@@ -172,39 +172,84 @@ class OkitResourceProperties {
     */   
     append = (parent, child) => parent.append(() => child.node())
 
+    // Formatting
+    formatting = {
+        // IPv4 IP Address
+        ipv4: {
+            placeholder: '0.0.0.0',
+            pattern: "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$)+",
+            title: 'IPv4 Address'
+        },
+        // IPv4 CIDR
+        ipv4_cidr: {
+            placeholder: '0.0.0.0/0',
+            pattern: "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(3[0-2]|[1-2][0-9]|[0-9]))$)+",
+            title: 'IPv4 CIDR block'
+        },
+        // IPv4 CIDR List
+        ipv4_cidr_list: {
+            placeholder: '0.0.0.0/0,0.0.0.0/0',
+            pattern: "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(3[0-2]|[1-2][0-9]|[0-9]))(,\s?|$))+",
+            title: 'Comma separated IPv4 CIDR blocks'
+        },
+        // IPv6 CIDR List
+        ipv6_cidr_list: {
+            placeholder: '2001:0db8:0123:45::/56',
+            pattern: "^((((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*|((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4})){7})(,\s?|$))+",
+            title: 'Comma separated IPv6 CIDR blocks'
+        },
+        // Port Range
+        port_range: {
+            placeholder:'80, 20-22',
+            pattern: "(^$|^(?:[1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])(?:-([1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5]))?$)",
+            pattern0: "^(?:[1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])(?:-([1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5]))?|\s*$",
+            pattern1: "^(?:6553[0-5]|655[0-2]\\d|65[0-4]\\d\\d|6[0-4]\\d{3}|[0-5]\\d{4}|\\d{1,4})(?:-(?:6553[0-5]|655[0-2]\\d|65[0-4]\\d\\d|6[0-4]\\d{3}|[0-5]\\d{4}|\\d{1,4}))?(?:,(?:6553[0-5]|655[0-2]\\d|65[0-4]\\d\\d|6[0-4]\\d{3}|[0-5]\\d{4}|\\d{1,4})(-(?:6553[0-5]|655[0-2]\\d|65[0-4]\\d\\d|6[0-4]\\d{3}|[0-5]\\d{4}|\\d{1,4}))?)|^\s*$",
+            title: 'Port range 80, 20-22'
+        }
+    }
+    pattern = "^(?:[1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])|\s*$"
+    pattern1 = "^(?:[1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])(?:-([1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5]))?|\s*$"
+
     createInput(type='text', label='', id='', idx=0, callback=undefined, data={}) {
         const row = d3.create('div').attr('class', 'tr').attr('id', this.trId(id, idx))
         let input = undefined
+        if (Object.keys(this.formatting).includes(type)) {
+            data = data ? {...data, ...this.formatting[type]} : formatting[type]
+            type = 'text'
+        }
         if (['text', 'password', 'email', 'date', 'number'].includes(type)) {
-            row.append('div').attr('class', 'td').text(label)
-            input = row.append('div').attr('class', 'td').append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', type).attr('class', 'okit-property-value').on('blur', callback)
-            if (data) {
-                if (data.min) input.attr('min', data.min)
-                if (data.max) input.attr('max', data.max)
-                if (data.maxlength) input.attr('maxlength', data.maxlength)
-                if (data.pattern) input.attr('pattern', data.pattern)
-                if (data.title) input.attr('title', data.title)
-            }
-        } else if (type === 'ipv4') {
-            const placeholder = '0.0.0.0'
-            const ipv4_regex = "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$)+"
-            row.append('div').attr('class', 'td').text(label)
-            input = row.append('div').attr('class', 'td').append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', 'text').attr('class', 'okit-property-value').attr('pattern', ipv4_regex).attr('title', "IPv4 Address").attr('placeholder', placeholder).on('blur', callback)
-        } else if (type === 'ipv4_cidr') {
-            const placeholder = '0.0.0.0/0'
-            const ipv4_cidr_regex = "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(3[0-2]|[1-2][0-9]|[0-9]))$)+"
-            row.append('div').attr('class', 'td').text(label)
-            input = row.append('div').attr('class', 'td').append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', 'text').attr('class', 'okit-property-value').attr('pattern', ipv4_cidr_regex).attr('title', "IPv4 CIDR block").attr('placeholder', placeholder).on('blur', callback)
-        } else if (type === 'ipv4_cidr_list') {
-            const placeholder = '0.0.0.0/0,0.0.0.0/0'
-            const ipv4_cidr_regex = "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(3[0-2]|[1-2][0-9]|[0-9]))(,\s?|$))+"
-            row.append('div').attr('class', 'td').text(label)
-            input = row.append('div').attr('class', 'td').append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', 'text').attr('class', 'okit-property-value').attr('pattern', ipv4_cidr_regex).attr('title', "Comma separated IPv4 CIDR blocks").attr('placeholder', placeholder).on('blur', callback)
-        } else if (type === 'ipv6_cidr_list') {
-            const placeholder = ''
-            const ipv4_cidr_regex = "^((((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*|((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4})){7})(,\s?|$))+"
-            row.append('div').attr('class', 'td').text(label)
-            input = row.append('div').attr('class', 'td').append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', 'text').attr('class', 'okit-property-value').attr('pattern', ipv4_cidr_regex).attr('title', "Comma separated IPv6 CIDR blocks").attr('placeholder', placeholder).on('blur', callback)
+            return this.createSimplePropertyRow(type, label, id, idx, callback, data)
+        // } else if (['text', 'password', 'email', 'date', 'number'].includes(type)) {
+        //     row.append('div').attr('class', 'td').text(label)
+        //     input = row.append('div').attr('class', 'td').append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', type).attr('class', 'okit-property-value').on('blur', callback)
+        //     this.addExtraAttributes(input, data)
+        //     // if (data) {
+        //     //     if (data.min) input.attr('min', data.min)
+        //     //     if (data.max) input.attr('max', data.max)
+        //     //     if (data.maxlength) input.attr('maxlength', data.maxlength)
+        //     //     if (data.pattern) input.attr('pattern', data.pattern)
+        //     //     if (data.title) input.attr('title', data.title)
+        //     // }
+        // } else if (type === 'ipv4') {
+        //     const placeholder = '0.0.0.0'
+        //     const ipv4_regex = "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$)+"
+        //     row.append('div').attr('class', 'td').text(label)
+        //     input = row.append('div').attr('class', 'td').append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', 'text').attr('class', 'okit-property-value').attr('pattern', ipv4_regex).attr('title', "IPv4 Address").attr('placeholder', placeholder).on('blur', callback)
+        // } else if (type === 'ipv4_cidr') {
+        //     const placeholder = '0.0.0.0/0'
+        //     const ipv4_cidr_regex = "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(3[0-2]|[1-2][0-9]|[0-9]))$)+"
+        //     row.append('div').attr('class', 'td').text(label)
+        //     input = row.append('div').attr('class', 'td').append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', 'text').attr('class', 'okit-property-value').attr('pattern', ipv4_cidr_regex).attr('title', "IPv4 CIDR block").attr('placeholder', placeholder).on('blur', callback)
+        // } else if (type === 'ipv4_cidr_list') {
+        //     const placeholder = '0.0.0.0/0,0.0.0.0/0'
+        //     const ipv4_cidr_regex = "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(3[0-2]|[1-2][0-9]|[0-9]))(,\s?|$))+"
+        //     row.append('div').attr('class', 'td').text(label)
+        //     input = row.append('div').attr('class', 'td').append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', 'text').attr('class', 'okit-property-value').attr('pattern', ipv4_cidr_regex).attr('title', "Comma separated IPv4 CIDR blocks").attr('placeholder', placeholder).on('blur', callback)
+        // } else if (type === 'ipv6_cidr_list') {
+        //     const placeholder = '2001:0db8:0123:45::/56'
+        //     const ipv4_cidr_regex = "^((((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*|((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4})){7})(,\s?|$))+"
+        //     row.append('div').attr('class', 'td').text(label)
+        //     input = row.append('div').attr('class', 'td').append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', 'text').attr('class', 'okit-property-value').attr('pattern', ipv4_cidr_regex).attr('title', "Comma separated IPv6 CIDR blocks").attr('placeholder', placeholder).on('blur', callback)
         } else if (type === 'select') {
             row.append('div').attr('class', 'td').text(label)
             input = row.append('div').attr('class', 'td').append('select').attr('id', this.inputId(id, idx)).attr('class', 'okit-property-value').on('change', callback)
@@ -223,6 +268,35 @@ class OkitResourceProperties {
             alert(`Unknown Type ${type}`)
         }
         return [row, input]
+    }
+    createSimplePropertyRow(type='text', label='', id='', idx=0, callback=undefined, data={}) {
+        const row = d3.create('div').attr('class', 'tr').attr('id', this.trId(id, idx))
+        row.append('div').attr('class', 'td').text(label)
+        const [cell, input] = this.createSimpleInputCell(type, id, idx, callback, data)
+        this.append(row, cell)
+        return [row, input]
+    }
+    createSimpleInputCell(type='text', id='', idx=0, callback=undefined, data={}) {
+        const cell = d3.create('div').attr('class', 'td')
+        const input = this.createSimpleInput(type, id, idx, callback, data)
+        this.append(cell, input)
+        return [cell, input]
+    }
+    createSimpleInput(type='text', id='', idx=0, callback=undefined, data={}) {
+        const input = d3.create('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', type).attr('class', 'okit-property-value').on('blur', callback)
+        this.addExtraAttributes(input, data)
+        return input
+    }
+
+    addExtraAttributes(input, data) {
+        if (data) {
+            if (data.min) input.attr('min', data.min)
+            if (data.max) input.attr('max', data.max)
+            if (data.maxlength) input.attr('maxlength', data.maxlength)
+            if (data.pattern) input.attr('pattern', data.pattern)
+            if (data.title) input.attr('title', data.title)
+            if (data.placeholder) input.attr('placeholder', data.placeholder)
+        }
     }
 
     createTable(label='', id='', idx='', callback=undefined, data={}) {
@@ -261,6 +335,13 @@ class OkitResourceProperties {
         const row = d3.create('div').attr('class', 'tr').attr('id', this.trId(id, idx))
         const div = row.append('div').attr('class', 'td')
         row.append('div').attr('class', 'td delete-property action-button-background delete').on('click', callback)
+        return [row, div]
+    }
+
+    createMultiValueRow(label='', id='', idx='', callback=undefined, data={}) {
+        const row = d3.create('div').attr('class', 'tr').attr('id', this.trId(id, idx))
+        row.append('div').attr('class', 'td').text(label)
+        const div = row.append('div').attr('class', 'td multi-value').append('div').attr('class', 'tr')
         return [row, div]
     }
 
