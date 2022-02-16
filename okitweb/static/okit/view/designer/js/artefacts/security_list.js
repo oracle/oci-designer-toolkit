@@ -32,7 +32,10 @@ class SecurityListView extends OkitDesignerArtefactView {
     /*
     ** Property Sheet Load function
      */
-    loadProperties() {
+    newPropertiesSheet() {
+        this.properties_sheet = new SecurityListProperties(this.artefact)
+    }
+    loadPropertiesOld() {
         let me = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/security_list.html", () => {
             // Load Referenced Ids

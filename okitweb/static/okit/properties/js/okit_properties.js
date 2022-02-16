@@ -202,13 +202,9 @@ class OkitResourceProperties {
         port_range: {
             placeholder:'80, 20-22',
             pattern: "(^$|^(?:[1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])(?:-([1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5]))?$)",
-            pattern0: "^(?:[1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])(?:-([1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5]))?|\s*$",
-            pattern1: "^(?:6553[0-5]|655[0-2]\\d|65[0-4]\\d\\d|6[0-4]\\d{3}|[0-5]\\d{4}|\\d{1,4})(?:-(?:6553[0-5]|655[0-2]\\d|65[0-4]\\d\\d|6[0-4]\\d{3}|[0-5]\\d{4}|\\d{1,4}))?(?:,(?:6553[0-5]|655[0-2]\\d|65[0-4]\\d\\d|6[0-4]\\d{3}|[0-5]\\d{4}|\\d{1,4})(-(?:6553[0-5]|655[0-2]\\d|65[0-4]\\d\\d|6[0-4]\\d{3}|[0-5]\\d{4}|\\d{1,4}))?)|^\s*$",
             title: 'Port range 80, 20-22'
         }
     }
-    pattern = "^(?:[1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])|\s*$"
-    pattern1 = "^(?:[1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])(?:-([1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5]))?|\s*$"
 
     createInput(type='text', label='', id='', idx=0, callback=undefined, data={}) {
         const row = d3.create('div').attr('class', 'tr').attr('id', this.trId(id, idx))
@@ -219,37 +215,6 @@ class OkitResourceProperties {
         }
         if (['text', 'password', 'email', 'date', 'number'].includes(type)) {
             return this.createSimplePropertyRow(type, label, id, idx, callback, data)
-        // } else if (['text', 'password', 'email', 'date', 'number'].includes(type)) {
-        //     row.append('div').attr('class', 'td').text(label)
-        //     input = row.append('div').attr('class', 'td').append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', type).attr('class', 'okit-property-value').on('blur', callback)
-        //     this.addExtraAttributes(input, data)
-        //     // if (data) {
-        //     //     if (data.min) input.attr('min', data.min)
-        //     //     if (data.max) input.attr('max', data.max)
-        //     //     if (data.maxlength) input.attr('maxlength', data.maxlength)
-        //     //     if (data.pattern) input.attr('pattern', data.pattern)
-        //     //     if (data.title) input.attr('title', data.title)
-        //     // }
-        // } else if (type === 'ipv4') {
-        //     const placeholder = '0.0.0.0'
-        //     const ipv4_regex = "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$)+"
-        //     row.append('div').attr('class', 'td').text(label)
-        //     input = row.append('div').attr('class', 'td').append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', 'text').attr('class', 'okit-property-value').attr('pattern', ipv4_regex).attr('title', "IPv4 Address").attr('placeholder', placeholder).on('blur', callback)
-        // } else if (type === 'ipv4_cidr') {
-        //     const placeholder = '0.0.0.0/0'
-        //     const ipv4_cidr_regex = "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(3[0-2]|[1-2][0-9]|[0-9]))$)+"
-        //     row.append('div').attr('class', 'td').text(label)
-        //     input = row.append('div').attr('class', 'td').append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', 'text').attr('class', 'okit-property-value').attr('pattern', ipv4_cidr_regex).attr('title', "IPv4 CIDR block").attr('placeholder', placeholder).on('blur', callback)
-        // } else if (type === 'ipv4_cidr_list') {
-        //     const placeholder = '0.0.0.0/0,0.0.0.0/0'
-        //     const ipv4_cidr_regex = "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(3[0-2]|[1-2][0-9]|[0-9]))(,\s?|$))+"
-        //     row.append('div').attr('class', 'td').text(label)
-        //     input = row.append('div').attr('class', 'td').append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', 'text').attr('class', 'okit-property-value').attr('pattern', ipv4_cidr_regex).attr('title', "Comma separated IPv4 CIDR blocks").attr('placeholder', placeholder).on('blur', callback)
-        // } else if (type === 'ipv6_cidr_list') {
-        //     const placeholder = '2001:0db8:0123:45::/56'
-        //     const ipv4_cidr_regex = "^((((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*|((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4})){7})(,\s?|$))+"
-        //     row.append('div').attr('class', 'td').text(label)
-        //     input = row.append('div').attr('class', 'td').append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', 'text').attr('class', 'okit-property-value').attr('pattern', ipv4_cidr_regex).attr('title', "Comma separated IPv6 CIDR blocks").attr('placeholder', placeholder).on('blur', callback)
         } else if (type === 'select') {
             row.append('div').attr('class', 'td').text(label)
             input = row.append('div').attr('class', 'td').append('select').attr('id', this.inputId(id, idx)).attr('class', 'okit-property-value').on('change', callback)

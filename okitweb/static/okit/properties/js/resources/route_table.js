@@ -53,9 +53,9 @@ class RouteTableProperties extends OkitResourceProperties {
         const network_entity_id = `${id}_network_entity_id`
         const [row, div] = this.createDeleteRow(id, idx, () => this.deleteRule(id, idx, rule))
         this.append(this.rules_tbody, row)
-        const [rule_details, rule_summary, rule_div] = this.createDetailsSection('Rule', `${self.id}_rule_details`, idx)
+        const [rule_details, rule_summary, rule_div] = this.createDetailsSection('Rule', `${id}_rule_details`, idx)
         this.append(div, rule_details)
-        const [rule_table, rule_thead, rule_tbody] = this.createTable('', `${self.id}_rule`, '')
+        const [rule_table, rule_thead, rule_tbody] = this.createTable('', `${id}_rule`, '')
         this.append(rule_div, rule_table)
         // Target Type
         const [tt_row, tt_input] = this.createInput('select', 'Target Type', `${id}_target_type`, idx, (d, i, n) => {rule.target_type = n[i].value = n[i].value; self.showRuleRows(rule, id, idx); this.loadNetworkEntitySelect(rule, network_entity_id, idx)})
@@ -115,15 +115,11 @@ class RouteTableProperties extends OkitResourceProperties {
     }
     loadNetworkEntitySelect(rule, id, idx) {
         const select = d3.select(`#${this.inputId(id, idx)}`)
-        console.info('Rule:', rule, select)
         const selected_id = this.loadSelect(select, rule.target_type, false)
         if (rule.target_type !== 'local_peering_gateway' || rule.network_entity_id === '' || !rule.network_entity_id) rule.network_entity_id = selected_id
         // this.loadSelect(select, rule.target_type, false, this.vcn_filter)
     }
     showRuleRows(rule, id, idx) {
-        // this.hideProperty(`${id}_destination_type`, idx)
-        // this.hideProperty(`${id}_destination`, idx)
-        // this.hideProperty(`${id}_network_entity_id`, idx)
         if (rule.target_type !== 'private_ip') {
             this.hideProperty(`${id}_destination_type`, idx)
             if (rule.target_type !== 'service_gateway') {
