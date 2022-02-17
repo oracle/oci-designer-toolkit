@@ -34,13 +34,13 @@ class OCITerraformGenerator(OCIGenerator):
     OUTPUTS_FILE_NAME = 'output.tf'
     JINJA2_VARIABLE_FORMAT = 'var.{0:s}'
 
-    def __init__(self, template_root, output_root, visualiser_json, use_vars=True, add_suffix=True):
+    def __init__(self, template_root, output_root, visualiser_json, use_vars=True, add_provider=True, add_suffix=True):
         template_dir = os.path.join(template_root, self.DIRECTORY_SUFFIX)
         if add_suffix:
             output_dir = os.path.join(output_root, self.DIRECTORY_SUFFIX)
         else:
             output_dir = output_root
-        super(OCITerraformGenerator, self).__init__(template_dir, output_dir, visualiser_json, use_vars)
+        super(OCITerraformGenerator, self).__init__(template_dir, output_dir, visualiser_json, use_vars, add_provider)
 
     def writeFiles(self):
         # Write Provider tf file
