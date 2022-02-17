@@ -27,8 +27,8 @@ from model.okitValidation import OCIJsonValidator
 logger = getLogger()
 
 class OCIGenerator(object):
-    OKIT_VERSION = "0.32.0"
-    def __init__(self, template_dir, output_dir, visualiser_json, use_vars=False):
+    OKIT_VERSION = "0.32.1"
+    def __init__(self, template_dir, output_dir, visualiser_json, use_vars=False, add_provider=True):
         # Initialise generator output data variables
         self.create_sequence = []
         self.run_variables = {}
@@ -40,6 +40,7 @@ class OCIGenerator(object):
         self.output_dir = output_dir
         self.visualiser_json = visualiser_json
         self.use_vars = use_vars
+        self.add_provider = add_provider
         # Check output directory
         self.getCheckOutputDirectory()
         # Read common variables
@@ -64,6 +65,7 @@ class OCIGenerator(object):
         self.jinja2_variables["copyright"] = __copyright__
         self.jinja2_variables["okit_version"] = self.OKIT_VERSION
         self.jinja2_variables["deployment_platform"] = self.visualiser_json.get('metadata', {}).get('platform', 'oci')
+        self.jinja2_variables["add_provider"] = self.add_provider
     
     def addStandardResourceVariables(self, resource={}):
         standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
