@@ -104,6 +104,7 @@ def pcaQuery():
         query = PCAQuery(config=config, profile=config_profile)
         response = query.executeQuery(regions=[regions] if regions else [], compartments=[compartments] if compartments else [], include_sub_compartments=sub_compartments)
         logJson(response)
+        # logger.info(jsonToFormattedString(response))
         return response
     else:
         return 404

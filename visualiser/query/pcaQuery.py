@@ -33,30 +33,36 @@ class PCAQuery(OCIConnection):
 
     SUPPORTED_RESOURCES = [
         "Compartment", # Must be first because we will use the resulting list to query other resources in the selected and potentially child compartments
+        "AvailabilityDomain", 
         # "Bucket", 
-        # "DHCPOptions", 
-        # "Drg", 
-        # "FileSystem", 
+        "DHCPOptions", 
+        "Drg", 
+        "FileSystem", 
         # "Group", 
-        # "Instance", 
-        # "InternetGateway",
-        # "LocalPeeringGateway",
-        # "MountTarget",
-        # "NatGateway", 
-        # "NetworkSecurityGroup", 
+        "Instance", 
+        "InternetGateway",
+        "LocalPeeringGateway",
+        "MountTarget",
+        "NatGateway", 
+        "NetworkSecurityGroup", 
         # "Policy", 
-        # "RouteTable", 
-        # "SecurityList", 
-        # "Subnet", 
+        "RouteTable", 
+        "SecurityList", 
+        "Subnet", 
         # "User", 
         "Vcn",
-        # "Volume"
+        "Volume"
     ]
 
     def __init__(self, config=None, configfile=None, profile=None, region=None, signer=None):
         super(PCAQuery, self).__init__(config=config, configfile=configfile, profile=profile, region=region, signer=signer)
         self.dropdown_json = {}
         self.resource_map = {
+            "AvailabilityDomain": {
+                "method": self.availability_domains, 
+                "client": "identity", 
+                "array": "availability_domains"
+                }, 
             "Bucket": {
                 "method": self.object_storage_buckets, 
                 "client": "volume", 
@@ -174,7 +180,8 @@ class PCAQuery(OCIConnection):
                 client.base_client.session.verify = self.cert_bundle
 
     def executeQuery(self, regions=None, compartments=[], include_sub_compartments=False, **kwargs):
-        logger.info(f'PCA Querying - Region: {regions} {self}')
+        logger.info(f'PCA Querying - Region: {regions}')
+        logger.info(f'PCA Querying - Compartment: {compartments} {include_sub_compartments}')
         if self.instance_principal:
             self.config['tenancy'] = self.getTenancy()
         if regions is None:
@@ -189,7 +196,11 @@ class PCAQuery(OCIConnection):
         self.query_compartments = compartments
         response_json = {}
         for resource in self.SUPPORTED_RESOURCES:
+            logger.info(f'>>>>>>>>>>>> Processing {resource}')
             self.resource_map[resource]["method"]()
+        # Remove Availability Domains
+        logger.info(jsonToFormattedString(self.dropdown_json.get('availability_domains', [])))
+        self.dropdown_json.pop('availability_domains', None)
         return self.dropdown_json
     
     def tenancy_compartments(self):
@@ -202,11 +213,11 @@ class PCAQuery(OCIConnection):
         self.all_compartment_ids = [c['id'] for c in self.all_compartments]
         return 
     
-    def sub_compartments(self, compartments):
+    def child_compartments(self, compartments):
         query_compartment_ids = [id for id in compartments]
         for id in compartments:
             children = [c['id'] for c in self.all_compartments if c['compartment_id'] == id]
-            query_compartment_ids.extend(self.sub_compartments(children))
+            query_compartment_ids.extend(self.child_compartments(children))
         return query_compartment_ids
 
     def compartments(self):
@@ -215,10 +226,9 @@ class PCAQuery(OCIConnection):
         array = resource_map["array"]
         resources = []
         self.dropdown_json[array] = []
-        # Compartments
         if self.sub_compartments:
             self.tenancy_compartments()
-            query_compartment_ids = self.sub_compartments(self.query_compartments)
+            query_compartment_ids = self.child_compartments(self.query_compartments)
             self.query_compartments = query_compartment_ids
             self.dropdown_json[array] = [c for c in self.all_compartments if c['id'] in query_compartment_ids]
         else:
@@ -229,18 +239,30 @@ class PCAQuery(OCIConnection):
                 self.dropdown_json[array].extend(resources)
         return self.dropdown_json[array]
 
+    def availability_domains(self):
+        resource_map = self.resource_map["AvailabilityDomain"]
+        client = self.clients[resource_map["client"]]
+        array = resource_map["array"]
+        resources = []
+        self.dropdown_json[array] = []
+        for compartment_id in self.query_compartments:
+            results = oci.pagination.list_call_get_all_results(client.list_availability_domains, compartment_id=compartment_id).data
+            # Convert to Json object
+            resources = self.toJson(results)
+            self.dropdown_json[array] = resources
+        return self.dropdown_json[array]
+
     def block_storage_volumes(self):
         resource_map = self.resource_map["Volume"]
         client = self.clients[resource_map["client"]]
         array = resource_map["array"]
         resources = []
         self.dropdown_json[array] = []
-        # DHCP Option
         for compartment_id in self.query_compartments:
             results = oci.pagination.list_call_get_all_results(client.list_volumes, compartment_id=compartment_id).data
             # Convert to Json object
             resources = self.toJson(results)
-            self.dropdown_json[array] = resources
+            self.dropdown_json[array].extend(resources)
         return self.dropdown_json[array]
 
     def dhcp_options(self):
@@ -249,12 +271,11 @@ class PCAQuery(OCIConnection):
         array = resource_map["array"]
         resources = []
         self.dropdown_json[array] = []
-        # DHCP Option
         for compartment_id in self.query_compartments:
             results = oci.pagination.list_call_get_all_results(client.list_dhcp_options, compartment_id=compartment_id).data
             # Convert to Json object
             resources = self.toJson(results)
-            self.dropdown_json[array] = resources
+            self.dropdown_json[array].extend(resources)
         return self.dropdown_json[array]
 
     def dynamic_routing_gateways(self):
@@ -263,12 +284,11 @@ class PCAQuery(OCIConnection):
         array = resource_map["array"]
         resources = []
         self.dropdown_json[array] = []
-        # DHCP Option
         for compartment_id in self.query_compartments:
             results = oci.pagination.list_call_get_all_results(client.list_drgs, compartment_id=compartment_id).data
             # Convert to Json object
             resources = self.toJson(results)
-            self.dropdown_json[array] = resources
+            self.dropdown_json[array].extend(resources)
         return self.dropdown_json[array]
 
     def file_systems(self):
@@ -277,12 +297,12 @@ class PCAQuery(OCIConnection):
         array = resource_map["array"]
         resources = []
         self.dropdown_json[array] = []
-        # DHCP Option
-        for compartment_id in self.query_compartments:
-            results = oci.pagination.list_call_get_all_results(client.list_file_systems, compartment_id=compartment_id).data
-            # Convert to Json object
-            resources = self.toJson(results)
-            self.dropdown_json[array] = resources
+        for availability_domain in self.dropdown_json.get('availability_domains', []):
+            for compartment_id in self.query_compartments:
+                results = oci.pagination.list_call_get_all_results(client.list_file_systems, compartment_id=compartment_id, availability_domain=availability_domain['name']).data
+                # Convert to Json object
+                resources = self.toJson(results)
+                self.dropdown_json[array].extend(resources)
         return self.dropdown_json[array]
 
     def instances(self):
@@ -291,12 +311,11 @@ class PCAQuery(OCIConnection):
         array = resource_map["array"]
         resources = []
         self.dropdown_json[array] = []
-        # DHCP Option
         for compartment_id in self.query_compartments:
             results = oci.pagination.list_call_get_all_results(client.list_instances, compartment_id=compartment_id).data
             # Convert to Json object
             resources = self.toJson(results)
-            self.dropdown_json[array] = resources
+            self.dropdown_json[array].extend(resources)
         return self.dropdown_json[array]
 
     def internet_gateways(self):
@@ -305,12 +324,11 @@ class PCAQuery(OCIConnection):
         array = resource_map["array"]
         resources = []
         self.dropdown_json[array] = []
-        # DHCP Option
         for compartment_id in self.query_compartments:
             results = oci.pagination.list_call_get_all_results(client.list_internet_gateways, compartment_id=compartment_id).data
             # Convert to Json object
             resources = self.toJson(results)
-            self.dropdown_json[array] = resources
+            self.dropdown_json[array].extend(resources)
         return self.dropdown_json[array]
 
     def local_peering_gateways(self):
@@ -319,12 +337,11 @@ class PCAQuery(OCIConnection):
         array = resource_map["array"]
         resources = []
         self.dropdown_json[array] = []
-        # DHCP Option
         for compartment_id in self.query_compartments:
             results = oci.pagination.list_call_get_all_results(client.list_local_peering_gateways, compartment_id=compartment_id).data
             # Convert to Json object
             resources = self.toJson(results)
-            self.dropdown_json[array] = resources
+            self.dropdown_json[array].extend(resources)
         return self.dropdown_json[array]
 
     def mount_targets(self):
@@ -333,12 +350,12 @@ class PCAQuery(OCIConnection):
         array = resource_map["array"]
         resources = []
         self.dropdown_json[array] = []
-        # DHCP Option
-        for compartment_id in self.query_compartments:
-            results = oci.pagination.list_call_get_all_results(client.list_mount_targets, compartment_id=compartment_id).data
-            # Convert to Json object
-            resources = self.toJson(results)
-            self.dropdown_json[array] = resources
+        for availability_domain in self.dropdown_json.get('availability_domains', []):
+            for compartment_id in self.query_compartments:
+                results = oci.pagination.list_call_get_all_results(client.list_mount_targets, compartment_id=compartment_id, availability_domain=availability_domain['name']).data
+                # Convert to Json object
+                resources = self.toJson(results)
+                self.dropdown_json[array].extend(resources)
         return self.dropdown_json[array]
 
     def nat_gateways(self):
@@ -347,12 +364,11 @@ class PCAQuery(OCIConnection):
         array = resource_map["array"]
         resources = []
         self.dropdown_json[array] = []
-        # DHCP Option
         for compartment_id in self.query_compartments:
             results = oci.pagination.list_call_get_all_results(client.list_nat_gateways, compartment_id=compartment_id).data
             # Convert to Json object
             resources = self.toJson(results)
-            self.dropdown_json[array] = resources
+            self.dropdown_json[array].extend(resources)
         return self.dropdown_json[array]
 
     def network_security_groups(self):
@@ -361,12 +377,11 @@ class PCAQuery(OCIConnection):
         array = resource_map["array"]
         resources = []
         self.dropdown_json[array] = []
-        # DHCP Option
         for compartment_id in self.query_compartments:
             results = oci.pagination.list_call_get_all_results(client.list_network_security_groups, compartment_id=compartment_id).data
             # Convert to Json object
             resources = self.toJson(results)
-            self.dropdown_json[array] = resources
+            self.dropdown_json[array].extend(resources)
         return self.dropdown_json[array]
 
     def policies(self):
@@ -375,12 +390,11 @@ class PCAQuery(OCIConnection):
         array = resource_map["array"]
         resources = []
         self.dropdown_json[array] = []
-        # DHCP Option
         for compartment_id in self.query_compartments:
             results = oci.pagination.list_call_get_all_results(client.list_policies, compartment_id=compartment_id).data
             # Convert to Json object
             resources = self.toJson(results)
-            self.dropdown_json[array] = resources
+            self.dropdown_json[array].extend(resources)
         return self.dropdown_json[array]
 
     def route_tables(self):
@@ -389,12 +403,11 @@ class PCAQuery(OCIConnection):
         array = resource_map["array"]
         resources = []
         self.dropdown_json[array] = []
-        # DHCP Option
         for compartment_id in self.query_compartments:
             results = oci.pagination.list_call_get_all_results(client.list_route_tables, compartment_id=compartment_id).data
             # Convert to Json object
             resources = self.toJson(results)
-            self.dropdown_json[array] = resources
+            self.dropdown_json[array].extend(resources)
         return self.dropdown_json[array]
 
     def security_lists(self):
@@ -403,12 +416,11 @@ class PCAQuery(OCIConnection):
         array = resource_map["array"]
         resources = []
         self.dropdown_json[array] = []
-        # DHCP Option
         for compartment_id in self.query_compartments:
             results = oci.pagination.list_call_get_all_results(client.list_security_lists, compartment_id=compartment_id).data
             # Convert to Json object
             resources = self.toJson(results)
-            self.dropdown_json[array] = resources
+            self.dropdown_json[array].extend(resources)
         return self.dropdown_json[array]
 
     def subnets(self):
@@ -417,12 +429,11 @@ class PCAQuery(OCIConnection):
         array = resource_map["array"]
         resources = []
         self.dropdown_json[array] = []
-        # Subnet
         for compartment_id in self.query_compartments:
             results = oci.pagination.list_call_get_all_results(client.list_subnets, compartment_id=compartment_id).data
             # Convert to Json object
             resources = self.toJson(results)
-            self.dropdown_json[array] = resources
+            self.dropdown_json[array].extend(resources)
         return self.dropdown_json[array]
 
     def users(self):
@@ -431,12 +442,11 @@ class PCAQuery(OCIConnection):
         array = resource_map["array"]
         resources = []
         self.dropdown_json[array] = []
-        # Subnet
         for compartment_id in self.query_compartments:
             results = oci.pagination.list_call_get_all_results(client.list_users, compartment_id=compartment_id).data
             # Convert to Json object
             resources = self.toJson(results)
-            self.dropdown_json[array] = resources
+            self.dropdown_json[array].extend(resources)
         return self.dropdown_json[array]
 
     def virtual_cloud_networks(self):
@@ -445,12 +455,11 @@ class PCAQuery(OCIConnection):
         array = resource_map["array"]
         resources = []
         self.dropdown_json[array] = []
-        # Vcn
         for compartment_id in self.query_compartments:
             results = oci.pagination.list_call_get_all_results(client.list_vcns, compartment_id=compartment_id).data
             # Convert to Json object
             resources = self.toJson(results)
-            self.dropdown_json[array] = resources
+            self.dropdown_json[array].extend(resources)
         return self.dropdown_json[array]
 
     def object_storage_buckets(self):
@@ -459,13 +468,12 @@ class PCAQuery(OCIConnection):
         array = resource_map["array"]
         resources = []
         self.dropdown_json[array] = []
-        # Buckets
         namespace = str(self.client.get_namespace().data)
         for compartment_id in self.query_compartments:
             results = oci.pagination.list_call_get_all_results(client.list_buckets, namespace_name=namespace, compartment_id=compartment_id).data
             # Convert to Json object
             resources = self.toJson(results)
-            self.dropdown_json[array] = resources
+            self.dropdown_json[array].extend(resources)
         return self.dropdown_json[array]
 
     def deduplicate(self, resources, key):
