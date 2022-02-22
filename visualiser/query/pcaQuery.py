@@ -9,7 +9,7 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 __author__ = ["Andrew Hopkinson (Oracle Cloud Solutions A-Team)"]
 __version__ = "1.0.0"
-__module__ = "PCADropdownQuery"
+__module__ = "PCAQuery"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 import json
@@ -25,37 +25,36 @@ from common.okitCommon import jsonToFormattedString
 from common.okitLogging import getLogger
 from common.okitCommon import userDataDecode
 from facades.ociConnection import OCIConnection
-from facades.ociShape import OCIShapes
 
 # Configure logging
 logger = getLogger()
 
-class PCADropdownQuery(OCIConnection):
+class PCAQuery(OCIConnection):
 
     SUPPORTED_RESOURCES = [
-        "Bucket", 
-        "Compartment", 
-        "DHCPOptions", 
-        "Drg", 
-        "FileSystem", 
-        "Group", 
-        "Instance", 
-        "InternetGateway",
-        "LocalPeeringGateway",
-        "MountTarget",
-        "NatGateway", 
-        "NetworkSecurityGroup", 
-        "Policy", 
-        "RouteTable", 
-        "SecurityList", 
-        "Subnet", 
-        "User", 
+        "Compartment", # Must be first because we will use the resulting list to query other resources in the selected and potentially child compartments
+        # "Bucket", 
+        # "DHCPOptions", 
+        # "Drg", 
+        # "FileSystem", 
+        # "Group", 
+        # "Instance", 
+        # "InternetGateway",
+        # "LocalPeeringGateway",
+        # "MountTarget",
+        # "NatGateway", 
+        # "NetworkSecurityGroup", 
+        # "Policy", 
+        # "RouteTable", 
+        # "SecurityList", 
+        # "Subnet", 
+        # "User", 
         "Vcn",
-        "Volume"
+        # "Volume"
     ]
 
     def __init__(self, config=None, configfile=None, profile=None, region=None, signer=None):
-        super(PCADropdownQuery, self).__init__(config=config, configfile=configfile, profile=profile, region=region, signer=signer)
+        super(PCAQuery, self).__init__(config=config, configfile=configfile, profile=profile, region=region, signer=signer)
         self.dropdown_json = {}
         self.resource_map = {
             "Bucket": {
@@ -65,73 +64,103 @@ class PCADropdownQuery(OCIConnection):
                 }, 
             "Compartment": {
                 "method": self.compartments, 
-                "client": "limits", 
+                "client": "identity", 
                 "array": "compartments"
                 }, 
             "DHCPOptions": {
-                "method": self.shapes, 
-                "client": "compute", 
-                "array": "shapes"
-                }, 
-            "DbSystemShape": {
-                "method": self.db_system_shapes, 
-                "client": "database", 
-                "array": "db_system_shapes"
-                }, 
-            "DbVersion": {
-                "method": self.db_versions, 
-                "client": "database", 
-                "array": "db_versions"
-                }, 
-            "CpeDeviceShape": {
-                "method": self.cpe_device_shapes, 
+                "method": self.dhcp_options, 
                 "client": "network", 
-                "array": "cpe_device_shapes"
+                "array": "dhcp_options"
                 }, 
-            "FastConnectProviderService": {
-                "method": self.fast_connect_provider_services, 
+            "Drg": {
+                "method": self.dynamic_routing_gateways, 
                 "client": "network", 
-                "array": "fast_connect_provider_services"
+                "array": "dynamic_routing_gateways"
                 }, 
-            "Image": {
-                "method": self.images, 
+            "FileSystem": {
+                "method": self.file_systems, 
+                "client": "filestorage", 
+                "array": "file_systems"
+                }, 
+            "Instance": {
+                "method": self.instances, 
                 "client": "compute", 
-                "array": "images"
+                "array": "instances"
+                }, 
+            "InternetGateway": {
+                "method": self.internet_gateways, 
+                "client": "network", 
+                "array": "internet_gateways"
+                }, 
+            "LocalPeeringGateway": {
+                "method": self.local_peering_gateways, 
+                "client": "network", 
+                "array": "local_peering_gateways"
                 },
-            "MySQLShape": {
-                "method": self.mysql_shapes, 
-                "client": "mysqlaas", 
-                "array": "mysql_shapes"
+            "MountTarget": {
+                "method": self.mount_targets, 
+                "client": "filestorage", 
+                "array": "mount_targets"
                 }, 
-            "MySQLVersion": {
-                "method": self.mysql_versions, 
-                "client": "mysqlaas", "array": 
-                "mysql_versions"
+            "NatGateway": {
+                "method": self.nat_gateways, 
+                "client": "network", 
+                "array": "nat_gateways"
                 }, 
-            "MySQLConfiguration": {
-                "method": self.mysql_configurations, 
-                "client": "mysqlaas", 
-                "array": "mysql_configurations"
+            "NetworkSecurityGroup": {
+                "method": self.network_security_groups, 
+                "client": "network", 
+                "array": "network_security_groups"
                 }, 
-            "LoadBalancerShape": {
-                "method": self.loadbalancer_shapes, 
-                "client": "loadbalancer", 
-                "array": "loadbalancer_shapes"
+            "Policy": {
+                "method": self.policies, 
+                "client": "identity", 
+                "array": "policys"
                 }, 
-            "ClusterOptions": {
-                "method": self.kubernetes_versions, 
-                "client": "container", 
-                "array": "kubernetes_versions"
+            "RouteTable": {
+                "method": self.route_tables, 
+                "client": "network", 
+                "array": "route_tables"
+                }, 
+            "SecurityList": {
+                "method": self.security_lists, 
+                "client": "network", 
+                "array": "security_lists"
+                }, 
+            "Subnet": {
+                "method": self.subnets, 
+                "client": "network", 
+                "array": "subnets"
+                }, 
+            "User": {
+                "method": self.users, 
+                "client": "identity", 
+                "array": "users"
+                }, 
+            "Vcn": {
+                "method": self.virtual_cloud_networks, 
+                "client": "network", 
+                "array": "virtual_cloud_networks"
+                }, 
+            "Volume": {
+                "method": self.block_storage_volumes, 
+                "client": "volume", 
+                "array": "block_storage_volumes"
                 }
         }
         # Load Tenancy OCID
         self.getTenancy()
+        # Set Single Compartment
+        self.sub_compartments = False
 
     def connect(self):
         logger.info(f'<<< Connecting PCA Clients >>> {self.cert_bundle}')
         self.clients = {
             "volume": oci.core.BlockstorageClient(config=self.config, signer=self.signer),
             "compute": oci.core.ComputeClient(config=self.config, signer=self.signer),
+            "object": oci.object_storage.ObjectStorageClient(config=self.config, signer=self.signer),
+            "filestorage": oci.file_storage.FileStorageClient(config=self.config, signer=self.signer),
+            "identity": oci.identity.IdentityClient(config=self.config, signer=self.signer),
             # "container": oci.container_engine.ContainerEngineClient(config=self.config, signer=self.signer),
             # "database": oci.database.DatabaseClient(config=self.config, signer=self.signer),
             # "limits":  oci.limits.LimitsClient(config=self.config, signer=self.signer),
@@ -144,8 +173,8 @@ class PCADropdownQuery(OCIConnection):
             for client in self.clients.values():
                 client.base_client.session.verify = self.cert_bundle
 
-    def executeQuery(self, regions=None, **kwargs):
-        logger.info(f'PCA Querying Dropdowns - Region: {regions} {self}')
+    def executeQuery(self, regions=None, compartments=[], include_sub_compartments=False, **kwargs):
+        logger.info(f'PCA Querying - Region: {regions} {self}')
         if self.instance_principal:
             self.config['tenancy'] = self.getTenancy()
         if regions is None:
@@ -156,179 +185,107 @@ class PCADropdownQuery(OCIConnection):
         else:
             cert_bundle = None
         logger.info(f'cert_bundle={cert_bundle}')
-        include_sub_compartments = True
+        self.sub_compartments = include_sub_compartments
+        self.query_compartments = compartments
         response_json = {}
         for resource in self.SUPPORTED_RESOURCES:
             self.resource_map[resource]["method"]()
         return self.dropdown_json
-
-    def cpe_device_shapes(self):
-        resource_map = self.resource_map["CpeDeviceShape"]
-        client = self.clients[resource_map["client"]]
-        array = resource_map["array"]
-        resources = []
-        # CPE Shapes
-        results = oci.pagination.list_call_get_all_results(client.list_cpe_device_shapes).data
-        # Convert to Json object
-        resources = self.toJson(results)
-        self.dropdown_json[array] = resources
-        return self.dropdown_json[array]
-
-    def db_system_shapes(self):
-        resource_map = self.resource_map["DbSystemShape"]
-        client = self.clients[resource_map["client"]]
-        array = resource_map["array"]
-        resources = []
-        results = oci.pagination.list_call_get_all_results(client.list_db_system_shapes, compartment_id=self.tenancy_ocid).data
-        # Convert to Json object
-        resources = self.toJson(results)
-        self.dropdown_json[array] = sorted(self.deduplicate(resources, 'shape'), key=lambda k: k['shape'])
-        return self.dropdown_json[array]
-
-    def db_versions(self):
-        resource_map = self.resource_map["DbVersion"]
-        client = self.clients[resource_map["client"]]
-        array = resource_map["array"]
-        resources = []
-        results = oci.pagination.list_call_get_all_results(client.list_db_versions, compartment_id=self.tenancy_ocid).data
-        # Convert to Json object
-        resources = self.toJson(results)
-        self.dropdown_json[array] = resources
-        return self.dropdown_json[array]
-
-    def fast_connect_provider_services(self):
-        resource_map = self.resource_map["FastConnectProviderService"]
-        client = self.clients[resource_map["client"]]
-        array = resource_map["array"]
-        resources = []
-        return resources
-
-    def images(self):
-        resource_map = self.resource_map["Image"]
-        client = self.clients[resource_map["client"]]
-        array = resource_map["array"]
-        resources = []
-        # Images
-        results = oci.pagination.list_call_get_all_results(client.list_images, compartment_id=self.tenancy_ocid).data
-        # Convert to Json object
-        resources = self.toJson(results)
-        for r in resources:
-            r['sort_key'] = f"{r['operating_system']} {r['operating_system_version']}"
-        self.dropdown_json[array] = sorted(self.deduplicate(resources, 'sort_key'), key=lambda k: k['sort_key'])
-        not_found = False
-        for r in self.dropdown_json[array]:
-            logger.info(f'Getting Shapes for {r["id"]}')
-            if not_found:
-                r['shapes'] = self.dropdown_json['shapes']
-            else:
-                try:
-                    r['shapes'] = [s.shape for s in oci.pagination.list_call_get_all_results(client.list_image_shape_compatibility_entries, image_id=r['id']).data]
-                except oci.exceptions.ServiceError as e:
-                    not_found = True
-                    r['shapes'] = self.dropdown_json['shapes']
-        return self.dropdown_json[array]
-
-    def kubernetes_versions(self):
-        resource_map = self.resource_map["ClusterOptions"]
-        client = self.clients[resource_map["client"]]
-        array = resource_map["array"]
-        resources = []
-        results = client.get_cluster_options('all').data.kubernetes_versions
-        # Convert to Json object
-        resources = [{"name": v, "version": v} for v in results]
-        self.dropdown_json[array] = resources
-        return self.dropdown_json[array]
-
-    def loadbalancer_shapes(self):
-        resource_map = self.resource_map["LoadBalancerShape"]
-        client = self.clients[resource_map["client"]]
-        array = resource_map["array"]
-        resources = []
-        # Query
-        results = oci.pagination.list_call_get_all_results(client.list_shapes, compartment_id=self.tenancy_ocid).data
-        # Convert to Json object
-        resources = self.toJson(results)
-        self.dropdown_json[array] = resources
-        return self.dropdown_json[array]
-
-    def mysql_shapes(self):
-        resource_map = self.resource_map["MySQLShape"]
-        client = self.clients[resource_map["client"]]
-        array = resource_map["array"]
-        resources = []
-        # Query
-        results = oci.pagination.list_call_get_all_results(client.list_shapes, compartment_id=self.tenancy_ocid).data
-        # Convert to Json object
-        resources = self.toJson(results)
-        self.dropdown_json[array] = resources
-        return self.dropdown_json[array]
-
-    def mysql_versions(self):
-        resource_map = self.resource_map["MySQLVersion"]
-        client = self.clients[resource_map["client"]]
-        array = resource_map["array"]
-        resources = []
-        # Query
-        results = oci.pagination.list_call_get_all_results(client.list_versions, compartment_id=self.tenancy_ocid).data
-        # Convert to Json object
-        resources = self.toJson(results)
-        self.dropdown_json[array] = resources
-        return self.dropdown_json[array]
-
-    def mysql_configurations(self):
-        resource_map = self.resource_map["MySQLConfiguration"]
-        client = self.clients[resource_map["client"]]
-        array = resource_map["array"]
-        resources = []
-        # Query
-        results = oci.pagination.list_call_get_all_results(client.list_configurations, compartment_id=self.tenancy_ocid).data
-        # Convert to Json object
-        resources = self.toJson(results)
-        self.dropdown_json[array] = resources
-        return self.dropdown_json[array]
-
-    def services(self):
-        resource_map = self.resource_map["Service"]
-        client = self.clients[resource_map["client"]]
-        array = resource_map["array"]
-        resources = []
-        # Query
-        results = oci.pagination.list_call_get_all_results(client.list_services, compartment_id=self.tenancy_ocid).data
-        # Convert to Json object
-        resources = self.toJson(results)
-        self.dropdown_json[array] = sorted(resources, key=lambda k: k['name'])
-        for r in self.dropdown_json[array]:
-            r['display_name'] = r['name']
-        return self.dropdown_json[array]
-
-    def shapes(self):
-        resource_map = self.resource_map["Shape"]
-        client = self.clients[resource_map["client"]]
-        array = resource_map["array"]
-        resources = []
-        # Query
-        results = oci.pagination.list_call_get_all_results(client.list_shapes, compartment_id=self.tenancy_ocid).data
-        # Convert to Json object
-        resources = self.toJson(results)
-        self.dropdown_json[array] = sorted(self.deduplicate(resources, 'shape'), key=lambda k: k['shape'])
-        return self.dropdown_json[array]
     
-    def volume_backup_policy(self):
-        resource_map = self.resource_map["VolumeBackupPolicy"]
+    def tenancy_compartments(self):
+        resource_map = self.resource_map["Compartment"]
+        client = self.clients[resource_map["client"]]
+        # All Compartments
+        results = oci.pagination.list_call_get_all_results(client.list_compartments, compartment_id=self.tenancy_ocid, compartment_id_in_subtree=self.sub_compartments).data
+        # Convert to Json object
+        self.all_compartments = self.toJson(results)
+        self.all_compartment_ids = [c['id'] for c in self.all_compartments]
+        return 
+    
+    def sub_compartments(self, compartments):
+        query_compartment_ids = [id for id in compartments]
+        for id in compartments:
+            children = [c['id'] for c in self.all_compartments if c['compartment_id'] == id]
+            query_compartment_ids.extend(self.sub_compartments(children))
+        return query_compartment_ids
+
+    def compartments(self):
+        resource_map = self.resource_map["Compartment"]
         client = self.clients[resource_map["client"]]
         array = resource_map["array"]
         resources = []
-        # Query (Oracle)
-        results = oci.pagination.list_call_get_all_results(client.list_volume_backup_policies).data
-        # Convert to Json object
-        resources = self.toJson(results)
-        # Query (Custom)
-        results = oci.pagination.list_call_get_all_results(client.list_volume_backup_policies, compartment_id=self.tenancy_ocid).data
-        # Extend
-        resources.extend(self.toJson(results))
-        self.dropdown_json[array] = sorted(resources, key=lambda k: k['display_name'])
+        self.dropdown_json[array] = []
+        # Compartments
+        if self.sub_compartments:
+            self.tenancy_compartments()
+            query_compartment_ids = self.sub_compartments(self.query_compartments)
+            self.query_compartments = query_compartment_ids
+            self.dropdown_json[array] = [c for c in self.all_compartments if c['id'] in query_compartment_ids]
+        else:
+            for compartment_id in self.query_compartments:
+                results = oci.pagination.list_call_get_all_results(client.list_compartments, compartment_id=compartment_id).data
+                # Convert to Json object
+                resources = self.toJson(results)
+                self.dropdown_json[array].extend(resources)
         return self.dropdown_json[array]
-    
+
+    def dhcp_options(self):
+        resource_map = self.resource_map["DHCPOptions"]
+        client = self.clients[resource_map["client"]]
+        array = resource_map["array"]
+        resources = []
+        self.dropdown_json[array] = []
+        # DHCP Option
+        for compartment_id in self.query_compartments:
+            results = oci.pagination.list_call_get_all_results(client.list_dhcp_options, compartment_id=compartment_id).data
+            # Convert to Json object
+            resources = self.toJson(results)
+            self.dropdown_json[array] = resources
+        return self.dropdown_json[array]
+
+    def subnets(self):
+        resource_map = self.resource_map["Subnet"]
+        client = self.clients[resource_map["client"]]
+        array = resource_map["array"]
+        resources = []
+        self.dropdown_json[array] = []
+        # Subnet
+        for compartment_id in self.query_compartments:
+            results = oci.pagination.list_call_get_all_results(client.list_subnets, compartment_id=compartment_id).data
+            # Convert to Json object
+            resources = self.toJson(results)
+            self.dropdown_json[array] = resources
+        return self.dropdown_json[array]
+
+    def virtual_cloud_networks(self):
+        resource_map = self.resource_map["Vcn"]
+        client = self.clients[resource_map["client"]]
+        array = resource_map["array"]
+        resources = []
+        self.dropdown_json[array] = []
+        # Vcn
+        for compartment_id in self.query_compartments:
+            results = oci.pagination.list_call_get_all_results(client.list_vcns, compartment_id=compartment_id).data
+            # Convert to Json object
+            resources = self.toJson(results)
+            self.dropdown_json[array] = resources
+        return self.dropdown_json[array]
+
+    def object_storage_buckets(self):
+        resource_map = self.resource_map["Bucket"]
+        client = self.clients[resource_map["client"]]
+        array = resource_map["array"]
+        resources = []
+        self.dropdown_json[array] = []
+        # Buckets
+        namespace = str(self.client.get_namespace().data)
+        for compartment_id in self.query_compartments:
+            results = oci.pagination.list_call_get_all_results(client.list_buckets, namespace_name=namespace, compartment_id=compartment_id).data
+            # Convert to Json object
+            resources = self.toJson(results)
+            self.dropdown_json[array] = resources
+        return self.dropdown_json[array]
+
     def deduplicate(self, resources, key):
         seen = []
         deduped = []

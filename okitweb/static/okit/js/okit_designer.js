@@ -1011,50 +1011,49 @@ function displayQueryDialog(title='Query OCI', btn_text='Query', callback) {
         .attr('type', 'button')
         .text(btn_text)
         .on('click', callback);
-        // .on('click', function () {
-        //     showQueryResults();
-        // });
     $(jqId('modal_dialog_wrapper')).removeClass('hidden');
 }
-function handleQueryOci(e) {
+function handleQueryOCI(e) {
     hideNavMenu();
     $("#toolbar_view_select").val('designer');
     handleSwitchToCompartmentView();
     // Display Dialog
-    displayQueryDialog('Query OCI', 'Query', () => {showQueryResults()});
+    displayQueryDialog('Query OCI', 'Query', () => {showQueryOCIResults()});
     // Set Query Config Profile
-    console.info('Profile : ' + okitSettings.profile);
-    if (!okitSettings.profile) {
-        okitSettings.profile = 'DEFAULT';
-    }
-    console.info('Profile : ' + okitSettings.profile);
+    // console.info('Profile : ' + okitSettings.profile);
+    // if (!okitSettings.profile) {
+    //     okitSettings.profile = 'DEFAULT';
+    // }
+    // console.info('Profile : ' + okitSettings.profile);
     okitSettings.home_region_key = '';
     okitSettings.home_region = '';
     ociRegions = [];
     // Load Previous Profile
-    $(jqId('config_profile')).val(okitSettings.profile);
+    // $(jqId('config_profile')).val(okitSettings.profile);
+    $(jqId('config_profile')).val($(`#console_header_config_select`).val());
     // Load Compartment Select
     loadCompartments();
     // Load Region Select
     loadRegions(selectQueryLastUsedRegion);
 }
-function handleImportFromOci(e) {
+function handleImportFromOCI(e) {
     hideNavMenu();
     $("#toolbar_view_select").val('designer');
     handleSwitchToCompartmentView();
     // Display Dialog
-    displayQueryDialog('Import From OCI', 'Introspect', () => {showImportOciResults()});
+    displayQueryDialog('Import From OCI', 'Introspect', () => {showImportOCIResults()});
     // Set Query Config Profile
-    console.info('Profile : ' + okitSettings.profile);
-    if (!okitSettings.profile) {
-        okitSettings.profile = 'DEFAULT';
-    }
-    console.info('Profile : ' + okitSettings.profile);
+    // console.info('Profile : ' + okitSettings.profile);
+    // if (!okitSettings.profile) {
+    //     okitSettings.profile = 'DEFAULT';
+    // }
+    // console.info('Profile : ' + okitSettings.profile);
     okitSettings.home_region_key = '';
     okitSettings.home_region = '';
     ociRegions = [];
     // Load Previous Profile
-    $(jqId('config_profile')).val(okitSettings.profile);
+    // $(jqId('config_profile')).val(okitSettings.profile);
+    $(jqId('config_profile')).val($(`#console_header_config_select`).val());
     // Load Compartment Select
     loadCompartments();
     // Load Region Select
@@ -1157,7 +1156,7 @@ function selectQueryLastUsedCompartment() {
     }
 }
 let queryCount = 0;
-function showQueryResults() {
+function showQueryOCIResults() {
     console.info('Generating Query Results');
     let regions = $(jqId('query_region_id')).val();
     let request = {};
@@ -1206,7 +1205,7 @@ function showQueryResults() {
     $(jqId('modal_dialog_wrapper')).addClass('hidden');
     hideRecoverMenuItem();
 }
-function showImportOciResults() {
+function showImportOCIResults() {
     console.info('Generating Import Oci Results');
     let regions = [$(jqId('query_region_id')).val()];
     let request = {};
@@ -1240,15 +1239,115 @@ function showImportOciResults() {
     hideRecoverMenuItem();
 }
 /*
-$(document).ajaxStop(function() {
-    console.info('All Ajax Functions Stopped');
-    //$(jqId('modal_loading_wrapper')).addClass('hidden');
-    okitJsonView ? console.info(okitJsonView) : console.info('okitJsonView not defined');
-    okitJsonModel ? console.info(okitJsonModel) : console.info('okitJsonModel not defined');
-    //displayTreeView();
-    okitOCIQuery ? console.info(okitOCIQuery) : console.info('okitOCIQuery not defined');
-});
- */
+** Query PCA-X9
+*/
+function handleQueryPCA(e) {
+    hideNavMenu();
+    $("#toolbar_view_select").val('designer');
+    handleSwitchToCompartmentView();
+    // Display Dialog
+    displayQueryDialog('Query PCA-X9', 'Query', () => {queryPCA(showQueryPCAResults())});
+    // Set Query Config Profile
+    okitSettings.home_region_key = '';
+    okitSettings.home_region = '';
+    ociRegions = [];
+    // Load Previous Profile
+    $(jqId('config_profile')).val($(`#console_header_config_select`).val());
+    // Load Compartment Select
+    loadCompartments();
+    // Load Region Select
+    loadRegions(selectQueryLastUsedRegion);
+}
+function handleImportFromPCA(e) {
+    hideNavMenu();
+    $("#toolbar_view_select").val('designer');
+    handleSwitchToCompartmentView();
+    // Display Dialog
+    displayQueryDialog('Import From PCA', 'Introspect', () => {showImportOCIResults()});
+    // Set Query Config Profile
+    okitSettings.home_region_key = '';
+    okitSettings.home_region = '';
+    ociRegions = [];
+    // Load Previous Profile
+    $(jqId('config_profile')).val($(`#console_header_config_select`).val());
+    // Load Compartment Select
+    loadCompartments();
+    // Load Region Select
+    loadRegions(selectQueryLastUsedRegion);
+}
+function queryPCA(callback=undefined) {
+    console.info('Querying PCA-X9');
+    const regions = $(jqId('query_region_id')).val();
+    let request = {};
+    request.compartment_id = $(jqId('query_compartment_id')).val();
+    request.compartment_name = $(`${jqId('query_compartment_id')} option:selected`).text();
+    request.config_profile = $(jqId('config_profile')).val();
+    request.sub_compartments = $(jqId('include_sub_compartments')).is(':checked');
+    request.fast_discovery = $(jqId('fast_discovery')).is(':checked');
+    request.region = '';
+    clearRegionTabBar();
+    showRegionTabBar();
+    newModel();
+    newDesignerView();
+    okitJsonView.newCanvas();
+    console.info('Regions Ids : ' + regions);
+    newRegionsModel();
+    if (regions.length > 0) {
+        $(jqId('modal_loading_wrapper')).removeClass('hidden');
+        okitPCAQuery = new OkitPCAQuery(regions, request.fast_discovery);
+        $(jqId('region_progress')).empty();
+        okitPCAQuery.query(request, callback, function (region) {
+            $(jqId(regionCheckboxName(region))).prop('checked', true);
+            removeRegionTabProgress(region);
+        });
+    } else {
+        console.info('Region Not Selected.');
+    }
+    $(jqId('modal_dialog_wrapper')).addClass('hidden');
+    hideRecoverMenuItem();
+}
+function showQueryPCAResults(region) {
+    console.info('Generating Query Results');
+    console.info('Complete ' + region);
+    okitJsonModel = regionOkitJson[region];
+    newDesignerView();
+    redrawSVGCanvas(region);
+    displayTreeView();
+    $(jqId('modal_loading_wrapper')).addClass('hidden');
+}
+function showImportPCAResults() {
+    console.info('Generating Import Oci Results');
+    let regions = [$(jqId('query_region_id')).val()];
+    let request = {};
+    request.compartment_id = $(jqId('query_compartment_id')).val();
+    request.compartment_name = $(`${jqId('query_compartment_id')} option:selected`).text();
+    request.config_profile = $(jqId('config_profile')).val();
+    request.sub_compartments = $(jqId('include_sub_compartments')).is(':checked');
+    request.fast_discovery = $(jqId('fast_discovery')).is(':checked');
+    request.region = '';
+    console.info('Regions Ids : ' + regions);
+    newRegionsModel();
+    if (regions.length > 0) {
+        $(jqId('modal_loading_wrapper')).removeClass('hidden');
+        okitOCIQuery = new OkitPCAQuery(regions, request.fast_discovery);
+        // Add Tabs
+        $(jqId('region_progress')).empty();
+        okitOCIQuery.query(request, function(region) {
+            console.info('Complete ' + region);
+            $(jqId('modal_loading_wrapper')).addClass('hidden');
+            slideLeftPanel('oci_import_panel');
+            const importView = new OkitOciImportView(regionOkitJson[region], okitJsonModel)
+            importView.draw()
+        }, function (region) {
+            $(jqId(regionCheckboxName(region))).prop('checked', true);
+            removeRegionTabProgress(region);
+        });
+    } else {
+        console.info('Region Not Selected.');
+    }
+    $(jqId('modal_dialog_wrapper')).addClass('hidden');
+    hideRecoverMenuItem();
+}
 /*
 ** Export the Model as various formats
  */
