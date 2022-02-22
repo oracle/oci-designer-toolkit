@@ -42,7 +42,7 @@ class OkitDesignerJsonView extends OkitJsonView {
         // New canvas
         let width = 0;
         let height = 0;
-        for (let compartment of this.compartments) {
+        for (let compartment of this.getCompartments()) {
             let dimensions = compartment.dimensions;
             width = Math.max(width, dimensions.width);
             height = Math.max(height, dimensions.height);

@@ -12,6 +12,8 @@
     4. Security list
     5. Subnet
     6. VCN
+3. Update Vagrant build functionality to clone Git Repository during build rather than copy file information and add a run-server.sh script that attempts to pull latest update before running the server.
+4. Add Query Functionality for PCA-X9
 ### Bug Fixes
 
 
