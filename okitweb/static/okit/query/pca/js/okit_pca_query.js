@@ -12,9 +12,10 @@ class OkitPCAQuery {
         this.active_region = '';
     }
 
-    query(request = null, complete_callback, region_complete_callback) {
+    query(request = null, complete_callback, region_complete_callback, error_callback) {
         this.complete_callback = complete_callback;
         this.region_complete_callback = region_complete_callback;
+        this.error_callback = error_callback
         if (request) {
             for (const [i, region] of this.regions.entries()) {
                 console.info(`${i} - Processing Selected Region : ${region}`);
@@ -46,9 +47,11 @@ class OkitPCAQuery {
             const response_json = JSON.parse(resp);
             const title = request.sub_compartments ? `Queried Compartment ${request.compartment_name} and Sub-Compartments` : `Queried Compartment ${request.compartment_name}`;
             const description = `${title} in Region ${request.region}`;
+            console.info(response_json)
             regionOkitJson[request.region].load(response_json)
             regionOkitJson[request.region].title = title;
             regionOkitJson[request.region].description = description;
+            regionOkitJson[request.region].metadata.platform = 'pca'
         }).fail((xhr, status, error) => {
             console.error('Status : ' + status);
             console.error('Error  : ' + error);
@@ -68,6 +71,7 @@ class OkitPCAQuery {
 
     isComplete() {
         if (this.complete_callback) {
+            console.info(`Region Query Count ${this.region_query_count}`)
             // Check if Region is complete
             for (let key of Object.keys(this.region_query_count)) {
                 if (this.region_query_count[key] === 0) {

@@ -1246,7 +1246,7 @@ function handleQueryPCA(e) {
     $("#toolbar_view_select").val('designer');
     handleSwitchToCompartmentView();
     // Display Dialog
-    displayQueryDialog('Query PCA-X9', 'Query', () => {queryPCA(showQueryPCAResults())});
+    displayQueryDialog('Query PCA-X9', 'Query', () => {queryPCA(showQueryPCAResults)});
     // Set Query Config Profile
     okitSettings.home_region_key = '';
     okitSettings.home_region = '';
@@ -1291,6 +1291,7 @@ function queryPCA(callback=undefined) {
     newDesignerView();
     okitJsonView.newCanvas();
     console.info('Regions Ids : ' + regions);
+    console.info('Request : ' + request);
     newRegionsModel();
     if (regions.length > 0) {
         $(jqId('modal_loading_wrapper')).removeClass('hidden');
@@ -1299,7 +1300,7 @@ function queryPCA(callback=undefined) {
         okitPCAQuery.query(request, callback, function (region) {
             $(jqId(regionCheckboxName(region))).prop('checked', true);
             removeRegionTabProgress(region);
-        });
+        }, () => $(jqId('modal_loading_wrapper')).addClass('hidden'));
     } else {
         console.info('Region Not Selected.');
     }
@@ -1307,13 +1308,13 @@ function queryPCA(callback=undefined) {
     hideRecoverMenuItem();
 }
 function showQueryPCAResults(region) {
-    console.info('Generating Query Results');
+    $(jqId('modal_loading_wrapper')).addClass('hidden');
+    console.info('Show PCA Query Results');
     console.info('Complete ' + region);
     okitJsonModel = regionOkitJson[region];
     newDesignerView();
     redrawSVGCanvas(region);
     displayTreeView();
-    $(jqId('modal_loading_wrapper')).addClass('hidden');
 }
 function showImportPCAResults() {
     console.info('Generating Import Oci Results');
