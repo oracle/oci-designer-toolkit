@@ -34,7 +34,7 @@ class PCAQuery(OCIConnection):
     SUPPORTED_RESOURCES = [
         "Compartment", # Must be first because we will use the resulting list to query other resources in the selected and potentially child compartments
         "AvailabilityDomain", 
-        # "Bucket", 
+        "Bucket", 
         "DHCPOptions", 
         "Drg", 
         "FileSystem", 
@@ -65,7 +65,7 @@ class PCAQuery(OCIConnection):
                 }, 
             "Bucket": {
                 "method": self.object_storage_buckets, 
-                "client": "volume", 
+                "client": "object", 
                 "array": "object_storage_buckets"
                 }, 
             "Compartment": {
@@ -199,7 +199,6 @@ class PCAQuery(OCIConnection):
             logger.info(f'>>>>>>>>>>>> Processing {resource}')
             self.resource_map[resource]["method"]()
         # Remove Availability Domains
-        logger.info(jsonToFormattedString(self.dropdown_json.get('availability_domains', [])))
         self.dropdown_json.pop('availability_domains', None)
         return self.dropdown_json
     
@@ -468,7 +467,7 @@ class PCAQuery(OCIConnection):
         array = resource_map["array"]
         resources = []
         self.dropdown_json[array] = []
-        namespace = str(self.client.get_namespace().data)
+        namespace = str(client.get_namespace().data)
         for compartment_id in self.query_compartments:
             results = oci.pagination.list_call_get_all_results(client.list_buckets, namespace_name=namespace, compartment_id=compartment_id).data
             # Convert to Json object
