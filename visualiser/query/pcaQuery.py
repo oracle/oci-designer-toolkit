@@ -22,6 +22,7 @@ from common.okitCommon import jsonToFormattedString
 from common.okitCommon import logJson
 from common.okitCommon import standardiseIds
 from common.okitCommon import jsonToFormattedString
+from common.okitCommon import userDataDecode
 from common.okitLogging import getLogger
 from common.okitCommon import userDataDecode
 from facades.ociConnection import OCIConnection
@@ -30,10 +31,9 @@ from facades.ociConnection import OCIConnection
 logger = getLogger()
 
 class PCAQuery(OCIConnection):
-
+    LIFECYCLE_STATES = ["RUNNING", "STARTING", "STOPPING", "STOPPED", "CREATING_IMAGE"]
     SUPPORTED_RESOURCES = [
         "Compartment", # Must be first because we will use the resulting list to query other resources in the selected and potentially child compartments
-        "AvailabilityDomain", 
         "Bucket", 
         "DHCPOptions", 
         "Drg", 
@@ -53,9 +53,18 @@ class PCAQuery(OCIConnection):
         "Vcn",
         "Volume"
     ]
+    ANCILLARY_RESOURCES = [
+        "AvailabilityDomain", 
+        "BootVolume",
+        "BootVolumeAttachment", 
+        "Image", 
+        "VnicAttachment", 
+        "VolumeAttachment", 
+    ]
 
     def __init__(self, config=None, configfile=None, profile=None, region=None, signer=None):
         super(PCAQuery, self).__init__(config=config, configfile=configfile, profile=profile, region=region, signer=signer)
+        self.ancillary_resources = {}
         self.dropdown_json = {}
         self.resource_map = {
             "AvailabilityDomain": {
@@ -63,6 +72,16 @@ class PCAQuery(OCIConnection):
                 "client": "identity", 
                 "array": "availability_domains"
                 }, 
+            "BootVolume": {
+                "method": self.boot_volumes, 
+                "client": "volume", 
+                "array": "boot_volumes"
+                },
+            "BootVolumeAttachment": {
+                "method": self.boot_volume_attachments, 
+                "client": "compute", 
+                "array": "boot_volume_attachments"
+                },
             "Bucket": {
                 "method": self.object_storage_buckets, 
                 "client": "object", 
@@ -88,6 +107,11 @@ class PCAQuery(OCIConnection):
                 "client": "filestorage", 
                 "array": "file_systems"
                 }, 
+            "Image": {
+                "method": self.images, 
+                "client": "compute", 
+                "array": "images"
+                },
             "Instance": {
                 "method": self.instances, 
                 "client": "compute", 
@@ -148,10 +172,20 @@ class PCAQuery(OCIConnection):
                 "client": "network", 
                 "array": "virtual_cloud_networks"
                 }, 
+            "VnicAttachment": {
+                "method": self.vnic_attachments, 
+                "client": "compute", 
+                "array": "vnic_attachments"
+                },
             "Volume": {
                 "method": self.block_storage_volumes, 
                 "client": "volume", 
                 "array": "block_storage_volumes"
+                },
+            "VolumeAttachment": {
+                "method": self.volume_attachments, 
+                "client": "compute", 
+                "array": "volume_attachments"
                 }
         }
         # Load Tenancy OCID
@@ -195,13 +229,104 @@ class PCAQuery(OCIConnection):
         self.sub_compartments = include_sub_compartments
         self.query_compartments = compartments
         response_json = {}
-        for resource in self.SUPPORTED_RESOURCES:
-            logger.info(f'>>>>>>>>>>>> Processing {resource}')
+        # Query Compartments
+        logger.info(f'>>>>>>>>>>>> Querying Compartments')
+        self.compartments()
+        # Process Supporting Resources
+        logger.info(f'>>>>>>>>>>>> Processing Ancillary Resources')
+        for resource in self.ANCILLARY_RESOURCES:
+            logger.info(f'>>>>>>>>>>>> Querying {resource}')
+            self.resource_map[resource]["method"]()
+        # Query Resources
+        logger.info(f'>>>>>>>>>>>> Processing Supported Resources')
+        for resource in [r for r in self.SUPPORTED_RESOURCES if r != "Compartment"]:
+            logger.info(f'>>>>>>>>>>>> Querying {resource}')
             self.resource_map[resource]["method"]()
         # Remove Availability Domains
         self.dropdown_json.pop('availability_domains', None)
         return self.dropdown_json
     
+    # Ancillary Resources
+    def availability_domains(self):
+        resource_map = self.resource_map["AvailabilityDomain"]
+        client = self.clients[resource_map["client"]]
+        array = resource_map["array"]
+        resources = []
+        self.ancillary_resources[array] = []
+        for compartment_id in self.query_compartments:
+            results = oci.pagination.list_call_get_all_results(client.list_availability_domains, compartment_id=compartment_id).data
+            # Convert to Json object
+            resources = self.toJson(results)
+            self.ancillary_resources[array] = resources
+        return self.ancillary_resources[array]
+
+    def boot_volumes(self):
+        resource_map = self.resource_map["BootVolume"]
+        client = self.clients[resource_map["client"]]
+        array = resource_map["array"]
+        resources = []
+        self.ancillary_resources[array] = []
+        for availability_domain in self.ancillary_resources.get('availability_domains', []):
+            for compartment_id in self.query_compartments:
+                results = oci.pagination.list_call_get_all_results(client.list_boot_volumes, compartment_id=compartment_id, availability_domain=availability_domain['name']).data
+                # Convert to Json object
+                resources = self.toJson(results)
+                self.ancillary_resources[array].extend(resources)
+        return self.ancillary_resources[array]
+
+    def boot_volume_attachments(self):
+        resource_map = self.resource_map["BootVolumeAttachment"]
+        client = self.clients[resource_map["client"]]
+        array = resource_map["array"]
+        resources = []
+        self.ancillary_resources[array] = []
+        for availability_domain in self.ancillary_resources.get('availability_domains', []):
+            for compartment_id in self.query_compartments:
+                results = oci.pagination.list_call_get_all_results(client.list_boot_volume_attachments, compartment_id=compartment_id, availability_domain=availability_domain['name']).data
+                # Convert to Json object
+                resources = self.toJson(results)
+                self.ancillary_resources[array].extend(resources)
+        return self.ancillary_resources[array]
+
+    def images(self):
+        resource_map = self.resource_map["Image"]
+        client = self.clients[resource_map["client"]]
+        array = resource_map["array"]
+        resources = []
+        # Images
+        results = oci.pagination.list_call_get_all_results(client.list_images, compartment_id=self.tenancy_ocid).data
+        # Convert to Json object
+        resources = self.toJson(results)
+        self.ancillary_resources[array] = resources
+        return self.ancillary_resources[array]
+
+    def vnic_attachments(self):
+        resource_map = self.resource_map["VnicAttachment"]
+        client = self.clients[resource_map["client"]]
+        array = resource_map["array"]
+        resources = []
+        self.ancillary_resources[array] = []
+        for compartment_id in self.query_compartments:
+            results = oci.pagination.list_call_get_all_results(client.list_vnic_attachments, compartment_id=compartment_id).data
+            # Convert to Json object
+            resources = self.toJson(results)
+            self.ancillary_resources[array].extend(resources)
+        return self.ancillary_resources[array]
+
+    def volume_attachments(self):
+        resource_map = self.resource_map["VolumeAttachment"]
+        client = self.clients[resource_map["client"]]
+        array = resource_map["array"]
+        resources = []
+        self.ancillary_resources[array] = []
+        for compartment_id in self.query_compartments:
+            results = oci.pagination.list_call_get_all_results(client.list_volume_attachments, compartment_id=compartment_id).data
+            # Convert to Json object
+            resources = self.toJson(results)
+            self.ancillary_resources[array].extend(resources)
+        return self.ancillary_resources[array]
+
+    # Supported Resources
     def tenancy_compartments(self):
         resource_map = self.resource_map["Compartment"]
         client = self.clients[resource_map["client"]]
@@ -236,19 +361,6 @@ class PCAQuery(OCIConnection):
                 # Convert to Json object
                 resources = self.toJson(results)
                 self.dropdown_json[array].extend(resources)
-        return self.dropdown_json[array]
-
-    def availability_domains(self):
-        resource_map = self.resource_map["AvailabilityDomain"]
-        client = self.clients[resource_map["client"]]
-        array = resource_map["array"]
-        resources = []
-        self.dropdown_json[array] = []
-        for compartment_id in self.query_compartments:
-            results = oci.pagination.list_call_get_all_results(client.list_availability_domains, compartment_id=compartment_id).data
-            # Convert to Json object
-            resources = self.toJson(results)
-            self.dropdown_json[array] = resources
         return self.dropdown_json[array]
 
     def block_storage_volumes(self):
@@ -296,7 +408,7 @@ class PCAQuery(OCIConnection):
         array = resource_map["array"]
         resources = []
         self.dropdown_json[array] = []
-        for availability_domain in self.dropdown_json.get('availability_domains', []):
+        for availability_domain in self.ancillary_resources.get('availability_domains', []):
             for compartment_id in self.query_compartments:
                 results = oci.pagination.list_call_get_all_results(client.list_file_systems, compartment_id=compartment_id, availability_domain=availability_domain['name']).data
                 # Convert to Json object
@@ -314,9 +426,43 @@ class PCAQuery(OCIConnection):
             results = oci.pagination.list_call_get_all_results(client.list_instances, compartment_id=compartment_id).data
             # Convert to Json object
             resources = self.toJson(results)
+            # Filter on Lifecycle State
+            resources = [r for r in resources if r['lifecycle_state'] in self.LIFECYCLE_STATES]
+            # Get OS and Version
             self.dropdown_json[array].extend(resources)
+        # Add Attachments and Additional Data
+        for resource in self.dropdown_json[array]:
+            # Add OS & Version
+            image_id = resource.get('source_details', {}).get('image_id', '')
+            resource['source_details']['os'] = ''
+            resource['source_details']['version'] = ''
+            if image_id != '':
+                images = [r for r in self.ancillary_resources['images'] if r['id'] == image_id]
+                if len(images) > 0:
+                    image = images[0]
+                    resource['source_details']['os'] = image['operating_system']
+                    resource['source_details']['version'] = image['operating_system_version']
+            # Decode Cloud Init Yaml
+            if resource.get('metadata', None) is None:
+                resource['metadata'] = {}
+            user_data = resource.get('metadata', {}).get('user_data', '')
+            if user_data != '':
+                resource['metadata']['user_data'] = userDataDecode(user_data)
+            # Add Vnic Attachments
+            resource['vnics'] = sorted([va for va in self.ancillary_resources['vnic_attachments'] if va['instance_id'] == resource['id']], key=lambda k: k['nic_index'])
+            # Add Volume Attachments
+            resource['block_storage_volume'] = [va for va in self.ancillary_resources['volume_attachments'] if va['instance_id'] == resource['id']]
+            # Add Boot Volume Details
+            boot_volume_attachments = [r for r in self.ancillary_resources['boot_volume_attachments'] if r['id'] == resource['id']]
+            if len(boot_volume_attachments) > 0:
+                boot_volume_attachment = boot_volume_attachments[0]
+                resource['is_pv_encryption_in_transit_enabled'] = boot_volume_attachment['is_pv_encryption_in_transit_enabled']
+                boot_volumes = [r for r in self.ancillary_resources['boot_volumes'] if r['id'] == boot_volume_attachment['boot_volume_id']]
+                if len(boot_volumes) > 0:
+                    boot_volume = boot_volumes[0]
+                    resource['boot_volume_size_in_gbs'] = boot_volume['size_in_gbs']
         return self.dropdown_json[array]
-
+    
     def internet_gateways(self):
         resource_map = self.resource_map["InternetGateway"]
         client = self.clients[resource_map["client"]]
@@ -349,7 +495,7 @@ class PCAQuery(OCIConnection):
         array = resource_map["array"]
         resources = []
         self.dropdown_json[array] = []
-        for availability_domain in self.dropdown_json.get('availability_domains', []):
+        for availability_domain in self.ancillary_resources.get('availability_domains', []):
             for compartment_id in self.query_compartments:
                 results = oci.pagination.list_call_get_all_results(client.list_mount_targets, compartment_id=compartment_id, availability_domain=availability_domain['name']).data
                 # Convert to Json object
