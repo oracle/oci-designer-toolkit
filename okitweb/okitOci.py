@@ -82,6 +82,7 @@ from facades.ociVmCluster import OCIVmClusters
 from facades.ociVmClusterNetwork import OCIVmClusterNetworks
 from generators.okitResourceManagerGenerator import OCIResourceManagerGenerator
 from query.ociQuery import OCIQuery
+from query.ociCompartmentQuery import OCICompartmentQuery
 from query.ociRegionQuery import OCIRegionQuery
 from query.ociDropdownQuery import OCIDropdownQuery
 
@@ -189,6 +190,15 @@ def ociResourceManger():
             logger.exception(e)
             return str(e), 500
     return
+
+
+@bp.route('/compartments/<string:profile>', methods=(['GET']))
+def ociCompartments(profile):
+    oci_compartment_query = OCICompartmentQuery(profile=profile)
+    compartments = oci_compartment_query.executeQuery()
+    response = jsonToFormattedString(compartments)
+    logger.debug(">>>>>>>>> Compartments: {0!s:s}".format(response))
+    return response
 
 
 @bp.route('/compartment', methods=(['GET']))

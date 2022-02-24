@@ -902,7 +902,7 @@ function displayQueryDialog(title='Query OCI', btn_text='Query', callback) {
                 loadHeaderConfigDropDown()
                 // Clear Existing Compartments
                 okitOciData.setCompartments([]);
-                loadCompartments();
+                loadOCICompartments();
                 loadRegions(selectQueryLastUsedRegion);
             });
     for (let section of okitOciConfig.sections) {
@@ -962,7 +962,7 @@ function displayQueryDialog(title='Query OCI', btn_text='Query', callback) {
                 .on('click', () => {
                     // Clear Existing Compartments
                     okitOciData.setCompartments([]);
-                    loadCompartments();
+                    loadOCICompartments();
                 });
     tr.append('div')
         .attr('class', 'td')
@@ -1032,7 +1032,7 @@ function handleQueryOCI(e) {
     // $(jqId('config_profile')).val(okitSettings.profile);
     $(jqId('config_profile')).val($(`#console_header_config_select`).val());
     // Load Compartment Select
-    loadCompartments();
+    loadOCICompartments();
     // Load Region Select
     loadRegions(selectQueryLastUsedRegion);
 }
@@ -1055,7 +1055,7 @@ function handleImportFromOCI(e) {
     // $(jqId('config_profile')).val(okitSettings.profile);
     $(jqId('config_profile')).val($(`#console_header_config_select`).val());
     // Load Compartment Select
-    loadCompartments();
+    loadOCICompartments();
     // Load Region Select
     loadRegions(selectQueryLastUsedRegion);
 }
@@ -1107,6 +1107,55 @@ function loadCompartments() {
             }
         });
     }
+}
+function loadOCICompartments() {
+    // Clear Select
+    let select = $(jqId('query_compartment_id'));
+    $(select).empty();
+    select.append($('<option>').attr('value', 'Retrieving').text('Retrieving..........'));
+    if (okitOciData.getCompartments().length > 0) {
+        loadQueryCompartmentsSelect()
+    } else {
+        const profile = $(jqId('config_profile')).val()
+        $.ajax({
+            type: 'get',
+            url: `oci/compartments/${profile}`,
+            dataType: 'text',
+            contentType: 'application/json',
+            data: {
+                config_profile: $(jqId('config_profile')).val()
+            } // Arguments
+        }).done((resp) => {
+            const compartments = JSON.parse(resp)
+            okitOciData.setCompartments(compartments)
+            loadQueryCompartmentsSelect()
+            // loadRegions(selectQueryLastUsedRegion);
+        }).fail((xhr, status, error) => {
+            console.error('Status : ' + status);
+            console.error('Error  : ' + error);
+        }).always(() => {})
+    }
+}
+function loadQueryCompartmentsSelect() {
+    // Clear Select
+    let select = $(jqId('query_compartment_id'));
+    $(select).empty();
+    if (okitOciData.getCompartments().length > 0) {
+        let compartment_select = d3.select(d3Id('query_compartment_id'));
+        for (let compartment of okitOciData.getCompartments()) {
+                console.info(compartment['display_name']);
+                console.info(compartment['canonical_name']);
+                compartment_select.append('option')
+                .attr('value', compartment['id'])
+                .text(compartment['canonical_name']);
+                if (okitSettings.home_region_key === '') {
+                    okitSettings.home_region_key = compartment.home_region_key;
+                }
+            }
+        selectQueryLastUsedCompartment();
+     } else {
+         console.warn('No Compartments Found')
+     }
 }
 function loadRegions(callback) {
     // Clear Select
