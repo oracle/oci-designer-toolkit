@@ -60,7 +60,8 @@ class SubnetView extends OkitContainerDesignerArtefactView {
         let attachment_count = 0;
         // Draw Route Table
         if (this.artefact.route_table_id !== '') {
-            const resource = this.getJsonView().getOkitJson().getRouteTable(this.route_table_id)
+            let resource = this.getJsonView().getOkitJson().getRouteTable(this.route_table_id)
+            resource = resource ? resource : new RouteTable({display_name: 'Missing From Design', read_only: true}, this.getJsonView().getOkitJson())
             if (resource) {
                 let attachment = new RouteTableView(resource, this.getJsonView());
                 attachment.attached_id = this.id;
@@ -70,7 +71,8 @@ class SubnetView extends OkitContainerDesignerArtefactView {
         }
         // Security Lists
         for (const security_list_id of this.artefact.security_list_ids) {
-            const resource = this.getJsonView().getOkitJson().getSecurityList(security_list_id)
+            let resource = this.getJsonView().getOkitJson().getSecurityList(security_list_id)
+            resource = resource ? resource : new SecurityList({display_name: 'Missing From Design', read_only: true}, this.getJsonView().getOkitJson())
             if (resource) {
                 let attachment = new SecurityListView(resource, this.getJsonView());
                 attachment.attached_id = this.id;
@@ -80,7 +82,8 @@ class SubnetView extends OkitContainerDesignerArtefactView {
         }
         // Draw Dhcp Options
         if (this.artefact.dhcp_options_id !== '') {
-            const resource = this.getJsonView().getOkitJson().getDhcpOption(this.dhcp_options_id)
+            let resource = this.getJsonView().getOkitJson().getDhcpOption(this.dhcp_options_id)
+            resource = resource ? resource : new DhcpOption({display_name: 'Missing From Design', read_only: true}, this.getJsonView().getOkitJson())
             if (resource) {
                 let attachment = new DhcpOptionView(resource, this.getJsonView());
                 attachment.attached_id = this.id;
