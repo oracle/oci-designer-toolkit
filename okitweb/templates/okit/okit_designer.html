@@ -268,7 +268,7 @@
     </div>
     <div id="okit_toolbar_right" class="okit-toolbar-right">
         <div>
-            <div id="refresh_toolbar_button" class="refresh okit-toolbar-button" title="Settings" onclick="handleRedraw()"></div>
+            <div id="refresh_toolbar_button" class="refresh okit-toolbar-button" title="Redraw" onclick="handleRedraw()"></div>
             <div id="settings_toolbar_button" class="settings okit-toolbar-button" title="Settings" onclick="handleSettings()"></div>
             <div id="validate_toolbar_button" class="validate okit-toolbar-button" title="Validate" onclick="handleValidate()"></div>
             <div id="properties_toolbar_button" class="properties okit-toolbar-button" title="Resource Properties" onclick="handleOpenProperties()"></div>
@@ -296,9 +296,9 @@
                 <div class="tr">
                     <div class="td"><label>Target</label></div>
                     <div class="td">
-                        <select id="deployment_platform" onchange="handleTargetPlatformSelect()">
+                        <select id="deployment_platform" onchange="handleTargetPlatformSelect()" {%- if pca_mode or oci_mode -%}disabled{%- endif -%}>
                             <option value="oci" selected="selected">OCI</option>
-                            <option value="freetier">OCI Free Tier</option>
+                            <!-- <option value="freetier">OCI Free Tier</option> -->
                             <option value="pca">PCA-X9</option>
                         </select>
                     </div>

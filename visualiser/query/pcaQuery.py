@@ -31,7 +31,21 @@ from facades.ociConnection import OCIConnection
 logger = getLogger()
 
 class PCAQuery(OCIConnection):
-    LIFECYCLE_STATES = ["RUNNING", "STARTING", "STOPPING", "STOPPED", "CREATING_IMAGE"]
+    LIFECYCLE_STATES = [
+        "ACTIVE", 
+        "AVAILABLE", 
+        "RUNNING", 
+        "STARTING", 
+        "STOPPING", 
+        "STOPPED", 
+        "CREATING_IMAGE",
+        "PROVISIONING", 
+        "UPDATING", 
+        "INACTIVE", 
+        "ALLOCATED", 
+        "VALIDATING", 
+        "VALIDATED"
+        ]
     SUPPORTED_RESOURCES = [
         "Compartment", # Must be first because we will use the resulting list to query other resources in the selected and potentially child compartments
         "Bucket", 

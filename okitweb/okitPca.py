@@ -34,6 +34,7 @@ from common.okitCommon import getOkitHome
 from common.okitLogging import getLogger
 # from query.pcaQuery import PCAQuery
 # from query.pcaRegionQuery import PCARegionQuery
+from query.pcaCompartmentQuery import PCACompartmentQuery
 from query.pcaDropdownQuery import PCADropdownQuery
 from query.pcaQuery import PCAQuery
 
@@ -91,6 +92,7 @@ def dropdownQuery():
     else:
         return 'Unknown Method', 500
 
+
 @bp.route('/query', methods=(['GET']))
 def pcaQuery():
     if request.method == 'GET':
@@ -108,5 +110,14 @@ def pcaQuery():
         return response
     else:
         return 404
+
+
+@bp.route('/compartments/<string:profile>', methods=(['GET']))
+def ociCompartments(profile):
+    oci_compartment_query = PCACompartmentQuery(profile=profile)
+    compartments = oci_compartment_query.executeQuery()
+    response = jsonToFormattedString(compartments)
+    logger.debug(">>>>>>>>> Compartments: {0!s:s}".format(response))
+    return response
 
 
