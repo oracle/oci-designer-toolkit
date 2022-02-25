@@ -5,18 +5,19 @@
 console.info('Loaded OKIT OCI Query Javascript');
 
 class OkitPCAQuery {
-    constructor(regions = [], fast_discovery=false) {
-        this.regions = regions;
+    constructor(regions=[], fast_discovery=false) {
+        this.regions = Array.isArray(regions) ? regions : [regions];
         this.region_query_count = {};
         this.complete_callback = undefined;
         this.active_region = '';
     }
 
-    query(request = null, complete_callback, region_complete_callback, error_callback) {
+    query(request=null, complete_callback, region_complete_callback, error_callback) {
         this.complete_callback = complete_callback;
         this.region_complete_callback = region_complete_callback;
         this.error_callback = error_callback
         if (request) {
+            console.info(`Regions ${this.regions} - ${typeof this.regions}`)
             for (const [i, region] of this.regions.entries()) {
                 console.info(`${i} - Processing Selected Region : ${region}`);
                 let region_request = JSON.clone(request);

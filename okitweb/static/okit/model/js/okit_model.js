@@ -21,7 +21,7 @@ class OkitJson {
         // this.okit_model_id = `okit-model-${uuidv4()}`;
         this.metadata = {
             resource_count: 0,
-            platform: 'oci',
+            platform: pca_mode ? 'pca' : 'oci',
             created: now,
             updated: now,
             okit_version: okitVersion,
