@@ -106,7 +106,7 @@ class PCACompartmentQuery(OCIConnection):
         resource_map = self.resource_map["Compartment"]
         client = self.clients[resource_map["client"]]
         # All Compartments
-        results = oci.pagination.list_call_get_all_results(client.list_compartments, compartment_id=self.tenancy_ocid, compartment_id_in_subtree=self.sub_compartments).data
+        results = oci.pagination.list_call_get_all_results(client.list_compartments, compartment_id=self.tenancy_ocid, compartment_id_in_subtree=True).data
         # Convert to Json object
         self.all_compartments = self.toJson(results)
         self.all_compartment_ids = [c['id'] for c in self.all_compartments]

@@ -9,7 +9,7 @@ class OkitResourceProperties {
     constructor (resource, resource_tabs=[]) {
         this.resource = resource
         this.resource_tabs = resource_tabs
-        this.id = this.toId(this.resource.resource_type)
+        this.id = this.resource ? this.toId(this.resource.resource_type) : 'missing'
         this.properties_div = '<div></div>'
         this.build()
     }
@@ -19,10 +19,12 @@ class OkitResourceProperties {
     subnet_filter = (r) => r.subnet_id.toString() === this.resource.subnet_id.toString()
 
     build() {
-        this.buildBaseSheet()
-        this.buildCore()
-        this.buildResource()
-        this.buildTags()
+        if (this.resource) {
+            this.buildBaseSheet()
+            this.buildCore()
+            this.buildResource()
+            this.buildTags()
+        }
     }
 
     buildBaseSheet() {
@@ -109,9 +111,11 @@ class OkitResourceProperties {
     }
 
     load() {
-        this.loadCore()
-        this.loadResource()
-        this.loadTags()
+        if (this.resource) {
+            this.loadCore()
+            this.loadResource()
+            this.loadTags()
+        }
     }
 
     loadCore() {

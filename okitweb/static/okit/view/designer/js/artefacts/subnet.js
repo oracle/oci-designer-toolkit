@@ -60,24 +60,33 @@ class SubnetView extends OkitContainerDesignerArtefactView {
         let attachment_count = 0;
         // Draw Route Table
         if (this.artefact.route_table_id !== '') {
-            let attachment = new RouteTableView(this.getJsonView().getOkitJson().getRouteTable(this.route_table_id), this.getJsonView());
-            attachment.attached_id = this.id;
-            attachment.draw();
-            attachment_count += 1;
+            const resource = this.getJsonView().getOkitJson().getRouteTable(this.route_table_id)
+            if (resource) {
+                let attachment = new RouteTableView(resource, this.getJsonView());
+                attachment.attached_id = this.id;
+                attachment.draw();
+                attachment_count += 1;
+            }
         }
         // Security Lists
-        for (let security_list_id of this.artefact.security_list_ids) {
-            let attachment = new SecurityListView(this.getJsonView().getOkitJson().getSecurityList(security_list_id), this.getJsonView());
-            attachment.attached_id = this.id;
-            attachment.draw();
-            attachment_count += 1;
+        for (const security_list_id of this.artefact.security_list_ids) {
+            const resource = this.getJsonView().getOkitJson().getSecurityList(security_list_id)
+            if (resource) {
+                let attachment = new SecurityListView(resource, this.getJsonView());
+                attachment.attached_id = this.id;
+                attachment.draw();
+                attachment_count += 1;
+            }
         }
         // Draw Dhcp Options
         if (this.artefact.dhcp_options_id !== '') {
-            let attachment = new DhcpOptionView(this.getJsonView().getOkitJson().getDhcpOption(this.dhcp_options_id), this.getJsonView());
-            attachment.attached_id = this.id;
-            attachment.draw();
-            attachment_count += 1;
+            const resource = this.getJsonView().getOkitJson().getDhcpOption(this.dhcp_options_id)
+            if (resource) {
+                let attachment = new DhcpOptionView(resource, this.getJsonView());
+                attachment.attached_id = this.id;
+                attachment.draw();
+                attachment_count += 1;
+            }
         }
     }
 
