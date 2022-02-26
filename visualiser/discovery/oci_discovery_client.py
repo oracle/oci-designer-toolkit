@@ -543,6 +543,16 @@ class OciResourceDiscoveryClient(object):
         if len(resource_types) == 0:
             return {}
 
+        # a large number of compartments can cause the query to exceed the maximum 50000 character
+        # limit. Split into multiple queries and combine results
+        max_compartments = 200
+        if compartments and len(compartments) > max_compartments:
+            chunks = [list(compartments)[i:i + max_compartments] for i in range(0, len(compartments), max_compartments)]
+            results = list()
+            for chunk in chunks:
+                result = self.search_resources_for_region(region_name, resource_types, chunk)
+                results.append(result)
+
         # copy the config and update the region
         region_config = self.config.copy()  
         region_config["region"] = region_name
