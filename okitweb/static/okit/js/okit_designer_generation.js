@@ -133,7 +133,7 @@ function generateTerraformLocalZipGet(results) {
         console.info(okitSettings);
         requestJson.use_variables = okitSettings.is_variables;
         $.ajax({
-
+            cache: false,
             type: 'get',
             url: 'export/terraform',
             dataType: 'text',
@@ -188,6 +188,7 @@ function generateTerraformLocalZip(results) {
 function exportTerraformForDisplay(results) {
     if (results.valid) {
         $.ajax({
+            cache: false,
             type: 'get',
             url: 'export/terraform',
             dataType: 'text',

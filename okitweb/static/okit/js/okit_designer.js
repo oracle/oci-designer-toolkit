@@ -52,6 +52,7 @@ function setOCILink() {
 }
 function setOCILinkOld() {
     $.ajax({
+        cache: false,
         type: 'get',
         url: `config/region/${okitSettings.profile}`,
         dataType: 'text',
@@ -288,6 +289,7 @@ function displaySaveAsTemplateDialog(title, callback, root_dir='templates/user',
     //     .attr('value', '.')
     //     .text('user')
     $.ajax({
+        cache: false,
         type: 'get',
         url: `templates/load`,
         dataType: 'text', // Response Type
@@ -372,6 +374,7 @@ function handleSaveAsTemplate(e) {
 const loadTemplatePanel = () => {
     const id = 'templates_panel'
     $.ajax({
+        cache: false,
         type: 'get',
         url: `panel/templates`,
         dataType: 'text', // Response Type
@@ -425,6 +428,7 @@ function handleSaveToGit(e) {
 const loadGitPanel = () => {
     const id = 'git_panel'
     $.ajax({
+        cache: false,
         type: 'get',
         url: `panel/git`,
         dataType: 'text', // Response Type
@@ -478,6 +482,7 @@ function handleSaveToContainer(e) {
 const loadFileSystemPanel = () => {
     const id = 'local_panel'
     $.ajax({
+        cache: false,
         type: 'get',
         url: `panel/local`,
         dataType: 'text', // Response Type
@@ -844,6 +849,7 @@ function importTemplate(template_url, event) {
                     .text('Import')
                     .on('click', () => {
                         $.ajax({
+                            cache: false,
                             type: 'get',
                             url: 'template/load',
                             dataType: 'text', // Response Type
@@ -1078,6 +1084,7 @@ function loadCompartmentsDeprecated() {
         select.append($('<option>').attr('value', 'Retrieving').text('Retrieving..........'));
         // Get Compartments
         $.ajax({
+            cache: false,
             type: 'get',
             url: 'oci/compartment',
             dataType: 'text',
@@ -1121,6 +1128,7 @@ function loadOCICompartments() {
     } else {
         const profile = $(jqId('config_profile')).val()
         $.ajax({
+            cache: false,
             type: 'get',
             url: `oci/compartments/${profile}`,
             dataType: 'text',
@@ -1300,6 +1308,7 @@ function loadPCACompartments() {
     } else {
         const profile = $(jqId('config_profile')).val()
         $.ajax({
+            cache: false,
             type: 'get',
             url: `pca/compartments/${profile}`,
             dataType: 'text',

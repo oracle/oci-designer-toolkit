@@ -37,11 +37,14 @@ function hclJsonLoad(evt) {
     let fileJson = JSON.parse(fileString);
     console.info(fileJson);
     $.ajax({
+        cache: false,
         type: 'get',
         url: 'parse/hcljson',
         dataType: 'text',
         contentType: 'application/json',
-        data: JSON.stringify(fileJson),
+        data: {
+            json: JSON.stringify(fileJson)
+        },
         success: function(resp) {
             let response_json = JSON.parse(resp);
             okitJsonModel = new OkitJson(JSON.stringify(response_json.okit_json));
@@ -92,11 +95,14 @@ function cceJsonLoad(evt) {
     let fileJson = JSON.parse(fileString);
     console.info(fileJson);
     $.ajax({
+        cache: false,
         type: 'get',
         url: 'parse/ccejson',
         dataType: 'text',
         contentType: 'application/json',
-        data: JSON.stringify(fileJson),
+        data: {
+            json: JSON.stringify(fileJson)
+        },
         success: function(resp) {
             let response_json = JSON.parse(resp);
             console.info(response_json);

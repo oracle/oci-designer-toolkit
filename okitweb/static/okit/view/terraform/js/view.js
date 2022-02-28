@@ -42,6 +42,7 @@ class OkitTerraformView extends OkitJsonView {
     generateTerraform(tab_bar, tab_content) {
         const self = this
         $.ajax({
+            cache: false,
             type: 'get',
             url: 'export/terraform',
             dataType: 'text',

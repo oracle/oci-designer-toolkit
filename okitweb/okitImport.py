@@ -33,13 +33,14 @@ debug_mode = bool(str(os.getenv('DEBUG_MODE', 'False')).title())
 def parseHclJson():
     #logger.debug('JSON : {0:s}'.format(str(request.json)))
     if request.method == 'GET':
-        query_string = request.query_string
-        parsed_query_string = urllib.parse.unquote(query_string.decode())
-        query_json = json.loads(parsed_query_string)
-        logJson(query_json)
+        # query_string = request.query_string
+        # parsed_query_string = urllib.parse.unquote(query_string.decode())
+        # import_json = json.loads(parsed_query_string)
+        import_json = json.loads(request.args.get('json', '{}'))
+        logJson(import_json)
         # Import HCL
         parser = OkitHclJsonParser()
-        response_json = parser.parse(query_json)
+        response_json = parser.parse(import_json)
         logJson(response_json)
         return json.dumps(response_json, sort_keys=False, indent=2, separators=(',', ': '))
     else:
@@ -49,13 +50,14 @@ def parseHclJson():
 def parseCceJson():
     #logger.debug('JSON : {0:s}'.format(str(request.json)))
     if request.method == 'GET':
-        query_string = request.query_string
-        parsed_query_string = urllib.parse.unquote(query_string.decode())
-        query_json = json.loads(parsed_query_string)
-        logJson(query_json)
+        # query_string = request.query_string
+        # parsed_query_string = urllib.parse.unquote(query_string.decode())
+        # import_json = json.loads(parsed_query_string)
+        import_json = json.loads(request.args.get('json', '{}'))
+        logJson(import_json)
         # Import CCE
         parser = OkitCceJsonParser()
-        response_json = parser.parse(query_json)
+        response_json = parser.parse(import_json)
         logJson(response_json)
         return json.dumps(response_json, sort_keys=False, indent=2, separators=(',', ': '))
     else:
