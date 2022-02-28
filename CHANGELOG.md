@@ -16,6 +16,7 @@
 4. Add Query Functionality for PCA-X9
 5. Add url arguments pca=true and oci=true which will lock the diagram type to either PCA-X9 or OCI
 ### Bug Fixes
+1. Fix error in query size when tenancy contains a large number of compartments.
 
 
 ## Version 0.32.0
