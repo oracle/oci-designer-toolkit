@@ -175,6 +175,7 @@ class OkitOCIData {
         const start = new Date().getTime()
         // Test Region Subscription
         $.getJSON('oci/subscription', {
+            cache: false,
             profile: profile
         }).done((resp) => {
             const response = resp
@@ -183,6 +184,7 @@ class OkitOCIData {
             // console.info('Region Subscriptions', typeof(response), response)
             // We Know that this Profile is not a PCA-X9 so we can use the OCI Dropdowwn Query
             $.getJSON('oci/dropdown', {
+                cache: false,
                 profile: profile,
                 region: region
             }).done((resp) => {
@@ -203,6 +205,7 @@ class OkitOCIData {
             console.warn('Error : '+ error)
             // Region Subscription does not appear to be support so we will drop back to PCA Dropdown Query
             $.getJSON('pca/dropdown', {
+                cache: false,
                 profile: profile,
                 region: region
             }).done((resp) => {
