@@ -17,10 +17,12 @@ from flask import request
 import json
 from werkzeug.utils import secure_filename
 from common.okitCommon import logJson
+from common.okitCommon import jsonToFormattedString
 from common.okitLogging import getLogger
 from parsers.okitHclJsonParser import OkitHclJsonParser
 from parsers.okitCceJsonParser import OkitCceJsonParser
 from parsers.okitCd3ExcelParser import OkitCd3ExcelParser
+from parsers.okitTfStateFileParser import OkitTfStateFileParser
 
 # Configure logging
 logger = getLogger()
@@ -43,6 +45,19 @@ def parseHclJson():
         response_json = parser.parse(import_json)
         logJson(response_json)
         return json.dumps(response_json, sort_keys=False, indent=2, separators=(',', ': '))
+    else:
+        return '404'
+
+@bp.route('tfstate', methods=(['GET']))
+def parseTfStateJson():
+    if request.method == 'GET':
+        import_json = json.loads(request.args.get('json', '{}'))
+        logJson(import_json)
+        # Import HCL
+        parser = OkitTfStateFileParser()
+        response_json = parser.parse(import_json)
+        logJson(response_json)
+        return jsonToFormattedString(response_json)
     else:
         return '404'
 
