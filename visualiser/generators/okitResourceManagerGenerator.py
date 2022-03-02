@@ -25,7 +25,7 @@ class OCIResourceManagerGenerator(OCITerraformGenerator):
 
     def __init__(self, template_root, output_root, visualiser_json, use_vars=False, tenancy_ocid=None, region=None, compartment_ocid=None):
         DIRECTORY_SUFFIX = 'resource-manager'
-        super(OCIResourceManagerGenerator, self).__init__(template_root, output_root, visualiser_json, use_vars)
+        super(OCIResourceManagerGenerator, self).__init__(template_root, output_root, visualiser_json, use_vars, add_provider=False)
         self.output_dir = os.path.join(output_root, DIRECTORY_SUFFIX)
         logger.info('OCIResourceManagerGenerator : Template Directory {0!s:s}'.format(template_root))
         logger.info('OCIResourceManagerGenerator : Output Directory {0!s:s}'.format(output_root))
@@ -42,6 +42,8 @@ class OCIResourceManagerGenerator(OCITerraformGenerator):
         self.jinja2_variables["resource_manager"] = True
 
     def writeFiles(self):
+        # Write Provider tf file
+        writeTerraformFile(os.path.join(self.output_dir, self.PROVIDER_FILE_NAME), self.getProvider())
         # Write Metadata tf file
         writeTerraformFile(os.path.join(self.output_dir, self.METADATA_FILE_NAME), self.getMetadata())
         # Write Main tf processing file

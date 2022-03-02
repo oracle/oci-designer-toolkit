@@ -11,6 +11,7 @@ terraform {
     required_version = ">= 0.12.0"
 }
 
+{% if add_provider is defined and add_provider %}
 # ------ Connect to Provider
 provider "oci" {
   tenancy_ocid     = {{ tenancy_ocid }}
@@ -19,6 +20,7 @@ provider "oci" {
   private_key_path = {{ private_key_path }}
   region           = {{ region }}
 }
+{% endif %}
 
 # ------ Home Region Provider
 {% if deployment_platform is defined and deployment_platform != "pca" %}

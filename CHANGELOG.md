@@ -21,6 +21,13 @@
 1. Fix error in query size when tenancy contains a large number of compartments.
 
 
+## Version 0.32.1
+**Release Date**: 17th February 2022
+### Features
+### Bug Fixes
+1. Add missing home_region provider to the Terraform generated for Resource Manager.
+
+
 ## Version 0.32.0
 **Release Date**: 9th February 2022
 ### Features
