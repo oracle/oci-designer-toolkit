@@ -49,3 +49,45 @@ class InternetGatewayView extends OkitDesignerArtefactView {
     }
     
 }
+/*
+** Dynamically Add View Functions
+*/
+OkitJsonView.prototype.dropInternetGatewayView = function(target) {
+    // Check if Gateway Already exists
+    for (let gateway of this.internet_gateways) {
+        if (gateway.vcn_id === target.id) {
+            alert('The maximum limit of 1 Internet Gateway per Virtual Cloud Network has been exceeded for ' + this.getVirtualCloudNetwork(target.id).display_name);
+            return null;
+        }
+    }
+    let view_artefact = this.newInternetGateway();
+    view_artefact.getArtefact().vcn_id = target.id;
+    view_artefact.getArtefact().compartment_id = target.compartment_id;
+    view_artefact.recalculate_dimensions = true;
+    return view_artefact;
+}
+OkitJsonView.prototype.newInternetGateway = function(gateway) {
+    let ig = gateway ? new InternetGatewayView(gateway, this) : new InternetGatewayView(this.okitjson.newInternetGateway(), this);
+    if (ig.artefact === null) {
+        return null;
+    }
+    this.getInternetGateways().push(ig);
+    return this.getInternetGateways()[this.getInternetGateways().length - 1];
+}
+OkitJsonView.prototype.getInternetGateways = function() {
+    if (!this.internet_gateways) this.internet_gateways = []
+    return this.internet_gateways;
+}
+OkitJsonView.prototype.getInternetGateway = function(id='') {
+    for (let artefact of this.getInternetGateways()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJsonView.prototype.loadInternetGateways = function(internet_gateways) {
+    for (const artefact of internet_gateways) {
+        this.getInternetGateways().push(new InternetGatewayView(new InternetGateway(artefact, this.okitjson), this));
+    }
+}

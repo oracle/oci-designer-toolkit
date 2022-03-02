@@ -77,3 +77,26 @@ class InstancePool extends OkitArtifact {
         }
     }
 }
+/*
+** Dynamically Add Model Functions
+*/
+OkitJson.prototype.newInstancePool = function(data) {
+    console.info('New InstancePool');
+    this.getInstancePools().push(new InstancePool(data, this));
+    return this.getInstancePools()[this.getInstancePools().length - 1];
+}
+OkitJson.prototype.getInstancePools = function() {
+    if (!this.instance_pools) this.instance_pools = [];
+    return this.instance_pools;
+}
+OkitJson.prototype.getInstancePool = function(id='') {
+    for (let artefact of this.getInstancePools()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJson.prototype.deleteInstancePool = function(id) {
+    this.instance_pools = this.instance_pools ? this.instance_pools.filter((r) => r.id !== id) : []
+}

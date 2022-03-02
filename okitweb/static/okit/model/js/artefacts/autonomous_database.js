@@ -47,7 +47,7 @@ class AutonomousDatabase extends OkitArtifact {
      */
     deleteChildren() {
         // Remove Instance references
-        for (let instance of this.getOkitJson().instances) {
+        for (let instance of this.getOkitJson().getInstances()) {
             for (let i=0; i < instance['autonomous_database_ids'].length; i++) {
                 if (instance.autonomous_database_ids[i] === this.id) {
                     instance.autonomous_database_ids.splice(i, 1);
@@ -68,4 +68,27 @@ class AutonomousDatabase extends OkitArtifact {
         return 'Autonomous Database';
     }
 
+}
+/*
+** Dynamically Add Model Functions
+*/
+OkitJson.prototype.newAutonomousDatabase = function(data) {
+    console.info('New Autonomous Database');
+    this.getAutonomousDatabases().push(new AutonomousDatabase(data, this));
+    return this.getAutonomousDatabases()[this.getAutonomousDatabases().length - 1];
+}
+OkitJson.prototype.getAutonomousDatabases = function() {
+    if (!this.autonomous_databases) this.autonomous_databases = [];
+    return this.autonomous_databases;
+}
+OkitJson.prototype.getAutonomousDatabase = function(id='') {
+    for (let artefact of this.getAutonomousDatabases()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJson.prototype.deleteAutonomousDatabase = function(id) {
+    this.autonomous_databases = this.autonomous_databases ? this.autonomous_databases.filter((r) => r.id !== id) : []
 }

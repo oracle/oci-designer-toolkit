@@ -78,3 +78,26 @@ class OkeCluster extends OkitArtifact {
         return 'Oke Cluster';
     }
 }
+/*
+** Dynamically Add Model Functions
+*/
+OkitJson.prototype.newOkeCluster = function(data) {
+    console.info('New OkeCluster');
+    this.getOkeClusters().push(new OkeCluster(data, this));
+    return this.getOkeClusters()[this.getOkeClusters().length - 1];
+}
+OkitJson.prototype.getOkeClusters = function() {
+    if (!this.oke_clusters) this.oke_clusters = [];
+    return this.oke_clusters;
+}
+OkitJson.prototype.getOkeCluster = function(id='') {
+    for (let artefact of this.getOkeClusters()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJson.prototype.deleteOkeCluster = function(id) {
+    this.oke_clusters = this.oke_clusters ? this.oke_clusters.filter((r) => r.id !== id) : []
+}

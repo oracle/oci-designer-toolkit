@@ -217,6 +217,14 @@ def designer():
     pca_mode = (request.args.get('pca', default='false') == 'true')
     if pca_mode:
         logger.info("<<<<<<<<<<<<<<<<<<<<<<<<<< PCA Mode >>>>>>>>>>>>>>>>>>>>>>>>>>")
+    # Test if OCI mode
+    oci_mode = (request.args.get('oci', default='false') == 'true')
+    if oci_mode:
+        logger.info("<<<<<<<<<<<<<<<<<<<<<<<<<< OCI Mode >>>>>>>>>>>>>>>>>>>>>>>>>>")
+    if oci_mode and pca_mode:
+        oci_mode = False
+        pca_mode = False
+        logger.info("<<<<<<<<<<<<<<<<<<<<<<<<<< OCI & PCA Mode >>>>>>>>>>>>>>>>>>>>>>>>>>")
     # Test if A2C mode
     a2c_mode = (request.args.get('a2c', default='false') == 'true')
     if a2c_mode:
@@ -279,7 +287,13 @@ def designer():
                         #    okit_templates_groups=template_groups,
                         #    okit_template_categories=template_categories,
                            local_okit=local,
-                           developer_mode=developer_mode, experimental_mode=experimental_mode, cd3_mode=cd3_mode, a2c_mode=a2c_mode, pca_mode=pca_mode, ansible_mode=ansible_mode)
+                           developer_mode=developer_mode, 
+                           experimental_mode=experimental_mode, 
+                           cd3_mode=cd3_mode, 
+                           a2c_mode=a2c_mode, 
+                           oci_mode=oci_mode, 
+                           pca_mode=pca_mode, 
+                           ansible_mode=ansible_mode)
 
 
 # Template Processing

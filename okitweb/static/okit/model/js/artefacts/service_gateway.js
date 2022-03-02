@@ -40,13 +40,8 @@ class ServiceGateway extends OkitArtifact {
      */
     deleteChildren() {
         // Remove Service Gateway references
-        for (let route_table of this.getOkitJson().route_tables) {
-            for (let i = 0; i < route_table.route_rules.length; i++) {
-                if (route_table.route_rules[i]['network_entity_id'] === this.id) {
-                    route_table.route_rules.splice(i, 1);
-                }
-            }
-        }
+        // Remove Route Rules
+        this.getOkitJson().getRouteTables().forEach((rt) => rt.route_rules = rt.route_rules.filter((d) => d.network_entity_id !== this.id))        
     }
 
     getNamePrefix() {
@@ -60,4 +55,27 @@ class ServiceGateway extends OkitArtifact {
         return 'Service Gateway';
     }
 
+}
+/*
+** Dynamically Add Model Functions
+*/
+OkitJson.prototype.newServiceGateway = function(data) {
+    console.info('New Service Gateway');
+    this.getServiceGateways().push(new ServiceGateway(data, this));
+    return this.getServiceGateways()[this.getServiceGateways().length - 1];
+}
+OkitJson.prototype.getServiceGateways = function() {
+    if (!this.service_gateways) this.service_gateways = [];
+    return this.service_gateways;
+}
+OkitJson.prototype.getServiceGateway = function(id='') {
+    for (let artefact of this.getServiceGateways()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJson.prototype.deleteServiceGateway = function(id) {
+    this.service_gateways = this.service_gateways ? this.service_gateways.filter((r) => r.id !== id) : []
 }

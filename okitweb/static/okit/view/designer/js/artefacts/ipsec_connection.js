@@ -74,3 +74,33 @@ class IpsecConnectionView extends OkitDesignerArtefactView {
     }
 
 }
+/*
+** Dynamically Add View Functions
+*/
+OkitJsonView.prototype.dropIpsecConnectionView = function(target) {
+    let view_artefact = this.newIpsecConnection();
+    view_artefact.getArtefact().compartment_id = target.id;
+    view_artefact.recalculate_dimensions = true;
+    return view_artefact;
+}
+OkitJsonView.prototype.newIpsecConnection = function(connect) {
+    this.getIpsecConnections().push(connect ? new IpsecConnectionView(connect, this) : new IpsecConnectionView(this.okitjson.newIpsecConnection(), this));
+    return this.getIpsecConnections()[this.getIpsecConnections().length - 1];
+}
+OkitJsonView.prototype.getIpsecConnections = function() {
+    if (!this.ipsec_connections) this.ipsec_connections = []
+    return this.ipsec_connections;
+}
+OkitJsonView.prototype.getIpsecConnection = function(id='') {
+    for (let artefact of this.getIpsecConnections()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJsonView.prototype.loadIpsecConnections = function(fast_connects) {
+    for (const artefact of fast_connects) {
+        this.getIpsecConnections().push(new IpsecConnectionView(new IpsecConnection(artefact, this.okitjson), this));
+    }
+}

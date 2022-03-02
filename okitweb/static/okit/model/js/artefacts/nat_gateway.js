@@ -37,13 +37,8 @@ class NatGateway extends OkitArtifact {
      */
     deleteChildren() {
         // Remove Internet Gateway references
-        for (let route_table of this.getOkitJson().route_tables) {
-            for (let i = 0; i < route_table.route_rules.length; i++) {
-                if (route_table.route_rules[i]['network_entity_id'] === this.id) {
-                    route_table.route_rules.splice(i, 1);
-                }
-            }
-        }
+        // Remove Route Rules
+        this.getOkitJson().getRouteTables().forEach((rt) => rt.route_rules = rt.route_rules.filter((d) => d.network_entity_id !== this.id))        
     }
 
     getNamePrefix() {
@@ -57,4 +52,27 @@ class NatGateway extends OkitArtifact {
         return 'NAT Gateway';
     }
 
+}
+/*
+** Dynamically Add Model Functions
+*/
+OkitJson.prototype.newNatGateway = function(data) {
+    console.info('New NAT Gateway');
+    this.getNatGateways().push(new NatGateway(data, this));
+    return this.getNatGateways()[this.getNatGateways().length - 1];
+}
+OkitJson.prototype.getNatGateways = function() {
+    if (!this.nat_gateways) this.nat_gateways = [];
+    return this.nat_gateways;
+}
+OkitJson.prototype.getNatGateway = function(id='') {
+    for (let artefact of this.getNatGateways()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJson.prototype.deleteNatGateway = function(id) {
+    this.nat_gateways = this.nat_gateways ? this.nat_gateways.filter((r) => r.id !== id) : []
 }

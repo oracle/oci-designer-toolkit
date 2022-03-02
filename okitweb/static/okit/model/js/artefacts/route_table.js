@@ -32,13 +32,22 @@ class RouteTable extends OkitArtifact {
         return new RouteTable(JSON.clone(this), this.getOkitJson());
     }
 
+    newRule() {
+        return {
+            target_type: "internet_gateway",
+            destination_type: "CIDR_BLOCK",
+            destination: "0.0.0.0/0",
+            network_entity_id: "",
+            description: ""
+        }
+    }
 
     /*
     ** Delete Processing
      */
     deleteChildren() {
         // Remove Subnet references
-        for (let subnet of this.getOkitJson().subnets) {
+        for (let subnet of this.getOkitJson().getSubnets()) {
             if (subnet.route_table_id === this.id) {
                 subnet.route_table_id = '';
             }
@@ -56,4 +65,27 @@ class RouteTable extends OkitArtifact {
         return 'Route Table';
     }
 
+}
+/*
+** Dynamically Add Model Functions
+*/
+OkitJson.prototype.newRouteTable = function(data) {
+    console.info('New Route Table');
+    this.getRouteTables().push(new RouteTable(data, this));
+    return this.getRouteTables()[this.getRouteTables().length - 1];
+}
+OkitJson.prototype.getRouteTables = function() {
+    if (!this.route_tables) this.route_tables = [];
+    return this.route_tables;
+}
+OkitJson.prototype.getRouteTable = function(id='') {
+    for (let artefact of this.getRouteTables()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJson.prototype.deleteRouteTable = function(id) {
+    this.route_tables = this.route_tables ? this.route_tables.filter((r) => r.id !== id) : []
 }

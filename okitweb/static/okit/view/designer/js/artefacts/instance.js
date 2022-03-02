@@ -98,7 +98,7 @@ class InstanceView extends OkitDesignerArtefactView {
             // Build Primary Vnic / Subnet List
             let subnet_select = $(jqId('subnet_id'));
             subnet_select.append($('<option>').attr('value', '').text(''));
-            for (let subnet of this.getOkitJson().subnets) {
+            for (let subnet of this.getOkitJson().getSubnets()) {
                 let compartment = this.getOkitJson().getCompartment(this.getOkitJson().getSubnet(subnet.id).compartment_id);
                 let vcn = this.getOkitJson().getVirtualCloudNetwork(this.getOkitJson().getSubnet(subnet.id).vcn_id);
                 let display_name = `${compartment ? compartment.display_name : ''}/${vcn ? vcn.display_name : ''}/${subnet.display_name}`;
@@ -453,7 +453,7 @@ class InstanceView extends OkitDesignerArtefactView {
                 redrawSVGCanvas();
                 me.loadNetworkSecurityGroups("nsg_ids" + idx, vnic.subnet_id);
             });
-        for (let subnet of this.getOkitJson().subnets) {
+        for (let subnet of this.getOkitJson().getSubnets()) {
             let compartment = this.getOkitJson().getCompartment(this.getOkitJson().getSubnet(subnet.id).compartment_id);
             let vcn = this.getOkitJson().getVirtualCloudNetwork(this.getOkitJson().getSubnet(subnet.id).vcn_id);
             let display_name = `${compartment.display_name}/${vcn.display_name}/${subnet.display_name}`;
@@ -581,4 +581,39 @@ class InstanceView extends OkitDesignerArtefactView {
     }
 
 
+}
+/*
+** Dynamically Add View Functions
+*/
+OkitJsonView.prototype.dropInstanceView = function(target) {
+    let view_artefact = this.newInstance();
+    if (target.type === Subnet.getArtifactReference()) {
+        view_artefact.getArtefact().primary_vnic.subnet_id = target.id;
+        view_artefact.getArtefact().compartment_id = target.compartment_id;
+    } else if (target.type === Compartment.getArtifactReference()) {
+        view_artefact.getArtefact().compartment_id = target.id;
+    }
+    view_artefact.recalculate_dimensions = true;
+    return view_artefact;
+}
+OkitJsonView.prototype.newInstance = function(instance) {
+    this.getInstances().push(instance ? new InstanceView(instance, this) : new InstanceView(this.okitjson.newInstance(), this));
+    return this.getInstances()[this.getInstances().length - 1];
+}
+OkitJsonView.prototype.getInstances = function() {
+    if (!this.instances) this.instances = []
+    return this.instances;
+}
+OkitJsonView.prototype.getInstance = function(id='') {
+    for (let artefact of this.getInstances()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJsonView.prototype.loadInstances = function(instances) {
+    for (const artefact of instances) {
+        this.getInstances().push(new InstanceView(new Instance(artefact, this.okitjson), this));
+    }
 }

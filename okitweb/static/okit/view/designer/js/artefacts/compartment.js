@@ -64,12 +64,10 @@ class CompartmentView extends OkitContainerDesignerArtefactView {
 
     /*
     ** Property Sheet Load function
-     */
-    loadProperties() {
-        let me = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/compartment.html", () => {loadPropertiesSheet(me.artefact);});
+    */
+    newPropertiesSheet() {
+        this.properties_sheet = new CompartmentProperties(this.artefact)
     }
-
 
     /*
     ** Child Type Functions
@@ -109,4 +107,44 @@ class CompartmentView extends OkitContainerDesignerArtefactView {
     }
 
 
+}
+/*
+** Dynamically Add View Functions
+*/
+OkitJsonView.prototype.dropCompartmentView = function(target) {
+    let view_artefact = this.newCompartment();
+    view_artefact.getArtefact().compartment_id = target.type === Compartment.getArtifactReference() ? target.id : target.compartment_id;
+    view_artefact.recalculate_dimensions = true;
+    return view_artefact;
+}
+OkitJsonView.prototype.newCompartment = function(compartment) {
+    this.getCompartments().push(compartment ? new CompartmentView(compartment, this) : new CompartmentView(this.okitjson.newCompartment(), this));
+    return this.getCompartments()[this.getCompartments().length - 1];
+}
+OkitJsonView.prototype.getCompartments = function() {
+    if (!this.compartments) this.compartments = []
+    return this.compartments;
+}
+OkitJsonView.prototype.getCompartment = function(id) {
+    for (let artefact of this.getCompartments()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJsonView.prototype.loadCompartments = function(compartments) {
+    for (const artefact of compartments) {
+        this.getCompartments().push(new CompartmentView(new Compartment(artefact, this.okitjson), this));
+    }
+}
+OkitJsonView.prototype.loadCompartmentsSelect = function(select_id, empty_option=false) {
+    $(jqId(select_id)).empty();
+    const compartment_select = $(jqId(select_id));
+    if (empty_option) {
+        compartment_select.append($('<option>').attr('value', '').text(''));
+    }
+    for (let compartment of this.getCompartments()) {
+        compartment_select.append($('<option>').attr('value', compartment.id).text(compartment.display_name));
+    }
 }

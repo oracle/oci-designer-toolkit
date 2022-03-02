@@ -125,3 +125,26 @@ class FileStorageSystem extends OkitArtifact {
     }
 
 }
+/*
+** Dynamically Add Model Functions
+*/
+OkitJson.prototype.newFileStorageSystem = function(data) {
+    console.info('New File Storage System');
+    this.getFileStorageSystems().push(new FileStorageSystem(data, this));
+    return this.getFileStorageSystems()[this.getFileStorageSystems().length - 1];
+}
+OkitJson.prototype.getFileStorageSystems = function() {
+    if (!this.file_storage_systems) this.file_storage_systems = [];
+    return this.file_storage_systems;
+}
+OkitJson.prototype.getFileStorageSystem = function(id='') {
+    for (let artefact of this.getFileStorageSystems()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJson.prototype.deleteFileStorageSystem = function(id) {
+    this.file_storage_systems = this.file_storage_systems ? this.file_storage_systems.filter((r) => r.id !== id) : []
+}

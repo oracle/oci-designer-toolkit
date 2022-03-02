@@ -31,23 +31,33 @@ echo "alias startflask='python3 -m flask run --host=0.0.0.0 --port=80 --no-debug
 echo "alias startgunicorn='gunicorn --bind=0.0.0.0:80 --workers=2 --limit-request-line 0 '\''okitweb:create_app()'\'''" >> /etc/bashrc
 echo "alias startnginx='nginx;gunicorn --workers=2 --limit-request-line 0 --bind=0.0.0.0:5000 okitweb.wsgi:app'" >> /etc/bashrc
 echo ''                                                                          >> /etc/bashrc
+
+echo 'export OKIT_DIR=/okit' >> /etc/bashrc
+echo 'export OKIT_GITHUB_DIR=/okit_github' >> /etc/bashrc
+echo 'export OKIT_BRANCH="master"' >> /etc/bashrc
+
 source /etc/bashrc
 
-# Upgrade pip
-python3 -m pip install --upgrade pip==20.0.2
-
-# Install required python modules
-pip3 install --no-cache-dir \
-        authlib==0.15.3 \
-        flask==1.1.1 \
-        gitpython==3.1.11 \
-        git-url-parse==1.2.2 \
-        gunicorn==20.0.4 \
-        oci \
-        openpyxl==3.0.5 \
-        pandas==1.1.2 \
-        python-magic==0.4.18 \
-        pyyaml==5.3.1 \
-        requests==2.24.0 \
-        xlsxwriter==1.3.6
+# Create Directories
+mkdir -p ${OKIT_DIR}
+mkdir -p ${OKIT_GITHUB_DIR}
+chmod 777 ${OKIT_DIR}
+chmod 777 ${OKIT_GITHUB_DIR}
+# Create Python Virtual Environment
+python3 -m venv ${OKIT_DIR}/.venv
+# Activate Virtual Environment
+source ${OKIT_DIR}/.venv/bin/activate
+# Update python & Install modules
+python3 -m pip install -U pip
+python3 -m pip install -U setuptools
+python3 -m pip install --no-cache-dir authlib flask gitpython git-url-parse gunicorn oci openpyxl pandas python-magic pyyaml requests xlsxwriter
+# Clone OKIT 
+git clone -b ${OKIT_BRANCH} https://github.com/oracle/oci-designer-toolkit.git ${OKIT_GITHUB_DIR}/oci-designer-toolkit
+# Create OKIT Required Directories
+mkdir -p ${OKIT_DIR}/{log,instance/git,instance/local,instance/templates/user,workspace,ssl}
+# Link Directories
+ln -sv ${OKIT_GITHUB_DIR}/oci-designer-toolkit/config ${OKIT_DIR}/config
+ln -sv ${OKIT_GITHUB_DIR}/oci-designer-toolkit/okitweb ${OKIT_DIR}/okitweb
+ln -sv ${OKIT_GITHUB_DIR}/oci-designer-toolkit/visualiser ${OKIT_DIR}/visualiser
+ln -sv ${OKIT_GITHUB_DIR}/oci-designer-toolkit/okitweb/static/okit/templates/reference_architecture ${OKIT_DIR}/instance/templates/reference_architecture
 

@@ -134,7 +134,7 @@ OkitJsonView.prototype.pasteVault = function(drop_target) {
         clone.subnet_id = drop_target.id;
         clone.compartment_id = drop_target.compartment_id;
     }
-    this.okitjson.vaults.push(clone);
+    this.okitjson.getVaults().push(clone);
     this.update(this.okitjson);
 }
 OkitJsonView.prototype.loadVaultsSelect = function(select_id, empty_option=false) {

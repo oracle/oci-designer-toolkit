@@ -52,6 +52,7 @@ function setOCILink() {
 }
 function setOCILinkOld() {
     $.ajax({
+        cache: false,
         type: 'get',
         url: `config/region/${okitSettings.profile}`,
         dataType: 'text',
@@ -288,6 +289,7 @@ function displaySaveAsTemplateDialog(title, callback, root_dir='templates/user',
     //     .attr('value', '.')
     //     .text('user')
     $.ajax({
+        cache: false,
         type: 'get',
         url: `templates/load`,
         dataType: 'text', // Response Type
@@ -372,6 +374,7 @@ function handleSaveAsTemplate(e) {
 const loadTemplatePanel = () => {
     const id = 'templates_panel'
     $.ajax({
+        cache: false,
         type: 'get',
         url: `panel/templates`,
         dataType: 'text', // Response Type
@@ -425,6 +428,7 @@ function handleSaveToGit(e) {
 const loadGitPanel = () => {
     const id = 'git_panel'
     $.ajax({
+        cache: false,
         type: 'get',
         url: `panel/git`,
         dataType: 'text', // Response Type
@@ -478,6 +482,7 @@ function handleSaveToContainer(e) {
 const loadFileSystemPanel = () => {
     const id = 'local_panel'
     $.ajax({
+        cache: false,
         type: 'get',
         url: `panel/local`,
         dataType: 'text', // Response Type
@@ -844,6 +849,7 @@ function importTemplate(template_url, event) {
                     .text('Import')
                     .on('click', () => {
                         $.ajax({
+                            cache: false,
                             type: 'get',
                             url: 'template/load',
                             dataType: 'text', // Response Type
@@ -869,7 +875,7 @@ function importTemplate(template_url, event) {
 /*
 ** Query OCI
  */
-function displayQueryDialog(title='Query OCI', btn_text='Query', callback) {
+function displayQueryDialog(title='Query OCI', btn_text='Query', callback=undefined, loadCompartments=loadOCICompartments) {
     $(jqId('modal_dialog_title')).text(title);
     // if (okitSettings.fast_discovery) {
     //     $(jqId('modal_dialog_title')).text('OCI Introspection (Fast Discovery)');
@@ -903,6 +909,7 @@ function displayQueryDialog(title='Query OCI', btn_text='Query', callback) {
                 // Clear Existing Compartments
                 okitOciData.setCompartments([]);
                 loadCompartments();
+                // loadOCICompartments();
                 loadRegions(selectQueryLastUsedRegion);
             });
     for (let section of okitOciConfig.sections) {
@@ -963,6 +970,7 @@ function displayQueryDialog(title='Query OCI', btn_text='Query', callback) {
                     // Clear Existing Compartments
                     okitOciData.setCompartments([]);
                     loadCompartments();
+                    // loadOCICompartments();
                 });
     tr.append('div')
         .attr('class', 'td')
@@ -1011,56 +1019,56 @@ function displayQueryDialog(title='Query OCI', btn_text='Query', callback) {
         .attr('type', 'button')
         .text(btn_text)
         .on('click', callback);
-        // .on('click', function () {
-        //     showQueryResults();
-        // });
     $(jqId('modal_dialog_wrapper')).removeClass('hidden');
 }
-function handleQueryOci(e) {
+function handleQueryOCI(e) {
     hideNavMenu();
     $("#toolbar_view_select").val('designer');
     handleSwitchToCompartmentView();
     // Display Dialog
-    displayQueryDialog('Query OCI', 'Query', () => {showQueryResults()});
+    displayQueryDialog('Query OCI', 'Query', () => {showQueryOCIResults()});
     // Set Query Config Profile
-    console.info('Profile : ' + okitSettings.profile);
-    if (!okitSettings.profile) {
-        okitSettings.profile = 'DEFAULT';
-    }
-    console.info('Profile : ' + okitSettings.profile);
+    // console.info('Profile : ' + okitSettings.profile);
+    // if (!okitSettings.profile) {
+    //     okitSettings.profile = 'DEFAULT';
+    // }
+    // console.info('Profile : ' + okitSettings.profile);
     okitSettings.home_region_key = '';
     okitSettings.home_region = '';
     ociRegions = [];
     // Load Previous Profile
-    $(jqId('config_profile')).val(okitSettings.profile);
+    // $(jqId('config_profile')).val(okitSettings.profile);
+    $(jqId('config_profile')).val($(`#console_header_config_select`).val());
     // Load Compartment Select
-    loadCompartments();
+    loadOCICompartments();
     // Load Region Select
     loadRegions(selectQueryLastUsedRegion);
 }
-function handleImportFromOci(e) {
+function handleImportFromOCI(e) {
     hideNavMenu();
     $("#toolbar_view_select").val('designer');
     handleSwitchToCompartmentView();
     // Display Dialog
-    displayQueryDialog('Import From OCI', 'Introspect', () => {showImportOciResults()});
+    displayQueryDialog('Import From OCI', 'Introspect', () => {showImportOCIResults()});
     // Set Query Config Profile
-    console.info('Profile : ' + okitSettings.profile);
-    if (!okitSettings.profile) {
-        okitSettings.profile = 'DEFAULT';
-    }
-    console.info('Profile : ' + okitSettings.profile);
+    // console.info('Profile : ' + okitSettings.profile);
+    // if (!okitSettings.profile) {
+    //     okitSettings.profile = 'DEFAULT';
+    // }
+    // console.info('Profile : ' + okitSettings.profile);
     okitSettings.home_region_key = '';
     okitSettings.home_region = '';
     ociRegions = [];
     // Load Previous Profile
-    $(jqId('config_profile')).val(okitSettings.profile);
+    // $(jqId('config_profile')).val(okitSettings.profile);
+    $(jqId('config_profile')).val($(`#console_header_config_select`).val());
     // Load Compartment Select
-    loadCompartments();
+    loadOCICompartments();
     // Load Region Select
     loadRegions(selectQueryLastUsedRegion);
 }
-function loadCompartments() {
+// TODO: Delete
+function loadCompartmentsDeprecated() {
     // Clear Select
     let select = $(jqId('query_compartment_id'));
     $(select).empty();
@@ -1076,6 +1084,7 @@ function loadCompartments() {
         select.append($('<option>').attr('value', 'Retrieving').text('Retrieving..........'));
         // Get Compartments
         $.ajax({
+            cache: false,
             type: 'get',
             url: 'oci/compartment',
             dataType: 'text',
@@ -1108,6 +1117,56 @@ function loadCompartments() {
             }
         });
     }
+}
+function loadOCICompartments() {
+    // Clear Select
+    let select = $(jqId('query_compartment_id'));
+    $(select).empty();
+    select.append($('<option>').attr('value', 'Retrieving').text('Retrieving..........'));
+    if (okitOciData.getCompartments().length > 0) {
+        loadQueryCompartmentsSelect()
+    } else {
+        const profile = $(jqId('config_profile')).val()
+        $.ajax({
+            cache: false,
+            type: 'get',
+            url: `oci/compartments/${profile}`,
+            dataType: 'text',
+            contentType: 'application/json',
+            data: {
+                config_profile: $(jqId('config_profile')).val()
+            } // Arguments
+        }).done((resp) => {
+            const compartments = JSON.parse(resp)
+            okitOciData.setCompartments(compartments)
+            loadQueryCompartmentsSelect()
+            // loadRegions(selectQueryLastUsedRegion);
+        }).fail((xhr, status, error) => {
+            console.error('Status : ' + status);
+            console.error('Error  : ' + error);
+        }).always(() => {})
+    }
+}
+function loadQueryCompartmentsSelect() {
+    // Clear Select
+    let select = $(jqId('query_compartment_id'));
+    $(select).empty();
+    if (okitOciData.getCompartments().length > 0) {
+        let compartment_select = d3.select(d3Id('query_compartment_id'));
+        for (let compartment of okitOciData.getCompartments()) {
+                // console.info(compartment['display_name']);
+                // console.info(compartment['canonical_name']);
+                compartment_select.append('option')
+                .attr('value', compartment['id'])
+                .text(compartment['canonical_name']);
+                if (okitSettings.home_region_key === '') {
+                    okitSettings.home_region_key = compartment.home_region_key;
+                }
+            }
+        selectQueryLastUsedCompartment();
+     } else {
+         console.warn('No Compartments Found')
+     }
 }
 function loadRegions(callback) {
     // Clear Select
@@ -1157,7 +1216,7 @@ function selectQueryLastUsedCompartment() {
     }
 }
 let queryCount = 0;
-function showQueryResults() {
+function showQueryOCIResults() {
     console.info('Generating Query Results');
     let regions = $(jqId('query_region_id')).val();
     let request = {};
@@ -1206,7 +1265,7 @@ function showQueryResults() {
     $(jqId('modal_dialog_wrapper')).addClass('hidden');
     hideRecoverMenuItem();
 }
-function showImportOciResults() {
+function showImportOCIResults() {
     console.info('Generating Import Oci Results');
     let regions = [$(jqId('query_region_id')).val()];
     let request = {};
@@ -1239,16 +1298,122 @@ function showImportOciResults() {
     $(jqId('modal_dialog_wrapper')).addClass('hidden');
     hideRecoverMenuItem();
 }
+function loadPCACompartments() {
+    // Clear Select
+    let select = $(jqId('query_compartment_id'));
+    $(select).empty();
+    select.append($('<option>').attr('value', 'Retrieving').text('Retrieving..........'));
+    if (okitOciData.getCompartments().length > 0) {
+        loadQueryCompartmentsSelect()
+    } else {
+        const profile = $(jqId('config_profile')).val()
+        $.ajax({
+            cache: false,
+            type: 'get',
+            url: `pca/compartments/${profile}`,
+            dataType: 'text',
+            contentType: 'application/json',
+            data: {
+                config_profile: $(jqId('config_profile')).val()
+            } // Arguments
+        }).done((resp) => {
+            const compartments = JSON.parse(resp)
+            okitOciData.setCompartments(compartments)
+            loadQueryCompartmentsSelect()
+            // loadRegions(selectQueryLastUsedRegion);
+        }).fail((xhr, status, error) => {
+            console.error('Status : ' + status);
+            console.error('Error  : ' + error);
+        }).always(() => {})
+    }
+}
 /*
-$(document).ajaxStop(function() {
-    console.info('All Ajax Functions Stopped');
-    //$(jqId('modal_loading_wrapper')).addClass('hidden');
-    okitJsonView ? console.info(okitJsonView) : console.info('okitJsonView not defined');
-    okitJsonModel ? console.info(okitJsonModel) : console.info('okitJsonModel not defined');
-    //displayTreeView();
-    okitOCIQuery ? console.info(okitOCIQuery) : console.info('okitOCIQuery not defined');
-});
- */
+** Query PCA-X9
+*/
+function handleQueryPCA(e) {
+    hideNavMenu();
+    $("#toolbar_view_select").val('designer');
+    handleSwitchToCompartmentView();
+    // Display Dialog
+    displayQueryDialog('Query PCA-X9', 'Query', () => {queryPCA(showQueryPCAResults)}, loadPCACompartments);
+    // Set Query Config Profile
+    okitSettings.home_region_key = '';
+    okitSettings.home_region = '';
+    ociRegions = [];
+    // Load Previous Profile
+    $(jqId('config_profile')).val($(`#console_header_config_select`).val());
+    // Load Compartment Select
+    loadPCACompartments();
+    // Load Region Select
+    loadRegions(selectQueryLastUsedRegion);
+}
+function handleImportFromPCA(e) {
+    hideNavMenu();
+    $("#toolbar_view_select").val('designer');
+    handleSwitchToCompartmentView();
+    // Display Dialog
+    displayQueryDialog('Import From PCA', 'Introspect', () => {queryPCA(showImportResults)}, loadPCACompartments);
+    // Set Query Config Profile
+    okitSettings.home_region_key = '';
+    okitSettings.home_region = '';
+    ociRegions = [];
+    // Load Previous Profile
+    $(jqId('config_profile')).val($(`#console_header_config_select`).val());
+    // Load Compartment Select
+    loadPCACompartments();
+    // Load Region Select
+    loadRegions(selectQueryLastUsedRegion);
+}
+function queryPCA(callback=undefined) {
+    console.info('Querying PCA-X9');
+    const regions = $(jqId('query_region_id')).val();
+    let request = {};
+    request.compartment_id = $(jqId('query_compartment_id')).val();
+    request.compartment_name = $(`${jqId('query_compartment_id')} option:selected`).text();
+    request.config_profile = $(jqId('config_profile')).val();
+    request.sub_compartments = $(jqId('include_sub_compartments')).is(':checked');
+    request.fast_discovery = $(jqId('fast_discovery')).is(':checked');
+    request.region = '';
+    clearRegionTabBar();
+    showRegionTabBar();
+    newModel();
+    newDesignerView();
+    okitJsonView.newCanvas();
+    console.info('Regions Ids : ' + regions);
+    console.info(`Request : ${request}`);
+    newRegionsModel();
+    if (regions.length > 0) {
+        $(jqId('modal_loading_wrapper')).removeClass('hidden');
+        okitPCAQuery = new OkitPCAQuery(regions, request.fast_discovery);
+        $(jqId('region_progress')).empty();
+        okitPCAQuery.query(request, callback, function (region) {
+            $(jqId(regionCheckboxName(region))).prop('checked', true);
+            removeRegionTabProgress(region);
+        }, () => $(jqId('modal_loading_wrapper')).addClass('hidden'));
+    } else {
+        console.info('Region Not Selected.');
+    }
+    $(jqId('modal_dialog_wrapper')).addClass('hidden');
+    hideRecoverMenuItem();
+}
+function showQueryPCAResults(region) {
+    $(jqId('modal_loading_wrapper')).addClass('hidden');
+    console.info('Show PCA Query Results');
+    console.info('Complete ' + region);
+    okitJsonModel = regionOkitJson[region];
+    newDesignerView();
+    redrawSVGCanvas(region);
+    displayTreeView();
+}
+function showImportResults(region) {
+    $(jqId('modal_loading_wrapper')).addClass('hidden');
+    console.info('Show PCA Import Results');
+    console.info('Complete ' + region);
+    slideLeftPanel('oci_import_panel');
+    const importView = new OkitOciImportView(regionOkitJson[region], okitJsonModel)
+    importView.draw()
+    hideRecoverMenuItem();
+}
 /*
 ** Export the Model as various formats
  */

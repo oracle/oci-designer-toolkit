@@ -5,7 +5,7 @@
 console.info('Loaded Mount Target Properties Javascript');
 
 /*
-** Define Mount Target View Class
+** Define Mount Target Properties Class
 */
 class MountTargetProperties extends OkitResourceProperties {
     constructor (resource) {
@@ -28,7 +28,7 @@ class MountTargetProperties extends OkitResourceProperties {
         this.subnet_id = s_input
         this.append(this.core_tbody, s_row)
 
-        // Option Properties
+        // Optional Properties
         const [details, summary, div] = this.createDetailsSection('Optional Networking', `${self.id}_optional_network_details`)
         this.append(this.properties_contents, details)
         const [table, thead, tbody] = this.createTable('', `${self.id}_option_network_properties`)
@@ -87,11 +87,11 @@ class MountTargetProperties extends OkitResourceProperties {
         this.loadSelect(fss_input, 'file_system', false, this.fss_filter)
         fss_input.property('value', fs_export.file_system_id)
         // Path
-        const [p_row, p_input] = this.createInput('text', 'Path', `${id}_hostname_label`, idx, (d, i, n) => fs_export.path = n[i].value)
+        const [p_row, p_input] = this.createInput('text', 'Path', `${id}_path`, idx, (d, i, n) => fs_export.path = n[i].value)
         this.append(e_tbody, p_row)
         p_input.property('value', fs_export.path)
         // CIDR
-        const [cidr_row, cidr_input] = this.createInput('ipv4_cidr', 'Source CIDR', `${id}_options_source`, idx, (d, i, n) => fs_export.options.source = n[i].value)
+        const [cidr_row, cidr_input] = this.createInput('ipv4_cidr', 'Source CIDR', `${id}_options_source`, idx, (d, i, n) => {n[i].reportValidity(); fs_export.options.source = n[i].value})
         this.append(e_tbody, cidr_row)
         cidr_input.property('value', fs_export.options.source)
         // Access

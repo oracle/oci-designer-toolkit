@@ -133,3 +133,34 @@ class LoadBalancerView extends OkitDesignerArtefactView {
     }
 
 }
+/*
+** Dynamically Add View Functions
+*/
+OkitJsonView.prototype.dropLoadBalancerView = function(target) {
+    let view_artefact = this.newLoadBalancer();
+    view_artefact.getArtefact().subnet_ids.push(target.id);
+    view_artefact.getArtefact().compartment_id = target.compartment_id;
+    view_artefact.recalculate_dimensions = true;
+    return view_artefact;
+}
+OkitJsonView.prototype.newLoadBalancer = function(loadbalancer) {
+    this.getLoadBalancers().push(loadbalancer ? new LoadBalancerView(loadbalancer, this) : new LoadBalancerView(this.okitjson.newLoadBalancer(), this));
+    return this.getLoadBalancers()[this.getLoadBalancers().length - 1];
+}
+OkitJsonView.prototype.getLoadBalancers = function() {
+    if (!this.load_balancers) this.load_balancers = []
+    return this.load_balancers;
+}
+OkitJsonView.prototype.getLoadBalancer = function(id='') {
+    for (let artefact of this.getLoadBalancers()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJsonView.prototype.loadLoadBalancers = function(load_balancers) {
+    for (const artefact of load_balancers) {
+        this.getLoadBalancers().push(new LoadBalancerView(new LoadBalancer(artefact, this.okitjson), this));
+    }
+}

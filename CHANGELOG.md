@@ -1,6 +1,26 @@
 # Release Notes
 
 
+## Version 0.33.0
+**Release Date**: 2nd March 2022
+### Features
+1. BOAT Authentication added (Requires tenancy_override in config file to indicate the actual tenancy whilst tenancy indicates the authentication tenancy)
+2. New Properties Sheet format added for 
+    1. Compartment
+    2. Dhcp Option
+    3. Route Table
+    4. Security list
+    5. Subnet
+    6. VCN
+3. Update Vagrant build functionality to clone Git Repository during build rather than copy file information and add a run-server.sh script that attempts to pull latest update before running the server.
+4. Add Query Functionality for PCA-X9
+5. Add URL arguments to lock the diagram type to either PCA-X9 or OCI
+    1. PCA-X9: pca=true 
+    2. OCI: oci=true 
+### Bug Fixes
+1. Fix error in query size when tenancy contains a large number of compartments.
+
+
 ## Version 0.32.1
 **Release Date**: 17th February 2022
 ### Features

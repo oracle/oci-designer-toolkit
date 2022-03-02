@@ -127,7 +127,7 @@ OkitJsonView.prototype.pasteFileSystem = function(drop_target) {
         clone.subnet_id = drop_target.id;
         clone.compartment_id = drop_target.compartment_id;
     }
-    this.okitjson.file_systems.push(clone);
+    this.okitjson.getFileSystems().push(clone);
     this.update(this.okitjson);
 }
 OkitJsonView.prototype.loadFileSystemsSelect = function(select_id, ad, empty_option=false) {

@@ -33,13 +33,60 @@ class SecurityList extends OkitArtifact {
         return new SecurityList(JSON.clone(this), this.getOkitJson());
     }
 
+    newIngressRule() {
+        return {
+            protocol: "all", 
+            is_stateless: false, 
+            description: "", 
+            source_type: "CIDR_BLOCK", 
+            source: "0.0.0.0/0"
+        };
+    }
+
+    newEgressRule() {
+        return {
+            protocol: "all", 
+            is_stateless: false, 
+            description: "", 
+            destination_type: "CIDR_BLOCK", 
+            destination: "0.0.0.0/0"
+        };
+    }
+
+    newTcpOptions() {
+        return {
+            source_port_range: this.newPortRange(),
+            destination_port_range: this.newPortRange()
+        }
+    }
+
+    newUdpOptions() {
+        return {
+            source_port_range: this.newPortRange(),
+            destination_port_range: this.newPortRange()
+        }
+    }
+
+    newPortRange() {
+        return {
+            min: '',
+            max: ''
+        }
+    }
+
+    newIcmpOptions() {
+        return {
+            type: '3',
+            code: '4'
+        }
+    }
 
     /*
     ** Delete Processing
      */
     deleteChildren() {
         // Remove Subnet references
-        for (let subnet of this.getOkitJson().subnets) {
+        for (let subnet of this.getOkitJson().getSubnets()) {
             subnet.security_list_ids = subnet.security_list_ids.filter((id) => id !== this.id);
             // for (let i=0; i < subnet.security_list_ids.length; i++) {
             //     if (subnet.security_list_ids[i] === this.id) {
@@ -132,4 +179,27 @@ class SecurityList extends OkitArtifact {
             }
         );
     }
+}
+/*
+** Dynamically Add Model Functions
+*/
+OkitJson.prototype.newSecurityList = function(data) {
+    console.info('New Security List');
+    this.getSecurityLists().push(new SecurityList(data, this));
+    return this.getSecurityLists()[this.getSecurityLists().length - 1];
+}
+OkitJson.prototype.getSecurityLists = function() {
+    if (!this.security_lists) this.security_lists = [];
+    return this.security_lists;
+}
+OkitJson.prototype.getSecurityList = function(id='') {
+    for (let artefact of this.getSecurityLists()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJson.prototype.deleteSecurityList = function(id) {
+    this.security_lists = this.security_lists ? this.security_lists.filter((r) => r.id !== id) : []
 }

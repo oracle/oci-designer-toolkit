@@ -27,7 +27,7 @@ class OkeClusterView extends OkitDesignerArtefactView {
         let me = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/oke_cluster.html", () => {
             let service_lb_subnet_select = d3.select(d3Id('service_lb_subnet_ids'));
-            for (let subnet of me.artefact.getOkitJson().subnets) {
+            for (let subnet of me.artefact.getOkitJson().getSubnets()) {
                 let div = service_lb_subnet_select.append('div');
                 div.append('input')
                     .attr('type', 'checkbox')
@@ -278,7 +278,7 @@ class OkeClusterView extends OkitDesignerArtefactView {
     addSubnets(element) {
         let subnet_select = $(jqId(element));
         subnet_select.append($('<option>').attr('value', '').text(''));
-        for (let subnet of this.getOkitJson().subnets) {
+        for (let subnet of this.getOkitJson().getSubnets()) {
             let compartment = this.getOkitJson().getCompartment(this.getOkitJson().getSubnet(subnet.id).compartment_id);
             let vcn = this.getOkitJson().getVirtualCloudNetwork(this.getOkitJson().getSubnet(subnet.id).vcn_id);
             let display_name = `${compartment.display_name}/${vcn.display_name}/${subnet.display_name}`;
@@ -328,4 +328,35 @@ class OkeClusterView extends OkitDesignerArtefactView {
         return [VirtualCloudNetwork.getArtifactReference()];
     }
 
+}
+/*
+** Dynamically Add View Functions
+*/
+OkitJsonView.prototype.dropOkeClusterView = function(target) {
+    let view_artefact = this.newOkeCluster();
+    view_artefact.getArtefact().vcn_id = target.id;
+    view_artefact.getArtefact().compartment_id = target.compartment_id;
+    view_artefact.recalculate_dimensions = true;
+    return view_artefact;
+}
+OkitJsonView.prototype.newOkeCluster = function(cluster) {
+    this.getOkeClusters().push(cluster ? new OkeClusterView(cluster, this) : new OkeClusterView(this.okitjson.newOkeCluster(), this));
+    return this.getOkeClusters()[this.getOkeClusters().length - 1];
+}
+OkitJsonView.prototype.getOkeClusters = function() {
+    if (!this.oke_clusters) this.oke_clusters = []
+    return this.oke_clusters;
+}
+OkitJsonView.prototype.getOkeCluster = function(id='') {
+    for (let artefact of this.getOkeClusters()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJsonView.prototype.loadOkeClusters = function(oke_clusters) {
+    for (const artefact of oke_clusters) {
+        this.getOkeClusters().push(new OkeClusterView(new OkeCluster(artefact, this.okitjson), this));
+    }
 }

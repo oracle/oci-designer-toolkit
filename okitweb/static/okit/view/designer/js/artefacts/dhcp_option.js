@@ -14,7 +14,7 @@ class DhcpOptionView extends OkitArtefactView {
     }
     get attached() {
         if (!this.attached_id) {
-            for (let subnet of this.getOkitJson().subnets) {
+            for (let subnet of this.getOkitJson().getSubnets()) {
                 if (subnet.dhcp_options_id === this.id) {
                     return true;
                 }
@@ -31,196 +31,10 @@ class DhcpOptionView extends OkitArtefactView {
     /*
     ** Property Sheet Load function
     */
-    loadProperties() {
-        const self = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/dhcp_option.html", () => {
-            loadPropertiesSheet(self.artefact);
-            // Load Options
-            self.loadOptions();
-            // Add Handler to Add Button
-            $(jqId('add_option')).on('click', () => {self.addOption();});
-        });
+    newPropertiesSheet() {
+        this.properties_sheet = new DhcpOptionProperties(this.artefact)
     }
-    loadOptions() {
-        // Empty Existing Rules
-        $(jqId('options_table_body')).empty();
-        // Route Rules
-        let option_idx = 1;
-        for (let option of this.options) {
-            this.addOptionHtml(option, option_idx);
-            option_idx += 1;
-        }
-    }
-    addOption() {
-        let new_option = {
-            type: "DomainNameServer",
-            server_type: "CustomDnsServer",
-            custom_dns_servers: [],
-            search_domain_names: []
-        };
-        this.options.push(new_option);
-        this.loadOptions();
-        displayOkitJson();
-    }
-    deleteOption(option_idx) {
-        this.options.splice(option_idx, 1);
-        this.loadOptions();
-        displayOkitJson();
-    }
-    addOptionHtml(option, option_idx=1) {
-        let self = this;
-        let vcn_id = '';
-        if (this.parent.getArtifactReference() === VirtualCloudNetwork.getArtifactReference()) {
-            vcn_id = this.parent_id;
-        } else if (this.parent.getArtifactReference() === Subnet.getArtifactReference()) {
-            vcn_id = this.parent.vcn_id;
-        } else {
-            // Must be a child of the Virtual Cloud Network
-            vcn_id = this.parent.parent_id;
-        }
 
-        let options_table_body = d3.select('#options_table_body');
-        let row = options_table_body.append('div').attr('class', 'tr');
-        let cell = row.append('div').attr('class', 'td')
-            .attr("id", "option_" + option_idx);
-        let option_table = cell.append('div').attr('class', 'table okit-table okit-properties-table')
-            .attr("id", "option_table_" + option_idx);
-        // First Row with Delete Button
-        let option_cell = row.append('div').attr('class', 'td');
-        option_cell.append('button')
-            .attr("type", "button")
-            .attr("class", "okit-delete-button")
-            .text("X")
-            .on('click', function() {
-                self.deleteOption(option_idx - 1);
-                self.loadOptions();
-                displayOkitJson();
-            });
-
-        // Option Type
-        const types_map = new Map([
-            ['Domain Name Server', 'DomainNameServer'],
-            ['Search Domain', 'SearchDomain'],
-        ]);
-        let option_row = option_table.append('div').attr('class', 'tr');
-        option_row.append('div').attr('class', 'td')
-            .text("Type");
-        let type_select = option_row.append('div').attr('class', 'td').append('select')
-            .attr("class", "property-value")
-            .attr("id", "type" + option_idx)
-            .on("change", function() {
-                const option_type = this.options[this.selectedIndex].value;
-                // Reset Other Options
-                option.server_type = '';
-                option.custom_dns_servers = [];
-                option.search_domain_names = [];
-                // Get Type
-                option['type'] = option_type;
-                if (option_type === 'DomainNameServer') {
-                    $(jqId("server_type_row" + option_idx)).removeClass('collapsed');
-                    $(jqId("custom_dns_servers_row" + option_idx)).removeClass('collapsed');
-                    $(jqId("search_domain_names_row" + option_idx)).addClass('collapsed');
-                    // Set Default for server type
-                    option.server_type = 'CustomDnsServer';
-                    $(jqId("server_type" + option_idx)).val(option.server_type);
-                } else {
-                    $(jqId("server_type_row" + option_idx)).addClass('collapsed');
-                    $(jqId("custom_dns_servers_row" + option_idx)).addClass('collapsed');
-                    $(jqId("search_domain_names_row" + option_idx)).removeClass('collapsed');
-                    option.search_domain_names = [`${self.vcn_name.split('-').join('')}.oraclevcn.com`];
-                }
-                $(jqId(`server_type${option_idx}`)).val(option.server_type);
-                $(jqId(`custom_dns_servers${option_idx}`)).val(option.custom_dns_servers);
-                $(jqId(`search_domain_names${option_idx}`)).val(option.search_domain_names);
-            displayOkitJson();
-            });
-        types_map.forEach((value, key) => {
-            type_select.append('option')
-                .attr('value', value)
-                .text(key);
-        });
-        type_select.property('value', option.type);
-        if (!option.type || option.type === '') {
-            option.type = 'DomainNameServer';
-        }
-        $(jqId("type" + option_idx)).val(option.type);
-
-        // Server Type
-        const server_types_map = new Map([
-            ['Custom Dns Server', 'CustomDnsServer'],
-            // ['Vcn Local', 'VcnLocal'],
-            ['Vcn Local Plus Internet', 'VcnLocalPlusInternet'],
-        ]);
-        option_row = option_table.append('div').attr('class', 'tr collapsed')
-            .attr('id', "server_type_row" + option_idx);
-        option_row.append('div').attr('class', 'td')
-            .text("Server Type");
-        let server_type = option_row.append('div').attr('class', 'td').append('select')
-            .attr("class", "property-value")
-            .attr("id", "server_type" + option_idx)
-            .on("change", function() {
-                let server_type = this.options[this.selectedIndex].value;
-                option['server_type'] = server_type;
-                if (server_type === 'VcnLocalPlusInternet') {
-                    $(jqId("custom_dns_servers_row" + option_idx)).addClass('collapsed');
-                } else {
-                    $(jqId("custom_dns_servers_row" + option_idx)).removeClass('collapsed');
-                }
-                displayOkitJson();
-            });
-        server_types_map.forEach((value, key) => {
-            server_type.append('option')
-                .attr('value', value)
-                .text(key);
-        });
-        $(jqId("server_type" + option_idx)).val(option.server_type);
-        // Custom Dns Servers
-        option_row = option_table.append('div').attr('class', 'tr collapsed').attr('id', 'custom_dns_servers_row' + option_idx);
-        option_row.append('div').attr('class', 'td')
-            .text("Dns Servers");
-        option_cell = option_row.append('div').attr('class', 'td');
-        option_cell.append('input')
-            .attr("type", "text")
-            .attr("class", "property-value")
-            .attr("id", "custom_dns_servers" + option_idx)
-            .attr("name", "custom_dns_servers")
-            .attr("value", option.custom_dns_servers ? option['custom_dns_servers'].join(',') : '')
-            .on("change", function() {
-                option['custom_dns_servers'] = this.value.replaceAll(' ', '').split(',');
-                displayOkitJson();
-            });
-
-        // Search Domain Names
-        option_row = option_table.append('div').attr('class', 'tr collapsed').attr('id', 'search_domain_names_row' + option_idx);
-        option_row.append('div').attr('class', 'td')
-            .text("Search Domain Names");
-        option_cell = option_row.append('div').attr('class', 'td');
-        option_cell.append('input')
-            .attr("type", "text")
-            .attr("class", "property-value")
-            .attr("id", "search_domain_names" + option_idx)
-            .attr("name", "search_domain_names")
-            .attr("value", option['search_domain_names'].join(','))
-            .on("change", function() {
-                option['search_domain_names'] = this.value.replaceAll(' ', '').split(',');
-                displayOkitJson();
-            });
-        // Check Display
-        if (option.type === 'DomainNameServer') {
-            $(jqId("server_type_row" + option_idx)).removeClass('collapsed');
-            $(jqId("custom_dns_servers_row" + option_idx)).removeClass('collapsed');
-            $(jqId("search_domain_names_row" + option_idx)).addClass('collapsed');
-            if (option.server_type === 'VcnLocalPlusInternet') {
-                $(jqId("custom_dns_servers_row" + option_idx)).addClass('collapsed');
-            } else {
-                $(jqId("custom_dns_servers_row" + option_idx)).removeClass('collapsed');
-            }
-        } else {
-            $(jqId("server_type_row" + option_idx)).addClass('collapsed');
-            $(jqId("custom_dns_servers_row" + option_idx)).addClass('collapsed');
-            $(jqId("search_domain_names_row" + option_idx)).removeClass('collapsed');
-        }
-    }
     /*
     ** Load and display Value Proposition
     */
@@ -330,7 +144,7 @@ OkitJsonView.prototype.pasteDhcpOption = function(drop_target) {
         clone.subnet_id = drop_target.id;
         clone.compartment_id = drop_target.compartment_id;
     }
-    this.okitjson.dhcp_options.push(clone);
+    this.okitjson.getDhcpOptions().push(clone);
     this.update(this.okitjson);
 }
 OkitJsonView.prototype.loadDhcpOptionsSelect = function(select_id, empty_option=false) {

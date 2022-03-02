@@ -19,7 +19,7 @@ class BlockStorageVolume extends OkitArtifact {
         this.availability_domain = '1';
         this.size_in_gbs = 1024;
         this.backup_policy = '';
-        this.vpus_per_gb = '10';
+        this.vpus_per_gb = '0';
         // Update with any passed data
         this.merge(data);
         this.convert();
@@ -44,7 +44,7 @@ class BlockStorageVolume extends OkitArtifact {
      */
     deleteChildren() {
         // Remove Instance references
-        for (let instance of this.getOkitJson().instances) {
+        for (let instance of this.getOkitJson().getInstances()) {
             for (let i=0; i < instance.block_storage_volume_ids.length; i++) {
                 if (instance.block_storage_volume_ids[i] === this.id) {
                     instance.block_storage_volume_ids.splice(i, 1);
@@ -65,4 +65,27 @@ class BlockStorageVolume extends OkitArtifact {
         return 'Block Storage Volume';
     }
 
+}
+/*
+** Dynamically Add Model Functions
+*/
+OkitJson.prototype.newBlockStorageVolume = function(data) {
+    console.info('New Block Storage Volume');
+    this.getBlockStorageVolumes().push(new BlockStorageVolume(data, this));
+    return this.getBlockStorageVolumes()[this.getBlockStorageVolumes().length - 1];
+}
+OkitJson.prototype.getBlockStorageVolumes = function() {
+    if (!this.block_storage_volumes) this.block_storage_volumes = [];
+    return this.block_storage_volumes;
+}
+OkitJson.prototype.getBlockStorageVolume = function(id='') {
+    for (let artefact of this.getBlockStorageVolumes()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJson.prototype.deleteBlockStorageVolume = function(id) {
+    this.block_storage_volumes = this.block_storage_volumes ? this.block_storage_volumes.filter((r) => r.id !== id) : []
 }

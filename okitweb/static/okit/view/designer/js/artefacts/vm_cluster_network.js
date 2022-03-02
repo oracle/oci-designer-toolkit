@@ -13,8 +13,8 @@ class VmClusterNetworkView extends OkitDesignerArtefactView {
         super(artefact, json_view);
     }
     get attached() {
-        if (!this.attached_id && this.getOkitJson().vm_clusters) {
-            for (let vm_cluster of this.getOkitJson().vm_clusters) {
+        if (!this.attached_id && this.getOkitJson().getVmClusters()) {
+            for (let vm_cluster of this.getOkitJson().getVmClusters()) {
                 if (vm_cluster.vm_cluster_network_id === this.id) {
                     return true;
                 }
@@ -271,7 +271,7 @@ OkitJsonView.prototype.pasteVmClusterNetwork = function(drop_target) {
         clone.subnet_id = drop_target.id;
         clone.compartment_id = drop_target.compartment_id;
     }
-    this.okitjson.vm_cluster_networks.push(clone);
+    this.okitjson.getVmClusterNetworks().push(clone);
     this.update(this.okitjson);
 }
 OkitJsonView.prototype.loadVmClusterNetworksSelect = function(select_id, empty_option=false) {

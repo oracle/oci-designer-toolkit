@@ -77,3 +77,34 @@ class MysqlDatabaseSystemView extends OkitDesignerArtefactView {
     }
 
 }
+/*
+** Dynamically Add View Functions
+*/
+OkitJsonView.prototype.dropMysqlDatabaseSystemView = function(target) {
+    let view_artefact = this.newMysqlDatabaseSystem();
+    view_artefact.getArtefact().subnet_id = target.id;
+    view_artefact.getArtefact().compartment_id = target.compartment_id;
+    view_artefact.recalculate_dimensions = true;
+    return view_artefact;
+}
+OkitJsonView.prototype.newMysqlDatabaseSystem = function(database) {
+    this.getMysqlDatabaseSystems().push(database ? new MysqlDatabaseSystemView(database, this) : new MysqlDatabaseSystemView(this.okitjson.newMysqlDatabaseSystem(), this));
+    return this.getMysqlDatabaseSystems()[this.getMysqlDatabaseSystems().length - 1];
+}
+OkitJsonView.prototype.getMysqlDatabaseSystems = function() {
+    if (!this.mysql_database_systems) this.mysql_database_systems = []
+    return this.mysql_database_systems;
+}
+OkitJsonView.prototype.getMysqlDatabaseSystem = function(id='') {
+    for (let artefact of this.getMysqlDatabaseSystems()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJsonView.prototype.loadMysqlDatabaseSystems = function(database_systems) {
+    for (const artefact of database_systems) {
+        this.getMysqlDatabaseSystems().push(new MysqlDatabaseSystemView(new MysqlDatabaseSystem(artefact, this.okitjson), this));
+    }
+}

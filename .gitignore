@@ -44,6 +44,7 @@ containers/ssh/*
 /lima-compose.yml
 /containers/runtime/
 /containers/lima/
+/containers/vbox/
 
 **/node_modules
 **/package-lock.json

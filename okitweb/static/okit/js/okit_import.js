@@ -37,11 +37,14 @@ function hclJsonLoad(evt) {
     let fileJson = JSON.parse(fileString);
     console.info(fileJson);
     $.ajax({
+        cache: false,
         type: 'get',
         url: 'parse/hcljson',
         dataType: 'text',
         contentType: 'application/json',
-        data: JSON.stringify(fileJson),
+        data: {
+            json: JSON.stringify(fileJson)
+        },
         success: function(resp) {
             let response_json = JSON.parse(resp);
             okitJsonModel = new OkitJson(JSON.stringify(response_json.okit_json));
@@ -58,6 +61,60 @@ function hclJsonLoad(evt) {
             console.info('Parsing Complete');
         }
     });
+}
+// Terraform State File
+function handleImportFromTFStateJson(e) {
+    hideNavMenu();
+    /*
+    ** Add Load File Handling
+     */
+    $('#files').off('change').on('change', handleTFStateJsonImportSelect);
+    $('#files').attr('accept', '.tfstate');
+    // Click Files Element
+    let fileinput = document.getElementById("files");
+    fileinput.click();
+}
+function handleTFStateJsonImportSelect(evt) {
+    let files = evt.target.files; // FileList object
+    getTFStateJson(files[0]);
+}
+function getTFStateJson(readFile) {
+    let reader = new FileReader();
+    reader.onload = TFStateJsonLoad;
+    reader.onerror = errorHandler;
+    reader.readAsText(readFile);
+}
+function TFStateJsonLoad(evt) {
+    // Clear Existing Region
+    regionOkitJson = {};
+    okitJsonModel = null
+    hideRegionTabBar();
+    clearRegionTabBar();
+    // Obtain the read file data
+    let fileString = evt.target.result;
+    let fileJson = JSON.parse(fileString);
+    console.info(fileJson);
+    $.ajax({
+        cache: false,
+        type: 'get',
+        url: 'parse/tfstate',
+        dataType: 'text',
+        contentType: 'application/json',
+        data: {
+            json: JSON.stringify(fileJson)
+        }}).done((resp) => {
+            let response_json = JSON.parse(resp);
+            okitJsonModel = new OkitJson(JSON.stringify(response_json.okit_json));
+            newDesignerView();
+            displayOkitJson();
+            displayDesignerView();
+            displayTreeView();
+        }).fail((xhr, status, error) => {
+            console.info('Status : '+ status)
+            console.info('Error : '+ error)
+        }).always(() => {
+            console.info('Parsing Complete');
+        })
 }
 // Oracle Cost Estimator Json
 function handleImportFromCCEJson(e) {
@@ -92,11 +149,14 @@ function cceJsonLoad(evt) {
     let fileJson = JSON.parse(fileString);
     console.info(fileJson);
     $.ajax({
+        cache: false,
         type: 'get',
         url: 'parse/ccejson',
         dataType: 'text',
         contentType: 'application/json',
-        data: JSON.stringify(fileJson),
+        data: {
+            json: JSON.stringify(fileJson)
+        },
         success: function(resp) {
             let response_json = JSON.parse(resp);
             console.info(response_json);

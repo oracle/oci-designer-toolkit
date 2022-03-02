@@ -79,3 +79,26 @@ class DatabaseSystem extends OkitArtifact {
     }
 
 }
+/*
+** Dynamically Add Model Functions
+*/
+OkitJson.prototype.newDatabaseSystem = function(data) {
+    console.info('New Database System');
+    this.getDatabaseSystems().push(new DatabaseSystem(data, this));
+    return this.getDatabaseSystems()[this.getDatabaseSystems().length - 1];
+}
+OkitJson.prototype.getDatabaseSystems = function() {
+    if (!this.database_systems) this.database_systems = [];
+    return this.database_systems;
+}
+OkitJson.prototype.getDatabaseSystem = function(id='') {
+    for (let artefact of this.getDatabaseSystems()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJson.prototype.deleteDatabaseSystem = function(id) {
+    this.database_systems = this.database_systems ? this.database_systems.filter((r) => r.id !== id) : []
+}

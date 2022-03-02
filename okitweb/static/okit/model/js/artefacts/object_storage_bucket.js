@@ -38,7 +38,7 @@ class ObjectStorageBucket extends OkitArtifact {
     ** Delete Processing
      */
     deleteChildren() {
-        for (let instance of this.getOkitJson().instances) {
+        for (let instance of this.getOkitJson().getInstances()) {
             for (let i=0; i < instance['object_storage_bucket_ids'].length; i++) {
                 if (instance.object_storage_bucket_ids[i] === this.id) {
                     instance.object_storage_bucket_ids.splice(i, 1);
@@ -58,4 +58,27 @@ class ObjectStorageBucket extends OkitArtifact {
         return 'Object Storage Bucket';
     }
 
+}
+/*
+** Dynamically Add Model Functions
+*/
+OkitJson.prototype.newObjectStorageBucket = function(data) {
+    console.info('New Object Storage Bucket');
+    this.getObjectStorageBuckets().push(new ObjectStorageBucket(data, this));
+    return this.getObjectStorageBuckets()[this.getObjectStorageBuckets().length - 1];
+}
+OkitJson.prototype.getObjectStorageBuckets = function() {
+    if (!this.object_storage_buckets) this.object_storage_buckets = [];
+    return this.object_storage_buckets;
+}
+OkitJson.prototype.getObjectStorageBucket = function(id='') {
+    for (let artefact of this.getObjectStorageBuckets()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJson.prototype.deleteObjectStorageBucket = function(id) {
+    this.object_storage_buckets = this.object_storage_buckets ? this.object_storage_buckets.filter((r) => r.id !== id) : []
 }

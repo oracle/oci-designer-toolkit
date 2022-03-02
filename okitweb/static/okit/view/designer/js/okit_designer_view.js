@@ -42,7 +42,7 @@ class OkitDesignerJsonView extends OkitJsonView {
         // New canvas
         let width = 0;
         let height = 0;
-        for (let compartment of this.compartments) {
+        for (let compartment of this.getCompartments()) {
             let dimensions = compartment.dimensions;
             width = Math.max(width, dimensions.width);
             height = Math.max(height, dimensions.height);
@@ -247,7 +247,7 @@ class OkitDesignerArtefactView extends OkitArtefactView {
         if (subnet_id && subnet_id !== '') {
             if (this.getOkitJson().getSubnet(subnet_id) != undefined) {
                 let vcn = this.getOkitJson().getVirtualCloudNetwork(this.getOkitJson().getSubnet(subnet_id).vcn_id);
-                for (let networkSecurityGroup of this.getOkitJson().network_security_groups) {
+                for (let networkSecurityGroup of this.getOkitJson().getNetworkSecurityGroups()) {
                     if (networkSecurityGroup.vcn_id === vcn.id) {
                         let div = multi_select.append('div');
                         div.append('input')

@@ -127,7 +127,7 @@ OkitJsonView.prototype.pasteUser = function(drop_target) {
         clone.subnet_id = drop_target.id;
         clone.compartment_id = drop_target.compartment_id;
     }
-    this.okitjson.users.push(clone);
+    this.okitjson.getUsers().push(clone);
     this.update(this.okitjson);
 }
 OkitJsonView.prototype.loadUsersSelect = function(select_id, empty_option=false) {

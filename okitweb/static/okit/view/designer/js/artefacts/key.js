@@ -134,7 +134,7 @@ OkitJsonView.prototype.pasteKey = function(drop_target) {
         clone.subnet_id = drop_target.id;
         clone.compartment_id = drop_target.compartment_id;
     }
-    this.okitjson.keys.push(clone);
+    this.okitjson.getKeys().push(clone);
     this.update(this.okitjson);
 }
 OkitJsonView.prototype.loadKeysSelect = function(select_id, empty_option=false) {

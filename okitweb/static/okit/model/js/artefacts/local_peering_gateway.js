@@ -57,3 +57,26 @@ function setPeeredGatewayPeerId(input_id, artefact) {
         okitJson.getLocalPeeringGateway(artefact.peer_id).peer_id = artefact.id;
     }
 }
+/*
+** Dynamically Add Model Functions
+*/
+OkitJson.prototype.newLocalPeeringGateway = function(data) {
+    console.info('New Local Peering Gateway');
+    this.getLocalPeeringGateways().push(new LocalPeeringGateway(data, this));
+    return this.getLocalPeeringGateways()[this.getLocalPeeringGateways().length - 1];
+}
+OkitJson.prototype.getLocalPeeringGateways = function() {
+    if (!this.local_peering_gateways) this.local_peering_gateways = [];
+    return this.local_peering_gateways;
+}
+OkitJson.prototype.getLocalPeeringGateway = function(id='') {
+    for (let artefact of this.getLocalPeeringGateways()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJson.prototype.deleteLocalPeeringGateway = function(id) {
+    this.local_peering_gateways = this.local_peering_gateways ? this.local_peering_gateways.filter((r) => r.id !== id) : []
+}

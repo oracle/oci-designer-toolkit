@@ -38,13 +38,8 @@ class DynamicRoutingGateway extends OkitArtifact {
      */
     deleteChildren() {
         // Remove Dynamic Routing Gateway references
-        for (let route_table of this.getOkitJson().route_tables) {
-            for (let i = 0; i < route_table.route_rules.length; i++) {
-                if (route_table.route_rules[i]['network_entity_id'] === this.id) {
-                    route_table.route_rules.splice(i, 1);
-                }
-            }
-        }
+        // Remove Route Rules
+        this.getOkitJson().getRouteTables().forEach((rt) => rt.route_rules = rt.route_rules.filter((d) => d.network_entity_id !== this.id))        
     }
 
 
@@ -59,4 +54,27 @@ class DynamicRoutingGateway extends OkitArtifact {
         return 'Dynamic Routing Gateway';
     }
 
+}
+/*
+** Dynamically Add Model Functions
+*/
+OkitJson.prototype.newDynamicRoutingGateway = function(data) {
+    console.info('New Dynamic Routing Gateway');
+    this.getDynamicRoutingGateways().push(new DynamicRoutingGateway(data, this));
+    return this.getDynamicRoutingGateways()[this.getDynamicRoutingGateways().length - 1];
+}
+OkitJson.prototype.getDynamicRoutingGateways = function() {
+    if (!this.dynamic_routing_gateways) this.dynamic_routing_gateways = [];
+    return this.dynamic_routing_gateways;
+}
+OkitJson.prototype.getDynamicRoutingGateway = function(id='') {
+    for (let artefact of this.getDynamicRoutingGateways()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJson.prototype.deleteDynamicRoutingGateway = function(id) {
+    this.dynamic_routing_gateways = this.dynamic_routing_gateways ? this.dynamic_routing_gateways.filter((r) => r.id !== id) : []
 }

@@ -60,64 +60,44 @@ class SubnetView extends OkitContainerDesignerArtefactView {
         let attachment_count = 0;
         // Draw Route Table
         if (this.artefact.route_table_id !== '') {
-            let attachment = new RouteTableView(this.getJsonView().getOkitJson().getRouteTable(this.route_table_id), this.getJsonView());
-            attachment.attached_id = this.id;
-            attachment.draw();
-            attachment_count += 1;
+            let resource = this.getJsonView().getOkitJson().getRouteTable(this.route_table_id)
+            resource = resource ? resource : new RouteTable({display_name: 'Missing From Design', read_only: true}, this.getJsonView().getOkitJson())
+            if (resource) {
+                let attachment = new RouteTableView(resource, this.getJsonView());
+                attachment.attached_id = this.id;
+                attachment.draw();
+                attachment_count += 1;
+            }
         }
         // Security Lists
-        for (let security_list_id of this.artefact.security_list_ids) {
-            let attachment = new SecurityListView(this.getJsonView().getOkitJson().getSecurityList(security_list_id), this.getJsonView());
-            attachment.attached_id = this.id;
-            attachment.draw();
-            attachment_count += 1;
+        for (const security_list_id of this.artefact.security_list_ids) {
+            let resource = this.getJsonView().getOkitJson().getSecurityList(security_list_id)
+            resource = resource ? resource : new SecurityList({display_name: 'Missing From Design', read_only: true}, this.getJsonView().getOkitJson())
+            if (resource) {
+                let attachment = new SecurityListView(resource, this.getJsonView());
+                attachment.attached_id = this.id;
+                attachment.draw();
+                attachment_count += 1;
+            }
         }
         // Draw Dhcp Options
         if (this.artefact.dhcp_options_id !== '') {
-            let attachment = new DhcpOptionView(this.getJsonView().getOkitJson().getDhcpOption(this.dhcp_options_id), this.getJsonView());
-            attachment.attached_id = this.id;
-            attachment.draw();
-            attachment_count += 1;
+            let resource = this.getJsonView().getOkitJson().getDhcpOption(this.dhcp_options_id)
+            resource = resource ? resource : new DhcpOption({display_name: 'Missing From Design', read_only: true}, this.getJsonView().getOkitJson())
+            if (resource) {
+                let attachment = new DhcpOptionView(resource, this.getJsonView());
+                attachment.attached_id = this.id;
+                attachment.draw();
+                attachment_count += 1;
+            }
         }
     }
 
     /*
     ** Property Sheet Load function
-     */
-    loadProperties() {
-        let me = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/subnet.html", () => {
-            // Load Referenced Ids
-            // Virtual Cloud Network
-            this.loadVirtualCloudNetworkSelect('vcn_id');
-            $(jqId('vcn_id')).on('change', () => {if ($(jqId('vcn_id')).val() != '') me.artefact.generateCIDR();});
-            // Route Table
-            let route_table_select = $(jqId('route_table_id'));
-            route_table_select.append($('<option>').attr('value', '').text(''));
-            for (let route_table of me.artefact.getOkitJson().route_tables) {
-                if (me.vcn_id === route_table.vcn_id) {
-                    route_table_select.append($('<option>').attr('value', route_table.id).text(route_table.display_name));
-                }
-            }
-            // Security Lists
-            let security_lists_select = d3.select(d3Id('security_list_ids'));
-            for (let security_list of me.artefact.getOkitJson().security_lists) {
-                if (me.vcn_id === security_list.vcn_id) {
-                    let div = security_lists_select.append('div');
-                    div.append('input')
-                        .attr('type', 'checkbox')
-                        .attr('id', safeId(security_list.id))
-                        .attr('value', security_list.id);
-                    div.append('label')
-                        .attr('for', safeId(security_list.id))
-                        .text(security_list.display_name);
-                }
-            }
-            // Dhcp Options
-            this.json_view.loadDhcpOptionsSelect('dhcp_options_id', true)
-            // Load Properties
-            loadPropertiesSheet(me.artefact);
-        });
+    */
+    newPropertiesSheet() {
+        this.properties_sheet = new SubnetProperties(this.artefact)
     }
 
     /*
@@ -183,3 +163,64 @@ class SubnetView extends OkitContainerDesignerArtefactView {
     }
 
 }
+/*
+** Dynamically Add View Functions
+*/
+OkitJsonView.prototype.dropSubnetView = function(target) {
+    let view_artefact = this.newSubnet();
+    if (target.type === VirtualCloudNetwork.getArtifactReference()) {
+        view_artefact.getArtefact().vcn_id = target.id;
+        view_artefact.getArtefact().compartment_id = target.compartment_id;
+        view_artefact.getArtefact().generateCIDR();
+    } else if (target.type === Compartment.getArtifactReference()) {
+        view_artefact.getArtefact().compartment_id = target.id;
+    }
+    view_artefact.recalculate_dimensions = true;
+    return view_artefact;
+}
+OkitJsonView.prototype.newSubnet = function(subnet) {
+    this.getSubnets().push(subnet ? new SubnetView(subnet, this) : new SubnetView(this.okitjson.newSubnet(), this));
+    return this.getSubnets()[this.getSubnets().length - 1];
+}
+OkitJsonView.prototype.getSubnets = function() {
+    if (!this.subnets) this.subnets = []
+    return this.subnets;
+}
+OkitJsonView.prototype.getSubnet = function(id='') {
+    for (let artefact of this.getSubnets()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJsonView.prototype.loadSubnets = function(subnets) {
+    for (const artefact of subnets) {
+        this.getSubnets().push(new SubnetView(new Subnet(artefact, this.okitjson), this));
+    }
+}
+// OkitJsonView.prototype.loadSubnetsSelect = function(select_id, empty_option=false) {
+//     $(jqId(select_id)).empty();
+//     const subnet_select = $(jqId(select_id));
+//     if (empty_option) {
+//         subnet_select.append($('<option>').attr('value', '').text(''));
+//     }
+//     for (let subnet of this.getSubnets()) {
+//         const compartment = this.getCompartment(subnet.compartment_id);
+//         const vcn = this.getVirtualCloudNetwork(subnet.vcn_id);
+//         const display_name = subnet.display_name;
+//         // const display_name = `${compartment.display_name}/${vcn.display_name}/${subnet.display_name}`;
+//         subnet_select.append($('<option>').attr('value', subnet.id).text(display_name));
+//     }
+// }
+OkitJsonView.prototype.loadSubnetsSelect = function(id, empty_option=false, vcn_id=undefined) {
+    // Build Subnet Select
+    let select = $(jqId(id));
+    $(select).empty();
+    if (empty_option) select.append($('<option>').attr('value', '').text(''));
+    for (const resource of this.getOkitJson().getSubnets().filter((s) => vcn_id === undefined || s.vcn_id === vcn_id)) {
+        select.append($('<option>').attr('value', resource.id).text(resource.display_name));
+    }
+}
+OkitArtefactView.prototype.loadSubnetsSelect = function(id, empty=true, vcn_id=undefined) {this.getJsonView().loadSubnetsSelect(id, empty, vcn_id)}
+OkitArtefactView.prototype.loadSubnetSelect = function(id, empty=true, vcn_id=undefined) {this.getJsonView().loadSubnetsSelect(id, empty, vcn_id)}

@@ -34,7 +34,9 @@ from common.okitCommon import getOkitHome
 from common.okitLogging import getLogger
 # from query.pcaQuery import PCAQuery
 # from query.pcaRegionQuery import PCARegionQuery
+from query.pcaCompartmentQuery import PCACompartmentQuery
 from query.pcaDropdownQuery import PCADropdownQuery
+from query.pcaQuery import PCAQuery
 
 # Configure logging
 logger = getLogger()
@@ -89,5 +91,33 @@ def dropdownQuery():
         return dropdown_json
     else:
         return 'Unknown Method', 500
+
+
+@bp.route('/query', methods=(['GET']))
+def pcaQuery():
+    if request.method == 'GET':
+        config_profile = request.args.get('config_profile', default='DEFAULT')
+        compartments = request.args.get('compartment_id')
+        regions = request.args.get('region')
+        region = request.args.get('region')
+        sub_compartments = request.args.get('sub_compartments', default=False).lower() == 'true'
+        logger.info('Using Profile : {0!s:s}'.format(config_profile))
+        config = {'region': region}
+        query = PCAQuery(config=config, profile=config_profile)
+        response = query.executeQuery(regions=[regions] if regions else [], compartments=[compartments] if compartments else [], include_sub_compartments=sub_compartments)
+        logJson(response)
+        # logger.info(jsonToFormattedString(response))
+        return response
+    else:
+        return 404
+
+
+@bp.route('/compartments/<string:profile>', methods=(['GET']))
+def ociCompartments(profile):
+    oci_compartment_query = PCACompartmentQuery(profile=profile)
+    compartments = oci_compartment_query.executeQuery()
+    response = jsonToFormattedString(compartments)
+    logger.debug(">>>>>>>>> Compartments: {0!s:s}".format(response))
+    return response
 
 

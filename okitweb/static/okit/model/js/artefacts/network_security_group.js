@@ -37,7 +37,7 @@ class NetworkSecurityGroup extends OkitArtifact {
      */
     deleteChildren() {
         // Remove Instance vnic references
-        for (let instance of this.getOkitJson().instances) {
+        for (let instance of this.getOkitJson().getInstances()) {
             for (let vnic of instance.vnics) {
                 for (let i = 0; i < vnic.nsg_ids.length; i++) {
                     if (vnic.nsg_ids[i] === this.id) {
@@ -59,4 +59,27 @@ class NetworkSecurityGroup extends OkitArtifact {
         return 'Network Security Group';
     }
 
+}
+/*
+** Dynamically Add Model Functions
+*/
+OkitJson.prototype.newNetworkSecurityGroup = function(data) {
+    console.info('New Network Security Group');
+    this.getNetworkSecurityGroups().push(new NetworkSecurityGroup(data, this));
+    return this.getNetworkSecurityGroups()[this.getNetworkSecurityGroups().length - 1];
+}
+OkitJson.prototype.getNetworkSecurityGroups = function() {
+    if (!this.network_security_groups) this.network_security_groups = [];
+    return this.network_security_groups;
+}
+OkitJson.prototype.getNetworkSecurityGroup = function(id='') {
+    for (let artefact of this.getNetworkSecurityGroups()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJson.prototype.deleteNetworkSecurityGroup = function(id) {
+    this.network_security_groups = this.network_security_groups ? this.network_security_groups.filter((r) => r.id !== id) : []
 }

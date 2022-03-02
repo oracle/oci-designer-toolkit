@@ -64,3 +64,26 @@ class FastConnect extends OkitArtifact {
     }
 
 }
+/*
+** Dynamically Add Model Functions
+*/
+OkitJson.prototype.newFastConnect = function(data) {
+    console.info('New FastConnect');
+    this.getFastConnects().push(new FastConnect(data, this));
+    return this.getFastConnects()[this.getFastConnects().length - 1];
+}
+OkitJson.prototype.getFastConnects = function() {
+    if (!this.fast_connects) this.fast_connects = [];
+    return this.fast_connects;
+}
+OkitJson.prototype.getFastConnect = function(id='') {
+    for (let artefact of this.getFastConnects()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJson.prototype.deleteFastConnect = function(id) {
+    this.fast_connects = this.fast_connects ? this.fast_connects.filter((r) => r.id !== id) : []
+}
