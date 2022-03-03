@@ -413,6 +413,8 @@ def template_save():
             #     logger.info(f'Top Dir : {top_dir}')
             #     top_dir = os.path.dirname(top_dir)
             logger.info(f'Git Root Dir : {git_repo_dir}')
+            logger.info(f'Template Filename : {template_filename}')
+            logger.info(f'Full Filename : {full_filename}')
             repo = Repo(git_repo_dir)
             repo.index.add(full_filename)
             repo.index.commit("commit changes from okit:" + git_commit_msg)

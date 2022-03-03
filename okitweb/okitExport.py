@@ -16,6 +16,7 @@ from flask import Blueprint
 from flask import current_app
 from flask import request
 from flask import send_from_directory
+from git import Repo
 import json
 import shutil
 import tempfile
@@ -48,6 +49,8 @@ def terraform():
         destination = request.args.get('destination', default='zip')
         directory = request.args.get('directory', default='')
         design = json.loads(request.args.get('design', default='{}'))
+        git = request.args.get('git', default=False)
+        git_commit_msg = request.args.get('git_commit_msg', default='')
         add_suffix = True
         response_json = {}
         if destination == 'file':
@@ -77,6 +80,18 @@ def terraform():
             return send_from_directory('/tmp', "okit-terraform.zip", mimetype='application/zip', as_attachment=True, cache_timeout=0)
         elif destination == 'json':
             response_json = generator.toJson()
+        if git:
+            top_dir = os.path.normpath(os.path.dirname(directory.strip('/'))).split(os.sep)
+            git_repo_dir = os.path.join(instance_path, root_dir, top_dir[0], top_dir[1])
+            full_directory_name = os.path.join(instance_path, root_dir, directory.strip('/'))
+            logger.info(f'Git Root Dir : {git_repo_dir}')
+            logger.info(f'Directory : {directory}')
+            logger.info(f'Dest Directory : {full_directory_name}')
+            repo = Repo(git_repo_dir)
+            repo.remotes.origin.pull()
+            repo.index.add(destination_dir)
+            repo.index.commit("commit changes from okit:" + git_commit_msg)
+            repo.remotes.origin.push()
         return json.dumps(response_json, sort_keys=False, indent=2, separators=(',', ': '))
     else:
         return '404'
