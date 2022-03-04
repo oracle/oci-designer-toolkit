@@ -17,20 +17,20 @@ class RouteTableProperties extends OkitResourceProperties {
     buildResource() {
         const self = this
         // VCN
-        const [vcn_row, vcn_input] = this.createInput('select', 'Virtual Cloud Network', `${self.id}_vcn_id`, '', (d, i, n) => self.resource.vcn_id = n[i].value)
-        this.vcn_id = vcn_input
-        this.append(this.core_tbody, vcn_row)
+        const vcn = this.createInput('select', 'Virtual Cloud Network', `${self.id}_vcn_id`, '', (d, i, n) => self.resource.vcn_id = n[i].value)
+        this.vcn_id = vcn.input
+        this.append(this.core_tbody, vcn.row)
         // Vcn Default
-        const [default_row, default_input] = this.createInput('checkbox', 'VCN Default', `${self.id}_default`, '', (d, i, n) => self.resource.default = n[i].checked)
-        this.default = default_input
-        this.append(this.core_tbody, default_row)
+        const vcn_default = this.createInput('checkbox', 'VCN Default', `${self.id}_default`, '', (d, i, n) => self.resource.default = n[i].checked)
+        this.default = vcn_default.input
+        this.append(this.core_tbody, vcn_default.row)
         // Rules
-        const [rules_details, rules_summary, rules_div] = this.createDetailsSection('Route Rules', `${self.id}_rules_details`)
-        this.append(this.properties_contents, rules_details)
-        this.rules_div = rules_div
-        const [rules_table, rules_thead, rules_tbody] = this.createArrayTable('Rules', `${self.id}_rules`, '', () => self.addRule())
-        this.rules_tbody = rules_tbody
-        this.append(rules_div, rules_table)
+        const rd = this.createDetailsSection('Route Rules', `${self.id}_rules_details`)
+        this.append(this.properties_contents, rd.details)
+        this.rules_div = rd.div
+        const rt = this.createArrayTable('Rules', `${self.id}_rules`, '', () => self.addRule())
+        this.rules_tbody = rt.tbody
+        this.append(rd.div, rt.table)
     }
 
     // Load Additional Resource Specific Properties
@@ -51,35 +51,35 @@ class RouteTableProperties extends OkitResourceProperties {
         const self = this
         const id = `${self.id}_rule`
         const network_entity_id = `${id}_network_entity_id`
-        const [row, div] = this.createDeleteRow(id, idx, () => this.deleteRule(id, idx, rule))
-        this.append(this.rules_tbody, row)
-        const [rule_details, rule_summary, rule_div] = this.createDetailsSection('Rule', `${id}_rule_details`, idx)
-        this.append(div, rule_details)
-        const [rule_table, rule_thead, rule_tbody] = this.createTable('', `${id}_rule`, '')
-        this.append(rule_div, rule_table)
+        const delete_row = this.createDeleteRow(id, idx, () => this.deleteRule(id, idx, rule))
+        this.append(this.rules_tbody, delete_row.row)
+        const rd = this.createDetailsSection('Rule', `${id}_rule_details`, idx)
+        this.append(delete_row.div, rd.details)
+        const rt = this.createTable('', `${id}_rule`, '')
+        this.append(rd.div, rt.table)
         // Target Type
-        const [tt_row, tt_input] = this.createInput('select', 'Target Type', `${id}_target_type`, idx, (d, i, n) => {rule.target_type = n[i].value = n[i].value; self.showRuleRows(rule, id, idx); this.loadNetworkEntitySelect(rule, network_entity_id, idx)})
-        this.append(rule_tbody, tt_row)
-        this.loadTargetTypeSelect(tt_input)
-        tt_input.property('value', rule.target_type)
+        const tt = this.createInput('select', 'Target Type', `${id}_target_type`, idx, (d, i, n) => {rule.target_type = n[i].value = n[i].value; self.showRuleRows(rule, id, idx); this.loadNetworkEntitySelect(rule, network_entity_id, idx)})
+        this.append(rt.tbody, tt.row)
+        this.loadTargetTypeSelect(tt.input)
+        tt.input.property('value', rule.target_type)
         // Destination Type
-        const [dt_row, dt_input] = this.createInput('select', 'Destination Type', `${id}_destination_type`, idx, (d, i, n) => {rule.destination_type = n[i].value = n[i].value; self.showRuleRows(rule, id, idx)})
-        this.append(rule_tbody, dt_row)
-        this.loadDestinationTypeSelect(dt_input)
-        dt_input.property('value', rule.destination_type)
+        const dt = this.createInput('select', 'Destination Type', `${id}_destination_type`, idx, (d, i, n) => {rule.destination_type = n[i].value = n[i].value; self.showRuleRows(rule, id, idx)})
+        this.append(rt.tbody, dt.row)
+        this.loadDestinationTypeSelect(dt.input)
+        dt.input.property('value', rule.destination_type)
         // Destination
-        const [destination_row, destination_input] = this.createInput('ipv4_cidr', 'Destination', `${id}_destination`, idx, (d, i, n) => {n[i].reportValidity(); rule.destination = n[i].value})
-        this.append(rule_tbody, destination_row)
-        destination_input.property('value', rule.destination)
+        const destination = this.createInput('ipv4_cidr', 'Destination', `${id}_destination`, idx, (d, i, n) => {n[i].reportValidity(); rule.destination = n[i].value})
+        this.append(rt.tbody, destination.row)
+        destination.input.property('value', rule.destination)
         // Network Entity
-        const [ne_row, ne_input] = this.createInput('select', 'Network Entity', network_entity_id, idx, (d, i, n) => {rule.network_entity_id = n[i].value = n[i].value; self.showRuleRows(rule, id, idx)})
-        this.append(rule_tbody, ne_row)
+        const ne = this.createInput('select', 'Network Entity', network_entity_id, idx, (d, i, n) => {rule.network_entity_id = n[i].value = n[i].value; self.showRuleRows(rule, id, idx)})
+        this.append(rt.tbody, ne.row)
         this.loadNetworkEntitySelect(rule, network_entity_id, idx)
-        ne_input.property('value', rule.network_entity_id)
+        ne.input.property('value', rule.network_entity_id)
         // Description
-        const [desc_row, desc_input] = this.createInput('text', 'Description', `${self.id}_description`, '', (d, i, n) => rule.description = n[i].value)
-        this.append(rule_tbody, desc_row)
-        desc_input.property('value', rule.description)
+        const desc = this.createInput('text', 'Description', `${self.id}_description`, '', (d, i, n) => rule.description = n[i].value)
+        this.append(rt.tbody, desc.row)
+        desc.input.property('value', rule.description)
         // Check Display
         this.showRuleRows(rule, id, idx)
     }

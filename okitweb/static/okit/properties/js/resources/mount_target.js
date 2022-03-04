@@ -20,39 +20,39 @@ class MountTargetProperties extends OkitResourceProperties {
     buildResource() {
         const self = this
         // Availability Domain
-        const [ad_row, ad_input] = this.createInput('select', 'Availability Domain', `${self.id}_availability_domain`, '', (d, i, n) => self.resource.availability_domain = n[i].value, {options: {1: 'Availability Domain 1', 2: 'Availability Domain 2', 3: 'Availability Domain 3'}})
-        this.availability_domain = ad_input
-        this.append(this.core_tbody, ad_row)
+        const ad = this.createInput('select', 'Availability Domain', `${self.id}_availability_domain`, '', (d, i, n) => self.resource.availability_domain = n[i].value, {options: {1: 'Availability Domain 1', 2: 'Availability Domain 2', 3: 'Availability Domain 3'}})
+        this.availability_domain = ad.input
+        this.append(this.core_tbody, ad.row)
         // Subnet
-        const [s_row, s_input] = this.createInput('select', 'Subnet', `${self.id}_subnet_id`, '', (d, i, n) => {self.resource.subnet_id = n[i].value;this.loadMultiSelect(this.nsg_ids, 'network_security_group', false, this.nsg_filter)})
-        this.subnet_id = s_input
-        this.append(this.core_tbody, s_row)
+        const subnet_id = this.createInput('select', 'Subnet', `${self.id}_subnet_id`, '', (d, i, n) => {self.resource.subnet_id = n[i].value;this.loadMultiSelect(this.nsg_ids, 'network_security_group', false, this.nsg_filter)})
+        this.subnet_id = subnet_id.input
+        this.append(this.core_tbody, subnet_id.row)
 
         // Optional Properties
-        const [details, summary, div] = this.createDetailsSection('Optional Networking', `${self.id}_optional_network_details`)
-        this.append(this.properties_contents, details)
-        const [table, thead, tbody] = this.createTable('', `${self.id}_option_network_properties`)
-        this.optional_network_tbody = tbody
-        this.append(div, table)
+        const ond = this.createDetailsSection('Optional Networking', `${self.id}_optional_network_details`)
+        this.append(this.properties_contents, ond.details)
+        const ont = this.createTable('', `${self.id}_option_network_properties`)
+        this.optional_network_tbody = ont.tbody
+        this.append(ond.div, ont.table)
         // Hostname
-        const [hn_row, hn_input] = this.createInput('text', 'Hostname', `${self.id}_hostname_label`, '', (d, i, n) => self.resource.hostname_label = n[i].value)
-        this.hostname_label = hn_input
-        this.append(this.optional_network_tbody, hn_row)
+        const hostname = this.createInput('text', 'Hostname', `${self.id}_hostname_label`, '', (d, i, n) => self.resource.hostname_label = n[i].value)
+        this.hostname_label = hostname.input
+        this.append(this.optional_network_tbody, hostname.row)
         // IP Address
-        const [ip_row, ip_input] = this.createInput('ipv4', 'IP Address', `${self.id}_ip_address`, '', (d, i, n) => {n[i].reportValidity(); self.resource.ip_address = n[i].value})
-        this.ip_address = ip_input
-        this.append(this.optional_network_tbody, ip_row)
+        const ip = this.createInput('ipv4', 'IP Address', `${self.id}_ip_address`, '', (d, i, n) => {n[i].reportValidity(); self.resource.ip_address = n[i].value})
+        this.ip_address = ip.input
+        this.append(this.optional_network_tbody, ip.row)
         // Network Security Groups
-        const [nsg_row, nsg_input] = this.createInput('multiselect', 'Network Security Groups', `${self.id}_nsg_ids`, '', (d, i, n) => self.resource.nsg_ids = Array.from(n[i].querySelectorAll('input[type="checkbox"]:checked')).map((n) => n.value))
-        this.nsg_ids = nsg_input
-        this.append(this.optional_network_tbody, nsg_row)
+        const nsg = this.createInput('multiselect', 'Network Security Groups', `${self.id}_nsg_ids`, '', (d, i, n) => self.resource.nsg_ids = Array.from(n[i].querySelectorAll('input[type="checkbox"]:checked')).map((n) => n.value))
+        this.nsg_ids = nsg.input
+        this.append(this.optional_network_tbody, nsg.row)
         // Exports
-        const [es_details, es_summary, es_div] = this.createDetailsSection('Export Set', `${self.id}_export_set_details`)
-        this.append(this.exports_contents, es_details)
-        this.export_set_div = es_div
-        const [e_table, e_thead, e_tbody] = this.createArrayTable('File Systems', `${self.id}_exports`, '', () => self.addExport())
-        this.exports_tbody = e_tbody
-        this.append(es_div, e_table)
+        const esd = this.createDetailsSection('Export Set', `${self.id}_export_set_details`)
+        this.append(this.exports_contents, esd.details)
+        this.export_set_div =esd.div
+        const exports = this.createArrayTable('File Systems', `${self.id}_exports`, '', () => self.addExport())
+        this.exports_tbody = exports.tbody
+        this.append(esd.div, exports.table)
     }
 
     // Load Additional Resource Specific Properties
@@ -75,47 +75,47 @@ class MountTargetProperties extends OkitResourceProperties {
     }
     addExportHtml(fs_export, idx) {
         const id = `${self.id}_export`
-        const [row, div] = this.createDeleteRow(id, idx, () => this.deleteExport(id, idx, fs_export))
-        this.append(this.exports_tbody, row)
-        const [e_details, e_summary, e_div] = this.createDetailsSection('Export', `${self.id}_export_details`, idx)
-        this.append(div, e_details)
-        const [e_table, e_thead, e_tbody] = this.createTable('', `${self.id}_export`, '')
-        this.append(e_div, e_table)
+        const delete_row = this.createDeleteRow(id, idx, () => this.deleteExport(id, idx, fs_export))
+        this.append(this.exports_tbody, delete_row.row)
+        const ed = this.createDetailsSection('Export', `${self.id}_export_details`, idx)
+        this.append(delete_row.div, ed.details)
+        const et = this.createTable('', `${self.id}_export`, '')
+        this.append(ed.div, et.table)
         // File System
-        const [fss_row, fss_input] = this.createInput('select', 'File System', `${id}_file_system_id`, idx, (d, i, n) => fs_export.file_system_id = n[i].value = n[i].value)
-        this.append(e_tbody, fss_row)
-        this.loadSelect(fss_input, 'file_system', false, this.fss_filter)
-        fss_input.property('value', fs_export.file_system_id)
+        const fss = this.createInput('select', 'File System', `${id}_file_system_id`, idx, (d, i, n) => fs_export.file_system_id = n[i].value = n[i].value)
+        this.append(et.table, fss.row)
+        this.loadSelect(fss.input, 'file_system', false, this.fss_filter)
+        fss.input.property('value', fs_export.file_system_id)
         // Path
-        const [p_row, p_input] = this.createInput('text', 'Path', `${id}_path`, idx, (d, i, n) => fs_export.path = n[i].value)
-        this.append(e_tbody, p_row)
-        p_input.property('value', fs_export.path)
+        const path = this.createInput('text', 'Path', `${id}_path`, idx, (d, i, n) => fs_export.path = n[i].value)
+        this.append(et.table, path.row)
+        path.input.property('value', fs_export.path)
         // CIDR
-        const [cidr_row, cidr_input] = this.createInput('ipv4_cidr', 'Source CIDR', `${id}_options_source`, idx, (d, i, n) => {n[i].reportValidity(); fs_export.options.source = n[i].value})
-        this.append(e_tbody, cidr_row)
-        cidr_input.property('value', fs_export.options.source)
+        const cidr = this.createInput('ipv4_cidr', 'Source CIDR', `${id}_options_source`, idx, (d, i, n) => {n[i].reportValidity(); fs_export.options.source = n[i].value})
+        this.append(et.table, cidr.row)
+        cidr.input.property('value', fs_export.options.source)
         // Access
-        const [oa_row, oa_input] = this.createInput('select', 'Permissions', `${id}_options_access`, idx, (d, i, n) => fs_export.options.access = n[i].value = n[i].value)
-        this.append(e_tbody, oa_row)
-        this.loadAccess(oa_input)
-        oa_input.property('value', fs_export.options.access)
+        const oa = this.createInput('select', 'Permissions', `${id}_options_access`, idx, (d, i, n) => fs_export.options.access = n[i].value = n[i].value)
+        this.append(et.table, oa.row)
+        this.loadAccess(oa.input)
+        oa.input.property('value', fs_export.options.access)
         // Identity Squash
-        const [ois_row, ois_input] = this.createInput('select', 'Identity Squash', `${id}_options_identity_squash`, idx, (d, i, n) => fs_export.options.identity_squash = n[i].value = n[i].value)
-        this.append(e_tbody, ois_row)
-        this.loadIdentitySquash(ois_input)
-        ois_input.property('value', fs_export.options.identity_squash)
+        const ois = this.createInput('select', 'Identity Squash', `${id}_options_identity_squash`, idx, (d, i, n) => fs_export.options.identity_squash = n[i].value = n[i].value)
+        this.append(et.table, ois.row)
+        this.loadIdentitySquash(ois.input)
+        ois.input.property('value', fs_export.options.identity_squash)
         // Gid
-        const [gid_row, gid_input] = this.createInput('text', 'Anonymous GID', `${id}_options_gid`, idx, (d, i, n) => fs_export.options.anonymous_gid = n[i].value)
-        this.append(e_tbody, gid_row)
-        gid_input.property('value', fs_export.options.anonymous_gid)
+        const gid = this.createInput('text', 'Anonymous GID', `${id}_options_gid`, idx, (d, i, n) => fs_export.options.anonymous_gid = n[i].value)
+        this.append(et.table, gid.row)
+        gid.input.property('value', fs_export.options.anonymous_gid)
         // Uid
-        const [uid_row, uid_input] = this.createInput('text', 'Anonymous UID', `${id}_options_uid`, idx, (d, i, n) => fs_export.options.anonymous_uid = n[i].value)
-        this.append(e_tbody, uid_row)
-        uid_input.property('value', fs_export.options.anonymous_uid)
+        const uid = this.createInput('text', 'Anonymous UID', `${id}_options_uid`, idx, (d, i, n) => fs_export.options.anonymous_uid = n[i].value)
+        this.append(et.table, uid.row)
+        uid.input.property('value', fs_export.options.anonymous_uid)
         // Privileged
-        const [psp_row, psp_input] = this.createInput('checkbox', 'Privileged Port', `${id}_options_require_privileged_source_port`, idx, (d, i, n) => fs_export.options.require_privileged_source_port = n[i].checked)
-        this.append(e_tbody, psp_row)
-        psp_input.property('checked', fs_export.options.require_privileged_source_port)
+        const psp = this.createInput('checkbox', 'Privileged Port', `${id}_options_require_privileged_source_port`, idx, (d, i, n) => fs_export.options.require_privileged_source_port = n[i].checked)
+        this.append(et.table, psp.row)
+        psp.input.property('checked', fs_export.options.require_privileged_source_port)
     }
     addExport() {
         console.info('Adding Export');
