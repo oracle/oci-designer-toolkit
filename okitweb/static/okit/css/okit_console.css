@@ -607,6 +607,18 @@ li a.parent-item:hover {
 */
 .table .tbody .tr:hover {background-color: #ddd;}
 
+/*
+.okit-property-editor .okit-table .tr .th:first-child {
+    background-color: red;
+    max-width: 20%;
+    width: 20%;
+}
+*/
+
+.okit-property-editor .okit-table .tr .td:first-child {
+    width: 20em;
+}
+
 .okit-table {
     border: #aeaeae 1px solid;
     border-collapse: collapse;
@@ -614,6 +626,7 @@ li a.parent-item:hover {
     color: #1e2834;
     font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
     font-size: 12px;
+    table-layout: fixed;
 }
 
 .okit-table .th {
@@ -637,7 +650,7 @@ li a.parent-item:hover {
     overflow: auto;
 }
 
-.okit-table .td > input[type="text"], input[type="email"], input[type="password"] {
+.okit-table .td > input[type="text"], input[type="email"], input[type="password"], input[type="range"] {
     width: 100%;
 }
 

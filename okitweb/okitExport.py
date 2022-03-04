@@ -60,11 +60,11 @@ def terraform():
             destination_dir = '/tmp'
         else:
             destination_dir = tempfile.mkdtemp()
-        logger.info(f'Export To Terraform Instance Path {instance_path}')
-        logger.info(f'Export To Terraform Destination {destination}')
-        logger.info(f'Export To Terraform Root Directory {root_dir}')
-        logger.info(f'Export To Terraform Directory {directory}')
-        logger.info(f'Export To Terraform Destination Directory {destination_dir}')
+        logger.debug(f'Export To Terraform Instance Path {instance_path}')
+        logger.debug(f'Export To Terraform Destination {destination}')
+        logger.debug(f'Export To Terraform Root Directory {root_dir}')
+        logger.debug(f'Export To Terraform Directory {directory}')
+        logger.debug(f'Export To Terraform Destination Directory {destination_dir}')
         generator = OCITerraformGenerator(template_root, destination_dir, design, use_vars=False, add_suffix=add_suffix)
         generator.generate()
         if destination == 'file':
@@ -73,10 +73,10 @@ def terraform():
         elif destination == 'zip':
             generator.writeFiles()
             zipname = generator.createZipArchive(os.path.join(destination_dir, 'terraform'), "/tmp/okit-terraform")
-            logger.info('Zipfile : {0:s}'.format(str(zipname)))
+            logger.debug('Zipfile : {0:s}'.format(str(zipname)))
             shutil.rmtree(destination_dir)
             filename = os.path.split(zipname)
-            logger.info('Split Zipfile : {0:s}'.format(str(filename)))
+            logger.debug('Split Zipfile : {0:s}'.format(str(filename)))
             return send_from_directory('/tmp', "okit-terraform.zip", mimetype='application/zip', as_attachment=True, cache_timeout=0)
         elif destination == 'json':
             response_json = generator.toJson()
@@ -84,9 +84,9 @@ def terraform():
             top_dir = os.path.normpath(os.path.dirname(directory.strip('/'))).split(os.sep)
             git_repo_dir = os.path.join(instance_path, root_dir, top_dir[0], top_dir[1])
             full_directory_name = os.path.join(instance_path, root_dir, directory.strip('/'))
-            logger.info(f'Git Root Dir : {git_repo_dir}')
-            logger.info(f'Directory : {directory}')
-            logger.info(f'Dest Directory : {full_directory_name}')
+            logger.debug(f'Git Root Dir : {git_repo_dir}')
+            logger.debug(f'Directory : {directory}')
+            logger.debug(f'Dest Directory : {full_directory_name}')
             repo = Repo(git_repo_dir)
             repo.remotes.origin.pull()
             repo.index.add(destination_dir)

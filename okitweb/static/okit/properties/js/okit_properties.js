@@ -66,14 +66,14 @@ class OkitResourceProperties {
 
     buildCore() {
         const self = this
-        const [details, summary, div] = this.createDetailsSection('Core', `${self.id}_core_details`)
-        this.append(this.properties_contents, details)
-        const [table, thead, tbody] = this.createTable('', `${self.id}_core_properties`)
-        this.core_tbody = tbody
-        this.append(div, table)
-        let [row, input] = this.createInput('text', 'Name', `${self.id}_display_name`, '', (d, i, n) => self.resource.display_name = n[i].value)
-        this.display_name = input
-        this.append(tbody, row)
+        const core = this.createDetailsSection('Core', `${self.id}_core_details`)
+        this.append(this.properties_contents, core.details)
+        const properties = this.createTable('', `${self.id}_core_properties`)
+        this.core_tbody = properties.tbody
+        this.append(core.div, properties.table)
+        let display_name = this.createInput('text', 'Name', `${self.id}_display_name`, '', (d, i, n) => self.resource.display_name = n[i].value)
+        this.display_name = display_name.input
+        this.append(this.core_tbody, display_name.row)
         this.documentation_contents.append('textarea')
                                     .attr('id', `${self.id}_documentation`)
                                     .attr('class', 'resource-documentation')
@@ -88,22 +88,22 @@ class OkitResourceProperties {
     buildTags() {
         const self = this
         // Freeform Tags
-        const [fft_details, fft_summary, fft_div] = this.createDetailsSection('Freeform Tags', `${self.id}_fft_details`)
-        this.append(this.tags_contents, fft_details)
-        const [fft_table, fft_thead, fft_tbody] = this.createTable('', `${self.id}_fftags`)
-        this.fft_tbody = fft_tbody
-        this.append(fft_details, fft_table)
-        let row = fft_thead.append('div').attr('class', 'tr')
+        const fft = this.createDetailsSection('Freeform Tags', `${self.id}_fft_details`)
+        this.append(this.tags_contents, fft.details)
+        const fft_table = this.createTable('', `${self.id}_fftags`)
+        this.fft_tbody = fft_table.tbody
+        this.append(fft.details, fft_table.table)
+        let row = fft_table.thead.append('div').attr('class', 'tr')
         row.append('div').attr('class', 'th').text('Key')
         row.append('div').attr('class', 'th').text('Value')
         row.append('div').attr('class', 'th add-tag action-button-background action-button-column').on('click', () => handleAddFreeformTag(self.resource, () => self.loadFreeformTags()))
         // Defined Tags
-        const [dt_details, dt_summary, dt_div] = this.createDetailsSection('Defined Tags', `${self.id}_dt_details`)
-        this.append(this.tags_contents, dt_details)
-        const [dt_table, dt_thead, dt_tbody] = this.createTable('', `${self.id}_dtags`)
-        this.dt_tbody = dt_tbody
-        this.append(dt_details, dt_table)
-        row = dt_thead.append('div').attr('class', 'tr')
+        const dt = this.createDetailsSection('Defined Tags', `${self.id}_dt_details`)
+        this.append(this.tags_contents, dt.details)
+        const dt_table = this.createTable('', `${self.id}_dtags`)
+        this.dt_tbody = dt_table.tbody
+        this.append(dt.details, dt_table.table)
+        row = dt_table.thead.append('div').attr('class', 'tr')
         row.append('div').attr('class', 'th').text('Namespace')
         row.append('div').attr('class', 'th').text('Key')
         row.append('div').attr('class', 'th').text('Value')
@@ -213,43 +213,49 @@ class OkitResourceProperties {
     createInput(type='text', label='', id='', idx=0, callback=undefined, data={}) {
         const row = d3.create('div').attr('class', 'tr').attr('id', this.trId(id, idx))
         let input = undefined
+        let cell = undefined
+        let title = undefined
         if (Object.keys(this.formatting).includes(type)) {
             data = data ? {...data, ...this.formatting[type]} : formatting[type]
             type = 'text'
         }
-        if (['text', 'password', 'email', 'date', 'number'].includes(type)) {
-            return this.createSimplePropertyRow(type, label, id, idx, callback, data)
+        if (['text', 'password', 'email', 'date', 'number', 'range'].includes(type)) {
+            title = row.append('div').attr('class', 'td').text(label)
+            cell = row.append('div').attr('class', 'td')
+            input = cell.append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', type).attr('class', 'okit-property-value').on('change', callback)
+            this.addExtraAttributes(input, data)
+            // return this.createSimplePropertyRow(type, label, id, idx, callback, data)
         } else if (type === 'select') {
-            row.append('div').attr('class', 'td').text(label)
+            title = row.append('div').attr('class', 'td').text(label)
             input = row.append('div').attr('class', 'td').append('select').attr('id', this.inputId(id, idx)).attr('class', 'okit-property-value').on('change', callback)
             if (data && data.options) {
                 Object.entries(data.options).forEach(([k, v]) => input.append('option').attr('value', k).text(v))
             }
         } else if (type === 'multiselect') {
-            row.append('div').attr('class', 'td').text(label)
+            title = row.append('div').attr('class', 'td').text(label)
             input = row.append('div').attr('class', 'td').append('div').attr('id', this.inputId(id, idx)).attr('class', 'okit-multiple-select').on('change', callback)
         } else if (type === 'checkbox') {
             row.append('div').attr('class', 'td')
-            const cell = row.append('div').attr('class', 'td')
+            cell = row.append('div').attr('class', 'td')
             input = cell.append('input').attr('type', 'checkbox').attr('id', this.inputId(id, idx)).attr('class', 'okit-property-value').on('input', callback)
             cell.append('label').attr('for', this.inputId(id, idx)).text(label)
         } else {
             alert(`Unknown Type ${type}`)
         }
-        return [row, input]
+        return {row: row, cell: cell, input: input, title: title}
     }
     createSimplePropertyRow(type='text', label='', id='', idx=0, callback=undefined, data={}) {
         const row = d3.create('div').attr('class', 'tr').attr('id', this.trId(id, idx))
         row.append('div').attr('class', 'td').text(label)
-        const [cell, input] = this.createSimpleInputCell(type, id, idx, callback, data)
-        this.append(row, cell)
-        return [row, input]
+        const input = this.createSimpleInputCell(type, id, idx, callback, data)
+        this.append(input.row, input.cell)
+        return {row: input.row, cell: input.cell, input: input.input}
     }
     createSimpleInputCell(type='text', id='', idx=0, callback=undefined, data={}) {
         const cell = d3.create('div').attr('class', 'td')
         const input = this.createSimpleInput(type, id, idx, callback, data)
         this.append(cell, input)
-        return [cell, input]
+        return {cell: cell, input: input}
     }
     createSimpleInput(type='text', id='', idx=0, callback=undefined, data={}) {
         const input = d3.create('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', type).attr('class', 'okit-property-value').on('blur', callback)
@@ -261,6 +267,7 @@ class OkitResourceProperties {
         if (data) {
             if (data.min) input.attr('min', data.min)
             if (data.max) input.attr('max', data.max)
+            if (data.step) input.attr('step', data.step)
             if (data.maxlength) input.attr('maxlength', data.maxlength)
             if (data.pattern) input.attr('pattern', data.pattern)
             if (data.title) input.attr('title', data.title)
@@ -272,7 +279,7 @@ class OkitResourceProperties {
         const table = d3.create('div').attr('class', 'table okit-table')
         const thead = table.append('div').attr('class', 'thead')
         const tbody = table.append('div').attr('class', 'tbody').attr('id', this.tbodyId(id, idx))
-        return [table, thead, tbody]
+        return {table: table, thead: thead, tbody: tbody}
     }
 
     createPropertiesTable(label='', id='', idx=0, callback=undefined, data={}) {
@@ -280,15 +287,15 @@ class OkitResourceProperties {
         const row = thead.append('div').attr('class', 'tr')
         row.append('div').attr('class', 'th').text('Property')
         row.append('div').attr('class', 'th').text('Value')
-        return [table, thead, tbody]
+        return {table: table, thead: thead, tbody: tbody}
     }
 
     createArrayTable(label='', id='', idx='', callback=undefined, data={}) {
-        const [table, thead, tbody] = this.createTable(label, id, idx, callback, data)
-        const row = thead.append('div').attr('class', 'tr')
+        const elements = this.createTable(label, id, idx, callback, data)
+        const row = elements.thead.append('div').attr('class', 'tr')
         row.append('div').attr('class', 'th').text(label)
         row.append('div').attr('class', 'th add-property action-button-background action-button-column').on('click', callback)
-        return [table, thead, tbody]
+        return elements
     }
 
     createDetailsSection(label='', id='', idx='', callback=undefined, data={}, open=true) {
@@ -297,21 +304,21 @@ class OkitResourceProperties {
         if (open) details.attr('open', open)
         const summary = details.append('summary').attr('class', 'summary-background').append('label').text(label)
         const div = details.append('div').attr('class', 'okit-details-body')
-        return [details, summary, div]
+        return {details: details, summary: summary, div: div}
     }
 
     createDeleteRow(id='', idx='', callback=undefined, data={}) {
         const row = d3.create('div').attr('class', 'tr').attr('id', this.trId(id, idx))
         const div = row.append('div').attr('class', 'td')
         row.append('div').attr('class', 'td delete-property action-button-background delete').on('click', callback)
-        return [row, div]
+        return {row: row, div: div}
     }
 
     createMultiValueRow(label='', id='', idx='', callback=undefined, data={}) {
         const row = d3.create('div').attr('class', 'tr').attr('id', this.trId(id, idx))
         row.append('div').attr('class', 'td').text(label)
         const div = row.append('div').attr('class', 'td multi-value').append('div').attr('class', 'tr')
-        return [row, div]
+        return {row: row, div: div}
     }
 
     tbodyId = (id, idx) => `${id.replaceAll(' ', '_').toLowerCase()}_tbody${idx}`
@@ -322,6 +329,22 @@ class OkitResourceProperties {
     showProperty = (id, idx) => d3.select(`#${this.trId(id, idx)}`).classed('collapsed', false)
 
     loadSelect(select, resource_type, empty_option=false, filter=undefined) {
+        select.selectAll('*').remove()
+        if (!filter) filter = () => true
+        if (empty_option) select.append('option').attr('value', '').text('')
+        let id = ''
+        const resources = this.resource.okit_json[`${resource_type}s`] ? this.resource.okit_json[`${resource_type}s`] : this.resource.okit_json[`${resource_type}`] ? this.resource.okit_json[`${resource_type}`] : []
+        resources.filter(filter).forEach((r, i) => {
+            const option = select.append('option').attr('value', r.id).text(r.display_name)
+            if (i === 0) {
+                option.attr('selected', 'selected')
+                id = r.id
+            }
+        })
+        return id
+    }
+
+    loadReferenceSelect(select, resource_type, empty_option=false, filter=undefined, groups=undefined) {
         select.selectAll('*').remove()
         if (!filter) filter = () => true
         if (empty_option) select.append('option').attr('value', '').text('')

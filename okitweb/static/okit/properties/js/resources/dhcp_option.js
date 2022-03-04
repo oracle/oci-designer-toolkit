@@ -17,20 +17,20 @@ class DhcpOptionProperties extends OkitResourceProperties {
     buildResource() {
         const self = this
         // VCN
-        const [vcn_row, vcn_input] = this.createInput('select', 'Virtual Cloud Network', `${self.id}_vcn_id`, '', (d, i, n) => self.resource.vcn_id = n[i].value)
-        this.vcn_id = vcn_input
-        this.append(this.core_tbody, vcn_row)
+        const vcn_id = this.createInput('select', 'Virtual Cloud Network', `${self.id}_vcn_id`, '', (d, i, n) => self.resource.vcn_id = n[i].value)
+        this.vcn_id = vcn_id.input
+        this.append(this.core_tbody, vcn_id.row)
         // Vcn Default
-        const [default_row, default_input] = this.createInput('checkbox', 'VCN Default', `${self.id}_default`, '', (d, i, n) => self.resource.default = n[i].checked)
-        this.default = default_input
-        this.append(this.core_tbody, default_row)
+        const vcn_default = this.createInput('checkbox', 'VCN Default', `${self.id}_default`, '', (d, i, n) => self.resource.default = n[i].checked)
+        this.default = vcn_default.input
+        this.append(this.core_tbody, vcn_default.row)
         // Options
-        const [opts_details, opts_summary, opts_div] = this.createDetailsSection('Options', `${self.id}_options_details`)
-        this.append(this.properties_contents, opts_details)
-        this.options_div = opts_div
-        const [opt_table, opt_thead, opt_tbody] = this.createArrayTable('Options', `${self.id}_options`, '', () => self.addOption())
-        this.options_tbody = opt_tbody
-        this.append(opts_div, opt_table)
+        const opts_details = this.createDetailsSection('Options', `${self.id}_options_details`)
+        this.append(this.properties_contents, opts_details.details)
+        this.options_div = opts_details.div
+        const opt_table = this.createArrayTable('Options', `${self.id}_options`, '', () => self.addOption())
+        this.options_tbody = opt_table.tbody
+        this.append(this.options_div, opt_table.table)
     }
 
     // Load Additional Resource Specific Properties
@@ -50,30 +50,30 @@ class DhcpOptionProperties extends OkitResourceProperties {
     addOptionHtml(option, idx) {
         const self = this
         const id = `${self.id}_option`
-        const [row, div] = this.createDeleteRow(id, idx, () => this.deleteOption(id, idx, option))
-        this.append(this.options_tbody, row)
-        const [opt_details, opt_summary, opt_div] = this.createDetailsSection('Option', `${self.id}_option_details`, idx)
-        this.append(div, opt_details)
-        const [opt_table, opt_thead, opt_tbody] = this.createTable('', `${self.id}_option`, '')
-        this.append(opt_div, opt_table)
+        const delete_row = this.createDeleteRow(id, idx, () => this.deleteOption(id, idx, option))
+        this.append(this.options_tbody, delete_row.row)
+        const opt_details = this.createDetailsSection('Option', `${self.id}_option_details`, idx)
+        this.append(delete_row.div, opt_details.details)
+        const opt_table = this.createTable('', `${self.id}_option`, '')
+        this.append(opt_div, opt_table.table)
         // Option Type
-        const [ot_row, ot_input] = this.createInput('select', 'Type', `${id}_type`, idx, (d, i, n) => {option.type = n[i].value = n[i].value; self.showOptionRows(option, id, idx)})
-        this.append(opt_tbody, ot_row)
-        this.loadOptionTypeSelect(ot_input)
-        ot_input.property('value', option.type)
+        const option_type = this.createInput('select', 'Type', `${id}_type`, idx, (d, i, n) => {option.type = n[i].value = n[i].value; self.showOptionRows(option, id, idx)})
+        this.append(opt_table.tbody, option_type.row)
+        this.loadOptionTypeSelect(option_type.input)
+        option_type.input.property('value', option.type)
         // Server Type
-        const [st_row, st_input] = this.createInput('select', 'Server Type', `${id}_server_type`, idx, (d, i, n) => {option.server_type = n[i].value = n[i].value; self.showOptionRows(option, id, idx)})
-        this.append(opt_tbody, st_row)
-        this.loadServerTypeSelect(st_input)
-        st_input.property('value', option.server_type)
+        const server_type = this.createInput('select', 'Server Type', `${id}_server_type`, idx, (d, i, n) => {option.server_type = n[i].value = n[i].value; self.showOptionRows(option, id, idx)})
+        this.append(opt_table.tbody, server_type.row)
+        this.loadServerTypeSelect(server_type.input)
+        server_type.input.property('value', option.server_type)
         // Custom Dns Servers
-        const [dns_row, dns_input] = this.createInput('text', 'Dns Servers', `${id}_custom_dns_servers`, idx, (d, i, n) => option.custom_dns_servers = n[i].value.replaceAll(' ', '').split(','))
-        this.append(opt_tbody, dns_row)
-        dns_input.property('value', option.custom_dns_servers ? option.custom_dns_servers.join(',') : '')
+        const dns_servers = this.createInput('text', 'Dns Servers', `${id}_custom_dns_servers`, idx, (d, i, n) => option.custom_dns_servers = n[i].value.replaceAll(' ', '').split(','))
+        this.append(opt_table.tbody, dns_servers.row)
+        dns_servers.input.property('value', option.custom_dns_servers ? option.custom_dns_servers.join(',') : '')
         // Search Domain Names
-        const [domain_row, domain_input] = this.createInput('text', 'Search Domain Names', `${id}_search_domain_names`, idx, (d, i, n) => option.search_domain_names = n[i].value.replaceAll(' ', '').split(','))
-        this.append(opt_tbody, domain_row)
-        domain_input.property('value', option.search_domain_names ? option.search_domain_names.join(',') : '')
+        const domain_names = this.createInput('text', 'Search Domain Names', `${id}_search_domain_names`, idx, (d, i, n) => option.search_domain_names = n[i].value.replaceAll(' ', '').split(','))
+        this.append(opt_table.tbody, domain_names.row)
+        domain_names.input.property('value', option.search_domain_names ? option.search_domain_names.join(',') : '')
         // Check Display
         this.showOptionRows(option, id, idx)
     }

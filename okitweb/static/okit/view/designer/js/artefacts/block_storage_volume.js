@@ -51,11 +51,15 @@ class BlockStorageVolumeView extends OkitDesignerArtefactView {
     /*
     ** Property Sheet Load function
      */
-    loadProperties() {
-        let okitJson = this.getOkitJson();
-        let me = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/block_storage_volume.html", () => {loadPropertiesSheet(me.artefact);});
+    newPropertiesSheet() {
+        this.properties_sheet = new BlockStorageVolumeProperties(this.artefact)
     }
+
+    // loadProperties() {
+    //     let okitJson = this.getOkitJson();
+    //     let me = this;
+    //     $(jqId(PROPERTIES_PANEL)).load("propertysheets/block_storage_volume.html", () => {loadPropertiesSheet(me.artefact);});
+    // }
 
     /*
     ** Load and display Value Proposition
