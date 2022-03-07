@@ -28,14 +28,6 @@ class IpsecConnection extends OkitArtifact {
 
 
     /*
-    ** Clone Functionality
-     */
-    clone() {
-        return new IpsecConnection(JSON.clone(this), this.getOkitJson());
-    }
-
-
-    /*
     ** Delete Processing
      */
 

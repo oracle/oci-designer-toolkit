@@ -25,14 +25,6 @@ class NatGateway extends OkitArtifact {
 
 
     /*
-    ** Clone Functionality
-     */
-    clone() {
-        return new NatGateway(JSON.clone(this), this.getOkitJson());
-    }
-
-
-    /*
     ** Delete Processing
      */
     deleteChildren() {

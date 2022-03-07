@@ -41,14 +41,6 @@ class MysqlDatabaseSystem extends OkitArtifact {
     }
 
 
-    /*
-    ** Clone Functionality
-     */
-    clone() {
-        return new MysqlDatabaseSystem(JSON.clone(this), this.getOkitJson());
-    }
-
-
     getNamePrefix() {
         return super.getNamePrefix() + 'mysql';
     }

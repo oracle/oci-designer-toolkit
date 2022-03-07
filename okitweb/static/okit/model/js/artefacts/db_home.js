@@ -28,12 +28,6 @@ class DbHome extends OkitArtifact {
         Object.defineProperty(this, 'subnet_id', {get: function() {return this.primary_mount_target.subnet_id;}, set: function(id) {this.primary_mount_target.subnet_id = id;}, enumerable: false });
     }
     /*
-    ** Clone Functionality
-    */
-    clone() {
-        return new DbHome(JSON.clone(this), this.getOkitJson());
-    }
-    /*
     ** Name Generation
     */
     getNamePrefix() {

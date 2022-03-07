@@ -28,14 +28,6 @@ class ServiceGateway extends OkitArtifact {
 
 
     /*
-    ** Clone Functionality
-     */
-    clone() {
-        return new ServiceGateway(JSON.clone(this), this.getOkitJson());
-    }
-
-
-    /*
     ** Delete Processing
      */
     deleteChildren() {

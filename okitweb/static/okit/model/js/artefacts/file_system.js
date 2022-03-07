@@ -24,12 +24,6 @@ class FileSystem extends OkitArtifact {
         this.convert();
     }
     /*
-    ** Clone Functionality
-    */
-    clone() {
-        return new FileSystem(JSON.clone(this), this.getOkitJson());
-    }
-    /*
     ** Name Generation
     */
     getNamePrefix() {

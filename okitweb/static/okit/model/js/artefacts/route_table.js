@@ -24,14 +24,6 @@ class RouteTable extends OkitArtifact {
         this.convert();
     }
 
-
-    /*
-    ** Clone Functionality
-     */
-    clone() {
-        return new RouteTable(JSON.clone(this), this.getOkitJson());
-    }
-
     newRule() {
         return {
             target_type: "internet_gateway",

@@ -27,12 +27,6 @@ class IntegrationInstance extends OkitArtifact {
         Object.defineProperty(this, 'subnet_id', {get: function() {return this.primary_mount_target.subnet_id;}, set: function(id) {this.primary_mount_target.subnet_id = id;}, enumerable: false });
     }
     /*
-    ** Clone Functionality
-    */
-    clone() {
-        return new IntegrationInstance(JSON.clone(this), this.getOkitJson());
-    }
-    /*
     ** Name Generation
     */
     getNamePrefix() {

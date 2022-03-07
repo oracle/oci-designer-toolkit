@@ -24,12 +24,6 @@ class Policy extends OkitArtifact {
         this.convert();
     }
     /*
-    ** Clone Functionality
-    */
-    clone() {
-        return new Policy(JSON.clone(this), this.getOkitJson());
-    }
-    /*
     ** Name Generation
     */
     getNamePrefix() {

@@ -26,14 +26,6 @@ class LocalPeeringGateway extends OkitArtifact {
 
 
     /*
-    ** Clone Functionality
-     */
-    clone() {
-        return new LocalPeeringGateway(JSON.clone(this), this.getOkitJson());
-    }
-
-
-    /*
     ** Delete Processing
      */
     deleteChildren() {}

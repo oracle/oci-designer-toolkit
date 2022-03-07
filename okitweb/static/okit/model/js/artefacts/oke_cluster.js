@@ -60,13 +60,6 @@ class OkeCluster extends OkitArtifact {
         super.convert();
     }
 
-    /*
-    ** Clone Functionality
-     */
-    clone() {
-        return new OkeCluster(JSON.clone(this), this.getOkitJson());
-    }
-
     getNamePrefix() {
         return super.getNamePrefix() + 'oke';
     }

@@ -55,12 +55,6 @@ class MountTarget extends OkitArtifact {
         }
     }
     /*
-    ** Clone Functionality
-    */
-    clone() {
-        return new MountTarget(JSON.clone(this), this.getOkitJson());
-    }
-    /*
     ** Name Generation
     */
     getNamePrefix() {

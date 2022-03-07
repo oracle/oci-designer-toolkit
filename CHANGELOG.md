@@ -1,6 +1,13 @@
 # Release Notes
 
 
+## Version 0.34.0
+**Release Date**: 23rd March 2022
+### Features
+### Bug Fixes
+1. Move clone functionality to the top level class to resolve duplicate resource_name issue.
+
+
 ## Version 0.33.0
 **Release Date**: 2nd March 2022
 ### Features

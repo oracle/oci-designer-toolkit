@@ -31,12 +31,6 @@ class Bastion extends OkitArtifact {
         Object.defineProperty(this, 'subnet_id', {get: function() {return this.target_subnet_id;}, set: function(id) {this.target_subnet_id = id;}, enumerable: false });
     }
     /*
-    ** Clone Functionality
-    */
-    clone() {
-        return new Bastion(JSON.clone(this), this.getOkitJson());
-    }
-    /*
     ** Name Generation
     */
     getNamePrefix() {

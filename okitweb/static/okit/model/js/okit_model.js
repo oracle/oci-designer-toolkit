@@ -258,8 +258,10 @@ class OkitArtifact {
     ** Clone Functionality
      */
     clone() {
-        alert('Clone function "clone()" has not been implemented.');
-        return;
+        const constructor = Object.getPrototypeOf(this).constructor
+        const clone = new constructor(JSON.clone(this), this.getOkitJson())
+        clone.resource_name = this.generateResourceName()
+        return clone;
     }
 
     /*
