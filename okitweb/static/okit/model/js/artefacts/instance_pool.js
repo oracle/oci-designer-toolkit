@@ -45,13 +45,6 @@ class InstancePool extends OkitArtifact {
         super.convert();
     }
 
-    /*
-    ** Clone Functionality
-     */
-    clone() {
-        return new InstancePool(JSON.clone(this), this.getOkitJson());
-    }
-
     getNamePrefix() {
         return super.getNamePrefix() + 'inp';
     }

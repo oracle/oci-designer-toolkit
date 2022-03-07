@@ -25,14 +25,6 @@ class InternetGateway extends OkitArtifact {
 
 
     /*
-    ** Clone Functionality
-     */
-    clone() {
-        return new InternetGateway(JSON.clone(this), this.getOkitJson());
-    }
-
-
-    /*
     ** Delete Processing
      */
     deleteChildren() {

@@ -23,12 +23,6 @@ class Group extends OkitArtifact {
         this.convert();
     }
     /*
-    ** Clone Functionality
-    */
-    clone() {
-        return new Group(JSON.clone(this), this.getOkitJson());
-    }
-    /*
     ** Name Generation
     */
     getNamePrefix() {

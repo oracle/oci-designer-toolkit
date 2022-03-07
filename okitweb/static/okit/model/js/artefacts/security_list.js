@@ -25,14 +25,6 @@ class SecurityList extends OkitArtifact {
         this.convert();
     }
 
-
-    /*
-    ** Clone Functionality
-     */
-    clone() {
-        return new SecurityList(JSON.clone(this), this.getOkitJson());
-    }
-
     newIngressRule() {
         return {
             protocol: "all", 

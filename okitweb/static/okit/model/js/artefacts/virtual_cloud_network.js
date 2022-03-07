@@ -46,14 +46,6 @@ class VirtualCloudNetwork extends OkitArtifact {
     }
 
     /*
-    ** Clone Functionality
-     */
-    clone() {
-        return new VirtualCloudNetwork(JSON.clone(this), this.getOkitJson());
-    }
-
-
-    /*
     ** Delete Processing
      */
     deleteChildren() {

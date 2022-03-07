@@ -34,12 +34,6 @@ class DrgAttachment extends OkitArtifact {
         Object.defineProperty(this, 'route_table_id', {get: function() {return this.network_details.route_table_id;}, set: function(id) {this.network_details.route_table_id = id;}, enumerable: true });
     }
     /*
-    ** Clone Functionality
-    */
-    clone() {
-        return new DrgAttachment(JSON.clone(this), this.getOkitJson());
-    }
-    /*
     ** Name Generation
     */
     getNamePrefix() {

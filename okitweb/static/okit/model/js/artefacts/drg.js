@@ -65,12 +65,6 @@ class Drg extends OkitArtifact {
         }
     }
     /*
-    ** Clone Functionality
-    */
-    clone() {
-        return new Drg(JSON.clone(this), this.getOkitJson());
-    }
-    /*
     ** Name Generation
     */
     getNamePrefix() {

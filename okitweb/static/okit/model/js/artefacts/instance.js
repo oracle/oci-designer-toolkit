@@ -120,13 +120,6 @@ class Instance extends OkitArtifact {
     }
 
     /*
-    ** Clone Functionality
-     */
-    clone() {
-        return new Instance(JSON.clone(this), this.getOkitJson());
-    }
-
-    /*
     ** Delete Processing
      */
     deleteChildren() {

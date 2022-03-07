@@ -42,12 +42,6 @@ class AnalyticsInstance extends OkitArtifact {
         Object.defineProperty(this, 'vcn_id', {get: function() {return this.network_endpoint_details.vcn_id;}, set: function(id) {this.network_endpoint_details.vcn_id = id;}, enumerable: true });
     }
     /*
-    ** Clone Functionality
-    */
-    clone() {
-        return new AnalyticsInstance(JSON.clone(this), this.getOkitJson());
-    }
-    /*
     ** Name Generation
     */
     getNamePrefix() {

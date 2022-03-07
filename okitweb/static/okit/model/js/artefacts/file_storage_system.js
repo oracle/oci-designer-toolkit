@@ -100,14 +100,6 @@ class FileStorageSystem extends OkitArtifact {
     }
 
     /*
-    ** Clone Functionality
-     */
-    clone() {
-        return new FileStorageSystem(JSON.clone(this), this.getOkitJson());
-    }
-
-
-    /*
     ** Delete Processing
      */
     deleteChildren() {}

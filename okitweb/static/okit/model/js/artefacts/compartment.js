@@ -33,14 +33,6 @@ class Compartment extends OkitArtifact {
     }
 
     /*
-    ** Clone Functionality
-     */
-    clone() {
-        return new Compartment(JSON.clone(this), this.getOkitJson());
-    }
-
-
-    /*
     ** Delete Processing
      */
     deleteChildren() {
