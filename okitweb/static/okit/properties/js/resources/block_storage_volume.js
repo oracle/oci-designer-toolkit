@@ -35,9 +35,11 @@ class BlockStorageVolumeProperties extends OkitResourceProperties {
         const vpus_per_gb = this.createInput('number', 'Volume Performance', `${self.id}_vpus_per_gb`, '', (d, i, n) => {self.resource.vpus_per_gb = n[i].value; self.vpus_per_gb_range.property('value', self.resource.vpus_per_gb); this.setPerformanceTitle()}, {min: 0, max: 120, step: 10})
         this.vpus_per_gb = vpus_per_gb.input
         this.vpus_per_gb_label = vpus_per_gb.title
+        this.vpus_per_gb_row = vpus_per_gb.row
         this.append(this.size_tbody, vpus_per_gb.row)
         const vpus_per_gb_range = this.createInput('range', '', `${self.id}_vpus_per_gb_range`, '', (d, i, n) => {self.resource.vpus_per_gb = n[i].value; self.vpus_per_gb.property('value', self.resource.vpus_per_gb); this.setPerformanceTitle()}, {min: 0, max: 120, step: 10})
         this.vpus_per_gb_range = vpus_per_gb_range.input
+        this.vpus_per_gb_range_row = vpus_per_gb_range.row
         this.append(this.size_tbody, vpus_per_gb_range.row)
         // Backup
         const backup = this.createDetailsSection('Backup', `${self.id}_backup_details`)
@@ -46,7 +48,7 @@ class BlockStorageVolumeProperties extends OkitResourceProperties {
         const backup_table = this.createTable('', `${self.id}_backup`)
         this.backup_tbody = backup_table.tbody
         this.append(this.backup_div, backup_table.table)
-        // Route Table
+        // Backup Policy
         const policy = this.createInput('select', 'Policy', `${self.id}_backup_policy`, '', (d, i, n) => self.resource.backup_policy = n[i].value = n[i].value)
         this.backup_policy = policy.input
         this.append(this.backup_tbody, policy.row)
@@ -59,6 +61,12 @@ class BlockStorageVolumeProperties extends OkitResourceProperties {
         this.vpus_per_gb.property('value', this.resource.vpus_per_gb)
         this.vpus_per_gb_range.property('value', this.resource.vpus_per_gb)
         this.setPerformanceTitle()
+        this.loadReferenceSelect(this.backup_policy, 'getVolumeBackupPolicies', true, undefined, {'Oracle-Defined Policies': this.oci_defined_filter, 'User-Defined Policies': this.user_defined_filter}, 'No Backup Policy Selected')
+        this.backup_policy.property('value', this.resource.backup_policy)
+        if (this.resource.getOkitJson().metadata.platform === 'pca') {
+            this.vpus_per_gb_row.classed('collapsed', true)
+            this.vpus_per_gb_range_row.classed('collapsed', true)
+        }
     }
 
     // Set Performance Label

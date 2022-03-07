@@ -360,6 +360,10 @@ class OkitOCIData {
         }
     }
 
+    getVolumeBackupPolicies() {
+        return this.dropdown_data.volume_backup_policy ? this.dropdown_data.volume_backup_policy : []
+    } 
+
     getMySQLShapes() {
         return this.dropdown_data.mysql_shapes;
     }
