@@ -17,6 +17,8 @@ class OkitResourceProperties {
     compartment_filter = (r) => r.compartment_id.toString() === this.resource.compartment_id.toString()
     vcn_filter = (r) => r.vcn_id.toString() === this.resource.vcn_id.toString()
     subnet_filter = (r) => r.subnet_id.toString() === this.resource.subnet_id.toString()
+    oci_defined_filter = (r) => r.compartment_id === null
+    user_defined_filter = (r) => r.compartment_id !== null
 
     build() {
         if (this.resource) {
@@ -264,14 +266,11 @@ class OkitResourceProperties {
     }
 
     addExtraAttributes(input, data) {
+        const attributes = ['min', 'max', 'step', 'maxlength', 'pattern', 'title', 'placeholder']
         if (data) {
-            if (data.min) input.attr('min', data.min)
-            if (data.max) input.attr('max', data.max)
-            if (data.step) input.attr('step', data.step)
-            if (data.maxlength) input.attr('maxlength', data.maxlength)
-            if (data.pattern) input.attr('pattern', data.pattern)
-            if (data.title) input.attr('title', data.title)
-            if (data.placeholder) input.attr('placeholder', data.placeholder)
+            Object.entries(data).forEach(([k, v]) => {
+                if (attributes.includes(k)) input.attr(k, v)
+            })
         }
     }
 
@@ -344,19 +343,32 @@ class OkitResourceProperties {
         return id
     }
 
-    loadReferenceSelect(select, resource_type, empty_option=false, filter=undefined, groups=undefined) {
+    loadReferenceSelect(select, resource_type, empty_option=false, filter=undefined, groups=undefined, empty_value=undefined) {
         select.selectAll('*').remove()
         if (!filter) filter = () => true
-        if (empty_option) select.append('option').attr('value', '').text('')
+        if (empty_option) select.append('option').attr('value', '').attr('selected', 'selected').text(empty_value ? empty_value : '')
         let id = ''
-        const resources = this.resource.okit_json[`${resource_type}s`] ? this.resource.okit_json[`${resource_type}s`] : this.resource.okit_json[`${resource_type}`] ? this.resource.okit_json[`${resource_type}`] : []
-        resources.filter(filter).forEach((r, i) => {
-            const option = select.append('option').attr('value', r.id).text(r.display_name)
-            if (i === 0) {
-                option.attr('selected', 'selected')
-                id = r.id
-            }
-        })
+        const resources = okitOciData[resource_type]()
+        if (groups) {
+            Object.entries(groups).forEach(([k, v]) => {
+                const optgrp = select.append('optgroup').attr('label', k)
+                resources.filter(v).forEach((r, i) => {
+                    const option = optgrp.append('option').attr('value', r.id).text(r.compartment_id ? r.display_name : titleCase(r.display_name))
+                    if (!empty_option && i === 0 && id === '') {
+                        option.attr('selected', 'selected')
+                        id = r.id
+                    }
+                })
+            })
+        } else {
+            resources.filter(filter).forEach((r, i) => {
+                const option = select.append('option').attr('value', r.id).text(r.display_name)
+                if (!empty_option && i === 0) {
+                    option.attr('selected', 'selected')
+                    id = r.id
+                }
+            })
+        }
         return id
     }
 
