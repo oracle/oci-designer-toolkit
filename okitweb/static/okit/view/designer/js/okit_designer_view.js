@@ -15,8 +15,6 @@ class OkitDesignerJsonView extends OkitJsonView {
         this.palette_svg = palette_svg;
         // Set up Canvas info
         this.canvas = undefined 
-        this.transform = undefined
-        this.zoom = undefined
     }
 
     static newView(model, oci_data=null, resource_icons=[], parent_id = 'canvas-div') {
@@ -114,7 +112,7 @@ class OkitDesignerJsonView extends OkitJsonView {
         // Zoom & Pan SVG
         // Zoom function associated with Canvas SVG but acts on the first <g> tag
         // const zoom = d3.zoom().scaleExtent([0.1, 3]).on("zoom", () => {d3.select("#canvas_root_svg g").attr("transform", d3.event.transform)});
-        const zoom = d3.zoom().scaleExtent([0.1, 3]).on("zoom", () => {transform_group.attr("transform", d3.event.transform);this.transform = d3.event.transform});
+        const zoom = d3.zoom().scaleExtent([0.1, 3]).on("zoom", () => transform_group.attr("transform", d3.event.transform));
         const canvas_root_svg = canvas_div.append("svg")
         .attr("id", 'canvas_root_svg')
         .attr("width", "100%")
@@ -125,10 +123,6 @@ class OkitDesignerJsonView extends OkitJsonView {
         d3.select('#zoom_in_toolbar_button').on('click', () => canvas_root_svg.transition().duration(750).call(zoom.scaleBy, 1.3))
         d3.select('#zoom_121_toolbar_button').on('click', () => canvas_root_svg.transition().duration(750).call(zoom.transform, d3.zoomIdentity.scale(1)))
         d3.select('#zoom_out_toolbar_button').on('click', () => canvas_root_svg.transition().duration(750).call(zoom.scaleBy, (1/1.3)))
-        // Set initial transform to last used
-        // if (this.transform) transform_group.attr("transform", this.transform)
-        // if (this.scale) zoom.scale(this.scale)
-        // if (this.translate) zoom.translate(this.translate)
 
         // Wrapper SVG Element to define ViewBox etc
         // let canvas_svg = canvas_div.append("svg")
@@ -140,9 +134,6 @@ class OkitDesignerJsonView extends OkitJsonView {
             .attr("height", height)
             .attr("viewBox", "0 0 " + width + " " + height)
             .attr("preserveAspectRatio", "xMinYMin meet");
-
-        // this.clearCanvas();
-        // if (this.transform) canvas_root_svg.transition().call(zoom.transform, this.transform)
 
         return canvas_svg;
     }
