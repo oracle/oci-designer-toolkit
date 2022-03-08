@@ -13,6 +13,10 @@ class OkitDesignerJsonView extends OkitJsonView {
         this.parent_id = parent_id;
         //this.display_grid = display_grid;
         this.palette_svg = palette_svg;
+        // Set up Canvas info
+        this.canvas = undefined 
+        this.transform = undefined
+        this.zoom = undefined
     }
 
     static newView(model, oci_data=null, resource_icons=[], parent_id = 'canvas-div') {
@@ -39,15 +43,19 @@ class OkitDesignerJsonView extends OkitJsonView {
         console.info('Drawing Designer Canvas');
         // Display Json
         this.displayOkitJson();
-        // New canvas
-        let width = 0;
-        let height = 0;
-        for (let compartment of this.getCompartments()) {
-            let dimensions = compartment.dimensions;
-            width = Math.max(width, dimensions.width);
-            height = Math.max(height, dimensions.height);
+        if (!this.canvas) {
+            // New canvas
+            let width = 0;
+            let height = 0;
+            for (let compartment of this.getCompartments()) {
+                let dimensions = compartment.dimensions;
+                width = Math.max(width, dimensions.width);
+                height = Math.max(height, dimensions.height);
+            }
+            this.canvas = this.newCanvas(width, height, for_export);
         }
-        let canvas_svg = this.newCanvas(width, height, for_export);
+        this.clearCanvas()
+        let canvas_svg = this.canvas
 
         // Get Canvas Root Containers
         Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter((r) => r instanceof OkitContainerArtefactView && (r.parent_id === null || r.parent_id === '' || r.parent_id === 'canvas')).forEach((e) => this.drawContainer(e))
@@ -106,7 +114,7 @@ class OkitDesignerJsonView extends OkitJsonView {
         // Zoom & Pan SVG
         // Zoom function associated with Canvas SVG but acts on the first <g> tag
         // const zoom = d3.zoom().scaleExtent([0.1, 3]).on("zoom", () => {d3.select("#canvas_root_svg g").attr("transform", d3.event.transform)});
-        const zoom = d3.zoom().scaleExtent([0.1, 3]).on("zoom", () => {transform_group.attr("transform", d3.event.transform)});
+        const zoom = d3.zoom().scaleExtent([0.1, 3]).on("zoom", () => {transform_group.attr("transform", d3.event.transform);this.transform = d3.event.transform});
         const canvas_root_svg = canvas_div.append("svg")
         .attr("id", 'canvas_root_svg')
         .attr("width", "100%")
@@ -117,6 +125,10 @@ class OkitDesignerJsonView extends OkitJsonView {
         d3.select('#zoom_in_toolbar_button').on('click', () => canvas_root_svg.transition().duration(750).call(zoom.scaleBy, 1.3))
         d3.select('#zoom_121_toolbar_button').on('click', () => canvas_root_svg.transition().duration(750).call(zoom.transform, d3.zoomIdentity.scale(1)))
         d3.select('#zoom_out_toolbar_button').on('click', () => canvas_root_svg.transition().duration(750).call(zoom.scaleBy, (1/1.3)))
+        // Set initial transform to last used
+        // if (this.transform) transform_group.attr("transform", this.transform)
+        // if (this.scale) zoom.scale(this.scale)
+        // if (this.translate) zoom.translate(this.translate)
 
         // Wrapper SVG Element to define ViewBox etc
         // let canvas_svg = canvas_div.append("svg")
@@ -129,7 +141,8 @@ class OkitDesignerJsonView extends OkitJsonView {
             .attr("viewBox", "0 0 " + width + " " + height)
             .attr("preserveAspectRatio", "xMinYMin meet");
 
-        this.clearCanvas();
+        // this.clearCanvas();
+        // if (this.transform) canvas_root_svg.transition().call(zoom.transform, this.transform)
 
         return canvas_svg;
     }
