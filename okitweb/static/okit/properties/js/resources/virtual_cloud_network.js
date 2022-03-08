@@ -17,7 +17,7 @@ class VirtualCloudNetworkProperties extends OkitResourceProperties {
     buildResource() {
         const self = this
         // IPv4 CIDR Blocks
-        const ipv4 = this.createInput('ipv4_cidr_list', 'IPv4 CIDR(s)', `${self.id}_cidr_blocks`, '', (d, i, n) => {n[i].reportValidity(); self.resource.cidr_blocks = n[i].value})
+        const ipv4 = this.createInput('ipv4_cidr_list', 'IPv4 CIDR(s)', `${self.id}_cidr_blocks`, '', (d, i, n) => {n[i].reportValidity(); self.resource.cidr_blocks = n[i].value.replace(' ', '').split(',')})
         this.cidr_blocks = ipv4.input
         this.append(this.core_tbody, ipv4.row)
         // DNS Label
@@ -48,7 +48,7 @@ class VirtualCloudNetworkProperties extends OkitResourceProperties {
 
     // Load Additional Resource Specific Properties
     loadResource() {
-        this.cidr_blocks.property('value', this.resource.cidr_blocks)
+        this.cidr_blocks.property('value', this.resource.cidr_blocks.join(','))
         this.dns_label.property('value', this.resource.dns_label)
         this.is_ipv6enabled.property('checked', this.resource.is_ipv6enabled)
         this.ipv6cidr_blocks.property('value', this.resource.ipv6cidr_blocks)

@@ -617,6 +617,7 @@ li a.parent-item:hover {
 
 .okit-property-editor .okit-table .tr .td:first-child {
     width: 20em;
+    font-weight: bolder;
 }
 
 .okit-table {
