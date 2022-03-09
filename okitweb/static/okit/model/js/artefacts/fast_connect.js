@@ -38,12 +38,6 @@ class FastConnect extends OkitArtifact {
     }
 
 
-    /*
-    ** Delete Processing
-     */
-    deleteChildren() {}
-
-
     getNamePrefix() {
         return super.getNamePrefix() + 'fc';
     }

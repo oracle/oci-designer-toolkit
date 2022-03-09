@@ -31,14 +31,20 @@ class Subnet extends OkitArtifact {
         this.convert();
     }
 
-
     /*
     ** Filters
      */
-    delete_children_filter = (r) => r.subnet_id !== this.id
-    get_children_filter = (r) => r.subnet_id === this.id
+    not_child_filter = (r) => r.subnet_id !== this.id
+    child_filter = (r) => r.subnet_id === this.id
 
-    
+    /*
+    ** Delete Processing
+     */
+    deleteReferences() {
+        // Instance Volume Attachment
+        this.getOkitJson().getInstances().forEach((r) => r.vnics = r.vnics.filter((v) => v.subnet_id !== this.id))
+    }
+
     /*
     ** Utility Methods
      */
@@ -65,7 +71,6 @@ class Subnet extends OkitArtifact {
         this.cidr_block = `${subnet_ip}/24`;
         return this.cidr_block;
     }
-
 
     /*
     ** Container Specific Overrides

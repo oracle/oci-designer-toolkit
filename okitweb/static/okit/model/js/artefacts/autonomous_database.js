@@ -34,21 +34,6 @@ class AutonomousDatabase extends OkitArtifact {
     }
 
 
-    /*
-    ** Delete Processing
-     */
-    deleteChildren() {
-        // Remove Instance references
-        for (let instance of this.getOkitJson().getInstances()) {
-            for (let i=0; i < instance['autonomous_database_ids'].length; i++) {
-                if (instance.autonomous_database_ids[i] === this.id) {
-                    instance.autonomous_database_ids.splice(i, 1);
-                }
-            }
-        }
-    }
-
-
     getNamePrefix() {
         return super.getNamePrefix() + 'ad';
     }

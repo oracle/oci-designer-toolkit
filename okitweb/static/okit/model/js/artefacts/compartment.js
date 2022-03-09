@@ -24,6 +24,12 @@ class Compartment extends OkitArtifact {
     }
 
     /*
+    ** Filters
+     */
+    not_child_filter = (r) => r.compartment_id !== this.id
+    child_filter = (r) => r.compartment_id === this.id
+
+    /*
     ** Conversion Routine allowing loading of old json
      */
     convert() {
@@ -35,22 +41,6 @@ class Compartment extends OkitArtifact {
     /*
     ** Delete Processing
      */
-    deleteChildren() {
-        console.log('Deleting Children of ' + this.getArtifactReference() + ' : ' + this.display_name);
-
-        // Remove Compartments
-        this.getOkitJson().getCompartments().filter((d) => d.vcn_id === this.id).forEach((c) => c.delete())
-        // Virtual Cloud Networks
-        this.getOkitJson().getVirtualCloudNetworks().filter((d) => d.vcn_id === this.id).forEach((c) => c.delete())
-        // Block Storage Volumes
-        this.getOkitJson().getBlockStorageVolumes().filter((d) => d.vcn_id === this.id).forEach((c) => c.delete())
-        // Object Storage Buckets
-        this.getOkitJson().getObjectStorageBuckets().filter((d) => d.vcn_id === this.id).forEach((c) => c.delete())
-        // Autonomous Databases
-        this.getOkitJson().getAutonomousDatabases().filter((d) => d.vcn_id === this.id).forEach((c) => c.delete())
-        // Dynamic Routing Gateways
-        this.getOkitJson().getDynamicRoutingGateways().filter((d) => d.vcn_id === this.id).forEach((c) => c.delete())
-    }
 
 
     getNamePrefix() {

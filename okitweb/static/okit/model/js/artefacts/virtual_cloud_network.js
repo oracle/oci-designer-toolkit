@@ -29,6 +29,12 @@ class VirtualCloudNetwork extends OkitArtifact {
     }
 
     /*
+    ** Filters
+     */
+    not_child_filter = (r) => r.vcnt_id !== this.id
+    child_filter = (r) => r.vcn_id === this.id
+
+    /*
     ** Conversion Routine allowing loading of old json
      */
     convert() {
@@ -43,32 +49,6 @@ class VirtualCloudNetwork extends OkitArtifact {
             else if (this.ipv6cidr_blocks.indexOf(this.ipv6cidr_block) < 0) this.ipv6cidr_blocks.push(this.ipv6cidr_block);
             delete this.ipv6cidr_block;
         }
-    }
-
-    /*
-    ** Delete Processing
-     */
-    deleteChildren() {
-        console.log('Deleting Children of ' + this.getArtifactReference() + ' : ' + this.display_name);
-        // Remove Subnets
-        this.getOkitJson().getSubnets().filter((d) => d.vcn_id === this.id).forEach((c) => c.delete())
-        // Remove Route_tables
-        this.getOkitJson().getRouteTables().filter((d) => d.vcn_id === this.id).forEach((c) => c.delete())
-        // Remove Security Lists
-        this.getOkitJson().getSecurityLists().filter((d) => d.vcn_id === this.id).forEach((c) => c.delete())
-        // Remove Internet Gateways
-        this.getOkitJson().getInternetGateways().filter((d) => d.vcn_id === this.id).forEach((c) => c.delete())
-        // Remove NAT Gateways
-        this.getOkitJson().getNatGateways().filter((d) => d.vcn_id === this.id).forEach((c) => c.delete())
-        // Remove Service Gateways
-        this.getOkitJson().getServiceGateways().filter((d) => d.vcn_id === this.id).forEach((c) => c.delete())
-        // Local Peering Gateways
-        this.getOkitJson().getLocalPeeringGateways().filter((d) => d.vcn_id === this.id).forEach((c) => c.delete())
-        // Network Security Groups
-        this.getOkitJson().getNetworkSecurityGroups().filter((d) => d.vcn_id === this.id).forEach((c) => c.delete())
-        // DHCP Options
-        this.getOkitJson().getDhcpOptions().filter((d) => d.vcn_id === this.id).forEach((c) => c.delete())
-        console.log();
     }
 
     /*

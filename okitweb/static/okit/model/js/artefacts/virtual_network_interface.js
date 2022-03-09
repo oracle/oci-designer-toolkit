@@ -32,12 +32,6 @@ class VirtualNetworkInterface extends OkitArtifact {
         this.convert();
     }
 
-
-    /*
-    ** Delete Processing
-     */
-    deleteChildren() {}
-
     getNamePrefix() {
         return super.getNamePrefix() + 'vnic';
     }

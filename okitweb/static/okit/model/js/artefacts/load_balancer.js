@@ -45,12 +45,6 @@ class LoadBalancer extends OkitArtifact {
         if (this.shape_name !== undefined) {this.shape = this.shape_name; delete this.shape_name;}
     }
 
-
-    /*
-    ** Delete Processing
-     */
-    deleteChildren() {}
-
     getNamePrefix() {
         return super.getNamePrefix() + 'lb';
     }
