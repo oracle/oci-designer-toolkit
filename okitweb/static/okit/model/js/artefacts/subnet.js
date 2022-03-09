@@ -39,45 +39,15 @@ class Subnet extends OkitArtifact {
     /*
     ** Delete Processing
      */
+    delete_children_filter = (r) => r.subnet_id !== this.id
     deleteChildren() {
         console.log('Deleting Children of ' + this.getArtifactReference() + ' : ' + this.display_name);
         // Remove Instances
-        this.getOkitJson().getInstances() = this.getOkitJson().getInstances().filter(function(child) {
-            if (child.primary_vnic.subnet_id === this.id) {
-                console.info('Deleting ' + child.display_name);
-                //child.delete();
-                return false; // So the filter removes the element
-            }
-            return true;
-        }, this);
-        for (let instance of this.getOkitJson().getInstances()) {
-            instance.vnics = instance.vnics.filter(function(child) {
-                if (child.subnet_id === this.id) {
-                    console.info('Deleting ' + child.hostname_label);
-                    return false; // So the filter removes the element
-                }
-                return true;
-            }, this);
-        }
+        this.getOkitJson().filterInstances(this.delete_children_filter)
         // Remove Load Balancers
-        this.getOkitJson().getLoadBalancers() = this.getOkitJson().getLoadBalancers().filter(function(child) {
-            if (child.subnet_id === this.id) {
-                console.info('Deleting ' + child.display_name);
-                //child.delete();
-                return false; // So the filter removes the element
-            }
-            return true;
-        }, this);
-        // Remove File Storage Systems
-        this.getOkitJson().getFileStorageSystems() = this.getOkitJson().getFileStorageSystems().filter(function(child) {
-            if (child.subnet_id === this.id) {
-                console.info('Deleting ' + child.display_name);
-                //child.delete();
-                return false; // So the filter removes the element
-            }
-            return true;
-        }, this);
-        console.log();
+        this.getOkitJson().filterLoadBalancers(this.delete_children_filter)
+        // Remove Mount Targets
+        this.getOkitJson().filterMountTargets(this.delete_children_filter)
     }
 
     /*

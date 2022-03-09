@@ -86,3 +86,4 @@ OkitJson.prototype.getLoadBalancer = function(id='') {
 OkitJson.prototype.deleteLoadBalancer = function(id) {
     this.load_balancers = this.load_balancers ? this.load_balancers.filter((r) => r.id !== id) : []
 }
+OkitJson.prototype.filterLoadBalancers = function(filter) {this.load_balancers = this.load_balancers ? this.load_balancers.filter(filter) : []}
