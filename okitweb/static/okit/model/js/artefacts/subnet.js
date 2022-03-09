@@ -29,27 +29,16 @@ class Subnet extends OkitArtifact {
         // Update with any passed data
         this.merge(data);
         this.convert();
-        // if (this.availability_domain && this.availability_domain.length > 1) {
-        //     this.region_availability_domain = this.availability_domain;
-        //     this.availability_domain = this.getAvailabilityDomainNumber(this.region_availability_domain);
-        // }
     }
 
 
     /*
-    ** Delete Processing
+    ** Filters
      */
     delete_children_filter = (r) => r.subnet_id !== this.id
-    deleteChildren() {
-        console.log('Deleting Children of ' + this.getArtifactReference() + ' : ' + this.display_name);
-        // Remove Instances
-        this.getOkitJson().filterInstances(this.delete_children_filter)
-        // Remove Load Balancers
-        this.getOkitJson().filterLoadBalancers(this.delete_children_filter)
-        // Remove Mount Targets
-        this.getOkitJson().filterMountTargets(this.delete_children_filter)
-    }
+    get_children_filter = (r) => r.subnet_id === this.id
 
+    
     /*
     ** Utility Methods
      */

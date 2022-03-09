@@ -282,6 +282,16 @@ class OkitArtifact {
         if ((update.resource_name === undefined || update.resource_name === '') && update.display_name) update.resource_name = this.generateResourceNameFromDisplayName(update.display_name)
         $.extend(true, this, this.clean(update));
     }
+    /*
+    ** Filter Resources
+    */
+    filter(filter) {
+        if (filter) {
+            Object.entries(this.getOkitJson()).forEach(([k, v]) => {
+                if (Array.isArray(v)) {this.getOkitJson()[k] = v.filter(filter)}
+            })
+        }
+    }
 
     /*
     ** Convert Functionality will be overridden to allow backwards compatibility
@@ -320,7 +330,7 @@ class OkitArtifact {
     }
 
     deleteChildren() {
-        console.warn('Default empty deleteChildren()');
+        this.filter(this.delete_children_filter)
     }
 
     getChildren(artefact) {
