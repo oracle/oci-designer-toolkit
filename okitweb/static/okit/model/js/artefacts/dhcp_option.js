@@ -42,13 +42,9 @@ class DhcpOption extends OkitArtifact {
     /*
     ** Delete Processing
      */
-    deleteChildren() {
-        // Remove Subnet references
-        for (let subnet of this.getOkitJson().getSubnets()) {
-            if (subnet.dhcp_options_id === this.id) {
-                subnet.dhcp_options_id = '';
-            }
-        }
+    deleteReferences() {
+        // Subnet Reference
+        this.getOkitJson().getSubnets().forEach((r) => r.dhcp_options_id = r.dhcp_options_id === this.id ? '' : r.dhcp_options_id)
     }
     /*
     ** Name Generation

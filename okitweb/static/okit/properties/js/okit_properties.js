@@ -13,6 +13,30 @@ class OkitResourceProperties {
         this.properties_div = '<div></div>'
         this.build()
     }
+    // Standard Data
+    // Availability Domain
+    ad_data = {
+        options: {
+            1: 'Availability Domain 1', 
+            2: 'Availability Domain 2', 
+            3: 'Availability Domain 3'
+        }
+    }
+    // Fault Domain
+    fd_data = {
+        options: {
+            0: 'Let Oracle Choose', 
+            1: 'Fault Domain 1', 
+            2: 'Fault Domain 2', 
+            3: 'Fault Domain 3'
+        }
+    }
+    // DNS Label
+    dns_data = {
+        maxlength: '15',
+        pattern: '^[a-zA-Z][a-zA-Z0-9]{0,15}$',
+        title: 'Only letters and numbers, starting with a letter. 15 characters max.'
+    }
 
     compartment_filter = (r) => r.compartment_id.toString() === this.resource.compartment_id.toString()
     vcn_filter = (r) => r.vcn_id.toString() === this.resource.vcn_id.toString()
@@ -353,7 +377,7 @@ class OkitResourceProperties {
             Object.entries(groups).forEach(([k, v]) => {
                 const optgrp = select.append('optgroup').attr('label', k)
                 resources.filter(v).forEach((r, i) => {
-                    const option = optgrp.append('option').attr('value', r.id).text(r.compartment_id ? r.display_name : titleCase(r.display_name))
+                    const option = optgrp.append('option').attr('value', r.id).text(r.display_name)
                     if (!empty_option && i === 0 && id === '') {
                         option.attr('selected', 'selected')
                         id = r.id

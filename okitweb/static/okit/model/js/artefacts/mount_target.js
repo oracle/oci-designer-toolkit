@@ -91,4 +91,5 @@ return undefined;
 OkitJson.prototype.deleteMountTarget = function(id) {
     this.mount_targets = this.mount_targets ? this.mount_targets.filter((r) => r.id !== id) : []
 }
+OkitJson.prototype.filterMountTargets = function(filter) {this.mount_targets = this.mount_targets ? this.mount_targets.filter(filter) : []}
 

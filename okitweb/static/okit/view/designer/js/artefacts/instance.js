@@ -79,55 +79,8 @@ class InstanceView extends OkitDesignerArtefactView {
     /*
     ** Property Sheet Load function
      */
-    loadPropertiesV1() {
-        let me = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/instance.html", () => {
-            // Load Referenced Ids
-            // Build Block Storage Select
-            let block_storage_volume_select = d3.select(d3Id('block_storage_volume_ids'));
-            for (let block_storage_volume of me.getOkitJson().block_storage_volumes) {
-                let div = block_storage_volume_select.append('div');
-                div.append('input')
-                    .attr('type', 'checkbox')
-                    .attr('id', safeId(block_storage_volume.id))
-                    .attr('value', block_storage_volume.id);
-                div.append('label')
-                    .attr('for', safeId(block_storage_volume.id))
-                    .text(block_storage_volume.display_name);
-            }
-            // Build Primary Vnic / Subnet List
-            let subnet_select = $(jqId('subnet_id'));
-            subnet_select.append($('<option>').attr('value', '').text(''));
-            for (let subnet of this.getOkitJson().getSubnets()) {
-                let compartment = this.getOkitJson().getCompartment(this.getOkitJson().getSubnet(subnet.id).compartment_id);
-                let vcn = this.getOkitJson().getVirtualCloudNetwork(this.getOkitJson().getSubnet(subnet.id).vcn_id);
-                let display_name = `${compartment ? compartment.display_name : ''}/${vcn ? vcn.display_name : ''}/${subnet.display_name}`;
-                subnet_select.append($('<option>').attr('value', subnet.id).text(display_name));
-            }
-            // Load Shapes
-            this.loadShapes();
-            const shape = okitOciData.getInstanceShape(this.shape);
-            if (shape) {
-                if (shape.memory_options && shape.ocpu_options) {
-                    $('#ocpus_row').removeClass('collapsed');
-                    $('#memory_in_gbs_row').removeClass('collapsed');
-                } else {
-                    this.shape_config.ocpus = 0;
-                    this.shape_config.memory_in_gbs = 0;
-                }
-            }
-            // Build Network Security Groups
-            this.loadNetworkSecurityGroups('nsg_ids', this.primary_vnic.subnet_id);
-            // Secondary Vnics
-            this.loadSecondaryVnics();
-            $(jqId('add_vnic')).on('click', () => {this.addSecondaryVnic();});
-            // Load OSs
-            this.loadOSs(this.shape);
-            // Load OS Versions
-            this.loadOSVersions(this.source_details.os);
-            // Load Properties
-            loadPropertiesSheet(me.artefact);
-        });
+    newPropertiesSheet() {
+        this.properties_sheet = new InstanceProperties(this.artefact)
     }
 
     loadProperties() {

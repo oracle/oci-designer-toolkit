@@ -29,55 +29,20 @@ class Subnet extends OkitArtifact {
         // Update with any passed data
         this.merge(data);
         this.convert();
-        // if (this.availability_domain && this.availability_domain.length > 1) {
-        //     this.region_availability_domain = this.availability_domain;
-        //     this.availability_domain = this.getAvailabilityDomainNumber(this.region_availability_domain);
-        // }
     }
 
+    /*
+    ** Filters
+     */
+    not_child_filter = (r) => r.subnet_id !== this.id
+    child_filter = (r) => r.subnet_id === this.id
 
     /*
     ** Delete Processing
      */
-    deleteChildren() {
-        console.log('Deleting Children of ' + this.getArtifactReference() + ' : ' + this.display_name);
-        // Remove Instances
-        this.getOkitJson().getInstances() = this.getOkitJson().getInstances().filter(function(child) {
-            if (child.primary_vnic.subnet_id === this.id) {
-                console.info('Deleting ' + child.display_name);
-                //child.delete();
-                return false; // So the filter removes the element
-            }
-            return true;
-        }, this);
-        for (let instance of this.getOkitJson().getInstances()) {
-            instance.vnics = instance.vnics.filter(function(child) {
-                if (child.subnet_id === this.id) {
-                    console.info('Deleting ' + child.hostname_label);
-                    return false; // So the filter removes the element
-                }
-                return true;
-            }, this);
-        }
-        // Remove Load Balancers
-        this.getOkitJson().getLoadBalancers() = this.getOkitJson().getLoadBalancers().filter(function(child) {
-            if (child.subnet_id === this.id) {
-                console.info('Deleting ' + child.display_name);
-                //child.delete();
-                return false; // So the filter removes the element
-            }
-            return true;
-        }, this);
-        // Remove File Storage Systems
-        this.getOkitJson().getFileStorageSystems() = this.getOkitJson().getFileStorageSystems().filter(function(child) {
-            if (child.subnet_id === this.id) {
-                console.info('Deleting ' + child.display_name);
-                //child.delete();
-                return false; // So the filter removes the element
-            }
-            return true;
-        }, this);
-        console.log();
+    deleteReferences() {
+        // Instance Volume Attachment
+        this.getOkitJson().getInstances().forEach((r) => r.vnics = r.vnics.filter((v) => v.subnet_id !== this.id))
     }
 
     /*
@@ -106,7 +71,6 @@ class Subnet extends OkitArtifact {
         this.cidr_block = `${subnet_ip}/24`;
         return this.cidr_block;
     }
-
 
     /*
     ** Container Specific Overrides

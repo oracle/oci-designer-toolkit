@@ -39,6 +39,12 @@ class NetworkSecurityGroup extends OkitArtifact {
             }
         }
     }
+    deleteReferences() {
+        // Instance VNIC Reference
+        this.getOkitJson().getInstances().forEach((r) => r.vnics.forEach((v) => v.nsg_ids = v.nsg_ids.filter((id) => id !== this.id)))
+        // Mount Target Reference
+        this.getOkitJson().getMountTargets().forEach((r) => r.nsg_ids = r.nsg_ids.filter((id) => id !== this.id))
+    }
 
     getNamePrefix() {
         return super.getNamePrefix() + 'nsg';

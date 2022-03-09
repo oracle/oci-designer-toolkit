@@ -32,23 +32,12 @@ class SubnetProperties extends OkitResourceProperties {
         this.advanced_network_tbody = advt.tbody
         this.append(advd.div, advt.table)
         // Availability Domain
-        const ad_data = {
-            options: {
-                0: 'Regional', 
-                1: 'Availability Domain 1', 
-                2: 'Availability Domain 2', 
-                3: 'Availability Domain 3'
-            }
-        }
+        const ad_data = {options: {0: 'Regional', ...this.ad_data.options}}
         const ad = this.createInput('select', 'Availability Domain', `${self.id}_availability_domain`, '', (d, i, n) => self.resource.availability_domain = n[i].value, ad_data)
         this.availability_domain = ad.input
         this.append(this.advanced_network_tbody, ad.row)
         // DNS Label
-        const dns_data = {
-            maxlength: '15',
-            pattern: '^[a-zA-Z][a-zA-Z0-9]{0,15}$',
-            title: 'Only letters and numbers, starting with a letter. 15 characters max.'
-        }
+        const dns_data = this.dns_data
         const dns = this.createInput('text', 'DNS Label', `${self.id}_dns_label`, '', (d, i, n) => {n[i].reportValidity(); self.resource.dns_label = n[i].value}, dns_data)
         this.dns_label = dns.input
         this.append(this.advanced_network_tbody, dns.row)

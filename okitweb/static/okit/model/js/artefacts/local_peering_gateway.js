@@ -28,7 +28,10 @@ class LocalPeeringGateway extends OkitArtifact {
     /*
     ** Delete Processing
      */
-    deleteChildren() {}
+    deleteReferences() {
+        // Remove Route Rules
+        this.getOkitJson().getRouteTables().forEach((rt) => rt.route_rules = rt.route_rules.filter((d) => d.network_entity_id !== this.id))        
+    }
 
 
     getNamePrefix() {

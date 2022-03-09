@@ -252,7 +252,12 @@ class OkitArtifact {
     get list_name() {return `${this.resource_type.toLowerCase().split(' ').join('_')}s`;}
     get json_model_list() {return this.okit_json[this.list_name];}
     set json_model_list(list) {this.okit_json[this.list_name] = list;}
-    get children() {return Object.values(this.getOkitJson()).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter((r) => r.parent_id === this.id)}
+    get children() {return Object.values(this.getOkitJson()).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter(this.child_filter)}
+    /*
+    ** Filters
+     */
+    not_child_filter = (r) => true
+    child_filter = (r) => false
 
     /*
     ** Clone Functionality
@@ -281,6 +286,16 @@ class OkitArtifact {
         }
         if ((update.resource_name === undefined || update.resource_name === '') && update.display_name) update.resource_name = this.generateResourceNameFromDisplayName(update.display_name)
         $.extend(true, this, this.clean(update));
+    }
+    /*
+    ** Filter Resources
+    */
+    filter(filter) {
+        if (filter) {
+            Object.entries(this.getOkitJson()).forEach(([k, v]) => {
+                if (Array.isArray(v)) {this.getOkitJson()[k] = v.filter(filter)}
+            })
+        }
     }
 
     /*
@@ -314,13 +329,20 @@ class OkitArtifact {
      */
     delete() {
         console.info('Delete (Default) ' + this.getArtifactReference() + ' : ' + this.id);
+        // First Delete Children
+        this.children.forEach((r) => r.delete())
+        // Remove References
+        this.deleteReferences()
+        // Delete This Resource
         this.json_model_list = this.json_model_list.filter((e) => e.id != this.id)
-        // Delete Child Artifacts
-        this.deleteChildren();
     }
 
+    deleteReferences() {}
+
     deleteChildren() {
-        console.warn('Default empty deleteChildren()');
+        this.children.forEach((r) => r.delete())
+        // Filter keeps resource no released to this resource
+        this.filter(this.not_child_filter)
     }
 
     getChildren(artefact) {

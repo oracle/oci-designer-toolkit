@@ -45,12 +45,6 @@ class LoadBalancer extends OkitArtifact {
         if (this.shape_name !== undefined) {this.shape = this.shape_name; delete this.shape_name;}
     }
 
-
-    /*
-    ** Delete Processing
-     */
-    deleteChildren() {}
-
     getNamePrefix() {
         return super.getNamePrefix() + 'lb';
     }
@@ -86,3 +80,4 @@ OkitJson.prototype.getLoadBalancer = function(id='') {
 OkitJson.prototype.deleteLoadBalancer = function(id) {
     this.load_balancers = this.load_balancers ? this.load_balancers.filter((r) => r.id !== id) : []
 }
+OkitJson.prototype.filterLoadBalancers = function(filter) {this.load_balancers = this.load_balancers ? this.load_balancers.filter(filter) : []}

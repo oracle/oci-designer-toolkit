@@ -46,29 +46,12 @@ class Instance extends OkitArtifact {
         //this.launch_options_specified = false;
         //this.launch_options = {boot_volume_type: '', firmware: '', is_consistent_volume_naming_enabled: false, is_pv_encryption_in_transit_enabled: false, network_type: '', remote_data_volume_type: ''};
         this.block_storage_volume_ids = [];
-        this.object_storage_bucket_ids = [];
-        this.autonomous_database_ids = [];
+        this.volume_attachments = []
         this.preserve_boot_volume = false;
         this.is_pv_encryption_in_transit_enabled = false;
         // Update with any passed data
         this.merge(data);
         this.convert();
-        // Check if built from a query
-        // if (this.availability_domain.length > 1) {
-        //     this.region_availability_domain = this.availability_domain;
-        //     this.availability_domain = this.getAvailabilityDomainNumber(this.region_availability_domain);
-        // }
-        // if (this.vnics.length > 0) {
-        //     // this.primary_vnic = this.vnics[0];
-        //     // for (let vnic of this.vnics) {
-        //     //     // vnic.region_availability_domain = vnic.availability_domain;
-        //     //     // vnic.availability_domain = this.getAvailabilityDomainNumber(vnic.region_availability_domain);
-        //     // }
-        // } else {
-        //     // this.vnics[0] = {subnet_id: '', assign_public_ip: true, nsg_ids: [], skip_source_dest_check: false, hostname_label: this.display_name.toLowerCase() + '0'};
-        //     // this.primary_vnic = {subnet_id: '', assign_public_ip: true, nsg_ids: [], skip_source_dest_check: false, hostname_label: this.display_name.toLowerCase() + '0'};
-        //     // this.vnics[0] = this.primary_vnic;
-        // }
         if (this.vnics.length === 0) this.vnics.push(this.newVnic())
         // Expose subnet_id for the first Mount target at the top level
         delete this.subnet_id;
@@ -118,6 +101,15 @@ class Instance extends OkitArtifact {
             hostname_label: this.display_name.toLowerCase().substring(0, 7)
         }
     }
+    /*
+    ** Create Volume Attachment
+    */
+   newVolumeAttachment() {
+       return {
+           volume_id: '',
+           attachment_type: 'paravirualized'
+       }
+   }
 
     /*
     ** Delete Processing
@@ -172,3 +164,4 @@ OkitJson.prototype.deleteInstance = function(id) {
 OkitJson.prototype.getInstanceByBlockVolumeId = function(id) {
     return this.getInstances().filter(i => i.block_storage_volume_ids.includes(id));
 }
+OkitJson.prototype.filterInstances = function(filter) {this.instances = this.instances ? this.instances.filter(filter) : []}

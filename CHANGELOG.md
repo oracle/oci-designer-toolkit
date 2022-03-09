@@ -8,6 +8,7 @@
     1. Block Storage Volume
 ### Bug Fixes
 1. Move clone functionality to the top level class to resolve duplicate resource_name issue.
+2. Resolve issue where vcn cidr_blocks were being converted from an array to a string.
 
 
 ## Version 0.33.0
