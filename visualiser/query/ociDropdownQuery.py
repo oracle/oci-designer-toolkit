@@ -113,6 +113,8 @@ class OCIDropdownQuery(OCIConnection):
                         resource_list = self.images(resource_list, resources)
                     elif resource_type == "Shape":
                         resource_list = self.shapes(resource_list, resources)                       
+                    elif resource_type == "VolumeBackupPolicy":
+                        resource_list = self.volume_backup_policies(resource_list, resources)                       
                     response_json[self.DISCOVER_OKIT_MAP[resource_type]] = resource_list
         return response_json
 
@@ -143,3 +145,13 @@ class OCIDropdownQuery(OCIConnection):
                 seen.append(shape['shape'])
         # logger.info(sorted([s["shape"] for s in deduplicated]))
         return sorted(deduplicated, key=lambda k: k['sort_key'])
+
+    def volume_backup_policies(self, policies, resources):
+        platform = ['Bronze', 'Silver', 'Gold']
+        for policy in policies:
+            if policy['compartment_id'] is None:
+                policy['display_name'] = policy['display_name'].title()
+                policy['sort_key'] = str(platform.index(policy['display_name']))
+            else:
+                policy['sort_key'] = policy['display_name']
+        return sorted(policies, key=lambda k: k['sort_key'])
