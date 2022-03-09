@@ -615,6 +615,10 @@ li a.parent-item:hover {
 }
 */
 
+.okit-property-editor .okit-table {
+    table-layout: fixed;
+}
+
 .okit-property-editor .okit-table .tr .td:first-child {
     width: 20em;
     font-weight: bolder;
@@ -627,7 +631,7 @@ li a.parent-item:hover {
     color: #1e2834;
     font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
     font-size: 12px;
-    table-layout: fixed;
+    /* table-layout: fixed; */
 }
 
 .okit-table .th {
