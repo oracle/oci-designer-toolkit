@@ -9,6 +9,7 @@
 ### Bug Fixes
 1. Move clone functionality to the top level class to resolve duplicate resource_name issue.
 2. Resolve issue where vcn cidr_blocks were being converted from an array to a string.
+3. Resole Delete issue which caused the subnet.js to fail to load on FireFox
 
 
 ## Version 0.33.0
