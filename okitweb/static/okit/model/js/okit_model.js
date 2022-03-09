@@ -290,7 +290,7 @@ class OkitArtifact {
     /*
     ** Filter Resources
     */
-    filter(filter) {
+    filterResources(filter) {
         if (filter) {
             Object.entries(this.getOkitJson()).forEach(([k, v]) => {
                 if (Array.isArray(v)) {this.getOkitJson()[k] = v.filter(filter)}
@@ -338,12 +338,6 @@ class OkitArtifact {
     }
 
     deleteReferences() {}
-
-    deleteChildren() {
-        this.children.forEach((r) => r.delete())
-        // Filter keeps resource no released to this resource
-        this.filter(this.not_child_filter)
-    }
 
     getChildren(artefact) {
         console.warn('Default empty getChildren()');

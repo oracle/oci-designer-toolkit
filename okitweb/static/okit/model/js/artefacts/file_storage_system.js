@@ -99,12 +99,6 @@ class FileStorageSystem extends OkitArtifact {
         if (this.hostname_label !== undefined) {this.mount_targets[0].hostname_label = this.hostname_label; delete this.hostname_label;}
     }
 
-    /*
-    ** Delete Processing
-     */
-    deleteChildren() {}
-
-
     getNamePrefix() {
         return super.getNamePrefix() + 'fss';
     }
