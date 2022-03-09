@@ -17,7 +17,8 @@ class BlockStorageVolumeProperties extends OkitResourceProperties {
     buildResource() {
         const self = this
         // Availability Domain
-        const ad = this.createInput('select', 'Availability Domain', `${self.id}_availability_domain`, '', (d, i, n) => self.resource.availability_domain = n[i].value, {options: {1: 'Availability Domain 1', 2: 'Availability Domain 2', 3: 'Availability Domain 3'}})
+        const ad_data = this.ad_data
+        const ad = this.createInput('select', 'Availability Domain', `${self.id}_availability_domain`, '', (d, i, n) => self.resource.availability_domain = n[i].value, ad_data)
         this.availability_domain = ad.input
         this.append(this.core_tbody, ad.row)
         // Size & Performance

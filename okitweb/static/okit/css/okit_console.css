@@ -66,6 +66,7 @@ textarea {
     resize: none;
     font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
     overflow: auto;
+    margin: 2px;
 }
 
 input:read-only {
@@ -151,7 +152,7 @@ summary:focus {
     background-position: center;
     background-repeat: no-repeat;
     background-size: 1em;
-    width: 1em;
+    width: 2em;
     height: 1em;
 }
 
