@@ -37,6 +37,12 @@ class OkitResourceProperties {
         pattern: '^[a-zA-Z][a-zA-Z0-9]{0,15}$',
         title: 'Only letters and numbers, starting with a letter. 15 characters max.'
     }
+    // Hostname Label
+    hostname_data = {
+        maxlength: '64',
+        pattern: '^[a-zA-Z][a-zA-Z0-9]{0,64}$',
+        title: 'Only letters and numbers, starting with a letter. 64 characters max.'
+    }
 
     compartment_filter = (r) => r.compartment_id.toString() === this.resource.compartment_id.toString()
     vcn_filter = (r) => r.vcn_id.toString() === this.resource.vcn_id.toString()
@@ -236,7 +242,7 @@ class OkitResourceProperties {
         }
     }
 
-    createInput(type='text', label='', id='', idx=0, callback=undefined, data={}) {
+    createInput(type='text', label='', id='', idx='', callback=undefined, data={}) {
         const row = d3.create('div').attr('class', 'tr').attr('id', this.trId(id, idx))
         let input = undefined
         let cell = undefined
@@ -298,6 +304,17 @@ class OkitResourceProperties {
         }
     }
 
+    createTextArea(id='', idx='', callback=undefined, data={}) {
+        const textarea = d3.create('textarea')
+            .attr('id', this.inputId(id, idx))
+            .attr('class', 'resource-documentation')
+            .attr('name', this.inputId(id, idx))
+            .attr('wrap', 'soft')
+            .on('change', callback)
+        this.addExtraAttributes(textarea, data)
+        return {input: textarea}
+    }
+
     createTable(label='', id='', idx='', callback=undefined, data={}) {
         const table = d3.create('div').attr('class', 'table okit-table')
         const thead = table.append('div').attr('class', 'thead')
@@ -305,9 +322,9 @@ class OkitResourceProperties {
         return {table: table, thead: thead, tbody: tbody}
     }
 
-    createPropertiesTable(label='', id='', idx=0, callback=undefined, data={}) {
-        const [table, thead, tbody] = this.createTable(label, id, idx, callback, data)
-        const row = thead.append('div').attr('class', 'tr')
+    createPropertiesTable(label='', id='', idx='', callback=undefined, data={}) {
+        const elements = this.createTable(label, id, idx, callback, data)
+        const row = elements.thead.append('div').attr('class', 'tr')
         row.append('div').attr('class', 'th').text('Property')
         row.append('div').attr('class', 'th').text('Value')
         return {table: table, thead: thead, tbody: tbody}

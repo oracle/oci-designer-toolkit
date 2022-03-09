@@ -98,7 +98,7 @@ class Instance extends OkitArtifact {
             assign_public_ip: true, 
             nsg_ids: [], 
             skip_source_dest_check: false, 
-            hostname_label: this.display_name.toLowerCase().substring(0, 7)
+            hostname_label: this.display_name.toLowerCase().substring(0, 64)
         }
     }
     /*
