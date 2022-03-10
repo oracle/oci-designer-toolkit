@@ -138,6 +138,7 @@ class OCIDropdownQuery(OCIConnection):
         for shape in shapes:
             if shape['shape'] not in seen:
                 shape['sort_key'] = shape['shape']
+                shape['display_name'] = shape['shape']
                 if 'ocpus' in shape:
                     split_shape = shape['shape'].split('.')
                     shape['sort_key'] = "{0:s}-{1:s}-{2:03n}-{3:03n}".format(split_shape[0], split_shape[1], shape['ocpus'], shape['memory_in_gbs'])

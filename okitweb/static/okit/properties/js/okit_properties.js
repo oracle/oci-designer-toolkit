@@ -25,10 +25,10 @@ class OkitResourceProperties {
     // Fault Domain
     fd_data = {
         options: {
-            0: 'Let Oracle Choose', 
-            1: 'Fault Domain 1', 
-            2: 'Fault Domain 2', 
-            3: 'Fault Domain 3'
+            '': 'Let Oracle Choose', 
+            'FAULT-DOMAIN-1': 'Fault Domain 1', 
+            'FAULT-DOMAIN-2': 'Fault Domain 2', 
+            'FAULT-DOMAIN-3': 'Fault Domain 3'
         }
     }
     // DNS Label
@@ -394,6 +394,7 @@ class OkitResourceProperties {
             Object.entries(groups).forEach(([k, v]) => {
                 const optgrp = select.append('optgroup').attr('label', k)
                 resources.filter(v).forEach((r, i) => {
+                    r = r instanceof Object ? r : {id: r, display_name: r}
                     const option = optgrp.append('option').attr('value', r.id).text(r.display_name)
                     if (!empty_option && i === 0 && id === '') {
                         option.attr('selected', 'selected')
@@ -403,6 +404,7 @@ class OkitResourceProperties {
             })
         } else {
             resources.filter(filter).forEach((r, i) => {
+                r = r instanceof Object ? r : {id: r, display_name: r}
                 const option = select.append('option').attr('value', r.id).text(r.display_name)
                 if (!empty_option && i === 0) {
                     option.attr('selected', 'selected')
@@ -427,5 +429,10 @@ class OkitResourceProperties {
 
     loadSelectFromMap(select, map) {
         map.forEach((v, t) => select.append('option').attr('value', v).text(t))
+    }
+
+    setMultiSelect(select, ids) {
+        const cbs = [...document.querySelectorAll(`#${select.attr('id')} input[type="checkbox"]`)]
+        cbs.forEach((c) => c.checked = ids.includes(c.value) )
     }
 }

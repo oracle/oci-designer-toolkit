@@ -153,7 +153,8 @@ class InstanceView extends OkitDesignerArtefactView {
         os = os ? os : $("#os").val()
         const self = this;
         const version_select = $(jqId('version'));
-        const osv = this.source_details.image_source === 'custom' ? okitOciData.getCustomImageOSVersions(os) : okitOciData.getPlatformImageOSVersions(os)
+        const filter = (i) => i.operating_system === os
+        const osv = this.source_details.image_source === 'custom' ? okitOciData.getCustomImageOSVersions(filter) : okitOciData.getPlatformImageOSVersions(filter)
         let version_exists = false;
         $(version_select).empty();
         for (let version of osv) {

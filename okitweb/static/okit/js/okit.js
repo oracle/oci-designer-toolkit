@@ -324,8 +324,9 @@ class OkitOCIData {
         return [...new Set(this.dropdown_data.images.filter(i => !i.compartment_id || i.compartment_id === null).map((i) => i.operating_system))].sort();
         // return [...new Set(this.dropdown_data.images.filter(i => !i.compartment_id || i.compartment_id === null).map((i) => i.operating_system))].sort((a, b) => b - a);
     }
-    getPlatformImageOSVersions(os='') {
-        return [...new Set(this.dropdown_data.images.filter(i =>( !i.compartment_id || i.compartment_id === null) && i.operating_system === os).map((i) => i.operating_system_version))].sort((a, b) => b - a);
+    getPlatformImageOSVersions(filter=undefined) {
+        filter = filter ? filter : () => true
+        return [...new Set(this.dropdown_data.images.filter((i) => !i.compartment_id || i.compartment_id === null).filter(filter).map((i) => i.operating_system_version))].sort((a, b) => b - a);
     }
 
     getCustomImages() {
@@ -335,8 +336,9 @@ class OkitOCIData {
         return [...new Set(this.dropdown_data.images.filter(i => i.compartment_id && i.compartment_id !== null).map((i) => i.operating_system))].sort();
         // return [...new Set(this.dropdown_data.images.filter(i => i.compartment_id && i.compartment_id !== null).map((i) => i.operating_system))].sort((a, b) => b - a);
     }
-    getCustomImageOSVersions(os='') {
-        return [...new Set(this.dropdown_data.images.filter(i =>( i.compartment_id && i.compartment_id !== null) && i.operating_system === os).map((i) => i.operating_system_version))].sort((a, b) => b - a);
+    getCustomImageOSVersions(filter=undefined) {
+        filter = filter ? filter : () => true
+        return [...new Set(this.dropdown_data.images.filter((i) => i.compartment_id && i.compartment_id !== null).filter(filter).map((i) => i.operating_system_version))].sort((a, b) => b - a);
     }
 
     getKubernetesVersions() {
