@@ -9,7 +9,8 @@
 ### Bug Fixes
 1. Move clone functionality to the top level class to resolve duplicate resource_name issue.
 2. Resolve issue where vcn cidr_blocks were being converted from an array to a string.
-3. Resole Delete issue which caused the subnet.js to fail to load on FireFox
+3. Resolve Delete issue which caused the subnet.js to fail to load on FireFox.
+4. Resolve issue where exporting to Resource Manager never retrieved the Regions / Compartments
 
 
 ## Version 0.33.0
