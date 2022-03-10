@@ -300,7 +300,7 @@ function generateResourceManager(results) {
         ociRegions = [];
         $(jqId('config_profile')).val(okitSettings.profile);
         // Load Compartment Select
-        loadCompartments();
+        loadOCICompartments();
         // Load Region Select
         loadRegions(selectRMLastUsedRegion);
     } else {
@@ -336,7 +336,7 @@ function displayResourceManagerDialog() {
             loadHeaderConfigDropDown()
             // Clear Existing Compartments
             okitOciData.setCompartments([]);
-            loadCompartments();
+            loadOCICompartments();
             loadRegions(selectRMLastUsedRegion);
         });
     for (let section of okitOciConfig.sections) {
@@ -375,7 +375,7 @@ function displayResourceManagerDialog() {
             .on('click', () => {
                 // Clear Existing Compartments
                 okitOciData.setCompartments([]);
-                loadCompartments();
+                loadOCICompartments();
             });
     tr.append('div')
         .attr('class', 'td')
