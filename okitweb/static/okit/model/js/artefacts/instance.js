@@ -59,6 +59,7 @@ class Instance extends OkitArtifact {
         Object.defineProperty(this, 'subnet_id', {get: function() {return this.primary_vnic.subnet_id;}, set: function(id) {this.primary_vnic.subnet_id = id;}, enumerable: true });
         Object.defineProperty(this, 'instance_type', {get: function() {return this.shape.toLowerCase().substr(0,2);}, set: function(type) {}, enumerable: true });
         Object.defineProperty(this, 'chipset', {get: function() {return this.shape.startsWith('VM.') && this.shape.includes('.E') ? 'amd' : this.shape.startsWith('VM.') && this.shape.includes('.A') ? 'arm' : 'intel'}, set: function(chipset) {}, enumerable: true });
+        Object.defineProperty(this, 'shape_series', {get: function() {return this.shape.startsWith('VM.') && this.shape.includes('.E') ? 'amd' : this.shape.startsWith('VM.') && this.shape.includes('.A') ? 'arm' : 'intel'}, set: function(chipset) {}, enumerable: true });
         Object.defineProperty(this, 'flex_shape', {get: function() {return this.shape.endsWith('.Flex')}, set: function(flex_shape) {}, enumerable: true });
     }
 
