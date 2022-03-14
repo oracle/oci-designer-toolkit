@@ -52,6 +52,11 @@ class OCIResourceManagers(OCIResourceManagerConnection):
             self.resource_managers_obj.append(OCIResourceManager(self.config, self.configfile, self.profile, resource_manager))
         return self.resource_managers_json
 
+    def getState(self, stack_id):
+        state = oci.pagination.list_call_get_all_results(self.client.get_stack_tf_state, stack_id=stack_id).data
+        state_json = self.toJson(state)
+        return state_json
+
     def createStack(self, stack):
         logger.debug('<<<<<<<<<<<<< Stack Detail >>>>>>>>>>>>>: {0!s:s}'.format(str(stack)))
         zip_source = oci.resource_manager.models.CreateZipUploadConfigSourceDetails(zip_file_base64_encoded=self.base64EncodeZip(stack))

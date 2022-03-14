@@ -97,6 +97,7 @@
         <script type="text/javascript" src="{{ url_for('static', filename='okit/properties/js/resources/' + js) }}"></script>
     {% endfor %}
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_ready.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_dialogs.js') }}"></script>
 {% endblock %}
 
 {% block headcss %}
@@ -177,8 +178,9 @@
             <li class="menu-item okit-target oci freetier"><a id="import-oci-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromOCI()">OCI Resources</a></li>
             <li class="menu-item okit-target pca"><a id="import-oci-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromPCA()">PCA-X9 Resources</a></li>
             <li class="menu-item okit-target oci freetier pca"><a id="file-load-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleLoad()">OKIT Json</a></li>
-            <li class="menu-item okit-target oci freetier pca"><a id="import-hcl-json-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromHCLJson()">Terraform Json</a></li>
+            <!-- <li class="menu-item okit-target oci freetier pca"><a id="import-hcl-json-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromHCLJson()">Terraform Json</a></li> -->
             <li class="menu-item okit-target oci freetier pca"><a id="import-tfstate-json-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromTFStateJson()">Terraform State File</a></li>
+            <li class="menu-item okit-target oci freetier"><a id="import-rmtfstate-json-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromRMTFStateJson()">Resource Manager State File</a></li>
             {% if cd3_mode %}
             <li class="menu-item okit-target oci freetier"><a id="import-cd3-xlsx-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromCd3Xlsx()">CD3 Excel</a></li>
             {% endif %}

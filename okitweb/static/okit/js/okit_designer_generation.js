@@ -307,8 +307,8 @@ function generateResourceManager(results) {
         validationFailedNotification();
     }
 }
-function displayResourceManagerDialog() {
-    $(jqId('modal_dialog_title')).text('Export To Resource Manager');
+function displayResourceManagerDialog(title='Export To Resource Manager', btn_text='Create Stack', callback=undefined, loadCompartments=loadOCICompartments) {
+    $(jqId('modal_dialog_title')).text(title);
     $(jqId('modal_dialog_body')).empty();
     $(jqId('modal_dialog_footer')).empty();
     let query_form = d3.select(d3Id('modal_dialog_body')).append('div').append('form')
