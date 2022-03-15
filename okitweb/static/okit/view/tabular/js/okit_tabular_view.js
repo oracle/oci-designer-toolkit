@@ -171,7 +171,7 @@ class OkitTabularJsonView extends OkitJsonView {
             .attr('id', 'tabular_view_tab_bar');
         // Add Tab Contents
         const tab_content = canvas_div.append('div')
-            .attr('class', 'okit-tab-contents')
+            .attr('class', 'tabular-tab-contents')
             .attr('id', 'tabular_view_tab_contents')
         // Loop through Model elements and create and create a tab for each
         Object.entries(this.getOkitJson().getResourceLists()).sort((a, b) => a[0].localeCompare(b[0])).forEach(([key, value]) => {if (value.length) this.addTab(tabbar, key);})

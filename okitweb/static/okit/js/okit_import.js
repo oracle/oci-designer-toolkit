@@ -39,7 +39,7 @@ function hclJsonLoad(evt) {
     $.ajax({
         cache: false,
         type: 'get',
-        url: 'parse/hcljson',
+        url: 'import/hcljson',
         dataType: 'text',
         contentType: 'application/json',
         data: {
@@ -97,7 +97,7 @@ function TFStateJsonLoad(evt) {
     $.ajax({
         cache: false,
         type: 'get',
-        url: 'parse/tfstate',
+        url: 'import/tfstate',
         dataType: 'text',
         contentType: 'application/json',
         data: {
@@ -115,6 +115,12 @@ function TFStateJsonLoad(evt) {
         }).always(() => {
             console.info('Parsing Complete');
         })
+}
+// Resource Manager Terraform Statefile
+function handleImportFromRMTFStateJson(e) {
+    hideNavMenu()
+    const dialog = okitDialogs.get('ImportResourceManager')
+    dialog.show()
 }
 // Oracle Cost Estimator Json
 function handleImportFromCCEJson(e) {
@@ -151,7 +157,7 @@ function cceJsonLoad(evt) {
     $.ajax({
         cache: false,
         type: 'get',
-        url: 'parse/ccejson',
+        url: 'import/ccejson',
         dataType: 'text',
         contentType: 'application/json',
         data: {
@@ -208,7 +214,7 @@ function cd3XlsxLoad(form_data) {
     console.info(form_data);
     $.ajax({
         type: 'post',
-        url: 'parse/cd3xlsx',
+        url: 'import/cd3xlsx',
         dataType: 'text', // What's Returned
         contentType: false,
         processData: false,

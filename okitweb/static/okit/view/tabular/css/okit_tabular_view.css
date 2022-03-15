@@ -7,3 +7,14 @@
  .tabular-row-selected {
     font-weight: bolder;
 }
+
+.tabular-tab-contents {
+    display: block;
+    width: 100%;
+    height: var(--tab-content-height);
+    overflow-x: auto;
+    overflow-y: scroll;
+    white-space: nowrap;
+    flex-wrap: nowrap;
+    scrollbar-width: none; /* Firefox */
+}
