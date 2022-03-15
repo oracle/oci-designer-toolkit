@@ -55,21 +55,19 @@ class OkitDialog {
     buildDialog() {}
 
     show() {
-        console.info('Show', this)
         if (this.heading) {this.heading.text(this.title)}
         if (this.body) {
-            this.body.selectAll('*').remove()
+            this.body.select('div').remove()
             const div = this.body.append('div')
             // this.body.append(this.framework.table)
             this.append(div, this.framework.table)
         }
         if (this.footer) {
-            this.footer.selectAll('*').remove()
+            this.footer.select('div').remove()
             const div = this.footer.append('div')
             // this.footer.append(this.action.button)
             this.append(div, this.action.button)
         }
-        console.info('Showing', this.wrapper)
         this.wrapper.classed('hidden', false)
         this.load()
     }
@@ -144,39 +142,140 @@ class OkitImportResourceManagerDialog extends OkitDialog {
     constructor(wrapper=undefined, heading=undefined, body=undefined, footer=undefined) {
         super(wrapper, heading, body, footer)
         this.title = 'Import Resource Manager Terraform State'
+        this.responses.profile = okitSettings.profile
+        this.responses.region = okitSettings.last_used_region
+        this.responses.compartment_id = okitSettings.last_used_compartment
+        this.responses.stack_id = ''
     }
 
     buildDialog() {
         const idx = ''
         // Config Profile
-        this.profile = this.createInput('select', 'Profile', `${this.id}_config_profile`, idx, (d, i, n) => this.responses.profile = n[i].value)
+        this.profile = this.createInput('select', 'Profile', `${this.id}_config_profile`, idx, (d, i, n) => {this.responses.profile = n[i].value; this.profileChanged()})
         this.append(this.framework.tbody, this.profile.row)
+        this.profile.input.append('option').attr('value', '').text('Retrieving......')
         // Region
-        this.region = this.createInput('select', 'Region', `${this.id}_region`, idx, (d, i, n) => this.responses.region = n[i].value)
+        this.region = this.createInput('select', 'Region', `${this.id}_region`, idx, (d, i, n) => {this.responses.region = n[i].value; this.loadStacks()})
         this.append(this.framework.tbody, this.region.row)
+        this.region.input.append('option').attr('value', '').text('Retrieving......')
         // Compartment
-        this.compartment = this.createInput('select', 'Compartment', `${this.id}_compartment`, idx, (d, i, n) => this.responses.compartment = n[i].value)
+        this.compartment = this.createInput('select', 'Compartment', `${this.id}_compartment`, idx, (d, i, n) => {this.responses.compartment_id = n[i].value; this.loadStacks()})
         this.append(this.framework.tbody, this.compartment.row)
+        this.compartment.input.append('option').attr('value', '').text('Retrieving......')
         // Stack
-        this.stack = this.createInput('select', 'Stack', `${this.id}_stack`, idx, (d, i, n) => this.responses.stack = n[i].value)
+        this.stack = this.createInput('select', 'Stack', `${this.id}_stack`, idx, (d, i, n) => this.responses.stack_id = n[i].value)
         this.append(this.framework.tbody, this.stack.row)
+        this.stack.input.append('option').attr('value', '').text('Retrieving......')
         // Action
-        this.action = this.createButton('Import', `${this.id}_action`, idx, () => {})
+        this.action = this.createButton('Import', `${this.id}_action`, idx, () => {
+            console.info('Import Action', this.responses)
+            $.ajax({
+                cache: false, 
+                type: 'get',
+                url: 'import/rmtfstate',
+                data: this.responses
+            }).done((resp) => {
+                resp = resp instanceof Object ? resp : JSON.parse(resp)
+                okitJsonModel = new OkitJson(JSON.stringify(resp.okit_json));
+                newDesignerView();
+                displayOkitJson();
+                displayDesignerView();
+                displayTreeView();    
+            }).always(() => {this.wrapper.classed('hidden', true)})
+        })
+    }
+
+    clear() {
+        this.region.input.selectAll('*').remove()
+        this.region.input.append('option').attr('value', '').text('Retrieving......')
+        this.compartment.input.selectAll('*').remove()
+        this.compartment.input.append('option').attr('value', '').text('Retrieving......')
+        this.stack.input.selectAll('*').remove()
+        this.stack.input.append('option').attr('value', '').text('Retrieving......')
     }
 
     load() {
-        this.loadConfigProfiles().then(() => {console.info('Then after load profiles')})
+        this.clear()
+        this.loadConfigProfiles().then(() => {
+            this.profileChanged()
+            // Promise.all([this.loadRegions(), this.loadCompartments()]).then(values => this.loadStacks())
+        })
+    }
+
+    profileChanged() {
+        Promise.all([this.loadRegions(), this.loadCompartments()]).then(values => this.loadStacks())
     }
 
     loadConfigProfiles() {
         return $.ajax({cache: false, type: 'get', url: 'config/sections'}).done((resp) => {
             const options = resp.sections.map((s) => {return {value: s, text: s}})
-            console.info('Options', options)
+            this.loadSelect(this.profile.input, options)
+            this.profile.input.property('value', this.responses.profile)
+        })
+    }
+
+    loadRegions() {
+        this.region.input.selectAll('*').remove()
+        this.region.input.append('option').attr('value', '').text('Retrieving......')
+        return $.ajax({
+            cache: false, 
+            type: 'get', 
+            url: `oci/regions/${this.responses.profile}`,
+            data: {
+                config_profile: this.responses.profile
+            }
+        }).done((resp) => {
+            resp = resp instanceof Object ? resp : JSON.parse(resp)
+            const options = resp.map((r) => {return {value: r.name, text: r.display_name}}).sort((a, b) => a.value < b.value ? -1 : a.value > b.value ? 1 : 0)
+            this.loadSelect(this.region.input, options)
+            this.responses.region = options.map((o) => o.value).includes(this.responses.region) ? this.responses.region : options.length > 0 ? resp.filter((r) => r.is_home_region)[0].name : ''
+            this.region.input.property('value', this.responses.region)
+        })
+    }
+
+    loadCompartments() {
+        this.compartment.input.selectAll('*').remove()
+        this.compartment.input.append('option').attr('value', '').text('Retrieving......')
+        return $.ajax({
+            cache: false, 
+            type: 'get', 
+            url: `oci/compartments/${this.responses.profile}`,
+            data: {
+                config_profile: this.responses.profile
+            }
+        }).done((resp) => {
+            resp = resp instanceof Object ? resp : JSON.parse(resp)
+            const options = resp.map((c) => {return {value: c.id, text: c.canonical_name}})
+            this.loadSelect(this.compartment.input, options)
+            this.responses.compartment_id = options.map((o) => o.value).includes(this.responses.compartment_id) ? this.responses.compartment_id : options.length > 0 ? options[0].value : ''
+            this.compartment.input.property('value', this.responses.compartment_id)
+        })
+    }
+
+    loadStacks() {
+        this.stack.input.selectAll('*').remove()
+        this.stack.input.append('option').attr('value', '').text('Retrieving......')
+        return $.ajax({
+            cache: false, 
+            type: 'get',
+            url: 'oci/resourcemanager',
+            data: {
+                config_profile: this.responses.profile,
+                compartment_id: this.responses.compartment_id,
+                region: this.responses.region
+            }
+        }).done((resp) => {
+            resp = resp instanceof Object ? resp : JSON.parse(resp)
+            const options = resp.map((r) => {return {value: r.id, text: r.display_name}})
+            this.loadSelect(this.stack.input, options)
+            this.responses.stack_id = options.map((o) => o.value).includes(this.responses.stack_id) ? this.responses.stack_id : options.length > 0 ? options[0].value : ''
+            this.stack.input.property('value', this.responses.stack_id)
         })
     }
 
     loadSelect(select, options) {
-
+        select.selectAll('*').remove()
+        options.forEach((o) => select.append('option').attr('value', o.value).text(o.text))
     }
 }
 

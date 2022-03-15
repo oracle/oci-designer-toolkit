@@ -54,7 +54,7 @@ def parseTfStateJson():
     if request.method == 'GET':
         import_json = json.loads(request.args.get('json', '{}'))
         logJson(import_json)
-        # Import HCL
+        # Import State
         parser = OkitTfStateFileParser()
         response_json = parser.parse(import_json)
         logJson(response_json)
@@ -65,7 +65,7 @@ def parseTfStateJson():
 @bp.route('rmtfstate', methods=(['GET']))
 def parseRmTfStateJson():
     if request.method == 'GET':
-        config_profile = request.args.get('config_profile', default='DEFAULT')
+        config_profile = request.args.get('profile', default='DEFAULT')
         compartment_id = request.args.get('compartment_id')
         region = request.args.get('region')
         stack_id = request.args.get('stack_id', '')
@@ -73,7 +73,8 @@ def parseRmTfStateJson():
         oci_resourcemanager = OCIResourceManagers(config=config, profile=config_profile, compartment_id=compartment_id)
         import_json = oci_resourcemanager.getState(stack_id)
         logJson(import_json)
-        # Import HCL
+        # Import State
+        response_json = {}
         parser = OkitTfStateFileParser()
         response_json = parser.parse(import_json)
         logJson(response_json)
