@@ -25,7 +25,8 @@ class OkitJson {
             created: now,
             updated: now,
             okit_version: okitVersion,
-            okit_model_id: `okit-model-${uuidv4()}`
+            okit_model_id: `okit-model-${uuidv4()}`,
+            file: this.newFileData()
         }
         this.user_defined = {terraform: ''};
         this.freeform_tags = {};
@@ -52,6 +53,18 @@ class OkitJson {
         const resource = Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter((r) => r.id === id)[0]
         console.info('Resource', resource)
         return resource
+    }
+
+    newFileData() {
+        return {
+            name: '',
+            generate_terraform: false,
+            terraform_dir: ''
+        }
+    }
+
+    clone() {
+        return new OkitJson(JSON.stringify(this))
     }
 
     /*

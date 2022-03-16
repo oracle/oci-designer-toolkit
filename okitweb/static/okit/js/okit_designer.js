@@ -271,7 +271,7 @@ const ajaxCallFailed = ((xhr, status, error) => {
     console.error('Status : '+ status)
     console.error('Error : '+ error)
 })
-function displaySaveAsDialog(title, callback, root_dir='templates/user', placeholder='<Directory Path>/<Filename>.json', ext='.json', generate=false) {
+function displaySaveAsDialog(title, callback, root_dir='templates/user', placeholder='<Directory Path>/<Filename>.json', ext='.json', generate=false, model=undefined) {
     $(jqId('modal_dialog_title')).text(title);
     $(jqId('modal_dialog_body')).empty();
     $(jqId('modal_dialog_footer')).empty();
@@ -292,6 +292,10 @@ function displaySaveAsDialog(title, callback, root_dir='templates/user', placeho
             if (!name.endsWith(ext)) name = `${name}/${okitJsonModel.title.split(' ').join('_').toLowerCase()}${ext}`
             $('#template_file_name').val(name)
             $('#terraform_dir').val(name.replace(/\.[^/.]+$/, ''))
+            if (model) {
+                model.metadata.file.name = $('#template_file_name').val()
+                model.metadata.file.terraform_dir = $('#terraform_dir').val()
+            }
         })
     $.ajax({
         cache: false,
@@ -336,6 +340,7 @@ function displaySaveAsDialog(title, callback, root_dir='templates/user', placeho
         .on('blur', () => {
             $('#template_file_name').val($('#template_file_name').val().replace(' ', '_').replace('\\', '/'))
             $('#terraform_dir').val($('#template_file_name').val().replace(/\.[^/.]+$/, ''))
+            if (model) model.metadata.file.name = $('#template_file_name').val()
         });
     // Generate On Save
     tr = tbody.append('div').attr('class', `tr ${generate ? '' : 'collapsed'}`)
@@ -344,7 +349,10 @@ function displaySaveAsDialog(title, callback, root_dir='templates/user', placeho
         .attr('id', 'generate_terraform_on_save')
         .attr('name', 'generate_terraform_on_save')
         .attr('type', 'checkbox')
-        .on('change', () => {$('#terraform_dir').prop('readonly', !$('#generate_terraform_on_save').is(':checked'))})
+        .on('change', () => {
+            $('#terraform_dir').prop('readonly', !$('#generate_terraform_on_save').is(':checked'))
+            if (model) model.metadata.file.generate_terraform = $('#generate_terraform_on_save').is(':checked')
+        })
     td.append('label')
         .attr('for', 'generate_terraform_on_save')
         .text('Generate Terraform');
@@ -365,7 +373,10 @@ function displaySaveAsDialog(title, callback, root_dir='templates/user', placeho
                 d3.event.preventDefault()
             }
         })
-        .on('blur', () => {$('#terraform_dir').val($('#terraform_dir').val().replace(' ', '_').replace('\\', '/'))})
+        .on('blur', () => {
+            $('#terraform_dir').val($('#terraform_dir').val().replace(' ', '_').replace('\\', '/'))
+            if (model) model.metadata.file.terraform_dir = $('#terraform_dir').val()
+        })
     // Submit Button
     const submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
         .attr('id', 'submit_btn')
@@ -380,97 +391,26 @@ function displaySaveAsDialog(title, callback, root_dir='templates/user', placeho
             }
             callback(data)
         });
-    $(jqId('modal_dialog_wrapper')).removeClass('hidden');
-}
-function displaySaveAsDialogOld(title, callback, root_dir='templates/user', placeholder='<Directory Path>/<Filename>.json', ext='.json', generate=false) {
-    $(jqId('modal_dialog_title')).text(title);
-    $(jqId('modal_dialog_body')).empty();
-    $(jqId('modal_dialog_footer')).empty();
-    // Add Save Options
-    const table = d3.select(d3Id('modal_dialog_body')).append('div').append('div')
-        .attr('class', 'table okit-table okit-modal-dialog-table');
-    const tbody = table.append('div').attr('class', 'tbody');
-    let tr = undefined
-    let td = undefined
-    // Template Directory
-    const templates_select = tbody.append('div').attr('class', 'tr').append('div').attr('class', 'td').append('select')
-        .attr('id', 'user_template_select')
-        .attr('size', '10')
-        .on('click', () => {
-            let name = $('#user_template_select').val().replace(root_dir, '')
-            if (!name.endsWith(ext)) name = `${name}/${okitJsonModel.title.split(' ').join('_').toLowerCase()}${ext}`
-            $('#template_file_name').val(name)
-        })
-    $.ajax({
-        cache: false,
-        type: 'get',
-        url: `templates/load`,
-        dataType: 'text', // Response Type
-        contentType: 'application/json', // Sent Message Type
-        data: {
-            root_dir: root_dir
-        }, // Arguments
-        success: function(resp) {
-            hierarchy = JSON.parse(resp)
-            console.info(hierarchy)
-            const add_dir = (select, depth, dir) => {
-                dir.files.forEach(file => select.append('option').attr('style', `padding-left: ${depth * 1}em`).attr('value', `${dir.path}/${file.json}`).text(file.json))
-                dir.dirs.forEach((d) => {
-                    select.append('option').attr('style', `padding-left: ${depth * 1}em; font-weight: bolder`).attr('value', `${d.path}`).text(d.name)
-                    add_dir(select, (depth + 1), d)
-                })
-            }
-            add_dir(templates_select, 1, hierarchy)
-        },
-        error: function(xhr, status, error) {
-            console.error('Status : '+ status)
-            console.error('Error : '+ error)
-        }
-    });
-    // Template name
-    tbody.append('div').attr('class', 'tr').append('div').attr('class', 'td').text('Name');
-    tbody.append('div').attr('class', 'tr').append('div').attr('class', 'td').append('input')
-        .attr('class', 'okit-input')
-        .attr('id', 'template_file_name')
-        .attr('name', 'template_file_name')
-        .attr('type', 'text')
-        .attr('placeholder', placeholder)
-        .on('keydown', (e) => {
-            if (d3.event.keyCode == 220) {
-                d3.event.preventDefault()
-            } else if (d3.event.keyCode == 32) {
-                d3.event.preventDefault()
-            }
-        })
-        .on('blur', () => {$('#template_file_name').val($('#template_file_name').val().replace(' ', '_').replace('\\', '/'))});
-    // Generate On Save
-    tr = tbody.append('div').attr('class', `tr ${generate ? '' : 'collapsed'}`)
-    td = tr.append('div').attr('class', 'td')
-    td.append('input')
-        .attr('id', 'generate_terraform_on_save')
-        .attr('name', 'generate_terraform_on_save')
-        .attr('type', 'checkbox');
-    td.append('label')
-        .attr('for', 'generate_terraform_on_save')
-        .text('Generate Terraform');
-    // Submit Button
-    const submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
-        .attr('id', 'submit_btn')
-        .attr('type', 'button')
-        .text('Save')
-        .on('click', callback);
+    if (model) {
+        $('#template_file_name').val(model.metadata.file.name)
+        $('#terraform_dir').val(model.metadata.file.terraform_dir)
+        $('#generate_terraform_on_save').prop('checked', model.metadata.file.generate_terraform)
+        $('#terraform_dir').prop('readonly', !model.metadata.file.generate_terraform)
+    }
     $(jqId('modal_dialog_wrapper')).removeClass('hidden');
 }
 function handleSaveAsTemplate(e) {
     const root_dir = 'templates/user'
     displaySaveAsDialog('Save as Template', () => {
         okitJsonModel.updated = getCurrentDateTime();
+        const templateModel = okitJsonModel.clone()
+        templateModel.metadata.file = templateModel.newFileData()
         $.ajax({
             type: 'post',
             url: 'template/save',
             dataType: 'text',
             contentType: 'application/json',
-            data: JSON.stringify({root_dir: root_dir, template_file: $('#template_file_name').val(), okit_json: okitJsonModel}),
+            data: JSON.stringify({root_dir: root_dir, template_file: $('#template_file_name').val(), okit_json: templateModel}),
             success: function(resp) {
                 console.info('Response : ' + resp);
                 loadTemplatePanel();
@@ -517,7 +457,7 @@ const loadTemplatePanel = () => {
  */
 function handleSaveToGit(e) {
     const root_dir = 'git'
-    displaySaveAsDialog('Save to Git', saveToGit, root_dir, '<Directory Path>/<Filename>.json', '.json', true)
+    displaySaveAsDialog('Save to Git', saveToGit, root_dir, '<Directory Path>/<Filename>.json', '.json', true, okitJsonModel)
 }
 const saveToGit = (data={}) => {
     okitJsonModel.updated = getCurrentDateTime();
@@ -564,7 +504,7 @@ const loadGitPanel = () => {
  */
 function handleSaveToContainer(e) {
     const root_dir = 'local'
-    displaySaveAsDialog('Save to Container', saveToContainer, root_dir, '<Directory Path>/<Filename>.json', '.json', true)
+    displaySaveAsDialog('Save to Container', saveToContainer, root_dir, '<Directory Path>/<Filename>.json', '.json', true, okitJsonModel)
 }
 const saveToContainer = (data={}) => {
     okitJsonModel.updated = getCurrentDateTime();

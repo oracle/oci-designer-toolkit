@@ -377,7 +377,7 @@ class OkitOCIData {
     }
 
     getRegions() {
-        return this.dropdown_data.regions;
+        return okitRegions.getRegions();
     }
 
     getCompartments() {
