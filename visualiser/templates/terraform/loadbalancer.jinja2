@@ -32,7 +32,7 @@ resource "oci_load_balancer_load_balancer" "{{ resource_name }}" {
     ip_mode   = {{ ip_mode | safe }}
 {% endif %}
 {% if network_security_group_ids is defined %}
-    network_security_group_ids   = {{ network_security_group_ids }}
+    network_security_group_ids   = [{% for nsg_id in network_security_group_ids %}{{ nsg_id }}{% if not loop.last %},{% endif %}{% endfor %}]
 {% endif %}
 {% if shape_details is defined %}
     shape_details {

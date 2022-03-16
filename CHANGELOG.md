@@ -11,6 +11,8 @@
 2. Resolve issue where vcn cidr_blocks were being converted from an array to a string.
 3. Resolve Delete issue which caused the subnet.js to fail to load on FireFox.
 4. Resolve issue where exporting to Resource Manager never retrieved the Regions / Compartments
+5. Fix issue where Load Balancers with NSGs were generating invalid Terraform
+6. Resolve issue where Region List was being returned as undefined.
 
 
 ## Version 0.33.0

@@ -1500,11 +1500,12 @@ class OCIGenerator(object):
             self.addJinja2Variable("ip_mode", resource["ip_mode"], standardisedName)
         # ---- Network Security Groups
         if len(resource['network_security_group_ids']):
-            jinja2_network_security_group_ids = []
-            for network_security_group_id in resource.get('network_security_group_ids', []):
-                network_security_group = self.id_name_map[network_security_group_id]
-                jinja2_network_security_group_ids.append(self.formatJinja2IdReference(self.standardiseResourceName(network_security_group)))
-            self.jinja2_variables["network_security_group_ids"] = jinja2_network_security_group_ids
+            self.jinja2_variables["network_security_group_ids"] = [self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[id])) for id in resource["network_security_group_ids"]]
+            # jinja2_network_security_group_ids = []
+            # for network_security_group_id in resource.get('network_security_group_ids', []):
+            #     network_security_group = self.id_name_map[network_security_group_id]
+            #     jinja2_network_security_group_ids.append(self.formatJinja2IdReference(self.standardiseResourceName(network_security_group)))
+            # self.jinja2_variables["network_security_group_ids"] = jinja2_network_security_group_ids
         else:
             self.jinja2_variables.pop("network_security_group_ids", None)
         # ---- Tags
