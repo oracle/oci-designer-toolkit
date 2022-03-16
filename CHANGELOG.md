@@ -6,6 +6,8 @@
 ### Features
 1. New Properties Sheet format added for 
     1. Block Storage Volume
+2. Add Option to Generate Terraform on Save
+3. Store Save Filename within model to allow for it to be populated during Save.
 ### Bug Fixes
 1. Move clone functionality to the top level class to resolve duplicate resource_name issue.
 2. Resolve issue where vcn cidr_blocks were being converted from an array to a string.
