@@ -17,6 +17,7 @@ class DhcpOption extends OkitArtifact {
         // this.display_name = this.generateDefaultName(okitjson.dhcp_options.length + 1);
         this.compartment_id = '';
         this.vcn_id = '';
+        // this.options = []
         this.options = [this.newOption()]
         this.default = false;
         // Update with any passed data
@@ -34,7 +35,7 @@ class DhcpOption extends OkitArtifact {
     newOption() {
         return {
             type: "DomainNameServer",
-            server_type: "CustomDnsServer",
+            server_type: "VcnLocalPlusInternet",
             custom_dns_servers: [],
             search_domain_names: []
         }
@@ -64,7 +65,6 @@ class DhcpOption extends OkitArtifact {
    addDefaultOptions(vcn_name) {
         const search_domain = this.newOption()
         search_domain.type =  "SearchDomain"            
-        // search_domain.search_domain_names = [`${vcn_name.split('-').join('')}.oraclevcn.com`]
         search_domain.search_domain_names = [`${this.getVcnDnsLabel()}.oraclevcn.com`]
         this.options.push(search_domain)
    }
