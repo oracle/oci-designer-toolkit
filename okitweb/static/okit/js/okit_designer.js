@@ -186,6 +186,8 @@ function handleLoad(evt) {
     ** Add Load File Handling
      */
     $('#files').off('change').on('change', handleFileSelect);
+    $('#files').attr('accept', '.json');
+    $('#files').prop('accept', 'application/json');
     // Click Files Element
     let fileinput = document.getElementById("files");
     fileinput.click();
