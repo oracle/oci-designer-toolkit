@@ -12,6 +12,7 @@ __module__ = "okitTfStateFileParser"
 
 
 import json
+from warnings import catch_warnings
 from common.okitLogging import getLogger
 
 # Configure logging
@@ -31,6 +32,7 @@ class OkitTfStateFileParser(object):
         "oci_core_internet_gateway":        "internet_gateways",
         "oci_load_balancer_load_balancer":  "load_balancers",
         "oci_core_local_peering_gateway":   "local_peering_gateways",
+        "oci_mysql_mysql_db_system":        "mysql_database_systems",
         "oci_core_nat_gateway":             "nat_gateways",
         "oci_core_network_security_group":  "network_security_groups",
         "oci_objectstorage_bucket":         "object_storage_buckets",
@@ -42,6 +44,17 @@ class OkitTfStateFileParser(object):
         "oci_core_subnet":                  "subnets",
         "oci_core_vcn":                     "virtual_cloud_networks"
     }
+
+    tf_ref_map = {
+        "oci_file_storage_export":       "oci_file_storage_export",
+        "oci_file_storage_export_set":   "oci_file_storage_export_set",
+        "oci_file_storage_mount_target": "oci_file_storage_mount_target",
+        "oci_load_balancer_backend":     "oci_load_balancer_backend",
+        "oci_load_balancer_backend_set": "oci_load_balancer_backend_set",
+        "oci_load_balancer_listener":    "oci_load_balancer_listener"
+    }
+
+    removes_keys = ["state", "time_created", "timeouts", "sensitive_attributes", "private", "dependencies"]
 
     def __init__(self, source_json=None):
         self.source_json = source_json
@@ -56,7 +69,7 @@ class OkitTfStateFileParser(object):
             },
             "compartments": [
                 {
-                    "id": "var.compartment_id",
+                    # "id": "var.compartment_id",
                     "name": "okit-root",
                     "compartment_id": None,
                     "parent_id": "canvas",
@@ -72,11 +85,13 @@ class OkitTfStateFileParser(object):
         
         self.okit_json = self.initialiseOkitJson()
         result_json = {"okit_json": {}, "warnings": {}}
+        known_map = self.tf_map.copy()
+        known_map.update(self.tf_ref_map)
 
         if self.source_json is not None:
             managed_resources = [r for r in self.source_json["resources"] if r["mode"] == "managed"]
             for resource in managed_resources:
-                okit_list = self.tf_map.get(resource["type"], None)
+                okit_list = known_map.get(resource["type"], None)
                 if okit_list is None:
                     result_json["warnings"][resource["type"]] = f'Unknown Resource Type {resource["type"]}'
                     logger.warn(result_json["warnings"][resource["type"]])
@@ -100,18 +115,88 @@ class OkitTfStateFileParser(object):
                         else:
                             self.okit_json[okit_list].append(okit_resource)
             # Post Process to resolve Defaults
-            for key, val in self.okit_json.items(): 
-                if key in ["dhcp_options", "route_tables", "security_lists"]:
+            # for key, val in self.okit_json.items(): 
+            #     if key in ["dhcp_options", "route_tables", "security_lists"]:
+            #         for okit_resource in val:
+            #             if "manage_default_resource_id" in okit_resource:
+            #                 for dependency in okit_resource["dependencies"]:
+            #                     parts = dependency.split(".")
+            #                     if parts[0] == "oci_core_vcn":
+            #                         vcn = [vcn for vcn in self.okit_json["virtual_cloud_networks"] if vcn["resource_name"] == parts[-1]]
+            #                         if len(vcn) > 0:
+            #                             okit_resource["vcn_id"] = vcn[0]["id"]
+            #                             del okit_resource["manage_default_resource_id"]
+            # Post Process Results
+            for key, val in self.okit_json.items():
+                try:
+                    func = getattr(self, key)
+                    func(val)
+                except AttributeError as e:
+                    # Ask for Forgiveness
+                    logger.info(f"No post processing for {key}")
+            # Remove Unwanted Keys
+            for key, val in self.okit_json.items():
+                if isinstance(val, list):
                     for okit_resource in val:
-                        if "manage_default_resource_id" in okit_resource:
-                            for dependency in okit_resource["dependencies"]:
-                                parts = dependency.split(".")
-                                if parts[0] == "oci_core_vcn":
-                                    vcn = [vcn for vcn in self.okit_json["virtual_cloud_networks"] if vcn["resource_name"] == parts[-1]]
-                                    if len(vcn) > 0:
-                                        okit_resource["vcn_id"] = vcn[0]["id"]
-                                        del okit_resource["manage_default_resource_id"]
+                        for key in self.removes_keys:
+                            try:
+                                del okit_resource[key]
+                            except KeyError as e:
+                                # Ignore
+                                pass
+            # Remove Reference Resources
+            for key in self.tf_ref_map:
+                try:
+                    logger.info(f'Removing {key}')
+                    del self.okit_json[key]
+                except KeyError as e:
+                    # Ignore
+                    pass
+            # Assign Response
             result_json["okit_json"] = self.okit_json
             logger.info("Parsed Resources")
-
+    
         return result_json
+
+    def dhcp_options(self, val, **kwargs):
+        for okit_resource in val:
+            if "manage_default_resource_id" in okit_resource:
+                for dependency in okit_resource["dependencies"]:
+                    parts = dependency.split(".")
+                    if parts[0] == "oci_core_vcn":
+                        vcn = [vcn for vcn in self.okit_json["virtual_cloud_networks"] if vcn["resource_name"] == parts[-1]]
+                        if len(vcn) > 0:
+                            okit_resource["vcn_id"] = vcn[0]["id"]
+                            del okit_resource["manage_default_resource_id"]
+        return
+    
+    def load_balancers(self, val, **kwargs):
+        for okit_resource in val:
+            okit_resource["backend_sets"] = [r for r in self.okit_json["oci_load_balancer_backend_set"] if r["load_balancer_id"] == okit_resource["id"]]
+            okit_resource["listeners"] = [r for r in self.okit_json["oci_load_balancer_listener"] if r["load_balancer_id"] == okit_resource["id"]]
+            backend_ips = [backend["ip_address"] for backend_set in okit_resource["backend_sets"] for backend in backend_set["backend"]]
+            logger.info(f'Backend IPs {backend_ips}')
+
+    def route_tables(self, val, **kwargs):
+        for okit_resource in val:
+            if "manage_default_resource_id" in okit_resource:
+                for dependency in okit_resource["dependencies"]:
+                    parts = dependency.split(".")
+                    if parts[0] == "oci_core_vcn":
+                        vcn = [vcn for vcn in self.okit_json["virtual_cloud_networks"] if vcn["resource_name"] == parts[-1]]
+                        if len(vcn) > 0:
+                            okit_resource["vcn_id"] = vcn[0]["id"]
+                            del okit_resource["manage_default_resource_id"]
+        return
+
+    def security_lists(self, val, **kwargs):
+        for okit_resource in val:
+            if "manage_default_resource_id" in okit_resource:
+                for dependency in okit_resource["dependencies"]:
+                    parts = dependency.split(".")
+                    if parts[0] == "oci_core_vcn":
+                        vcn = [vcn for vcn in self.okit_json["virtual_cloud_networks"] if vcn["resource_name"] == parts[-1]]
+                        if len(vcn) > 0:
+                            okit_resource["vcn_id"] = vcn[0]["id"]
+                            del okit_resource["manage_default_resource_id"]
+        return

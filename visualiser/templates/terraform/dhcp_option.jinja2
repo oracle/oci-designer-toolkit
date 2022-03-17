@@ -16,7 +16,7 @@ locals {
 {% else %}
 # ------ Create Dhcp Options
 {% if manage_default_resource_id is defined %}
-# ------- Update VCN Default Route Table
+# ------- Update VCN Default DHCP Option
 resource "oci_core_default_dhcp_options" "{{ resource_name }}" {
     # Required
     manage_default_resource_id = {{ manage_default_resource_id }}
@@ -31,10 +31,11 @@ resource "oci_core_dhcp_options" "{{ resource_name }}" {
         type  = {{ option.type | safe }}
     {% if option.server_type is defined and option.server_type | length > 0 %}
         server_type = {{ option.server_type | safe }}
-        {% if option.custom_dns_servers is defined %}
+    {% endif %}
+    {% if option.custom_dns_servers is defined %}
         custom_dns_servers       = [{{ option.custom_dns_servers | safe }}]
-        {% endif %}
-    {% else %}
+    {% endif %}
+    {% if option.search_domain_names is defined %}
         search_domain_names      = [{{ option.search_domain_names | safe }}]
     {% endif %}
     }

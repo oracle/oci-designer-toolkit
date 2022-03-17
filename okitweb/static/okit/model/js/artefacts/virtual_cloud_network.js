@@ -66,18 +66,6 @@ class VirtualCloudNetwork extends OkitArtifact {
 
     getGateways() {
         return [...this.getInternetGateways(), ...this.getNatGateways(), ...this.getLocalPeeringGateways(), ...this.getServiceGateways(), ...this.getDynamicRoutingGateways()]
-        // let gateways = [];
-        // // Internet Gateways
-        // gateways.push(...this.getInternetGateways());
-        // // NAT Gateways
-        // gateways.push(...this.getNatGateways());
-        // // Local Peering Gateways
-        // gateways.push(...this.getLocalPeeringGateways());
-        // // Service Gateways
-        // gateways.push(...this.getServiceGateways());
-        // // Dynamic Routing Gateways
-        // gateways.push(...this.getDynamicRoutingGateways());
-        // return gateways;
     }
 
     getInternetGateways() {

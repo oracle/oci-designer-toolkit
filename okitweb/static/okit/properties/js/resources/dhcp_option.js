@@ -55,7 +55,7 @@ class DhcpOptionProperties extends OkitResourceProperties {
         const opt_details = this.createDetailsSection('Option', `${self.id}_option_details`, idx)
         this.append(delete_row.div, opt_details.details)
         const opt_table = this.createTable('', `${self.id}_option`, '')
-        this.append(opt_div, opt_table.table)
+        this.append(opt_details.div, opt_table.table)
         // Option Type
         const option_type = this.createInput('select', 'Type', `${id}_type`, idx, (d, i, n) => {option.type = n[i].value = n[i].value; self.showOptionRows(option, id, idx)})
         this.append(opt_table.tbody, option_type.row)

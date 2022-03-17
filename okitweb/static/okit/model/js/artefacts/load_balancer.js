@@ -30,6 +30,8 @@ class LoadBalancer extends OkitArtifact {
             minimum_bandwidth_in_mbps: 10,
             maximum_bandwidth_in_mbps: 10
         }
+        // this.backend_sets = []
+        // this.listeners = []
 
         // Update with any passed data
         this.merge(data);
@@ -43,6 +45,31 @@ class LoadBalancer extends OkitArtifact {
      */
     convert() {
         if (this.shape_name !== undefined) {this.shape = this.shape_name; delete this.shape_name;}
+    }
+
+    /*
+    ** Sub Group Creation routines
+    */
+    newBackendSet() {
+        return {
+            display_name: '',
+            backend_policy: 'ROUND_ROBIN',
+            backends: []
+        }
+    }
+
+    newBackend() {
+        return {
+            instance_id: ''
+        }
+    }
+
+    newHealthChecker() {
+        return {}
+    }
+
+    newListener() {
+        return {}
     }
 
     getNamePrefix() {
