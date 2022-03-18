@@ -52,15 +52,6 @@ locals {
     objectstorage_services_destination  = data.oci_core_services.ObjectStorageRegionServices.services[0].cidr_block
 }
 # ----- Outputs
-output "RegionServices" {
-    value = data.oci_core_services.RegionServices.services
-}
-output "AllRegionServices" {
-    value = data.oci_core_services.AllRegionServices.services
-}
-output "ObjectStorageRegionServices" {
-    value = data.oci_core_services.ObjectStorageRegionServices.services
-}
 output "AllServicesDestination" {
     value = local.all_services_destination
 }
