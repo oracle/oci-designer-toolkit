@@ -2110,9 +2110,19 @@ class OCIGenerator(object):
         for route_rule in resource.get('route_rules', []):
             jinja2_route_rule = {}
             # ------ Network End Point
-            jinja2_route_rule["network_entity_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[route_rule["network_entity_id"]]))
+            if route_rule["target_type"] == "drg_attachment":
+                # Read DRG Id from Attachment
+                drgs_attachments = [da for da in self.visualiser_json.get('drg_attachments', []) if da["id"] == route_rule["network_entity_id"]]
+                network_entity_id = drgs_attachments[0]["drg_id"] if len(drgs_attachments) > 0 else ''
+            else:
+                network_entity_id = route_rule["network_entity_id"]
+            jinja2_route_rule["network_entity_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[network_entity_id]))
+            # jinja2_route_rule["network_entity_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[route_rule["network_entity_id"]]))
             # ------ Destination
-            jinja2_route_rule["destination"] = self.generateJinja2Variable('route_rule_{0:02d}_destination'.format(rule_number), route_rule["destination"], standardisedName)
+            if route_rule["target_type"] == "service_gateway":
+                jinja2_route_rule["destination"] = route_rule["destination"]
+            else:
+                jinja2_route_rule["destination"] = self.generateJinja2Variable('route_rule_{0:02d}_destination'.format(rule_number), route_rule["destination"], standardisedName)
             # ------ Destination Type
             jinja2_route_rule["destination_type"] = self.generateJinja2Variable('route_rule_{0:02d}_destination_type'.format(rule_number), route_rule["destination_type"], standardisedName)
             jinja2_route_rule["use_cidr_block"] = (route_rule["destination_type"] == "CIDR_BLOCK")
@@ -2300,7 +2310,11 @@ class OCIGenerator(object):
         # ---- Display Name
         self.addJinja2Variable("display_name", resource["display_name"], standardisedName)
         # ---- Service Name
-        self.addJinja2Variable("service_name", resource["service_name"], standardisedName)
+        if resource["service_name"] == "All":
+            self.jinja2_variables["service_name"] = "all_services_id"
+        else:
+            self.jinja2_variables["service_name"] = "objectstorage_services_id"
+        # self.addJinja2Variable("service_name", resource["service_name"], standardisedName)
         # --- Optional
         # ---- Route Table
         if resource['route_table_id'] is not None and len(resource['route_table_id']):

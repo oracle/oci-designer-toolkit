@@ -353,7 +353,17 @@ class OCIJsonValidator(object):
                             'message': f'Cyclic Route Rule Reference. Route Table "{rt["display_name"]}" has a rule that references "{resource["display_name"]}" whilst "{resource["display_name"]}" route table is defined as "{rt["display_name"]}".',
                             'element': 'route_table_id'
                         }
-                        self.results['errors'].append(error)
+                    self.results['errors'].append(error)
+                if resource['drg_id'] == '':
+                    self.valid = False
+                    error = {
+                        'id': resource['id'],
+                        'type': 'DRG Attachment',
+                        'artefact': resource['display_name'],
+                        'message': f'No associated DRG',
+                        'element': 'drg_id'
+                    }
+                    self.results['errors'].append(error)
 
 
     # Fast Connect
