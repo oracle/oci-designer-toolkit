@@ -26,8 +26,44 @@ data "oci_identity_regions" "Regions" {
 # ------ Get List Service OCIDs
 data "oci_core_services" "RegionServices" {
 }
+data "oci_core_services" "AllRegionServices" {
+    filter {
+        name = "cidr_block"
+        values = ["all-*"]
+        regex = true
+    }
+}
+data "oci_core_services" "ObjectStorageRegionServices" {
+    filter {
+        name = "cidr_block"
+        values = ["\\w*-objectstorage"]
+        regex = true
+    }
+}
 # ------ Get List Images
 data "oci_core_images" "InstanceImages" {
     compartment_id           = {{ compartment_ocid }}
 }
-
+# ------ Setup Local variables
+locals {
+    all_services_id                     = data.oci_core_services.AllRegionServices.services[0].id
+    all_services_destination            = data.oci_core_services.AllRegionServices.services[0].cidr_block
+    objectstorage_services_id           = data.oci_core_services.ObjectStorageRegionServices.services[0].id
+    objectstorage_services_destination  = data.oci_core_services.ObjectStorageRegionServices.services[0].cidr_block
+}
+# ----- Outputs
+output "RegionServices" {
+    value = data.oci_core_services.RegionServices.services
+}
+output "AllRegionServices" {
+    value = data.oci_core_services.AllRegionServices.services
+}
+output "ObjectStorageRegionServices" {
+    value = data.oci_core_services.ObjectStorageRegionServices.services
+}
+output "AllServicesDestination" {
+    value = local.all_services_destination
+}
+output "ObjectStorageServicesDestination" {
+    value = local.objectstorage_services_destination
+}

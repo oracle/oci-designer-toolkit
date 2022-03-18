@@ -67,6 +67,11 @@ class RouteTableProperties extends OkitResourceProperties {
         this.append(rt.tbody, dt.row)
         this.loadDestinationTypeSelect(dt.input)
         dt.input.property('value', rule.destination_type)
+        // Service Destination
+        const service_dest = this.createInput('select', 'Destination', `${id}_service_destination`, idx, (d, i, n) => {rule.destination = n[i].value = n[i].value})
+        this.append(rt.tbody, service_dest.row)
+        this.loadServiceDestinationSelect(service_dest.input)
+        service_dest.input.property('value', rule.destination)
         // Destination
         const destination = this.createInput('ipv4_cidr', 'Destination', `${id}_destination`, idx, (d, i, n) => {n[i].reportValidity(); rule.destination = n[i].value})
         this.append(rt.tbody, destination.row)
@@ -113,6 +118,13 @@ class RouteTableProperties extends OkitResourceProperties {
         ]);
         this.loadSelectFromMap(select, types_map)
     }
+    loadServiceDestinationSelect(select) {
+        const types_map = new Map([ // Map to Terraform Local Variable Names
+            ['All Services', 'all_services_destination'],
+            ['Object Storage Service', 'objectstorage_services_destination'],
+        ]);
+        this.loadSelectFromMap(select, types_map)
+    }
     loadNetworkEntitySelect(rule, id, idx) {
         const select = d3.select(`#${this.inputId(id, idx)}`)
         const selected_id = this.loadSelect(select, rule.target_type, false)
@@ -124,9 +136,14 @@ class RouteTableProperties extends OkitResourceProperties {
             this.hideProperty(`${id}_destination_type`, idx)
             if (rule.target_type !== 'service_gateway') {
                 this.showProperty(`${id}_destination`, idx)
+                this.hideProperty(`${id}_service_destination`, idx)
             } else {
                 this.hideProperty(`${id}_destination`, idx)
+                this.showProperty(`${id}_service_destination`, idx)
             }
+            rule.destination = rule.target_type === 'service_gateway' ? 'all_services_destination' : '0.0.0.0/0'
+            rule.destination_type = rule.target_type === 'service_gateway' ?  'SERVICE_CIDR_BLOCK' : 'CIDR_BLOCK'
+            this.setPropertyValue(`${id}_destination`, idx, rule.destination)
         } else {
             this.showProperty(`${id}_destination_type`, idx)
         }
