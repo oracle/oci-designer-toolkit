@@ -14,6 +14,7 @@ __module__ = "okitTfStateFileParser"
 import json
 from warnings import catch_warnings
 from common.okitLogging import getLogger
+from common.okitCommon import jsonToFormattedString
 
 # Configure logging
 logger = getLogger()
@@ -135,7 +136,7 @@ class OkitTfStateFileParser(object):
                     # Ask for Forgiveness
                     logger.info(f"No post processing for {key}")
             # Remove Unwanted Keys
-            for key, val in self.okit_json.items():
+            for k, val in self.okit_json.items():
                 if isinstance(val, list):
                     for okit_resource in val:
                         for key in self.removes_keys:
@@ -175,7 +176,19 @@ class OkitTfStateFileParser(object):
             okit_resource["backend_sets"] = [r for r in self.okit_json["oci_load_balancer_backend_set"] if r["load_balancer_id"] == okit_resource["id"]]
             okit_resource["listeners"] = [r for r in self.okit_json["oci_load_balancer_listener"] if r["load_balancer_id"] == okit_resource["id"]]
             backend_ips = [backend["ip_address"] for backend_set in okit_resource["backend_sets"] for backend in backend_set["backend"]]
-            logger.info(f'Backend IPs {backend_ips}')
+            lb_backends = [r for r in self.okit_json["oci_load_balancer_backend"] if r["load_balancer_id"] == okit_resource["id"]]
+            for backend_set in okit_resource["backend_sets"]:
+                backend_set["backends"] = [backend for backend in lb_backends if backend["backendset_name"] == backend_set["name"]]
+                del backend_set["backend"]
+                for backend in backend_set["backends"]:
+                    del backend["backendset_name"]
+                    del backend["load_balancer_id"]
+                    del backend["id"]
+                del backend_set["load_balancer_id"]
+                del backend_set["id"]
+            for listener in okit_resource["listeners"]:
+                del listener["load_balancer_id"]
+                del listener["id"]
 
     def route_tables(self, val, **kwargs):
         for okit_resource in val:

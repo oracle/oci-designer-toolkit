@@ -327,10 +327,7 @@ class OkitArtifact {
     /*
     ** Get the Artifact name this Artifact will be know by.
      */
-    getArtifactReference() {
-        //alert('Get Artifact Reference function "getArtifactReference()" has not been implemented.');
-        return this.constructor.getArtifactReference();
-    }
+    getArtifactReference() {return this.constructor.getArtifactReference();}
 
     artefactToElement(name) {
         return name.toLowerCase().split(' ').join('_') + 's';
@@ -390,7 +387,8 @@ class OkitArtifact {
         // }
     }
 
-    generateResourceName() {return `Okit_${this.getArtifactReference().split(' ').join('_')}_${Date.now()}`}
+    generateResourceName() {return `Okit_${this.getArtifactReference().split(' ').map((r) => r[0]).join('')}_${Date.now()}`}
+    // generateResourceName() {return `Okit${this.getArtifactReference().split(' ').join('')}${Date.now()}`}
 
     generateResourceNameFromDisplayName(name) {return titleCase(name).split(' ').join('').replaceAll('-','_')}
 
@@ -398,8 +396,7 @@ class OkitArtifact {
     ** Static Functionality
      */
     static getArtifactReference() {
-        alert('Get Artifact Reference function "getArtifactReference()" has not been implemented.');
-        return;
+        return this.constructor.name.split(/(?=[A-Z])/).join(' ');
     }
 
     static getDropTargets() {

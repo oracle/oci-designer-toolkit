@@ -52,20 +52,26 @@ class LoadBalancer extends OkitArtifact {
     */
     newBackendSet() {
         return {
-            display_name: '',
+            resource_name: '',
+            name: '',
             backend_policy: 'ROUND_ROBIN',
-            backends: []
+            backends: [],
+            heather_checker: this.newHealthChecker()
         }
     }
 
     newBackend() {
         return {
+            resource_name: '',
             instance_id: ''
         }
     }
 
     newHealthChecker() {
-        return {}
+        return {
+            protocol: 'HTTP',
+            port: 80
+        }
     }
 
     newListener() {
