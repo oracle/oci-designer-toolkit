@@ -17,9 +17,9 @@ class CompartmentProperties extends OkitResourceProperties {
     buildResource() {
         const self = this
         // Description
-        const [row, input] = this.createInput('text', 'Description', `${self.id}_description`, '', (d, i, n) => self.resource.description = n[i].value)
-        this.description = input
-        this.append(this.core_tbody, row)
+        const description = this.createInput('text', 'Description', `${self.id}_description`, '', (d, i, n) => self.resource.description = n[i].value)
+        this.description = description.input
+        this.append(this.core_tbody, description.row)
     }
 
     // Load Additional Resource Specific Properties

@@ -38,20 +38,6 @@ class FastConnect extends OkitArtifact {
     }
 
 
-    /*
-    ** Clone Functionality
-     */
-    clone() {
-        return new FastConnect(JSON.clone(this), this.getOkitJson());
-    }
-
-
-    /*
-    ** Delete Processing
-     */
-    deleteChildren() {}
-
-
     getNamePrefix() {
         return super.getNamePrefix() + 'fc';
     }

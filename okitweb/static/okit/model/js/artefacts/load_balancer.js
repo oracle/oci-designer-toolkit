@@ -30,6 +30,8 @@ class LoadBalancer extends OkitArtifact {
             minimum_bandwidth_in_mbps: 10,
             maximum_bandwidth_in_mbps: 10
         }
+        // this.backend_sets = []
+        // this.listeners = []
 
         // Update with any passed data
         this.merge(data);
@@ -45,19 +47,36 @@ class LoadBalancer extends OkitArtifact {
         if (this.shape_name !== undefined) {this.shape = this.shape_name; delete this.shape_name;}
     }
 
-
     /*
-    ** Clone Functionality
-     */
-    clone() {
-        return new LoadBalancer(JSON.clone(this), this.getOkitJson());
+    ** Sub Group Creation routines
+    */
+    newBackendSet() {
+        return {
+            resource_name: '',
+            name: '',
+            backend_policy: 'ROUND_ROBIN',
+            backends: [],
+            heather_checker: this.newHealthChecker()
+        }
     }
 
+    newBackend() {
+        return {
+            resource_name: '',
+            instance_id: ''
+        }
+    }
 
-    /*
-    ** Delete Processing
-     */
-    deleteChildren() {}
+    newHealthChecker() {
+        return {
+            protocol: 'HTTP',
+            port: 80
+        }
+    }
+
+    newListener() {
+        return {}
+    }
 
     getNamePrefix() {
         return super.getNamePrefix() + 'lb';
@@ -94,3 +113,4 @@ OkitJson.prototype.getLoadBalancer = function(id='') {
 OkitJson.prototype.deleteLoadBalancer = function(id) {
     this.load_balancers = this.load_balancers ? this.load_balancers.filter((r) => r.id !== id) : []
 }
+OkitJson.prototype.filterLoadBalancers = function(filter) {this.load_balancers = this.load_balancers ? this.load_balancers.filter(filter) : []}

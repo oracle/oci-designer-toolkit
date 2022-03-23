@@ -33,7 +33,7 @@ resource "oci_core_route_table" "{{ resource_name }}" {
     {% if rule.use_cidr_block %}
         destination       = {{ rule.destination | safe }}
     {% else %}
-        destination       = lookup([for x in data.oci_core_services.RegionServices.services: x if substr(x.name, 0, 3) == {{ rule.destination | safe }}][0], "cidr_block")
+        destination       = local.{{ rule.destination | safe }}
     {% endif %}
         network_entity_id = {{ rule.network_entity_id }}
         description       = {{ rule.description | safe }}

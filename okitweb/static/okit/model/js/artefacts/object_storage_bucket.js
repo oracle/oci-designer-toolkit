@@ -25,28 +25,6 @@ class ObjectStorageBucket extends OkitArtifact {
         this.convert();
     }
 
-
-    /*
-    ** Clone Functionality
-     */
-    clone() {
-        return new ObjectStorageBucket(JSON.clone(this), this.getOkitJson());
-    }
-
-
-    /*
-    ** Delete Processing
-     */
-    deleteChildren() {
-        for (let instance of this.getOkitJson().getInstances()) {
-            for (let i=0; i < instance['object_storage_bucket_ids'].length; i++) {
-                if (instance.object_storage_bucket_ids[i] === this.id) {
-                    instance.object_storage_bucket_ids.splice(i, 1);
-                }
-            }
-        }
-    }
-
     getNamePrefix() {
         return super.getNamePrefix() + 'osb';
     }

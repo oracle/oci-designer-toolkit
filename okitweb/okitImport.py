@@ -23,11 +23,12 @@ from parsers.okitHclJsonParser import OkitHclJsonParser
 from parsers.okitCceJsonParser import OkitCceJsonParser
 from parsers.okitCd3ExcelParser import OkitCd3ExcelParser
 from parsers.okitTfStateFileParser import OkitTfStateFileParser
+from facades.ociResourceManager import OCIResourceManagers
 
 # Configure logging
 logger = getLogger()
 
-bp = Blueprint('parsers', __name__, url_prefix='/okit/parse', static_folder='static/okit')
+bp = Blueprint('parsers', __name__, url_prefix='/okit/import', static_folder='static/okit')
 
 debug_mode = bool(str(os.getenv('DEBUG_MODE', 'False')).title())
 
@@ -53,7 +54,27 @@ def parseTfStateJson():
     if request.method == 'GET':
         import_json = json.loads(request.args.get('json', '{}'))
         logJson(import_json)
-        # Import HCL
+        # Import State
+        parser = OkitTfStateFileParser()
+        response_json = parser.parse(import_json)
+        logJson(response_json)
+        return jsonToFormattedString(response_json)
+    else:
+        return '404'
+
+@bp.route('rmtfstate', methods=(['GET']))
+def parseRmTfStateJson():
+    if request.method == 'GET':
+        config_profile = request.args.get('profile', default='DEFAULT')
+        compartment_id = request.args.get('compartment_id')
+        region = request.args.get('region')
+        stack_id = request.args.get('stack_id', '')
+        config = {'region': region}
+        oci_resourcemanager = OCIResourceManagers(config=config, profile=config_profile, compartment_id=compartment_id)
+        import_json = oci_resourcemanager.getState(stack_id)
+        logJson(import_json)
+        # Import State
+        response_json = {}
         parser = OkitTfStateFileParser()
         response_json = parser.parse(import_json)
         logJson(response_json)

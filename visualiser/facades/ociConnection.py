@@ -25,7 +25,7 @@ logger = getLogger()
 
 class OCIConnection(object):
     PAGINATION_LIMIT = 1000
-    OKIT_VERSION = 'v0.33.0'
+    OKIT_VERSION = 'v0.34.0'
 
     def __init__(self, config=None, configfile=None, profile=None, region=None, signer=None):
         self.tenancy_ocid = ''
@@ -54,6 +54,7 @@ class OCIConnection(object):
             self.cert_bundle = os.path.expanduser(self.config['cert-bundle'])
         else:
             self.cert_bundle = None
+        self.tenancy_override = self.config.get('tenancy_override', None)
         # Connect
         self.connect()
 
@@ -96,6 +97,7 @@ class OCIConnection(object):
         self.loadConfig()
         self.signer = oci.Signer(
             tenancy=self.config["tenancy"],
+            # tenancy=self.config.get('boat_tenancy', self.config["tenancy"]),
             user=self.config["user"],
             fingerprint=self.config["fingerprint"],
             private_key_file_location=self.config.get("key_file"),
@@ -153,6 +155,9 @@ class OCIConnection(object):
         return json_list
     
     def getClient(self, oci_class):
+        if self.tenancy_override is not None:
+                logger.info('Overriding Tenancy in Config for BOAT')
+                self.config['tenancy'] = self.tenancy_override
         client = oci_class(config=self.config, signer=self.signer)
         if self.cert_bundle is not None:
             client.base_client.session.verify = self.cert_bundle

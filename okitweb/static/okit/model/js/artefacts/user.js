@@ -24,12 +24,6 @@ class User extends OkitArtifact {
         this.convert();
     }
     /*
-    ** Clone Functionality
-    */
-    clone() {
-        return new User(JSON.clone(this), this.getOkitJson());
-    }
-    /*
     ** Name Generation
     */
     getNamePrefix() {

@@ -25,18 +25,9 @@ class NatGateway extends OkitArtifact {
 
 
     /*
-    ** Clone Functionality
-     */
-    clone() {
-        return new NatGateway(JSON.clone(this), this.getOkitJson());
-    }
-
-
-    /*
     ** Delete Processing
      */
-    deleteChildren() {
-        // Remove Internet Gateway references
+    deleteReferences() {
         // Remove Route Rules
         this.getOkitJson().getRouteTables().forEach((rt) => rt.route_rules = rt.route_rules.filter((d) => d.network_entity_id !== this.id))        
     }

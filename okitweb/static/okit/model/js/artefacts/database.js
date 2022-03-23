@@ -29,12 +29,6 @@ class Database extends OkitArtifact {
         if (this.db_name) this.display_name = this.db_name
     }
     /*
-    ** Clone Functionality
-    */
-    clone() {
-        return new Database(JSON.clone(this), this.getOkitJson());
-    }
-    /*
     ** Name Generation
     */
     getNamePrefix() {

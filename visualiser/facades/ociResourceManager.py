@@ -14,18 +14,21 @@ __module__ = "ociResourceManager"
 
 
 import base64
+import io
 import oci
 import time
 
 from common.okitLogging import getLogger
 from common.okitCommon import logJson
+from common.okitCommon import parseJsonString
+from common.okitCommon import jsonToFormattedString
 from facades.ociConnection import OCIResourceManagerConnection
-
 # Configure logging
 logger = getLogger()
 
 
 class OCIResourceManagers(OCIResourceManagerConnection):
+    MEBIBYTE = 1024 * 1024
     def __init__(self, config=None, configfile=None, profile=None, compartment_id=None):
         self.compartment_id = compartment_id
         self.resource_managers_json = []
@@ -51,6 +54,24 @@ class OCIResourceManagers(OCIResourceManagerConnection):
         for resource_manager in self.resource_managers_json:
             self.resource_managers_obj.append(OCIResourceManager(self.config, self.configfile, self.profile, resource_manager))
         return self.resource_managers_json
+
+    def getState(self, stack_id):
+        logger.info('Getting State for Stack Id')
+        logger.info(stack_id)
+        logger.info(self.config)
+        result = self.client.get_stack_tf_state(stack_id=stack_id)
+        state = io.BytesIO()
+        for chunk in result.data.raw.stream(self.MEBIBYTE, decode_content=True):
+            state.write(chunk)
+        state_json = parseJsonString(state.getvalue().decode())
+        return state_json
+    
+    def listJobs(self, stack_id, compartment_id=None):
+        if compartment_id is None:
+            compartment_id = self.compartment_id
+        jobs = oci.pagination.list_call_get_all_results(self.client.list_jobs, compartment_id=compartment_id, stack_id=stack_id).data
+        jobs_json = self.toJson(jobs)
+        return jobs_json
 
     def createStack(self, stack):
         logger.debug('<<<<<<<<<<<<< Stack Detail >>>>>>>>>>>>>: {0!s:s}'.format(str(stack)))

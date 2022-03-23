@@ -32,25 +32,11 @@ class BlockStorageVolume extends OkitArtifact {
 
 
     /*
-    ** Clone Functionality
-     */
-    clone() {
-        return new BlockStorageVolume(JSON.clone(this), this.getOkitJson());
-    }
-
-
-    /*
     ** Delete Processing
      */
-    deleteChildren() {
-        // Remove Instance references
-        for (let instance of this.getOkitJson().getInstances()) {
-            for (let i=0; i < instance.block_storage_volume_ids.length; i++) {
-                if (instance.block_storage_volume_ids[i] === this.id) {
-                    instance.block_storage_volume_ids.splice(i, 1);
-                }
-            }
-        }
+    deleteReferences() {
+        // Instance Volume Attachment
+        this.getOkitJson().getInstances().forEach((r) => r.volume_attachments = r.volume_attachments.filter((v) => v.volume_id !== this.id))
     }
 
 

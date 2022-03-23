@@ -17,28 +17,28 @@ class SecurityListProperties extends OkitResourceProperties {
     buildResource() {
         const self = this
         // VCN
-        const [vcn_row, vcn_input] = this.createInput('select', 'Virtual Cloud Network', `${this.id}_vcn_id`, '', (d, i, n) => this.resource.vcn_id = n[i].value)
-        this.vcn_id = vcn_input
-        this.append(this.core_tbody, vcn_row)
+        const vcn = this.createInput('select', 'Virtual Cloud Network', `${this.id}_vcn_id`, '', (d, i, n) => this.resource.vcn_id = n[i].value)
+        this.vcn_id = vcn.input
+        this.append(this.core_tbody, vcn.row)
         // Vcn Default
-        const [default_row, default_input] = this.createInput('checkbox', 'VCN Default', `${this.id}_default`, '', (d, i, n) => this.resource.default = n[i].checked)
-        this.default = default_input
-        this.append(this.core_tbody, default_row)
+        const vcn_default = this.createInput('checkbox', 'VCN Default', `${this.id}_default`, '', (d, i, n) => this.resource.default = n[i].checked)
+        this.default = vcn_default.input
+        this.append(this.core_tbody, vcn_default.row)
         // Rules
         // Ingress
-        const [ir_details, ir_summary, ir_div] = this.createDetailsSection('Ingress', `${self.id}_ingress_rules_details`)
-        this.append(this.rules_contents, ir_details)
-        this.ingress_rules_div = ir_div
-        const [ir_table, ir_thead, ir_tbody] = this.createArrayTable('Rules', `${self.id}_ingress_rules`, '', () => self.addIngressRule())
-        this.ingress_rules_tbody = ir_tbody
-        this.append(ir_div, ir_table)
+        const ird = this.createDetailsSection('Ingress', `${self.id}_ingress_rules_details`)
+        this.append(this.rules_contents, ird.details)
+        this.ingress_rules_div = ird.div
+        const irt = this.createArrayTable('Rules', `${self.id}_ingress_rules`, '', () => self.addIngressRule())
+        this.ingress_rules_tbody = irt.tbody
+        this.append(this.ingress_rules_div, irt.table)
         // Egress
-        const [er_details, er_summary, er_div] = this.createDetailsSection('Egress', `${self.id}_egress_rules_details`)
-        this.append(this.rules_contents, er_details)
-        this.egress_rules_div = er_div
-        const [er_table, er_thead, er_tbody] = this.createArrayTable('Rules', `${self.id}_egress_rules`, '', () => self.addEgressRule())
-        this.egress_rules_tbody = er_tbody
-        this.append(er_div, er_table)
+        const erd = this.createDetailsSection('Egress', `${self.id}_egress_rules_details`)
+        this.append(this.rules_contents, erd.details)
+        this.egress_rules_div = erd.div
+        const ert = this.createArrayTable('Rules', `${self.id}_egress_rules`, '', () => self.addEgressRule())
+        this.egress_rules_tbody = ert.tbody
+        this.append(this.egress_rules_div, ert.table)
     }
 
     // Load Additional Resource Specific Properties
@@ -63,40 +63,40 @@ class SecurityListProperties extends OkitResourceProperties {
     addIngressRuleHtml(rule, idx) {
         const self = this
         const id = `${this.id}_ingress_rule`
-        const [row, div] = this.createDeleteRow(id, idx, () => this.deleteIngressRule(id, idx, rule))
-        this.append(this.ingress_rules_tbody, row)
-        const [rule_details, rule_summary, rule_div] = this.createDetailsSection('Rule', `${id}_details`, idx, (d, i, n) => this.toggleSummaryText(n, i, rule))
-        this.append(div, rule_details)
-        const [rule_table, rule_thead, rule_tbody] = this.createTable('', `${id}_rule`, '')
-        this.append(rule_div, rule_table)
+        const delete_row = this.createDeleteRow(id, idx, () => this.deleteIngressRule(id, idx, rule))
+        this.append(this.ingress_rules_tbody, delete_row.row)
+        const rd = this.createDetailsSection('Rule', `${id}_details`, idx, (d, i, n) => this.toggleSummaryText(n, i, rule))
+        this.append(delete_row.div, rd.details)
+        const rt = this.createTable('', `${id}_rule`, '')
+        this.append(rd.div, rt.table)
         // Description
-        const [desc_row, desc_input] = this.createInput('text', 'Description', `${id}_description`, '', (d, i, n) => rule.description = n[i].value)
-        this.append(rule_tbody, desc_row)
-        desc_input.property('value', rule.description)
+        const desc = this.createInput('text', 'Description', `${id}_description`, '', (d, i, n) => rule.description = n[i].value)
+        this.append(rt.tbody, desc.row)
+        desc.input.property('value', rule.description)
         // Source Type
-        const [sdtype_row, sdtype_input] = this.createInput('select', 'Source Type', `${id}_source_type`, idx, (d, i, n) => {rule.source_type = n[i].value = n[i].value; self.showProtocolRuleRows(rule, id, idx)})
-        this.append(rule_tbody, sdtype_row)
-        this.loadSourceDestinationTypeSelect(sdtype_input)
-        sdtype_input.property('value', rule.source_type)
+        const sdtype = this.createInput('select', 'Source Type', `${id}_source_type`, idx, (d, i, n) => {rule.source_type = n[i].value = n[i].value; self.showProtocolRuleRows(rule, id, idx)})
+        this.append(rt.tbody, sdtype.row)
+        this.loadSourceDestinationTypeSelect(sdtype.input)
+        sdtype.input.property('value', rule.source_type)
         // Source
-        const [source_row, source_input] = this.createInput('ipv4_cidr', 'Source', `${id}_source`, idx, (d, i, n) => {n[i].reportValidity(); rule.source = n[i].value})
-        this.append(rule_tbody, source_row)
-        source_input.property('value', rule.source)
+        const source = this.createInput('ipv4_cidr', 'Source', `${id}_source`, idx, (d, i, n) => {n[i].reportValidity(); rule.source = n[i].value})
+        this.append(rt.tbody, source.row)
+        source.input.property('value', rule.source)
         // Stateless
-        const [stateless_row, stateless_input] = this.createInput('checkbox', 'Stateless', `${id}_is_stateless`, idx, (d, i, n) => rule.is_stateless = n[i].checked)
-        this.append(rule_tbody, stateless_row)
-        stateless_input.property('checked', rule.is_stateless)
+        const stateless = this.createInput('checkbox', 'Stateless', `${id}_is_stateless`, idx, (d, i, n) => rule.is_stateless = n[i].checked)
+        this.append(rt.tbody, stateless.row)
+        stateless.input.property('checked', rule.is_stateless)
         // Protocol
-        const [sdprotocol_row, sdprotocol_input] = this.createInput('select', 'Protocol', `${id}_protocol`, idx, (d, i, n) => {rule.protocol = n[i].value = n[i].value; this.createOptions(rule); self.showProtocolRuleRows(rule, id, idx)})
-        this.append(rule_tbody, sdprotocol_row)
-        this.loadProtocolSelect(sdprotocol_input)
-        sdprotocol_input.property('value', rule.protocol)
+        const sdprotocol = this.createInput('select', 'Protocol', `${id}_protocol`, idx, (d, i, n) => {rule.protocol = n[i].value = n[i].value; this.createOptions(rule); self.showProtocolRuleRows(rule, id, idx)})
+        this.append(rt.tbody, sdprotocol.row)
+        this.loadProtocolSelect(sdprotocol.input)
+        sdprotocol.input.property('value', rule.protocol)
         // TCP Options
-        this.addTcpOptionsHtml(rule_tbody, rule, id, idx)
+        this.addTcpOptionsHtml(rt.tbody, rule, id, idx)
         // UDP Options
-        this.addUdpOptionsHtml(rule_tbody, rule, id, idx)
+        this.addUdpOptionsHtml(rt.tbody, rule, id, idx)
         // ICMP Options
-        this.addIcmpOptionsHtml(rule_tbody, rule, id, idx)
+        this.addIcmpOptionsHtml(rt.tbody, rule, id, idx)
         // Check Display
         this.showProtocolRuleRows(rule, id, idx)
     }
@@ -119,40 +119,40 @@ class SecurityListProperties extends OkitResourceProperties {
     addEgressRuleHtml(rule, idx) {
         const self = this
         const id = `${this.id}_egress_rule`
-        const [row, div] = this.createDeleteRow(id, idx, () => this.deleteEgressRule(id, idx, rule))
-        this.append(this.egress_rules_tbody, row)
-        const [rule_details, rule_summary, rule_div] = this.createDetailsSection('Rule', `${id}_details`, idx, (d, i, n) => this.toggleSummaryText(n, i, rule))
-        this.append(div, rule_details)
-        const [rule_table, rule_thead, rule_tbody] = this.createTable('', `${id}_rule`, '')
-        this.append(rule_div, rule_table)
+        const delete_row = this.createDeleteRow(id, idx, () => this.deleteEgressRule(id, idx, rule))
+        this.append(this.egress_rules_tbody, delete_row.row)
+        const rd = this.createDetailsSection('Rule', `${id}_details`, idx, (d, i, n) => this.toggleSummaryText(n, i, rule))
+        this.append(delete_row.div, rd.details)
+        const rt = this.createTable('', `${id}_rule`, '')
+        this.append(rd.div, rt.table)
         // Description
-        const [desc_row, desc_input] = this.createInput('text', 'Description', `${id}_description`, '', (d, i, n) => rule.description = n[i].value)
-        this.append(rule_tbody, desc_row)
-        desc_input.property('value', rule.description)
+        const desc = this.createInput('text', 'Description', `${id}_description`, '', (d, i, n) => rule.description = n[i].value)
+        this.append(rt.tbody, desc.row)
+        desc.input.property('value', rule.description)
         // Source Type
-        const [sdtype_row, sdtype_input] = this.createInput('select', 'Destination Type', `${id}_destination_type`, idx, (d, i, n) => {rule.source_type = n[i].value = n[i].value; self.showProtocolRuleRows(rule, id, idx)})
-        this.append(rule_tbody, sdtype_row)
-        this.loadSourceDestinationTypeSelect(sdtype_input)
-        sdtype_input.property('value', rule.source_type)
+        const sdtype = this.createInput('select', 'Destination Type', `${id}_destination_type`, idx, (d, i, n) => {rule.source_type = n[i].value = n[i].value; self.showProtocolRuleRows(rule, id, idx)})
+        this.append(rt.tbody, sdtype.row)
+        this.loadSourceDestinationTypeSelect(sdtype.input)
+        sdtype.input.property('value', rule.source_type)
         // Source
-        const [source_row, source_input] = this.createInput('ipv4_cidr', 'Destination', `${id}_destination`, idx, (d, i, n) => {n[i].reportValidity(); rule.source = n[i].value})
-        this.append(rule_tbody, source_row)
-        source_input.property('value', rule.source)
+        const source = this.createInput('ipv4_cidr', 'Destination', `${id}_destination`, idx, (d, i, n) => {n[i].reportValidity(); rule.source = n[i].value})
+        this.append(rt.tbody, source.row)
+        source.input.property('value', rule.source)
         // Stateless
-        const [stateless_row, stateless_input] = this.createInput('checkbox', 'Stateless', `${id}_is_stateless`, idx, (d, i, n) => rule.is_stateless = n[i].checked)
-        this.append(rule_tbody, stateless_row)
-        stateless_input.property('checked', rule.is_stateless)
+        const stateless = this.createInput('checkbox', 'Stateless', `${id}_is_stateless`, idx, (d, i, n) => rule.is_stateless = n[i].checked)
+        this.append(rt.tbody, stateless.row)
+        stateless.input.property('checked', rule.is_stateless)
         // Protocol
-        const [sdprotocol_row, sdprotocol_input] = this.createInput('select', 'Protocol', `${id}_protocol`, idx, (d, i, n) => {rule.protocol = n[i].value = n[i].value; this.createOptions(rule); self.showProtocolRuleRows(rule, id, idx)})
-        this.append(rule_tbody, sdprotocol_row)
-        this.loadProtocolSelect(sdprotocol_input)
-        sdprotocol_input.property('value', rule.protocol)
+        const sdprotocol = this.createInput('select', 'Protocol', `${id}_protocol`, idx, (d, i, n) => {rule.protocol = n[i].value = n[i].value; this.createOptions(rule); self.showProtocolRuleRows(rule, id, idx)})
+        this.append(rt.tbody, sdprotocol.row)
+        this.loadProtocolSelect(sdprotocol.input)
+        sdprotocol.input.property('value', rule.protocol)
         // TCP Options
-        this.addTcpOptionsHtml(rule_tbody, rule, id, idx)
+        this.addTcpOptionsHtml(rt.tbody, rule, id, idx)
         // UDP Options
-        this.addUdpOptionsHtml(rule_tbody, rule, id, idx)
+        this.addUdpOptionsHtml(rt.tbody, rule, id, idx)
         // ICMP Options
-        this.addIcmpOptionsHtml(rule_tbody, rule, id, idx)
+        this.addIcmpOptionsHtml(rt.tbody, rule, id, idx)
         // Check Display
         this.showProtocolRuleRows(rule, id, idx)
 
@@ -238,37 +238,37 @@ class SecurityListProperties extends OkitResourceProperties {
     addTcpOptionsHtml(rule_tbody, rule, rule_id, idx) {
         const id = `${rule_id}_tcp`
         // Source
-        const [source_row, source_input] = this.createInput('port_range', 'Source Port Range', `${id}_source_port_range`, idx, (d, i, n) => {n[i].reportValidity(); this.setPortRange(rule.tcp_options.source_port_range, n[i].value)})
-        this.append(rule_tbody, source_row)
-        if (rule.tcp_options) {source_input.property('value', this.getPortRange(rule.tcp_options.source_port_range))}
+        const source = this.createInput('port_range', 'Source Port Range', `${id}_source_port_range`, idx, (d, i, n) => {n[i].reportValidity(); this.setPortRange(rule.tcp_options.source_port_range, n[i].value)})
+        this.append(rule_tbody, source.row)
+        if (rule.tcp_options) {source.input.property('value', this.getPortRange(rule.tcp_options.source_port_range))}
 
         // Destination
-        const [destination_row, destination_input] = this.createInput('port_range', 'Destination Port Range', `${id}_destination_port_range`, idx, (d, i, n) => {n[i].reportValidity(); this.setPortRange(rule.tcp_options.destination_port_range, n[i].value)})
-        this.append(rule_tbody, destination_row)
-        if (rule.tcp_options) {destination_input.property('value', this.getPortRange(rule.tcp_options.destination_port_range))}
+        const destination = this.createInput('port_range', 'Destination Port Range', `${id}_destination_port_range`, idx, (d, i, n) => {n[i].reportValidity(); this.setPortRange(rule.tcp_options.destination_port_range, n[i].value)})
+        this.append(rule_tbody, destination.row)
+        if (rule.tcp_options) {destination.input.property('value', this.getPortRange(rule.tcp_options.destination_port_range))}
     }
     addUdpOptionsHtml(rule_tbody, rule, rule_id, idx) {
         const id = `${rule_id}_udp`
         // Source
-        const [source_row, source_input] = this.createInput('port_range', 'Source Port Range', `${id}_source_port_range`, idx, (d, i, n) => {n[i].reportValidity(); this.setPortRange(rule.udp_options.source_port_range, n[i].value)})
-        this.append(rule_tbody, source_row)
-        if (rule.udp_options) {source_input.property('value', this.getPortRange(rule.udp_options.source_port_range))}
+        const source = this.createInput('port_range', 'Source Port Range', `${id}_source_port_range`, idx, (d, i, n) => {n[i].reportValidity(); this.setPortRange(rule.udp_options.source_port_range, n[i].value)})
+        this.append(rule_tbody, source.row)
+        if (rule.udp_options) {source.input.property('value', this.getPortRange(rule.udp_options.source_port_range))}
 
         // Destination
-        const [destination_row, destination_input] = this.createInput('port_range', 'Destination Port Range', `${id}_destination_port_range`, idx, (d, i, n) => {n[i].reportValidity(); this.setPortRange(rule.udp_options.destination_port_range, n[i].value)})
-        this.append(rule_tbody, destination_row)
-        if (rule.udp_options) {destination_input.property('value', this.getPortRange(rule.udp_options.destination_port_range))}
+        const destination = this.createInput('port_range', 'Destination Port Range', `${id}_destination_port_range`, idx, (d, i, n) => {n[i].reportValidity(); this.setPortRange(rule.udp_options.destination_port_range, n[i].value)})
+        this.append(rule_tbody, destination.row)
+        if (rule.udp_options) {destination.input.property('value', this.getPortRange(rule.udp_options.destination_port_range))}
     }
     addIcmpOptionsHtml(rule_tbody, rule, rule_id, idx) {
         const id = `${rule_id}_icmp`
         // Type
-        const [type_row, type_input] = this.createInput('number', 'Type', `${id}_type`, idx, (d, i, n) => rule.icmp_options.type = n[i].value, {min: 0})
-        this.append(rule_tbody, type_row)
-        if (rule.icmp_options) type_input.property('value', rule.icmp_options.type)
+        const type = this.createInput('number', 'Type', `${id}_type`, idx, (d, i, n) => rule.icmp_options.type = n[i].value, {min: 0})
+        this.append(rule_tbody, type.row)
+        if (rule.icmp_options) type.input.property('value', rule.icmp_options.type)
         // Code
-        const [code_row, code_input] = this.createInput('number', 'Code', `${id}_code`, idx, (d, i, n) => rule.icmp_options.code = n[i].value, {min: 0})
-        this.append(rule_tbody, code_row)
-        if (rule.icmp_options) code_input.property('value', rule.icmp_options.code)
+        const code = this.createInput('number', 'Code', `${id}_code`, idx, (d, i, n) => rule.icmp_options.code = n[i].value, {min: 0})
+        this.append(rule_tbody, code.row)
+        if (rule.icmp_options) code.input.property('value', rule.icmp_options.code)
     }
     createOptions(rule) {
         if (rule.protocol === '1') {

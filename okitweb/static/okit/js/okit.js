@@ -126,19 +126,6 @@ class OkitOCIData {
         this.compartments = [];
         const self = this;
         if (!this.loadLocal(profile, region)) this.query(profile, region)
-        // if (!this.loadLocal(profile, region)) {
-        //     const start = new Date().getTime()
-        //     $.getJSON(`dropdown/data/${String(profile)}/${String(region)}`, (resp) => {
-        //         const end = new Date().getTime()
-        //         console.info('Load Dropdown Data took', end - start, 'ms')
-        //         // $.extend(true, self, resp);
-        //         self.dropdown_data = resp;
-        //         self.storeLocal(profile, region);
-        //         if (resp.shipped && profile !== undefined) {
-        //             self.refresh(profile, region);
-        //         }
-        //     });
-        // }
     }
 
     refresh(profile, region='') {
@@ -296,6 +283,21 @@ class OkitOCIData {
         return [...new Set(oss)].sort();
     }
 
+    getImageOSs() {
+        // let oss = []
+        // for (let image of this.dropdown_data.images) {
+        //     oss.push({compartment_id: image.compartment_id, id: image.operating_system, display_name: image.operating_system});
+        // }
+        const oss = this.dropdown_data.images.map(i => {return {compartment_id: i.compartment_id, id: i.operating_system, display_name: i.operating_system, platform: i.compartment_id === null}})
+        const unique = oss.reduce((unique, o) => {
+            if (!unique.some(obj => obj.platform === o.platform && obj.id === o.id)) {unique.push(o)}
+            return unique
+        }, [])
+        console.info(oss)
+        console.info(unique)
+        return unique.sort();
+    }
+
     getInstanceOSVersions(os='') {
         let versions = [];
         let os_images = this.dropdown_data.images.filter(i => i.operating_system === os);
@@ -322,8 +324,9 @@ class OkitOCIData {
         return [...new Set(this.dropdown_data.images.filter(i => !i.compartment_id || i.compartment_id === null).map((i) => i.operating_system))].sort();
         // return [...new Set(this.dropdown_data.images.filter(i => !i.compartment_id || i.compartment_id === null).map((i) => i.operating_system))].sort((a, b) => b - a);
     }
-    getPlatformImageOSVersions(os='') {
-        return [...new Set(this.dropdown_data.images.filter(i =>( !i.compartment_id || i.compartment_id === null) && i.operating_system === os).map((i) => i.operating_system_version))].sort((a, b) => b - a);
+    getPlatformImageOSVersions(filter=undefined) {
+        filter = filter ? filter : () => true
+        return [...new Set(this.dropdown_data.images.filter((i) => !i.compartment_id || i.compartment_id === null).filter(filter).map((i) => i.operating_system_version))].sort((a, b) => b - a);
     }
 
     getCustomImages() {
@@ -333,8 +336,9 @@ class OkitOCIData {
         return [...new Set(this.dropdown_data.images.filter(i => i.compartment_id && i.compartment_id !== null).map((i) => i.operating_system))].sort();
         // return [...new Set(this.dropdown_data.images.filter(i => i.compartment_id && i.compartment_id !== null).map((i) => i.operating_system))].sort((a, b) => b - a);
     }
-    getCustomImageOSVersions(os='') {
-        return [...new Set(this.dropdown_data.images.filter(i =>( i.compartment_id && i.compartment_id !== null) && i.operating_system === os).map((i) => i.operating_system_version))].sort((a, b) => b - a);
+    getCustomImageOSVersions(filter=undefined) {
+        filter = filter ? filter : () => true
+        return [...new Set(this.dropdown_data.images.filter((i) => i.compartment_id && i.compartment_id !== null).filter(filter).map((i) => i.operating_system_version))].sort((a, b) => b - a);
     }
 
     getKubernetesVersions() {
@@ -360,6 +364,10 @@ class OkitOCIData {
         }
     }
 
+    getVolumeBackupPolicies() {
+        return this.dropdown_data.volume_backup_policy ? this.dropdown_data.volume_backup_policy : []
+    } 
+
     getMySQLShapes() {
         return this.dropdown_data.mysql_shapes;
     }
@@ -369,7 +377,7 @@ class OkitOCIData {
     }
 
     getRegions() {
-        return this.dropdown_data.regions;
+        return okitRegions.getRegions();
     }
 
     getCompartments() {

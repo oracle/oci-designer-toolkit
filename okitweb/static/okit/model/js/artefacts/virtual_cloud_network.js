@@ -29,6 +29,12 @@ class VirtualCloudNetwork extends OkitArtifact {
     }
 
     /*
+    ** Filters
+     */
+    not_child_filter = (r) => r.vcnt_id !== this.id
+    child_filter = (r) => r.vcn_id === this.id
+
+    /*
     ** Conversion Routine allowing loading of old json
      */
     convert() {
@@ -46,40 +52,6 @@ class VirtualCloudNetwork extends OkitArtifact {
     }
 
     /*
-    ** Clone Functionality
-     */
-    clone() {
-        return new VirtualCloudNetwork(JSON.clone(this), this.getOkitJson());
-    }
-
-
-    /*
-    ** Delete Processing
-     */
-    deleteChildren() {
-        console.log('Deleting Children of ' + this.getArtifactReference() + ' : ' + this.display_name);
-        // Remove Subnets
-        this.getOkitJson().getSubnets().filter((d) => d.vcn_id === this.id).forEach((c) => c.delete())
-        // Remove Route_tables
-        this.getOkitJson().getRouteTables().filter((d) => d.vcn_id === this.id).forEach((c) => c.delete())
-        // Remove Security Lists
-        this.getOkitJson().getSecurityLists().filter((d) => d.vcn_id === this.id).forEach((c) => c.delete())
-        // Remove Internet Gateways
-        this.getOkitJson().getInternetGateways().filter((d) => d.vcn_id === this.id).forEach((c) => c.delete())
-        // Remove NAT Gateways
-        this.getOkitJson().getNatGateways().filter((d) => d.vcn_id === this.id).forEach((c) => c.delete())
-        // Remove Service Gateways
-        this.getOkitJson().getServiceGateways().filter((d) => d.vcn_id === this.id).forEach((c) => c.delete())
-        // Local Peering Gateways
-        this.getOkitJson().getLocalPeeringGateways().filter((d) => d.vcn_id === this.id).forEach((c) => c.delete())
-        // Network Security Groups
-        this.getOkitJson().getNetworkSecurityGroups().filter((d) => d.vcn_id === this.id).forEach((c) => c.delete())
-        // DHCP Options
-        this.getOkitJson().getDhcpOptions().filter((d) => d.vcn_id === this.id).forEach((c) => c.delete())
-        console.log();
-    }
-
-    /*
     ** Artifact Specific Functions
      */
     hasUnattachedSecurityList() {
@@ -94,18 +66,6 @@ class VirtualCloudNetwork extends OkitArtifact {
 
     getGateways() {
         return [...this.getInternetGateways(), ...this.getNatGateways(), ...this.getLocalPeeringGateways(), ...this.getServiceGateways(), ...this.getDynamicRoutingGateways()]
-        // let gateways = [];
-        // // Internet Gateways
-        // gateways.push(...this.getInternetGateways());
-        // // NAT Gateways
-        // gateways.push(...this.getNatGateways());
-        // // Local Peering Gateways
-        // gateways.push(...this.getLocalPeeringGateways());
-        // // Service Gateways
-        // gateways.push(...this.getServiceGateways());
-        // // Dynamic Routing Gateways
-        // gateways.push(...this.getDynamicRoutingGateways());
-        // return gateways;
     }
 
     getInternetGateways() {

@@ -30,10 +30,10 @@ class OCIJsonValidator(object):
     def validate(self):
         logger.info('Validating OKIT Json')
         self.validateCommon()
-        target = self.okit_json.get('metadata', {}).get('platform', 'oci')
-        if target == 'pca':
+        self.target = self.okit_json.get('metadata', {}).get('platform', 'oci')
+        if self.target == 'pca':
             self.validatePCA()
-        elif target == 'freetier':
+        elif self.target == 'freetier':
             self.validateFreeTier()
         else:
             self.validateOCI()
@@ -337,8 +337,34 @@ class OCIJsonValidator(object):
 
     # Dynamic Routing Gateway
     def validateDynamicRoutingGateways(self):
-        for artefact in self.okit_json.get('dynamic_routing_gateways', []):
-            logger.info('Validating {!s}'.format(artefact['display_name']))
+        if self.target == 'pca':
+            for artefact in self.okit_json.get('dynamic_routing_gateways', []):
+                logger.info('Validating {!s}'.format(artefact['display_name']))
+        else:
+            for resource in self.okit_json.get('drg_attachments', []):
+                logger.info('Validating {!s}'.format(resource['display_name']))
+                for rt in [r for r in self.okit_json.get('route_tables', []) if r['id'] == resource['route_table_id']]:
+                    if [rr for rr in rt['route_rules'] if rr['network_entity_id'] == resource['id']]:
+                        self.valid = False
+                        error = {
+                            'id': resource['id'],
+                            'type': 'DRG Attachment',
+                            'artefact': resource['display_name'],
+                            'message': f'Cyclic Route Rule Reference. Route Table "{rt["display_name"]}" has a rule that references "{resource["display_name"]}" whilst "{resource["display_name"]}" route table is defined as "{rt["display_name"]}".',
+                            'element': 'route_table_id'
+                        }
+                    self.results['errors'].append(error)
+                if resource['drg_id'] == '':
+                    self.valid = False
+                    error = {
+                        'id': resource['id'],
+                        'type': 'DRG Attachment',
+                        'artefact': resource['display_name'],
+                        'message': f'No associated DRG',
+                        'element': 'drg_id'
+                    }
+                    self.results['errors'].append(error)
+
 
     # Fast Connect
     def validateFastConnects(self):
@@ -563,6 +589,7 @@ class OCIJsonValidator(object):
             else:
                 for rule in resource['route_rules']:
                     if rule['network_entity_id'] == '':
+                        self.valid = False
                         error = {
                             'id': resource['id'],
                             'type': 'Route Table',

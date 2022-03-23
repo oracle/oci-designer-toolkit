@@ -27,7 +27,7 @@ from model.okitValidation import OCIJsonValidator
 logger = getLogger()
 
 class OCIGenerator(object):
-    OKIT_VERSION = "0.33.0"
+    OKIT_VERSION = "0.34.0"
     def __init__(self, template_dir, output_dir, visualiser_json, use_vars=False, add_provider=True):
         # Initialise generator output data variables
         self.create_sequence = []
@@ -807,15 +807,18 @@ class OCIGenerator(object):
             # ------ Type
             logger.info(f'DHCP Option: {dhcp_option}')
             jinja2_dhcp_option["type"] = self.generateJinja2Variable('dhcp_option_{0:02d}_type'.format(option_cnt), dhcp_option["type"], standardisedName)
-            # ------ Server Type
-            if len(dhcp_option.get("server_type", '')) > 0:
-                jinja2_dhcp_option["server_type"] = self.generateJinja2Variable('dhcp_option_{0:02d}_server_type'.format(option_cnt), dhcp_option["server_type"], standardisedName)
-            # ------ Custom DNS Servers
-            if len(dhcp_option.get("custom_dns_servers", [])) > 0:
-                jinja2_dhcp_option["custom_dns_servers"] = self.generateJinja2Variable('dhcp_option_{0:02d}_custom_dns_servers'.format(option_cnt), '","'.join(dhcp_option["custom_dns_servers"]), standardisedName)
-            # ------ Domain Names
-            if len(dhcp_option.get("search_domain_names", [])) > 0:
-                jinja2_dhcp_option["search_domain_names"] = self.generateJinja2Variable('dhcp_option_{0:02d}_search_domain_names'.format(option_cnt), '","'.join(dhcp_option["search_domain_names"]), standardisedName)
+            if dhcp_option["type"] == "DomainNameServer":
+                # ------ Server Type
+                if len(dhcp_option.get("server_type", '')) > 0:
+                    jinja2_dhcp_option["server_type"] = self.generateJinja2Variable('dhcp_option_{0:02d}_server_type'.format(option_cnt), dhcp_option["server_type"], standardisedName)
+                if dhcp_option["server_type"] == "CustomDnsServer":
+                    # ------ Custom DNS Servers
+                    if len(dhcp_option.get("custom_dns_servers", [])) > 0:
+                        jinja2_dhcp_option["custom_dns_servers"] = self.generateJinja2Variable('dhcp_option_{0:02d}_custom_dns_servers'.format(option_cnt), '","'.join(dhcp_option["custom_dns_servers"]), standardisedName)
+            else: # SearchDomain
+                # ------ Domain Names
+                if len(dhcp_option.get("search_domain_names", [])) > 0:
+                    jinja2_dhcp_option["search_domain_names"] = self.generateJinja2Variable('dhcp_option_{0:02d}_search_domain_names'.format(option_cnt), '","'.join(dhcp_option["search_domain_names"]), standardisedName)
             # Add to Dhpc Option used for Jinja template
             jinja2_dhcp_options.append(jinja2_dhcp_option)
             # Increment option number
@@ -1500,11 +1503,12 @@ class OCIGenerator(object):
             self.addJinja2Variable("ip_mode", resource["ip_mode"], standardisedName)
         # ---- Network Security Groups
         if len(resource['network_security_group_ids']):
-            jinja2_network_security_group_ids = []
-            for network_security_group_id in resource.get('network_security_group_ids', []):
-                network_security_group = self.id_name_map[network_security_group_id]
-                jinja2_network_security_group_ids.append(self.formatJinja2IdReference(self.standardiseResourceName(network_security_group)))
-            self.jinja2_variables["network_security_group_ids"] = jinja2_network_security_group_ids
+            self.jinja2_variables["network_security_group_ids"] = [self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[id])) for id in resource["network_security_group_ids"]]
+            # jinja2_network_security_group_ids = []
+            # for network_security_group_id in resource.get('network_security_group_ids', []):
+            #     network_security_group = self.id_name_map[network_security_group_id]
+            #     jinja2_network_security_group_ids.append(self.formatJinja2IdReference(self.standardiseResourceName(network_security_group)))
+            # self.jinja2_variables["network_security_group_ids"] = jinja2_network_security_group_ids
         else:
             self.jinja2_variables.pop("network_security_group_ids", None)
         # ---- Tags
@@ -2106,9 +2110,19 @@ class OCIGenerator(object):
         for route_rule in resource.get('route_rules', []):
             jinja2_route_rule = {}
             # ------ Network End Point
-            jinja2_route_rule["network_entity_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[route_rule["network_entity_id"]]))
+            if route_rule["target_type"] == "drg_attachment":
+                # Read DRG Id from Attachment
+                drgs_attachments = [da for da in self.visualiser_json.get('drg_attachments', []) if da["id"] == route_rule["network_entity_id"]]
+                network_entity_id = drgs_attachments[0]["drg_id"] if len(drgs_attachments) > 0 else ''
+            else:
+                network_entity_id = route_rule["network_entity_id"]
+            jinja2_route_rule["network_entity_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[network_entity_id]))
+            # jinja2_route_rule["network_entity_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[route_rule["network_entity_id"]]))
             # ------ Destination
-            jinja2_route_rule["destination"] = self.generateJinja2Variable('route_rule_{0:02d}_destination'.format(rule_number), route_rule["destination"], standardisedName)
+            if route_rule["target_type"] == "service_gateway":
+                jinja2_route_rule["destination"] = route_rule["destination"]
+            else:
+                jinja2_route_rule["destination"] = self.generateJinja2Variable('route_rule_{0:02d}_destination'.format(rule_number), route_rule["destination"], standardisedName)
             # ------ Destination Type
             jinja2_route_rule["destination_type"] = self.generateJinja2Variable('route_rule_{0:02d}_destination_type'.format(rule_number), route_rule["destination_type"], standardisedName)
             jinja2_route_rule["use_cidr_block"] = (route_rule["destination_type"] == "CIDR_BLOCK")
@@ -2296,7 +2310,11 @@ class OCIGenerator(object):
         # ---- Display Name
         self.addJinja2Variable("display_name", resource["display_name"], standardisedName)
         # ---- Service Name
-        self.addJinja2Variable("service_name", resource["service_name"], standardisedName)
+        if resource["service_name"] == "All":
+            self.jinja2_variables["service_name"] = "all_services_id"
+        else:
+            self.jinja2_variables["service_name"] = "objectstorage_services_id"
+        # self.addJinja2Variable("service_name", resource["service_name"], standardisedName)
         # --- Optional
         # ---- Route Table
         if resource['route_table_id'] is not None and len(resource['route_table_id']):

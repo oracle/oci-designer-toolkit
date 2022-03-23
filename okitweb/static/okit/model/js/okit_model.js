@@ -25,7 +25,8 @@ class OkitJson {
             created: now,
             updated: now,
             okit_version: okitVersion,
-            okit_model_id: `okit-model-${uuidv4()}`
+            okit_model_id: `okit-model-${uuidv4()}`,
+            file: this.newFileData()
         }
         this.user_defined = {terraform: ''};
         this.freeform_tags = {};
@@ -52,6 +53,18 @@ class OkitJson {
         const resource = Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter((r) => r.id === id)[0]
         console.info('Resource', resource)
         return resource
+    }
+
+    newFileData() {
+        return {
+            name: '',
+            generate_terraform: false,
+            terraform_dir: ''
+        }
+    }
+
+    clone() {
+        return new OkitJson(JSON.stringify(this))
     }
 
     /*
@@ -252,14 +265,21 @@ class OkitArtifact {
     get list_name() {return `${this.resource_type.toLowerCase().split(' ').join('_')}s`;}
     get json_model_list() {return this.okit_json[this.list_name];}
     set json_model_list(list) {this.okit_json[this.list_name] = list;}
-    get children() {return Object.values(this.getOkitJson()).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter((r) => r.parent_id === this.id)}
+    get children() {return Object.values(this.getOkitJson()).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter(this.child_filter)}
+    /*
+    ** Filters
+     */
+    not_child_filter = (r) => true
+    child_filter = (r) => false
 
     /*
     ** Clone Functionality
      */
     clone() {
-        alert('Clone function "clone()" has not been implemented.');
-        return;
+        const constructor = Object.getPrototypeOf(this).constructor
+        const clone = new constructor(JSON.clone(this), this.getOkitJson())
+        clone.resource_name = this.generateResourceName()
+        return clone;
     }
 
     /*
@@ -280,6 +300,16 @@ class OkitArtifact {
         if ((update.resource_name === undefined || update.resource_name === '') && update.display_name) update.resource_name = this.generateResourceNameFromDisplayName(update.display_name)
         $.extend(true, this, this.clean(update));
     }
+    /*
+    ** Filter Resources
+    */
+    filterResources(filter) {
+        if (filter) {
+            Object.entries(this.getOkitJson()).forEach(([k, v]) => {
+                if (Array.isArray(v)) {this.getOkitJson()[k] = v.filter(filter)}
+            })
+        }
+    }
 
     /*
     ** Convert Functionality will be overridden to allow backwards compatibility
@@ -297,10 +327,7 @@ class OkitArtifact {
     /*
     ** Get the Artifact name this Artifact will be know by.
      */
-    getArtifactReference() {
-        //alert('Get Artifact Reference function "getArtifactReference()" has not been implemented.');
-        return this.constructor.getArtifactReference();
-    }
+    getArtifactReference() {return this.constructor.getArtifactReference();}
 
     artefactToElement(name) {
         return name.toLowerCase().split(' ').join('_') + 's';
@@ -312,14 +339,15 @@ class OkitArtifact {
      */
     delete() {
         console.info('Delete (Default) ' + this.getArtifactReference() + ' : ' + this.id);
+        // First Delete Children
+        this.children.forEach((r) => r.delete())
+        // Remove References
+        this.deleteReferences()
+        // Delete This Resource
         this.json_model_list = this.json_model_list.filter((e) => e.id != this.id)
-        // Delete Child Artifacts
-        this.deleteChildren();
     }
 
-    deleteChildren() {
-        console.warn('Default empty deleteChildren()');
-    }
+    deleteReferences() {}
 
     getChildren(artefact) {
         console.warn('Default empty getChildren()');
@@ -359,7 +387,8 @@ class OkitArtifact {
         // }
     }
 
-    generateResourceName() {return `Okit_${this.getArtifactReference().split(' ').join('_')}_${Date.now()}`}
+    generateResourceName() {return `Okit_${this.getArtifactReference().split(' ').map((r) => r[0]).join('')}_${Date.now()}`}
+    // generateResourceName() {return `Okit${this.getArtifactReference().split(' ').join('')}${Date.now()}`}
 
     generateResourceNameFromDisplayName(name) {return titleCase(name).split(' ').join('').replaceAll('-','_')}
 
@@ -367,8 +396,7 @@ class OkitArtifact {
     ** Static Functionality
      */
     static getArtifactReference() {
-        alert('Get Artifact Reference function "getArtifactReference()" has not been implemented.');
-        return;
+        return this.constructor.name.split(/(?=[A-Z])/).join(' ');
     }
 
     static getDropTargets() {

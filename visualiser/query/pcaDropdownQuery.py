@@ -335,7 +335,14 @@ class PCADropdownQuery(OCIConnection):
         results = oci.pagination.list_call_get_all_results(client.list_volume_backup_policies, compartment_id=self.tenancy_ocid).data
         # Extend
         resources.extend(self.toJson(results))
-        self.dropdown_json[array] = sorted(resources, key=lambda k: k['display_name'])
+        platform = ['Bronze', 'Silver', 'Gold']
+        for policy in resources:
+            if policy['compartment_id'] is None:
+                policy['display_name'] = policy['display_name'].title()
+                policy['sort_key'] = str(platform.index(policy['display_name']))
+            else:
+                policy['sort_key'] = policy['display_name']
+        self.dropdown_json[array] = sorted(resources, key=lambda k: k['sort_key'])
         return self.dropdown_json[array]
     
     def deduplicate(self, resources, key):

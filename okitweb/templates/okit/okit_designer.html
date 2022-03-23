@@ -97,6 +97,7 @@
         <script type="text/javascript" src="{{ url_for('static', filename='okit/properties/js/resources/' + js) }}"></script>
     {% endfor %}
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_ready.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_dialogs.js') }}"></script>
 {% endblock %}
 
 {% block headcss %}
@@ -124,26 +125,19 @@
             </li>
             <li id="file_recover_menu_item_li" class="hidden"><a id="file-recover-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleRecover()">Recover</a></li>
             <li class="menu-item okit-target oci freetier pca"><a id="file-new-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleNew()">New</a></li>
-            <!-- <li><a id="file-load-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleLoad()">Open</a></li> -->
             <li id="save_menu" class="sub-header-item dropdown" onmouseover="handleDropdownMenuMouseOver()">
                 <span>Save</span>
                 <ul class="dropdown-content">
                     <li class="menu-item okit-target oci freetier pca"><a id="file-save-to-container-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSaveToContainer()">Save</a></li>
-                    <!-- <li><a id="file-save-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSave()">Save</a></li> -->
-                    <!--li id="file-save-regional-menu-item-li" class="hidden"><a id="file-save-regional-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSaveRegional()">Save Regions</a></li-->
                     <li class="menu-item okit-target oci freetier pca"><a id="file-save-as-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSaveAsTemplate()">Save As Template</a></li>
                     <li class="menu-item okit-target oci freetier pca"><a id="file-save-as-menu-item-git" class="parent-item" href="javascript:void(0)" onclick="handleSaveToGit()">Save To Git</a></li>
                     <li class="menu-item okit-target oci freetier pca"><a id="file-save-as-menu-item-terraform" class="parent-item" href="javascript:void(0)" onclick="handleSaveAsTerraform()">Save As Terraform</a></li>
-                    <!-- <li class="menu-item okit-target oci freetier pca"><a id="file-save-as-menu-item-md" class="parent-item" href="javascript:void(0)" onclick="handleSaveAsMarkdown()">Save As Markdown</a></li> -->
                 </ul>
             </li>
             {% if local_okit or session['username'] %}
             <li class="menu-item okit-target oci freetier"><a id="query-oci-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleQueryOCI()">Query OCI</a></li>
             <li class="menu-item okit-target pca"><a id="query-oci-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleQueryPCA()">Query PCA</a></li>
             {% endif %}
-            <!-- <li><a id="file-redraw-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleRedraw()">Redraw</a></li> -->
-            <!-- <li><a id="file-validate-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleValidate()">Validate</a></li> -->
-            <!-- <li><a id="file-clone-rw-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleEnableCreate()">Enable R/W</a></li> -->
         </ul>
         <ul id="export_menu" class="okit-navigation-sub-list">
             <li>
@@ -163,39 +157,13 @@
                 </ul>
             </li>
             <li class="menu-item okit-target oci freetier pca"><a id="file-save-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSave()">OKIT Json</a></li>
-            <!--li id="terraform_export" class="sub-header-item dropdown" onmouseover="handleDropdownMenuMouseOver()">
-                <span>Terraform</span>
-                <ul class="dropdown-content">
-                    <li><a id="generate-terraform-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleExportToTerraformLocal()">Local Zip</a></li>
-                    <li><a id="generate-terraform-menu-item-git" class="parent-item" href="javascript:void(0)" onclick="handleExportToTerraformGit()">Git</a></li>
-                </ul>
-            </li-->
             <li class="menu-item okit-target oci freetier pca"><a id="generate-terraform-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleExportToTerraformLocal()">Terraform</a></li>
-            <!-- <li><a id="export-terraform-for-display-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleExportToTerraformForDisplay()">Terraform Display</a></li> -->
             {%- if ansible_mode -%}
-            <!--li id="ansible_export" class="sub-header-item dropdown" onmouseover="handleDropdownMenuMouseOver()">
-                <span>Ansible</span>
-                <ul class="dropdown-content">
-                    <li><a id="generate-ansible-menu-item"   class="parent-item" href="javascript:void(0)" onclick="handleExportToAnsibleLocal()">Local Zip</a></li>
-                    <li><a id="generate-ansible-menu-item"   class="parent-item" href="javascript:void(0)" onclick="handleExportToAnsibleGit()">Git</a></li>
-                </ul>
-            </li-->
             <li class="menu-item okit-target oci freetier pca"><a id="generate-ansible-menu-item"   class="parent-item" href="javascript:void(0)" onclick="handleExportToAnsibleLocal()">Ansible</a></li>
             {%- endif -%}
             {% if local_okit or session['username'] %}
-            <!--li id="image_export" class="sub-header-item dropdown" onmouseover="handleDropdownMenuMouseOver()">
-                <span>Resource Manager</span>
-                <ul class="dropdown-content">
-                    <li><a id="file-export-rm-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleExportToResourceManager()">Resource Manager</a></li>
-                    <li><a id="file-export-rm-gitlab-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleExportToResourceManagerLocal()">Local Zip</a></li>
-                    <li><a id="file-export-rm-gitlab-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleExportToResourceManagerGit()">Git</a></li>
-                </ul>
-            </li-->
             <li class="menu-item okit-target oci freetier"><a id="file-export-rm-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleExportToResourceManager()">Resource Manager</a></li>
             {% endif %}
-            <!--li><a id="generate-terraform-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleExportToTerraformLocal()">Terraform</a></li>
-            <li><a id="generate-ansible-menu-item"   class="parent-item" href="javascript:void(0)" onclick="handleExportToAnsibleLocal()">Ansible</a></li-->
-            <!--li><a id="file-export-rm-gitlab-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleExportToResourceManagerLocal()">Resource Manager VCS</a></li-->
             <li class="menu-item okit-target oci freetier pca"><a id="generate-markdown-menu-item"   class="parent-item" href="javascript:void(0)" onclick="handleExportToMarkdownLocal()">Markdown</a></li>
         </ul>
         <ul id="import_menu" class="okit-navigation-sub-list">
@@ -210,8 +178,14 @@
             <li class="menu-item okit-target oci freetier"><a id="import-oci-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromOCI()">OCI Resources</a></li>
             <li class="menu-item okit-target pca"><a id="import-oci-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromPCA()">PCA-X9 Resources</a></li>
             <li class="menu-item okit-target oci freetier pca"><a id="file-load-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleLoad()">OKIT Json</a></li>
-            <li class="menu-item okit-target oci freetier pca"><a id="import-hcl-json-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromHCLJson()">Terraform Json</a></li>
-            <!-- <li class="menu-item okit-target oci freetier pca"><a id="import-tfstate-json-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromTFStateJson()">Terraform State File</a></li> -->
+            <!-- <li class="menu-item okit-target oci freetier pca"><a id="import-hcl-json-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromHCLJson()">Terraform Json</a></li> -->
+            <li id="tf_state_import_menu" class="sub-header-item dropdown" onmouseover="handleDropdownMenuMouseOver()">
+                <span>Terraform State (Experimental)</span>
+                <ul class="dropdown-content">
+                    <li class="menu-item okit-target oci freetier pca"><a id="import-tfstate-json-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromTFStateJson()">State File</a></li>
+                    <li class="menu-item okit-target oci freetier"><a id="import-rmtfstate-json-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromRMTFStateJson()">Resource Manager</a></li>
+                </ul>
+            </li>
             {% if cd3_mode %}
             <li class="menu-item okit-target oci freetier"><a id="import-cd3-xlsx-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromCd3Xlsx()">CD3 Excel</a></li>
             {% endif %}
@@ -305,7 +279,6 @@
                     </div>
                     <div class="td"><label>Title</label></div><div class="td"><input id="json_title" type="text" size="100" onchange="updateJsonTitle()"/></div>
                 </div>
-                <!--div class="td"><div class="td"><label>Description</label></div><div class="td"><input id="json_description" type="text" size="100" onchange="updateJsonDescription()"/></div></div-->
             </div>
         </div>
         <div id="center-panels" class="okit-center-panels">

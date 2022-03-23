@@ -25,14 +25,6 @@ class SecurityList extends OkitArtifact {
         this.convert();
     }
 
-
-    /*
-    ** Clone Functionality
-     */
-    clone() {
-        return new SecurityList(JSON.clone(this), this.getOkitJson());
-    }
-
     newIngressRule() {
         return {
             protocol: "all", 
@@ -84,16 +76,9 @@ class SecurityList extends OkitArtifact {
     /*
     ** Delete Processing
      */
-    deleteChildren() {
-        // Remove Subnet references
-        for (let subnet of this.getOkitJson().getSubnets()) {
-            subnet.security_list_ids = subnet.security_list_ids.filter((id) => id !== this.id);
-            // for (let i=0; i < subnet.security_list_ids.length; i++) {
-            //     if (subnet.security_list_ids[i] === this.id) {
-            //         subnet.security_list_ids.splice(i, 1);
-            //     }
-            // }
-        }
+    deleteReferences() {
+        // Subnet Reference
+        this.getOkitJson().getSubnets().forEach((r) => r.security_list_ids = r.security_list_ids.filter((id) => id !== this.id))
     }
 
     getNamePrefix() {

@@ -29,12 +29,6 @@ class DbNode extends OkitArtifact {
         if (this.hostname) this.display_name = this.hostname
     }
     /*
-    ** Clone Functionality
-    */
-    clone() {
-        return new DbNode(JSON.clone(this), this.getOkitJson());
-    }
-    /*
     ** Name Generation
     */
     getNamePrefix() {

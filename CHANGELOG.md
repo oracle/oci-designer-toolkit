@@ -1,6 +1,27 @@
 # Release Notes
 
 
+## Version 0.34.0
+**Release Date**: 23rd March 2022
+### Features
+1. New Properties Sheet format added for 
+    1. Block Storage Volume
+2. Add Option to Generate Terraform on Save
+3. Store Save Filename within model to allow for it to be populated during Save.
+4. Extend Validation to check for Cyclic Route Table/Rules references with DRG Attachments.
+5. Add Import from Terraform State files.
+6. Add Import from Resource Manager Stack.
+7. Update Route Rules to all Service Gateway Rule to specify either All or Object Storage.
+### Bug Fixes
+1. Move clone functionality to the top level class to resolve duplicate resource_name issue.
+2. Resolve issue where vcn cidr_blocks were being converted from an array to a string.
+3. Resolve Delete issue which caused the subnet.js to fail to load on FireFox.
+4. Resolve issue where exporting to Resource Manager never retrieved the Regions / Compartments
+5. Fix issue where Load Balancers with NSGs were generating invalid Terraform
+6. Resolve issue where Region List was being returned as undefined.
+7. Fix issues where DRG Attachment Id was used for Route Table not DRG Id
+
+
 ## Version 0.33.0
 **Release Date**: 2nd March 2022
 ### Features

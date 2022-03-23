@@ -24,10 +24,11 @@ class FileSystem extends OkitArtifact {
         this.convert();
     }
     /*
-    ** Clone Functionality
-    */
-    clone() {
-        return new FileSystem(JSON.clone(this), this.getOkitJson());
+    ** Delete Processing
+     */
+    deleteReferences() {
+        // Mount Target Export
+        this.getOkitJson().getInstances().forEach((r) => r.exports = r.exports.filter((v) => v.file_system_id !== this.id))
     }
     /*
     ** Name Generation

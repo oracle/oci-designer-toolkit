@@ -24,14 +24,6 @@ class RouteTable extends OkitArtifact {
         this.convert();
     }
 
-
-    /*
-    ** Clone Functionality
-     */
-    clone() {
-        return new RouteTable(JSON.clone(this), this.getOkitJson());
-    }
-
     newRule() {
         return {
             target_type: "internet_gateway",
@@ -45,13 +37,9 @@ class RouteTable extends OkitArtifact {
     /*
     ** Delete Processing
      */
-    deleteChildren() {
-        // Remove Subnet references
-        for (let subnet of this.getOkitJson().getSubnets()) {
-            if (subnet.route_table_id === this.id) {
-                subnet.route_table_id = '';
-            }
-        }
+    deleteReferences() {
+        // Subnet Reference
+        this.getOkitJson().getSubnets().forEach((r) => r.route_table_id = r.route_table_id === this.id ? '' : r.route_table_id)
     }
 
     getNamePrefix() {
