@@ -71,6 +71,7 @@ class PCAQuery(OCIConnection):
         "AvailabilityDomain", 
         "BootVolume",
         "BootVolumeAttachment", 
+        "Export",
         "Image", 
         "VnicAttachment", 
         "VolumeAttachment", 
@@ -115,6 +116,11 @@ class PCAQuery(OCIConnection):
                 "method": self.dynamic_routing_gateways, 
                 "client": "network", 
                 "array": "dynamic_routing_gateways"
+                }, 
+            "Export": {
+                "method": self.exports, 
+                "client": "filestorage", 
+                "array": "exports"
                 }, 
             "FileSystem": {
                 "method": self.file_systems, 
@@ -300,6 +306,19 @@ class PCAQuery(OCIConnection):
                 # Convert to Json object
                 resources = self.toJson(results)
                 self.ancillary_resources[array].extend(resources)
+        return self.ancillary_resources[array]
+
+    def exports(self):
+        resource_map = self.resource_map["Export"]
+        client = self.clients[resource_map["client"]]
+        array = resource_map["array"]
+        resources = []
+        self.ancillary_resources[array] = []
+        for compartment_id in self.query_compartments:
+            results = oci.pagination.list_call_get_all_results(client.list_exports, compartment_id=compartment_id).data
+            # Convert to Json object
+            resources = self.toJson(results)
+            self.ancillary_resources[array].extend(resources)
         return self.ancillary_resources[array]
 
     def images(self):
@@ -514,6 +533,11 @@ class PCAQuery(OCIConnection):
                 results = oci.pagination.list_call_get_all_results(client.list_mount_targets, compartment_id=compartment_id, availability_domain=availability_domain['name']).data
                 # Convert to Json object
                 resources = self.toJson(results)
+                for resource in resources:
+                    resource["exports"] = []
+                    for eid in [e["id"] for e in self.ancillary_resources["exports"] if e["export_set_id"] == resource["export_set_id"]]:
+                        export = client.get_export(export_id=eid).data
+                        resource["exports"].append(self.toJson(export))
                 self.dropdown_json[array].extend(resources)
         return self.dropdown_json[array]
 
