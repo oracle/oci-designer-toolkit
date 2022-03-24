@@ -31,6 +31,21 @@ from facades.ociShape import OCIShapes
 logger = getLogger()
 
 class PCADropdownQuery(OCIConnection):
+    LIFECYCLE_STATES = [
+        "ACTIVE", 
+        "AVAILABLE", 
+        "RUNNING", 
+        "STARTING", 
+        "STOPPING", 
+        "STOPPED", 
+        "CREATING_IMAGE",
+        "PROVISIONING", 
+        "UPDATING", 
+        "INACTIVE", 
+        "ALLOCATED", 
+        "VALIDATING", 
+        "VALIDATED"
+        ]
 
     SUPPORTED_RESOURCES = [
         "VolumeBackupPolicy",
@@ -54,6 +69,11 @@ class PCADropdownQuery(OCIConnection):
         super(PCADropdownQuery, self).__init__(config=config, configfile=configfile, profile=profile, region=region, signer=signer)
         self.dropdown_json = {}
         self.resource_map = {
+            "Compartment": {
+                "method": self.compartments, 
+                "client": "identity", 
+                "array": "compartments"
+                }, 
             "VolumeBackupPolicy": {
                 "method": self.volume_backup_policy, 
                 "client": "volume", 
@@ -130,6 +150,7 @@ class PCADropdownQuery(OCIConnection):
             "compute": oci.core.ComputeClient(config=self.config, signer=self.signer),
             # "container": oci.container_engine.ContainerEngineClient(config=self.config, signer=self.signer),
             # "database": oci.database.DatabaseClient(config=self.config, signer=self.signer),
+            "identity": oci.identity.IdentityClient(config=self.config, signer=self.signer),
             # "limits":  oci.limits.LimitsClient(config=self.config, signer=self.signer),
             # "loadbalancer": oci.load_balancer.LoadBalancerClient(config=self.config, signer=self.signer),
             # "mysqlaas": oci.mysql.MysqlaasClient(config=self.config, signer=self.signer),
@@ -154,10 +175,31 @@ class PCADropdownQuery(OCIConnection):
         logger.info(f'cert_bundle={cert_bundle}')
         include_sub_compartments = True
         response_json = {}
+        # Get All Compartments
+        self.tenancy_compartments()
+        # Process Dropdown Resources
         for resource in self.SUPPORTED_RESOURCES:
             self.resource_map[resource]["method"]()
+
         return self.dropdown_json
 
+    def tenancy_compartments(self):
+        resource_map = self.resource_map["Compartment"]
+        client = self.clients[resource_map["client"]]
+        # Get Tenancy
+        tenancy = client.get_tenancy(tenancy_id=self.tenancy_ocid).data
+        self.all_compartments = [self.toJson(tenancy)]
+        # All Sub Compartments
+        results = oci.pagination.list_call_get_all_results(client.list_compartments, compartment_id=self.tenancy_ocid, compartment_id_in_subtree=True).data
+        # Convert to Json object
+        # self.all_compartments = self.toJson(results)
+        self.all_compartments.extend(self.toJson(results))
+        self.all_compartment_ids = [c['id'] for c in self.all_compartments]
+        return 
+    
+    def compartments(self):
+        return
+    
     def cpe_device_shapes(self):
         resource_map = self.resource_map["CpeDeviceShape"]
         client = self.clients[resource_map["client"]]
@@ -204,26 +246,28 @@ class PCADropdownQuery(OCIConnection):
         client = self.clients[resource_map["client"]]
         array = resource_map["array"]
         resources = []
-        # Images
-        results = oci.pagination.list_call_get_all_results(client.list_images, compartment_id=self.tenancy_ocid).data
-        # Convert to Json object
-        resources = self.toJson(results)
-        logger.info(jsonToFormattedString(resources))
-        for r in resources:
-            r['sort_key'] = f"{r['operating_system']} {r['operating_system_version']} {r['display_name']}"
-        self.dropdown_json[array] = sorted(self.deduplicate(resources, 'sort_key'), key=lambda k: k['sort_key'])
-        logger.info(jsonToFormattedString(self.dropdown_json[array]))
-        not_found = False
-        for r in self.dropdown_json[array]:
-            logger.info(f'Getting Shapes for {r["id"]}')
-            if not_found:
-                r['shapes'] = self.dropdown_json['shapes']
-            else:
-                try:
-                    r['shapes'] = [s.shape for s in oci.pagination.list_call_get_all_results(client.list_image_shape_compatibility_entries, image_id=r['id']).data]
-                except oci.exceptions.ServiceError as e:
-                    not_found = True
+        self.dropdown_json[array] = []
+        # results = oci.pagination.list_call_get_all_results(client.list_images, compartment_id=self.tenancy_ocid).data
+        for compartment_id in self.all_compartment_ids:
+            # Images
+            results = oci.pagination.list_call_get_all_results(client.list_images, compartment_id=compartment_id).data
+            # results = oci.pagination.list_call_get_all_results(client.list_images, compartment_id=self.tenancy_ocid).data
+            # Convert to Json object
+            resources = self.toJson(results)
+            for r in resources:
+                r['sort_key'] = f"{r['operating_system']} {r['operating_system_version']} {r['display_name']}"
+            self.dropdown_json[array].extend(sorted(self.deduplicate(resources, 'sort_key'), key=lambda k: k['sort_key']))
+            not_found = False
+            for r in self.dropdown_json[array]:
+                if not_found:
                     r['shapes'] = self.dropdown_json['shapes']
+                else:
+                    try:
+                        r['shapes'] = [s.shape for s in oci.pagination.list_call_get_all_results(client.list_image_shape_compatibility_entries, image_id=r['id']).data]
+                    except oci.exceptions.ServiceError as e:
+                        not_found = True
+                        r['shapes'] = self.dropdown_json['shapes']
+            self.dropdown_json[array] = [r for r in self.dropdown_json[array] if r['lifecycle_state'] in self.LIFECYCLE_STATES]
         return self.dropdown_json[array]
 
     def kubernetes_versions(self):
