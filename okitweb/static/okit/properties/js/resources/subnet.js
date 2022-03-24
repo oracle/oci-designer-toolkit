@@ -21,7 +21,7 @@ class SubnetProperties extends OkitResourceProperties {
         this.vcn_id = vcn.input
         this.append(this.core_tbody, vcn.row)
         // IPv4 CIDR Blocks
-        const ipv4 = this.createInput('ipv4_cidr', 'IPv4 CIDR', `${self.id}_cidr_block`, '', (d, i, n) => {n[i].reportValidity(); self.resource.cidr_block = n[i].value})
+        const ipv4 = this.createInput('ipv4_cidr', 'IPv4 CIDR', `${self.id}_cidr_block`, '', (d, i, n) => {n[i].reportValidity(); self.resource.cidr_block = n[i].value; this.redraw()})
         this.cidr_block = ipv4.input
         this.append(this.core_tbody, ipv4.row)
 
@@ -42,19 +42,19 @@ class SubnetProperties extends OkitResourceProperties {
         this.dns_label = dns.input
         this.append(this.advanced_network_tbody, dns.row)
         // Private
-        const private_ip = this.createInput('checkbox', 'Private', `${self.id}_prohibit_public_ip_on_vnic`, '', (d, i, n) => self.resource.prohibit_public_ip_on_vnic = n[i].checked)
+        const private_ip = this.createInput('checkbox', 'Private', `${self.id}_prohibit_public_ip_on_vnic`, '', (d, i, n) => {self.resource.prohibit_public_ip_on_vnic = n[i].checked; this.redraw()})
         this.prohibit_public_ip_on_vnic = private_ip.input
         this.append(this.advanced_network_tbody, private_ip.row)
         // Route Table
-        const rt = this.createInput('select', 'Route Table', `${self.id}_route_table_id`, '', (d, i, n) => self.resource.route_table_id = n[i].value = n[i].value)
+        const rt = this.createInput('select', 'Route Table', `${self.id}_route_table_id`, '', (d, i, n) => {self.resource.route_table_id = n[i].value = n[i].value; this.redraw()})
         this.route_table_id = rt.input
         this.append(this.advanced_network_tbody, rt.row)
         // Security Lists
-        const sl = this.createInput('multiselect', 'Security Lists', `${self.id}_security_list_ids`, '', (d, i, n) => self.resource.security_list_ids = Array.from(n[i].querySelectorAll('input[type="checkbox"]:checked')).map((n) => n.value))
+        const sl = this.createInput('multiselect', 'Security Lists', `${self.id}_security_list_ids`, '', (d, i, n) => {self.resource.security_list_ids = Array.from(n[i].querySelectorAll('input[type="checkbox"]:checked')).map((n) => n.value); this.redraw()})
         this.security_list_ids = sl.input
         this.append(this.advanced_network_tbody, sl.row)
         // DHCP Options
-        const dhcp = this.createInput('select', 'DHCP Options', `${self.id}_dhcp_options_id`, '', (d, i, n) => self.resource.dhcp_options_id = n[i].value = n[i].value)
+        const dhcp = this.createInput('select', 'DHCP Options', `${self.id}_dhcp_options_id`, '', (d, i, n) => {self.resource.dhcp_options_id = n[i].value = n[i].value; this.redraw()})
         this.dhcp_options_id = dhcp.input
         this.append(this.advanced_network_tbody, dhcp.row)
 
