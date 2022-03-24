@@ -103,7 +103,14 @@ class OkitResourceProperties {
         const properties = this.createTable('', `${self.id}_core_properties`)
         this.core_tbody = properties.tbody
         this.append(core.div, properties.table)
-        let display_name = this.createInput('text', 'Name', `${self.id}_display_name`, '', (d, i, n) => self.resource.display_name = n[i].value)
+        const ocid_data = {
+            readonly: true
+        }
+        const ocid = this.createInput('text', 'Ocid', `${self.id}_ocid`, '', undefined, ocid_data)
+        this.ocid = ocid.input
+        this.append(this.core_tbody, ocid.row)
+        ocid.row.classed('collapsed', !okitSettings.show_ocids)
+        const display_name = this.createInput('text', 'Name', `${self.id}_display_name`, '', (d, i, n) => {self.resource.display_name = n[i].value; this.redraw()})
         this.display_name = display_name.input
         this.append(this.core_tbody, display_name.row)
         this.documentation_contents.append('textarea')
@@ -151,6 +158,8 @@ class OkitResourceProperties {
     }
 
     loadCore() {
+        this.ocid.property('value', this.resource.id)
+        okitSettings.show_ocids ? this.showProperty(`${this.id}_ocid`, '') : this.hideProperty(`${this.id}_ocid`, '')
         this.display_name.property('value', this.resource.display_name)
     }
 
@@ -247,6 +256,7 @@ class OkitResourceProperties {
         let input = undefined
         let cell = undefined
         let title = undefined
+        // Check for special formatting type e.g. ipv4
         if (Object.keys(this.formatting).includes(type)) {
             data = data ? {...data, ...this.formatting[type]} : formatting[type]
             type = 'text'
@@ -296,12 +306,13 @@ class OkitResourceProperties {
     }
 
     addExtraAttributes(input, data) {
-        const attributes = ['min', 'max', 'step', 'maxlength', 'pattern', 'title', 'placeholder']
+        const attributes = ['min', 'max', 'step', 'maxlength', 'pattern', 'title', 'placeholder', 'readonly']
         if (data) {
             Object.entries(data).forEach(([k, v]) => {
                 if (attributes.includes(k)) input.attr(k, v)
             })
         }
+        if (data.classes) data.classes.forEach((c) => input.classed(c, true))
     }
 
     createTextArea(id='', idx='', callback=undefined, data={}) {
@@ -387,10 +398,10 @@ class OkitResourceProperties {
 
     loadReferenceSelect(select, resource_type, empty_option=false, filter=undefined, groups=undefined, empty_value=undefined) {
         select.selectAll('*').remove()
-        if (!filter) filter = () => true
+        filter = filter ? filter : () => true
         if (empty_option) select.append('option').attr('value', '').attr('selected', 'selected').text(empty_value ? empty_value : '')
         let id = ''
-        const resources = okitOciData[resource_type]()
+        const resources = okitOciData[resource_type](filter)
         if (groups) {
             Object.entries(groups).forEach(([k, v]) => {
                 const optgrp = select.append('optgroup').attr('label', k)
@@ -404,6 +415,7 @@ class OkitResourceProperties {
                 })
             })
         } else {
+            filter = () => true
             resources.filter(filter).forEach((r, i) => {
                 r = r instanceof Object ? r : {id: r, display_name: r}
                 const option = select.append('option').attr('value', r.id).text(r.display_name)
@@ -436,4 +448,9 @@ class OkitResourceProperties {
         const cbs = [...document.querySelectorAll(`#${select.attr('id')} input[type="checkbox"]`)]
         cbs.forEach((c) => c.checked = ids.includes(c.value) )
     }
+
+    /*
+    ** Redraw
+    */
+    redraw = () => okitJsonView.update()
 }

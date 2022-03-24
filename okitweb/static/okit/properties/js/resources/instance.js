@@ -238,16 +238,19 @@ class InstanceProperties extends OkitResourceProperties {
     // Load Selects
     loadImageOSs(source=undefined) {
         source = source ? source : this.resource.source_details.image_source
+        console.info(`Loading Images For ${source}`)
         this.loadReferenceSelect(this.image_os, source === 'custom' ? 'getCustomImageOSs' : 'getPlatformImageOSs')
         const options = Array.from(this.image_os.node().options).map((opt) => opt.value)
         this.resource.source_details.os = options.includes(this.resource.source_details.os) ? this.resource.source_details.os : options.length > 0 ? options[0] : ''
         this.image_os.property('value', this.resource.source_details.os)
+        this.loadImageOSVersions(this.resource.source_details.os, source)
     }
 
     loadImageOSVersions(os=undefined, source=undefined) {
         os = os ? os : this.resource.source_details.os
         source = source ? source : this.resource.source_details.image_source
-        this.loadReferenceSelect(this.image_version, source === 'custom' ? 'getCustomImageOSVersions' : 'getPlatformImageOSVersions', (i) => i.operating_system === os)
+        console.info(`Loading Image Versions For ${source} - ${os}`)
+        this.loadReferenceSelect(this.image_version, source === 'custom' ? 'getCustomImageOSVersions' : 'getPlatformImageOSVersions', false, (i) => i.operating_system === os)
         const options = Array.from(this.image_version.node().options).map((opt) => opt.value)
         this.resource.source_details.version = options.includes(this.resource.source_details.version) ? this.resource.source_details.version : options.length > 0 ? options[0] : ''
         this.image_version.property('value', this.resource.source_details.version)
