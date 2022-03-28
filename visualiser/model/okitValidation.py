@@ -380,6 +380,16 @@ class OCIJsonValidator(object):
     def validateInstances(self):
         for artefact in self.okit_json.get('instances', []):
             logger.info('Validating {!s}'.format(artefact['display_name']))
+            # Shape
+            if artefact['shape'] == '':
+                warning = {
+                    'id': artefact['id'],
+                    'type': 'Instance',
+                    'artefact': artefact['display_name'],
+                    'message': 'Shape must be specified.',
+                    'element': 'shape'
+                }
+                self.results['warnings'].append(warning)
             # Check ssh Key
             if artefact['metadata']['ssh_authorized_keys'] == '':
                 warning = {
