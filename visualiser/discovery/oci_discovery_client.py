@@ -93,14 +93,14 @@ class OciResourceDiscoveryClient(object):
         # - "?": (oci.certificates.CertificatesClient, "list_certificate_authority_bundle_versions"),
         # - "?": (oci.certificates.CertificatesClient, "list_certificate_bundle_versions"),
         # oci.certificates_management.CertificatesManagementClient
-        "CaBundle": (oci.certificates_management.CertificatesManagementClient, "list_ca_bundles"),
-        "CaBundleAssociation": (oci.certificates_management.CertificatesManagementClient, "list_associations"), #TODO all associations use the same method?
-        "Certificate": (oci.certificates_management.CertificatesManagementClient, "list_certificates"),
-        "CertificateAssociation": (oci.certificates_management.CertificatesManagementClient, "list_associations"), # TODO
-        "CertificateVersion": (oci.certificates_management.CertificatesManagementClient, "list_certificate_versions"),
-        "CertificateAuthority": (oci.certificates_management.CertificatesManagementClient, "list_certificate_authorities"),
-        "CertificateAuthorityVersion": (oci.certificates_management.CertificatesManagementClient, "list_certificate_authority_versions"),
-        "CertificateAuthorityAssociation": (oci.certificates_management.CertificatesManagementClient, "list_associations"), # TODO
+        # "CaBundle": (oci.certificates_management.CertificatesManagementClient, "list_ca_bundles"),
+        # "CaBundleAssociation": (oci.certificates_management.CertificatesManagementClient, "list_associations"), #TODO all associations use the same method?
+        # "Certificate": (oci.certificates_management.CertificatesManagementClient, "list_certificates"),
+        # "CertificateAssociation": (oci.certificates_management.CertificatesManagementClient, "list_associations"), # TODO
+        # "CertificateVersion": (oci.certificates_management.CertificatesManagementClient, "list_certificate_versions"),
+        # "CertificateAuthority": (oci.certificates_management.CertificatesManagementClient, "list_certificate_authorities"),
+        # "CertificateAuthorityVersion": (oci.certificates_management.CertificatesManagementClient, "list_certificate_authority_versions"),
+        # "CertificateAuthorityAssociation": (oci.certificates_management.CertificatesManagementClient, "list_associations"), # TODO
         # oci.cloud_guard.CloudGuardClient
         "CloudGuardDetectorRecipe": (oci.cloud_guard.CloudGuardClient, "list_detector_recipes"),
         "CloudGuardManagedList": (oci.cloud_guard.CloudGuardClient, "list_managed_lists"),
