@@ -122,6 +122,7 @@ function newDiagram() {
 }
 function newDesignerView() {
     okitJsonView = new OkitDesignerJsonView(okitJsonModel, 'canvas-div', palette_svg);
+    loadVariablesDatalist()
 }
 function newModel() {
     okitJsonModel = new OkitJson();
@@ -163,6 +164,11 @@ function updatePaletteForPlatform() {
     $('.okit-target-row').addClass('collapsed');
     $(`.${okitJsonModel.metadata.platform}`).removeClass('hidden');
     $(`.${okitJsonModel.metadata.platform}`).removeClass('collapsed');
+}
+function loadVariablesDatalist() {
+    $('#variables_datalist').empty()
+    const datalist = d3.select('#variables_datalist')
+    if (okitJsonModel) okitJsonModel.variables_schema.variables.forEach((v) => datalist.append('option').attr('value', `var.${v.name}`))
 }
 
 /*
@@ -1438,6 +1444,7 @@ function showQueryPCAResults(region) {
     $(jqId('modal_loading_wrapper')).addClass('hidden');
     console.info('Show PCA Query Results');
     console.info('Complete ' + region);
+    console.info(regionOkitJson[region])
     okitJsonModel = regionOkitJson[region];
     newDesignerView();
     redrawSVGCanvas(region);

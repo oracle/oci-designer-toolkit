@@ -31,6 +31,7 @@ class OkitJson {
         this.user_defined = {terraform: ''};
         this.freeform_tags = {};
         this.defined_tags = {};
+        this.variables_schema = this.newVariableSchema()
 
         if (okit_json_string !== undefined && okit_json_string.length > 0) {
             this.load(JSON.parse(okit_json_string));
@@ -62,6 +63,29 @@ class OkitJson {
             terraform_dir: ''
         }
     }
+
+    newVariableSchema() {
+        return {
+            groups: [],
+            variables: []
+        }
+    }
+
+    newVariableGroup() {
+        return {
+            name: '',
+            default: ''
+        }
+    }
+
+    newVariable() {
+        return {
+            group: '',
+            name: '',
+            default: ''
+        }
+    }
+
 
     clone() {
         return new OkitJson(JSON.stringify(this))

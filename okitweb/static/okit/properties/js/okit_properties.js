@@ -248,6 +248,9 @@ class OkitResourceProperties {
             placeholder:'80, 20-22',
             pattern: "(^$|^(?:[1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])(?:-([1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5]))?$)",
             title: 'Port range 80, 20-22'
+        },
+        dns_name: {
+            pattern: "^[\w\._-]+$"
         }
     }
 
@@ -264,7 +267,7 @@ class OkitResourceProperties {
         if (['text', 'password', 'email', 'date', 'number', 'range'].includes(type)) {
             title = row.append('div').attr('class', 'td').text(label)
             cell = row.append('div').attr('class', 'td')
-            input = cell.append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', type).attr('class', 'okit-property-value').on('change', callback)
+            input = cell.append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', type).attr('class', 'okit-property-value').attr('list', 'variables_datalist').on('change', callback)
             this.addExtraAttributes(input, data)
             // return this.createSimplePropertyRow(type, label, id, idx, callback, data)
         } else if (type === 'select') {

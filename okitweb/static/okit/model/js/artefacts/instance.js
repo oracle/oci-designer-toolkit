@@ -32,7 +32,7 @@ class Instance extends OkitArtifact {
             version: '8', 
             boot_volume_size_in_gbs: '50', 
             source_type: 'image', 
-            image_source: 'platform'
+            image_source: this.getOkitJson().metadata.platform === 'pca' ? 'custom' : 'platform'
         };
         this.metadata = {
             ssh_authorized_keys: '', 
