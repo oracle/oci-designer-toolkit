@@ -394,13 +394,6 @@ class PCAQuery(OCIConnection):
                 # Convert to Json object
                 resources = self.toJson(results)
                 self.dropdown_json[array].append(resources)
-        # else:
-        #     for compartment_id in self.query_compartments:
-        #         results = oci.pagination.list_call_get_all_results(client.list_compartments, compartment_id=compartment_id).data
-        #         # Convert to Json object
-        #         resources = self.toJson(results)
-        #         self.dropdown_json[array].extend(resources)
-        logger.info(f"Compartments: {jsonToFormattedString(self.dropdown_json[array])}")
         return self.dropdown_json[array]
 
     def block_storage_volumes(self):
