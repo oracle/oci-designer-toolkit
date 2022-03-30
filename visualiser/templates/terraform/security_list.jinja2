@@ -39,6 +39,9 @@ resource "oci_core_security_list" "{{ resource_name }}" {
     {% if rule.description is defined %}
         description  = {{ rule.description | safe }}
     {% endif %}
+    {% if rule.stateless is defined %}
+        stateless  = {{ rule.stateless | safe }}
+    {% endif %}
     {% if rule.tcp_options is defined %}
         tcp_options {
         {% if rule.tcp_options.destination_port_range is defined %}
@@ -88,6 +91,9 @@ resource "oci_core_security_list" "{{ resource_name }}" {
     {% endif %}
     {% if rule.description is defined %}
         description  = {{ rule.description | safe }}
+    {% endif %}
+    {% if rule.stateless is defined %}
+        stateless  = {{ rule.stateless | safe }}
     {% endif %}
     {% if rule.tcp_options is defined %}
         tcp_options {

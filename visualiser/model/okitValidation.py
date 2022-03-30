@@ -151,15 +151,14 @@ class OCIJsonValidator(object):
             if isinstance(self.okit_json[key], list):
                 for artefact in self.okit_json[key]:
                     if used_display_names[artefact['display_name']] > 1:
-                        self.valid = False
-                        error = {
+                        warning = {
                             'id': artefact['id'],
                             'type': self.keyToType(key),
                             'artefact': artefact['display_name'],
                             'message': 'Duplicate Display Name.',
                             'element': 'display_name'
                         }
-                        self.results['warnings'].append(error)
+                        self.results['warnings'].append(warning)
         # Build Resource Name List
         used_resource_names = {}
         for key in self.okit_json:
@@ -380,16 +379,6 @@ class OCIJsonValidator(object):
     def validateInstances(self):
         for artefact in self.okit_json.get('instances', []):
             logger.info('Validating {!s}'.format(artefact['display_name']))
-            # Shape
-            if artefact['shape'] == '':
-                warning = {
-                    'id': artefact['id'],
-                    'type': 'Instance',
-                    'artefact': artefact['display_name'],
-                    'message': 'Shape must be specified.',
-                    'element': 'shape'
-                }
-                self.results['warnings'].append(warning)
             # Check ssh Key
             if artefact['metadata']['ssh_authorized_keys'] == '':
                 warning = {
@@ -431,6 +420,16 @@ class OCIJsonValidator(object):
                     'artefact': artefact['display_name'],
                     'message': f'Boot Volume Size must between 50GB and 32,768GB',
                     'element': 'boot_volume_size_in_gbs'
+                }
+                self.results['errors'].append(error)
+            # Shape
+            if artefact['shape'] == '':
+                error = {
+                    'id': artefact['id'],
+                    'type': 'Instance',
+                    'artefact': artefact['display_name'],
+                    'message': 'Shape must be specified.',
+                    'element': 'shape'
                 }
                 self.results['errors'].append(error)
 
@@ -673,6 +672,17 @@ class OCIJsonValidator(object):
                     'artefact': artefact['display_name'],
                     'message': 'Subnet is not part of a VCN.',
                     'element': 'vcn_id'
+                }
+                self.results['errors'].append(error)
+            # Check DNs
+            if len([s for s in self.okit_json.get('subnets', []) if s["id"] != artefact["id"] and s["dns_label"] == artefact["dns_label"] and s["vcn_id"] == artefact["vcn_id"]]) > 0:
+                self.valid = False
+                error = {
+                    'id': artefact['id'],
+                    'type': 'Subnet',
+                    'artefact': artefact['display_name'],
+                    'message': f'DNS Label {artefact["dns_label"]} is a duplicate of one that already exists in the VCN.',
+                    'element': 'dns_label'
                 }
                 self.results['errors'].append(error)
             # Check that CIDR exists

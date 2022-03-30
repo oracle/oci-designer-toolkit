@@ -124,11 +124,13 @@ output "{{ resource_name }}PrivateIP" {
 
 # ------ Create Block Storage Attachments
 {% for volume in volume_attachments %}
-resource "oci_core_volume_attachment" "{{ resource_name }}VolumeAttachment{{ loop.index }}" {
+resource "oci_core_volume_attachment" "{{ volume.resource_name }}" {
     attachment_type = {{ volume.attachment_type | safe }}
     instance_id     = local.{{ resource_name }}_id
-    volume_id       = {{ volume.block_storage_volume_id }}
+    volume_id       = {{ volume.volume_id }}
     display_name    = {{ volume.display_name | safe }}
+    is_read_only    = {{ volume.is_read_only | safe }}
+    is_shareable    = {{ volume.is_shareable | safe }}
 }
 {% endfor %}
 

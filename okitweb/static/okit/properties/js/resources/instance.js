@@ -11,6 +11,8 @@ class InstanceProperties extends OkitResourceProperties {
     constructor (resource) {
         const resource_tabs = ['Volumes', 'Secondary Networks', 'Cloud Init', 'Agent']
         super(resource, resource_tabs)
+        this.secondary_vnics_idx = 0;
+        this.volumes_idx = 0;
     }
 
     // Build Additional Resource Specific Properties
@@ -39,15 +41,15 @@ class InstanceProperties extends OkitResourceProperties {
         this.append(this.image_div, image_table.table)
         // Image Source
         const is_data = {options: {platform: 'Platform Images', custom: 'Custom Images'}}
-        const image_source = this.createInput('select', 'Image source', `${self.id}_image_source`, '', (d, i, n) => {self.resource.source_details.image_source = n[i].value = n[i].value; this.loadImageOSs(n[i].value)}, is_data)
+        const image_source = this.createInput('select', 'Image source', `${self.id}_image_source`, '', (d, i, n) => {self.resource.source_details.image_source = n[i].value = n[i].value; this.handleImageSourceChange(n[i].value)}, is_data)
         this.image_source = image_source.input
         this.append(this.image_tbody, image_source.row)
         // Image OS
-        const image_os = this.createInput('select', 'Image OS', `${self.id}_image_os`, '', (d, i, n) => {self.resource.source_details.os = n[i].value = n[i].value})
+        const image_os = this.createInput('select', 'Image OS', `${self.id}_image_os`, '', (d, i, n) => {self.resource.source_details.os = n[i].value = n[i].value; this.handleImageOSChange(n[i].value)})
         this.image_os = image_os.input
         this.append(this.image_tbody, image_os.row)
         // Image Version
-        const image_version = this.createInput('select', 'Image Version', `${self.id}_image_version`, '', (d, i, n) => {self.resource.source_details.version = n[i].value = n[i].value; this.loadImageOSVersions(n[i].value)})
+        const image_version = this.createInput('select', 'Image Version', `${self.id}_image_version`, '', (d, i, n) => {self.resource.source_details.version = n[i].value = n[i].value; this.handleImageOSVersionChange()})
         this.image_version = image_version.input
         this.append(this.image_tbody, image_version.row)
         // Image Id (Custom Image)
@@ -64,28 +66,34 @@ class InstanceProperties extends OkitResourceProperties {
         this.append(this.shape_div, shape_table.table)
         // Instance Type
         const it_data = {options: {vm: 'Virtual Machine', bm: 'Bare Metal'}}
-        const instance_type = this.createInput('select', 'Instance Type', `${self.id}_instance_type`, '', (d, i, n) => {self.resource.source_details.instance_type = n[i].value = n[i].value; this.handleInstanceTypeChange()}, it_data)
+        const instance_type = this.createInput('select', 'Instance Type', `${self.id}_instance_type`, '', (d, i, n) => {self.resource.source_details.instance_type = n[i].value = n[i].value; this.handleInstanceTypeChange(n[i].value)}, it_data)
         this.instance_type = instance_type.input
         this.append(this.shape_tbody, instance_type.row)
         // Shape Series
         const ss_data = {options: {amd: 'AMD', intel: 'Intel', arm: 'Ampere'}}
-        const shape_series = this.createInput('select', 'Shape Series', `${self.id}_shape_series`, '', (d, i, n) => {self.resource.source_details.shape_series = n[i].value = n[i].value; this.handleShapeSeriesChange()}, ss_data)
+        const shape_series = this.createInput('select', 'Shape Series', `${self.id}_shape_series`, '', (d, i, n) => {self.resource.source_details.shape_series = n[i].value = n[i].value; this.handleShapeSeriesChange(n[i].value)}, ss_data)
         this.shape_series = shape_series.input
+        this.shape_series_row = shape_series.row
         this.append(this.shape_tbody, shape_series.row)
         // Shape
-        const shape = this.createInput('select', 'Shape', `${self.id}_shape`, '', (d, i, n) => {self.resource.source_details.shape = n[i].value = n[i].value; this.loadOCPUs(n[i].value)})
+        const shape = this.createInput('select', 'Shape', `${self.id}_shape`, '', (d, i, n) => {self.resource.shape = n[i].value = n[i].value; this.handleShapeChange(n[i].value)})
         this.shape = shape.input
         this.append(this.shape_tbody, shape.row)
-        // Memory
-        const memory_in_gbs = this.createInput('number', 'Memory (in GB)', `${self.id}_memory_in_gbs`, '', (d, i, n) => self.resource.shape_config.memory_in_gbs = n[i].value, {min: 1, max: 16})
-        this.memory_in_gbs = memory_in_gbs.input
-        this.append(this.shape_tbody, memory_in_gbs.row)
         // OCPUS
-        const ocpus = this.createInput('number', 'OCPUs', `${self.id}_ocpus`, '', (d, i, n) => self.resource.shape_config.ocpus = n[i].value, {min: 1, max: 64})
+        const ocpus_data = {min: 1, max: 64}
+        const ocpus = this.createInput('number', 'OCPUs', `${self.id}_ocpus`, '', (d, i, n) => {self.resource.shape_config.ocpus = n[i].value; this.handleOcpusChanged(n[i].value)}, ocpus_data)
         this.ocpus = ocpus.input
+        this.ocpus_row = ocpus.row
         this.append(this.shape_tbody, ocpus.row)
+        // Memory
+        const memory_data = {min: 1, max: 16}
+        const memory_in_gbs = this.createInput('number', 'Memory (in GB)', `${self.id}_memory_in_gbs`, '', (d, i, n) => self.resource.shape_config.memory_in_gbs = n[i].value, memory_data)
+        this.memory_in_gbs = memory_in_gbs.input
+        this.memory_in_gbs_row = memory_in_gbs.row
+        this.append(this.shape_tbody, memory_in_gbs.row)
         // Networking
         const primary_network = this.addNetworkHtml(this.properties_contents, self.resource.primary_vnic)
+        this.primary_network_display_name = primary_network.display_name
         this.subnet_id = primary_network.subnet_id
         this.hostname_label = primary_network.hostname_label
         this.assign_public_ip = primary_network.assign_public_ip
@@ -129,14 +137,14 @@ class InstanceProperties extends OkitResourceProperties {
         const secondary_networks = this.createDetailsSection('Secondary Networks', `${self.id}_secondary_network_details`)
         this.append(this.secondary_networks_contents, secondary_networks.details)
         this.secondary_networks_div = secondary_networks.div
-        const secondary_vnics = this.createArrayTable('Network', `${self.id}_secondary_vnics`, '', () => self.addSecondaryNetwork())
+        const secondary_vnics = this.createArrayTable('Networks', `${self.id}_secondary_vnics`, '', () => self.addSecondaryNetwork())
         this.secondary_networks_tbody = secondary_vnics.tbody
         this.append(this.secondary_networks_div, secondary_vnics.table)    
         // Volume Attachments Tab
         const volumes = this.createDetailsSection('Volume Attachments', `${self.id}_volume_details`)
         this.append(this.volumes_contents, volumes.details)
         this.volumes_div = volumes.div
-        const vol_attachments = this.createArrayTable('Volume', `${self.id}_vol_attachments`, '', () => self.addVolumeAttachment())
+        const vol_attachments = this.createArrayTable('Attachments', `${self.id}_vol_attachments`, '', () => self.addVolumeAttachment())
         this.volumes_tbody = vol_attachments.tbody
         this.append(this.volumes_div, vol_attachments.table)    
         // Agent Tab
@@ -175,13 +183,13 @@ class InstanceProperties extends OkitResourceProperties {
         this.image_id.property('value', this.resource.source_details.image_id)
         // Shape
         this.instance_type.property('value', this.resource.instance_type)
-        this.handleInstanceTypeChange()
         this.shape_series.property('value', this.resource.chipset)
-        this.handleShapeSeriesChange()
+        this.loadImageShapes()
         this.shape.property('value', this.resource.shape)
         this.memory_in_gbs.property('value', this.resource.shape_config.memory_in_gbs)
         this.ocpus.property('value', this.resource.shape_config.ocpus)
         // Primary Network
+        this.primary_network_display_name.property('value', this.resource.primary_vnic.display_name)
         this.subnet_id.property('value', this.resource.primary_vnic.subnet_id)
         this.hostname_label.property('value', this.resource.primary_vnic.hostname_label)
         this.assign_public_ip.property('checked', this.resource.primary_vnic.assign_public_ip)
@@ -199,57 +207,111 @@ class InstanceProperties extends OkitResourceProperties {
         // Agent
         this.is_management_disabled.property('checked', this.resource.agent_config.is_management_disabled)
         this.is_monitoring_disabled.property('checked', this.resource.agent_config.is_monitoring_disabled)
+        // Secondary Networks
+        this.loadSecondaryNetworks()
+        // Volume Attachments
+        this.loadVolumeAttachments()
+        // Collapse where appropriate
+        this.image_id_row.classed('collapsed', this.resource.source_details.image_source !== 'custom')
+        this.shape_series_row.classed('collapsed', this.resource.instance_type === 'bm')
+        this.memory_in_gbs_row.classed('collapsed', !this.resource.flex_shape)
+        this.ocpus_row.classed('collapsed', !this.resource.flex_shape)
     }
 
     // Add Network HTML
-    addNetworkHtml(parent, vnic, idx='') {
+    addNetworkHtml(parent, vnic, id=this.id, idx='') {
         const elements = {}
         // Networking
-        const networking = this.createDetailsSection('Networking', `${self.id}_networking_details`, idx)
+        const networking = this.createDetailsSection('Networking', `${id}_networking_details`, idx)
         this.append(parent, networking.details)
         elements.networking_div = networking.div
-        const networking_table = this.createTable('', `${self.id}_networking$`, idx)
+        const networking_table = this.createTable('', `${id}_networking$`, idx)
         elements.networking_tbody = networking_table.tbody
         this.append(elements.networking_div, networking_table.table)
+        // Name
+        const display_name = this.createInput('text', 'Name', `${self.id}_display_name`, '', (d, i, n) => vnic.display_name = n[i].value)
+        elements.display_name = display_name.input
+        this.append(elements.networking_tbody, display_name.row)
         // Subnet
-        const subnet = this.createInput('select', 'Subnet', `${self.id}_subnet_id`, idx, (d, i, n) => vnic.subnet_id = n[i].value)
+        const subnet = this.createInput('select', 'Subnet', `${id}_subnet_id`, idx, (d, i, n) => vnic.subnet_id = n[i].value)
         elements.subnet_id = subnet.input
         this.append(elements.networking_tbody, subnet.row)
         // Hostname Label
         const hostname_data = this.hostname_data
-        const hostname = this.createInput('text', 'Hostname', `${self.id}_hostname_label`, idx, (d, i, n) => {n[i].reportValidity(); vnic.hostname_label = n[i].value}, hostname_data)
+        const hostname = this.createInput('text', 'Hostname', `${id}_hostname_label`, idx, (d, i, n) => {n[i].reportValidity(); vnic.hostname_label = n[i].value}, hostname_data)
         elements.hostname_label = hostname.input
         this.append(elements.networking_tbody, hostname.row)
         // Public IP
-        const assign_public_ip = this.createInput('checkbox', 'Assign Public IP', `${self.id}_assign_public_ip`, idx, (d, i, n) => vnic.assign_public_ip = n[i].checked)
+        const assign_public_ip = this.createInput('checkbox', 'Assign Public IP', `${id}_assign_public_ip`, idx, (d, i, n) => vnic.assign_public_ip = n[i].checked)
         elements.assign_public_ip = assign_public_ip.input
         this.append(elements.networking_tbody, assign_public_ip.row)
         // Skip Source / Destination Check
-        const skip_source_dest_check = this.createInput('checkbox', 'Skip Source / Destination Check', `${self.id}_skip_source_dest_check`, idx, (d, i, n) => vnic.skip_source_dest_check = n[i].checked)
+        const skip_source_dest_check = this.createInput('checkbox', 'Skip Source / Destination Check', `${id}_skip_source_dest_check`, idx, (d, i, n) => vnic.skip_source_dest_check = n[i].checked)
         elements.skip_source_dest_check = skip_source_dest_check.input
         this.append(elements.networking_tbody, skip_source_dest_check.row)
         // NSG Lists
-        const nsg = this.createInput('multiselect', 'Network Security Groups', `${self.id}_nsg_ids`, idx, (d, i, n) => vnic.nsg_ids = Array.from(n[i].querySelectorAll('input[type="checkbox"]:checked')).map((n) => n.value))
+        const nsg = this.createInput('multiselect', 'Network Security Groups', `${id}_nsg_ids`, idx, (d, i, n) => vnic.nsg_ids = Array.from(n[i].querySelectorAll('input[type="checkbox"]:checked')).map((n) => n.value))
         elements.nsg_ids = nsg.input
         this.append(elements.networking_tbody, nsg.row)
         return elements
     }
 
+    // Handlers
+    handleImageSourceChange(source=undefined) {
+        source = source ? source : this.resource.source_details.image_source
+        this.image_id_row.classed('collapsed', source !== 'custom')
+        this.loadImageOSs(source)
+        this.handleImageOSChange(undefined, source)
+    }
+
+    handleImageOSChange(os=undefined, source=undefined) {
+        os = os ? os : this.resource.source_details.os
+        source = source ? source : this.resource.source_details.image_source
+        this.loadImageOSVersions(os, source)
+        this.handleImageOSVersionChange()
+    }
+
+    handleImageOSVersionChange() {
+        this.loadImageShapes()
+        this.loadCustomImages()
+    }
+
+    handleInstanceTypeChange(instance_type=undefined) {
+        instance_type = instance_type ? instance_type : this.resource.instance_type
+        this.shape_series_row.classed('collapsed', instance_type === 'bm')
+        this.loadImageShapes(instance_type)
+    }
+
+    handleShapeSeriesChange(shape_series=undefined) {
+        shape_series = shape_series ? shape_series : this.resource.shape_series
+        this.loadImageShapes(undefined, shape_series)
+    }
+
+    handleShapeChange(shape=undefined) {
+        shape = shape ? shape : this.resource.shape
+        this.memory_in_gbs_row.classed('collapsed', !this.resource.flex_shape)
+        this.ocpus_row.classed('collapsed', !this.resource.flex_shape)
+        this.loadOCPUs(shape)
+        this.loadMemoryInGbp(shape)
+    }
+
+    handleOcpusChanged(ocpus=undefined) {
+        this.loadMemoryInGbp()
+    }
+
     // Load Selects
     loadImageOSs(source=undefined) {
         source = source ? source : this.resource.source_details.image_source
-        console.info(`Loading Images For ${source}`)
         this.loadReferenceSelect(this.image_os, source === 'custom' ? 'getCustomImageOSs' : 'getPlatformImageOSs')
         const options = Array.from(this.image_os.node().options).map((opt) => opt.value)
         this.resource.source_details.os = options.includes(this.resource.source_details.os) ? this.resource.source_details.os : options.length > 0 ? options[0] : ''
         this.image_os.property('value', this.resource.source_details.os)
-        this.loadImageOSVersions(this.resource.source_details.os, source)
+        // this.loadImageOSVersions(this.resource.source_details.os, source)
     }
 
     loadImageOSVersions(os=undefined, source=undefined) {
         os = os ? os : this.resource.source_details.os
         source = source ? source : this.resource.source_details.image_source
-        console.info(`Loading Image Versions For ${source} - ${os}`)
         this.loadReferenceSelect(this.image_version, source === 'custom' ? 'getCustomImageOSVersions' : 'getPlatformImageOSVersions', false, (i) => i.operating_system === os)
         const options = Array.from(this.image_version.node().options).map((opt) => opt.value)
         this.resource.source_details.version = options.includes(this.resource.source_details.version) ? this.resource.source_details.version : options.length > 0 ? options[0] : ''
@@ -261,15 +323,136 @@ class InstanceProperties extends OkitResourceProperties {
         chipset = chipset ? chipset : this.resource.chipset
         this.loadReferenceSelect(this.shape, instance_type === 'bm' ? 'getBareMetalInstanceShapes' : chipset === 'amd' ? 'getAMDInstanceShapes' : chipset === 'arm' ? 'getARMInstanceShapes' : 'getIntelInstanceShapes')
         const options = Array.from(this.shape.node().options).map((opt) => opt.value)
-        this.resource.shape = options.includes(this.resource.shape) ? this.resource.shape : options.length ? options[0] > 0 : ''
+        this.resource.shape = options.includes(this.resource.shape) ? this.resource.shape : options.length > 0 ? options[0] : ''
         this.shape.property('value', this.resource.shape)
     }
 
-    loadCustomImages() {}
+    loadCustomImages(os=undefined, version=undefined) {
+        os = os ? os : this.resource.source_details.os
+        version = version ? version : this.resource.source_details.version
+        this.loadReferenceSelect(this.image_id, 'getCustomImages', false, (i) => i.operating_system === os && i.operating_system_version === version)
+        const options = Array.from(this.image_id.node().options).map((opt) => opt.value)
+        this.resource.source_details.image_id =  options.includes(this.resource.source_details.image_id) ? this.resource.source_details.image_id : options.length > 0 ? options[0] : ''
+        this.image_id.property('value', this.resource.source_details.image_id)
+    }
 
-    loadOCPUs(shape=undefined) {}
+    // Load Custom Data
 
-    handleInstanceTypeChange(instance_type=undefined) {}
+    loadOCPUs(shape=undefined) {
+        shape = shape ? shape : this.resource.shape
+        const instance_shape = okitOciData.getInstanceShape(shape)
+        if (instance_shape && instance_shape.memory_options && instance_shape.ocpu_options) {
+            this.ocpus.attr('min', instance_shape.ocpu_options.min)
+            this.ocpus.attr('max', instance_shape.ocpu_options.max)
+            this.resource.shape_config.ocpus = this.resource.shape_config.ocpus > instance_shape.ocpu_options.min ? this.resource.shape_config.ocpus : instance_shape.ocpus
+        } else {
+            this.resource.shape_config.ocpus = 0
+        }
+        this.ocpus.property('value', this.resource.shape_config.ocpus)
+    }
 
-    handleShapeSeriesChange(shape_series=undefined) {}
+    loadMemoryInGbp(shape=undefined) {
+        shape = shape ? shape : this.resource.shape
+        const instance_shape = okitOciData.getInstanceShape(shape)
+        if (instance_shape && instance_shape.memory_options && instance_shape.ocpu_options) {
+            const min = Math.max(instance_shape.memory_options.min_in_g_bs, (instance_shape.memory_options.min_per_ocpu_in_gbs * this.resource.shape_config.ocpus));
+            const max = Math.min(instance_shape.memory_options.max_in_g_bs, (instance_shape.memory_options.max_per_ocpu_in_gbs * this.resource.shape_config.ocpus));
+            this.memory_in_gbs.attr('min', min)
+            this.memory_in_gbs.attr('max', max)
+            this.resource.shape_config.memory_in_gbs = this.resource.shape_config.memory_in_gbs > min ? this.resource.shape_config.memory_in_gbs : min
+        } else {
+            this.resource.shape_config.memory_in_gbs = 0
+        }
+        this.memory_in_gbs.property('value', this.resource.shape_config.memory_in_gbs)
+    }
+
+    // Secondary Networks
+
+    loadSecondaryNetworks() {
+        this.secondary_networks_tbody.selectAll('*').remove()
+        this.resource.vnics.forEach((e, i) => {if (i > 0) this.addSecondaryNetworkHtml(e, i+1)})
+        this.secondary_vnics_idx = this.resource.vnics.length
+    }
+    addSecondaryNetwork() {
+        const vnic = this.resource.newVnic();
+        this.resource.vnics.push(vnic);
+        this.secondary_vnics_idx += 1
+        this.addSecondaryNetworkHtml(vnic, this.secondary_vnics_idx)
+    }
+    addSecondaryNetworkHtml(vnic, idx) {
+        const id = 'vnic';
+        const delete_row = this.createDeleteRow(id, idx, () => this.deleteSecondaryNetwork(id, idx, vnic))
+        this.append(this.secondary_networks_tbody, delete_row.row)
+        const secondary_network = this.addNetworkHtml(delete_row.div, vnic, id, idx)
+        // Load Selects
+        this.loadSelect(secondary_network.subnet_id, 'subnet', true)
+        this.loadMultiSelect(secondary_network.nsg_ids, 'network_security_group', (r) => r.vcn_id === this.getOkitJson().getSubnet(vnic.subnet_id) ? this.getOkitJson().getSubnet(vnic.subnet_id).vcn_id : '')
+        // Assign Values
+        secondary_network.display_name.property('value', vnic.display_name)
+        secondary_network.subnet_id.property('value', vnic.subnet_id)
+        secondary_network.hostname_label.property('value', vnic.hostname_label)
+        secondary_network.assign_public_ip.property('checked', vnic.assign_public_ip)
+        secondary_network.skip_source_dest_check.property('value', vnic.skip_source_dest_check)
+        return secondary_network
+    }
+    deleteSecondaryNetwork(id, idx, vnic) {
+        this.resource.vnics = this.resource.vnics.filter((e) => e !== vnic)
+        $(`#${this.trId(id, idx)}`).remove()
+    }
+
+    // Block Storage Volumes
+
+    loadVolumeAttachments() {
+        this.volumes_tbody.selectAll('*').remove()
+        this.resource.volume_attachments.forEach((e, i) => {this.addVolumeAttachmentHtml(e, i+1)})
+        this.volumes_idx = this.resource.volume_attachments.length
+    }
+    addVolumeAttachment() {
+        const attachment = this.resource.newVolumeAttachment()
+        this.resource.volume_attachments.push(attachment)
+        this.volumes_idx += 1
+        this.addVolumeAttachmentHtml(attachment, this.volumes_idx)
+    }
+    addVolumeAttachmentHtml(attachment, idx) {
+        const id = `${this.id}_attachment`
+        const delete_row = this.createDeleteRow(id, idx, () => this.deleteVolumeAttachment(id, idx, attachment))
+        this.append(this.volumes_tbody, delete_row.row)
+        const attachment_details = this.createDetailsSection('Volume', `${id}_details`, idx)
+        this.append(delete_row.div, attachment_details.details)
+        const attachment_table = this.createTable('', `${id}_table`, '')
+        this.append(attachment_details.div, attachment_table.table)
+        // Name
+        const display_name = this.createInput('text', 'Name', `${self.id}_display_name`, '', (d, i, n) => attachment.display_name = n[i].value)
+        this.append(attachment_table.tbody, display_name.row)
+        display_name.input.property('value', attachment.display_name)
+        // Volume Id
+        const volume = this.createInput('select', 'Volume', `${id}_volume_id`, idx, (d, i, n) => {attachment.volume_id = n[i].value = n[i].value})
+        this.append(attachment_table.tbody, volume.row)
+        this.loadSelect(volume.input, 'block_storage_volume', true)
+        volume.input.property('value', attachment.volume_id)
+        // Attachment Type
+        const attachment_type = this.createInput('select', 'Attachment Type', `${id}_attachment_type`, idx, (d, i, n) => {attachment.attachment_type = n[i].value = n[i].value})
+        this.append(attachment_table.tbody, attachment_type.row)
+        this.loadAttachmentTypeSelect(attachment_type.input)
+        attachment_type.input.property('value', attachment.attachment_type)
+        // Read Only
+        const read_only = this.createInput('checkbox', 'Read Only', `${id}_is_read_only`, idx, (d, i, n) => attachment.is_read_only = n[i].checked)
+        this.append(attachment_table.tbody, read_only.row)
+        read_only.input.property('checked', attachment.is_read_only)
+        // Shareable
+        const shareable = this.createInput('checkbox', 'Shareable', `${id}_is_shareable`, idx, (d, i, n) => attachment.is_shareable = n[i].checked)
+        this.append(attachment_table.tbody, shareable.row)
+        shareable.input.property('checked', attachment.is_shareable)
+    }
+    deleteVolumeAttachment(id, idx, attachment) {
+        this.resource.volume_attachments = this.resource.volume_attachments.filter((e) => e !== attachment)
+        $(`#${this.trId(id, idx)}`).remove()
+    }
+    loadAttachmentTypeSelect(select) {
+        const types_map = new Map([ // Map to Terraform Local Variable Names
+            ['Paravirtualized', 'paravirtualized'],
+            ['ISCSI', 'iscsi'],
+        ]);
+        this.loadSelectFromMap(select, types_map)
+    }
 }

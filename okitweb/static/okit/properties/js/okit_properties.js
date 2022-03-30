@@ -265,22 +265,22 @@ class OkitResourceProperties {
             type = 'text'
         }
         if (['text', 'password', 'email', 'date', 'number', 'range'].includes(type)) {
-            title = row.append('div').attr('class', 'td').text(label)
+            title = row.append('div').attr('class', 'td property-label').text(label)
             cell = row.append('div').attr('class', 'td')
             input = cell.append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', type).attr('class', 'okit-property-value').attr('list', 'variables_datalist').on('change', callback)
             this.addExtraAttributes(input, data)
             // return this.createSimplePropertyRow(type, label, id, idx, callback, data)
         } else if (type === 'select') {
-            title = row.append('div').attr('class', 'td').text(label)
+            title = row.append('div').attr('class', 'td property-label').text(label)
             input = row.append('div').attr('class', 'td').append('select').attr('id', this.inputId(id, idx)).attr('class', 'okit-property-value').on('change', callback)
             if (data && data.options) {
                 Object.entries(data.options).forEach(([k, v]) => input.append('option').attr('value', k).text(v))
             }
         } else if (type === 'multiselect') {
-            title = row.append('div').attr('class', 'td').text(label)
+            title = row.append('div').attr('class', 'td property-label').text(label)
             input = row.append('div').attr('class', 'td').append('div').attr('id', this.inputId(id, idx)).attr('class', 'okit-multiple-select').on('change', callback)
         } else if (type === 'checkbox') {
-            row.append('div').attr('class', 'td')
+            row.append('div').attr('class', 'td property-label')
             cell = row.append('div').attr('class', 'td')
             input = cell.append('input').attr('type', 'checkbox').attr('id', this.inputId(id, idx)).attr('class', 'okit-property-value').on('input', callback)
             cell.append('label').attr('for', this.inputId(id, idx)).text(label)
@@ -291,7 +291,7 @@ class OkitResourceProperties {
     }
     createSimplePropertyRow(type='text', label='', id='', idx=0, callback=undefined, data={}) {
         const row = d3.create('div').attr('class', 'tr').attr('id', this.trId(id, idx))
-        row.append('div').attr('class', 'td').text(label)
+        row.append('div').attr('class', 'td property-label').text(label)
         const input = this.createSimpleInputCell(type, id, idx, callback, data)
         this.append(input.row, input.cell)
         return {row: input.row, cell: input.cell, input: input.input}
@@ -405,6 +405,7 @@ class OkitResourceProperties {
         if (empty_option) select.append('option').attr('value', '').attr('selected', 'selected').text(empty_value ? empty_value : '')
         let id = ''
         const resources = okitOciData[resource_type](filter)
+        console.info('Resources', resources)
         if (groups) {
             Object.entries(groups).forEach(([k, v]) => {
                 const optgrp = select.append('optgroup').attr('label', k)

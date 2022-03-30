@@ -39,14 +39,14 @@ class InstanceView extends OkitDesignerArtefactView {
      */
     // Add Specific Mouse Events
     addAssociationHighlighting() {
-        for (let id of this.block_storage_volume_ids) {$(jqId(id)).addClass('highlight-association');}
-        for (let vnic of this.getVnicAttachments()) {$(jqId(vnic.subnet_id)).addClass('highlight-association');}
+        for (let id of this.artefact.block_storage_volume_ids) {$(jqId(id)).addClass('highlight-association');}
+        for (let vnic of this.getVnicAttachments().filter((v) => v.subnet_id !== '')) {$(jqId(vnic.subnet_id)).addClass('highlight-association');}
         for (let id of this.primary_vnic.nsg_ids) {$(jqId(id)).addClass('highlight-association');}
     }
 
     removeAssociationHighlighting() {
-        for (let id of this.block_storage_volume_ids) {$(jqId(id)).removeClass('highlight-association');}
-        for (let vnic of this.getVnicAttachments()) {$(jqId(vnic.subnet_id)).removeClass('highlight-association');}
+        for (let id of this.artefact.block_storage_volume_ids) {$(jqId(id)).removeClass('highlight-association');}
+        for (let vnic of this.getVnicAttachments().filter((v) => v.subnet_id !== '')) {$(jqId(vnic.subnet_id)).removeClass('highlight-association');}
         for (let id of this.primary_vnic.nsg_ids) {$(jqId(id)).removeClass('highlight-association');}
     }
     // TODO: Decide If Required
@@ -83,7 +83,7 @@ class InstanceView extends OkitDesignerArtefactView {
         this.properties_sheet = new InstanceProperties(this.artefact)
     }
 
-    loadProperties() {
+    loadProperties1() {
         let me = this;
         const self = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/instance_v2.html", () => {
@@ -260,8 +260,8 @@ class InstanceView extends OkitDesignerArtefactView {
         $(`#${this.trId(id, idx)}`).remove()
     }
 
-    // V1 Implementation
-    loadShapes() {
+    // TODO: Delete V1 Implementation
+    loadShapesDeprecated() {
         const self = this;
         const shape_select = $(jqId('shape'));
         $(shape_select).empty();
@@ -274,8 +274,8 @@ class InstanceView extends OkitDesignerArtefactView {
         shape_select.on('change', () => {self.loadOSs($("#shape").val());self.loadOCPUs($("#shape").val());});
     }
 
-    // V1 Implementation
-    loadOSs(shape) {
+    // TODO: Delete V1 Implementation
+    loadOSsDeprecated(shape) {
         const self = this;
         const os_select = $(jqId('os'));
         let os_exists = false;
@@ -291,8 +291,8 @@ class InstanceView extends OkitDesignerArtefactView {
         $("#os").val(this.source_details.os);
     }
 
-    // V1 Implementation
-    loadOSVersions(os) {
+    // TODO: Delete V1 Implementation
+    loadOSVersionsDeprecated(os) {
         const self = this;
         const version_select = $(jqId('version'));
         let version_exists = false;
@@ -350,8 +350,8 @@ class InstanceView extends OkitDesignerArtefactView {
         memory_in_gbs.value = this.shape_config.memory_in_gbs;
     }
 
-    // V1 Implementation
-    loadSecondaryVnics() {
+    // TODO: Delete V1 Implementation
+    loadSecondaryVnicsDeprecated() {
         // Empty Existing VNICs
         $(jqId('vnics_table_body')).empty();
         // VNICs
@@ -360,23 +360,23 @@ class InstanceView extends OkitDesignerArtefactView {
         }
     }
 
-    // V1 Implementation
-    addSecondaryVnic() {
+    // TODO: Delete V1 Implementation
+    addSecondaryVnicDeprecated() {
         let vnic = {subnet_id: '', assign_public_ip: true, nsg_ids: [], skip_source_dest_check: false, hostname_label: this.display_name.toLowerCase() + this.vnics.length};
         this.vnics.push(vnic);
         this.loadSecondaryVnics();
         displayOkitJson();
     }
 
-    // V1 Implementation
-    deleteSecondayVnic(vnic_idx) {
+    // TODO: Delete V1 Implementation
+    deleteSecondayVnicDeprecated(vnic_idx) {
         this.vnics.splice(vnic_idx, 1);
         this.loadSecondaryVnics();
         displayOkitJson();
     }
 
-    // V1 Implementation
-    addVnicHtml(vnic, idx) {
+    // TODO: Delete V1 Implementation
+    addVnicHtmlDeprecated(vnic, idx) {
         let me = this;
         let tbody = d3.select(d3Id('vnics_table_body'));
         let row = tbody.append('div').attr('class', 'tr');
