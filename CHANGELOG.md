@@ -4,7 +4,14 @@
 ## Version 0.34.0
 **Release Date**: 13th April 2022
 ### Features
+1. Add Subnet validation for duplicate DNS Label.
+2. New Properties panels:
+    1. Instance
+3. Extend Volume Attachment information for Instances
 ### Bug Fixes
+1. Resolve issue when querying single compartment for PCA not returning any compartments.
+2. Resolve issue where duplicate Display Names were still being reported as an error.
+3. Add missing "Stateless" flag to Security list Ingress/Egress rule generation.
 
 
 ## Version 0.34.0

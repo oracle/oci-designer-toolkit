@@ -45,7 +45,6 @@ class Instance extends OkitArtifact {
         // TODO: Future
         //this.launch_options_specified = false;
         //this.launch_options = {boot_volume_type: '', firmware: '', is_consistent_volume_naming_enabled: false, is_pv_encryption_in_transit_enabled: false, network_type: '', remote_data_volume_type: ''};
-        this.block_storage_volume_ids = [];
         this.volume_attachments = []
         this.preserve_boot_volume = false;
         this.is_pv_encryption_in_transit_enabled = false;
@@ -57,10 +56,11 @@ class Instance extends OkitArtifact {
         delete this.subnet_id;
         Object.defineProperty(this, 'primary_vnic', {get: function() {return this.vnics[0];}, set: function(vnic) {this.vnics[0] = vnic;}, enumerable: true });
         Object.defineProperty(this, 'subnet_id', {get: function() {return this.primary_vnic.subnet_id;}, set: function(id) {this.primary_vnic.subnet_id = id;}, enumerable: true });
-        Object.defineProperty(this, 'instance_type', {get: function() {return this.shape.toLowerCase().substr(0,2);}, set: function(type) {}, enumerable: true });
-        Object.defineProperty(this, 'chipset', {get: function() {return this.shape.startsWith('VM.') && this.shape.includes('.E') ? 'amd' : this.shape.startsWith('VM.') && this.shape.includes('.A') ? 'arm' : 'intel'}, set: function(chipset) {}, enumerable: true });
-        Object.defineProperty(this, 'shape_series', {get: function() {return this.shape.startsWith('VM.') && this.shape.includes('.E') ? 'amd' : this.shape.startsWith('VM.') && this.shape.includes('.A') ? 'arm' : 'intel'}, set: function(chipset) {}, enumerable: true });
-        Object.defineProperty(this, 'flex_shape', {get: function() {return this.shape.endsWith('.Flex')}, set: function(flex_shape) {}, enumerable: true });
+        Object.defineProperty(this, 'instance_type', {get: function() {return !this.shape ? 'vm' : this.shape.toLowerCase().substr(0,2);}, set: function(type) {}, enumerable: true });
+        Object.defineProperty(this, 'chipset', {get: function() {return !this.shape ? 'intel' : this.shape.startsWith('VM.') && this.shape.includes('.E') ? 'amd' : this.shape.startsWith('VM.') && this.shape.includes('.A') ? 'arm' : 'intel'}, set: function(chipset) {}, enumerable: true });
+        Object.defineProperty(this, 'shape_series', {get: function() {return !this.shape ? 'intel' : this.shape.startsWith('VM.') && this.shape.includes('.E') ? 'amd' : this.shape.startsWith('VM.') && this.shape.includes('.A') ? 'arm' : 'intel'}, set: function(chipset) {}, enumerable: true });
+        Object.defineProperty(this, 'flex_shape', {get: function() {return !this.shape ? false : this.shape.endsWith('.Flex')}, set: function(flex_shape) {}, enumerable: true });
+        Object.defineProperty(this, 'block_storage_volume_ids', {get: () => {return this.volume_attachments.map((va) => va.volume_id)}})
     }
 
     /*
@@ -83,11 +83,22 @@ class Instance extends OkitArtifact {
         if (this.subnet_ids !== undefined) {if (this.subnet_ids.length > 0) {for (let subnet_id of this.subnet_ids) {this.vnics.push({subnet_id: subnet_id})}} delete this.subnet_ids;}
         if (this.subnet_id !== undefined) {if (this.vnics.length === 0) {this.vnics.push({subnet_id: ''})} this.vnics[0].subnet_id = this.subnet_id; delete this.subnet_id;}
         if (this.hostname_label !== undefined) {this.vnics[0].hostname_label = this.hostname_label; delete this.hostname_label;}
-        for (let vnic of this.vnics) {
+        this.vnics.forEach((vnic, i) => {
+            if (!vnic.hasOwnProperty('resource_name')) vnic.resource_name = `${this.resource_name}VnicAttachment${i+1}`
+            if (!vnic.hasOwnProperty('display_name')) vnic.display_name = `${this.display_name} Vnic`
             if (!vnic.hasOwnProperty('assign_public_ip')) {vnic.assign_public_ip = true;}
             if (!vnic.hasOwnProperty('skip_source_dest_check')) {vnic.skip_source_dest_check = false;}
             if (!vnic.hasOwnProperty('nsg_ids')) {vnic.nsg_ids = [];}
             if (vnic.availability_domain) {vnic.availability_domain = this.getAvailabilityDomainNumber(vnic.availability_domain)}
+        })
+        if (this.block_storage_volume_ids) {
+            this.block_storage_volume_ids.forEach((bsv, i) => {
+                const va = this.newVolumeAttachment()
+                va.volume_id = bsv
+                va.resource_name = `${this.resource_name}VolumeAttachment${i+1}`
+                this.volume_attachments.push(va)
+            })
+            delete this.block_storage_volume_ids
         }
     }
     /*
@@ -95,6 +106,8 @@ class Instance extends OkitArtifact {
     */
     newVnic() {
         return {
+            resource_name: `${this.generateResourceName()}VnicAttachment`,
+            display_name: `${this.display_name} Vnic`,
             subnet_id: '', 
             assign_public_ip: true, 
             nsg_ids: [], 
@@ -106,10 +119,14 @@ class Instance extends OkitArtifact {
     ** Create Volume Attachment
     */
    newVolumeAttachment() {
-       return {
-           volume_id: '',
-           attachment_type: 'paravirualized'
-       }
+        return {
+            resource_name: `${this.generateResourceName()}VolumeAttachment`,
+            display_name: `${this.display_name} Volume Attachment`,
+            volume_id: '',
+            attachment_type: 'paravirtualized',
+            is_read_only: false,
+            is_shareable: false
+        }
    }
 
     /*
@@ -117,7 +134,7 @@ class Instance extends OkitArtifact {
      */
     deleteReferences() {
         // Instance Volume Attachment
-        this.getOkitJson().getLoadBalancers().forEach((r) => r.vnics = r.instance_ids.filter((id) => id != this.id))
+        this.getOkitJson().getLoadBalancers().forEach((r) => r.instance_ids = r.instance_ids.filter((id) => id != this.id))
     }
 
     getNamePrefix() {

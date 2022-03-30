@@ -620,7 +620,7 @@ li a.parent-item:hover {
     table-layout: fixed;
 }
 
-.okit-property-editor .okit-table .tr .td:first-child {
+.okit-property-editor .okit-table .tr .property-label {
     width: 20em;
     font-weight: bolder;
 }
