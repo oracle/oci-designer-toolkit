@@ -8,11 +8,14 @@
 2. New Properties panels:
     1. Instance
 3. Extend Volume Attachment information for Instances
+4. Sort Local / Git / Reference Architecture Side panels by filename.
+5. Add generic render function for Terraform Generation.
 ### Bug Fixes
 1. Resolve issue when querying single compartment for PCA not returning any compartments.
 2. Resolve issue where duplicate Display Names were still being reported as an error.
 3. Add missing "Stateless" flag to Security list Ingress/Egress rule generation.
 4. Add test to see if import_drg_route_distribution_id exists during Terraform generation.
+5. Fix issue where network entity in route rule was not filtered by vcn id
 
 
 ## Version 0.34.0

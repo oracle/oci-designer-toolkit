@@ -380,7 +380,7 @@ class OCIGenerator(object):
         resource.pop('definition', None)
         # ---- Process Remaining Keys
         self.processResourceElements(resource, self.jinja2_variables)
-        logger.info(jsonToFormattedString(self.jinja2_variables))
+        # logger.info(jsonToFormattedString(self.jinja2_variables))
 
         # -- Render Template
         for template in templates:
