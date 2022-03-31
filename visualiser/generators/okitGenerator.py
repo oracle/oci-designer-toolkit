@@ -380,7 +380,7 @@ class OCIGenerator(object):
         resource.pop('definition', None)
         # ---- Process Remaining Keys
         self.processResourceElements(resource, self.jinja2_variables)
-        # logger.info(jsonToFormattedString(self.jinja2_variables))
+        logger.info(jsonToFormattedString(self.jinja2_variables))
 
         # -- Render Template
         for template in templates:
@@ -393,15 +393,16 @@ class OCIGenerator(object):
         # Process Elements in Json Data
         if isinstance(json_data, dict):
             for key, val in json_data.items():
-                logger.info(f'Processing {key}')
+                # logger.info(f'Processing {key}')
                 if isinstance(val, str):
                     # Process Simple Elements First
                     # if key.endswith('_ids') and isinstance(val, list):
                     #     # List of Reference Ids
                     #     ids = [self.getLocalReference(id) for id in val]
                     #     parent[key] = self.formatJinja2Value(ids)
-                    # el
-                    if key.endswith('_id'):
+                    if key == 'resource_name':
+                        parent[key] = val
+                    elif key.endswith('_id') and  val != '':
                         # Simple Reference
                         parent[key] = self.getLocalReference(val)
                     elif val != '':

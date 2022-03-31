@@ -22,8 +22,8 @@ locals {
 # ------ Get List Images
 data "oci_core_images" "{{ resource_name }}Images" {
     compartment_id           = {{ compartment_ocid }}
-    operating_system         = {{ os | safe }}
-    operating_system_version = {{ os_version | safe }}
+    operating_system         = {{ source_details.os | safe }}
+    operating_system_version = {{ source_details.version | safe }}
     shape                    = {{ shape | safe }}
 }
 locals {
@@ -39,32 +39,32 @@ resource "oci_core_instance" "{{ resource_name }}" {
     # Optional
     display_name        = {{ display_name | safe }}
     availability_domain = data.oci_identity_availability_domains.AvailabilityDomains.availability_domains[{{ availability_domain | safe }} - 1]["name"]
-{% if is_management_disabled is defined or is_monitoring_disabled is defined %}
+{% if agent_config is defined and (is_management_disabled is defined or is_monitoring_disabled is defined) %}
     agent_config {
         # Optional
 {% if is_management_disabled is defined %}
-        is_management_disabled = {{ is_management_disabled | safe }}
+        agent_config.is_management_disabled = {{ agent_config.is_management_disabled | safe }}
 {% endif %}
 {% if is_monitoring_disabled is defined %}
-        is_monitoring_disabled = {{ is_monitoring_disabled | safe }}
+        agent_config.is_monitoring_disabled = {{ agent_config.is_monitoring_disabled | safe }}
 {% endif %}
     }
 {% endif %}
     create_vnic_details {
         # Required
-        subnet_id        = {{ subnet_id }}
+        subnet_id        = {{ vnics[0].subnet_id }}
         # Optional
-        assign_public_ip = {{ assign_public_ip | safe }}
-        display_name     = {{ display_name | safe }}
-        hostname_label   = {{ hostname_label | safe }}
-{% if nsg_ids is defined %}
-        nsg_ids          = [{% for nsg_id in nsg_ids %}{{ nsg_id }}{% if not loop.last %},{% endif %}{% endfor %}]
+        assign_public_ip = {{ vnics[0].assign_public_ip | safe }}
+        display_name     = {{ vnics[0].display_name | safe }}
+        hostname_label   = {{ vnics[0].hostname_label | safe }}
+{% if vnics[0].nsg_ids is defined %}
+        nsg_ids          = [{% for nsg_id in vnics[0].nsg_ids %}{{ nsg_id }}{% if not loop.last %},{% endif %}{% endfor %}]
 {% endif %}
-{% if private_ip is defined %}
-        private_ip       = {{ private_ip | safe }}
+{% if vnics[0].private_ip is defined %}
+        private_ip       = {{ vnics[0].private_ip | safe }}
 {% endif %}
-{% if skip_source_dest_check is defined %}
-        skip_source_dest_check = {{ skip_source_dest_check | safe }}
+{% if vnics[0].skip_source_dest_check is defined %}
+        skip_source_dest_check = {{ vnics[0].skip_source_dest_check | safe }}
 {% endif %}
 {% if defined_tags is defined %}
         defined_tags     = {{ defined_tags | safe }}
@@ -76,12 +76,16 @@ resource "oci_core_instance" "{{ resource_name }}" {
 {% if fault_domain is defined %}
     fault_domain = {{ fault_domain | safe }}
 {% endif %}
+{% if metadata is defined %}
     metadata = {
-        ssh_authorized_keys = {{ ssh_authorized_keys | safe }}
-{% if user_data is defined %}
-        user_data           = base64encode({{ user_data | safe }})
+{% if metadata.ssh_authorized_keys is defined %}
+        ssh_authorized_keys = {{ metadata.ssh_authorized_keys | safe }}
+{% endif %}
+{% if metadata.user_data is defined %}
+        user_data           = base64encode({{ metadata.user_data | safe }})
 {% endif %}
     }
+{% endif %}
 {% if shape_config is defined %}
     shape_config {
         #Optional
@@ -92,10 +96,10 @@ resource "oci_core_instance" "{{ resource_name }}" {
     source_details {
         # Required
         source_id               = local.{{ resource_name }}_image_id
-        source_type             = {{ source_type | safe }}
+        source_type             = {{ source_details.source_type | safe }}
         # Optional
-        boot_volume_size_in_gbs = {{ boot_volume_size_in_gbs | safe }}
-#        kms_key_id              = {{ kms_key_id | safe }}
+        boot_volume_size_in_gbs = {{ source_details.boot_volume_size_in_gbs | safe }}
+#        kms_key_id              = {{ source_details.kms_key_id | safe }}
     }
 {% if preserve_boot_volume is defined %}
     preserve_boot_volume = {{ preserve_boot_volume | safe }}
@@ -135,7 +139,8 @@ resource "oci_core_volume_attachment" "{{ volume.resource_name }}" {
 {% endfor %}
 
 # ------ Create VNic Attachments
-{% for vnic in vnic_attachments %}
+{% for vnic in vnics %}
+{% if loop.index > 1 %}
 resource "oci_core_vnic_attachment" "{{ resource_name }}VnicAttachment{{ loop.index }}" {
     #Required
     create_vnic_details {
@@ -166,5 +171,6 @@ resource "oci_core_vnic_attachment" "{{ resource_name }}VnicAttachment{{ loop.in
     #Optional
     display_name = {{ vnic.display_name | safe }}
 }
+{% endif %}
 {% endfor %}
 {% endif %}
