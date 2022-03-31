@@ -68,20 +68,22 @@ class OCIGenerator(object):
         self.jinja2_variables["add_provider"] = self.add_provider
     
     def addStandardResourceVariables(self, resource={}):
-        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
-        self.jinja2_variables['resource_name'] = standardisedName
-        self.jinja2_variables['output_name'] = self.standardiseOutputName(resource['display_name'])
-        # ---- Read Only
-        self.jinja2_variables['read_only'] = resource.get('read_only', False)
-        # ---- Id
-        self.jinja2_variables["ocid"] = self.formatJinja2Value(resource['id'])
-        # --- Required
+        self.jinja2_variables['output_name'] = self.standardiseOutputName(resource['resource_name'])
+        # ---- Resource Name
+        self.jinja2_variables['resource_name'] = resource.pop('resource_name', None)
+        logger.info('Processing Resource {0!s:s}'.format(self.jinja2_variables['resource_name']))
         # ---- Compartment Id
-        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['compartment_id']]))
+        self.jinja2_variables["compartment_id"] = self.getLocalReference(resource.pop('compartment_id', None))
         # ---- Display Name
-        self.addJinja2Variable("display_name", resource["display_name"], standardisedName)
+        self.jinja2_variables['display_name'] = resource.pop('display_name', 'Missing Display Name')
+        # ---- Read Only
+        self.jinja2_variables['read_only'] = resource.pop('read_only', False)
+        # ---- Id
+        self.jinja2_variables["ocid"] = self.formatJinja2Value(resource.pop('id', None))
         # ---- Tags
         self.renderTags(resource)
+        resource.pop('defined_tags', None)
+        resource.pop('freeform_tags', None)
 
 
     def get(self, artifact_type, id):
@@ -180,6 +182,47 @@ class OCIGenerator(object):
         # Process Main Data
         self.create_sequence.append(self.copyright)
 
+        # --- Get List of Compartment Ids
+        compartment_ids = [compartment['id'] for compartment in self.visualiser_json.get('compartments', [])]
+        logger.info('Compartment Ids {0!s:s}'.format(compartment_ids))
+
+        # Loop through resource lists
+        for key, value in self.visualiser_json.items():
+            if isinstance(value, list):
+                for resource in value:
+                    resource['root_compartment'] = (resource.get('compartment_id', 'ROOT') not in compartment_ids)
+                    self.renderResource(resource, [f'{key[:-1]}.jinja2'])
+        return
+
+    def generateOrig(self):
+        # Validate input json
+        validator = OCIJsonValidator(self.visualiser_json)
+        validator.validate()
+        # Build the Id to Name Map
+        self.buildIdNameMap()
+        # Generate Copyright 
+        logger.info("Processing Copyright Information")
+        jinja2_template = self.jinja2_environment.get_template("copyright.jinja2")
+        self.copyright = jinja2_template.render(self.jinja2_variables)
+        # Process Provider Connection information
+        logger.info("Processing Provider Information")
+        self.connection_provider.append(self.copyright)
+        jinja2_template = self.jinja2_environment.get_template("provider.jinja2")
+        self.connection_provider.append(jinja2_template.render(self.jinja2_variables))
+        # self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        # logger.debug(self.create_sequence[-1])
+
+        # Process Regional Data
+        logger.info("Processing Region Information")
+        self.metadata.append(self.copyright)
+        jinja2_template = self.jinja2_environment.get_template("region_data.jinja2")
+        self.metadata.append(jinja2_template.render(self.jinja2_variables))
+        # self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        # logger.debug(self.create_sequence[-1])
+
+        # Process Main Data
+        self.create_sequence.append(self.copyright)
+
         # Process keys within the input json file
         # - Users / User Groups
         for user in self.visualiser_json.get('users', []):
@@ -195,6 +238,7 @@ class OCIGenerator(object):
             compartment['root_compartment'] = (compartment.get('compartment_id', 'ROOT') not in compartment_ids)
             logger.info('Compartment {0!s:s}'.format(compartment))
             self.renderCompartment(compartment)
+            # self.renderResource(compartment, ['compartment.jinja2'])
         # -- Virtual Cloud Networks
         for virtual_cloud_network in self.visualiser_json.get('virtual_cloud_networks', []):
             self.renderVirtualCloudNetwork(virtual_cloud_network)
@@ -218,6 +262,7 @@ class OCIGenerator(object):
         # -- Internet Gateways
         for internet_gateway in self.visualiser_json.get('internet_gateways', []):
             self.renderInternetGateway(internet_gateway)
+            # self.renderResource(internet_gateway, ['internet_gateway.jinja2'])
         # -- NAT Gateways
         for nat_gateway in self.visualiser_json.get('nat_gateways', []):
             self.renderNATGateway(nat_gateway)
@@ -247,15 +292,18 @@ class OCIGenerator(object):
         # -- Security Lists
         for security_list in self.visualiser_json.get('security_lists', []):
             self.renderSecurityList(security_list)
+            # self.renderResource(security_list, ['security_list.jinja2'])
         # -- Route Tables
         for route_table in self.visualiser_json.get('route_tables', []):
             self.renderRouteTable(route_table)
+            # self.renderResource(route_table, ['route_table.jinja2'])
         # -- Service Gateways
         for service_gateway in self.visualiser_json.get('service_gateways', []):
             self.renderServiceGateway(service_gateway)
         # -- Dhcp Options
         for resource in self.visualiser_json.get('dhcp_options', []):
             self.renderDhcpOption(resource)
+            # self.renderResource(resource, ['dhcp_option.jinja2'])
         # -- Subnet
         for subnet in self.visualiser_json.get('subnets', []):
             self.renderSubnet(subnet)
@@ -318,6 +366,80 @@ class OCIGenerator(object):
         # for resource in self.visualiser_json.get('databases', []):
         #     self.renderDatabase(resource)
 
+        return
+
+    # Render Resources
+
+    def renderResource(self, resource, templates=[]):
+        # Reset Variables
+        self.initialiseJinja2Variables()
+        # ---- Add Standard
+        self.addStandardResourceVariables(resource)
+        # ---- Remove OKIT Meta Data
+        resource.pop('documentation', None)
+        resource.pop('definition', None)
+        # ---- Process Remaining Keys
+        self.processResourceElements(resource, self.jinja2_variables)
+        logger.info(jsonToFormattedString(self.jinja2_variables))
+
+        # -- Render Template
+        for template in templates:
+            jinja2_template = self.jinja2_environment.get_template(template)
+            self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        # logger.debug(self.create_sequence[-1])
+        return         
+
+    def processResourceElements(self, json_data, parent={}, idx=0):
+        # Process Elements in Json Data
+        if isinstance(json_data, dict):
+            for key, val in json_data.items():
+                logger.info(f'Processing {key}')
+                if isinstance(val, str):
+                    # Process Simple Elements First
+                    # if key.endswith('_ids') and isinstance(val, list):
+                    #     # List of Reference Ids
+                    #     ids = [self.getLocalReference(id) for id in val]
+                    #     parent[key] = self.formatJinja2Value(ids)
+                    # el
+                    if key.endswith('_id'):
+                        # Simple Reference
+                        parent[key] = self.getLocalReference(val)
+                    elif val != '':
+                        # Add Simple Value
+                        parent[key] = self.formatJinja2Value(val)
+                    else:
+                        # Remove empty / optional value
+                        parent.pop(key, None)
+                elif isinstance(val, dict):
+                    # Child Dict so recursively call routine
+                    parent[key] = {}
+                    self.processResourceElements(val, parent[key])
+                    if len(parent[key].keys()) == 0:
+                        # Dictionary is empty
+                        parent.pop(key, None)
+                elif isinstance(val, list):
+                    if len(val) > 0 and isinstance(val[0], dict):
+                        parent[key] = []
+                        for element in val:
+                            entry = {}
+                            self.processResourceElements(element, entry)
+                            if len(entry.keys()) > 0:
+                                parent[key].append(entry)
+                    elif len(val) > 0:
+                        if key.endswith('_ids') and isinstance(val, list):
+                            # List of Reference Ids
+                            parent[key] = [self.getLocalReference(id) for id in val]
+                            # ids = [self.getLocalReference(id) for id in val]
+                            # parent[key] = self.formatJinja2Value(ids)
+                    else:
+                        parent.pop(key, None)
+                elif isinstance(val, bool):
+                    parent[key] = val
+                elif val != None:
+                    parent[key] = self.formatJinja2Value(val)
+                else:
+                    logger.info(f'Ignoring: {key} / {val}')
+                    parent.pop(key, None)
         return
 
     # OCI Resource Specific Render methods, one exists for each resource we use
@@ -798,6 +920,7 @@ class OCIGenerator(object):
         if resource.get("default", False): # Is it valid to replace the default DHCP Options
             self.jinja2_variables["manage_default_resource_id"] = self.formatJinja2IdReference(
                 self.standardiseResourceName(self.id_name_map[resource['vcn_id']]), 'default_dhcp_options_id')
+            self.jinja2_variables["default"] = resource["default"]
         else:
             self.removeJinja2Variable("manage_default_resource_id")
         # ---- Compartment Id
@@ -2081,6 +2204,7 @@ class OCIGenerator(object):
         if resource.get("default", False):
             self.jinja2_variables["manage_default_resource_id"] = self.formatJinja2IdReference(
                 self.standardiseResourceName(self.id_name_map[resource['vcn_id']]), 'default_route_table_id')
+            self.jinja2_variables["default"] = resource["default"]
         else:
             self.removeJinja2Variable("manage_default_resource_id")
         # ---- Compartment Id
@@ -2149,6 +2273,7 @@ class OCIGenerator(object):
         if resource.get("default", False):
             self.jinja2_variables["manage_default_resource_id"] = self.formatJinja2IdReference(
                 self.standardiseResourceName(self.id_name_map[resource['vcn_id']]), 'default_security_list_id')
+            self.jinja2_variables["default"] = resource["default"]
         else:
             self.removeJinja2Variable("manage_default_resource_id")
         # ---- Compartment Id
@@ -2192,7 +2317,7 @@ class OCIGenerator(object):
             jinja2_egress_rules.append(jinja2_egress_rule)
             # Increment rule number
             rule_number += 1
-        self.jinja2_variables["egress_rules"] = jinja2_egress_rules
+        self.jinja2_variables["egress_security_rules"] = jinja2_egress_rules
         # ---- Ingress Rules
         rule_number = 1
         jinja2_ingress_rules = []
@@ -2227,7 +2352,7 @@ class OCIGenerator(object):
             jinja2_ingress_rules.append(jinja2_ingress_rule)
             # Increment rule number
             rule_number += 1
-        self.jinja2_variables["ingress_rules"] = jinja2_ingress_rules
+        self.jinja2_variables["ingress_security_rules"] = jinja2_ingress_rules
         # ---- Tags
         self.renderTags(resource)
 
@@ -2583,65 +2708,6 @@ class OCIGenerator(object):
         self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
         logger.debug(self.create_sequence[-1])
         return
-
-    # TODO: Generic Render
-    def renderResource(self, resource):
-        # Reset Variables
-        self.initialiseJinja2Variables()
-        # Read Data
-        resourceName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
-        self.jinja2_variables['resource_name'] = resourceName
-        self.jinja2_variables['output_name'] = resource['display_name']
-        logger.info('Processing Resource {0!s:s}'.format(resourceName))
-        # ---- Read Only
-        self.jinja2_variables['read_only'] = resource.get('read_only', False)
-        # ---- Id
-        self.jinja2_variables["ocid"] = self.formatJinja2Value(resource['id'])
-
-    # TODO: Generic Render Element need to pass in parent and then walk hierarchy
-    def processResourceElements(self, json_data, standardisedName, parent=None, idx=0):
-        # Process Elements in Json Data
-        if isinstance(json_data, dict):
-            for key, val in json_data.items():
-                logger.debug('{0!s:s} : {1!s:s}'.format(key, val))
-                if isinstance(val, str):
-                    # Process Simple Elements First
-                    if key.endswith('_ids') and isinstance(val, list):
-                        # List of Reference Ids
-                        ids = [self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[id])) for id in val]
-                        self.addJinja2Variable(key, ids, standardisedName)
-                    elif key.endswith('_id'):
-                        # Simple Reference
-                        self.addJinja2Variable(key, self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[val])), standardisedName)
-                    elif val != '':
-                        # Add Simple Value
-                        self.addJinja2Variable(key, val, standardisedName)
-                    else:
-                        # Remove empty / optional value
-                        self.removeJinja2Variable(key)
-                elif isinstance(val, dict):
-                    # Child Dict so recursively call routine
-                    self.addJinja2Variable(key, {}, standardisedName)
-                    self.processResourceElements(val, standardisedName, key)
-                    if not self.getJinja2Variable(key):
-                        # Dictionary is empty
-                        self.removeJinja2Variable(key)
-                elif isinstance(val, list):
-                    if len(val) > 0 and isinstance(val[0], dict):
-                        for element in json_data:
-                            self.processResourceElements(val, standardisedName, key)
-                    elif len(val) > 0:
-                        # TODO: Build names for key based on parent
-                        vals = [self.generateJinja2Variable(key, val, standardisedName) for v in val]
-                        self.addJinja2Variable(key, vals, standardisedName)
-                    else:
-                        self.removeJinja2Variable(key)
-                elif val != '':
-                    self.addJinja2Variable(key, val, standardisedName)
-                else:
-                    self.removeJinja2Variable(key)
-        return
-
 
     def addJinja2Variable(self, name, value, resource):
         self.jinja2_variables[name] = self.generateJinja2Variable(name, value, resource)
