@@ -45,7 +45,6 @@ resource "oci_core_drg_route_table_route_rule" "{{ resource_name }}Rule{{ loop.i
     destination = {{ rule.destination | safe }}
     destination_type = {{ rule.destination_type | safe }}
     next_hop_drg_attachment_id = {{ rule.next_hop_drg_attachment_id | safe }}
-
 }
 {% endfor %}
 {% endif %}

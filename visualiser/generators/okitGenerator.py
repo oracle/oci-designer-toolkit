@@ -140,6 +140,13 @@ class OCIGenerator(object):
                     # self.id_name_map[self.formatOcid(asset["id"])] = asset.get("display_name", asset.get("name", "Unknown"))
                     self.id_name_map[self.formatOcid(asset["id"])] = asset.get("resource_name", asset.get("display_name", "Unknown"))
         return
+    
+    def getLocalReference(self, id):
+        reference = self.id_name_map.get(id, None)
+        if reference is not None:
+            return self.formatJinja2IdReference(self.standardiseResourceName(reference))
+        else:
+            return self.formatJinja2Value(id)
 
     def formatOcid(self, id):
         return id
@@ -934,7 +941,7 @@ class OCIGenerator(object):
         # ---- DRG Id
         self.jinja2_variables["drg_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['drg_id']]))
         # ---- Distribution Id
-        if len(resource["import_drg_route_distribution_id"]):
+        if len(resource.get("import_drg_route_distribution_id", "")):
             self.jinja2_variables["import_drg_route_distribution_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['import_drg_route_distribution_id']]))
         # ---- Display Name
         self.addJinja2Variable("display_name", resource["display_name"], standardisedName)
@@ -947,7 +954,8 @@ class OCIGenerator(object):
             jinja2_rules.append({
                 "destination": self.formatJinja2Value(rule["destination"]),
                 "destination_type": self.formatJinja2Value(rule["destination_type"]),
-                "next_hop_drg_attachment_id": self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[rule['next_hop_drg_attachment_id']]))
+                # "next_hop_drg_attachment_id": self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[rule['next_hop_drg_attachment_id']]))
+                "next_hop_drg_attachment_id": self.getLocalReference(rule['next_hop_drg_attachment_id'])
             })
         self.jinja2_variables["drg_route_rules"] = jinja2_rules
         # ---- Tags

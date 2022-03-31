@@ -12,6 +12,7 @@
 1. Resolve issue when querying single compartment for PCA not returning any compartments.
 2. Resolve issue where duplicate Display Names were still being reported as an error.
 3. Add missing "Stateless" flag to Security list Ingress/Egress rule generation.
+4. Add test to see if import_drg_route_distribution_id exists during Terraform generation.
 
 
 ## Version 0.34.0
