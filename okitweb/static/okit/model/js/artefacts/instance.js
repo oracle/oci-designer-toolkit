@@ -46,6 +46,7 @@ class Instance extends OkitArtifact {
         //this.launch_options_specified = false;
         //this.launch_options = {boot_volume_type: '', firmware: '', is_consistent_volume_naming_enabled: false, is_pv_encryption_in_transit_enabled: false, network_type: '', remote_data_volume_type: ''};
         this.volume_attachments = []
+        // this.vnic_attachments = []
         this.preserve_boot_volume = false;
         this.is_pv_encryption_in_transit_enabled = false;
         // Update with any passed data
