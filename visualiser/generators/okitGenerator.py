@@ -75,7 +75,7 @@ class OCIGenerator(object):
         # ---- Compartment Id
         self.jinja2_variables["compartment_id"] = self.getLocalReference(resource.pop('compartment_id', None))
         # ---- Display Name
-        self.jinja2_variables['display_name'] = resource.pop('display_name', 'Missing Display Name')
+        self.jinja2_variables['display_name'] = self.formatJinja2Value(resource.pop('display_name', 'Missing Display Name'))
         # ---- Read Only
         self.jinja2_variables['read_only'] = resource.pop('read_only', False)
         # ---- Id
@@ -146,7 +146,8 @@ class OCIGenerator(object):
     def getLocalReference(self, id):
         reference = self.id_name_map.get(id, None)
         if reference is not None:
-            return self.formatJinja2IdReference(self.standardiseResourceName(reference))
+            return self.formatJinja2IdReference(reference)
+            # return self.formatJinja2IdReference(self.standardiseResourceName(reference))
         else:
             return self.formatJinja2Value(id)
 
@@ -432,10 +433,12 @@ class OCIGenerator(object):
                             parent[key] = [self.getLocalReference(id) for id in val]
                             # ids = [self.getLocalReference(id) for id in val]
                             # parent[key] = self.formatJinja2Value(ids)
+                        else:
+                            parent[key] = val
                     else:
                         parent.pop(key, None)
                 elif isinstance(val, bool):
-                    parent[key] = val
+                    parent[key] = self.formatJinja2Value(val)
                 elif val != None:
                     parent[key] = self.formatJinja2Value(val)
                 else:
