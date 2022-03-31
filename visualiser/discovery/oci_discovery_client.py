@@ -496,7 +496,10 @@ class OciResourceDiscoveryClient(object):
         self.exclude_resource_types = set(exclude_resource_types) if exclude_resource_types else None
 
         # get tenancy
-        self.tenancy = self.get_tenancy(tenancy_override)
+        if not tenancy_override and "tenancy_override" in self.config:
+            self.tenancy = self.get_tenancy(config["tenancy_override"])
+        else:
+            self.tenancy = self.get_tenancy(tenancy_override)
         self.config["tenancy"] = self.tenancy.id
 
         # get regions
