@@ -16,11 +16,11 @@ locals {
 }
 {% else %}
 # ------ Create Route Table
-{% if manage_default_resource_id is defined %}
+{% if default %}
 # ------- Update VCN Default Route Table
 resource "oci_core_default_route_table" "{{ resource_name }}" {
     # Required
-    manage_default_resource_id = {{ manage_default_resource_id }}
+    manage_default_resource_id = {{ vcn_id }}
 {% else %}
 resource "oci_core_route_table" "{{ resource_name }}" {
     # Required
@@ -49,7 +49,7 @@ resource "oci_core_route_table" "{{ resource_name }}" {
 {% endif %}
 }
 
-{% if manage_default_resource_id is defined %}
+{% if default %}
 locals {
     {{ resource_name }}_id = oci_core_default_route_table.{{ resource_name }}.id
     }

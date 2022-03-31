@@ -15,11 +15,11 @@ locals {
 }
 {% else %}
 # ------ Create Dhcp Options
-{% if manage_default_resource_id is defined %}
+{% if default %}
 # ------- Update VCN Default DHCP Option
 resource "oci_core_default_dhcp_options" "{{ resource_name }}" {
     # Required
-    manage_default_resource_id = {{ manage_default_resource_id }}
+    manage_default_resource_id = {{ vcn_id }}
 {% else %}
 resource "oci_core_dhcp_options" "{{ resource_name }}" {
     # Required
@@ -50,7 +50,7 @@ resource "oci_core_dhcp_options" "{{ resource_name }}" {
 {% endif %}
 }
 
-{% if manage_default_resource_id is defined %}
+{% if default %}
 locals {
     {{ resource_name }}_id = oci_core_default_dhcp_options.{{ resource_name }}.id
     }

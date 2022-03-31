@@ -16,18 +16,18 @@ locals {
 }
 {% else %}
 # ------ Create Security List
-{% if manage_default_resource_id is defined %}
+{% if default %}
 # ------- Update VCN Default Security List
 resource "oci_core_default_security_list" "{{ resource_name }}" {
     # Required
-    manage_default_resource_id = {{ manage_default_resource_id }}
+    manage_default_resource_id = {{ vcn_id }}
 {% else %}
 resource "oci_core_security_list" "{{ resource_name }}" {
     # Required
     compartment_id = {{ compartment_id }}
     vcn_id         = {{ vcn_id }}
 {% endif %}
-{% for rule in egress_rules %}
+{% for rule in egress_security_rules %}
     egress_security_rules {
         # Required
         protocol    = {{ rule.protocol | safe }}
@@ -80,7 +80,7 @@ resource "oci_core_security_list" "{{ resource_name }}" {
     {% endif %}
     }
 {% endfor %}
-{% for rule in ingress_rules %}
+{% for rule in ingress_security_rules %}
     ingress_security_rules {
         # Required
         protocol    = {{ rule.protocol | safe }}
@@ -143,7 +143,7 @@ resource "oci_core_security_list" "{{ resource_name }}" {
 {% endif %}
 }
 
-{% if manage_default_resource_id is defined %}
+{% if default %}
 locals {
     {{ resource_name }}_id = oci_core_default_security_list.{{ resource_name }}.id
 }
