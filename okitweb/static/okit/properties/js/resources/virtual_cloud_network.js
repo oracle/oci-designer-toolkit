@@ -41,7 +41,7 @@ class VirtualCloudNetworkProperties extends OkitResourceProperties {
         this.is_ipv6enabled = ipv6flag.input
         this.append(this.optional_network_tbody, ipv6flag.row)
         // IPv6 CIDR Blocks
-        const ipv6 = this.createInput('ipv6_cidr_list', 'IPv6 CIDR(s)', `${self.id}_ipv6cidr_blocks`, '', (d, i, n) => {n[i].reportValidity(); self.resource.ipv6cidr_blocks = n[i].value})
+        const ipv6 = this.createInput('ipv6_cidr_list', 'IPv6 CIDR(s)', `${self.id}_ipv6cidr_blocks`, '', (d, i, n) => {n[i].reportValidity(); self.resource.ipv6cidr_blocks = n[i].value.replace(' ', '').split(',')})
         this.ipv6cidr_blocks = ipv6.input
         this.append(this.optional_network_tbody, ipv6.row)
     }
@@ -51,13 +51,13 @@ class VirtualCloudNetworkProperties extends OkitResourceProperties {
         this.cidr_blocks.property('value', this.resource.cidr_blocks.join(','))
         this.dns_label.property('value', this.resource.dns_label)
         this.is_ipv6enabled.property('checked', this.resource.is_ipv6enabled)
-        this.ipv6cidr_blocks.property('value', this.resource.ipv6cidr_blocks)
+        this.ipv6cidr_blocks.property('value', this.resource.ipv6cidr_blocks.join(','))
         this.ipv6EnabledChange()
     }
 
     ipv6EnabledChange() {
         this.ipv6cidr_blocks.attr('readonly', !this.resource.is_ipv6enabled ? 'readonly' : undefined)
-        this.ipv6cidr_blocks.property('value', this.resource.is_ipv6enabled ? this.resource.ipv6cidr_blocks : '')
-        this.resource.ipv6cidr_blocks = this.resource.is_ipv6enabled ? this.resource.ipv6cidr_blocks : ''
+        this.ipv6cidr_blocks.property('value', this.resource.is_ipv6enabled ? this.resource.ipv6cidr_blocks.join(',') : '')
+        this.resource.ipv6cidr_blocks = this.resource.is_ipv6enabled ? this.resource.ipv6cidr_blocks : []
     }
 }

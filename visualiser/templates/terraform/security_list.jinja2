@@ -20,7 +20,7 @@ locals {
 # ------- Update VCN Default Security List
 resource "oci_core_default_security_list" "{{ resource_name }}" {
     # Required
-    manage_default_resource_id = {{ vcn_id }}
+    manage_default_resource_id = {{ vcn_id | trim('id') }}default_security_list_id
 {% else %}
 resource "oci_core_security_list" "{{ resource_name }}" {
     # Required
@@ -45,8 +45,12 @@ resource "oci_core_security_list" "{{ resource_name }}" {
     {% if rule.tcp_options is defined %}
         tcp_options {
         {% if rule.tcp_options.destination_port_range is defined %}
+            {% if rule.tcp_options.destination_port_range.min is defined %}
             min = {{ rule.tcp_options.destination_port_range.min | safe }}
+            {% endif %}
+            {% if rule.tcp_options.destination_port_range.max is defined %}
             max = {{ rule.tcp_options.destination_port_range.max | safe }}
+            {% endif %}
         {% endif %}
         {% if rule.tcp_options.source_port_range is defined %}
             source_port_range {
@@ -59,8 +63,12 @@ resource "oci_core_security_list" "{{ resource_name }}" {
     {% if rule.udp_options is defined %}
         udp_options {
         {% if rule.udp_options.destination_port_range is defined %}
+            {% if rule.udp_options.destination_port_range.min is defined %}
             min = {{ rule.udp_options.destination_port_range.min | safe }}
+            {% endif %}
+            {% if rule.udp_options.destination_port_range.max is defined %}
             max = {{ rule.udp_options.destination_port_range.max | safe }}
+            {% endif %}
         {% endif %}
         {% if rule.udp_options.source_port_range is defined %}
             source_port_range {
@@ -98,8 +106,12 @@ resource "oci_core_security_list" "{{ resource_name }}" {
     {% if rule.tcp_options is defined %}
         tcp_options {
         {% if rule.tcp_options.destination_port_range is defined %}
+            {% if rule.tcp_options.destination_port_range.min is defined %}
             min = {{ rule.tcp_options.destination_port_range.min | safe }}
+            {% endif %}
+            {% if rule.tcp_options.destination_port_range.max is defined %}
             max = {{ rule.tcp_options.destination_port_range.max | safe }}
+            {% endif %}
         {% endif %}
         {% if rule.tcp_options.source_port_range is defined %}
             source_port_range {
@@ -112,8 +124,12 @@ resource "oci_core_security_list" "{{ resource_name }}" {
     {% if rule.udp_options is defined %}
         udp_options {
         {% if rule.udp_options.destination_port_range is defined %}
+            {% if rule.udp_options.destination_port_range.min is defined %}
             min = {{ rule.udp_options.destination_port_range.min | safe }}
+            {% endif %}
+            {% if rule.udp_options.destination_port_range.max is defined %}
             max = {{ rule.udp_options.destination_port_range.max | safe }}
+            {% endif %}
         {% endif %}
         {% if rule.udp_options.source_port_range is defined %}
             source_port_range {
