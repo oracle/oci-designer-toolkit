@@ -383,7 +383,7 @@ class OkitResourceProperties {
     showProperty = (id, idx) => d3.select(`#${this.trId(id, idx)}`).classed('collapsed', false)
     setPropertyValue = (id, idx, val) => d3.select(`#${this.inputId(id, idx)}`).property('value', val)
 
-    loadSelect(select, resource_type, empty_option=false, filter=undefined) {
+    loadSelect(select, resource_type, empty_option=false, filter=() => true) {
         select.selectAll('*').remove()
         if (!filter) filter = () => true
         if (empty_option) select.append('option').attr('value', '').text('')
