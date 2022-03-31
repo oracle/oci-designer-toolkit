@@ -338,7 +338,9 @@ def dir_to_json(rootdir, reltodir=None, dkey='dirs', fkey='files'):
                 elif entry.is_dir():
                     hierarchy[dkey].append(dir_to_json(os.path.join(rootdir, entry.name), reltodir, dkey, fkey))
 
-    logger.debug(f'Directory Hierarchy : {jsonToFormattedString(hierarchy)}')
+    # logger.info(f'Directory Hierarchy : {jsonToFormattedString(hierarchy)}')
+    hierarchy[fkey] = sorted(hierarchy[fkey], key=lambda d: d['name'])
+    hierarchy[dkey] = sorted(hierarchy[dkey], key=lambda d: d['name'])
     return hierarchy
 
 def hierarchy_category(category, hierarchy, root=''):
@@ -459,7 +461,7 @@ def local_panel():
         local_filesystem_dir = os.path.join(current_app.instance_path, 'local')
         local_filesystem = [dir_to_json(local_filesystem_dir, current_app.instance_path, 'children', 'templates')]
         #Render The Template
-        logger.debug(f'Local Filesystem: {jsonToFormattedString(local_filesystem)}')
+        # logger.debug(f'Local Filesystem: {jsonToFormattedString(local_filesystem)}')
         return render_template('okit/local_panel.html', local_filesystem=local_filesystem)
 
 
