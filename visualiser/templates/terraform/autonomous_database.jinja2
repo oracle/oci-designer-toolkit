@@ -32,12 +32,27 @@ resource "oci_database_autonomous_database" "{{ resource_name }}" {
 {% if clone_type is defined %}
     clone_type               = {{ clone_type | safe }}
 {% endif %}
+{% if db_workload is defined %}
     db_workload              = {{ db_workload | safe }}
-    is_auto_scaling_enabled  = tobool(lower({{ is_auto_scaling_enabled | safe }}))
-{% if is_dedicated is defined %}
-    is_dedicated             = tobool(lower({{ is_dedicated | safe }}))
 {% endif %}
-    is_free_tier             = tobool(lower({{ is_free_tier | safe }}))
+{% if is_access_control_enabled is defined %}
+    is_access_control_enabled  = {{ is_access_control_enabled | safe | lower}}
+{% endif %}
+{% if is_auto_scaling_enabled is defined %}
+    is_auto_scaling_enabled  = {{ is_auto_scaling_enabled | safe | lower}}
+{% endif %}
+{% if is_auto_scaling_for_storage_enabled is defined %}
+    is_auto_scaling_for_storage_enabled  = {{ is_auto_scaling_for_storage_enabled | safe | lower}}
+{% endif %}
+{% if is_data_guard_enabled is defined %}
+    is_data_guard_enabled             = {{ is_data_guard_enabled | safe | lower }}
+{% endif %}
+{% if is_dedicated is defined %}
+    is_dedicated             = {{ is_dedicated | safe | lower }}
+{% endif %}
+{% if is_free_tier is defined %}
+    is_free_tier             = {{ is_free_tier | safe | lower }}
+{% endif %}
 #    is_preview_version_with_service_terms_accepted = {{ is_preview_version_with_service_terms_accepted | safe }}
 {% if license_model is defined %}
     license_model            = {{ license_model | safe }}

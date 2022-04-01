@@ -51,11 +51,6 @@ class DatabaseSystem extends OkitArtifact {
         // Update with any passed data
         this.merge(data);
         this.convert();
-        // Check if built from a query
-        if (this.availability_domain.length > 1) {
-            this.region_availability_domain = this.availability_domain;
-            this.availability_domain = this.getAvailabilityDomainNumber(this.region_availability_domain);
-        }
     }
 
 

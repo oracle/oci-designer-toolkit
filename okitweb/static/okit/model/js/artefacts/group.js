@@ -16,7 +16,7 @@ class Group extends OkitArtifact {
         // Configure default values
         // this.display_name = this.generateDefaultName(okitjson.groups.length + 1);
         this.compartment_id = null;
-        this.description = ''
+        this.description = `User Group ${this.display_name}`
         this.user_ids = []
         // Update with any passed data
         this.merge(data);

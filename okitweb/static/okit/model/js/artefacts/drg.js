@@ -23,11 +23,24 @@ class Drg extends OkitArtifact {
         this.merge(data);
         this.convert();
     }
+
+    convert() {
+        super.convert()
+        this.route_tables.forEach((rt, idx) => {
+            rt.resource_name = rt.resource_name ? rt.resource_name : `${this.resource_name}RouteTable${idx}`
+            rt.rules.forEach((rr, i) => rr.resource_name = rr.resource_name ? rr.resource_name : `${rt.resource_name}Rule${i}`)
+        })
+        this.route_distributions.forEach((rd, idx) => {
+            rd.resource_name = rd.resource_name ? rd.resource_name : `${this.resource_name}RouteDistribution${idx}`
+            rd.statements.forEach((rs, i) => rs.resource_name = rs.resource_name ? rs.resource_name : `${rd.resource_name}Statement${i}`)
+        })
+    }
     /*
     ** Create Route Table
     */
     newRouteTable() {
         return {
+            resource_name: `${this.generateResourceName()}RouteTable`,
             id: `${this.id}.rt${this.route_tables.length + 1}`,
             display_name: `${this.display_name} route table ${this.route_tables.length + 1}`,
             import_drg_route_distribution_id: '',
@@ -37,6 +50,7 @@ class Drg extends OkitArtifact {
     }
     newRouteRule() {
         return {
+            resource_name: `${this.generateResourceName()}RouteRule`,
             destination: '',
             destination_type: 'CIDR_BLOCK',
             next_hop_drg_attachment_id: ''
@@ -47,6 +61,7 @@ class Drg extends OkitArtifact {
     */
     newRouteDistribution() {
         return {
+            resource_name: `${this.generateResourceName()}RouteDistribution`,
             id: `${this.id}.rd${this.route_tables.length + 1}`,
             distribution_type: 'IMPORT',
             display_name: `${this.display_name} route distribution ${this.route_tables.length + 1}`,
@@ -55,6 +70,7 @@ class Drg extends OkitArtifact {
     }
     newDistributionStatement() {
         return {
+            resource_name: `${this.generateResourceName()}DistributionStatement`,
             action: 'ACCEPT',
             match_criteria: {
                 match_type: 'DRG_ATTACHMENT_ID',

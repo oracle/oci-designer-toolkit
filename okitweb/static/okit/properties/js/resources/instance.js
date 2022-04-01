@@ -370,12 +370,12 @@ class InstanceProperties extends OkitResourceProperties {
 
     loadSecondaryNetworks() {
         this.secondary_networks_tbody.selectAll('*').remove()
-        this.resource.vnics.forEach((e, i) => {if (i > 0) this.addSecondaryNetworkHtml(e, i+1)})
+        this.resource.vnic_attachments.forEach((e, i) => {if (i > 0) this.addSecondaryNetworkHtml(e, i+1)})
         this.secondary_vnics_idx = this.resource.vnics.length
     }
     addSecondaryNetwork() {
-        const vnic = this.resource.newVnic();
-        this.resource.vnics.push(vnic);
+        const vnic = this.resource.newVnicAttachment();
+        this.resource.vnic_attachments.push(vnic);
         this.secondary_vnics_idx += 1
         this.addSecondaryNetworkHtml(vnic, this.secondary_vnics_idx)
     }
@@ -396,7 +396,7 @@ class InstanceProperties extends OkitResourceProperties {
         return secondary_network
     }
     deleteSecondaryNetwork(id, idx, vnic) {
-        this.resource.vnics = this.resource.vnics.filter((e) => e !== vnic)
+        this.resource.vnic_attachments = this.resource.vnic_attachments.filter((e) => e !== vnic)
         $(`#${this.trId(id, idx)}`).remove()
     }
 

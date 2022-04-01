@@ -26,7 +26,6 @@ class Instance extends OkitArtifact {
             is_monitoring_disabled: false, 
             is_management_disabled: false
         };
-        this.vnics = [];
         this.source_details = {
             os: 'Oracle Linux', 
             version: '8', 
@@ -46,22 +45,23 @@ class Instance extends OkitArtifact {
         //this.launch_options_specified = false;
         //this.launch_options = {boot_volume_type: '', firmware: '', is_consistent_volume_naming_enabled: false, is_pv_encryption_in_transit_enabled: false, network_type: '', remote_data_volume_type: ''};
         this.volume_attachments = []
-        // this.vnic_attachments = []
+        this.vnic_attachments = []
         this.preserve_boot_volume = false;
         this.is_pv_encryption_in_transit_enabled = false;
         // Update with any passed data
         this.merge(data);
         this.convert();
-        if (this.vnics.length === 0) this.vnics.push(this.newVnic())
+        if (this.vnic_attachments.length === 0) this.vnic_attachments.push(this.newVnicAttachment())
         // Expose subnet_id for the first Mount target at the top level
         delete this.subnet_id;
-        Object.defineProperty(this, 'primary_vnic', {get: function() {return this.vnics[0];}, set: function(vnic) {this.vnics[0] = vnic;}, enumerable: true });
+        Object.defineProperty(this, 'primary_vnic', {get: function() {return this.vnic_attachments[0];}, set: function(vnic) {this.vnic_attachments[0] = vnic;}, enumerable: true });
         Object.defineProperty(this, 'subnet_id', {get: function() {return this.primary_vnic.subnet_id;}, set: function(id) {this.primary_vnic.subnet_id = id;}, enumerable: true });
         Object.defineProperty(this, 'instance_type', {get: function() {return !this.shape ? 'vm' : this.shape.toLowerCase().substr(0,2);}, set: function(type) {}, enumerable: true });
         Object.defineProperty(this, 'chipset', {get: function() {return !this.shape ? 'intel' : this.shape.startsWith('VM.') && this.shape.includes('.E') ? 'amd' : this.shape.startsWith('VM.') && this.shape.includes('.A') ? 'arm' : 'intel'}, set: function(chipset) {}, enumerable: true });
         Object.defineProperty(this, 'shape_series', {get: function() {return !this.shape ? 'intel' : this.shape.startsWith('VM.') && this.shape.includes('.E') ? 'amd' : this.shape.startsWith('VM.') && this.shape.includes('.A') ? 'arm' : 'intel'}, set: function(chipset) {}, enumerable: true });
         Object.defineProperty(this, 'flex_shape', {get: function() {return !this.shape ? false : this.shape.endsWith('.Flex')}, set: function(flex_shape) {}, enumerable: true });
         Object.defineProperty(this, 'block_storage_volume_ids', {get: () => {return this.volume_attachments.map((va) => va.volume_id)}})
+        Object.defineProperty(this, 'vnics', {get: () => {return this.vnic_attachments}})
     }
 
     /*
@@ -80,11 +80,11 @@ class Instance extends OkitArtifact {
         if (this.version !== undefined) {this.source_details.version = this.version; delete this.version;}
         if (this.boot_volume_size_in_gbs !== undefined) {this.source_details.boot_volume_size_in_gbs = this.boot_volume_size_in_gbs; delete this.boot_volume_size_in_gbs;}
         // Move Subnet_ids
-        if (this.vnics === undefined) {this.vnics = [];}
         if (this.subnet_ids !== undefined) {if (this.subnet_ids.length > 0) {for (let subnet_id of this.subnet_ids) {this.vnics.push({subnet_id: subnet_id})}} delete this.subnet_ids;}
         if (this.subnet_id !== undefined) {if (this.vnics.length === 0) {this.vnics.push({subnet_id: ''})} this.vnics[0].subnet_id = this.subnet_id; delete this.subnet_id;}
         if (this.hostname_label !== undefined) {this.vnics[0].hostname_label = this.hostname_label; delete this.hostname_label;}
-        this.vnics.forEach((vnic, i) => {
+        if (this.vnics) {this.vnic_attachments = this.vnics; delete this.vnics}
+        this.vnic_attachments.forEach((vnic, i) => {
             if (!vnic.hasOwnProperty('resource_name')) vnic.resource_name = `${this.resource_name}VnicAttachment${i+1}`
             if (!vnic.hasOwnProperty('display_name')) vnic.display_name = `${this.display_name} Vnic`
             if (!vnic.hasOwnProperty('assign_public_ip')) {vnic.assign_public_ip = true;}
@@ -105,7 +105,7 @@ class Instance extends OkitArtifact {
     /*
     ** Create Secondary Network (VNIC)
     */
-    newVnic() {
+    newVnicAttachment() {
         return {
             resource_name: `${this.generateResourceName()}VnicAttachment`,
             display_name: `${this.display_name} Vnic`,

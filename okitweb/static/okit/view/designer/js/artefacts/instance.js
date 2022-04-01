@@ -73,7 +73,7 @@ class InstanceView extends OkitDesignerArtefactView {
     }
 
     getVnicAttachments() {
-        return (this.parent.getArtifactReference() === Compartment.getArtifactReference() && this.primary_vnic.subnet_id !== '') ? this.vnics : this.vnics.slice(1);
+        return (this.parent.getArtifactReference() === Compartment.getArtifactReference() && this.primary_vnic.subnet_id !== '') ? this.vnic_attachments : this.vnic_attachments.slice(1);
     }
 
     /*

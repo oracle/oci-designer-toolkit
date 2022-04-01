@@ -1,29 +1,30 @@
+{% for route_table in route_tables %}
 {% if read_only %}
 # ------ Read DRG Route Table
 data "oci_core_drg_route_tables" "{{ resource_name }}" {
     # Required
-    drg_id = {{ drg_id }}
+    drg_id = local.{{ resource_name }}_id
     filter {
         name = "id"
-        values = [{{ ocid | safe }}]
+        values = [{{ route_table.ocid | safe }}]
     }
 }
 
 locals {
-    {{ resource_name }}_id = {{ ocid | safe }}
+    {{ route_table.resource_name }}_id = {{ ocid | safe }}
 }
 {% else %}
 # ------ Create DRG Route Table
-resource "oci_core_drg_route_table" "{{ resource_name }}" {
+resource "oci_core_drg_route_table" "{{ route_table.resource_name }}" {
     #Required
-    drg_id = {{ drg_id }}
+    drg_id = local.{{ resource_name }}_id
     #Optional
-    display_name = {{ display_name | safe }}
-{% if import_drg_route_distribution_id is defined %}
-    import_drg_route_distribution_id = {{ import_drg_route_distribution_id | safe }}
+    display_name = {{ route_table.display_name | safe }}
+{% if route_table.import_drg_route_distribution_id is defined %}
+    import_drg_route_distribution_id = {{ route_table.import_drg_route_distribution_id | safe }}
 {% endif %}
-{% if is_ecmp_enabled is defined %}
-    is_ecmp_enabled = {{ is_ecmp_enabled | safe }}
+{% if route_table.is_ecmp_enabled is defined %}
+    is_ecmp_enabled = {{ route_table.is_ecmp_enabled | safe | lower }}
 {% endif %}
 {% if defined_tags is defined %}
     defined_tags = {{ defined_tags | safe }}
@@ -35,16 +36,17 @@ resource "oci_core_drg_route_table" "{{ resource_name }}" {
 
 
 locals {
-    {{ resource_name }}_id = oci_core_drg_route_table.{{ resource_name }}.id
+    {{ route_table.resource_name }}_id = oci_core_drg_route_table.{{ route_table.resource_name }}.id
 }
 # ------ Create DRG Route Table Rules
-{% for rule in drg_route_rules %}
+{% for rule in route_table.rules %}
 resource "oci_core_drg_route_table_route_rule" "{{ resource_name }}Rule{{ loop.index }}" {
     #Required
-    drg_route_table_id = local.{{ resource_name }}_id
+    drg_route_table_id = local.{{ route_table.resource_name }}_id
     destination = {{ rule.destination | safe }}
     destination_type = {{ rule.destination_type | safe }}
     next_hop_drg_attachment_id = {{ rule.next_hop_drg_attachment_id | safe }}
 }
 {% endfor %}
 {% endif %}
+{% endfor %}

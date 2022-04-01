@@ -1,25 +1,26 @@
+{% for route_distribution in route_distributions %}
 {% if read_only %}
 # ------ Read DRG Route Distribution
-data "oci_core_drg_route_distributions" "{{ resource_name }}" {
+data "oci_core_drg_route_distributions" "{{ route_distribution.resource_name }}" {
     # Required
-    drg_id = {{ drg_id }}
+    drg_id = local.{{ resource_name }}_id
     filter {
         name = "id"
-        values = [{{ ocid | safe }}]
+        values = [{{ route_distribution.ocid | safe }}]
     }
 }
 
 locals {
-    {{ resource_name }}_id = {{ ocid | safe }}
+    {{ route_distribution.resource_name }}_id = {{ route_distribution.ocid | safe }}
 }
 {% else %}
 # ------ Create DRG Route Distribution
-resource "oci_core_drg_route_distribution" "{{ resource_name }}" {
+resource "oci_core_drg_route_distribution" "{{ route_distribution.resource_name }}" {
     #Required
-    drg_id = {{ drg_id }}
-    distribution_type = {{ distribution_type | safe }}
+    drg_id = local.{{ resource_name }}_id
+    distribution_type = {{ route_distribution.distribution_type | safe }}
     #Optional
-    display_name = {{ display_name | safe }}
+    display_name = {{ route_distribution.display_name | safe }}
 {% if defined_tags is defined %}
     defined_tags = {{ defined_tags | safe }}
 {% endif %}
@@ -30,28 +31,30 @@ resource "oci_core_drg_route_distribution" "{{ resource_name }}" {
 
 
 locals {
-    {{ resource_name }}_id = oci_core_drg_route_distribution.{{ resource_name }}.id
+    {{ route_distribution.resource_name }}_id = oci_core_drg_route_distribution.{{ route_distribution.resource_name }}.id
 }
-# ------ Create DRG Route Distribution Statemments
-{% for rule in drg_distribution_statementss %}
-resource "oci_core_drg_route_distribution_statement" "{{ resource_name }}Statement{{ loop.index }}" {
+# ------ Create DRG Route Distribution Statements
+{% for statement in route_distribution.statements %}
+resource "oci_core_drg_route_distribution_statement" "{{ statement.resource_name }}Statement" {
     #Required
-    drg_route_distribution_id = local.{{ resource_name }}_id
-    action = {{ rule.action | safe }}
+    drg_route_distribution_id = local.{{ route_distribution.resource_name }}_id
+    action = {{ statement.action | safe }}
     #Optional
     match_criteria {
         #Required
-        match_type = {{ rule.match_criteria.match_type | safe }}
+        match_type = {{ statement.match_criteria.match_type | safe }}
 
         #Optional
-{% if rule.match_criteria.attachment_type is defined %}
-        attachment_type = {{ rule.match_criteria.attachment_type | safe }}
+{% if statement.match_criteria.attachment_type is defined %}
+        attachment_type = {{ statement.match_criteria.attachment_type | safe }}
 {% endif %}
-{% if rule.match_criteria.drg_attachment_id is defined %}
-        drg_attachment_id = {{ rule.match_criteria.drg_attachment_id }}
+{% if statement.match_criteria.drg_attachment_id is defined %}
+        drg_attachment_id = {{ statement.match_criteria.drg_attachment_id }}
 {% endif %}
     }
-    priority = {{ rule.priority | safe }}
+    priority = {{ statement.priority | safe }}
 
-}{% endfor %}
+}
+{% endfor %}
 {% endif %}
+{% endfor %}
