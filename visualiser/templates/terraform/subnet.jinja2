@@ -19,7 +19,7 @@ resource "oci_core_subnet" "{{ resource_name }}" {
     vcn_id                     = {{ vcn_id }}
     cidr_block                 = {{ cidr_block | safe }}
     # Optional
-{% if availability_domain is defined %}
+{% if availability_domain is defined and availability_domain | int != 0 %}
     availability_domain        = data.oci_identity_availability_domains.AvailabilityDomains.availability_domains[{{ availability_domain | safe }} - 1]["name"]
 {% endif %}
 {% if display_name is defined %}
@@ -41,7 +41,7 @@ resource "oci_core_subnet" "{{ resource_name }}" {
     dhcp_options_id            = {{ dhcp_options_id | safe }}
 {% endif %}
 {% if prohibit_public_ip_on_vnic is defined %}
-    prohibit_public_ip_on_vnic = {{ prohibit_public_ip_on_vnic | safe }}
+    prohibit_public_ip_on_vnic = {{ prohibit_public_ip_on_vnic | safe | lower }}
 {% endif %}
 {% if defined_tags is defined %}
     defined_tags               = {{ defined_tags | safe }}

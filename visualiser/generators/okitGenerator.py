@@ -154,6 +154,10 @@ class OCIGenerator(object):
     def formatOcid(self, id):
         return id
 
+    resource_template_map = {
+        "drgs": ["drg.jinja2", "drg_route_distribution.jinja2", "drg_route_table.jinja2"]
+    }
+
     def generate(self):
         # Validate input json
         validator = OCIJsonValidator(self.visualiser_json)
@@ -192,7 +196,7 @@ class OCIGenerator(object):
             if isinstance(value, list):
                 for resource in value:
                     resource['root_compartment'] = (resource.get('compartment_id', 'ROOT') not in compartment_ids)
-                    self.renderResource(resource, [f'{key[:-1]}.jinja2'])
+                    self.renderResource(resource, self.resource_template_map.get(key, [f'{key[:-1]}.jinja2']))
         return
 
     def generateOrig(self):
@@ -403,7 +407,7 @@ class OCIGenerator(object):
                     #     parent[key] = self.formatJinja2Value(ids)
                     if key == 'resource_name':
                         parent[key] = val
-                    elif key.endswith('_id') and  val != '':
+                    elif (key.endswith('_id') or key == 'id') and  val != '':
                         # Simple Reference
                         parent[key] = self.getLocalReference(val)
                     elif val != '':

@@ -52,19 +52,19 @@ resource "oci_core_instance" "{{ resource_name }}" {
 {% endif %}
     create_vnic_details {
         # Required
-        subnet_id        = {{ vnics[0].subnet_id }}
+        subnet_id        = {{ vnic_attachments[0].subnet_id }}
         # Optional
-        assign_public_ip = {{ vnics[0].assign_public_ip | safe }}
-        display_name     = {{ vnics[0].display_name | safe }}
-        hostname_label   = {{ vnics[0].hostname_label | safe }}
-{% if vnics[0].nsg_ids is defined %}
-        nsg_ids          = [{% for nsg_id in vnics[0].nsg_ids %}{{ nsg_id }}{% if not loop.last %},{% endif %}{% endfor %}]
+        assign_public_ip = {{ vnic_attachments[0].assign_public_ip | safe | lower }}
+        display_name     = {{ vnic_attachments[0].display_name | safe }}
+        hostname_label   = {{ vnic_attachments[0].hostname_label | safe }}
+{% if vnic_attachments[0].nsg_ids is defined %}
+        nsg_ids          = [{% for nsg_id in vnic_attachments[0].nsg_ids %}{{ nsg_id }}{% if not loop.last %},{% endif %}{% endfor %}]
 {% endif %}
-{% if vnics[0].private_ip is defined %}
-        private_ip       = {{ vnics[0].private_ip | safe }}
+{% if vnic_attachments[0].private_ip is defined %}
+        private_ip       = {{ vnic_attachments[0].private_ip | safe }}
 {% endif %}
-{% if vnics[0].skip_source_dest_check is defined %}
-        skip_source_dest_check = {{ vnics[0].skip_source_dest_check | safe }}
+{% if vnic_attachments[0].skip_source_dest_check is defined %}
+        skip_source_dest_check = {{ vnic_attachments[0].skip_source_dest_check | safe | lower }}
 {% endif %}
 {% if defined_tags is defined %}
         defined_tags     = {{ defined_tags | safe }}
@@ -102,7 +102,7 @@ resource "oci_core_instance" "{{ resource_name }}" {
 #        kms_key_id              = {{ source_details.kms_key_id | safe }}
     }
 {% if preserve_boot_volume is defined %}
-    preserve_boot_volume = {{ preserve_boot_volume | safe }}
+    preserve_boot_volume = {{ preserve_boot_volume | safe | lower }}
 {% endif %}
 {% if defined_tags is defined %}
     defined_tags               = {{ defined_tags | safe }}
@@ -133,13 +133,13 @@ resource "oci_core_volume_attachment" "{{ volume.resource_name }}" {
     instance_id     = local.{{ resource_name }}_id
     volume_id       = {{ volume.volume_id }}
     display_name    = {{ volume.display_name | safe }}
-    is_read_only    = {{ volume.is_read_only | safe }}
-    is_shareable    = {{ volume.is_shareable | safe }}
+    is_read_only    = {{ volume.is_read_only | safe | lower }}
+    is_shareable    = {{ volume.is_shareable | safe | lower }}
 }
 {% endfor %}
 
 # ------ Create VNic Attachments
-{% for vnic in vnics %}
+{% for vnic in vnic_attachments %}
 {% if loop.index > 1 %}
 resource "oci_core_vnic_attachment" "{{ resource_name }}VnicAttachment{{ loop.index }}" {
     #Required
@@ -148,7 +148,7 @@ resource "oci_core_vnic_attachment" "{{ resource_name }}VnicAttachment{{ loop.in
         subnet_id        = {{ vnic.subnet_id }}
         #Optional
         display_name     = {{ vnic.display_name | safe }}
-        assign_public_ip = {{ vnic.assign_public_ip | safe }}
+        assign_public_ip = {{ vnic.assign_public_ip | safe | lower }}
     {% if defined_tags is defined %}
         defined_tags     = {{ defined_tags | safe }}
     {% endif %}
@@ -163,7 +163,7 @@ resource "oci_core_vnic_attachment" "{{ resource_name }}VnicAttachment{{ loop.in
         private_ip       = {{ vnic.private_ip | safe }}
     {% endif %}
     {% if vnic.skip_source_dest_check is defined %}
-        skip_source_dest_check = {{ vnic.skip_source_dest_check | safe }}
+        skip_source_dest_check = {{ vnic.skip_source_dest_check | safe | lower }}
     {% endif %}
     }
     instance_id = local.{{ resource_name }}_id
