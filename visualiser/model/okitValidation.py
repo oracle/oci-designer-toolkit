@@ -61,11 +61,13 @@ class OCIJsonValidator(object):
         self.validateNATGateways()
         self.validateNetworkSecurityGroups()
         self.validateObjectStorageBuckets()
+        self.validatePolicies()
         self.validateRemotePeeringConnections()
         self.validateRouteTables()
         self.validateSecurityLists()
         self.validateServiceGateways()
         self.validateSubnets()
+        self.validateUsers()
         self.validateVirtualCloudNetworks()
         return
     
@@ -91,11 +93,13 @@ class OCIJsonValidator(object):
         self.validateNATGateways()
         self.validateNetworkSecurityGroups()
         self.validateObjectStorageBuckets()
+        self.validatePolicies()
         self.validateRemotePeeringConnections()
         self.validateRouteTables()
         self.validateSecurityLists()
         self.validateServiceGateways()
         self.validateSubnets()
+        self.validateUsers()
         self.validateVirtualCloudNetworks()
         return
 
@@ -113,9 +117,11 @@ class OCIJsonValidator(object):
         self.validateNATGateways()
         self.validateNetworkSecurityGroups()
         self.validateObjectStorageBuckets()
+        self.validatePolicies()
         self.validateRouteTables()
         self.validateSecurityLists()
         self.validateSubnets()
+        self.validateUsers()
         self.validateVirtualCloudNetworks()
         return
 
@@ -604,6 +610,31 @@ class OCIJsonValidator(object):
         for artefact in self.okit_json.get('object_storage_buckets', []):
             logger.info('Validating {!s}'.format(artefact['display_name']))
 
+    # Policies
+    def validatePolicies(self):
+        for resource in self.okit_json.get('policies', self.okit_json.get('policys', [])):
+            logger.info('Validating {!s}'.format(resource['display_name']))
+            if resource['description'] == '':
+                self.valid = False
+                error = {
+                    'id': resource['id'],
+                    'type': 'Policy',
+                    'artefact': resource['display_name'],
+                    'message': 'Policy Description must be specified.',
+                    'element': 'description'
+                }
+                self.results['errors'].append(error)
+            if len(resource['statements']) == 0:
+                self.valid = False
+                error = {
+                    'id': resource['id'],
+                    'type': 'Policy',
+                    'artefact': resource['display_name'],
+                    'message': 'Policy must have at least one statement.',
+                    'element': 'statements'
+                }
+                self.results['errors'].append(error)
+
     # Remote Peering Connection
     def validateRemotePeeringConnections(self):
         for artefact in self.okit_json.get('remote_peering_connections', []):
@@ -780,6 +811,21 @@ class OCIJsonValidator(object):
                     'element': 'security_list_ids'
                 }
                 self.results['warnings'].append(warning)
+
+    # Users
+    def validateUsers(self):
+        for resource in self.okit_json.get('users', []):
+            logger.info('Validating {!s}'.format(resource['display_name']))
+            if resource['description'] == '':
+                self.valid = False
+                error = {
+                    'id': resource['id'],
+                    'type': 'User',
+                    'artefact': resource['display_name'],
+                    'message': 'User Description must be specified.',
+                    'element': 'description'
+                }
+                self.results['errors'].append(error)
 
     # Virtual Cloud Networks
     def validateVirtualCloudNetworks(self):

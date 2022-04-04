@@ -32,13 +32,17 @@ class MountTarget extends OkitArtifact {
     convert() {
         super.convert()
         delete this.export_set
-        this.exports.forEach((e) => {if (!e.options) e.options = this.newExportOptions()})
+        this.exports.forEach((e, i) => {
+            if (!e.resource_name) e.resource_name = `${this.resource_name}Export${i+1}`
+            if (!e.options) e.options = this.newExportOptions()
+        })
     }
     /*
     ** Create Export Element
     */
     newExport() {
         return {
+            resource_name: `${this.generateResourceName()}Export`,
             file_system_id: '',
             path: '',
             options: this.newExportOptions()

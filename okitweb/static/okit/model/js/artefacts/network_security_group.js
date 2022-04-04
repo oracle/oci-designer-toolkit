@@ -23,6 +23,30 @@ class NetworkSecurityGroup extends OkitArtifact {
         this.convert();
     }
 
+    get egress_rules() {return this.security_rules.filter((r) => r.direction === 'EGRESS')}
+    get ingress_rules() {return this.security_rules.filter((r) => r.direction === 'INGRESS')}
+
+    convert() {
+        super.convert()
+        this.security_rules.forEach((r, i) => {if (!r.resource_name) r.resource_name = `${this.resource_name}_Rule${i+1}`})
+    }
+    /*
+    ** Create Security Rule Elements
+    */
+    newSecurityRule() {
+        return {
+            resource_name: `${this.generateResourceName()}Rule`,
+            direction: "INGRESS", 
+            protocol: "all", 
+            is_stateless: false, 
+            description: "",
+            source_type: "CIDR_BLOCK", 
+            source: "0.0.0.0/0",
+            destination_type: "CIDR_BLOCK", 
+            destination: "0.0.0.0/0"
+        }
+    }
+
 
     /*
     ** Delete Processing

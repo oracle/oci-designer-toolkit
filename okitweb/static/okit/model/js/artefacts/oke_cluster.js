@@ -18,12 +18,7 @@ class OkeCluster extends OkitArtifact {
         // this.display_name = this.generateDefaultName(okitjson.oke_clusters.length + 1);
         this.vcn_id = '';
         this.kubernetes_version = '';
-        this.options = {
-            add_ons: {is_kubernetes_dashboard_enabled: false, is_tiller_enabled: false},
-            admission_controller_options: {is_pod_security_policy_enabled: false},
-            kubernetes_network_config: {pods_cidr: '', services_cidr: ''},
-            service_lb_subnet_ids: []
-        };
+        this.options = this.newOptions();
         this.pools = []
             /*
             Each pool entry will have the following structure
@@ -50,6 +45,35 @@ class OkeCluster extends OkitArtifact {
                     config.availability_domain = this.getAvailabilityDomainNumber(config.region_availability_domain);
                 }
             }
+        }
+    }
+
+    /*
+    ** OKE Cluster Elements
+    */
+    newOptions() {
+        return {
+            add_ons: this.newAddOns(),
+            admission_controller_options: this.newAdmissionControllerOptions(),
+            kubernetes_network_config: this.newKubernetesNetworkConfig(),
+            service_lb_subnet_ids: []
+        }
+    }
+    newAddOns() {
+        return {
+            is_kubernetes_dashboard_enabled: false, 
+            is_tiller_enabled: false
+        }
+    }
+    newAdmissionControllerOptions() {
+        return {
+            is_pod_security_policy_enabled: false
+        }
+    }
+    newKubernetesNetworkConfig() {
+        return {
+            pods_cidr: '', 
+            services_cidr: ''
         }
     }
 
