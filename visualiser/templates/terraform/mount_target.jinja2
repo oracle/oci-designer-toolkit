@@ -69,7 +69,7 @@ locals {
 
 # ------ Create File Storage Mount Target Export
 {% for fs_export in exports %}
-resource "oci_file_storage_export" "{{ resource_name }}Export{{ loop.index }}" {
+resource "oci_file_storage_export" "{{ fs_export.resource_name }}" {
     #Required
     export_set_id  = local.{{ resource_name }}ExportSet_id
     file_system_id = {{ fs_export.file_system_id | safe }}
@@ -87,7 +87,7 @@ resource "oci_file_storage_export" "{{ resource_name }}Export{{ loop.index }}" {
         anonymous_gid = {{ fs_export.options.anonymous_gid | safe }}
         anonymous_uid = {{ fs_export.options.anonymous_uid | safe }}
 {% endif %}
-        require_privileged_source_port = {{ fs_export.options.require_privileged_source_port }}
+        require_privileged_source_port = {{ fs_export.options.require_privileged_source_port | safe | lower }}
     }
 }
 {% endfor %}

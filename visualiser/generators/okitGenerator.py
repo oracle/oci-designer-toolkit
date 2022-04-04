@@ -155,7 +155,8 @@ class OCIGenerator(object):
         return id
 
     resource_template_map = {
-        "drgs": ["drg.jinja2", "drg_route_distribution.jinja2", "drg_route_table.jinja2"]
+        "drgs": ["drg.jinja2", "drg_route_distribution.jinja2", "drg_route_table.jinja2"],
+        "load_balancers": ["loadbalancer.jinja2"]
     }
 
     def generate(self):
@@ -191,8 +192,15 @@ class OCIGenerator(object):
         compartment_ids = [compartment['id'] for compartment in self.visualiser_json.get('compartments', [])]
         logger.info('Compartment Ids {0!s:s}'.format(compartment_ids))
 
+        # --- Preprocess selected resources
+        # ---- Local Peering Gateways - Done to stop TF Cyclic references
+        for lpg in self.visualiser_json.get("local_peering_gateways", []):
+            peers = [l for l in self.visualiser_json["local_peering_gateways"] if l["id"] == lpg["peer_id"]]
+            if len(peers) > 0:
+                peers[0]["peer_id"] = ''
+
         # Loop through resource lists
-        for key, value in self.visualiser_json.items():
+        for key, value in sorted(self.visualiser_json.items()):
             if isinstance(value, list):
                 for resource in value:
                     resource['root_compartment'] = (resource.get('compartment_id', 'ROOT') not in compartment_ids)

@@ -115,8 +115,13 @@ class OCIDropdownQuery(OCIConnection):
                         resource_list = self.shapes(resource_list, resources)                       
                     elif resource_type == "VolumeBackupPolicy":
                         resource_list = self.volume_backup_policies(resource_list, resources)                       
+                    elif resource_type == "ClusterOptions":
+                        resource_list = self.cluster_options(resource_list, resources)                       
                     response_json[self.DISCOVER_OKIT_MAP[resource_type]] = resource_list
         return response_json
+
+    def cluster_options(self, cluster_options, resources):
+        return [{"id": kv, "display_name": kv, "name": kv, "version": kv} for kv in cluster_options[0]["kubernetes_versions"]]
 
     def images(self, images, resources):
         # logger.info(f'Processing Images - Shape Compatibility: {resources.get("ImageShapeCompatibility", [])}')

@@ -80,30 +80,30 @@ class ServiceGatewayView extends OkitDesignerArtefactView {
                     route_table_select.append($('<option>').attr('value', route_table.id).text(route_table.display_name));
                 }
             }
-            let autonomous_database_select = $(jqId('autonomous_database_ids'));
-            for (let autonomous_database of okitJson.getAutonomousDatabases()) {
-                if (me.compartment_id === autonomous_database.compartment_id) {
-                    autonomous_database_select.append($('<option>').attr('value', autonomous_database.id).text(autonomous_database.display_name));
-                }
-            }
-            let object_storage_bucket_select = $(jqId('object_storage_bucket_ids'));
-            for (let object_storage_bucket of okitJson.getObjectStorageBuckets()) {
-                if (me.compartment_id === object_storage_bucket.compartment_id) {
-                    object_storage_bucket_select.append($('<option>').attr('value', object_storage_bucket.id).text(object_storage_bucket.display_name));
-                }
-            }
-            // Add Type Change
-            $(jqId('service_name')).on('change', () => {
-                if ($(jqId('service_name')).val() === 'All') {
-                    $(jqId("autonomous_database_ids_row")).removeClass('collapsed');
-                } else {
-                    $(jqId("autonomous_database_ids_row")).addClass('collapsed');
-                }
-            });
-            // Check Service Name
-            if (me.service_name !== 'All' && me.service_name !== '') {
-                $(jqId("autonomous_database_ids_row")).addClass('collapsed');
-            }
+            // let autonomous_database_select = $(jqId('autonomous_database_ids'));
+            // for (let autonomous_database of okitJson.getAutonomousDatabases()) {
+            //     if (me.compartment_id === autonomous_database.compartment_id) {
+            //         autonomous_database_select.append($('<option>').attr('value', autonomous_database.id).text(autonomous_database.display_name));
+            //     }
+            // }
+            // let object_storage_bucket_select = $(jqId('object_storage_bucket_ids'));
+            // for (let object_storage_bucket of okitJson.getObjectStorageBuckets()) {
+            //     if (me.compartment_id === object_storage_bucket.compartment_id) {
+            //         object_storage_bucket_select.append($('<option>').attr('value', object_storage_bucket.id).text(object_storage_bucket.display_name));
+            //     }
+            // }
+            // // Add Type Change
+            // $(jqId('service_name')).on('change', () => {
+            //     if ($(jqId('service_name')).val() === 'All') {
+            //         $(jqId("autonomous_database_ids_row")).removeClass('collapsed');
+            //     } else {
+            //         $(jqId("autonomous_database_ids_row")).addClass('collapsed');
+            //     }
+            // });
+            // // Check Service Name
+            // if (me.service_name !== 'All' && me.service_name !== '') {
+            //     $(jqId("autonomous_database_ids_row")).addClass('collapsed');
+            // }
             // Load Properties
             loadPropertiesSheet(me.artefact);
         });

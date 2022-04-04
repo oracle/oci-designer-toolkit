@@ -25,7 +25,8 @@ class LoadBalancer extends OkitArtifact {
         this.ip_mode = '';
         this.network_security_group_ids = [];
         this.backend_policy = 'ROUND_ROBIN';
-        this.health_checker = {url_path: '/'}
+        this.health_checker = this.newHealthChecker()
+        // this.health_checker = {url_path: '/'}
         this.shape_details = {
             minimum_bandwidth_in_mbps: 10,
             maximum_bandwidth_in_mbps: 10
@@ -70,7 +71,8 @@ class LoadBalancer extends OkitArtifact {
     newHealthChecker() {
         return {
             protocol: 'HTTP',
-            port: 80
+            port: 80,
+            url_path: '/'
         }
     }
 
