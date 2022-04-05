@@ -30,13 +30,15 @@ resource "oci_core_route_table" "{{ resource_name }}" {
 {% for rule in route_rules %}
     route_rules    {
         destination_type  = {{ rule.destination_type | safe }}
-    {% if rule.use_cidr_block %}
+    {% if rule.destination_type | trim('"') == "CIDR_BLOCK" %}
         destination       = {{ rule.destination | safe }}
     {% else %}
         destination       = local.{{ rule.destination | safe }}
     {% endif %}
         network_entity_id = {{ rule.network_entity_id }}
+{% if rule.description is defined %}
         description       = {{ rule.description | safe }}
+{% endif %}
     }
 {% endfor %}
     # Optional

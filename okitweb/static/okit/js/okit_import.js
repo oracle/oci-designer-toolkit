@@ -103,7 +103,8 @@ function TFStateJsonLoad(evt) {
         data: {
             json: JSON.stringify(fileJson)
         }}).done((resp) => {
-            let response_json = JSON.parse(resp);
+            const response_json = JSON.parse(resp);
+            console.info(response_json.okit_json)
             okitJsonModel = new OkitJson(JSON.stringify(response_json.okit_json));
             newDesignerView();
             displayOkitJson();

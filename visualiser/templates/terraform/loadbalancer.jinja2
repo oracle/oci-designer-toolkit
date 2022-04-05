@@ -22,7 +22,7 @@ resource "oci_load_balancer_load_balancer" "{{ resource_name }}" {
     shape          = {{ shape | safe }}
     display_name   = {{ display_name | safe }}
     subnet_ids     = [
-{% for subnet_id in loadbalancer_subnet_ids %}
+{% for subnet_id in subnet_ids %}
                     {{ subnet_id }}{% if not loop.last %},{% endif %}
 {% endfor %}
                     ]
@@ -34,7 +34,7 @@ resource "oci_load_balancer_load_balancer" "{{ resource_name }}" {
 {% if network_security_group_ids is defined %}
     network_security_group_ids   = [{% for nsg_id in network_security_group_ids %}{{ nsg_id }}{% if not loop.last %},{% endif %}{% endfor %}]
 {% endif %}
-{% if shape_details is defined %}
+{% if shape_details is defined and shape | trim('"') == "flexible" %}
     shape_details {
         #Required
         maximum_bandwidth_in_mbps = {{ shape_details.maximum_bandwidth_in_mbps | safe }}
@@ -112,7 +112,7 @@ locals {
 }
 
 # ------ Create Loadbalancer Backend
-{% for backend_instance in backend_instances %}
+{% for backend_instance in instance_ids %}
 resource "oci_load_balancer_backend" "{{ resource_name }}Backend{{ loop.index }}" {
     # Required
     backendset_name  = local.{{ resource_name }}BackendSet_name

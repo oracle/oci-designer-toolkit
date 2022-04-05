@@ -640,12 +640,16 @@ function handleSaveAsMarkdown(e) {
 function handleRedraw(evt) {
     hideNavMenu();
     redrawSVGCanvas();
+    redrawTerraformView()
     return false;
 }
 function redrawSVGCanvas(recalculate=false) {
     if (recalculate) {resetRecalculateFlag();}
     displayDesignerView();
     displayOkitJson();
+}
+function redrawTerraformView() {
+    if (okitTerraformView) okitTerraformView.draw()
 }
 /*
 ** Toolbar Handlers
