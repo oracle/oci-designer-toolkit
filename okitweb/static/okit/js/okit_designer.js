@@ -861,6 +861,7 @@ function loadTemplate(template_url) {
             displayOkitJson();
             displayDesignerView();
             displayTreeView();
+            slideLeftPanel('icons_palette')
         },
         error: function(xhr, status, error) {
             console.error('Status : '+ status);
