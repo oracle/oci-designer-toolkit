@@ -79,8 +79,9 @@ class Instance extends OkitArtifact {
         if (this.os !== undefined) {this.source_details.os = this.os; delete this.os;}
         if (this.version !== undefined) {this.source_details.version = this.version; delete this.version;}
         if (this.boot_volume_size_in_gbs !== undefined) {this.source_details.boot_volume_size_in_gbs = this.boot_volume_size_in_gbs; delete this.boot_volume_size_in_gbs;}
-        if (this.hostname_label !== undefined) {this.vnics[0].hostname_label = this.hostname_label; delete this.hostname_label;}
+        // Networking
         if (this.vnics) {this.vnic_attachments = this.vnics; delete this.vnics}
+        if (this.hostname_label !== undefined) {this.vnic_attachments[0].hostname_label = this.hostname_label; delete this.hostname_label;}
         this.vnic_attachments.forEach((vnic, i) => {
             if (!vnic.hasOwnProperty('resource_name')) vnic.resource_name = `${this.resource_name}VnicAttachment${i+1}`
             if (!vnic.hasOwnProperty('display_name')) vnic.display_name = `${this.display_name} Vnic`

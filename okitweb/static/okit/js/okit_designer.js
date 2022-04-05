@@ -640,12 +640,16 @@ function handleSaveAsMarkdown(e) {
 function handleRedraw(evt) {
     hideNavMenu();
     redrawSVGCanvas();
+    redrawTerraformView()
     return false;
 }
 function redrawSVGCanvas(recalculate=false) {
     if (recalculate) {resetRecalculateFlag();}
     displayDesignerView();
     displayOkitJson();
+}
+function redrawTerraformView() {
+    if (okitTerraformView) okitTerraformView.draw()
 }
 /*
 ** Toolbar Handlers
@@ -857,6 +861,7 @@ function loadTemplate(template_url) {
             displayOkitJson();
             displayDesignerView();
             displayTreeView();
+            slideLeftPanel('icons_palette')
         },
         error: function(xhr, status, error) {
             console.error('Status : '+ status);

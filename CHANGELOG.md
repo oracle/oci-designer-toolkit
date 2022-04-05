@@ -1,7 +1,7 @@
 # Release Notes
 
 
-## Version 0.34.0
+## Version 0.35.0
 **Release Date**: 13th April 2022
 ### Features
 1. Add Subnet validation for duplicate DNS Label.
@@ -10,6 +10,8 @@
 3. Extend Volume Attachment information for Instances
 4. Sort Local / Git / Reference Architecture Side panels by filename.
 5. Add generic render function for Terraform Generation.
+6. Update Terraform Jinja2 templates to work with new generation functionality.
+7. Display Palette once file is opened.
 ### Bug Fixes
 1. Resolve issue when querying single compartment for PCA not returning any compartments.
 2. Resolve issue where duplicate Display Names were still being reported as an error.

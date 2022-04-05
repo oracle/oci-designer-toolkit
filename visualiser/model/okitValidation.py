@@ -529,6 +529,16 @@ class OCIJsonValidator(object):
                     'element': 'instance_ids'
                 }
                 self.results['warnings'].append(warning)
+            if len(artefact['subnet_ids']) == 0:
+                self.valid = False
+                error = {
+                    'id': artefact['id'],
+                    'type': 'Load Balancer',
+                    'artefact': artefact['display_name'],
+                    'message': 'At least one subnet must be specified.',
+                    'element': 'subnet_ids'
+                }
+                self.results['errors'].append(error)
 
     # Local Peering Gateways
     def validateLocalPeeringGateways(self):
