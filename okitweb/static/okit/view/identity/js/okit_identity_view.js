@@ -13,7 +13,8 @@ class OkitIdentityView extends OkitJsonView {
     get data() {return this.oci_data;}
 
     static newView(model, oci_data=null, resource_icons=[], parent_id = 'identity-div') {
-        return new OkitIdentityView((model, oci_data, parent_id, resource_icons))
+        console.info(`>>>>>>> Resource Icons:`, resource_icons)
+        return new OkitIdentityView(model, oci_data, resource_icons, parent_id)
     }
 
     draw(for_export=false) {

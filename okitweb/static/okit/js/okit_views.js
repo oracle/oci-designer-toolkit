@@ -4,5 +4,5 @@
 */
 console.info('Loaded Views Javascript');
 
-// let okitViewClasses = [];
-// let okitViews = [];
+// const okitViewClasses = [];
+// const okitViews = [];

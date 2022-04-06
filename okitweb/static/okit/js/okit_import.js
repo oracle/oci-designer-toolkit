@@ -29,7 +29,8 @@ function getHclJson(readFile) {
 function hclJsonLoad(evt) {
     // Clear Existing Region
     regionOkitJson = {};
-    okitJsonModel = null
+    // okitJsonModel = null
+    newModel()
     hideRegionTabBar();
     clearRegionTabBar();
     // Obtain the read file data
@@ -47,7 +48,8 @@ function hclJsonLoad(evt) {
         },
         success: function(resp) {
             let response_json = JSON.parse(resp);
-            okitJsonModel = new OkitJson(JSON.stringify(response_json.okit_json));
+            // okitJsonModel = new OkitJson(JSON.stringify(response_json.okit_json));
+            newModel(JSON.stringify(response_json.okit_json));
             newDesignerView();
             displayOkitJson();
             displayDesignerView();
@@ -87,7 +89,8 @@ function getTFStateJson(readFile) {
 function TFStateJsonLoad(evt) {
     // Clear Existing Region
     regionOkitJson = {};
-    okitJsonModel = null
+    // okitJsonModel = null
+    newModel()
     hideRegionTabBar();
     clearRegionTabBar();
     // Obtain the read file data
@@ -105,7 +108,8 @@ function TFStateJsonLoad(evt) {
         }}).done((resp) => {
             const response_json = JSON.parse(resp);
             console.info(response_json.okit_json)
-            okitJsonModel = new OkitJson(JSON.stringify(response_json.okit_json));
+            // okitJsonModel = new OkitJson(JSON.stringify(response_json.okit_json));
+            newModel(JSON.stringify(response_json.okit_json));
             newDesignerView();
             displayOkitJson();
             displayDesignerView();
@@ -148,7 +152,8 @@ function getCceJson(readFile) {
 function cceJsonLoad(evt) {
     // Clear Existing Region
     regionOkitJson = {};
-    okitJsonModel = null
+    // okitJsonModel = null
+    newModel()
     hideRegionTabBar();
     clearRegionTabBar();
     // Obtain the read file data
@@ -167,7 +172,8 @@ function cceJsonLoad(evt) {
         success: function(resp) {
             let response_json = JSON.parse(resp);
             console.info(response_json);
-            okitJsonModel = new OkitJson(JSON.stringify(response_json.okit_json));
+            // okitJsonModel = new OkitJson(JSON.stringify(response_json.okit_json));
+            newModel(JSON.stringify(response_json.okit_json));
             newDesignerView();
             displayOkitJson();
             displayDesignerView();
@@ -209,7 +215,8 @@ function getCd3Xlsx(readFile) {
 function cd3XlsxLoad(form_data) {
     // Clear Existing Region
     regionOkitJson = {};
-    okitJsonModel = null
+    // okitJsonModel = null
+    newModel()
     hideRegionTabBar();
     clearRegionTabBar();
     console.info(form_data);
@@ -223,7 +230,8 @@ function cd3XlsxLoad(form_data) {
         success: function(resp) {
             let response_json = JSON.parse(resp);
             console.info(response_json);
-            okitJsonModel = new OkitJson(JSON.stringify(response_json.okit_json));
+            // okitJsonModel = new OkitJson(JSON.stringify(response_json.okit_json));
+            newModel(JSON.stringify(response_json.okit_json));
             newDesignerView();
             displayOkitJson();
             displayDesignerView();

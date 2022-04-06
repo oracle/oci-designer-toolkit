@@ -443,31 +443,31 @@ class OkitArtifact {
 /*
 ** Model Representation of OCI Regions
  */
-class OkitRegionsJson {
-    /*
-    ** Create
-     */
-    constructor() {
-        this['us-sanjose-1'] = new OkitJson();
-        this['us-phoenix-1'] = new OkitJson();
-        this['us-ashburn-1'] = new OkitJson();
-        this['uk-london-1'] = new OkitJson();
-        this['sa-saopaulo-1'] = new OkitJson();
-        this['me-jeddah-1'] = new OkitJson();
-        this['eu-zurich-1'] = new OkitJson();
-        this['eu-frankfurt-1'] = new OkitJson();
-        this['eu-amsterdam-1'] = new OkitJson();
-        this['ca-toronto-1'] = new OkitJson();
-        this['ca-montreal-1'] = new OkitJson();
-        this['ap-tokyo-1'] = new OkitJson();
-        this['ap-sydney-1'] = new OkitJson();
-        this['ap-seoul-1'] = new OkitJson();
-        this['ap-osaka-1'] = new OkitJson();
-        this['ap-mumbai-1'] = new OkitJson();
-        this['ap-melbourne-1'] = new OkitJson();
-        this['ap-hyderabad-1'] = new OkitJson();
-        this['ap-chuncheon-1'] = new OkitJson();
-    }
-}
+// class OkitRegionsJson {
+//     /*
+//     ** Create
+//      */
+//     constructor() {
+//         this['us-sanjose-1'] = new OkitJson();
+//         this['us-phoenix-1'] = new OkitJson();
+//         this['us-ashburn-1'] = new OkitJson();
+//         this['uk-london-1'] = new OkitJson();
+//         this['sa-saopaulo-1'] = new OkitJson();
+//         this['me-jeddah-1'] = new OkitJson();
+//         this['eu-zurich-1'] = new OkitJson();
+//         this['eu-frankfurt-1'] = new OkitJson();
+//         this['eu-amsterdam-1'] = new OkitJson();
+//         this['ca-toronto-1'] = new OkitJson();
+//         this['ca-montreal-1'] = new OkitJson();
+//         this['ap-tokyo-1'] = new OkitJson();
+//         this['ap-sydney-1'] = new OkitJson();
+//         this['ap-seoul-1'] = new OkitJson();
+//         this['ap-osaka-1'] = new OkitJson();
+//         this['ap-mumbai-1'] = new OkitJson();
+//         this['ap-melbourne-1'] = new OkitJson();
+//         this['ap-hyderabad-1'] = new OkitJson();
+//         this['ap-chuncheon-1'] = new OkitJson();
+//     }
+// }
 
 let okitJsonModel

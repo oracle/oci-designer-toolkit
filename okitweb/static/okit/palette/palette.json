@@ -224,6 +224,16 @@
                     "svg": "Policies.svg"
                 },
                 {
+                    "title": "User",
+                    "targets": ["hidden"],
+                    "svg": "User.svg"
+                },
+                {
+                    "title": "Group",
+                    "targets": ["hidden"],
+                    "svg": "UserGroup.svg"
+                },
+                {
                     "title": "Vault",
                     "targets": ["hidden"],
                     "svg": "KeyVault.svg"

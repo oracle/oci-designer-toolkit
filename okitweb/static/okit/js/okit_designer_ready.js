@@ -27,14 +27,18 @@ $(document).ready(function() {
     okitRegions = new OkitRegions(loadHeaderRegionsDropDown);
     okitOciData = new OkitOCIData(okitSettings.profile, okitSettings.region);
     okitGitConfig = new OkitGITConfig();
-    okitJsonModel = new OkitJson();
-    okitJsonView = new OkitDesignerJsonView(okitJsonModel);
-    okitTabularView = new OkitTabularJsonView(okitJsonModel);
+    // okitJsonModel = new OkitJson();
+    newModel()
+    okitJsonView = OkitDesignerJsonView.newView(okitJsonModel, okitOciData, resource_icons);
+    // okitJsonView = new OkitDesignerJsonView(okitJsonModel);
+    // okitTabularView = new OkitTabularJsonView(okitJsonModel);
+    okitTabularView = OkitTabularJsonView.newView(okitJsonModel, okitOciData, resource_icons);
     console.info(okitJsonView);
-    okitViews = [];
+    // okitViews = [];
+    console.info(`>>>>>>> Resource Icons:`, resource_icons)
     for (let view_class of okitViewClasses) {
         console.warn('View Class:', view_class);
-        okitViews.push(view_class.newView(okitJsonModel, okitOciData, resource_icons_svg))
+        okitViews.push(view_class.newView(okitJsonModel, okitOciData, resource_icons))
     }
     for (let view of okitViews) {console.warn('Okit View:', view)}
     /*
