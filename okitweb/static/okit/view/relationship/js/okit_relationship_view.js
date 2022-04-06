@@ -68,7 +68,8 @@ class OkitRelationshipJsonView extends OkitJsonView {
     }
 
     static newView(model, oci_data=null, resource_icons=[], parent_id = 'relationship-div') {
-        return new OkitRelationshipJsonView((model, oci_data, parent_id, resource_icons))
+        console.info(`>>>>>>> Resource Icons:`, resource_icons)
+        return new OkitRelationshipJsonView(model, oci_data, resource_icons, parent_id)
     }
 
     draw(for_export=false) {

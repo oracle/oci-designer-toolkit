@@ -19,6 +19,7 @@ class OkitJsonView {
         if (oci_data !== null) this.oci_data = oci_data;
         if (parent_id !== null) this.parent_id = parent_id;
         if (resource_icons !== null) this.resource_icons = resource_icons;
+        console.info(this.constructor.name, this.resource_icons)
         // Define Canvas Root SVG
         // this.canvas = new CanvasView(new Canvas(okitjson), this);
         // Define View Lists
@@ -1375,7 +1376,6 @@ class OkitArtefactView {
     getRightChildrenMaxDimensions() {
         let max_dimensions = {height: 0, width: 0};
         for (let group of this.getRightArtifacts()) {
-            console.info('Group:', group, this.getArrayFunction(group))
             for(let artefact of this.json_view[this.getArrayFunction(group)]()) {
                 if (artefact.parent_id === this.id) {
                     let dimension = artefact.dimensions;
@@ -1432,7 +1432,6 @@ class OkitArtefactView {
     getRightEdgeChildrenMaxDimensions() {
         let max_dimensions = {height: 0, width: 0};
         for (let group of this.getRightEdgeArtifacts()) {
-            console.info('getFunction', group, this.getArrayFunction(group))
             for(let artefact of this.json_view[this.getArrayFunction(group)]()) {
                 if (artefact.parent_id === this.id) {
                     let dimension = artefact.dimensions;
@@ -1906,7 +1905,7 @@ const okitViews = [];
 
 const updateViews = () => {okitViews.forEach((v) => v.update(okitJsonModel));redrawViews()}
 const redrawViews = () => {okitViews.forEach((v) => v.draw())}
-const newModel = (data) => {okitJsonModel = new OkitJson(data)}
-// const newModel = (data) => {okitJsonModel = new OkitJson(data);updateViews()}
+// const newModel = (data) => {okitJsonModel = new OkitJson(data)}
+const newModel = (data) => {okitJsonModel = new OkitJson(data);updateViews()}
 
 let okitJsonView = null;

@@ -64,8 +64,8 @@
         resource_icon_files = palette_json.files
         const resource_icons_svg = palette_svg;
         const resource_icons = {
-            svg: palette_svg,
-            files: resource_icon_files
+            svg: palette_json.svg,
+            files: palette_json.files
         }
     </script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_svg.js') }}"></script>

@@ -122,7 +122,8 @@ function newDiagram() {
     console.log();
 }
 function newDesignerView() {
-    okitJsonView = new OkitDesignerJsonView(okitJsonModel, 'canvas-div', palette_svg);
+    // okitJsonView = new OkitDesignerJsonView(okitJsonModel, 'canvas-div', palette_svg);
+    okitJsonView = OkitDesignerJsonView.newView(okitJsonModel, okitOciData, resource_icons);
     loadVariablesDatalist()
 }
 // function newModel() {

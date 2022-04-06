@@ -93,7 +93,7 @@ class OkitResourceProperties {
                                             .attr('class', `okit-tab-contents ${i > 0 ? 'hidden' : ''} ${self.resource.read_only && name !== 'Documentation' ? 'read-only' : ''}`)
         })
     
-        console.info('Properties div', this.properties_div)
+        // console.info('Properties div', this.properties_div)
     }
 
     buildCore() {

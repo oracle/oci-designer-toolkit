@@ -16,7 +16,7 @@ class OkitTabularJsonView extends OkitJsonView {
     get data() {return this.oci_data;}
 
     static newView(model, oci_data=null, resource_icons=[], parent_id = 'tabular-div') {
-        return new OkitTabularJsonView((model, oci_data, parent_id, resource_icons))
+        return new OkitTabularJsonView(model, oci_data, resource_icons, parent_id)
     }
 
     loadPropertyMap() {
