@@ -119,7 +119,6 @@ function newDiagram() {
     resource.description = 'Represents the deployment location for the resources specified within the design.'
     resource.definition = 'Logical Compartment that represents the deployment location for the resources specified within the design. This compartment will not be created during the build process.'
     console.info(okitJsonView);
-    console.log();
 }
 function newDesignerView() {
     // okitJsonView = new OkitDesignerJsonView(okitJsonModel, 'canvas-div', palette_svg);
@@ -651,7 +650,7 @@ function handleRedraw(evt) {
 function redrawSVGCanvas(recalculate=false) {
     if (recalculate) {resetRecalculateFlag();}
     displayDesignerView();
-    displayOkitJson();
+    // displayOkitJson();
 }
 function redrawTerraformView() {
     if (okitTerraformView) okitTerraformView.draw()
@@ -1640,6 +1639,7 @@ function displayOkitJson() {
  */
 function displayDesignerView() {
     okitJsonView.draw();
+    // redrawViews()
     setTitleDescription();
 }
 function resetRecalculateFlag() {

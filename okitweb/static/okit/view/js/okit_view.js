@@ -1905,7 +1905,7 @@ const okitViews = [];
 
 const updateViews = () => {okitViews.forEach((v) => v.update(okitJsonModel));redrawViews()}
 const redrawViews = () => {okitViews.forEach((v) => v.draw())}
-// const newModel = (data) => {okitJsonModel = new OkitJson(data)}
-const newModel = (data) => {okitJsonModel = new OkitJson(data);updateViews()}
+const newModel = (data) => {okitJsonModel = new OkitJson(data)}
+// const newModel = (data) => {okitJsonModel = new OkitJson(data);updateViews()}
 
 let okitJsonView = null;
