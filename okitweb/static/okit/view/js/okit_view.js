@@ -124,10 +124,6 @@ class OkitJsonView {
     }
 }
 
-// Define Arrays to contain View Classes and Objects
-let okitViewClasses = [];
-let okitViews = [];
-
 /*
 ** Simple Artefact View Class for all artefacts that are not Containers
  */
@@ -1904,6 +1900,13 @@ class CanvasView extends OkitContainerArtefactView {
 
 }
 
+// Define Arrays to contain View Classes and Objects
+const okitViewClasses = [];
+const okitViews = [];
 
+const updateViews = () => {okitViews.forEach((v) => v.update(okitJsonModel));redrawViews()}
+const redrawViews = () => {okitViews.forEach((v) => v.draw())}
+const newModel = (data) => {okitJsonModel = new OkitJson(data)}
+// const newModel = (data) => {okitJsonModel = new OkitJson(data);updateViews()}
 
 let okitJsonView = null;

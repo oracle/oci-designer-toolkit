@@ -235,13 +235,13 @@ class OkitTabularJsonView extends OkitJsonView {
             // Designer View Object
             const view_resource = this.getViewResource(resource.getArtifactReference(), resource.id);
             const tr = tbody.append('div').attr('class', 'tr okit-tr-first-column-count').on('click', function() {
-                view_resource.loadSlidePanels()
+                // view_resource.loadSlidePanels()
                 // Highlight selected row
                 $('#tabular_view_tab_contents .tabular-row-selected').removeClass('tabular-row-selected')
                 $(this).addClass('tabular-row-selected')
             });
             self.addContextMenu(tr, resource_type, view_resource);
-            if (first) {first = false; view_resource.loadSlidePanels();}
+            // if (first) {first = false; view_resource.loadSlidePanels();}
             tr.append('div').attr('class', 'td').text(cnt);
             cnt += 1;
             Object.entries(property_map).forEach(([key, value]) => {

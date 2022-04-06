@@ -176,7 +176,8 @@ class OkitImportResourceManagerDialog extends OkitDialog {
                 data: this.responses
             }).done((resp) => {
                 resp = resp instanceof Object ? resp : JSON.parse(resp)
-                okitJsonModel = new OkitJson(JSON.stringify(resp.okit_json));
+                // okitJsonModel = new OkitJson(JSON.stringify(resp.okit_json));
+                newModel(JSON.stringify(resp.okit_json));
                 newDesignerView();
                 displayOkitJson();
                 displayDesignerView();
