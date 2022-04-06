@@ -280,9 +280,9 @@ def designer():
     palette_json['files'] = {}
     for group in palette_json.get('groups', []):
         for resource in group.get('resources', []):
-            palette_json['files'][resource['title']] = os.path.join('static', 'okit', 'palette', 'svg', resource['svg'])
+            palette_json['files'][resource['title'].lower()] = os.path.join('/', 'static', 'okit', 'palette', 'svg', resource['svg'])
             with open(os.path.join(bp.static_folder, 'palette', 'svg', resource['svg']), 'r') as svgFile:
-                palette_json['svg'][resource['title']] = ''.join(svgFile.read().splitlines())
+                palette_json['svg'][resource['title'].lower()] = ''.join(svgFile.read().splitlines())
 
     # config_sections = {"sections": readAndValidateConfigFileSections()}
     # config_sections = {"sections": readConfigFileSections()}

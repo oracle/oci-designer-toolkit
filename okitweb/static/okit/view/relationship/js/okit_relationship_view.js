@@ -132,7 +132,7 @@ class OkitRelationshipJsonView extends OkitJsonView {
                         .attr('text-anchor', "middle");
 
         relationship_images = relationship_node.append("image")
-                        .attr("xlink:href", function(d) { return self.resource_icons.files[d.type]; })
+                        .attr("xlink:href", function(d) { return self.resource_icons.files[d.type.toLowerCase()]; })
                         // .attr("xlink:href", function(d) { return "images/" + d.type.replaceAll(' ','_') + ".svg"; })
                         .attr("width", function(d) { return 1.4 * self.getRadius(d.type); })
                         .attr("height", function(d) { return 1.4 * self.getRadius(d.type); })

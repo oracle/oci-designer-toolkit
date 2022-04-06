@@ -18,6 +18,7 @@
 3. Add missing "Stateless" flag to Security list Ingress/Egress rule generation.
 4. Add test to see if import_drg_route_distribution_id exists during Terraform generation.
 5. Fix issue where network entity in route rule was not filtered by vcn id
+6. Resolve missing Icon in Relationship view
 
 
 ## Version 0.34.0
