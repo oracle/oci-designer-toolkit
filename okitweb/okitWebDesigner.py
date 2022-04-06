@@ -47,6 +47,7 @@ from generators.okitTerraform11Generator import OCITerraform11Generator
 from generators.okitTerraformGenerator import OCITerraformGenerator
 from generators.okitResourceManagerGenerator import OCIResourceManagerGenerator
 from generators.okitMarkdownGenerator import OkitMarkdownGenerator
+from visualiser.common.okitCommon import readXmlFile
 
 # Configure logging
 logger = getLogger()
@@ -272,8 +273,16 @@ def designer():
     # Read Resource Specific JavaScript Properties Files
     resource_properties_js_files = sorted(os.listdir(os.path.join(bp.static_folder, 'properties', 'js', 'resources')))
 
-    # Read Pallete Json
+    # Read Palette Json
     palette_json = readJsonFile(os.path.join(bp.static_folder, 'palette', 'palette.json'))
+    # Read SVG File
+    palette_json['svg'] = {}
+    palette_json['files'] = {}
+    for group in palette_json.get('groups', []):
+        for resource in group.get('resources', []):
+            palette_json['files'][resource['title']] = os.path.join('static', 'okit', 'palette', 'svg', resource['svg'])
+            with open(os.path.join(bp.static_folder, 'palette', 'svg', resource['svg']), 'r') as svgFile:
+                palette_json['svg'][resource['title']] = ''.join(svgFile.read().splitlines())
 
     # config_sections = {"sections": readAndValidateConfigFileSections()}
     # config_sections = {"sections": readConfigFileSections()}
