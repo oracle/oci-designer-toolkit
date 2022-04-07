@@ -210,7 +210,7 @@ class OkitTfStateFileParser(object):
             for listener in okit_resource["listeners"]:
                 del listener["load_balancer_id"]
                 del listener["id"]
-                okit_resource["shape_details"] = okit_resource["shape_details"][0] if len(okit_resource["shape_details"]) > 0 else {}
+            okit_resource["shape_details"] = okit_resource["shape_details"][0] if len(okit_resource["shape_details"]) > 0 else {}
 
     def route_tables(self, val, **kwargs):
         for okit_resource in val:
