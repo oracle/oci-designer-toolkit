@@ -11,7 +11,7 @@ class OkitJson {
     /*
     ** Create
      */
-    constructor(okit_json_string = '') {
+    constructor(okitjson) {
         const now = getCurrentDateTime();
         this.title = "OKIT OCI Visualiser Json";
         this.description = `# Description\n__Created ${getCurrentDateTime()}__\n\n--------------------------------------\n\n`;
@@ -33,8 +33,10 @@ class OkitJson {
         this.defined_tags = {};
         this.variables_schema = this.newVariableSchema()
 
-        if (okit_json_string !== undefined && okit_json_string.length > 0) {
-            this.load(JSON.parse(okit_json_string));
+        if (okitjson !== undefined && typeof okitjson === 'string' && okitjson.length > 0) {
+            this.load(JSON.parse(okitjson));
+        }  else if (okitjson !== undefined && okitjson instanceof Object) {
+            this.load(okitjson);
         }
     }
 

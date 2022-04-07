@@ -1903,7 +1903,7 @@ class CanvasView extends OkitContainerArtefactView {
 const okitViewClasses = [];
 const okitViews = [];
 
-const updateViews = () => {okitViews.forEach((v) => v.update(okitJsonModel));redrawViews()}
+const updateViews = (model) => {okitViews.forEach((v) => v.update(model ? model : okitJsonModel));redrawViews()}
 const redrawViews = () => {okitViews.forEach((v) => v.draw())}
 const newModel = (data) => {okitJsonModel = new OkitJson(data)}
 // const newModel = (data) => {okitJsonModel = new OkitJson(data);updateViews()}

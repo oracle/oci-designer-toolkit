@@ -15,6 +15,7 @@ class OkitDesignerJsonView extends OkitJsonView {
         // this.palette_svg = resource_icons.svg;
         // Set up Canvas info
         this.canvas = undefined 
+        this.newCanvas()
     }
 
     static newView(model, oci_data=null, resource_icons={}, parent_id='canvas-div') {
@@ -104,7 +105,7 @@ class OkitDesignerJsonView extends OkitJsonView {
             height = Math.round(Math.max(height, parent_height));
         }
         // Round up to next grid size to display full grid.
-        if (okitSettings.is_display_grid) {
+        if (okitSettings && okitSettings.is_display_grid) {
             width += (grid_size - (width % grid_size) + 1);
             height += (grid_size - (height % grid_size) + 1);
         }
