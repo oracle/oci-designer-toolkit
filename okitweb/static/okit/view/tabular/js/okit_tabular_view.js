@@ -198,6 +198,7 @@ class OkitTabularJsonView extends OkitJsonView {
     }
 
     generateTabName(name) {
+        console.info(`Generating Tab name from ${name}`)
         return titleCase(name.replaceAll('_', ' '));
     }
 

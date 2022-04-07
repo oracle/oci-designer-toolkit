@@ -69,7 +69,7 @@ function getTimestamp() {
 }
 
 function titleCase(str) {
-    return str.replace(/\b\w+/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}).replaceAll('-', '_').replace(/\W+/g, '')
+    return str.replace(/\b\w+/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}).replaceAll('-', '_').replace(/\W+/g, ' ')
 }
 
 function toFilename(str) {
