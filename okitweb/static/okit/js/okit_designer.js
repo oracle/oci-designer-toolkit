@@ -108,16 +108,23 @@ function handleNew(evt) {
 }
 function newDiagram() {
     console.log('Creating New Diagram');
-    newModel();
+    const compartment = {
+        read_only: true,
+        display_name: 'Deployment Compartment',
+        description: 'Represents the deployment location for the resources specified within the design.',
+        definition: 'Logical Compartment that represents the deployment location for the resources specified within the design. This compartment will not be created during the build process.'
+    }
+    const data = {compartments: [compartment]}
+    newModel(data);
     newDesignerView();
-    okitJsonView.newCanvas();
-    okitJsonView.newCompartment();
-    // Set Top Compartment as deployment compartment
-    const resource = okitJsonModel.getCompartments()[0]
-    resource.read_only = true;
-    resource.display_name = 'Deployment Compartment';
-    resource.description = 'Represents the deployment location for the resources specified within the design.'
-    resource.definition = 'Logical Compartment that represents the deployment location for the resources specified within the design. This compartment will not be created during the build process.'
+    // okitJsonView.newCanvas();
+    // okitJsonView.newCompartment();
+    // // Set Top Compartment as deployment compartment
+    // const resource = okitJsonModel.getCompartments()[0]
+    // resource.read_only = true;
+    // resource.display_name = 'Deployment Compartment';
+    // resource.description = 'Represents the deployment location for the resources specified within the design.'
+    // resource.definition = 'Logical Compartment that represents the deployment location for the resources specified within the design. This compartment will not be created during the build process.'
     console.info(okitJsonView);
 }
 function newDesignerView() {
