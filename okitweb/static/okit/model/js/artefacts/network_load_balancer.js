@@ -14,17 +14,69 @@ class NetworkLoadBalancer extends OkitArtifact {
     constructor (data={}, okitjson={}) {
         super(okitjson);
         // Configure default values
-        // this.display_name = this.generateDefaultName(okitjson.network_load_balancers.length + 1);
-        this.compartment_id = data.parent_id;
-        /*
-        ** TODO: Add Resource / Artefact specific parameters and default
-        */
+        this.subnet_id = ''
+        this.is_preserve_source_destination = false 
+        this.is_private = true
+        this.network_security_group_ids = []
+        // nlb_ip_version = 'IPv4'
+        this.reserved_ips = []
+        this.backend_sets = []
+        this.listeners = []
         // Update with any passed data
         this.merge(data);
         this.convert();
-        // TODO: If the Resource is within a Subnet but the subnet_iss is not at the top level then raise it with the following functions if not required delete them.
-        // Expose subnet_id at the top level
-        Object.defineProperty(this, 'subnet_id', {get: function() {return this.primary_mount_target.subnet_id;}, set: function(id) {this.primary_mount_target.subnet_id = id;}, enumerable: false });
+    }
+
+    newHealthChecker() {
+        return {
+            protocol: 'HTTP',
+            interval_in_millis: 10000,
+            port: 80,
+            request_data: '',
+            response_body_regex: '',
+            response_data: '',
+            retries: 3,
+            return_code: 200,
+            timeout_in_millis: 3000,
+            url_path: ''
+        }
+    }
+
+    newBackendSet() {
+        return {
+            resource_name: `${this.generateResourceName()}BackendSet`,
+            health_checker: this.newHealthChecker(),
+            name: `${this.display_name} Backend Set`,
+            policy: 'FIVE_TUPLE',
+            ip_version: '',
+            is_preserve_source: true,
+            backends: []
+        }
+    }
+
+    newBackend() {
+        return {
+            resource_name: `${this.generateResourceName()}Backend`,
+            port: 80,
+            ip_address: '',
+            is_backup: false,
+            is_drain: false,
+            is_offline: false,
+            name: `${this.display_name} Backend`,
+            target_id: '',
+            weight: 1
+        }
+    }
+
+    newListener() {
+        return {
+            resource_name: `${this.generateResourceName()}Backend`,
+            default_backend_set_name: '',
+            name: `${this.display_name} Listener`,
+            port: 80,
+            protocol: 'HTTP',
+            ip_version: ''
+        }
     }
     /*
     ** Name Generation

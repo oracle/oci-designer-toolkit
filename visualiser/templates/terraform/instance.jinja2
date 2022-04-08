@@ -132,7 +132,11 @@ resource "oci_core_volume_attachment" "{{ volume.resource_name }}" {
     attachment_type = {{ volume.attachment_type | safe }}
     instance_id     = local.{{ resource_name }}_id
     volume_id       = {{ volume.volume_id }}
+{% if volume.display_name is defined %}
     display_name    = {{ volume.display_name | safe }}
+{% else %}
+    display_name    = {{ display_name | safe }}
+{% endif %}
     is_read_only    = {{ volume.is_read_only | safe | lower }}
     is_shareable    = {{ volume.is_shareable | safe | lower }}
 }
