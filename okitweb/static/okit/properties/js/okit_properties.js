@@ -49,6 +49,8 @@ class OkitResourceProperties {
     subnet_filter = (r) => r.subnet_id.toString() === this.resource.subnet_id.toString()
     oci_defined_filter = (r) => r.compartment_id === null
     user_defined_filter = (r) => r.compartment_id !== null
+    nsg_filter = (r) => r.vcn_id === [...(this.resource.okit_json.subnet ? this.resource.okit_json.subnet : this.resource.okit_json.subnets ? this.resource.okit_json.subnets : [])].filter((s) => s.id === this.resource.subnet_id)[0].vcn_id
+    fss_filter = (r) => r.availability_domain.toString() === this.resource.availability_domain.toString()
 
     build() {
         if (this.resource) {
