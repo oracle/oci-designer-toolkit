@@ -89,6 +89,7 @@ class NetworkLoadBalancerProperties extends OkitResourceProperties {
         const backends = this.createArrayTable('Backends', `${id}_backends`, '', () => this.addBackend(backend_set, backends.tbody))
         // this.backends_tbody = backends.tbody
         this.append(backends_details.div, backends.table)
+        this.loadBackends(backend_set, backends.tbody)
     }
     addBackendSet() {
         const backend_set = this.resource.newBackendSet();
@@ -101,7 +102,10 @@ class NetworkLoadBalancerProperties extends OkitResourceProperties {
         $(`#${id}${idx}_row`).remove()
     }
 
-    loadBackends(backend_set, backend_table) {
+    loadBackends(backend_set, backends_tbody) {
+        backends_tbody.selectAll('*').remove()
+        backend_set.backends.forEach((e, i) => this.addBackendHtml(e, i+1, backend_set, backends_tbody))
+        this.backends_idx = this.backends_idx ? this.backends_idx + backend_set.backends.length : backend_set.backends.length;
     }
     addBackendHtml(backend, idx, backend_set, backends_tbody) {
         const id = `${this.id}_backend`
