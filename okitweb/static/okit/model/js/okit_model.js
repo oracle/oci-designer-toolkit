@@ -45,6 +45,7 @@ class OkitJson {
     get updated() {return this.metadata.updated}
     get okit_version() {return this.metadata.okit_version}
     get okit_model_id() {return this.metadata.okit_model_id}
+    get all_instances() {return [...this.getInstances(), ...this.getAnalyticsInstances()]}
 
     getResourceLists() {
         return Object.entries(this).reduce((r, [k, v]) => {
