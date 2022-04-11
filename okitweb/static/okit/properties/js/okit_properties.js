@@ -43,6 +43,11 @@ class OkitResourceProperties {
         pattern: '^[a-zA-Z][a-zA-Z0-9]{0,64}$',
         title: 'Only letters and numbers, starting with a letter. 64 characters max.'
     }
+    // Alphanumeric, Hyphon & Underscore
+    spaceless_name_data = {
+        pattern: '^[\\w-]*$',
+        title: 'Only alphanumeric characters, dashes, and underscores.'
+    }
 
     compartment_filter = (r) => r.compartment_id.toString() === this.resource.compartment_id.toString()
     vcn_filter = (r) => r.vcn_id.toString() === this.resource.vcn_id.toString()
@@ -269,7 +274,7 @@ class OkitResourceProperties {
         if (['text', 'password', 'email', 'date', 'number', 'range'].includes(type)) {
             title = row.append('div').attr('class', 'td property-label').text(label)
             cell = row.append('div').attr('class', 'td')
-            input = cell.append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', type).attr('class', 'okit-property-value').attr('list', 'variables_datalist').on('change', callback)
+            input = cell.append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', type).attr('class', 'okit-property-value').attr('list', 'variables_datalist').on('blur', callback)
             this.addExtraAttributes(input, data)
             // return this.createSimplePropertyRow(type, label, id, idx, callback, data)
         } else if (type === 'select') {

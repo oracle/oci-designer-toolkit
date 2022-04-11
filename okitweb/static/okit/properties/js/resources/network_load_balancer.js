@@ -74,11 +74,11 @@ class NetworkLoadBalancerProperties extends OkitResourceProperties {
         const bs_table = this.createTable('', `${id}_backend_set_table`, '')
         this.append(bs_details.div, bs_table.table)
         // Name
-        const name = this.createInput('text', 'Name', `${id}_name`, idx, (d, i, n) => {backend_set.name = n[i].value;bs_details.summary.text(backend_set.name)})
+        const name = this.createInput('text', 'Name', `${id}_name`, idx, (d, i, n) => {n[i].reportValidity(); backend_set.name = n[i].value;bs_details.summary.text(backend_set.name)}, this.spaceless_name_data)
         this.append(bs_table.table, name.row)
         name.input.property('value', backend_set.name)
         // Policy
-        const policy = this.createInput('select', 'Policy', `${id}_policy`, idx, (d, i, n) => backend_set.policy = n[i].value = n[i].value)
+        const policy = this.createInput('select', 'Policy', `${id}_policy`, idx, (d, i, n) => backend_set.policy = n[i].value)
         this.append(bs_table.table, policy.row)
         this.loadPolicySelect(policy.input)
         policy.input.property('value', backend_set.policy)
@@ -116,7 +116,7 @@ class NetworkLoadBalancerProperties extends OkitResourceProperties {
         const bs_table = this.createTable('', `${id}_backend_table`, idx)
         this.append(bs_details.div, bs_table.table)
         // Name
-        const name = this.createInput('text', 'Name', `${id}_name`, idx, (d, i, n) => {backend.name = n[i].value;bs_details.summary.text(backend.name)})
+        const name = this.createInput('text', 'Name', `${id}_name`, idx, (d, i, n) => {n[i].reportValidity(); backend.name = n[i].value;bs_details.summary.text(backend.name)}, this.spaceless_name_data)
         this.append(bs_table.table, name.row)
         name.input.property('value', backend.name)
         // Target Id
@@ -165,14 +165,31 @@ class NetworkLoadBalancerProperties extends OkitResourceProperties {
         this.resource.listeners.forEach((e, i) => this.addListenerHtml(e, i+1))
         this.listeners_idx = this.resource.listeners.length;
     }
-    addListenerHtml(listeners, idx) {
-        const id = `${this.id}_listeners`
-        const delete_row = this.createDeleteRow(id, idx, () => this.deleteBackendSet(id, idx, listeners))
+    addListenerHtml(listener, idx) {
+        const id = `${this.id}_listener`
+        const delete_row = this.createDeleteRow(id, idx, () => this.deleteBackendSet(id, idx, listener))
         this.append(this.listeners_tbody, delete_row.row)
-        const ed = this.createDetailsSection('Listener', `${id}_listeners_details`, idx)
-        this.append(delete_row.div, ed.details)
-        const et = this.createTable('', `${id}_listeners_table`, '')
-        this.append(ed.div, et.table)
+        const listener_details = this.createDetailsSection(listener.name, `${id}_listener_details`, idx)
+        this.append(delete_row.div, listener_details.details)
+        const listener_table = this.createTable('', `${id}_listener_table`, '')
+        this.append(listener_details.div, listener_table.table)
+        // Name
+        const name = this.createInput('text', 'Name', `${id}_name`, idx, (d, i, n) => {n[i].reportValidity(); listener.name = n[i].value;listener_details.summary.text(listener.name)}, this.spaceless_name_data)
+        this.append(listener_table.table, name.row)
+        name.input.property('value', listener.name)
+        // Port
+        const port = this.createInput('number', 'Port', `${id}_port`, idx, (d, i, n) => {listener.port = n[i].value})
+        this.append(listener_table.table, port.row)
+        port.input.property('value', listener.port)
+        // Protocol
+        const protocol = this.createInput('text', 'Protocol', `${id}_protocol`, idx, (d, i, n) => {listener.protocol = n[i].value})
+        this.append(listener_table.table, protocol.row)
+        protocol.input.property('value', listener.protocol)
+        // Default Backend Set
+        const default_backend_set_name = this.createInput('select', 'Default Backend Set', `${id}_default_backend_set_name`, idx, (d, i, n) => listener.default_backend_set_name = n[i].value)
+        this.append(listener_table.table, default_backend_set_name.row)
+        this.loadDefaultBackendSetSelect(default_backend_set_name.input)
+        default_backend_set_name.input.property('value', listener.default_backend_set_name)
     }
     addListener() {
         const listener = this.resource.newListener();
@@ -191,5 +208,9 @@ class NetworkLoadBalancerProperties extends OkitResourceProperties {
             ['Two Tuple', 'Two_TUPLE'],
         ]);
         this.loadSelectFromMap(select, types_map)
+    }
+    loadDefaultBackendSetSelect(select) {
+        const values_map = new Map(this.resource.backend_sets.map((r) => [r.name, r.name]))
+        this.loadSelectFromMap(select, values_map)
     }
 }

@@ -46,7 +46,7 @@ class NetworkLoadBalancer extends OkitArtifact {
         return {
             resource_name: `${this.generateResourceName()}BackendSet`,
             health_checker: this.newHealthChecker(),
-            name: `${this.display_name} Backend Set`,
+            name: `${this.display_name}BackendSet`.replaceAll(' ', '_'),
             policy: 'FIVE_TUPLE',
             ip_version: '',
             is_preserve_source: true,
@@ -62,7 +62,7 @@ class NetworkLoadBalancer extends OkitArtifact {
             is_backup: false,
             is_drain: false,
             is_offline: false,
-            name: `${this.display_name} Backend`,
+            name: `${this.display_name}Backend`.replaceAll(' ', '_'),
             target_id: '',
             weight: 1
         }
@@ -72,7 +72,7 @@ class NetworkLoadBalancer extends OkitArtifact {
         return {
             resource_name: `${this.generateResourceName()}Backend`,
             default_backend_set_name: '',
-            name: `${this.display_name} Listener`,
+            name: `${this.display_name}Listener`.replaceAll(' ', '_'),
             port: 80,
             protocol: 'HTTP',
             ip_version: ''
