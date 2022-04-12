@@ -17,6 +17,12 @@ class NetworkLoadBalancerView extends OkitArtefactView {
     /*
     ** SVG Processing
     */
+    // Draw Connections
+    drawConnections() {
+        this.artefact.backend_sets.forEach((backend_set) => {
+            backend_set.backends.forEach((backend) => {if (backend.instance_id) this.drawConnection(this.id, backend.instance_id)})
+        })
+    }
     /*
     ** Property Sheet Load function
     */

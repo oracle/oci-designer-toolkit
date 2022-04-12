@@ -13,6 +13,7 @@ __module__ = "ociQuery"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 import datetime
+from ipaddress import ip_address
 import json
 import oci
 import re
@@ -332,9 +333,18 @@ class OCIQuery(OCIConnection):
         return database_systems
 
     def network_load_balancers(self, nlbs, resources):
+        private_ips = resources.get("PrivateIp", [])
+        vnic_attachments = resources.get("VnicAttachment", [])
         for nlb in nlbs:
             nlb["backend_sets"] = list(nlb["backend_sets"].values())
             nlb["listeners"] = list(nlb["listeners"].values())
+            for bs in nlb["backend_sets"]:
+                for backend in bs["backends"]:
+                    vnic_ids = [ip["vnic_id"] for ip in private_ips if ip["id"] == backend["target_id"]]
+                    if len(vnic_ids) > 0:
+                        instance_ids = [va["instance_id"] for va in vnic_attachments if va["vnic_id"] in vnic_ids]
+                        if len(instance_ids) > 0:
+                            backend["target_id"] = instance_ids[0]
         return nlbs
 
     def network_security_group(self, nsgs, resources):
