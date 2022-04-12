@@ -274,7 +274,7 @@ class OkitResourceProperties {
         if (['text', 'password', 'email', 'date', 'number', 'range'].includes(type)) {
             title = row.append('div').attr('class', 'td property-label').text(label)
             cell = row.append('div').attr('class', 'td')
-            input = cell.append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', type).attr('class', 'okit-property-value').attr('list', 'variables_datalist').on('blur', callback)
+            input = cell.append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', type).attr('class', 'okit-property-value').attr('list', 'variables_datalist').on('change', callback).on('blur', (d, i, n) => n[i].reportValidity())
             this.addExtraAttributes(input, data)
             // return this.createSimplePropertyRow(type, label, id, idx, callback, data)
         } else if (type === 'select') {

@@ -74,7 +74,7 @@ class NetworkLoadBalancerProperties extends OkitResourceProperties {
         const bs_table = this.createTable('', `${id}_backend_set_table`, '')
         this.append(bs_details.div, bs_table.table)
         // Name
-        const name = this.createInput('text', 'Name', `${id}_name`, idx, (d, i, n) => {n[i].reportValidity(); backend_set.name = n[i].value;bs_details.summary.text(backend_set.name)}, this.spaceless_name_data)
+        const name = this.createInput('text', 'Name', `${id}_name`, idx, (d, i, n) => {backend_set.name = n[i].value;bs_details.summary.text(backend_set.name)}, this.spaceless_name_data)
         this.append(bs_table.table, name.row)
         name.input.property('value', backend_set.name)
         // Policy
@@ -116,7 +116,7 @@ class NetworkLoadBalancerProperties extends OkitResourceProperties {
         const bs_table = this.createTable('', `${id}_backend_table`, idx)
         this.append(bs_details.div, bs_table.table)
         // Name
-        const name = this.createInput('text', 'Name', `${id}_name`, idx, (d, i, n) => {n[i].reportValidity(); backend.name = n[i].value;bs_details.summary.text(backend.name)}, this.spaceless_name_data)
+        const name = this.createInput('text', 'Name', `${id}_name`, idx, (d, i, n) => {backend.name = n[i].value;bs_details.summary.text(backend.name)}, this.spaceless_name_data)
         this.append(bs_table.table, name.row)
         name.input.property('value', backend.name)
         // Target Id
@@ -174,7 +174,7 @@ class NetworkLoadBalancerProperties extends OkitResourceProperties {
         const listener_table = this.createTable('', `${id}_listener_table`, '')
         this.append(listener_details.div, listener_table.table)
         // Name
-        const name = this.createInput('text', 'Name', `${id}_name`, idx, (d, i, n) => {n[i].reportValidity(); listener.name = n[i].value;listener_details.summary.text(listener.name)}, this.spaceless_name_data)
+        const name = this.createInput('text', 'Name', `${id}_name`, idx, (d, i, n) => {listener.name = n[i].value;listener_details.summary.text(listener.name)}, this.spaceless_name_data)
         this.append(listener_table.table, name.row)
         name.input.property('value', listener.name)
         // Port
