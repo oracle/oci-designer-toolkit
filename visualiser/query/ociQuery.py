@@ -70,6 +70,7 @@ class OCIQuery(OCIConnection):
         "MountTarget",
         "MySqlDbSystem",
         "NatGateway",
+        "NetworkLoadBalancer",
         "NetworkSecurityGroup",
         "NetworkSecurityGroupSecurityRule",
         "NodePool",
@@ -119,6 +120,7 @@ class OCIQuery(OCIConnection):
         "MountTarget": "mount_targets",
         "MySqlDbSystem": "mysql_database_systems",
         "NatGateway": "nat_gateways",
+        "NetworkLoadBalancer": "network_load_balancers",
         "NetworkSecurityGroup": "network_security_groups",
         "Policy": "policys", # Yes we know it's spelt incorrectly but the okitCodeSkeletonGenerator.py is simple
         "RemotePeeringConnection": "remote_peering_connections",
@@ -228,6 +230,8 @@ class OCIQuery(OCIConnection):
                         resource_list = self.service_gateways(resource_list, resources)
                     elif resource_type == "Group":
                         resource_list = self.groups(resource_list, resources)
+                    elif resource_type == "NetworkLoadBalancer":
+                        resource_list = self.network_load_balancers(resource_list, resources)
                     # elif resource_type == "AnalyticsInstance":
                     #     resource_list = self.analytics_instances(resource_list, resources)
                     # Check Life Cycle State
@@ -326,6 +330,12 @@ class OCIQuery(OCIConnection):
             # Trim version to just the number
             db_system["mysql_version"] = db_system["mysql_version"].split('-')[0]
         return database_systems
+
+    def network_load_balancers(self, nlbs, resources):
+        for nlb in nlbs:
+            nlb["backend_sets"] = list(nlb["backend_sets"].values())
+            nlb["listeners"] = list(nlb["listeners"].values())
+        return nlbs
 
     def network_security_group(self, nsgs, resources):
         for nsg in nsgs:

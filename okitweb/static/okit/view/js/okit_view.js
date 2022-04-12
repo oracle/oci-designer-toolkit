@@ -145,7 +145,7 @@ class OkitArtefactView {
                     if (!(value instanceof Function)) {
                         Object.defineProperty(this, key, {
                             get: function () {
-                                // console.warn(`${this.constructor.name} accessing ${key} directly`)
+                                // console.warn(`${this.constructor.name} accessing ${key} directly (${typeof value}) ${value}`)
                                 return this.artefact[key];
                             }
                         });
@@ -154,7 +154,8 @@ class OkitArtefactView {
             );
         }
         this.getJsonView = function() {return json_view};
-        this.getOkitJson = function() {return json_view.getOkitJson()};
+        console.info(this.getOkitJson)
+        if (!this.getOkitJson) this.getOkitJson = function() {return json_view.getOkitJson()};
         // Create Properties Sheet Object
         this.newPropertiesSheet()
     }

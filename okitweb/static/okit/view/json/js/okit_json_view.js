@@ -65,6 +65,7 @@ class OkitTextJsonView extends OkitJsonView {
             let object_ul = document.createElement('ul')
             element.appendChild(object_ul)
             Object.entries(obj).forEach(([k, v]) => {
+                // console.info(`${k} is ${typeof v}`)
                 if (v instanceof Function) console.info('Ignoring Function', k)
                 else if (Array.isArray(v)) this.addArrayAttribute(object_ul, v, k)
                 else if (v instanceof Object) this.addObjectAttribute(object_ul, v, k)

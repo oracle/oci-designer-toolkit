@@ -262,7 +262,7 @@ class OkitArtifact {
     ** Create
      */
     constructor (okitjson) {
-        this.getOkitJson = function() {return okitjson};
+        // this.getOkitJson = () => {return okitjson};
         // Add Id
         this.id = this.okit_id;
         // All Artefacts will have compartment id, display name & description
@@ -284,6 +284,8 @@ class OkitArtifact {
         this.resource_name = this.generateResourceName();
         Object.defineProperty(this, 'documentation', {get: function() {return this.definition;}, set: function(documentation) {this.definition = documentation;}, enumerable: true });
     }
+
+    getOkitJson() {return this.okit_json}
 
     get name() {return this.display_name;}
     set name(name) {this.display_name = name;}
