@@ -71,7 +71,7 @@ class OCIQuery(OCIConnection):
         "MountTarget",
         "MySqlDbSystem",
         "NatGateway",
-        "NetworkLoadBalancer",
+        # "NetworkLoadBalancer",
         "NetworkSecurityGroup",
         "NetworkSecurityGroupSecurityRule",
         "NodePool",
