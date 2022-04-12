@@ -89,7 +89,7 @@
                 },
                 {
                     "title": "Network Load Balancer",
-                    "targets": ["oci", "freetier"],
+                    "targets": ["hidden"],
                     "svg": "NetworkLoadBalancerLB.svg"
                 },
                 {

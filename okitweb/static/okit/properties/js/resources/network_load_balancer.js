@@ -9,7 +9,7 @@ console.info('Loaded NetworkLoadBalancer Properties Javascript');
 */
 class NetworkLoadBalancerProperties extends OkitResourceProperties {
     constructor (resource) {
-        const resource_tabs = ['Backends', 'Listeners']
+        const resource_tabs = ['Listeners', 'Backends']
         super(resource, resource_tabs)
     }
 
@@ -74,7 +74,7 @@ class NetworkLoadBalancerProperties extends OkitResourceProperties {
         const bs_table = this.createTable('', `${id}_backend_set_table`, '')
         this.append(bs_details.div, bs_table.table)
         // Name
-        const name = this.createInput('text', 'Name', `${id}_name`, idx, (d, i, n) => {n[i].reportValidity(); backend_set.name = n[i].value;bs_details.summary.text(backend_set.name)}, this.spaceless_name_data)
+        const name = this.createInput('text', 'Name', `${id}_name`, idx, (d, i, n) => {backend_set.name = n[i].value;bs_details.summary.text(backend_set.name)}, this.spaceless_name_data)
         this.append(bs_table.table, name.row)
         name.input.property('value', backend_set.name)
         // Policy
@@ -82,12 +82,58 @@ class NetworkLoadBalancerProperties extends OkitResourceProperties {
         this.append(bs_table.table, policy.row)
         this.loadPolicySelect(policy.input)
         policy.input.property('value', backend_set.policy)
+
+        // Health Checker
+        const health_checker_details = this.createDetailsSection('Health Checker', `${id}_health_checker_details`, '', undefined, {}, false)
+        this.append(bs_details.div, health_checker_details.details)
+        const health_checker_table = this.createTable('Backends', `${id}_health_checker_table`, '')
+        this.append(health_checker_details.div, health_checker_table.table)
+        // Protocol
+        const protocol = this.createInput('select', 'Protocol', `${id}_protocol`, idx, (d, i, n) => backend_set.health_checker.protocol = n[i].value)
+        this.append(health_checker_table.table, protocol.row)
+        this.loadHealthCheckProtocolSelect(protocol.input)
+        protocol.input.property('value', backend_set.health_checker.protocol)
+        // Interval In Millis
+        const interval_in_millis = this.createInput('number', 'Interval (ms)', `${id}_interval_in_millis`, idx, (d, i, n) => {backend_set.health_checker.interval_in_millis = n[i].value})
+        this.append(health_checker_table.table, interval_in_millis.row)
+        interval_in_millis.input.property('value', backend_set.health_checker.interval_in_millis)
+        // Port
+        const port = this.createInput('number', 'Port', `${id}_port`, idx, (d, i, n) => {backend_set.health_checker.port = n[i].value})
+        this.append(health_checker_table.table, port.row)
+        port.input.property('value', backend_set.health_checker.port)
+        // URL Path
+        const url_path = this.createInput('number', 'Url Path', `${id}_url_path`, idx, (d, i, n) => {backend_set.health_checker.url_path = n[i].value})
+        this.append(health_checker_table.table, url_path.row)
+        url_path.input.property('value', backend_set.health_checker.url_path)
+        // Request Data
+        const request_data = this.createInput('text', 'Request Data', `${id}_request_data`, idx, (d, i, n) => {backend_set.health_checker.request_data = n[i].value})
+        this.append(health_checker_table.table, request_data.row)
+        request_data.input.property('value', backend_set.health_checker.request_data)
+        // Response RegEx
+        const response_body_regex = this.createInput('text', 'Response RegEx', `${id}_response_body_regex`, idx, (d, i, n) => {backend_set.health_checker.response_body_regex = n[i].value})
+        this.append(health_checker_table.table, response_body_regex.row)
+        response_body_regex.input.property('value', backend_set.health_checker.response_body_regex)
+        // Response Data
+        const response_data = this.createInput('text', 'Response Data', `${id}_response_data`, idx, (d, i, n) => {backend_set.health_checker.response_data = n[i].value})
+        this.append(health_checker_table.table, response_data.row)
+        response_data.input.property('value', backend_set.health_checker.response_data)
+        // Retries
+        const retries = this.createInput('number', 'Retries', `${id}_retries`, idx, (d, i, n) => {backend_set.health_checker.retries = n[i].value})
+        this.append(health_checker_table.table, retries.row)
+        retries.input.property('value', backend_set.health_checker.retries)
+        // Return Code
+        const return_code = this.createInput('number', 'Return Code', `${id}_return_code`, idx, (d, i, n) => {backend_set.health_checker.return_code = n[i].value})
+        this.append(health_checker_table.table, return_code.row)
+        return_code.input.property('value', backend_set.health_checker.return_code)
+        // Timeout in Millis
+        const timeout_in_millis = this.createInput('number', 'Timeout (ms)', `${id}_timeout_in_millis`, idx, (d, i, n) => {backend_set.health_checker.timeout_in_millis = n[i].value})
+        this.append(health_checker_table.table, timeout_in_millis.row)
+        timeout_in_millis.input.property('value', backend_set.health_checker.timeout_in_millis)
+
         // Backends
         const backends_details = this.createDetailsSection('Backends', `${id}_backends_details`)
         this.append(bs_details.div, backends_details.details)
-        // this.backends_div = backends_details.div
         const backends = this.createArrayTable('Backends', `${id}_backends`, '', () => this.addBackend(backend_set, backends.tbody))
-        // this.backends_tbody = backends.tbody
         this.append(backends_details.div, backends.table)
         this.loadBackends(backend_set, backends.tbody)
     }
@@ -116,7 +162,7 @@ class NetworkLoadBalancerProperties extends OkitResourceProperties {
         const bs_table = this.createTable('', `${id}_backend_table`, idx)
         this.append(bs_details.div, bs_table.table)
         // Name
-        const name = this.createInput('text', 'Name', `${id}_name`, idx, (d, i, n) => {n[i].reportValidity(); backend.name = n[i].value;bs_details.summary.text(backend.name)}, this.spaceless_name_data)
+        const name = this.createInput('text', 'Name', `${id}_name`, idx, (d, i, n) => {backend.name = n[i].value;bs_details.summary.text(backend.name)}, this.spaceless_name_data)
         this.append(bs_table.table, name.row)
         name.input.property('value', backend.name)
         // Target Id
@@ -174,17 +220,19 @@ class NetworkLoadBalancerProperties extends OkitResourceProperties {
         const listener_table = this.createTable('', `${id}_listener_table`, '')
         this.append(listener_details.div, listener_table.table)
         // Name
-        const name = this.createInput('text', 'Name', `${id}_name`, idx, (d, i, n) => {n[i].reportValidity(); listener.name = n[i].value;listener_details.summary.text(listener.name)}, this.spaceless_name_data)
+        const name = this.createInput('text', 'Name', `${id}_name`, idx, (d, i, n) => {listener.name = n[i].value;listener_details.summary.text(listener.name)}, this.spaceless_name_data)
         this.append(listener_table.table, name.row)
         name.input.property('value', listener.name)
+        // Protocol
+        const protocol = this.createInput('select', 'Protocol', `${id}_protocol`, idx, (d, i, n) => {listener.protocol = n[i].value;port.row.classed('collapsed', listener.protocol === 'ANY');listener.port = listener.protocol !== 'ANY' ? listener.port : '0'})
+        this.append(listener_table.table, protocol.row)
+        this.loadListenerProtocolSelect(protocol.input)
+        protocol.input.property('value', listener.protocol)
         // Port
         const port = this.createInput('number', 'Port', `${id}_port`, idx, (d, i, n) => {listener.port = n[i].value})
         this.append(listener_table.table, port.row)
         port.input.property('value', listener.port)
-        // Protocol
-        const protocol = this.createInput('text', 'Protocol', `${id}_protocol`, idx, (d, i, n) => {listener.protocol = n[i].value})
-        this.append(listener_table.table, protocol.row)
-        protocol.input.property('value', listener.protocol)
+        port.row.classed('collapsed', listener.protocol === 'ANY')
         // Default Backend Set
         const default_backend_set_name = this.createInput('select', 'Default Backend Set', `${id}_default_backend_set_name`, idx, (d, i, n) => listener.default_backend_set_name = n[i].value)
         this.append(listener_table.table, default_backend_set_name.row)
@@ -205,7 +253,25 @@ class NetworkLoadBalancerProperties extends OkitResourceProperties {
         const types_map = new Map([ // Map to Terraform Local Variable Names
             ['Five Tuple', 'FIVE_TUPLE'],
             ['Three Tuple', 'THREE_TUPLE'],
-            ['Two Tuple', 'Two_TUPLE'],
+            ['Two Tuple', 'TWO_TUPLE'],
+        ]);
+        this.loadSelectFromMap(select, types_map)
+    }
+    loadHealthCheckProtocolSelect(select) {
+        const types_map = new Map([ // Map to Terraform Local Variable Names
+            ['HTTP', 'HTTP'],
+            ['HTTPS', 'HTTPS'],
+            ['TCP', 'TCP'],
+            ['UDP', 'UDP'],
+        ]);
+        this.loadSelectFromMap(select, types_map)
+    }
+    loadListenerProtocolSelect(select) {
+            const types_map = new Map([ // Map to Terraform Local Variable Names
+            ['Any', 'ANY'],
+            ['TCP', 'TCP'],
+            ['UDP', 'UDP'],
+            ['TCP & UDP', 'TCP_AND_UDP'],
         ]);
         this.loadSelectFromMap(select, types_map)
     }

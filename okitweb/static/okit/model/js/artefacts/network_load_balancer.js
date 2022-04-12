@@ -70,11 +70,11 @@ class NetworkLoadBalancer extends OkitArtifact {
 
     newListener() {
         return {
-            resource_name: `${this.generateResourceName()}Backend`,
+            resource_name: `${this.generateResourceName()}Listener`,
             default_backend_set_name: '',
             name: `${this.display_name}Listener`.replaceAll(' ', '_'),
             port: 80,
-            protocol: 'HTTP',
+            protocol: 'ANY',
             ip_version: ''
         }
     }
