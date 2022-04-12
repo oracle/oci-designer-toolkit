@@ -20,7 +20,7 @@ class NetworkLoadBalancerView extends OkitArtefactView {
     // Draw Connections
     drawConnections() {
         this.artefact.backend_sets.forEach((backend_set) => {
-            backend_set.backends.forEach((backend) => {if (backend.instance_id) this.drawConnection(this.id, backend.instance_id)})
+            backend_set.backends.forEach((backend) => {if (backend.target_id) this.drawConnection(this.id, backend.target_id)})
         })
     }
     /*
