@@ -147,7 +147,7 @@ class OkitJson {
         const compartment_ids = this.compartments ? this.compartments.map((c) => c.id) : []
         let root_ids = this.compartments ? this.compartments.filter((c) => c.compartment_id === null) : []
         if (root_ids.length === 0) {
-            this.compartments = [new Compartment({display_name: 'Deployment Compartment'}, this), ...this.compartments]
+            this.compartments = this.compartments ? [new Compartment({display_name: 'Deployment Compartment'}, this), ...this.compartments] : [new Compartment({display_name: 'Deployment Compartment'}, this)]
             root_ids = this.compartments ? this.compartments.filter((c) => c.compartment_id === null) : []
         }
         const root_id = root_ids[0].id
