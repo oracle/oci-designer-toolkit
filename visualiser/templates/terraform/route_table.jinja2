@@ -16,11 +16,11 @@ locals {
 }
 {% else %}
 # ------ Create Route Table
-{% if manage_default_resource_id is defined %}
+{% if default %}
 # ------- Update VCN Default Route Table
 resource "oci_core_default_route_table" "{{ resource_name }}" {
     # Required
-    manage_default_resource_id = {{ manage_default_resource_id }}
+    manage_default_resource_id = {{ vcn_id | trim('id') }}default_route_table_id
 {% else %}
 resource "oci_core_route_table" "{{ resource_name }}" {
     # Required
@@ -30,13 +30,15 @@ resource "oci_core_route_table" "{{ resource_name }}" {
 {% for rule in route_rules %}
     route_rules    {
         destination_type  = {{ rule.destination_type | safe }}
-    {% if rule.use_cidr_block %}
+    {% if rule.destination_type | trim('"') == "CIDR_BLOCK" %}
         destination       = {{ rule.destination | safe }}
     {% else %}
         destination       = local.{{ rule.destination | safe }}
     {% endif %}
         network_entity_id = {{ rule.network_entity_id }}
+{% if rule.description is defined %}
         description       = {{ rule.description | safe }}
+{% endif %}
     }
 {% endfor %}
     # Optional
@@ -49,7 +51,7 @@ resource "oci_core_route_table" "{{ resource_name }}" {
 {% endif %}
 }
 
-{% if manage_default_resource_id is defined %}
+{% if default %}
 locals {
     {{ resource_name }}_id = oci_core_default_route_table.{{ resource_name }}.id
     }

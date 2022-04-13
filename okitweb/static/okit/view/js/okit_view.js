@@ -19,6 +19,7 @@ class OkitJsonView {
         if (oci_data !== null) this.oci_data = oci_data;
         if (parent_id !== null) this.parent_id = parent_id;
         if (resource_icons !== null) this.resource_icons = resource_icons;
+        console.info(this.constructor.name, this.resource_icons)
         // Define Canvas Root SVG
         // this.canvas = new CanvasView(new Canvas(okitjson), this);
         // Define View Lists
@@ -124,10 +125,6 @@ class OkitJsonView {
     }
 }
 
-// Define Arrays to contain View Classes and Objects
-let okitViewClasses = [];
-let okitViews = [];
-
 /*
 ** Simple Artefact View Class for all artefacts that are not Containers
  */
@@ -148,7 +145,7 @@ class OkitArtefactView {
                     if (!(value instanceof Function)) {
                         Object.defineProperty(this, key, {
                             get: function () {
-                                // console.warn(`${this.constructor.name} accessing ${key} directly`)
+                                // console.warn(`${this.constructor.name} accessing ${key} directly (${typeof value}) ${value}`)
                                 return this.artefact[key];
                             }
                         });
@@ -157,7 +154,8 @@ class OkitArtefactView {
             );
         }
         this.getJsonView = function() {return json_view};
-        this.getOkitJson = function() {return json_view.getOkitJson()};
+        console.info(this.getOkitJson)
+        if (!this.getOkitJson) this.getOkitJson = function() {return json_view.getOkitJson()};
         // Create Properties Sheet Object
         this.newPropertiesSheet()
     }
@@ -1379,7 +1377,6 @@ class OkitArtefactView {
     getRightChildrenMaxDimensions() {
         let max_dimensions = {height: 0, width: 0};
         for (let group of this.getRightArtifacts()) {
-            console.info('Group:', group, this.getArrayFunction(group))
             for(let artefact of this.json_view[this.getArrayFunction(group)]()) {
                 if (artefact.parent_id === this.id) {
                     let dimension = artefact.dimensions;
@@ -1436,7 +1433,6 @@ class OkitArtefactView {
     getRightEdgeChildrenMaxDimensions() {
         let max_dimensions = {height: 0, width: 0};
         for (let group of this.getRightEdgeArtifacts()) {
-            console.info('getFunction', group, this.getArrayFunction(group))
             for(let artefact of this.json_view[this.getArrayFunction(group)]()) {
                 if (artefact.parent_id === this.id) {
                     let dimension = artefact.dimensions;
@@ -1904,6 +1900,13 @@ class CanvasView extends OkitContainerArtefactView {
 
 }
 
+// Define Arrays to contain View Classes and Objects
+const okitViewClasses = [];
+const okitViews = [];
 
+const updateViews = (model) => {okitViews.forEach((v) => v.update(model ? model : okitJsonModel));redrawViews()}
+const redrawViews = () => {okitViews.forEach((v) => v.draw())}
+const newModel = (data) => {okitJsonModel = new OkitJson(data)}
+// const newModel = (data) => {okitJsonModel = new OkitJson(data);updateViews()}
 
 let okitJsonView = null;

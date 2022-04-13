@@ -21,7 +21,11 @@ class AutonomousDatabase extends OkitArtifact {
         this.data_storage_size_in_tbs = 1;
         this.cpu_core_count = 1;
         this.db_workload = 'OLTP';
+        // this.is_access_control_enabled = false
         this.is_auto_scaling_enabled = true;
+        // this.is_auto_scaling_for_storage_enabled = true
+        // this.is_data_guard_enabled = true 
+        // this.is_dedicated = false 
         this.is_free_tier = false;
         this.license_model = 'BRING_YOUR_OWN_LICENSE';
         this.subnet_id = '';

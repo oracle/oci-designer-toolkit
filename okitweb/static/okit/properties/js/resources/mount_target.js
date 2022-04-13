@@ -13,8 +13,8 @@ class MountTargetProperties extends OkitResourceProperties {
         super(resource, resource_tabs)
     }
 
-    nsg_filter = (r) => r.vcn_id === [...(this.resource.okit_json.subnet ? this.resource.okit_json.subnet : this.resource.okit_json.subnets ? this.resource.okit_json.subnets : [])].filter((s) => s.id === this.resource.subnet_id)[0].vcn_id
-    fss_filter = (r) => r.availability_domain.toString() === this.resource.availability_domain.toString()
+    // nsg_filter = (r) => r.vcn_id === [...(this.resource.okit_json.subnet ? this.resource.okit_json.subnet : this.resource.okit_json.subnets ? this.resource.okit_json.subnets : [])].filter((s) => s.id === this.resource.subnet_id)[0].vcn_id
+    // fss_filter = (r) => r.availability_domain.toString() === this.resource.availability_domain.toString()
 
     // Build Additional Resource Specific Properties
     buildResource() {
@@ -75,12 +75,12 @@ class MountTargetProperties extends OkitResourceProperties {
         this.export_idx = this.resource.exports.length;
     }
     addExportHtml(fs_export, idx) {
-        const id = `${self.id}_export`
+        const id = `${this.id}_export`
         const delete_row = this.createDeleteRow(id, idx, () => this.deleteExport(id, idx, fs_export))
         this.append(this.exports_tbody, delete_row.row)
-        const ed = this.createDetailsSection('Export', `${self.id}_export_details`, idx)
+        const ed = this.createDetailsSection('Export', `${id}_export_details`, idx)
         this.append(delete_row.div, ed.details)
-        const et = this.createTable('', `${self.id}_export`, '')
+        const et = this.createTable('', `${id}_export`, '')
         this.append(ed.div, et.table)
         // File System
         const fss = this.createInput('select', 'File System', `${id}_file_system_id`, idx, (d, i, n) => fs_export.file_system_id = n[i].value = n[i].value)

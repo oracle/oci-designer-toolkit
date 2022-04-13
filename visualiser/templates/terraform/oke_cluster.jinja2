@@ -27,35 +27,35 @@ resource "oci_containerengine_cluster" "{{ resource_name }}" {
 {% if kms_key_id is defined %}
     kms_key_id         = {{ kms_key_id | safe}}
 {% endif %}
-{% if is_kubernetes_dashboard_enabled is defined or is_tiller_enabled is defined or is_pod_security_policy_enabled is defined or pods_cidr is defined or services_cidr is defined or service_lb_subnet_ids is defined %}
+{% if options is defined %}
     options {
         #Optional
-    {% if is_kubernetes_dashboard_enabled is defined or is_tiller_enabled is defined %}
+    {% if options.add_ons is defined %}
         add_ons {
             #Optional
-            is_kubernetes_dashboard_enabled = {{ is_kubernetes_dashboard_enabled | safe }}
-            is_tiller_enabled               = {{ is_tiller_enabled | safe }}
+            is_kubernetes_dashboard_enabled = {{ options.add_ons.is_kubernetes_dashboard_enabled | safe | lower }}
+            is_tiller_enabled               = {{ options.add_ons.is_tiller_enabled | safe | lower }}
         }
     {% endif %}
-    {% if is_pod_security_policy_enabled is defined %}
+    {% if options.admission_controller_options is defined %}
         admission_controller_options {
             #Optional
-            is_pod_security_policy_enabled  = {{ is_pod_security_policy_enabled | safe }}
+            is_pod_security_policy_enabled  = {{ options.admission_controller_options.is_pod_security_policy_enabled | safe | lower }}
         }
     {% endif %}
-    {% if pods_cidr is defined or services_cidr is defined %}
+    {% if options.kubernetes_network_config is defined %}
         kubernetes_network_config {
             #Optional
-        {% if pods_cidr is defined %}
-            pods_cidr                       = {{ pods_cidr | safe }}
+        {% if options.kubernetes_network_config.pods_cidr is defined %}
+            pods_cidr                       = {{ options.kubernetes_network_config.pods_cidr | safe }}
         {% endif %}
-        {% if services_cidr is defined %}
-            services_cidr                   = {{ services_cidr | safe }}
+        {% if options.kubernetes_network_config.services_cidr is defined %}
+            services_cidr                   = {{ options.kubernetes_network_config.services_cidr | safe }}
         {% endif %}
         }
     {% endif %}
-    {% if service_lb_subnet_ids is defined %}
-        service_lb_subnet_ids = [{% for id in service_lb_subnet_ids %}{{ id }}{% if not loop.last %},{% endif %}{% endfor %}]
+    {% if options.service_lb_subnet_ids is defined %}
+        service_lb_subnet_ids = [{% for id in options.service_lb_subnet_ids %}{{ id }}{% if not loop.last %},{% endif %}{% endfor %}]
     {% endif %}
     }
 {% endif %}
@@ -82,11 +82,11 @@ resource "oci_containerengine_node_pool" "{{ resource_name }}NodePool{{ loop.ind
     node_shape         = {{ pool.node_shape | safe }}
 
     #Optional
-{% if pool.key is defined and pool.value is defined %}
+{% if pool.initial_node_labels is defined %}
     initial_node_labels {
         #Optional
-        key = {{ pool.key | safe }}
-        value = {{ pool.value | safe }}
+        key = {{ pool.initial_node_labels.key | safe }}
+        value = {{ pool.initial_node_labels.value | safe }}
     }
 {% endif %}
 {% if pool.node_config_details is defined %}

@@ -1,6 +1,28 @@
 # Release Notes
 
 
+## Version 0.35.0
+**Release Date**: 13th April 2022
+### Features
+1. Add Subnet validation for duplicate DNS Label.
+2. New Properties panels:
+    1. Instance
+3. Extend Volume Attachment information for Instances
+4. Sort Local / Git / Reference Architecture Side panels by filename.
+5. Add generic render function for Terraform Generation.
+6. Update Terraform Jinja2 templates to work with new generation functionality.
+7. Display Palette once file is opened.
+### Bug Fixes
+1. Resolve issue when querying single compartment for PCA not returning any compartments.
+2. Resolve issue where duplicate Display Names were still being reported as an error.
+3. Add missing "Stateless" flag to Security list Ingress/Egress rule generation.
+4. Add test to see if import_drg_route_distribution_id exists during Terraform generation.
+5. Fix issue where network entity in route rule was not filtered by vcn id
+6. Resolve missing Icon in Relationship view
+7. Update Price Calculator to check if resource in OKIT model before attempting to access it (Issue: #519)
+8. Fixed Unable to export to Terraform (Issue: #520)
+
+
 ## Version 0.34.0
 **Release Date**: 23rd March 2022
 ### Features

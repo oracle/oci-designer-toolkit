@@ -76,9 +76,10 @@ class NetworkSecurityGroupView extends OkitDesignerArtefactView {
     }
 
     addSecurityRule() {
-        let new_rule = {direction: "INGRESS", protocol: "all", is_stateless: false, description: "",
-            source_type: "CIDR_BLOCK", source: "0.0.0.0/0",
-            destination_type: "CIDR_BLOCK", destination: "0.0.0.0/0"};
+        // let new_rule = {direction: "INGRESS", protocol: "all", is_stateless: false, description: "",
+        //     source_type: "CIDR_BLOCK", source: "0.0.0.0/0",
+        //     destination_type: "CIDR_BLOCK", destination: "0.0.0.0/0"};
+        const new_rule = this.artefact.newSecurityRule()
         this.security_rules.push(new_rule);
         this.loadSecurityRules();
         displayOkitJson();

@@ -8,17 +8,19 @@ class OkitDesignerJsonView extends OkitJsonView {
     // Define Constants
     static get CANVAS_SVG() {return 'canvas-svg'}
 
-    constructor(okitjson=null, parent_id = 'canvas-div', palette_svg = []) {
-        super(okitjson);
+    constructor(okitjson=null, oci_data=null, resource_icons=null, parent_id='canvas-div') {
+        super(okitjson, oci_data, resource_icons, parent_id);
         this.parent_id = parent_id;
         //this.display_grid = display_grid;
-        this.palette_svg = palette_svg;
+        // this.palette_svg = resource_icons.svg;
         // Set up Canvas info
         this.canvas = undefined 
+        this.newCanvas()
     }
 
-    static newView(model, oci_data=null, resource_icons=[], parent_id = 'canvas-div') {
-        return new OkitDesignerJsonView((model, parent_id, resource_icons))
+    static newView(model, oci_data=null, resource_icons={}, parent_id='canvas-div') {
+        console.info(`>>>>>>> Resource Icons:`, resource_icons)
+        return new OkitDesignerJsonView(model, oci_data, resource_icons, parent_id)
     }
 
     get display_grid() {return okitSettings.is_display_grid;}
@@ -103,7 +105,7 @@ class OkitDesignerJsonView extends OkitJsonView {
             height = Math.round(Math.max(height, parent_height));
         }
         // Round up to next grid size to display full grid.
-        if (okitSettings.is_display_grid) {
+        if (okitSettings && okitSettings.is_display_grid) {
             width += (grid_size - (width % grid_size) + 1);
             height += (grid_size - (height % grid_size) + 1);
         }
@@ -156,13 +158,13 @@ class OkitDesignerJsonView extends OkitJsonView {
     addDefinitions(canvas_svg) {
         // Add Palette Icons
         let defs = canvas_svg.append('defs');
-        for (let key in this.palette_svg) {
+        for (let key in this.resource_icons.svg) {
             let defid =  OkitJsonView.toSvgIconDef(key);
             // let defid = key.replace(/ /g, '').toLowerCase() + 'Svg';
             defs.append('g')
                 .attr("id", defid)
                 .attr("transform", "translate(4.5, 4.5) scale(0.8, 0.8)")
-                .html(this.palette_svg[key]);
+                .html(this.resource_icons.svg[key]);
         }
         // Add Connector Markers
         // Pointer
@@ -285,5 +287,5 @@ class OkitContainerDesignerArtefactView extends OkitContainerArtefactView {
 okitViewClasses.push(OkitDesignerJsonView);
 
 $(document).ready(function() {
-    okitJsonView = new OkitDesignerJsonView();
+    okitJsonView = OkitDesignerJsonView.newView(okitJsonModel, okitOciData, resource_icons);
 });

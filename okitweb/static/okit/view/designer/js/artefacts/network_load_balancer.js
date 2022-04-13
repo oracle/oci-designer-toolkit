@@ -12,23 +12,22 @@ class NetworkLoadBalancerView extends OkitArtefactView {
         if (!json_view.network_load_balancers) json_view.network_load_balancers = [];
         super(artefact, json_view);
     }
-    // TODO: Return Artefact Parent id e.g. vcn_id for a Internet Gateway
-    get parent_id() {return this.artefact.vcn_id;}
-    // TODO: Return Artefact Parent Object e.g. VirtualCloudNetwork for a Internet Gateway
-    get parent() {return this.getJsonView().getVirtualCloudNetwork(this.parent_id);}
-    // TODO: If the Resource is within a Subnet but the subnet_iss is not at the top level then raise it with the following functions if not required delete them.
-    // Direct Subnet Access
-    get subnet_id() {return this.artefact.primary_mount_target.subnet_id;}
-    set subnet_id(id) {this.artefact.primary_mount_target.subnet_id = id;}
+    get parent_id() {return this.artefact.subnet_id;}
+    get parent() {return this.getJsonView().getSubnet(this.parent_id);}
     /*
     ** SVG Processing
     */
+    // Draw Connections
+    drawConnections() {
+        this.artefact.backend_sets.forEach((backend_set) => {
+            backend_set.backends.forEach((backend) => {if (backend.target_id) this.drawConnection(this.id, backend.target_id)})
+        })
+    }
     /*
     ** Property Sheet Load function
     */
-    loadProperties() {
-        const self = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/network_load_balancer.html", () => {loadPropertiesSheet(self.artefact);});
+    newPropertiesSheet() {
+        this.properties_sheet = new NetworkLoadBalancerProperties(this.artefact)
     }
     /*
     ** Load and display Value Proposition
@@ -43,8 +42,7 @@ class NetworkLoadBalancerView extends OkitArtefactView {
         return NetworkLoadBalancer.getArtifactReference();
     }
     static getDropTargets() {
-        // TODO: Return List of Artefact Drop Targets Parent Object Reference Names e.g. VirtualCloudNetwork for a Internet Gateway
-        return [VirtualCloudNetwork.getArtifactReference()];
+        return [Subnet.getArtifactReference()];
     }
 }
 /*
@@ -56,6 +54,7 @@ OkitJsonView.prototype.dropNetworkLoadBalancerView = function(target) {
         view_artefact.artefact.compartment_id = target.id;
     } else {
         view_artefact.artefact.compartment_id = target.compartment_id;
+        view_artefact.artefact.subnet_id = target.id;
     }
     view_artefact.recalculate_dimensions = true;
     return view_artefact;

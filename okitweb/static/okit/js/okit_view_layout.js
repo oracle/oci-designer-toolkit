@@ -48,7 +48,8 @@ function handleSwitchToTabularView(e) {
     hideAllViewDivs();
     $("#tabular-div").removeClass('hidden');
     hideSideBars();
-    okitTabularView = new OkitTabularJsonView(okitJsonModel, okitOciData);
+    // okitTabularView = new OkitTabularJsonView(okitJsonModel, okitOciData);
+    okitTabularView = OkitTabularJsonView.newView(okitJsonModel, okitOciData, resource_icons);
     okitTabularView.draw();
 }
 
@@ -56,7 +57,8 @@ function handleSwitchToIdentityView(e) {
     hideAllViewDivs();
     $("#identity-div").removeClass('hidden');
     hideSideBars();
-    okitIdentityView = new OkitIdentityView(okitJsonModel, okitOciData);
+    // okitIdentityView = new OkitIdentityView(okitJsonModel, okitOciData);
+    okitIdentityView = OkitIdentityView.newView(okitJsonModel, okitOciData, resource_icons);
     okitIdentityView.draw();
 }
 
@@ -76,7 +78,8 @@ function handleSwitchToRelationshipView(e) {
     hideAllViewDivs();
     $("#relationship-div").removeClass('hidden');
     hideSideBars();
-    okitRelationshipView = new OkitRelationshipJsonView(okitJsonModel, okitOciData, resource_icons);
+    // okitRelationshipView = new OkitRelationshipJsonView(okitJsonModel, okitOciData, resource_icons);
+    okitRelationshipView = OkitRelationshipJsonView.newView(okitJsonModel, okitOciData, resource_icons);
     okitRelationshipView.draw();
 }
 
@@ -84,7 +87,8 @@ function handleSwitchToTextJsonView(e) {
     hideAllViewDivs();
     $("#json-text-div").removeClass('hidden');
     hideSideBars();
-    okitTextJsonView = new OkitTextJsonView(okitJsonModel, okitOciData, resource_icons);
+    // okitTextJsonView = new OkitTextJsonView(okitJsonModel, okitOciData, resource_icons);
+    okitTextJsonView = OkitTextJsonView.newView(okitJsonModel, okitOciData, resource_icons);
     okitTextJsonView.draw();
 }
 
@@ -100,6 +104,7 @@ function handleSwitchTerraformView(e) {
     hideAllViewDivs();
     $("#terraform-div").removeClass('hidden');
     hideSideBars();
-    okitTerraformView = new OkitTerraformView(okitJsonModel, okitOciData, resource_icons);
+    // okitTerraformView = new OkitTerraformView(okitJsonModel, okitOciData, resource_icons);
+    okitTerraformView = OkitTerraformView.newView(okitJsonModel, okitOciData, resource_icons);
     okitTerraformView.draw();
 }

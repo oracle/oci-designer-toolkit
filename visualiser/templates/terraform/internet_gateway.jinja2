@@ -21,7 +21,7 @@ resource "oci_core_internet_gateway" "{{ resource_name }}" {
     compartment_id = {{ compartment_id }}
     vcn_id         = {{ vcn_id }}
     # Optional
-    enabled        = {{ enabled | safe }}
+    enabled        = {{ enabled | safe | lower }}
     display_name   = {{ display_name | safe }}
 {% if defined_tags is defined %}
     defined_tags   = {{ defined_tags | safe }}

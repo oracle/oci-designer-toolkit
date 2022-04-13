@@ -122,9 +122,11 @@ class OCITerraformGenerator(OCIGenerator):
         if isinstance(value, dict):
             return json.dumps(value)
         elif isinstance(value, bool):
-            return str(value).lower()
+            # return str(value).lower()
+            return value
         else:
             return '"{0!s:s}"'.format(value)
+            # return value
 
     def renderDefinedTags(self, artifact):
         # tags = {**artifact.get("defined_tags", {}), **self.visualiser_json.get("defined_tags", {})}

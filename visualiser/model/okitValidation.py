@@ -40,6 +40,7 @@ class OCIJsonValidator(object):
         return self.valid
 
     def validateOCI(self):
+        self.validateAnalyticsInstances()
         self.validateAutonomousDatabases()
         self.validateBastions()
         self.validateBlockStorageVolumes()
@@ -50,6 +51,7 @@ class OCIJsonValidator(object):
         self.validateDynamicRoutingGateways()
         self.validateFastConnects()
         self.validateFileStorageSystems()
+        self.validateGroups()
         self.validateInstances()
         self.validateInternetGateways()
         self.validateIPSecConnections()
@@ -59,11 +61,13 @@ class OCIJsonValidator(object):
         self.validateNATGateways()
         self.validateNetworkSecurityGroups()
         self.validateObjectStorageBuckets()
+        self.validatePolicies()
         self.validateRemotePeeringConnections()
         self.validateRouteTables()
         self.validateSecurityLists()
         self.validateServiceGateways()
         self.validateSubnets()
+        self.validateUsers()
         self.validateVirtualCloudNetworks()
         return
     
@@ -79,6 +83,7 @@ class OCIJsonValidator(object):
         self.validateDynamicRoutingGateways()
         self.validateFastConnects()
         self.validateFileStorageSystems()
+        self.validateGroups()
         self.validateInstances()
         self.validateInternetGateways()
         self.validateIPSecConnections()
@@ -88,11 +93,13 @@ class OCIJsonValidator(object):
         self.validateNATGateways()
         self.validateNetworkSecurityGroups()
         self.validateObjectStorageBuckets()
+        self.validatePolicies()
         self.validateRemotePeeringConnections()
         self.validateRouteTables()
         self.validateSecurityLists()
         self.validateServiceGateways()
         self.validateSubnets()
+        self.validateUsers()
         self.validateVirtualCloudNetworks()
         return
 
@@ -103,15 +110,18 @@ class OCIJsonValidator(object):
         self.validateDhcpOptions()
         self.validateDynamicRoutingGateways()
         self.validateFileStorageSystems()
+        self.validateGroups()
         self.validateInstances()
         self.validateInternetGateways()
         self.validateLocalPeeringGateways()
         self.validateNATGateways()
         self.validateNetworkSecurityGroups()
         self.validateObjectStorageBuckets()
+        self.validatePolicies()
         self.validateRouteTables()
         self.validateSecurityLists()
         self.validateSubnets()
+        self.validateUsers()
         self.validateVirtualCloudNetworks()
         return
 
@@ -151,15 +161,14 @@ class OCIJsonValidator(object):
             if isinstance(self.okit_json[key], list):
                 for artefact in self.okit_json[key]:
                     if used_display_names[artefact['display_name']] > 1:
-                        self.valid = False
-                        error = {
+                        warning = {
                             'id': artefact['id'],
                             'type': self.keyToType(key),
                             'artefact': artefact['display_name'],
                             'message': 'Duplicate Display Name.',
                             'element': 'display_name'
                         }
-                        self.results['warnings'].append(error)
+                        self.results['warnings'].append(warning)
         # Build Resource Name List
         used_resource_names = {}
         for key in self.okit_json:
@@ -179,6 +188,22 @@ class OCIJsonValidator(object):
                             'element': 'resource_name'
                         }
                         self.results['errors'].append(error)
+
+    # Analytics Instances
+    def validateAnalyticsInstances(self):
+        for resource in self.okit_json.get('analytics_instances', []):
+            logger.info('Validating {!s}'.format(resource['display_name']))
+            # Check DB Name
+            if resource['idcs_access_token'] == '':
+                self.valid = False
+                error = {
+                    'id': resource['id'],
+                    'type': 'Analytics Instance',
+                    'artefact': resource['display_name'],
+                    'message': 'IDCS Access Token must be specified.',
+                    'element': 'idcs_access_token'
+                }
+                self.results['errors'].append(error)
 
     # Autonomous Database
     def validateAutonomousDatabases(self):
@@ -216,7 +241,8 @@ class OCIJsonValidator(object):
                     'element': 'license_model'
                 }
                 self.results['errors'].append(error)
-            if artefact['subnet_id'] != '' and len(artefact['nsg_ids']) == 0:
+            subnets = [s for s in self.okit_json.get('subnets', []) if s['id'] == artefact['subnet_id']]
+            if artefact['subnet_id'] != '' and len(subnets) > 0 and subnets[0]['prohibit_public_ip_on_vnic'] and len(artefact['nsg_ids']) == 0:
                 self.valid = False
                 error = {
                     'id': artefact['id'],
@@ -353,7 +379,7 @@ class OCIJsonValidator(object):
                             'message': f'Cyclic Route Rule Reference. Route Table "{rt["display_name"]}" has a rule that references "{resource["display_name"]}" whilst "{resource["display_name"]}" route table is defined as "{rt["display_name"]}".',
                             'element': 'route_table_id'
                         }
-                    self.results['errors'].append(error)
+                        self.results['errors'].append(error)
                 if resource['drg_id'] == '':
                     self.valid = False
                     error = {
@@ -375,6 +401,22 @@ class OCIJsonValidator(object):
     def validateFileStorageSystems(self):
         for artefact in self.okit_json.get('file_storage_systems', []):
             logger.info('Validating {!s}'.format(artefact['display_name']))
+
+    # Groups
+    def validateGroups(self):
+        for resource in self.okit_json.get('groups', []):
+            logger.info('Validating {!s}'.format(resource['display_name']))
+            # Check DB Name
+            if resource['description'] == '':
+                self.valid = False
+                error = {
+                    'id': resource['id'],
+                    'type': 'User Group',
+                    'artefact': resource['display_name'],
+                    'message': 'User Group description can not be empty.',
+                    'element': 'description'
+                }
+                self.results['errors'].append(error)
 
     # Instances
     def validateInstances(self):
@@ -401,7 +443,7 @@ class OCIJsonValidator(object):
                     'element': 'hostname_label'
                 }
                 self.results['warnings'].append(warning)
-            for vnic in artefact['vnics']:
+            for vnic in artefact['vnic_attachments']:
                 if vnic['subnet_id'] == '':
                     self.valid = False
                     error = {
@@ -421,6 +463,16 @@ class OCIJsonValidator(object):
                     'artefact': artefact['display_name'],
                     'message': f'Boot Volume Size must between 50GB and 32,768GB',
                     'element': 'boot_volume_size_in_gbs'
+                }
+                self.results['errors'].append(error)
+            # Shape
+            if artefact['shape'] == '':
+                error = {
+                    'id': artefact['id'],
+                    'type': 'Instance',
+                    'artefact': artefact['display_name'],
+                    'message': 'Shape must be specified.',
+                    'element': 'shape'
                 }
                 self.results['errors'].append(error)
 
@@ -477,6 +529,16 @@ class OCIJsonValidator(object):
                     'element': 'instance_ids'
                 }
                 self.results['warnings'].append(warning)
+            if len(artefact['subnet_ids']) == 0:
+                self.valid = False
+                error = {
+                    'id': artefact['id'],
+                    'type': 'Load Balancer',
+                    'artefact': artefact['display_name'],
+                    'message': 'At least one subnet must be specified.',
+                    'element': 'subnet_ids'
+                }
+                self.results['errors'].append(error)
 
     # Local Peering Gateways
     def validateLocalPeeringGateways(self):
@@ -557,6 +619,31 @@ class OCIJsonValidator(object):
     def validateObjectStorageBuckets(self):
         for artefact in self.okit_json.get('object_storage_buckets', []):
             logger.info('Validating {!s}'.format(artefact['display_name']))
+
+    # Policies
+    def validatePolicies(self):
+        for resource in self.okit_json.get('policies', self.okit_json.get('policys', [])):
+            logger.info('Validating {!s}'.format(resource['display_name']))
+            if resource['description'] == '':
+                self.valid = False
+                error = {
+                    'id': resource['id'],
+                    'type': 'Policy',
+                    'artefact': resource['display_name'],
+                    'message': 'Policy Description must be specified.',
+                    'element': 'description'
+                }
+                self.results['errors'].append(error)
+            if len(resource['statements']) == 0:
+                self.valid = False
+                error = {
+                    'id': resource['id'],
+                    'type': 'Policy',
+                    'artefact': resource['display_name'],
+                    'message': 'Policy must have at least one statement.',
+                    'element': 'statements'
+                }
+                self.results['errors'].append(error)
 
     # Remote Peering Connection
     def validateRemotePeeringConnections(self):
@@ -665,6 +752,17 @@ class OCIJsonValidator(object):
                     'element': 'vcn_id'
                 }
                 self.results['errors'].append(error)
+            # Check DNs
+            if len([s for s in self.okit_json.get('subnets', []) if s["id"] != artefact["id"] and s["dns_label"] == artefact["dns_label"] and s["vcn_id"] == artefact["vcn_id"]]) > 0:
+                self.valid = False
+                error = {
+                    'id': artefact['id'],
+                    'type': 'Subnet',
+                    'artefact': artefact['display_name'],
+                    'message': f'DNS Label {artefact["dns_label"]} is a duplicate of one that already exists in the VCN.',
+                    'element': 'dns_label'
+                }
+                self.results['errors'].append(error)
             # Check that CIDR exists
             if artefact['cidr_block'] == '':
                 self.valid = False
@@ -723,6 +821,21 @@ class OCIJsonValidator(object):
                     'element': 'security_list_ids'
                 }
                 self.results['warnings'].append(warning)
+
+    # Users
+    def validateUsers(self):
+        for resource in self.okit_json.get('users', []):
+            logger.info('Validating {!s}'.format(resource['display_name']))
+            if resource['description'] == '':
+                self.valid = False
+                error = {
+                    'id': resource['id'],
+                    'type': 'User',
+                    'artefact': resource['display_name'],
+                    'message': 'User Description must be specified.',
+                    'element': 'description'
+                }
+                self.results['errors'].append(error)
 
     # Virtual Cloud Networks
     def validateVirtualCloudNetworks(self):

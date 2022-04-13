@@ -324,19 +324,19 @@ class OkitOCIData {
         return [...new Set(this.dropdown_data.images.filter(i => !i.compartment_id || i.compartment_id === null).map((i) => i.operating_system))].sort();
         // return [...new Set(this.dropdown_data.images.filter(i => !i.compartment_id || i.compartment_id === null).map((i) => i.operating_system))].sort((a, b) => b - a);
     }
-    getPlatformImageOSVersions(filter=undefined) {
+    getPlatformImageOSVersions(filter=() => true) {
         filter = filter ? filter : () => true
         return [...new Set(this.dropdown_data.images.filter((i) => !i.compartment_id || i.compartment_id === null).filter(filter).map((i) => i.operating_system_version))].sort((a, b) => b - a);
     }
 
-    getCustomImages() {
-        return this.dropdown_data.images.filter(i => i.compartment_id && i.compartment_id !== null)
+    getCustomImages(filter=() => true) {
+        return this.dropdown_data.images.filter(i => i.compartment_id && i.compartment_id !== null).filter(filter)
     }
     getCustomImageOSs() {
         return [...new Set(this.dropdown_data.images.filter(i => i.compartment_id && i.compartment_id !== null).map((i) => i.operating_system))].sort();
         // return [...new Set(this.dropdown_data.images.filter(i => i.compartment_id && i.compartment_id !== null).map((i) => i.operating_system))].sort((a, b) => b - a);
     }
-    getCustomImageOSVersions(filter=undefined) {
+    getCustomImageOSVersions(filter=() => true) {
         filter = filter ? filter : () => true
         return [...new Set(this.dropdown_data.images.filter((i) => i.compartment_id && i.compartment_id !== null).filter(filter).map((i) => i.operating_system_version))].sort((a, b) => b - a);
     }

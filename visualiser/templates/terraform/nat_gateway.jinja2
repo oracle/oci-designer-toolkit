@@ -18,7 +18,7 @@ resource "oci_core_nat_gateway" "{{ resource_name }}" {
     # Optional
     display_name   = {{ display_name | safe }}
 {% if block_traffic is defined %}
-    block_traffic  = {{ block_traffic | safe }}
+    block_traffic  = {{ block_traffic | safe | lower }}
 {% endif %}
 {% if defined_tags is defined %}
     defined_tags   = {{ defined_tags | safe }}

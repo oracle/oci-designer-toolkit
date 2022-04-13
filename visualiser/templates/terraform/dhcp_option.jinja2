@@ -15,11 +15,11 @@ locals {
 }
 {% else %}
 # ------ Create Dhcp Options
-{% if manage_default_resource_id is defined %}
+{% if default %}
 # ------- Update VCN Default DHCP Option
 resource "oci_core_default_dhcp_options" "{{ resource_name }}" {
     # Required
-    manage_default_resource_id = {{ manage_default_resource_id }}
+    manage_default_resource_id = {{ vcn_id | trim('id') }}default_dhcp_options_id
 {% else %}
 resource "oci_core_dhcp_options" "{{ resource_name }}" {
     # Required
@@ -33,10 +33,12 @@ resource "oci_core_dhcp_options" "{{ resource_name }}" {
         server_type = {{ option.server_type | safe }}
     {% endif %}
     {% if option.custom_dns_servers is defined %}
-        custom_dns_servers       = [{{ option.custom_dns_servers | safe }}]
+        custom_dns_servers       = [{% for dns_server in option.custom_dns_servers %}"{{ dns_server }}"{% if not loop.last %},{% endif %}{% endfor %}]
+#        custom_dns_servers       = [{{ option.custom_dns_servers | safe }}]
     {% endif %}
     {% if option.search_domain_names is defined %}
-        search_domain_names      = [{{ option.search_domain_names | safe }}]
+        search_domain_names      = [{% for domain_name in option.search_domain_names %}"{{ domain_name }}"{% if not loop.last %},{% endif %}{% endfor %}]
+#        search_domain_names      = [{{ option.search_domain_names | safe }}]
     {% endif %}
     }
 {% endfor %}
@@ -50,7 +52,7 @@ resource "oci_core_dhcp_options" "{{ resource_name }}" {
 {% endif %}
 }
 
-{% if manage_default_resource_id is defined %}
+{% if default %}
 locals {
     {{ resource_name }}_id = oci_core_default_dhcp_options.{{ resource_name }}.id
     }
