@@ -13,7 +13,8 @@ class OkitTextJsonView extends OkitJsonView {
     get data() {return this.oci_data;}
 
     static newView(model, oci_data=null, resource_icons=[], parent_id = 'json-text-div') {
-        return new OkitTextJsonView((model, oci_data, parent_id, resource_icons))
+        console.info(`>>>>>>> Resource Icons:`, resource_icons)
+        return new OkitTextJsonView(model, oci_data, resource_icons, parent_id)
     }
 
     draw(for_export=false) {
@@ -64,6 +65,7 @@ class OkitTextJsonView extends OkitJsonView {
             let object_ul = document.createElement('ul')
             element.appendChild(object_ul)
             Object.entries(obj).forEach(([k, v]) => {
+                // console.info(`${k} is ${typeof v}`)
                 if (v instanceof Function) console.info('Ignoring Function', k)
                 else if (Array.isArray(v)) this.addArrayAttribute(object_ul, v, k)
                 else if (v instanceof Object) this.addObjectAttribute(object_ul, v, k)

@@ -43,12 +43,19 @@ class OkitResourceProperties {
         pattern: '^[a-zA-Z][a-zA-Z0-9]{0,64}$',
         title: 'Only letters and numbers, starting with a letter. 64 characters max.'
     }
+    // Alphanumeric, Hyphon & Underscore
+    spaceless_name_data = {
+        pattern: '^[\\w-]*$',
+        title: 'Only alphanumeric characters, dashes, and underscores.'
+    }
 
     compartment_filter = (r) => r.compartment_id.toString() === this.resource.compartment_id.toString()
     vcn_filter = (r) => r.vcn_id.toString() === this.resource.vcn_id.toString()
     subnet_filter = (r) => r.subnet_id.toString() === this.resource.subnet_id.toString()
     oci_defined_filter = (r) => r.compartment_id === null
     user_defined_filter = (r) => r.compartment_id !== null
+    nsg_filter = (r) => r.vcn_id === [...(this.resource.okit_json.subnet ? this.resource.okit_json.subnet : this.resource.okit_json.subnets ? this.resource.okit_json.subnets : [])].filter((s) => s.id === this.resource.subnet_id)[0].vcn_id
+    fss_filter = (r) => r.availability_domain.toString() === this.resource.availability_domain.toString()
 
     build() {
         if (this.resource) {
@@ -93,7 +100,7 @@ class OkitResourceProperties {
                                             .attr('class', `okit-tab-contents ${i > 0 ? 'hidden' : ''} ${self.resource.read_only && name !== 'Documentation' ? 'read-only' : ''}`)
         })
     
-        console.info('Properties div', this.properties_div)
+        // console.info('Properties div', this.properties_div)
     }
 
     buildCore() {
@@ -103,7 +110,14 @@ class OkitResourceProperties {
         const properties = this.createTable('', `${self.id}_core_properties`)
         this.core_tbody = properties.tbody
         this.append(core.div, properties.table)
-        let display_name = this.createInput('text', 'Name', `${self.id}_display_name`, '', (d, i, n) => self.resource.display_name = n[i].value)
+        const ocid_data = {
+            readonly: true
+        }
+        const ocid = this.createInput('text', 'Ocid', `${self.id}_ocid`, '', undefined, ocid_data)
+        this.ocid = ocid.input
+        this.append(this.core_tbody, ocid.row)
+        ocid.row.classed('collapsed', !okitSettings.show_ocids)
+        const display_name = this.createInput('text', 'Name', `${self.id}_display_name`, '', (d, i, n) => {self.resource.display_name = n[i].value; this.redraw()})
         this.display_name = display_name.input
         this.append(this.core_tbody, display_name.row)
         this.documentation_contents.append('textarea')
@@ -151,6 +165,8 @@ class OkitResourceProperties {
     }
 
     loadCore() {
+        this.ocid.property('value', this.resource.id)
+        okitSettings.show_ocids ? this.showProperty(`${this.id}_ocid`, '') : this.hideProperty(`${this.id}_ocid`, '')
         this.display_name.property('value', this.resource.display_name)
     }
 
@@ -239,6 +255,9 @@ class OkitResourceProperties {
             placeholder:'80, 20-22',
             pattern: "(^$|^(?:[1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])(?:-([1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5]))?$)",
             title: 'Port range 80, 20-22'
+        },
+        dns_name: {
+            pattern: "^[\w\._-]+$"
         }
     }
 
@@ -247,27 +266,28 @@ class OkitResourceProperties {
         let input = undefined
         let cell = undefined
         let title = undefined
+        // Check for special formatting type e.g. ipv4
         if (Object.keys(this.formatting).includes(type)) {
             data = data ? {...data, ...this.formatting[type]} : formatting[type]
             type = 'text'
         }
         if (['text', 'password', 'email', 'date', 'number', 'range'].includes(type)) {
-            title = row.append('div').attr('class', 'td').text(label)
+            title = row.append('div').attr('class', 'td property-label').text(label)
             cell = row.append('div').attr('class', 'td')
-            input = cell.append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', type).attr('class', 'okit-property-value').on('change', callback)
+            input = cell.append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', type).attr('class', 'okit-property-value').attr('list', 'variables_datalist').on('change', callback).on('blur', (d, i, n) => n[i].reportValidity())
             this.addExtraAttributes(input, data)
             // return this.createSimplePropertyRow(type, label, id, idx, callback, data)
         } else if (type === 'select') {
-            title = row.append('div').attr('class', 'td').text(label)
+            title = row.append('div').attr('class', 'td property-label').text(label)
             input = row.append('div').attr('class', 'td').append('select').attr('id', this.inputId(id, idx)).attr('class', 'okit-property-value').on('change', callback)
             if (data && data.options) {
                 Object.entries(data.options).forEach(([k, v]) => input.append('option').attr('value', k).text(v))
             }
         } else if (type === 'multiselect') {
-            title = row.append('div').attr('class', 'td').text(label)
+            title = row.append('div').attr('class', 'td property-label').text(label)
             input = row.append('div').attr('class', 'td').append('div').attr('id', this.inputId(id, idx)).attr('class', 'okit-multiple-select').on('change', callback)
         } else if (type === 'checkbox') {
-            row.append('div').attr('class', 'td')
+            row.append('div').attr('class', 'td property-label')
             cell = row.append('div').attr('class', 'td')
             input = cell.append('input').attr('type', 'checkbox').attr('id', this.inputId(id, idx)).attr('class', 'okit-property-value').on('input', callback)
             cell.append('label').attr('for', this.inputId(id, idx)).text(label)
@@ -278,7 +298,7 @@ class OkitResourceProperties {
     }
     createSimplePropertyRow(type='text', label='', id='', idx=0, callback=undefined, data={}) {
         const row = d3.create('div').attr('class', 'tr').attr('id', this.trId(id, idx))
-        row.append('div').attr('class', 'td').text(label)
+        row.append('div').attr('class', 'td property-label').text(label)
         const input = this.createSimpleInputCell(type, id, idx, callback, data)
         this.append(input.row, input.cell)
         return {row: input.row, cell: input.cell, input: input.input}
@@ -296,12 +316,13 @@ class OkitResourceProperties {
     }
 
     addExtraAttributes(input, data) {
-        const attributes = ['min', 'max', 'step', 'maxlength', 'pattern', 'title', 'placeholder']
+        const attributes = ['min', 'max', 'step', 'maxlength', 'pattern', 'title', 'placeholder', 'readonly']
         if (data) {
             Object.entries(data).forEach(([k, v]) => {
                 if (attributes.includes(k)) input.attr(k, v)
             })
         }
+        if (data.classes) data.classes.forEach((c) => input.classed(c, true))
     }
 
     createTextArea(id='', idx='', callback=undefined, data={}) {
@@ -369,7 +390,7 @@ class OkitResourceProperties {
     showProperty = (id, idx) => d3.select(`#${this.trId(id, idx)}`).classed('collapsed', false)
     setPropertyValue = (id, idx, val) => d3.select(`#${this.inputId(id, idx)}`).property('value', val)
 
-    loadSelect(select, resource_type, empty_option=false, filter=undefined) {
+    loadSelect(select, resource_type, empty_option=false, filter=() => true) {
         select.selectAll('*').remove()
         if (!filter) filter = () => true
         if (empty_option) select.append('option').attr('value', '').text('')
@@ -387,10 +408,11 @@ class OkitResourceProperties {
 
     loadReferenceSelect(select, resource_type, empty_option=false, filter=undefined, groups=undefined, empty_value=undefined) {
         select.selectAll('*').remove()
-        if (!filter) filter = () => true
+        filter = filter ? filter : () => true
         if (empty_option) select.append('option').attr('value', '').attr('selected', 'selected').text(empty_value ? empty_value : '')
         let id = ''
-        const resources = okitOciData[resource_type]()
+        const resources = okitOciData[resource_type](filter)
+        console.info('Resources', resources)
         if (groups) {
             Object.entries(groups).forEach(([k, v]) => {
                 const optgrp = select.append('optgroup').attr('label', k)
@@ -404,6 +426,7 @@ class OkitResourceProperties {
                 })
             })
         } else {
+            filter = () => true
             resources.filter(filter).forEach((r, i) => {
                 r = r instanceof Object ? r : {id: r, display_name: r}
                 const option = select.append('option').attr('value', r.id).text(r.display_name)
@@ -436,4 +459,9 @@ class OkitResourceProperties {
         const cbs = [...document.querySelectorAll(`#${select.attr('id')} input[type="checkbox"]`)]
         cbs.forEach((c) => c.checked = ids.includes(c.value) )
     }
+
+    /*
+    ** Redraw
+    */
+    redraw = () => okitJsonView.update()
 }

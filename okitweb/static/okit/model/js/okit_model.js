@@ -11,7 +11,7 @@ class OkitJson {
     /*
     ** Create
      */
-    constructor(okit_json_string = '') {
+    constructor(okitjson) {
         const now = getCurrentDateTime();
         this.title = "OKIT OCI Visualiser Json";
         this.description = `# Description\n__Created ${getCurrentDateTime()}__\n\n--------------------------------------\n\n`;
@@ -31,9 +31,12 @@ class OkitJson {
         this.user_defined = {terraform: ''};
         this.freeform_tags = {};
         this.defined_tags = {};
+        this.variables_schema = this.newVariableSchema()
 
-        if (okit_json_string !== undefined && okit_json_string.length > 0) {
-            this.load(JSON.parse(okit_json_string));
+        if (okitjson !== undefined && typeof okitjson === 'string' && okitjson.length > 0) {
+            this.load(JSON.parse(okitjson));
+        }  else if (okitjson !== undefined && okitjson instanceof Object) {
+            this.load(okitjson);
         }
     }
 
@@ -42,6 +45,7 @@ class OkitJson {
     get updated() {return this.metadata.updated}
     get okit_version() {return this.metadata.okit_version}
     get okit_model_id() {return this.metadata.okit_model_id}
+    get all_instances() {return [...this.getInstances(), ...this.getAnalyticsInstances()]}
 
     getResourceLists() {
         return Object.entries(this).reduce((r, [k, v]) => {
@@ -62,6 +66,29 @@ class OkitJson {
             terraform_dir: ''
         }
     }
+
+    newVariableSchema() {
+        return {
+            groups: [],
+            variables: []
+        }
+    }
+
+    newVariableGroup() {
+        return {
+            name: '',
+            default: ''
+        }
+    }
+
+    newVariable() {
+        return {
+            group: '',
+            name: '',
+            default: ''
+        }
+    }
+
 
     clone() {
         return new OkitJson(JSON.stringify(this))
@@ -120,7 +147,7 @@ class OkitJson {
         const compartment_ids = this.compartments ? this.compartments.map((c) => c.id) : []
         let root_ids = this.compartments ? this.compartments.filter((c) => c.compartment_id === null) : []
         if (root_ids.length === 0) {
-            this.compartments = [new Compartment({display_name: 'Deployment Compartment'}, this), ...this.compartments]
+            this.compartments = this.compartments ? [new Compartment({display_name: 'Deployment Compartment'}, this), ...this.compartments] : [new Compartment({display_name: 'Deployment Compartment'}, this)]
             root_ids = this.compartments ? this.compartments.filter((c) => c.compartment_id === null) : []
         }
         const root_id = root_ids[0].id
@@ -235,7 +262,7 @@ class OkitArtifact {
     ** Create
      */
     constructor (okitjson) {
-        this.getOkitJson = function() {return okitjson};
+        // this.getOkitJson = () => {return okitjson};
         // Add Id
         this.id = this.okit_id;
         // All Artefacts will have compartment id, display name & description
@@ -257,6 +284,8 @@ class OkitArtifact {
         this.resource_name = this.generateResourceName();
         Object.defineProperty(this, 'documentation', {get: function() {return this.definition;}, set: function(documentation) {this.definition = documentation;}, enumerable: true });
     }
+
+    getOkitJson() {return this.okit_json}
 
     get name() {return this.display_name;}
     set name(name) {this.display_name = name;}
@@ -367,9 +396,10 @@ class OkitArtifact {
     ** Default name generation
      */
     generateDefaultName(count = 0) {
-        const today = new Date();
-        const pad = (n) => ("0" + n).slice(-2)
-        return `${this.getNamePrefix()}-${today.getFullYear()}${pad(today.getMonth() + 1)}${pad(today.getDate())}-${pad(today.getHours())}${pad(today.getMinutes())}${pad(today.getSeconds())}`;
+        return this.getNamePrefix()
+        // const today = new Date();
+        // const pad = (n) => ("0" + n).slice(-2)
+        // return `${this.getNamePrefix()}-${today.getFullYear()}${pad(today.getMonth() + 1)}${pad(today.getDate())}-${pad(today.getHours())}${pad(today.getMinutes())}${pad(today.getSeconds())}`;
         // return this.getNamePrefix() + ('000' + count).slice(-3);
     }
 
@@ -418,31 +448,31 @@ class OkitArtifact {
 /*
 ** Model Representation of OCI Regions
  */
-class OkitRegionsJson {
-    /*
-    ** Create
-     */
-    constructor() {
-        this['us-sanjose-1'] = new OkitJson();
-        this['us-phoenix-1'] = new OkitJson();
-        this['us-ashburn-1'] = new OkitJson();
-        this['uk-london-1'] = new OkitJson();
-        this['sa-saopaulo-1'] = new OkitJson();
-        this['me-jeddah-1'] = new OkitJson();
-        this['eu-zurich-1'] = new OkitJson();
-        this['eu-frankfurt-1'] = new OkitJson();
-        this['eu-amsterdam-1'] = new OkitJson();
-        this['ca-toronto-1'] = new OkitJson();
-        this['ca-montreal-1'] = new OkitJson();
-        this['ap-tokyo-1'] = new OkitJson();
-        this['ap-sydney-1'] = new OkitJson();
-        this['ap-seoul-1'] = new OkitJson();
-        this['ap-osaka-1'] = new OkitJson();
-        this['ap-mumbai-1'] = new OkitJson();
-        this['ap-melbourne-1'] = new OkitJson();
-        this['ap-hyderabad-1'] = new OkitJson();
-        this['ap-chuncheon-1'] = new OkitJson();
-    }
-}
+// class OkitRegionsJson {
+//     /*
+//     ** Create
+//      */
+//     constructor() {
+//         this['us-sanjose-1'] = new OkitJson();
+//         this['us-phoenix-1'] = new OkitJson();
+//         this['us-ashburn-1'] = new OkitJson();
+//         this['uk-london-1'] = new OkitJson();
+//         this['sa-saopaulo-1'] = new OkitJson();
+//         this['me-jeddah-1'] = new OkitJson();
+//         this['eu-zurich-1'] = new OkitJson();
+//         this['eu-frankfurt-1'] = new OkitJson();
+//         this['eu-amsterdam-1'] = new OkitJson();
+//         this['ca-toronto-1'] = new OkitJson();
+//         this['ca-montreal-1'] = new OkitJson();
+//         this['ap-tokyo-1'] = new OkitJson();
+//         this['ap-sydney-1'] = new OkitJson();
+//         this['ap-seoul-1'] = new OkitJson();
+//         this['ap-osaka-1'] = new OkitJson();
+//         this['ap-mumbai-1'] = new OkitJson();
+//         this['ap-melbourne-1'] = new OkitJson();
+//         this['ap-hyderabad-1'] = new OkitJson();
+//         this['ap-chuncheon-1'] = new OkitJson();
+//     }
+// }
 
 let okitJsonModel

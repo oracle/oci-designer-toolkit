@@ -47,6 +47,7 @@ from generators.okitTerraform11Generator import OCITerraform11Generator
 from generators.okitTerraformGenerator import OCITerraformGenerator
 from generators.okitResourceManagerGenerator import OCIResourceManagerGenerator
 from generators.okitMarkdownGenerator import OkitMarkdownGenerator
+from visualiser.common.okitCommon import readXmlFile
 
 # Configure logging
 logger = getLogger()
@@ -272,8 +273,16 @@ def designer():
     # Read Resource Specific JavaScript Properties Files
     resource_properties_js_files = sorted(os.listdir(os.path.join(bp.static_folder, 'properties', 'js', 'resources')))
 
-    # Read Pallete Json
+    # Read Palette Json
     palette_json = readJsonFile(os.path.join(bp.static_folder, 'palette', 'palette.json'))
+    # Read SVG File
+    palette_json['svg'] = {}
+    palette_json['files'] = {}
+    for group in palette_json.get('groups', []):
+        for resource in group.get('resources', []):
+            palette_json['files'][resource['title'].lower()] = os.path.join('/', 'static', 'okit', 'palette', 'svg', resource['svg'])
+            with open(os.path.join(bp.static_folder, 'palette', 'svg', resource['svg']), 'r') as svgFile:
+                palette_json['svg'][resource['title'].lower()] = ''.join(svgFile.read().splitlines())
 
     # config_sections = {"sections": readAndValidateConfigFileSections()}
     # config_sections = {"sections": readConfigFileSections()}
@@ -338,7 +347,9 @@ def dir_to_json(rootdir, reltodir=None, dkey='dirs', fkey='files'):
                 elif entry.is_dir():
                     hierarchy[dkey].append(dir_to_json(os.path.join(rootdir, entry.name), reltodir, dkey, fkey))
 
-    logger.debug(f'Directory Hierarchy : {jsonToFormattedString(hierarchy)}')
+    # logger.info(f'Directory Hierarchy : {jsonToFormattedString(hierarchy)}')
+    hierarchy[fkey] = sorted(hierarchy[fkey], key=lambda d: d['name'])
+    hierarchy[dkey] = sorted(hierarchy[dkey], key=lambda d: d['name'])
     return hierarchy
 
 def hierarchy_category(category, hierarchy, root=''):
@@ -459,7 +470,7 @@ def local_panel():
         local_filesystem_dir = os.path.join(current_app.instance_path, 'local')
         local_filesystem = [dir_to_json(local_filesystem_dir, current_app.instance_path, 'children', 'templates')]
         #Render The Template
-        logger.debug(f'Local Filesystem: {jsonToFormattedString(local_filesystem)}')
+        # logger.debug(f'Local Filesystem: {jsonToFormattedString(local_filesystem)}')
         return render_template('okit/local_panel.html', local_filesystem=local_filesystem)
 
 

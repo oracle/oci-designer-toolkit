@@ -17,6 +17,7 @@ class UserView extends OkitArtefactView {
     /*
     ** SVG Processing
     */
+    draw() {}
     /*
     ** Property Sheet Load function
     */

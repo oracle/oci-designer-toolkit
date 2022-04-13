@@ -30,56 +30,41 @@
         let resource_icon_files = {}
         let xmlSerialiser = new XMLSerializer();
         let icon_title = '';
-        {% for palette_icon_group in palette_json.groups %}
-            {% for palette_icon in palette_icon_group['resources'] %}
-                icon_title = "{{ palette_icon['title']|title }}"
-                icon_title = "{{ palette_icon['title'] }}"
-                palette_svg[icon_title] = "{{ url_for('static', filename='okit/palette/svg/' + palette_icon['svg']) }}";
-                resource_icon_files[icon_title] = "{{ url_for('static', filename='okit/palette/svg/' + palette_icon['svg']) }}";
-                $.ajax({
-                    type: 'get',
-                    url: "{{ url_for('static', filename='okit/palette/svg/' + palette_icon['svg']) }}",
-                    dataType: 'xml',
-                    success: function(xml) {
-                        // const icon_title = "{{ palette_icon['title']|title }}"
-                        const icon_title = "{{ palette_icon['title'] }}"
-                        // console.info("{{ 'Loaded ' + palette_icon['svg'] }}", icon_title);
-                        let g = $(xml).find("g");
-                        let svg = $(xml).find("svg");
-                        let style = $(xml).find("style");
-                        g[0].removeAttribute('transform');
-                        palette_svg[icon_title] = xmlSerialiser.serializeToString(g[0]);
-                        // palette_svg[icon_title] = xmlSerialiser.serializeToString(svg[0]);
-                        if (style.length > 0) {
-                            if (style[0].sheet) {
-                                for (let rule of style[0].sheet.cssRules) {
-                                    const fromStr = `class="${rule.selectorText.substring(1)}"`
-                                    const toStr = `style="${rule.style.cssText}"`
-                                    palette_svg[icon_title] = palette_svg[icon_title].replaceAll(fromStr, toStr)
-                                }
-                            } else {
-                                for (let rule of style[0].textContent.split('\n\t').filter((r) => r !== '')) {
-                                    const fromStr = `class="${rule.substring(1, rule.indexOf('{')).trim()}"`
-                                    const cssText = rule.substring(rule.indexOf('{') + 1, rule.indexOf('}')).trim()
-                                    const toStr = `style="${cssText}"`
-                                    palette_svg[icon_title] = palette_svg[icon_title].replaceAll(fromStr, toStr)
-                                }
-                            }
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.groupCollapsed("{{ 'Error Loading ' + palette_icon['svg'] }}");
-                        console.error('Error  : ' + error);
-                        console.error('Status : ' + status);
-                        console.groupEnd();
+        const parser = new DOMParser();
+        const palette_json = {{ palette_json | safe }}
+        const svg_data = {{ palette_json.svg | safe }}
+        Object.entries(svg_data).forEach(([k,v]) => {
+            const xml = parser.parseFromString(v, "application/xml")
+            const g = $(xml).find("g")
+            const svg = $(xml).find("svg")
+            const style = $(xml).find("style")
+            g[0].removeAttribute('transform')
+            let svgg = xmlSerialiser.serializeToString(g[0])
+            if (style.length > 0) {
+                if (style[0].sheet) {
+                    for (let rule of style[0].sheet.cssRules) {
+                        const fromStr = `class="${rule.selectorText.substring(1)}"`
+                        const toStr = `style="${rule.style.cssText}"`
+                        svgg = svgg.replaceAll(fromStr, toStr)
                     }
-                });
-            {% endfor %}
-        {% endfor %}
+                } else {
+                    for (let rule of style[0].textContent.split('\t').filter((r) => r !== '')) {
+                        const fromStr = `class="${rule.substring(1, rule.indexOf('{')).trim()}"`
+                        const cssText = rule.substring(rule.indexOf('{') + 1, rule.indexOf('}')).trim()
+                        const toStr = `style="${cssText}"`
+                        svgg = svgg.replaceAll(fromStr, toStr)
+                    }
+                }
+            }
+            svg_data[k] = svgg
+            palette_json.svg[k] = svgg
+        })
+        palette_svg = palette_json.svg
+        resource_icon_files = palette_json.files
         const resource_icons_svg = palette_svg;
         const resource_icons = {
-            svg: palette_svg,
-            files: resource_icon_files
+            svg: palette_json.svg,
+            files: palette_json.files
         }
     </script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_svg.js') }}"></script>
@@ -394,6 +379,7 @@
         </li>
     </ul> -->
 </div>
+<datalist id="variables_datalist"></datalist>
 {% endblock %}
 
 {% block footerblock %}

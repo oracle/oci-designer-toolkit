@@ -229,7 +229,8 @@ class SecurityListProperties extends OkitResourceProperties {
         if (port_range && value) {
             const ports = value.trim().split('-')
             port_range.min = ports.length > 0 ? ports[0] : ''
-            port_range.max = ports.length > 1 && ports[0] !== ports[1] ? ports[1] : ''
+            port_range.max = ports.length > 1 ? ports[1] : port_range.min
+            // port_range.max = ports.length > 1 && ports[0] !== ports[1] ? ports[1] : ''
         } else if (port_range) {
             port_range.min = ''
             port_range.max = ''

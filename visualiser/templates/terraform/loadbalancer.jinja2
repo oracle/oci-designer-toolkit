@@ -22,19 +22,19 @@ resource "oci_load_balancer_load_balancer" "{{ resource_name }}" {
     shape          = {{ shape | safe }}
     display_name   = {{ display_name | safe }}
     subnet_ids     = [
-{% for subnet_id in loadbalancer_subnet_ids %}
+{% for subnet_id in subnet_ids %}
                     {{ subnet_id }}{% if not loop.last %},{% endif %}
 {% endfor %}
                     ]
     # Optional
-    is_private     = {{ is_private | safe }}
+    is_private     = {{ is_private | safe | lower }}
 {% if ip_mode is defined %}
     ip_mode   = {{ ip_mode | safe }}
 {% endif %}
 {% if network_security_group_ids is defined %}
     network_security_group_ids   = [{% for nsg_id in network_security_group_ids %}{{ nsg_id }}{% if not loop.last %},{% endif %}{% endfor %}]
 {% endif %}
-{% if shape_details is defined %}
+{% if shape_details is defined and shape | trim('"') == "flexible" %}
     shape_details {
         #Required
         maximum_bandwidth_in_mbps = {{ shape_details.maximum_bandwidth_in_mbps | safe }}
@@ -73,15 +73,15 @@ resource "oci_load_balancer_backend_set" "{{ resource_name }}BackendSet" {
     # Required
     health_checker {
         # Required
-        protocol            = {{ protocol | safe }}
+        protocol            = {{ health_checker.protocol | safe }}
         # Optional
-        interval_ms         = {{ health_check_interval | default(5000) }}
-        port                = {{ port | safe }}
-#        response_body_regex = {{ health_check_response_regex }}
-#        retries             = {{ health_check_retries | default(100) }}
-#        return_code         = {{ health_check_return_code | default(200) }}
-        timeout_in_millis   = {{ health_check_timeout | default(3000) }}
-        url_path            = {{ url_path | safe }}
+        interval_ms         = {{ health_checker.health_check_interval | default(5000) }}
+        port                = {{ health_checker.port | safe }}
+#        response_body_regex = {{ health_checker.health_check_response_regex }}
+#        retries             = {{ health_checker.health_check_retries | default(100) }}
+#        return_code         = {{ health_checker.health_check_return_code | default(200) }}
+        timeout_in_millis   = {{ health_checker.health_check_timeout | default(3000) }}
+        url_path            = {{ health_checker.url_path | safe }}
     }
     load_balancer_id = local.{{ resource_name }}_id
     name             = substr(local.{{ resource_name }}_backend_set_name, 0, 32)
@@ -95,13 +95,13 @@ resource "oci_load_balancer_backend_set" "{{ resource_name }}BackendSet" {
         disable_fallback = {{ disable_fallback | safe }}
     }
 {% endif %}
-{% if ssl_certificate_name is defined %}
+{% if ssl_configuration is defined and ssl_configuration.ssl_certificate_name is defined %}
     ssl_configuration {
         #Required
-        certificate_name        = {{ ssl_certificate_name | safe }}
+        certificate_name        = {{ ssl_configuration.ssl_certificate_name | safe }}
         # Optional
-        verify_depth            = {{ ssl_verify_depth | safe }}
-        verify_peer_certificate = {{ ssl_verify_peer_certificate | safe }}
+        verify_depth            = {{ ssl_configuration.ssl_verify_depth | safe }}
+        verify_peer_certificate = {{ ssl_configuration.ssl_verify_peer_certificate | safe }}
     }
 {% endif %}
 }
@@ -112,7 +112,7 @@ locals {
 }
 
 # ------ Create Loadbalancer Backend
-{% for backend_instance in backend_instances %}
+{% for backend_instance in instance_ids %}
 resource "oci_load_balancer_backend" "{{ resource_name }}Backend{{ loop.index }}" {
     # Required
     backendset_name  = local.{{ resource_name }}BackendSet_name

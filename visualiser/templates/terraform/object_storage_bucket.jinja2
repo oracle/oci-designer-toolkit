@@ -9,7 +9,7 @@ data "oci_objectstorage_namespace" "{{ resource_name }}Namespace" {
 # ------ Read Object Storage Bucket
 data "oci_objectstorage_bucket" "{{ resource_name }}" {
     # Required
-    name           = {{ name | safe }}
+    name           = {{ display_name | safe }}
     namespace      = data.oci_objectstorage_namespace.{{ resource_name }}Namespace.namespace
 }
 {% else %}
@@ -17,7 +17,7 @@ data "oci_objectstorage_bucket" "{{ resource_name }}" {
 resource "oci_objectstorage_bucket" "{{ resource_name }}" {
     #Required
     compartment_id = {{ compartment_id }}
-    name           = {{ name | safe }}
+    name           = {{ display_name | safe }}
     namespace      = data.oci_objectstorage_namespace.{{ resource_name }}Namespace.namespace
 
     #Optional

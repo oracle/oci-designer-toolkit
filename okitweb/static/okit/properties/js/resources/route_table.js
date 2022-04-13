@@ -127,7 +127,7 @@ class RouteTableProperties extends OkitResourceProperties {
     }
     loadNetworkEntitySelect(rule, id, idx) {
         const select = d3.select(`#${this.inputId(id, idx)}`)
-        const selected_id = this.loadSelect(select, rule.target_type, false)
+        const selected_id = this.loadSelect(select, rule.target_type, false, this.vcn_filter)
         if (rule.target_type !== 'local_peering_gateway' || rule.network_entity_id === '' || !rule.network_entity_id) rule.network_entity_id = selected_id
         // this.loadSelect(select, rule.target_type, false, this.vcn_filter)
     }

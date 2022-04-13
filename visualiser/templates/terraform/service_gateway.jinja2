@@ -15,10 +15,6 @@ locals {
     {{ resource_name }}_ocid = {{ ocid | safe }}
 }
 {% else %}
-# ------ Get List Service OCIDs
-#locals {
-#    {{ resource_name }}ServiceId = lookup([for x in data.oci_core_services.RegionServices.services: x if substr(x.name, 0, 3) == {{ service_name | safe }}][0], "id")
-#}
 
 # ------ Create Service Gateway
 resource "oci_core_service_gateway" "{{ resource_name }}" {
@@ -26,8 +22,11 @@ resource "oci_core_service_gateway" "{{ resource_name }}" {
     compartment_id = {{ compartment_id }}
     vcn_id         = {{ vcn_id }}
     services {
-        service_id = local.{{ service_name }}
-        #service_id = local.{{ resource_name }}ServiceId
+{% if service_name | lower | trim('"') == "all" %}
+        service_id = local.all_services_id
+{% else %}
+        service_id = local.objectstorage_services_id
+{% endif %}
     }
     # Optional
     display_name   = {{ display_name | safe }}

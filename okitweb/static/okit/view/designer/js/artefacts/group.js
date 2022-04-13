@@ -17,6 +17,7 @@ class GroupView extends OkitArtefactView {
     /*
     ** SVG Processing
     */
+    draw() {}
     /*
     ** Property Sheet Load function
     */

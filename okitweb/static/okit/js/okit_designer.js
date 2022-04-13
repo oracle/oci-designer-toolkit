@@ -84,7 +84,8 @@ let recovered_model = undefined;
 function handleRecover(evt) {
     if (recovered_model) {
         resetDesigner();
-        okitJsonModel = new OkitJson(JSON.stringify(recovered_model));
+        // okitJsonModel = new OkitJson(JSON.stringify(recovered_model));
+        newModel(JSON.stringify(recovered_model));
         newDesignerView();
         displayOkitJson();
         displayDesignerView();
@@ -107,28 +108,36 @@ function handleNew(evt) {
 }
 function newDiagram() {
     console.log('Creating New Diagram');
-    newModel();
+    const compartment = {
+        read_only: true,
+        display_name: 'Deployment Compartment',
+        description: 'Represents the deployment location for the resources specified within the design.',
+        definition: 'Logical Compartment that represents the deployment location for the resources specified within the design. This compartment will not be created during the build process.'
+    }
+    const data = {compartments: [compartment]}
+    newModel(data);
     newDesignerView();
-    okitJsonView.newCanvas();
-    okitJsonView.newCompartment();
-    // Set Top Compartment as deployment compartment
-    const resource = okitJsonModel.getCompartments()[0]
-    resource.read_only = true;
-    resource.display_name = 'Deployment Compartment';
-    resource.description = 'Represents the deployment location for the resources specified within the design.'
-    resource.definition = 'Logical Compartment that represents the deployment location for the resources specified within the design. This compartment will not be created during the build process.'
+    // okitJsonView.newCanvas();
+    // okitJsonView.newCompartment();
+    // // Set Top Compartment as deployment compartment
+    // const resource = okitJsonModel.getCompartments()[0]
+    // resource.read_only = true;
+    // resource.display_name = 'Deployment Compartment';
+    // resource.description = 'Represents the deployment location for the resources specified within the design.'
+    // resource.definition = 'Logical Compartment that represents the deployment location for the resources specified within the design. This compartment will not be created during the build process.'
     console.info(okitJsonView);
-    console.log();
 }
 function newDesignerView() {
-    okitJsonView = new OkitDesignerJsonView(okitJsonModel, 'canvas-div', palette_svg);
+    // okitJsonView = new OkitDesignerJsonView(okitJsonModel, 'canvas-div', palette_svg);
+    okitJsonView = OkitDesignerJsonView.newView(okitJsonModel, okitOciData, resource_icons);
+    loadVariablesDatalist()
 }
-function newModel() {
-    okitJsonModel = new OkitJson();
-}
-function newRegionsModel() {
-    regionOkitJson = new OkitRegionsJson();
-}
+// function newModel() {
+//     okitJsonModel = new OkitJson();
+// }
+// function newRegionsModel() {
+//     regionOkitJson = new OkitRegionsJson();
+// }
 function setTitleDescription() {
     okitJsonModel ? $('#json_title').val(okitJsonModel.title) : $('#json_title').val('');
     okitJsonModel ? $('#json_description').val(okitJsonModel.description) : $('#json_description').val('');
@@ -163,6 +172,11 @@ function updatePaletteForPlatform() {
     $('.okit-target-row').addClass('collapsed');
     $(`.${okitJsonModel.metadata.platform}`).removeClass('hidden');
     $(`.${okitJsonModel.metadata.platform}`).removeClass('collapsed');
+}
+function loadVariablesDatalist() {
+    $('#variables_datalist').empty()
+    const datalist = d3.select('#variables_datalist')
+    if (okitJsonModel) okitJsonModel.variables_schema.variables.forEach((v) => datalist.append('option').attr('value', `var.${v.name}`))
 }
 
 /*
@@ -205,7 +219,8 @@ function getAsJson(readFile) {
 function loaded(evt) {
     // Clear Existing Region
     regionOkitJson = {};
-    okitJsonModel = null
+    // okitJsonModel = null
+    newModel()
     hideRegionTabBar();
     clearRegionTabBar();
     // Obtain the read file data
@@ -214,7 +229,8 @@ function loaded(evt) {
     console.info(fileJson);
     if (fileJson.hasOwnProperty('compartments')) {
         console.info('>> Single Region File')
-        okitJsonModel = new OkitJson(fileString);
+        // okitJsonModel = new OkitJson(fileString);
+        newModel(fileString)
         newDesignerView();
     } else {
         console.info('>> Multi Region File.')
@@ -224,7 +240,8 @@ function loaded(evt) {
             addRegionTab(region);
             regionOkitJson[region] = new OkitJson(JSON.stringify(fileJson[region]));
             if (okitJsonModel === null) {
-                okitJsonModel = regionOkitJson[region];
+                // okitJsonModel = regionOkitJson[region];
+                newModel(regionOkitJson[region]);
                 newDesignerView();
                 $(jqId(regionTabName(region))).trigger("click");
             }
@@ -634,12 +651,16 @@ function handleSaveAsMarkdown(e) {
 function handleRedraw(evt) {
     hideNavMenu();
     redrawSVGCanvas();
+    redrawTerraformView()
     return false;
 }
 function redrawSVGCanvas(recalculate=false) {
     if (recalculate) {resetRecalculateFlag();}
     displayDesignerView();
-    displayOkitJson();
+    // displayOkitJson();
+}
+function redrawTerraformView() {
+    if (okitTerraformView) okitTerraformView.draw()
 }
 /*
 ** Toolbar Handlers
@@ -846,11 +867,13 @@ function loadTemplate(template_url) {
             template_file: template_url
         }, // Query Arguments
         success: function(resp) {
-            okitJsonModel = new OkitJson(resp);
+            // okitJsonModel = new OkitJson(resp);
+            newModel(resp)
             newDesignerView();
             displayOkitJson();
             displayDesignerView();
             displayTreeView();
+            slideLeftPanel('icons_palette')
         },
         error: function(xhr, status, error) {
             console.error('Status : '+ status);
@@ -1270,7 +1293,7 @@ function showQueryOCIResults() {
     newDesignerView();
     okitJsonView.newCanvas();
     console.info('Regions Ids : ' + regions);
-    newRegionsModel();
+    // newRegionsModel();
     if (regions.length > 0) {
         $(jqId('modal_loading_wrapper')).removeClass('hidden');
         // okitOCIQuery = new OkitOCIQuery(regions, okitSettings.fast_discovery);
@@ -1288,7 +1311,8 @@ function showQueryOCIResults() {
         }
         okitOCIQuery.query(request, function(region) {
             console.info('Complete ' + region);
-            okitJsonModel = regionOkitJson[region];
+            // okitJsonModel = regionOkitJson[region];
+            newModel(regionOkitJson[region]);
             newDesignerView();
             redrawSVGCanvas(region);
             displayTreeView();
@@ -1314,7 +1338,7 @@ function showImportOCIResults() {
     request.fast_discovery = $(jqId('fast_discovery')).is(':checked');
     request.region = '';
     console.info('Regions Ids : ' + regions);
-    newRegionsModel();
+    // newRegionsModel();
     if (regions.length > 0) {
         $(jqId('modal_loading_wrapper')).removeClass('hidden');
         okitOCIQuery = new OkitOCIQuery(regions, request.fast_discovery);
@@ -1419,7 +1443,7 @@ function queryPCA(callback=undefined) {
     okitJsonView.newCanvas();
     console.info('Regions Ids : ' + regions);
     console.info(`Request : ${request}`);
-    newRegionsModel();
+    // newRegionsModel();
     if (regions.length > 0) {
         $(jqId('modal_loading_wrapper')).removeClass('hidden');
         okitPCAQuery = new OkitPCAQuery(regions, request.fast_discovery);
@@ -1438,7 +1462,9 @@ function showQueryPCAResults(region) {
     $(jqId('modal_loading_wrapper')).addClass('hidden');
     console.info('Show PCA Query Results');
     console.info('Complete ' + region);
-    okitJsonModel = regionOkitJson[region];
+    console.info(regionOkitJson[region])
+    // okitJsonModel = regionOkitJson[region];
+    newModel(regionOkitJson[region]);
     newDesignerView();
     redrawSVGCanvas(region);
     displayTreeView();
@@ -1566,7 +1592,8 @@ function addRegionTab(region) {
             $('#region_tab_bar > button').removeClass("okit-tab-active");
             $(jqId(regionTabName(region))).addClass("okit-tab-active");
             activeRegion = region;
-            okitJsonModel = regionOkitJson[region];
+            // okitJsonModel = regionOkitJson[region];
+            newModel(regionOkitJson[region]);
             newDesignerView();
             redrawSVGCanvas();
         });
@@ -1619,6 +1646,7 @@ function displayOkitJson() {
  */
 function displayDesignerView() {
     okitJsonView.draw();
+    // redrawViews()
     setTitleDescription();
 }
 function resetRecalculateFlag() {

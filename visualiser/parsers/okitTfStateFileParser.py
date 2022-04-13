@@ -47,6 +47,7 @@ class OkitTfStateFileParser(object):
     }
 
     tf_ref_map = {
+        "oci_core_vnic_attachment":      "oci_core_vnic_attachment",
         "oci_file_storage_export":       "oci_file_storage_export",
         "oci_file_storage_export_set":   "oci_file_storage_export_set",
         "oci_file_storage_mount_target": "oci_file_storage_mount_target",
@@ -102,6 +103,14 @@ class OkitTfStateFileParser(object):
                         # Update for required 
                         okit_resource["resource_name"] = resource["name"]
                         self.okit_json["metadata"]["okit_model_id"] = okit_resource.get('freeform_tags',{}).get("okit_model_id", self.okit_json["metadata"]["okit_model_id"])
+                        # Convert Defined Tags
+                        defined_tags = {}
+                        for k, v in okit_resource.get("defined_tags", {}).items():
+                            nk = k.split('.')
+                            if nk[0] not in defined_tags:
+                                defined_tags[nk[0]] = {}
+                            defined_tags[nk[0]][nk[1]] = v
+                        okit_resource["defined_tags"] = defined_tags
                         okit_reference = okit_resource.get('freeform_tags',{}).get("okit_reference", None)
                         if "manage_default_resource_id" in okit_resource:
                             # okit_resource["vcn_id"] = okit_resource["manage_default_resource_id"]
@@ -149,7 +158,7 @@ class OkitTfStateFileParser(object):
             for key in self.tf_ref_map:
                 try:
                     logger.info(f'Removing {key}')
-                    del self.okit_json[key]
+                    self.okit_json.pop(key, None)
                 except KeyError as e:
                     # Ignore
                     pass
@@ -171,14 +180,26 @@ class OkitTfStateFileParser(object):
                             del okit_resource["manage_default_resource_id"]
         return
     
+    def instances(self, val, **kwargs):
+        for okit_resource in val:
+            # Primary Vnic
+            okit_resource["vnic_attachments"] = okit_resource.get("create_vnic_details", [])
+            okit_resource.pop("create_vnic_details", None)
+            # Secondary Vnics
+            vnic_attachments = [va for va in self.okit_json.get("oci_core_vnic_attachment", []) if va["instance_id"] == okit_resource["id"]]
+            for va in vnic_attachments:
+                okit_resource["vnic_attachments"].extend(va.get("create_vnic_details", []))
+        return
+
     def load_balancers(self, val, **kwargs):
         for okit_resource in val:
-            okit_resource["backend_sets"] = [r for r in self.okit_json["oci_load_balancer_backend_set"] if r["load_balancer_id"] == okit_resource["id"]]
-            okit_resource["listeners"] = [r for r in self.okit_json["oci_load_balancer_listener"] if r["load_balancer_id"] == okit_resource["id"]]
+            okit_resource["backend_sets"] = [r for r in self.okit_json.get("oci_load_balancer_backend_set", []) if r["load_balancer_id"] == okit_resource["id"]]
+            okit_resource["listeners"] = [r for r in self.okit_json.get("oci_load_balancer_listener", []) if r["load_balancer_id"] == okit_resource["id"]]
             backend_ips = [backend["ip_address"] for backend_set in okit_resource["backend_sets"] for backend in backend_set["backend"]]
-            lb_backends = [r for r in self.okit_json["oci_load_balancer_backend"] if r["load_balancer_id"] == okit_resource["id"]]
+            lb_backends = [r for r in self.okit_json.get("oci_load_balancer_backend", []) if r["load_balancer_id"] == okit_resource["id"]]
+            logger.info(jsonToFormattedString(lb_backends))
             for backend_set in okit_resource["backend_sets"]:
-                backend_set["backends"] = [backend for backend in lb_backends if backend["backendset_name"] == backend_set["name"]]
+                backend_set["backends"] = [dict(backend) for backend in lb_backends if backend["backendset_name"] == backend_set["name"]]
                 del backend_set["backend"]
                 for backend in backend_set["backends"]:
                     del backend["backendset_name"]
@@ -189,6 +210,7 @@ class OkitTfStateFileParser(object):
             for listener in okit_resource["listeners"]:
                 del listener["load_balancer_id"]
                 del listener["id"]
+            okit_resource["shape_details"] = okit_resource["shape_details"][0] if len(okit_resource["shape_details"]) > 0 else {}
 
     def route_tables(self, val, **kwargs):
         for okit_resource in val:

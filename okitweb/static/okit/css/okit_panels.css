@@ -104,3 +104,26 @@
 .okit-template-category-summary > label {
     padding-left: 5px;
 }
+
+.okit-validation-message {
+    border-radius: 2px;
+    border-color: gray;
+    border-width: 1px;
+    width: 100%;
+    padding: 2px;
+}
+
+.okit-validation-error {
+    border-left-color: red;
+    border-left-width: 2px;
+}
+
+.okit-validation-warning {
+    border-left-color: yellow;
+    border-left-width: 2px;
+}
+
+.okit-validation-error {
+    border-left-color: blue;
+    border-left-width: 2px;
+}

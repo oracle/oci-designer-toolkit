@@ -12,8 +12,8 @@ resource "oci_analytics_analytics_instance" "{{ resource_name }}" {
     compartment_id      = {{ compartment_id }}
     capacity {
         #Required
-        capacity_type = {{ capacity_type | safe }}
-        capacity_value = {{ capacity_value | safe }}
+        capacity_type = {{ capacity.capacity_type | safe }}
+        capacity_value = {{ capacity.capacity_value | safe }}
     }
     feature_set = {{ feature_set | safe }}
     idcs_access_token = {{ idcs_access_token | safe }}

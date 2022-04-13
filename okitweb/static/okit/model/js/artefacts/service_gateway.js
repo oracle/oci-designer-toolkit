@@ -18,8 +18,8 @@ class ServiceGateway extends OkitArtifact {
         this.compartment_id = data.compartment_id;
         this.vcn_id = data.parent_id;
         this.service_name = '';
-        this.autonomous_database_ids = [];
-        this.object_storage_bucket_ids = [];
+        // this.autonomous_database_ids = [];
+        // this.object_storage_bucket_ids = [];
         this.route_table_id = '';
         // Update with any passed data
         this.merge(data);

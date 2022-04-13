@@ -345,6 +345,11 @@ class OciResourceDiscoveryClient(object):
         "MySQLDbSystem": (oci.mysql.DbSystemClient, "list_db_systems"), # note: use get_db_system to get additional resource details
         # oci.mysql.MysqlaasClient
         "MySQLConfiguration": (oci.mysql.MysqlaasClient, "list_configurations"),
+        # oci.network_load_balancer.NetworkLoadBalancerClient
+        "NetworkLoadBalancer": (oci.network_load_balancer.NetworkLoadBalancerClient, "list_network_load_balancers"),
+        # "NetworkLoadBalancerBackendSet": (oci.network_load_balancer.NetworkLoadBalancerClient, "list_backend_sets"), # NOT USED - backend sets are returned in the parent Load Balancer response
+        # "NetworkLoadBalancerBackend": (oci.network_load_balancer.NetworkLoadBalancerClient, "list_backends"), # NOT USED - backends are returned in the parent Load Balancer response
+        # "NetworkLoadBalancerListener": (oci.network_load_balancer.NetworkLoadBalancerClient, "list_listeners"), # NOT USED - listners are returned in the parent Load Balancer response
         # oci.nosql.NosqlClient
         "NoSQLTable": (oci.nosql.NosqlClient, "list_tables"),
         "NoSQLIndex": (oci.nosql.NosqlClient, "list_indexes"),
@@ -496,7 +501,10 @@ class OciResourceDiscoveryClient(object):
         self.exclude_resource_types = set(exclude_resource_types) if exclude_resource_types else None
 
         # get tenancy
-        self.tenancy = self.get_tenancy(tenancy_override)
+        if not tenancy_override and "tenancy_override" in self.config:
+            self.tenancy = self.get_tenancy(config["tenancy_override"])
+        else:
+            self.tenancy = self.get_tenancy(tenancy_override)
         self.config["tenancy"] = self.tenancy.id
 
         # get regions
@@ -545,7 +553,7 @@ class OciResourceDiscoveryClient(object):
 
         # a large number of compartments can cause the query to exceed the maximum 50000 character
         # limit. Split into multiple queries and combine results
-        max_compartments = 200
+        max_compartments = 100
         if compartments and len(compartments) > max_compartments:
             chunks = [list(compartments)[i:i + max_compartments] for i in range(0, len(compartments), max_compartments)]
             results = list()
@@ -660,6 +668,8 @@ class OciResourceDiscoveryClient(object):
         search_resource_types = dict()
         for region in searchable_resource_types:
             supported_searchable_resource_types = [resource for resource in self.list_resource_client_methods]
+            supported_searchable_resource_types.extend(["Vnic"])
+
             search_resource_types[region] = set(supported_searchable_resource_types).intersection(set(searchable_resource_types[region]))
             if self.include_resource_types:
                 search_resource_types[region] = search_resource_types[region].intersection(self.include_resource_types)
@@ -669,6 +679,7 @@ class OciResourceDiscoveryClient(object):
             if region != self.home_region:
                 # remove IAM resources
                 search_resource_types[region] = search_resource_types[region] - {resource for resource in self.list_resource_client_methods if self.list_resource_client_methods[resource][0] == oci.identity.IdentityClient}
+        
         return search_resource_types
 
     # fetch resources for all regions in parallel
@@ -843,13 +854,21 @@ class OciResourceDiscoveryClient(object):
                         auto_scaling_configuration_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, auto_scaling_configuration_id=auto_scaling_configuration_id)
                         futures_list.update({(region, resource_type, compartment_id, auto_scaling_configuration_id):future})
-                    elif method_name == "list_backends":
+                    elif method_name == "list_backends" and resource_type == "LoadBalancer":
                         load_balancer_id, backend_set_name = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, load_balancer_id=load_balancer_id, backend_set_name=backend_set_name)
                         futures_list.update({(region, resource_type, compartment_id, (load_balancer_id, backend_set_name)):future})
-                    elif method_name == "list_backend_sets":
+                    elif method_name == "list_backends" and resource_type == "NetworkLoadBalancer":
+                        network_load_balancer_id, backend_set_name = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, network_load_balancer_id=network_load_balancer_id, backend_set_name=backend_set_name)
+                        futures_list.update({(region, resource_type, compartment_id, (load_balancer_id, backend_set_name)):future})
+                    elif method_name == "list_backend_sets" and resource_type == "LoadBalancer":
                         load_balancer_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, load_balancer_id=load_balancer_id)
+                        futures_list.update({(region, resource_type, compartment_id, load_balancer_id):future})
+                    elif method_name == "list_backend_sets" and resource_type == "NetworkLoadBalancer":
+                        network_load_balancer_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, network_load_balancer_id=network_load_balancer_id)
                         futures_list.update({(region, resource_type, compartment_id, load_balancer_id):future})
                     elif method_name == "list_backups" and resource_type == "Backup": # Database Backup
                         database_id = item[2]
@@ -865,8 +884,8 @@ class OciResourceDiscoveryClient(object):
                         futures_list.update({(region, resource_type, compartment_id, namespace_name):future})
                     elif method_name == "list_certificates" and resource_type == "Certificate":
                         load_balancer_id = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, load_balancer_id=load_balancer_id)
-                        futures_list.update({(region, resource_type, compartment_id, load_balancer_id):future})
+                        future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id)
+                        futures_list.update({(region, resource_type, compartment_id, None):future})
                     elif method_name == "list_certificate_authority_versions":
                         certificate_authority_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, certificate_authority_id=certificate_authority_id)
@@ -986,7 +1005,11 @@ class OciResourceDiscoveryClient(object):
                         subnet_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, subnet_id=subnet_id)
                         futures_list.update({(region, resource_type, compartment_id, subnet_id):future})
-                    elif method_name == "list_listener_rules":
+                    elif method_name == "list_listeners": # NetworkLoadBalancer
+                        network_load_balancer_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, network_load_balancer_id=network_load_balancer_id)
+                        futures_list.update({(region, resource_type, compartment_id, load_balancer_id):future})
+                    elif method_name == "list_listener_rules": 
                         load_balancer_id, listener_name = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, load_balancer_id=load_balancer_id, listener_name=listener_name)
                         futures_list.update({(region, resource_type, compartment_id, load_balancer_id):future})
@@ -1261,6 +1284,10 @@ class OciResourceDiscoveryClient(object):
                     regional_resource_requests.add((ro_resource_type, self.tenancy.id, None))
                 
             for resource in resources[region]:
+                # special casde for Vnic which doesn't have a list method
+                if resource.resource_type == "Vnic":
+                    regional_resource_requests.add((resource.resource_type, resource.compartment_id, resource.identifier))
+
                 # handle list resource query varient cases
                 if resource.resource_type in ["BootVolume", "FileSystem", "Instance", "MountTarget"]:
                     # list by avaiability domain
@@ -1412,6 +1439,13 @@ class OciResourceDiscoveryClient(object):
                     #     regional_resource_requests.add(("RuleSet", resource.compartment_id, resource.identifier))
                     # if self.include_resource_types == None or "SSLCipherSuite" in self.include_resource_types:
                     #     regional_resource_requests.add(("SSLCipherSuite", resource.compartment_id, resource.identifier))
+                elif resource.resource_type == "NetworkLoadBalancer":
+                    pass
+                    # No need to fetch child resource are they are included in the load balancer response
+                    # if self.include_resource_types == None or "NetworkLoadBalancerBackendSet" in self.include_resource_types:
+                    #     regional_resource_requests.add(("NetworkLoadBalancerBackendSet", resource.compartment_id, resource.identifier))
+                    # if self.include_resource_types == None or "NetworkLoadBalancerListener" in self.include_resource_types:
+                    #     regional_resource_requests.add(("NetworkLoadBalancerListener", resource.compartment_id, resource.identifier))
                 elif resource.resource_type == "MountTarget" and (self.include_resource_types == None or "ExportSet" in self.include_resource_types):
                     # get ExportSets in the same compartment and AD as the MountTarget
                     regional_resource_requests.add(("ExportSet", resource.compartment_id, resource.availability_domain))
@@ -1472,6 +1506,7 @@ class OciResourceDiscoveryClient(object):
                 "LogGroup", "LogSavedSearch", # Loging
                 "ManagementDashboard", "ManagementSavedSearch", # Dashboard
                 "MySQLDbSystem", "MySQLChannel", "MySQLConfiguration", # MySQL
+                "NetworkLoadBalancer", # NetworkLoadBalancer
                 "DatabaseInsight", "SQLPlan", "SQLSearch", "SQLText", # OperationalInsight
                 "RoverCluster", "RoverEntitlement", "RoverNode", # Roving Edge
                 "StreamPool", # Streams
@@ -1497,9 +1532,6 @@ class OciResourceDiscoveryClient(object):
         extra_resource_requests = dict()
         for region in resources_by_region:
             regional_resource_requests = set()
-            # get Vnic from Vnic Attachments
-            for vnic_attachment in resources_by_region[region]["VnicAttachment"] if (self.include_resource_types == None or "Vnic" in self.include_resource_types) and "VnicAttachment" in resources_by_region[region] else []:
-                regional_resource_requests.add(("Vnic", vnic_attachment.compartment_id, vnic_attachment.vnic_id))
             # get FastConnect circuit shapes
             for fastconnect_provider in resources_by_region[region]["FastConnectProviderService"] if (self.include_resource_types == None or "VirtualCircuitBandwidthShape" in self.include_resource_types) and "FastConnectProviderService" in resources_by_region[region] else []:
                 regional_resource_requests.add(("VirtualCircuitBandwidthShape", None, fastconnect_provider.id))

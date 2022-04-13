@@ -9,12 +9,14 @@ class OkitTerraformView extends OkitJsonView {
     constructor(okitjson=null, oci_data=null, resource_icons=[], parent_id = 'terraform-div') {
         super(okitjson, oci_data, resource_icons, parent_id);
         this.terraform = {}
+        this.selected_tab = this.generateTabId('provider.tf')
     }
     get model() {return this.okitjson;}
     get data() {return this.oci_data;}
 
     static newView(model, oci_data=null, resource_icons=[], parent_id = 'terraform-div') {
-        return new OkitTerraformView((model, oci_data, parent_id, resource_icons))
+        console.info(`>>>>>>> Resource Icons:`, resource_icons)
+        return new OkitTerraformView(model, oci_data, resource_icons, parent_id)
     }
 
     draw(for_export=false) {
@@ -67,7 +69,8 @@ class OkitTerraformView extends OkitJsonView {
         Object.entries(data).forEach(([k,v]) => {
             self.addTab(tab_bar, k)
         })
-        $('#terraform_view_tab_bar button:first-child').trigger("click");
+        // $('#terraform_view_tab_bar button:first-child').trigger("click");
+        $(`#${this.selected_tab}`).trigger("click");
     }
 
     addTab(tab_bar, key) {
@@ -81,11 +84,12 @@ class OkitTerraformView extends OkitJsonView {
                 $('#terraform_view_tab_bar > button').removeClass("okit-tab-active");
                 $(jqId(self.generateTabId(key))).addClass("okit-tab-active");
                 self.loadTabContent(key);
+                self.selected_tab = self.generateTabId(key)
             });
     }
 
     generateTabId(name) {
-        return `${name}_tab`;
+        return `${name.replaceAll('.', '_')}_tab`;
     }
 
     generateTabTitle(name) {

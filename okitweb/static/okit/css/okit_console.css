@@ -620,7 +620,7 @@ li a.parent-item:hover {
     table-layout: fixed;
 }
 
-.okit-property-editor .okit-table .tr .td:first-child {
+.okit-property-editor .okit-table .tr .property-label {
     width: 20em;
     font-weight: bolder;
 }
@@ -999,6 +999,7 @@ li a.parent-item:hover {
     top: calc(var(--console-header-gradient-height) + var(--console-header-height) + var(--console-toolbar-height) + 2px);
     height: calc(100vh - (var(--console-header-gradient-height) + var(--console-header-height) + var(--console-toolbar-height) + var(--console-footer-height)) - 2px);
     width: 35%;
+    min-width: 600px;
     padding: 5px;
     transition: all 0.5s;
     border-top: #aeaeae 1px solid;

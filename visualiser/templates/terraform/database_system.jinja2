@@ -24,49 +24,49 @@ resource "oci_database_db_system" "{{ resource_name }}" {
         #Required
         database {
             #Required
-            admin_password      = {{ admin_password | safe }}
+            admin_password      = {{ db_home.database.admin_password | safe }}
             #Optional
-{% if backup_id is defined %}
-            backup_id           = {{ backup_id | safe }}
+{% if db_home.database.backup_id is defined %}
+            backup_id           = {{ db_home.database.backup_id | safe }}
 {% endif %}
-{% if backup_tde_password is defined %}
-            backup_tde_password = {{ backup_tde_password | safe }}
+{% if db_home.database.backup_tde_password is defined %}
+            backup_tde_password = {{ db_home.database.backup_tde_password | safe }}
 {% endif %}
-{% if character_set is defined %}
-            character_set       = {{ character_set | safe }}
+{% if db_home.database.character_set is defined %}
+            character_set       = {{ db_home.database.character_set | safe }}
 {% endif %}
-{% if auto_backup_enabled is defined or auto_backup_window is defined or recovery_window_in_days is defined %}
+{% if db_home.database.db_backup_config is defined and (db_home.database.db_backup_config.auto_backup_enabled is defined or db_home.database.db_backup_config.auto_backup_window is defined or db_home.database.db_backup_config.recovery_window_in_days is defined) %}
             db_backup_config {
                 #Optional
-    {% if auto_backup_enabled is defined %}
-                auto_backup_enabled = {{ auto_backup_enabled | safe }}
+    {% if db_home.database.db_backup_config.auto_backup_enabled is defined %}
+                auto_backup_enabled = {{ db_home.database.db_backup_config.auto_backup_enabled | safe }}
     {% endif %}
-    {% if auto_backup_window is defined %}
-                auto_backup_window  = {{ auto_backup_window | safe }}
+    {% if db_home.database.db_backup_config.auto_backup_window is defined %}
+                auto_backup_window  = {{ db_home.database.db_backup_config.auto_backup_window | safe }}
     {% endif %}
-    {% if backup_destination_details is defined %}
+    {% if db_home.database.db_backup_config.backup_destination_details is defined %}
                 backup_destination_details {
                     #Optional
-                    id   = {{ backup_destination_id | safe }}
-                    type = {{ backup_destination_type | safe }}
+                    id   = {{ db_home.database.db_backup_config.backup_destination_details.backup_destination_id | safe }}
+                    type = {{ db_home.database.db_backup_config.backup_destination_details.backup_destination_type | safe }}
                 }
     {% endif %}
-    {% if recovery_window_in_days is defined %}
-                recovery_window_in_days = {{ recovery_window_in_days | safe }}
+    {% if db_home.database.db_backup_config.recovery_window_in_days is defined %}
+                recovery_window_in_days = {{ db_home.database.db_backup_config.recovery_window_in_days | safe }}
     {% endif %}
             }
 {% endif %}
-{% if db_name is defined %}
-            db_name        = {{ db_name | safe }}
+{% if db_home.database.db_name is defined %}
+            db_name        = {{ db_home.database.db_name | safe }}
 {%  endif %}
-{% if db_workload is defined %}
-            db_workload    = {{ db_workload | safe }}
+{% if db_home.database.db_workload is defined %}
+            db_workload    = {{ db_home.database.db_workload | safe }}
 {%  endif %}
-{% if ncharacter_set is defined %}
-            ncharacter_set = {{ ncharacter_set | safe }}
+{% if db_home.database.ncharacter_set is defined %}
+            ncharacter_set = {{ db_home.database.ncharacter_set | safe }}
 {% endif %}
-{% if pdb_name is defined %}
-            pdb_name       = {{ pdb_name | safe }}
+{% if db_home.database.pdb_name is defined %}
+            pdb_name       = {{ db_home.database.pdb_name | safe }}
 {% endif %}
 {% if defined_tags is defined %}
             defined_tags             = {{ defined_tags | safe }}
@@ -76,11 +76,11 @@ resource "oci_database_db_system" "{{ resource_name }}" {
 {% endif %}
         }
         #Optional
-{% if db_version is defined %}
-        db_version = {{ db_version | safe }}
+{% if db_home.db_version is defined %}
+        db_version = {{ db_home.db_version | safe }}
 {% endif %}
-{% if display_name is defined %}
-        display_name = {{ display_name | safe }}
+{% if db_home.display_name is defined %}
+        display_name = {{ db_home.display_name | safe }}
 {% endif %}
     }
     hostname        = {{ hostname | safe }}
@@ -106,10 +106,10 @@ resource "oci_database_db_system" "{{ resource_name }}" {
 {% if data_storage_size_in_gb is defined %}
     data_storage_size_in_gb = {{ data_storage_size_in_gb | safe }}
 {% endif %}
-{% if storage_management is defined %}
+{% if db_system_options is defined %}
     db_system_options {
         #Optional
-        storage_management  = {{ storage_management | safe }}
+        storage_management  = {{ db_system_options.storage_management | safe }}
     }
 {% endif %}
 {% if disk_redundancy is defined %}
@@ -131,16 +131,16 @@ resource "oci_database_db_system" "{{ resource_name }}" {
         #Optional
         days_of_week {
             #Optional
-            name = {{ dow_name | safe }}
+            name = {{ maintenance_window_details.days_of_week.dow_name | safe }}
         }
-        hours_of_day       = {{ hours_of_days | safe }}
-        lead_time_in_weeks = {{ lead_time_in_weeks | safe }}
+        hours_of_day       = {{ maintenance_window_details.hours_of_days | safe }}
+        lead_time_in_weeks = {{ maintenance_window_details.lead_time_in_weeks | safe }}
         months {
             #Optional
-            name = {{ month_name | safe }}
+            name = {{ maintenance_window_details.months.month_name | safe }}
         }
-        preference     = {{ preference | safe }}
-        weeks_of_month = {{ weeks_of_month | safe }}
+        preference     = {{ maintenance_window_details.preference | safe }}
+        weeks_of_month = {{ maintenance_window_details.weeks_of_month | safe }}
     }
 {% endif %}
 {% if node_count is defined %}
@@ -153,7 +153,7 @@ resource "oci_database_db_system" "{{ resource_name }}" {
     source           = {{ source | safe }}
 {% endif %}
 {% if sparse_diskgroup is defined %}
-    sparse_diskgroup = {{ sparse_diskgroup | safe }}
+    sparse_diskgroup = {{ sparse_diskgroup | safe | lower }}
 {% endif %}
 {% if time_zone is defined %}
     time_zone        = {{ time_zone | safe }}

@@ -130,7 +130,7 @@ def price_calculator(okitjson, all_resources):
     #############################################
     # ADB price calculator
     #############################################
-    if okitjson['autonomous_databases']:
+    if 'autonomous_databases' in okitjson:
         adb_storage = 0
         adb_ocpu = 0
         oltp_ocp = 0
@@ -203,7 +203,7 @@ def price_calculator(okitjson, all_resources):
     #############################################
     # DBaaS price calculator
     #############################################
-    if okitjson['database_systems']:
+    if 'database_systems' in okitjson:
         dbaas_storage = 0
         dbaas_ocpu = 0
         PAYG_DBaaS_OCPU = 0
@@ -290,7 +290,7 @@ def price_calculator(okitjson, all_resources):
     #############################################
     # Block Volume price calculator
     #############################################
-    if okitjson['block_storage_volumes']:
+    if 'block_storage_volumes' in okitjson:
         block_gb = 0
         vpus_per_gb = 0
         PAYG_Block_Volume_price = 0
@@ -322,7 +322,7 @@ def price_calculator(okitjson, all_resources):
     #############################################
     # Instance price calculator
     #############################################
-    if okitjson['instances']:
+    if 'instances' in okitjson:
         PAYG_Compute_OCPU = 0
         Monthly_Flex_Compute_OCPU = 0
         windows_os_ocpu = 0
@@ -388,7 +388,7 @@ def price_calculator(okitjson, all_resources):
     #############################################
     # FastConnect price calculator
     #############################################
-    if okitjson['fast_connects']:
+    if 'fast_connects' in okitjson:
         # Currentl OKIT does not have an option to select provisioned FC bandwidth
         bandwidth = "1Gbps"
         PAYG_FC_price = 0
@@ -415,7 +415,7 @@ def price_calculator(okitjson, all_resources):
     #############################################
     # Load Balancer price calculator
     #############################################
-    if okitjson['load_balancers']:
+    if 'load_balancers' in okitjson:
         PAYG_LB_price = 0
         Monthly_Flex_LB_price = 0
         for lb in okitjson['load_balancers']:
@@ -440,7 +440,7 @@ def price_calculator(okitjson, all_resources):
     #############################################
     # File Storage Service price calculator
     #############################################
-    if okitjson['file_storage_systems']:
+    if 'file_storage_systems' in okitjson:
         # default 1TB
         fss_gb = 1000
         # get file storage service price
@@ -460,7 +460,7 @@ def price_calculator(okitjson, all_resources):
     #############################################
     # Object Storage Service price calculator
     #############################################
-    if okitjson['object_storage_buckets']:
+    if 'object_storage_buckets' in okitjson:
         # default 1TB, 100K request,  fist 50K resuests will be free
         object_storage_gb = 1000
         requests = 1000000
@@ -499,7 +499,7 @@ def price_calculator(okitjson, all_resources):
     #############################################
     # Oracke Kubernetes Engine price calculator
     #############################################
-    if okitjson['oke_clusters']:
+    if 'oke_clusters' in okitjson:
         PAYG_Compute_OCPU = 0
         Monthly_Flex_Compute_OCPU = 0
         Windows_os_ocpu = 0
