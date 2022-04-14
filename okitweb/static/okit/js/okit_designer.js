@@ -1726,6 +1726,9 @@ function setCenterColumnWidth() {
 ** Model Validation
  */
 function displayValidationResults(results) {
+    const okitValidationPanel = new OkitValidationPanel(results)
+}
+function displayValidationResultsDeprecated(results) {
     console.info('Displaying Validation Results', results);
     if (results.valid) {
         $(jqId('validation_status')).text('Validation Successful');

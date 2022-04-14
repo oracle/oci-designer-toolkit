@@ -4,6 +4,14 @@
 ## Version 0.35.0
 **Release Date**: 13th April 2022
 ### Features
+1. New Look and Feel for Validation Panel
+### Bug Fixes
+1. Resolve issues where match_criteria was not being tested as defined in jinja2 template for DRG Distributions
+
+
+## Version 0.35.0
+**Release Date**: 13th April 2022
+### Features
 1. Add Subnet validation for duplicate DNS Label.
 2. New Properties panels:
     1. Instance
