@@ -50,11 +50,23 @@ class OkitValidationPanel extends OkitPanel {
             results.results.errors.forEach((r) => this.displayResult(r, 'okit-validation-error', this.error_details.div))
             results.results.warnings.forEach((r) => this.displayResult(r, 'okit-validation-warning', this.warning_details.div))
             results.results.info.forEach((r) => this.displayResult(r, 'okit-validation-info', this.info_details.div))
+            this.error_details.summary.text(`Errors (${results.results.errors.length})`)
+            this.warning_details.summary.text(`Warnings (${results.results.warnings.length})`)
+            this.info_details.summary.text(`Information (${results.results.info.length})`)
+            this.error_details.details.property('open', results.results.errors.length > 0)
+            this.warning_details.details.property('open', results.results.warnings.length > 0)
+            this.info_details.details.property('open', results.results.info.length > 0)
         }
     }
 
     displayResult(result, result_class, parent) {
-        const result_div = parent.append('div').attr('class', `okit-validation-result ${result_class}`)
+        const svg = d3.select(d3Id(result.id))
+        const fill = svg.attr('fill')
+        const result_wrapper_div = parent.append('div').attr('class', `okit-validation-result`)
+                                            .on('mouseover', () => {svg.classed(`${result_class}-highlight`, true)})
+                                            .on('mouseout', () => svg.classed(`${result_class}-highlight`, false))
+                                            .on('click', () => {okitJsonView.getResource(result.id).loadProperties();handleOpenProperties()})
+        const result_div = result_wrapper_div.append('div').attr('class', `${result_class}`)
         const resource_class = result.type.toLowerCase().replaceAll(' ', '-')
         const result_title = result_div.append('div').attr('class', `okit-validation-result-title ${resource_class}`).text(`${result.type} / ${result.artefact}`)
         const result_message = result_div.append('div').attr('class', `okit-validation-message`).text(result.message)

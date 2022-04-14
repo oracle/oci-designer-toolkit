@@ -161,14 +161,14 @@ class OCIJsonValidator(object):
             if isinstance(self.okit_json[key], list):
                 for artefact in self.okit_json[key]:
                     if used_display_names[artefact['display_name']] > 1:
-                        warning = {
+                        info = {
                             'id': artefact['id'],
                             'type': self.keyToType(key),
                             'artefact': artefact['display_name'],
                             'message': 'Duplicate Display Name.',
                             'element': 'display_name'
                         }
-                        self.results['warnings'].append(warning)
+                        self.results['info'].append(info)
         # Build Resource Name List
         used_resource_names = {}
         for key in self.okit_json:
