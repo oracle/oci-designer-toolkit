@@ -105,25 +105,48 @@
     padding-left: 5px;
 }
 
-.okit-validation-message {
-    border-radius: 2px;
-    border-color: gray;
-    border-width: 1px;
+.okit-validation-results {
+    margin-right: 1em;
+}
+
+.okit-validation-results .okit-details-body {
+    padding-right: 1em;
+}
+
+.okit-validation-result {
+    border-radius: 5px;
+    border: grey 1px solid;
     width: 100%;
-    padding: 2px;
+    padding: 10px;
+    /* margin: 5px 15px 5px 5px; */
 }
 
 .okit-validation-error {
     border-left-color: red;
-    border-left-width: 2px;
+    border-left-width: 3px;
 }
 
 .okit-validation-warning {
     border-left-color: yellow;
-    border-left-width: 2px;
+    border-left-width: 3px;
 }
 
-.okit-validation-error {
+.okit-validation-info {
     border-left-color: blue;
-    border-left-width: 2px;
+    border-left-width: 3px;
+}
+
+.okit-validation-result-title {
+    padding-left: 30px;
+    width: 100%;
+    background-position-x: left;
+    background-position-y: center;
+    background-repeat: no-repeat;
+    color: darkgray;
+}
+
+.okit-validation-message {
+    word-wrap: normal;
+    width: 100%;
+    margin-top: 5px;
 }
