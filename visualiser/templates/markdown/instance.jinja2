@@ -2,7 +2,7 @@
 {% macro document_instance(resource) -%}
 {{ common.document_common_details(resource) }}
 {{ common.document_common_properties(resource) }}
-{{ common.subnet_property(resource.vnics[0].subnet_id) }}
+{{ common.subnet_property(resource.vnic_attachments[0].subnet_id) }}
 {{ common.document_property("Fault Domain", resource.fault_domain) }}
 {{ common.document_property("Shape", resource.shape) }}
 {{ common.document_property("Operating System", resource.source_details.os ~ " " ~ resource.source_details.version) }}
