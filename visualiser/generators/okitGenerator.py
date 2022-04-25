@@ -246,7 +246,8 @@ class OCIGenerator(object):
                         parent[key] = self.getLocalReference(val)
                     elif val != '':
                         # Add Simple Value
-                        parent[key] = self.formatJinja2Value(val)
+                        parent[key] = self.formatJinja2Value(val.replace('\n', '\\n').replace('"', '\\"'))
+                        # parent[key] = self.formatJinja2Value(val)
                     else:
                         # Remove empty / optional value
                         parent.pop(key, None)
