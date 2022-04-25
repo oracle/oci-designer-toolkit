@@ -73,7 +73,7 @@ class OkitResourceProperties {
                                 .attr('id', `${self.id}_editor`)
                                 .attr('class', 'okit-property-editor')
         this.title = this.properties_div.append('div')
-                                .attr('class', `property-editor-title`)
+                                .attr('class', `property-editor-title ${this.resource.resource_type.toLowerCase().replaceAll(' ', '-')}`)
                                 .append('h3')
                                 .attr('class', `heading-background ${self.resource.read_only ? 'padlock-closed' : 'padlock-open'}`)
                                     .text(this.resource.resource_type)
@@ -117,7 +117,7 @@ class OkitResourceProperties {
         this.ocid = ocid.input
         this.append(this.core_tbody, ocid.row)
         ocid.row.classed('collapsed', !okitSettings.show_ocids)
-        const display_name = this.createInput('text', 'Name', `${self.id}_display_name`, '', (d, i, n) => {self.resource.display_name = n[i].value; this.redraw()})
+        const display_name = this.createInput('text', 'Name', `${self.id}_display_name`, '', (d, i, n) => {this.resource.display_name = n[i].value; this.redraw(); this.setTitle()})
         this.display_name = display_name.input
         this.append(this.core_tbody, display_name.row)
         this.documentation_contents.append('textarea')
@@ -156,6 +156,8 @@ class OkitResourceProperties {
         row.append('div').attr('class', 'th add-tag action-button-background action-button-column').on('click', () => handleAddDefinedTag(self.resource, () => self.loadDefinedTags()))
     }
 
+    setTitle = () => this.title.text(`${this.resource.resource_type} (${this.resource.display_name})`)
+
     load() {
         if (this.resource) {
             this.loadCore()
@@ -168,6 +170,7 @@ class OkitResourceProperties {
         this.ocid.property('value', this.resource.id)
         okitSettings.show_ocids ? this.showProperty(`${this.id}_ocid`, '') : this.hideProperty(`${this.id}_ocid`, '')
         this.display_name.property('value', this.resource.display_name)
+        this.setTitle()
     }
 
     loadResource() {}
