@@ -1,8 +1,8 @@
 # Release Notes
 
 
-## Version 0.35.0
-**Release Date**: 13th April 2022
+## Version 0.36.0
+**Release Date**: 4th May 2022
 ### Features
 1. New Look and Feel for Validation Panel
 ### Bug Fixes
