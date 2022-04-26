@@ -52,6 +52,12 @@ OkitJsonView.prototype.dropNetworkLoadBalancerView = function(target) {
     let view_artefact = this.newNetworkLoadBalancer();
     if (target.type === Compartment.getArtifactReference()) {
         view_artefact.artefact.compartment_id = target.id;
+    }
+    else if (target.type === Subnet.getArtifactReference()) {
+        view_artefact.artefact.compartment_id = target.compartment_id;
+        view_artefact.artefact.subnet_id = target.id;
+        view_artefact.artefact.is_private = this.getSubnet(target.id).prohibit_public_ip_on_vnic;
+        view_artefact.artefact.is_preserve_source_destination = this.getSubnet(target.id).prohibit_public_ip_on_vnic;
     } else {
         view_artefact.artefact.compartment_id = target.compartment_id;
         view_artefact.artefact.subnet_id = target.id;

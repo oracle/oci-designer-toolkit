@@ -48,7 +48,13 @@ class OkitResourceProperties {
         pattern: '^[\\w-]*$',
         title: 'Only alphanumeric characters, dashes, and underscores.'
     }
+    // Port Data
+    port_range_data = {
+        min: 0,
+        max: 65535
+    }
 
+    // Common Filters
     compartment_filter = (r) => r.compartment_id.toString() === this.resource.compartment_id.toString()
     vcn_filter = (r) => r.vcn_id.toString() === this.resource.vcn_id.toString()
     subnet_filter = (r) => r.subnet_id.toString() === this.resource.subnet_id.toString()
@@ -57,6 +63,7 @@ class OkitResourceProperties {
     nsg_filter = (r) => r.vcn_id === [...(this.resource.okit_json.subnet ? this.resource.okit_json.subnet : this.resource.okit_json.subnets ? this.resource.okit_json.subnets : [])].filter((s) => s.id === this.resource.subnet_id)[0].vcn_id
     fss_filter = (r) => r.availability_domain.toString() === this.resource.availability_domain.toString()
 
+    // Build Sheet
     build() {
         if (this.resource) {
             this.buildBaseSheet()

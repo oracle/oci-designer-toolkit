@@ -15,6 +15,7 @@ __module__ = "ociJsonValidator"
 import ipaddress
 
 from common.okitLogging import getLogger
+from visualiser.common.okitCommon import jsonToFormattedString
 
 # Configure logging
 logger = getLogger()
@@ -32,11 +33,14 @@ class OCIJsonValidator(object):
         self.validateCommon()
         self.target = self.okit_json.get('metadata', {}).get('platform', 'oci')
         if self.target == 'pca':
-            self.validatePCA()
+            self.validateSupportedResources('PCA-X9', self.pca_resources)
+            # self.validatePCA()
         elif self.target == 'freetier':
-            self.validateFreeTier()
-        else:
-            self.validateOCI()
+            self.validateSupportedResources('Free Tier', self.freetier_resources)
+            # self.validateFreeTier()
+        # else:
+        #     self.validateOCI()
+        self.validateResources()
         return self.valid
 
     def validateOCI(self):
@@ -120,6 +124,39 @@ class OCIJsonValidator(object):
         self.validatePolicies()
         self.validateRouteTables()
         self.validateSecurityLists()
+        self.validateSubnets()
+        self.validateUsers()
+        self.validateVirtualCloudNetworks()
+        return
+
+    def validateResources(self):
+        self.validateAnalyticsInstances()
+        self.validateAutonomousDatabases()
+        self.validateBastions()
+        self.validateBlockStorageVolumes()
+        self.validateCompartments()
+        self.validateCustomerPremiseEquipments()
+        self.validateDhcpOptions()
+        self.validateDatabaseSystems()
+        self.validateDynamicRoutingGateways()
+        self.validateFastConnects()
+        self.validateFileStorageSystems()
+        self.validateGroups()
+        self.validateInstances()
+        self.validateInternetGateways()
+        self.validateIPSecConnections()
+        self.validateLoadBalancers()
+        self.validateLocalPeeringGateways()
+        self.validateMySqlDatabaseSystems()
+        self.validateNATGateways()
+        self.validateNetworkLoadBalancers()
+        self.validateNetworkSecurityGroups()
+        self.validateObjectStorageBuckets()
+        self.validatePolicies()
+        self.validateRemotePeeringConnections()
+        self.validateRouteTables()
+        self.validateSecurityLists()
+        self.validateServiceGateways()
         self.validateSubnets()
         self.validateUsers()
         self.validateVirtualCloudNetworks()
@@ -609,6 +646,53 @@ class OCIJsonValidator(object):
     def validateNATGateways(self):
         for artefact in self.okit_json.get('nat_gateways', []):
             logger.info('Validating {!s}'.format(artefact['display_name']))
+
+    # Network Load Balancers
+    def validateNetworkLoadBalancers(self):
+        for resource in self.okit_json.get('network_load_balancers', []):
+            logger.info('Validating {!s}'.format(resource['display_name']))
+            subnet = [s for s in self.okit_json.get('subnets', []) if s['id'] == resource['subnet_id']]
+            if len(subnet) > 0 and resource['is_private'] != subnet[0]['prohibit_public_ip_on_vnic']:
+                error = {
+                    'id': resource['id'],
+                    'type': 'Network Load Balancer',
+                    'artefact': resource['display_name'],
+                    'message': 'Load balancer must be private if the Subnet is private and public if the Subnet is public.',
+                    'element': 'subnet_id'
+                }
+                self.results['errors'].append(error)
+
+            for listener in resource.get('listeners', []):
+                if listener['default_backend_set_name'] == '':
+                    error = {
+                        'id': resource['id'],
+                        'type': 'Network Load Balancer',
+                        'artefact': resource['display_name'],
+                        'message': 'Listener must specify backend set.',
+                        'element': 'listeners'
+                    }
+                    self.results['errors'].append(error)
+                if len([l for l in resource['listeners'] if l['name'] == listener['name']]) > 1:
+                    error = {
+                        'id': resource['id'],
+                        'type': 'Network Load Balancer',
+                        'artefact': resource['display_name'],
+                        'message': f'Listener name {listener["name"]} must be unique.',
+                        'element': 'listeners'
+                    }
+                    self.results['errors'].append(error)
+            for backendset in resource.get('backend_sets',[]):
+                if len([l for l in resource['backend_sets'] if l['name'] == backendset['name']]) > 1:
+                    error = {
+                        'id': resource['id'],
+                        'type': 'Network Load Balancer',
+                        'artefact': resource['display_name'],
+                        'message': f'Backend Set name {listener["name"]} must be unique.',
+                        'element': 'backend_sets'
+                    }
+                    self.results['errors'].append(error)
+
+        return
 
     # Network Security Groups
     def validateNetworkSecurityGroups(self):
