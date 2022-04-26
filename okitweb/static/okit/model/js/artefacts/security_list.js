@@ -25,6 +25,36 @@ class SecurityList extends OkitArtifact {
         this.convert();
     }
 
+    convert() {
+        super.convert()
+        // Check min & max are set for all Egress Rules
+        this.egress_security_rules.forEach((rule) => {
+            if (rule.tcp_options) {
+                if (rule.tcp_options.destination_port_range) {
+                    rule.tcp_options.destination_port_range.max = rule.tcp_options.destination_port_range.max == '' ? rule.tcp_options.destination_port_range.min : rule.tcp_options.destination_port_range.max
+                    rule.tcp_options.destination_port_range.min = rule.tcp_options.destination_port_range.min == '' ? rule.tcp_options.destination_port_range.max : rule.tcp_options.destination_port_range.min
+                }
+                if (rule.tcp_options.source_port_range) {
+                    rule.tcp_options.source_port_range.max = rule.tcp_options.source_port_range.max == '' ? rule.tcp_options.source_port_range.min : rule.tcp_options.source_port_range.max
+                    rule.tcp_options.source_port_range.min = rule.tcp_options.source_port_range.min == '' ? rule.tcp_options.source_port_range.max : rule.tcp_options.source_port_range.min
+                }
+            }
+        })
+        // Check min & max are set for all Ingress Rules
+        this.ingress_security_rules.forEach((rule) => {
+            if (rule.tcp_options) {
+                if (rule.tcp_options.destination_port_range) {
+                    rule.tcp_options.destination_port_range.max = rule.tcp_options.destination_port_range.max == '' ? rule.tcp_options.destination_port_range.min : rule.tcp_options.destination_port_range.max
+                    rule.tcp_options.destination_port_range.min = rule.tcp_options.destination_port_range.min == '' ? rule.tcp_options.destination_port_range.max : rule.tcp_options.destination_port_range.min
+                }
+                if (rule.tcp_options.source_port_range) {
+                    rule.tcp_options.source_port_range.max = rule.tcp_options.source_port_range.max == '' ? rule.tcp_options.source_port_range.min : rule.tcp_options.source_port_range.max
+                    rule.tcp_options.source_port_range.min = rule.tcp_options.source_port_range.min == '' ? rule.tcp_options.source_port_range.max : rule.tcp_options.source_port_range.min
+                }
+            }
+        })
+    }
+
     newIngressRule() {
         return {
             protocol: "all", 
