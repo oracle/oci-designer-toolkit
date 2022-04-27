@@ -681,16 +681,28 @@ class OCIJsonValidator(object):
                         'element': 'listeners'
                     }
                     self.results['errors'].append(error)
+            backends = []
             for backendset in resource.get('backend_sets',[]):
-                if len([l for l in resource['backend_sets'] if l['name'] == backendset['name']]) > 1:
+                backends.extend(backendset['backends'])
+                if len([bs for bs in resource['backend_sets'] if bs['name'] == backendset['name']]) > 1:
                     error = {
                         'id': resource['id'],
                         'type': 'Network Load Balancer',
                         'artefact': resource['display_name'],
-                        'message': f'Backend Set name {listener["name"]} must be unique.',
+                        'message': f'Backend Set name {backendset["name"]} must be unique.',
                         'element': 'backend_sets'
                     }
-                    self.results['errors'].append(error)
+                    self.results['errors'].append(error)            
+            for backend in backends:
+                if len([b for b in backends if b['name'] == backend['name']]) > 1:
+                    error = {
+                        'id': resource['id'],
+                        'type': 'Network Load Balancer',
+                        'artefact': resource['display_name'],
+                        'message': f'Backend name {backend["name"]} must be unique.',
+                        'element': 'backends'
+                    }
+                    self.results['errors'].append(error)            
 
         return
 

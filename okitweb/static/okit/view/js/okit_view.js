@@ -498,7 +498,6 @@ class OkitArtefactView {
             this.drawText(svg, this.svg_label_text);
             this.drawTitle(svg);
             const icon = this.drawIcon(svg);
-            // if (this.read_only) this.drawIconOverlay(svg)
             // Add standard / common click event
             this.addClickEvent(svg);
             // Add standard / common mouse over event
@@ -591,18 +590,6 @@ class OkitArtefactView {
             .on('change', (d, i, o) => {
                 this.artefact.display_name = o[0].value
             })
-    }
-
-    drawIconOverlay(svg) {
-        // console.warn('Drawing Overlay for', this.display_name);
-        const overlay_icon_definition_id = "ReadOnlySvg"
-        const overlay_transform = "scale(0.5, 0.5), translate(1, 1)"
-        const icon = svg.append('g')
-            .attr("style", "pointer-events: bounding-box;")
-            .append("use")
-            .attr("xlink:href",`#${overlay_icon_definition_id}`)
-            .attr("transform", overlay_transform);
-        return icon;
     }
 
     drawText(svg, svg_text) {
