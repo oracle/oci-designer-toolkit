@@ -23,14 +23,22 @@ resource "oci_objectstorage_bucket" "{{ resource_name }}" {
     #Optional
     storage_tier   = {{ storage_tier | safe }}
     access_type    = {{ public_access_type | safe }}
+    #kms_key_id = {{ kms_key_id }}
+    #metadata = {{ metadata | safe }}
+{% if object_events_enabled is defined %}
+    object_events_enabled = {{ object_events_enabled | safe | lower }}
+{% endif %}
+{% if versioning is defined %}
+    versioning = {{ versioning | safe }}
+{% endif %}
+{% if auto_tiering is defined %}
+    auto_tiering = {{ auto_tiering | safe }}
+{% endif %}
 {% if defined_tags is defined %}
     defined_tags   = {{ defined_tags | safe }}
 {% endif %}
 {% if freeform_tags is defined %}
     freeform_tags  = {{ freeform_tags | safe }}
 {% endif %}
-    #kms_key_id = {{ kms_key_id }}
-    #metadata = {{ metadata | safe }}
-    #object_events_enabled = {{ object_events_enabled | safe }}
 }
 {% endif %}

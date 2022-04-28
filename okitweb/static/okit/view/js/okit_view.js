@@ -132,6 +132,32 @@ const model_proxy_handler = {}
 
 class OkitArtefactView {
     static cut_copy_paste = {resource: undefined, paste_count: 0, is_cut: false};
+    // Class Constants
+    // -- Icon
+    static get icon_height() {return 45;}
+    static get icon_width() {return 45;}
+    static get icon_x_tranlation() {return 0;}
+    static get icon_y_tranlation() {return 0;}
+    static get icon_v_align() {return 'top';}
+    static get icon_h_align() {return 'middle';}
+    // -- Rectangle
+    static get rect_x() {return 0;}
+    static get rect_y() {return 0;}
+    static get rect_rx() {return 0;}
+    static get rect_ry() {return 0;}
+    static get rect_fill() {return 'white';}
+    static get rect_fill_style() {return 'fill-opacity: .25;';}
+    static get rect_stroke_colour() {return this.stroke_colours.bark;}
+    static get rect_stroke_width() {return 1;}
+    static get rect_stroke_dash() {return 2;}
+    static get rect_stroke_space() {return 1;}
+    static get rect_stroke_dasharray() {return `${this.rect_stroke_dash}, ${this.rect_stroke_space}`;}
+    static get rect_stroke_opacity() {return 0;}
+    // -- Foreign Object
+    static get fo_width() {return 150}
+    static get fo_height() {return '3em'}
+    static get fo_x_tranlation() {return this.icon_width + 5;}
+    static get fo_y_tranlation() {return 0;}
 
     constructor(artefact=null, json_view) {
         this.artefact = artefact;
@@ -160,6 +186,7 @@ class OkitArtefactView {
         this.newPropertiesSheet()
     }
 
+    // Instance Constants
     // -- Reference
     get resource_type() {return this.getArtifactReference();}
     get json_view() {return this.getJsonView();}
@@ -181,6 +208,7 @@ class OkitArtefactView {
     get is_collapsed() {return this.parent ? this.collapsed || this.parent.is_collapsed : this.collapsed;}
     // -- SVG Definitions
     // --- Standard
+    get theme_classname() {return this.resource_type.toLowerCase().replaceAll(' ', '-')}
     get stroke_colours() {
         return {
             red: "#F80000",
@@ -287,6 +315,22 @@ class OkitArtefactView {
             stroke_opacity: this.rect_stroke_opacity,
             stroke_dasharray: this.rect_stroke_dasharray
         };
+    }
+    getIconDefinition() {
+        const definition = {
+            id: this.icon_definition_id,
+            transform: this.icon_transform
+        }
+    }
+    getForeignObjectDefinition() {
+        const definition = {
+            x: 0,
+            y: 0,
+            width: this.constructor.fo_width,
+            height: this.constructor.fo_height,
+            transform: `translate(${this.constructor.fo_x_tranlation}, ${this.constructor.fo_y_tranlation})`
+        }
+        return definition
     }
     // ---- Svg
     get svg_id() {return this.artefact_id + '-svg';}
@@ -498,6 +542,7 @@ class OkitArtefactView {
             this.drawText(svg, this.svg_label_text);
             this.drawTitle(svg);
             const icon = this.drawIcon(svg);
+            // const foreign = this.drawForeignObject(svg);
             // Add standard / common click event
             this.addClickEvent(svg);
             // Add standard / common mouse over event
@@ -570,6 +615,7 @@ class OkitArtefactView {
     }
 
     drawIcon(svg) {
+        const definition = this.getIconDefinition()
         const icon = svg.append('g')
             .attr("style", "pointer-events: bounding-box;")
             // .attr("class", this.artefact && this.artefact.read_only ? 'read-only' : '')
@@ -580,16 +626,15 @@ class OkitArtefactView {
     }
 
     drawForeignObject(svg) {
-        const foreignObject = svg.append('foreignObject')
-        const details_div = foreignObject.append('xhtml:div').attr('class', 'okit-resource-details')
-        details_div.append('div').attr('class', 'okit-resource-title').text(this.type_text)
-        details_div.append('div').append('input').attr('class', 'okit-resource-display-name').attr('tabindex', -1)
+        const definition = this.getForeignObjectDefinition()
+        const foreignObject = svg.append('foreignObject').attr('width', definition.width).attr('height', definition.height).attr('transform', definition.transform)
+        const details_div = foreignObject.append('xhtml:div').attr('class', `okit-resource-svg-details`)
+        details_div.append('div').attr('class', 'okit-resource-svg-title').append('label').text(this.type_text)
+        details_div.append('div').append('input').attr('class', 'okit-resource-svg-display-name').attr('tabindex', -1)
             .attr('type', 'text')
             .attr('name', `${this.resource_name}_display_name`)
             .attr('value', `${this.display_name}`)
-            .on('change', (d, i, o) => {
-                this.artefact.display_name = o[0].value
-            })
+            .on('change', (d, i, n) => {this.artefact.display_name = n[i].value})
     }
 
     drawText(svg, svg_text) {

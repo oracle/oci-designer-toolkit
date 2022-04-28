@@ -6,6 +6,7 @@
 ### Features
 1. New Look and Feel for Validation Panel
 2. Add Network Load Balancer Resource to OKIT.
+3. New Properties layout for Object Storage Bucket implementing additional options for Auto Tiering, versioning and object events.
 ### Bug Fixes
 1. Resolve issues where match_criteria was not being tested as defined in jinja2 template for DRG Distributions
 2. Resolve issue where invalid local variable names were generated within the load balancer terraform
