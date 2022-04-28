@@ -318,7 +318,7 @@ class NetworkLoadBalancerProperties extends OkitResourceProperties {
         this.loadSelectFromMap(select, types_map)
     }
     loadListenerProtocolSelect(select) {
-            const types_map = new Map([ // Map to Terraform Local Variable Names
+        const types_map = new Map([ // Map to Terraform Local Variable Names
             ['TCP', 'TCP'],
             ['UDP', 'UDP'],
             ['TCP/UDP', 'TCP_AND_UDP'],

@@ -462,6 +462,7 @@ class OkitResourceProperties {
     }
 
     loadSelectFromMap(select, map) {
+        select.selectAll('*').remove()
         map.forEach((v, t) => select.append('option').attr('value', v).text(t))
     }
 
