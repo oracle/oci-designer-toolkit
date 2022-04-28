@@ -25,11 +25,6 @@ class ObjectStorageBucketView extends OkitDesignerArtefactView {
     newPropertiesSheet() {
         this.properties_sheet = new ObjectStorageBucketProperties(this.artefact)
     }
-    // loadProperties() {
-    //     let okitJson = this.getOkitJson();
-    //     let me = this;
-    //     $(jqId(PROPERTIES_PANEL)).load("propertysheets/object_storage_bucket.html", () => {loadPropertiesSheet(me.artefact);});
-    // }
 
     /*
     ** Load and display Value Proposition
