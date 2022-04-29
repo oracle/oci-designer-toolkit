@@ -75,6 +75,7 @@ class OCIQuery(OCIConnection):
         "NetworkSecurityGroup",
         "NetworkSecurityGroupSecurityRule",
         "NodePool",
+        "OdaInstance",
         "Policy",
         "PrivateIp",
         "PublicIp",
@@ -123,6 +124,7 @@ class OCIQuery(OCIConnection):
         "NatGateway": "nat_gateways",
         "NetworkLoadBalancer": "network_load_balancers",
         "NetworkSecurityGroup": "network_security_groups",
+        "OdaInstance": "oracle_digital_assistants",
         "Policy": "policys", # Yes we know it's spelt incorrectly but the okitCodeSkeletonGenerator.py is simple
         "RemotePeeringConnection": "remote_peering_connections",
         "RouteTable": "route_tables",

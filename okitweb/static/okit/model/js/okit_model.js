@@ -15,10 +15,6 @@ class OkitJson {
         const now = getCurrentDateTime();
         this.title = "OKIT OCI Visualiser Json";
         this.description = `# Description\n__Created ${getCurrentDateTime()}__\n\n--------------------------------------\n\n`;
-        // this.created = getCurrentDateTime();
-        // this.updated = this.created;
-        // this.okit_version = okitVersion;
-        // this.okit_model_id = `okit-model-${uuidv4()}`;
         this.metadata = {
             resource_count: 0,
             platform: pca_mode ? 'pca' : 'oci',
@@ -98,7 +94,7 @@ class OkitJson {
     ** Load Simple Json Structure and build Object Based JSON
      */
     load(okit_json) {
-        console.log('Load OKIT Json');
+        console.info('Load OKIT Json');
         // Title & Description
         if (okit_json.title) {this.title = okit_json.title;}
         if (okit_json.description) {this.description = okit_json.description;}
