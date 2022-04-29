@@ -105,6 +105,11 @@
     {% include "load_balancer.jinja2" ignore missing with context %}
 {%- endif %}
 
+{% if oracle_digital_assistants is defined and oracle_digital_assistants|length > 0 -%}
+    ### Oracle Digital Assistants
+    {% include "oracle_digital_assistant.jinja2" ignore missing with context %}
+{%- endif %}
+
 ## Storage
 
 {% if block_storage_volumes is defined and block_storage_volumes|length > 0 -%}

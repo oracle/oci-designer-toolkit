@@ -37,6 +37,11 @@
                     "title": "Bare Metal Compute",
                     "targets": ["hidden"],
                     "svg": "BareMetalCompute.svg"
+                },
+                {
+                    "title": "Oracle Digital Assistant",
+                    "targets": ["oci"],
+                    "svg": "OracleDigitalAssistantODA.svg"
                 }
             ]
         },
