@@ -13,10 +13,10 @@ locals {
 }
 {% else %}
 # image_source {{ image_source | safe }}
-{% if image_source is defined and image_source | safe == '"custom"' %}
+{% if source_details is defined and source_details.image_source is defined and source_details.image_source | safe | lower == '"custom"' %}
 # ------ Set Custom Images Id
 locals {
-    {{ resource_name }}_image_id = {{ image_id | safe }}
+    {{ resource_name }}_image_id = {{ source_details.image_id | safe }}
 }
 {% else %}
 # ------ Get List Images

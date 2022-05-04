@@ -71,10 +71,11 @@ class OCIQuery(OCIConnection):
         "MountTarget",
         "MySqlDbSystem",
         "NatGateway",
-        # "NetworkLoadBalancer",
+        "NetworkLoadBalancer",
         "NetworkSecurityGroup",
         "NetworkSecurityGroupSecurityRule",
         "NodePool",
+        "OdaInstance",
         "Policy",
         "PrivateIp",
         "PublicIp",
@@ -123,6 +124,7 @@ class OCIQuery(OCIConnection):
         "NatGateway": "nat_gateways",
         "NetworkLoadBalancer": "network_load_balancers",
         "NetworkSecurityGroup": "network_security_groups",
+        "OdaInstance": "oracle_digital_assistants",
         "Policy": "policys", # Yes we know it's spelt incorrectly but the okitCodeSkeletonGenerator.py is simple
         "RemotePeeringConnection": "remote_peering_connections",
         "RouteTable": "route_tables",
@@ -345,6 +347,8 @@ class OCIQuery(OCIConnection):
                         instance_ids = [va["instance_id"] for va in vnic_attachments if va["vnic_id"] in vnic_ids]
                         if len(instance_ids) > 0:
                             backend["target_id"] = instance_ids[0]
+            for l in nlb["listeners"]:
+                l["use_any_port"] = l["port"] == 0
         return nlbs
 
     def network_security_group(self, nsgs, resources):

@@ -48,7 +48,13 @@ class OkitResourceProperties {
         pattern: '^[\\w-]*$',
         title: 'Only alphanumeric characters, dashes, and underscores.'
     }
+    // Port Data
+    port_range_data = {
+        min: 0,
+        max: 65535
+    }
 
+    // Common Filters
     compartment_filter = (r) => r.compartment_id.toString() === this.resource.compartment_id.toString()
     vcn_filter = (r) => r.vcn_id.toString() === this.resource.vcn_id.toString()
     subnet_filter = (r) => r.subnet_id.toString() === this.resource.subnet_id.toString()
@@ -57,6 +63,7 @@ class OkitResourceProperties {
     nsg_filter = (r) => r.vcn_id === [...(this.resource.okit_json.subnet ? this.resource.okit_json.subnet : this.resource.okit_json.subnets ? this.resource.okit_json.subnets : [])].filter((s) => s.id === this.resource.subnet_id)[0].vcn_id
     fss_filter = (r) => r.availability_domain.toString() === this.resource.availability_domain.toString()
 
+    // Build Sheet
     build() {
         if (this.resource) {
             this.buildBaseSheet()
@@ -73,7 +80,7 @@ class OkitResourceProperties {
                                 .attr('id', `${self.id}_editor`)
                                 .attr('class', 'okit-property-editor')
         this.title = this.properties_div.append('div')
-                                .attr('class', `property-editor-title`)
+                                .attr('class', `property-editor-title ${this.resource.resource_type.toLowerCase().replaceAll(' ', '-')}`)
                                 .append('h3')
                                 .attr('class', `heading-background ${self.resource.read_only ? 'padlock-closed' : 'padlock-open'}`)
                                     .text(this.resource.resource_type)
@@ -117,7 +124,7 @@ class OkitResourceProperties {
         this.ocid = ocid.input
         this.append(this.core_tbody, ocid.row)
         ocid.row.classed('collapsed', !okitSettings.show_ocids)
-        const display_name = this.createInput('text', 'Name', `${self.id}_display_name`, '', (d, i, n) => {self.resource.display_name = n[i].value; this.redraw()})
+        const display_name = this.createInput('text', 'Name', `${self.id}_display_name`, '', (d, i, n) => {this.resource.display_name = n[i].value; this.redraw(); this.setTitle()})
         this.display_name = display_name.input
         this.append(this.core_tbody, display_name.row)
         this.documentation_contents.append('textarea')
@@ -156,6 +163,8 @@ class OkitResourceProperties {
         row.append('div').attr('class', 'th add-tag action-button-background action-button-column').on('click', () => handleAddDefinedTag(self.resource, () => self.loadDefinedTags()))
     }
 
+    setTitle = () => this.title.text(`${this.resource.resource_type} (${this.resource.display_name})`)
+
     load() {
         if (this.resource) {
             this.loadCore()
@@ -168,6 +177,7 @@ class OkitResourceProperties {
         this.ocid.property('value', this.resource.id)
         okitSettings.show_ocids ? this.showProperty(`${this.id}_ocid`, '') : this.hideProperty(`${this.id}_ocid`, '')
         this.display_name.property('value', this.resource.display_name)
+        this.setTitle()
     }
 
     loadResource() {}
@@ -452,6 +462,7 @@ class OkitResourceProperties {
     }
 
     loadSelectFromMap(select, map) {
+        select.selectAll('*').remove()
         map.forEach((v, t) => select.append('option').attr('value', v).text(t))
     }
 

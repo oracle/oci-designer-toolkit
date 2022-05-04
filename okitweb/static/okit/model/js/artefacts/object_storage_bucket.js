@@ -16,10 +16,13 @@ class ObjectStorageBucket extends OkitArtifact {
         // Configure default values
         // this.name = this.generateDefaultName(okitjson.object_storage_buckets.length + 1);
         this.compartment_id = data.parent_id;
-        this.display_name = this.name;
+        // this.display_name = this.name;
         this.namespace = 'Tenancy Name';
         this.storage_tier = 'Standard';
         this.public_access_type = 'NoPublicAccess';
+        this.object_events_enabled = false
+        this.versioning = 'Disabled'
+        this.auto_tiering = 'Disabled'
         // Update with any passed data
         this.merge(data);
         this.convert();

@@ -11,6 +11,13 @@
 
 * {box-sizing: border-box; overflow: hidden;}
 
+html {
+    max-width: 100%;
+    width: 100%;
+    min-width: 100%;
+    position: fixed;
+}
+
 canvas {
     display: block;
 }
@@ -72,6 +79,10 @@ textarea {
 input:read-only {
     opacity: 0.5;
 }
+
+/* input:focus {
+    background-color: #1d2733;
+} */
 
 details > summary::-webkit-details-marker {
     display:none;
@@ -144,7 +155,6 @@ summary:focus {
     background-position: right center;
     background-repeat: no-repeat;
     background-size: 20px;
-    padding-left: 5px;
     margin-right: 1em;
 }
 
@@ -982,6 +992,7 @@ li a.parent-item:hover {
     max-width: 0 !important;
     transition: transform 0.25s;
     transform: translateX(-100%);
+    pointer-events: none;
 }
 
 .okit-slide-hide-right {
@@ -990,6 +1001,11 @@ li a.parent-item:hover {
     overflow: hidden !important;
     max-width: 0;
     transform: translateX(100%);
+    pointer-events: none;
+}
+
+.okit-slide-hide-right input {
+    pointer-events: none;
 }
 
 .okit-right-side-panel {

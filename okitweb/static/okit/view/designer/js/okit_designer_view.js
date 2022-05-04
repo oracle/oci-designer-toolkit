@@ -227,9 +227,17 @@ class OkitDesignerJsonView extends OkitJsonView {
         for (let key in this.stroke_colours) {
             colours += '.' + key.replace(new RegExp('_', 'g'), '-') + '{fill:' + this.stroke_colours[key] + ';} ';
         }
+        // Add Theme Styles
+        let resource_styles = ''
+        // Object.values(document.styleSheets).forEach((sheet) => {
+        //     if (sheet.href && sheet.href.includes('theme.css')) {
+        //         // Object.values(sheet.cssRules).forEach((rule) => console.info(rule.cssText))
+        //         resource_styles = Object.values(sheet.cssRules).reduce((r, c) => `${r}${c.cssText} `, '')
+        //     }
+        // })
         canvas_svg.append('style')
             .attr("type", "text/css")
-            .text(colours + ' text{font-weight: normal; font-size: 10pt}');
+            .text(`${colours} ${resource_styles} text{font-weight: normal; font-size: 10pt}`);
     }
 }
 

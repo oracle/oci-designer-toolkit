@@ -353,6 +353,9 @@ class PCADropdownQuery(OCIConnection):
         # Convert to Json object
         resources = self.toJson(results)
         self.dropdown_json[array] = sorted(self.deduplicate(resources, 'shape'), key=lambda k: k['shape'])
+        for resource in self.dropdown_json[array]:
+            resource['display_name'] = resource['shape']
+            resource['sort_key'] = resource['shape']
         return self.dropdown_json[array]
     
     def volume_backup_policy(self):

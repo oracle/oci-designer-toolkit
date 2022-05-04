@@ -105,25 +105,68 @@
     padding-left: 5px;
 }
 
-.okit-validation-message {
-    border-radius: 2px;
-    border-color: gray;
-    border-width: 1px;
+.okit-validation-results {
+    margin-right: 1em;
+}
+
+.okit-validation-results .okit-details-body {
+    padding-right: 1em;
+}
+
+.okit-validation-result {
+    border-radius: 5px;
+    border: grey 1px solid;
     width: 100%;
-    padding: 2px;
+    margin: 5px;
+    /* margin: 5px 15px 5px 5px; */
 }
 
 .okit-validation-error {
-    border-left-color: red;
-    border-left-width: 2px;
+    border-left-color: #cc0000;
+    border-left-width: 5px;
+    border-left-style: solid;
+    padding: 10px;
+    width: 100%;
+}
+
+.okit-validation-error-highlight {
+    fill: #cc0000;
 }
 
 .okit-validation-warning {
-    border-left-color: yellow;
-    border-left-width: 2px;
+    border-left-color: #ffcc00;
+    border-left-width: 5px;
+    border-left-style: solid;
+    padding: 10px;
+    width: 100%;
 }
 
-.okit-validation-error {
-    border-left-color: blue;
-    border-left-width: 2px;
+.okit-validation-warning-highlight {
+    fill: #ffcc00;
+}
+
+.okit-validation-info {
+    border-left-color: #5c85d6;
+    border-left-width: 5px;
+    border-left-style: solid;
+    padding: 10px;
+    width: 100%;
+}
+
+.okit-validation-result-title {
+    padding-left: 25px;
+    width: 100%;
+    height: 20px;
+    vertical-align: middle;
+    background-position-x: left;
+    background-position-y: center;
+    background-repeat: no-repeat;
+    background-size: 20px 20px;
+    color: darkgray;
+}
+
+.okit-validation-message {
+    word-wrap: normal;
+    width: 100%;
+    margin-top: 5px;
 }

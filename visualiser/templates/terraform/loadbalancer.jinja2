@@ -116,7 +116,7 @@ locals {
 resource "oci_load_balancer_backend" "{{ resource_name }}Backend{{ loop.index }}" {
     # Required
     backendset_name  = local.{{ resource_name }}BackendSet_name
-    ip_address       = local.{{ backend_instance }}_private_ip
+    ip_address       = {{ backend_instance | trim('id') }}private_ip
     load_balancer_id = local.{{ resource_name }}_id
     port             = {{ port | safe }}
     # Optional

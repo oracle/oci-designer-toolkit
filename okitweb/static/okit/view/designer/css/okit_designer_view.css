@@ -1,0 +1,65 @@
+/*
+# Copyright (c) 2020, 2021, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+ */
+
+.okit-resource-svg-details {
+    display: grid;
+    grid-auto-flow: row;
+    row-gap: 2px;
+    max-width: 150px;
+    min-width: 150px;
+    width: 150px;
+    min-height: 50;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 2px 0 0 0;
+    padding: 0px;
+    background-repeat: no-repeat;
+    background-position-x: left;
+    background-position-y: center;
+    background-size: 45px;
+}
+
+.okit-resource-svg-details label {
+    opacity: 0.5;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.okit-resource-svg-details input {
+    /* max-width: 140px; */
+    max-width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    font-weight: bold;
+    border: none;
+    opacity: 1;
+    pointer-events: all;
+}
+
+.okit-resource-svg-details input:focus {
+    border: initial;
+    background-color: ghostwhite;
+}
+
+/* .okit-resource-svg-title {
+    opacity: 0.5;
+}
+
+.okit-resource-svg-display-name {
+    font-weight: bold;
+    border: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.okit-resource-svg-display-name:focus {
+    border: none;
+    outline-width: 0;
+    background-color: ghostwhite;
+} */
+
