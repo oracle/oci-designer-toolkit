@@ -12,6 +12,7 @@
 ### Bug Fixes
 1. Resolve issues where match_criteria was not being tested as defined in jinja2 template for DRG Distributions
 2. Resolve issue where invalid local variable names were generated within the load balancer terraform
+3. Remove spurious quotes from route rule destination.
 
 
 ## Version 0.35.0

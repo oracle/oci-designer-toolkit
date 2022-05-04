@@ -33,7 +33,7 @@ resource "oci_core_route_table" "{{ resource_name }}" {
     {% if rule.destination_type | trim('"') == "CIDR_BLOCK" %}
         destination       = {{ rule.destination | safe }}
     {% else %}
-        destination       = local.{{ rule.destination | safe }}
+        destination       = local.{{ rule.destination | trim('"') | safe }}
     {% endif %}
         network_entity_id = {{ rule.network_entity_id }}
 {% if rule.description is defined %}
