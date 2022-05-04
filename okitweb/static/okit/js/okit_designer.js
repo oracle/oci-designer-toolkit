@@ -1499,16 +1499,28 @@ function handleExportToSVG(evt) {
     hideNavMenu();
     setExportDisplay();
     const okitcanvas = document.getElementById("canvas-svg");
-    const name = okitJsonModel.compartments[0]['name'];
-    let filename = name + '.svg';
-    if (okitSettings.is_timestamp_files) {
-        filename = name + getTimestamp() + '.svg';
-    }
+    const name = okitJsonModel.compartments[0]['name'].replaceAll(' ', '');
+    // let filename = name + '.svg';
+    // if (okitSettings.is_timestamp_files) {
+    //     filename = name + getTimestamp() + '.svg';
+    // }
+    const filename = `${name}${okitSettings.is_timestamp_files ? getTimestamp() : ''}.svg`
     saveSvg(okitcanvas, filename);
 }
 function saveSvg(svgEl, name) {
     svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
     svgEl.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
+    // Add Theme Styles
+    Object.values(document.styleSheets).forEach((sheet) => {
+        if (sheet.href && sheet.href.includes('theme.css')) {
+            // Object.values(sheet.cssRules).forEach((rule) => console.info(rule.cssText))
+            const style = document.createElement('style')
+            style.setAttribute("type", "text/css")
+            style.innerText = Object.values(sheet.cssRules).reduce((r, c) => `${r}${c.cssText} `, '')
+            console.info(style)
+            svgEl.insertBefore(style, svgEl.children[1])
+        }
+    })
     let svgData = svgEl.outerHTML;
     let preface = '<?xml version="1.0" standalone="no"?>\r\n';
     let svgBlob = new Blob([preface, svgData], {type:"image/svg+xml;charset=utf-8"});
@@ -1726,6 +1738,9 @@ function setCenterColumnWidth() {
 ** Model Validation
  */
 function displayValidationResults(results) {
+    const okitValidationPanel = new OkitValidationPanel(results)
+}
+function displayValidationResultsDeprecated(results) {
     console.info('Displaying Validation Results', results);
     if (results.valid) {
         $(jqId('validation_status')).text('Validation Successful');

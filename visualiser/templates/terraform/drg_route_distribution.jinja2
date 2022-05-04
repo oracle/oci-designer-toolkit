@@ -40,6 +40,7 @@ resource "oci_core_drg_route_distribution_statement" "{{ statement.resource_name
     drg_route_distribution_id = local.{{ route_distribution.resource_name }}_id
     action = {{ statement.action | safe }}
     #Optional
+{% if statement.match_criteria is defined %}
     match_criteria {
         #Required
         match_type = {{ statement.match_criteria.match_type | safe }}
@@ -52,6 +53,7 @@ resource "oci_core_drg_route_distribution_statement" "{{ statement.resource_name
         drg_attachment_id = {{ statement.match_criteria.drg_attachment_id }}
 {% endif %}
     }
+{% endif %}
     priority = {{ statement.priority | safe }}
 
 }

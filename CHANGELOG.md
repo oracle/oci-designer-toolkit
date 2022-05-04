@@ -1,6 +1,21 @@
 # Release Notes
 
 
+## Version 0.36.0
+**Release Date**: 4th May 2022
+### Features
+1. New Look and Feel for Validation Panel
+2. New Resources
+    1. Network Load Balancer.
+    2. Oracle Digital Assistant (ODA Instance)
+3. New Properties layout for Object Storage Bucket implementing additional options for Auto Tiering, versioning and object events.
+### Bug Fixes
+1. Resolve issues where match_criteria was not being tested as defined in jinja2 template for DRG Distributions.
+2. Resolve issue where invalid local variable names were generated within the load balancer terraform.
+3. Remove spurious quotes from route rule destination.
+4. For PCA remove shape_config from instance terraform.
+
+
 ## Version 0.35.0
 **Release Date**: 13th April 2022
 ### Features

@@ -617,8 +617,12 @@ function generateMarkdown(results) {
     if (results.valid || !okitSettings.validate_markdown) {
         let requestJson = JSON.clone(okitJsonModel);
         requestJson.use_variables = okitSettings.is_variables;
-        setExportDisplay();
+        const dimensions = setExportDisplay();
+        console.info('Canvas Dimensions', dimensions)
         const okitcanvas = document.getElementById("canvas-svg");
+        okitcanvas.setAttribute('width', dimensions.width)
+        okitcanvas.setAttribute('height', dimensions.height)
+        okitcanvas.setAttribute('viewBox', `0 0 ${dimensions.width} ${dimensions.height}`)
         requestJson.svg = okitcanvas.outerHTML.replaceAll('\n', ' ');
         // Add Style and Def to Compartment SVG
         for (let compartment of requestJson.compartments) {
@@ -628,18 +632,22 @@ function generateMarkdown(results) {
             compartment.svg = document.getElementById(svg_id).outerHTML.replaceAll('\n', ' ');
         }
         // Add Style and Def to VCN SVG
-        for (let vcn of requestJson.virtual_cloud_networks) {
-            let svg_id = okitJsonView.getVirtualCloudNetwork(vcn.id).svg_id;
-            let svg = d3.select(d3Id(svg_id));
-            okitJsonView.addDefinitions(svg);
-            vcn.svg = document.getElementById(svg_id).outerHTML.replaceAll('\n', ' ');
+        if (requestJson.virtual_cloud_networks) {
+            for (let vcn of requestJson.virtual_cloud_networks) {
+                let svg_id = okitJsonView.getVirtualCloudNetwork(vcn.id).svg_id;
+                let svg = d3.select(d3Id(svg_id));
+                okitJsonView.addDefinitions(svg);
+                vcn.svg = document.getElementById(svg_id).outerHTML.replaceAll('\n', ' ');
+            }
         }
         // Add Style and Def to Subnet SVG
-        for (let subnet of requestJson.subnets) {
-            let svg_id = okitJsonView.getSubnet(subnet.id).svg_id;
-            let svg = d3.select(d3Id(svg_id));
-            okitJsonView.addDefinitions(svg);
-            subnet.svg = document.getElementById(svg_id).outerHTML.replaceAll('\n', ' ');
+        if (requestJson.subnets) {
+            for (let subnet of requestJson.subnets) {
+                let svg_id = okitJsonView.getSubnet(subnet.id).svg_id;
+                let svg = d3.select(d3Id(svg_id));
+                okitJsonView.addDefinitions(svg);
+                subnet.svg = document.getElementById(svg_id).outerHTML.replaceAll('\n', ' ');
+            }
         }
         okitJsonView.draw();
         $.ajax({

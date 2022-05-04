@@ -16,7 +16,7 @@ class NetworkLoadBalancer extends OkitArtifact {
         // Configure default values
         this.subnet_id = ''
         this.is_preserve_source_destination = false 
-        this.is_private = true
+        this.is_private = false
         this.network_security_group_ids = []
         // nlb_ip_version = 'IPv4'
         this.reserved_ips = []
@@ -73,8 +73,9 @@ class NetworkLoadBalancer extends OkitArtifact {
             resource_name: `${this.generateResourceName()}Listener`,
             default_backend_set_name: '',
             name: `${this.display_name}Listener`.replaceAll(' ', '_'),
+            use_any_port: false,
             port: 80,
-            protocol: 'ANY',
+            protocol: 'TCP',
             ip_version: ''
         }
     }

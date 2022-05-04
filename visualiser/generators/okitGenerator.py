@@ -27,7 +27,7 @@ from model.okitValidation import OCIJsonValidator
 logger = getLogger()
 
 class OCIGenerator(object):
-    OKIT_VERSION = "0.35.0"
+    OKIT_VERSION = "0.36.0"
     def __init__(self, template_dir, output_dir, visualiser_json, use_vars=False, add_provider=True):
         # Initialise generator output data variables
         self.create_sequence = []
@@ -246,7 +246,8 @@ class OCIGenerator(object):
                         parent[key] = self.getLocalReference(val)
                     elif val != '':
                         # Add Simple Value
-                        parent[key] = self.formatJinja2Value(val)
+                        parent[key] = self.formatJinja2Value(val.replace('\n', '\\n').replace('"', '\\"'))
+                        # parent[key] = self.formatJinja2Value(val)
                     else:
                         # Remove empty / optional value
                         parent.pop(key, None)
