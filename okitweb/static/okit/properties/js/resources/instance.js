@@ -340,28 +340,36 @@ class InstanceProperties extends OkitResourceProperties {
 
     loadOCPUs(shape=undefined) {
         shape = shape ? shape : this.resource.shape
-        const instance_shape = okitOciData.getInstanceShape(shape)
-        if (instance_shape && instance_shape.memory_options && instance_shape.ocpu_options) {
-            this.ocpus.attr('min', instance_shape.ocpu_options.min)
-            this.ocpus.attr('max', instance_shape.ocpu_options.max)
-            this.resource.shape_config.ocpus = this.resource.shape_config.ocpus > instance_shape.ocpu_options.min ? this.resource.shape_config.ocpus : instance_shape.ocpus
+        if (this.resource.flex_shape) {
+            const instance_shape = okitOciData.getInstanceShape(shape)
+            if (instance_shape && instance_shape.memory_options && instance_shape.ocpu_options) {
+                this.ocpus.attr('min', instance_shape.ocpu_options.min)
+                this.ocpus.attr('max', instance_shape.ocpu_options.max)
+                this.resource.shape_config.ocpus = this.resource.shape_config.ocpus > instance_shape.ocpu_options.min ? this.resource.shape_config.ocpus : instance_shape.ocpus
+            } else {
+                this.resource.shape_config.ocpus = 0
+            }
         } else {
-            this.resource.shape_config.ocpus = 0
+            this.resource.shape_config.ocpus = ''
         }
         this.ocpus.property('value', this.resource.shape_config.ocpus)
     }
 
     loadMemoryInGbp(shape=undefined) {
         shape = shape ? shape : this.resource.shape
-        const instance_shape = okitOciData.getInstanceShape(shape)
-        if (instance_shape && instance_shape.memory_options && instance_shape.ocpu_options) {
-            const min = Math.max(instance_shape.memory_options.min_in_g_bs, (instance_shape.memory_options.min_per_ocpu_in_gbs * this.resource.shape_config.ocpus));
-            const max = Math.min(instance_shape.memory_options.max_in_g_bs, (instance_shape.memory_options.max_per_ocpu_in_gbs * this.resource.shape_config.ocpus));
-            this.memory_in_gbs.attr('min', min)
-            this.memory_in_gbs.attr('max', max)
-            this.resource.shape_config.memory_in_gbs = this.resource.shape_config.memory_in_gbs > min ? this.resource.shape_config.memory_in_gbs : min
+        if (this.resource.flex_shape) {
+            const instance_shape = okitOciData.getInstanceShape(shape)
+            if (instance_shape && instance_shape.memory_options && instance_shape.ocpu_options) {
+                const min = Math.max(instance_shape.memory_options.min_in_g_bs, (instance_shape.memory_options.min_per_ocpu_in_gbs * this.resource.shape_config.ocpus));
+                const max = Math.min(instance_shape.memory_options.max_in_g_bs, (instance_shape.memory_options.max_per_ocpu_in_gbs * this.resource.shape_config.ocpus));
+                this.memory_in_gbs.attr('min', min)
+                this.memory_in_gbs.attr('max', max)
+                this.resource.shape_config.memory_in_gbs = this.resource.shape_config.memory_in_gbs > min ? this.resource.shape_config.memory_in_gbs : min
+            } else {
+                this.resource.shape_config.memory_in_gbs = 0
+            }
         } else {
-            this.resource.shape_config.memory_in_gbs = 0
+            this.resource.shape_config.memory_in_gbs = ''
         }
         this.memory_in_gbs.property('value', this.resource.shape_config.memory_in_gbs)
     }
