@@ -226,6 +226,8 @@ class SecurityListProperties extends OkitResourceProperties {
         return ''
     }
     setPortRange(port_range, value) {
+        console.info(port_range)
+        console.info(value)
         if (port_range && value) {
             const ports = value.trim().split('-')
             port_range.min = ports.length > 0 ? ports[0] : ''
