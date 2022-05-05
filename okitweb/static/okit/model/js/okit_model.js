@@ -413,10 +413,12 @@ class OkitArtifact {
         // }
     }
 
-    generateResourceName() {return `Okit_${this.getArtifactReference().split(' ').map((r) => r[0]).join('')}_${Date.now()}`}
+    generateResourceName = () => `Okit_${this.getArtifactReference().split(' ').map((r) => r[0]).join('')}_${Date.now()}`
+    // generateResourceName() {return `Okit_${this.getArtifactReference().split(' ').map((r) => r[0]).join('')}_${Date.now()}`}
     // generateResourceName() {return `Okit${this.getArtifactReference().split(' ').join('')}${Date.now()}`}
 
-    generateResourceNameFromDisplayName(name) {return titleCase(name).split(' ').join('').replaceAll('-','_')}
+    // generateResourceNameFromDisplayName(name) {return titleCase(name).split(' ').join('').replaceAll('-','_')}
+    generateResourceNameFromDisplayName = (name) => titleCase(name.split('_').join('-')).split(' ').join('').replaceAll('-','_')
 
     /*
     ** Static Functionality
