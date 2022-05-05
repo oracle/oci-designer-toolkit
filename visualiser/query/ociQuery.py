@@ -374,7 +374,8 @@ class OCIQuery(OCIConnection):
                          'drg': 'drg_attachment',
                         #  'drg': 'dynamic_routing_gateway',
                          'privateip':'private_ip',
-                         'servicegateway': 'service_gateway'}
+                         'servicegateway': 'service_gateway',
+                         'vcn': 'vcn'}
         for route_table in route_tables:
             for rule in route_table.get('route_rules', []):
                 if len(rule['network_entity_id']) > 0:
