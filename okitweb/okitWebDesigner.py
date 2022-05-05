@@ -132,20 +132,29 @@ def getConfigFileValue(section, key, config_file='~/.oci/config'):
     return value
 
 def validateConfigFile(config_file='~/.oci/config'):
-    results = []
+    results = {"valid": True, "errors": [], "sections": {}}
+    logger.debug(f'Validating Config File {config_file}')
     if os.getenv('OCI_CLI_AUTH', 'config') != 'instance_principal':
         logger.debug('Config File {0!s:s}'.format(config_file))
         abs_config_file = os.path.expanduser(config_file)
         logger.debug('Config File {0!s:s}'.format(abs_config_file))
         config = configparser.ConfigParser()
         config.read(abs_config_file)
-        if len(config.sections()) == 0 and 'DEFAULT' not in config:
-            results.append('OCI Connect Config file is either missing or empty.')
+        # if os.path.exists(abs_config_file) and os.path.isfile(abs_config_file):
+        if len(config.sections()) == 0 and not config.has_section('DEFAULT'):
+            results["valid"] = False
+            results["errors"].append('OCI Connect Config file is either missing or empty.')
         else:
             for section in config:
-                key_file = config[section]['key_file']
-                if not os.path.exists(os.path.expanduser(key_file)):
-                    results.append('[{0!s:s}] Key File {1!s:s} does not exist.'.format(section, key_file))
+                results["section"][section] = {"valid": True}
+                if config.has_option(section, 'key_file'):
+                    key_file = config[section]['key_file']
+                    if not os.path.exists(os.path.expanduser(key_file)):
+                        results["section"][section]["valid"] = False
+                        results["errors"].append('[{0!s:s}] Key File {1!s:s} does not exist.'.format(section, key_file))
+                else:
+                    results["section"][section]["valid"] = False
+                    results["errors"].append('[{0!s:s}] Key File entry does not exist.'.format(section))
         logger.info(results)
     return results
 

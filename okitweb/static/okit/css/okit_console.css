@@ -282,6 +282,7 @@ summary:focus {
     width: 50px;
     vertical-align: middle;
     text-align: left;
+    padding-right: 5px;
 }
 
 .okit-console-header-dropdown > label {
