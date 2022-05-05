@@ -210,6 +210,7 @@ class OCIGenerator(object):
     # Render Resources
 
     def renderResource(self, resource, templates=[]):
+        # logger.info(f'resource_name {resource["resource_name"]} - old Standardised Resource Name {self.standardiseResourceName(resource["display_name"])}')
         # Reset Variables
         self.initialiseJinja2Variables()
         # ---- Add Standard
