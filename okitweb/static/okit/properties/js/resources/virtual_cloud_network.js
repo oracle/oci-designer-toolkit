@@ -51,7 +51,7 @@ class VirtualCloudNetworkProperties extends OkitResourceProperties {
         this.cidr_blocks.property('value', this.resource.cidr_blocks.join(','))
         this.dns_label.property('value', this.resource.dns_label)
         this.is_ipv6enabled.property('checked', this.resource.is_ipv6enabled)
-        this.ipv6cidr_blocks.property('value', this.resource.ipv6cidr_blocks.join(','))
+        this.ipv6cidr_blocks.property('value', Array.isArray(this.resource.ipv6cidr_blocks) ? this.resource.ipv6cidr_blocks.join(',') : '')
         this.ipv6EnabledChange()
     }
 
