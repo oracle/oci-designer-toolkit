@@ -146,14 +146,14 @@ def validateConfigFile(config_file='~/.oci/config'):
             results["errors"].append('OCI Connect Config file is either missing or empty.')
         else:
             for section in config:
-                results["section"][section] = {"valid": True}
+                results["sections"][section] = {"valid": True}
                 if config.has_option(section, 'key_file'):
                     key_file = config[section]['key_file']
                     if not os.path.exists(os.path.expanduser(key_file)):
-                        results["section"][section]["valid"] = False
+                        results["sections"][section]["valid"] = False
                         results["errors"].append('[{0!s:s}] Key File {1!s:s} does not exist.'.format(section, key_file))
                 else:
-                    results["section"][section]["valid"] = False
+                    results["sections"][section]["valid"] = False
                     results["errors"].append('[{0!s:s}] Key File entry does not exist.'.format(section))
         logger.info(results)
     return results
