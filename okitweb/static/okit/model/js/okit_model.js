@@ -95,6 +95,8 @@ class OkitJson {
      */
     load(okit_json) {
         console.info('Load OKIT Json');
+        // Convert data if required
+        this.convert(okit_json)
         // Title & Description
         if (okit_json.title) {this.title = okit_json.title;}
         if (okit_json.description) {this.description = okit_json.description;}
@@ -154,6 +156,56 @@ class OkitJson {
             }
         }
     }
+    convert(model) {
+        // Split old for file_storage_system into new split version
+        if (model) {
+            if (model.file_storage_systems) {
+                model.file_systems = model.file_systems ? model.file_systems : []
+                model.mount_targets = model.mount_targets ? model.mount_targets : []
+                model.file_storage_systems.forEach((resource, idx) => {
+                    const file_system = new FileSystem({
+                        id: resource.id,
+                        compartment_id: resource.compartment_id,
+                        availability_domain: resource.availability_domain,
+                        display_name: resource.display_name,
+                        definition: resource.definition,
+                        freeform_tags: resource.freeform_tags,
+                        defined_tags: resource.defined_tags,
+                        resource_name: resource.resource_name ? resource.resource_name : '',
+                    }, this)
+                    const rmt = resource.mount_targets[0]
+                    const mount_target = new MountTarget({
+                        compartment_id: resource.compartment_id,
+                        subnet_id: rmt.subnet_id,
+                        display_name: rmt.display_name,
+                        hostname_label: rmt.hostname_label,
+                        nsg_ids: rmt.nsg_ids,
+                        max_fs_stat_bytes: rmt.export_set.max_fs_stat_bytes,
+                        max_fs_stat_files: rmt.export_set.max_fs_stat_files,
+                        resource_name: rmt.resource_name ? rmt.resource_name : `${file_system.resource_name}MountTarget`,
+                    }, this)
+                    resource.exports.forEach((r_exp, i) => {
+                        const mt_exp = mount_target.newExport()
+                        mt_exp.path = r_exp.path
+                        mt_exp.file_system_id = file_system.id
+                        mt_exp.options.source = r_exp.export_options.source
+                        mt_exp.options.access = r_exp.export_options.access
+                        mt_exp.options.anonymous_gid = r_exp.export_options.anonymous_gid
+                        mt_exp.options.anonymous_uid = r_exp.export_options.anonymous_uid
+                        mt_exp.options.identity_squash = r_exp.export_options.identity_squash
+                        mt_exp.options.require_privileged_source_port = r_exp.export_options.require_privileged_source_port
+                        mt_exp.resource_name = `${mount_target.resource_name}Export`
+                        mount_target.exports.push(mt_exp)
+                    })
+                    model.file_systems.push(this.classToJson(file_system))
+                    model.mount_targets.push(this.classToJson(mount_target))
+                })
+                delete model.file_storage_systems
+            }
+        }
+        return model
+    }
+    classToJson = (obj) => JSON.parse(JSON.stringify(obj))
 
     /*
     ** Clear Model 

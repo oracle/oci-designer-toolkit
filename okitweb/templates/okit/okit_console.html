@@ -41,13 +41,13 @@
                 <div class="td oracle-console-logo"></div>
                 <div class="td"></div>
                 {% if local_okit %}
+                <div id="config_link_div" class="td okit-console-header-icon config_alert collapsed"><a id="config_link" class="okit-icon-link" href="#" onclick="showConfigErrors(); return false;"></a></div>
                 <div class="td okit-console-header-dropdown"><select id="console_header_config_select" onchange="handleConfigChanged()">
                     <option value="DEFAULT" selected="selected">DEFAULT</option>
                 </select></div>
                 <div class="td okit-console-header-dropdown"><select id="console_header_region_select" onchange="handleRegionChanged()">
                     <option value="" selected="selected">Loading.....</option>
                 </select></div>
-                <div class="td okit-console-header-icon"><a id="config_link" class="okit-icon-link" href="#" onclick="showConfigErrors(); return false;"></a></div>
                 <div class="td okit-console-header-icon cloud"><a id="oci_link" class="okit-icon-link" href="https://console.us-phoenix-1.oraclecloud.com" target="_blank" rel="noopener noreferrer"></a></div>
                 {% elif session['username'] %}
                 <div class="td okit-console-header-right"><a href="javascript:void(0)">{{ session['username'] }}</a>&nbsp;&nbsp;<a href="{{ session['logout'] }}">Logout</a></div>

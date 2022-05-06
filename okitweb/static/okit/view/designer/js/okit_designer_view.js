@@ -25,6 +25,10 @@ class OkitDesignerJsonView extends OkitJsonView {
 
     get display_grid() {return okitSettings.is_display_grid;}
 
+    autoLayout() {
+        
+    }
+
     drawContainer(container) {
         // const resources = Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []);
         // console.info('Resources: ', resources)

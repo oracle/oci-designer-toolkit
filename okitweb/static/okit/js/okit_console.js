@@ -33,7 +33,7 @@ function checkForUpdate() {
 }
 
 function showConfigErrors() {
-    let msg = okitOciConfig.results.join('\n');
+    let msg = okitOciConfig.results.errors.join('\n');
     alert(msg);
 }
 
