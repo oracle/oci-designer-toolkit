@@ -400,17 +400,17 @@ class OkitResourceProperties {
     showProperty = (id, idx) => d3.select(`#${this.trId(id, idx)}`).classed('collapsed', false)
     setPropertyValue = (id, idx, val) => d3.select(`#${this.inputId(id, idx)}`).property('value', val)
 
-    loadSelect(select, resource_type, empty_option=false, filter=() => true) {
+    loadSelect(select, resource_type, empty_option=false, filter=() => true, id_element='id', display_element='display_name') {
         select.selectAll('*').remove()
         if (!filter) filter = () => true
         if (empty_option) select.append('option').attr('value', '').text('')
         let id = ''
         const resources = this.resource.okit_json[`${resource_type}s`] ? this.resource.okit_json[`${resource_type}s`] : this.resource.okit_json[`${resource_type}`] ? this.resource.okit_json[`${resource_type}`] : []
         resources.filter(filter).forEach((r, i) => {
-            const option = select.append('option').attr('value', r.id).text(r.display_name)
+            const option = select.append('option').attr('value', r[id_element]).text(r[display_element])
             if (i === 0) {
                 option.attr('selected', 'selected')
-                id = r.id
+                id = r[id_element]
             }
         })
         return id

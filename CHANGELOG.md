@@ -8,6 +8,8 @@
 2. Add conversion routine to change old style File Storage Systems to new 2 part Mount Target and File System.
 ### Bug Fixes
 1. Fix resource_name generation based on display_name to correctly Title Case.
+2. Fix issue where route rules were specifying DRG Attachment Id not DRG Id.
+3. Fix issue with Route Rule specifying Service Gateway not displaying the correct destination on query.
 
 
 ## Version 0.36.0

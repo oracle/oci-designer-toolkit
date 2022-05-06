@@ -382,6 +382,11 @@ class OCIQuery(OCIConnection):
                     rule['target_type'] = rule_type_map[rule['network_entity_id'].split('.')[1]]
                 else:
                     rule['target_type'] = ''
+                if rule['target_type'] == 'service_gateway':
+                    if rule['destination'].startswith('all-') and rule['destination'].endswith('services-network'):
+                        rule['destination'] = 'all_services_destination'
+                    else:
+                        rule['destination'] = 'objectstorage_services_destination'
 
         return route_tables
 
