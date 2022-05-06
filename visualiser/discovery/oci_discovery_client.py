@@ -554,45 +554,45 @@ class OciResourceDiscoveryClient(object):
         # a large number of compartments can cause the query to exceed the maximum 50000 character
         # limit. Split into multiple queries and combine results
         max_compartments = 100
+        results = list()
         if compartments and len(compartments) > max_compartments:
             chunks = [list(compartments)[i:i + max_compartments] for i in range(0, len(compartments), max_compartments)]
-            results = list()
             for chunk in chunks:
                 result = self.search_resources_for_region(region_name, resource_types, chunk)
                 results.append(result)
+        else:
+            # copy the config and update the region
+            region_config = self.config.copy()  
+            region_config["region"] = region_name
+            
+            conditions = ""
+            if compartments:
+                conditions = "where compartmentId == '" +  "' || compartmentId == '".join(compartments) + "'"
 
-        # copy the config and update the region
-        region_config = self.config.copy()  
-        region_config["region"] = region_name
-        
-        conditions = ""
-        if compartments:
-            conditions = "where compartmentId == '" +  "' || compartmentId == '".join(compartments) + "'"
+            query=f"""
+                query 
+                    {",".join(resource_types)} resources 
+                {conditions}
+            """
+            logger.debug(query)
 
-        query=f"""
-            query 
-                {",".join(resource_types)} resources 
-            {conditions}
-        """
-        logger.debug(query)
-
-        search = oci.resource_search.ResourceSearchClient(config=region_config, signer=self.signer)
-        if self.cert_bundle:
-            search.base_client.session.verify = self.cert_bundle
-        search_details = oci.resource_search.models.StructuredSearchDetails(
-            type="Structured",
-            query=query,
-            matching_context_type=oci.resource_search.models.SearchDetails.MATCHING_CONTEXT_TYPE_NONE,
-        )
-        logger.info("requesting resources for " + region_name)
-        results = oci.pagination.list_call_get_all_results(search.search_resources, search_details, tenant_id=self.tenancy.id).data
+            search = oci.resource_search.ResourceSearchClient(config=region_config, signer=self.signer)
+            if self.cert_bundle:
+                search.base_client.session.verify = self.cert_bundle
+            search_details = oci.resource_search.models.StructuredSearchDetails(
+                type="Structured",
+                query=query,
+                matching_context_type=oci.resource_search.models.SearchDetails.MATCHING_CONTEXT_TYPE_NONE,
+            )
+            logger.info("requesting resources for " + region_name)
+            results = oci.pagination.list_call_get_all_results(search.search_resources, search_details, tenant_id=self.tenancy.id).data
         return results
 
     def get_compartments(self):
         identity = oci.identity.IdentityClient(config=self.config, signer=self.signer)
         if self.cert_bundle:
             identity.base_client.session.verify = self.cert_bundle
-        return oci.pagination.list_call_get_all_results(identity.list_compartments, self.tenancy.id, compartment_id_in_subtree=True).data
+        return oci.pagination.list_call_get_all_results(identity.list_compartments, self.tenancy.id, compartment_id_in_subtree=True, lifecycle_state="ACTIVE").data
 
     def get_subcompartment_ids(self, compartment_id):
         all_subcompartment_ids = set()
