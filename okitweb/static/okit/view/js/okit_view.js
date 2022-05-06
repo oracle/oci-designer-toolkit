@@ -768,9 +768,12 @@ class OkitArtefactView {
                     .attr('href', 'javascript:void(0)')
                     .text('Delete')
                     .on('click', function () {
+                        const parent = self.parent
                         self.delete();
                         self.json_view.update(self.okit_json);
                         $(jqId("context-menu")).addClass("hidden");
+                        parent.loadSlidePanels()
+                        slideRightPanel()
                     });
                 // Cut
                 if (self.moveable) {
