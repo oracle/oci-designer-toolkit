@@ -141,7 +141,7 @@ class RouteTableProperties extends OkitResourceProperties {
                 this.hideProperty(`${id}_destination`, idx)
                 this.showProperty(`${id}_service_destination`, idx)
             }
-            rule.destination = rule.target_type === 'service_gateway' ? 'all_services_destination' : '0.0.0.0/0'
+            rule.destination = rule.target_type === 'service_gateway' && !['all_services_destination', 'objectstorage_services_destination'].includes(rule.destination) ? 'all_services_destination' : rule.destination
             rule.destination_type = rule.target_type === 'service_gateway' ?  'SERVICE_CIDR_BLOCK' : 'CIDR_BLOCK'
             this.setPropertyValue(`${id}_destination`, idx, rule.destination)
         } else {
