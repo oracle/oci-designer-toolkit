@@ -1,6 +1,15 @@
 # Release Notes
 
 
+## Version 0.37.0
+**Release Date**: 25th May 2022
+### Features
+1. Display Alert Icon if there is an issue with the OCI Config file and it is identified as not valid.
+2. Add conversion routine to change old style File Storage Systems to new 2 part Mount Target and File System.
+### Bug Fixes
+1. Fix resource_name generation based on display_name to correctly Title Case.
+
+
 ## Version 0.36.0
 **Release Date**: 4th May 2022
 ### Features
