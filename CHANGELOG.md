@@ -10,6 +10,8 @@
 1. Fix resource_name generation based on display_name to correctly Title Case.
 2. Fix issue where route rules were specifying DRG Attachment Id not DRG Id.
 3. Fix issue with Route Rule specifying Service Gateway not displaying the correct destination on query.
+4. Fix Fast Discovery compartment chunking algorithm to generate correct length queries.
+5. Resolve issue where Security List Egress rules properties were writing to source field not destination field.
 
 
 ## Version 0.36.0

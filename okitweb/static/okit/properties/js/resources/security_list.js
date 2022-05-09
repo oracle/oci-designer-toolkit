@@ -129,15 +129,15 @@ class SecurityListProperties extends OkitResourceProperties {
         const desc = this.createInput('text', 'Description', `${id}_description`, '', (d, i, n) => rule.description = n[i].value)
         this.append(rt.tbody, desc.row)
         desc.input.property('value', rule.description)
-        // Source Type
-        const sdtype = this.createInput('select', 'Destination Type', `${id}_destination_type`, idx, (d, i, n) => {rule.source_type = n[i].value = n[i].value; self.showProtocolRuleRows(rule, id, idx)})
+        // Destination Type
+        const sdtype = this.createInput('select', 'Destination Type', `${id}_destination_type`, idx, (d, i, n) => {rule.destination_type = n[i].value = n[i].value; self.showProtocolRuleRows(rule, id, idx)})
         this.append(rt.tbody, sdtype.row)
         this.loadSourceDestinationTypeSelect(sdtype.input)
-        sdtype.input.property('value', rule.source_type)
-        // Source
-        const source = this.createInput('ipv4_cidr', 'Destination', `${id}_destination`, idx, (d, i, n) => {n[i].reportValidity(); rule.source = n[i].value})
-        this.append(rt.tbody, source.row)
-        source.input.property('value', rule.source)
+        sdtype.input.property('value', rule.destination_type)
+        // Destination
+        const destination = this.createInput('ipv4_cidr', 'Destination', `${id}_destination`, idx, (d, i, n) => {n[i].reportValidity(); rule.destination = n[i].value})
+        this.append(rt.tbody, destination.row)
+        destination.input.property('value', rule.destination)
         // Stateless
         const stateless = this.createInput('checkbox', 'Stateless', `${id}_is_stateless`, idx, (d, i, n) => rule.is_stateless = n[i].checked)
         this.append(rt.tbody, stateless.row)
