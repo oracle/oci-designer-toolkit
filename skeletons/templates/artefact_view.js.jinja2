@@ -16,29 +16,17 @@ class {{ model_class_name }}View extends OkitContainerArtefactView {
         if (!json_view.{{ artefact_json_list }}) json_view.{{ artefact_json_list }} = [];
         super(artefact, json_view);
     }
-    // TODO: Return Artefact Parent id e.g. vcn_id for a Internet Gateway
-    get parent_id() {return this.artefact.vcn_id;}
-    // TODO: Return Artefact Parent Object e.g. VirtualCloudNetwork for a Internet Gateway
-    get parent() {return this.getJsonView().getVirtualCloudNetwork(this.parent_id);}
-    // TODO: If the Resource is within a Subnet but the subnet_iss is not at the top level then raise it with the following functions if not required delete them.
-    // Direct Subnet Access
-    get subnet_id() {return this.artefact.primary_mount_target.subnet_id;}
-    set subnet_id(id) {this.artefact.primary_mount_target.subnet_id = id;}
+    // TODO: Change as appropriate
+    get parent_id() {return this.artefact.compartment_id;}
+    get parent() {return this.getJsonView().getCompartment(this.parent_id);}
     /*
     ** SVG Processing
     */
     /*
     ** Property Sheet Load function
     */
-    loadProperties() {
-        const self = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/{{ html_name }}.html", () => {loadPropertiesSheet(self.artefact);});
-    }
-    /*
-    ** Load and display Value Proposition
-    */
-    loadValueProposition() {
-        $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/{{ html_name }}.html");
+    newPropertiesSheet() {
+        this.properties_sheet = new {{ model_class_name }}Properties(this.artefact)
     }
     /*
     ** Static Functionality

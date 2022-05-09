@@ -14,17 +14,16 @@ class DataIntegrationWorkspace extends OkitArtifact {
     constructor (data={}, okitjson={}) {
         super(okitjson);
         // Configure default values
-        // this.display_name = this.generateDefaultName(okitjson.data_integration_workspaces.length + 1);
         this.compartment_id = data.parent_id;
-        /*
-        ** TODO: Add Resource / Artefact specific parameters and default
-        */
+        this.description = ''
+        this.dns_server_ip = ''
+        this.dns_server_zone = ''
+        this.is_private_network_enabled = true
+        this.subnet_id = ''
+        this.vcn_id = ''
         // Update with any passed data
         this.merge(data);
         this.convert();
-        // TODO: If the Resource is within a Subnet but the subnet_iss is not at the top level then raise it with the following functions if not required delete them.
-        // Expose subnet_id at the top level
-        Object.defineProperty(this, 'subnet_id', {get: function() {return this.primary_mount_target.subnet_id;}, set: function(id) {this.primary_mount_target.subnet_id = id;}, enumerable: false });
     }
     /*
     ** Name Generation
@@ -47,9 +46,7 @@ OkitJson.prototype.newDataIntegrationWorkspace = function(data) {
     return this.getDataIntegrationWorkspaces()[this.getDataIntegrationWorkspaces().length - 1];
 }
 OkitJson.prototype.getDataIntegrationWorkspaces = function() {
-    if (!this.data_integration_workspaces) {
-        this.data_integration_workspaces = [];
-    }
+    if (!this.data_integration_workspaces) this.data_integration_workspaces = []
     return this.data_integration_workspaces;
 }
 OkitJson.prototype.getDataIntegrationWorkspace = function(id='') {

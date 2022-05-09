@@ -63,6 +63,12 @@ def processWorkflow(args):
         #logger.info(rendered)
         filename = "../okitweb/static/okit/view/designer/js/artefacts/{0!s:s}.js".format(standardised_name)
         writeFile(filename, rendered)
+        # --- Resource Properties JavaScript
+        jinja2_template = jinja2_environment.get_template("artefact_properties.js.jinja2")
+        rendered = jinja2_template.render(jinja2_variables)
+        #logger.info(rendered)
+        filename = "../okitweb/static/okit/properties/js/resources/{0!s:s}.js".format(standardised_name)
+        writeFile(filename, rendered)
         # ---- View Functions JavaScript
         #jinja2_template = jinja2_environment.get_template("view_functions.jinja2")
         #rendered = jinja2_template.render(jinja2_variables)
@@ -70,30 +76,30 @@ def processWorkflow(args):
         #filename = "../okitweb/static/okit/view/js/Additional_View_Functions_For_{0!s:s}.js".format(svg_id)
         #writeFile(filename, rendered)
         # ---- SVG
-        jinja2_template = jinja2_environment.get_template("artefact.svg.jinja2")
-        rendered = jinja2_template.render(jinja2_variables)
-        #logger.info(rendered)
-        filename = "../okitweb/static/okit/palette/svg/{0!s:s}.svg".format(svg_id)
-        writeFile(filename, rendered)
-        # ---- Properties HTML
-        jinja2_template = jinja2_environment.get_template("artefact_properties.html.jinja2")
-        rendered = jinja2_template.render(jinja2_variables)
-        #logger.info(rendered)
-        filename = "../okitweb/templates/okit/propertysheets/{0!s:s}.html".format(standardised_name)
-        writeFile(filename, rendered)
-        # ---- Value Proposition HTML
-        jinja2_template = jinja2_environment.get_template("artefact_value_proposition.html.jinja2")
-        rendered = jinja2_template.render(jinja2_variables)
-        #logger.info(rendered)
-        filename = "../okitweb/templates/okit/valueproposition/{0!s:s}.html".format(standardised_name)
-        writeFile(filename, rendered)
+        # jinja2_template = jinja2_environment.get_template("artefact.svg.jinja2")
+        # rendered = jinja2_template.render(jinja2_variables)
+        # #logger.info(rendered)
+        # filename = "../okitweb/static/okit/palette/svg/{0!s:s}.svg".format(svg_id)
+        # writeFile(filename, rendered)
+        # # ---- Properties HTML
+        # jinja2_template = jinja2_environment.get_template("artefact_properties.html.jinja2")
+        # rendered = jinja2_template.render(jinja2_variables)
+        # #logger.info(rendered)
+        # filename = "../okitweb/templates/okit/propertysheets/{0!s:s}.html".format(standardised_name)
+        # writeFile(filename, rendered)
+        # # ---- Value Proposition HTML
+        # jinja2_template = jinja2_environment.get_template("artefact_value_proposition.html.jinja2")
+        # rendered = jinja2_template.render(jinja2_variables)
+        # #logger.info(rendered)
+        # filename = "../okitweb/templates/okit/valueproposition/{0!s:s}.html".format(standardised_name)
+        # writeFile(filename, rendered)
         # --- Backend
         # ---- Python Facade
-        jinja2_template = jinja2_environment.get_template("artefact_facade.py.jinja2")
-        rendered = jinja2_template.render(jinja2_variables)
-        #logger.info(rendered)
-        filename = "../visualiser/facades/oci{0!s:s}.py".format(model_class_name)
-        writeFile(filename, rendered)
+        # jinja2_template = jinja2_environment.get_template("artefact_facade.py.jinja2")
+        # rendered = jinja2_template.render(jinja2_variables)
+        # #logger.info(rendered)
+        # filename = "../visualiser/facades/oci{0!s:s}.py".format(model_class_name)
+        # writeFile(filename, rendered)
     return
 
 

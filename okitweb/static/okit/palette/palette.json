@@ -15,6 +15,11 @@
                     "title": "OKE Cluster",
                     "targets": ["oci"],
                     "svg": "ContainerEngineForKubernetes.svg"
+                },
+                {
+                    "title": "Data Integration Workspace",
+                    "targets": ["oci"],
+                    "svg": "DataIntegrationSystemDIS.svg"
                 }
             ]
         },
