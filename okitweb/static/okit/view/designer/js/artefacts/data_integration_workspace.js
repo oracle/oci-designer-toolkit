@@ -12,29 +12,16 @@ class DataIntegrationWorkspaceView extends OkitArtefactView {
         if (!json_view.data_integration_workspaces) json_view.data_integration_workspaces = [];
         super(artefact, json_view);
     }
-    // TODO: Return Artefact Parent id e.g. vcn_id for a Internet Gateway
-    get parent_id() {return this.artefact.vcn_id;}
-    // TODO: Return Artefact Parent Object e.g. VirtualCloudNetwork for a Internet Gateway
-    get parent() {return this.getJsonView().getVirtualCloudNetwork(this.parent_id);}
-    // TODO: If the Resource is within a Subnet but the subnet_iss is not at the top level then raise it with the following functions if not required delete them.
-    // Direct Subnet Access
-    get subnet_id() {return this.artefact.primary_mount_target.subnet_id;}
-    set subnet_id(id) {this.artefact.primary_mount_target.subnet_id = id;}
+    get parent_id() {return this.artefact.subnet_id && this.artefact.subnet_id !== '' ? this.artefact.subnet_id : this.artefact.compartment_id;}
+    get parent() {return this.artefact.subnet_id && this.artefact.subnet_id !== '' ? this.getJsonView().getSubnet(this.parent_id) : this.getJsonView().getCompartment(this.parent_id);}
     /*
     ** SVG Processing
     */
     /*
     ** Property Sheet Load function
     */
-    loadProperties() {
-        const self = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/data_integration_workspace.html", () => {loadPropertiesSheet(self.artefact);});
-    }
-    /*
-    ** Load and display Value Proposition
-    */
-    loadValueProposition() {
-        $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/data_integration_workspace.html");
+    newPropertiesSheet() {
+        this.properties_sheet = new DataIntegrationWorkspaceProperties(this.artefact)
     }
     /*
     ** Static Functionality
@@ -43,8 +30,7 @@ class DataIntegrationWorkspaceView extends OkitArtefactView {
         return DataIntegrationWorkspace.getArtifactReference();
     }
     static getDropTargets() {
-        // TODO: Return List of Artefact Drop Targets Parent Object Reference Names e.g. VirtualCloudNetwork for a Internet Gateway
-        return [VirtualCloudNetwork.getArtifactReference()];
+        return [Subnet.getArtifactReference(), Compartment.getArtifactReference()];
     }
 }
 /*
@@ -52,8 +38,15 @@ class DataIntegrationWorkspaceView extends OkitArtefactView {
 */
 OkitJsonView.prototype.dropDataIntegrationWorkspaceView = function(target) {
     let view_artefact = this.newDataIntegrationWorkspace();
-    if (target.type === Compartment.getArtifactReference()) {
+    if (target.type === Subnet.getArtifactReference()) {
+        const subnet = this.getSubnet(target.id)
+        view_artefact.getArtefact().subnet_id = target.id;
+        view_artefact.getArtefact().vcn_id = subnet.vcn_id;
+        view_artefact.artefact.is_private_network_enabled = true;
+        view_artefact.getArtefact().compartment_id = target.compartment_id;
+    } else if (target.type === Compartment.getArtifactReference()) {
         view_artefact.artefact.compartment_id = target.id;
+        view_artefact.artefact.is_private_network_enabled = false;
     } else {
         view_artefact.artefact.compartment_id = target.compartment_id;
     }

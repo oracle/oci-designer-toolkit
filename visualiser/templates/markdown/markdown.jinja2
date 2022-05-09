@@ -14,6 +14,11 @@
     {% include "compartment.jinja2" ignore missing with context %}
 {%- endif %}
 
+{% if data_integration_workspaces is defined and data_integration_workspaces|length > 0 -%}
+    ### DIS Workspace
+    {% include "data_integration_workspace.jinja2" ignore missing with context %}
+{%- endif %}
+
 ## Networking
 
 {% if virtual_cloud_networks is defined and virtual_cloud_networks|length > 0 -%}
