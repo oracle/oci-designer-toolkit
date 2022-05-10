@@ -1,0 +1,34 @@
+{% if read_only %}
+# ------ Read Vault
+data "oci_kms_vaults" "{{ resource_name }}" {
+    #Required
+    compartment_id = {{ compartment_id }}
+    filter {
+        name = "id"
+        values = [{{ ocid | safe }}]
+    }
+}
+
+locals {
+    {{ resource_name }}_id              = {{ ocid | safe }}
+}
+{% else %}
+# ------ Create Vault
+resource "oci_kms_vault" "{{ resource_name }}" {
+    #Required
+    compartment_id = {{ compartment_id }}
+    display_name = {{ display_name | safe }}
+    vault_type = {{ vault_type | safe }}
+{% if defined_tags is defined %}
+    defined_tags   = {{ defined_tags | safe }}
+{% endif %}
+{% if freeform_tags is defined %}
+    freeform_tags  = {{ freeform_tags | safe }}
+{% endif %}
+}
+
+locals {
+    {{ resource_name }}_id                  = oci_kms_vault.{{ resource_name }}.id
+    {{ resource_name }}_management_endpoint = oci_kms_vault.{{ resource_name }}.management_endpoint
+}
+{% endif %}

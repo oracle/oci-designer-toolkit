@@ -81,7 +81,7 @@ class CompartmentView extends OkitContainerDesignerArtefactView {
     }
 
     getLeftArtifacts() {
-        return [Bastion.getArtifactReference(), BlockStorageVolume.getArtifactReference(), Policy.getArtifactReference(), FileSystem.getArtifactReference()];
+        return [Policy.getArtifactReference(), Vault.getArtifactReference(), Bastion.getArtifactReference(), BlockStorageVolume.getArtifactReference(), FileSystem.getArtifactReference()];
     }
 
     getRightArtifacts() {

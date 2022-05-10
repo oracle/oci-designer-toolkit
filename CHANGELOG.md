@@ -7,6 +7,7 @@
 1. Display Alert Icon if there is an issue with the OCI Config file and it is identified as not valid.
 2. Add conversion routine to change old style File Storage Systems to new 2 part Mount Target and File System.
 3. Implement Data Integration Workspace resource functionality.
+4. Implement KMS Vault resource.
 ### Bug Fixes
 1. Fix resource_name generation based on display_name to correctly Title Case.
 2. Fix issue where route rules were specifying DRG Attachment Id not DRG Id.

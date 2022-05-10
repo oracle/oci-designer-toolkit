@@ -12,29 +12,17 @@ class KeyView extends OkitArtefactView {
         if (!json_view.keys) json_view.keys = [];
         super(artefact, json_view);
     }
-    // TODO: Return Artefact Parent id e.g. vcn_id for a Internet Gateway
-    get parent_id() {return this.artefact.vcn_id;}
-    // TODO: Return Artefact Parent Object e.g. VirtualCloudNetwork for a Internet Gateway
-    get parent() {return this.getJsonView().getVirtualCloudNetwork(this.parent_id);}
-    // TODO: If the Resource is within a Subnet but the subnet_iss is not at the top level then raise it with the following functions if not required delete them.
-    // Direct Subnet Access
-    get subnet_id() {return this.artefact.primary_mount_target.subnet_id;}
-    set subnet_id(id) {this.artefact.primary_mount_target.subnet_id = id;}
+    // TODO: Change as appropriate
+    get parent_id() {return this.artefact.compartment_id;}
+    get parent() {return this.getJsonView().getCompartment(this.parent_id);}
     /*
     ** SVG Processing
     */
     /*
     ** Property Sheet Load function
     */
-    loadProperties() {
-        const self = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/key.html", () => {loadPropertiesSheet(self.artefact);});
-    }
-    /*
-    ** Load and display Value Proposition
-    */
-    loadValueProposition() {
-        $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/key.html");
+    newPropertiesSheet() {
+        this.properties_sheet = new KeyProperties(this.artefact)
     }
     /*
     ** Static Functionality
@@ -44,7 +32,7 @@ class KeyView extends OkitArtefactView {
     }
     static getDropTargets() {
         // TODO: Return List of Artefact Drop Targets Parent Object Reference Names e.g. VirtualCloudNetwork for a Internet Gateway
-        return [VirtualCloudNetwork.getArtifactReference()];
+        return [Compartment.getArtifactReference()];
     }
 }
 /*

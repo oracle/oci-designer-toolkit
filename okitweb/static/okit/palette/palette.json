@@ -245,7 +245,7 @@
                 },
                 {
                     "title": "Vault",
-                    "targets": ["hidden"],
+                    "targets": ["oci", "freetier"],
                     "svg": "KeyVault.svg"
                 },
                 {
