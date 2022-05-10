@@ -141,6 +141,7 @@ class OCIGenerator(object):
                 for asset in value:
                     # self.id_name_map[self.formatOcid(asset["id"])] = asset.get("display_name", asset.get("name", "Unknown"))
                     self.id_name_map[self.formatOcid(asset["id"])] = asset.get("resource_name", asset.get("display_name", "Unknown"))
+                    # logger.info(f'{asset["id"]}: {self.id_name_map[self.formatOcid(asset["id"])]}')
         return
     
     def getLocalReference(self, id):
@@ -245,6 +246,7 @@ class OCIGenerator(object):
                     elif (key.endswith('_id') or key == 'id') and  val != '':
                         # Simple Reference
                         parent[key] = self.getLocalReference(val)
+                        parent[f'{key}_resource_name'] = self.id_name_map[val]
                     elif val != '':
                         # Add Simple Value
                         parent[key] = self.formatJinja2Value(val.replace('\n', '\\n').replace('"', '\\"'))

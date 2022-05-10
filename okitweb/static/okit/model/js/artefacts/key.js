@@ -14,7 +14,6 @@ class Key extends OkitArtifact {
     constructor (data={}, okitjson={}) {
         super(okitjson);
         // Configure default values
-        // this.display_name = this.generateDefaultName(okitjson.keys.length + 1);
         this.compartment_id = data.parent_id;
         /*
         ** TODO: Add Resource / Artefact specific parameters and default
@@ -47,9 +46,7 @@ OkitJson.prototype.newKey = function(data) {
     return this.getKeys()[this.getKeys().length - 1];
 }
 OkitJson.prototype.getKeys = function() {
-    if (!this.keys) {
-        this.keys = [];
-    }
+    if (!this.keys) this.keys = []
     return this.keys;
 }
 OkitJson.prototype.getKey = function(id='') {
