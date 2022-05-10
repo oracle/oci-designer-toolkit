@@ -204,7 +204,7 @@
                 {
                     "title": "Object Storage Bucket",
                     "targets": ["oci", "pca"],
-                    "svg": "ObjectStorage.svg"
+                    "svg": "Buckets.svg"
                 },
                 {
                     "title": "Mount Target",
