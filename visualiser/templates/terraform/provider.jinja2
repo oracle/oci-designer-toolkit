@@ -1,4 +1,24 @@
 
+{% if deployment_platform is defined and deployment_platform == "pca" %}
+# To automate infrastructure provisioning using Terraform in combination with Oracle Private Cloud Appliance, you must 
+# override certain variables. However, depending on the version that you use of Oracle Cloud Infrastructure's 
+# Terraform provider, the variables you override are different.
+
+# For Terraform versions up to and including 4.50.0:
+# export domain_name_override=<your_appliance_domain>
+# export custom_cert_location=<path_to_certificate>
+
+# For Terraform version 4.51.0 and newer:
+# export domain_name_override=<your_appliance_domain>
+# export custom_cert_location=<path_to_certificate>
+# export OCI_DEFAULT_REALM=<your_appliance_name>
+
+# The default realm override should only be required for the identity endpoint, not for other Oracle Private Cloud Appliance service endpoints. 
+# This override requirement may change in newer versions of the Terraform provider for Oracle Cloud Infrastructure.
+
+# See Release Notes for more details
+
+{% endif %}
 terraform {
 {# {% if deployment_platform is defined and deployment_platform == "pca" %}
     required_providers {
