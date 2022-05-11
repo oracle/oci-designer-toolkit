@@ -46,7 +46,7 @@ class SubnetProperties extends OkitResourceProperties {
         this.prohibit_public_ip_on_vnic = private_ip.input
         this.append(this.advanced_network_tbody, private_ip.row)
         // Route Table
-        const rt = this.createInput('select', 'Route Table', `${self.id}_route_table_id`, '', (d, i, n) => {self.resource.route_table_id = n[i].value = n[i].value; this.redraw()})
+        const rt = this.createInput('select', 'Route Table', `${self.id}_route_table_id`, '', (d, i, n) => {self.resource.route_table_id = n[i].value; this.redraw()})
         this.route_table_id = rt.input
         this.append(this.advanced_network_tbody, rt.row)
         // Security Lists
@@ -54,7 +54,7 @@ class SubnetProperties extends OkitResourceProperties {
         this.security_list_ids = sl.input
         this.append(this.advanced_network_tbody, sl.row)
         // DHCP Options
-        const dhcp = this.createInput('select', 'DHCP Options', `${self.id}_dhcp_options_id`, '', (d, i, n) => {self.resource.dhcp_options_id = n[i].value = n[i].value; this.redraw()})
+        const dhcp = this.createInput('select', 'DHCP Options', `${self.id}_dhcp_options_id`, '', (d, i, n) => {self.resource.dhcp_options_id = n[i].value; this.redraw()})
         this.dhcp_options_id = dhcp.input
         this.append(this.advanced_network_tbody, dhcp.row)
 

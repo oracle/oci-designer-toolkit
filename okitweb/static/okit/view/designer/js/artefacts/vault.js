@@ -7,14 +7,15 @@ console.info('Loaded Vault View Javascript');
 /*
 ** Define Vault View Class
 */
-class VaultView extends OkitArtefactView {
+class VaultView extends OkitContainerDesignerArtefactView {
     constructor(artefact=null, json_view) {
         if (!json_view.vaults) json_view.vaults = [];
         super(artefact, json_view);
+        this.collapsed = true;
     }
-    // TODO: Change as appropriate
     get parent_id() {return this.artefact.compartment_id;}
     get parent() {return this.getJsonView().getCompartment(this.parent_id);}
+    get minimum_dimensions() {return {width: 100, height: 200};}
     /*
     ** SVG Processing
     */
@@ -23,6 +24,12 @@ class VaultView extends OkitArtefactView {
     */
     newPropertiesSheet() {
         this.properties_sheet = new VaultProperties(this.artefact)
+    }
+    /*
+    ** Child Artifact Functions
+     */
+    getLeftArtifacts() {
+        return [Key.getArtifactReference()];
     }
     /*
     ** Static Functionality

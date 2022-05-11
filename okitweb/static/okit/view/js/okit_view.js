@@ -162,7 +162,7 @@ class OkitArtefactView {
     constructor(artefact=null, json_view) {
         this.artefact = artefact;
         // this.artefact = new Proxy(artefact, model_proxy_handler);
-        this.collapsed = false;
+        this.collapsed = true;
         this._recalculate_dimensions = true;
         // Raise Artefact Elements to View Class
         if (this.artefact) {
@@ -1682,6 +1682,7 @@ class OkitArtefactView {
 class OkitContainerArtefactView extends OkitArtefactView {
     constructor(artefact = null, json_view) {
         super(artefact, json_view);
+        this.collapsed = false;
         this._dimensions = {width: 0, height: 0};
     }
 

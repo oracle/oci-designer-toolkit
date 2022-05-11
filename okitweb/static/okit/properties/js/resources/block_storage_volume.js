@@ -50,7 +50,7 @@ class BlockStorageVolumeProperties extends OkitResourceProperties {
         this.backup_tbody = backup_table.tbody
         this.append(this.backup_div, backup_table.table)
         // Backup Policy
-        const policy = this.createInput('select', 'Policy', `${self.id}_backup_policy`, '', (d, i, n) => self.resource.backup_policy = n[i].value = n[i].value)
+        const policy = this.createInput('select', 'Policy', `${self.id}_backup_policy`, '', (d, i, n) => self.resource.backup_policy = n[i].value)
         this.backup_policy = policy.input
         this.append(this.backup_tbody, policy.row)
     }

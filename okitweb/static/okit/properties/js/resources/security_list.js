@@ -74,7 +74,7 @@ class SecurityListProperties extends OkitResourceProperties {
         this.append(rt.tbody, desc.row)
         desc.input.property('value', rule.description)
         // Source Type
-        const sdtype = this.createInput('select', 'Source Type', `${id}_source_type`, idx, (d, i, n) => {rule.source_type = n[i].value = n[i].value; self.showProtocolRuleRows(rule, id, idx)})
+        const sdtype = this.createInput('select', 'Source Type', `${id}_source_type`, idx, (d, i, n) => {rule.source_type = n[i].value; self.showProtocolRuleRows(rule, id, idx)})
         this.append(rt.tbody, sdtype.row)
         this.loadSourceDestinationTypeSelect(sdtype.input)
         sdtype.input.property('value', rule.source_type)
@@ -87,7 +87,7 @@ class SecurityListProperties extends OkitResourceProperties {
         this.append(rt.tbody, stateless.row)
         stateless.input.property('checked', rule.is_stateless)
         // Protocol
-        const sdprotocol = this.createInput('select', 'Protocol', `${id}_protocol`, idx, (d, i, n) => {rule.protocol = n[i].value = n[i].value; this.createOptions(rule); self.showProtocolRuleRows(rule, id, idx)})
+        const sdprotocol = this.createInput('select', 'Protocol', `${id}_protocol`, idx, (d, i, n) => {rule.protocol = n[i].value; this.createOptions(rule); self.showProtocolRuleRows(rule, id, idx)})
         this.append(rt.tbody, sdprotocol.row)
         this.loadProtocolSelect(sdprotocol.input)
         sdprotocol.input.property('value', rule.protocol)
@@ -130,7 +130,7 @@ class SecurityListProperties extends OkitResourceProperties {
         this.append(rt.tbody, desc.row)
         desc.input.property('value', rule.description)
         // Destination Type
-        const sdtype = this.createInput('select', 'Destination Type', `${id}_destination_type`, idx, (d, i, n) => {rule.destination_type = n[i].value = n[i].value; self.showProtocolRuleRows(rule, id, idx)})
+        const sdtype = this.createInput('select', 'Destination Type', `${id}_destination_type`, idx, (d, i, n) => {rule.destination_type = n[i].value; self.showProtocolRuleRows(rule, id, idx)})
         this.append(rt.tbody, sdtype.row)
         this.loadSourceDestinationTypeSelect(sdtype.input)
         sdtype.input.property('value', rule.destination_type)
@@ -143,7 +143,7 @@ class SecurityListProperties extends OkitResourceProperties {
         this.append(rt.tbody, stateless.row)
         stateless.input.property('checked', rule.is_stateless)
         // Protocol
-        const sdprotocol = this.createInput('select', 'Protocol', `${id}_protocol`, idx, (d, i, n) => {rule.protocol = n[i].value = n[i].value; this.createOptions(rule); self.showProtocolRuleRows(rule, id, idx)})
+        const sdprotocol = this.createInput('select', 'Protocol', `${id}_protocol`, idx, (d, i, n) => {rule.protocol = n[i].value; this.createOptions(rule); self.showProtocolRuleRows(rule, id, idx)})
         this.append(rt.tbody, sdprotocol.row)
         this.loadProtocolSelect(sdprotocol.input)
         sdprotocol.input.property('value', rule.protocol)
