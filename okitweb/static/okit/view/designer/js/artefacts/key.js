@@ -13,8 +13,8 @@ class KeyView extends OkitArtefactView {
         super(artefact, json_view);
     }
     // TODO: Change as appropriate
-    get parent_id() {return this.artefact.compartment_id;}
-    get parent() {return this.getJsonView().getCompartment(this.parent_id);}
+    get parent_id() {return this.artefact.vault_id;}
+    get parent() {return this.getJsonView().getVault(this.parent_id);}
     /*
     ** SVG Processing
     */
@@ -31,8 +31,7 @@ class KeyView extends OkitArtefactView {
         return Key.getArtifactReference();
     }
     static getDropTargets() {
-        // TODO: Return List of Artefact Drop Targets Parent Object Reference Names e.g. VirtualCloudNetwork for a Internet Gateway
-        return [Compartment.getArtifactReference()];
+        return [Vault.getArtifactReference()];
     }
 }
 /*
@@ -40,7 +39,10 @@ class KeyView extends OkitArtefactView {
 */
 OkitJsonView.prototype.dropKeyView = function(target) {
     let view_artefact = this.newKey();
-    if (target.type === Compartment.getArtifactReference()) {
+    if (target.type === Vault.getArtifactReference()) {
+        view_artefact.artefact.vault_id = target.id;
+        view_artefact.artefact.compartment_id = target.compartment_id;
+    } else if (target.type === Compartment.getArtifactReference()) {
         view_artefact.artefact.compartment_id = target.id;
     } else {
         view_artefact.artefact.compartment_id = target.compartment_id;

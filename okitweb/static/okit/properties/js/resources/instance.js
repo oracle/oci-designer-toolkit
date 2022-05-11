@@ -41,19 +41,19 @@ class InstanceProperties extends OkitResourceProperties {
         this.append(this.image_div, image_table.table)
         // Image Source
         const is_data = {options: {platform: 'Platform Images', custom: 'Custom Images'}}
-        const image_source = this.createInput('select', 'Image source', `${self.id}_image_source`, '', (d, i, n) => {self.resource.source_details.image_source = n[i].value = n[i].value; this.handleImageSourceChange(n[i].value)}, is_data)
+        const image_source = this.createInput('select', 'Image source', `${self.id}_image_source`, '', (d, i, n) => {self.resource.source_details.image_source = n[i].value; this.handleImageSourceChange(n[i].value)}, is_data)
         this.image_source = image_source.input
         this.append(this.image_tbody, image_source.row)
         // Image OS
-        const image_os = this.createInput('select', 'Image OS', `${self.id}_image_os`, '', (d, i, n) => {self.resource.source_details.os = n[i].value = n[i].value; this.handleImageOSChange(n[i].value)})
+        const image_os = this.createInput('select', 'Image OS', `${self.id}_image_os`, '', (d, i, n) => {self.resource.source_details.os = n[i].value; this.handleImageOSChange(n[i].value)})
         this.image_os = image_os.input
         this.append(this.image_tbody, image_os.row)
         // Image Version
-        const image_version = this.createInput('select', 'Image Version', `${self.id}_image_version`, '', (d, i, n) => {self.resource.source_details.version = n[i].value = n[i].value; this.handleImageOSVersionChange()})
+        const image_version = this.createInput('select', 'Image Version', `${self.id}_image_version`, '', (d, i, n) => {self.resource.source_details.version = n[i].value; this.handleImageOSVersionChange()})
         this.image_version = image_version.input
         this.append(this.image_tbody, image_version.row)
         // Image Id (Custom Image)
-        const image_id = this.createInput('select', 'Custom Image', `${self.id}_image_id`, '', (d, i, n) => {self.resource.source_details.image_id = n[i].value = n[i].value})
+        const image_id = this.createInput('select', 'Custom Image', `${self.id}_image_id`, '', (d, i, n) => {self.resource.source_details.image_id = n[i].value})
         this.image_id = image_id.input
         this.image_id_row = image_id.row
         this.append(this.image_tbody, image_id.row)
@@ -66,17 +66,17 @@ class InstanceProperties extends OkitResourceProperties {
         this.append(this.shape_div, shape_table.table)
         // Instance Type
         const it_data = {options: {vm: 'Virtual Machine', bm: 'Bare Metal'}}
-        const instance_type = this.createInput('select', 'Instance Type', `${self.id}_instance_type`, '', (d, i, n) => {self.resource.source_details.instance_type = n[i].value = n[i].value; this.handleInstanceTypeChange(n[i].value)}, it_data)
+        const instance_type = this.createInput('select', 'Instance Type', `${self.id}_instance_type`, '', (d, i, n) => {self.resource.source_details.instance_type = n[i].value; this.handleInstanceTypeChange(n[i].value)}, it_data)
         this.instance_type = instance_type.input
         this.append(this.shape_tbody, instance_type.row)
         // Shape Series
         const ss_data = {options: {amd: 'AMD', intel: 'Intel', arm: 'Ampere'}}
-        const shape_series = this.createInput('select', 'Shape Series', `${self.id}_shape_series`, '', (d, i, n) => {self.resource.source_details.shape_series = n[i].value = n[i].value; this.handleShapeSeriesChange(n[i].value)}, ss_data)
+        const shape_series = this.createInput('select', 'Shape Series', `${self.id}_shape_series`, '', (d, i, n) => {self.resource.source_details.shape_series = n[i].value; this.handleShapeSeriesChange(n[i].value)}, ss_data)
         this.shape_series = shape_series.input
         this.shape_series_row = shape_series.row
         this.append(this.shape_tbody, shape_series.row)
         // Shape
-        const shape = this.createInput('select', 'Shape', `${self.id}_shape`, '', (d, i, n) => {self.resource.shape = n[i].value = n[i].value; this.handleShapeChange(n[i].value)})
+        const shape = this.createInput('select', 'Shape', `${self.id}_shape`, '', (d, i, n) => {self.resource.shape = n[i].value; this.handleShapeChange(n[i].value)})
         this.shape = shape.input
         this.append(this.shape_tbody, shape.row)
         // OCPUS
@@ -434,12 +434,12 @@ class InstanceProperties extends OkitResourceProperties {
         this.append(attachment_table.tbody, display_name.row)
         display_name.input.property('value', attachment.display_name)
         // Volume Id
-        const volume = this.createInput('select', 'Volume', `${id}_volume_id`, idx, (d, i, n) => {attachment.volume_id = n[i].value = n[i].value})
+        const volume = this.createInput('select', 'Volume', `${id}_volume_id`, idx, (d, i, n) => {attachment.volume_id = n[i].value})
         this.append(attachment_table.tbody, volume.row)
         this.loadSelect(volume.input, 'block_storage_volume', true)
         volume.input.property('value', attachment.volume_id)
         // Attachment Type
-        const attachment_type = this.createInput('select', 'Attachment Type', `${id}_attachment_type`, idx, (d, i, n) => {attachment.attachment_type = n[i].value = n[i].value})
+        const attachment_type = this.createInput('select', 'Attachment Type', `${id}_attachment_type`, idx, (d, i, n) => {attachment.attachment_type = n[i].value})
         this.append(attachment_table.tbody, attachment_type.row)
         this.loadAttachmentTypeSelect(attachment_type.input)
         attachment_type.input.property('value', attachment.attachment_type)

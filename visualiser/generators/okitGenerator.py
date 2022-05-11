@@ -246,7 +246,7 @@ class OCIGenerator(object):
                     elif (key.endswith('_id') or key == 'id') and  val != '':
                         # Simple Reference
                         parent[key] = self.getLocalReference(val)
-                        parent[f'{key}_resource_name'] = self.id_name_map[val]
+                        parent[f'{key}_resource_name'] = self.id_name_map.get(val, 'unknown')
                     elif val != '':
                         # Add Simple Value
                         parent[key] = self.formatJinja2Value(val.replace('\n', '\\n').replace('"', '\\"'))

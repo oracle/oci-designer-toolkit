@@ -83,7 +83,7 @@ class MountTargetProperties extends OkitResourceProperties {
         const et = this.createTable('', `${id}_export`, '')
         this.append(ed.div, et.table)
         // File System
-        const fss = this.createInput('select', 'File System', `${id}_file_system_id`, idx, (d, i, n) => fs_export.file_system_id = n[i].value = n[i].value)
+        const fss = this.createInput('select', 'File System', `${id}_file_system_id`, idx, (d, i, n) => fs_export.file_system_id = n[i].value)
         this.append(et.table, fss.row)
         this.loadSelect(fss.input, 'file_system', false, this.fss_filter)
         fss.input.property('value', fs_export.file_system_id)
@@ -96,12 +96,12 @@ class MountTargetProperties extends OkitResourceProperties {
         this.append(et.table, cidr.row)
         cidr.input.property('value', fs_export.options.source)
         // Access
-        const oa = this.createInput('select', 'Permissions', `${id}_options_access`, idx, (d, i, n) => fs_export.options.access = n[i].value = n[i].value)
+        const oa = this.createInput('select', 'Permissions', `${id}_options_access`, idx, (d, i, n) => fs_export.options.access = n[i].value)
         this.append(et.table, oa.row)
         this.loadAccess(oa.input)
         oa.input.property('value', fs_export.options.access)
         // Identity Squash
-        const ois = this.createInput('select', 'Identity Squash', `${id}_options_identity_squash`, idx, (d, i, n) => fs_export.options.identity_squash = n[i].value = n[i].value)
+        const ois = this.createInput('select', 'Identity Squash', `${id}_options_identity_squash`, idx, (d, i, n) => fs_export.options.identity_squash = n[i].value)
         this.append(et.table, ois.row)
         this.loadIdentitySquash(ois.input)
         ois.input.property('value', fs_export.options.identity_squash)

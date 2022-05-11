@@ -250,7 +250,7 @@
                 },
                 {
                     "title": "Key",
-                    "targets": ["hidden"],
+                    "targets": ["oci", "freetier"],
                     "svg": "KeyManagement.svg"
                 }
             ]
