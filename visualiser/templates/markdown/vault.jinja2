@@ -1,0 +1,21 @@
+{% import "common_macros.jinja2" as common with context %}
+{% macro document_vault(resource) -%}
+{{ common.document_common_details(resource) }}
+{{ common.document_common_properties(resource) }}
+{{ common.document_property("Vault Type", resource.vault_type) }}
+{{ common.document_property("Management Endpoint", resource.management_endpoint) }}
+{% if (keys is defined and keys|length > 0) -%}
+##### Keys
+| Name | Protection | Algorithm | Length | Curve |
+| ---- | ---------- | --------- | ------ | ----- |
+    {% for key in keys %}
+        {% if key.vault_id == resource.id %}
+|{{ key.display_name }}|{{ key.protection_mode }}|{{ key.key_shape.algorithm }}|{{ key.key_shape.length * 8 }} bits|{{ key.key_shape.curve_id }}|
+        {% endif %}
+    {% endfor %}
+{%- endif %}
+{{ common.document_tags(resource) }}
+{%- endmacro %}
+{% for vault in vaults -%}
+    {{ document_vault(vault) }}
+{%- endfor %}
