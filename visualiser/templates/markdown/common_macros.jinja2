@@ -17,6 +17,7 @@
         {{ document_availability_domain(resource.availability_domain, resource.region_availability_domain) }}
     {% endif %}
 {{ compartment_property(resource.compartment_id) }}
+{{ document_property("Name", resource.display_name) }}
 {%- endmacro -%}
 
 {% macro document_freeform_tags(tags) -%}
