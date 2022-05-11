@@ -24,6 +24,9 @@ resource "oci_file_storage_file_system" "{{ resource_name }}" {
 
     # Optional
     display_name   = {{ display_name | safe }}
+{% if kms_key_id is defined %}
+    kms_key_id   = {{ kms_key_id | safe }}
+{% endif %}
 {% if defined_tags is defined %}
     defined_tags   = {{ defined_tags | safe }}
 {% endif %}

@@ -20,16 +20,19 @@ class FileSystemView extends OkitArtefactView {
     /*
     ** Property Sheet Load function
     */
-    loadProperties() {
-        const self = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/file_system.html", () => {loadPropertiesSheet(self.artefact);});
+    newPropertiesSheet() {
+        this.properties_sheet = new FileSystemProperties(this.artefact)
     }
-    /*
-    ** Load and display Value Proposition
-    */
-    loadValueProposition() {
-        $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/file_system.html");
-    }
+    // loadProperties() {
+    //     const self = this;
+    //     $(jqId(PROPERTIES_PANEL)).load("propertysheets/file_system.html", () => {loadPropertiesSheet(self.artefact);});
+    // }
+    // /*
+    // ** Load and display Value Proposition
+    // */
+    // loadValueProposition() {
+    //     $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/file_system.html");
+    // }
     /*
     ** Static Functionality
     */
