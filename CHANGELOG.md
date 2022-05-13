@@ -10,6 +10,7 @@
     1. Data Integration Workspace.
     2. KMS Vault.
     3. KMS Key.
+4. Update Discovery Code to include Key
 ### Bug Fixes
 1. Fix resource_name generation based on display_name to correctly Title Case.
 2. Fix issue where route rules were specifying DRG Attachment Id not DRG Id.
