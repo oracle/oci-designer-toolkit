@@ -17,6 +17,7 @@
 5. Update Discovery Code to include additional resources requires the python module to be upgraded to the latest release.
 6. Remove Object Storage from PCA flagged OKIT designs.
 7. Update Terraform Generation to create multiple files based on OCI groupings.
+8. Update Copyright.
 ### Bug Fixes
 1. Fix resource_name generation based on display_name to correctly Title Case.
 2. Fix issue where route rules were specifying DRG Attachment Id not DRG Id.
