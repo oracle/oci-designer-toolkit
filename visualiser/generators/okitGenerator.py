@@ -165,24 +165,45 @@ class OCIGenerator(object):
         "metadata": "metadata",
         "user_defined": "user_defined",
 
+        "bastions": "identity",
         "compartments": "identity",
         "groups": "identity",
         "keys": "identity",
         "users": "identity",
         "vaults": "identity",
 
+        "dhcp_options": "networking",
+        "drg_attachments": "networking",
         "internet_gateways": "networking",
+        "load_balancers": "networking",
+        "local_peering_gateways": "networking",
         "nat_gateways": "networking",
+        "network_load_balancers": "networking",
+        "network_security_groups": "networking",
+        "remote_peering_connections": "networking",
+        "route_tables": "networking",
+        "security_lists": "networking",
+        "service_gateways": "networking",
         "subnets": "networking",
         "virtual_cloud_networks": "networking",
 
         "block_storage_volumes": "storage",
         "file_systems": "storage",
+        "mount_targets": "storage",
         "object_storage_buckets": "storage",
 
+        "analytics_instances": "compute",
         "instances": "compute",
 
+        "autonomous_databases": "database",
         "database_systems": "database",
+        "mysql_database_systems": "database",
+
+        "customer_premise_equipments": "customer_connectivity",
+        "drgs": "customer_connectivity",
+        "ipsec_connections": "customer_connectivity",
+
+        "oke_clusters": "containers",
     }
     resource_template_map = {
         "drgs": ["drg.jinja2", "drg_route_distribution.jinja2", "drg_route_table.jinja2"],

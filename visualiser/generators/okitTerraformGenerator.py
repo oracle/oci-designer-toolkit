@@ -42,7 +42,7 @@ class OCITerraformGenerator(OCIGenerator):
             output_dir = output_root
         super(OCITerraformGenerator, self).__init__(template_dir, output_dir, visualiser_json, use_vars, add_provider)
 
-    def writeFiles(self):
+    def writeFilesOriginal(self):
         # Write Provider tf file
         writeTerraformFile(os.path.join(self.output_dir, self.PROVIDER_FILE_NAME), self.getProvider())
         # Write Metadata tf file
@@ -69,6 +69,12 @@ class OCITerraformGenerator(OCIGenerator):
         if user_defined_terraform.rstrip() != '':
             writeTerraformFile(os.path.join(self.output_dir, self.USER_DEFINED_FILE_NAME), [user_defined_terraform])
 
+        return
+    
+    def writeFiles(self):
+        generated_tf = self.toJson(True)
+        for key, value in generated_tf.items():
+            writeTerraformFile(os.path.join(self.output_dir, key), value)
         return
     
     def getVariableDefinitions(self):
@@ -109,18 +115,24 @@ class OCITerraformGenerator(OCIGenerator):
         }
         return generated_tf
 
-    def toJson(self):
+    def toJson(self, force_main=False):
         logger.info(jsonToFormattedString(self.rendered_resources))
         generated_tf = {
-            "provider.tf": '\n'.join(self.getProvider()),
-            "metadata.tf": '\n'.join(self.getMetadata()),
+            self.PROVIDER_FILE_NAME: '\n'.join(self.getProvider()),
+            self.METADATA_FILE_NAME: '\n'.join(self.getMetadata()),
         }
+        if force_main:
+            generated_tf[self.MAIN_FILE_NAME] = []
+        for value in sorted(self.file_map.values()):
+            if len(self.rendered_resources.get(value,'')) > 0:
+                generated_tf[f'{value}.tf'] = ''
         for key, value in self.rendered_resources.items():
             if len(value) > 0:
                 generated_tf[f'{key}.tf'] = value
-        generated_tf["user_defined.tf"] = self.visualiser_json.get('user_defined', {}).get('terraform', '')
-        generated_tf["variables.tf"] = '\n'.join(self.getVariableDefinitions())
-        generated_tf["terraform.tfvar"] = '\n'.join(self.getVariableValues())
+        generated_tf[self.USER_DEFINED_FILE_NAME] = self.visualiser_json.get('user_defined', {}).get('terraform', '')
+        generated_tf[self.VARIABLES_FILE_NAME] = '\n'.join(self.getVariableDefinitions())
+        generated_tf[self.TERRAFORM_FILE_NAME] = '\n'.join(self.getVariableValues())
+        logger.info(jsonToFormattedString(generated_tf))
         return generated_tf
 
     def formatJinja2Variable(self, variable_name):

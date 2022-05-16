@@ -144,8 +144,11 @@ def writeXmlFile(tree, filename):
 def writeTerraformFile(terraform_file, contents):
     logger.info('Writing Terraform File: {0:s}'.format(terraform_file))
     with closing(open(terraform_file, 'w')) as f:
-        for resource in contents:
-            f.write('{0:s}\n'.format(resource))
+        if isinstance(contents, list):
+            for resource in contents:
+                f.write('{0:s}\n'.format(resource))
+        else:
+            f.write('{0:s}\n'.format(contents))
     return
 
 
