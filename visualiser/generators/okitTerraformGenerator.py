@@ -97,7 +97,7 @@ class OCITerraformGenerator(OCIGenerator):
             variable_definitions.append('variable "{0:s}" {{}}'.format(key))
         return variable_values
     
-    def toJson(self):
+    def toJsonSimple(self):
         generated_tf = {
             "provider.tf": '\n'.join(self.getProvider()),
             "metadata.tf": '\n'.join(self.getMetadata()),
@@ -107,6 +107,20 @@ class OCITerraformGenerator(OCIGenerator):
             # "output.tf": '\n'.join(self.getRenderedOutput()),
             "user_defined.tf": self.visualiser_json.get('user_defined', {}).get('terraform', '')
         }
+        return generated_tf
+
+    def toJson(self):
+        logger.info(jsonToFormattedString(self.rendered_resources))
+        generated_tf = {
+            "provider.tf": '\n'.join(self.getProvider()),
+            "metadata.tf": '\n'.join(self.getMetadata()),
+        }
+        for key, value in self.rendered_resources.items():
+            if len(value) > 0:
+                generated_tf[f'{key}.tf'] = value
+        generated_tf["user_defined.tf"] = self.visualiser_json.get('user_defined', {}).get('terraform', '')
+        generated_tf["variables.tf"] = '\n'.join(self.getVariableDefinitions())
+        generated_tf["terraform.tfvar"] = '\n'.join(self.getVariableValues())
         return generated_tf
 
     def formatJinja2Variable(self, variable_name):

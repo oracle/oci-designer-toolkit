@@ -10,7 +10,11 @@
     1. Data Integration Workspace.
     2. KMS Vault.
     3. KMS Key.
-4. Update Discovery Code to include Key
+4. Updated Resources
+    1. File System (Allow KMS Key Selection)
+    2. Block Volume (Allow KMS Key Selection)
+5. Update Discovery Code to include additional resources requires the python module to be upgraded to the latest release.
+6. Remove Object Storage from PCA flagged OKIT designs.
 ### Bug Fixes
 1. Fix resource_name generation based on display_name to correctly Title Case.
 2. Fix issue where route rules were specifying DRG Attachment Id not DRG Id.

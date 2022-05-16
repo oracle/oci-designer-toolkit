@@ -17,6 +17,7 @@ class BlockStorageVolume extends OkitArtifact {
         // this.display_name = this.generateDefaultName(okitjson.block_storage_volumes.length + 1);
         this.compartment_id = data.parent_id;
         this.availability_domain = '1';
+        this.kms_key_id = '';
         this.size_in_gbs = 1024;
         this.backup_policy = '';
         this.vpus_per_gb = '0';

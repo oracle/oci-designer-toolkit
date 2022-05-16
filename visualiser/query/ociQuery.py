@@ -155,7 +155,8 @@ class OCIQuery(OCIConnection):
         "CREATING",
         "INACTIVE",
         "ATTACHED",
-        "ALLOCATED"
+        "ALLOCATED",
+        "ENABLED"
     ]
 
     def __init__(self, config=None, configfile=None, profile=None):
@@ -214,7 +215,8 @@ class OCIQuery(OCIConnection):
         for region, resources in discovery_data.items():
             logger.info("Processing Region : {0!s:s} {1!s:s}".format(region, resources.keys()))
             for resource_type, resource_list in resources.items():
-                logger.info("Processing Resource : {0!s:s}".format(resource_type))
+                # logger.info("Processing Resource : {0!s:s}".format(resource_type))
+                logger.info(f"Processing Resource : {resource_type} {len(resource_list)}")
                 # logger.info(jsonToFormattedString(resource_list))
                 if resource_type in map_keys:
                     if resource_type == "Drg":

@@ -21,6 +21,10 @@ class BlockStorageVolumeProperties extends OkitResourceProperties {
         const ad = this.createInput('select', 'Availability Domain', `${self.id}_availability_domain`, '', (d, i, n) => self.resource.availability_domain = n[i].value, ad_data)
         this.availability_domain = ad.input
         this.append(this.core_tbody, ad.row)
+        // KMS Key
+        const kms_key_id = this.createInput('select', 'KMS Encryption Key', `${this.id}_kms_key_id`, '', (d, i, n) => this.resource.kms_key_id = n[i].value)
+        this.kms_key_id = kms_key_id.input
+        this.append(this.core_tbody, kms_key_id.row)
         // Size & Performance
         const size = this.createDetailsSection('Size and Performance', `${self.id}_size_details`)
         this.append(this.properties_contents, size.details)
@@ -57,7 +61,11 @@ class BlockStorageVolumeProperties extends OkitResourceProperties {
 
     // Load Additional Resource Specific Properties
     loadResource() {
+        // Load Selects
+        this.loadSelect(this.kms_key_id, 'key', true, () => true, 'Oracle-managed keys')
+        // Assign Values
         this.availability_domain.property('value', this.resource.availability_domain)
+        this.kms_key_id.property('value', this.resource.kms_key_id)
         this.size_in_gbs.property('value', this.resource.size_in_gbs)
         this.vpus_per_gb.property('value', this.resource.vpus_per_gb)
         this.vpus_per_gb_range.property('value', this.resource.vpus_per_gb)
