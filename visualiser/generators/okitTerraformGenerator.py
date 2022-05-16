@@ -116,7 +116,7 @@ class OCITerraformGenerator(OCIGenerator):
         return generated_tf
 
     def toJson(self, force_main=False):
-        logger.info(jsonToFormattedString(self.rendered_resources))
+        # logger.info(jsonToFormattedString(self.rendered_resources))
         generated_tf = {
             self.PROVIDER_FILE_NAME: '\n'.join(self.getProvider()),
             self.METADATA_FILE_NAME: '\n'.join(self.getMetadata()),
@@ -132,7 +132,7 @@ class OCITerraformGenerator(OCIGenerator):
         generated_tf[self.USER_DEFINED_FILE_NAME] = self.visualiser_json.get('user_defined', {}).get('terraform', '')
         generated_tf[self.VARIABLES_FILE_NAME] = '\n'.join(self.getVariableDefinitions())
         generated_tf[self.TERRAFORM_FILE_NAME] = '\n'.join(self.getVariableValues())
-        logger.info(jsonToFormattedString(generated_tf))
+        # logger.info(jsonToFormattedString(generated_tf))
         return generated_tf
 
     def formatJinja2Variable(self, variable_name):
