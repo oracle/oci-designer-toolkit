@@ -203,7 +203,7 @@
                 },
                 {
                     "title": "Object Storage Bucket",
-                    "targets": ["oci", "pca"],
+                    "targets": ["oci"],
                     "svg": "Buckets.svg"
                 },
                 {

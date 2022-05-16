@@ -23,6 +23,7 @@ class ObjectStorageBucket extends OkitArtifact {
         this.object_events_enabled = false
         this.versioning = 'Disabled'
         this.auto_tiering = 'Disabled'
+        this.kms_key_id = '';
         // Update with any passed data
         this.merge(data);
         this.convert();

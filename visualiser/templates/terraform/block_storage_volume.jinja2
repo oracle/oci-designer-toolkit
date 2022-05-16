@@ -37,6 +37,9 @@ resource "oci_core_volume" "{{ resource_name }}" {
     display_name   = {{ display_name | safe }}
     size_in_gbs    = {{ size_in_gbs | safe }}
     vpus_per_gb    = {{ vpus_per_gb | safe }}
+{% if kms_key_id is defined %}
+    kms_key_id   = {{ kms_key_id | safe }}
+{% endif %}
 {% if defined_tags is defined %}
     defined_tags   = {{ defined_tags | safe }}
 {% endif %}

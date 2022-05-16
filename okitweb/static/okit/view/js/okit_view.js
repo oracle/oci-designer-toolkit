@@ -1138,6 +1138,21 @@ class OkitArtefactView {
         alert('Get First Child function "getFirstChildOffset()" has not been implemented.');
     }
 
+    getChildrenMaxDimensions(children) {
+        let max_dimensions = {height: 0, width: 0};
+        for (const child of children) {
+            for(const resource of this.json_view[this.getArrayFunction(child)]()) {
+                if (resource.parent_id === this.id && (!resource.attached || !okitSettings.hide_attached)) {
+                    let dimension = resource.dimensions;
+                    max_dimensions.height += Math.round(dimension.height + positional_adjustments.spacing.y);
+                    max_dimensions.width = Math.max(max_dimensions.width, dimension.width);
+                }
+            }
+        }
+        return max_dimensions;
+    }
+
+
     // Top Edge
     hasTopEdgeChildren() {
         let children = false;
@@ -1154,17 +1169,18 @@ class OkitArtefactView {
     }
 
     getTopEdgeChildrenMaxDimensions() {
-        let max_dimensions = {height: 0, width: 0};
-        for (let group of this.getTopEdgeArtifacts()) {
-            for(let artefact of this.json_view[this.getArrayFunction(group)]()) {
-                if (artefact.parent_id === this.id) {
-                    let dimension = artefact.dimensions;
-                    max_dimensions.height = Math.max(max_dimensions.height, dimension.height);
-                    max_dimensions.width += Math.round(dimension.width + positional_adjustments.spacing.x);
-                }
-            }
-        }
-        return max_dimensions;
+        return this.getChildrenMaxDimensions(this.getTopEdgeArtifacts())
+        // let max_dimensions = {height: 0, width: 0};
+        // for (let group of this.getTopEdgeArtifacts()) {
+        //     for(let artefact of this.json_view[this.getArrayFunction(group)]()) {
+        //         if (artefact.parent_id === this.id) {
+        //             let dimension = artefact.dimensions;
+        //             max_dimensions.height = Math.max(max_dimensions.height, dimension.height);
+        //             max_dimensions.width += Math.round(dimension.width + positional_adjustments.spacing.x);
+        //         }
+        //     }
+        // }
+        // return max_dimensions;
     }
 
     getFirstTopEdgeChildOffset() {
@@ -1194,17 +1210,18 @@ class OkitArtefactView {
     }
 
     getTopChildrenMaxDimensions() {
-        let max_dimensions = {height: 0, width: 0};
-        for (let group of this.getTopArtifacts()) {
-            for(let artefact of this.json_view[this.getArrayFunction(group)]()) {
-                if (artefact.parent_id === this.id && (!artefact.attached || !okitSettings.hide_attached)) {
-                    let dimension = artefact.dimensions;
-                    max_dimensions.height = Math.max(max_dimensions.height, dimension.height);
-                    max_dimensions.width += Math.round(dimension.width + positional_adjustments.spacing.x);
-                }
-            }
-        }
-        return max_dimensions;
+        return this.getChildrenMaxDimensions(this.getTopArtifacts())
+        // let max_dimensions = {height: 0, width: 0};
+        // for (let group of this.getTopArtifacts()) {
+        //     for(let artefact of this.json_view[this.getArrayFunction(group)]()) {
+        //         if (artefact.parent_id === this.id && (!artefact.attached || !okitSettings.hide_attached)) {
+        //             let dimension = artefact.dimensions;
+        //             max_dimensions.height = Math.max(max_dimensions.height, dimension.height);
+        //             max_dimensions.width += Math.round(dimension.width + positional_adjustments.spacing.x);
+        //         }
+        //     }
+        // }
+        // return max_dimensions;
     }
 
     getFirstTopChildOffset() {
@@ -1234,18 +1251,19 @@ class OkitArtefactView {
     }
 
     getContainerChildrenMaxDimensions() {
-        let max_dimensions = {height: 0, width: 0};
-        for (let group of this.getContainerArtifacts()) {
-            // for(let artefact of this.json_view[this.getArrayFunction(group)]()) {
-            for(let artefact of this.json_view[this.getArrayFunction(group)]()) {
-                if (artefact.parent_id === this.id && (!artefact.attached || !okitSettings.hide_attached)) {
-                    let dimension = artefact.dimensions;
-                    max_dimensions.height += Math.round(dimension.height + positional_adjustments.spacing.y);
-                    max_dimensions.width = Math.max(max_dimensions.width, dimension.width);
-                }
-            }
-        }
-        return max_dimensions;
+        return this.getChildrenMaxDimensions(this.getContainerArtifacts())
+        // let max_dimensions = {height: 0, width: 0};
+        // for (let group of this.getContainerArtifacts()) {
+        //     // for(let artefact of this.json_view[this.getArrayFunction(group)]()) {
+        //     for(let artefact of this.json_view[this.getArrayFunction(group)]()) {
+        //         if (artefact.parent_id === this.id && (!artefact.attached || !okitSettings.hide_attached)) {
+        //             let dimension = artefact.dimensions;
+        //             max_dimensions.height += Math.round(dimension.height + positional_adjustments.spacing.y);
+        //             max_dimensions.width = Math.max(max_dimensions.width, dimension.width);
+        //         }
+        //     }
+        // }
+        // return max_dimensions;
     }
 
     getFirstContainerChildOffset() {
@@ -1276,21 +1294,22 @@ class OkitArtefactView {
     }
 
     getBottomChildrenMaxDimensions() {
-        let max_dimensions = {height: 0, width: 0};
-        for (let group of this.getBottomArtifacts()) {
-            const resources = this.json_view[this.artefact.artefactToElement(group)];
-            console.warn(this.getArtifactReference(), 'Group', group, resources)
-            if (resources) {
-                for(let artefact of resources) {
-                    if (artefact.parent_id === this.id && (!artefact.attached || !okitSettings.hide_attached)) {
-                        let dimension = artefact.dimensions;
-                        max_dimensions.height = Math.max(max_dimensions.height, dimension.height);
-                        max_dimensions.width += Math.round(dimension.width + positional_adjustments.spacing.x);
-                    }
-                }
-            }
-        }
-        return max_dimensions;
+        return this.getChildrenMaxDimensions(this.getBottomArtifacts())
+        // let max_dimensions = {height: 0, width: 0};
+        // for (let group of this.getBottomArtifacts()) {
+        //     const resources = this.json_view[this.artefact.artefactToElement(group)];
+        //     console.warn(this.getArtifactReference(), 'Group', group, resources)
+        //     if (resources) {
+        //         for(let artefact of resources) {
+        //             if (artefact.parent_id === this.id && (!artefact.attached || !okitSettings.hide_attached)) {
+        //                 let dimension = artefact.dimensions;
+        //                 max_dimensions.height = Math.max(max_dimensions.height, dimension.height);
+        //                 max_dimensions.width += Math.round(dimension.width + positional_adjustments.spacing.x);
+        //             }
+        //         }
+        //     }
+        // }
+        // return max_dimensions;
     }
 
     getFirstBottomChildOffset() {
@@ -1325,17 +1344,18 @@ class OkitArtefactView {
     }
 
     getBottomEdgeChildrenMaxDimensions() {
-        let max_dimensions = {height: 0, width: 0};
-        for (let group of this.getBottomEdgeArtifacts()) {
-            for(let artefact of this.json_view[this.getArrayFunction(group)]()) {
-                if (artefact.parent_id === this.id) {
-                    let dimension = artefact.dimensions;
-                    max_dimensions.height = Math.max(max_dimensions.height, dimension.height);
-                    max_dimensions.width += Math.round(dimension.width + positional_adjustments.spacing.x);
-                }
-            }
-        }
-        return max_dimensions;
+        return this.getChildrenMaxDimensions(this.getBottomEdgeArtifacts())
+        // let max_dimensions = {height: 0, width: 0};
+        // for (let group of this.getBottomEdgeArtifacts()) {
+        //     for(let artefact of this.json_view[this.getArrayFunction(group)]()) {
+        //         if (artefact.parent_id === this.id) {
+        //             let dimension = artefact.dimensions;
+        //             max_dimensions.height = Math.max(max_dimensions.height, dimension.height);
+        //             max_dimensions.width += Math.round(dimension.width + positional_adjustments.spacing.x);
+        //         }
+        //     }
+        // }
+        // return max_dimensions;
     }
 
     getFirstBottomEdgeChildOffset() {
@@ -1370,17 +1390,18 @@ class OkitArtefactView {
     }
 
     getLeftChildrenMaxDimensions() {
-        let max_dimensions = {height: 0, width: 0};
-        for (let group of this.getLeftArtifacts()) {
-            for(let artefact of this.json_view[this.getArrayFunction(group)]()) {
-                if (artefact.parent_id === this.id) {
-                    let dimension = artefact.dimensions;
-                    max_dimensions.height += Math.round(dimension.height + positional_adjustments.spacing.y);
-                    max_dimensions.width = Math.max(max_dimensions.width, dimension.width);
-                }
-            }
-        }
-        return max_dimensions;
+        return this.getChildrenMaxDimensions(this.getLeftArtifacts())
+        // let max_dimensions = {height: 0, width: 0};
+        // for (let group of this.getLeftArtifacts()) {
+        //     for(let artefact of this.json_view[this.getArrayFunction(group)]()) {
+        //         if (artefact.parent_id === this.id) {
+        //             let dimension = artefact.dimensions;
+        //             max_dimensions.height += Math.round(dimension.height + positional_adjustments.spacing.y);
+        //             max_dimensions.width = Math.max(max_dimensions.width, dimension.width);
+        //         }
+        //     }
+        // }
+        // return max_dimensions;
     }
 
     getFirstLeftChildOffset() {
@@ -1410,23 +1431,26 @@ class OkitArtefactView {
     }
 
     getRightChildrenMaxDimensions() {
-        let max_dimensions = {height: 0, width: 0};
-        for (let group of this.getRightArtifacts()) {
-            for(let artefact of this.json_view[this.getArrayFunction(group)]()) {
-                if (artefact.parent_id === this.id) {
-                    let dimension = artefact.dimensions;
-                    max_dimensions.height += Math.round(dimension.height + positional_adjustments.spacing.y);
-                    max_dimensions.width = Math.max(max_dimensions.width, dimension.width);
-                }
-            }
-        }
-        return max_dimensions;
+        return this.getChildrenMaxDimensions(this.getRightArtifacts())
+        // let max_dimensions = {height: 0, width: 0};
+        // for (let group of this.getRightArtifacts()) {
+        //     for(let artefact of this.json_view[this.getArrayFunction(group)]()) {
+        //         if (artefact.parent_id === this.id) {
+        //             let dimension = artefact.dimensions;
+        //             max_dimensions.height += Math.round(dimension.height + positional_adjustments.spacing.y);
+        //             max_dimensions.width = Math.max(max_dimensions.width, dimension.width);
+        //         }
+        //     }
+        // }
+        // return max_dimensions;
     }
 
     getFirstRightChildOffset() {
         let offset = this.getFirstLeftChildOffset();
         if (this.hasLeftChildren()) {
-            offset.dx += Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x);
+            const dimensions = this.getLeftChildrenMaxDimensions()
+            offset.dx += dimensions.width
+            // offset.dx += Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x);
         }
         let dx_adjustment = 0;
         if (this.hasTopChildren()) {
@@ -1434,7 +1458,7 @@ class OkitArtefactView {
             dx_adjustment = Math.max(dimensions.width, dx_adjustment);
         }
         if (this.hasContainerChildren()) {
-            let dimensions = this.getContainerChildrenMaxDimensions();
+            const dimensions = this.getContainerChildrenMaxDimensions();
             dx_adjustment = Math.max(dimensions.width, dx_adjustment);
         }
         if (this.hasBottomChildren()) {
