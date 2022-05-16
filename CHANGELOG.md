@@ -13,6 +13,7 @@
 4. Updated Resources
     1. File System (Allow KMS Key Selection)
     2. Block Volume (Allow KMS Key Selection)
+    3. Object Storage Bucket (Allow KMS Key Selection)
 5. Update Discovery Code to include additional resources requires the python module to be upgraded to the latest release.
 6. Remove Object Storage from PCA flagged OKIT designs.
 ### Bug Fixes
