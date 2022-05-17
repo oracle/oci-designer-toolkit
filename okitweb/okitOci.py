@@ -94,6 +94,23 @@ bp = Blueprint('oci', __name__, url_prefix='/okit/oci', static_folder='static/ok
 debug_mode = bool(str(os.getenv('DEBUG_MODE', 'False')).title())
 template_root = f'{getOkitHome()}/visualiser/templates'
 
+def loadDropdownFile(profile, region):
+    dropdown_dir = os.path.abspath(os.path.join(bp.static_folder, 'json', 'dropdown'))
+    shipped_dropdown_file = os.path.abspath(os.path.join(dropdown_dir, 'dropdown.json'))
+    profile_dropdown_dir = os.path.abspath(os.path.join(dropdown_dir, 'profiles'))
+    profile_dropdown_file = os.path.abspath(os.path.join(profile_dropdown_dir, profile, f'{region}.json'))
+    if os.path.exists(profile_dropdown_file):
+        dropdown_file = profile_dropdown_file
+        logger.info(f'Loading Dropdown file {dropdown_file}')
+        dropdown_json = readJsonFile(dropdown_file)
+    else:
+        dropdown_file = shipped_dropdown_file
+        logger.info(f'Loading Dropdown file {dropdown_file}')
+        dropdown_json = readJsonFile(dropdown_file)
+        dropdown_json["shipped"] = True
+        dropdown_json["default"] = True
+    return dropdown_json
+
 #
 # Define Error Handlers
 #
@@ -285,17 +302,19 @@ def resourceTypes(profile):
 
 @bp.route('/dropdown', methods=(['GET']))
 def dropdownQuery():
+    profile = request.args.get('profile', None)
+    region = request.args.get('region', None)
     if request.method == 'GET':
         try:
-            profile = request.args.get('profile', None)
-            region = request.args.get('region', None)
+            # profile = request.args.get('profile', None)
+            # region = request.args.get('region', None)
             logger.info(f'Dropdown Query Profile {profile}')
             logger.info(f'Dropdown Query Region {region}')
             dropdown_query = OCIDropdownQuery(profile=profile)
             dropdown_json = dropdown_query.executeQuery([region])
         except Exception as e:
             logger.exception(e)
-            dropdown_json = {}
+            dropdown_json = loadDropdownFile(profile, region)
         return dropdown_json
     else:
         return 'Unknown Method', 500
