@@ -289,9 +289,12 @@ def dropdownQuery():
         try:
             profile = request.args.get('profile', None)
             region = request.args.get('region', None)
+            logger.info(f'Dropdown Query Profile {profile}')
+            logger.info(f'Dropdown Query Region {region}')
             dropdown_query = OCIDropdownQuery(profile=profile)
             dropdown_json = dropdown_query.executeQuery([region])
         except Exception as e:
+            logger.exception(e)
             dropdown_json = {}
         return dropdown_json
     else:
