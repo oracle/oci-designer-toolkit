@@ -129,7 +129,7 @@ class OkitOCIData {
         console.info('Loading Dropdown data for', profile);
         this.compartments = [];
         const self = this;
-        if (!this.loadLocal(profile, region)) this.query(profile, region)
+        if (!this.loadLocal(profile, region)) this.query(profile, region, true)
     }
 
     refresh(profile, region='') {
@@ -142,7 +142,7 @@ class OkitOCIData {
         this.storeLocal(profile, region);
         $.ajax({
             type: 'post',
-            url: `dropdown/data/${String(profile)}`,
+            url: `dropdown/data/${String(profile)}/${String(region)}`,
             dataType: 'text',
             contentType: 'application/json',
             data: JSON.stringify(this.dropdown_data),
