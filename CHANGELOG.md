@@ -10,6 +10,7 @@
     1. Data Integration Workspace.
     2. KMS Vault.
     3. KMS Key.
+    4. Visual Builder Instance
 4. Updated Resources
     1. File System (Allow KMS Key Selection)
     2. Block Volume (Allow KMS Key Selection)

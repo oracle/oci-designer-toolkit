@@ -15,13 +15,12 @@ class OracleDigitalAssistantProperties extends OkitResourceProperties {
 
     // Build Additional Resource Specific Properties
     buildResource() {
-        const self = this
         // Description
-        const description = this.createInput('text', 'Description', `${self.id}_description`, '', (d, i, n) => self.resource.description = n[i].value)
+        const description = this.createInput('text', 'Description', `${this.id}_description`, '', (d, i, n) => this.resource.description = n[i].value)
         this.description = description.input
         this.append(this.core_tbody, description.row)
         // Shape Name
-        const shape_name = this.createInput('select', 'Shape', `${self.id}_shape_name`, '', (d, i, n) => self.resource.shape_name = n[i].value)
+        const shape_name = this.createInput('select', 'Shape', `${this.id}_shape_name`, '', (d, i, n) => this.resource.shape_name = n[i].value)
         this.shape_name = shape_name.input
         this.append(this.core_tbody, shape_name.row)
     }
