@@ -28,7 +28,7 @@ class VaultView extends OkitContainerDesignerArtefactView {
     /*
     ** Child Artifact Functions
      */
-    getLeftArtifacts() {
+    getContainerArtifacts() {
         return [Key.getArtifactReference()];
     }
     /*
