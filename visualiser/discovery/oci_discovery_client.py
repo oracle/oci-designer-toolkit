@@ -607,7 +607,7 @@ class OciResourceDiscoveryClient(object):
             chunks = [list(compartments)[i:i + max_compartments] for i in range(0, len(compartments), max_compartments)]
             for chunk in chunks:
                 result = self.search_resources_for_region(region_name, resource_types, chunk)
-                results.append(result)
+                results.extend(result)
         else:
             # copy the config and update the region
             region_config = self.config.copy()  
