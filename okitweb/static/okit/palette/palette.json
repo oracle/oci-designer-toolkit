@@ -47,6 +47,11 @@
                     "title": "Oracle Digital Assistant",
                     "targets": ["oci"],
                     "svg": "OracleDigitalAssistantODA.svg"
+                },
+                {
+                    "title": "Visual Builder Instance",
+                    "targets": ["oci"],
+                    "svg": "VisualBuilderInstance.svg"
                 }
             ]
         },
