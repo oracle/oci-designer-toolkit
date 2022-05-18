@@ -85,9 +85,9 @@ class OCIDropdownQuery(OCIConnection):
         include_sub_compartments = True
         discovery_client = OciResourceDiscoveryClient(self.config, signer=self.signer, cert_bundle=self.cert_bundle, regions=regions, include_resource_types=self.SUPPORTED_RESOURCES, compartments=[self.config['tenancy']], include_sub_compartments=include_sub_compartments)
         # Get Supported Resources
-        logger.info(f'Discovery Response {discovery_client.get_all_resources()}')
+        logger.debug(f'Discovery Response {discovery_client.get_all_resources()}')
         response = self.response_to_json(discovery_client.get_all_resources())
-        logger.info('Response JSON : {0!s:s}'.format(jsonToFormattedString(response)))
+        logger.debug('Response JSON : {0!s:s}'.format(jsonToFormattedString(response)))
         response_json = self.convert(response)
         return response_json
 
