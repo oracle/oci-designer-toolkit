@@ -207,7 +207,6 @@ class OCIGenerator(object):
     }
     resource_template_map = {
         "drgs": ["drg.jinja2", "drg_route_distribution.jinja2", "drg_route_table.jinja2"],
-        # "load_balancers": ["loadbalancer.jinja2"]
     }
 
     def generate(self):

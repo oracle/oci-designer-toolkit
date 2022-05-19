@@ -1,5 +1,5 @@
 {% if read_only %}
-# ------ Read Network Load Balancer
+# ------ Read Load Balancer
 data "oci_load_balancer_load_balancers" "{{ resource_name }}" {
     # Required
     compartment_id = {{ compartment_id }}
@@ -14,7 +14,7 @@ locals {
     {{ resource_name }}_ocid = {{ ocid | safe }}
 }
 {% else %}
-# ------ Create Network Load Balancer
+# ------ Create Load Balancer
 resource "oci_load_balancer_load_balancer" "{{ resource_name }}" {
     #Required
     compartment_id = {{ compartment_id }}
@@ -56,7 +56,7 @@ locals {
 }
 
 {% if backend_sets is defined %}
-# ------- Create Network Load Balancer {{ resource_name }} BackendSets
+# ------- Create Load Balancer {{ resource_name }} BackendSets
 {% for backend_set in backend_sets %}
 resource "oci_load_balancer_backend_set" "{{ backend_set.resource_name }}" {
     #Required
@@ -111,7 +111,7 @@ locals {
 }
 
 {% if backend_set.backends is defined %}
-# -------- Create Network Load Balancer {{ resource_name }} BackendSet {{ backend_set.resource_name }} Backends
+# -------- Create Load Balancer {{ resource_name }} BackendSet {{ backend_set.resource_name }} Backends
 {% for backend in backend_set.backends %}
 resource "oci_load_balancer_backend" "{{ backend.resource_name }}" {
     #Required
@@ -148,7 +148,7 @@ resource "oci_load_balancer_backend" "{{ backend.resource_name }}" {
 {% endif %} {# End backend_sets Defined #}
 
 {% if listeners is defined %}
-# ------- Create Network Load Balancer {{ resource_name }} Listeners
+# ------- Create Load Balancer {{ resource_name }} Listeners
 {% for listener in listeners %}
 resource "oci_load_balancer_listener" "{{ listener.resource_name }}" {
     #Required

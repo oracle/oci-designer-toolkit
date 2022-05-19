@@ -29,14 +29,6 @@ class LoadBalancer extends OkitArtifact {
         this.backend_sets = []
         this.listeners = []
 
-        // V1
-        this.protocol = 'HTTP';
-        this.port = '80';
-        this.instance_ids = [];
-        this.backend_policy = 'ROUND_ROBIN';
-        this.health_checker = this.newHealthChecker()
-        // this.health_checker = {url_path: '/'}
-
         // Update with any passed data
         this.merge(data);
         this.convert();
@@ -48,7 +40,34 @@ class LoadBalancer extends OkitArtifact {
     ** Conversion Routine allowing loading of old json
      */
     convert() {
+        super.convert()
         if (this.shape_name !== undefined) {this.shape = this.shape_name; delete this.shape_name;}
+        if (this.backend_sets && !Array.isArray(this.backend_sets) && typeof this.backend_sets === 'object') this.backend_set = Object.values(this.backend_set)
+        if (this.listeners && !Array.isArray(this.listeners) && typeof this.listeners === 'object') this.listeners = Object.values(this.listeners)
+        if (this.health_checker) {
+            // V1 Format
+            const backend_set = this.newBackendSet()
+            backend_set.health_checker = this.health_checker
+            backend_set.policy = this.backend_policy
+            this.instance_ids.forEach((id) => {
+                const backend = this.newBackend()
+                backend.target_id = id
+                backend.port = this.port
+                backend_set.backends.push(backend)
+            })
+            this.backend_sets.push(backend_set)
+            const listener = this.newListener()
+            listener.default_backend_set_name = backend_set.resource_name
+            listener.port = this.port
+            listener.protocol = this.protocol
+            this.listeners.push(listener)
+            // Remove V1 Variables
+            delete this.health_checker
+            delete this.port
+            delete this.protocol
+            delete this.instance_ids
+            delete this.backend_policy
+        }
     }
 
     /*

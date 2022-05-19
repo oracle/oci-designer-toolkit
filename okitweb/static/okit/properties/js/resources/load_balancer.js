@@ -338,11 +338,9 @@ class LoadBalancerProperties extends OkitResourceProperties {
     loadListenerProtocolSelect(select) {
         const types_map = new Map([ // Map to Terraform Local Variable Names
             ['TCP', 'TCP'],
-            ['UDP', 'UDP'],
-            ['TCP/UDP', 'TCP_AND_UDP'],
-            // ['TCP/UDP/ICMP', 'ANY'],
+            ['HTTP', 'HTTP'],
+            ['HTTPS', 'HTTPS'],
         ]);
-        if (this.resource.is_private) types_map.set('TCP/UDP/ICMP', 'ANY')
         this.loadSelectFromMap(select, types_map)
     }
     loadDefaultBackendSetSelect(select) {

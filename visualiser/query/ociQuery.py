@@ -228,7 +228,7 @@ class OCIQuery(OCIConnection):
                     elif resource_type == "Instance":
                         resource_list = self.instances(resource_list, resources)
                     elif resource_type == "LoadBalancer":
-                        resource_list = self.loadbalancers(resource_list, resources)
+                        resource_list = self.load_balancers(resource_list, resources)
                     elif resource_type == "MySqlDbSystem":
                         resource_list = self.mysql_database_systems(resource_list, resources)
                     elif resource_type == "NetworkSecurityGroup":
@@ -321,6 +321,23 @@ class OCIQuery(OCIConnection):
             instance['boot_volume_size_in_gbs'] = boot_volumes[0]['size_in_gbs'] if len(boot_volumes) else 0
             instance['is_pv_encryption_in_transit_enabled'] = boot_volume_attachments[0]['is_pv_encryption_in_transit_enabled'] if len(boot_volume_attachments) else False
         return instances
+
+    def load_balancers(self, nlbs, resources):
+        private_ips = resources.get("PrivateIp", [])
+        vnic_attachments = resources.get("VnicAttachment", [])
+        for nlb in nlbs:
+            nlb["backend_sets"] = list(nlb["backend_sets"].values())
+            nlb["listeners"] = list(nlb["listeners"].values())
+            for bs in nlb["backend_sets"]:
+                for backend in bs["backends"]:
+                    vnic_ids = [ip["vnic_id"] for ip in private_ips if ip["ip_address"] == backend["ip_address"]]
+                    if len(vnic_ids) > 0:
+                        instance_ids = [va["instance_id"] for va in vnic_attachments if va["vnic_id"] in vnic_ids]
+                        if len(instance_ids) > 0:
+                            backend["target_id"] = instance_ids[0]
+            for l in nlb["listeners"]:
+                l["use_any_port"] = l["port"] == 0
+        return nlbs
 
     def loadbalancers(self, loadbalancers, resources):
         for lb in loadbalancers:
