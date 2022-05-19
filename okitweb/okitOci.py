@@ -302,9 +302,9 @@ def resourceTypes(profile):
 
 @bp.route('/dropdown', methods=(['GET']))
 def dropdownQuery():
-    profile = request.args.get('profile', None)
-    region = request.args.get('region', None)
     if request.method == 'GET':
+        profile = request.args.get('profile', None)
+        region = request.args.get('region', None)
         try:
             # profile = request.args.get('profile', None)
             # region = request.args.get('region', None)

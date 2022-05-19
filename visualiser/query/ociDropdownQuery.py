@@ -85,9 +85,9 @@ class OCIDropdownQuery(OCIConnection):
         include_sub_compartments = True
         discovery_client = OciResourceDiscoveryClient(self.config, signer=self.signer, cert_bundle=self.cert_bundle, regions=regions, include_resource_types=self.SUPPORTED_RESOURCES, compartments=[self.config['tenancy']], include_sub_compartments=include_sub_compartments)
         # Get Supported Resources
-        logger.info(f'Discovery Response {discovery_client.get_all_resources()}')
+        logger.debug(f'Discovery Response {discovery_client.get_all_resources()}')
         response = self.response_to_json(discovery_client.get_all_resources())
-        logger.info('Response JSON : {0!s:s}'.format(jsonToFormattedString(response)))
+        logger.debug('Response JSON : {0!s:s}'.format(jsonToFormattedString(response)))
         response_json = self.convert(response)
         return response_json
 
@@ -114,6 +114,8 @@ class OCIDropdownQuery(OCIConnection):
                         resource_list = self.images(resource_list, resources)
                     elif resource_type == "Shape":
                         resource_list = self.shapes(resource_list, resources)                       
+                    elif resource_type == "LoadBalancerShape":
+                        resource_list = self.load_balancer_shapes(resource_list, resources)                       
                     elif resource_type == "VolumeBackupPolicy":
                         resource_list = self.volume_backup_policies(resource_list, resources)                       
                     elif resource_type == "ClusterOptions":
@@ -140,7 +142,6 @@ class OCIDropdownQuery(OCIConnection):
     def shapes(self, shapes, resources):
         seen = []
         deduplicated = []
-        logger.info(sorted([s["shape"] for s in shapes]))
         for shape in shapes:
             if shape['shape'] not in seen:
                 shape['sort_key'] = shape['shape']
@@ -152,6 +153,12 @@ class OCIDropdownQuery(OCIConnection):
                 seen.append(shape['shape'])
         # logger.info(sorted([s["shape"] for s in deduplicated]))
         return sorted(deduplicated, key=lambda k: k['sort_key'])
+
+    def load_balancer_shapes(self, shapes, resources):
+        for shape in shapes:
+            shape['id'] = shape['name']
+            shape['display_name'] = shape['name'].title()
+        return shapes
 
     def volume_backup_policies(self, policies, resources):
         platform = ['Bronze', 'Silver', 'Gold']
