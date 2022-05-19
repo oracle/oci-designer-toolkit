@@ -29,14 +29,6 @@ class LoadBalancer extends OkitArtifact {
         this.backend_sets = []
         this.listeners = []
 
-        // V1
-        // this.protocol = 'HTTP';
-        // this.port = '80';
-        // this.instance_ids = [];
-        // this.backend_policy = 'ROUND_ROBIN';
-        // this.health_checker = this.newHealthChecker()
-        // this.health_checker = {url_path: '/'}
-
         // Update with any passed data
         this.merge(data);
         this.convert();
