@@ -114,6 +114,8 @@ class OCIDropdownQuery(OCIConnection):
                         resource_list = self.images(resource_list, resources)
                     elif resource_type == "Shape":
                         resource_list = self.shapes(resource_list, resources)                       
+                    elif resource_type == "LoadBalancerShape":
+                        resource_list = self.load_balancer_shapes(resource_list, resources)                       
                     elif resource_type == "VolumeBackupPolicy":
                         resource_list = self.volume_backup_policies(resource_list, resources)                       
                     elif resource_type == "ClusterOptions":
@@ -140,7 +142,6 @@ class OCIDropdownQuery(OCIConnection):
     def shapes(self, shapes, resources):
         seen = []
         deduplicated = []
-        logger.info(sorted([s["shape"] for s in shapes]))
         for shape in shapes:
             if shape['shape'] not in seen:
                 shape['sort_key'] = shape['shape']
@@ -152,6 +153,12 @@ class OCIDropdownQuery(OCIConnection):
                 seen.append(shape['shape'])
         # logger.info(sorted([s["shape"] for s in deduplicated]))
         return sorted(deduplicated, key=lambda k: k['sort_key'])
+
+    def load_balancer_shapes(self, shapes, resources):
+        for shape in shapes:
+            shape['id'] = shape['name']
+            shape['display_name'] = shape['name'].title()
+        return shapes
 
     def volume_backup_policies(self, policies, resources):
         platform = ['Bronze', 'Silver', 'Gold']

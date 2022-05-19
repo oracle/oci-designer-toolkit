@@ -46,12 +46,19 @@ class LoadBalancerView extends OkitDesignerArtefactView {
         for (let instance_id of this.artefact.instance_ids) {
             if (instance_id !== '') {this.drawConnection(this.id, instance_id);}
         }
+        // this.artefact.backend_sets.forEach((bs) => {
+        //     bs.backends.forEach((b) => {if (b.target_id !== '') {this.drawConnection(this.id, b.target_id)}})
+        // })
     }
 
     /*
     ** Property Sheet Load function
      */
-    loadProperties() {
+    newPropertiesSheet() {
+        this.properties_sheet = new LoadBalancerProperties(this.artefact)
+    }
+    // TODO: Delete
+    loadProperties1() {
         const self = this;
         let okitJson = this.getOkitJson();
         let me = this;
@@ -86,6 +93,7 @@ class LoadBalancerView extends OkitDesignerArtefactView {
         });
     }
 
+    // TODO: Delete
     showHideBandwidth(shape) {
         const min_bandwidth = document.getElementById('minimum_bandwidth_in_mbps');
         const max_bandwidth = document.getElementById('maximum_bandwidth_in_mbps');
@@ -106,6 +114,7 @@ class LoadBalancerView extends OkitDesignerArtefactView {
         max_bandwidth.value = this.shape_details.maximum_bandwidth_in_mbps;
     }
 
+    // TODO: Delete
     setMinMaxBandwidth() {
         const max_bandwidth = document.getElementById('minimum_bandwidth_in_mbps');
         const min = this.shape_details.minimum_bandwidth_in_mbps;
