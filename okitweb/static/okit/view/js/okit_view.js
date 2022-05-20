@@ -496,6 +496,7 @@ class OkitArtefactView {
     getArrayFunction(resource_type) {return `${this.getFunction(resource_type)}s`}
 
     getArtefact() {return this.artefact;}
+    getResource() {return this.getArtefact();}
 
     static new(artefact, json_view) {return new this(artefact, json_view);}
 
@@ -532,6 +533,7 @@ class OkitArtefactView {
 
     draw() {
         // console.warn('Drawing', this)
+        console.warn(`${this.getResource().display_name} Associations ${this.getAssociations()}`)
         if ((!this.parent || !this.parent.is_collapsed) && (!okitSettings.hide_attached || !this.attached)) {
             // console.info(`Drawing ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id}) [${this.parent_id}]`);
             const svg = this.drawSvg();
@@ -717,6 +719,8 @@ class OkitArtefactView {
             d3.event.stopPropagation();
         });
     }
+
+    getAssociations() {return this.getResource().getAssociations()}
 
     addAssociationHighlighting() {}
 

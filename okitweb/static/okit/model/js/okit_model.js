@@ -412,6 +412,23 @@ class OkitArtifact {
         return name.toLowerCase().split(' ').join('_') + 's';
     }
 
+    /*
+    ** Resource Associations
+    */
+    getAssociations() {
+        const associations = (obj) => Object.entries(obj).reduce((n, [k, v]) => {
+            if (k.endsWith('_ids') && Array.isArray(v)) {
+                return [...n, ...v]
+            } else if (v instanceof Object) {
+                return [...n, ...associations(v)]
+            } else if (k.endsWith('_id')) {
+                return [...n, v]
+            }
+            return n
+        }, [])
+        return associations(this)
+    }
+
 
     /*
     ** Delete Processing
