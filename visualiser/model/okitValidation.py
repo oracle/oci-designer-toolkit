@@ -880,7 +880,7 @@ class OCIJsonValidator(object):
                 }
                 self.results['errors'].append(error)
             # Check DNs
-            if len([s for s in self.okit_json.get('subnets', []) if s["id"] != artefact["id"] and s["dns_label"] == artefact["dns_label"] and s["vcn_id"] == artefact["vcn_id"]]) > 0:
+            if len([s for s in self.okit_json.get('subnets', []) if s["id"] != artefact["id"] and s["dns_label"] != '' and s["dns_label"] == artefact["dns_label"] and s["vcn_id"] == artefact["vcn_id"]]) > 0:
                 self.valid = False
                 error = {
                     'id': artefact['id'],

@@ -30,8 +30,10 @@ class OkitJson {
         this.variables_schema = this.newVariableSchema()
 
         if (okitjson !== undefined && typeof okitjson === 'string' && okitjson.length > 0) {
+            console.info('Load String')
             this.load(JSON.parse(okitjson));
         }  else if (okitjson !== undefined && okitjson instanceof Object) {
+            console.info('Load Object')
             this.load(okitjson);
         }
     }

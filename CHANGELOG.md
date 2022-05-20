@@ -20,6 +20,7 @@
 6. Remove Object Storage from PCA flagged OKIT designs.
 7. Update Terraform Generation to create multiple files based on OCI groupings.
 8. Update Copyright.
+9. Update DNS Label when vcn / subnet name changes.
 ### Bug Fixes
 1. Fix resource_name generation based on display_name to correctly Title Case.
 2. Fix issue where route rules were specifying DRG Attachment Id not DRG Id.

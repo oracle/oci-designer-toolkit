@@ -124,7 +124,7 @@ class OkitResourceProperties {
         this.ocid = ocid.input
         this.append(this.core_tbody, ocid.row)
         ocid.row.classed('collapsed', !okitSettings.show_ocids)
-        const display_name = this.createInput('text', 'Name', `${self.id}_display_name`, '', (d, i, n) => {this.resource.display_name = n[i].value; this.redraw(); this.setTitle()})
+        const display_name = this.createInput('text', 'Name', `${self.id}_display_name`, '', (d, i, n) => {this.resource.display_name = n[i].value; this.redraw(); this.setTitle(); this.handleDisplayNameChange()})
         this.display_name = display_name.input
         this.append(this.core_tbody, display_name.row)
         this.documentation_contents.append('textarea')
@@ -164,6 +164,7 @@ class OkitResourceProperties {
     }
 
     setTitle = () => this.title.text(`${this.resource.resource_type} (${this.resource.display_name})`)
+    handleDisplayNameChange = () => {}
 
     load() {
         if (this.resource) {
