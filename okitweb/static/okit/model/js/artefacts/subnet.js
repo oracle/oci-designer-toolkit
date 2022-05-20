@@ -14,11 +14,11 @@ class Subnet extends OkitArtifact {
     constructor (data={}, okitjson={},) {
         super(okitjson);
         // Configure default values
-        // this.display_name = this.generateDefaultName(okitjson.subnets.length + 1);
         this.compartment_id = '';
         this.vcn_id = '';
         this.cidr_block = '';
-        this.dns_label = `sn${this.display_name.toLowerCase().slice(-6)}`;
+        this.dns_label = '';
+        this.dns_label = this.generateDnsLabel();
         this.prohibit_public_ip_on_vnic = false;
         this.route_table_id = '';
         this.security_list_ids = [];
@@ -71,6 +71,7 @@ class Subnet extends OkitArtifact {
         this.cidr_block = `${subnet_ip}/24`;
         return this.cidr_block;
     }
+    generateDnsLabel = () => this.display_name.toLowerCase().replaceAll(' ', '').slice(0, 15)
 
     /*
     ** Container Specific Overrides

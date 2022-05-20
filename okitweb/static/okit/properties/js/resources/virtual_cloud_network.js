@@ -21,15 +21,14 @@ class VirtualCloudNetworkProperties extends OkitResourceProperties {
         this.cidr_blocks = ipv4.input
         this.append(this.core_tbody, ipv4.row)
         // DNS Label
-        const dns_data = {
-            maxlength: '15',
-            pattern: '^[a-zA-Z][a-zA-Z0-9]{0,15}$',
-            title: 'Only letters and numbers, starting with a letter. 15 characters max.'
-        }
-        const dns = this.createInput('text', 'DNS Label', `${self.id}_dns_label`, '', (d, i, n) => {n[i].reportValidity(); self.resource.dns_label = n[i].value}, dns_data)
+        // const dns_data = {
+        //     maxlength: '15',
+        //     pattern: '^[a-zA-Z][a-zA-Z0-9]{0,15}$',
+        //     title: 'Only letters and numbers, starting with a letter. 15 characters max.'
+        // }
+        const dns = this.createInput('text', 'DNS Label', `${self.id}_dns_label`, '', (d, i, n) => {n[i].reportValidity(); self.resource.dns_label = n[i].value}, this.dns_data)
         this.dns_label = dns.input
         this.append(this.core_tbody, dns.row)
-
         // Optional Properties
         const ond = this.createDetailsSection('Optional Networking', `${self.id}_optional_network_details`, '', undefined, {}, false)
         this.append(this.properties_contents, ond.details)
@@ -48,6 +47,7 @@ class VirtualCloudNetworkProperties extends OkitResourceProperties {
 
     // Load Additional Resource Specific Properties
     loadResource() {
+        // this.handleDisplayNameChange()
         this.cidr_blocks.property('value', this.resource.cidr_blocks.join(','))
         this.dns_label.property('value', this.resource.dns_label)
         this.is_ipv6enabled.property('checked', this.resource.is_ipv6enabled)
@@ -59,5 +59,13 @@ class VirtualCloudNetworkProperties extends OkitResourceProperties {
         this.ipv6cidr_blocks.attr('readonly', !this.resource.is_ipv6enabled ? 'readonly' : undefined)
         this.ipv6cidr_blocks.property('value', this.resource.is_ipv6enabled ? this.resource.ipv6cidr_blocks.join(',') : '')
         this.resource.ipv6cidr_blocks = this.resource.is_ipv6enabled ? this.resource.ipv6cidr_blocks : []
+    }
+
+    handleDisplayNameChange = () => {
+        const dns_label = this.resource.generateDnsLabel()
+        this.dns_label.attr('placeholder', dns_label)
+        this.dns_label.property('placeholder', dns_label)
+        this.resource.dns_label = dns_label
+        this.dns_label.property('value', this.resource.dns_label)
     }
 }

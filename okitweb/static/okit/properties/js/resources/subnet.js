@@ -76,6 +76,7 @@ class SubnetProperties extends OkitResourceProperties {
 
     // Load Additional Resource Specific Properties
     loadResource() {
+        // this.handleDisplayNameChange()
         // Load Reference Selects
         this.loadSelect(this.vcn_id, 'virtual_cloud_network', true)
         this.loadSelect(this.route_table_id, 'route_table', true, this.vcn_filter)
@@ -99,5 +100,13 @@ class SubnetProperties extends OkitResourceProperties {
         this.ipv6cidr_blocks.attr('readonly', !this.resource.is_ipv6enabled ? 'readonly' : undefined)
         this.ipv6cidr_blocks.property('value', this.resource.is_ipv6enabled ? this.resource.ipv6cidr_blocks : '')
         this.resource.ipv6cidr_blocks = this.resource.is_ipv6enabled ? this.resource.ipv6cidr_blocks : ''
+    }
+
+    handleDisplayNameChange = () => {
+        const dns_label = this.resource.generateDnsLabel()
+        this.dns_label.attr('placeholder', dns_label)
+        this.dns_label.property('placeholder', dns_label)
+        this.resource.dns_label = dns_label
+        this.dns_label.property('value', this.resource.dns_label)
     }
 }
