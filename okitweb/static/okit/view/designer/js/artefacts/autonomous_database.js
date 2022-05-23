@@ -31,7 +31,7 @@ class AutonomousDatabaseView extends OkitDesignerArtefactView {
     /*
      ** SVG Processing
      */
-    getAssociations() {return super.getAssociations().filter((id) => !this.resource.nsg_ids)}
+    getLinks() {return super.getLinks().filter((id) => !this.resource.nsg_ids)}
      // Add Specific Mouse Events
     addAssociationHighlighting() {
         for (let id of this.nsg_ids) {$(jqId(id)).addClass('highlight-association');}

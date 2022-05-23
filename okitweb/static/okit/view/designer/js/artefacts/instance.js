@@ -38,7 +38,7 @@ class InstanceView extends OkitDesignerArtefactView {
      ** SVG Processing
      */
     getNsgIds() {return this.resource.vnic_attachments.reduce((a, v) => [...a, ...v.nsg_ids], [])}
-    getAssociations() {return super.getAssociations().filter((id) => !this.getNsgIds().includes(id))}
+    getLinks() {return super.getLinks().filter((id) => !this.getNsgIds().includes(id))}
      // Add Specific Mouse Events
     addAssociationHighlighting() {
         for (let id of this.artefact.block_storage_volume_ids) {$(jqId(id)).addClass('highlight-association');}

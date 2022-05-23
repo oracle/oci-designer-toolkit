@@ -722,6 +722,7 @@ class OkitArtefactView {
     }
 
     getAssociations() {return this.getResource().getAssociations().filter((id) => id !== this.compartment_id && id !== this.parent_id && !this.children.includes(id))}
+    getLinks() {return this.getResource().getLinks().filter((id) => id !== this.compartment_id && id !== this.parent_id && !this.children.includes(id))}
 
     addAssociationHighlighting() {}
 
@@ -851,7 +852,7 @@ class OkitArtefactView {
     drawAttachments() {}
 
     drawConnections() {
-        this.getAssociations().forEach((id) => this.drawConnection(this.id, id))
+        this.getLinks().forEach((id) => this.drawConnection(this.id, id))
     }
 
     drawConnection(start_id, end_id) {
