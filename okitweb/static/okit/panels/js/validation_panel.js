@@ -61,7 +61,7 @@ class OkitValidationPanel extends OkitPanel {
 
     displayResult(result, result_class, parent) {
         const svg = d3.select(d3Id(result.id))
-        const fill = svg.attr('fill')
+        // const fill = svg.attr('fill')
         const result_wrapper_div = parent.append('div').attr('class', `okit-validation-result`)
                                             .on('mouseover', () => {svg.classed(`${result_class}-highlight`, true)})
                                             .on('mouseout', () => svg.classed(`${result_class}-highlight`, false))
