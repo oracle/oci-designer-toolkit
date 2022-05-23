@@ -18,7 +18,7 @@ class Instance extends OkitArtifact {
         // this.display_name = this.generateDefaultName(okitjson.instances.length + 1);
         this.availability_domain = '1';
         this.compartment_id = '';
-        this.shape = 'VM.Standard.E3.Flex';
+        this.shape = okitjson && okitjson.metadata.platform !== 'pca' ? 'VM.Standard.E3.Flex' : '';
         // # Optional
         this.count = 1;
         this.fault_domain = '';
