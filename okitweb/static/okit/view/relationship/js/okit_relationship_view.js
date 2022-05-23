@@ -87,6 +87,8 @@ class OkitRelationshipJsonView extends OkitJsonView {
     drawRelationshipSVG(width=800, height=800, for_export=false) {
         this.relationship_svg_div.selectAll('*').remove()
         const self = this;
+        width = this.relationship_svg_div.node().clientWidth
+        height = this.relationship_svg_div.node().clientHeight
         relationship_data = this.relationships;
         // Add SVG
         relationship_svg = this.relationship_svg_div.append("svg")
@@ -142,7 +144,8 @@ class OkitRelationshipJsonView extends OkitJsonView {
         // use for to organise the graph
         relationship_simulation = d3.forceSimulation(relationship_data.nodes)
                             .force("link", d3.forceLink().id(function(d) { return d.id; }).links(relationship_data.links))
-                            .force("charge", d3.forceManyBody().strength(-50 * self.getRadius("")))
+                            .force("charge", d3.forceManyBody().strength(-30))
+                            .force("collision", d3.forceCollide().radius(50))
                             .force("center", d3.forceCenter(width / 2, height / 2))
                             .on("tick", self.ticked);
     }
