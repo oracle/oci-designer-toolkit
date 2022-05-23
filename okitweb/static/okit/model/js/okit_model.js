@@ -428,6 +428,7 @@ class OkitArtifact {
         }, [])
         return associations(this)
     }
+    getLinks() {return this.getAssociations()}
 
 
     /*
