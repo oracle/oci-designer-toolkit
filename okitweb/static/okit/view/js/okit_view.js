@@ -534,7 +534,6 @@ class OkitArtefactView {
 
     draw() {
         // console.warn('Drawing', this)
-        console.warn(`${this.getResource().display_name} Associations ${this.getAssociations()}`)
         if ((!this.parent || !this.parent.is_collapsed) && (!okitSettings.hide_attached || !this.attached)) {
             // console.info(`Drawing ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id}) [${this.parent_id}]`);
             const svg = this.drawSvg();

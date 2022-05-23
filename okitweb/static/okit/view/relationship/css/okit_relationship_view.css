@@ -1,0 +1,56 @@
+/*
+# Copyright (c) 2020, 2022, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+ */
+
+ :root {
+    --relationship-selection-width: 200px;
+ }
+
+.relationship-selection {
+    display: block;
+    float: left;
+    height: 100%;
+    width: var(--relationship-selection-width);
+    border-right: black solid 1px;
+    overflow: scroll;
+}
+
+.relationship-selection > div {
+    width: 100%;
+    overflow: hidden;
+}
+
+.relationship-selection > div > label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: smaller;
+}
+
+.relationship-svg-div {
+    display: block;
+    float: left;
+    height: 100%;
+    width: calc(100% - var(--relationship-selection-width));
+    background: #fff;
+    padding: 0;
+    margin: 0;
+    overflow: scroll;
+}
+
+.relationship-svg-div line.links {
+    stroke: #2C5967;
+}
+
+.relationship-svg-div rect {
+    /* fill: #99b6d3; */
+    fill: none;
+    stroke-width: 1.5px;
+}
+
+.relationship-svg-div text {
+    font-family: sans-serif;
+    font-size: 20px;
+    fill: #000;
+}
+
