@@ -186,6 +186,7 @@ class OkitArtefactView {
         this.newPropertiesSheet()
     }
 
+    get resource() {return this.artefact}
     // Instance Constants
     // -- Reference
     get resource_type() {return this.getArtifactReference();}

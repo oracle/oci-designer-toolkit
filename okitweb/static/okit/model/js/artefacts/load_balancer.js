@@ -42,7 +42,7 @@ class LoadBalancer extends OkitArtifact {
     convert() {
         super.convert()
         if (this.shape_name !== undefined) {this.shape = this.shape_name; delete this.shape_name;}
-        if (this.backend_sets && !Array.isArray(this.backend_sets) && typeof this.backend_sets === 'object') this.backend_set = Object.values(this.backend_set)
+        if (this.backend_sets && !Array.isArray(this.backend_sets) && typeof this.backend_sets === 'object') this.backend_sets = Object.values(this.backend_sets)
         if (this.listeners && !Array.isArray(this.listeners) && typeof this.listeners === 'object') this.listeners = Object.values(this.listeners)
         if (this.health_checker) {
             // V1 Format
