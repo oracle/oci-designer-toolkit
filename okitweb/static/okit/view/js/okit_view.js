@@ -202,7 +202,8 @@ class OkitArtefactView {
     get compartment_id() {return this.artefact ? this.artefact.compartment_id : '';}
     get parent_id() {return null;}
     get parent() {return null;}
-    get children() {return [];}
+    get children() {return Object.values(this.getJsonView()).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter((r) => r.parent_id === this.id)}
+    // get children() {return [];}
     get display_name() {return this.artefact ? this.artefact.display_name : '';}
     get definition() {return this.artefact ? this.artefact.definition : '';}
     get is_collapsed() {return this.parent ? this.collapsed || this.parent.is_collapsed : this.collapsed;}
@@ -720,7 +721,7 @@ class OkitArtefactView {
         });
     }
 
-    getAssociations() {return this.getResource().getAssociations()}
+    getAssociations() {return this.getResource().getAssociations().filter((id) => id !== this.compartment_id && id !== this.parent_id && !this.children.includes(id))}
 
     addAssociationHighlighting() {}
 
@@ -849,7 +850,9 @@ class OkitArtefactView {
 
     drawAttachments() {}
 
-    drawConnections() {}
+    drawConnections() {
+        this.getAssociations().forEach((id) => this.drawConnection(this.id, id))
+    }
 
     drawConnection(start_id, end_id) {
         if (this.parent && !this.parent.is_collapsed) {
@@ -1727,7 +1730,7 @@ class OkitContainerArtefactView extends OkitArtefactView {
         this._dimensions = {width: 0, height: 0};
     }
 
-    get children() {return Object.values(this.getJsonView()).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter((r) => r.parent_id === this.id)}
+    // get children() {return Object.values(this.getJsonView()).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter((r) => r.parent_id === this.id)}
 
     // -- SVG Definitions
     // --- Dimensions
