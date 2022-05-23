@@ -38,8 +38,8 @@ class Instance extends OkitArtifact {
             user_data: ''
         };
         this.shape_config = {
-            memory_in_gbs: 16, 
-            ocpus: 1
+            memory_in_gbs: okitjson && okitjson.metadata.platform !== 'pca' ? 16 : '', 
+            ocpus: okitjson && okitjson.metadata.platform !== 'pca' ? 1 : ''
         };
         // TODO: Future
         //this.launch_options_specified = false;
