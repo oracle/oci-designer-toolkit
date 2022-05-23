@@ -40,13 +40,13 @@ class LoadBalancerView extends OkitDesignerArtefactView {
     }
 
     // Draw Connections
-    drawConnections() {
-        // Check if there are any missing following query
-        // this.checkBackends();
-        this.artefact.backend_sets.forEach((bs) => {
-            bs.backends.forEach((b) => {if (b.target_id !== '') {this.drawConnection(this.id, b.target_id)}})
-        })
-    }
+    // drawConnections() {
+    //     // Check if there are any missing following query
+    //     // this.checkBackends();
+    //     this.artefact.backend_sets.forEach((bs) => {
+    //         bs.backends.forEach((b) => {if (b.target_id !== '') {this.drawConnection(this.id, b.target_id)}})
+    //     })
+    // }
 
     /*
     ** Property Sheet Load function

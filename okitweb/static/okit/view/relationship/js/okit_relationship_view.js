@@ -18,53 +18,25 @@ class OkitRelationshipJsonView extends OkitJsonView {
 
     constructor(okitjson=null, oci_data=null, resource_icons=[], parent_id = 'relationship-div') {
         super(okitjson, oci_data, resource_icons, parent_id);
+        this.included = []
+        this.excluded = ['compartments']
     }
     get model() {return this.okitjson;}
     get data() {return this.oci_data;}
     get relationships() {
-        let nodes = []
-        let ids = []
-        let links = []
         if (this.model) {
-            // Loop through Model elements and create node entries
-            Object.entries(this.okitjson).forEach(([key, value]) => {
-                if (Array.isArray(value)) {
-                    if (value.length > 0) {
-                        for (let resource of value) {
-                            nodes.push({
-                                id: this.getSafeId(resource.id),
-                                ocid: resource.id,
-                                name: resource.display_name,
-                                type: resource.getArtifactReference()
-                            });
-                            ids.push(resource.id)
-                        }
-                    }
-                }
-            })
-            // Assign id to index
-            // nodes.forEach((n, i) => n.id = i)
-            // Loop through Model elements and create link entries but only to ids in nodes
-            Object.entries(this.okitjson).forEach(([key, value]) => {
-                if (Array.isArray(value)) {
-                    if (value.length > 0) {
-                        for (let resource of value) {
-                            Object.entries(resource).forEach(([k, v]) => {
-                                if (k.endsWith('_id') && ids.indexOf(v) >= 0) {
-                                    links.push({source: this.getSafeId(resource.id), target: this.getSafeId(v)});
-                                } else if (k.endsWith('_ids')) {
-                                    v.forEach((id) => {if (ids.indexOf(id) >= 0) links.push({source: this.getSafeId(resource.id),target: this.getSafeId(id)})});
-                                }
-                            });
-                        }
-                    }
-                }
-            })
-            // Map Ids to index
-            // relationships.nodes = relationships.nodes.map((d) => {return {id: ids.indexOf(d.id), ocid: d.ocid, name: d.name, type: d.type}});
-            // relationships.nodes.forEach((n) => n.id = ids.indexOf(n.id));
+            // Identify Resources to display
+            const resources = Object.entries(this.okitjson).filter(([k, v]) => !this.excluded.includes(k) && Array.isArray(v)).reduce((a, [k, v]) => [...a, ...v], [])
+            // Create Nodes
+            const nodes = resources.map((resource) => {return {id: this.getSafeId(resource.id), ocid: resource.id, name: resource.display_name, type: resource.getArtifactReference()}})
+            // Get Ids of displayed resources
+            const ids = resources.map((resource) => resource.id)
+            // Create Links
+            const links = resources.reduce((a, r) => [...a, ...r.getAssociations().filter((id) => ids.includes(id)).map((id) => {return {source: this.getSafeId(r.id), target: this.getSafeId(id)}})], [])
+            return {nodes: nodes, links: links};
+        } else {
+            return {nodes: [], links: []};
         }
-        return {nodes: nodes, links: links};
     }
 
     static newView(model, oci_data=null, resource_icons=[], parent_id = 'relationship-div') {
@@ -74,23 +46,50 @@ class OkitRelationshipJsonView extends OkitJsonView {
 
     draw(for_export=false) {
         this.newCanvas()
+        this.drawResourceSelection()
+        this.drawRelationshipSVG()
     }
 
     newCanvas(width=800, height=800, for_export=false) {
-        relationship_data = this.relationships;
-        // console.warn('Data:', relationship_data);
-        // console.warn('Data:', JSON.stringify(relationship_data, null, 2));
         const self = this;
         let canvas_div = d3.select(d3Id(this.parent_id));
-        let parent_width  = $(jqId(this.parent_id)).width();
-        let parent_height = $(jqId(this.parent_id)).height();
-        if (!for_export) {
-            width = Math.round(Math.max(width, parent_width));
-            height = Math.round(Math.max(height, parent_height));
-        }
         // Empty existing Canvas
         canvas_div.selectAll('*').remove();
-        relationship_svg = canvas_div.append("svg")
+        // Add Select Div
+        this.selection_div = canvas_div.append("div").attr('class', 'relationship-selection')
+        // Add relationship display area
+        this.relationship_svg_div = canvas_div.append("div").attr('class', 'relationship-svg-div')
+    }
+
+    drawResourceSelection() {
+        this.selection_div.selectAll('*').remove()
+        if (this.model) {
+            Object.entries(this.model).filter(([k, v]) => Array.isArray(v)).sort((a, b) => a[0].localeCompare(b[0])).forEach(([k, v]) => {
+                const resource_div = this.selection_div.append('div')
+                const cb = resource_div.append('input').attr('type', 'checkbox')
+                    .attr('id', `${k}_relationship_cb`)
+                    .on('input', (d, i, n) => {
+                        if (n[i].checked) {
+                            this.excluded = this.excluded.filter((e) => e !== k)
+                        } else {
+                            this.excluded.push(k)
+                        }
+                        this.drawRelationshipSVG()
+                    })
+                const label = resource_div.append('label')
+                    .attr('for', `${k}_relationship_cb`)
+                    .text(titleCase(k.replaceAll('_', ' ')))
+                    cb.property('checked', !this.excluded.includes(k))
+            })
+        }
+    }
+
+    drawRelationshipSVG(width=800, height=800, for_export=false) {
+        this.relationship_svg_div.selectAll('*').remove()
+        const self = this;
+        relationship_data = this.relationships;
+        // Add SVG
+        relationship_svg = this.relationship_svg_div.append("svg")
             .attr("id", 'relationship-svg')
             .attr("width", '100%')
             .attr("height", "100%")

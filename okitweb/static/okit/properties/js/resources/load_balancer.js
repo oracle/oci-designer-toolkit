@@ -205,6 +205,7 @@ class LoadBalancerProperties extends OkitResourceProperties {
                 backend.ip_address = '';
                 ip_address.input.property('value', backend.ip_address)
             }
+            this.redraw()
         })
         this.append(bs_table.table, target_id.row)
         this.loadSelect(target_id.input, 'all_instances', true)

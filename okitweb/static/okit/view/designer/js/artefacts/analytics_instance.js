@@ -28,6 +28,7 @@ class AnalyticsInstanceView extends OkitArtefactView {
     /*
     ** SVG Processing
     */
+    getAssociations() {return super.getAssociations().filter((id) => id !== this.vcn_id)}
     /*
     ** Property Sheet Load function
     */
