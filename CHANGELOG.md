@@ -18,7 +18,7 @@
     4. Load Balancer - Allow specification of multiple Backend Sets and Listeners.
 5. Update Discovery Code to include additional resources requires the python module to be upgraded to the latest release.
 6. Remove Object Storage from PCA flagged OKIT designs.
-7. Update Terraform Generation to create multiple files based on OCI groupings.
+7. Update Terraform Generation to create multiple files based on OCI groupings. (Issue: #308 - Terraform export should use multiple files)
 8. Update Copyright.
 9. Update DNS Label when vcn / subnet name changes.
 10. Add generic association Highlighting and connection drawing.

@@ -124,7 +124,7 @@ output "{{ resource_name }}PublicIP" {
 }
 
 output "{{ resource_name }}PrivateIP" {
-    value = local.{{ resource_name }}_private_ip
+    value = [local.{{ resource_name }}_display_name, local.{{ resource_name }}_private_ip]
 }
 
 # ------ Create Block Storage Attachments
