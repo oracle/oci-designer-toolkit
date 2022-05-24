@@ -40,17 +40,17 @@ class InstanceView extends OkitDesignerArtefactView {
     getNsgIds() {return this.resource.vnic_attachments.reduce((a, v) => [...a, ...v.nsg_ids], [])}
     getLinks() {return super.getLinks().filter((id) => !this.getNsgIds().includes(id))}
      // Add Specific Mouse Events
-    addAssociationHighlighting() {
-        for (let id of this.artefact.block_storage_volume_ids) {$(jqId(id)).addClass('highlight-association');}
-        for (let vnic of this.getVnicAttachments().filter((v) => v.subnet_id !== '')) {$(jqId(vnic.subnet_id)).addClass('highlight-association');}
-        for (let id of this.primary_vnic.nsg_ids) {$(jqId(id)).addClass('highlight-association');}
-    }
+    // addAssociationHighlighting() {
+    //     for (let id of this.artefact.block_storage_volume_ids) {$(jqId(id)).addClass('highlight-association');}
+    //     for (let vnic of this.getVnicAttachments().filter((v) => v.subnet_id !== '')) {$(jqId(vnic.subnet_id)).addClass('highlight-association');}
+    //     for (let id of this.primary_vnic.nsg_ids) {$(jqId(id)).addClass('highlight-association');}
+    // }
 
-    removeAssociationHighlighting() {
-        for (let id of this.artefact.block_storage_volume_ids) {$(jqId(id)).removeClass('highlight-association');}
-        for (let vnic of this.getVnicAttachments().filter((v) => v.subnet_id !== '')) {$(jqId(vnic.subnet_id)).removeClass('highlight-association');}
-        for (let id of this.primary_vnic.nsg_ids) {$(jqId(id)).removeClass('highlight-association');}
-    }
+    // removeAssociationHighlighting() {
+    //     for (let id of this.artefact.block_storage_volume_ids) {$(jqId(id)).removeClass('highlight-association');}
+    //     for (let vnic of this.getVnicAttachments().filter((v) => v.subnet_id !== '')) {$(jqId(vnic.subnet_id)).removeClass('highlight-association');}
+    //     for (let id of this.primary_vnic.nsg_ids) {$(jqId(id)).removeClass('highlight-association');}
+    // }
     // TODO: Decide If Required
     drawAttachmentsOrig() {
         let attachment_count = 0;

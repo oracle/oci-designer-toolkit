@@ -426,7 +426,7 @@ class OkitArtifact {
             }
             return n
         }, [])
-        return associations(this)
+        return associations(this).filter((id) => id !== '')
     }
     getLinks() {return this.getAssociations()}
 

@@ -21,6 +21,8 @@
 7. Update Terraform Generation to create multiple files based on OCI groupings.
 8. Update Copyright.
 9. Update DNS Label when vcn / subnet name changes.
+10. Add generic association Highlighting and connection drawing.
+11. Update resource view to allow selection of resources to display.
 ### Bug Fixes
 1. Fix resource_name generation based on display_name to correctly Title Case.
 2. Fix issue where route rules were specifying DRG Attachment Id not DRG Id.
