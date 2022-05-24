@@ -128,7 +128,7 @@ class OCITerraformGenerator(OCIGenerator):
                 generated_tf[f'{value}.tf'] = ''
         for key, value in self.rendered_resources.items():
             if len(value) > 0:
-                generated_tf[f'{key}.tf'] = value
+                generated_tf[f'{key}.tf'] = '\n'.join(value)
         generated_tf[self.USER_DEFINED_FILE_NAME] = self.visualiser_json.get('user_defined', {}).get('terraform', '')
         generated_tf[self.VARIABLES_FILE_NAME] = '\n'.join(self.getVariableDefinitions())
         generated_tf[self.TERRAFORM_FILE_NAME] = '\n'.join(self.getVariableValues())
