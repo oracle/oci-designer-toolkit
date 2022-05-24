@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
+** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded Designer AutonomousDatabase View Javascript');
@@ -31,7 +31,8 @@ class AutonomousDatabaseView extends OkitDesignerArtefactView {
     /*
      ** SVG Processing
      */
-    // Add Specific Mouse Events
+    getLinks() {return super.getLinks().filter((id) => !this.resource.nsg_ids)}
+     // Add Specific Mouse Events
     addAssociationHighlighting() {
         for (let id of this.nsg_ids) {$(jqId(id)).addClass('highlight-association');}
         $(jqId(this.artefact_id)).addClass('highlight-association');

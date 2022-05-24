@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
+** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded OKIT Designer View Javascript');
@@ -24,6 +24,10 @@ class OkitDesignerJsonView extends OkitJsonView {
     }
 
     get display_grid() {return okitSettings.is_display_grid;}
+
+    autoLayout() {
+        
+    }
 
     drawContainer(container) {
         // const resources = Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []);

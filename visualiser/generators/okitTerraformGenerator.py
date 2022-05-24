@@ -1,5 +1,5 @@
 
-# Copyright (c) 2020, 2021, Oracle and/or its affiliates.
+# Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 """Provide Module Description
@@ -42,7 +42,7 @@ class OCITerraformGenerator(OCIGenerator):
             output_dir = output_root
         super(OCITerraformGenerator, self).__init__(template_dir, output_dir, visualiser_json, use_vars, add_provider)
 
-    def writeFiles(self):
+    def writeFilesOriginal(self):
         # Write Provider tf file
         writeTerraformFile(os.path.join(self.output_dir, self.PROVIDER_FILE_NAME), self.getProvider())
         # Write Metadata tf file
@@ -71,6 +71,12 @@ class OCITerraformGenerator(OCIGenerator):
 
         return
     
+    def writeFiles(self):
+        generated_tf = self.toJson(True)
+        for key, value in generated_tf.items():
+            writeTerraformFile(os.path.join(self.output_dir, key), value)
+        return
+    
     def getVariableDefinitions(self):
         variable_definitions = []
         variable_values = []
@@ -97,7 +103,7 @@ class OCITerraformGenerator(OCIGenerator):
             variable_definitions.append('variable "{0:s}" {{}}'.format(key))
         return variable_values
     
-    def toJson(self):
+    def toJsonSimple(self):
         generated_tf = {
             "provider.tf": '\n'.join(self.getProvider()),
             "metadata.tf": '\n'.join(self.getMetadata()),
@@ -107,6 +113,26 @@ class OCITerraformGenerator(OCIGenerator):
             # "output.tf": '\n'.join(self.getRenderedOutput()),
             "user_defined.tf": self.visualiser_json.get('user_defined', {}).get('terraform', '')
         }
+        return generated_tf
+
+    def toJson(self, force_main=False):
+        # logger.info(jsonToFormattedString(self.rendered_resources))
+        generated_tf = {
+            self.PROVIDER_FILE_NAME: '\n'.join(self.getProvider()),
+            self.METADATA_FILE_NAME: '\n'.join(self.getMetadata()),
+        }
+        if force_main:
+            generated_tf[self.MAIN_FILE_NAME] = []
+        for value in sorted(self.file_map.values()):
+            if len(self.rendered_resources.get(value,'')) > 0:
+                generated_tf[f'{value}.tf'] = ''
+        for key, value in self.rendered_resources.items():
+            if len(value) > 0:
+                generated_tf[f'{key}.tf'] = '\n'.join(value)
+        generated_tf[self.USER_DEFINED_FILE_NAME] = self.visualiser_json.get('user_defined', {}).get('terraform', '')
+        generated_tf[self.VARIABLES_FILE_NAME] = '\n'.join(self.getVariableDefinitions())
+        generated_tf[self.TERRAFORM_FILE_NAME] = '\n'.join(self.getVariableValues())
+        # logger.info(jsonToFormattedString(generated_tf))
         return generated_tf
 
     def formatJinja2Variable(self, variable_name):

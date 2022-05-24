@@ -1,6 +1,36 @@
 # Release Notes
 
 
+## Version 0.37.0
+**Release Date**: 25th May 2022
+### Features
+1. Display Alert Icon if there is an issue with the OCI Config file and it is identified as not valid.
+2. Add conversion routine to change old style File Storage Systems to new 2 part Mount Target and File System.
+3. New Resources
+    1. Data Integration Workspace.
+    2. KMS Vault.
+    3. KMS Key.
+    4. Visual Builder Instance
+4. Updated Resources
+    1. File System (Allow KMS Key Selection)
+    2. Block Volume (Allow KMS Key Selection)
+    3. Object Storage Bucket (Allow KMS Key Selection)
+    4. Load Balancer - Allow specification of multiple Backend Sets and Listeners.
+5. Update Discovery Code to include additional resources requires the python module to be upgraded to the latest release.
+6. Remove Object Storage from PCA flagged OKIT designs.
+7. Update Terraform Generation to create multiple files based on OCI groupings.
+8. Update Copyright.
+9. Update DNS Label when vcn / subnet name changes.
+10. Add generic association Highlighting and connection drawing.
+11. Update resource view to allow selection of resources to display.
+### Bug Fixes
+1. Fix resource_name generation based on display_name to correctly Title Case.
+2. Fix issue where route rules were specifying DRG Attachment Id not DRG Id.
+3. Fix issue with Route Rule specifying Service Gateway not displaying the correct destination on query.
+4. Fix Fast Discovery compartment chunking algorithm to generate correct length queries.
+5. Resolve issue where Security List Egress rules properties were writing to source field not destination field.
+
+
 ## Version 0.36.0
 **Release Date**: 4th May 2022
 ### Features

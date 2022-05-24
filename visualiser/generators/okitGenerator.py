@@ -1,5 +1,5 @@
 
-# Copyright (c) 2020, 2021, Oracle and/or its affiliates.
+# Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 """Provide Module Description
@@ -7,7 +7,7 @@
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 __author__ = "Andrew Hopkinson (Oracle Cloud Solutions A-Team)"
-__copyright__ = "Copyright (c) 2020, 2021, Oracle and/or its affiliates."
+__copyright__ = "Copyright (c) 2020, 2022, Oracle and/or its affiliates."
 __version__ = "1.0.0"
 __module__ = "ociGenerator"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
@@ -27,9 +27,10 @@ from model.okitValidation import OCIJsonValidator
 logger = getLogger()
 
 class OCIGenerator(object):
-    OKIT_VERSION = "0.36.0"
+    OKIT_VERSION = "0.37.0"
     def __init__(self, template_dir, output_dir, visualiser_json, use_vars=False, add_provider=True):
         # Initialise generator output data variables
+        self.rendered_resources = {}
         self.create_sequence = []
         self.run_variables = {}
         self.data_output = []
@@ -56,6 +57,9 @@ class OCIGenerator(object):
         self.jinja2_environment = jinja2.Environment(loader=self.template_loader, trim_blocks=True, lstrip_blocks=True, autoescape=True)
         # Initialise working variables
         self.id_name_map = {}
+        # Build Empty Rendered Resources
+        for v in self.file_map.values():
+            self.rendered_resources[v] = []
 
     def initialiseJinja2Variables(self):
         # Copy common variables
@@ -141,6 +145,7 @@ class OCIGenerator(object):
                 for asset in value:
                     # self.id_name_map[self.formatOcid(asset["id"])] = asset.get("display_name", asset.get("name", "Unknown"))
                     self.id_name_map[self.formatOcid(asset["id"])] = asset.get("resource_name", asset.get("display_name", "Unknown"))
+                    # logger.info(f'{asset["id"]}: {self.id_name_map[self.formatOcid(asset["id"])]}')
         return
     
     def getLocalReference(self, id):
@@ -154,9 +159,54 @@ class OCIGenerator(object):
     def formatOcid(self, id):
         return id
 
+    file_map = {
+        "default": "main",
+        "provider": "provider",
+        "metadata": "metadata",
+        "user_defined": "user_defined",
+
+        "bastions": "identity",
+        "compartments": "identity",
+        "groups": "identity",
+        "keys": "identity",
+        "users": "identity",
+        "vaults": "identity",
+
+        "dhcp_options": "networking",
+        "drg_attachments": "networking",
+        "internet_gateways": "networking",
+        "load_balancers": "networking",
+        "local_peering_gateways": "networking",
+        "nat_gateways": "networking",
+        "network_load_balancers": "networking",
+        "network_security_groups": "networking",
+        "remote_peering_connections": "networking",
+        "route_tables": "networking",
+        "security_lists": "networking",
+        "service_gateways": "networking",
+        "subnets": "networking",
+        "virtual_cloud_networks": "networking",
+
+        "block_storage_volumes": "storage",
+        "file_systems": "storage",
+        "mount_targets": "storage",
+        "object_storage_buckets": "storage",
+
+        "analytics_instances": "compute",
+        "instances": "compute",
+
+        "autonomous_databases": "database",
+        "database_systems": "database",
+        "mysql_database_systems": "database",
+
+        "customer_premise_equipments": "customer_connectivity",
+        "drgs": "customer_connectivity",
+        "ipsec_connections": "customer_connectivity",
+
+        "oke_clusters": "containers",
+    }
     resource_template_map = {
         "drgs": ["drg.jinja2", "drg_route_distribution.jinja2", "drg_route_table.jinja2"],
-        "load_balancers": ["loadbalancer.jinja2"]
     }
 
     def generate(self):
@@ -204,12 +254,13 @@ class OCIGenerator(object):
             if isinstance(value, list):
                 for resource in value:
                     resource['root_compartment'] = (resource.get('compartment_id', 'ROOT') not in compartment_ids)
-                    self.renderResource(resource, self.resource_template_map.get(key, [f'{key[:-1]}.jinja2']))
+                    self.renderResource(key, resource, self.resource_template_map.get(key, [f'{key[:-1]}.jinja2']))
         return
 
     # Render Resources
 
-    def renderResource(self, resource, templates=[]):
+    def renderResource(self, resource_type, resource, templates=[]):
+        # logger.info(f'resource_name {resource["resource_name"]} - old Standardised Resource Name {self.standardiseResourceName(resource["display_name"])}')
         # Reset Variables
         self.initialiseJinja2Variables()
         # ---- Add Standard
@@ -221,10 +272,14 @@ class OCIGenerator(object):
         self.processResourceElements(resource, self.jinja2_variables)
         # logger.info(jsonToFormattedString(self.jinja2_variables))
 
+        default_key = self.file_map['default']
+        resource_key = self.file_map.get(resource_type, default_key)
+        rendered_resources = self.rendered_resources[resource_key]
         # -- Render Template
         for template in templates:
             jinja2_template = self.jinja2_environment.get_template(template)
             self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+            rendered_resources.append(jinja2_template.render(self.jinja2_variables))
         # logger.debug(self.create_sequence[-1])
         return         
 
@@ -244,6 +299,7 @@ class OCIGenerator(object):
                     elif (key.endswith('_id') or key == 'id') and  val != '':
                         # Simple Reference
                         parent[key] = self.getLocalReference(val)
+                        parent[f'{key}_resource_name'] = self.id_name_map.get(val, 'unknown')
                     elif val != '':
                         # Add Simple Value
                         parent[key] = self.formatJinja2Value(val.replace('\n', '\\n').replace('"', '\\"'))

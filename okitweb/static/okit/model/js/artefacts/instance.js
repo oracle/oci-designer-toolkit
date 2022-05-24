@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
+** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded Instance Javascript');
@@ -18,7 +18,7 @@ class Instance extends OkitArtifact {
         // this.display_name = this.generateDefaultName(okitjson.instances.length + 1);
         this.availability_domain = '1';
         this.compartment_id = '';
-        this.shape = 'VM.Standard.E3.Flex';
+        this.shape = okitjson && okitjson.metadata.platform !== 'pca' ? 'VM.Standard.E3.Flex' : '';
         // # Optional
         this.count = 1;
         this.fault_domain = '';
@@ -38,8 +38,8 @@ class Instance extends OkitArtifact {
             user_data: ''
         };
         this.shape_config = {
-            memory_in_gbs: 16, 
-            ocpus: 1
+            memory_in_gbs: okitjson && okitjson.metadata.platform !== 'pca' ? 16 : '', 
+            ocpus: okitjson && okitjson.metadata.platform !== 'pca' ? 1 : ''
         };
         // TODO: Future
         //this.launch_options_specified = false;

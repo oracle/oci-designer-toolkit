@@ -15,6 +15,11 @@
                     "title": "OKE Cluster",
                     "targets": ["oci"],
                     "svg": "ContainerEngineForKubernetes.svg"
+                },
+                {
+                    "title": "Data Integration Workspace",
+                    "targets": ["oci"],
+                    "svg": "DataIntegrationSystemDIS.svg"
                 }
             ]
         },
@@ -42,6 +47,11 @@
                     "title": "Oracle Digital Assistant",
                     "targets": ["oci"],
                     "svg": "OracleDigitalAssistantODA.svg"
+                },
+                {
+                    "title": "Visual Builder Instance",
+                    "targets": ["oci"],
+                    "svg": "VisualBuilderInstance.svg"
                 }
             ]
         },
@@ -198,8 +208,8 @@
                 },
                 {
                     "title": "Object Storage Bucket",
-                    "targets": ["oci", "pca"],
-                    "svg": "ObjectStorage.svg"
+                    "targets": ["oci"],
+                    "svg": "Buckets.svg"
                 },
                 {
                     "title": "Mount Target",
@@ -240,12 +250,12 @@
                 },
                 {
                     "title": "Vault",
-                    "targets": ["hidden"],
+                    "targets": ["oci", "freetier"],
                     "svg": "KeyVault.svg"
                 },
                 {
                     "title": "Key",
-                    "targets": ["hidden"],
+                    "targets": ["oci", "freetier"],
                     "svg": "KeyManagement.svg"
                 }
             ]

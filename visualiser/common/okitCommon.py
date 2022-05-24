@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# Copyright (c) 2020, 2021, Oracle and/or its affiliates.
+# Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 """Provide Module Description
@@ -144,8 +144,11 @@ def writeXmlFile(tree, filename):
 def writeTerraformFile(terraform_file, contents):
     logger.info('Writing Terraform File: {0:s}'.format(terraform_file))
     with closing(open(terraform_file, 'w')) as f:
-        for resource in contents:
-            f.write('{0:s}\n'.format(resource))
+        if isinstance(contents, list):
+            for resource in contents:
+                f.write('{0:s}\n'.format(resource))
+        else:
+            f.write('{0:s}\n'.format(contents))
     return
 
 

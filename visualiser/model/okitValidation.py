@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# Copyright (c) 2020, 2021, Oracle and/or its affiliates.
+# Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 """Provide Module Description
@@ -555,27 +555,58 @@ class OCIJsonValidator(object):
 
     # Load Balancers
     def validateLoadBalancers(self):
-        for artefact in self.okit_json.get('load_balancers', []):
-            logger.info('Validating {!s}'.format(artefact['display_name']))
-            if len(artefact['instance_ids']) == 0:
-                warning = {
-                    'id': artefact['id'],
-                    'type': 'Load Balancer',
-                    'artefact': artefact['display_name'],
-                    'message': 'No Backend Instances have been specified.',
-                    'element': 'instance_ids'
-                }
-                self.results['warnings'].append(warning)
-            if len(artefact['subnet_ids']) == 0:
+        for resource in self.okit_json.get('load_balancers', []):
+            logger.info('Validating {!s}'.format(resource['display_name']))
+            # if len(resource['instance_ids']) == 0:
+            #     warning = {
+            #         'id': resource['id'],
+            #         'type': 'Load Balancer',
+            #         'resource': resource['display_name'],
+            #         'message': 'No Backend Instances have been specified.',
+            #         'element': 'instance_ids'
+            #     }
+            #     self.results['warnings'].append(warning)
+            if len(resource['subnet_ids']) == 0:
                 self.valid = False
                 error = {
-                    'id': artefact['id'],
+                    'id': resource['id'],
                     'type': 'Load Balancer',
-                    'artefact': artefact['display_name'],
+                    'artefact': resource['display_name'],
                     'message': 'At least one subnet must be specified.',
                     'element': 'subnet_ids'
                 }
                 self.results['errors'].append(error)
+            for listener in resource.get('listeners', []):
+                if listener['default_backend_set_name'] == '':
+                    error = {
+                        'id': resource['id'],
+                        'type': 'Load Balancer',
+                        'artefact': resource['display_name'],
+                        'message': 'Listener must specify backend set.',
+                        'element': 'listeners'
+                    }
+                    self.results['errors'].append(error)
+                if len([l for l in resource['listeners'] if l['name'] == listener['name']]) > 1:
+                    error = {
+                        'id': resource['id'],
+                        'type': 'Load Balancer',
+                        'artefact': resource['display_name'],
+                        'message': f'Listener name {listener["name"]} must be unique.',
+                        'element': 'listeners'
+                    }
+                    self.results['errors'].append(error)
+            backends = []
+            for backendset in resource.get('backend_sets',[]):
+                backends.extend(backendset['backends'])
+                if len([bs for bs in resource['backend_sets'] if bs['name'] == backendset['name']]) > 1:
+                    error = {
+                        'id': resource['id'],
+                        'type': 'Load Balancer',
+                        'artefact': resource['display_name'],
+                        'message': f'Backend Set name {backendset["name"]} must be unique.',
+                        'element': 'backend_sets'
+                    }
+                    self.results['errors'].append(error)            
 
     # Local Peering Gateways
     def validateLocalPeeringGateways(self):
@@ -849,7 +880,7 @@ class OCIJsonValidator(object):
                 }
                 self.results['errors'].append(error)
             # Check DNs
-            if len([s for s in self.okit_json.get('subnets', []) if s["id"] != artefact["id"] and s["dns_label"] == artefact["dns_label"] and s["vcn_id"] == artefact["vcn_id"]]) > 0:
+            if len([s for s in self.okit_json.get('subnets', []) if s["id"] != artefact["id"] and s["dns_label"] != '' and s["dns_label"] == artefact["dns_label"] and s["vcn_id"] == artefact["vcn_id"]]) > 0:
                 self.valid = False
                 error = {
                     'id': artefact['id'],

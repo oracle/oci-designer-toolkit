@@ -1,0 +1,170 @@
+{% if read_only %}
+# ------ Read Load Balancer
+data "oci_load_balancer_load_balancers" "{{ resource_name }}" {
+    # Required
+    compartment_id = {{ compartment_id }}
+    filter {
+        name = "id"
+        values = [{{ ocid | safe }}]
+    }
+}
+
+locals {
+    {{ resource_name }}_id = {{ ocid | safe }}
+    {{ resource_name }}_ocid = {{ ocid | safe }}
+}
+{% else %}
+# ------ Create Load Balancer
+resource "oci_load_balancer_load_balancer" "{{ resource_name }}" {
+    #Required
+    compartment_id = {{ compartment_id }}
+    display_name = {{ display_name | safe }}
+    subnet_ids = [{% for subnet_id in subnet_ids %}{{ subnet_id }}{% if not loop.last %},{% endif %}{% endfor %}]
+    shape          = {{ shape | safe }}
+    is_private = {{ is_private | safe | lower }}
+{% if network_security_group_ids is defined %}
+    network_security_group_ids   = [{% for nsg_id in network_security_group_ids %}{{ nsg_id }}{% if not loop.last %},{% endif %}{% endfor %}]
+{% endif %}
+{% if ip_mode is defined %}
+    ip_mode = {{ ip_mode | safe }}
+{% endif %}
+{% if reserved_ips is defined %}
+{% for reserved_ip in reserved_ips %}
+    reserved_ips {
+        #Optional
+        id = {{ reserved_ip }}
+    }
+{% endfor %}
+{% endif %}
+{% if shape_details is defined and shape | trim('"') == "flexible" %}
+    shape_details {
+        #Required
+        maximum_bandwidth_in_mbps = {{ shape_details.maximum_bandwidth_in_mbps | safe }}
+        minimum_bandwidth_in_mbps = {{ shape_details.minimum_bandwidth_in_mbps | safe }}
+    }
+{% endif %}
+{% if defined_tags is defined %}
+    defined_tags   = {{ defined_tags | safe }}
+{% endif %}
+{% if freeform_tags is defined %}
+    freeform_tags  = {{ freeform_tags | safe }}
+{% endif %}
+}
+
+locals {
+    {{ resource_name }}_id            = oci_load_balancer_load_balancer.{{ resource_name }}.id
+}
+
+{% if backend_sets is defined %}
+# ------- Create Load Balancer {{ resource_name }} BackendSets
+{% for backend_set in backend_sets %}
+resource "oci_load_balancer_backend_set" "{{ backend_set.resource_name }}" {
+    #Required
+    health_checker {
+        #Required
+        protocol = {{ backend_set.health_checker.protocol | safe }}
+        #Optional
+{% if backend_set.health_checker.interval_in_millis is defined %}
+        interval_in_millis = {{ backend_set.health_checker.interval_in_millis | safe }}
+{% endif %}
+{% if backend_set.health_checker.port is defined %}
+        port = {{ backend_set.health_checker.port | safe }}
+{% endif %}
+{% if backend_set.health_checker.request_data is defined %}
+        request_data = {{ backend_set.health_checker.request_data | safe }}
+{% endif %}
+{% if backend_set.health_checker.response_body_regex is defined %}
+        response_body_regex = {{ backend_set.health_checker.response_body_regex | safe }}
+{% endif %}
+{% if backend_set.health_checker.response_data is defined %}
+        response_data = {{ backend_set.health_checker.response_data | safe }}
+{% endif %}
+{% if backend_set.health_checker.retries is defined %}
+        retries = {{ backend_set.health_checker.retries | safe }}
+{% endif %}
+{% if backend_set.health_checker.return_code is defined %}
+        return_code = {{ backend_set.health_checker.return_code | safe }}
+{% endif %}
+{% if backend_set.health_checker.timeout_in_millis is defined %}
+        timeout_in_millis = {{ backend_set.health_checker.timeout_in_millis | safe }}
+{% endif %}
+{% if backend_set.health_checker.url_path is defined %}
+        url_path = {{ backend_set.health_checker.url_path | safe }}
+{% endif %}
+    }
+    name = {{ backend_set.name | safe }}
+    {# load_balancer_id = local.{{ resource_name }}_id #}
+    load_balancer_id = oci_load_balancer_load_balancer.{{ resource_name }}.id
+    policy = {{ backend_set.policy | safe }}
+    #Optional
+{% if backend_set.ip_version is defined %}
+    ip_version = {{ backend_set.ip_version | safe }}
+{% endif %}
+{% if backend_set.is_preserve_source is defined %}
+    is_preserve_source = {{ backend_set.is_preserve_source | safe | lower }}
+{% endif %}
+    depends_on = [oci_load_balancer_load_balancer.{{ resource_name }}]
+}
+
+locals {
+    {{ backend_set.resource_name }}_name            = oci_load_balancer_backend_set.{{ backend_set.resource_name }}.name
+}
+
+{% if backend_set.backends is defined %}
+# -------- Create Load Balancer {{ resource_name }} BackendSet {{ backend_set.resource_name }} Backends
+{% for backend in backend_set.backends %}
+resource "oci_load_balancer_backend" "{{ backend.resource_name }}" {
+    #Required
+    backendset_name = {{ backend_set.name | safe }}
+    {# load_balancer_id = local.{{ resource_name }}_id #}
+    load_balancer_id = oci_load_balancer_load_balancer.{{ resource_name }}.id
+    port = {{ backend.port | safe }}
+    ip_address = {{ backend.target_id| trim('id') | safe }}private_ip
+    #Optional
+{% if backend.is_backup is defined %}
+    is_backup = {{ backend.is_backup | safe | lower }}
+{% endif %}
+{% if backend.is_drain is defined %}
+    is_drain = {{ backend.is_drain | safe | lower }}
+{% endif %}
+{% if backend.is_offline is defined %}
+    is_offline = {{ backend.is_offline | safe | lower }}
+{% endif %}
+{# {% if backend.name is defined %}
+    name = {{ backend.name | safe }}
+{% endif %} #}
+{# {% if backend.target_id is defined %}
+    target_id = {{ backend.target_id | safe }}
+{% endif %} #}
+{% if backend.weight is defined %}
+    weight = {{ backend.weight | safe }}
+{% endif %}
+    depends_on = [oci_load_balancer_backend_set.{{ backend_set.resource_name }}]
+}
+{% endfor %} {# End backend_set.backends Loop #}
+{% endif %} {# End backend_set.backends Defined #}
+
+{% endfor %} {# End backend_sets Loop #}
+{% endif %} {# End backend_sets Defined #}
+
+{% if listeners is defined %}
+# ------- Create Load Balancer {{ resource_name }} Listeners
+{% for listener in listeners %}
+resource "oci_load_balancer_listener" "{{ listener.resource_name }}" {
+    #Required
+    default_backend_set_name = oci_load_balancer_backend_set.{{ listener.default_backend_set_name | trim('"') }}.name
+    name = {{ listener.name | safe }}
+    {# load_balancer_id = local.{{ resource_name }}_id #}
+    load_balancer_id = oci_load_balancer_load_balancer.{{ resource_name }}.id
+    port = {{ listener.port | safe }}
+    protocol = {{ listener.protocol | safe }}
+    #Optional
+{% if listener.ip_version is defined %}
+    ip_version = {{ listener.ip_version | safe }}
+{% endif %}
+    depends_on = [oci_load_balancer_load_balancer.{{ resource_name }}{% for backend_set in backend_sets %},oci_load_balancer_backend_set.{{ backend_set.resource_name }}{% endfor %}]
+}
+{% endfor %} {# End listeners Loop #}
+{% endif %} {# End listeners Defined #}
+
+{% endif %} {# End Read Only#}

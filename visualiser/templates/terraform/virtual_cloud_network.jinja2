@@ -25,7 +25,9 @@ resource "oci_core_vcn" "{{ resource_name }}" {
     cidr_block     = {% for cidr_block in cidr_blocks %}{% if loop.first %}"{{ cidr_block }}"{% endif %}{% endfor %} 
 {% endif %}
     # Optional
+{% if dns_label is defined %}
     dns_label      = {{ dns_label | safe }}
+{% endif %}
     display_name   = {{ display_name | safe }}
 {% if defined_tags is defined %}
     defined_tags   = {{ defined_tags | safe }}

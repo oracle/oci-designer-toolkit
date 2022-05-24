@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
+** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded Subnet Properties Javascript');
@@ -46,7 +46,7 @@ class SubnetProperties extends OkitResourceProperties {
         this.prohibit_public_ip_on_vnic = private_ip.input
         this.append(this.advanced_network_tbody, private_ip.row)
         // Route Table
-        const rt = this.createInput('select', 'Route Table', `${self.id}_route_table_id`, '', (d, i, n) => {self.resource.route_table_id = n[i].value = n[i].value; this.redraw()})
+        const rt = this.createInput('select', 'Route Table', `${self.id}_route_table_id`, '', (d, i, n) => {self.resource.route_table_id = n[i].value; this.redraw()})
         this.route_table_id = rt.input
         this.append(this.advanced_network_tbody, rt.row)
         // Security Lists
@@ -54,7 +54,7 @@ class SubnetProperties extends OkitResourceProperties {
         this.security_list_ids = sl.input
         this.append(this.advanced_network_tbody, sl.row)
         // DHCP Options
-        const dhcp = this.createInput('select', 'DHCP Options', `${self.id}_dhcp_options_id`, '', (d, i, n) => {self.resource.dhcp_options_id = n[i].value = n[i].value; this.redraw()})
+        const dhcp = this.createInput('select', 'DHCP Options', `${self.id}_dhcp_options_id`, '', (d, i, n) => {self.resource.dhcp_options_id = n[i].value; this.redraw()})
         this.dhcp_options_id = dhcp.input
         this.append(this.advanced_network_tbody, dhcp.row)
 
@@ -76,6 +76,7 @@ class SubnetProperties extends OkitResourceProperties {
 
     // Load Additional Resource Specific Properties
     loadResource() {
+        // this.handleDisplayNameChange()
         // Load Reference Selects
         this.loadSelect(this.vcn_id, 'virtual_cloud_network', true)
         this.loadSelect(this.route_table_id, 'route_table', true, this.vcn_filter)
@@ -99,5 +100,13 @@ class SubnetProperties extends OkitResourceProperties {
         this.ipv6cidr_blocks.attr('readonly', !this.resource.is_ipv6enabled ? 'readonly' : undefined)
         this.ipv6cidr_blocks.property('value', this.resource.is_ipv6enabled ? this.resource.ipv6cidr_blocks : '')
         this.resource.ipv6cidr_blocks = this.resource.is_ipv6enabled ? this.resource.ipv6cidr_blocks : ''
+    }
+
+    handleDisplayNameChange = () => {
+        const dns_label = this.resource.generateDnsLabel()
+        this.dns_label.attr('placeholder', dns_label)
+        this.dns_label.property('placeholder', dns_label)
+        this.resource.dns_label = dns_label
+        this.dns_label.property('value', this.resource.dns_label)
     }
 }

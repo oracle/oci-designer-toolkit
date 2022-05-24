@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
+** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded File System View Javascript');
@@ -20,16 +20,19 @@ class FileSystemView extends OkitArtefactView {
     /*
     ** Property Sheet Load function
     */
-    loadProperties() {
-        const self = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/file_system.html", () => {loadPropertiesSheet(self.artefact);});
+    newPropertiesSheet() {
+        this.properties_sheet = new FileSystemProperties(this.artefact)
     }
-    /*
-    ** Load and display Value Proposition
-    */
-    loadValueProposition() {
-        $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/file_system.html");
-    }
+    // loadProperties() {
+    //     const self = this;
+    //     $(jqId(PROPERTIES_PANEL)).load("propertysheets/file_system.html", () => {loadPropertiesSheet(self.artefact);});
+    // }
+    // /*
+    // ** Load and display Value Proposition
+    // */
+    // loadValueProposition() {
+    //     $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/file_system.html");
+    // }
     /*
     ** Static Functionality
     */

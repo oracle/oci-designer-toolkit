@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
+** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded Virtual Cloud Network Javascript');
@@ -14,11 +14,11 @@ class VirtualCloudNetwork extends OkitArtifact {
     constructor (data={}, okitjson={}) {
         super(okitjson);
         // Configure default values
-        // this.display_name = this.generateDefaultName(okitjson.virtual_cloud_networks.length + 1);
         this.compartment_id = data.parent_id;
         // Generate Cidr
         this.cidr_blocks = [];
-        this.dns_label = `vcn${this.display_name.toLowerCase().slice(-6)}`;
+        this.dns_label = '';
+        this.dns_label = this.generateDnsLabel();
         this.is_ipv6enabled = false;
         this.ipv6cidr_blocks = [];
         // Update with any passed data
@@ -119,6 +119,7 @@ class VirtualCloudNetwork extends OkitArtifact {
         this.cidr_blocks = [`${ip}/16`];
         return this.cidr_blocks;
     }
+    generateDnsLabel = () => this.display_name.toLowerCase().replaceAll(' ', '').slice(0, 15)
 
     /*
     ** Static Functionality

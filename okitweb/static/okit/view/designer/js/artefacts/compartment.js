@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
+** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded Designer Compartment View Javascript');
@@ -73,7 +73,7 @@ class CompartmentView extends OkitContainerDesignerArtefactView {
     ** Child Type Functions
      */
     getTopArtifacts() {
-        return [Instance.getArtifactReference(), AnalyticsInstance.getArtifactReference(), IntegrationInstance.getArtifactReference(), OracleDigitalAssistant.getArtifactReference()];
+        return [Instance.getArtifactReference(), AnalyticsInstance.getArtifactReference(), IntegrationInstance.getArtifactReference(), OracleDigitalAssistant.getArtifactReference(), DataIntegrationWorkspace.getArtifactReference(), VisualBuilderInstance.getArtifactReference()];
     }
 
     getContainerArtifacts() {
@@ -81,7 +81,7 @@ class CompartmentView extends OkitContainerDesignerArtefactView {
     }
 
     getLeftArtifacts() {
-        return [Bastion.getArtifactReference(), BlockStorageVolume.getArtifactReference(), Policy.getArtifactReference(), FileSystem.getArtifactReference()];
+        return [Policy.getArtifactReference(), Vault.getArtifactReference(), Bastion.getArtifactReference(), BlockStorageVolume.getArtifactReference(), FileSystem.getArtifactReference()];
     }
 
     getRightArtifacts() {

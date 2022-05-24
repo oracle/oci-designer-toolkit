@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
+** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded DhcpOption Properties Javascript');
@@ -57,12 +57,12 @@ class DhcpOptionProperties extends OkitResourceProperties {
         const opt_table = this.createTable('', `${self.id}_option`, '')
         this.append(opt_details.div, opt_table.table)
         // Option Type
-        const option_type = this.createInput('select', 'Type', `${id}_type`, idx, (d, i, n) => {option.type = n[i].value = n[i].value; self.showOptionRows(option, id, idx)})
+        const option_type = this.createInput('select', 'Type', `${id}_type`, idx, (d, i, n) => {option.type = n[i].value; self.showOptionRows(option, id, idx)})
         this.append(opt_table.tbody, option_type.row)
         this.loadOptionTypeSelect(option_type.input)
         option_type.input.property('value', option.type)
         // Server Type
-        const server_type = this.createInput('select', 'Server Type', `${id}_server_type`, idx, (d, i, n) => {option.server_type = n[i].value = n[i].value; self.showOptionRows(option, id, idx)})
+        const server_type = this.createInput('select', 'Server Type', `${id}_server_type`, idx, (d, i, n) => {option.server_type = n[i].value; self.showOptionRows(option, id, idx)})
         this.append(opt_table.tbody, server_type.row)
         this.loadServerTypeSelect(server_type.input)
         server_type.input.property('value', option.server_type)

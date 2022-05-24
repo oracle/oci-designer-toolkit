@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
+** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded OKIT Javascript');
@@ -18,11 +18,11 @@ if (typeof JSON.clean !== "function") {
     JSON.clean = obj => {
         if (Array.isArray(obj)) {
             return obj
-                .map(v => (v && v instanceof Object) ? JSON.clean(v) : v)
+                .map(v => (v && v instanceof Object && !(v instanceof Function)) ? JSON.clean(v) : v)
                 .filter(v => !(v == null));
         } else {
             return Object.entries(obj)
-                .map(([k, v]) => [k, v && v instanceof Object ? JSON.clean(v) : v])
+                .map(([k, v]) => [k, v && v instanceof Object && !(v instanceof Function) ? JSON.clean(v) : v])
                 .reduce((a, [k, v]) => (v == null ? a : (a[k]=v, a)), {});
         }
     }
@@ -35,11 +35,13 @@ let selectedArtefact = null;
  */
 class OkitOCIConfig {
     constructor(loaded_callback) {
-        this.results = [];
+        this.results = {valid: true};
         this.loaded_callback = loaded_callback;
         this.validate();
         this.load();
     }
+
+    get valid() {return this.results.valid}
 
     load() {
         let me = this;
@@ -51,11 +53,13 @@ class OkitOCIConfig {
     }
 
     validate() {
-        let me = this;
+        const self = this;
         $.getJSON('config/validate', function(resp) {
-            me.results = resp.results;
-            if (me.results.length > 0) {
+            console.info('Config Validate ', resp)
+            self.results = resp.results;
+            if (!self.results.valid) {
                 $('#config_link').removeClass('hidden');
+                $('#config_link_div').removeClass('collapsed');
             }
         });
     }
@@ -125,7 +129,7 @@ class OkitOCIData {
         console.info('Loading Dropdown data for', profile);
         this.compartments = [];
         const self = this;
-        if (!this.loadLocal(profile, region)) this.query(profile, region)
+        if (!this.loadLocal(profile, region)) this.query(profile, region, true)
     }
 
     refresh(profile, region='') {
@@ -138,7 +142,7 @@ class OkitOCIData {
         this.storeLocal(profile, region);
         $.ajax({
             type: 'post',
-            url: `dropdown/data/${String(profile)}`,
+            url: `dropdown/data/${String(profile)}/${String(region)}`,
             dataType: 'text',
             contentType: 'application/json',
             data: JSON.stringify(this.dropdown_data),

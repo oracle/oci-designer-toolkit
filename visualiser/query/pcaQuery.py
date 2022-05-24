@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# Copyright (c) 2020, 2021, Oracle and/or its affiliates.
+# Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 """Provide Module Description
@@ -250,18 +250,24 @@ class PCAQuery(OCIConnection):
         self.query_compartments = compartments
         response_json = {}
         # Query Compartments
-        logger.info(f'>>>>>>>>>>>> Querying Compartments')
+        logger.info(f'>>>>>>>> Querying Compartments')
         self.compartments()
         # Process Supporting Resources
-        logger.info(f'>>>>>>>>>>>> Processing Ancillary Resources')
+        logger.info(f'>>>>>>>>>> Processing Ancillary Resources')
         for resource in self.ANCILLARY_RESOURCES:
-            logger.info(f'>>>>>>>>>>>> Querying {resource}')
-            self.resource_map[resource]["method"]()
+            try:
+                logger.info(f'>>>>>>>>>>>> Querying {resource}')
+                self.resource_map[resource]["method"]()
+            except Exception as e:
+                logger.warn(e)
         # Query Resources
-        logger.info(f'>>>>>>>>>>>> Processing Supported Resources')
+        logger.info(f'>>>>>>>>>> Processing Supported Resources')
         for resource in [r for r in self.SUPPORTED_RESOURCES if r != "Compartment"]:
-            logger.info(f'>>>>>>>>>>>> Querying {resource}')
-            self.resource_map[resource]["method"]()
+            try:
+                logger.info(f'>>>>>>>>>>>> Querying {resource}')
+                self.resource_map[resource]["method"]()
+            except Exception as e:
+                logger.warn(e)
         # Remove Availability Domains
         self.dropdown_json.pop('availability_domains', None)
         return self.dropdown_json
