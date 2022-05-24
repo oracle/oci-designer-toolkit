@@ -573,8 +573,9 @@ class OkitArtefactView {
         const definition = this.svg_definition;
         // const g = parent_svg.append("g")
         //     .attr("transform", `translate(${definition.x}, ${definition.y})`)
+        const svg_class = this.artefact ? this.artefact.read_only ? 'top-level' : this.artefact.read_only ? 'read-only' : '' : ''
         const svg = parent_svg.append("svg")
-            .attr("class", this.artefact && this.artefact.read_only ? 'read-only' : '')
+            .attr("class", svg_class)
             .attr("id",        definition.id)
             .attr("data-type", this.artefact ? this.artefact.getArtifactReference() : '')
             .attr("x",         definition.x)
