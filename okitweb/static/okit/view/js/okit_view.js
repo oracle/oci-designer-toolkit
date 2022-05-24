@@ -851,9 +851,7 @@ class OkitArtefactView {
 
     drawAttachments() {}
 
-    drawConnections() {
-        this.getLinks().forEach((id) => this.drawConnection(this.id, id))
-    }
+    drawConnections() {this.getLinks().forEach((id) => this.drawConnection(this.id, id))}
 
     drawConnection(start_id, end_id) {
         if (this.parent && !this.parent.is_collapsed) {
@@ -1077,6 +1075,11 @@ class OkitArtefactView {
     removeConnection(start_id, end_id) {
         d3.select(`#${this.generateConnectorId(end_id, start_id)}`).remove()
     }
+
+    hideConnection = () => d3.select(`#${this.generateConnectorId(end_id, start_id)}`).classed('hidden', true)
+    showConnection = () => d3.select(`#${this.generateConnectorId(end_id, start_id)}`).classed('hidden', false)
+    addAssociationHighlighting = () => this.getAssociations().forEach((id) => $(jqId(id)).addClass('highlight-association'))
+    removeAssociationHighlighting = () => this.getAssociations().forEach((id) => $(jqId(id)).removeClass('highlight-association'))
 
     coordString(coord) {
         let coord_str = coord['x'] + ',' + coord['y'];
