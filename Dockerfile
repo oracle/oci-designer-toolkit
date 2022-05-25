@@ -36,8 +36,11 @@ RUN yum install -y \
  && yum install -y \
         git \
         openssl \
+        gcc \
+        gcc-c++ \
         python36 \
         python3-pip \
+        python3-devel \
  && rm -rf /var/cache/yum \
 # Configure ssh
  && echo 'Host *' > /etc/ssh/ssh_config \
