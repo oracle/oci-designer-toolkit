@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
+** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded ObjectStorageBucket Properties Javascript');
@@ -36,6 +36,10 @@ class ObjectStorageBucketProperties extends OkitResourceProperties {
         const object_events_enabled = this.createInput('checkbox', 'Object Events Enabled', `${self.id}_object_events_enabled`, '', (d, i, n) => self.resource.object_events_enabled = n[i].checked)
         this.object_events_enabled = object_events_enabled.input
         this.append(this.core_tbody, object_events_enabled.row)
+        // KMS Key
+        const kms_key_id = this.createInput('select', 'KMS Encryption Key', `${this.id}_kms_key_id`, '', (d, i, n) => this.resource.kms_key_id = n[i].value)
+        this.kms_key_id = kms_key_id.input
+        this.append(this.core_tbody, kms_key_id.row)
     }
 
     // Load Additional Resource Specific Properties
@@ -45,13 +49,14 @@ class ObjectStorageBucketProperties extends OkitResourceProperties {
         this.loadPublicAccessTypeSelect(this.public_access_type)
         this.loadAutoTieringSelect(this.auto_tiering)
         this.loadVersioningSelect(this.versioning)
+        this.loadSelect(this.kms_key_id, 'key', true, () => true, 'Oracle-managed keys')
         // Assign Values
         this.storage_tier.property('value', this.resource.storage_tier)
         this.public_access_type.property('value', this.resource.public_access_type)
         this.auto_tiering.property('value', this.resource.auto_tiering)
         this.versioning.property('value', this.resource.versioning)
         this.object_events_enabled.property('checked', this.resource.object_events_enabled)
-
+        this.kms_key_id.property('value', this.resource.kms_key_id)
     }
 
     loadStorageTierSelect(select) {

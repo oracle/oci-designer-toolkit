@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
+** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded RouteTable Properties Javascript');
@@ -58,17 +58,17 @@ class RouteTableProperties extends OkitResourceProperties {
         const rt = this.createTable('', `${id}_rule`, '')
         this.append(rd.div, rt.table)
         // Target Type
-        const tt = this.createInput('select', 'Target Type', `${id}_target_type`, idx, (d, i, n) => {rule.target_type = n[i].value = n[i].value; self.showRuleRows(rule, id, idx); this.loadNetworkEntitySelect(rule, network_entity_id, idx)})
+        const tt = this.createInput('select', 'Target Type', `${id}_target_type`, idx, (d, i, n) => {rule.target_type = n[i].value; self.showRuleRows(rule, id, idx); this.loadNetworkEntitySelect(rule, `${id}_network_entity_id`, idx)})
         this.append(rt.tbody, tt.row)
         this.loadTargetTypeSelect(tt.input)
         tt.input.property('value', rule.target_type)
         // Destination Type
-        const dt = this.createInput('select', 'Destination Type', `${id}_destination_type`, idx, (d, i, n) => {rule.destination_type = n[i].value = n[i].value; self.showRuleRows(rule, id, idx)})
+        const dt = this.createInput('select', 'Destination Type', `${id}_destination_type`, idx, (d, i, n) => {rule.destination_type = n[i].value; self.showRuleRows(rule, id, idx)})
         this.append(rt.tbody, dt.row)
         this.loadDestinationTypeSelect(dt.input)
         dt.input.property('value', rule.destination_type)
         // Service Destination
-        const service_dest = this.createInput('select', 'Destination', `${id}_service_destination`, idx, (d, i, n) => {rule.destination = n[i].value = n[i].value})
+        const service_dest = this.createInput('select', 'Destination', `${id}_service_destination`, idx, (d, i, n) => {rule.destination = n[i].value})
         this.append(rt.tbody, service_dest.row)
         this.loadServiceDestinationSelect(service_dest.input)
         service_dest.input.property('value', rule.destination)
@@ -77,12 +77,12 @@ class RouteTableProperties extends OkitResourceProperties {
         this.append(rt.tbody, destination.row)
         destination.input.property('value', rule.destination)
         // Network Entity
-        const ne = this.createInput('select', 'Network Entity', network_entity_id, idx, (d, i, n) => {rule.network_entity_id = n[i].value = n[i].value; self.showRuleRows(rule, id, idx)})
+        const ne = this.createInput('select', 'Network Entity', `${id}_network_entity_id`, idx, (d, i, n) => {rule.network_entity_id = n[i].value; console.info('Network Entity Id', rule.network_entity_id); self.showRuleRows(rule, id, idx)})
         this.append(rt.tbody, ne.row)
-        this.loadNetworkEntitySelect(rule, network_entity_id, idx)
+        this.loadNetworkEntitySelect(rule, `${id}_network_entity_id`, idx)
         ne.input.property('value', rule.network_entity_id)
         // Description
-        const desc = this.createInput('text', 'Description', `${self.id}_description`, '', (d, i, n) => rule.description = n[i].value)
+        const desc = this.createInput('text', 'Description', `${id}_description`, '', (d, i, n) => rule.description = n[i].value)
         this.append(rt.tbody, desc.row)
         desc.input.property('value', rule.description)
         // Check Display
@@ -127,9 +127,8 @@ class RouteTableProperties extends OkitResourceProperties {
     }
     loadNetworkEntitySelect(rule, id, idx) {
         const select = d3.select(`#${this.inputId(id, idx)}`)
-        const selected_id = this.loadSelect(select, rule.target_type, false, this.vcn_filter)
-        if (rule.target_type !== 'local_peering_gateway' || rule.network_entity_id === '' || !rule.network_entity_id) rule.network_entity_id = selected_id
-        // this.loadSelect(select, rule.target_type, false, this.vcn_filter)
+        const selected_id = this.loadSelect(select, rule.target_type, false, this.vcn_filter, '', rule.target_type === 'drg_attachment' ? 'drg_id' : 'id')
+        if (rule.target_type !== 'local_peering_gateway' && (rule.network_entity_id === '' || !rule.network_entity_id)) rule.network_entity_id = selected_id
     }
     showRuleRows(rule, id, idx) {
         if (rule.target_type !== 'private_ip') {
@@ -141,7 +140,7 @@ class RouteTableProperties extends OkitResourceProperties {
                 this.hideProperty(`${id}_destination`, idx)
                 this.showProperty(`${id}_service_destination`, idx)
             }
-            rule.destination = rule.target_type === 'service_gateway' ? 'all_services_destination' : '0.0.0.0/0'
+            rule.destination = rule.target_type === 'service_gateway' && !['all_services_destination', 'objectstorage_services_destination'].includes(rule.destination) ? 'all_services_destination' : rule.destination
             rule.destination_type = rule.target_type === 'service_gateway' ?  'SERVICE_CIDR_BLOCK' : 'CIDR_BLOCK'
             this.setPropertyValue(`${id}_destination`, idx, rule.destination)
         } else {

@@ -116,14 +116,15 @@ locals {
     {{ resource_name }}_id            = oci_core_instance.{{ resource_name }}.id
     {{ resource_name }}_public_ip     = oci_core_instance.{{ resource_name }}.public_ip
     {{ resource_name }}_private_ip    = oci_core_instance.{{ resource_name }}.private_ip
+    {{ resource_name }}_display_name    = oci_core_instance.{{ resource_name }}.display_name
 }
 
 output "{{ resource_name }}PublicIP" {
-    value = local.{{ resource_name }}_public_ip
+    value = [local.{{ resource_name }}_display_name, local.{{ resource_name }}_public_ip]
 }
 
 output "{{ resource_name }}PrivateIP" {
-    value = local.{{ resource_name }}_private_ip
+    value = [local.{{ resource_name }}_display_name, local.{{ resource_name }}_private_ip]
 }
 
 # ------ Create Block Storage Attachments

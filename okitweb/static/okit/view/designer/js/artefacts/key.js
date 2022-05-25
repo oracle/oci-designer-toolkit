@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
+** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded Key View Javascript');
@@ -12,29 +12,17 @@ class KeyView extends OkitArtefactView {
         if (!json_view.keys) json_view.keys = [];
         super(artefact, json_view);
     }
-    // TODO: Return Artefact Parent id e.g. vcn_id for a Internet Gateway
-    get parent_id() {return this.artefact.vcn_id;}
-    // TODO: Return Artefact Parent Object e.g. VirtualCloudNetwork for a Internet Gateway
-    get parent() {return this.getJsonView().getVirtualCloudNetwork(this.parent_id);}
-    // TODO: If the Resource is within a Subnet but the subnet_iss is not at the top level then raise it with the following functions if not required delete them.
-    // Direct Subnet Access
-    get subnet_id() {return this.artefact.primary_mount_target.subnet_id;}
-    set subnet_id(id) {this.artefact.primary_mount_target.subnet_id = id;}
+    // TODO: Change as appropriate
+    get parent_id() {return this.artefact.vault_id;}
+    get parent() {return this.getJsonView().getVault(this.parent_id);}
     /*
     ** SVG Processing
     */
     /*
     ** Property Sheet Load function
     */
-    loadProperties() {
-        const self = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/key.html", () => {loadPropertiesSheet(self.artefact);});
-    }
-    /*
-    ** Load and display Value Proposition
-    */
-    loadValueProposition() {
-        $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/key.html");
+    newPropertiesSheet() {
+        this.properties_sheet = new KeyProperties(this.artefact)
     }
     /*
     ** Static Functionality
@@ -43,8 +31,7 @@ class KeyView extends OkitArtefactView {
         return Key.getArtifactReference();
     }
     static getDropTargets() {
-        // TODO: Return List of Artefact Drop Targets Parent Object Reference Names e.g. VirtualCloudNetwork for a Internet Gateway
-        return [VirtualCloudNetwork.getArtifactReference()];
+        return [Vault.getArtifactReference()];
     }
 }
 /*
@@ -52,7 +39,10 @@ class KeyView extends OkitArtefactView {
 */
 OkitJsonView.prototype.dropKeyView = function(target) {
     let view_artefact = this.newKey();
-    if (target.type === Compartment.getArtifactReference()) {
+    if (target.type === Vault.getArtifactReference()) {
+        view_artefact.artefact.vault_id = target.id;
+        view_artefact.artefact.compartment_id = target.compartment_id;
+    } else if (target.type === Compartment.getArtifactReference()) {
         view_artefact.artefact.compartment_id = target.id;
     } else {
         view_artefact.artefact.compartment_id = target.compartment_id;

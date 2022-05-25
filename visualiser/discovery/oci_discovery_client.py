@@ -1,4 +1,4 @@
-# Copyright (c) 2020, 2021, Oracle and/or its affiliates.
+# Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 import oci
@@ -52,6 +52,9 @@ class OciResourceDiscoveryClient(object):
         "AiAnomalyDetectionDataAsset": (oci.ai_anomaly_detection.AnomalyDetectionClient, "list_data_assets"),
         "AiAnomalyDetectionModel": (oci.ai_anomaly_detection.AnomalyDetectionClient, "list_models"),
         "AiAnomalyDetectionProject": (oci.ai_anomaly_detection.AnomalyDetectionClient, "list_projects"),
+        # oci.ai_vision.AIServiceVisionClient
+        "AiVisionModel": (oci.ai_vision.AIServiceVisionClient, "list_models"),
+        "AiVisionProject": (oci.ai_vision.AIServiceVisionClient, "list_projects"),
         # oci.analytics.AnalyticsClient
         "AnalyticsInstance": (oci.analytics.AnalyticsClient, "list_analytics_instances"),
         # oci.apigateway.ApiGatewayClient
@@ -80,8 +83,10 @@ class OciResourceDiscoveryClient(object):
         "Bastion": (oci.bastion.BastionClient, "list_bastions"),
         "BastionSession": (oci.bastion.BastionClient, "list_sessions"),
         # oci.bds.BdsClient
-        "BigDataService": (oci.bds.BdsClient, "list_bds_instances"), # TODO not tested
         "BigDataAutoScalingConfiguration": (oci.bds.BdsClient, "list_auto_scaling_configurations"),
+        "BigDataService": (oci.bds.BdsClient, "list_bds_instances"), 
+        "BigDataServiceApiKey": (oci.bds.BdsClient, "list_bds_api_keys"),
+        "BigDataServiceMetastoreConfig": (oci.bds.BdsClient, "list_bds_metastore_configurations"),
         # oci.blockchain.BlockchainPlatformClient
         "BlockchainPlatform": (oci.blockchain.BlockchainPlatformClient, "list_blockchain_platforms"),  # TODO not tested
         "BlockchainOsn": (oci.blockchain.BlockchainPlatformClient, "list_osns"), # TODO by blockchain_platform - check resource name
@@ -106,6 +111,9 @@ class OciResourceDiscoveryClient(object):
         "CloudGuardManagedList": (oci.cloud_guard.CloudGuardClient, "list_managed_lists"),
         "CloudGuardResponderRecipe": (oci.cloud_guard.CloudGuardClient, "list_responder_recipes"),
         "CloudGuardTarget": (oci.cloud_guard.CloudGuardClient, "list_targets"),
+        "SecurityZonesSecurityPolicy": (oci.cloud_guard.CloudGuardClient, "list_security_policies"),
+        "SecurityZonesSecurityRecipe": (oci.cloud_guard.CloudGuardClient, "list_security_recipes"),
+        "SecurityZonesSecurityZone": (oci.cloud_guard.CloudGuardClient, "list_security_zones"),
         # oci.container_engine.ContainerEngineClient
         "Cluster": (oci.container_engine.ContainerEngineClient, "list_clusters"),
         "NodePool": (oci.container_engine.ContainerEngineClient, "list_node_pools"),
@@ -119,6 +127,7 @@ class OciResourceDiscoveryClient(object):
         "VolumeBackupPolicy": (oci.core.BlockstorageClient, "list_volume_backup_policies"),
         "VolumeGroup": (oci.core.BlockstorageClient, "list_volume_groups"),
         "VolumeGroupBackup": (oci.core.BlockstorageClient, "list_volume_group_backups"),
+        "VolumeGroupReplica": (oci.core.BlockstorageClient, "list_volume_group_replicas"),
         # oci.core.ComputeClient
         "BootVolumeAttachment": (oci.core.ComputeClient, "list_boot_volume_attachments"),
         "ComputeCapacityReservation": (oci.core.ComputeClient, "list_compute_capacity_reservations"),
@@ -133,6 +142,7 @@ class OciResourceDiscoveryClient(object):
         "InstancePool": (oci.core.ComputeManagementClient, "list_instance_pools"),
         # oci.core.VirtualNetworkClient
         "ByoipRange": (oci.core.VirtualNetworkClient, "list_byoip_ranges"),
+        "CaptureFilter": (oci.core.VirtualNetworkClient, "list_capture_filters"),
         "CrossConnect": (oci.core.VirtualNetworkClient, "list_cross_connects"),
         "CrossConnectGroup": (oci.core.VirtualNetworkClient, "list_cross_connect_groups"),
         "CrossConnectMapping": (oci.core.VirtualNetworkClient, "list_cross_connect_mappings"),
@@ -164,9 +174,14 @@ class OciResourceDiscoveryClient(object):
         "Vcn": (oci.core.VirtualNetworkClient, "list_vcns"),
         "VirtualCircuit": (oci.core.VirtualNetworkClient, "list_virtual_circuits"),
         "Vlan": (oci.core.VirtualNetworkClient, "list_vlans"),
+        "Vtap": (oci.core.VirtualNetworkClient, "list_vtaps"),
+        # oci.dashboard_service.DashboardClient
+        "ConsoleDashboard": (oci.dashboard_service.DashboardClient, "list_dashboards"),
+        # oci.dashboard_service.DashboardGroupClient
+        "ConsoleDashboardGroup": (oci.dashboard_service.DashboardGroupClient, "list_dashboard_groups"),
         # oci.data_catalog.DataCatalogClient
         "DataCatalog": (oci.data_catalog.DataCatalogClient, "list_catalogs"),
-        # - "DataCatalogMetastore": (oci.data_catalog.DataCatalogClient, "?"), # TODO
+        "DataCatalogMetastore": (oci.data_catalog.DataCatalogClient, "list_metastores"),
         "DataCatalogPrivateEndpoint": (oci.data_catalog.DataCatalogClient, "list_catalog_private_endpoints"),
         # oci.data_flow.DataFlowClient
         "DataFlowApplication": (oci.data_flow.DataFlowClient, "list_applications"),
@@ -177,11 +192,28 @@ class OciResourceDiscoveryClient(object):
         # oci.data_labeling_service.DataLabelingManagementClient
         "DataLabelingDataset": (oci.data_labeling_service.DataLabelingManagementClient, "list_datasets"),
         # oci.data_safe.DataSafeClient
+        "DataSafeAlertPolicy": (oci.data_safe.DataSafeClient, "list_alert_policies"),
+        "DataSafeArchiveRetrieval": (oci.data_safe.DataSafeClient, "list_audit_archive_retrievals"),
+        "DataSafeAuditPolicy": (oci.data_safe.DataSafeClient, "list_audit_policies"),
+        "DataSafeAuditProfile": (oci.data_safe.DataSafeClient, "list_audit_profiles"),
+        "DataSafeAuditTrail": (oci.data_safe.DataSafeClient, "list_audit_trails"),
+        "DataSafeDiscoveryJob": (oci.data_safe.DataSafeClient, "list_discovery_jobs"),
+        "DataSafeLibraryMaskingFormat": (oci.data_safe.DataSafeClient, "list_library_masking_formats"),
+        "DataSafeMaskingPolicy": (oci.data_safe.DataSafeClient, "list_masking_policies"),
+        "DataSafeMaskingReport": (oci.data_safe.DataSafeClient, "list_masking_reports"),
         "DataSafeOnpremConnector": (oci.data_safe.DataSafeClient, "list_on_prem_connectors"), 
         "DataSafePrivateEndpoint": (oci.data_safe.DataSafeClient, "list_data_safe_private_endpoints"),
+        "DataSafeReport": (oci.data_safe.DataSafeClient, "list_reports"),
+        "DataSafeReportDefinition": (oci.data_safe.DataSafeClient, "list_report_definitions"),
         "DataSafeSecurityAssessment": (oci.data_safe.DataSafeClient, "list_security_assessments"),
+        "DataSafeSensitiveDataModel": (oci.data_safe.DataSafeClient, "list_sensitive_data_models"),
+        "DataSafeSensitiveType": (oci.data_safe.DataSafeClient, "list_sensitive_types"),
+        "DataSafeTargetAlertPolicyAssociation": (oci.data_safe.DataSafeClient, "list_target_alert_policy_associations"),
         "DataSafeTargetDatabase": (oci.data_safe.DataSafeClient, "list_target_databases"),
         "DataSafeUserAssessment": (oci.data_safe.DataSafeClient, "list_user_assessments"),
+        # oci.data_connectivity.DataConnectivityManagementClient
+        "DCMSEndpoint": (oci.data_connectivity.DataConnectivityManagementClient, "list_endpoints"),
+        "DCMSRegistry": (oci.data_connectivity.DataConnectivityManagementClient, "list_registries"),
         # oci.data_science.DataScienceClient
         "DataScienceJob": (oci.data_science.DataScienceClient, "list_jobs"),
         "DataScienceJobRun": (oci.data_science.DataScienceClient, "list_job_runs"),
@@ -200,6 +232,7 @@ class OciResourceDiscoveryClient(object):
         "AutonomousVmCluster": (oci.database.DatabaseClient, "list_autonomous_exadata_infrastructures"), # Exadata Cloud@Customer only
         "Backup": (oci.database.DatabaseClient, "list_backups"),
         "BackupDestination": (oci.database.DatabaseClient, "list_backup_destination"),
+        "CloudAutonomousVmCluster": (oci.database.DatabaseClient, "list_cloud_autonomous_vm_clusters"),
         "CloudExadataInfrastructure": (oci.database.DatabaseClient, "list_cloud_exadata_infrastructures"),
         "CloudVmCluster": (oci.database.DatabaseClient, "list_cloud_vm_clusters"),
         "Database": (oci.database.DatabaseClient, "list_databases"),
@@ -287,23 +320,28 @@ class OciResourceDiscoveryClient(object):
         # oci.identity.IdentityClient
         "AvailabilityDomain": (oci.identity.IdentityClient, "list_availability_domains"),
         "DynamicGroup": (oci.identity.IdentityClient, "list_dynamic_groups"),
+        "DbCredential": (oci.identity.IdentityClient, "list_db_credentials"),
         "Group": (oci.identity.IdentityClient, "list_groups"),
         "IdentityProvider": (oci.identity.IdentityClient, "list_identity_providers"),
         "IdentityProviderGroup": (oci.identity.IdentityClient, "list_identity_provider_groups"),
         "IdpGroupMapping": (oci.identity.IdentityClient, "list_idp_group_mappings"),
+        "Domain": (oci.identity.IdentityClient, "list_domains"),
         "MfaTotpDevice": (oci.identity.IdentityClient, "list_mfa_totp_devices"),
         "NetworkSource": (oci.identity.IdentityClient, "list_network_sources"),
         "Policy": (oci.identity.IdentityClient, "list_policies"),
         "Tag": (oci.identity.IdentityClient, "list_tags"),
-        # - "Tag": (oci.identity.IdentityClient, "list_cost_tracking_tags"),
         "TagDefault": (oci.identity.IdentityClient, "list_tag_defaults"),
         "TagNamespace":  (oci.identity.IdentityClient, "list_tag_namespaces"),
         "User": (oci.identity.IdentityClient, "list_users"),
         "UserGroupMembership": (oci.identity.IdentityClient, "list_user_group_memberships"),
         # oci.integration.IntegrationInstanceClient
         "IntegrationInstance": (oci.integration.IntegrationInstanceClient, "list_integration_instances"),
+        # oci.jms.JavaManagementServiceClient
+        "JmsFleet": (oci.jms.JavaManagementServiceClient, "list_fleets"),
+        # "": (oci.jms.JavaManagementServiceClient, "list_installation_sites"), # TODO
+        # "": (oci.jms.JavaManagementServiceClient, "list_blocklists"), # TODO
         # oci.key_management.KmsManagementClient
-        "Key": (oci.key_management.KmsManagementClient, "list_keys"), # TODO list_keys by compartment return empty results!?
+        "Key": (oci.key_management.KmsManagementClient, "list_keys"),
         # oci.key_management.KmsVaultClient
         "Vault": (oci.key_management.KmsVaultClient, "list_vaults"),
         "VaultReplica": (oci.key_management.KmsVaultClient, "list_vault_replicas"),
@@ -394,12 +432,22 @@ class OciResourceDiscoveryClient(object):
         "RoverNode": (oci.rover.RoverNodeClient, "list_rover_nodes"),
         # oci.sch.ServiceConnectorClient
         "ServiceConnector": (oci.sch.ServiceConnectorClient, "list_service_connectors"),
+        # oci.service_mesh.ServiceMeshClient
+        "AccessPolicy": (oci.service_mesh.ServiceMeshClient, "list_access_policies"),
+        "IngressGateway": (oci.service_mesh.ServiceMeshClient, "list_ingress_gateways"),
+        "IngressGatewayRouteTable": (oci.service_mesh.ServiceMeshClient, "list_ingress_gateway_route_tables"),
+        "Mesh": (oci.service_mesh.ServiceMeshClient, "list_meshes"),
+        "VirtualDeployment": (oci.service_mesh.ServiceMeshClient, "list_virtual_deployments"),
+        "VirtualServiceRouteTable": (oci.service_mesh.ServiceMeshClient, "list_virtual_service_route_tables"),
+        "VirtualService": (oci.service_mesh.ServiceMeshClient, "list_virtual_services"),
         # oci.streaming.StreamAdminClient
         "ConnectHarness": (oci.streaming.StreamAdminClient, "list_connect_harnesses"),
         "Stream": (oci.streaming.StreamAdminClient, "list_streams"), 
         "StreamPool": (oci.streaming.StreamAdminClient, "list_stream_pools"),
         # oci.vault.VaultsClient
         "VaultSecret": (oci.vault.VaultsClient, "list_secrets"),
+        # oci.visual_builder.VbInstanceClient
+        "VisualBuilderInstance": (oci.visual_builder.VbInstanceClient, "list_vb_instances"),
         # oci.vulnerability_scanning.VulnerabilityScanningClient
         "VssContainerScanRecipe": ( oci.vulnerability_scanning.VulnerabilityScanningClient, "list_container_scan_recipes"),
         "VssContainerScanTarget": ( oci.vulnerability_scanning.VulnerabilityScanningClient, "list_container_scan_targets"),
@@ -554,45 +602,47 @@ class OciResourceDiscoveryClient(object):
         # a large number of compartments can cause the query to exceed the maximum 50000 character
         # limit. Split into multiple queries and combine results
         max_compartments = 100
+        results = list()
         if compartments and len(compartments) > max_compartments:
             chunks = [list(compartments)[i:i + max_compartments] for i in range(0, len(compartments), max_compartments)]
-            results = list()
             for chunk in chunks:
                 result = self.search_resources_for_region(region_name, resource_types, chunk)
-                results.append(result)
+                results.extend(result)
+        else:
+            # copy the config and update the region
+            region_config = self.config.copy()  
+            region_config["region"] = region_name
+            
+            conditions = ""
+            if compartments:
+                conditions = "where compartmentId == '" +  "' || compartmentId == '".join(compartments) + "'"
 
-        # copy the config and update the region
-        region_config = self.config.copy()  
-        region_config["region"] = region_name
-        
-        conditions = ""
-        if compartments:
-            conditions = "where compartmentId == '" +  "' || compartmentId == '".join(compartments) + "'"
+            query=f"""
+                query 
+                    {",".join(resource_types)} resources 
+                {conditions}
+            """
+            logger.debug(query)
 
-        query=f"""
-            query 
-                {",".join(resource_types)} resources 
-            {conditions}
-        """
-        logger.debug(query)
-
-        search = oci.resource_search.ResourceSearchClient(config=region_config, signer=self.signer)
-        if self.cert_bundle:
-            search.base_client.session.verify = self.cert_bundle
-        search_details = oci.resource_search.models.StructuredSearchDetails(
-            type="Structured",
-            query=query,
-            matching_context_type=oci.resource_search.models.SearchDetails.MATCHING_CONTEXT_TYPE_NONE,
-        )
-        logger.info("requesting resources for " + region_name)
-        results = oci.pagination.list_call_get_all_results(search.search_resources, search_details, tenant_id=self.tenancy.id).data
+            search = oci.resource_search.ResourceSearchClient(config=region_config, signer=self.signer)
+            if self.cert_bundle:
+                search.base_client.session.verify = self.cert_bundle
+            search_details = oci.resource_search.models.StructuredSearchDetails(
+                type="Structured",
+                query=query,
+                matching_context_type=oci.resource_search.models.SearchDetails.MATCHING_CONTEXT_TYPE_NONE,
+            )
+            logger.info("requesting resources for " + region_name)
+            results = oci.pagination.list_call_get_all_results(search.search_resources, search_details, tenant_id=self.tenancy.id).data
         return results
 
     def get_compartments(self):
         identity = oci.identity.IdentityClient(config=self.config, signer=self.signer)
         if self.cert_bundle:
             identity.base_client.session.verify = self.cert_bundle
-        return oci.pagination.list_call_get_all_results(identity.list_compartments, self.tenancy.id, compartment_id_in_subtree=True).data
+        result = oci.pagination.list_call_get_all_results(identity.list_compartments, self.tenancy.id, compartment_id_in_subtree=True, lifecycle_state="ACTIVE").data
+        logger.info(f'found {len(result)} active compartments')
+        return result
 
     def get_subcompartment_ids(self, compartment_id):
         all_subcompartment_ids = set()
@@ -713,12 +763,14 @@ class OciResourceDiscoveryClient(object):
     # - `region` - the region name to override in the config file
     # - `compartment_id` - the compartment ocid to list resource in
     # - `**kwargs` - any extra ags to pass to the list method  
-    def list_resources(self, klass, method_name, region, back_off=0.1, **kwargs):
+    def list_resources(self, klass, method_name, region, back_off=0.1, service_endpoint=None, **kwargs):
         try: 
             region_config = self.config.copy()
             region_config["region"] = region
+            if not service_endpoint:
+                service_endpoint = f"https://iaas.{region}.oraclecloud.com" 
             if klass == oci.key_management.KmsManagementClient:
-                client = klass(config=region_config, service_endpoint=f"https://iaas.{region}.oraclecloud.com", signer=self.signer)
+                client = klass(config=region_config, service_endpoint=service_endpoint, signer=self.signer)
             else:
                 client = klass(config=region_config, signer=self.signer)
             client.base_client.timeout = (self.timeout, self.timeout)  # set connect timeout, read timeout
@@ -752,48 +804,48 @@ class OciResourceDiscoveryClient(object):
                 # do a get for resources that need full details or don't have a list method
                 if resource_type in self.get_resource_client_methods and item[2]:
                     klass, method_name = self.get_resource_client_methods[resource_type]
-                    if method_name == "get_application": # DataFlowApplicationDetails
-                        application_id = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, application_id=application_id)
-                        futures_list.update({(region, resource_type, compartment_id, application_id):future})
-                    if method_name == "get_bastion": # BastionDetails
+                    if resource_type == "BastionDetails" and method_name == "get_bastion":
                         bastion_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, bastion_id=bastion_id)
                         futures_list.update({(region, resource_type, None, bastion_id):future})
-                    elif method_name == "get_cloud_vm_cluster_iorm_config": # CloudExadataInfrastrcture
+                    elif resource_type == "CloudExadataInfrastrcture" and method_name == "get_cloud_vm_cluster_iorm_config":
                         cloud_vm_cluster_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, cloud_vm_cluster_id=cloud_vm_cluster_id)
                         futures_list.update({(region, resource_type, None, cloud_vm_cluster_id):future})
-                    elif method_name == "get_configuration": # MySQLConfiguration
-                        configuration_id = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, configuration_id=configuration_id)
-                        futures_list.update({(region, resource_type, None, configuration_id):future})
-                    elif method_name == "get_db_system": # MySQLDbSystemDetails
-                        db_system_id = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, db_system_id=db_system_id)
-                        futures_list.update({(region, resource_type, compartment_id, db_system_id):future})
-                    elif method_name == "get_export_set": # ExportSetDetails
+                    elif resource_type == "DataFlowApplicationDetails" and method_name == "get_application":
+                        application_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, application_id=application_id)
+                        futures_list.update({(region, resource_type, compartment_id, application_id):future})
+                    elif resource_type == "DataFlowRunDetails" and method_name == "get_run": # 
+                        run_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, run_id=run_id)
+                        futures_list.update({(region, resource_type, compartment_id, run_id):future})
+                    elif resource_type == "ExportSetDetails" and method_name == "get_export_set":
                         export_set_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, export_set_id=export_set_id)
                         futures_list.update({(region, resource_type, compartment_id, export_set_id):future})
-                    elif method_name == "get_image" and compartment_id == None:
+                    elif resource_type == "Image" and method_name == "get_image" and compartment_id == None:
                         if compartment_id == None and item[2]:
                             image_id = item[2]
                             future = executor.submit(self.list_resources, klass, method_name, region, image_id=image_id)
                             futures_list.update({(region, resource_type, None, image_id):future})
-                    elif method_name == "get_managed_instance":
+                    elif resource_type == "MySQLConfiguration" and method_name == "get_configuration":
+                        configuration_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, configuration_id=configuration_id)
+                        futures_list.update({(region, resource_type, None, configuration_id):future})
+                    elif resource_type == "MySQLDbSystemDetails" and method_name == "get_db_system":
+                        db_system_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, db_system_id=db_system_id)
+                        futures_list.update({(region, resource_type, compartment_id, db_system_id):future})
+                    elif resource_type == "OsmsManagedInstance" and method_name == "get_managed_instance":
                         managed_instance_id=item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, managed_instance_id=managed_instance_id)
                         futures_list.update({(region, resource_type, None, managed_instance_id):future})
-                    elif method_name == "get_run": # DataFlowRunDetails
-                        run_id = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, run_id=run_id)
-                        futures_list.update({(region, resource_type, compartment_id, run_id):future})
-                    elif method_name == "get_vnic":
+                    elif resource_type == "Vnic" and method_name == "get_vnic":
                         vnic_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, vnic_id=vnic_id)
                         futures_list.update({(region, resource_type, compartment_id, vnic_id):future})
-                    elif method_name == "get_volume_backup_policy_asset_assignment":
+                    elif resource_type == "VolumeBackupPolicyAssignment" and method_name == "get_volume_backup_policy_asset_assignment":
                         asset_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, asset_id=asset_id)
                         futures_list.update({(region, resource_type, compartment_id, asset_id):future})
@@ -801,26 +853,26 @@ class OciResourceDiscoveryClient(object):
                 # do a list for other resources, which is more efficient than separate get requests
                 if resource_type in self.static_resource_client_methods:
                     klass, method_name = self.static_resource_client_methods[resource_type]
-                    if method_name == "get_cluster_options":
+                    if resource_type == "ClusterOptions" and method_name == "get_cluster_options":
                         future = executor.submit(self.list_resources, klass, method_name, region, cluster_option_id="all")
                         futures_list.update({(region, resource_type, None, "all"):future})
-                    elif method_name == "list_configurations":
-                        request_type = item[2]
-                        if request_type == "DEFAULT":
-                            future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, type=["DEFAULT"])
-                            futures_list.update({(region, resource_type, compartment_id, "DEFAULT"):future})
-                    elif method_name == "list_cpe_device_shapes":
+                    elif resource_type == "CpeDeviceShape" and method_name == "list_cpe_device_shapes":
                         future = executor.submit(self.list_resources, klass, method_name, region)
                         futures_list.update({(region, resource_type, None, None):future})
-                    elif method_name == "list_fast_connect_provider_virtual_circuit_bandwidth_shapes":
-                        provider_service_id = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, provider_service_id=provider_service_id)
-                        futures_list.update({(region, resource_type, None, provider_service_id):future})
-                    elif method_name == "list_image_shape_compatibility_entries":
+                    elif resource_type == "ImageShapeCompatibility" and method_name == "list_image_shape_compatibility_entries":
                         image_id = item[2]
                         if image_id:
                             future = executor.submit(self.list_resources, klass, method_name, region, image_id=image_id)
                             futures_list.update({(region, resource_type, None, image_id):future})
+                    elif resource_type == "MySQLConfiguration" and method_name == "list_configurations":
+                        request_type = item[2]
+                        if request_type == "DEFAULT":
+                            future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, type=["DEFAULT"])
+                            futures_list.update({(region, resource_type, compartment_id, "DEFAULT"):future})
+                    elif resource_type == "VirtualCircuitBandwidthShape" and method_name == "list_fast_connect_provider_virtual_circuit_bandwidth_shapes":
+                        provider_service_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, provider_service_id=provider_service_id)
+                        futures_list.update({(region, resource_type, None, provider_service_id):future})
                     else:
                         # all others static types
                         future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id)
@@ -831,217 +883,249 @@ class OciResourceDiscoveryClient(object):
                     # the majority of the list methods only need the compartment
                     # id, methods that have additional required attributes are 
                     # handled specifically below: 
-                    if method_name == "list_alert_rules":
+                    if resource_type == "AlertRule" and method_name == "list_alert_rules":
                         # list alert rules by budget
                         budget_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, budget_id=budget_id)
                         futures_list.update({(region, resource_type, compartment_id, budget_id):future})
-                    elif method_name == "list_autonomous_container_database_dataguard_associations":
+                    elif resource_type == "AmsSourceApplication" and method_name == "list_source_applications":
+                        source_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, source_id=source_id)
+                        futures_list.update({(region, resource_type, compartment_id, source_id):future})
+                    elif resource_type == "AutonomousContainerDatabaseDataguardAssociation" and method_name == "list_autonomous_container_database_dataguard_associations":
                         autonomous_container_database_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, adb_id=autonomous_container_database_id)
                         futures_list.update({(region, resource_type, compartment_id, autonomous_container_database_id):future})
-                    elif method_name in ["list_autonomous_database_backups", "list_autonomous_database_dataguard_associations"]:
+                    elif resource_type == "AutonomousDatabaseBackup" and method_name == "list_autonomous_database_backups":
                         # TODO ? list_autonomous_database_backups can also be queried by compartment id
                         # which might get backups of ADBs that have been terminated ? TBC
                         autonomous_database_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, autonomous_database_id=autonomous_database_id)
                         futures_list.update({(region, resource_type, compartment_id, autonomous_database_id):future})
-                    elif method_name == "list_auto_scaling_configurations" and resource_type == "BigDataAutoScalingConfiguration":
-                        bds_instance_id = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, bds_instance_id=bds_instance_id)
-                        futures_list.update({(region, resource_type, compartment_id, bds_instance_id):future})                    
-                    elif method_name == "list_auto_scaling_policies":
+                    elif resource_type == "AutonomousDatabaseDataguardAssociation" and method_name == "list_autonomous_database_dataguard_associations":
+                        autonomous_database_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, autonomous_database_id=autonomous_database_id)
+                        futures_list.update({(region, resource_type, compartment_id, autonomous_database_id):future})
+                    elif resource_type == "AutoScalingPolicy" and method_name == "list_auto_scaling_policies":
                         auto_scaling_configuration_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, auto_scaling_configuration_id=auto_scaling_configuration_id)
                         futures_list.update({(region, resource_type, compartment_id, auto_scaling_configuration_id):future})
-                    elif method_name == "list_backends" and resource_type == "LoadBalancer":
-                        load_balancer_id, backend_set_name = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, load_balancer_id=load_balancer_id, backend_set_name=backend_set_name)
-                        futures_list.update({(region, resource_type, compartment_id, (load_balancer_id, backend_set_name)):future})
-                    elif method_name == "list_backends" and resource_type == "NetworkLoadBalancer":
-                        network_load_balancer_id, backend_set_name = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, network_load_balancer_id=network_load_balancer_id, backend_set_name=backend_set_name)
-                        futures_list.update({(region, resource_type, compartment_id, (load_balancer_id, backend_set_name)):future})
-                    elif method_name == "list_backend_sets" and resource_type == "LoadBalancer":
-                        load_balancer_id = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, load_balancer_id=load_balancer_id)
-                        futures_list.update({(region, resource_type, compartment_id, load_balancer_id):future})
-                    elif method_name == "list_backend_sets" and resource_type == "NetworkLoadBalancer":
-                        network_load_balancer_id = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, network_load_balancer_id=network_load_balancer_id)
-                        futures_list.update({(region, resource_type, compartment_id, load_balancer_id):future})
-                    elif method_name == "list_backups" and resource_type == "Backup": # Database Backup
+                    elif resource_type == "Backup" and method_name == "list_backups": # Database Backup
                         database_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, database_id=database_id)
                         futures_list.update({(region, resource_type, compartment_id, database_id):future})
-                    elif method_name == "list_backups" and resource_type == "MySQLBackup":
-                        db_system_id = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, db_system_id=db_system_id)
-                        futures_list.update({(region, resource_type, compartment_id, db_system_id):future})
-                    elif method_name == "list_buckets":
+                    elif resource_type == "BastionSession" and method_name == "list_sessions":
+                        bastion_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, bastion_id=bastion_id)
+                        futures_list.update({(region, resource_type, compartment_id, bastion_id):future})
+                    elif resource_type == "BigDataAutoScalingConfiguration" and method_name == "list_auto_scaling_configurations":
+                        bds_instance_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, bds_instance_id=bds_instance_id)
+                        futures_list.update({(region, resource_type, compartment_id, bds_instance_id):future})                    
+                    elif resource_type == "BigDataServiceApiKey" and method_name == "list_bds_api_keys":
+                        bds_instance_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, bds_instance_id=bds_instance_id)
+                        futures_list.update({(region, resource_type, compartment_id, bds_instance_id):future})                    
+                    elif resource_type == "BigDataServiceMetastoreConfig" and method_name == "list_bds_metastore_configurations":
+                        bds_instance_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, bds_instance_id=bds_instance_id)
+                        futures_list.update({(region, resource_type, compartment_id, bds_instance_id):future})                    
+                    elif resource_type == "Bucket" and method_name == "list_buckets":
                         namespace_name = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, namespace_name=namespace_name)
                         futures_list.update({(region, resource_type, compartment_id, namespace_name):future})
-                    elif method_name == "list_certificates" and resource_type == "Certificate":
+                    elif resource_type == "Certificate" and method_name == "list_certificates":
                         load_balancer_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id)
                         futures_list.update({(region, resource_type, compartment_id, None):future})
-                    elif method_name == "list_certificate_authority_versions":
+                    elif resource_type == "CertificateAuthorityVersion" and method_name == "list_certificate_authority_versions":
                         certificate_authority_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, certificate_authority_id=certificate_authority_id)
                         futures_list.update({(region, resource_type, compartment_id, certificate_authority_id):future})
-                    elif method_name == "list_certificate_versions":
+                    elif resource_type == "CertificateVersion" and method_name == "list_certificate_versions":
                         certificate_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, certificate_id=certificate_id)
                         futures_list.update({(region, resource_type, compartment_id, certificate_id):future})
-                    elif method_name == "list_compute_capacity_reservation_instances":
+                    elif resource_type == "ComputeCapacityReservationInstance" and method_name == "list_compute_capacity_reservation_instances":
                         capacity_reservation_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, capacity_reservation_id=capacity_reservation_id)
                         futures_list.update({(region, resource_type, compartment_id, capacity_reservation_id):future})
-                    elif method_name == "list_configurations":
+                    elif resource_type == "ConsoleDashboard" and method_name == "list_dashboards":
+                        dashboard_group_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, dashboard_group_id=dashboard_group_id)
+                        futures_list.update({(region, resource_type, compartment_id, dashboard_group_id):future})
+                    elif resource_type == "CrossConnectMapping" and method_name == "list_cross_connect_mappings":
+                        virtual_circuit_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, virtual_circuit_id=virtual_circuit_id)
+                        futures_list.update({(region, resource_type, compartment_id, virtual_circuit_id):future})
+                    elif resource_type == "Database" and method_name == "list_databases":
+                        db_home_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, db_home_id=db_home_id)
+                        futures_list.update({(region, resource_type, compartment_id, db_home_id):future})
+                    elif resource_type == "DbHome" and method_name == "list_db_homes":
+                        if item[2] is None:
+                            future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id)
+                            futures_list.update({(region, resource_type, compartment_id, None):future})
+                        elif item[2][0] == "DbSystem":
+                            db_system_id = item[2][1]
+                            future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, db_system_id=db_system_id)
+                            futures_list.update({(region, resource_type, compartment_id, db_system_id):future})
+                        elif item[2][0] == "VmCluster":
+                            vm_cluster_id = item[2][1]
+                            future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, vm_cluster_id=vm_cluster_id)
+                            futures_list.update({(region, resource_type, compartment_id, vm_cluster_id):future})
+                    elif resource_type == "DbNode" and method_name == "list_db_nodes":
+                        if item[2] is None:
+                            future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id)
+                            futures_list.update({(region, resource_type, compartment_id, None):future})
+                        elif item[2][0] == "DbSystem":
+                            db_system_id = item[2][1]
+                            future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, db_system_id=db_system_id)
+                            futures_list.update({(region, resource_type, compartment_id, db_system_id):future})
+                        elif item[2][0] == "VmCluster":
+                            vm_cluster_id = item[2][1]
+                            future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, vm_cluster_id=vm_cluster_id)
+                            futures_list.update({(region, resource_type, compartment_id, vm_cluster_id):future})
+                    elif resource_type == "DedicatedVmHostInstance" and method_name == "list_dedicated_vm_host_instances":
+                        dedicated_vm_host_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, dedicated_vm_host_id=dedicated_vm_host_id)
+                        futures_list.update({(region, resource_type, compartment_id, dedicated_vm_host_id):future})
+                    elif resource_type == "DnsPolicyAttachment" and method_name == "list_steering_policy_attachments":
+                        steering_policy_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, steering_policy_id=steering_policy_id)
+                        futures_list.update({(region, resource_type, compartment_id, steering_policy_id):future})
+                    elif resource_type == "DnsResolverEndpoint" and method_name == "list_resolver_endpoints":
+                        resolver_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, resolver_id=resolver_id)
+                        futures_list.update({(region, resource_type, compartment_id, resolver_id):future})
+                    elif resource_type == "DrgRouteDistribution" and method_name == "list_drg_route_distributions":
+                        drg_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, drg_id=drg_id)
+                        futures_list.update({(region, resource_type, compartment_id, drg_id):future})
+                    elif resource_type == "DrgRouteDistributionStatement" and method_name == "list_drg_route_distribution_statements":
+                        drg_route_distribution_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, drg_route_distribution_id=drg_route_distribution_id)
+                        futures_list.update({(region, resource_type, compartment_id, drg_route_distribution_id):future})
+                    elif resource_type == "DrgRouteRule" and method_name == "list_drg_route_rules":
+                        drg_route_table_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, drg_route_table_id=drg_route_table_id)
+                        futures_list.update({(region, resource_type, compartment_id, drg_route_table_id):future})
+                    elif resource_type == "DrgRouteTable" and method_name == "list_drg_route_tables":
+                        drg_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, drg_id=drg_id)
+                        futures_list.update({(region, resource_type, compartment_id, drg_id):future})
+                    elif resource_type == "EmailDkim" and method_name == "list_dkims":
+                        email_domain_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, email_domain_id=email_domain_id)
+                        futures_list.update({(region, resource_type, compartment_id, email_domain_id):future})
+                    elif resource_type == "Export" and method_name == "list_exports":
+                        file_system_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, file_system_id=file_system_id)
+                        futures_list.update({(region, resource_type, compartment_id, file_system_id):future})
+                    elif resource_type == "ExternalDatabaseConnector" and method_name == "list_external_database_connectors":
+                        external_database_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, external_database_id=external_database_id)
+                        futures_list.update({(region, resource_type, compartment_id, external_database_id):future})
+                    elif resource_type == "FunctionsFunction" and method_name == "list_functions":
+                        application_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, application_id=application_id)
+                        futures_list.update({(region, resource_type, compartment_id, application_id):future})
+                    elif resource_type == "Hostname" and method_name == "list_hostnames":
+                        load_balancer_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, load_balancer_id=load_balancer_id)
+                        futures_list.update({(region, resource_type, compartment_id, load_balancer_id):future})
+                    elif resource_type == "IdentityProvider" and method_name == "list_identity_providers":
+                        protocol = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, protocol=protocol, compartment_id=compartment_id)
+                        futures_list.update({(region, resource_type, compartment_id, protocol):future})
+                    elif resource_type == "IdentityProviderGroup" and method_name == "list_identity_provider_groups":
+                        identity_provider_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, identity_provider_id=identity_provider_id)
+                        futures_list.update({(region, resource_type, compartment_id, identity_provider_id):future})
+                    elif resource_type == "IdpGroupMapping" and  method_name == "list_idp_group_mappings":
+                        identity_provider_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, identity_provider_id=identity_provider_id)
+                        futures_list.update({(region, resource_type, compartment_id, identity_provider_id):future})
+                    elif resource_type == "Image" and method_name == "list_images":
+                        if compartment_id:
+                            # only if compartment is set, otherwise its handled above as a get request
+                            future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id)
+                            futures_list.update({(region, resource_type, compartment_id, None):future})
+                    elif resource_type == "IpSecConnectionTunnel" and method_name == "list_ip_sec_connection_tunnels":
+                        ipsec_connection_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, ipsc_id=ipsec_connection_id)
+                        futures_list.update({(region, resource_type, compartment_id, ipsec_connection_id):future})
+                    elif resource_type == "Ipv6" and  method_name == "list_ipv6s":
+                        subnet_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, subnet_id=subnet_id)
+                        futures_list.update({(region, resource_type, compartment_id, subnet_id):future})
+                    elif resource_type == "Key" and method_name == "list_keys":
+                        service_endpoint = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, service_endpoint=service_endpoint, compartment_id=compartment_id)
+                        futures_list.update({(region, resource_type, compartment_id, service_endpoint):future})
+                    elif resource_type == "ListenerRule" and method_name == "list_listener_rules": 
+                        load_balancer_id, listener_name = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, load_balancer_id=load_balancer_id, listener_name=listener_name)
+                        futures_list.update({(region, resource_type, compartment_id, load_balancer_id):future})
+                    elif resource_type == "LoadBalancer" and method_name == "list_backends":
+                        load_balancer_id, backend_set_name = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, load_balancer_id=load_balancer_id, backend_set_name=backend_set_name)
+                        futures_list.update({(region, resource_type, compartment_id, (load_balancer_id, backend_set_name)):future})
+                    elif resource_type == "LoadBalancer" and method_name == "list_backend_sets":
+                        load_balancer_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, load_balancer_id=load_balancer_id)
+                        futures_list.update({(region, resource_type, compartment_id, load_balancer_id):future})
+                    elif resource_type == "MfaTotpDevice" and method_name == "list_mfa_totp_devices":
+                        user_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, user_id=user_id)
+                        futures_list.update({(region, resource_type, compartment_id, user_id):future})
+                    elif resource_type == "MySQLBackup" and method_name == "list_backups":
+                        db_system_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, db_system_id=db_system_id)
+                        futures_list.update({(region, resource_type, compartment_id, db_system_id):future})
+                    elif resource_type == "MySQLConfiguration" and method_name == "list_configurations":
                         request_type = item[2]
                         if compartment_id and (request_type == None or request_type != "DEFAULT"):
                             # only fetch Custom configurations in compartments - ignores the default configuration that have no compartment
                             future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, type=["CUSTOM"])
                             futures_list.update({(region, resource_type, compartment_id, None):future})
-                    elif method_name == "list_cross_connect_mappings":
-                        virtual_circuit_id = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, virtual_circuit_id=virtual_circuit_id)
-                        futures_list.update({(region, resource_type, compartment_id, virtual_circuit_id):future})
-                    elif method_name == "list_databases":
-                        db_home_id = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, db_home_id=db_home_id)
-                        futures_list.update({(region, resource_type, compartment_id, db_home_id):future})
-                    elif method_name == "list_dedicated_vm_host_instances":
-                        dedicated_vm_host_id = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, dedicated_vm_host_id=dedicated_vm_host_id)
-                        futures_list.update({(region, resource_type, compartment_id, dedicated_vm_host_id):future})
-                    elif method_name == "list_db_homes":
-                        if item[2] is None:
-                            future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id)
-                            futures_list.update({(region, resource_type, compartment_id, None):future})
-                        elif item[2][0] == "DbSystem":
-                            db_system_id = item[2][1]
-                            future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, db_system_id=db_system_id)
-                            futures_list.update({(region, resource_type, compartment_id, db_system_id):future})
-                        elif item[2][0] == "VmCluster":
-                            vm_cluster_id = item[2][1]
-                            future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, vm_cluster_id=vm_cluster_id)
-                            futures_list.update({(region, resource_type, compartment_id, vm_cluster_id):future})
-                    elif method_name == "list_db_nodes":
-                        if item[2] is None:
-                            future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id)
-                            futures_list.update({(region, resource_type, compartment_id, None):future})
-                        elif item[2][0] == "DbSystem":
-                            db_system_id = item[2][1]
-                            future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, db_system_id=db_system_id)
-                            futures_list.update({(region, resource_type, compartment_id, db_system_id):future})
-                        elif item[2][0] == "VmCluster":
-                            vm_cluster_id = item[2][1]
-                            future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, vm_cluster_id=vm_cluster_id)
-                            futures_list.update({(region, resource_type, compartment_id, vm_cluster_id):future})
-                    elif method_name == "list_dkims":
-                        email_domain_id = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, email_domain_id=email_domain_id)
-                        futures_list.update({(region, resource_type, compartment_id, email_domain_id):future})
-                    elif method_name == "list_drg_route_distributions":
-                        drg_id = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, drg_id=drg_id)
-                        futures_list.update({(region, resource_type, compartment_id, drg_id):future})
-                    elif method_name == "list_drg_route_distribution_statements":
-                        drg_route_distribution_id = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, drg_route_distribution_id=drg_route_distribution_id)
-                        futures_list.update({(region, resource_type, compartment_id, drg_route_distribution_id):future})
-                    elif method_name == "list_drg_route_rules":
-                        drg_route_table_id = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, drg_route_table_id=drg_route_table_id)
-                        futures_list.update({(region, resource_type, compartment_id, drg_route_table_id):future})
-                    elif method_name == "list_drg_route_tables":
-                        drg_id = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, drg_id=drg_id)
-                        futures_list.update({(region, resource_type, compartment_id, drg_id):future})
-                    elif method_name == "list_exports":
-                        file_system_id = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, file_system_id=file_system_id)
-                        futures_list.update({(region, resource_type, compartment_id, file_system_id):future})
-                    elif method_name == "list_external_database_connectors": # External Database
-                        external_database_id = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, external_database_id=external_database_id)
-                        futures_list.update({(region, resource_type, compartment_id, external_database_id):future})
-                    elif method_name == "list_functions":
-                        application_id = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, application_id=application_id)
-                        futures_list.update({(region, resource_type, compartment_id, application_id):future})
-                    elif method_name == "list_hostnames":
-                        load_balancer_id = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, load_balancer_id=load_balancer_id)
+                    elif resource_type == "NetworkLoadBalancerBackend" and method_name == "list_backends":
+                        network_load_balancer_id, backend_set_name = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, network_load_balancer_id=network_load_balancer_id, backend_set_name=backend_set_name)
+                        futures_list.update({(region, resource_type, compartment_id, (load_balancer_id, backend_set_name)):future})
+                    elif resource_type == "NetworkLoadBalancerBackendSet" and method_name == "list_backend_sets":
+                        network_load_balancer_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, network_load_balancer_id=network_load_balancer_id)
                         futures_list.update({(region, resource_type, compartment_id, load_balancer_id):future})
-                    elif method_name == "list_identity_providers":
-                        protocol = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, protocol=protocol, compartment_id=compartment_id)
-                        futures_list.update({(region, resource_type, compartment_id, protocol):future})
-                    elif method_name == "list_identity_provider_groups":
-                        identity_provider_id = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, identity_provider_id=identity_provider_id)
-                        futures_list.update({(region, resource_type, compartment_id, identity_provider_id):future})
-                    elif method_name == "list_idp_group_mappings":
-                        identity_provider_id = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, identity_provider_id=identity_provider_id)
-                        futures_list.update({(region, resource_type, compartment_id, identity_provider_id):future})
-                    elif method_name == "list_images":
-                        if compartment_id:
-                            # only if compartment is set, otherwise its handled above as a get request
-                            future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id)
-                            futures_list.update({(region, resource_type, compartment_id, None):future})
-                    elif method_name == "list_indexes":
-                        table_id = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, table_name_or_id=table_id)
-                        futures_list.update({(region, resource_type, compartment_id, table_id):future})
-                    elif method_name == "list_ip_sec_connection_tunnels":
-                        ipsec_connection_id = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, ipsc_id=ipsec_connection_id)
-                        futures_list.update({(region, resource_type, compartment_id, ipsec_connection_id):future})
-                    elif method_name == "list_ipv6s":
-                        subnet_id = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, subnet_id=subnet_id)
-                        futures_list.update({(region, resource_type, compartment_id, subnet_id):future})
-                    elif method_name == "list_listeners": # NetworkLoadBalancer
+                    elif resource_type == "NetworkLoadBalancerListener" and method_name == "list_listeners":
                         network_load_balancer_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, network_load_balancer_id=network_load_balancer_id)
                         futures_list.update({(region, resource_type, compartment_id, load_balancer_id):future})
-                    elif method_name == "list_listener_rules": 
-                        load_balancer_id, listener_name = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, load_balancer_id=load_balancer_id, listener_name=listener_name)
-                        futures_list.update({(region, resource_type, compartment_id, load_balancer_id):future})
-                    elif method_name == "list_mfa_totp_devices":
-                        user_id = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, user_id=user_id)
-                        futures_list.update({(region, resource_type, compartment_id, user_id):future})
-                    elif method_name == "list_network_security_group_security_rules":
+                    elif resource_type == "NetworkSecurityGroupSecurityRule" and method_name == "list_network_security_group_security_rules":
                         network_security_group_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, network_security_group_id=network_security_group_id)
                         futures_list.update({(region, resource_type, compartment_id, network_security_group_id):future})
-                    elif method_name == "list_network_security_group_vnics":
+                    elif resource_type == "NetworkSecurityGroupVnic" and method_name == "list_network_security_group_vnics":
                         network_security_group_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, network_security_group_id=network_security_group_id)
                         futures_list.update({(region, resource_type, compartment_id, network_security_group_id):future})
-                    elif method_name == "list_path_route_sets":
+                    elif resource_type == "NoSQLIndex" and method_name == "list_indexes":
+                        table_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, table_name_or_id=table_id)
+                        futures_list.update({(region, resource_type, compartment_id, table_id):future})
+                    elif resource_type == "PathRouteSet" and method_name == "list_path_route_sets":
                         load_balancer_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, load_balancer_id=load_balancer_id)
                         futures_list.update({(region, resource_type, compartment_id, load_balancer_id):future})
-                    elif method_name == "list_preauthenticated_requests":
+                    elif resource_type == "PreauthenticatedRequest" and method_name == "list_preauthenticated_requests":
                         bucket_name = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, namespace_name=self.object_storage_namespace, bucket_name=bucket_name)
                         futures_list.update({(region, resource_type, compartment_id, bucket_name):future})
-                    elif method_name == "list_private_ips":
+                    elif resource_type == "PrivateIp" and method_name == "list_private_ips":
                         subnet_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, subnet_id=subnet_id)
                         futures_list.update({(region, resource_type, compartment_id, subnet_id):future})
-                    elif method_name == "list_resolver_endpoints":
-                        resolver_id = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, resolver_id=resolver_id)
-                        futures_list.update({(region, resource_type, compartment_id, resolver_id):future})
-                    elif method_name == "list_public_ips":
+                    elif resource_type == "PublicIp" and method_name == "list_public_ips":
                         # handle the varient cases to list regional and AD specific public ips
                         availability_domain = item[2]
                         for availability_domain in self.availability_domains[region]:
@@ -1049,47 +1133,35 @@ class OciResourceDiscoveryClient(object):
                             futures_list.update({(region, resource_type, availability_domain):future})
                         future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, scope="REGION")
                         futures_list.update({(region, resource_type, compartment_id, "REGION"):future})
-                    elif method_name == "list_rule_sets":
+                    elif resource_type == "RuleSet" and method_name == "list_rule_sets":
                         load_balancer_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, load_balancer_id=load_balancer_id)
                         futures_list.update({(region, resource_type, compartment_id, load_balancer_id):future})
-                    elif method_name == "list_sessions":
-                        bastion_id = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, bastion_id=bastion_id)
-                        futures_list.update({(region, resource_type, compartment_id, bastion_id):future})
-                    elif method_name == "list_snapshots":
+                    elif resource_type == "Snapshot" and method_name == "list_snapshots":
                         file_system_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, file_system_id=file_system_id)
                         futures_list.update({(region, resource_type, compartment_id, file_system_id):future})
-                    elif method_name == "list_source_applications":
-                        source_id = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, source_id=source_id)
-                        futures_list.update({(region, resource_type, compartment_id, source_id):future})
-                    elif method_name == "list_ssl_cipher_suites":
+                    elif resource_type == "SSLCipherSuite" and method_name == "list_ssl_cipher_suites":
                         load_balancer_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, load_balancer_id=load_balancer_id)
                         futures_list.update({(region, resource_type, compartment_id, load_balancer_id):future})
-                    elif method_name == "list_steering_policy_attachments":
-                        steering_policy_id = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, steering_policy_id=steering_policy_id)
-                        futures_list.update({(region, resource_type, compartment_id, steering_policy_id):future})
-                    elif method_name == "list_tags" and resource_type == "Tag":
+                    elif resource_type == "Tag" and method_name == "list_tags":
                         tag_namespace_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, tag_namespace_id=tag_namespace_id)
                         futures_list.update({(region, resource_type, compartment_id, tag_namespace_id):future})
-                    elif method_name == "list_user_group_memberships":
+                    elif resource_type == "UserGroupMembership" and method_name == "list_user_group_memberships":
                         group_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, group_id=group_id)
                         futures_list.update({(region, resource_type, compartment_id, group_id):future})
-                    elif method_name == "list_vault_replicas":
+                    elif resource_type == "VaultReplica" and method_name == "list_vault_replicas":
                         vault_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, vault_id=vault_id)
                         futures_list.update({(region, resource_type, compartment_id, vault_id):future})
-                    elif method_name == "list_vm_clusters":
+                    elif resource_type == "VmCluster" and method_name == "list_vm_clusters":
                         exadata_infrastructure_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, exadata_infrastructure_id=exadata_infrastructure_id)
                         futures_list.update({(region, resource_type, compartment_id, exadata_infrastructure_id):future})
-                    elif method_name == "list_vm_cluster_networks":
+                    elif resource_type == "VmClusterNetwork" and method_name == "list_vm_cluster_networks":
                         exadata_infrastructure_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, exadata_infrastructure_id=exadata_infrastructure_id)
                         futures_list.update({(region, resource_type, compartment_id, exadata_infrastructure_id):future})
@@ -1102,6 +1174,7 @@ class OciResourceDiscoveryClient(object):
                         "list_file_systems",
                         "list_instances",
                         "list_mount_targets",
+                        "list_volume_group_replicas",
                     ]:
                         # need to provide the availability domain when listing instances,
                         # boot volumes, file systems, ... 
@@ -1116,6 +1189,7 @@ class OciResourceDiscoveryClient(object):
         
         logger.info(f"submitted {len(futures_list)} list resources requests")
         return futures_list
+
 
     def process_list_resource_worker_reponses(self, futures_list):
 
@@ -1261,8 +1335,13 @@ class OciResourceDiscoveryClient(object):
         # i.e. for each region generate a set of (resource_type, compartment_id, 
         # availability_domain) tuples 
         resource_requests = dict()
+
+        # cache compartments that have KMS keys
+        kms_key_compartments_by_region = dict()
+
         for region in resources:
             regional_resource_requests = set()
+            kms_key_compartments_by_region[region] = set()
 
             if self.include_resource_types != None and "Image" in self.include_resource_types:
                 # If Image is specifically requested search for platform images in the root Compartment
@@ -1284,7 +1363,7 @@ class OciResourceDiscoveryClient(object):
                     regional_resource_requests.add((ro_resource_type, self.tenancy.id, None))
                 
             for resource in resources[region]:
-                # special casde for Vnic which doesn't have a list method
+                # special case for Vnic which doesn't have a list method
                 if resource.resource_type == "Vnic":
                     regional_resource_requests.add((resource.resource_type, resource.compartment_id, resource.identifier))
 
@@ -1296,9 +1375,16 @@ class OciResourceDiscoveryClient(object):
                     regional_resource_requests.add((resource.resource_type, resource.compartment_id, self.object_storage_namespace))
                 elif resource.resource_type == "IdentityProvider":
                     regional_resource_requests.add((resource.resource_type, resource.compartment_id, "SAML2"))
-                elif resource.resource_type == ["PrivateIp"]:
-                    # skip private ips, fetch private ips per subnet instead (below)
-                    pass
+                # elif resource.resource_type == "PrivateIp":
+                #     # skip private ips, fetch private ips per subnet instead (below)
+                #     pass
+                elif resource.resource_type == "Key":
+                    # KMS vault keys need special handling. Keys have to be fetched using the Vault specific service endpoint,
+                    # but the RQS results have the key id and compartment but no details of the vault it is contained in.
+                    # To ensure we find all keys we need to `list_keys` for each vault that is found across compartments that
+                    # contain keys. 
+                    # Build up a list of compartments containing keys here for use later
+                    kms_key_compartments_by_region[region].add(resource.compartment_id)
                 else:
                     # for all other resources
                     regional_resource_requests.add((resource.resource_type, resource.compartment_id, None))
@@ -1535,6 +1621,12 @@ class OciResourceDiscoveryClient(object):
             # get FastConnect circuit shapes
             for fastconnect_provider in resources_by_region[region]["FastConnectProviderService"] if (self.include_resource_types == None or "VirtualCircuitBandwidthShape" in self.include_resource_types) and "FastConnectProviderService" in resources_by_region[region] else []:
                 regional_resource_requests.add(("VirtualCircuitBandwidthShape", None, fastconnect_provider.id))
+            # find kms keys for a vault
+            for vault in resources_by_region[region]["Vault"] if "Vault" in resources_by_region[region] and (self.include_resource_types == None or "Key" in self.include_resource_types) else []:
+                # as we don't know which compartment the keys are in we need to search across all compartments we know contain keys
+                if vault.lifecycle_state == "ACTIVE":
+                    for compartment_id in kms_key_compartments_by_region[region]:
+                        regional_resource_requests.add(("Key", compartment_id, vault.management_endpoint))
             # find references to images that are not in the image results and do an explict get
             for instance in resources_by_region[region]["Instance"] if (self.include_resource_types == None or "Image" in self.include_resource_types) and "Instance" in resources_by_region[region] and "Image" in resources_by_region[region] else []:
                 image_ids = [image.id for image in resources_by_region[region]["Image"]]

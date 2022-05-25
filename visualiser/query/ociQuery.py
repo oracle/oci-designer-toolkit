@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# Copyright (c) 2020, 2021, Oracle and/or its affiliates.
+# Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 """Provide Module Description
@@ -49,6 +49,7 @@ class OCIQuery(OCIConnection):
         "DbNode",
         "DbSystem",
         "DHCPOptions",
+        "DISWorkspace",
         "Drg",
         "DrgAttachment",
         "DrgRouteDistribution",
@@ -66,6 +67,7 @@ class OCIQuery(OCIConnection):
         "InternetGateway",
         "IPSecConnection",
         "IpSecConnectionTunnel",
+        "Key",
         "LoadBalancer",
         "LocalPeeringGateway",
         "MountTarget",
@@ -86,7 +88,9 @@ class OCIQuery(OCIConnection):
         "Subnet",
         "User",
         "UserGroupMembership",
+        "Vault",
         "Vcn",
+        "VisualBuilderInstance",
         "VmCluster",
         "VmClusterNetwork",
         "Volume",
@@ -107,6 +111,7 @@ class OCIQuery(OCIConnection):
         "DbNode": "db_nodes",
         "DbSystem": "database_systems",
         "DHCPOptions": "dhcp_options",
+        "DISWorkspace": "data_integration_workspaces",
         # "Drg": "dynamic_routing_gateways",
         "Drg": "drgs",
         "DrgAttachment": "drg_attachments",
@@ -117,6 +122,7 @@ class OCIQuery(OCIConnection):
         "InstancePool": "instance_pools",
         "InternetGateway": "internet_gateways",
         "IPSecConnection": "ipsec_connections",
+        "Key": "keys",
         "LoadBalancer": "load_balancers",
         "LocalPeeringGateway": "local_peering_gateways",
         "MountTarget": "mount_targets",
@@ -132,6 +138,8 @@ class OCIQuery(OCIConnection):
         "ServiceGateway": "service_gateways",
         "Subnet": "subnets",
         "User": "users",
+        "Vault": "vaults",
+        "VisualBuilderInstance": "Visual_builder_instances",
         "Vcn": "virtual_cloud_networks",
         "VmCluster": "vm_clusters",
         "VmClusterNetwork": "vm_cluster_networks",
@@ -149,7 +157,8 @@ class OCIQuery(OCIConnection):
         "CREATING",
         "INACTIVE",
         "ATTACHED",
-        "ALLOCATED"
+        "ALLOCATED",
+        "ENABLED"
     ]
 
     def __init__(self, config=None, configfile=None, profile=None):
@@ -208,7 +217,8 @@ class OCIQuery(OCIConnection):
         for region, resources in discovery_data.items():
             logger.info("Processing Region : {0!s:s} {1!s:s}".format(region, resources.keys()))
             for resource_type, resource_list in resources.items():
-                logger.info("Processing Resource : {0!s:s}".format(resource_type))
+                # logger.info("Processing Resource : {0!s:s}".format(resource_type))
+                logger.info(f"Processing Resource : {resource_type} {len(resource_list)}")
                 # logger.info(jsonToFormattedString(resource_list))
                 if resource_type in map_keys:
                     if resource_type == "Drg":
@@ -218,7 +228,7 @@ class OCIQuery(OCIConnection):
                     elif resource_type == "Instance":
                         resource_list = self.instances(resource_list, resources)
                     elif resource_type == "LoadBalancer":
-                        resource_list = self.loadbalancers(resource_list, resources)
+                        resource_list = self.load_balancers(resource_list, resources)
                     elif resource_type == "MySqlDbSystem":
                         resource_list = self.mysql_database_systems(resource_list, resources)
                     elif resource_type == "NetworkSecurityGroup":
@@ -312,6 +322,23 @@ class OCIQuery(OCIConnection):
             instance['is_pv_encryption_in_transit_enabled'] = boot_volume_attachments[0]['is_pv_encryption_in_transit_enabled'] if len(boot_volume_attachments) else False
         return instances
 
+    def load_balancers(self, nlbs, resources):
+        private_ips = resources.get("PrivateIp", [])
+        vnic_attachments = resources.get("VnicAttachment", [])
+        for nlb in nlbs:
+            nlb["backend_sets"] = list(nlb["backend_sets"].values())
+            nlb["listeners"] = list(nlb["listeners"].values())
+            for bs in nlb["backend_sets"]:
+                for backend in bs["backends"]:
+                    vnic_ids = [ip["vnic_id"] for ip in private_ips if ip["ip_address"] == backend["ip_address"]]
+                    if len(vnic_ids) > 0:
+                        instance_ids = [va["instance_id"] for va in vnic_attachments if va["vnic_id"] in vnic_ids]
+                        if len(instance_ids) > 0:
+                            backend["target_id"] = instance_ids[0]
+            for l in nlb["listeners"]:
+                l["use_any_port"] = l["port"] == 0
+        return nlbs
+
     def loadbalancers(self, loadbalancers, resources):
         for lb in loadbalancers:
             lb["instance_ids"] = []
@@ -374,13 +401,19 @@ class OCIQuery(OCIConnection):
                          'drg': 'drg_attachment',
                         #  'drg': 'dynamic_routing_gateway',
                          'privateip':'private_ip',
-                         'servicegateway': 'service_gateway'}
+                         'servicegateway': 'service_gateway',
+                         'vcn': 'vcn'}
         for route_table in route_tables:
             for rule in route_table.get('route_rules', []):
                 if len(rule['network_entity_id']) > 0:
                     rule['target_type'] = rule_type_map[rule['network_entity_id'].split('.')[1]]
                 else:
                     rule['target_type'] = ''
+                if rule['target_type'] == 'service_gateway':
+                    if rule['destination'].startswith('all-') and rule['destination'].endswith('services-network'):
+                        rule['destination'] = 'all_services_destination'
+                    else:
+                        rule['destination'] = 'objectstorage_services_destination'
 
         return route_tables
 

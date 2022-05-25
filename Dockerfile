@@ -1,14 +1,14 @@
 
-# Copyright (c) 2020, 2021, Oracle and/or its affiliates.
+# Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 FROM oraclelinux:7-slim
 ARG BRANCH=master
 LABEL "provider"="Oracle" \
       "issues"="https://github.com/oracle/oci-designer-toolkit/issues" \
-      "version"="0.35.0" \
+      "version"="0.37.0" \
       "description"="OKIT Web Server Container." \
-      "copyright"="Copyright (c) 2020, 2021, Oracle and/or its affiliates."
+      "copyright"="Copyright (c) 2020, 2022, Oracle and/or its affiliates."
 # SHELL ["/bin/bash", "-c"]
 ENV PYTHONIOENCODING=utf8 \
     PYTHONPATH=":/okit/visualiser:/okit/okitweb:/okit" \

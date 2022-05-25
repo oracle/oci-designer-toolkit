@@ -14,6 +14,11 @@
     {% include "compartment.jinja2" ignore missing with context %}
 {%- endif %}
 
+{% if data_integration_workspaces is defined and data_integration_workspaces|length > 0 -%}
+    ### DIS Workspace
+    {% include "data_integration_workspace.jinja2" ignore missing with context %}
+{%- endif %}
+
 ## Networking
 
 {% if virtual_cloud_networks is defined and virtual_cloud_networks|length > 0 -%}
@@ -182,7 +187,7 @@
 
 {%- endif %}
 
-{% if (groups is defined and groups|length > 0) or (users is defined and users|length > 0) or (policys is defined and policys|length > 0) -%}
+{% if (groups is defined and groups|length > 0) or (users is defined and users|length > 0) or (policys is defined and policys|length > 0) or (vaults is defined and vaults|length > 0) -%}
 ## Identity
 {% if (users is defined and users|length > 0) -%}
 ### Users
@@ -197,6 +202,11 @@
 {% if (policys is defined and policys|length > 0) -%}
 ### Policies
     {% include "policy.jinja2" ignore missing with context %}
+{%- endif %}
+
+{% if (vaults is defined and vaults|length > 0) -%}
+### Vaults
+    {% include "vault.jinja2" ignore missing with context %}
 {%- endif %}
 {%- endif %}
 

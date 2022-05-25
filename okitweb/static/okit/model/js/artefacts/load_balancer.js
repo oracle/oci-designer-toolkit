@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
+** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded Load Balancer Javascript');
@@ -19,20 +19,15 @@ class LoadBalancer extends OkitArtifact {
         this.subnet_ids = [];
         this.is_private = false;
         this.shape = 'flexible';
-        this.protocol = 'HTTP';
-        this.port = '80';
-        this.instance_ids = [];
         this.ip_mode = '';
         this.network_security_group_ids = [];
-        this.backend_policy = 'ROUND_ROBIN';
-        this.health_checker = this.newHealthChecker()
-        // this.health_checker = {url_path: '/'}
         this.shape_details = {
             minimum_bandwidth_in_mbps: 10,
             maximum_bandwidth_in_mbps: 10
         }
-        // this.backend_sets = []
-        // this.listeners = []
+        this.reserved_ips = []
+        this.backend_sets = []
+        this.listeners = []
 
         // Update with any passed data
         this.merge(data);
@@ -45,39 +40,85 @@ class LoadBalancer extends OkitArtifact {
     ** Conversion Routine allowing loading of old json
      */
     convert() {
+        super.convert()
         if (this.shape_name !== undefined) {this.shape = this.shape_name; delete this.shape_name;}
+        if (this.backend_sets && !Array.isArray(this.backend_sets) && typeof this.backend_sets === 'object') this.backend_sets = Object.values(this.backend_sets)
+        if (this.listeners && !Array.isArray(this.listeners) && typeof this.listeners === 'object') this.listeners = Object.values(this.listeners)
+        if (this.health_checker) {
+            // V1 Format
+            const backend_set = this.newBackendSet()
+            backend_set.health_checker = this.health_checker
+            backend_set.policy = this.backend_policy
+            this.instance_ids.forEach((id) => {
+                const backend = this.newBackend()
+                backend.target_id = id
+                backend.port = this.port
+                backend_set.backends.push(backend)
+            })
+            this.backend_sets.push(backend_set)
+            const listener = this.newListener()
+            listener.default_backend_set_name = backend_set.resource_name
+            listener.port = this.port
+            listener.protocol = this.protocol
+            this.listeners.push(listener)
+            // Remove V1 Variables
+            delete this.health_checker
+            delete this.port
+            delete this.protocol
+            delete this.instance_ids
+            delete this.backend_policy
+        }
     }
 
     /*
     ** Sub Group Creation routines
     */
+    newHealthChecker() {
+        return {
+            protocol: 'HTTP',
+            interval_ms: 10000,
+            port: 80,
+            response_body_regex: '',
+            retries: 3,
+            return_code: 200,
+            timeout_in_millis: 3000,
+            url_path: ''
+        }
+    }
+
     newBackendSet() {
         return {
-            resource_name: '',
-            name: '',
-            backend_policy: 'ROUND_ROBIN',
-            backends: [],
-            heather_checker: this.newHealthChecker()
+            resource_name: `${this.generateResourceName()}BackendSet`,
+            health_checker: this.newHealthChecker(),
+            name: `${this.display_name}BackendSet`.replaceAll(' ', '_'),
+            policy: 'ROUND_ROBIN',
+            backends: []
         }
     }
 
     newBackend() {
         return {
-            resource_name: '',
-            instance_id: ''
-        }
-    }
-
-    newHealthChecker() {
-        return {
-            protocol: 'HTTP',
+            resource_name: `${this.generateResourceName()}Backend`,
             port: 80,
-            url_path: '/'
+            ip_address: '',
+            backup: false,
+            drain: false,
+            offline: false,
+            name: `${this.display_name}Backend`.replaceAll(' ', '_'),
+            target_id: '',
+            weight: 1
         }
     }
 
     newListener() {
-        return {}
+        return {
+            resource_name: `${this.generateResourceName()}Listener`,
+            default_backend_set_name: '',
+            name: `${this.display_name}Listener`.replaceAll(' ', '_'),
+            use_any_port: false,
+            port: 80,
+            protocol: 'TCP'
+        }
     }
 
     getNamePrefix() {

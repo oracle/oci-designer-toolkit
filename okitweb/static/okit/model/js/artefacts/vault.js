@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
+** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded Vault Javascript');
@@ -14,17 +14,11 @@ class Vault extends OkitArtifact {
     constructor (data={}, okitjson={}) {
         super(okitjson);
         // Configure default values
-        // this.display_name = this.generateDefaultName(okitjson.vaults.length + 1);
         this.compartment_id = data.parent_id;
-        /*
-        ** TODO: Add Resource / Artefact specific parameters and default
-        */
+        this.vault_type = 'DEFAULT'
         // Update with any passed data
         this.merge(data);
         this.convert();
-        // TODO: If the Resource is within a Subnet but the subnet_iss is not at the top level then raise it with the following functions if not required delete them.
-        // Expose subnet_id at the top level
-        Object.defineProperty(this, 'subnet_id', {get: function() {return this.primary_mount_target.subnet_id;}, set: function(id) {this.primary_mount_target.subnet_id = id;}, enumerable: false });
     }
     /*
     ** Name Generation
@@ -47,9 +41,7 @@ OkitJson.prototype.newVault = function(data) {
     return this.getVaults()[this.getVaults().length - 1];
 }
 OkitJson.prototype.getVaults = function() {
-    if (!this.vaults) {
-        this.vaults = [];
-    }
+    if (!this.vaults) this.vaults = []
     return this.vaults;
 }
 OkitJson.prototype.getVault = function(id='') {

@@ -26,6 +26,7 @@ logger = getLogger()
 # Execute workflow
 def processWorkflow(args):
     if args["name"] != "":
+        overwrite = args['overwrite']
         template_dir = "./templates"
         template_loader = jinja2.FileSystemLoader(searchpath=template_dir)
         jinja2_environment = jinja2.Environment(loader=template_loader, trim_blocks=True, lstrip_blocks=True, autoescape=True)
@@ -50,50 +51,56 @@ def processWorkflow(args):
         rendered = jinja2_template.render(jinja2_variables)
         #logger.info(rendered)
         filename = "../okitweb/static/okit/model/js/artefacts/{0!s:s}.js".format(standardised_name)
-        writeFile(filename, rendered)
+        writeFile(filename, rendered, overwrite)
         # ---- Model Functions JavaScript
         #jinja2_template = jinja2_environment.get_template("model_functions.jinja2")
         #rendered = jinja2_template.render(jinja2_variables)
         #logger.info(rendered)
         #filename = "../okitweb/static/okit/model/js/Additional_Model_Functions_For_{0!s:s}.js".format(svg_id)
-        #writeFile(filename, rendered)
+        #writeFile(filename, rendered, overwrite)
         # --- Artefact View JavaScript
         jinja2_template = jinja2_environment.get_template("artefact_view.js.jinja2")
         rendered = jinja2_template.render(jinja2_variables)
         #logger.info(rendered)
         filename = "../okitweb/static/okit/view/designer/js/artefacts/{0!s:s}.js".format(standardised_name)
-        writeFile(filename, rendered)
+        writeFile(filename, rendered, overwrite)
+        # --- Resource Properties JavaScript
+        jinja2_template = jinja2_environment.get_template("artefact_properties.js.jinja2")
+        rendered = jinja2_template.render(jinja2_variables)
+        #logger.info(rendered)
+        filename = "../okitweb/static/okit/properties/js/resources/{0!s:s}.js".format(standardised_name)
+        writeFile(filename, rendered, overwrite)
         # ---- View Functions JavaScript
         #jinja2_template = jinja2_environment.get_template("view_functions.jinja2")
         #rendered = jinja2_template.render(jinja2_variables)
         #logger.info(rendered)
         #filename = "../okitweb/static/okit/view/js/Additional_View_Functions_For_{0!s:s}.js".format(svg_id)
-        #writeFile(filename, rendered)
+        #writeFile(filename, rendered, overwrite)
         # ---- SVG
-        jinja2_template = jinja2_environment.get_template("artefact.svg.jinja2")
-        rendered = jinja2_template.render(jinja2_variables)
-        #logger.info(rendered)
-        filename = "../okitweb/static/okit/palette/svg/{0!s:s}.svg".format(svg_id)
-        writeFile(filename, rendered)
-        # ---- Properties HTML
-        jinja2_template = jinja2_environment.get_template("artefact_properties.html.jinja2")
-        rendered = jinja2_template.render(jinja2_variables)
-        #logger.info(rendered)
-        filename = "../okitweb/templates/okit/propertysheets/{0!s:s}.html".format(standardised_name)
-        writeFile(filename, rendered)
-        # ---- Value Proposition HTML
-        jinja2_template = jinja2_environment.get_template("artefact_value_proposition.html.jinja2")
-        rendered = jinja2_template.render(jinja2_variables)
-        #logger.info(rendered)
-        filename = "../okitweb/templates/okit/valueproposition/{0!s:s}.html".format(standardised_name)
-        writeFile(filename, rendered)
+        # jinja2_template = jinja2_environment.get_template("artefact.svg.jinja2")
+        # rendered = jinja2_template.render(jinja2_variables)
+        # #logger.info(rendered)
+        # filename = "../okitweb/static/okit/palette/svg/{0!s:s}.svg".format(svg_id)
+        # writeFile(filename, rendered, overwrite)
+        # # ---- Properties HTML
+        # jinja2_template = jinja2_environment.get_template("artefact_properties.html.jinja2")
+        # rendered = jinja2_template.render(jinja2_variables)
+        # #logger.info(rendered)
+        # filename = "../okitweb/templates/okit/propertysheets/{0!s:s}.html".format(standardised_name)
+        # writeFile(filename, rendered, overwrite)
+        # # ---- Value Proposition HTML
+        # jinja2_template = jinja2_environment.get_template("artefact_value_proposition.html.jinja2")
+        # rendered = jinja2_template.render(jinja2_variables)
+        # #logger.info(rendered)
+        # filename = "../okitweb/templates/okit/valueproposition/{0!s:s}.html".format(standardised_name)
+        # writeFile(filename, rendered, overwrite)
         # --- Backend
         # ---- Python Facade
-        jinja2_template = jinja2_environment.get_template("artefact_facade.py.jinja2")
-        rendered = jinja2_template.render(jinja2_variables)
-        #logger.info(rendered)
-        filename = "../visualiser/facades/oci{0!s:s}.py".format(model_class_name)
-        writeFile(filename, rendered)
+        # jinja2_template = jinja2_environment.get_template("artefact_facade.py.jinja2")
+        # rendered = jinja2_template.render(jinja2_variables)
+        # #logger.info(rendered)
+        # filename = "../visualiser/facades/oci{0!s:s}.py".format(model_class_name)
+        # writeFile(filename, rendered, overwrite)
     return
 
 
@@ -101,6 +108,7 @@ def processWorkflow(args):
 def defaultArgs():
     args = {}
     args['name'] = ""
+    args['overwrite'] = False
     return args
 
 
@@ -114,6 +122,8 @@ def readargs(opts, args):
             moduleargs['name'] = arg
         elif opt in ("-t", "--toolsdir"):
             moduleargs['toolsdir'] = arg
+        elif opt in ("-o", "--overwrite"):
+            moduleargs['overwrite'] = True
 
     return moduleargs
 
@@ -124,8 +134,8 @@ def usage():
 # Main processing function
 def main(argv):
     # Configure Parameters and Options
-    options = 'n:'
-    longOptions = ['name=']
+    options = 'n:o'
+    longOptions = ['name=', 'overwrite']
     # Get Options & Arguments
     try:
         opts, args = getopt.getopt(argv, options, longOptions)

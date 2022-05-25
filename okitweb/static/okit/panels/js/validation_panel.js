@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
+** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded ValidationPanel Javascript');
@@ -61,7 +61,7 @@ class OkitValidationPanel extends OkitPanel {
 
     displayResult(result, result_class, parent) {
         const svg = d3.select(d3Id(result.id))
-        const fill = svg.attr('fill')
+        // const fill = svg.attr('fill')
         const result_wrapper_div = parent.append('div').attr('class', `okit-validation-result`)
                                             .on('mouseover', () => {svg.classed(`${result_class}-highlight`, true)})
                                             .on('mouseout', () => svg.classed(`${result_class}-highlight`, false))

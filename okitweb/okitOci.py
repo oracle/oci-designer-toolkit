@@ -1,5 +1,5 @@
 
-# Copyright (c) 2020, 2021, Oracle and/or its affiliates.
+# Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 """Provide Module Description
@@ -93,6 +93,23 @@ bp = Blueprint('oci', __name__, url_prefix='/okit/oci', static_folder='static/ok
 
 debug_mode = bool(str(os.getenv('DEBUG_MODE', 'False')).title())
 template_root = f'{getOkitHome()}/visualiser/templates'
+
+def loadDropdownFile(profile, region):
+    dropdown_dir = os.path.abspath(os.path.join(bp.static_folder, 'json', 'dropdown'))
+    shipped_dropdown_file = os.path.abspath(os.path.join(dropdown_dir, 'dropdown.json'))
+    profile_dropdown_dir = os.path.abspath(os.path.join(dropdown_dir, 'profiles'))
+    profile_dropdown_file = os.path.abspath(os.path.join(profile_dropdown_dir, profile, f'{region}.json'))
+    if os.path.exists(profile_dropdown_file):
+        dropdown_file = profile_dropdown_file
+        logger.info(f'Loading Dropdown file {dropdown_file}')
+        dropdown_json = readJsonFile(dropdown_file)
+    else:
+        dropdown_file = shipped_dropdown_file
+        logger.info(f'Loading Dropdown file {dropdown_file}')
+        dropdown_json = readJsonFile(dropdown_file)
+        dropdown_json["shipped"] = True
+        dropdown_json["default"] = True
+    return dropdown_json
 
 #
 # Define Error Handlers
@@ -237,21 +254,6 @@ def ociRegionSubscription():
         return 404
 
 
-# @bp.route('/region', methods=(['GET']))
-# def ociRegion():
-#     # query_string = request.query_string
-#     # parsed_query_string = urllib.parse.unquote(query_string.decode())
-#     # query_json = json.loads(parsed_query_string)
-#     # logJson(query_json)
-#     # config_profile = query_json.get('config_profile', 'DEFAULT')
-#     config_profile = request.args.get('config_profile', default='DEFAULT')
-#     logger.info('Using Profile : {0!s:s}'.format(config_profile))
-#     oci_regions = OCIRegions(profile=config_profile)
-#     regions = oci_regions.list()
-#     logger.debug(">>>>>>>>> Regions: {0!s:s}".format(regions))
-#     return json.dumps(regions, sort_keys=False, indent=2, separators=(',', ': '))
-
-
 @bp.route('/regions/<string:profile>', methods=(['GET']))
 def ociRegions(profile):
     oci_region_query = OCIRegionQuery(profile=profile)
@@ -288,158 +290,6 @@ def response_to_json(data):
     return json.dumps(json.loads(json_str), indent=2)
 
 
-# @bp.route('/artefacts/<string:artifact>', methods=(['GET']))
-# def ociArtifacts(artifact):
-#     logger.debug('Artifact : {0:s}'.format(str(artifact)))
-#     # query_string = request.query_string
-#     # parsed_query_string = urllib.parse.unquote(query_string.decode())
-#     # query_json = standardiseIds(json.loads(parsed_query_string), from_char='-', to_char='.')
-#     # logger.debug('===================================== Query Json =====================================')
-#     # logJson(query_json)
-#     # logger.debug('======================================================================================')
-#     # config_profile = query_json.get('config_profile', 'DEFAULT')
-#     config_profile = request.args.get('config_profile', default='DEFAULT')
-#     logger.debug('Using Profile : {0!s:s}'.format(config_profile))
-#     response_json = {}
-#     config = {'region': query_json['region']}
-#     if artifact == 'Compartment':
-#         logger.info('---- Processing Compartment')
-#         oci_compartments = OCICompartments(config=config, profile=config_profile)
-#         response_json = oci_compartments.get(compartment_id=query_json['compartment_id'])
-#     elif artifact == 'AutonomousDatabase':
-#         logger.info('---- Processing Autonomous Databases')
-#         oci_autonomous_databases = OCIAutonomousDatabases(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
-#         response_json = oci_autonomous_databases.list(filter=query_json.get('autonomous_database_filter', None))
-#     elif artifact == 'BlockStorageVolume':
-#         logger.info('---- Processing Block Storage Volumes')
-#         oci_block_storage_volumes = OCIBlockStorageVolumes(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
-#         response_json = oci_block_storage_volumes.list(filter=query_json.get('block_storage_volume_filter', None))
-#     elif artifact == 'Compartments':
-#         logger.info('---- Processing Compartments')
-#         oci_compartments = OCICompartments(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
-#         response_json = oci_compartments.list(filter=query_json.get('compartment_filter', None))
-#     elif artifact == 'CustomerPremiseEquipment':
-#         logger.info('---- Processing Customer Premise Equipment')
-#         oci_cpes = OCICustomerPremiseEquipments(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
-#         response_json = oci_cpes.list(filter=query_json.get('cpe_filter', None))
-#     elif artifact == 'Database':
-#         logger.info('---- Processing Databases')
-#         oci_databases = OCIDatabases(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], db_home_id=query_json.get('db_home_id', None))
-#         response_json = oci_databases.list(filter=query_json.get('database_system_filter', None))
-#     elif artifact == 'DatabaseSystem':
-#         logger.info('---- Processing Database Systems')
-#         oci_database_systems = OCIDatabaseSystems(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
-#         response_json = oci_database_systems.list(filter=query_json.get('database_system_filter', None))
-#     elif artifact == 'DbHome':
-#         logger.info('---- Processing Db Home')
-#         oci_db_nodes = OCIDbHomes(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vm_cluster_id=query_json.get('vm_cluster_id', None))
-#         response_json = oci_db_nodes.list(filter=query_json.get('db_node_filter', None))
-#     elif artifact == 'DbNode':
-#         logger.info('---- Processing Db Node')
-#         oci_db_homes = OCIDbNodes(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vm_cluster_id=query_json.get('vm_cluster_id', None))
-#         response_json = oci_db_homes.list(filter=query_json.get('db_home_filter', None))
-#     elif artifact == 'DynamicRoutingGateway':
-#         logger.info('---- Processing Dynamic Routing Gateways')
-#         oci_dynamic_routing_gateways = OCIDynamicRoutingGateways(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
-#         response_json = oci_dynamic_routing_gateways.list(filter=query_json.get('dynamic_routing_gateway_filter', None))
-#     elif artifact == 'ExadataInfrastructure':
-#         logger.info('---- Processing Exadata Infrastructures aka C@C')
-#         oci_exadata_infrastructures = OCIExadataInfrastructures(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
-#         response_json = oci_exadata_infrastructures.list(filter=query_json.get('exadata_infrastructure_filter', None))
-#     elif artifact == 'FastConnect':
-#         logger.info('---- Processing FastConnects')
-#         oci_fast_connects = OCIFastConnects(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
-#         response_json = oci_fast_connects.list(filter=query_json.get('fast_connect_filter', None))
-#     elif artifact == 'FileStorageSystem':
-#         logger.info('---- Processing File Storage Systems')
-#         oci_file_storage_systems = OCIFileStorageSystems(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
-#         response_json = oci_file_storage_systems.list(filter=query_json.get('file_storage_system_filter', None))
-#     elif artifact == 'Instance':
-#         logger.info('---- Processing Instances')
-#         oci_instances = OCIInstances(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
-#         response_json = oci_instances.list(filter=query_json.get('instance_filter', None))
-#     elif artifact == 'InstancePool':
-#         logger.info('---- Processing Instance Pools')
-#         oci_instance_pools = OCIInstancePools(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
-#         response_json = oci_instance_pools.list(filter=query_json.get('instance_filter', None))
-#     elif artifact == 'InternetGateway':
-#         logger.info('---- Processing Internet Gateways')
-#         oci_internet_gateways = OCIInternetGateways(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
-#         response_json = oci_internet_gateways.list(filter=query_json.get('internet_gateway_filter', None))
-#     elif artifact == 'IPSecConnection':
-#         logger.info('---- Processing IPSec Connections')
-#         oci_ipsec_connections = OCIIPSecConnections(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
-#         response_json = oci_ipsec_connections.list(filter=query_json.get('ipsec_connection_filter', None))
-#     elif artifact == 'LoadBalancer':
-#         logger.info('---- Processing Load Balancers')
-#         oci_load_balancers = OCILoadBalancers(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
-#         response_json = oci_load_balancers.list(filter=query_json.get('load_balancer_filter', None))
-#         response_json = [lb for lb in response_json if query_json['subnet_id'] in lb['subnet_ids']]
-#     elif artifact == 'LocalPeeringGateway':
-#         logger.info('---- Processing LocalPeeringGateways')
-#         oci_local_peering_gateways = OCILocalPeeringGateways(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
-#         response_json = oci_local_peering_gateways.list(filter=query_json.get('local_peering_gateway_filter', None))
-#     elif artifact == 'MySQLDatabaseSystem':
-#         logger.info('---- Processing MySQL Database Systems')
-#         oci_mysql_database_systems = OCIMySQLDatabaseSystems(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
-#         response_json = oci_mysql_database_systems.list(filter=query_json.get('mysql_database_system_filter', None))
-#     elif artifact == 'NATGateway':
-#         logger.info('---- Processing NAT Gateways')
-#         oci_nat_gateways = OCINATGateways(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
-#         response_json = oci_nat_gateways.list(filter=query_json.get('nat_gateway_filter', None))
-#     elif artifact == 'NetworkSecurityGroup':
-#         logger.info('---- Processing Network Security Groups')
-#         oci_network_security_groups = OCINetworkSecurityGroups(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
-#         response_json = oci_network_security_groups.list(filter=query_json.get('network_security_group_filter', None))
-#     elif artifact == 'ObjectStorageBucket':
-#         logger.info('---- Processing Object Storage Buckets')
-#         oci_object_storage_buckets = OCIObjectStorageBuckets(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
-#         response_json = oci_object_storage_buckets.list(filter=query_json.get('object_storage_bucket_filter', None))
-#     elif artifact == 'OkeCluster':
-#         logger.info('---- Processing OKE Clusters')
-#         oke_clusters = OCIContainers(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
-#         response_json = oke_clusters.list(filter=query_json.get('oke_cluster_filter', None))
-#     elif artifact == 'RemotePeeringConnection':
-#         logger.info('---- Processing Remote Peering Connections')
-#         oci_remote_peering_connections = OCIRemotePeeringConnections(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
-#         response_json = oci_remote_peering_connections.list(filter=query_json.get('remote_peering_connection_filter', None))
-#     elif artifact == 'RouteTable':
-#         logger.info('---- Processing Route Tables')
-#         oci_route_tables = OCIRouteTables(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
-#         response_json = oci_route_tables.list(filter=query_json.get('route_table_filter', None))
-#     elif artifact == 'SecurityList':
-#         logger.info('---- Processing Security Lists')
-#         oci_security_lists = OCISecurityLists(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
-#         response_json = oci_security_lists.list(filter=query_json.get('security_list_filter', None))
-#     elif artifact == 'ServiceGateway':
-#         logger.info('---- Processing Service Gateways')
-#         oci_service_gateways = OCIServiceGateways(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
-#         response_json = oci_service_gateways.list(filter=query_json.get('service_gateway_filter', None))
-#     elif artifact == 'Subnet':
-#         logger.info('---- Processing Subnets')
-#         oci_subnets = OCISubnets(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
-#         response_json = oci_subnets.list(filter=query_json.get('subnet_filter', None))
-#     elif artifact == 'VirtualCloudNetwork':
-#         logger.info('---- Processing Virtual Cloud Networks')
-#         oci_virtual_cloud_networks = OCIVirtualCloudNetworks(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
-#         response_json = oci_virtual_cloud_networks.list(filter=query_json.get('virtual_cloud_network_filter', None))
-#     elif artifact == 'VmCluster':
-#         logger.info('---- Processing VM Clusters')
-#         oci_vm_clusters = OCIVmClusters(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], exadata_infrastructure_id=query_json.get('exadata_infrastructure_id', None))
-#         # oci_vm_clusters = OCIVmClusters(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
-#         response_json = oci_vm_clusters.list(filter=query_json.get('vm_cluster_filter', None))
-#     elif artifact == 'VmClusterNetwork':
-#         logger.info('---- Processing VM Cluster Networks')
-#         oci_vm_cluster_networks = OCIVmClusterNetworks(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], exadata_infrastructure_id=query_json['exadata_infrastructure_id'])
-#         response_json = oci_vm_cluster_networks.list(filter=query_json.get('vm_cluster_network_filter', None))
-#     else:
-#         logger.warn('---- Unknown Artifact : {0:s}'.format(str(artifact)))
-#         return 404
-
-#     logger.debug(json.dumps(response_json, sort_keys=True, indent=2, separators=(',', ': ')))
-#     return json.dumps(standardiseIds(response_json), sort_keys=True)
-
-
 @bp.route('/resourcetypes/<string:profile>', methods=(['GET']))
 def resourceTypes(profile):
     if request.method == 'GET':
@@ -455,112 +305,16 @@ def dropdownQuery():
     if request.method == 'GET':
         profile = request.args.get('profile', None)
         region = request.args.get('region', None)
-        dropdown_query = OCIDropdownQuery(profile=profile)
-        dropdown_json = dropdown_query.executeQuery([region])
-        return dropdown_json
-    else:
-        return 'Unknown Method', 500
-
-# @bp.route('/dropdown1/<string:profile>/<string:region>', methods=(['GET']))
-# def dropdown1Query(profile, region):
-#     if request.method == 'GET':
-#         dropdown_query = OCIDropdownQuery(profile=profile)
-#         dropdown_json = dropdown_query.executeQuery([region])
-#         return dropdown_json
-#     else:
-#         return 'Unknown Method', 500
-
-
-@bp.route('/dropdownold/<string:profile>', methods=(['GET']))
-def dropdownOldQuery(profile):
-    if request.method == 'GET':
-        dropdown_json = {}
-        # Regions
-        # oci_regions = OCIRegions(profile=profile)
-        # dropdown_json["regions"] = sorted(oci_regions.list(), key=lambda k: k['name'])
-        # Services
-        oci_services = OCIServices(profile=profile)
-        dropdown_json["services"] = sorted(oci_services.list(), key=lambda k: k['name'])
-        # Instance Shapes
-        oci_shapes = OCIShapes(profile=profile)
-        dropdown_json["shapes"] = sorted(oci_shapes.list(), key=lambda k: k['sort_key'])
-        # Instance Images
-        oci_images = OCIImages(profile=profile)
-        dropdown_json["images"] = sorted(oci_images.list(), key=lambda k: k['sort_key'])
-        # Database System Shapes
-        db_system_shapes = OCIDatabaseSystemShapes(profile=profile)
-        dropdown_json["db_system_shapes"] = sorted(db_system_shapes.list(), key=lambda k: k['shape'])
-        # Database Versions
-        db_versions = OCIDatabaseVersions(profile=profile)
-        dropdown_json["db_versions"] = sorted(db_versions.list(), key=lambda k: k['version'])
-        # CPE Device Shapes
-        cpe_device_shapes = OCICpeDeviceShapes(profile=profile)
-        dropdown_json["cpe_device_shapes"] = sorted(cpe_device_shapes.list(), key=lambda k: k['cpe_device_info']['vendor'])
-        # Fast Connect Provider Services
-        # fast_connect_provider_services = OCIFastConnectProviderServices(profile=profile)
-        # dropdown_json["fast_connect_provider_services"] = sorted(fast_connect_provider_services.list(), key=lambda k: k['provider_name'])
-        # MySQL Shapes
-        mysql_shapes = OCIMySQLShapes(profile=profile)
-        dropdown_json["mysql_shapes"] = sorted(mysql_shapes.list(), key=lambda k: k['name'])
-        # Database Versions
-        mysql_versions = OCIMySQLVersions(profile=profile)
-        dropdown_json["mysql_versions"] = sorted(mysql_versions.list(), key=lambda k: k['version_family'])
-        # MySQL Configurations
-        mysql_configurations = OCIMySQLConfigurations(profile=profile)
-        dropdown_json["mysql_configurations"] = sorted(mysql_configurations.list(), key=lambda k: k['display_name'])
-        # Instance Shapes
-        oci_loadbalancer_shapes = OCILoadBalancerShapes(profile=profile)
-        dropdown_json["loadbalancer_shapes"] = sorted(oci_loadbalancer_shapes.list(), key=lambda k: k['name'])
-        # Kubernetes Versions
-        k8_versions = OCIKubernetesVersions(profile=profile)
-        dropdown_json["kubernetes_versions"] = sorted(k8_versions.list(), key=lambda k: k['version'], reverse=True)
-        return dropdown_json
-    else:
-        return 'Unknown Method', 500
-
-@bp.route('/dropdown2', methods=(['GET']))
-def dropdown2Query():
-    if request.method == 'GET':
-        dropdown_json = {}
-        # Regions
-        oci_regions = OCIRegions()
-        dropdown_json["regions"] = sorted(oci_regions.list(), key=lambda k: k['name'])
-        # Services
-        oci_services = OCIServices()
-        dropdown_json["services"] = sorted(oci_services.list(), key=lambda k: k['name'])
-        # Instance Shapes
-        oci_shapes = OCIShapes()
-        dropdown_json["shapes"] = sorted(oci_shapes.list(), key=lambda k: k['sort_key'])
-        # Instance Images
-        oci_images = OCIImages()
-        dropdown_json["images"] = sorted(oci_images.list(), key=lambda k: k['sort_key'])
-        # Database System Shapes
-        db_system_shapes = OCIDatabaseSystemShapes()
-        dropdown_json["db_system_shapes"] = sorted(db_system_shapes.list(), key=lambda k: k['shape'])
-        # Database Versions
-        db_versions = OCIDatabaseVersions()
-        dropdown_json["db_versions"] = sorted(db_versions.list(), key=lambda k: k['version'])
-        # CPE Device Shapes
-        cpe_device_shapes = OCICpeDeviceShapes()
-        dropdown_json["cpe_device_shapes"] = sorted(cpe_device_shapes.list(), key=lambda k: k['cpe_device_info']['vendor'])
-        # Fast Connect Provider Services
-        fast_connect_provider_services = OCIFastConnectProviderServices()
-        dropdown_json["fast_connect_provider_services"] = sorted(fast_connect_provider_services.list(), key=lambda k: k['provider_name'])
-        # MySQL Shapes
-        mysql_shapes = OCIMySQLShapes()
-        dropdown_json["mysql_shapes"] = sorted(mysql_shapes.list(), key=lambda k: k['name'])
-        # Database Versions
-        mysql_versions = OCIMySQLVersions()
-        dropdown_json["mysql_versions"] = sorted(mysql_versions.list(), key=lambda k: k['version_family'])
-        # MySQL Configurations
-        mysql_configurations = OCIMySQLConfigurations()
-        dropdown_json["mysql_configurations"] = sorted(mysql_configurations.list(), key=lambda k: k['display_name'])
-        # Instance Shapes
-        oci_loadbalancer_shapes = OCILoadBalancerShapes()
-        dropdown_json["loadbalancer_shapes"] = sorted(oci_loadbalancer_shapes.list(), key=lambda k: k['name'])
-        # Kubernetes Versions
-        k8_versions = OCIKubernetesVersions()
-        dropdown_json["kubernetes_versions"] = sorted(k8_versions.list(), key=lambda k: k['version'], reverse=True)
+        try:
+            # profile = request.args.get('profile', None)
+            # region = request.args.get('region', None)
+            logger.info(f'Dropdown Query Profile {profile}')
+            logger.info(f'Dropdown Query Region {region}')
+            dropdown_query = OCIDropdownQuery(profile=profile)
+            dropdown_json = dropdown_query.executeQuery([region])
+        except Exception as e:
+            logger.exception(e)
+            dropdown_json = loadDropdownFile(profile, region)
         return dropdown_json
     else:
         return 'Unknown Method', 500

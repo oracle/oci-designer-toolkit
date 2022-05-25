@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
+** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded Designer Javascript');
@@ -357,9 +357,14 @@ function displaySaveAsDialog(title, callback, root_dir='templates/user', placeho
             }
         })
         .on('blur', () => {
-            $('#template_file_name').val($('#template_file_name').val().replace(' ', '_').replace('\\', '/'))
-            $('#terraform_dir').val($('#template_file_name').val().replace(/\.[^/.]+$/, ''))
-            if (model) model.metadata.file.name = $('#template_file_name').val()
+            const file_name = $('#template_file_name').val().replaceAll(' ', '_').replaceAll('\\', '/')
+            const terraform_dir = file_name.replace(/\.[^/.]+$/, '')
+            $('#template_file_name').val(file_name)
+            if (model) model.metadata.file.name = file_name
+            if ($('#terraform_dir').val().trim() === '') {
+                $('#terraform_dir').val(terraform_dir)
+                if (model) model.metadata.file.terraform_dir = terraform_dir
+            }
         });
     // Generate On Save
     tr = tbody.append('div').attr('class', `tr ${generate ? '' : 'collapsed'}`)
@@ -371,6 +376,12 @@ function displaySaveAsDialog(title, callback, root_dir='templates/user', placeho
         .on('change', () => {
             $('#terraform_dir').prop('readonly', !$('#generate_terraform_on_save').is(':checked'))
             if (model) model.metadata.file.generate_terraform = $('#generate_terraform_on_save').is(':checked')
+            const file_name = $('#template_file_name').val().replaceAll(' ', '_').replaceAll('\\', '/')
+            const terraform_dir = file_name.replace(/\.[^/.]+$/, '')
+            if ($('#terraform_dir').val().trim() === '') {
+                $('#terraform_dir').val(terraform_dir)
+                if (model) model.metadata.file.terraform_dir = terraform_dir
+            }
         })
     td.append('label')
         .attr('for', 'generate_terraform_on_save')
@@ -393,8 +404,9 @@ function displaySaveAsDialog(title, callback, root_dir='templates/user', placeho
             }
         })
         .on('blur', () => {
-            $('#terraform_dir').val($('#terraform_dir').val().replace(' ', '_').replace('\\', '/'))
-            if (model) model.metadata.file.terraform_dir = $('#terraform_dir').val()
+            const terraform_dir = $('#terraform_dir').val().replaceAll(' ', '_').replaceAll('\\', '/')
+            $('#terraform_dir').val(terraform_dir)
+            if (model) model.metadata.file.terraform_dir = terraform_dir
         })
     // Submit Button
     const submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')

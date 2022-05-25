@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
+** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded OKIT Properties Javascript');
@@ -124,7 +124,7 @@ class OkitResourceProperties {
         this.ocid = ocid.input
         this.append(this.core_tbody, ocid.row)
         ocid.row.classed('collapsed', !okitSettings.show_ocids)
-        const display_name = this.createInput('text', 'Name', `${self.id}_display_name`, '', (d, i, n) => {this.resource.display_name = n[i].value; this.redraw(); this.setTitle()})
+        const display_name = this.createInput('text', 'Name', `${self.id}_display_name`, '', (d, i, n) => {this.resource.display_name = n[i].value; this.redraw(); this.setTitle(); this.handleDisplayNameChange()})
         this.display_name = display_name.input
         this.append(this.core_tbody, display_name.row)
         this.documentation_contents.append('textarea')
@@ -164,6 +164,7 @@ class OkitResourceProperties {
     }
 
     setTitle = () => this.title.text(`${this.resource.resource_type} (${this.resource.display_name})`)
+    handleDisplayNameChange = () => {}
 
     load() {
         if (this.resource) {
@@ -400,23 +401,23 @@ class OkitResourceProperties {
     showProperty = (id, idx) => d3.select(`#${this.trId(id, idx)}`).classed('collapsed', false)
     setPropertyValue = (id, idx, val) => d3.select(`#${this.inputId(id, idx)}`).property('value', val)
 
-    loadSelect(select, resource_type, empty_option=false, filter=() => true) {
+    loadSelect(select, resource_type, empty_option=false, filter=() => true, empty_value='', id_element='id', display_element='display_name') {
         select.selectAll('*').remove()
         if (!filter) filter = () => true
-        if (empty_option) select.append('option').attr('value', '').text('')
+        if (empty_option) select.append('option').attr('value', '').text(empty_value ? empty_value : '')
         let id = ''
         const resources = this.resource.okit_json[`${resource_type}s`] ? this.resource.okit_json[`${resource_type}s`] : this.resource.okit_json[`${resource_type}`] ? this.resource.okit_json[`${resource_type}`] : []
         resources.filter(filter).forEach((r, i) => {
-            const option = select.append('option').attr('value', r.id).text(r.display_name)
+            const option = select.append('option').attr('value', r[id_element]).text(r[display_element])
             if (i === 0) {
                 option.attr('selected', 'selected')
-                id = r.id
+                id = r[id_element]
             }
         })
         return id
     }
 
-    loadReferenceSelect(select, resource_type, empty_option=false, filter=undefined, groups=undefined, empty_value=undefined) {
+    loadReferenceSelect(select, resource_type, empty_option=false, filter=undefined, groups=undefined, empty_value='') {
         select.selectAll('*').remove()
         filter = filter ? filter : () => true
         if (empty_option) select.append('option').attr('value', '').attr('selected', 'selected').text(empty_value ? empty_value : '')

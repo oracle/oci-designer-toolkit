@@ -1,0 +1,54 @@
+{% if read_only %} {# Read #}
+# ------ Read Data Integration Workspace
+data "oci_dataintegration_workspaces" "{{ resource_name }}" {
+    # Required
+    compartment_id = {{ compartment_id }}
+    filter {
+        name = "id"
+        values = [{{ display_name | safe }}]
+    }
+}
+
+locals {
+    {{ resource_name }}_id = {{ ocid | safe }}
+    {{ resource_name }}_ocid = {{ ocid | safe }}
+}
+{% else %} {# Create #}
+# ------ Create Data Integration Workspace
+resource "oci_dataintegration_workspace" "{{ resource_name }}" {
+    #Required
+    compartment_id = {{ compartment_id }}
+    display_name   = {{ display_name | safe }}
+
+    #Optional
+{% if vcn_id is defined %}
+    vcn_id = {{ vcn_id | safe }}
+{% endif %}
+{% if subnet_id is defined %}
+    subnet_id = {{ subnet_id | safe }}
+{% endif %}
+{% if description is defined %}
+    description = {{ description | safe }}
+{% endif %}
+{% if dns_server_ip is defined %}
+    dns_server_ip = {{ dns_server_ip | safe }}
+{% endif %}
+{% if dns_server_zone is defined %}
+    dns_server_zone = {{ dns_server_zone | safe }}
+{% endif %}
+{% if is_private_network_enabled is defined %}
+    is_private_network_enabled = {{ is_private_network_enabled | safe | lower }}
+{% endif %}
+{% if defined_tags is defined %}
+    defined_tags   = {{ defined_tags | safe }}
+{% endif %}
+{% if freeform_tags is defined %}
+    freeform_tags  = {{ freeform_tags | safe }}
+{% endif %}
+}
+
+locals {
+    {{ resource_name }}_id   = oci_dataintegration_workspace.{{ resource_name }}.id
+    {{ resource_name }}_ocid = oci_dataintegration_workspace.{{ resource_name }}.id
+}
+{% endif %} {# End Of Read Only #}
