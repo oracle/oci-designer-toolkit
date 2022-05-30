@@ -623,9 +623,9 @@ class OkitArtefactView {
         const icon = svg.append('g')
             .attr("style", "pointer-events: bounding-box;")
             // .attr("class", this.artefact && this.artefact.read_only ? 'read-only' : '')
-        .append("use")
-            .attr("xlink:href",`#${this.icon_definition_id}`)
-            .attr("transform", this.icon_transform);
+            .append("use")
+                .attr("xlink:href",`#${this.icon_definition_id}`)
+                .attr("transform", this.icon_transform);
         return icon;
     }
 

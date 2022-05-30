@@ -1,0 +1,61 @@
+{
+    "instance": {
+        "shape": {
+            "BM.DenseIO.E4.128": "",
+            "BM.DenseIO2.52": "B88515",
+
+            "BM.Optimized3.36": "",
+
+            "BM.Standard.A1.160": "",
+
+            "BM.Standard.E2.64": "",
+            "BM.Standard.E4.128": "",
+            "BM.Standard.E3.128": "",
+            "BM.Standard1.36": "B88513",
+            "BM.Standard2.52": "B88513",
+            "BM.Standard3.64": "",
+
+
+            "VM.DenseIO.E4.Flex": "",
+            "VM.DenseIO2.8": "B88516",
+            "VM.DenseIO2.16": "B88516",
+            "VM.DenseIO2.24": "B88516",
+
+            "VM.Optimized3.Flex": "B88514",
+
+            "VM.Standard.A1.Flex": "",
+
+            "VM.Standard.B1.1": "",
+            "VM.Standard.B1.2": "",
+            "VM.Standard.B1.4": "",
+            "VM.Standard.B1.8": "",
+            "VM.Standard.B1.16": "",
+
+            "VM.Standard.E2.1": "B90425",
+            "VM.Standard.E2.2": "B90425",
+            "VM.Standard.E2.4": "B90425",
+            "VM.Standard.E2.8": "B90425",
+
+            "VM.Standard.E3.Flex": "B90425",
+            "VM.Standard.E4.Flex": "",
+
+            "VM.Standard1.1": "B88317",
+            "VM.Standard1.2": "B88317",
+            "VM.Standard1.4": "B88317",
+            "VM.Standard1.8": "B88317",
+            "VM.Standard1.16": "B88317",
+
+            "VM.Standard2.1": "B88514",
+            "VM.Standard2.2": "B88514",
+            "VM.Standard2.4": "B88514",
+            "VM.Standard2.8": "B88514",
+            "VM.Standard2.16": "B88514",
+            "VM.Standard2.24": "B88514",
+
+            "VM.Standard3.Flex": ""
+        }
+    },
+    "os": {
+        "windows": "B88318"
+    }
+}

@@ -22,10 +22,14 @@
 }
 
 .okit-resource-svg-details label {
-    opacity: 0.5;
+    display: inline-block;
     max-width: 100%;
-    overflow: hidden;
+    width: 100%;
     text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: smaller;
+    opacity: 0.5;
 }
 
 .okit-resource-svg-details input {

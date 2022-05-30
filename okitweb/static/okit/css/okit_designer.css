@@ -508,29 +508,33 @@ rect.highlight-properties {
     opacity: 0.6;
 }
 
-.read-only > g {
-    opacity: 0.6;
-}
-
-.read-only > rect {
-    opacity: 0.6;
-}
-
+.read-only > g,
+.read-only > rect,
 .read-only > text {
     opacity: 0.6;
 }
 
-.top-level > g {
+.top-level > g,
+.top-level > rect,
+.top-level > text {
     opacity: 0.7;
 }
 
-.top-level > rect {
+.top-level > foreignObject input,
+.top-level > foreignObject button,
+.top-level > foreignObject select,
+.top-level > foreignObject .action-button-background {
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+/* .top-level > rect {
     opacity: 0.7;
 }
 
 .top-level > text {
     opacity: 0.7;
-}
+} */
 
 /*
 ** Cost Estimate and Value Proposition

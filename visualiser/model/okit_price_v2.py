@@ -84,6 +84,8 @@ def export_bom(filename):
 
     # Get all resource names
     filename = json.loads(filename)
+    logger.info('>>> Export BoM')
+    logger.info(jsonToFormattedString(filename))
     for item in filename:
         resources.append(item)
     # remove non-OCI resources
@@ -94,6 +96,8 @@ def export_bom(filename):
     # Call pricing calculator
     OKIT_RESULTS = price_calculator(filename, all_resources)
     print("\nEnd the Process\n")
+    logger.info('>>> Estimate Results')
+    logger.info(OKIT_RESULTS)
 
     output = BytesIO()
     writer = pd.ExcelWriter(output, engine='xlsxwriter')
