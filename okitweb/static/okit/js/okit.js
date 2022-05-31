@@ -37,19 +37,34 @@ class OkitOCIConfig {
     constructor(loaded_callback) {
         this.results = {valid: true};
         this.loaded_callback = loaded_callback;
-        this.validate();
+        // this.validate();
         this.load();
     }
 
     get valid() {return this.results.valid}
 
     load() {
-        let me = this;
-        $.getJSON('config/sections', function(resp) {
-            $.extend(true, me, resp);
-            if (me.loaded_callback) me.loaded_callback();
-            console.info(me)
-        });
+        // let me = this;
+        // $.getJSON('config/sections', function(resp) {
+        //     $.extend(true, me, resp);
+        //     if (me.loaded_callback) me.loaded_callback();
+        //     console.info(me)
+        // });
+        const config_sections = $.getJSON('config/sections', {cache: false})
+        const validate_config = $.getJSON('config/validate', {cache: false})
+        const validated_config_sections = $.getJSON('config/validated_sections', {cache: false})
+    
+        Promise.all([config_sections, validate_config, validated_config_sections]).then(results => {
+            this.sections = results[0].sections
+            this.validation_results = results[1].results
+            this.results = results[1].results
+            this.validated_sections = results[2].sections
+            if (!this.validation_results.valid) {
+                $('#config_link').removeClass('hidden');
+                $('#config_link_div').removeClass('collapsed');
+            }
+            if (this.loaded_callback) this.loaded_callback();
+        })
     }
 
     validate() {
