@@ -2,7 +2,7 @@
 ** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
-console.info('Loaded OKIT Properties Javascript');
+console.debug('Loaded OKIT Properties Javascript');
 
 class OkitResourceProperties {
     resource_tabs = []
@@ -84,6 +84,7 @@ class OkitResourceProperties {
                                 .append('h3')
                                 .attr('class', `heading-background ${self.resource.read_only ? 'padlock-closed' : 'padlock-open'}`)
                                     .text(this.resource.resource_type)
+        this.buildCostEstimate()
         this.panel = this.properties_div.append('div')
                                 .attr('id', `${self.id}_panel`)
                                 .attr('class', 'okit-resource-properties-panel')
@@ -108,6 +109,20 @@ class OkitResourceProperties {
         })
     
         // console.info('Properties div', this.properties_div)
+    }
+
+    buildCostEstimate() {
+        this.cost_estimate_div = this.properties_div.append('div')
+                                .attr('class', `property-editor-cost-estimate ${!developer_mode ? 'hidden' : ''}`)
+        const right_div = this.cost_estimate_div.append('div')
+        const estimate_label = right_div.append('label').text('Estimated Monthly Cost')
+        this.cost_estimate = right_div.append('label').text('0.00')
+        // const cost_table = this.createTable('', `${this.id}_cost_table`)
+        // this.cost_estimate_tbody = cost_table.tbody
+        // this.append(this.cost_estimate_div, cost_table.table)
+        // const cost_estimate = this.createInput('number', 'Estimated Monthly Cost', `${self.id}_cost_estimate`, '')
+        // this.cost_estimate = cost_estimate.input
+        // this.append(this.cost_estimate_tbody, cost_estimate.row)
     }
 
     buildCore() {

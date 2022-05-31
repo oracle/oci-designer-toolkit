@@ -7,6 +7,7 @@
 2. Remove current Cost Estimator because it is using the old, deprecated costing interface.
 ### Bug Fixes
 1. Fix issue where Instance was set to public IP on private network and private on public network.
+2. Fix issue where Subnets can not be deleted if an instance exists in another subnet.
 
 
 ## Version 0.37.0
