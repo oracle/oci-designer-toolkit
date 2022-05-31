@@ -1,0 +1,1373 @@
+{
+  "category": {
+    "API Platform": {
+      "map": {
+        "Standard": "B89652"
+      },
+      "skus": {
+        "B89652": "Standard"
+      }
+    },
+    "Analytics": {
+      "map": {
+        "Enterprise": "B89631",
+        "Enterprise - BYOL": "B89637",
+        "Standard": "B89630",
+        "Standard - BYOL": "B89636"
+      },
+      "skus": {
+        "B89630": "Standard",
+        "B89631": "Enterprise",
+        "B89636": "Standard - BYOL",
+        "B89637": "Enterprise - BYOL"
+      }
+    },
+    "Apiary": {
+      "map": {
+        "Professional": "B88651",
+        "Standard": "B88650"
+      },
+      "skus": {
+        "B88650": "Standard",
+        "B88651": "Professional"
+      }
+    },
+    "Autonomous Data Warehouse": {
+      "map": {
+        "Exadata Storage": "B89041",
+        "Extreme Performance Edition": "B89040"
+      },
+      "skus": {
+        "B89040": "Extreme Performance Edition",
+        "B89041": "Exadata Storage"
+      }
+    },
+    "Autonomous Data Warehouse - BYOL": {
+      "map": {
+        "All Editions - BYOL": "B89039"
+      },
+      "skus": {
+        "B89039": "All Editions - BYOL"
+      }
+    },
+    "Autonomous Transaction Processing": {
+      "map": {
+        "Autonomous Transaction Processing": "B90453",
+        "Exadata Storage": "B90455"
+      },
+      "skus": {
+        "B90453": "Autonomous Transaction Processing",
+        "B90455": "Exadata Storage"
+      }
+    },
+    "Autonomous Transaction Processing - BYOL": {
+      "map": {
+        "Autonomous Transaction Processing - BYOL": "B90454"
+      },
+      "skus": {
+        "B90454": "Autonomous Transaction Processing - BYOL"
+      }
+    },
+    "Big Data - Compute": {
+      "map": {
+        "Compute Capacity": "B88307",
+        "High Performance Storage Capacity": "B88306",
+        "Storage Capacity": "B88308"
+      },
+      "skus": {
+        "B88306": "High Performance Storage Capacity",
+        "B88307": "Compute Capacity",
+        "B88308": "Storage Capacity"
+      }
+    },
+    "Blockchain": {
+      "map": {
+        "Standard": "B88887"
+      },
+      "skus": {
+        "B88887": "Standard"
+      }
+    },
+    "Blockchain Platform Cloud - Enterprise": {
+      "map": {
+        "Oracle Cloud Infrastructure - Blockchain Platform Cloud Service - Enterprise - OCPU Per Hour": "B92303",
+        "Oracle Cloud Infrastructure - Blockchain Platform Cloud Service - Storage - Terabyte Storage Capacity Per Month": "B92304"
+      },
+      "skus": {
+        "B92303": "Oracle Cloud Infrastructure - Blockchain Platform Cloud Service - Enterprise - OCPU Per Hour",
+        "B92304": "Oracle Cloud Infrastructure - Blockchain Platform Cloud Service - Storage - Terabyte Storage Capacity Per Month"
+      }
+    },
+    "Blockchain Platform Cloud - Standard": {
+      "map": {
+        "Oracle Cloud Infrastructure - Blockchain Platform Cloud Service - Standard - OCPU Per Hour": "B92302"
+      },
+      "skus": {
+        "B92302": "Oracle Cloud Infrastructure - Blockchain Platform Cloud Service - Standard - OCPU Per Hour"
+      }
+    },
+    "Cloud Access Security Broker - IaaS": {
+      "map": {
+        "Additional Capacity": "B88164",
+        "Custom Apps": "B88165",
+        "Monitored Account": "B88163"
+      },
+      "skus": {
+        "B88163": "Monitored Account",
+        "B88164": "Additional Capacity",
+        "B88165": "Custom Apps"
+      }
+    },
+    "Cloud Access Security Broker - SaaS": {
+      "map": {
+        "Data Protection,Data Loss Prevention": "B89480",
+        "Data Protection,Data Loss Prevention Retroactive Scan": "B89481",
+        "Discovery": "B89476",
+        "Enterprise": "B88161",
+        "Non-Enterprise": "B88162"
+      },
+      "skus": {
+        "B88161": "Enterprise",
+        "B88162": "Non-Enterprise",
+        "B89476": "Discovery",
+        "B89480": "Data Protection,Data Loss Prevention",
+        "B89481": "Data Protection,Data Loss Prevention Retroactive Scan"
+      }
+    },
+    "Compute": {
+      "map": {
+        "Compute - BM Standard - B1": "B91119",
+        "Compute - HPC - X7": "B90398",
+        "Compute - Microsoft SQL Enterprise - OCPU Per Hour": "B91372",
+        "Compute - Microsoft SQL Standard - OCPU Per Hour": "B91373",
+        "Compute - Standard - E2": "B90425",
+        "Compute - VM Standard - B1": "B91120",
+        "Compute - Virtual Machine Dense I/O - X7": "B88516",
+        "Compute - Virtual Machine GPU Standard - X7": "B88518",
+        "Compute - Virtual Machine Standard - X7": "B88514",
+        "Virtual Machine Standard - X5": "B88317",
+        "Windows OS": "B88318"
+      },
+      "skus": {
+        "B88317": "Virtual Machine Standard - X5",
+        "B88318": "Windows OS",
+        "B88514": "Compute - Virtual Machine Standard - X7",
+        "B88516": "Compute - Virtual Machine Dense I/O - X7",
+        "B88518": "Compute - Virtual Machine GPU Standard - X7",
+        "B90398": "Compute - HPC - X7",
+        "B90425": "Compute - Standard - E2",
+        "B91119": "Compute - BM Standard - B1",
+        "B91120": "Compute - VM Standard - B1",
+        "B91372": "Compute - Microsoft SQL Enterprise - OCPU Per Hour",
+        "B91373": "Compute - Microsoft SQL Standard - OCPU Per Hour"
+      }
+    },
+    "Compute Bare Metal": {
+      "map": {
+        "Bare Metal GPU Standard - High Performance - X7": "B89734",
+        "Bare Metal GPU Standard - X7": "B88517",
+        "Bare Metal Standard - X5": "B88315",
+        "Compute - Bare Metal Dense I/O - X7": "B88515",
+        "Compute - Bare Metal Standard - X7": "B88513"
+      },
+      "skus": {
+        "B88315": "Bare Metal Standard - X5",
+        "B88513": "Compute - Bare Metal Standard - X7",
+        "B88515": "Compute - Bare Metal Dense I/O - X7",
+        "B88517": "Bare Metal GPU Standard - X7",
+        "B89734": "Bare Metal GPU Standard - High Performance - X7"
+      }
+    },
+    "Container Pipelines": {
+      "map": {
+        "Oracle Container Pipelines Cloud Service": "B88896"
+      },
+      "skus": {
+        "B88896": "Oracle Container Pipelines Cloud Service"
+      }
+    },
+    "Content and Experience": {
+      "map": {
+        "Oracle Content and Experience Cloud Service": "B91210",
+        "Oracle Content and Experience Cloud Service - Outbound Data Transfer": "B91211"
+      },
+      "skus": {
+        "B91210": "Oracle Content and Experience Cloud Service",
+        "B91211": "Oracle Content and Experience Cloud Service - Outbound Data Transfer"
+      }
+    },
+    "DNS": {
+      "map": {
+        "DNS": "B88525"
+      },
+      "skus": {
+        "B88525": "DNS"
+      }
+    },
+    "Data Integration": {
+      "map": {
+        "Oracle Cloud Infrastructure - Data Integration - Gigabyte of Data Processed per Hour": "B92599",
+        "Oracle Cloud Infrastructure - Data Integration - Workspace - Workspace Usage per Hour": "B92598"
+      },
+      "skus": {
+        "B92598": "Oracle Cloud Infrastructure - Data Integration - Workspace - Workspace Usage per Hour",
+        "B92599": "Oracle Cloud Infrastructure - Data Integration - Gigabyte of Data Processed per Hour"
+      }
+    },
+    "Data Integration Platform": {
+      "map": {
+        "Enterprise": "B89655",
+        "Governance": "B89656",
+        "Standard": "B89654"
+      },
+      "skus": {
+        "B89654": "Standard",
+        "B89655": "Enterprise",
+        "B89656": "Governance"
+      }
+    },
+    "Data Integration Platform - BYOL": {
+      "map": {
+        "Enterprise - BYOL": "B89661",
+        "Governance - BYOL": "B89662",
+        "Standard - BYOL": "B89660"
+      },
+      "skus": {
+        "B89660": "Standard - BYOL",
+        "B89661": "Enterprise - BYOL",
+        "B89662": "Governance - BYOL"
+      }
+    },
+    "Data Integrator": {
+      "map": {
+        "BYOL": "B88406",
+        "Standard": "B88299"
+      },
+      "skus": {
+        "B88299": "Standard",
+        "B88406": "BYOL"
+      }
+    },
+    "Data Safe": {
+      "map": {
+        "Data Safe for Database Cloud Service - Audit Record Collection Over 1 Million Records - 10,000 Audit Records Per Target Per Month": "B91631",
+        "Data Safe for Database Cloud Service - Each": "B91632"
+      },
+      "skus": {
+        "B91631": "Data Safe for Database Cloud Service - Audit Record Collection Over 1 Million Records - 10,000 Audit Records Per Target Per Month",
+        "B91632": "Data Safe for Database Cloud Service - Each"
+      }
+    },
+    "Database - OCI": {
+      "map": {
+        "All Editions - BYOL": "B90573",
+        "Database All Editions - Additional Capacity - BYOL": "B88846",
+        "Database All Editions - Dense I/0 - X7 - BYOL": "B89625",
+        "Enterprise": "B90570",
+        "Enterprise Edition - Additional Capacity": "B88328",
+        "Enterprise Edition - Dense I/O - X7": "B89622",
+        "Enterprise Edition Extreme Performance": "B90572",
+        "Enterprise Edition Extreme Performance - Additional Capacity": "B88330",
+        "Enterprise Edition Extreme Performance - Dense I/O - X7": "B89624",
+        "Enterprise Edition High Performance": "B90571",
+        "Enterprise Edition High Performance - Additional Capacity": "B88329",
+        "Enterprise Edition High Performance Dense - I/O - X7": "B89623",
+        "Standard": "B90569",
+        "Standard Edition - Additional Capacity": "B88331",
+        "Standard Edition - Dense I/O - X7": "B89621"
+      },
+      "skus": {
+        "B88328": "Enterprise Edition - Additional Capacity",
+        "B88329": "Enterprise Edition High Performance - Additional Capacity",
+        "B88330": "Enterprise Edition Extreme Performance - Additional Capacity",
+        "B88331": "Standard Edition - Additional Capacity",
+        "B88846": "Database All Editions - Additional Capacity - BYOL",
+        "B89621": "Standard Edition - Dense I/O - X7",
+        "B89622": "Enterprise Edition - Dense I/O - X7",
+        "B89623": "Enterprise Edition High Performance Dense - I/O - X7",
+        "B89624": "Enterprise Edition Extreme Performance - Dense I/O - X7",
+        "B89625": "Database All Editions - Dense I/0 - X7 - BYOL",
+        "B90569": "Standard",
+        "B90570": "Enterprise",
+        "B90571": "Enterprise Edition High Performance",
+        "B90572": "Enterprise Edition Extreme Performance",
+        "B90573": "All Editions - BYOL"
+      }
+    },
+    "Database Backup": {
+      "map": {
+        "Archive Storage": "B90231",
+        "Object Storage": "B90230"
+      },
+      "skus": {
+        "B90230": "Object Storage",
+        "B90231": "Archive Storage"
+      }
+    },
+    "Digital Assistant": {
+      "map": {
+        "Standard": "B90260"
+      },
+      "skus": {
+        "B90260": "Standard"
+      }
+    },
+    "Digital Assistant Platform for SaaS": {
+      "map": {
+        "Oracle Digital Assistant Platform for SaaS - 1000 Sessions": "B91940",
+        "Oracle Digital Assistant Platform for SaaS - Hosted Employee": "B91939",
+        "Oracle Digital Assistant Platform for SaaS - Hosted Named User": "B91938"
+      },
+      "skus": {
+        "B91938": "Oracle Digital Assistant Platform for SaaS - Hosted Named User",
+        "B91939": "Oracle Digital Assistant Platform for SaaS - Hosted Employee",
+        "B91940": "Oracle Digital Assistant Platform for SaaS - 1000 Sessions"
+      }
+    },
+    "EPM Cloud - PLANNING": {
+      "map": {
+        "Oracle Enterprise Data Management (EDM) Cloud Service - Hosted 1,000 Records": "B91920"
+      },
+      "skus": {
+        "B91920": "Oracle Enterprise Data Management (EDM) Cloud Service - Hosted 1,000 Records"
+      }
+    },
+    "Edge Services": {
+      "map": {
+        "DNS Traffic Management": "B90327",
+        "Health Checks - Basic": "B90323",
+        "Health Checks - Premium": "B90325",
+        "Web Application Firewall - Bot Management": "B90332",
+        "Web Application Firewall - Good Traffic": "B90330",
+        "Web Application Firewall - Requests": "B90329"
+      },
+      "skus": {
+        "B90323": "Health Checks - Basic",
+        "B90325": "Health Checks - Premium",
+        "B90327": "DNS Traffic Management",
+        "B90329": "Web Application Firewall - Requests",
+        "B90330": "Web Application Firewall - Good Traffic",
+        "B90332": "Web Application Firewall - Bot Management"
+      }
+    },
+    "Email Delivery": {
+      "map": {
+        "Oracle Cloud Infrastructure Email Delivery": "B88523"
+      },
+      "skus": {
+        "B88523": "Oracle Cloud Infrastructure Email Delivery"
+      }
+    },
+    "Exadata": {
+      "map": {
+        "Additional OCPU's": "B88592",
+        "Additional OCPU's - BYOL (OCI)": "B88847",
+        "Database Exadata Infrastructure - Base System": "B90777",
+        "Full Rack - X6 (OCI)": "B88595",
+        "Full Rack - X6 - BYOL (OCI)": "B88854",
+        "Full Rack - X7": "B90001",
+        "Half Rack - X6 (OCI)": "B88594",
+        "Half Rack - X6 - BYOL (OCI)": "B88855",
+        "Half Rack - X7": "B90000",
+        "Oracle Cloud Infrastructure - Database Exadata Infrastructure - Full Rack - X8 - Hosted Environment Per Hour": "B91537",
+        "Oracle Cloud Infrastructure - Database Exadata Infrastructure - Half Rack - X8 - Hosted Environment Per Hour": "B91536",
+        "Oracle Cloud Infrastructure - Database Exadata Infrastructure - Quarter Rack - X8 - Hosted Environment Per Hour": "B91535",
+        "Quarter Rack - X6 (OCI)": "B88593",
+        "Quarter Rack - X6 - BYOL (OCI)": "B88856",
+        "Quarter Rack - X7": "B89999"
+      },
+      "skus": {
+        "B88592": "Additional OCPU's",
+        "B88593": "Quarter Rack - X6 (OCI)",
+        "B88594": "Half Rack - X6 (OCI)",
+        "B88595": "Full Rack - X6 (OCI)",
+        "B88847": "Additional OCPU's - BYOL (OCI)",
+        "B88854": "Full Rack - X6 - BYOL (OCI)",
+        "B88855": "Half Rack - X6 - BYOL (OCI)",
+        "B88856": "Quarter Rack - X6 - BYOL (OCI)",
+        "B89999": "Quarter Rack - X7",
+        "B90000": "Half Rack - X7",
+        "B90001": "Full Rack - X7",
+        "B90777": "Database Exadata Infrastructure - Base System",
+        "B91535": "Oracle Cloud Infrastructure - Database Exadata Infrastructure - Quarter Rack - X8 - Hosted Environment Per Hour",
+        "B91536": "Oracle Cloud Infrastructure - Database Exadata Infrastructure - Half Rack - X8 - Hosted Environment Per Hour",
+        "B91537": "Oracle Cloud Infrastructure - Database Exadata Infrastructure - Full Rack - X8 - Hosted Environment Per Hour"
+      }
+    },
+    "Exadata Cloud at Customer": {
+      "map": {
+        "Exadata Cloud at Customer - Autonomous Data Warehouse - Database OCPU - BYOL - OCPU Per Hour": "B92421",
+        "Exadata Cloud at Customer - Autonomous Data Warehouse- Database OCPU Per Hour": "B92419",
+        "Exadata Cloud at Customer - Autonomous Transaction Processing - Database OCPU - BYOL - OCPU Per Hour": "B92420",
+        "Exadata Cloud at Customer - Autonomous Transation Processing - Database OCPU Per Hour": "B92418",
+        "Exadata Cloud at Customer - Database OCPU - BYOL - OCPU Per Hour": "B91364",
+        "Exadata Cloud at Customer - Database OCPU - OCPU Per Hour": "B89980"
+      },
+      "skus": {
+        "B89980": "Exadata Cloud at Customer - Database OCPU - OCPU Per Hour",
+        "B91363": "Exadata Cloud at Customer - Database OCPU - OCPU Per Hour",
+        "B91364": "Exadata Cloud at Customer - Database OCPU - BYOL - OCPU Per Hour",
+        "B92418": "Exadata Cloud at Customer - Autonomous Transation Processing - Database OCPU Per Hour",
+        "B92419": "Exadata Cloud at Customer - Autonomous Data Warehouse- Database OCPU Per Hour",
+        "B92420": "Exadata Cloud at Customer - Autonomous Transaction Processing - Database OCPU - BYOL - OCPU Per Hour",
+        "B92421": "Exadata Cloud at Customer - Autonomous Data Warehouse - Database OCPU - BYOL - OCPU Per Hour"
+      }
+    },
+    "Exadata Express": {
+      "map": {
+        "Exadata Express Cloud Service - X1000": "B88411",
+        "Exadata Express Cloud Service - X1000IM": "B88412",
+        "Exadata Express Cloud Service - X250": "B88409",
+        "Exadata Express Cloud Service - X500": "B88410"
+      },
+      "skus": {
+        "B88409": "Exadata Express Cloud Service - X250",
+        "B88410": "Exadata Express Cloud Service - X500",
+        "B88411": "Exadata Express Cloud Service - X1000",
+        "B88412": "Exadata Express Cloud Service - X1000IM"
+      }
+    },
+    "GoldenGate": {
+      "map": {
+        "Enterprise - BYOL - Metered": "B88398",
+        "Enterprise - Metered": "B88310",
+        "Oracle Stream Analytics for Oracle Cloud Infrastructure - OCPU Per Hour": "B92695"
+      },
+      "skus": {
+        "B88310": "Enterprise - Metered",
+        "B88398": "Enterprise - BYOL - Metered",
+        "B92695": "Oracle Stream Analytics for Oracle Cloud Infrastructure - OCPU Per Hour"
+      }
+    },
+    "Identity - Consumer": {
+      "map": {
+        "Consumer User": "B90556"
+      },
+      "skus": {
+        "B90556": "Consumer User"
+      }
+    },
+    "Identity - Enterprise": {
+      "map": {
+        "Enterprise User": "B90555"
+      },
+      "skus": {
+        "B90555": "Enterprise User"
+      }
+    },
+    "Integration": {
+      "map": {
+        "Enterprise": "B89640",
+        "Standard": "B89639"
+      },
+      "skus": {
+        "B89639": "Standard",
+        "B89640": "Enterprise"
+      }
+    },
+    "Integration - BYOL": {
+      "map": {
+        "Enterprise - BYOL": "B89644",
+        "Standard - BYOL": "B89643"
+      },
+      "skus": {
+        "B89643": "Standard - BYOL",
+        "B89644": "Enterprise - BYOL"
+      }
+    },
+    "Java": {
+      "map": {
+        "Enterprise": "B88287",
+        "Enterprise - BYOL": "B88399",
+        "High Performance": "B88289",
+        "High Performance - BYOL": "B88400",
+        "Standard": "B88288",
+        "Standard - BYOL": "B88844"
+      },
+      "skus": {
+        "B88287": "Enterprise",
+        "B88288": "Standard",
+        "B88289": "High Performance",
+        "B88399": "Enterprise - BYOL",
+        "B88400": "High Performance - BYOL",
+        "B88844": "Standard - BYOL"
+      }
+    },
+    "Key Management - OCI": {
+      "map": {
+        "Key Management": "B90328"
+      },
+      "skus": {
+        "B90328": "Key Management"
+      }
+    },
+    "Load Balancer": {
+      "map": {
+        "100 Mbps Load Balancer": "B88319",
+        "400 Mbps Load Balancer": "B88320",
+        "8000 Mbps Load Balancer": "B88321"
+      },
+      "skus": {
+        "B88319": "100 Mbps Load Balancer",
+        "B88320": "400 Mbps Load Balancer",
+        "B88321": "8000 Mbps Load Balancer"
+      }
+    },
+    "Management": {
+      "map": {
+        "Enterprise Edition": "B89162",
+        "Log Analytics Edition": "B89163",
+        "Standard Edition": "B89161"
+      },
+      "skus": {
+        "B89161": "Standard Edition",
+        "B89162": "Enterprise Edition",
+        "B89163": "Log Analytics Edition"
+      }
+    },
+    "Messaging": {
+      "map": {
+        "Standard": "B88461"
+      },
+      "skus": {
+        "B88461": "Standard"
+      }
+    },
+    "Mobile": {
+      "map": {
+        "Mobile Hub": "B90304"
+      },
+      "skus": {
+        "B90304": "Mobile Hub"
+      }
+    },
+    "MySQL Database": {
+      "map": {
+        "MySQL Database - Backup Storage - Gigabyte Storage Capacity per Month": "B92483",
+        "MySQL Database - Standard - E2 - OCPU Per Hour": "B92425",
+        "MySQL Database - Storage - Gigabyte Storage Capacity per Month": "B92426"
+      },
+      "skus": {
+        "B92425": "MySQL Database - Standard - E2 - OCPU Per Hour",
+        "B92426": "MySQL Database - Storage - Gigabyte Storage Capacity per Month",
+        "B92483": "MySQL Database - Backup Storage - Gigabyte Storage Capacity per Month"
+      }
+    },
+    "Network": {
+      "map": {
+        "FastConnect 1 Gbps": "B88325",
+        "FastConnect 10 Gbps": "B88326",
+        "Monitoring - Ingestion": "B90925",
+        "Monitoring - Retrieval": "B90926",
+        "Notifications - Email Delivery": "B90941",
+        "Notifications - HTTPS Delivery": "B90940",
+        "Outbound Data Transfer": "B88327",
+        "Streaming - PUT or GET": "B90938",
+        "Streaming - Storage": "B90939"
+      },
+      "skus": {
+        "B88325": "FastConnect 1 Gbps",
+        "B88326": "FastConnect 10 Gbps",
+        "B88327": "Outbound Data Transfer",
+        "B90925": "Monitoring - Ingestion",
+        "B90926": "Monitoring - Retrieval",
+        "B90938": "Streaming - PUT or GET",
+        "B90939": "Streaming - Storage",
+        "B90940": "Notifications - HTTPS Delivery",
+        "B90941": "Notifications - Email Delivery"
+      }
+    },
+    "NoSQL Database": {
+      "map": {
+        "Read": "B89738",
+        "Storage": "B89739",
+        "Write": "B89737"
+      },
+      "skus": {
+        "B89737": "Write",
+        "B89738": "Read",
+        "B89739": "Storage"
+      }
+    },
+    "Oracle Autonomous JSON Database": {
+      "map": {
+        "Oracle Autonomous JSON Database - OCPU per Hour": "B92212"
+      },
+      "skus": {
+        "B92212": "Oracle Autonomous JSON Database - OCPU per Hour"
+      }
+    },
+    "Oracle Cloud Infrastructure": {
+      "map": {
+        "Oracle Functions - Execution Time": "B90617",
+        "Oracle Functions - Invocations": "B90618"
+      },
+      "skus": {
+        "B90617": "Oracle Functions - Execution Time",
+        "B90618": "Oracle Functions - Invocations"
+      }
+    },
+    "Oracle Cloud Infrastructure - Data Safe for On-Premises Databases": {
+      "map": {
+        "Oracle Cloud Infrastructure - Data Safe for On-Premises Databases - 10,000 Audit Records Per Target Per Month": "B92734",
+        "Oracle Cloud Infrastructure - Data Safe for On-Premises Databases - Target Database Per Month": "B92733"
+      },
+      "skus": {
+        "B92733": "Oracle Cloud Infrastructure - Data Safe for On-Premises Databases - Target Database Per Month",
+        "B92734": "Oracle Cloud Infrastructure - Data Safe for On-Premises Databases - 10,000 Audit Records Per Target Per Month"
+      }
+    },
+    "Oracle Cloud Program": {
+      "map": {
+        "Oracle Cloud Program - Research Cloud Starter": "B94418"
+      },
+      "skus": {
+        "B94418": "Oracle Cloud Program - Research Cloud Starter"
+      }
+    },
+    "Oracle Cloud Promotion": {
+      "map": {
+        "Free Oracle Cloud Promotion - Developer": "B88384",
+        "Free Oracle Cloud Promotion - Educator": "B88465",
+        "Free Oracle Cloud Promotion - In House Startup Accelerator": "B88889",
+        "Free Oracle Cloud Promotion - Metered": "B88385",
+        "Free Oracle Cloud Promotion - Student": "B88464",
+        "Free Oracle Cloud Promotion - Virtual Startup Accelerator": "B87880"
+      },
+      "skus": {
+        "B87880": "Free Oracle Cloud Promotion - Virtual Startup Accelerator",
+        "B88384": "Free Oracle Cloud Promotion - Developer",
+        "B88385": "Free Oracle Cloud Promotion - Metered",
+        "B88464": "Free Oracle Cloud Promotion - Student",
+        "B88465": "Free Oracle Cloud Promotion - Educator",
+        "B88889": "Free Oracle Cloud Promotion - In House Startup Accelerator"
+      }
+    },
+    "Oracle Field Service Cloud": {
+      "map": {
+        "Oracle Field Service Enterprise Cloud Service - Hosted Named Seat Month": "B90336",
+        "Oracle Field Service Enterprise Cloud Service - Hosted Named User": "B90335",
+        "Oracle Field Service Professional Cloud Service - Hosted Named Seat Month": "B90334",
+        "Oracle Field Service Professional Cloud Service - Hosted Named User": "B90333"
+      },
+      "skus": {
+        "B90333": "Oracle Field Service Professional Cloud Service - Hosted Named User",
+        "B90334": "Oracle Field Service Professional Cloud Service - Hosted Named Seat Month",
+        "B90335": "Oracle Field Service Enterprise Cloud Service - Hosted Named User",
+        "B90336": "Oracle Field Service Enterprise Cloud Service - Hosted Named Seat Month"
+      }
+    },
+    "Oracle Fusion Cloud - CRM": {
+      "map": {
+        "Oracle Fusion Partner Relationship Management for Partners Cloud Service - Hosted Named User": "B67281",
+        "Oracle Fusion Sales and Service Enterprise Cloud Service - Hosted Named User": "B91069",
+        "Oracle Fusion Sales and Service Premium Cloud Service - Hosted Named User": "B91070",
+        "Oracle Fusion Sales and Service Standard Cloud Service - Hosted Named User": "B91068",
+        "Oracle Fusion Sales and Service for High Tech and Manufacturing Cloud Service - Hosted Named User": "B81521"
+      },
+      "skus": {
+        "B67281": "Oracle Fusion Partner Relationship Management for Partners Cloud Service - Hosted Named User",
+        "B81521": "Oracle Fusion Sales and Service for High Tech and Manufacturing Cloud Service - Hosted Named User",
+        "B91068": "Oracle Fusion Sales and Service Standard Cloud Service - Hosted Named User",
+        "B91069": "Oracle Fusion Sales and Service Enterprise Cloud Service - Hosted Named User",
+        "B91070": "Oracle Fusion Sales and Service Premium Cloud Service - Hosted Named User"
+      }
+    },
+    "Oracle Public Cloud Services - Blockchain Platform Cloud - Enterprise - BYOL": {
+      "map": {
+        "Oracle Cloud Infrastructure - Blockchain Platform Cloud Service - Enterprise - BYOL - OCPU Per Hour": "B92305"
+      },
+      "skus": {
+        "B92305": "Oracle Cloud Infrastructure - Blockchain Platform Cloud Service - Enterprise - BYOL - OCPU Per Hour"
+      }
+    },
+    "Oracle Public Cloud Services - CLOUDCM": {
+      "map": {
+        "Essbase for Oracle Cloud Infrastructure - OCPU Per Hour": "B92335",
+        "Oracle Autonomous Data Warehouse - Dedicated - BYOL - OCPU Per Hour": "B92184",
+        "Oracle Autonomous Data Warehouse - Dedicated - OCPU Per Hour": "B92182",
+        "Oracle Autonomous Data Warehouse - Exadata Storage - Free - Terabyte Storage Capacity Per Month": "B91392",
+        "Oracle Autonomous Data Warehouse - Free - OCPU Per Hour": "B91391",
+        "Oracle Autonomous Transaction Processing - Dedicated - BYOL - OCPU Per Hour": "B92183",
+        "Oracle Autonomous Transaction Processing - Dedicated - OCPU Per Hour": "B92181",
+        "Oracle Autonomous Transaction Processing - Exadata Storage - Free - Terabyte Storage Capacity Per Month": "B91394",
+        "Oracle Autonomous Transaction Processing - Free - OCPU Per Hour": "B91393",
+        "Oracle Big Data Service - Compute - Dense I/O - OCPU Per Hour": "B91129",
+        "Oracle Big Data Service - Compute - HPC - OCPU Per Hour": "B91130",
+        "Oracle Big Data Service - Compute - Standard - OCPU Per Hour": "B91128",
+        "Oracle Cloud Infrastructure - 10 Mbps Load Balancer - Free - Load Balancer Hour": "B91446",
+        "Oracle Cloud Infrastructure - API Gateway  - 1,000,000 API Calls - 1,000,000 API Calls per Month": "B92072",
+        "Oracle Cloud Infrastructure - Block Volume - Free - Gigabyte Storage Capacity per Month": "B91445",
+        "Oracle Cloud Infrastructure - Compute - Standard - E3 - Memory - Gigabytes Per Hour": "B92307",
+        "Oracle Cloud Infrastructure - Compute - Standard - E3 - OCPU - OCPU Per Hour": "B92306",
+        "Oracle Cloud Infrastructure - Compute - Virtual Machine Standard - E2 Micro - Free - OCPU Per Hour": "B91444",
+        "Oracle Cloud Infrastructure - KMS Vault - Key Versions - Key Version per Month": "B92092",
+        "Oracle Cloud SQL - Compute Capacity - OCPU Per Hour": "B91121",
+        "Oracle Content and Experience Cloud Service - BYOL - 5,000 Assets Per Month": "B92637",
+        "Oracle Content and Experience Cloud Service Advanced Video Management - 250 Video Assets per Month": "B92217",
+        "Oracle Database Cloud Service - All Editions - BYOL - OCPU Per Hour": "B88404",
+        "Oracle Database Cloud Service - Enterprise Edition - General Purpose - OCPU Per Hour": "B88290",
+        "Oracle Database Cloud Service - Enterprise Edition Extreme Performance - General Purpose - OCPU Per Hour": "B88291",
+        "Oracle Database Cloud Service - Enterprise Edition Extreme Performance RAC - BYOL - OCPU Per Hour": "B88402",
+        "Oracle Database Cloud Service - Enterprise Edition High Performance - General Purpose - OCPU Per Hour": "B88292",
+        "Oracle Database Cloud Service - Standard Edition - General Purpose - OCPU Per Hour": "B88293",
+        "Oracle Database Exadata Cloud at Customer - Database OCPU - BYOL - OCPU Per Hour": "B89981",
+        "Oracle Database Exadata Express Cloud Service - X20 - Hosted Environment Per Hour": "B88408",
+        "Oracle Developer Cloud Service - Additional Storage - Gigabyte Storage Capacity Per Month": "B90203",
+        "Oracle Identity Cloud Service - Consumer User - BYOL - User Per Month": "B90558",
+        "Oracle Identity Cloud Service - Enterprise User - BYOL - User Per Month": "B90557",
+        "Oracle Identity Foundation Cloud Service - Each": "B90936",
+        "Oracle WebLogic Server Enterprise Edition for Oracle Cloud Infrastructure - OCPU Per Hour": "B91346",
+        "Oracle WebLogic Suite for Oracle Cloud Infrastructure - OCPU Per Hour": "B91347"
+      },
+      "skus": {
+        "B88290": "Oracle Database Cloud Service - Enterprise Edition - General Purpose - OCPU Per Hour",
+        "B88291": "Oracle Database Cloud Service - Enterprise Edition Extreme Performance - General Purpose - OCPU Per Hour",
+        "B88292": "Oracle Database Cloud Service - Enterprise Edition High Performance - General Purpose - OCPU Per Hour",
+        "B88293": "Oracle Database Cloud Service - Standard Edition - General Purpose - OCPU Per Hour",
+        "B88402": "Oracle Database Cloud Service - Enterprise Edition Extreme Performance RAC - BYOL - OCPU Per Hour",
+        "B88404": "Oracle Database Cloud Service - All Editions - BYOL - OCPU Per Hour",
+        "B88408": "Oracle Database Exadata Express Cloud Service - X20 - Hosted Environment Per Hour",
+        "B89981": "Oracle Database Exadata Cloud at Customer - Database OCPU - BYOL - OCPU Per Hour",
+        "B90203": "Oracle Developer Cloud Service - Additional Storage - Gigabyte Storage Capacity Per Month",
+        "B90557": "Oracle Identity Cloud Service - Enterprise User - BYOL - User Per Month",
+        "B90558": "Oracle Identity Cloud Service - Consumer User - BYOL - User Per Month",
+        "B90936": "Oracle Identity Foundation Cloud Service - Each",
+        "B91121": "Oracle Cloud SQL - Compute Capacity - OCPU Per Hour",
+        "B91128": "Oracle Big Data Service - Compute - Standard - OCPU Per Hour",
+        "B91129": "Oracle Big Data Service - Compute - Dense I/O - OCPU Per Hour",
+        "B91130": "Oracle Big Data Service - Compute - HPC - OCPU Per Hour",
+        "B91346": "Oracle WebLogic Server Enterprise Edition for Oracle Cloud Infrastructure - OCPU Per Hour",
+        "B91347": "Oracle WebLogic Suite for Oracle Cloud Infrastructure - OCPU Per Hour",
+        "B91391": "Oracle Autonomous Data Warehouse - Free - OCPU Per Hour",
+        "B91392": "Oracle Autonomous Data Warehouse - Exadata Storage - Free - Terabyte Storage Capacity Per Month",
+        "B91393": "Oracle Autonomous Transaction Processing - Free - OCPU Per Hour",
+        "B91394": "Oracle Autonomous Transaction Processing - Exadata Storage - Free - Terabyte Storage Capacity Per Month",
+        "B91444": "Oracle Cloud Infrastructure - Compute - Virtual Machine Standard - E2 Micro - Free - OCPU Per Hour",
+        "B91445": "Oracle Cloud Infrastructure - Block Volume - Free - Gigabyte Storage Capacity per Month",
+        "B91446": "Oracle Cloud Infrastructure - 10 Mbps Load Balancer - Free - Load Balancer Hour",
+        "B92072": "Oracle Cloud Infrastructure - API Gateway  - 1,000,000 API Calls - 1,000,000 API Calls per Month",
+        "B92092": "Oracle Cloud Infrastructure - KMS Vault - Key Versions - Key Version per Month",
+        "B92181": "Oracle Autonomous Transaction Processing - Dedicated - OCPU Per Hour",
+        "B92182": "Oracle Autonomous Data Warehouse - Dedicated - OCPU Per Hour",
+        "B92183": "Oracle Autonomous Transaction Processing - Dedicated - BYOL - OCPU Per Hour",
+        "B92184": "Oracle Autonomous Data Warehouse - Dedicated - BYOL - OCPU Per Hour",
+        "B92217": "Oracle Content and Experience Cloud Service Advanced Video Management - 250 Video Assets per Month",
+        "B92306": "Oracle Cloud Infrastructure - Compute - Standard - E3 - OCPU - OCPU Per Hour",
+        "B92307": "Oracle Cloud Infrastructure - Compute - Standard - E3 - Memory - Gigabytes Per Hour",
+        "B92335": "Essbase for Oracle Cloud Infrastructure - OCPU Per Hour",
+        "B92637": "Oracle Content and Experience Cloud Service - BYOL - 5,000 Assets Per Month"
+      }
+    },
+    "Oracle Public Cloud Services - COMPUTEBAREMETAL": {
+      "map": {
+        "Oracle Cloud Infrastructure - Block Volume Performance Units - Government - Performance Units Per Gigabyte Per Month": "B91964",
+        "Oracle Cloud Infrastructure - Block Volume Storage - Government - Gigabyte Storage Capacity Per Month": "B91963"
+      },
+      "skus": {
+        "B91963": "Oracle Cloud Infrastructure - Block Volume Storage - Government - Gigabyte Storage Capacity Per Month",
+        "B91964": "Oracle Cloud Infrastructure - Block Volume Performance Units - Government - Performance Units Per Gigabyte Per Month"
+      }
+    },
+    "Oracle Public Cloud Services - EXADATABM": {
+      "map": {
+        "Oracle Cloud Infrastructure - Database Exadata Infrastructure - Full Rack - X8 - Government - Hosted Environment Per Month": "B91541",
+        "Oracle Cloud Infrastructure - Database Exadata Infrastructure - Half Rack - X8 - Government - Hosted Environment Per Month": "B91540",
+        "Oracle Cloud Infrastructure - Database Exadata Infrastructure - Quarter Rack - X8 - Government - Hosted Environment Per Month": "B91539",
+        "Oracle Cloud Infrastructure - Database Exadata OCPU - BYOL - Government - OCPU Per Hour": "B90488",
+        "Oracle Cloud Infrastructure - Database Exadata OCPU - Government - OCPU Per Hour": "B90487"
+      },
+      "skus": {
+        "B90487": "Oracle Cloud Infrastructure - Database Exadata OCPU - Government - OCPU Per Hour",
+        "B90488": "Oracle Cloud Infrastructure - Database Exadata OCPU - BYOL - Government - OCPU Per Hour",
+        "B91539": "Oracle Cloud Infrastructure - Database Exadata Infrastructure - Quarter Rack - X8 - Government - Hosted Environment Per Month",
+        "B91540": "Oracle Cloud Infrastructure - Database Exadata Infrastructure - Half Rack - X8 - Government - Hosted Environment Per Month",
+        "B91541": "Oracle Cloud Infrastructure - Database Exadata Infrastructure - Full Rack - X8 - Government - Hosted Environment Per Month"
+      }
+    },
+    "RightNow": {
+      "map": {
+        "Oracle RightNow Enterprise Contact Center Dynamic Agent Desktop Cloud Service - Hosted Named Seat Month": "B88490",
+        "Oracle RightNow Enterprise Dynamic Agent Desktop Cloud Service - Hosted Named Seat Month": "B88486",
+        "Oracle RightNow Standalone Chat Dynamic Agent Desktop Cloud Service - Hosted Named Seat Month": "B88494",
+        "Oracle RightNow Standard Dynamic Agent Desktop Cloud Service - Hosted Named Seat Month": "B88482"
+      },
+      "skus": {
+        "B88482": "Oracle RightNow Standard Dynamic Agent Desktop Cloud Service - Hosted Named Seat Month",
+        "B88486": "Oracle RightNow Enterprise Dynamic Agent Desktop Cloud Service - Hosted Named Seat Month",
+        "B88490": "Oracle RightNow Enterprise Contact Center Dynamic Agent Desktop Cloud Service - Hosted Named Seat Month",
+        "B88494": "Oracle RightNow Standalone Chat Dynamic Agent Desktop Cloud Service - Hosted Named Seat Month"
+      }
+    },
+    "SOA Suite": {
+      "map": {
+        "BYOL": "B88407",
+        "Oracle SOA Suite for Oracle Cloud Infrastructure - OCPU Per Hour": "B92450",
+        "Oracle SOA Suite for Oracle Cloud Infrastructure - with B2B Adapter for EDI - OCPU Per Hour": "B92451",
+        "Standard": "B88460",
+        "Standard - B2B Adapter": "B88160"
+      },
+      "skus": {
+        "B88160": "Standard - B2B Adapter",
+        "B88407": "BYOL",
+        "B88460": "Standard",
+        "B92450": "Oracle SOA Suite for Oracle Cloud Infrastructure - OCPU Per Hour",
+        "B92451": "Oracle SOA Suite for Oracle Cloud Infrastructure - with B2B Adapter for EDI - OCPU Per Hour"
+      }
+    },
+    "Storage": {
+      "map": {
+        "Archive Storage": "B91633",
+        "Block Volume": "B88322",
+        "Block Volume Performance Units (VPUs)": "B91962",
+        "Block Volume Storage": "B91961",
+        "File Storage": "B89057",
+        "Object Storage - Requests": "B91627",
+        "Object Storage - Storage": "B91628"
+      },
+      "skus": {
+        "B88322": "Block Volume",
+        "B89057": "File Storage",
+        "B91627": "Object Storage - Requests",
+        "B91628": "Object Storage - Storage",
+        "B91633": "Archive Storage",
+        "B91961": "Block Volume Storage",
+        "B91962": "Block Volume Performance Units (VPUs)"
+      }
+    },
+    "VMWare": {
+      "map": {
+        "Oracle Cloud VMware Solution - OCPU Per Hour": "B92386"
+      },
+      "skus": {
+        "B92386": "Oracle Cloud VMware Solution - OCPU Per Hour"
+      }
+    },
+    "Visual Builder": {
+      "map": {
+        "Enterprise": "B89646"
+      },
+      "skus": {
+        "B89646": "Enterprise"
+      }
+    },
+    "WebCenter Portal": {
+      "map": {
+        "BYOL": "B88405",
+        "Standard": "B88298"
+      },
+      "skus": {
+        "B88298": "Standard",
+        "B88405": "BYOL"
+      }
+    }
+  },
+  "map": {
+    "B67281 - Oracle Fusion Partner Relationship Management for Partners Cloud Service - Hosted Named User": "B67281",
+    "B81521 - Oracle Fusion Sales and Service for High Tech and Manufacturing Cloud Service - Hosted Named User": "B81521",
+    "B86731 - Free Oracle Cloud Promotion": "B86731",
+    "B87848 - Free Oracle Cloud Promotion - Oracle Code": "B87848",
+    "B87849 - Free Oracle Cloud Promotion - Student": "B87849",
+    "B87850 - Free Oracle Cloud Promotion - Educator": "B87850",
+    "B87880 - Free Oracle Cloud Promotion - Universal Credits - Virtual Startup Accelerator": "B87880",
+    "B88160 - Oracle SOA Suite Cloud Service - B2B Adapter for EDI - OCPU per Hour": "B88160",
+    "B88161 - Oracle CASB for SaaS - Enterprise User - Monitored Service User Per Hour": "B88161",
+    "B88162 - Oracle CASB for SaaS - Non-Enterprise User - Monitored Service User Per Hour": "B88162",
+    "B88163 - Oracle CASB for IaaS - Monitored Account Per Hour": "B88163",
+    "B88164 - Oracle CASB for IaaS - Additional Capacity - Gigabyte Data Capacity Per Hour": "B88164",
+    "B88165 - Oracle CASB for Custom Apps - Monitored App Per Hour": "B88165",
+    "B88206 - Oracle PaaS and IaaS Universal Credits": "B88206",
+    "B88287 - Oracle Java Cloud Service - Enterprise - OCPU Per Hour": "B88287",
+    "B88288 - Oracle Java Cloud Service - Standard - OCPU Per Hour": "B88288",
+    "B88289 - Oracle Java Cloud Service - High Performance - OCPU Per Hour": "B88289",
+    "B88290 - Oracle Database Cloud Service - Enterprise Edition - General Purpose - OCPU Per Hour": "B88290",
+    "B88291 - Oracle Database Cloud Service - Enterprise Edition Extreme Performance - General Purpose - OCPU Per Hour": "B88291",
+    "B88292 - Oracle Database Cloud Service - Enterprise Edition High Performance - General Purpose - OCPU Per Hour": "B88292",
+    "B88293 - Oracle Database Cloud Service - Standard Edition - General Purpose - OCPU Per Hour": "B88293",
+    "B88298 - Oracle WebCenter Portal Cloud Service - OCPU Per Hour": "B88298",
+    "B88299 - Oracle Data Integrator Cloud Service - OCPU Per Hour": "B88299",
+    "B88306 - Oracle Big Data Cloud Service - Compute Edition - High Performance Storage Capacity - Gigabyte Storage Capacity Per Month": "B88306",
+    "B88307 - Oracle Big Data Cloud Enterprise - Compute Capacity - OCPU Per Hour": "B88307",
+    "B88308 - Oracle Big Data Cloud Service - Compute Edition - Storage Capacity - Gigabyte Storage Capacity Per Month": "B88308",
+    "B88310 - Oracle GoldenGate Cloud Service - Enterprise - OCPU Per Hour": "B88310",
+    "B88315 - Oracle Cloud Infrastructure - Compute - Bare Metal Standard - X5 - OCPU Per Hour": "B88315",
+    "B88317 - Oracle Cloud Infrastructure - Compute - Virtual Machine Standard - X5 - OCPU Per Hour": "B88317",
+    "B88318 - Oracle Cloud Infrastructure - Compute - Windows OS - OCPU Per Hour": "B88318",
+    "B88319 - Oracle Cloud Infrastructure - 100 Mbps Load Balancer - Load Balancer Hour": "B88319",
+    "B88320 - Oracle Cloud Infrastructure - 400 Mbps Load Balancer - Load Balancer Hour": "B88320",
+    "B88321 - Oracle Cloud Infrastructure - 8000 Mbps Load Balancer - Load Balancer Hour": "B88321",
+    "B88322 - Oracle Cloud Infrastructure - Block Volume - Gigabyte Storage Capacity per Month": "B88322",
+    "B88325 - Oracle Cloud Infrastructure - FastConnect 1 Gbps - Port Hour": "B88325",
+    "B88326 - Oracle Cloud Infrastructure - FastConnect 10 Gbps - Port Hour": "B88326",
+    "B88327 - Oracle Cloud Infrastructure - Outbound Data Transfer - Gigabyte Outbound Data Transfer per month": "B88327",
+    "B88328 - Oracle Cloud Infrastructure - Database Enterprise Edition - Additional Capacity - OCPU Per Hour": "B88328",
+    "B88329 - Oracle Cloud Infrastructure - Database Enterprise Edition High Performance - Additional Capacity - OCPU Per Hour": "B88329",
+    "B88330 - Oracle Cloud Infrastructure - Database Enterprise Edition Extreme Performance - Additional Capacity - OCPU Per Hour": "B88330",
+    "B88331 - Oracle Cloud Infrastructure - Database Standard Edition - Additional Capacity - OCPU Per Hour": "B88331",
+    "B88384 - Free Oracle Cloud Promotion - Commitment - Developer": "B88384",
+    "B88385 - Free Oracle Cloud Promotion - Universal Credits": "B88385",
+    "B88398 - Oracle GoldenGate Cloud Service - Enterprise - BYOL - OCPU Per Hour": "B88398",
+    "B88399 - Oracle Java Cloud Service - Enterprise - BYOL - OCPU Per Hour": "B88399",
+    "B88400 - Oracle Java Cloud Service - High Performance - BYOL - OCPU Per Hour": "B88400",
+    "B88402 - Oracle Database Cloud Service - Enterprise Edition Extreme Performance RAC - BYOL - OCPU Per Hour": "B88402",
+    "B88404 - Oracle Database Cloud Service - All Editions - BYOL - OCPU Per Hour": "B88404",
+    "B88405 - Oracle WebCenter Portal Cloud Service - BYOL - OCPU Per Hour": "B88405",
+    "B88406 - Oracle Data Integrator Cloud Service - BYOL - OCPU Per Hour": "B88406",
+    "B88407 - Oracle SOA Suite Cloud Service - BYOL - OCPU Per Hour": "B88407",
+    "B88408 - Oracle Database Exadata Express Cloud Service - X20 - Hosted Environment Per Hour": "B88408",
+    "B88409 - Oracle Database Exadata Express Cloud Service - X250 - Hosted Environment Per Hour": "B88409",
+    "B88410 - Oracle Database Exadata Express Cloud Service - X500 - Hosted Environment Per Hour": "B88410",
+    "B88411 - Oracle Database Exadata Express Cloud Service - X1000 - Hosted Environment Per Hour": "B88411",
+    "B88412 - Oracle Database Exadata Express Cloud Service - X1000IM - Hosted Environment Per Hour": "B88412",
+    "B88460 - Oracle SOA Suite Cloud Service - OCPU Per Hour": "B88460",
+    "B88461 - Oracle Messaging Cloud Service - 1,000,000 API Calls per Month": "B88461",
+    "B88464 - Free Oracle Cloud Promotion - Universal Credits - Student": "B88464",
+    "B88465 - Free Oracle Cloud Promotion - Universal Credits - Educator": "B88465",
+    "B88482 - Oracle RightNow Standard Dynamic Agent Desktop Cloud Service - Hosted Named Seat Month": "B88482",
+    "B88486 - Oracle RightNow Enterprise Dynamic Agent Desktop Cloud Service - Hosted Named Seat Month": "B88486",
+    "B88490 - Oracle RightNow Enterprise Contact Center Dynamic Agent Desktop Cloud Service - Hosted Named Seat Month": "B88490",
+    "B88494 - Oracle RightNow Standalone Chat Dynamic Agent Desktop Cloud Service - Hosted Named Seat Month": "B88494",
+    "B88513 - Oracle Cloud Infrastructure - Compute - Bare Metal Standard - X7 - OCPU Per Hour": "B88513",
+    "B88514 - Oracle Cloud Infrastructure - Compute - Virtual Machine Standard - X7 - OCPU Per Hour": "B88514",
+    "B88515 - Oracle Cloud Infrastructure - Compute - Bare Metal Dense I/O - X7 - OCPU Per Hour": "B88515",
+    "B88516 - Oracle Cloud Infrastructure - Compute - Virtual Machine Dense I/O - X7 - OCPU Per Hour": "B88516",
+    "B88517 - Oracle Cloud Infrastructure - Compute - Bare Metal GPU Standard - X7 - GPU Per Hour": "B88517",
+    "B88518 - Oracle Cloud Infrastructure - Compute - Virtual Machine GPU Standard - X7 - GPU Per Hour": "B88518",
+    "B88523 - Oracle Cloud Infrastructure - Email Delivery - 1,000 Emails Sent": "B88523",
+    "B88525 - Oracle Cloud Infrastructure - DNS - 1,000,000 Queries": "B88525",
+    "B88592 - Oracle Cloud Infrastructure - Database Exadata OCPU - OCPU Per Hour": "B88592",
+    "B88593 - Oracle Cloud Infrastructure - Database Exadata Quarter Rack - X6 - Hosted Environment Per Hour": "B88593",
+    "B88594 - Oracle Cloud Infrastructure - Database Exadata Half Rack - X6 - Hosted Environment Per Hour": "B88594",
+    "B88595 - Oracle Cloud Infrastructure - Database Exadata Full Rack - X6 - Hosted Environment Per Hour": "B88595",
+    "B88640 - Oracle PaaS and IaaS Universal Credits": "B88640",
+    "B88643 - Oracle Analytics Universal Credits": "B88643",
+    "B88650 - Oracle Apiary Cloud Service - Standard - User Per Month": "B88650",
+    "B88651 - Oracle Apiary Cloud Service - Professional - User Per Month": "B88651",
+    "B88844 - Oracle Java Cloud Service - Standard - BYOL - OCPU Per Hour": "B88844",
+    "B88846 - Oracle Cloud Infrastructure - Database All Editions - Additional Capacity - BYOL - OCPU Per Hour": "B88846",
+    "B88847 - Oracle Cloud Infrastructure - Database Exadata OCPU - BYOL - OCPU Per Hour": "B88847",
+    "B88854 - Oracle Cloud Infrastructure - Database Exadata Full Rack - X6 - BYOL - Hosted Environment Per Hour": "B88854",
+    "B88855 - Oracle Cloud Infrastructure - Database Exadata Half Rack - X6 - BYOL - Hosted Environment Per Hour": "B88855",
+    "B88856 - Oracle Cloud Infrastructure - Database Exadata Quarter Rack - X6 - BYOL - Hosted Environment Per Hour": "B88856",
+    "B88887 - Oracle Blockchain Platform Cloud Service - 500 Transactions Per Hour": "B88887",
+    "B88889 - Oracle Cloud Program - Universal Credits - In House Startup Accelerator": "B88889",
+    "B88896 - Oracle Container Pipelines Cloud Service - User Per Month": "B88896",
+    "B89009 - Oracle Cloud Program - Universal Credits with Engineered Systems": "B89009",
+    "B89010 - Oracle Cloud Program - Universal Credits": "B89010",
+    "B89039 - Oracle Autonomous Data Warehouse - BYOL - OCPU Per Hour": "B89039",
+    "B89040 - Oracle Autonomous Data Warehouse - OCPU Per Hour": "B89040",
+    "B89041 - Oracle Autonomous Data Warehouse - Exadata Storage - Terabyte Storage Capacity Per Month": "B89041",
+    "B89057 - Oracle Cloud Infrastructure - File Storage - Gigabyte Storage Capacity per Month": "B89057",
+    "B89161 - Oracle Management Cloud - Standard Edition - 100 Entities Per Hour": "B89161",
+    "B89162 - Oracle Management Cloud - Enterprise Edition - 100 Entities Per Hour": "B89162",
+    "B89163 - Oracle Management Cloud - Log Analytics Edition - 300 Gigabytes Per Hour": "B89163",
+    "B89476 - Oracle CASB for Discovery - User per Month": "B89476",
+    "B89480 - Oracle CASB for Data Protection - Data Loss Prevention - Monitored Service User per Hour": "B89480",
+    "B89481 - Oracle CASB for Data Protection - Data Loss Prevention - Retroactive Scan - Gigabyte Data Capacity per Hour": "B89481",
+    "B89621 - Oracle Cloud Infrastructure - Database Standard Edition - Dense I/O - X7 - Hosted Environment Per Hour": "B89621",
+    "B89622 - Oracle Cloud Infrastructure - Database Enterprise Edition - Dense I/O - X7 - Hosted Environment Per Hour": "B89622",
+    "B89623 - Oracle Cloud Infrastructure - Database Enterprise Edition High Performance - Dense I/O - X7 - Hosted Environment Per Hour": "B89623",
+    "B89624 - Oracle Cloud Infrastructure - Database Enterprise Edition Extreme Performance - Dense I/O - X7 - Hosted Environment Per Hour": "B89624",
+    "B89625 - Oracle Cloud Infrastructure - Database All Editions - Dense I/O - X7 - BYOL - Hosted Environment Per Hour": "B89625",
+    "B89630 - Oracle Analytics Cloud - Professional - OCPU Per Hour": "B89630",
+    "B89631 - Oracle Analytics Cloud - Enterprise - OCPU Per Hour": "B89631",
+    "B89636 - Oracle Analytics Cloud - Professional - BYOL - OCPU Per Hour": "B89636",
+    "B89637 - Oracle Analytics Cloud - Enterprise - BYOL - OCPU Per Hour": "B89637",
+    "B89639 - Oracle Integration Cloud Service - Standard - 5K Messages Per Hour": "B89639",
+    "B89640 - Oracle Integration Cloud Service - Enterprise - 5K Messages Per Hour": "B89640",
+    "B89643 - Oracle Integration Cloud Service - Standard - BYOL - 20K Messages Per Hour": "B89643",
+    "B89644 - Oracle Integration Cloud Service - Enterprise - BYOL - 20K Messages Per Hour": "B89644",
+    "B89646 - Oracle Visual Builder Cloud Service - OCPU Per Hour": "B89646",
+    "B89652 - Oracle API Platform Cloud Service - Gateway Per Hour": "B89652",
+    "B89654 - Oracle Data Integration Platform Cloud Service - Standard - Gigabyte of Data Processed Per Hour": "B89654",
+    "B89655 - Oracle Data Integration Platform Cloud Service - Enterprise - Gigabyte of Data Processed Per Hour": "B89655",
+    "B89656 - Oracle Data Integration Platform Cloud Service - Governance - Gigabyte of Data Processed Per Hour": "B89656",
+    "B89660 - Oracle Data Integration Platform Cloud Service - Standard - BYOL - Gigabyte of Data Processed Per Hour": "B89660",
+    "B89661 - Oracle Data Integration Platform Cloud Service - Enterprise - BYOL - Gigabyte of Data Processed Per Hour": "B89661",
+    "B89662 - Oracle Data Integration Platform Cloud Service - Governance - BYOL - Gigabyte of Data Processed Per Hour": "B89662",
+    "B89734 - Oracle Cloud Infrastructure - Compute - GPU Standard - V2 - GPU Per Hour": "B89734",
+    "B89737 - Oracle NoSQL Database Cloud Service - Write - Write Unit Per Month": "B89737",
+    "B89738 - Oracle NoSQL Database Cloud Service - Read - Read Unit Per Month": "B89738",
+    "B89739 - Oracle NoSQL Database Cloud Service - Storage - Gigabyte Storage Capacity Per Month": "B89739",
+    "B89980 - Oracle Database Exadata Cloud at Customer - Database OCPU - OCPU Per Hour": "B89980",
+    "B89981 - Oracle Database Exadata Cloud at Customer - Database OCPU - BYOL - OCPU Per Hour": "B89981",
+    "B89999 - Oracle Cloud Infrastructure - Database Exadata Infrastructure - Quarter Rack - X7 - Hosted Environment Per Hour": "B89999",
+    "B90000 - Oracle Cloud Infrastructure - Database Exadata Infrastructure - Half Rack - X7 - Hosted Environment Per Hour": "B90000",
+    "B90001 - Oracle Cloud Infrastructure - Database Exadata Infrastructure - Full Rack - X7 - Hosted Environment Per Hour": "B90001",
+    "B90203 - Oracle Visual Builder Studio - Additional Storage - Gigabyte Storage Capacity Per Month": "B90203",
+    "B90230 - Oracle Database Backup Cloud - Object Storage - Gigabyte Storage Capacity Per Month": "B90230",
+    "B90231 - Oracle Database Backup Cloud - Archive Storage - Gigabyte Storage Capacity Per Month": "B90231",
+    "B90260 - Oracle Digital Assistant Cloud Service - Request": "B90260",
+    "B90304 - Oracle Mobile Hub Cloud Service - Request": "B90304",
+    "B90323 - Oracle Cloud Infrastructure - Health Checks - Basic - Endpoints Per Month": "B90323",
+    "B90325 - Oracle Cloud Infrastructure - Health Checks - Premium - Endpoints Per Month": "B90325",
+    "B90327 - Oracle Cloud Infrastructure - DNS Traffic Management - 1,000,000 DNS Traffic Management Queries": "B90327",
+    "B90328 - Oracle Cloud Infrastructure - Key Management - Virtual Private Vault Per Hour": "B90328",
+    "B90329 - Oracle Cloud Infrastructure - Web Application Firewall - Requests - 1,000,000 Incoming Requests": "B90329",
+    "B90330 - Oracle Cloud Infrastructure - Web Application Firewall - Good Traffic - Gigabyte Of Good Traffic": "B90330",
+    "B90332 - Oracle Cloud Infrastructure - Web Application Firewall - Bot Management - 1,000,000 Incoming Requests": "B90332",
+    "B90333 - Oracle Field Service Professional Cloud Service - Hosted Named User": "B90333",
+    "B90334 - Oracle Field Service Professional Cloud Service - Hosted Named Seat Month": "B90334",
+    "B90335 - Oracle Field Service Enterprise Cloud Service - Hosted Named User": "B90335",
+    "B90336 - Oracle Field Service Enterprise Cloud Service - Hosted Named Seat Month": "B90336",
+    "B90398 - Oracle Cloud Infrastructure - Compute - HPC - X7 - OCPU Per Hour": "B90398",
+    "B90425 - Oracle Cloud Infrastructure - Compute - Standard - E2 - OCPU Per Hour": "B90425",
+    "B90453 - Oracle Autonomous Transaction Processing - OCPU Per Hour": "B90453",
+    "B90454 - Oracle Autonomous Transaction Processing - BYOL - OCPU Per Hour": "B90454",
+    "B90455 - Oracle Autonomous Transaction Processing - Exadata Storage - Terabyte Storage Capacity Per Month": "B90455",
+    "B90487 - Oracle Cloud Infrastructure - Database Exadata OCPU - Government - OCPU Per Hour": "B90487",
+    "B90488 - Oracle Cloud Infrastructure - Database Exadata OCPU - BYOL - Government - OCPU Per Hour": "B90488",
+    "B90555 - Oracle Identity Cloud Service - Enterprise User - User Per Month": "B90555",
+    "B90556 - Oracle Identity Cloud Service - Consumer User - User Per Month": "B90556",
+    "B90557 - Oracle Identity Cloud Service - Enterprise User - BYOL - User Per Month": "B90557",
+    "B90558 - Oracle Identity Cloud Service - Consumer User - BYOL - User Per Month": "B90558",
+    "B90569 - Oracle Cloud Infrastructure - Database Cloud Service - Standard Edition - OCPU Per Hour": "B90569",
+    "B90570 - Oracle Cloud Infrastructure - Database Cloud Service - Enterprise Edition - OCPU Per Hour": "B90570",
+    "B90571 - Oracle Cloud Infrastructure - Database Cloud Service - Enterprise Edition High Performance - OCPU Per Hour": "B90571",
+    "B90572 - Oracle Cloud Infrastructure - Database Cloud Service - Enterprise Edition Extreme Performance - OCPU Per Hour": "B90572",
+    "B90573 - Oracle Cloud Infrastructure - Database Cloud Service - All Editions - BYOL - OCPU Per Hour": "B90573",
+    "B90617 - Oracle Functions - Execution Time - 10,000 Gigabyte Memory-Seconds": "B90617",
+    "B90618 - Oracle Functions - Invocations - 1,000,000 Function Invocations": "B90618",
+    "B90777 - Oracle Cloud Infrastructure - Database Exadata Infrastructure - Base System - Hosted Environment Per Hour": "B90777",
+    "B90824 - Oracle Analytics Cloud - Professional - Subscription - Hosted Named User Per Month": "B90824",
+    "B90828 - Oracle Analytics Cloud - Enterprise - Subscription - Hosted Named User Per Month": "B90828",
+    "B90925 - Oracle Cloud Infrastructure - Monitoring - Ingestion - Million Datapoints": "B90925",
+    "B90926 - Oracle Cloud Infrastructure - Monitoring - Retrieval - Million Datapoints": "B90926",
+    "B90936 - Oracle Identity Foundation Cloud Service - Each": "B90936",
+    "B90938 - Oracle Cloud Infrastructure - Streaming - PUT or GET - Gigabytes of Data Transferred": "B90938",
+    "B90939 - Oracle Cloud Infrastructure - Streaming - Storage - Gigabyte Per Hour": "B90939",
+    "B90940 - Oracle Cloud Infrastructure - Notifications - HTTPS Delivery - Million Delivery Operations": "B90940",
+    "B90941 - Oracle Cloud Infrastructure - Notifications - Email Delivery - 1,000 Emails Sent": "B90941",
+    "B90994 - Free Oracle Cloud Program - Universal Credits - Startup Accelerator": "B90994",
+    "B91068 - Oracle Fusion Sales and Service Standard Cloud Service - Hosted Named User": "B91068",
+    "B91069 - Oracle Fusion Sales and Service Enterprise Cloud Service - Hosted Named User": "B91069",
+    "B91070 - Oracle Fusion Sales and Service Premium Cloud Service - Hosted Named User": "B91070",
+    "B91119 - Oracle Cloud Infrastructure - Compute - Bare Metal Standard - B1 - OCPU Per Hour": "B91119",
+    "B91120 - Oracle Cloud Infrastructure - Compute - Virtual Machine Standard - B1 - OCPU Per Hour": "B91120",
+    "B91121 - Oracle Cloud SQL - Compute Capacity - OCPU Per Hour": "B91121",
+    "B91128 - Oracle Big Data Service - Compute - Standard - OCPU Per Hour": "B91128",
+    "B91129 - Oracle Big Data Service - Compute - Dense I/O - OCPU Per Hour": "B91129",
+    "B91130 - Oracle Big Data Service - Compute - HPC - OCPU Per Hour": "B91130",
+    "B91210 - Oracle Content and Experience Cloud Service - 5,000 Assets Per Month": "B91210",
+    "B91211 - Oracle Content and Experience Cloud Service - Outbound Data Transfer - Gigabyte Outbound Data Transfer Per Month": "B91211",
+    "B91346 - Oracle WebLogic Server Enterprise Edition for Oracle Cloud Infrastructure - OCPU Per Hour": "B91346",
+    "B91347 - Oracle WebLogic Suite for Oracle Cloud Infrastructure - OCPU Per Hour": "B91347",
+    "B91363 - Gen 2 Exadata Cloud at Customer - Database OCPU - OCPU Per Hour": "B91363",
+    "B91364 - Gen 2 Exadata Cloud at Customer - Database OCPU - BYOL - OCPU Per Hour": "B91364",
+    "B91372 - Oracle Cloud Infrastructure - Compute - Microsoft SQL Enterprise - OCPU Per Hour": "B91372",
+    "B91373 - Oracle Cloud Infrastructure - Compute - Microsoft SQL Standard - OCPU Per Hour": "B91373",
+    "B91391 - Oracle Autonomous Data Warehouse - Free - OCPU Per Hour": "B91391",
+    "B91392 - Oracle Autonomous Data Warehouse - Exadata Storage - Free - Terabyte Storage Capacity Per Month": "B91392",
+    "B91393 - Oracle Autonomous Transaction Processing - Free - OCPU Per Hour": "B91393",
+    "B91394 - Oracle Autonomous Transaction Processing - Exadata Storage - Free - Terabyte Storage Capacity Per Month": "B91394",
+    "B91444 - Oracle Cloud Infrastructure - Compute - Virtual Machine Standard - E2 Micro - Free - OCPU Per Hour": "B91444",
+    "B91445 - Oracle Cloud Infrastructure - Block Volume - Free - Gigabyte Storage Capacity per Month": "B91445",
+    "B91446 - Oracle Cloud Infrastructure - 10 Mbps Load Balancer - Free - Load Balancer Hour": "B91446",
+    "B91535 - Oracle Cloud Infrastructure - Database Exadata Infrastructure - Quarter Rack - X8 - Hosted Environment Per Hour": "B91535",
+    "B91536 - Oracle Cloud Infrastructure - Database Exadata Infrastructure - Half Rack - X8 - Hosted Environment Per Hour": "B91536",
+    "B91537 - Oracle Cloud Infrastructure - Database Exadata Infrastructure - Full Rack - X8 - Hosted Environment Per Hour": "B91537",
+    "B91539 - Oracle Cloud Infrastructure - Database Exadata Infrastructure - Quarter Rack - X8 - Government - Hosted Environment Per Month": "B91539",
+    "B91540 - Oracle Cloud Infrastructure - Database Exadata Infrastructure - Half Rack - X8 - Government - Hosted Environment Per Month": "B91540",
+    "B91541 - Oracle Cloud Infrastructure - Database Exadata Infrastructure - Full Rack - X8 - Government - Hosted Environment Per Month": "B91541",
+    "B91627 - Oracle Cloud Infrastructure - Object Storage - Requests - 10,000 Requests per Month": "B91627",
+    "B91628 - Oracle Cloud Infrastructure - Object Storage - Storage - Gigabyte Storage Capacity per Month": "B91628",
+    "B91631 - Oracle Cloud Infrastructure - Data Safe for Database Cloud Service - Audit Record Collection Over 1 Million Records - 10,000 Audit Records Per Target Per Month": "B91631",
+    "B91632 - Oracle Cloud Infrastructure - Data Safe for Database Cloud Service - Each": "B91632",
+    "B91633 - Oracle Cloud Infrastructure - Archive Storage - Free - Gigabyte Storage Capacity per Month": "B91633",
+    "B91920 - Oracle Enterprise Data Management (EDM) Cloud Service - Hosted 1,000 Records": "B91920",
+    "B91938 - Oracle Digital Assistant Platform for SaaS - Hosted Named User": "B91938",
+    "B91939 - Oracle Digital Assistant Platform for SaaS - Hosted Employee": "B91939",
+    "B91940 - Oracle Digital Assistant Platform for SaaS - 1000 Sessions": "B91940",
+    "B91961 - Oracle Cloud Infrastructure - Block Volume Storage - Gigabyte Storage Capacity Per Month": "B91961",
+    "B91962 - Oracle Cloud Infrastructure - Block Volume Performance - Performance Units Per Gigabyte Per Month": "B91962",
+    "B91963 - Oracle Cloud Infrastructure - Block Volume Storage - Government - Gigabyte Storage Capacity Per Month": "B91963",
+    "B91964 - Oracle Cloud Infrastructure - Block Volume Performance Units - Government - Performance Units Per Gigabyte Per Month": "B91964",
+    "B92072 - Oracle Cloud Infrastructure - API Gateway - 1,000,000 API Calls - 1,000,000 API Calls Per Month": "B92072",
+    "B92092 - Oracle Cloud Infrastructure - KMS Vault - Key Versions - Key Version per Month": "B92092",
+    "B92181 - Oracle Autonomous Transaction Processing - Dedicated - OCPU Per Hour": "B92181",
+    "B92182 - Oracle Autonomous Data Warehouse - Dedicated - OCPU Per Hour": "B92182",
+    "B92183 - Oracle Autonomous Transaction Processing - Dedicated - BYOL - OCPU Per Hour": "B92183",
+    "B92184 - Oracle Autonomous Data Warehouse - Dedicated - BYOL - OCPU Per Hour": "B92184",
+    "B92212 - Oracle Autonomous JSON Database - OCPU Per Hour": "B92212",
+    "B92217 - Oracle Content and Experience Cloud Service Advanced Video Management - 250 Video Assets per Month": "B92217",
+    "B92302 - Oracle Cloud Infrastructure - Blockchain Platform Cloud Service - Standard - OCPU Per Hour": "B92302",
+    "B92303 - Oracle Cloud Infrastructure - Blockchain Platform Cloud Service - Enterprise - OCPU Per Hour": "B92303",
+    "B92304 - Oracle Cloud Infrastructure - Blockchain Platform Cloud Service - Storage - Terabyte Storage Capacity Per Month": "B92304",
+    "B92305 - Oracle Cloud Infrastructure - Blockchain Platform Cloud Service - Enterprise - BYOL - OCPU Per Hour": "B92305",
+    "B92306 - Oracle Cloud Infrastructure - Compute - Standard - E3 - OCPU - OCPU Per Hour": "B92306",
+    "B92307 - Oracle Cloud Infrastructure - Compute - Standard - E3 - Memory - Gigabyte Per Hour": "B92307",
+    "B92335 - Essbase for Oracle Cloud Infrastructure - OCPU Per Hour": "B92335",
+    "B92386 - Oracle Cloud VMware Solution - OCPU Per Hour": "B92386",
+    "B92418 - Exadata Cloud at Customer - Autonomous Transaction Processing - Database OCPU Per Hour": "B92418",
+    "B92419 - Exadata Cloud at Customer - Autonomous Data Warehouse - Database OCPU Per Hour": "B92419",
+    "B92420 - Exadata Cloud at Customer - Autonomous Transaction Processing - Database OCPU - BYOL - OCPU Per Hour": "B92420",
+    "B92421 - Exadata Cloud at Customer - Autonomous Data Warehouse - Database OCPU - BYOL - OCPU Per Hour": "B92421",
+    "B92425 - MySQL Database - Standard - E2 - OCPU Per Hour": "B92425",
+    "B92426 - MySQL Database - Storage - Gigabyte Storage Capacity per Month": "B92426",
+    "B92450 - Oracle SOA Suite for Oracle Cloud Infrastructure - OCPU Per Hour": "B92450",
+    "B92451 - Oracle SOA Suite for Oracle Cloud Infrastructure - with B2B Adapter for EDI - OCPU Per Hour": "B92451",
+    "B92483 - MySQL Database - Backup Storage - Gigabyte Storage Capacity per Month": "B92483",
+    "B92598 - Oracle Cloud Infrastructure - Data Integration - Workspace - Workspace Usage per Hour": "B92598",
+    "B92599 - Oracle Cloud Infrastructure - Data Integration - Gigabyte of Data Processed per Hour": "B92599",
+    "B92637 - Oracle Content and Experience Cloud Service - BYOL - 5,000 Assets Per Month": "B92637",
+    "B92695 - Oracle Stream Analytics for Oracle Cloud Infrastructure - OCPU Per Hour": "B92695",
+    "B92733 - Oracle Cloud Infrastructure - Data Safe for On-Premises Databases & Databases on Compute - Target Database Per Month": "B92733",
+    "B92734 - Oracle Cloud Infrastructure - Data Safe for On-Premises Databases & Databases on Compute - 10,000 Audit Records Per Target Per Month": "B92734",
+    "B93338 - Oracle Cloud Program - Universal Credits Curated Arm": "B93338",
+    "B94418 - Oracle Cloud Program - Universal Credits - Research Cloud Starter": "B94418"
+  },
+  "skus": {
+    "B67281": "B67281 - Oracle Fusion Partner Relationship Management for Partners Cloud Service - Hosted Named User",
+    "B81521": "B81521 - Oracle Fusion Sales and Service for High Tech and Manufacturing Cloud Service - Hosted Named User",
+    "B86731": "B86731 - Free Oracle Cloud Promotion",
+    "B87848": "B87848 - Free Oracle Cloud Promotion - Oracle Code",
+    "B87849": "B87849 - Free Oracle Cloud Promotion - Student",
+    "B87850": "B87850 - Free Oracle Cloud Promotion - Educator",
+    "B87880": "B87880 - Free Oracle Cloud Promotion - Universal Credits - Virtual Startup Accelerator",
+    "B88160": "B88160 - Oracle SOA Suite Cloud Service - B2B Adapter for EDI - OCPU per Hour",
+    "B88161": "B88161 - Oracle CASB for SaaS - Enterprise User - Monitored Service User Per Hour",
+    "B88162": "B88162 - Oracle CASB for SaaS - Non-Enterprise User - Monitored Service User Per Hour",
+    "B88163": "B88163 - Oracle CASB for IaaS - Monitored Account Per Hour",
+    "B88164": "B88164 - Oracle CASB for IaaS - Additional Capacity - Gigabyte Data Capacity Per Hour",
+    "B88165": "B88165 - Oracle CASB for Custom Apps - Monitored App Per Hour",
+    "B88206": "B88206 - Oracle PaaS and IaaS Universal Credits",
+    "B88287": "B88287 - Oracle Java Cloud Service - Enterprise - OCPU Per Hour",
+    "B88288": "B88288 - Oracle Java Cloud Service - Standard - OCPU Per Hour",
+    "B88289": "B88289 - Oracle Java Cloud Service - High Performance - OCPU Per Hour",
+    "B88290": "B88290 - Oracle Database Cloud Service - Enterprise Edition - General Purpose - OCPU Per Hour",
+    "B88291": "B88291 - Oracle Database Cloud Service - Enterprise Edition Extreme Performance - General Purpose - OCPU Per Hour",
+    "B88292": "B88292 - Oracle Database Cloud Service - Enterprise Edition High Performance - General Purpose - OCPU Per Hour",
+    "B88293": "B88293 - Oracle Database Cloud Service - Standard Edition - General Purpose - OCPU Per Hour",
+    "B88298": "B88298 - Oracle WebCenter Portal Cloud Service - OCPU Per Hour",
+    "B88299": "B88299 - Oracle Data Integrator Cloud Service - OCPU Per Hour",
+    "B88306": "B88306 - Oracle Big Data Cloud Service - Compute Edition - High Performance Storage Capacity - Gigabyte Storage Capacity Per Month",
+    "B88307": "B88307 - Oracle Big Data Cloud Enterprise - Compute Capacity - OCPU Per Hour",
+    "B88308": "B88308 - Oracle Big Data Cloud Service - Compute Edition - Storage Capacity - Gigabyte Storage Capacity Per Month",
+    "B88310": "B88310 - Oracle GoldenGate Cloud Service - Enterprise - OCPU Per Hour",
+    "B88315": "B88315 - Oracle Cloud Infrastructure - Compute - Bare Metal Standard - X5 - OCPU Per Hour",
+    "B88317": "B88317 - Oracle Cloud Infrastructure - Compute - Virtual Machine Standard - X5 - OCPU Per Hour",
+    "B88318": "B88318 - Oracle Cloud Infrastructure - Compute - Windows OS - OCPU Per Hour",
+    "B88319": "B88319 - Oracle Cloud Infrastructure - 100 Mbps Load Balancer - Load Balancer Hour",
+    "B88320": "B88320 - Oracle Cloud Infrastructure - 400 Mbps Load Balancer - Load Balancer Hour",
+    "B88321": "B88321 - Oracle Cloud Infrastructure - 8000 Mbps Load Balancer - Load Balancer Hour",
+    "B88322": "B88322 - Oracle Cloud Infrastructure - Block Volume - Gigabyte Storage Capacity per Month",
+    "B88325": "B88325 - Oracle Cloud Infrastructure - FastConnect 1 Gbps - Port Hour",
+    "B88326": "B88326 - Oracle Cloud Infrastructure - FastConnect 10 Gbps - Port Hour",
+    "B88327": "B88327 - Oracle Cloud Infrastructure - Outbound Data Transfer - Gigabyte Outbound Data Transfer per month",
+    "B88328": "B88328 - Oracle Cloud Infrastructure - Database Enterprise Edition - Additional Capacity - OCPU Per Hour",
+    "B88329": "B88329 - Oracle Cloud Infrastructure - Database Enterprise Edition High Performance - Additional Capacity - OCPU Per Hour",
+    "B88330": "B88330 - Oracle Cloud Infrastructure - Database Enterprise Edition Extreme Performance - Additional Capacity - OCPU Per Hour",
+    "B88331": "B88331 - Oracle Cloud Infrastructure - Database Standard Edition - Additional Capacity - OCPU Per Hour",
+    "B88384": "B88384 - Free Oracle Cloud Promotion - Commitment - Developer",
+    "B88385": "B88385 - Free Oracle Cloud Promotion - Universal Credits",
+    "B88398": "B88398 - Oracle GoldenGate Cloud Service - Enterprise - BYOL - OCPU Per Hour",
+    "B88399": "B88399 - Oracle Java Cloud Service - Enterprise - BYOL - OCPU Per Hour",
+    "B88400": "B88400 - Oracle Java Cloud Service - High Performance - BYOL - OCPU Per Hour",
+    "B88402": "B88402 - Oracle Database Cloud Service - Enterprise Edition Extreme Performance RAC - BYOL - OCPU Per Hour",
+    "B88404": "B88404 - Oracle Database Cloud Service - All Editions - BYOL - OCPU Per Hour",
+    "B88405": "B88405 - Oracle WebCenter Portal Cloud Service - BYOL - OCPU Per Hour",
+    "B88406": "B88406 - Oracle Data Integrator Cloud Service - BYOL - OCPU Per Hour",
+    "B88407": "B88407 - Oracle SOA Suite Cloud Service - BYOL - OCPU Per Hour",
+    "B88408": "B88408 - Oracle Database Exadata Express Cloud Service - X20 - Hosted Environment Per Hour",
+    "B88409": "B88409 - Oracle Database Exadata Express Cloud Service - X250 - Hosted Environment Per Hour",
+    "B88410": "B88410 - Oracle Database Exadata Express Cloud Service - X500 - Hosted Environment Per Hour",
+    "B88411": "B88411 - Oracle Database Exadata Express Cloud Service - X1000 - Hosted Environment Per Hour",
+    "B88412": "B88412 - Oracle Database Exadata Express Cloud Service - X1000IM - Hosted Environment Per Hour",
+    "B88460": "B88460 - Oracle SOA Suite Cloud Service - OCPU Per Hour",
+    "B88461": "B88461 - Oracle Messaging Cloud Service - 1,000,000 API Calls per Month",
+    "B88464": "B88464 - Free Oracle Cloud Promotion - Universal Credits - Student",
+    "B88465": "B88465 - Free Oracle Cloud Promotion - Universal Credits - Educator",
+    "B88482": "B88482 - Oracle RightNow Standard Dynamic Agent Desktop Cloud Service - Hosted Named Seat Month",
+    "B88486": "B88486 - Oracle RightNow Enterprise Dynamic Agent Desktop Cloud Service - Hosted Named Seat Month",
+    "B88490": "B88490 - Oracle RightNow Enterprise Contact Center Dynamic Agent Desktop Cloud Service - Hosted Named Seat Month",
+    "B88494": "B88494 - Oracle RightNow Standalone Chat Dynamic Agent Desktop Cloud Service - Hosted Named Seat Month",
+    "B88513": "B88513 - Oracle Cloud Infrastructure - Compute - Bare Metal Standard - X7 - OCPU Per Hour",
+    "B88514": "B88514 - Oracle Cloud Infrastructure - Compute - Virtual Machine Standard - X7 - OCPU Per Hour",
+    "B88515": "B88515 - Oracle Cloud Infrastructure - Compute - Bare Metal Dense I/O - X7 - OCPU Per Hour",
+    "B88516": "B88516 - Oracle Cloud Infrastructure - Compute - Virtual Machine Dense I/O - X7 - OCPU Per Hour",
+    "B88517": "B88517 - Oracle Cloud Infrastructure - Compute - Bare Metal GPU Standard - X7 - GPU Per Hour",
+    "B88518": "B88518 - Oracle Cloud Infrastructure - Compute - Virtual Machine GPU Standard - X7 - GPU Per Hour",
+    "B88523": "B88523 - Oracle Cloud Infrastructure - Email Delivery - 1,000 Emails Sent",
+    "B88525": "B88525 - Oracle Cloud Infrastructure - DNS - 1,000,000 Queries",
+    "B88592": "B88592 - Oracle Cloud Infrastructure - Database Exadata OCPU - OCPU Per Hour",
+    "B88593": "B88593 - Oracle Cloud Infrastructure - Database Exadata Quarter Rack - X6 - Hosted Environment Per Hour",
+    "B88594": "B88594 - Oracle Cloud Infrastructure - Database Exadata Half Rack - X6 - Hosted Environment Per Hour",
+    "B88595": "B88595 - Oracle Cloud Infrastructure - Database Exadata Full Rack - X6 - Hosted Environment Per Hour",
+    "B88640": "B88640 - Oracle PaaS and IaaS Universal Credits",
+    "B88643": "B88643 - Oracle Analytics Universal Credits",
+    "B88650": "B88650 - Oracle Apiary Cloud Service - Standard - User Per Month",
+    "B88651": "B88651 - Oracle Apiary Cloud Service - Professional - User Per Month",
+    "B88844": "B88844 - Oracle Java Cloud Service - Standard - BYOL - OCPU Per Hour",
+    "B88846": "B88846 - Oracle Cloud Infrastructure - Database All Editions - Additional Capacity - BYOL - OCPU Per Hour",
+    "B88847": "B88847 - Oracle Cloud Infrastructure - Database Exadata OCPU - BYOL - OCPU Per Hour",
+    "B88854": "B88854 - Oracle Cloud Infrastructure - Database Exadata Full Rack - X6 - BYOL - Hosted Environment Per Hour",
+    "B88855": "B88855 - Oracle Cloud Infrastructure - Database Exadata Half Rack - X6 - BYOL - Hosted Environment Per Hour",
+    "B88856": "B88856 - Oracle Cloud Infrastructure - Database Exadata Quarter Rack - X6 - BYOL - Hosted Environment Per Hour",
+    "B88887": "B88887 - Oracle Blockchain Platform Cloud Service - 500 Transactions Per Hour",
+    "B88889": "B88889 - Oracle Cloud Program - Universal Credits - In House Startup Accelerator",
+    "B88896": "B88896 - Oracle Container Pipelines Cloud Service - User Per Month",
+    "B89009": "B89009 - Oracle Cloud Program - Universal Credits with Engineered Systems",
+    "B89010": "B89010 - Oracle Cloud Program - Universal Credits",
+    "B89039": "B89039 - Oracle Autonomous Data Warehouse - BYOL - OCPU Per Hour",
+    "B89040": "B89040 - Oracle Autonomous Data Warehouse - OCPU Per Hour",
+    "B89041": "B89041 - Oracle Autonomous Data Warehouse - Exadata Storage - Terabyte Storage Capacity Per Month",
+    "B89057": "B89057 - Oracle Cloud Infrastructure - File Storage - Gigabyte Storage Capacity per Month",
+    "B89161": "B89161 - Oracle Management Cloud - Standard Edition - 100 Entities Per Hour",
+    "B89162": "B89162 - Oracle Management Cloud - Enterprise Edition - 100 Entities Per Hour",
+    "B89163": "B89163 - Oracle Management Cloud - Log Analytics Edition - 300 Gigabytes Per Hour",
+    "B89476": "B89476 - Oracle CASB for Discovery - User per Month",
+    "B89480": "B89480 - Oracle CASB for Data Protection - Data Loss Prevention - Monitored Service User per Hour",
+    "B89481": "B89481 - Oracle CASB for Data Protection - Data Loss Prevention - Retroactive Scan - Gigabyte Data Capacity per Hour",
+    "B89621": "B89621 - Oracle Cloud Infrastructure - Database Standard Edition - Dense I/O - X7 - Hosted Environment Per Hour",
+    "B89622": "B89622 - Oracle Cloud Infrastructure - Database Enterprise Edition - Dense I/O - X7 - Hosted Environment Per Hour",
+    "B89623": "B89623 - Oracle Cloud Infrastructure - Database Enterprise Edition High Performance - Dense I/O - X7 - Hosted Environment Per Hour",
+    "B89624": "B89624 - Oracle Cloud Infrastructure - Database Enterprise Edition Extreme Performance - Dense I/O - X7 - Hosted Environment Per Hour",
+    "B89625": "B89625 - Oracle Cloud Infrastructure - Database All Editions - Dense I/O - X7 - BYOL - Hosted Environment Per Hour",
+    "B89630": "B89630 - Oracle Analytics Cloud - Professional - OCPU Per Hour",
+    "B89631": "B89631 - Oracle Analytics Cloud - Enterprise - OCPU Per Hour",
+    "B89636": "B89636 - Oracle Analytics Cloud - Professional - BYOL - OCPU Per Hour",
+    "B89637": "B89637 - Oracle Analytics Cloud - Enterprise - BYOL - OCPU Per Hour",
+    "B89639": "B89639 - Oracle Integration Cloud Service - Standard - 5K Messages Per Hour",
+    "B89640": "B89640 - Oracle Integration Cloud Service - Enterprise - 5K Messages Per Hour",
+    "B89643": "B89643 - Oracle Integration Cloud Service - Standard - BYOL - 20K Messages Per Hour",
+    "B89644": "B89644 - Oracle Integration Cloud Service - Enterprise - BYOL - 20K Messages Per Hour",
+    "B89646": "B89646 - Oracle Visual Builder Cloud Service - OCPU Per Hour",
+    "B89652": "B89652 - Oracle API Platform Cloud Service - Gateway Per Hour",
+    "B89654": "B89654 - Oracle Data Integration Platform Cloud Service - Standard - Gigabyte of Data Processed Per Hour",
+    "B89655": "B89655 - Oracle Data Integration Platform Cloud Service - Enterprise - Gigabyte of Data Processed Per Hour",
+    "B89656": "B89656 - Oracle Data Integration Platform Cloud Service - Governance - Gigabyte of Data Processed Per Hour",
+    "B89660": "B89660 - Oracle Data Integration Platform Cloud Service - Standard - BYOL - Gigabyte of Data Processed Per Hour",
+    "B89661": "B89661 - Oracle Data Integration Platform Cloud Service - Enterprise - BYOL - Gigabyte of Data Processed Per Hour",
+    "B89662": "B89662 - Oracle Data Integration Platform Cloud Service - Governance - BYOL - Gigabyte of Data Processed Per Hour",
+    "B89734": "B89734 - Oracle Cloud Infrastructure - Compute - GPU Standard - V2 - GPU Per Hour",
+    "B89737": "B89737 - Oracle NoSQL Database Cloud Service - Write - Write Unit Per Month",
+    "B89738": "B89738 - Oracle NoSQL Database Cloud Service - Read - Read Unit Per Month",
+    "B89739": "B89739 - Oracle NoSQL Database Cloud Service - Storage - Gigabyte Storage Capacity Per Month",
+    "B89980": "B89980 - Oracle Database Exadata Cloud at Customer - Database OCPU - OCPU Per Hour",
+    "B89981": "B89981 - Oracle Database Exadata Cloud at Customer - Database OCPU - BYOL - OCPU Per Hour",
+    "B89999": "B89999 - Oracle Cloud Infrastructure - Database Exadata Infrastructure - Quarter Rack - X7 - Hosted Environment Per Hour",
+    "B90000": "B90000 - Oracle Cloud Infrastructure - Database Exadata Infrastructure - Half Rack - X7 - Hosted Environment Per Hour",
+    "B90001": "B90001 - Oracle Cloud Infrastructure - Database Exadata Infrastructure - Full Rack - X7 - Hosted Environment Per Hour",
+    "B90203": "B90203 - Oracle Visual Builder Studio - Additional Storage - Gigabyte Storage Capacity Per Month",
+    "B90230": "B90230 - Oracle Database Backup Cloud - Object Storage - Gigabyte Storage Capacity Per Month",
+    "B90231": "B90231 - Oracle Database Backup Cloud - Archive Storage - Gigabyte Storage Capacity Per Month",
+    "B90260": "B90260 - Oracle Digital Assistant Cloud Service - Request",
+    "B90304": "B90304 - Oracle Mobile Hub Cloud Service - Request",
+    "B90323": "B90323 - Oracle Cloud Infrastructure - Health Checks - Basic - Endpoints Per Month",
+    "B90325": "B90325 - Oracle Cloud Infrastructure - Health Checks - Premium - Endpoints Per Month",
+    "B90327": "B90327 - Oracle Cloud Infrastructure - DNS Traffic Management - 1,000,000 DNS Traffic Management Queries",
+    "B90328": "B90328 - Oracle Cloud Infrastructure - Key Management - Virtual Private Vault Per Hour",
+    "B90329": "B90329 - Oracle Cloud Infrastructure - Web Application Firewall - Requests - 1,000,000 Incoming Requests",
+    "B90330": "B90330 - Oracle Cloud Infrastructure - Web Application Firewall - Good Traffic - Gigabyte Of Good Traffic",
+    "B90332": "B90332 - Oracle Cloud Infrastructure - Web Application Firewall - Bot Management - 1,000,000 Incoming Requests",
+    "B90333": "B90333 - Oracle Field Service Professional Cloud Service - Hosted Named User",
+    "B90334": "B90334 - Oracle Field Service Professional Cloud Service - Hosted Named Seat Month",
+    "B90335": "B90335 - Oracle Field Service Enterprise Cloud Service - Hosted Named User",
+    "B90336": "B90336 - Oracle Field Service Enterprise Cloud Service - Hosted Named Seat Month",
+    "B90398": "B90398 - Oracle Cloud Infrastructure - Compute - HPC - X7 - OCPU Per Hour",
+    "B90425": "B90425 - Oracle Cloud Infrastructure - Compute - Standard - E2 - OCPU Per Hour",
+    "B90453": "B90453 - Oracle Autonomous Transaction Processing - OCPU Per Hour",
+    "B90454": "B90454 - Oracle Autonomous Transaction Processing - BYOL - OCPU Per Hour",
+    "B90455": "B90455 - Oracle Autonomous Transaction Processing - Exadata Storage - Terabyte Storage Capacity Per Month",
+    "B90487": "B90487 - Oracle Cloud Infrastructure - Database Exadata OCPU - Government - OCPU Per Hour",
+    "B90488": "B90488 - Oracle Cloud Infrastructure - Database Exadata OCPU - BYOL - Government - OCPU Per Hour",
+    "B90555": "B90555 - Oracle Identity Cloud Service - Enterprise User - User Per Month",
+    "B90556": "B90556 - Oracle Identity Cloud Service - Consumer User - User Per Month",
+    "B90557": "B90557 - Oracle Identity Cloud Service - Enterprise User - BYOL - User Per Month",
+    "B90558": "B90558 - Oracle Identity Cloud Service - Consumer User - BYOL - User Per Month",
+    "B90569": "B90569 - Oracle Cloud Infrastructure - Database Cloud Service - Standard Edition - OCPU Per Hour",
+    "B90570": "B90570 - Oracle Cloud Infrastructure - Database Cloud Service - Enterprise Edition - OCPU Per Hour",
+    "B90571": "B90571 - Oracle Cloud Infrastructure - Database Cloud Service - Enterprise Edition High Performance - OCPU Per Hour",
+    "B90572": "B90572 - Oracle Cloud Infrastructure - Database Cloud Service - Enterprise Edition Extreme Performance - OCPU Per Hour",
+    "B90573": "B90573 - Oracle Cloud Infrastructure - Database Cloud Service - All Editions - BYOL - OCPU Per Hour",
+    "B90617": "B90617 - Oracle Functions - Execution Time - 10,000 Gigabyte Memory-Seconds",
+    "B90618": "B90618 - Oracle Functions - Invocations - 1,000,000 Function Invocations",
+    "B90777": "B90777 - Oracle Cloud Infrastructure - Database Exadata Infrastructure - Base System - Hosted Environment Per Hour",
+    "B90824": "B90824 - Oracle Analytics Cloud - Professional - Subscription - Hosted Named User Per Month",
+    "B90828": "B90828 - Oracle Analytics Cloud - Enterprise - Subscription - Hosted Named User Per Month",
+    "B90925": "B90925 - Oracle Cloud Infrastructure - Monitoring - Ingestion - Million Datapoints",
+    "B90926": "B90926 - Oracle Cloud Infrastructure - Monitoring - Retrieval - Million Datapoints",
+    "B90936": "B90936 - Oracle Identity Foundation Cloud Service - Each",
+    "B90938": "B90938 - Oracle Cloud Infrastructure - Streaming - PUT or GET - Gigabytes of Data Transferred",
+    "B90939": "B90939 - Oracle Cloud Infrastructure - Streaming - Storage - Gigabyte Per Hour",
+    "B90940": "B90940 - Oracle Cloud Infrastructure - Notifications - HTTPS Delivery - Million Delivery Operations",
+    "B90941": "B90941 - Oracle Cloud Infrastructure - Notifications - Email Delivery - 1,000 Emails Sent",
+    "B90994": "B90994 - Free Oracle Cloud Program - Universal Credits - Startup Accelerator",
+    "B91068": "B91068 - Oracle Fusion Sales and Service Standard Cloud Service - Hosted Named User",
+    "B91069": "B91069 - Oracle Fusion Sales and Service Enterprise Cloud Service - Hosted Named User",
+    "B91070": "B91070 - Oracle Fusion Sales and Service Premium Cloud Service - Hosted Named User",
+    "B91119": "B91119 - Oracle Cloud Infrastructure - Compute - Bare Metal Standard - B1 - OCPU Per Hour",
+    "B91120": "B91120 - Oracle Cloud Infrastructure - Compute - Virtual Machine Standard - B1 - OCPU Per Hour",
+    "B91121": "B91121 - Oracle Cloud SQL - Compute Capacity - OCPU Per Hour",
+    "B91128": "B91128 - Oracle Big Data Service - Compute - Standard - OCPU Per Hour",
+    "B91129": "B91129 - Oracle Big Data Service - Compute - Dense I/O - OCPU Per Hour",
+    "B91130": "B91130 - Oracle Big Data Service - Compute - HPC - OCPU Per Hour",
+    "B91210": "B91210 - Oracle Content and Experience Cloud Service - 5,000 Assets Per Month",
+    "B91211": "B91211 - Oracle Content and Experience Cloud Service - Outbound Data Transfer - Gigabyte Outbound Data Transfer Per Month",
+    "B91346": "B91346 - Oracle WebLogic Server Enterprise Edition for Oracle Cloud Infrastructure - OCPU Per Hour",
+    "B91347": "B91347 - Oracle WebLogic Suite for Oracle Cloud Infrastructure - OCPU Per Hour",
+    "B91363": "B91363 - Gen 2 Exadata Cloud at Customer - Database OCPU - OCPU Per Hour",
+    "B91364": "B91364 - Gen 2 Exadata Cloud at Customer - Database OCPU - BYOL - OCPU Per Hour",
+    "B91372": "B91372 - Oracle Cloud Infrastructure - Compute - Microsoft SQL Enterprise - OCPU Per Hour",
+    "B91373": "B91373 - Oracle Cloud Infrastructure - Compute - Microsoft SQL Standard - OCPU Per Hour",
+    "B91391": "B91391 - Oracle Autonomous Data Warehouse - Free - OCPU Per Hour",
+    "B91392": "B91392 - Oracle Autonomous Data Warehouse - Exadata Storage - Free - Terabyte Storage Capacity Per Month",
+    "B91393": "B91393 - Oracle Autonomous Transaction Processing - Free - OCPU Per Hour",
+    "B91394": "B91394 - Oracle Autonomous Transaction Processing - Exadata Storage - Free - Terabyte Storage Capacity Per Month",
+    "B91444": "B91444 - Oracle Cloud Infrastructure - Compute - Virtual Machine Standard - E2 Micro - Free - OCPU Per Hour",
+    "B91445": "B91445 - Oracle Cloud Infrastructure - Block Volume - Free - Gigabyte Storage Capacity per Month",
+    "B91446": "B91446 - Oracle Cloud Infrastructure - 10 Mbps Load Balancer - Free - Load Balancer Hour",
+    "B91535": "B91535 - Oracle Cloud Infrastructure - Database Exadata Infrastructure - Quarter Rack - X8 - Hosted Environment Per Hour",
+    "B91536": "B91536 - Oracle Cloud Infrastructure - Database Exadata Infrastructure - Half Rack - X8 - Hosted Environment Per Hour",
+    "B91537": "B91537 - Oracle Cloud Infrastructure - Database Exadata Infrastructure - Full Rack - X8 - Hosted Environment Per Hour",
+    "B91539": "B91539 - Oracle Cloud Infrastructure - Database Exadata Infrastructure - Quarter Rack - X8 - Government - Hosted Environment Per Month",
+    "B91540": "B91540 - Oracle Cloud Infrastructure - Database Exadata Infrastructure - Half Rack - X8 - Government - Hosted Environment Per Month",
+    "B91541": "B91541 - Oracle Cloud Infrastructure - Database Exadata Infrastructure - Full Rack - X8 - Government - Hosted Environment Per Month",
+    "B91627": "B91627 - Oracle Cloud Infrastructure - Object Storage - Requests - 10,000 Requests per Month",
+    "B91628": "B91628 - Oracle Cloud Infrastructure - Object Storage - Storage - Gigabyte Storage Capacity per Month",
+    "B91631": "B91631 - Oracle Cloud Infrastructure - Data Safe for Database Cloud Service - Audit Record Collection Over 1 Million Records - 10,000 Audit Records Per Target Per Month",
+    "B91632": "B91632 - Oracle Cloud Infrastructure - Data Safe for Database Cloud Service - Each",
+    "B91633": "B91633 - Oracle Cloud Infrastructure - Archive Storage - Free - Gigabyte Storage Capacity per Month",
+    "B91920": "B91920 - Oracle Enterprise Data Management (EDM) Cloud Service - Hosted 1,000 Records",
+    "B91938": "B91938 - Oracle Digital Assistant Platform for SaaS - Hosted Named User",
+    "B91939": "B91939 - Oracle Digital Assistant Platform for SaaS - Hosted Employee",
+    "B91940": "B91940 - Oracle Digital Assistant Platform for SaaS - 1000 Sessions",
+    "B91961": "B91961 - Oracle Cloud Infrastructure - Block Volume Storage - Gigabyte Storage Capacity Per Month",
+    "B91962": "B91962 - Oracle Cloud Infrastructure - Block Volume Performance - Performance Units Per Gigabyte Per Month",
+    "B91963": "B91963 - Oracle Cloud Infrastructure - Block Volume Storage - Government - Gigabyte Storage Capacity Per Month",
+    "B91964": "B91964 - Oracle Cloud Infrastructure - Block Volume Performance Units - Government - Performance Units Per Gigabyte Per Month",
+    "B92072": "B92072 - Oracle Cloud Infrastructure - API Gateway - 1,000,000 API Calls - 1,000,000 API Calls Per Month",
+    "B92092": "B92092 - Oracle Cloud Infrastructure - KMS Vault - Key Versions - Key Version per Month",
+    "B92181": "B92181 - Oracle Autonomous Transaction Processing - Dedicated - OCPU Per Hour",
+    "B92182": "B92182 - Oracle Autonomous Data Warehouse - Dedicated - OCPU Per Hour",
+    "B92183": "B92183 - Oracle Autonomous Transaction Processing - Dedicated - BYOL - OCPU Per Hour",
+    "B92184": "B92184 - Oracle Autonomous Data Warehouse - Dedicated - BYOL - OCPU Per Hour",
+    "B92212": "B92212 - Oracle Autonomous JSON Database - OCPU Per Hour",
+    "B92217": "B92217 - Oracle Content and Experience Cloud Service Advanced Video Management - 250 Video Assets per Month",
+    "B92302": "B92302 - Oracle Cloud Infrastructure - Blockchain Platform Cloud Service - Standard - OCPU Per Hour",
+    "B92303": "B92303 - Oracle Cloud Infrastructure - Blockchain Platform Cloud Service - Enterprise - OCPU Per Hour",
+    "B92304": "B92304 - Oracle Cloud Infrastructure - Blockchain Platform Cloud Service - Storage - Terabyte Storage Capacity Per Month",
+    "B92305": "B92305 - Oracle Cloud Infrastructure - Blockchain Platform Cloud Service - Enterprise - BYOL - OCPU Per Hour",
+    "B92306": "B92306 - Oracle Cloud Infrastructure - Compute - Standard - E3 - OCPU - OCPU Per Hour",
+    "B92307": "B92307 - Oracle Cloud Infrastructure - Compute - Standard - E3 - Memory - Gigabyte Per Hour",
+    "B92335": "B92335 - Essbase for Oracle Cloud Infrastructure - OCPU Per Hour",
+    "B92386": "B92386 - Oracle Cloud VMware Solution - OCPU Per Hour",
+    "B92418": "B92418 - Exadata Cloud at Customer - Autonomous Transaction Processing - Database OCPU Per Hour",
+    "B92419": "B92419 - Exadata Cloud at Customer - Autonomous Data Warehouse - Database OCPU Per Hour",
+    "B92420": "B92420 - Exadata Cloud at Customer - Autonomous Transaction Processing - Database OCPU - BYOL - OCPU Per Hour",
+    "B92421": "B92421 - Exadata Cloud at Customer - Autonomous Data Warehouse - Database OCPU - BYOL - OCPU Per Hour",
+    "B92425": "B92425 - MySQL Database - Standard - E2 - OCPU Per Hour",
+    "B92426": "B92426 - MySQL Database - Storage - Gigabyte Storage Capacity per Month",
+    "B92450": "B92450 - Oracle SOA Suite for Oracle Cloud Infrastructure - OCPU Per Hour",
+    "B92451": "B92451 - Oracle SOA Suite for Oracle Cloud Infrastructure - with B2B Adapter for EDI - OCPU Per Hour",
+    "B92483": "B92483 - MySQL Database - Backup Storage - Gigabyte Storage Capacity per Month",
+    "B92598": "B92598 - Oracle Cloud Infrastructure - Data Integration - Workspace - Workspace Usage per Hour",
+    "B92599": "B92599 - Oracle Cloud Infrastructure - Data Integration - Gigabyte of Data Processed per Hour",
+    "B92637": "B92637 - Oracle Content and Experience Cloud Service - BYOL - 5,000 Assets Per Month",
+    "B92695": "B92695 - Oracle Stream Analytics for Oracle Cloud Infrastructure - OCPU Per Hour",
+    "B92733": "B92733 - Oracle Cloud Infrastructure - Data Safe for On-Premises Databases & Databases on Compute - Target Database Per Month",
+    "B92734": "B92734 - Oracle Cloud Infrastructure - Data Safe for On-Premises Databases & Databases on Compute - 10,000 Audit Records Per Target Per Month",
+    "B93338": "B93338 - Oracle Cloud Program - Universal Credits Curated Arm",
+    "B94418": "B94418 - Oracle Cloud Program - Universal Credits - Research Cloud Starter"
+  }
+}

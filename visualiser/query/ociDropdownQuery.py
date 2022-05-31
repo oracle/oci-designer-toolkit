@@ -113,7 +113,9 @@ class OCIDropdownQuery(OCIConnection):
                     if resource_type == "Image":
                         resource_list = self.images(resource_list, resources)
                     elif resource_type == "Shape":
-                        resource_list = self.shapes(resource_list, resources)                       
+                        resource_list = self.shapes(resource_list, resources)
+                        response_json["compute_shapes"] = resource_list                       
+                        response_json["shapes_list"] = [r["shape"] for r in resource_list]                       
                     elif resource_type == "LoadBalancerShape":
                         resource_list = self.load_balancer_shapes(resource_list, resources)                       
                     elif resource_type == "VolumeBackupPolicy":

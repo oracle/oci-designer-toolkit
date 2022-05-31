@@ -1,6 +1,14 @@
 # Release Notes
 
 
+## Version 0.38.0
+**Release Date**: 6th July 2022
+### Features
+2. Remove current Cost Estimator because it is using the old, deprecated costing interface.
+### Bug Fixes
+1. Fix issue where Instance was set to public IP on private network and private on public network.
+
+
 ## Version 0.37.0
 **Release Date**: 25th May 2022
 ### Features
