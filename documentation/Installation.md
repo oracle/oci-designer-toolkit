@@ -290,7 +290,7 @@ sudo bash -c "yum install -y python-oci-cli"
 # Install Required Python Modules
 sudo bash -c "python3 -m pip install -U pip"
 sudo bash -c "python3 -m pip install -U setuptools"
-sudo bash -c "python3 -m pip install --no-cache-dir authlib flask gitpython git-url-parse gunicorn oci openpyxl pandas python-magic pyyaml requests xlsxwriter"
+sudo bash -c "python3 -m pip install --no-cache-dir authlib flask gitpython git-url-parse gunicorn oci openpyxl python-magic pyyaml requests xlsxwriter"
 # Clone OKIT
 sudo bash -c "git clone -b master --depth 1 https://github.com/oracle/oci-designer-toolkit.git ${OKIT_DIR}"
 sudo bash -c "mkdir -p ${OKIT_DIR}/{git,local,log,instance/git,instance/local,instance/templates/user,workspace,ssl}"
@@ -347,7 +347,7 @@ source ${OKIT_DIR}/.venv/bin/activate
 # Update python & Install modules
 python3 -m pip install -U pip
 python3 -m pip install -U setuptools
-python3 -m pip install --no-cache-dir authlib flask gitpython git-url-parse gunicorn oci openpyxl pandas python-magic pyyaml requests xlsxwriter
+python3 -m pip install --no-cache-dir authlib flask gitpython git-url-parse gunicorn oci openpyxl python-magic pyyaml requests xlsxwriter
 # Clone OKIT 
 git clone -b ${OKIT_BRANCH} https://github.com/oracle/oci-designer-toolkit.git ${OKIT_GITHUB_DIR}/oci-designer-toolkit
 # Create OKIT Required Directories
@@ -394,7 +394,7 @@ source ${OKIT_DIR}/.venv/bin/activate
 # Update python & Install modules
 python3 -m pip install -U pip
 python3 -m pip install -U setuptools
-python3 -m pip install --no-cache-dir authlib flask gitpython git-url-parse gunicorn oci openpyxl pandas python-magic pyyaml requests xlsxwriter
+python3 -m pip install --no-cache-dir authlib flask gitpython git-url-parse gunicorn oci openpyxl python-magic pyyaml requests xlsxwriter
 # Clone OKIT 
 git clone -b ${OKIT_BRANCH} https://github.com/oracle/oci-designer-toolkit.git ${OKIT_GITHUB_DIR}/oci-designer-toolkit
 # Create OKIT Required Directories
@@ -533,7 +533,7 @@ sudo bash -c "yum update -y"
 # Install Required Python Modules
 sudo bash -c "python3 -m pip install -U pip"
 sudo bash -c "python3 -m pip install -U setuptools"
-sudo bash -c "python3 -m pip install --no-cache-dir authlib flask gitpython git-url-parse gunicorn oci openpyxl pandas python-magic pyyaml requests xlsxwriter"
+sudo bash -c "python3 -m pip install --no-cache-dir authlib flask gitpython git-url-parse gunicorn oci openpyxl python-magic pyyaml requests xlsxwriter"
 # Clone OKIT
 sudo bash -c "mkdir -p /github"
 sudo bash -c "git clone -b master https://github.com/oracle/oci-designer-toolkit.git /github/oci-designer-toolkit"
