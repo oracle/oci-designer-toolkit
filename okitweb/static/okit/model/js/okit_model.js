@@ -493,6 +493,8 @@ class OkitArtifact {
     // generateResourceNameFromDisplayName(name) {return titleCase(name).split(' ').join('').replaceAll('-','_')}
     generateResourceNameFromDisplayName = (name) => titleCase(name.split('_').join('-')).split(' ').join('').replaceAll('-','_')
 
+    estimateCost = () => '$0.00'
+
     /*
     ** Static Functionality
      */

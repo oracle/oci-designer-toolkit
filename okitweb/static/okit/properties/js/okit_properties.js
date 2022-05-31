@@ -116,13 +116,7 @@ class OkitResourceProperties {
                                 .attr('class', `property-editor-cost-estimate ${!developer_mode ? 'hidden' : ''}`)
         const right_div = this.cost_estimate_div.append('div')
         const estimate_label = right_div.append('label').text('Estimated Monthly Cost')
-        this.cost_estimate = right_div.append('label').text('0.00')
-        // const cost_table = this.createTable('', `${this.id}_cost_table`)
-        // this.cost_estimate_tbody = cost_table.tbody
-        // this.append(this.cost_estimate_div, cost_table.table)
-        // const cost_estimate = this.createInput('number', 'Estimated Monthly Cost', `${self.id}_cost_estimate`, '')
-        // this.cost_estimate = cost_estimate.input
-        // this.append(this.cost_estimate_tbody, cost_estimate.row)
+        this.cost_estimate = right_div.append('label').text('')
     }
 
     buildCore() {
@@ -184,6 +178,7 @@ class OkitResourceProperties {
     load() {
         if (this.resource) {
             this.loadCore()
+            this.loadCostEstimate()
             this.loadResource()
             this.loadTags()
         }
@@ -194,6 +189,10 @@ class OkitResourceProperties {
         okitSettings.show_ocids ? this.showProperty(`${this.id}_ocid`, '') : this.hideProperty(`${this.id}_ocid`, '')
         this.display_name.property('value', this.resource.display_name)
         this.setTitle()
+    }
+
+    loadCostEstimate() {
+        this.cost_estimate.text(this.resource.estimateCost())
     }
 
     loadResource() {}
