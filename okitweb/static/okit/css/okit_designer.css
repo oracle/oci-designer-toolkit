@@ -374,6 +374,18 @@
     background-size: 20px 20px;
 }
 
+.property-editor-cost-estimate {
+    display: inline-block;
+    margin-left: auto; 
+    align-items: right;
+    width: 100%;
+}
+
+.property-editor-cost-estimate > div {
+    margin-left: auto; 
+    width: fit-content;
+}
+
 .okit-resource-properties-panel {
     height: 100%;
     width: 100%;

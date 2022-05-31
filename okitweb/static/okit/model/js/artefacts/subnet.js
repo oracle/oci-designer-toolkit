@@ -42,7 +42,7 @@ class Subnet extends OkitArtifact {
      */
     deleteReferences() {
         // Instance Volume Attachment
-        this.getOkitJson().getInstances().forEach((r) => r.vnics = r.vnics.filter((v) => v.subnet_id !== this.id))
+        this.getOkitJson().getInstances().forEach((r) => r.vnic_attachments = r.vnic_attachments.filter((v) => v.subnet_id !== this.id))
     }
 
     /*
