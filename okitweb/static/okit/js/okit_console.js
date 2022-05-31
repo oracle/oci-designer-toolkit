@@ -100,7 +100,8 @@ function loadHeaderConfigDropDown() {
     */
     const console_header_config_select = $('#console_header_config_select')
     console_header_config_select.empty()
-    okitOciConfig.sections.forEach((section) => {console_header_config_select.append($('<option>').attr('value', section).attr('disabled', section === 'Error').text(section))})
+    // okitOciConfig.sections.forEach((section) => {console_header_config_select.append($('<option>').attr('value', section).attr('disabled', section === 'Error').text(section))})
+    okitOciConfig.validated_sections.forEach((section) => {console_header_config_select.append($('<option>').attr('value', section.section).attr('disabled', !section.valid).attr('title', section.reason).text(section.section))})
     console_header_config_select.val(okitSettings.profile)
     const console_header_region_select = $('#console_header_region_select')
     console_header_region_select.empty()
