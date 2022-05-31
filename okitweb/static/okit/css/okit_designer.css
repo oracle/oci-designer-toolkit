@@ -386,6 +386,15 @@
     width: fit-content;
 }
 
+.property-editor-cost-estimate > div > label {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.property-editor-cost-estimate > div > label:last-child {
+    font-weight: bold;
+}
+
 .okit-resource-properties-panel {
     height: 100%;
     width: 100%;
