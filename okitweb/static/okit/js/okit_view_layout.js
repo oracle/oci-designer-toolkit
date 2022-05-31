@@ -26,6 +26,7 @@ function handleViewSelect(e) {
     else if (selected === 'cache') handleSwitchToTextCacheView(e)
     else if (selected === 'identity') handleSwitchToIdentityView(e)
     else if (selected === 'terraform') handleSwitchTerraformView(e)
+    else if (selected === 'bom') handleSwitchBoMView(e)
     else console.warn('Unknown View', selected)
 }
 
@@ -107,4 +108,12 @@ function handleSwitchTerraformView(e) {
     // okitTerraformView = new OkitTerraformView(okitJsonModel, okitOciData, resource_icons);
     okitTerraformView = OkitTerraformView.newView(okitJsonModel, okitOciData, resource_icons);
     okitTerraformView.draw();
+}
+
+function handleSwitchBoMView(e) {
+    hideAllViewDivs();
+    $("#bom-div").removeClass('hidden');
+    hideSideBars();
+    okitBoMView = OkitBoMView.newView(okitJsonModel, okitOciData, resource_icons);
+    okitBoMView.draw();
 }

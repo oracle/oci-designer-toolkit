@@ -36,3 +36,8 @@ class OkitBoMView extends OkitJsonView {
     drawEstimatePanel() {}
 
 }
+
+
+okitViewClasses.push(OkitBoMView);
+
+let okitBoMView = null;
