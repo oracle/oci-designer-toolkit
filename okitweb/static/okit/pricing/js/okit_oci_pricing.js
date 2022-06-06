@@ -57,6 +57,10 @@ class OkitOciProductPricing {
         }
     }
 
+    getSkuCost(sku, model="PAY_AS_YOU_GO", currency=undefined) {
+        part_data = this.prices.items[sku][currency ? currency : 'USD']
+    }
+
     getInstanceSkus(resource) {
         const shape = resource.shape
         const shape_parts = shape.split('.')
