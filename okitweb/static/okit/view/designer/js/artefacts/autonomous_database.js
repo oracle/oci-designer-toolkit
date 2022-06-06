@@ -15,12 +15,10 @@ class AutonomousDatabaseView extends OkitDesignerArtefactView {
     // -- Reference
     get icon_definition_id() {return this.db_workload.startsWith('DW') ? OkitJsonView.toSvgIconDef('AutonomousDataWarehouseCloudService') : super.icon_definition_id;}
     get parent_id() {
-        let subnet = this.getJsonView().getSubnet(this.artefact.subnet_id);
+        const subnet = this.getJsonView().getSubnet(this.artefact.subnet_id);
         if (subnet && subnet.compartment_id === this.artefact.compartment_id) {
-            console.info('Using Subnet as parent');
             return this.subnet_id;
         } else {
-            console.info('Using Compartment as parent');
             return this.compartment_id;
         }
     }

@@ -427,6 +427,20 @@ class OCIJsonValidator(object):
                         'element': 'drg_id'
                     }
                     self.results['errors'].append(error)
+            for resource in self.okit_json.get('drgs', []):
+                logger.info('Validating {!s}'.format(resource['display_name']))
+                for route_distribution in resource.get('route_distributions', []):
+                    for statement in route_distribution.get('statements', []):
+                        if statement.get('match_criteria', {}).get('match_type', '') == '':
+                            self.valid = False
+                            error = {
+                                'id': resource['id'],
+                                'type': 'DRG',
+                                'artefact': route_distribution['display_name'],
+                                'message': f'Match Criteria for Distribution Statement must be specified.',
+                                'element': 'match_type'
+                            }
+                            self.results['errors'].append(error)
 
 
     # Fast Connect
@@ -491,6 +505,28 @@ class OCIJsonValidator(object):
                         'element': 'subnet_id'
                     }
                     self.results['errors'].append(error)
+            # Check OS
+            if artefact['source_details']['os'] == '':
+                self.valid = False
+                error = {
+                    'id': artefact['id'],
+                    'type': 'Instance',
+                    'artefact': artefact['display_name'],
+                    'message': f'Operating System must be specified',
+                    'element': 'os'
+                }
+                self.results['errors'].append(error)
+            # Check OS Version
+            if artefact['source_details']['version'] == '':
+                self.valid = False
+                error = {
+                    'id': artefact['id'],
+                    'type': 'Instance',
+                    'artefact': artefact['display_name'],
+                    'message': f'Operating System Version must be specified',
+                    'element': 'version'
+                }
+                self.results['errors'].append(error)
             # Check Boot volume size
             if int(artefact['source_details']['boot_volume_size_in_gbs']) < 50 or int(artefact['source_details']['boot_volume_size_in_gbs']) > 32768:
                 self.valid = False

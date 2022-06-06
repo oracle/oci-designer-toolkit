@@ -68,6 +68,12 @@ class LoadBalancer extends OkitArtifact {
             delete this.instance_ids
             delete this.backend_policy
         }
+        // Check Resource Names
+        this.backend_sets.forEach((bs, i) => {
+            bs.resource_name = bs.resource_name ? bs.resource_name : `${this.generateResourceName()}BackendSet${i}`
+            bs.backends.forEach((b, j) => b.resource_name = b.resource_name ? b.resource_name : `${this.generateResourceName()}BackendSet${i}BackEnd${j}`)
+        })
+        this.listeners.forEach((l, i) => l.resource_name = l.resource_name ? l.resource_name : `${this.generateResourceName()}Listener${i}`)
     }
 
     /*
