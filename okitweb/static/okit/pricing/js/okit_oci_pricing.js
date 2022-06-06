@@ -9,10 +9,10 @@ class OkitOciProductPricing {
         this.load()
     }
 
-    getSkuDisplayName = (sku) => this.products.filter((p) => p.partNumber === sku).reduce((a, p) => p.displayName.split(' - ').slice(1, -1).join(' - '), '')
+    getSkuDisplayName= (sku) => this.products.filter((p) => p.partNumber === sku).reduce((a, p) => p.displayName.split(' - ').slice(1, -1).join(' - '), '')
     getSkuMetricDisplayName = (sku) => this.products.filter((p) => p.partNumber === sku).reduce((a, p) => p.metricDisplayName, '')
 
-    load() {
+    load(model) {
         const products = $.getJSON('pricing/products', {cache: false})
         const prices = $.getJSON('pricing/prices', {cache: false})
         const sku_map = $.getJSON('pricing/sku_map', {cache: false})
@@ -21,28 +21,28 @@ class OkitOciProductPricing {
             this.prices = results[1]
             this.sku_map = results[2]
             this.productsToCategories(results[0])
-            console.info(this)
+            console.debug(this)
         })
     }
 
     productsToCategories(products) {
         this.categories = {}
-        this.sku_map = {}
-        this.name_map = {}
+        this.sku2name = {}
+        this.name2sku = {}
         if (products.items) {
             products.items.forEach((item) => {
-                this.sku_map[item.partNumber] = item.displayName
-                this.name_map[item.displayName] = item.partNumber
-                if (!this.categories[item.serviceCategoryDisplayName]) this.categories[item.serviceCategoryDisplayName] = {sku_map: {}, name_map: {}}
-                this.categories[item.serviceCategoryDisplayName].sku_map[item.partNumber] = item.shortDisplayName
-                this.categories[item.serviceCategoryDisplayName].name_map[item.shortDisplayName] = item.partNumber
+                this.sku2name[item.partNumber] = item.displayName
+                this.name2sku[item.displayName] = item.partNumber
+                if (!this.categories[item.serviceCategoryDisplayName]) this.categories[item.serviceCategoryDisplayName] = {sku2name: {}, name2sku: {}}
+                this.categories[item.serviceCategoryDisplayName].sku2name[item.partNumber] = item.shortDisplayName
+                this.categories[item.serviceCategoryDisplayName].name2sku[item.shortDisplayName] = item.partNumber
             })
         }
     }
 
     generateBoM(model) {
-        let bom = {}
-        if (model) {
+        this.bom = {}
+        if (model && this.sku_map) {
             Object.entries(model).filter(([k, v]) => Array.isArray(v)).forEach(([resource_name, resource_list]) => resource_list.forEach((resource) => {
                 console.info('Processing Resource', resource_name)
                 // Get Skus
@@ -55,6 +55,7 @@ class OkitOciProductPricing {
                 }
             }))
         }
+        console.debug('BoM:', this.bom)
     }
 
     getSkuCost(sku, model="PAY_AS_YOU_GO", currency=undefined) {
@@ -72,10 +73,10 @@ class OkitOciProductPricing {
             'DenseIO1': 'Dense I/O',
             'DenseIO2': 'Dense I/O',
         }
-        const name_map = {...this.name_map["Compute"], ...this.name_map["Compute Bare Metal"]}
+        const name2sku = {...this.name2sku["Compute"], ...this.name2sku["Compute Bare Metal"]}
         const type_str = parts_map[shape_parts[0]]
         const skus = [
-            this.sku_map.instance[resource.shape], // Standard Shape based SKU
+            this.sku_map.instance.shape[resource.shape], // Standard Shape based SKU
             'B91962' // Boot Volume SKU
         ]
         if (this.sku_map.os[resource.source_details.os.toLowerCase()]) skus.push(this.sku_map.os[resource.source_details.os.toLowerCase()])

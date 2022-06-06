@@ -142,7 +142,7 @@ class OkitJson {
         });
         // Check for root compartment
         this.checkCompartmentIds();
-        // if (okitOciProductPricing) okitOciProductPricing.generateBoM(this)
+        if (okitOciProductPricing) okitOciProductPricing.generateBoM(this)
     }
     checkCompartmentIds() {
         const compartment_ids = this.compartments ? this.compartments.map((c) => c.id) : []
