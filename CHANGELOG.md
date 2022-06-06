@@ -6,6 +6,9 @@
 ### Features
 1. Disable config selection for invalid entries.
 2. Remove current Cost Estimator because it is using the old, deprecated costing interface.
+3. Update Properties Sheet
+    1. Internet Gateway
+    2. NAT Gateway
 ### Bug Fixes
 1. Fix issue where Instance was set to public IP on private network and private on public network.
 2. Fix issue where Subnets can not be deleted if an instance exists in another subnet.
