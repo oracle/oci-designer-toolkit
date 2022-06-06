@@ -27,18 +27,6 @@ class InternetGatewayView extends OkitDesignerArtefactView {
     newPropertiesSheet() {
         this.properties_sheet = new InternetGatewayProperties(this.artefact)
     }
-    loadProperties1() {
-        let okitJson = this.getOkitJson();
-        let me = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/internet_gateway.html", () => {loadPropertiesSheet(me.artefact);});
-    }
-
-    /*
-    ** Load and display Value Proposition
-     */
-    loadValueProposition() {
-        $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/internet_gateway.html");
-    }
 
     /*
     ** Static Functionality
