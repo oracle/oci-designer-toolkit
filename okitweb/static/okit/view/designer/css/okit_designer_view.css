@@ -6,7 +6,7 @@
 .okit-resource-svg-details {
     display: grid;
     grid-auto-flow: row;
-    row-gap: 2px;
+    row-gap: 0px;
     max-width: 150px;
     min-width: 150px;
     width: 150px;
@@ -18,11 +18,19 @@
     background-repeat: no-repeat;
     background-position-x: left;
     background-position-y: center;
-    background-size: 45px;
+    background-size: 45px 45px;
+}
+
+.okit-resource-svg-detail > div {
+    height: 1em;
+    padding: 0;
+    margin: 0;
 }
 
 .okit-resource-svg-details label {
     display: inline-block;
+    margin-left: 1px;
+    padding-left: 1px;
     max-width: 100%;
     width: 100%;
     text-overflow: ellipsis;
@@ -34,6 +42,8 @@
 
 .okit-resource-svg-details input {
     /* max-width: 140px; */
+    margin-left: 1px;
+    padding-left: 1px;
     max-width: 100%;
     text-overflow: ellipsis;
     white-space: nowrap;

@@ -606,17 +606,17 @@ class OkitArtefactView {
         return rect;
     }
 
-    drawIcon1(svg) {
-        const icon = svg.append('svg')
-            .attr("width",     icon_width)
-            .attr("height",    icon_height)
-            .append('g')
-                .attr("style", "pointer-events: bounding-box;")
-                .append("use")
-                .attr("xlink:href",`#${this.icon_definition_id}`)
-                .attr("transform", this.icon_transform);
-        return icon;
-    }
+    // drawIcon1(svg) {
+    //     const icon = svg.append('svg')
+    //         .attr("width",     icon_width)
+    //         .attr("height",    icon_height)
+    //         .append('g')
+    //             .attr("style", "pointer-events: bounding-box;")
+    //             .append("use")
+    //             .attr("xlink:href",`#${this.icon_definition_id}`)
+    //             .attr("transform", this.icon_transform);
+    //     return icon;
+    // }
 
     drawIcon(svg) {
         const definition = this.getIconDefinition()
