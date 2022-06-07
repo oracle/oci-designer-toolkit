@@ -41,17 +41,7 @@ class OkitOciProductPricing {
     }
 
     generateBoM(model) {
-        this.bom = {
-            'sku': {
-                'description': 'Compute - Standard - E2',
-                'metric': 'OCPU Per Hour',
-                'quantity': 0,
-                'units': 0,
-                'list_price': 0,
-                'price_per_month': 0
-            }
-        }
-        // this.bom = {}
+        this.bom = {}
         if (model && this.sku_map) {
             Object.entries(model).filter(([k, v]) => Array.isArray(v)).forEach(([resource_name, resource_list]) => resource_list.forEach((resource) => {
                 console.info('Processing Resource', resource_name)
@@ -66,17 +56,22 @@ class OkitOciProductPricing {
             }))
         }
         console.debug('BoM:', this.bom)
+        return this.bom
     }
 
     newBoMSkuEntry(sku) {
-        return {
-            'description': '',
-            'metric': '',
+        const products = this.products.items.filter((p) => p.partNumber === sku)
+        console.info(`Products for ${sku}`, products)
+        const bom_entry = {
+            'description': products.length > 0 ? products[0].displayName.replace(`${sku} - `, '') : '',
+            'metric': products.length > 0 ? products[0].metricDisplayName : '',
             'quantity': 0,
             'units': 0,
-            'list_price': 0,
+            'list_price': this.getSkuCost(sku),
             'price_per_month': 0
         }
+        console.info('BoM Entry', bom_entry)
+        return bom_entry
     }
 
     getBoMSkuEntry(sku) {
@@ -85,10 +80,31 @@ class OkitOciProductPricing {
     }
 
     getSkuCost(sku, model="PAY_AS_YOU_GO", currency='USD') {
-        part_data = this.prices.items[sku][currency ? currency : 'USD']
+        const price = this.prices.items[sku][currency ? currency : 'USD']
+        return price
     }
 
     getInstanceSkus(resource) {
+        const shape_sku = this.sku_map.instance.shape[resource.shape]
+        const boot_vol_sku = 'B91962'
+        const os_sku = this.sku_map.os[resource.source_details.os.toLowerCase()]
+        const skus = [shape_sku, boot_vol_sku]
+        const shape_entry = this.getBoMSkuEntry(shape_sku)
+        const boot_vol_entry = this.getBoMSkuEntry(boot_vol_sku)
+        // Process Shape Information
+        shape_entry.quantity += 1
+        shape_entry.units = 744 // Hrs/ Month
+        shape_entry.price_per_month = (shape_entry.list_price * shape_entry.quantity * shape_entry.units)
+        // Process Boot Volume Information
+        if (os_sku) {
+            skus.push(os_sku)
+            const os_entry = this.getBoMSkuEntry(os_sku)
+        }
+        return skus
+    }
+
+    // TODO: Delete
+    getInstanceSkusDeprecated(resource) {
         const shape = resource.shape
         const shape_parts = shape.split('.')
         const parts_map = {
@@ -106,6 +122,9 @@ class OkitOciProductPricing {
             'B91962' // Boot Volume SKU
         ]
         if (this.sku_map.os[resource.source_details.os.toLowerCase()]) skus.push(this.sku_map.os[resource.source_details.os.toLowerCase()])
+        this.getBoMSkuEntry(this.sku_map.instance.shape[resource.shape])
         return skus
     }
 }
+
+let okitOciProductPricing = null

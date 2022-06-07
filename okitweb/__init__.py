@@ -58,8 +58,11 @@ def create_local_app(test_config=None):
                                    'favicon.ico', mimetype='image/vnd.microsoft.icon')
     from . import okitWebDesigner
     app.register_blueprint(okitWebDesigner.bp)
-    from . import okitPricing
-    app.register_blueprint(okitPricing.bp)
+    try:
+        from . import okitPricing
+        app.register_blueprint(okitPricing.bp)
+    except Exception as e:
+        logger.info(e)
     from . import okitOci
     app.register_blueprint(okitOci.bp)
     from . import okitImport
