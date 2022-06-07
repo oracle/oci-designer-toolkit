@@ -41,7 +41,17 @@ class OkitOciProductPricing {
     }
 
     generateBoM(model) {
-        this.bom = {}
+        this.bom = {
+            'sku': {
+                'description': 'Compute - Standard - E2',
+                'metric': 'OCPU Per Hour',
+                'quantity': 0,
+                'units': 0,
+                'list_price': 0,
+                'price_per_month': 0
+            }
+        }
+        // this.bom = {}
         if (model && this.sku_map) {
             Object.entries(model).filter(([k, v]) => Array.isArray(v)).forEach(([resource_name, resource_list]) => resource_list.forEach((resource) => {
                 console.info('Processing Resource', resource_name)
@@ -58,7 +68,23 @@ class OkitOciProductPricing {
         console.debug('BoM:', this.bom)
     }
 
-    getSkuCost(sku, model="PAY_AS_YOU_GO", currency=undefined) {
+    newBoMSkuEntry(sku) {
+        return {
+            'description': '',
+            'metric': '',
+            'quantity': 0,
+            'units': 0,
+            'list_price': 0,
+            'price_per_month': 0
+        }
+    }
+
+    getBoMSkuEntry(sku) {
+        if (!this.bom[sku]) this.bom[sku] = this.newBoMSkuEntry(sku)
+        return this.bom[sku]
+    }
+
+    getSkuCost(sku, model="PAY_AS_YOU_GO", currency='USD') {
         part_data = this.prices.items[sku][currency ? currency : 'USD']
     }
 
