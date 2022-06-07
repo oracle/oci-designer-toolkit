@@ -23,6 +23,10 @@ class User extends OkitArtifact {
         this.merge(data);
         this.convert();
     }
+    convert() {
+        super.convert()
+        if (!this.description || this.description === '') this.description = this.name
+    }
     /*
     ** Name Generation
     */

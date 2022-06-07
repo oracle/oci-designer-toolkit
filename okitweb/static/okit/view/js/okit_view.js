@@ -632,9 +632,9 @@ class OkitArtefactView {
     drawForeignObject(svg) {
         const definition = this.getForeignObjectDefinition()
         const foreignObject = svg.append('foreignObject').attr('width', definition.width).attr('height', definition.height).attr('transform', definition.transform)
-        const details_div = foreignObject.append('xhtml:div').attr('class', `okit-resource-svg-details`)
-        details_div.append('div').attr('class', 'okit-resource-svg-title').append('label').text(this.type_text)
-        details_div.append('div').append('input').attr('class', 'okit-resource-svg-display-name').attr('tabindex', -1)
+        const details_div = foreignObject.append('xhtml:div').attr('xmlns', 'http://www.w3.org/1999/xhtml').attr('class', `okit-resource-svg-details`)
+        details_div.append('xhtml:div').attr('xmlns', 'http://www.w3.org/1999/xhtml').attr('class', 'okit-resource-svg-title').append('xhtml:label').attr('xmlns', 'http://www.w3.org/1999/xhtml').text(this.type_text)
+        details_div.append('xhtml:div').attr('xmlns', 'http://www.w3.org/1999/xhtml').attr('class', 'okit-resource-svg-input').append('xhtml:input').attr('xmlns', 'http://www.w3.org/1999/xhtml').attr('class', 'okit-resource-svg-display-name').attr('tabindex', -1)
             .attr('type', 'text')
             .attr('name', `${this.resource_name}_display_name`)
             .attr('value', `${this.display_name}`)
