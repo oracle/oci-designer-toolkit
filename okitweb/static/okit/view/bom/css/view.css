@@ -3,3 +3,13 @@
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
  */
 
+.bom_heading {
+    display: grid;
+    grid-template-columns: auto 150px;
+    max-width: 100%;
+}
+
+.bom_heading > div {
+    vertical-align: middle;
+    margin: auto;
+}
