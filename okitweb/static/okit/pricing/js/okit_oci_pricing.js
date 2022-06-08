@@ -96,6 +96,31 @@ class OkitOciProductPricing {
         return price
     }
 
+    getBlockStorageVolumeSkus(resource) {
+        const resource_name = resource.getArtifactReference()
+        const boot_vol_perf_sku = 'B91962' // Performance
+        const boot_vol_cap_sku = 'B91961' // Capacity
+        const boot_vol_perf_entry = this.getBoMSkuEntry(boot_vol_perf_sku)
+        const boot_vol_cap_entry = this.getBoMSkuEntry(boot_vol_cap_sku)
+        const skus = [boot_vol_perf_sku, boot_vol_cap_sku]
+        let price_per_month = 0
+        // Process Boot Volume Performance Information
+        price_per_month = boot_vol_perf_entry.list_price * +resource.vpus_per_gb * +resource.size_in_gbs
+        this.updateCostEstimate(resource_name, price_per_month)
+        boot_vol_perf_entry.quantity += 1
+        boot_vol_perf_entry.utilization += +resource.vpus_per_gb // VPUS / GB
+        boot_vol_perf_entry.units += +resource.size_in_gbs // Convert to Number
+        boot_vol_perf_entry.price_per_month += price_per_month
+        // Process Boot Volume Capacity Information
+        price_per_month = boot_vol_perf_entry.list_price * +resource.size_in_gbs
+        this.updateCostEstimate(resource_name, price_per_month)
+        boot_vol_cap_entry.quantity += 1
+        boot_vol_cap_entry.utilization = 1
+        boot_vol_cap_entry.units += +resource.size_in_gbs // Convert to Number
+        boot_vol_cap_entry.price_per_month += price_per_month
+        return skus
+    }
+
     getInstanceSkus(resource) {
         const resource_name = resource.getArtifactReference()
         const shape_sku = this.sku_map.instance.shape[resource.shape]
@@ -106,32 +131,38 @@ class OkitOciProductPricing {
         const shape_entry = this.getBoMSkuEntry(shape_sku)
         const boot_vol_perf_entry = this.getBoMSkuEntry(boot_vol_perf_sku)
         const boot_vol_cap_entry = this.getBoMSkuEntry(boot_vol_cap_sku)
+        const monthly_utilization = 744
+        let price_per_month = 0
         // Process Shape Information
+        price_per_month = shape_entry.list_price * +resource.shape_config.ocpus * monthly_utilization
+        this.updateCostEstimate(resource_name, price_per_month)
         shape_entry.quantity += 1
-        shape_entry.utilization = 744 // Hrs/ Month
+        shape_entry.utilization = monthly_utilization // Hrs/ Month
         shape_entry.units += resource.shape_config.ocpus // OCPUs
-        shape_entry.price_per_month = (shape_entry.list_price * shape_entry.utilization * shape_entry.units)
-        this.updateCostEstimate(resource_name, shape_entry.price_per_month)
+        shape_entry.price_per_month += price_per_month
         // Process Boot Volume Performance Information
+        price_per_month = boot_vol_perf_entry.list_price * +resource.source_details.boot_volume_size_in_gbs * 10
+        this.updateCostEstimate(resource_name, price_per_month)
         boot_vol_perf_entry.quantity += 1
-        boot_vol_perf_entry.utilization = 10 // VPUS / GB
+        boot_vol_perf_entry.utilization += 10 // VPUS / GB
         boot_vol_perf_entry.units += +resource.source_details.boot_volume_size_in_gbs // Convert to Number
-        boot_vol_perf_entry.price_per_month = (boot_vol_perf_entry.list_price * boot_vol_perf_entry.utilization * boot_vol_perf_entry.units)
-        this.updateCostEstimate(resource_name, boot_vol_perf_entry.price_per_month)
+        boot_vol_perf_entry.price_per_month += price_per_month
         // Process Boot Volume Capacity Information
+        price_per_month = boot_vol_cap_entry.list_price * +resource.source_details.boot_volume_size_in_gbs
+        this.updateCostEstimate(resource_name, price_per_month)
         boot_vol_cap_entry.quantity += 1
         boot_vol_cap_entry.utilization = 1
         boot_vol_cap_entry.units += +resource.source_details.boot_volume_size_in_gbs // Convert to Number
-        boot_vol_cap_entry.price_per_month = (boot_vol_cap_entry.list_price * boot_vol_cap_entry.utilization * boot_vol_cap_entry.units)
-        this.updateCostEstimate(resource_name, boot_vol_cap_entry.price_per_month)
+        boot_vol_cap_entry.price_per_month += price_per_month
         if (os_sku) {
             skus.push(os_sku)
             const os_entry = this.getBoMSkuEntry(os_sku)
+            price_per_month = os_entry.list_price * monthly_utilization
+            this.updateCostEstimate(resource_name, price_per_month)
             os_entry.quantity += 1
-            os_entry.utilization = 744 // Hrs/ Month
+            os_entry.utilization = monthly_utilization // Hrs/ Month
             os_entry.units += 1
-            os_entry.price_per_month = (os_entry.list_price * os_entry.utilization * os_entry.units)
-            this.updateCostEstimate(resource_name, os_entry.price_per_month)
+            os_entry.price_per_month += price_per_month
         }
         return skus
     }
