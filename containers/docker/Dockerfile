@@ -56,7 +56,6 @@ RUN yum install -y \
         python-magic==0.4.22 \
         pyyaml==5.4.1 \
         requests==2.25.1 \
-        xlsxwriter==1.3.7 \
 # Create Workspace
  && mkdir -p /okit/{config,git,instance/git,instance/local,instance/templates/user,local,log,ssl,visualiser,okitweb,workspace,skeletons} \
 #  && mkdir -p /okit/okitweb/static/okit/templates \
