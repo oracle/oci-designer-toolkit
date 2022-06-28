@@ -11,21 +11,25 @@ class OkitOciProductPricing {
         this.cost_estimate = {}
         this.load()
     }
+    oci_products_url = 'https://apexapps.oracle.com/pls/apex/cetools/api/v1/products/'
 
     getSkuDisplayName= (sku) => this.products.filter((p) => p.partNumber === sku).reduce((a, p) => p.displayName.split(' - ').slice(1, -1).join(' - '), '')
     getSkuMetricDisplayName = (sku) => this.products.filter((p) => p.partNumber === sku).reduce((a, p) => p.metricDisplayName, '')
 
     load(model) {
+        console.info('>>>>>> Loading Price <<<<<<<')
+        const oci_products = $.getJSON(this.oci_products_url, {cache: false})
         const products = $.getJSON('pricing/products', {cache: false})
-        const prices = $.getJSON('pricing/prices', {cache: false})
+        // const prices = $.getJSON('pricing/prices', {cache: false})
         const sku_map = $.getJSON('pricing/sku_map', {cache: false})
-        Promise.all([products, prices, sku_map]).then(results => {
-            this.products = results[0]
-            this.prices = results[1]
-            this.sku_map = results[2]
-            this.productsToCategories(results[0])
+        Promise.allSettled([oci_products, products, sku_map]).then(results => {
+            this.products = results[0].status === 'fulfilled' ? results[0].value : results[1].value
+            this.sku_map = results[2].value
+            // this.productsToCategories(this.products)
             console.debug(this)
         })
+
+        // $.getJSON(this.oci_products_url, {cache: false}).done((results) => console.info('>>>>>> Product Pricing:', results)).fail((xhr, status, error) => {ajaxCallFailed(xhr, status, error)})
     }
 
     productsToCategories(products) {
@@ -69,8 +73,8 @@ class OkitOciProductPricing {
         console.info(`Products for ${sku}`, products)
         const bom_entry = {
             // 'description': products.length > 0 ? products[0].displayName.replace(`${sku} - `, '') : '',
-            'description': products.length > 0 ? `${products[0].serviceCategoryDisplayName} - ${products[0].shortDisplayName}` : '',
-            'metric': products.length > 0 ? products[0].metricDisplayName : '',
+            'description': products.length > 0 ? products[0].displayName : '',
+            'metric': products.length > 0 ? products[0].metricName : '',
             'quantity': 0,
             'utilization': 0,
             'units': 0,
@@ -80,6 +84,23 @@ class OkitOciProductPricing {
         console.info('BoM Entry', bom_entry)
         return bom_entry
     }
+
+    // newBoMSkuEntry(sku) {
+    //     const products = this.products.items.filter((p) => p.partNumber === sku)
+    //     console.info(`Products for ${sku}`, products)
+    //     const bom_entry = {
+    //         // 'description': products.length > 0 ? products[0].displayName.replace(`${sku} - `, '') : '',
+    //         'description': products.length > 0 ? `${products[0].serviceCategoryDisplayName} - ${products[0].shortDisplayName}` : '',
+    //         'metric': products.length > 0 ? products[0].metricDisplayName : '',
+    //         'quantity': 0,
+    //         'utilization': 0,
+    //         'units': 0,
+    //         'list_price': this.getSkuCost(sku),
+    //         'price_per_month': 0
+    //     }
+    //     console.info('BoM Entry', bom_entry)
+    //     return bom_entry
+    // }
 
     getBoMSkuEntry(sku) {
         if (!this.bom[sku]) this.bom[sku] = this.newBoMSkuEntry(sku)
@@ -91,10 +112,24 @@ class OkitOciProductPricing {
         this.cost_estimate[resource] += price
     }
 
-    getSkuCost(sku, model="PAY_AS_YOU_GO", currency) {
-        const price = this.prices.items[sku][currency ? currency : this.currency]
+    getSkuCost(sku, model="PAY_AS_YOU_GO", currency_code=undefined) {
+        currency_code = currency_code ? currency_code : this.currency
+        console.info('Sku:', sku, 'Model:', model, 'Currency:', currency_code)
+        const price = this.products.items.filter(p => p.partNumber === sku)[0].currencyCodeLocalizations.filter(c => c.currencyCode === currency_code)[0].prices.filter(p => p.model === model)[0].value
+        // const items = this.products.items.filter(p => p.partNumber === sku)
+        // console.info('>>> Item', items)
+        // const currencies = items[0].currencyCodeLocalizations.filter(c => c.currencyCode === currency_code)
+        // console.info('>>> Currency', currencies)
+        // const prices = currencies[0].prices.filter(p => p.model === model)
+        // console.info('>>> Price', prices)
+        // const price = prices[0].value
         return price
     }
+
+    // getSkuCostPriceFile(sku, model="PAY_AS_YOU_GO", currency) {
+    //     const price = this.prices.items[sku][currency ? currency : this.currency]
+    //     return price
+    // }
 
     getBlockStorageVolumeSkus(resource) {
         const resource_name = resource.getArtifactReference()
