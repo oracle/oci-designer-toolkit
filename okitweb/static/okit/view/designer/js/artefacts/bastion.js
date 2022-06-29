@@ -31,15 +31,8 @@ class BastionView extends OkitArtefactView {
     /*
     ** Property Sheet Load function
     */
-    loadProperties() {
-        const self = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/bastion.html", () => {loadPropertiesSheet(self.artefact);});
-    }
-    /*
-    ** Load and display Value Proposition
-    */
-    loadValueProposition() {
-        $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/bastion.html");
+    newPropertiesSheet() {
+        this.properties_sheet = new BastionProperties(this.artefact)
     }
     /*
     ** Static Functionality

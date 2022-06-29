@@ -192,6 +192,7 @@ class OkitResourceProperties {
     }
 
     loadCostEstimate() {
+        console.info('Setting Cost Estimate')
         this.cost_estimate.text(this.resource.estimateCost())
     }
 
@@ -257,6 +258,12 @@ class OkitResourceProperties {
             pattern: "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$)+",
             title: 'IPv4 Address'
         },
+        // IPv4 IP Address List
+        ipv4_list: {
+            placeholder: '0.0.0.0,0.0.0.0',
+            pattern: "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(,\s?|$))+",
+            title: 'Comma separated IPv4 Addresses'
+        },
         // IPv4 CIDR
         ipv4_cidr: {
             placeholder: '0.0.0.0/0',
@@ -268,6 +275,12 @@ class OkitResourceProperties {
             placeholder: '0.0.0.0/0,0.0.0.0/0',
             pattern: "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(3[0-2]|[1-2][0-9]|[0-9]))(,\s?|$))+",
             title: 'Comma separated IPv4 CIDR blocks'
+        },
+        // IPv4 CIDR List
+        ipv4_single_cidr_list: {
+            placeholder: '0.0.0.0/0,0.0.0.0/0',
+            pattern: "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(32))(,\s?|$))+",
+            title: 'Comma separated Single IPv4 CIDR (/32)'
         },
         // IPv6 CIDR List
         ipv6_cidr_list: {
@@ -286,7 +299,8 @@ class OkitResourceProperties {
         }
     }
 
-    createInput(type='text', label='', id='', idx='', callback=undefined, data={}) {
+    createInput(type='text', label='', id='', idx='', callback_function=undefined, data={}) {
+        const callback = callback_function === undefined ? this.loadCostEstimate() : (d, i, n) => {callback_function(d, i, n);this.loadCostEstimate()}
         const row = d3.create('div').attr('class', 'tr').attr('id', this.trId(id, idx))
         let input = undefined
         let cell = undefined

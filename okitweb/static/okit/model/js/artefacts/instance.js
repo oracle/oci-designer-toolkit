@@ -117,7 +117,7 @@ class Instance extends OkitArtifact {
     /*
     ** Create Volume Attachment
     */
-   newVolumeAttachment() {
+    newVolumeAttachment() {
         return {
             resource_name: `${this.generateResourceName()}VolumeAttachment`,
             display_name: `${this.display_name} Volume Attachment`,
@@ -126,7 +126,7 @@ class Instance extends OkitArtifact {
             is_read_only: false,
             is_shareable: false
         }
-   }
+    }
 
     /*
     ** Delete Processing
