@@ -490,6 +490,20 @@ class OkitResourceProperties {
         })
     }
 
+    loadSelectFromList(select, list, empty_option=false, empty_value='', id_element='id', display_element='display_name') {
+        select.selectAll('*').remove()
+        if (empty_option) select.append('option').attr('selected', 'selected').attr('value', '').text(empty_value ? empty_value : '')
+        let id = ''
+        list.forEach((r, i) => {
+            const option = select.append('option').attr('value', r[id_element]).text(r[display_element])
+            if (i === 0 && !empty_option) {
+                option.attr('selected', 'selected')
+                id = r[id_element]
+            }
+        })
+        return id
+    }
+
     loadSelectFromMap(select, map) {
         select.selectAll('*').remove()
         map.forEach((v, t) => select.append('option').attr('value', v).text(t))

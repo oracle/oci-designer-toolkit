@@ -26,7 +26,10 @@ class DrgAttachmentView extends OkitArtefactView {
         /*
     ** Property Sheet Load function
     */
-    loadProperties() {
+    newPropertiesSheet() {
+        this.properties_sheet = new DrgAttachmentProperties(this.artefact)
+    }
+    loadProperties1() {
         const self = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/drg_attachment.html", () => {
             const self = this;
