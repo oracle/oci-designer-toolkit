@@ -26,22 +26,8 @@ class DrgAttachmentView extends OkitArtefactView {
         /*
     ** Property Sheet Load function
     */
-    loadProperties() {
-        const self = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/drg_attachment.html", () => {
-            const self = this;
-            this.getJsonView().loadVirtualCloudNetworksSelect('vcn_id')
-            this.getJsonView().loadDrgsSelect('drg_id')
-            this.getJsonView().loadRouteTablesSelect('route_table_id', this.vcn_id, true)
-            this.getJsonView().loadDrgRouteTablesSelect('drg_route_table_id', this.drg_id, true)
-            loadPropertiesSheet(self.artefact);
-        });
-    }
-    /*
-    ** Load and display Value Proposition
-    */
-    loadValueProposition() {
-        $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/drg_attachment.html");
+    newPropertiesSheet() {
+        this.properties_sheet = new DrgAttachmentProperties(this.artefact)
     }
     /*
     ** Static Functionality

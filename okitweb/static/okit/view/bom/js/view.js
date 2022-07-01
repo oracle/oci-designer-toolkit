@@ -17,16 +17,6 @@ class OkitBoMView extends OkitJsonView {
         return new OkitBoMView(model, oci_data, resource_icons, parent_id)
     }
 
-    // currencies = {
-    //     GBP: {name: 'British Pound', symbol: '£'},
-    //     USD: {name: 'US Dollar', symbol: '$'},
-    //     EUR: {name: 'Euro', symbol: '€'},
-    //     AUD: {name: 'Australian Dollar', symbol: 'A$'},
-    //     CAD: {name: 'Canadian Dollar', symbol: 'CA$'},
-    //     NZD: {name: 'New Zealand Dollar', symbol: 'NZ$'},
-    //     SEK: {name: 'Swedish Krona', symbol: 'SEK '},
-    //     NOK: {name: 'Norwegian Krone', symbol: 'NOK '},
-    // }
     currencies = OkitOciProductPricing.currencies
 
     draw(for_export=false) {
