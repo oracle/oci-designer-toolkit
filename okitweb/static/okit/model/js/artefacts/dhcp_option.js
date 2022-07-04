@@ -65,6 +65,7 @@ class DhcpOption extends OkitArtifact {
    addDefaultOptions(vcn_name) {
         const search_domain = this.newOption()
         search_domain.type =  "SearchDomain"            
+        search_domain.server_type =  ''          
         search_domain.search_domain_names = [`${this.getVcnDnsLabel()}.oraclevcn.com`]
         this.options.push(search_domain)
    }

@@ -57,7 +57,7 @@ class DhcpOptionProperties extends OkitResourceProperties {
         const opt_table = this.createTable('', `${self.id}_option`, '')
         this.append(opt_details.div, opt_table.table)
         // Option Type
-        const option_type = this.createInput('select', 'Type', `${id}_type`, idx, (d, i, n) => {option.type = n[i].value; self.showOptionRows(option, id, idx)})
+        const option_type = this.createInput('select', 'Type', `${id}_type`, idx, (d, i, n) => {option.type = n[i].value; self.optionTypeChanged(option, id, idx)})
         this.append(opt_table.tbody, option_type.row)
         this.loadOptionTypeSelect(option_type.input)
         option_type.input.property('value', option.type)
@@ -105,6 +105,17 @@ class DhcpOptionProperties extends OkitResourceProperties {
     loadTypeSelect(type_select, types_map) {
         types_map.forEach((v, t) => type_select.append('option').attr('value', v).text(t))
     }
+    optionTypeChanged(option, id, idx) {
+        if (option.type === 'SearchDomain') {
+            option.server_type = ''
+            option.custom_dns_servers = []
+        } else if (option.server_type === '') {
+            option.server_type = 'VcnLocalPlusInternet'
+            option.search_domain_names = []
+            d3.select(`#${this.trId(`${id}_server_type`, idx)}`).property('value', option.server_type)
+        }
+        this.showOptionRows(option, id, idx)
+    }
     showOptionRows(option, id, idx) {
         this.hideProperty(`${id}_server_type`, idx)
         this.hideProperty(`${id}_custom_dns_servers`, idx)
@@ -117,5 +128,8 @@ class DhcpOptionProperties extends OkitResourceProperties {
         } else {
             this.showProperty(`${id}_search_domain_names`, idx)
         }
+        this.setPropertyValue(`${id}_server_type`, idx, option.server_type)
+        this.setPropertyValue(`${id}_custom_dns_servers`, idx, option.custom_dns_servers ? option.custom_dns_servers.join(',') : '')
+        this.setPropertyValue(`${id}_search_domain_names`, idx, option.search_domain_names ? option.search_domain_names.join(',') : '')
     }
 }

@@ -15,6 +15,8 @@
 ### Bug Fixes
 1. Fix issue where Instance was set to public IP on private network and private on public network.
 2. Fix issue where Subnets can not be deleted if an instance exists in another subnet.
+3. Resolve issue where Server Type was still being added to Terraform for DHCP Options which specify Search Domain as the type.
+4. Add filtering of PCA Queries data for all types of resource.
 
 
 ## Version 0.37.0
