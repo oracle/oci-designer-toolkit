@@ -270,6 +270,11 @@ class PCAQuery(OCIConnection):
                 logger.warn(e)
         # Remove Availability Domains
         self.dropdown_json.pop('availability_domains', None)
+        # Filter
+        filtered_resources = {}
+        for k, v in self.dropdown_json.items():
+            filtered_resources[k] = [r for r in self.dropdown_json[k] if  r.get('lifecycle_state', "AVAILABLE") in self.LIFECYCLE_STATES]
+        self.dropdown_json = filtered_resources
         return self.dropdown_json
     
     # Ancillary Resources
