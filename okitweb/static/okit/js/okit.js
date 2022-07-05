@@ -108,7 +108,7 @@ class OkitOCIData {
     }
 
     storeLocal(profile, region='') {
-        console.info(`Storing Local Dropdown data for ${profile}`);
+        console.info(`Storing Local Dropdown data for Profile: ${profile} Region: ${region}`);
         const local_data = localStorage.getItem(this.key)
         let cache = {}
         if (local_data) cache = JSON.parse(local_data)
@@ -127,7 +127,7 @@ class OkitOCIData {
 
     loadLocal(profile, region='') {
         const local_data = localStorage.getItem(this.key)
-        console.info(`Loading Local Dropdown data for ${profile}`);
+        console.info(`Loading Local Dropdown data for Profile: ${profile} Region: ${region}`);
         let cache = {}
         if (local_data) cache = JSON.parse(local_data)
         if (profile && region && cache[profile] && cache[profile][region]) {
@@ -153,7 +153,7 @@ class OkitOCIData {
     }
 
     save(profile, region='') {
-        console.info('Saving Dropdown data for', profile);
+        console.info(`Saving Dropdown data for Profile: ${profile} Region: ${region}`);
         this.storeLocal(profile, region);
         $.ajax({
             type: 'post',
