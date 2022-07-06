@@ -2,7 +2,7 @@
 ** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
-console.info('Loaded Designer AutonomousDatabase View Javascript');
+console.debug('Loaded Designer AutonomousDatabase View Javascript');
 
 /*
 ** Define AutonomousDatabase View Artifact Class
@@ -15,12 +15,10 @@ class AutonomousDatabaseView extends OkitDesignerArtefactView {
     // -- Reference
     get icon_definition_id() {return this.db_workload.startsWith('DW') ? OkitJsonView.toSvgIconDef('AutonomousDataWarehouseCloudService') : super.icon_definition_id;}
     get parent_id() {
-        let subnet = this.getJsonView().getSubnet(this.artefact.subnet_id);
+        const subnet = this.getJsonView().getSubnet(this.artefact.subnet_id);
         if (subnet && subnet.compartment_id === this.artefact.compartment_id) {
-            console.info('Using Subnet as parent');
             return this.subnet_id;
         } else {
-            console.info('Using Compartment as parent');
             return this.compartment_id;
         }
     }

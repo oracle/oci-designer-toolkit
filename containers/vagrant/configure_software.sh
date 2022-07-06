@@ -50,7 +50,7 @@ source ${OKIT_DIR}/.venv/bin/activate
 # Update python & Install modules
 python3 -m pip install -U pip
 python3 -m pip install -U setuptools
-python3 -m pip install --no-cache-dir authlib flask gitpython git-url-parse gunicorn oci openpyxl pandas python-magic pyyaml requests xlsxwriter
+python3 -m pip install --no-cache-dir authlib flask gitpython git-url-parse gunicorn oci openpyxl python-magic pyyaml requests
 # Clone OKIT 
 git clone -b ${OKIT_BRANCH} https://github.com/oracle/oci-designer-toolkit.git ${OKIT_GITHUB_DIR}/oci-designer-toolkit
 # Create OKIT Required Directories

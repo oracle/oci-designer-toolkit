@@ -2,7 +2,7 @@
 ** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
-console.info('Loaded Dhcp Option Javascript');
+console.debug('Loaded Dhcp Option Javascript');
 
 /*
 ** Define Dhcp Option Class
@@ -65,6 +65,7 @@ class DhcpOption extends OkitArtifact {
    addDefaultOptions(vcn_name) {
         const search_domain = this.newOption()
         search_domain.type =  "SearchDomain"            
+        search_domain.server_type =  ''          
         search_domain.search_domain_names = [`${this.getVcnDnsLabel()}.oraclevcn.com`]
         this.options.push(search_domain)
    }

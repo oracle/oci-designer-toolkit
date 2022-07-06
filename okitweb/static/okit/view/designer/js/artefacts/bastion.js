@@ -2,7 +2,7 @@
 ** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
-console.info('Loaded Bastion View Javascript');
+console.debug('Loaded Bastion View Javascript');
 
 /*
 ** Define Bastion View Class
@@ -31,15 +31,8 @@ class BastionView extends OkitArtefactView {
     /*
     ** Property Sheet Load function
     */
-    loadProperties() {
-        const self = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/bastion.html", () => {loadPropertiesSheet(self.artefact);});
-    }
-    /*
-    ** Load and display Value Proposition
-    */
-    loadValueProposition() {
-        $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/bastion.html");
+    newPropertiesSheet() {
+        this.properties_sheet = new BastionProperties(this.artefact)
     }
     /*
     ** Static Functionality

@@ -1,6 +1,24 @@
 # Release Notes
 
 
+## Version 0.38.0
+**Release Date**: 6th July 2022
+### Features
+1. Disable config selection for invalid entries.
+2. Remove current Cost Estimator because it is using the old, deprecated costing interface.
+3. Update Properties Sheet
+    1. Internet Gateway
+    2. NAT Gateway
+    3. Local Peering Gateway
+    4. Bastion
+    5. DRG Attachment
+### Bug Fixes
+1. Fix issue where Instance was set to public IP on private network and private on public network.
+2. Fix issue where Subnets can not be deleted if an instance exists in another subnet.
+3. Resolve issue where Server Type was still being added to Terraform for DHCP Options which specify Search Domain as the type.
+4. Add filtering of PCA Queries data for all types of resource.
+
+
 ## Version 0.37.0
 **Release Date**: 25th May 2022
 ### Features

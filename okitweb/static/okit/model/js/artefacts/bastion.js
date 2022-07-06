@@ -2,7 +2,7 @@
 ** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
-console.info('Loaded Bastion Javascript');
+console.debug('Loaded Bastion Javascript');
 
 /*
 ** Define Bastion Class
@@ -23,7 +23,7 @@ class Bastion extends OkitArtifact {
         this.client_cidr_block_allow_list = [];
         this.max_session_ttl_in_seconds = 180 * 60;
         this.phone_book_entry = '';
-        this.static_jump_host_ip_addresses = '';
+        this.static_jump_host_ip_addresses = [];
         // Update with any passed data
         this.merge(data);
         this.convert();
@@ -62,7 +62,7 @@ OkitJson.prototype.getBastion = function(id='') {
             return artefact;
         }
     }
-return undefined;
+    return undefined;
 }
 OkitJson.prototype.deleteBastion = function(id) {
     this.bastions = this.bastions ? this.bastions.filter((r) => r.id !== id) : []

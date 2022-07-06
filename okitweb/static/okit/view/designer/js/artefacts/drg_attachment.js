@@ -2,7 +2,7 @@
 ** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
-console.info('Loaded Drg Attachment View Javascript');
+console.debug('Loaded Drg Attachment View Javascript');
 
 /*
 ** Define Drg Attachment View Class
@@ -26,22 +26,8 @@ class DrgAttachmentView extends OkitArtefactView {
         /*
     ** Property Sheet Load function
     */
-    loadProperties() {
-        const self = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/drg_attachment.html", () => {
-            const self = this;
-            this.getJsonView().loadVirtualCloudNetworksSelect('vcn_id')
-            this.getJsonView().loadDrgsSelect('drg_id')
-            this.getJsonView().loadRouteTablesSelect('route_table_id', this.vcn_id, true)
-            this.getJsonView().loadDrgRouteTablesSelect('drg_route_table_id', this.drg_id, true)
-            loadPropertiesSheet(self.artefact);
-        });
-    }
-    /*
-    ** Load and display Value Proposition
-    */
-    loadValueProposition() {
-        $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/drg_attachment.html");
+    newPropertiesSheet() {
+        this.properties_sheet = new DrgAttachmentProperties(this.artefact)
     }
     /*
     ** Static Functionality

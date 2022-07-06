@@ -2,7 +2,7 @@
 ** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
-console.info('Loaded Load Balancer Javascript');
+console.debug('Loaded Load Balancer Javascript');
 
 /*
 ** Define Load Balancer Class
@@ -68,6 +68,12 @@ class LoadBalancer extends OkitArtifact {
             delete this.instance_ids
             delete this.backend_policy
         }
+        // Check Resource Names
+        this.backend_sets.forEach((bs, i) => {
+            bs.resource_name = bs.resource_name ? bs.resource_name : `${this.generateResourceName()}BackendSet${i}`
+            bs.backends.forEach((b, j) => b.resource_name = b.resource_name ? b.resource_name : `${this.generateResourceName()}BackendSet${i}BackEnd${j}`)
+        })
+        this.listeners.forEach((l, i) => l.resource_name = l.resource_name ? l.resource_name : `${this.generateResourceName()}Listener${i}`)
     }
 
     /*

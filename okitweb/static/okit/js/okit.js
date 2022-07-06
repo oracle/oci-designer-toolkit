@@ -2,7 +2,7 @@
 ** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
-console.info('Loaded OKIT Javascript');
+console.debug('Loaded OKIT Javascript');
 /*
 ** Add Clone to JSON package
  */
@@ -37,19 +37,34 @@ class OkitOCIConfig {
     constructor(loaded_callback) {
         this.results = {valid: true};
         this.loaded_callback = loaded_callback;
-        this.validate();
+        // this.validate();
         this.load();
     }
 
     get valid() {return this.results.valid}
 
     load() {
-        let me = this;
-        $.getJSON('config/sections', function(resp) {
-            $.extend(true, me, resp);
-            if (me.loaded_callback) me.loaded_callback();
-            console.info(me)
-        });
+        // let me = this;
+        // $.getJSON('config/sections', function(resp) {
+        //     $.extend(true, me, resp);
+        //     if (me.loaded_callback) me.loaded_callback();
+        //     console.info(me)
+        // });
+        const config_sections = $.getJSON('config/sections', {cache: false})
+        const validate_config = $.getJSON('config/validate', {cache: false})
+        const validated_config_sections = $.getJSON('config/validated_sections', {cache: false})
+    
+        Promise.all([config_sections, validate_config, validated_config_sections]).then(results => {
+            this.sections = results[0].sections
+            this.validation_results = results[1].results
+            this.results = results[1].results
+            this.validated_sections = results[2].sections
+            if (!this.validation_results.valid) {
+                $('#config_link').removeClass('hidden');
+                $('#config_link_div').removeClass('collapsed');
+            }
+            if (this.loaded_callback) this.loaded_callback();
+        })
     }
 
     validate() {
@@ -93,7 +108,7 @@ class OkitOCIData {
     }
 
     storeLocal(profile, region='') {
-        console.info(`Storing Local Dropdown data for ${profile}`);
+        console.info(`Storing Local Dropdown data for Profile: ${profile} Region: ${region}`);
         const local_data = localStorage.getItem(this.key)
         let cache = {}
         if (local_data) cache = JSON.parse(local_data)
@@ -112,7 +127,7 @@ class OkitOCIData {
 
     loadLocal(profile, region='') {
         const local_data = localStorage.getItem(this.key)
-        console.info(`Loading Local Dropdown data for ${profile}`);
+        console.info(`Loading Local Dropdown data for Profile: ${profile} Region: ${region}`);
         let cache = {}
         if (local_data) cache = JSON.parse(local_data)
         if (profile && region && cache[profile] && cache[profile][region]) {
@@ -138,7 +153,7 @@ class OkitOCIData {
     }
 
     save(profile, region='') {
-        console.info('Saving Dropdown data for', profile);
+        console.info(`Saving Dropdown data for Profile: ${profile} Region: ${region}`);
         this.storeLocal(profile, region);
         $.ajax({
             type: 'post',

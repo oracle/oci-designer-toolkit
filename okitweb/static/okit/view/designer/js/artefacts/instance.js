@@ -2,7 +2,7 @@
 ** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
-console.info('Loaded Designer Instance View Javascript');
+console.debug('Loaded Designer Instance View Javascript');
 
 /*
 ** Define Instance View Artifact Class
@@ -141,7 +141,7 @@ OkitJsonView.prototype.dropInstanceView = function(target) {
     let view_artefact = this.newInstance();
     if (target.type === Subnet.getArtifactReference()) {
         view_artefact.getArtefact().primary_vnic.subnet_id = target.id;
-        view_artefact.artefact.primary_vnic.assign_public_ip = this.getSubnet(target.id).prohibit_public_ip_on_vnic;
+        view_artefact.artefact.primary_vnic.assign_public_ip = !this.getSubnet(target.id).prohibit_public_ip_on_vnic;
         view_artefact.getArtefact().compartment_id = target.compartment_id;
     } else if (target.type === Compartment.getArtifactReference()) {
         view_artefact.getArtefact().compartment_id = target.id;

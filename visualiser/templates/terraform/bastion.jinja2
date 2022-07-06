@@ -2,7 +2,6 @@
 # ------ Read Bastion
 data "oci_bastion_bastion" "{{ resource_name }}" {
     # Required
-    compartment_id  = {{ compartment_ocid }}
     bastion_id = {{ ocid | safe }}
 }
 

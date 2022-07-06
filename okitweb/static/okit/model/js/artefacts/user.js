@@ -2,7 +2,7 @@
 ** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
-console.info('Loaded User Javascript');
+console.debug('Loaded User Javascript');
 
 /*
 ** Define User Class
@@ -22,6 +22,10 @@ class User extends OkitArtifact {
         // Update with any passed data
         this.merge(data);
         this.convert();
+    }
+    convert() {
+        super.convert()
+        if (!this.description || this.description === '') this.description = this.name
     }
     /*
     ** Name Generation

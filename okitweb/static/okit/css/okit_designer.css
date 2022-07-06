@@ -374,6 +374,27 @@
     background-size: 20px 20px;
 }
 
+.property-editor-cost-estimate {
+    display: inline-block;
+    margin-left: auto; 
+    align-items: right;
+    width: 100%;
+}
+
+.property-editor-cost-estimate > div {
+    margin-left: auto; 
+    width: fit-content;
+}
+
+.property-editor-cost-estimate > div > label {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.property-editor-cost-estimate > div > label:last-child {
+    font-weight: bold;
+}
+
 .okit-resource-properties-panel {
     height: 100%;
     width: 100%;
@@ -508,17 +529,33 @@ rect.highlight-properties {
     opacity: 0.6;
 }
 
-.read-only > g {
-    opacity: 0.6;
-}
-
-.read-only > rect {
-    opacity: 0.6;
-}
-
+.read-only > g,
+.read-only > rect,
 .read-only > text {
     opacity: 0.6;
 }
+
+.top-level > g,
+.top-level > rect,
+.top-level > text {
+    opacity: 0.7;
+}
+
+.top-level > foreignObject input,
+.top-level > foreignObject button,
+.top-level > foreignObject select,
+.top-level > foreignObject .action-button-background {
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+/* .top-level > rect {
+    opacity: 0.7;
+}
+
+.top-level > text {
+    opacity: 0.7;
+} */
 
 /*
 ** Cost Estimate and Value Proposition
@@ -546,4 +583,6 @@ rect.highlight-properties {
     font-weight: bold;
     font-style: italic;
     font-family: Arial;
+    word-wrap: normal;
+    text-overflow: ellipsis;
 }

@@ -98,38 +98,23 @@ def readAndValidateConfigFileSections(config_file='~/.oci/config'):
                 "reason": ''
             }
             # Validate Key
-            key_file = config[section]['key_file']
-            if not os.path.exists(os.path.expanduser(key_file)):
+            # key_file = config[section]['key_file']
+            # if not os.path.exists(os.path.expanduser(key_file)):
+            #     entry["valid"] = False
+            #     entry["reason"] = f'{key_file} does not exist in ~/.oci'
+            if config.has_option(section, 'key_file'):
+                key_file = config[section]['key_file']
+                if not os.path.exists(os.path.expanduser(key_file)):
+                    entry["valid"] = False
+                    entry["reason"] = '[{0!s:s}] Key File {1!s:s} does not exist.'.format(section, key_file)
+            else:
                 entry["valid"] = False
-                entry["reason"] = f'{key_file} does not exist in ~/.oci'
+                entry["reason"] = '[{0!s:s}] Key File entry does not exist.'.format(section)
             config_sections.append(entry)
     else:
         config_sections = [{"section": 'InstancePrincipal', "valid": True, "reason": ''}]
     logger.info('Config Sections {0!s:s}'.format(config_sections))
     return config_sections
-
-def readGitConfigFile(config_file='~/.oci/git_repositories'):
-    logger.debug('Setting File {0!s:s}'.format(config_file))
-    abs_config_file = os.path.expanduser(config_file)
-    logger.debug('Setting File {0!s:s}'.format(abs_config_file))
-    config = configparser.ConfigParser()
-    config.read(abs_config_file)
-    repo_list = []
-    for each_git_section in config.sections():
-        repo_list.append({'label': each_git_section, 'branch': config[each_git_section]['branch'], 'url': config[each_git_section]['url']})
-    logger.info(repo_list)
-    return repo_list
-
-def getConfigFileValue(section, key, config_file='~/.oci/config'):
-    value = ''
-    if os.getenv('OCI_CLI_AUTH', 'config') != 'instance_principal':
-        logger.debug('Config File {0!s:s}'.format(config_file))
-        abs_config_file = os.path.expanduser(config_file)
-        logger.debug('Config File {0!s:s}'.format(abs_config_file))
-        config = configparser.ConfigParser()
-        config.read(abs_config_file)
-        value = config[section][key]
-    return value
 
 def validateConfigFile(config_file='~/.oci/config'):
     results = {"valid": True, "errors": [], "sections": {}}
@@ -150,13 +135,38 @@ def validateConfigFile(config_file='~/.oci/config'):
                 if config.has_option(section, 'key_file'):
                     key_file = config[section]['key_file']
                     if not os.path.exists(os.path.expanduser(key_file)):
+                        results["valid"] = False
                         results["sections"][section]["valid"] = False
                         results["errors"].append('[{0!s:s}] Key File {1!s:s} does not exist.'.format(section, key_file))
                 else:
+                    results["valid"] = False
                     results["sections"][section]["valid"] = False
                     results["errors"].append('[{0!s:s}] Key File entry does not exist.'.format(section))
         logger.info(results)
     return results
+
+def getConfigFileValue(section, key, config_file='~/.oci/config'):
+    value = ''
+    if os.getenv('OCI_CLI_AUTH', 'config') != 'instance_principal':
+        logger.debug('Config File {0!s:s}'.format(config_file))
+        abs_config_file = os.path.expanduser(config_file)
+        logger.debug('Config File {0!s:s}'.format(abs_config_file))
+        config = configparser.ConfigParser()
+        config.read(abs_config_file)
+        value = config[section][key]
+    return value
+
+def readGitConfigFile(config_file='~/.oci/git_repositories'):
+    logger.debug('Setting File {0!s:s}'.format(config_file))
+    abs_config_file = os.path.expanduser(config_file)
+    logger.debug('Setting File {0!s:s}'.format(abs_config_file))
+    config = configparser.ConfigParser()
+    config.read(abs_config_file)
+    repo_list = []
+    for each_git_section in config.sections():
+        repo_list.append({'label': each_git_section, 'branch': config[each_git_section]['branch'], 'url': config[each_git_section]['url']})
+    logger.info(repo_list)
+    return repo_list
 
 #
 # Define Error Handlers
@@ -639,6 +649,15 @@ def dropdownData(profile, region):
 def configSections():
     if request.method == 'GET':
         config_sections = {"sections": readConfigFileSections()}
+        logger.info('Config Sections {0!s:s}'.format(config_sections))
+        return config_sections
+    else:
+        return 'Unknown Method', 500
+
+@bp.route('config/validated_sections', methods=(['GET']))
+def configValidatedSections():
+    if request.method == 'GET':
+        config_sections = {"sections": readAndValidateConfigFileSections()}
         logger.info('Config Sections {0!s:s}'.format(config_sections))
         return config_sections
     else:

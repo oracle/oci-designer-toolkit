@@ -12,6 +12,7 @@
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_views.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/view/js/okit_view.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='okit/pricing/js/okit_oci_pricing.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/properties/js/okit_properties.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/panels/js/base_panel.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/panels/js/validation_panel.js') }}"></script>
@@ -21,6 +22,7 @@
     <script type="text/javascript" src="{{ url_for('static', filename='okit/view/json/js/okit_json_view.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/view/tree/js/okit_tree_view.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/view/oci/js/view.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='okit/view/bom/js/view.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/view/terraform/js/view.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/view/identity/js/okit_identity_view.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/query/oci/js/okit_oci_query.js') }}"></script>
@@ -94,6 +96,7 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/designer/css/okit_designer_view.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/tree/css/okit_tree_view.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/oci/css/view.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/bom/css/view.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/terraform/css/view.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/json/css/okit_json_view.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/tabular/css/okit_tabular_view.css') }}">
@@ -219,6 +222,7 @@
                 <option id="relationship_view_option" value="relationship">Relationship</option>
                 <option id="json_view_option" value="json">Json</option>
                 <option id="tf_view_option" value="terraform">Terraform</option>
+                {%- if developer_mode -%}<option id="bom_view_option" value="bom">BoM</option>{%- endif -%}
                 {%- if developer_mode -%}<option id="cache_view_option" value="cache">Cache</option>{%- endif -%}
             </select>
         </div>
@@ -236,7 +240,7 @@
             <div id="settings_toolbar_button" class="settings okit-toolbar-button" title="Settings" onclick="handleSettings()"></div>
             <div id="validate_toolbar_button" class="validate okit-toolbar-button" title="Validate" onclick="handleValidate()"></div>
             <div id="properties_toolbar_button" class="properties okit-toolbar-button" title="Resource Properties" onclick="handleOpenProperties()"></div>
-            <div id="cost_toolbar_button" class="cost-estimate okit-toolbar-button" title="Cost Estimate" onclick="handleEstimateCost()"></div>
+            {%- if developer_mode -%}<div id="cost_toolbar_button" class="cost-estimate okit-toolbar-button" title="Cost Estimate" onclick="handleEstimateCost()"></div>{%- endif -%}
             <div id="documentation_toolbar_button" class="documentation okit-toolbar-button" title="Documentation" onclick="handleDocumentation()"></div>
             <div id="terraform_toolbar_button" class="terraform okit-toolbar-button" title="Terraform" onclick="handleFreeformTerraform()"></div>
             <div id="tags_toolbar_button" class="global-tags okit-toolbar-button" title="Global Tags" onclick="handleGlobalTags()"></div>

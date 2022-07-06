@@ -2,7 +2,7 @@
 ** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
-console.info('Loaded Drg Javascript');
+console.debug('Loaded Drg Javascript');
 
 /*
 ** Define Drg Class
@@ -32,7 +32,10 @@ class Drg extends OkitArtifact {
         })
         this.route_distributions.forEach((rd, idx) => {
             rd.resource_name = rd.resource_name ? rd.resource_name : `${this.resource_name}RouteDistribution${idx}`
-            rd.statements.forEach((rs, i) => rs.resource_name = rs.resource_name ? rs.resource_name : `${rd.resource_name}Statement${i}`)
+            rd.statements.forEach((rs, i) => {
+                rs.resource_name = rs.resource_name ? rs.resource_name : `${rd.resource_name}Statement${i}`
+                if (Array.isArray (rs.match_criteria))  rs.match_criteria = rs.match_criteria.length > 0 ? rs.match_criteria[0] : {}
+            })
         })
     }
     /*
@@ -72,12 +75,15 @@ class Drg extends OkitArtifact {
         return {
             resource_name: `${this.generateResourceName()}DistributionStatement`,
             action: 'ACCEPT',
-            match_criteria: {
-                match_type: 'DRG_ATTACHMENT_ID',
-                attachment_type: 'VCN',
-                drg_attachment_id: ''
-            },
+            match_criteria: this.newMatchCriteria(),
             priority: 1
+        }
+    }
+    newMatchCriteria() {
+        return {
+            match_type: 'DRG_ATTACHMENT_ID',
+            attachment_type: 'VCN',
+            drg_attachment_id: ''
         }
     }
     /*

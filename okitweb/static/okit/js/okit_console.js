@@ -2,11 +2,11 @@
 ** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
-console.info('Loaded Console Javascript');
+console.debug('Loaded Console Javascript');
 
 
-const okitVersion = '0.37.0';
-const okitReleaseDate = '25th May 2022';
+const okitVersion = '0.38.0';
+const okitReleaseDate = '6th July 2022';
 
 // Validation
 const validate_error_colour = "#ff4d4d";
@@ -100,7 +100,8 @@ function loadHeaderConfigDropDown() {
     */
     const console_header_config_select = $('#console_header_config_select')
     console_header_config_select.empty()
-    okitOciConfig.sections.forEach((section) => {console_header_config_select.append($('<option>').attr('value', section).attr('disabled', section === 'Error').text(section))})
+    // okitOciConfig.sections.forEach((section) => {console_header_config_select.append($('<option>').attr('value', section).attr('disabled', section === 'Error').text(section))})
+    okitOciConfig.validated_sections.forEach((section) => {console_header_config_select.append($('<option>').attr('value', section.section).attr('disabled', !section.valid).attr('title', section.reason).text(section.section))})
     console_header_config_select.val(okitSettings.profile)
     const console_header_region_select = $('#console_header_region_select')
     console_header_region_select.empty()

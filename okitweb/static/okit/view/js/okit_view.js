@@ -2,7 +2,7 @@
 ** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
-console.info('Loaded OKIT View Javascript');
+console.debug('Loaded OKIT View Javascript');
 
 class OkitJsonView {
     constructor(okitjson=null, oci_data=null, resource_icons=null, parent_id=null) {
@@ -573,8 +573,9 @@ class OkitArtefactView {
         const definition = this.svg_definition;
         // const g = parent_svg.append("g")
         //     .attr("transform", `translate(${definition.x}, ${definition.y})`)
+        const svg_class = this.artefact ? this.artefact.read_only ? 'top-level' : this.artefact.read_only ? 'read-only' : '' : ''
         const svg = parent_svg.append("svg")
-            .attr("class", this.artefact && this.artefact.read_only ? 'read-only' : '')
+            .attr("class", svg_class)
             .attr("id",        definition.id)
             .attr("data-type", this.artefact ? this.artefact.getArtifactReference() : '')
             .attr("x",         definition.x)
@@ -605,35 +606,35 @@ class OkitArtefactView {
         return rect;
     }
 
-    drawIcon1(svg) {
-        const icon = svg.append('svg')
-            .attr("width",     icon_width)
-            .attr("height",    icon_height)
-            .append('g')
-                .attr("style", "pointer-events: bounding-box;")
-                .append("use")
-                .attr("xlink:href",`#${this.icon_definition_id}`)
-                .attr("transform", this.icon_transform);
-        return icon;
-    }
+    // drawIcon1(svg) {
+    //     const icon = svg.append('svg')
+    //         .attr("width",     icon_width)
+    //         .attr("height",    icon_height)
+    //         .append('g')
+    //             .attr("style", "pointer-events: bounding-box;")
+    //             .append("use")
+    //             .attr("xlink:href",`#${this.icon_definition_id}`)
+    //             .attr("transform", this.icon_transform);
+    //     return icon;
+    // }
 
     drawIcon(svg) {
         const definition = this.getIconDefinition()
         const icon = svg.append('g')
             .attr("style", "pointer-events: bounding-box;")
             // .attr("class", this.artefact && this.artefact.read_only ? 'read-only' : '')
-        .append("use")
-            .attr("xlink:href",`#${this.icon_definition_id}`)
-            .attr("transform", this.icon_transform);
+            .append("use")
+                .attr("xlink:href",`#${this.icon_definition_id}`)
+                .attr("transform", this.icon_transform);
         return icon;
     }
 
     drawForeignObject(svg) {
         const definition = this.getForeignObjectDefinition()
         const foreignObject = svg.append('foreignObject').attr('width', definition.width).attr('height', definition.height).attr('transform', definition.transform)
-        const details_div = foreignObject.append('xhtml:div').attr('class', `okit-resource-svg-details`)
-        details_div.append('div').attr('class', 'okit-resource-svg-title').append('label').text(this.type_text)
-        details_div.append('div').append('input').attr('class', 'okit-resource-svg-display-name').attr('tabindex', -1)
+        const details_div = foreignObject.append('xhtml:div').attr('xmlns', 'http://www.w3.org/1999/xhtml').attr('class', `okit-resource-svg-details`)
+        details_div.append('xhtml:div').attr('xmlns', 'http://www.w3.org/1999/xhtml').attr('class', 'okit-resource-svg-title').append('xhtml:label').attr('xmlns', 'http://www.w3.org/1999/xhtml').text(this.type_text)
+        details_div.append('xhtml:div').attr('xmlns', 'http://www.w3.org/1999/xhtml').attr('class', 'okit-resource-svg-input').append('xhtml:input').attr('xmlns', 'http://www.w3.org/1999/xhtml').attr('class', 'okit-resource-svg-display-name').attr('tabindex', -1)
             .attr('type', 'text')
             .attr('name', `${this.resource_name}_display_name`)
             .attr('value', `${this.display_name}`)
