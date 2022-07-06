@@ -17,6 +17,7 @@ from flask import request
 
 import json
 from common.okitCommon import logJson
+from common.okitCommon import readJsonFile
 from model.okitCostEstimator import OCIPriceEstimator
 from common.okitLogging import getLogger
 
@@ -52,3 +53,29 @@ def pricingEstimateDownload():
     else:
         return '404'
 
+@bp.route('products', methods=(["GET"]))
+def pricingProducts():
+    if request.method == 'GET':
+        bom_dir = os.path.abspath(os.path.join(bp.static_folder, 'json', 'bom'))
+        products_file = os.path.abspath(os.path.join(bom_dir, 'products.json'))
+        return readJsonFile(products_file)
+    else:
+        return '404'
+
+@bp.route('prices', methods=(["GET"]))
+def pricingPrices():
+    if request.method == 'GET':
+        bom_dir = os.path.abspath(os.path.join(bp.static_folder, 'json', 'bom'))
+        prices_file = os.path.abspath(os.path.join(bom_dir, 'prices.json'))
+        return readJsonFile(prices_file)
+    else:
+        return '404'
+
+@bp.route('sku_map', methods=(["GET"]))
+def pricingSkuMap():
+    if request.method == 'GET':
+        bom_dir = os.path.abspath(os.path.join(bp.static_folder, 'json', 'bom'))
+        prices_file = os.path.abspath(os.path.join(bom_dir, 'sku_map.json'))
+        return readJsonFile(prices_file)
+    else:
+        return '404'

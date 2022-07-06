@@ -131,6 +131,10 @@ summary:focus {
     max-width: 0;
 }
 
+.right-align {
+    text-align: right !important;
+}
+
 .okit-pointer-cursor {
     cursor: pointer;
 }

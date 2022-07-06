@@ -1,0 +1,23 @@
+/*
+# Copyright (c) 2020, 2022, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+ */
+
+.bom_heading {
+    display: grid;
+    grid-template-columns: auto 250px;
+    max-width: 100%;
+}
+
+.bom_heading > div {
+    vertical-align: middle;
+    margin: auto;
+}
+
+.okit-bom-bom-details {
+    margin: 1px 3px 1px 2px;
+}
+
+.okit-bom-estimate-details {
+    margin: 1px 3px 1px 2px;
+}

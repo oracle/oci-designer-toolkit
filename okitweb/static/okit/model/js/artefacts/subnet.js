@@ -2,7 +2,7 @@
 ** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
-console.info('Loaded Subnet Javascript');
+console.debug('Loaded Subnet Javascript');
 
 /*
 ** Define Subnet Artifact Class
@@ -42,7 +42,7 @@ class Subnet extends OkitArtifact {
      */
     deleteReferences() {
         // Instance Volume Attachment
-        this.getOkitJson().getInstances().forEach((r) => r.vnics = r.vnics.filter((v) => v.subnet_id !== this.id))
+        this.getOkitJson().getInstances().forEach((r) => r.vnic_attachments = r.vnic_attachments.filter((v) => v.subnet_id !== this.id))
     }
 
     /*

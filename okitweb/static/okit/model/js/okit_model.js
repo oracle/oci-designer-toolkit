@@ -2,7 +2,7 @@
 ** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
-console.info('Loaded OKIT Model Javascript');
+console.debug('Loaded OKIT Model Javascript');
 
 /*
 ** Representation of overall OKIT Model Data Structure
@@ -142,6 +142,7 @@ class OkitJson {
         });
         // Check for root compartment
         this.checkCompartmentIds();
+        if (okitOciProductPricing) okitOciProductPricing.generateBoM(this)
     }
     checkCompartmentIds() {
         const compartment_ids = this.compartments ? this.compartments.map((c) => c.id) : []
@@ -492,6 +493,18 @@ class OkitArtifact {
     // generateResourceNameFromDisplayName(name) {return titleCase(name).split(' ').join('').replaceAll('-','_')}
     generateResourceNameFromDisplayName = (name) => titleCase(name.split('_').join('-')).split(' ').join('').replaceAll('-','_')
 
+    estimateCost = () => {
+        const get_sku_function = `get${this.constructor.name}BoM`
+        const pricing = okitOciProductPricing ? okitOciProductPricing : new OkitOciProductPricing()
+        try {
+            const bom_details = pricing[get_sku_function](this)
+            return OkitOciProductPricing.formatPrice(bom_details.price_per_month, pricing.currency)
+        } catch (e) {
+            console.debug(e)
+            return OkitOciProductPricing.formatPrice(0, pricing.currency)
+        }
+    }
+
     /*
     ** Static Functionality
      */
@@ -514,35 +527,5 @@ class OkitArtifact {
     }
 
 }
-
-/*
-** Model Representation of OCI Regions
- */
-// class OkitRegionsJson {
-//     /*
-//     ** Create
-//      */
-//     constructor() {
-//         this['us-sanjose-1'] = new OkitJson();
-//         this['us-phoenix-1'] = new OkitJson();
-//         this['us-ashburn-1'] = new OkitJson();
-//         this['uk-london-1'] = new OkitJson();
-//         this['sa-saopaulo-1'] = new OkitJson();
-//         this['me-jeddah-1'] = new OkitJson();
-//         this['eu-zurich-1'] = new OkitJson();
-//         this['eu-frankfurt-1'] = new OkitJson();
-//         this['eu-amsterdam-1'] = new OkitJson();
-//         this['ca-toronto-1'] = new OkitJson();
-//         this['ca-montreal-1'] = new OkitJson();
-//         this['ap-tokyo-1'] = new OkitJson();
-//         this['ap-sydney-1'] = new OkitJson();
-//         this['ap-seoul-1'] = new OkitJson();
-//         this['ap-osaka-1'] = new OkitJson();
-//         this['ap-mumbai-1'] = new OkitJson();
-//         this['ap-melbourne-1'] = new OkitJson();
-//         this['ap-hyderabad-1'] = new OkitJson();
-//         this['ap-chuncheon-1'] = new OkitJson();
-//     }
-// }
 
 let okitJsonModel

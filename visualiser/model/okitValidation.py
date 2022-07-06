@@ -77,56 +77,58 @@ class OCIJsonValidator(object):
     
     def validateFreeTier(self):
         self.validateSupportedResources('Free Tier', self.freetier_resources)
-        self.validateAutonomousDatabases()
-        self.validateBastions()
-        self.validateBlockStorageVolumes()
-        self.validateCompartments()
-        self.validateCustomerPremiseEquipments()
-        self.validateDhcpOptions()
-        self.validateDatabaseSystems()
-        self.validateDynamicRoutingGateways()
-        self.validateFastConnects()
-        self.validateFileStorageSystems()
-        self.validateGroups()
-        self.validateInstances()
-        self.validateInternetGateways()
-        self.validateIPSecConnections()
-        self.validateLoadBalancers()
-        self.validateLocalPeeringGateways()
-        self.validateMySqlDatabaseSystems()
-        self.validateNATGateways()
-        self.validateNetworkSecurityGroups()
-        self.validateObjectStorageBuckets()
-        self.validatePolicies()
-        self.validateRemotePeeringConnections()
-        self.validateRouteTables()
-        self.validateSecurityLists()
-        self.validateServiceGateways()
-        self.validateSubnets()
-        self.validateUsers()
-        self.validateVirtualCloudNetworks()
+        # self.validateAutonomousDatabases()
+        # self.validateBastions()
+        # self.validateBlockStorageVolumes()
+        # self.validateCompartments()
+        # self.validateCustomerPremiseEquipments()
+        # self.validateDhcpOptions()
+        # self.validateDatabaseSystems()
+        # self.validateDynamicRoutingGateways()
+        # self.validateFastConnects()
+        # self.validateFileStorageSystems()
+        # self.validateGroups()
+        # self.validateInstances()
+        # self.validateInternetGateways()
+        # self.validateIPSecConnections()
+        # self.validateLoadBalancers()
+        # self.validateLocalPeeringGateways()
+        # self.validateMySqlDatabaseSystems()
+        # self.validateNATGateways()
+        # self.validateNetworkSecurityGroups()
+        # self.validateObjectStorageBuckets()
+        # self.validatePolicies()
+        # self.validateRemotePeeringConnections()
+        # self.validateRouteTables()
+        # self.validateSecurityLists()
+        # self.validateServiceGateways()
+        # self.validateSubnets()
+        # self.validateUsers()
+        # self.validateVirtualCloudNetworks()
+        self.validateResources()
         return
 
     def validatePCA(self):
         self.validateSupportedResources('PCA-X9', self.pca_resources)
-        self.validateBlockStorageVolumes()
-        self.validateCompartments()
-        self.validateDhcpOptions()
-        self.validateDynamicRoutingGateways()
-        self.validateFileStorageSystems()
-        self.validateGroups()
-        self.validateInstances()
-        self.validateInternetGateways()
-        self.validateLocalPeeringGateways()
-        self.validateNATGateways()
-        self.validateNetworkSecurityGroups()
-        self.validateObjectStorageBuckets()
-        self.validatePolicies()
-        self.validateRouteTables()
-        self.validateSecurityLists()
-        self.validateSubnets()
-        self.validateUsers()
-        self.validateVirtualCloudNetworks()
+        # self.validateBlockStorageVolumes()
+        # self.validateCompartments()
+        # self.validateDhcpOptions()
+        # self.validateDynamicRoutingGateways()
+        # self.validateFileStorageSystems()
+        # self.validateGroups()
+        # self.validateInstances()
+        # self.validateInternetGateways()
+        # self.validateLocalPeeringGateways()
+        # self.validateNATGateways()
+        # self.validateNetworkSecurityGroups()
+        # self.validateObjectStorageBuckets()
+        # self.validatePolicies()
+        # self.validateRouteTables()
+        # self.validateSecurityLists()
+        # self.validateSubnets()
+        # self.validateUsers()
+        # self.validateVirtualCloudNetworks()
+        self.validateResources()
         return
 
     def validateResources(self):
@@ -148,6 +150,7 @@ class OCIJsonValidator(object):
         self.validateLoadBalancers()
         self.validateLocalPeeringGateways()
         self.validateMySqlDatabaseSystems()
+        self.validateMountTargets()
         self.validateNATGateways()
         self.validateNetworkLoadBalancers()
         self.validateNetworkSecurityGroups()
@@ -427,6 +430,20 @@ class OCIJsonValidator(object):
                         'element': 'drg_id'
                     }
                     self.results['errors'].append(error)
+            for resource in self.okit_json.get('drgs', []):
+                logger.info('Validating {!s}'.format(resource['display_name']))
+                for route_distribution in resource.get('route_distributions', []):
+                    for statement in route_distribution.get('statements', []):
+                        if statement.get('match_criteria', {}).get('match_type', '') == '':
+                            self.valid = False
+                            error = {
+                                'id': resource['id'],
+                                'type': 'DRG',
+                                'artefact': route_distribution['display_name'],
+                                'message': f'Match Criteria for Distribution Statement must be specified.',
+                                'element': 'match_type'
+                            }
+                            self.results['errors'].append(error)
 
 
     # Fast Connect
@@ -491,6 +508,28 @@ class OCIJsonValidator(object):
                         'element': 'subnet_id'
                     }
                     self.results['errors'].append(error)
+            # Check OS
+            if artefact['source_details']['os'] == '':
+                self.valid = False
+                error = {
+                    'id': artefact['id'],
+                    'type': 'Instance',
+                    'artefact': artefact['display_name'],
+                    'message': f'Operating System must be specified',
+                    'element': 'os'
+                }
+                self.results['errors'].append(error)
+            # Check OS Version
+            if artefact['source_details']['version'] == '':
+                self.valid = False
+                error = {
+                    'id': artefact['id'],
+                    'type': 'Instance',
+                    'artefact': artefact['display_name'],
+                    'message': f'Operating System Version must be specified',
+                    'element': 'version'
+                }
+                self.results['errors'].append(error)
             # Check Boot volume size
             if int(artefact['source_details']['boot_volume_size_in_gbs']) < 50 or int(artefact['source_details']['boot_volume_size_in_gbs']) > 32768:
                 self.valid = False
@@ -645,6 +684,22 @@ class OCIJsonValidator(object):
                                     'element': 'route_table_id'
                                 }
                                 self.results['errors'].append(error)
+
+    # Mount Targets
+    def validateMountTargets(self):
+        for resource in self.okit_json.get('mount_targets', []):
+            logger.info('Validating {!s}'.format(resource['display_name']))
+            for export in resource.get('exports', []):
+                if export.get('options', {}).get('source', '') == '':
+                    self.valid = False
+                    error = {
+                        'id': resource['id'],
+                        'type': 'Mount Target',
+                        'artefact': resource['display_name'],
+                        'message': 'Mount Target Export Source must be specified.',
+                        'element': 'source'
+                    }
+                    self.results['errors'].append(error)
 
     # MySql Database Systems
     def validateMySqlDatabaseSystems(self):

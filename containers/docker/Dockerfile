@@ -5,7 +5,7 @@
 FROM oraclelinux:7-slim
 LABEL "provider"="Oracle" \
       "issues"="https://github.com/oracle/oci-designer-toolkit/issues" \
-      "version"="0.37.0" \
+      "version"="0.38.0" \
       "description"="OKIT Web Server Container." \
       "copyright"="Copyright (c) 2020, 2022, Oracle and/or its affiliates."
 # SHELL ["/bin/bash", "-c"]
@@ -53,11 +53,9 @@ RUN yum install -y \
         gunicorn==20.0.4 \
         oci \
         openpyxl==3.0.7 \
-        pandas==1.1.2 \
         python-magic==0.4.22 \
         pyyaml==5.4.1 \
         requests==2.25.1 \
-        xlsxwriter==1.3.7 \
 # Create Workspace
  && mkdir -p /okit/{config,git,instance/git,instance/local,instance/templates/user,local,log,ssl,visualiser,okitweb,workspace,skeletons} \
 #  && mkdir -p /okit/okitweb/static/okit/templates \

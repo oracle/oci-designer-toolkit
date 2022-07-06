@@ -55,6 +55,7 @@ def Storage_GB_per_month(storage_price, storage_capacity):
     return PAYG_Storage_price, Monthly_Flex_Storage_price
 
 def OCPU_per_hr(ocpu_price,numberOfocpu):
+    logger.info(f'OCPU Price: {ocpu_price}' )
     ocpu_per_month = 24 * 31
     # PAYG
     PAYG_OCPU = round(ocpu_price[0] * numberOfocpu * ocpu_per_month,2)

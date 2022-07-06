@@ -25,5 +25,7 @@ export PYTHONPATH=:/okit/visualiser:/okit/okitweb:/okit
 
 # Activate Virtual Environment
 source ${OKIT_DIR}/.venv/bin/activate
+# Update oci python module
+python3 -m pip install -U oci
 # Run Server
 ${OKIT_DIR}/.venv/bin/gunicorn okitweb.wsgi:app --config ${OKIT_DIR}/config/gunicorn_http.py

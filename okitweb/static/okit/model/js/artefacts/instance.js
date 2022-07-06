@@ -2,7 +2,7 @@
 ** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
-console.info('Loaded Instance Javascript');
+console.debug('Loaded Instance Javascript');
 
 /*
 ** Define Instance Class
@@ -117,7 +117,7 @@ class Instance extends OkitArtifact {
     /*
     ** Create Volume Attachment
     */
-   newVolumeAttachment() {
+    newVolumeAttachment() {
         return {
             resource_name: `${this.generateResourceName()}VolumeAttachment`,
             display_name: `${this.display_name} Volume Attachment`,
@@ -126,7 +126,7 @@ class Instance extends OkitArtifact {
             is_read_only: false,
             is_shareable: false
         }
-   }
+    }
 
     /*
     ** Delete Processing

@@ -2,7 +2,7 @@
 ** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
-console.info('Loaded Designer Ready Javascript');
+console.debug('Loaded Designer Ready Javascript');
 
 /*
 ** Define variables for Artefact classes
@@ -27,6 +27,7 @@ $(document).ready(function() {
     okitRegions = new OkitRegions(loadHeaderRegionsDropDown);
     okitOciData = new OkitOCIData(okitSettings.profile, okitSettings.region);
     okitGitConfig = new OkitGITConfig();
+    okitOciProductPricing = new OkitOciProductPricing()
     // okitJsonModel = new OkitJson();
     newModel()
     okitJsonView = OkitDesignerJsonView.newView(okitJsonModel, okitOciData, resource_icons);

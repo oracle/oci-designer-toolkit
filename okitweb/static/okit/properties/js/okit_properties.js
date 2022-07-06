@@ -2,7 +2,7 @@
 ** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
-console.info('Loaded OKIT Properties Javascript');
+console.debug('Loaded OKIT Properties Javascript');
 
 class OkitResourceProperties {
     resource_tabs = []
@@ -84,6 +84,7 @@ class OkitResourceProperties {
                                 .append('h3')
                                 .attr('class', `heading-background ${self.resource.read_only ? 'padlock-closed' : 'padlock-open'}`)
                                     .text(this.resource.resource_type)
+        this.buildCostEstimate()
         this.panel = this.properties_div.append('div')
                                 .attr('id', `${self.id}_panel`)
                                 .attr('class', 'okit-resource-properties-panel')
@@ -108,6 +109,14 @@ class OkitResourceProperties {
         })
     
         // console.info('Properties div', this.properties_div)
+    }
+
+    buildCostEstimate() {
+        this.cost_estimate_div = this.properties_div.append('div')
+                                .attr('class', `property-editor-cost-estimate ${!developer_mode ? 'hidden' : ''}`)
+        const right_div = this.cost_estimate_div.append('div')
+        const estimate_label = right_div.append('label').text('Estimated Monthly Cost')
+        this.cost_estimate = right_div.append('label').text('')
     }
 
     buildCore() {
@@ -169,6 +178,7 @@ class OkitResourceProperties {
     load() {
         if (this.resource) {
             this.loadCore()
+            this.loadCostEstimate()
             this.loadResource()
             this.loadTags()
         }
@@ -179,6 +189,11 @@ class OkitResourceProperties {
         okitSettings.show_ocids ? this.showProperty(`${this.id}_ocid`, '') : this.hideProperty(`${this.id}_ocid`, '')
         this.display_name.property('value', this.resource.display_name)
         this.setTitle()
+    }
+
+    loadCostEstimate() {
+        console.info('Setting Cost Estimate')
+        this.cost_estimate.text(this.resource.estimateCost())
     }
 
     loadResource() {}
@@ -243,6 +258,12 @@ class OkitResourceProperties {
             pattern: "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$)+",
             title: 'IPv4 Address'
         },
+        // IPv4 IP Address List
+        ipv4_list: {
+            placeholder: '0.0.0.0,0.0.0.0',
+            pattern: "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(,\s?|$))+",
+            title: 'Comma separated IPv4 Addresses'
+        },
         // IPv4 CIDR
         ipv4_cidr: {
             placeholder: '0.0.0.0/0',
@@ -254,6 +275,12 @@ class OkitResourceProperties {
             placeholder: '0.0.0.0/0,0.0.0.0/0',
             pattern: "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(3[0-2]|[1-2][0-9]|[0-9]))(,\s?|$))+",
             title: 'Comma separated IPv4 CIDR blocks'
+        },
+        // IPv4 CIDR List
+        ipv4_single_cidr_list: {
+            placeholder: '0.0.0.0/0,0.0.0.0/0',
+            pattern: "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(32))(,\s?|$))+",
+            title: 'Comma separated Single IPv4 CIDR (/32)'
         },
         // IPv6 CIDR List
         ipv6_cidr_list: {
@@ -272,7 +299,8 @@ class OkitResourceProperties {
         }
     }
 
-    createInput(type='text', label='', id='', idx='', callback=undefined, data={}) {
+    createInput(type='text', label='', id='', idx='', callback_function=undefined, data={}) {
+        const callback = callback_function === undefined ? this.loadCostEstimate() : (d, i, n) => {callback_function(d, i, n);this.loadCostEstimate()}
         const row = d3.create('div').attr('class', 'tr').attr('id', this.trId(id, idx))
         let input = undefined
         let cell = undefined
@@ -460,6 +488,20 @@ class OkitResourceProperties {
             div.append('input').attr('type', 'checkbox').attr('id', safeid).attr('value', r.id)
             div.append('label').attr('for', safeid).text(r.display_name)
         })
+    }
+
+    loadSelectFromList(select, list, empty_option=false, empty_value='', id_element='id', display_element='display_name') {
+        select.selectAll('*').remove()
+        if (empty_option) select.append('option').attr('selected', 'selected').attr('value', '').text(empty_value ? empty_value : '')
+        let id = ''
+        list.forEach((r, i) => {
+            const option = select.append('option').attr('value', r[id_element]).text(r[display_element])
+            if (i === 0 && !empty_option) {
+                option.attr('selected', 'selected')
+                id = r[id_element]
+            }
+        })
+        return id
     }
 
     loadSelectFromMap(select, map) {
