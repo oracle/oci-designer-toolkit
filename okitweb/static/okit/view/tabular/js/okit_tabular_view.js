@@ -70,6 +70,9 @@ class OkitTabularJsonView extends OkitJsonView {
                 'Availability Domain': {property: 'availability_domain'},
             },
             instances: {
+                'Shape': {property: 'shape'},
+                'Memory (Gbs)': {property: 'memory_in_gbs'},
+                'OCPUs': {property: 'ocpus'},
                 'Subnet': {property: 'subnet_id', lookup: 'model.getSubnet'},
                 'Block Volumes': {property: 'block_storage_volume_ids', lookup: 'model.getBlockStorageVolume'},
             },
