@@ -69,6 +69,10 @@ class OkitTabularJsonView extends OkitJsonView {
             file_storage_systems: {
                 'Availability Domain': {property: 'availability_domain'},
             },
+            groups: {
+                'User Count': {property: 'user_count'},
+                'Users': {property: 'user_ids', lookup: 'model.getUser'},
+            },
             instances: {
                 'Shape': {property: 'shape'},
                 'Memory (Gbs)': {property: 'memory_in_gbs'},
@@ -342,7 +346,8 @@ class OkitTabularJsonView extends OkitJsonView {
         const sections = lookup.split('.');
         const obj = sections[0];
         const getFunction = sections[1];
-        return this[obj][getFunction](id);
+        const resource = this[obj][getFunction](id);
+        return resource ? resource : {display_name: 'Unknown'}
     }
 
     getViewResource(type, id) {

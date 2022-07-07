@@ -4,6 +4,19 @@
 ## Version 0.39.0
 **Release Date**: 27th July 2022
 ### Features
+1. Extend PCA Resource Query to include:
+    1. Groups
+    2. Policies
+    3. Users
+2. Add __namespace__ field to config to allow specification of the Object Storage namespace for PCA because the client.get_namespace is not implemented.
+3. Extend Tablular View to display additional information
+    1. Instance
+        1. Shape
+        2. Memory
+        3. OCPUs
+    2. Groups
+        1. Users
+        2. User Count
 ### Bug Fixes
 
 
