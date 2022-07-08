@@ -35,7 +35,7 @@ class OkitOciProductPricing {
         ILS: {name: 'Israeli New Shekel', symbol: 'ILS'},
         INR: {name: 'Indian Rupee', symbol: 'INR'},
         ISK: {name: 'Icelandic Króna', symbol: 'ISK'},
-        JPY: {name: 'Japanese Yen', symbol: 'ISK'},
+        JPY: {name: 'Japanese Yen', symbol: 'JPY'},
         KRW: {name: 'South Korean Won', symbol: 'KRW'},
         KWD: {name: 'Kuwaiti Dinar', symbol: 'KWD'},
         MXN: {name: 'Mexican Peso', symbol: 'MXN'},
