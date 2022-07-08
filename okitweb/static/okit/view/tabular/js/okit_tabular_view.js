@@ -172,6 +172,20 @@ class OkitTabularJsonView extends OkitJsonView {
         let canvas_div = d3.select(d3Id(this.parent_id));
         // Empty existing Canvas
         canvas_div.selectAll('*').remove();
+        // Toolbar
+        const toolbar = canvas_div.append('div')
+            .attr('class', 'okit-toolbar')
+            .attr('id', 'tabular_view_toolbar')
+        const export_excel = toolbar.append('a')
+            .attr('href', '#')
+            // .attr('download', 'okit.xls')
+            .text('Export to Excel')
+            .on('click', () => {
+                let a = document.createElement('a');
+                a.setAttribute('href', 'data:Application/octet-stream,' + encodeURIComponent(this.exportToXls()));
+                a.setAttribute('download', 'okit.xls');
+                a.click();                           
+            })
         // Add Tab Bar
         const tabbar = canvas_div.append('div')
             .attr('class', 'okit-tab-bar')
@@ -364,6 +378,71 @@ class OkitTabularJsonView extends OkitJsonView {
         }
     }
 
+    exportToXls() {
+        const workbook = this.buildWorkbook()
+        console.info(workbook)
+        // document.open('data:Application/octet-stream,' + encodeURIComponent(workbook))
+        return workbook
+    }
+
+    buildWorkbook() {
+        const workbook = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <?mso-application progid="Excel.Sheet"?>
+        <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet" xmlns:html="https://www.w3.org/TR/html401/">
+        ${this.buildWorksheets().join('')}
+        </Workbook>
+        `
+        return workbook
+    }
+
+    buildWorksheets() {
+        let sheets = []
+        Object.entries(this.getOkitJson().getResourceLists()).sort((a, b) => a[0].localeCompare(b[0])).forEach(([key, value]) => {if (value.length) sheets.push(this.buildWorksheet(key, value));})
+        return sheets
+    }
+
+    buildWorksheet(resource_type, resources) {
+        console.info(`Build Worksheet ${resource_type}`, resources)
+        const property_map = {...this.resource_property_map['common'], ...this.resource_property_map[resource_type]}
+        const sheet = `
+        <Worksheet ss:Name="${this.generateTabName(resource_type)}">
+        <Table>
+        ${Object.keys(property_map).map((k, i) => `<Column ss:Index="${i + 1}" ss:AutoFitWidth="1"/>`).join('\n')}
+        <Row>
+        ${Object.keys(property_map).map((k, i) => `<Cell><Data ss:Type="String">${k}</Data></Cell>`).join('\n')}
+        </Row>
+        ${resources.map((r, i) => `<Row>
+        ${Object.values(property_map).map((v) => `<Cell><Data ss:Type="String">${this.getCellData(r, v)}</Data></Cell>`).join('\n')}
+        </Row>`).join('\n')}
+        </Table>
+        </Worksheet>
+        `
+        // ${resources.map((r, i) => {`<Row>${Object.values(property_map).map((v) => `<Cell><Data ss:Type="String">${this.getCellData(r, v)}</Data></Cell>`).join('\n')}</Row>`}).join('\n')}
+        return sheet
+    }
+
+    getCellData(resource, value) {
+        let cell_data = '';
+        if (value.lookup) {
+            if (Array.isArray(resource[value.property])) {
+                const array_data = resource[value.property].map(id => self.getResource(value.lookup, id).display_name);
+                cell_data = array_data.join(', ');
+            } else {
+                const lookup = this.getResource(value.lookup, resource[value.property]);
+                if (lookup && Array.isArray(lookup)) {
+                    cell_data = lookup.map(l => l.display_name).join(', ');
+                } else if (lookup) {
+                    cell_data = lookup.display_name;
+                } else {
+                    cell_data = '';
+                }
+            }
+        } else {
+            cell_data = this.getValue(resource, value.property);
+        }
+        return cell_data
+    }
 
 }
 
