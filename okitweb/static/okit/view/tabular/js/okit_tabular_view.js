@@ -181,10 +181,14 @@ class OkitTabularJsonView extends OkitJsonView {
             // .attr('download', 'okit.xls')
             .text('Export to Excel')
             .on('click', () => {
-                let a = document.createElement('a');
-                a.setAttribute('href', 'data:Application/octet-stream,' + encodeURIComponent(this.exportToXls()));
-                a.setAttribute('download', 'okit.xls');
-                a.click();                           
+                const uri = 'data:Application/octet-stream,' + encodeURIComponent(this.exportToXls())
+                const name = 'okit.xls'
+                triggerDownload(uri, name)
+                // let a = document.createElement('a');
+                // a.setAttribute('href', 'data:Application/octet-stream,' + encodeURIComponent(this.exportToXls()));
+                // a.setAttribute('download', 'okit.xls');
+                // a.click();        
+                // document.removeChild(a)                   
             })
         // Add Tab Bar
         const tabbar = canvas_div.append('div')
@@ -418,7 +422,6 @@ class OkitTabularJsonView extends OkitJsonView {
         </Table>
         </Worksheet>
         `
-        // ${resources.map((r, i) => {`<Row>${Object.values(property_map).map((v) => `<Cell><Data ss:Type="String">${this.getCellData(r, v)}</Data></Cell>`).join('\n')}</Row>`}).join('\n')}
         return sheet
     }
 
@@ -426,7 +429,7 @@ class OkitTabularJsonView extends OkitJsonView {
         let cell_data = '';
         if (value.lookup) {
             if (Array.isArray(resource[value.property])) {
-                const array_data = resource[value.property].map(id => self.getResource(value.lookup, id).display_name);
+                const array_data = resource[value.property].map(id => this.getResource(value.lookup, id).display_name);
                 cell_data = array_data.join(', ');
             } else {
                 const lookup = this.getResource(value.lookup, resource[value.property]);
