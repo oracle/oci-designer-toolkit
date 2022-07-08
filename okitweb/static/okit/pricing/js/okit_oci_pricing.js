@@ -53,7 +53,7 @@ class OkitOciProductPricing {
         TRY: {name: 'Turkish Lira', symbol: 'TRY'},
         TWD: {name: 'New Taiwan Dollar', symbol: 'TWD'},
         VND: {name: 'Vietnamese Dong', symbol: 'VND'},
-        ZAR: {name: 'South African Rand', symbol: ''},
+        ZAR: {name: 'South African Rand', symbol: 'ZAR'},
     }
     static formatPrice = (price=0, currency='USD') => `${OkitOciProductPricing.currencies[currency].symbol}${(Math.round((price + Number.EPSILON) * 100)/100).toFixed(2)}`
 
