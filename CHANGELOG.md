@@ -18,6 +18,7 @@
         1. Users
         2. User Count
 ### Bug Fixes
+1. Fix issue where PCA queried Compartment was not displayed as the top level compartment
 
 
 ## Version 0.38.0
