@@ -176,14 +176,19 @@ class OkitTabularJsonView extends OkitJsonView {
         const toolbar = canvas_div.append('div')
             .attr('class', 'okit-toolbar')
             .attr('id', 'tabular_view_toolbar')
-        const export_excel = toolbar.append('a')
-            .attr('href', '#')
-            // .attr('download', 'okit.xls')
-            .text('Export to Excel')
+        // const export_excel = toolbar.append('a')
+        //     .attr('href', '#')
+        //     // .attr('download', 'okit.xls')
+        //     .text('Export to Excel')
+        const export_excel = toolbar.append('div')
+            .attr('class', 'excel okit-toolbar-button')
+            .attr('title', 'Export to Excel')
             .on('click', () => {
                 const uri = 'data:Application/octet-stream,' + encodeURIComponent(this.exportToXls())
                 const name = 'okit.xls'
                 triggerDownload(uri, name)
+                const wb = new OkitWorkbook(this.model, this.data, this.resource_property_map)
+                console.info(wb)
                 // let a = document.createElement('a');
                 // a.setAttribute('href', 'data:Application/octet-stream,' + encodeURIComponent(this.exportToXls()));
                 // a.setAttribute('download', 'okit.xls');
