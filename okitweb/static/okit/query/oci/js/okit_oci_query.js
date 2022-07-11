@@ -49,6 +49,7 @@ class OkitOCIQuery {
                 const response_json = JSON.parse(resp);
                 const title = request.sub_compartments ? `Queried Compartment ${request.compartment_name} and Sub-Compartments` : `Queried Compartment ${request.compartment_name}`;
                 const description = `${title} in Region ${request.region}`;
+                console.info('OCI Query Response:', response_json)
                 regionOkitJson[request.region].load(response_json)
                 regionOkitJson[request.region].title = title;
                 regionOkitJson[request.region].description = description;
