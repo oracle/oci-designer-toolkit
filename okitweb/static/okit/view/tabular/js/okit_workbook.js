@@ -28,6 +28,14 @@ class OkitWorkbook {
         const resource = this[obj][getFunction](id);
         return resource ? resource : {display_name: 'Unknown'}
     }
+
+    exportToExcel() {
+        return `<?xml version="1.0" encoding="UTF-8"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet" xmlns:html="https://www.w3.org/TR/html401/">
+${ this.worksheet.map(ws => `${ws.exportToExcel()}\n`)}
+</Workbook>`
+    }
 }
 
 class Worksheet {
