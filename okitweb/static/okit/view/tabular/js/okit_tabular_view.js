@@ -75,8 +75,8 @@ class OkitTabularJsonView extends OkitJsonView {
             },
             instances: {
                 'Shape': {property: 'shape'},
-                'Memory (Gbs)': {property: 'memory_in_gbs'},
-                'OCPUs': {property: 'ocpus'},
+                'Memory (Gbs)': {property: 'memory_in_gbs', type: 'number'},
+                'OCPUs': {property: 'ocpus', type: 'number'},
                 'Subnet': {property: 'subnet_id', lookup: 'model.getSubnet'},
                 'Block Volumes': {property: 'block_storage_volume_ids', lookup: 'model.getBlockStorageVolume'},
             },
@@ -184,11 +184,11 @@ class OkitTabularJsonView extends OkitJsonView {
             .attr('class', 'excel okit-toolbar-button')
             .attr('title', 'Export to Excel')
             .on('click', () => {
-                const uri = 'data:Application/octet-stream,' + encodeURIComponent(this.exportToXls())
+                // const uri = 'data:Application/octet-stream,' + encodeURIComponent(this.exportToXls())
+                const wb = new OkitWorkbook(this.model, this.data, this.resource_property_map)
+                const uri = 'data:Application/octet-stream,' + encodeURIComponent(wb.exportToXls())
                 const name = 'okit.xls'
                 triggerDownload(uri, name)
-                const wb = new OkitWorkbook(this.model, this.data, this.resource_property_map)
-                console.info(wb)
                 // let a = document.createElement('a');
                 // a.setAttribute('href', 'data:Application/octet-stream,' + encodeURIComponent(this.exportToXls()));
                 // a.setAttribute('download', 'okit.xls');
@@ -457,3 +457,30 @@ class OkitTabularJsonView extends OkitJsonView {
 okitViewClasses.push(OkitTabularJsonView);
 
 let okitTabularView = null;
+
+class TabularWorkbook extends OkitWorkbook {
+    constructor(model={}, data={}, elements={}) {
+        Object.defineProperty(this, 'model', {get: () => {return model}})
+        Object.defineProperty(this, 'data', {get: () => {return data}})
+        Object.defineProperty(this, 'elements', {get: () => {return elements}})
+        super()
+    }
+}
+
+class TabularWorksheet extends OkitWorksheet {
+    constructor() {
+        super()
+    }
+}
+
+class TabularWorksheetRow extends OkitWorksheetRow {
+    constructor() {
+        super()
+    }
+}
+
+class TabularWorksheetCell extends OkitWorksheetCell {
+    constructor() {
+        super()
+    }
+}

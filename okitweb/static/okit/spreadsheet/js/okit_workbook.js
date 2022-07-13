@@ -6,20 +6,23 @@ console.debug('Loaded OKIT Workbook Javascript');
 
 class OkitWorkbook {
     constructor(model={}, data={}, elements={}) {
-        this.model = model
-        this.data = data
-        this.elements = elements 
+        // this.model = model
+        // this.data = data
+        // this.elements = elements 
         this.worksheets = []
+        Object.defineProperty(this, 'model', {get: () => {return model}})
+        Object.defineProperty(this, 'data', {get: () => {return data}})
+        Object.defineProperty(this, 'elements', {get: () => {return elements}})
         this.build(model)
     }
 
     build(model, elements) {
         model = model || this.model || {}
         elements = elements || this.elements || {}
-        Object.entries(model.getResourceLists()).sort((a, b) => a[0].localeCompare(b[0])).forEach(([key, value]) => {if (value.length) this.worksheets.push(new Worksheet(this.generateSheetName(key), value, {...elements['common'], ...elements[key]}, this));})
+        Object.entries(model.getResourceLists()).sort((a, b) => a[0].localeCompare(b[0])).forEach(([key, value]) => {if (value.length) this.worksheets.push(new OkitWorksheet(this.generateSheetName(key), value, {...elements['common'], ...elements[key]}, this));})
     }
 
-    generateSheetName = (name) => titleCase(name.replaceAll('_', ' '))
+    generateSheetName(name) {return titleCase(name.replaceAll('_', ' '))}
 
     getResource(lookup, id) {
         const sections = lookup.split('.');
@@ -29,22 +32,25 @@ class OkitWorkbook {
         return resource ? resource : {display_name: 'Unknown'}
     }
 
-    exportToExcel() {
+    exportToXls() {
         return `<?xml version="1.0" encoding="UTF-8"?>
 <?mso-application progid="Excel.Sheet"?>
 <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet" xmlns:html="https://www.w3.org/TR/html401/">
-${ this.worksheet.map(ws => `${ws.exportToExcel()}\n`)}
+${this.worksheets.map(ws => `${ws.exportToXls()}`).join('\n')}
 </Workbook>`
     }
 }
 
-class Worksheet {
+class OkitWorksheet {
     constructor(name, resources, elements, workbook) {
         this.name = name
-        this.resources = resources
-        this.elements = elements
-        this.workbook = workbook
+        // this.resources = resources
+        // this.elements = elements
+        // this.workbook = workbook
         this.rows = []
+        Object.defineProperty(this, 'workbook', {get: () => {return workbook}})
+        Object.defineProperty(this, 'resources', {get: () => {return resources}})
+        Object.defineProperty(this, 'elements', {get: () => {return elements}})
         this.build(name, resources, elements)
     }
 
@@ -53,17 +59,30 @@ class Worksheet {
         resources = resources || this.resources || []
         elements = elements || this.elements || {}
         workbook = workbook || this.workbook
-        this.header = new Row()
-        Object.keys(elements).forEach(k => this.header.cells.push(k))
-        resources.forEach(r => this.rows.push(new Row(r, elements, workbook)))
+        this.header = new OkitWorksheetRow()
+        Object.keys(elements).forEach(k => this.header.cells.push(new OkitWorksheetCell(k)))
+        resources.forEach(r => this.rows.push(new OkitWorksheetRow(r, elements, workbook)))
+    }
+
+    exportToXls() {
+        return `<Worksheet ss:Name="${this.name}">
+<Table>
+${this.header.cells.map((k, i) => `<Column ss:Index="${i + 1}" ss:AutoFitWidth="1"/>`).join('\n')}
+${this.header.exportToXls()}
+${this.rows.map(row => `${row.exportToXls()}`).join('\n')}
+</Table>
+</Worksheet>`
     }
 }
 
-class Row {
+class OkitWorksheetRow {
     constructor(resource, elements, workbook) {
-        this.resource = resource
-        this.elements = elements
-        this.workbook = workbook
+        // this.resource = resource
+        // this.elements = elements
+        // this.workbook = workbook
+        Object.defineProperty(this, 'workbook', {get: () => {return workbook}})
+        Object.defineProperty(this, 'resource', {get: () => {return resource}})
+        Object.defineProperty(this, 'elements', {get: () => {return elements}})
         this.cells = []
         this.build(resource, elements)
     }
@@ -72,7 +91,7 @@ class Row {
         resource = resource || this.resource || {}
         elements = elements || this.elements || {}
         workbook = workbook || this.workbook
-        Object.values(elements).forEach(v => this.cells.push(new Cell(this.getCellData(resource, v, workbook))))
+        Object.values(elements).forEach(v => this.cells.push(new OkitWorksheetCell(this.getCellData(resource, v, workbook))))
     }
 
     getCellData(resource, value, workbook) {
@@ -105,11 +124,21 @@ class Row {
             return resource[key];
         }
     }
+
+    exportToXls() {
+        return `<Row>
+${this.cells.map(cell => `${cell.exportToXls()}`).join('\n')}
+</Row>`
+    }
 }
 
-class Cell {
+class OkitWorksheetCell {
     constructor(data, type=undefined) {
         this.data = data 
         this.type = type 
+    }
+
+    exportToXls() {
+        return `<Cell><Data ss:Type="${this.type ? this.type : 'String'}">${this.data}</Data></Cell>`
     }
 }
