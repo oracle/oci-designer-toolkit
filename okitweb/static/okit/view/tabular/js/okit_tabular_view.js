@@ -176,24 +176,14 @@ class OkitTabularJsonView extends OkitJsonView {
         const toolbar = canvas_div.append('div')
             .attr('class', 'okit-toolbar')
             .attr('id', 'tabular_view_toolbar')
-        // const export_excel = toolbar.append('a')
-        //     .attr('href', '#')
-        //     // .attr('download', 'okit.xls')
-        //     .text('Export to Excel')
         const export_excel = toolbar.append('div')
             .attr('class', 'excel okit-toolbar-button')
             .attr('title', 'Export to Excel')
             .on('click', () => {
-                // const uri = 'data:Application/octet-stream,' + encodeURIComponent(this.exportToXls())
-                const wb = new OkitWorkbook(this.model, this.data, this.resource_property_map)
+                const wb = new TabularWorkbook(this.model, this.data, this.resource_property_map)
                 const uri = 'data:Application/octet-stream,' + encodeURIComponent(wb.exportToXls())
                 const name = 'okit.xls'
                 triggerDownload(uri, name)
-                // let a = document.createElement('a');
-                // a.setAttribute('href', 'data:Application/octet-stream,' + encodeURIComponent(this.exportToXls()));
-                // a.setAttribute('download', 'okit.xls');
-                // a.click();        
-                // document.removeChild(a)                   
             })
         // Add Tab Bar
         const tabbar = canvas_div.append('div')
@@ -460,27 +450,99 @@ let okitTabularView = null;
 
 class TabularWorkbook extends OkitWorkbook {
     constructor(model={}, data={}, elements={}) {
+        super()
         Object.defineProperty(this, 'model', {get: () => {return model}})
         Object.defineProperty(this, 'data', {get: () => {return data}})
         Object.defineProperty(this, 'elements', {get: () => {return elements}})
-        super()
+        this.build()
+    }
+
+    build(model, elements) {
+        model = model || this.model || {}
+        elements = elements || this.elements || {}
+        Object.entries(model.getResourceLists()).sort((a, b) => a[0].localeCompare(b[0])).forEach(([key, value]) => {if (value.length) this.worksheets.push(new TabularWorksheet(this.generateSheetName(key), value, {...elements['common'], ...elements[key]}, this));})
+    }
+
+    generateSheetName(name) {return titleCase(name.replaceAll('_', ' '))}
+
+    getResource(lookup, id) {
+        const sections = lookup.split('.');
+        const obj = sections[0];
+        const getFunction = sections[1];
+        const resource = this[obj][getFunction](id);
+        return resource ? resource : {display_name: 'Unknown'}
     }
 }
 
 class TabularWorksheet extends OkitWorksheet {
-    constructor() {
-        super()
+    constructor(name, resources, elements, workbook) {
+        super(name)
+        Object.defineProperty(this, 'workbook', {get: () => {return workbook}})
+        Object.defineProperty(this, 'resources', {get: () => {return resources}})
+        Object.defineProperty(this, 'elements', {get: () => {return elements}})
+        this.build()
+    }
+
+    build(name, resources, elements, workbook) {
+        name = name || this.name
+        resources = resources || this.resources || []
+        elements = elements || this.elements || {}
+        workbook = workbook || this.workbook
+        this.header = new OkitWorksheetRow()
+        Object.keys(elements).forEach(k => this.header.cells.push(new TabularWorksheetCell(k)))
+        resources.forEach(r => this.rows.push(new TabularWorksheetRow(r, elements, workbook)))
     }
 }
 
 class TabularWorksheetRow extends OkitWorksheetRow {
-    constructor() {
+    constructor(resource, elements, workbook) {
         super()
+        Object.defineProperty(this, 'workbook', {get: () => {return workbook}})
+        Object.defineProperty(this, 'resource', {get: () => {return resource}})
+        Object.defineProperty(this, 'elements', {get: () => {return elements}})
+        this.build()
+    }
+    build(resource, elements, workbook) {
+        resource = resource || this.resource || {}
+        elements = elements || this.elements || {}
+        workbook = workbook || this.workbook
+        Object.values(elements).forEach(v => this.cells.push(new TabularWorksheetCell(this.getCellData(resource, v, workbook), v.type)))
+    }
+
+    getCellData(resource, value, workbook) {
+        let cell_data = '';
+        if (value.lookup) {
+            if (Array.isArray(resource[value.property])) {
+                const array_data = resource[value.property].map(id => workbook.getResource(value.lookup, id).display_name);
+                cell_data = array_data.join(', ');
+            } else {
+                const lookup = workbook.getResource(value.lookup, resource[value.property]);
+                if (lookup && Array.isArray(lookup)) {
+                    cell_data = lookup.map(l => l.display_name).join(', ');
+                } else if (lookup) {
+                    cell_data = lookup.display_name;
+                } else {
+                    cell_data = '';
+                }
+            }
+        } else {
+            cell_data = this.getValue(resource, value.property);
+        }
+        return cell_data
+    }
+
+    getValue(resource, key) {
+        const keys = key.split('.');
+        if (keys.length > 1) {
+            return this.getValue(resource[keys[0]], keys.slice(1).join('.'));
+        } else {
+            return resource[key];
+        }
     }
 }
 
 class TabularWorksheetCell extends OkitWorksheetCell {
-    constructor() {
-        super()
+    constructor(data, type=undefined) {
+        super(data, type)
     }
 }
