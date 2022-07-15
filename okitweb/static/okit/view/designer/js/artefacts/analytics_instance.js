@@ -32,7 +32,10 @@ class AnalyticsInstanceView extends OkitArtefactView {
     /*
     ** Property Sheet Load function
     */
-    loadProperties() {
+    newPropertiesSheet() {
+        this.properties_sheet = new AnalyticsInstanceProperties(this.artefact)
+    }
+    loadProperties1() {
         const self = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/analytics_instance.html", () => {
             // Add Subnet & Vcn Lists
