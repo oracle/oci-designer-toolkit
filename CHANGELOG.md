@@ -17,6 +17,8 @@
     2. Groups
         1. Users
         2. User Count
+4. New Properties sheet.
+    1. Analytics Instance
 ### Bug Fixes
 1. Fix issue where PCA queried Compartment was not displayed as the top level compartment
 
