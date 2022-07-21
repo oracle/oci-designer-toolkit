@@ -1,0 +1,370 @@
+{
+    "count": 9,
+    "items": [
+        {
+            "ocpuMax": 4032,
+            "weight": 1600,
+            "description": "The starting configuration for Exadata Cloud Infrastructure X9M includes 2 Database Servers and 3 Storage Servers.  With Exadata Cloud Infrastructure, you can provision additional resources needed for your workloads with any combination of 2 to 32 Database Servers and 3 to 64 Storage Servers within a single Exadata Database Service. OCPU consumption is provisioned separately.",
+            "additionalOcpu": true,
+            "systemGeneration": "X9M",
+            "notes": "You can scale CPU cores in multiples of the number of database servers currently provisioned for the cloud VM cluster. For example, if you have 6 database servers provisioned, you can add CPU cores in multiples of 6. At the time of provisioning, X9M systems have 2 database servers. For more information on adding compute and storage resources to an X9M system, see Scaling Exadata X9M Compute and Storage.",
+            "totalFlashCapacity": null,
+            "ocpuMaxFactor": 126,
+            "flexibleSystem": true,
+            "ocpuMinFactor": 2,
+            "totalUsableDiskCapacity": null,
+            "products": [
+                {
+                    "presetNames": [
+                        "AUTODB_PRESET_V1",
+                        "ED_X8M_V1"
+                    ],
+                    "partNumber": "B93380",
+                    "type": {
+                        "value": "systemProduct",
+                        "label": "System Product"
+                    }
+                },
+                {
+                    "presetNames": [
+                        "ED_X8M_V1",
+                        "AUTODB_PRESET_V1"
+                    ],
+                    "partNumber": "B93381",
+                    "type": {
+                        "value": "dbProduct",
+                        "label": "DB Product"
+                    }
+                },
+                {
+                    "presetNames": [
+                        "AUTODB_PRESET_V1",
+                        "ED_X8M_V1"
+                    ],
+                    "partNumber": "B93382",
+                    "type": {
+                        "value": "storageProduct",
+                        "label": "Storage Product"
+                    }
+                }
+            ],
+            "totalPersistentMemoryCapacity": null,
+            "dbServersMax": 32,
+            "systemModel": "Exadata Cloud Infrastructure X9M",
+            "baseDbServersQty": 2,
+            "baseStorageServersQty": 3,
+            "storageServersMax": 64,
+            "id": 141,
+            "ocpuMin": 4
+        },
+        {
+            "ocpuMax": 1600,
+            "weight": 1500,
+            "description": "The starting configuration for Exadata Cloud Infrastructure X8M includes 2 Database Servers and 3 Storage Servers.  With Exadata Cloud Infrastructure, you can provision additional resources needed for your workloads with any combination of 2 to 32 Database Servers and 3 to 64 Storage Servers within a single Exadata Database Service. OCPU consumption is provisioned separately.",
+            "additionalOcpu": true,
+            "systemGeneration": "X8M",
+            "notes": "You can scale CPU cores in multiples of the number of database servers currently provisioned for the cloud VM cluster. For example, if you have 6 database servers provisioned, you can add CPU cores in multiples of 6. At the time of provisioning, X8M systems have 2 database servers. For more information on adding compute and storage resources to an X8M system, see Scaling Exadata X8M Compute and Storage.",
+            "totalFlashCapacity": null,
+            "ocpuMaxFactor": 50,
+            "flexibleSystem": true,
+            "ocpuMinFactor": 2,
+            "totalUsableDiskCapacity": null,
+            "products": [
+                {
+                    "presetNames": [
+                        "ED_X8M_V1",
+                        "ADW_DI",
+                        "ATP_DI",
+                        "AUTODB_PRESET_V1"
+                    ],
+                    "partNumber": "B92380",
+                    "type": {
+                        "value": "systemProduct",
+                        "label": "System Product"
+                    }
+                },
+                {
+                    "presetNames": [
+                        "ED_X8M_V1"
+                    ],
+                    "partNumber": "B92381",
+                    "type": {
+                        "value": "dbProduct",
+                        "label": "DB Product"
+                    }
+                },
+                {
+                    "presetNames": [
+                        "ED_X8M_V1"
+                    ],
+                    "partNumber": "B92382",
+                    "type": {
+                        "value": "storageProduct",
+                        "label": "Storage Product"
+                    }
+                }
+            ],
+            "totalPersistentMemoryCapacity": null,
+            "dbServersMax": 32,
+            "systemModel": "Exadata Database Cloud Service - Quarter Rack - X8M",
+            "baseDbServersQty": 2,
+            "baseStorageServersQty": 3,
+            "storageServersMax": 64,
+            "id": 1,
+            "ocpuMin": 4
+        },
+        {
+            "ocpuMax": 100,
+            "weight": 1400,
+            "description": "Exadata Cloud Infrastructure X8 configuration is a Quarter Rack which includes 2 Database Servers and 3 Storage Servers.  OCPUs are provisioned separately.",
+            "additionalOcpu": true,
+            "systemGeneration": "X8",
+            "notes": "You must add a minimum of 2 OCPUs per database server and OCPUs must be added in increments of 2.",
+            "totalFlashCapacity": null,
+            "ocpuMaxFactor": null,
+            "flexibleSystem": false,
+            "ocpuMinFactor": null,
+            "totalUsableDiskCapacity": null,
+            "products": [
+                {
+                    "presetNames": [
+                        "ADW_DI",
+                        "ATP_DI",
+                        "DB_EXACS_FULL_X6_V1",
+                        "AUTODB_PRESET_V1",
+                        "ED_X8M_V1"
+                    ],
+                    "partNumber": "B91535",
+                    "type": {
+                        "value": "systemProduct",
+                        "label": "System Product"
+                    }
+                }
+            ],
+            "totalPersistentMemoryCapacity": null,
+            "dbServersMax": null,
+            "systemModel": "Quarter Rack - X8",
+            "baseDbServersQty": null,
+            "baseStorageServersQty": null,
+            "storageServersMax": null,
+            "id": 2,
+            "ocpuMin": 4
+        },
+        {
+            "ocpuMax": 200,
+            "weight": 1300,
+            "description": "Exadata Cloud Infrastructure X8 configuration is a Half Rack which includes 4 Database Servers and 6 Storage Servers.  OCPUs are provisioned separately.",
+            "additionalOcpu": true,
+            "systemGeneration": "X8",
+            "notes": "You must add a minimum of 2 OCPUs per database server and OCPUs must be added in increments of 2.",
+            "totalFlashCapacity": null,
+            "ocpuMaxFactor": null,
+            "flexibleSystem": false,
+            "ocpuMinFactor": null,
+            "totalUsableDiskCapacity": null,
+            "products": [
+                {
+                    "presetNames": [
+                        "ADW_DI",
+                        "ATP_DI",
+                        "AUTODB_PRESET_V1"
+                    ],
+                    "partNumber": "B91536",
+                    "type": {
+                        "value": "systemProduct",
+                        "label": "System Product"
+                    }
+                }
+            ],
+            "totalPersistentMemoryCapacity": null,
+            "dbServersMax": null,
+            "systemModel": "Half Rack - X8",
+            "baseDbServersQty": null,
+            "baseStorageServersQty": null,
+            "storageServersMax": null,
+            "id": 3,
+            "ocpuMin": 8
+        },
+        {
+            "ocpuMax": 400,
+            "weight": 1200,
+            "description": "Exadata Cloud Infrastructure X8 configuration is a Full Rack which includes 8 Database Servers and 12 Storage Servers.  OCPUs are provisioned separately.",
+            "additionalOcpu": true,
+            "systemGeneration": "X8",
+            "notes": "You must add a minimum of 2 OCPUs per database server and OCPUs must be added in increments of 2.",
+            "totalFlashCapacity": null,
+            "ocpuMaxFactor": null,
+            "flexibleSystem": false,
+            "ocpuMinFactor": null,
+            "totalUsableDiskCapacity": null,
+            "products": [
+                {
+                    "presetNames": [
+                        "ATP_DI",
+                        "ADW_DI",
+                        "AUTODB_PRESET_V1"
+                    ],
+                    "partNumber": "B91537",
+                    "type": {
+                        "value": "systemProduct",
+                        "label": "System Product"
+                    }
+                }
+            ],
+            "totalPersistentMemoryCapacity": null,
+            "dbServersMax": null,
+            "systemModel": "Full Rack - X8",
+            "baseDbServersQty": null,
+            "baseStorageServersQty": null,
+            "storageServersMax": null,
+            "id": 4,
+            "ocpuMin": 16
+        },
+        {
+            "ocpuMax": 92,
+            "weight": 1100,
+            "description": "Exadata Cloud Infrastructure X7 configuration is a Quarter Rack which includes 2 Database Servers and 3 Storage Servers.  OCPUs are provisioned separately.",
+            "additionalOcpu": true,
+            "systemGeneration": "X7",
+            "notes": "You must add a minimum of 2 OCPUs per database server and OCPUs must be added in increments of 2.",
+            "totalFlashCapacity": null,
+            "ocpuMaxFactor": null,
+            "flexibleSystem": false,
+            "ocpuMinFactor": null,
+            "totalUsableDiskCapacity": null,
+            "products": [
+                {
+                    "presetNames": [
+                        "ADW_DI",
+                        "ATP_DI",
+                        "AUTODB_PRESET_V1"
+                    ],
+                    "partNumber": "B89999",
+                    "type": {
+                        "value": "systemProduct",
+                        "label": "System Product"
+                    }
+                }
+            ],
+            "totalPersistentMemoryCapacity": null,
+            "dbServersMax": null,
+            "systemModel": "Quarter Rack - X7",
+            "baseDbServersQty": null,
+            "baseStorageServersQty": null,
+            "storageServersMax": null,
+            "id": 5,
+            "ocpuMin": 4
+        },
+        {
+            "ocpuMax": 184,
+            "weight": 1000,
+            "description": "Exadata Cloud Infrastructure X7 configuration is a Half Rack which includes 4 Database Servers and 6 Storage Servers.  OCPUs are provisioned separately.",
+            "additionalOcpu": true,
+            "systemGeneration": "X7",
+            "notes": "You must add a minimum of 2 OCPUs per database server and OCPUs must be added in increments of 2.",
+            "totalFlashCapacity": null,
+            "ocpuMaxFactor": null,
+            "flexibleSystem": false,
+            "ocpuMinFactor": null,
+            "totalUsableDiskCapacity": null,
+            "products": [
+                {
+                    "presetNames": [
+                        "AUTODB_PRESET_V1",
+                        "ADW_DI",
+                        "ATP_DI"
+                    ],
+                    "partNumber": "B90000",
+                    "type": {
+                        "value": "systemProduct",
+                        "label": "System Product"
+                    }
+                }
+            ],
+            "totalPersistentMemoryCapacity": null,
+            "dbServersMax": null,
+            "systemModel": "Half Rack - X7",
+            "baseDbServersQty": null,
+            "baseStorageServersQty": null,
+            "storageServersMax": null,
+            "id": 6,
+            "ocpuMin": 8
+        },
+        {
+            "ocpuMax": 368,
+            "weight": 900,
+            "description": "Exadata Cloud Infrastructure X7 configuration is a Full Rack which includes 8 Database Servers and 12 Storage Servers.  OCPUs are provisioned separately.",
+            "additionalOcpu": true,
+            "systemGeneration": "X7",
+            "notes": "You must add a minimum of 2 OCPUs per database server and OCPUs must be added in increments of 2.",
+            "totalFlashCapacity": null,
+            "ocpuMaxFactor": null,
+            "flexibleSystem": false,
+            "ocpuMinFactor": null,
+            "totalUsableDiskCapacity": null,
+            "products": [
+                {
+                    "presetNames": [
+                        "ADW_DI",
+                        "AUTODB_PRESET_V1",
+                        "ATP_DI"
+                    ],
+                    "partNumber": "B90001",
+                    "type": {
+                        "value": "systemProduct",
+                        "label": "System Product"
+                    }
+                }
+            ],
+            "totalPersistentMemoryCapacity": null,
+            "dbServersMax": null,
+            "systemModel": "Full Rack - X7",
+            "baseDbServersQty": null,
+            "baseStorageServersQty": null,
+            "storageServersMax": null,
+            "id": 7,
+            "ocpuMin": 16
+        },
+        {
+            "ocpuMax": 48,
+            "weight": 800,
+            "description": "Exadata Cloud Infrastructure Base System configuration is generation agnostic and includes 2 Database Servers and 3 Storage Servers. OCPUs are provisioned separately.",
+            "additionalOcpu": true,
+            "systemGeneration": "X7",
+            "notes": "You must add a minimum of 2 OCPUs per database server and can scale to a maximum of 50 OCPUs (in increments of 2).",
+            "totalFlashCapacity": null,
+            "ocpuMaxFactor": null,
+            "flexibleSystem": false,
+            "ocpuMinFactor": null,
+            "totalUsableDiskCapacity": null,
+            "products": [
+                {
+                    "presetNames": [
+                        "DB_EXACS_FULL_X6_V1",
+                        "ED_X8M_V1"
+                    ],
+                    "partNumber": "B90777",
+                    "type": {
+                        "value": "systemProduct",
+                        "label": "System Product"
+                    }
+                }
+            ],
+            "totalPersistentMemoryCapacity": null,
+            "dbServersMax": null,
+            "systemModel": "Exadata Database Cloud Service - Base System",
+            "baseDbServersQty": null,
+            "baseStorageServersQty": null,
+            "storageServersMax": null,
+            "id": 8,
+            "ocpuMin": 4
+        }
+    ],
+    "buildId": {
+        "buildNumber": 537,
+        "instance": "GEN2-PUBLIC-PROD",
+        "serviceType": "paas",
+        "realm": "public",
+        "buildDate": "2022-07-14T09:05:13Z"
+    }
+}
