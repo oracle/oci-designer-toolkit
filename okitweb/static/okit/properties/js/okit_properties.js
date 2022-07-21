@@ -355,7 +355,7 @@ class OkitResourceProperties {
     }
 
     addExtraAttributes(input, data) {
-        const attributes = ['min', 'max', 'step', 'maxlength', 'pattern', 'title', 'placeholder', 'readonly']
+        const attributes = ['min', 'max', 'step', 'minlength', 'maxlength', 'pattern', 'title', 'placeholder', 'readonly', 'required']
         if (data) {
             Object.entries(data).forEach(([k, v]) => {
                 if (attributes.includes(k)) input.attr(k, v)

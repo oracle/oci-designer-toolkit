@@ -77,7 +77,7 @@
                 },
                 {
                     "title": "NoSQL Database",
-                    "targets": ["hidden"],
+                    "targets": ["oci", "freetier"],
                     "svg": "NoSQLDatabase.svg"
                 },
                 {
