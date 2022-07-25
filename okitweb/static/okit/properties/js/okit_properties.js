@@ -136,7 +136,7 @@ class OkitResourceProperties {
         const display_name = this.createInput('text', 'Name', `${self.id}_display_name`, '', (d, i, n) => {this.resource.display_name = n[i].value; this.redraw(); this.setTitle(); this.handleDisplayNameChange()})
         this.display_name = display_name.input
         this.append(this.core_tbody, display_name.row)
-        this.documentation_contents.append('textarea')
+        this.documentation = this.documentation_contents.append('textarea')
                                     .attr('id', `${self.id}_documentation`)
                                     .attr('class', 'resource-documentation')
                                     .attr('name', 'documentation')
@@ -188,6 +188,7 @@ class OkitResourceProperties {
         this.ocid.property('value', this.resource.id)
         okitSettings.show_ocids ? this.showProperty(`${this.id}_ocid`, '') : this.hideProperty(`${this.id}_ocid`, '')
         this.display_name.property('value', this.resource.display_name)
+        this.documentation.property('value', this.resource.documentation)
         this.setTitle()
     }
 
