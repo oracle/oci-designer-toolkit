@@ -53,14 +53,8 @@ OkitJson.prototype.getUsers = function() {
     }
     return this.users;
 }
-OkitJson.prototype.getUser = function(id='') {
-    for (let artefact of this.getUsers()) {
-        if (artefact.id === id) {
-            return artefact;
-        }
-    }
-return undefined;
-}
+OkitJson.prototype.getUser = function(id) {return this.getUsers().find(r => r.id === id)}
+// OkitJson.prototype.getUser = (id) => this.getUsers().find(r => r.id === id)
 OkitJson.prototype.deleteUser = function(id) {
     this.users = this.users ? this.users.filter((u) => u.id !== id) : []
 }

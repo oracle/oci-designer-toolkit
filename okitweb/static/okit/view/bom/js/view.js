@@ -30,6 +30,20 @@ class OkitBoMView extends OkitJsonView {
         const canvas_div = d3.select(d3Id(this.parent_id));
         // Empty existing Canvas
         canvas_div.selectAll('*').remove();
+        // Toolbar
+        const toolbar = canvas_div.append('div')
+            .attr('class', 'okit-toolbar')
+            .attr('id', 'tabular_view_toolbar')
+        const export_excel = toolbar.append('div')
+            .attr('class', 'excel okit-toolbar-button')
+            .attr('title', 'Export to Excel')
+            .on('click', () => {
+                alert('Currently not implemented')
+                // const wb = new BoMWorkbook(this.model, this.data)
+                // const uri = 'data:Application/octet-stream,' + encodeURIComponent(wb.exportToXls())
+                // const name = 'okit.xls'
+                // triggerDownload(uri, name)
+            })
         // Heading and Safe Harbour
         this.heading_div = canvas_div.append('div').attr('id', 'bom_heading_div').attr('class', 'bom_heading')
         this.safe_harbour_div = this.heading_div.append('div')

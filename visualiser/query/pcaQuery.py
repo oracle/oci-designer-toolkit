@@ -52,18 +52,18 @@ class PCAQuery(OCIConnection):
         "DHCPOptions", 
         "Drg", 
         "FileSystem", 
-        # "Group", 
+        "Group", 
         "Instance", 
         "InternetGateway",
         "LocalPeeringGateway",
         "MountTarget",
         "NatGateway", 
         "NetworkSecurityGroup", 
-        # "Policy", 
+        "Policy", 
         "RouteTable", 
         "SecurityList", 
         "Subnet", 
-        # "User", 
+        "User", 
         "Vcn",
         "Volume"
     ]
@@ -73,6 +73,7 @@ class PCAQuery(OCIConnection):
         "BootVolumeAttachment", 
         "Export",
         "Image", 
+        # "UserGroupMembership",
         "VnicAttachment", 
         "VolumeAttachment", 
     ]
@@ -126,6 +127,11 @@ class PCAQuery(OCIConnection):
                 "method": self.file_systems, 
                 "client": "filestorage", 
                 "array": "file_systems"
+                }, 
+            "Group": {
+                "method": self.groups, 
+                "client": "identity", 
+                "array": "groups"
                 }, 
             "Image": {
                 "method": self.images, 
@@ -186,6 +192,11 @@ class PCAQuery(OCIConnection):
                 "method": self.users, 
                 "client": "identity", 
                 "array": "users"
+                }, 
+            "UserGroupMembership": {
+                "method": self.user_group_memberships, 
+                "client": "identity", 
+                "array": "user_group_memberships"
                 }, 
             "Vcn": {
                 "method": self.virtual_cloud_networks, 
@@ -248,6 +259,7 @@ class PCAQuery(OCIConnection):
         logger.info(f'cert_bundle={cert_bundle}')
         self.sub_compartments = include_sub_compartments
         self.query_compartments = compartments
+        self.top_level_compartments = compartments
         response_json = {}
         # Query Compartments
         logger.info(f'>>>>>>>> Querying Compartments')
@@ -265,7 +277,8 @@ class PCAQuery(OCIConnection):
         for resource in [r for r in self.SUPPORTED_RESOURCES if r != "Compartment"]:
             try:
                 logger.info(f'>>>>>>>>>>>> Querying {resource}')
-                self.resource_map[resource]["method"]()
+                queried_resources = self.resource_map[resource]["method"]()
+                logger.info(f'>>>>>>>>>>>>>>>> Found {len(queried_resources)} {resource}')
             except Exception as e:
                 logger.warn(e)
         # Remove Availability Domains
@@ -344,6 +357,19 @@ class PCAQuery(OCIConnection):
         self.ancillary_resources[array] = resources
         return self.ancillary_resources[array]
 
+    def user_group_memberships(self):
+        resource_map = self.resource_map["UserGroupMembership"]
+        client = self.clients[resource_map["client"]]
+        array = resource_map["array"]
+        resources = []
+        self.ancillary_resources[array] = []
+        for compartment_id in self.query_compartments:
+            results = oci.pagination.list_call_get_all_results(client.list_user_group_memberships, compartment_id=compartment_id).data
+            # Convert to Json object
+            resources = self.toJson(results)
+            self.ancillary_resources[array].extend(resources)
+        return self.ancillary_resources[array]
+
     def vnic_attachments(self):
         resource_map = self.resource_map["VnicAttachment"]
         client = self.clients[resource_map["client"]]
@@ -378,6 +404,10 @@ class PCAQuery(OCIConnection):
         results = oci.pagination.list_call_get_all_results(client.list_compartments, compartment_id=self.tenancy_ocid, compartment_id_in_subtree=self.sub_compartments).data
         # Convert to Json object
         self.all_compartments = self.toJson(results)
+        # Add Tenancy Root to list
+        results = client.get_compartment(compartment_id=self.tenancy_ocid).data
+        tenancy_root = self.toJson(results)
+        self.all_compartments.append(tenancy_root)
         self.all_compartment_ids = [c['id'] for c in self.all_compartments]
         return 
     
@@ -397,14 +427,18 @@ class PCAQuery(OCIConnection):
         if self.sub_compartments:
             self.tenancy_compartments()
             query_compartment_ids = self.child_compartments(self.query_compartments)
-            self.query_compartments = query_compartment_ids
             self.dropdown_json[array] = [c for c in self.all_compartments if c['id'] in query_compartment_ids]
+            # Extend compartments to include Sub compartments
+            self.query_compartments = query_compartment_ids
         else:
             for compartment_id in self.query_compartments:
                 results = client.get_compartment(compartment_id=compartment_id).data
                 # Convert to Json object
                 resources = self.toJson(results)
                 self.dropdown_json[array].append(resources)
+        for compartment in self.dropdown_json[array]:
+            if compartment['id'] in self.top_level_compartments:
+                compartment['compartment_id'] = None
         return self.dropdown_json[array]
 
     def block_storage_volumes(self):
@@ -458,6 +492,26 @@ class PCAQuery(OCIConnection):
                 # Convert to Json object
                 resources = self.toJson(results)
                 self.dropdown_json[array].extend(resources)
+        return self.dropdown_json[array]
+
+    def groups(self):
+        resource_map = self.resource_map["Group"]
+        client = self.clients[resource_map["client"]]
+        array = resource_map["array"]
+        resources = []
+        self.dropdown_json[array] = []
+        for compartment_id in self.query_compartments:
+            results = oci.pagination.list_call_get_all_results(client.list_groups, compartment_id=compartment_id).data
+            # Convert to Json object
+            resources = self.toJson(results)
+            self.dropdown_json[array].extend(resources)
+        # Add Users in Group
+        for resource in self.dropdown_json[array]:
+            results = oci.pagination.list_call_get_all_results(client.list_user_group_memberships, compartment_id=resource['compartment_id'], group_id=resource['id']).data
+            # Convert to Json object
+            user_group_memberships = self.toJson(results)
+            # resource['user_ids'] = [u['id'] for u in self.ancillary_resources['user_group_memberships'] if u['group_id'] == resource['id']]
+            resource['user_ids'] = [u['user_id'] for u in user_group_memberships if u['group_id'] == resource['id']]
         return self.dropdown_json[array]
 
     def instances(self):
@@ -578,6 +632,23 @@ class PCAQuery(OCIConnection):
             self.dropdown_json[array].extend(resources)
         return self.dropdown_json[array]
 
+    def object_storage_buckets(self):
+        resource_map = self.resource_map["Bucket"]
+        client = self.clients[resource_map["client"]]
+        array = resource_map["array"]
+        resources = []
+        self.dropdown_json[array] = []
+        namespace = str(client.get_namespace().data)
+        # Required because previous call returns wrong information for PCA
+        namespace = self.config.get('namespace', namespace)
+        logger.debug(f'Namespace {namespace}')
+        for compartment_id in self.query_compartments:
+            results = oci.pagination.list_call_get_all_results(client.list_buckets, namespace_name=namespace, compartment_id=compartment_id).data
+            # Convert to Json object
+            resources = self.toJson(results)
+            self.dropdown_json[array].extend(resources)
+        return self.dropdown_json[array]
+
     def policies(self):
         resource_map = self.resource_map["Policy"]
         client = self.clients[resource_map["client"]]
@@ -651,20 +722,6 @@ class PCAQuery(OCIConnection):
         self.dropdown_json[array] = []
         for compartment_id in self.query_compartments:
             results = oci.pagination.list_call_get_all_results(client.list_vcns, compartment_id=compartment_id).data
-            # Convert to Json object
-            resources = self.toJson(results)
-            self.dropdown_json[array].extend(resources)
-        return self.dropdown_json[array]
-
-    def object_storage_buckets(self):
-        resource_map = self.resource_map["Bucket"]
-        client = self.clients[resource_map["client"]]
-        array = resource_map["array"]
-        resources = []
-        self.dropdown_json[array] = []
-        namespace = str(client.get_namespace().data)
-        for compartment_id in self.query_compartments:
-            results = oci.pagination.list_call_get_all_results(client.list_buckets, namespace_name=namespace, compartment_id=compartment_id).data
             # Convert to Json object
             resources = self.toJson(results)
             self.dropdown_json[array].extend(resources)
