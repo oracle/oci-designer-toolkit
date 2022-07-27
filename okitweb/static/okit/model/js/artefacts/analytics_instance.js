@@ -16,11 +16,11 @@ class AnalyticsInstance extends OkitArtifact {
         // Configure default values
         // this.display_name = this.generateDefaultName(okitjson.analytics_instances.length + 1);
         this.compartment_id = '';
-        this.feature_set = '';
+        this.feature_set = 'SELF_SERVICE_ANALYTICS';
         this.idcs_access_token = '';
-        this.license_type = '';
+        this.license_type = 'LICENSE_INCLUDED';
         this.capacity = {
-            capacity_type: '',
+            capacity_type: 'OLPU_COUNT',
             capacity_value: 1
         }
         this.description = '';
@@ -40,6 +40,12 @@ class AnalyticsInstance extends OkitArtifact {
         delete this.vcn_id;
         Object.defineProperty(this, 'subnet_id', {get: function() {return this.network_endpoint_details.subnet_id;}, set: function(id) {this.network_endpoint_details.subnet_id = id;}, enumerable: true });
         Object.defineProperty(this, 'vcn_id', {get: function() {return this.network_endpoint_details.vcn_id;}, set: function(id) {this.network_endpoint_details.vcn_id = id;}, enumerable: true });
+    }
+    newWhitelistedVcn() {
+        return {
+            id: "",
+            whitelisted_ips: []
+        }
     }
     /*
     ** Name Generation

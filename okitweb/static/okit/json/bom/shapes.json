@@ -1,0 +1,1771 @@
+{
+    "count": 34,
+    "items": [
+        {
+            "status": "ACTIVE",
+            "maxVnicsTotalWindows": "1",
+            "allowReservedCapacity": true,
+            "allowPreemptible": true,
+            "description": null,
+            "weight": null,
+            "processorType": {
+                "value": "intel",
+                "label": "Intel"
+            },
+            "allowDedicatedHost": false,
+            "allowBurstable": false,
+            "shapeType": {
+                "value": "vm",
+                "label": "VM"
+            },
+            "name": "VM.DenseIO1.4",
+            "subType": {
+                "value": "dense",
+                "label": "Dense"
+            },
+            "products": [
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_VM_V1"
+                    ],
+                    "min": null,
+                    "default": null,
+                    "max": null,
+                    "qty": 4,
+                    "partNumber": "B88516",
+                    "type": {
+                        "value": "ocpu",
+                        "label": "OCPU"
+                    }
+                }
+            ],
+            "functionDescription": null,
+            "bundleMemoryQty": 60,
+            "maxVnicsTotalLinux": "4",
+            "localDisk": "3.2 TB NVMe SSD",
+            "maxNetworkBandwidth": "1.2 Gbps",
+            "id": 27,
+            "features": null
+        },
+        {
+            "status": "ACTIVE",
+            "maxVnicsTotalWindows": "- VM with 1 OCPU: 2 VNICs\r\n- VM with 2 or more OCPUs: 1 VNIC per OCPU\r\n- Maximum 24 VNICs.",
+            "allowReservedCapacity": false,
+            "allowPreemptible": false,
+            "description": null,
+            "weight": null,
+            "processorType": {
+                "value": "amd",
+                "label": "AMD"
+            },
+            "allowDedicatedHost": false,
+            "allowBurstable": false,
+            "shapeType": {
+                "value": "vm",
+                "label": "VM"
+            },
+            "name": "VM.DenseIO.E4.Flex",
+            "subType": {
+                "value": "dense",
+                "label": "Dense"
+            },
+            "products": [
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_CLASSIC_V1",
+                        "OCI_COMPUTE_VM_V1"
+                    ],
+                    "min": null,
+                    "default": null,
+                    "max": null,
+                    "qty": 8,
+                    "partNumber": "B93121",
+                    "type": {
+                        "value": "ocpu",
+                        "label": "OCPU"
+                    }
+                },
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_CLASSIC_V1",
+                        "OCI_COMPUTE_VM_V1"
+                    ],
+                    "min": null,
+                    "default": null,
+                    "max": null,
+                    "qty": 128,
+                    "partNumber": "B93122",
+                    "type": {
+                        "value": "memory",
+                        "label": "Memory"
+                    }
+                },
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_CLASSIC_V1",
+                        "OCI_COMPUTE_VM_V1"
+                    ],
+                    "min": null,
+                    "default": null,
+                    "max": null,
+                    "qty": 6.8,
+                    "partNumber": "B93123",
+                    "type": {
+                        "value": "disk",
+                        "label": "Local disk"
+                    }
+                }
+            ],
+            "functionDescription": null,
+            "bundleMemoryQty": 128,
+            "maxVnicsTotalLinux": "- VM with 1 OCPU: 2 VNICs\r\n- VM with 2 or more OCPUs: 1 VNIC per OCPU\r\n- Maximum 24 VNICs.",
+            "localDisk": "6.8 or 13.6 or 27.2 TB NVMe SSD",
+            "maxNetworkBandwidth": "1 Gbps per OCPU, maximum 40 Gbps",
+            "id": 115,
+            "features": null
+        },
+        {
+            "status": "ACTIVE",
+            "maxVnicsTotalWindows": "8",
+            "allowReservedCapacity": true,
+            "allowPreemptible": true,
+            "description": null,
+            "weight": null,
+            "processorType": {
+                "value": "intel",
+                "label": "Intel"
+            },
+            "allowDedicatedHost": false,
+            "allowBurstable": false,
+            "shapeType": {
+                "value": "vm",
+                "label": "VM"
+            },
+            "name": "VM.DenseIO2.8",
+            "subType": {
+                "value": "dense",
+                "label": "Dense"
+            },
+            "products": [
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_VM_V1"
+                    ],
+                    "min": null,
+                    "default": null,
+                    "max": null,
+                    "qty": 8,
+                    "partNumber": "B88516",
+                    "type": {
+                        "value": "ocpu",
+                        "label": "OCPU"
+                    }
+                }
+            ],
+            "functionDescription": null,
+            "bundleMemoryQty": 120,
+            "maxVnicsTotalLinux": "8",
+            "localDisk": "6.4 TB NVMe SSD",
+            "maxNetworkBandwidth": "8.2 Gbps",
+            "id": 29,
+            "features": null
+        },
+        {
+            "status": "ACTIVE",
+            "maxVnicsTotalWindows": "1",
+            "allowReservedCapacity": true,
+            "allowPreemptible": true,
+            "description": null,
+            "weight": null,
+            "processorType": {
+                "value": "intel",
+                "label": "Intel"
+            },
+            "allowDedicatedHost": false,
+            "allowBurstable": false,
+            "shapeType": {
+                "value": "vm",
+                "label": "VM"
+            },
+            "name": "VM.DenseIO1.8",
+            "subType": {
+                "value": "dense",
+                "label": "Dense"
+            },
+            "products": [
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_VM_V1"
+                    ],
+                    "min": null,
+                    "default": null,
+                    "max": null,
+                    "qty": 8,
+                    "partNumber": "B88516",
+                    "type": {
+                        "value": "ocpu",
+                        "label": "OCPU"
+                    }
+                }
+            ],
+            "functionDescription": null,
+            "bundleMemoryQty": 120,
+            "maxVnicsTotalLinux": "8",
+            "localDisk": "6.4 TB NVMe SSD",
+            "maxNetworkBandwidth": "2.4 Gbps",
+            "id": 5,
+            "features": null
+        },
+        {
+            "status": "ACTIVE",
+            "maxVnicsTotalWindows": "1",
+            "allowReservedCapacity": true,
+            "allowPreemptible": true,
+            "description": null,
+            "weight": null,
+            "processorType": {
+                "value": "intel",
+                "label": "Intel"
+            },
+            "allowDedicatedHost": false,
+            "allowBurstable": false,
+            "shapeType": {
+                "value": "vm",
+                "label": "VM"
+            },
+            "name": "VM.DenseIO1.16",
+            "subType": {
+                "value": "dense",
+                "label": "Dense"
+            },
+            "products": [
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_VM_V1"
+                    ],
+                    "min": null,
+                    "default": null,
+                    "max": null,
+                    "qty": 16,
+                    "partNumber": "B88516",
+                    "type": {
+                        "value": "ocpu",
+                        "label": "OCPU"
+                    }
+                }
+            ],
+            "functionDescription": null,
+            "bundleMemoryQty": 240,
+            "maxVnicsTotalLinux": "16",
+            "localDisk": "12.8 TB NVMe SSD",
+            "maxNetworkBandwidth": "4.8 Gbps",
+            "id": 28,
+            "features": null
+        },
+        {
+            "status": "ACTIVE",
+            "maxVnicsTotalWindows": "16",
+            "allowReservedCapacity": true,
+            "allowPreemptible": true,
+            "description": null,
+            "weight": null,
+            "processorType": {
+                "value": "intel",
+                "label": "Intel"
+            },
+            "allowDedicatedHost": false,
+            "allowBurstable": false,
+            "shapeType": {
+                "value": "vm",
+                "label": "VM"
+            },
+            "name": "VM.DenseIO2.16",
+            "subType": {
+                "value": "dense",
+                "label": "Dense"
+            },
+            "products": [
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_VM_V1"
+                    ],
+                    "min": null,
+                    "default": null,
+                    "max": null,
+                    "qty": 16,
+                    "partNumber": "B88516",
+                    "type": {
+                        "value": "ocpu",
+                        "label": "OCPU"
+                    }
+                }
+            ],
+            "functionDescription": null,
+            "bundleMemoryQty": 240,
+            "maxVnicsTotalLinux": "16",
+            "localDisk": "12.8 TB NVMe SSD",
+            "maxNetworkBandwidth": "16.4 Gbps",
+            "id": 30,
+            "features": null
+        },
+        {
+            "status": "ACTIVE",
+            "maxVnicsTotalWindows": "24",
+            "allowReservedCapacity": true,
+            "allowPreemptible": true,
+            "description": null,
+            "weight": null,
+            "processorType": {
+                "value": "intel",
+                "label": "Intel"
+            },
+            "allowDedicatedHost": false,
+            "allowBurstable": false,
+            "shapeType": {
+                "value": "vm",
+                "label": "VM"
+            },
+            "name": "VM.DenseIO2.24",
+            "subType": {
+                "value": "dense",
+                "label": "Dense"
+            },
+            "products": [
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_VM_V1"
+                    ],
+                    "min": null,
+                    "default": null,
+                    "max": null,
+                    "qty": 24,
+                    "partNumber": "B88516",
+                    "type": {
+                        "value": "ocpu",
+                        "label": "OCPU"
+                    }
+                }
+            ],
+            "functionDescription": null,
+            "bundleMemoryQty": 320,
+            "maxVnicsTotalLinux": "24",
+            "localDisk": "25.6 TB NVMe SSD",
+            "maxNetworkBandwidth": "24.6 Gbps",
+            "id": 31,
+            "features": null
+        },
+        {
+            "status": "ACTIVE",
+            "maxVnicsTotalWindows": "27 total (1 on the first physical NIC, 26 on the second)",
+            "allowReservedCapacity": true,
+            "allowPreemptible": false,
+            "description": null,
+            "weight": null,
+            "processorType": {
+                "value": "intel",
+                "label": "Intel"
+            },
+            "allowDedicatedHost": false,
+            "allowBurstable": false,
+            "shapeType": {
+                "value": "bm",
+                "label": "BM"
+            },
+            "name": "BM.DenseIO2.52",
+            "subType": {
+                "value": "dense",
+                "label": "Dense"
+            },
+            "products": [
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_CLASSIC_V1"
+                    ],
+                    "min": null,
+                    "default": null,
+                    "max": null,
+                    "qty": 52,
+                    "partNumber": "B88515",
+                    "type": {
+                        "value": "ocpu",
+                        "label": "OCPU"
+                    }
+                }
+            ],
+            "functionDescription": null,
+            "bundleMemoryQty": 768,
+            "maxVnicsTotalLinux": "52 total (26 per physical NIC)",
+            "localDisk": "51.2 TB NVMe SSD (8 drives)",
+            "maxNetworkBandwidth": "2 x 25 Gbps",
+            "id": 33,
+            "features": null
+        },
+        {
+            "status": "ACTIVE",
+            "maxVnicsTotalWindows": "129 total (1 on the first physical NIC, 128 on the second)",
+            "allowReservedCapacity": false,
+            "allowPreemptible": false,
+            "description": null,
+            "weight": null,
+            "processorType": {
+                "value": "amd",
+                "label": "AMD"
+            },
+            "allowDedicatedHost": false,
+            "allowBurstable": false,
+            "shapeType": {
+                "value": "bm",
+                "label": "BM"
+            },
+            "name": "BM.DenseIO.E4.128",
+            "subType": {
+                "value": "dense",
+                "label": "Dense"
+            },
+            "products": [
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_CLASSIC_V1",
+                        "OCI_COMPUTE_VM_V1"
+                    ],
+                    "min": null,
+                    "default": null,
+                    "max": null,
+                    "qty": 128,
+                    "partNumber": "B93121",
+                    "type": {
+                        "value": "ocpu",
+                        "label": "OCPU"
+                    }
+                },
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_CLASSIC_V1",
+                        "OCI_COMPUTE_VM_V1"
+                    ],
+                    "min": null,
+                    "default": null,
+                    "max": null,
+                    "qty": 2048,
+                    "partNumber": "B93122",
+                    "type": {
+                        "value": "memory",
+                        "label": "Memory"
+                    }
+                },
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_CLASSIC_V1",
+                        "OCI_COMPUTE_VM_V1"
+                    ],
+                    "min": null,
+                    "default": null,
+                    "max": null,
+                    "qty": 54.4,
+                    "partNumber": "B93123",
+                    "type": {
+                        "value": "disk",
+                        "label": "Local disk"
+                    }
+                }
+            ],
+            "functionDescription": null,
+            "bundleMemoryQty": 2048,
+            "maxVnicsTotalLinux": "256",
+            "localDisk": "54.4 TB NVMe SSD",
+            "maxNetworkBandwidth": "2 x 50 Gbps",
+            "id": 135,
+            "features": null
+        },
+        {
+            "status": "ACTIVE",
+            "maxVnicsTotalWindows": "VM with 1 OCPU: 2 VNICs. \r\n \r\nVM with 2 or more OCPUs: 1 VNIC per OCPU. \r\n \r\nMaximum 24 VNICs.",
+            "allowReservedCapacity": true,
+            "allowPreemptible": true,
+            "description": null,
+            "weight": 3,
+            "processorType": {
+                "value": "amd",
+                "label": "AMD"
+            },
+            "allowDedicatedHost": false,
+            "allowBurstable": true,
+            "shapeType": {
+                "value": "vm",
+                "label": "VM"
+            },
+            "name": "VM.Standard.E3.Flex",
+            "subType": {
+                "value": "flexible",
+                "label": "Flexible"
+            },
+            "products": [
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_VM_V1"
+                    ],
+                    "min": 1,
+                    "default": null,
+                    "max": 64,
+                    "qty": 0,
+                    "partNumber": "B92306",
+                    "type": {
+                        "value": "ocpu",
+                        "label": "OCPU"
+                    }
+                },
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_VM_V1"
+                    ],
+                    "min": 1,
+                    "default": 8,
+                    "max": 1024,
+                    "qty": 0,
+                    "partNumber": "B92307",
+                    "type": {
+                        "value": "memory",
+                        "label": "Memory"
+                    }
+                }
+            ],
+            "functionDescription": null,
+            "bundleMemoryQty": 0,
+            "maxVnicsTotalLinux": "VM with 1 OCPU: 2 VNICs. \r\n \r\nVM with 2 or more OCPUs: 1 VNIC per OCPU. \r\n \r\nMaximum 24 VNICs.",
+            "localDisk": "Block storage only",
+            "maxNetworkBandwidth": "1 Gbps per OCPU, maximum 40 Gbps",
+            "id": 25,
+            "features": null
+        },
+        {
+            "status": "ACTIVE",
+            "maxVnicsTotalWindows": "VM with 1 OCPU: 2 VNICs. \r\n \r\nVM with 2 or more OCPUs: 1 VNIC per OCPU. \r\n \r\nMaximum 24 VNICs.",
+            "allowReservedCapacity": true,
+            "allowPreemptible": true,
+            "description": null,
+            "weight": 4,
+            "processorType": {
+                "value": "amd",
+                "label": "AMD"
+            },
+            "allowDedicatedHost": false,
+            "allowBurstable": true,
+            "shapeType": {
+                "value": "vm",
+                "label": "VM"
+            },
+            "name": "VM.Standard.E4.Flex",
+            "subType": {
+                "value": "flexible",
+                "label": "Flexible"
+            },
+            "products": [
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_VM_V1"
+                    ],
+                    "min": 1,
+                    "default": null,
+                    "max": 64,
+                    "qty": 0,
+                    "partNumber": "B93113",
+                    "type": {
+                        "value": "ocpu",
+                        "label": "OCPU"
+                    }
+                },
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_VM_V1"
+                    ],
+                    "min": 1,
+                    "default": 8,
+                    "max": 1024,
+                    "qty": 0,
+                    "partNumber": "B93114",
+                    "type": {
+                        "value": "memory",
+                        "label": "Memory"
+                    }
+                }
+            ],
+            "functionDescription": null,
+            "bundleMemoryQty": 0,
+            "maxVnicsTotalLinux": "VM with 1 OCPU: 2 VNICs. \r\n \r\nVM with 2 or more OCPUs: 1 VNIC per OCPU. \r\n \r\nMaximum 24 VNICs.",
+            "localDisk": "Block storage only",
+            "maxNetworkBandwidth": "1 Gbps per OCPU, maximum 40 Gbps",
+            "id": 3,
+            "features": null
+        },
+        {
+            "status": "ACTIVE",
+            "maxVnicsTotalWindows": "Windows images are not supported on this shape.",
+            "allowReservedCapacity": true,
+            "allowPreemptible": true,
+            "description": null,
+            "weight": 2,
+            "processorType": {
+                "value": "arm",
+                "label": "Ampere"
+            },
+            "allowDedicatedHost": false,
+            "allowBurstable": false,
+            "shapeType": {
+                "value": "vm",
+                "label": "VM"
+            },
+            "name": "VM.Standard.A1.Flex",
+            "subType": {
+                "value": "flexible",
+                "label": "Flexible"
+            },
+            "products": [
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_VM_V1"
+                    ],
+                    "min": 1,
+                    "default": null,
+                    "max": 80,
+                    "qty": 0,
+                    "partNumber": "B93297",
+                    "type": {
+                        "value": "ocpu",
+                        "label": "OCPU"
+                    }
+                },
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_VM_V1"
+                    ],
+                    "min": 1,
+                    "default": 6,
+                    "max": 512,
+                    "qty": 0,
+                    "partNumber": "B93298",
+                    "type": {
+                        "value": "memory",
+                        "label": "Memory"
+                    }
+                }
+            ],
+            "functionDescription": "Each tenancy gets the first 3,000 OCPU hours and 18,000 GB hours per month for free to create Ampere A1 Compute instances using the VM.Standard.A1.Flex shape (equivalent to 4 OCPUs and 24 GB of memory).",
+            "bundleMemoryQty": 0,
+            "maxVnicsTotalLinux": "VM with 1 OCPU: 2 VNICs. \r\n \r\nVM with 2 or more OCPUs: 1 VNIC per OCPU. \r\n \r\nMaximum 24 VNICs.",
+            "localDisk": "Block storage only",
+            "maxNetworkBandwidth": "1 Gbps per OCPU, maximum 40 Gbps",
+            "id": 26,
+            "features": null
+        },
+        {
+            "status": "ACTIVE",
+            "maxVnicsTotalWindows": "24",
+            "allowReservedCapacity": true,
+            "allowPreemptible": true,
+            "description": null,
+            "weight": null,
+            "processorType": {
+                "value": "intel",
+                "label": "Intel"
+            },
+            "allowDedicatedHost": false,
+            "allowBurstable": true,
+            "shapeType": {
+                "value": "vm",
+                "label": "VM"
+            },
+            "name": "VM.Standard3.Flex",
+            "subType": {
+                "value": "flexible",
+                "label": "Flexible"
+            },
+            "products": [
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_VM_V1"
+                    ],
+                    "min": 1,
+                    "default": null,
+                    "max": 32,
+                    "qty": 0,
+                    "partNumber": "B94176",
+                    "type": {
+                        "value": "ocpu",
+                        "label": "OCPU"
+                    }
+                },
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_VM_V1"
+                    ],
+                    "min": 1,
+                    "default": 8,
+                    "max": 512,
+                    "qty": 0,
+                    "partNumber": "B94177",
+                    "type": {
+                        "value": "memory",
+                        "label": "Memory"
+                    }
+                }
+            ],
+            "functionDescription": null,
+            "bundleMemoryQty": 0,
+            "maxVnicsTotalLinux": "24",
+            "localDisk": "Block storage only",
+            "maxNetworkBandwidth": "FLEX",
+            "id": 75,
+            "features": null
+        },
+        {
+            "status": "ACTIVE",
+            "maxVnicsTotalWindows": "VM with 1 OCPU: 2 VNICs. \r\n \r\nVM with 2 or more OCPUs: 1 VNIC per OCPU. \r\n \r\nMaximum 18 VNICs.",
+            "allowReservedCapacity": true,
+            "allowPreemptible": true,
+            "description": null,
+            "weight": 1,
+            "processorType": {
+                "value": "intel",
+                "label": "Intel"
+            },
+            "allowDedicatedHost": false,
+            "allowBurstable": false,
+            "shapeType": {
+                "value": "vm",
+                "label": "VM"
+            },
+            "name": "VM.Optimized3.Flex",
+            "subType": {
+                "value": "flexible",
+                "label": "Flexible"
+            },
+            "products": [
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_VM_V1"
+                    ],
+                    "min": 1,
+                    "default": null,
+                    "max": 18,
+                    "qty": 0,
+                    "partNumber": "B93311",
+                    "type": {
+                        "value": "ocpu",
+                        "label": "OCPU"
+                    }
+                },
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_VM_V1"
+                    ],
+                    "min": 1,
+                    "default": 8,
+                    "max": 256,
+                    "qty": 0,
+                    "partNumber": "B93312",
+                    "type": {
+                        "value": "memory",
+                        "label": "Memory"
+                    }
+                }
+            ],
+            "functionDescription": null,
+            "bundleMemoryQty": 0,
+            "maxVnicsTotalLinux": "VM with 1 OCPU: 2 VNICs. \r\n \r\nVM with 2 or more OCPUs: 1 VNIC per OCPU. \r\n \r\nMaximum 18 VNICs.",
+            "localDisk": "Block storage only",
+            "maxNetworkBandwidth": "4 Gbps per OCPU, maximum 40 Gbps",
+            "id": 4,
+            "features": null
+        },
+        {
+            "status": "ACTIVE",
+            "maxVnicsTotalWindows": "12",
+            "allowReservedCapacity": false,
+            "allowPreemptible": true,
+            "description": "1x NVIDIA P100, Arch =Pascal, GPU Memory =16 GB",
+            "weight": null,
+            "processorType": {
+                "value": "pascal",
+                "label": "Pascal"
+            },
+            "allowDedicatedHost": false,
+            "allowBurstable": false,
+            "shapeType": {
+                "value": "vm",
+                "label": "VM"
+            },
+            "name": "VM.GPU2.1",
+            "subType": {
+                "value": "gpu",
+                "label": "GPU"
+            },
+            "products": [
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_GPU"
+                    ],
+                    "min": null,
+                    "default": null,
+                    "max": null,
+                    "qty": 1,
+                    "partNumber": "B88518",
+                    "type": {
+                        "value": "ocpu",
+                        "label": "OCPU"
+                    }
+                }
+            ],
+            "functionDescription": null,
+            "bundleMemoryQty": 16,
+            "maxVnicsTotalLinux": "12",
+            "localDisk": "Block storage only",
+            "maxNetworkBandwidth": "8 Gbps",
+            "id": 55,
+            "features": null
+        },
+        {
+            "status": "ACTIVE",
+            "maxVnicsTotalWindows": null,
+            "allowReservedCapacity": false,
+            "allowPreemptible": true,
+            "description": "1x NVIDIA V100 Tensor Core, Arch =Volta, GPU Memory =16 GB",
+            "weight": null,
+            "processorType": {
+                "value": "volta",
+                "label": "Volta"
+            },
+            "allowDedicatedHost": false,
+            "allowBurstable": false,
+            "shapeType": {
+                "value": "vm",
+                "label": "VM"
+            },
+            "name": "VM.GPU3.1",
+            "subType": {
+                "value": "gpu",
+                "label": "GPU"
+            },
+            "products": [
+                {
+                    "presetNames": [],
+                    "min": null,
+                    "default": null,
+                    "max": null,
+                    "qty": 1,
+                    "partNumber": "B89734",
+                    "type": {
+                        "value": "ocpu",
+                        "label": "OCPU"
+                    }
+                }
+            ],
+            "functionDescription": null,
+            "bundleMemoryQty": 16,
+            "maxVnicsTotalLinux": null,
+            "localDisk": "Block storage only",
+            "maxNetworkBandwidth": "4 Gbps",
+            "id": 11,
+            "features": null
+        },
+        {
+            "status": "ACTIVE",
+            "maxVnicsTotalWindows": "15 (1 on the first physical NIC, 14 on the second)",
+            "allowReservedCapacity": false,
+            "allowPreemptible": false,
+            "description": "2x NVIDIA P100, Arch =Pascal, GPU Memory =32 GB",
+            "weight": null,
+            "processorType": {
+                "value": "pascal",
+                "label": "Pascal"
+            },
+            "allowDedicatedHost": false,
+            "allowBurstable": false,
+            "shapeType": {
+                "value": "bm",
+                "label": "BM"
+            },
+            "name": "BM.GPU2.2",
+            "subType": {
+                "value": "gpu",
+                "label": "GPU"
+            },
+            "products": [
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_GPU"
+                    ],
+                    "min": null,
+                    "default": null,
+                    "max": null,
+                    "qty": 2,
+                    "partNumber": "B88517",
+                    "type": {
+                        "value": "ocpu",
+                        "label": "OCPU"
+                    }
+                }
+            ],
+            "functionDescription": null,
+            "bundleMemoryQty": 32,
+            "maxVnicsTotalLinux": "28",
+            "localDisk": "Block storage only",
+            "maxNetworkBandwidth": "2x 25 Gbps",
+            "id": 56,
+            "features": null
+        },
+        {
+            "status": "ACTIVE",
+            "maxVnicsTotalWindows": null,
+            "allowReservedCapacity": false,
+            "allowPreemptible": true,
+            "description": "2x NVIDIA V100 Tensor Core, Arch =Volta, GPU Memory =32 GB",
+            "weight": null,
+            "processorType": {
+                "value": "volta",
+                "label": "Volta"
+            },
+            "allowDedicatedHost": false,
+            "allowBurstable": false,
+            "shapeType": {
+                "value": "vm",
+                "label": "VM"
+            },
+            "name": "VM.GPU3.2",
+            "subType": {
+                "value": "gpu",
+                "label": "GPU"
+            },
+            "products": [
+                {
+                    "presetNames": [],
+                    "min": null,
+                    "default": null,
+                    "max": null,
+                    "qty": 2,
+                    "partNumber": "B89734",
+                    "type": {
+                        "value": "ocpu",
+                        "label": "OCPU"
+                    }
+                }
+            ],
+            "functionDescription": null,
+            "bundleMemoryQty": 32,
+            "maxVnicsTotalLinux": null,
+            "localDisk": "Block storage only",
+            "maxNetworkBandwidth": "8 Gbps",
+            "id": 12,
+            "features": null
+        },
+        {
+            "status": "ACTIVE",
+            "maxVnicsTotalWindows": null,
+            "allowReservedCapacity": false,
+            "allowPreemptible": true,
+            "description": "4x NVIDIA V100 Tensor Core, Arch =Volta, GPU Memory =64 GB",
+            "weight": null,
+            "processorType": {
+                "value": "volta",
+                "label": "Volta"
+            },
+            "allowDedicatedHost": false,
+            "allowBurstable": false,
+            "shapeType": {
+                "value": "vm",
+                "label": "VM"
+            },
+            "name": "VM.GPU3.4",
+            "subType": {
+                "value": "gpu",
+                "label": "GPU"
+            },
+            "products": [
+                {
+                    "presetNames": [],
+                    "min": null,
+                    "default": null,
+                    "max": null,
+                    "qty": 4,
+                    "partNumber": "B89734",
+                    "type": {
+                        "value": "ocpu",
+                        "label": "OCPU"
+                    }
+                }
+            ],
+            "functionDescription": null,
+            "bundleMemoryQty": 64,
+            "maxVnicsTotalLinux": null,
+            "localDisk": "Block storage only",
+            "maxNetworkBandwidth": "25 Gbps",
+            "id": 13,
+            "features": null
+        },
+        {
+            "status": "ACTIVE",
+            "maxVnicsTotalWindows": "Windows platform images do not support this shape.",
+            "allowReservedCapacity": false,
+            "allowPreemptible": false,
+            "description": "8x NVIDIA A100 Tensor Core, Arch =Ampere, GPU Memory =320 GB",
+            "weight": null,
+            "processorType": {
+                "value": "arm",
+                "label": "Ampere"
+            },
+            "allowDedicatedHost": false,
+            "allowBurstable": false,
+            "shapeType": {
+                "value": "bm",
+                "label": "BM"
+            },
+            "name": "BM.GPU4.8",
+            "subType": {
+                "value": "gpu",
+                "label": "GPU"
+            },
+            "products": [
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_GPU"
+                    ],
+                    "min": null,
+                    "default": null,
+                    "max": null,
+                    "qty": 8,
+                    "partNumber": "B92740",
+                    "type": {
+                        "value": "ocpu",
+                        "label": "OCPU"
+                    }
+                }
+            ],
+            "functionDescription": null,
+            "bundleMemoryQty": 320,
+            "maxVnicsTotalLinux": "64",
+            "localDisk": "27.2 TB NVMe SSD (4 drives)",
+            "maxNetworkBandwidth": "1 x 50 Gbps \r\n \r\n8 x 200 Gbps RDMA",
+            "id": 36,
+            "features": null
+        },
+        {
+            "status": "ACTIVE",
+            "maxVnicsTotalWindows": "27 total (1 on the first physical NIC, 26 on the second)",
+            "allowReservedCapacity": false,
+            "allowPreemptible": false,
+            "description": "8x NVIDIA V100 Tensor Core, Arch =Volta, GPU Memory =128 GB",
+            "weight": null,
+            "processorType": {
+                "value": "volta",
+                "label": "Volta"
+            },
+            "allowDedicatedHost": false,
+            "allowBurstable": false,
+            "shapeType": {
+                "value": "bm",
+                "label": "BM"
+            },
+            "name": "BM.GPU3.8",
+            "subType": {
+                "value": "gpu",
+                "label": "GPU"
+            },
+            "products": [
+                {
+                    "presetNames": [],
+                    "min": null,
+                    "default": null,
+                    "max": null,
+                    "qty": 8,
+                    "partNumber": "B89734",
+                    "type": {
+                        "value": "ocpu",
+                        "label": "OCPU"
+                    }
+                }
+            ],
+            "functionDescription": null,
+            "bundleMemoryQty": 128,
+            "maxVnicsTotalLinux": "52",
+            "localDisk": "Block storage only",
+            "maxNetworkBandwidth": "2x 25 Gbps",
+            "id": 34,
+            "features": null
+        },
+        {
+            "status": "ACTIVE",
+            "maxVnicsTotalWindows": "1",
+            "allowReservedCapacity": true,
+            "allowPreemptible": false,
+            "description": null,
+            "weight": null,
+            "processorType": {
+                "value": "intel",
+                "label": "Intel"
+            },
+            "allowDedicatedHost": false,
+            "allowBurstable": false,
+            "shapeType": {
+                "value": "bm",
+                "label": "BM"
+            },
+            "name": "BM.HPC2.36",
+            "subType": {
+                "value": "hpc",
+                "label": "HPC"
+            },
+            "products": [
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_CLASSIC_V1"
+                    ],
+                    "min": null,
+                    "default": null,
+                    "max": null,
+                    "qty": 36,
+                    "partNumber": "B90398",
+                    "type": {
+                        "value": "ocpu",
+                        "label": "OCPU"
+                    }
+                }
+            ],
+            "functionDescription": null,
+            "bundleMemoryQty": 384,
+            "maxVnicsTotalLinux": "50",
+            "localDisk": "6.4 TB NVMe SSD",
+            "maxNetworkBandwidth": "1 x 25 Gbps, 1 x 100 Gbps RDMA",
+            "id": 10,
+            "features": null
+        },
+        {
+            "status": "ACTIVE",
+            "maxVnicsTotalWindows": "129",
+            "allowReservedCapacity": true,
+            "allowPreemptible": false,
+            "description": null,
+            "weight": null,
+            "processorType": {
+                "value": "intel",
+                "label": "Intel"
+            },
+            "allowDedicatedHost": false,
+            "allowBurstable": false,
+            "shapeType": {
+                "value": "bm",
+                "label": "BM"
+            },
+            "name": "BM.Optimized3.36",
+            "subType": {
+                "value": "optimized",
+                "label": "Optimized"
+            },
+            "products": [
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_VM_V1"
+                    ],
+                    "min": null,
+                    "default": null,
+                    "max": null,
+                    "qty": 36,
+                    "partNumber": "B93311",
+                    "type": {
+                        "value": "ocpu",
+                        "label": "OCPU"
+                    }
+                },
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_VM_V1"
+                    ],
+                    "min": null,
+                    "default": null,
+                    "max": null,
+                    "qty": 512,
+                    "partNumber": "B93312",
+                    "type": {
+                        "value": "memory",
+                        "label": "Memory"
+                    }
+                }
+            ],
+            "functionDescription": null,
+            "bundleMemoryQty": 512,
+            "maxVnicsTotalLinux": "256",
+            "localDisk": "3.8TB NVMe SSD (1 drive)",
+            "maxNetworkBandwidth": "2 X 50 Gbps, 1 X 100 Gbps RDMA",
+            "id": 9,
+            "features": null
+        },
+        {
+            "status": "ACTIVE",
+            "maxVnicsTotalWindows": "2",
+            "allowReservedCapacity": true,
+            "allowPreemptible": true,
+            "description": null,
+            "weight": null,
+            "processorType": {
+                "value": "intel",
+                "label": "Intel"
+            },
+            "allowDedicatedHost": false,
+            "allowBurstable": false,
+            "shapeType": {
+                "value": "vm",
+                "label": "VM"
+            },
+            "name": "VM.Standard2.1",
+            "subType": {
+                "value": "standard",
+                "label": "Standard"
+            },
+            "products": [
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_VM_V1"
+                    ],
+                    "min": null,
+                    "default": null,
+                    "max": null,
+                    "qty": 1,
+                    "partNumber": "B88514",
+                    "type": {
+                        "value": "ocpu",
+                        "label": "OCPU"
+                    }
+                }
+            ],
+            "functionDescription": null,
+            "bundleMemoryQty": 15,
+            "maxVnicsTotalLinux": "2",
+            "localDisk": "Block storage only",
+            "maxNetworkBandwidth": "1 Gbps",
+            "id": 1,
+            "features": null
+        },
+        {
+            "status": "ACTIVE",
+            "maxVnicsTotalWindows": "2",
+            "allowReservedCapacity": true,
+            "allowPreemptible": true,
+            "description": null,
+            "weight": null,
+            "processorType": {
+                "value": "intel",
+                "label": "Intel"
+            },
+            "allowDedicatedHost": false,
+            "allowBurstable": false,
+            "shapeType": {
+                "value": "vm",
+                "label": "VM"
+            },
+            "name": "VM.Standard2.2",
+            "subType": {
+                "value": "standard",
+                "label": "Standard"
+            },
+            "products": [
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_VM_V1"
+                    ],
+                    "min": null,
+                    "default": null,
+                    "max": null,
+                    "qty": 2,
+                    "partNumber": "B88514",
+                    "type": {
+                        "value": "ocpu",
+                        "label": "OCPU"
+                    }
+                }
+            ],
+            "functionDescription": null,
+            "bundleMemoryQty": 30,
+            "maxVnicsTotalLinux": "2",
+            "localDisk": "Block storage only",
+            "maxNetworkBandwidth": "2 Gbps",
+            "id": 21,
+            "features": null
+        },
+        {
+            "status": "ACTIVE",
+            "maxVnicsTotalWindows": "4",
+            "allowReservedCapacity": true,
+            "allowPreemptible": true,
+            "description": null,
+            "weight": null,
+            "processorType": {
+                "value": "intel",
+                "label": "Intel"
+            },
+            "allowDedicatedHost": false,
+            "allowBurstable": false,
+            "shapeType": {
+                "value": "vm",
+                "label": "VM"
+            },
+            "name": "VM.Standard2.4",
+            "subType": {
+                "value": "standard",
+                "label": "Standard"
+            },
+            "products": [
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_VM_V1"
+                    ],
+                    "min": null,
+                    "default": null,
+                    "max": null,
+                    "qty": 4,
+                    "partNumber": "B88514",
+                    "type": {
+                        "value": "ocpu",
+                        "label": "OCPU"
+                    }
+                }
+            ],
+            "functionDescription": null,
+            "bundleMemoryQty": 60,
+            "maxVnicsTotalLinux": "4",
+            "localDisk": "Block storage only",
+            "maxNetworkBandwidth": "4.1 Gbps",
+            "id": 22,
+            "features": null
+        },
+        {
+            "status": "ACTIVE",
+            "maxVnicsTotalWindows": "8",
+            "allowReservedCapacity": true,
+            "allowPreemptible": true,
+            "description": null,
+            "weight": null,
+            "processorType": {
+                "value": "intel",
+                "label": "Intel"
+            },
+            "allowDedicatedHost": false,
+            "allowBurstable": false,
+            "shapeType": {
+                "value": "vm",
+                "label": "VM"
+            },
+            "name": "VM.Standard2.8",
+            "subType": {
+                "value": "standard",
+                "label": "Standard"
+            },
+            "products": [
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_VM_V1"
+                    ],
+                    "min": null,
+                    "default": null,
+                    "max": null,
+                    "qty": 8,
+                    "partNumber": "B88514",
+                    "type": {
+                        "value": "ocpu",
+                        "label": "OCPU"
+                    }
+                }
+            ],
+            "functionDescription": null,
+            "bundleMemoryQty": 120,
+            "maxVnicsTotalLinux": "8",
+            "localDisk": "Block storage only",
+            "maxNetworkBandwidth": "8.2 Gbps",
+            "id": 23,
+            "features": null
+        },
+        {
+            "status": "ACTIVE",
+            "maxVnicsTotalWindows": "16",
+            "allowReservedCapacity": true,
+            "allowPreemptible": true,
+            "description": null,
+            "weight": null,
+            "processorType": {
+                "value": "intel",
+                "label": "Intel"
+            },
+            "allowDedicatedHost": false,
+            "allowBurstable": false,
+            "shapeType": {
+                "value": "vm",
+                "label": "VM"
+            },
+            "name": "VM.Standard2.16",
+            "subType": {
+                "value": "standard",
+                "label": "Standard"
+            },
+            "products": [
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_VM_V1"
+                    ],
+                    "min": null,
+                    "default": null,
+                    "max": null,
+                    "qty": 16,
+                    "partNumber": "B88514",
+                    "type": {
+                        "value": "ocpu",
+                        "label": "OCPU"
+                    }
+                }
+            ],
+            "functionDescription": null,
+            "bundleMemoryQty": 240,
+            "maxVnicsTotalLinux": "16",
+            "localDisk": "Block storage only",
+            "maxNetworkBandwidth": "16.4 Gbps",
+            "id": 2,
+            "features": null
+        },
+        {
+            "status": "ACTIVE",
+            "maxVnicsTotalWindows": "24",
+            "allowReservedCapacity": true,
+            "allowPreemptible": true,
+            "description": null,
+            "weight": null,
+            "processorType": {
+                "value": "intel",
+                "label": "Intel"
+            },
+            "allowDedicatedHost": false,
+            "allowBurstable": false,
+            "shapeType": {
+                "value": "vm",
+                "label": "VM"
+            },
+            "name": "VM.Standard2.24",
+            "subType": {
+                "value": "standard",
+                "label": "Standard"
+            },
+            "products": [
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_VM_V1"
+                    ],
+                    "min": null,
+                    "default": null,
+                    "max": null,
+                    "qty": 24,
+                    "partNumber": "B88514",
+                    "type": {
+                        "value": "ocpu",
+                        "label": "OCPU"
+                    }
+                }
+            ],
+            "functionDescription": null,
+            "bundleMemoryQty": 320,
+            "maxVnicsTotalLinux": "24",
+            "localDisk": "Block storage only",
+            "maxNetworkBandwidth": "24.6 Gbps",
+            "id": 24,
+            "features": null
+        },
+        {
+            "status": "ACTIVE",
+            "maxVnicsTotalWindows": "101 total (1 on the first physical NIC, 100 on the second)",
+            "allowReservedCapacity": true,
+            "allowPreemptible": false,
+            "description": null,
+            "weight": null,
+            "processorType": {
+                "value": "intel",
+                "label": "Intel"
+            },
+            "allowDedicatedHost": false,
+            "allowBurstable": false,
+            "shapeType": {
+                "value": "bm",
+                "label": "BM"
+            },
+            "name": "BM.Standard2.52",
+            "subType": {
+                "value": "standard",
+                "label": "Standard"
+            },
+            "products": [
+                {
+                    "presetNames": [
+                        "BM.Standard2.52",
+                        "OCI_COMPUTE_CLASSIC_V1"
+                    ],
+                    "min": null,
+                    "default": null,
+                    "max": null,
+                    "qty": 52,
+                    "partNumber": "B88513",
+                    "type": {
+                        "value": "ocpu",
+                        "label": "OCPU"
+                    }
+                }
+            ],
+            "functionDescription": null,
+            "bundleMemoryQty": 768,
+            "maxVnicsTotalLinux": "200",
+            "localDisk": "Block storage only",
+            "maxNetworkBandwidth": "2 x 25 Gbps",
+            "id": 32,
+            "features": null
+        },
+        {
+            "status": "ACTIVE",
+            "maxVnicsTotalWindows": "256",
+            "allowReservedCapacity": true,
+            "allowPreemptible": false,
+            "description": null,
+            "weight": null,
+            "processorType": {
+                "value": "intel",
+                "label": "Intel"
+            },
+            "allowDedicatedHost": false,
+            "allowBurstable": false,
+            "shapeType": {
+                "value": "bm",
+                "label": "BM"
+            },
+            "name": "BM.Standard3.64",
+            "subType": {
+                "value": "standard",
+                "label": "Standard"
+            },
+            "products": [
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_VM_V1"
+                    ],
+                    "min": null,
+                    "default": null,
+                    "max": null,
+                    "qty": 64,
+                    "partNumber": "B94176",
+                    "type": {
+                        "value": "ocpu",
+                        "label": "OCPU"
+                    }
+                },
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_VM_V1"
+                    ],
+                    "min": null,
+                    "default": null,
+                    "max": null,
+                    "qty": 1024,
+                    "partNumber": "B94177",
+                    "type": {
+                        "value": "memory",
+                        "label": "Memory"
+                    }
+                }
+            ],
+            "functionDescription": null,
+            "bundleMemoryQty": 1024,
+            "maxVnicsTotalLinux": "256",
+            "localDisk": "Block storage only",
+            "maxNetworkBandwidth": "2 x 50 Gbps",
+            "id": 95,
+            "features": null
+        },
+        {
+            "status": "ACTIVE",
+            "maxVnicsTotalWindows": "129 total (1 on the first physical NIC, 128 on the second)",
+            "allowReservedCapacity": true,
+            "allowPreemptible": false,
+            "description": null,
+            "weight": null,
+            "processorType": {
+                "value": "amd",
+                "label": "AMD"
+            },
+            "allowDedicatedHost": false,
+            "allowBurstable": false,
+            "shapeType": {
+                "value": "bm",
+                "label": "BM"
+            },
+            "name": "BM.Standard.E4.128",
+            "subType": {
+                "value": "standard",
+                "label": "Standard"
+            },
+            "products": [
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_VM_V1"
+                    ],
+                    "min": null,
+                    "default": null,
+                    "max": null,
+                    "qty": 128,
+                    "partNumber": "B93113",
+                    "type": {
+                        "value": "ocpu",
+                        "label": "OCPU"
+                    }
+                },
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_VM_V1"
+                    ],
+                    "min": null,
+                    "default": null,
+                    "max": null,
+                    "qty": 2048,
+                    "partNumber": "B93114",
+                    "type": {
+                        "value": "memory",
+                        "label": "Memory"
+                    }
+                }
+            ],
+            "functionDescription": null,
+            "bundleMemoryQty": 2048,
+            "maxVnicsTotalLinux": "256",
+            "localDisk": "Block storage only",
+            "maxNetworkBandwidth": "2 x 50 Gbps",
+            "id": 7,
+            "features": null
+        },
+        {
+            "status": "ACTIVE",
+            "maxVnicsTotalWindows": "129 total (1 on the first physical NIC, 128 on the second)",
+            "allowReservedCapacity": true,
+            "allowPreemptible": false,
+            "description": null,
+            "weight": null,
+            "processorType": {
+                "value": "amd",
+                "label": "AMD"
+            },
+            "allowDedicatedHost": false,
+            "allowBurstable": false,
+            "shapeType": {
+                "value": "bm",
+                "label": "BM"
+            },
+            "name": "BM.Standard.E3.128",
+            "subType": {
+                "value": "standard",
+                "label": "Standard"
+            },
+            "products": [
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_VM_V1"
+                    ],
+                    "min": null,
+                    "default": null,
+                    "max": null,
+                    "qty": 128,
+                    "partNumber": "B92306",
+                    "type": {
+                        "value": "ocpu",
+                        "label": "OCPU"
+                    }
+                },
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_VM_V1"
+                    ],
+                    "min": null,
+                    "default": null,
+                    "max": null,
+                    "qty": 2048,
+                    "partNumber": "B92307",
+                    "type": {
+                        "value": "memory",
+                        "label": "Memory"
+                    }
+                }
+            ],
+            "functionDescription": null,
+            "bundleMemoryQty": 2048,
+            "maxVnicsTotalLinux": "256",
+            "localDisk": "Block storage only",
+            "maxNetworkBandwidth": "2 x 50 Gbps",
+            "id": 6,
+            "features": null
+        },
+        {
+            "status": "ACTIVE",
+            "maxVnicsTotalWindows": "Windows images are not supported on this shape.",
+            "allowReservedCapacity": true,
+            "allowPreemptible": false,
+            "description": null,
+            "weight": null,
+            "processorType": {
+                "value": "arm",
+                "label": "Ampere"
+            },
+            "allowDedicatedHost": false,
+            "allowBurstable": false,
+            "shapeType": {
+                "value": "bm",
+                "label": "BM"
+            },
+            "name": "BM.Standard.A1.160",
+            "subType": {
+                "value": "standard",
+                "label": "Standard"
+            },
+            "products": [
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_VM_V1"
+                    ],
+                    "min": null,
+                    "default": null,
+                    "max": null,
+                    "qty": 160,
+                    "partNumber": "B93297",
+                    "type": {
+                        "value": "ocpu",
+                        "label": "OCPU"
+                    }
+                },
+                {
+                    "presetNames": [
+                        "OCI_COMPUTE_VM_V1"
+                    ],
+                    "min": null,
+                    "default": null,
+                    "max": null,
+                    "qty": 1024,
+                    "partNumber": "B93298",
+                    "type": {
+                        "value": "memory",
+                        "label": "Memory"
+                    }
+                }
+            ],
+            "functionDescription": null,
+            "bundleMemoryQty": 1024,
+            "maxVnicsTotalLinux": "256",
+            "localDisk": "Block storage only",
+            "maxNetworkBandwidth": "2 x 50 Gbps",
+            "id": 8,
+            "features": null
+        }
+    ],
+    "buildId": {
+        "buildNumber": 538,
+        "instance": "GEN2-PUBLIC-PROD",
+        "serviceType": "paas",
+        "realm": "public",
+        "buildDate": "2022-07-14T14:38:54Z"
+    }
+}

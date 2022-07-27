@@ -39,16 +39,16 @@ RUN yum install -y \
  && python3 -m pip install --upgrade pip \
 # Install required python modules
  && python3 -m pip install --no-cache-dir \
-        authlib==0.15.3 \
-        flask==1.1.2 \
-        gitpython==3.1.14 \
-        git-url-parse==1.2.2 \
-        gunicorn==20.0.4 \
+        authlib \
+        flask \
+        gitpython \
+        git-url-parse \
+        gunicorn \
         oci \
-        openpyxl==3.0.7 \
-        python-magic==0.4.22 \
-        pyyaml==5.4.1 \
-        requests==2.25.1 \
+        openpyxl \
+        python-magic \
+        pyyaml \
+        requests \
 # Create Workspace
  && mkdir -p /github \
  && git clone -c core.autocrlf=input https://github.com/oracle/oci-designer-toolkit.git /github/oci-designer-toolkit \

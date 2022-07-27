@@ -7,24 +7,42 @@ console.debug('Loaded NoSQL Database Javascript');
 /*
 ** Define NoSQL Database Class
 */
-class NoSQLDatabase extends OkitArtifact {
+class NosqlDatabase extends OkitArtifact {
     /*
     ** Create
     */
     constructor (data={}, okitjson={}) {
         super(okitjson);
         // Configure default values
-        // this.display_name = this.generateDefaultName(okitjson.nosql_databases.length + 1);
         this.compartment_id = data.parent_id;
-        /*
-        ** TODO: Add Resource / Artefact specific parameters and default
-        */
+        this.ddl_statement = ''
+        this.table_limits = {
+            max_read_units: 0,
+            max_storage_in_gbs: 1,
+            max_write_units: 0,
+            capacity_mode: 'ON_DEMAND'
+        }
+        this.is_auto_reclaimable = true        
+        this.indexes = []
         // Update with any passed data
         this.merge(data);
         this.convert();
-        // TODO: If the Resource is within a Subnet but the subnet_iss is not at the top level then raise it with the following functions if not required delete them.
-        // Expose subnet_id at the top level
-        Object.defineProperty(this, 'subnet_id', {get: function() {return this.primary_mount_target.subnet_id;}, set: function(id) {this.primary_mount_target.subnet_id = id;}, enumerable: false });
+    }
+
+    newIndex() {
+        return {
+            resource_name: `${this.generateResourceName()}Index`,
+            name: `${this.display_name}Index${this.indexes.length + 1}`,
+            is_if_not_exists: true,
+            keys: []
+        }
+    }
+    newIndexKey() {
+        return {
+            column_name: '',
+            json_field_type: '',
+            json_path: ''
+        }
     }
     /*
     ** Name Generation
@@ -42,25 +60,23 @@ class NoSQLDatabase extends OkitArtifact {
 /*
 ** Dynamically Add Model Functions
 */
-OkitJson.prototype.newNoSQLDatabase = function(data) {
-    this.getNoSQLDatabases().push(new NoSQLDatabase(data, this));
-    return this.getNoSQLDatabases()[this.getNoSQLDatabases().length - 1];
+OkitJson.prototype.newNosqlDatabase = function(data) {
+    this.getNosqlDatabases().push(new NosqlDatabase(data, this));
+    return this.getNosqlDatabases()[this.getNosqlDatabases().length - 1];
 }
-OkitJson.prototype.getNoSQLDatabases = function() {
-    if (!this.nosql_databases) {
-        this.nosql_databases = [];
-    }
+OkitJson.prototype.getNosqlDatabases = function() {
+    if (!this.nosql_databases) this.nosql_databases = []
     return this.nosql_databases;
 }
-OkitJson.prototype.getNoSQLDatabase = function(id='') {
-    for (let artefact of this.getNoSQLDatabases()) {
-        if (artefact.id === id) {
-            return artefact;
-        }
-    }
-return undefined;
+OkitJson.prototype.getNosqlDatabase = function(id='') {
+    // for (let artefact of this.getNosqlDatabases()) {
+    //     if (artefact.id === id) {
+    //         return artefact;
+    //     }
+    // }
+    return this.getNosqlDatabases().find(r => r.id === id);
 }
-OkitJson.prototype.deleteNoSQLDatabase = function(id) {
+OkitJson.prototype.deleteNosqlDatabase = function(id) {
     this.nosql_databases = this.nosql_databases ? this.nosql_databases.filter((r) => r.id !== id) : []
 }
 

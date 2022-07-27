@@ -21,6 +21,8 @@ class Group extends OkitArtifact {
         // Update with any passed data
         this.merge(data);
         this.convert();
+        // Expose Useful Information
+        Object.defineProperty(this, 'user_count', {get: () => {return this.user_ids.length}})
     }
     /*
     ** Name Generation

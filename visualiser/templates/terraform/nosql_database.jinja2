@@ -1,0 +1,77 @@
+{% if read_only %} {# Read Only #}
+# ------ Read NoSQL Table
+data "oci_nosql_tables" "{{ resource_name }}" {
+    #Required
+    compartment_id = {{ compartment_id }}
+    filter {
+        name = "id"
+        values = [{{ ocid | safe }}]
+    }
+}
+
+locals {
+    {{ resource_name }}_id = {{ ocid | safe }}
+}
+{% else %} {# (Not) Read Only #}
+# ------ Create NoSQL Table
+resource "oci_nosql_table" "{{ resource_name }}" {
+    #Required
+    compartment_id = {{ compartment_id }}
+    ddl_statement = {{ ddl_statement | safe }}
+    name = {{ display_name | safe }}
+    table_limits {
+        #Required
+        max_storage_in_gbs = {{ table_limits.max_storage_in_gbs | safe }}
+{% if table_limits.max_read_units is defined %}
+        max_read_units = {{ table_limits.max_read_units | safe }}
+{% endif %}
+{% if table_limits.max_write_units is defined %}
+        max_write_units = {{ table_limits.max_write_units | safe }}
+{% endif %}
+        #Optional
+        capacity_mode = {{ table_limits.capacity_mode | safe }}
+    }
+    #Optional
+{% if defined_tags is defined %}
+    defined_tags   = {{ defined_tags | safe }}
+{% endif %}
+{% if freeform_tags is defined %}
+    freeform_tags  = {{ freeform_tags | safe }}
+{% endif %}
+{% if is_auto_reclaimable is defined %}
+    is_auto_reclaimable = {{ is_auto_reclaimable | safe | lower }}
+{% endif %}
+}
+
+locals {
+    {{ resource_name }}_id   = oci_nosql_table.{{ resource_name }}.id
+    {{ resource_name }}_ocid = oci_nosql_table.{{ resource_name }}.id
+}
+
+{% for index in indexes %}
+# ------ Create NoSQL Index
+resource "oci_nosql_index" "{{ index.resource_name }}" {
+    #Required
+    {% for key in index["keys"] %}
+    keys {
+        #Required
+        column_name = {{ key.column_name | safe }}
+        #Optional
+        {% if key.json_field_type is defined %}
+        json_field_type = {{ key.json_field_type | safe }}
+        {% endif %}
+        {% if key.json_path is defined %}
+        json_path = {{ key.json_path | safe }}
+        {% endif %}
+    }
+    {% endfor %} {# Keys #}
+    name = {{ index.name | safe}}
+    table_name_or_id = local.{{ resource_name }}_id
+    #Optional
+    compartment_id = {{ compartment_id }}
+    {% if index.is_if_not_exists is defined %}
+    is_if_not_exists = {{ index.is_if_not_exists | safe | lower }}
+    {% endif %}
+}
+{% endfor %}
+{% endif %} {# Read Only #}

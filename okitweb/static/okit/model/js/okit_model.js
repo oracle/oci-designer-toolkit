@@ -319,7 +319,8 @@ class OkitArtifact {
         // All Artefacts will have compartment id, display name & description
         this.compartment_id = '';
         this.display_name = this.generateDefaultName(okitjson.metadata.resource_count += 1);
-        this.definition = '';
+        // this.definition = '';
+        this.documentation = '';
         this.okit_reference = `okit-${uuidv4()}`;
         // Add default for common Tag variables
         this.freeform_tags = {};
@@ -333,7 +334,7 @@ class OkitArtifact {
         this.read_only = false;
         // Add Terraform Resource Name
         this.resource_name = this.generateResourceName();
-        Object.defineProperty(this, 'documentation', {get: function() {return this.definition;}, set: function(documentation) {this.definition = documentation;}, enumerable: true });
+        // Object.defineProperty(this, 'documentation', {get: function() {return this.definition;}, set: function(documentation) {this.definition = documentation;}, enumerable: true });
     }
 
     getOkitJson() {return this.okit_json}
@@ -402,6 +403,12 @@ class OkitArtifact {
         }
         if (this.availability_domain) {this.availability_domain = this.getAvailabilityDomainNumber(this.availability_domain);}
         // if (this.availability_domain && this.availability_domain.length > 1) {this.availability_domain = this.getAvailabilityDomainNumber(this.availability_domain);}
+        // Switch Definition to Documentation
+        if (this.definition !== undefined) {
+            this.documentation = this.definition
+            delete this.definition
+        }
+        Object.defineProperty(this, 'definition', {get: function() {return this.documentation;}, set: function(documentation) {this.documentation = documentation;}, enumerable: false });
     }
 
     /*

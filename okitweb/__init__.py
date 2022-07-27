@@ -62,7 +62,7 @@ def create_local_app(test_config=None):
         from . import okitPricing
         app.register_blueprint(okitPricing.bp)
     except Exception as e:
-        logger.info(e)
+        logger.debug(e)
     from . import okitOci
     app.register_blueprint(okitOci.bp)
     from . import okitImport
