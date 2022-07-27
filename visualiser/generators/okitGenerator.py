@@ -198,6 +198,7 @@ class OCIGenerator(object):
         "autonomous_databases": "database",
         "database_systems": "database",
         "mysql_database_systems": "database",
+        "nosql_databases": "database",
 
         "customer_premise_equipments": "customer_connectivity",
         "drgs": "customer_connectivity",

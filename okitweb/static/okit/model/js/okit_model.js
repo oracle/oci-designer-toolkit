@@ -409,7 +409,6 @@ class OkitArtifact {
             delete this.definition
         }
         Object.defineProperty(this, 'definition', {get: function() {return this.documentation;}, set: function(documentation) {this.documentation = documentation;}, enumerable: false });
-        console.info(`>>>>> Type ${typeof this.definition}`)
     }
 
     /*

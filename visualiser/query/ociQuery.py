@@ -77,6 +77,8 @@ class OCIQuery(OCIConnection):
         "NetworkSecurityGroup",
         "NetworkSecurityGroupSecurityRule",
         "NodePool",
+        "NoSQLTable",
+        "NoSQLIndex",
         "OdaInstance",
         "Policy",
         "PrivateIp",
@@ -130,6 +132,7 @@ class OCIQuery(OCIConnection):
         "NatGateway": "nat_gateways",
         "NetworkLoadBalancer": "network_load_balancers",
         "NetworkSecurityGroup": "network_security_groups",
+        "NoSQLTable": "nosql_databases",
         "OdaInstance": "oracle_digital_assistants",
         "Policy": "policys", # Yes we know it's spelt incorrectly but the okitCodeSkeletonGenerator.py is simple
         "RemotePeeringConnection": "remote_peering_connections",
@@ -245,6 +248,8 @@ class OCIQuery(OCIConnection):
                         resource_list = self.groups(resource_list, resources)
                     elif resource_type == "NetworkLoadBalancer":
                         resource_list = self.network_load_balancers(resource_list, resources)
+                    elif resource_type == "NoSQLTable":
+                        resource_list = self.nosql_databases(resource_list, resources)
                     # elif resource_type == "AnalyticsInstance":
                     #     resource_list = self.analytics_instances(resource_list, resources)
                     # Check Life Cycle State
@@ -382,6 +387,13 @@ class OCIQuery(OCIConnection):
         for nsg in nsgs:
             nsg["security_rules"] = [r for r in resources.get("NetworkSecurityGroupSecurityRule", []) if r["network_security_group_id"] == nsg["id"]]
         return nsgs
+
+    def nosql_databases(self, databases, resources):
+        indexes = resources.get("NoSQLIndex", [])
+        for database in databases:
+            logger.info(jsonToFormattedString(database))
+        logger.info(jsonToFormattedString(indexes))
+        return databases
 
     def object_storage_buckets(self, buckets, resources):
         for bucket in buckets:

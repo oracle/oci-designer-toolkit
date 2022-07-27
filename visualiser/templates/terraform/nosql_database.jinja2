@@ -13,7 +13,8 @@ locals {
     {{ resource_name }}_id = {{ ocid | safe }}
 }
 {% else %} {# (Not) Read Only #}
-resource "oci_nosql_table" "test_table" {
+# ------ Create NoSQL Table
+resource "oci_nosql_table" "{{ resource_name }}" {
     #Required
     compartment_id = {{ compartment_id }}
     ddl_statement = {{ ddl_statement | safe }}
@@ -30,7 +31,6 @@ resource "oci_nosql_table" "test_table" {
         #Optional
         capacity_mode = {{ table_limits.capacity_mode | safe }}
     }
-
     #Optional
 {% if defined_tags is defined %}
     defined_tags   = {{ defined_tags | safe }}
@@ -39,7 +39,39 @@ resource "oci_nosql_table" "test_table" {
     freeform_tags  = {{ freeform_tags | safe }}
 {% endif %}
 {% if is_auto_reclaimable is defined %}
-    is_auto_reclaimable = {{ is_auto_reclaimable | safe }}
+    is_auto_reclaimable = {{ is_auto_reclaimable | safe | lower }}
 {% endif %}
 }
+
+locals {
+    {{ resource_name }}_id   = oci_nosql_table.{{ resource_name }}.id
+    {{ resource_name }}_ocid = oci_nosql_table.{{ resource_name }}.id
+}
+
+{% for index in indexes %}
+# ------ Create NoSQL Index
+resource "oci_nosql_index" "{{ index.resource_name }}" {
+    #Required
+    {% for key in index["keys"] %}
+    keys {
+        #Required
+        column_name = {{ key.column_name | safe }}
+        #Optional
+        {% if key.json_field_type is defined %}
+        json_field_type = {{ key.json_field_type | safe }}
+        {% endif %}
+        {% if key.json_path is defined %}
+        json_path = {{ key.json_path | safe }}
+        {% endif %}
+    }
+    {% endfor %} {# Keys #}
+    name = {{ index.name | safe}}
+    table_name_or_id = local.{{ resource_name }}_id
+    #Optional
+    compartment_id = {{ compartment_id }}
+    {% if index.is_if_not_exists is defined %}
+    is_if_not_exists = {{ index.is_if_not_exists | safe | lower }}
+    {% endif %}
+}
+{% endfor %}
 {% endif %} {# Read Only #}
