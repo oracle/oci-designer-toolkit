@@ -17,9 +17,9 @@ class NosqlDatabase extends OkitArtifact {
         this.compartment_id = data.parent_id;
         this.ddl_statement = ''
         this.table_limits = {
-            max_read_units: null,
+            max_read_units: 0,
             max_storage_in_gbs: 1,
-            max_write_units: null,
+            max_write_units: 0,
             capacity_mode: 'ON_DEMAND'
         }
         this.is_auto_reclaimable = true        
@@ -31,6 +31,7 @@ class NosqlDatabase extends OkitArtifact {
 
     newIndex() {
         return {
+            resource_name: `${this.generateResourceName()}Index`,
             name: `${this.display_name}Index${this.indexes.length + 1}`,
             is_if_not_exists: true,
             keys: []

@@ -169,8 +169,8 @@ PRIMARY KEY (id)
 
     capacityModeChanged() {
         if (this.resource.table_limits.capacity_mode === 'ON_DEMAND') {
-            this.resource.table_limits.max_read_units = null
-            this.resource.table_limits.max_write_units = null
+            this.resource.table_limits.max_read_units = 0
+            this.resource.table_limits.max_write_units = 0
         } else {
             if (this.resource.table_limits.max_read_units === 0) this.resource.table_limits.max_read_units = 1
             if (this.resource.table_limits.max_write_units === 0) this.resource.table_limits.max_write_units = 1

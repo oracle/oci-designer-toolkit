@@ -19,6 +19,8 @@
         2. User Count
 4. New Properties sheet.
     1. Analytics Instance
+5. New Resource
+    1. NoSQL Table / Index __(Creation only)__
 ### Bug Fixes
 1. Fix issue where PCA queried Compartment was not displayed as the top level compartment
 2. Resolve issues where documentation information was not be reloaded for resources.
