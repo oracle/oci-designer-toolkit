@@ -6,7 +6,7 @@ FROM oraclelinux:7-slim
 ARG BRANCH=master
 LABEL "provider"="Oracle" \
       "issues"="https://github.com/oracle/oci-designer-toolkit/issues" \
-      "version"="0.38.0" \
+      "version"="0.39.0" \
       "description"="OKIT Web Server Container." \
       "copyright"="Copyright (c) 2020, 2022, Oracle and/or its affiliates."
 # SHELL ["/bin/bash", "-c"]
@@ -47,16 +47,16 @@ RUN yum install -y \
  && python3 -m pip install --upgrade pip \
 # Install required python modules
  && pip3 install --no-cache-dir \
-        authlib==0.15.3 \
-        flask==1.1.2 \
-        gitpython==3.1.14 \
-        git-url-parse==1.2.2 \
-        gunicorn==20.0.4 \
+        authlib \
+        flask \
+        gitpython \
+        git-url-parse \
+        gunicorn \
         oci \
-        openpyxl==3.0.7 \
-        python-magic==0.4.22 \
-        pyyaml==5.4.1 \
-        requests==2.25.1 \
+        openpyxl \
+        python-magic \
+        pyyaml \
+        requests \
 # Create Workspace
  && mkdir -p /github \
  && echo "Branch: $BRANCH" \
