@@ -21,6 +21,7 @@
     1. Analytics Instance
 5. New Resource
     1. NoSQL Table / Index __(Creation only)__
+6. Remove Python module version specification and allow use of latest.
 ### Bug Fixes
 1. Fix issue where PCA queried Compartment was not displayed as the top level compartment
 2. Resolve issues where documentation information was not be reloaded for resources.
