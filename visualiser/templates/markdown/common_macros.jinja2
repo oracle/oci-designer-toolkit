@@ -1,8 +1,8 @@
 {%- macro document_common_details(resource) %}
 
 #### {{ resource.display_name }}
-    {% if resource.definition is defined and resource.definition|length > 0 -%}
-        {{ resource.definition | safe }}
+    {% if resource.documentation is defined and resource.documentation|length > 0 -%}
+        {{ resource.documentation | safe }}
 
     {% endif %}
     {% if resource.svg is defined -%}
