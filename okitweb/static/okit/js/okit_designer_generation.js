@@ -671,52 +671,6 @@ function generateMarkdown(results) {
 }
 
 
-// TODO: Deprecated
-function handleExportToTerraformGit1(e) {
-    $(jqId('modal_dialog_title')).text('Export Terraform');
-    $(jqId('modal_dialog_body')).empty();
-    $(jqId('modal_dialog_footer')).empty();
-    let table = d3.select(d3Id('modal_dialog_body')).append('div').append('div')
-        .attr('id', 'load_from_git')
-        .attr('class', 'table okit-table okit-modal-dialog-table');
-    let tbody = table.append('div').attr('class', 'tbody');
-
-    tr = tbody.append('div').attr('class', 'tr').attr('id', 'export_box_repo');
-    tr.append('div').attr('class', 'td').text('Repository:');
-    tr.append('div').attr('class', 'td').append('select')
-        .attr('id', 'git_repository')
-        .append('option')
-        .attr('value', 'select')
-        .text('Select');
-
-    let git_repository_filename_select = d3.select(d3Id('git_repository'));
-
-    for (let git_setting of okitGitConfig.gitsections) {
-        git_repository_filename_select.append('option').attr('value', git_setting['url']+'*'+git_setting['branch']).text(git_setting['label']);
-    }
-
-    tr = tbody.append('div').attr('class', 'tr').attr('id', 'export_box_filename');
-    tr.append('div').attr('class', 'td').text('Folder Name:');
-    tr.append('div').attr('class', 'td').append('input')
-        .attr('class', 'okit-input')
-        .attr('id', 'git_repository_filename')
-        .attr('type', 'text');
-
-    tr = tbody.append('div').attr('class', 'tr').attr('id', 'export_box_commitmsg');
-    tr.append('div').attr('class', 'td').text('Description:');
-    tr.append('div').attr('class', 'td').append('input')
-        .attr('class', 'okit-input')
-        .attr('id', 'git_repository_commitmsg')
-        .attr('type', 'text');
-
-    // Submit
-    let save_button = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
-        .attr('id', 'export_terraform_option_id')
-        .attr('type', 'button')
-        .text('Submit');
-    save_button.on("click", handleExportToTerraformGitProceed);
-    $(jqId('modal_dialog_wrapper')).removeClass('hidden');
-}
 function handleExportToTerraformGitProceed(e) {
     okitJsonModel.git_repository = $(jqId('git_repository')).val();
     okitJsonModel.git_repository_filename = $(jqId('git_repository_filename')).val();

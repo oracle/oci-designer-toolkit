@@ -507,8 +507,8 @@ def valueproposition(sheet):
 def generate(language, destination):
     logger.info('Language : {0:s} - {1:s}'.format(str(language), str(request.method)))
     logger.info('Destination : {0:s} - {1:s}'.format(str(destination), str(request.method)))
-    logger.debug('JSON     : {0:s}'.format(str(request.json)))
     if request.method == 'POST':
+        logger.debug('JSON     : {0:s}'.format(str(request.json)))
         use_vars = request.json.get("use_variables", True)
         try:
             if destination == 'git':
@@ -557,6 +557,7 @@ def generate(language, destination):
             logger.exception(e)
             return str(e), 500
     else:
+        logger.info(f'Returning /tmp/okit-{language}.zip')
         return send_from_directory('/tmp', "okit-{0:s}.zip".format(str(language)), mimetype='application/zip', as_attachment=True)
 
 
