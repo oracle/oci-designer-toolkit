@@ -281,16 +281,46 @@ def designer():
     ansible_mode = (request.args.get('ansible', default='false') == 'true')
     if ansible_mode:
         logger.info("<<<<<<<<<<<<<<<<<<<<<<<< Ansible Mode >>>>>>>>>>>>>>>>>>>>>>>>")
-    # Read Artifact Model Specific JavaScript Files
-    artefact_model_js_files = sorted(os.listdir(os.path.join(bp.static_folder, 'model', 'js', 'artefacts')))
-    # Read Artifact View Specific JavaScript Files
-    if os.path.exists(os.path.join(bp.static_folder, 'view', 'js', 'artefacts')) and os.path.isdir(os.path.join(bp.static_folder, 'view', 'js', 'artefacts')):
-        artefact_view_js_files = sorted(os.listdir(os.path.join(bp.static_folder, 'view', 'js', 'artefacts')))
-    else:
-        artefact_view_js_files = []
-    artefact_view_js_files.extend(sorted(os.listdir(os.path.join(bp.static_folder, 'view', 'designer', 'js', 'artefacts'))))
+    # Define Resource directories
+    resource_js_files = [
+        {
+            'root': os.path.join('model', 'js', 'artefacts'),
+            'files': []
+        },
+        {
+            'root': os.path.join('view', 'js', 'artefacts'),
+            'files': []
+        },
+        {
+            'root': os.path.join('view', 'designer', 'js', 'artefacts'),
+            'files': []
+        },
+        {
+            'root': os.path.join('view', 'bom', 'js', 'resources'),
+            'files': []
+        },
+        {
+            'root': os.path.join('view', 'markdown', 'js', 'resources'),
+            'files': []
+        },
+        {
+            'root': os.path.join('properties', 'js', 'resources'),
+            'files': []
+        }
+    ]
+    # # Read Artifact Model Specific JavaScript Files
+    # artefact_model_js_files = sorted(os.listdir(os.path.join(bp.static_folder, 'model', 'js', 'artefacts')))
+    # # Read Artifact View Specific JavaScript Files
+    # if os.path.exists(os.path.join(bp.static_folder, 'view', 'js', 'artefacts')) and os.path.isdir(os.path.join(bp.static_folder, 'view', 'js', 'artefacts')):
+    #     artefact_view_js_files = sorted(os.listdir(os.path.join(bp.static_folder, 'view', 'js', 'artefacts')))
+    # else:
+    #     artefact_view_js_files = []
+    # artefact_view_js_files.extend(sorted(os.listdir(os.path.join(bp.static_folder, 'view', 'designer', 'js', 'artefacts'))))
+    for js_dir in resource_js_files:
+        js_dir['files'] = sorted(os.listdir(os.path.join(bp.static_folder, js_dir['root'])))
+    logger.info(jsonToFormattedString(resource_js_files))
     # Read Resource Specific JavaScript Properties Files
-    resource_properties_js_files = sorted(os.listdir(os.path.join(bp.static_folder, 'properties', 'js', 'resources')))
+    # resource_properties_js_files = sorted(os.listdir(os.path.join(bp.static_folder, 'properties', 'js', 'resources')))
 
     # Read Palette Json
     palette_json = readJsonFile(os.path.join(bp.static_folder, 'palette', 'palette.json'))
@@ -308,9 +338,10 @@ def designer():
 
     #Render The Template
     return render_template('okit/okit_designer.html',
-                           artefact_model_js_files=artefact_model_js_files,
-                           artefact_view_js_files=artefact_view_js_files,
-                           resource_properties_js_files=resource_properties_js_files,
+                        #    artefact_model_js_files=artefact_model_js_files,
+                        #    artefact_view_js_files=artefact_view_js_files,
+                        #    resource_properties_js_files=resource_properties_js_files,
+                           resource_js_files=resource_js_files,
                            palette_json=palette_json,
                            local_okit=local,
                            developer_mode=developer_mode, 
