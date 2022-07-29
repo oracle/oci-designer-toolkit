@@ -27,6 +27,7 @@ function handleViewSelect(e) {
     else if (selected === 'identity') handleSwitchToIdentityView(e)
     else if (selected === 'terraform') handleSwitchTerraformView(e)
     else if (selected === 'bom') handleSwitchBoMView(e)
+    else if (selected === 'markdown') handleSwitchMarkdownView(e)
     else console.warn('Unknown View', selected)
 }
 
@@ -116,4 +117,12 @@ function handleSwitchBoMView(e) {
     hideSideBars();
     okitBoMView = OkitBoMView.newView(okitJsonModel, okitOciData, resource_icons);
     okitBoMView.draw();
+}
+
+function handleSwitchMarkdownView(e) {
+    hideAllViewDivs();
+    $("#markdown-div").removeClass('hidden');
+    hideSideBars();
+    okitMarkdownView = OkitMarkdownView.newView(okitJsonModel, okitOciData, resource_icons);
+    okitMarkdownView.draw();
 }
