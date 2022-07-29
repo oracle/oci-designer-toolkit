@@ -1,7 +1,8 @@
 {% import "common_macros.jinja2" as common with context %}
 # {{ title }}
 
-{{ description | safe }}
+{% if description is defined -%}{{ description | safe }}{%- endif %}
+{% if documentation is defined -%}{{ documentation | safe }}{%- endif %}
 
 {% if svg is defined -%}
     {{ svg | safe }}
