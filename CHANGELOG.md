@@ -1,6 +1,14 @@
 # Release Notes
 
 
+## Version 0.40.0
+**Release Date**: 17th August 2022
+### Features
+### Bug Fixes
+1. In markdown generation switch to using documentation not definition
+2. Move logging debug message in generate "GET" that accesses unknown element.
+
+
 ## Version 0.39.0
 **Release Date**: 27th July 2022
 ### Features
