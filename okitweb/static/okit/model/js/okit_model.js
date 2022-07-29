@@ -14,7 +14,7 @@ class OkitJson {
     constructor(okitjson) {
         const now = getCurrentDateTime();
         this.title = "OKIT OCI Visualiser Json";
-        this.description = `# Description\n__Created ${getCurrentDateTime()}__\n\n--------------------------------------\n\n`;
+        this.documentation = `# Description\n__Created ${getCurrentDateTime()}__\n\n--------------------------------------\n\n`;
         this.metadata = {
             resource_count: 0,
             platform: pca_mode ? 'pca' : 'oci',
@@ -101,7 +101,8 @@ class OkitJson {
         this.convert(okit_json)
         // Title & Description
         if (okit_json.title) {this.title = okit_json.title;}
-        if (okit_json.description) {this.description = okit_json.description;}
+        if (okit_json.description) {this.documentation = okit_json.description;}
+        if (okit_json.documentation) {this.documentation = okit_json.documentation;}
         if (okit_json.user_defined && okit_json.user_defined.terraform) {this.user_defined.terraform = okit_json.user_defined.terraform}
         if (okit_json.freeform_tags) {this.freeform_tags = okit_json.freeform_tags}
         if (okit_json.defined_tags) {this.defined_tags = okit_json.defined_tags}
