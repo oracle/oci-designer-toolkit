@@ -168,6 +168,14 @@ def readGitConfigFile(config_file='~/.oci/git_repositories'):
     logger.info(repo_list)
     return repo_list
 
+def readStaticFiles(root):
+    all_files = []
+    for path, dirnames, filenames in os.walk(os.path.join(bp.static_folder, root)):
+        # logger.info(f'Static: {bp.static_folder} \n\tPath: {path} \n\tRelative Path: {os.path.relpath(path, bp.static_folder)} \n\tDirectories: {dirnames} \n\tFiles: {filenames}')
+        all_files.extend([os.path.join(path, filename) for filename in filenames])
+    sorted_files = sorted(all_files, key=lambda file: (os.path.dirname(file), os.path.basename(file)))
+    return sorted_files
+
 #
 # Define Error Handlers
 #
@@ -282,45 +290,14 @@ def designer():
     if ansible_mode:
         logger.info("<<<<<<<<<<<<<<<<<<<<<<<< Ansible Mode >>>>>>>>>>>>>>>>>>>>>>>>")
     # Define Resource directories
-    resource_js_files = [
-        {
-            'root': os.path.join('model', 'js', 'artefacts'),
-            'files': []
-        },
-        {
-            'root': os.path.join('view', 'js', 'artefacts'),
-            'files': []
-        },
-        {
-            'root': os.path.join('view', 'designer', 'js', 'artefacts'),
-            'files': []
-        },
-        {
-            'root': os.path.join('view', 'bom', 'js', 'resources'),
-            'files': []
-        },
-        {
-            'root': os.path.join('view', 'markdown', 'js', 'resources'),
-            'files': []
-        },
-        {
-            'root': os.path.join('properties', 'js', 'resources'),
-            'files': []
-        }
-    ]
-    # # Read Artifact Model Specific JavaScript Files
-    # artefact_model_js_files = sorted(os.listdir(os.path.join(bp.static_folder, 'model', 'js', 'artefacts')))
-    # # Read Artifact View Specific JavaScript Files
-    # if os.path.exists(os.path.join(bp.static_folder, 'view', 'js', 'artefacts')) and os.path.isdir(os.path.join(bp.static_folder, 'view', 'js', 'artefacts')):
-    #     artefact_view_js_files = sorted(os.listdir(os.path.join(bp.static_folder, 'view', 'js', 'artefacts')))
-    # else:
-    #     artefact_view_js_files = []
-    # artefact_view_js_files.extend(sorted(os.listdir(os.path.join(bp.static_folder, 'view', 'designer', 'js', 'artefacts'))))
-    for js_dir in resource_js_files:
-        js_dir['files'] = sorted(os.listdir(os.path.join(bp.static_folder, js_dir['root'])))
-    logger.info(jsonToFormattedString(resource_js_files))
-    # Read Resource Specific JavaScript Properties Files
-    # resource_properties_js_files = sorted(os.listdir(os.path.join(bp.static_folder, 'properties', 'js', 'resources')))
+    # Process Javascript & css files
+    resource_dirs = ['model', 'view', 'properties', 'panels', 'pricing', 'spreadsheet', 'views']
+    resource_files = {'js': [], 'css': []}
+    for dir in resource_dirs:
+        sorted_files = readStaticFiles(dir)
+        resource_files['js'].extend([os.path.relpath(path, bp.static_folder) for path in sorted_files if os.path.splitext(path)[1] == '.js'])
+        resource_files['css'].extend([os.path.relpath(path, bp.static_folder) for path in sorted_files if os.path.splitext(path)[1] == '.css'])
+    logger.debug(jsonToFormattedString(resource_files))
 
     # Read Palette Json
     palette_json = readJsonFile(os.path.join(bp.static_folder, 'palette', 'palette.json'))
@@ -333,15 +310,9 @@ def designer():
             with open(os.path.join(bp.static_folder, 'palette', 'svg', resource['svg']), 'r') as svgFile:
                 palette_json['svg'][resource['title'].lower()] = ''.join(svgFile.read().splitlines())
 
-    # config_sections = {"sections": readAndValidateConfigFileSections()}
-    # config_sections = {"sections": readConfigFileSections()}
-
     #Render The Template
     return render_template('okit/okit_designer.html',
-                        #    artefact_model_js_files=artefact_model_js_files,
-                        #    artefact_view_js_files=artefact_view_js_files,
-                        #    resource_properties_js_files=resource_properties_js_files,
-                           resource_js_files=resource_js_files,
+                           resource_files=resource_files,
                            palette_json=palette_json,
                            local_okit=local,
                            developer_mode=developer_mode, 

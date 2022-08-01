@@ -4,6 +4,7 @@
 ## Version 0.40.0
 **Release Date**: 17th August 2022
 ### Features
+1. Streamline / refactor backend javascript / css file identification and load functionality
 ### Bug Fixes
 1. In markdown generation switch to using documentation not definition
 2. Move logging debug message in generate "GET" that accesses unknown element.
