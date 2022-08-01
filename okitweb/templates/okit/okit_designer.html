@@ -11,21 +11,9 @@
 {% block headscripts %}
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_views.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='okit/view/js/okit_view.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='okit/pricing/js/okit_oci_pricing.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='okit/properties/js/okit_properties.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='okit/panels/js/base_panel.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='okit/panels/js/validation_panel.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='okit/spreadsheet/js/okit_workbook.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='okit/view/designer/js/okit_designer_view.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='okit/view/tabular/js/okit_tabular_view.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='okit/view/relationship/js/okit_relationship_view.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='okit/view/json/js/okit_json_view.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='okit/view/tree/js/okit_tree_view.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='okit/view/oci/js/view.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='okit/view/bom/js/view.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='okit/view/terraform/js/view.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='okit/view/identity/js/okit_identity_view.js') }}"></script>
+    {% for js_file in resource_files.js %}
+        <script type="text/javascript" src="{{ url_for('static', filename='okit/' + js_file) }}"></script>
+    {% endfor %}
     <script type="text/javascript" src="{{ url_for('static', filename='okit/query/oci/js/okit_oci_query.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/query/pca/js/okit_pca_query.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer.js') }}"></script>
@@ -77,15 +65,6 @@
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_generation.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_import.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_properties.js') }}"></script>
-    {% for model_js in artefact_model_js_files %}
-        <script type="text/javascript" src="{{ url_for('static', filename='okit/model/js/artefacts/' + model_js) }}"></script>
-    {% endfor %}
-    {% for view_js in artefact_view_js_files %}
-        <script type="text/javascript" src="{{ url_for('static', filename='okit/view/designer/js/artefacts/' + view_js) }}"></script>
-    {% endfor %}
-    {% for js in resource_properties_js_files %}
-        <script type="text/javascript" src="{{ url_for('static', filename='okit/properties/js/resources/' + js) }}"></script>
-    {% endfor %}
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_ready.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_dialogs.js') }}"></script>
 {% endblock %}
@@ -94,15 +73,9 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/css/okit_designer.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/css/okit_panels.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/css/okit_threedots_menu.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/designer/css/okit_designer_view.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/tree/css/okit_tree_view.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/oci/css/view.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/bom/css/view.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/terraform/css/view.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/json/css/okit_json_view.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/tabular/css/okit_tabular_view.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/identity/css/okit_identity_view.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/relationship/css/okit_relationship_view.css') }}">
+    {% for css_file in resource_files.css %}
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/' + css_file) }}">
+    {% endfor %}
 {% endblock %}
 
 {% block navmenublock %}
@@ -224,6 +197,7 @@
                 <option id="json_view_option" value="json">Json</option>
                 <option id="tf_view_option" value="terraform">Terraform</option>
                 {%- if developer_mode -%}<option id="bom_view_option" value="bom">BoM</option>{%- endif -%}
+                {%- if developer_mode -%}<option id="markdown_view_option" value="markdown">Markdown</option>{%- endif -%}
                 {%- if developer_mode -%}<option id="cache_view_option" value="cache">Cache</option>{%- endif -%}
             </select>
         </div>
@@ -286,6 +260,7 @@
             <div id="json-text-div" class="okit-text-json-canvas hidden"></div>
             <div id="terraform-div" class="okit-terraform-canvas hidden"></div>
             <div id="bom-div" class="okit-bom-canvas hidden"></div>
+            <div id="markdown-div" class="okit-markdown-canvas hidden"></div>
         </div>
     </div>   
     <div class="hidden"><input type="file" id="files" class="file-button toolbar-button" name="file[]" accept="application/json" onclick="this.value = null"></div>

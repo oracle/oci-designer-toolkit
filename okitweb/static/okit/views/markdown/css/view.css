@@ -3,18 +3,14 @@
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
  */
 
- .okit-terraform-canvas {
+ .okit-markdown-canvas {
     display: block;
     background: #fff;
     padding: 0;
-    margin: ;
+    margin: 0;
     height: 100%;
     width: 100%;
     overflow: hidden;
     font-family: Arial, Helvetica, sans-serif;
     font-size: smaller;
-}
-
-.okit-terraform-canvas textarea.code {
-    font-family: Consolas,"courier new",monaco,monospace;
 }
