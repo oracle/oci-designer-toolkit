@@ -8,6 +8,7 @@
 ### Bug Fixes
 1. In markdown generation switch to using documentation not definition
 2. Move logging debug message in generate "GET" that accesses unknown element.
+3. Resolve Config validation issue where configs with only DEFAULT reported an error.
 
 
 ## Version 0.39.0
