@@ -126,7 +126,7 @@ def validateConfigFile(config_file='~/.oci/config'):
         config = configparser.ConfigParser()
         config.read(abs_config_file)
         # if os.path.exists(abs_config_file) and os.path.isfile(abs_config_file):
-        if len(config.sections()) == 0 and not config.has_section('DEFAULT'):
+        if len(config.sections()) == 0 and 'DEFAULT' not in config:
             results["valid"] = False
             results["errors"].append('OCI Connect Config file is either missing or empty.')
         else:
