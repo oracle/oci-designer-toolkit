@@ -57,18 +57,11 @@ OkitJsonView.prototype.new{{ model_class_name }} = function(obj) {
     return this.get{{ model_class_name }}s()[this.get{{ model_class_name }}s().length - 1];
 }
 OkitJsonView.prototype.get{{ model_class_name }}s = function() {
-    if (!this.{{ artefact_json_list }}) {
-        this.{{ artefact_json_list }} = [];
-    }
+    if (!this.{{ artefact_json_list }}) this.{{ artefact_json_list }} = [];
     return this.{{ artefact_json_list }};
 }
 OkitJsonView.prototype.get{{ model_class_name }} = function(id='') {
-    for (let artefact of this.get{{ model_class_name }}s()) {
-        if (artefact.id === id) {
-            return artefact;
-        }
-    }
-    return undefined;
+    return this.get{{ model_class_name }}s().find(r => r.id === id)
 }
 OkitJsonView.prototype.load{{ model_class_name }}s = function({{ artefact_json_list }}) {
     for (const artefact of {{ artefact_json_list }}) {

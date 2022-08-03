@@ -56,16 +56,19 @@ class OkitOciProductPricing {
         ZAR: {name: 'South African Rand', symbol: 'ZAR'},
     }
     static formatPrice = (price=0, currency='USD') => `${OkitOciProductPricing.currencies[currency].symbol}${(Math.round((price + Number.EPSILON) * 100)/100).toFixed(2)}`
+    static getBoMFunctionName = (base_name) => `get${base_name}BoM`
+    static getPriceFunctionName = (base_name) => `get${base_name}Price`
 
     constructor() {
         this.currency = 'USD'
         this.bom = {}
         this.cost_estimate = {}
+        this.sku_map = {instance: {shape: {}}, os: {}}
         this.load()
     }
     oci_products_url = 'https://apexapps.oracle.com/pls/apex/cetools/api/v1/products/'
 
-    getSkuDisplayName= (sku) => this.products.filter((p) => p.partNumber === sku).reduce((a, p) => p.displayName.split(' - ').slice(1, -1).join(' - '), '')
+    getSkuDisplayName = (sku) => this.products.filter((p) => p.partNumber === sku).reduce((a, p) => p.displayName.split(' - ').slice(1, -1).join(' - '), '')
     getSkuMetricDisplayName = (sku) => this.products.filter((p) => p.partNumber === sku).reduce((a, p) => p.metricDisplayName, '')
 
     load(model) {
@@ -91,7 +94,7 @@ class OkitOciProductPricing {
             Object.entries(model).filter(([k, v]) => Array.isArray(v)).forEach(([resource_name, resource_list]) => resource_list.forEach((resource) => {
                 console.info('Processing Resource', resource_name)
                 // Get Skus
-                const get_sku_function = `get${titleCase(resource_name.replaceAll('_', ' ')).replaceAll(' ', '').slice(0, -1)}BoM`
+                const get_sku_function = OkitOciProductPricing.getBoMFunctionName(titleCase(resource_name.replaceAll('_', ' ')).replaceAll(' ', '').slice(0, -1))
                 console.info('Get Sku Function:', get_sku_function)
                 if (this[get_sku_function]) {
                     const bom_details = this[get_sku_function](resource)
@@ -143,85 +146,99 @@ class OkitOciProductPricing {
         }
     }
 
-    getBlockStorageVolumeBoM(resource) {
-        const resource_name = resource.getArtifactReference()
-        const boot_vol_perf_sku = 'B91962' // Performance
-        const boot_vol_cap_sku = 'B91961' // Capacity
-        const boot_vol_perf_entry = this.getBoMSkuEntry(boot_vol_perf_sku)
-        const boot_vol_cap_entry = this.getBoMSkuEntry(boot_vol_cap_sku)
-        const skus = [boot_vol_perf_sku, boot_vol_cap_sku]
-        const bom = {skus: skus, price_per_month: 0}
-        let price_per_month = 0
-        // Process Boot Volume Performance Information
-        price_per_month = boot_vol_perf_entry.list_price * +resource.vpus_per_gb * +resource.size_in_gbs
-        this.updateCostEstimate(resource_name, price_per_month)
-        bom.price_per_month += price_per_month
-        boot_vol_perf_entry.quantity += 1
-        boot_vol_perf_entry.utilization += +resource.vpus_per_gb // VPUS / GB
-        boot_vol_perf_entry.units += +resource.size_in_gbs // Convert to Number
-        boot_vol_perf_entry.price_per_month += price_per_month
-        // Process Boot Volume Capacity Information
-        price_per_month = boot_vol_perf_entry.list_price * +resource.size_in_gbs
-        this.updateCostEstimate(resource_name, price_per_month)
-        bom.price_per_month += price_per_month
-        boot_vol_cap_entry.quantity += 1
-        boot_vol_cap_entry.utilization = 1
-        boot_vol_cap_entry.units += +resource.size_in_gbs // Convert to Number
-        boot_vol_cap_entry.price_per_month += price_per_month
-        return bom
+    // getBlockStorageVolumeBoM(resource) {
+    //     const resource_name = resource.getArtifactReference()
+    //     const boot_vol_perf_sku = 'B91962' // Performance
+    //     const boot_vol_cap_sku = 'B91961' // Capacity
+    //     const boot_vol_perf_entry = this.getBoMSkuEntry(boot_vol_perf_sku)
+    //     const boot_vol_cap_entry = this.getBoMSkuEntry(boot_vol_cap_sku)
+    //     const skus = [boot_vol_perf_sku, boot_vol_cap_sku]
+    //     const bom = {skus: skus, price_per_month: 0}
+    //     let price_per_month = 0
+    //     // Process Boot Volume Performance Information
+    //     price_per_month = boot_vol_perf_entry.list_price * +resource.vpus_per_gb * +resource.size_in_gbs
+    //     this.updateCostEstimate(resource_name, price_per_month)
+    //     bom.price_per_month += price_per_month
+    //     boot_vol_perf_entry.quantity += 1
+    //     boot_vol_perf_entry.utilization += +resource.vpus_per_gb // VPUS / GB
+    //     boot_vol_perf_entry.units += +resource.size_in_gbs // Convert to Number
+    //     boot_vol_perf_entry.price_per_month += price_per_month
+    //     // Process Boot Volume Capacity Information
+    //     price_per_month = boot_vol_perf_entry.list_price * +resource.size_in_gbs
+    //     this.updateCostEstimate(resource_name, price_per_month)
+    //     bom.price_per_month += price_per_month
+    //     boot_vol_cap_entry.quantity += 1
+    //     boot_vol_cap_entry.utilization = 1
+    //     boot_vol_cap_entry.units += +resource.size_in_gbs // Convert to Number
+    //     boot_vol_cap_entry.price_per_month += price_per_month
+    //     return bom
+    // }
+
+    // getInstanceBoM(resource) {
+    //     const resource_name = resource.getArtifactReference()
+    //     const shape_sku = this.sku_map.instance.shape[resource.shape]
+    //     const boot_vol_perf_sku = 'B91962' // Performance
+    //     const boot_vol_cap_sku = 'B91961' // Capacity
+    //     const os_sku = this.sku_map.os[resource.source_details.os.toLowerCase()]
+    //     const skus = [shape_sku, boot_vol_perf_sku, boot_vol_cap_sku]
+    //     const bom = {skus: skus, price_per_month: 0}
+    //     const shape_entry = this.getBoMSkuEntry(shape_sku)
+    //     const boot_vol_perf_entry = this.getBoMSkuEntry(boot_vol_perf_sku)
+    //     const boot_vol_cap_entry = this.getBoMSkuEntry(boot_vol_cap_sku)
+    //     const monthly_utilization = 744
+    //     let price_per_month = 0
+    //     // Process Shape Information
+    //     price_per_month = shape_entry.list_price * +resource.shape_config.ocpus * monthly_utilization
+    //     this.updateCostEstimate(resource_name, price_per_month)
+    //     bom.price_per_month += price_per_month
+    //     shape_entry.quantity += 1
+    //     shape_entry.utilization = monthly_utilization // Hrs/ Month
+    //     shape_entry.units += resource.shape_config.ocpus // OCPUs
+    //     shape_entry.price_per_month += price_per_month
+    //     // Process Boot Volume Performance Information
+    //     price_per_month = boot_vol_perf_entry.list_price * +resource.source_details.boot_volume_size_in_gbs * 10
+    //     this.updateCostEstimate(resource_name, price_per_month)
+    //     bom.price_per_month += price_per_month
+    //     boot_vol_perf_entry.quantity += 1
+    //     boot_vol_perf_entry.utilization += 10 // VPUS / GB
+    //     boot_vol_perf_entry.units += +resource.source_details.boot_volume_size_in_gbs // Convert to Number
+    //     boot_vol_perf_entry.price_per_month += price_per_month
+    //     // Process Boot Volume Capacity Information
+    //     price_per_month = boot_vol_cap_entry.list_price * +resource.source_details.boot_volume_size_in_gbs
+    //     this.updateCostEstimate(resource_name, price_per_month)
+    //     bom.price_per_month += price_per_month
+    //     boot_vol_cap_entry.quantity += 1
+    //     boot_vol_cap_entry.utilization = 1
+    //     boot_vol_cap_entry.units += +resource.source_details.boot_volume_size_in_gbs // Convert to Number
+    //     boot_vol_cap_entry.price_per_month += price_per_month
+    //     if (os_sku) {
+    //         skus.push(os_sku)
+    //         const os_entry = this.getBoMSkuEntry(os_sku)
+    //         price_per_month = os_entry.list_price * monthly_utilization
+    //         this.updateCostEstimate(resource_name, price_per_month)
+    //         bom.price_per_month += price_per_month
+    //         os_entry.quantity += 1
+    //         os_entry.utilization = monthly_utilization // Hrs/ Month
+    //         os_entry.units += 1
+    //         os_entry.price_per_month += price_per_month
+    //     }
+    //     return bom
+    // }
+
+}
+
+class OkitOciPricingResource {
+    constructor(resource, pricing) {
+        this.resource = resource
+        this.pricing = pricing
     }
 
-    getInstanceBoM(resource) {
-        const resource_name = resource.getArtifactReference()
-        const shape_sku = this.sku_map.instance.shape[resource.shape]
-        const boot_vol_perf_sku = 'B91962' // Performance
-        const boot_vol_cap_sku = 'B91961' // Capacity
-        const os_sku = this.sku_map.os[resource.source_details.os.toLowerCase()]
-        const skus = [shape_sku, boot_vol_perf_sku, boot_vol_cap_sku]
-        const bom = {skus: skus, price_per_month: 0}
-        const shape_entry = this.getBoMSkuEntry(shape_sku)
-        const boot_vol_perf_entry = this.getBoMSkuEntry(boot_vol_perf_sku)
-        const boot_vol_cap_entry = this.getBoMSkuEntry(boot_vol_cap_sku)
-        const monthly_utilization = 744
-        let price_per_month = 0
-        // Process Shape Information
-        price_per_month = shape_entry.list_price * +resource.shape_config.ocpus * monthly_utilization
-        this.updateCostEstimate(resource_name, price_per_month)
-        bom.price_per_month += price_per_month
-        shape_entry.quantity += 1
-        shape_entry.utilization = monthly_utilization // Hrs/ Month
-        shape_entry.units += resource.shape_config.ocpus // OCPUs
-        shape_entry.price_per_month += price_per_month
-        // Process Boot Volume Performance Information
-        price_per_month = boot_vol_perf_entry.list_price * +resource.source_details.boot_volume_size_in_gbs * 10
-        this.updateCostEstimate(resource_name, price_per_month)
-        bom.price_per_month += price_per_month
-        boot_vol_perf_entry.quantity += 1
-        boot_vol_perf_entry.utilization += 10 // VPUS / GB
-        boot_vol_perf_entry.units += +resource.source_details.boot_volume_size_in_gbs // Convert to Number
-        boot_vol_perf_entry.price_per_month += price_per_month
-        // Process Boot Volume Capacity Information
-        price_per_month = boot_vol_cap_entry.list_price * +resource.source_details.boot_volume_size_in_gbs
-        this.updateCostEstimate(resource_name, price_per_month)
-        bom.price_per_month += price_per_month
-        boot_vol_cap_entry.quantity += 1
-        boot_vol_cap_entry.utilization = 1
-        boot_vol_cap_entry.units += +resource.source_details.boot_volume_size_in_gbs // Convert to Number
-        boot_vol_cap_entry.price_per_month += price_per_month
-        if (os_sku) {
-            skus.push(os_sku)
-            const os_entry = this.getBoMSkuEntry(os_sku)
-            price_per_month = os_entry.list_price * monthly_utilization
-            this.updateCostEstimate(resource_name, price_per_month)
-            bom.price_per_month += price_per_month
-            os_entry.quantity += 1
-            os_entry.utilization = monthly_utilization // Hrs/ Month
-            os_entry.units += 1
-            os_entry.price_per_month += price_per_month
-        }
-        return bom
-    }
+    get sku_map() {return this.pricing.sku_map}
 
+    getPrice(resource) {return 0}
+    getBoM(resource) {return {}}
+    updateCostEstimate = (resource, price=0) => this.pricing.updateCostEstimate(resource, price)
+    getSkuCost = (sku, model="PAY_AS_YOU_GO", currency_code=undefined) => this.pricing.getSkuCost(sku, model, currency_code)
 }
 
 let okitOciProductPricing = null
