@@ -69,11 +69,6 @@ OkitJson.prototype.getNosqlDatabases = function() {
     return this.nosql_databases;
 }
 OkitJson.prototype.getNosqlDatabase = function(id='') {
-    // for (let artefact of this.getNosqlDatabases()) {
-    //     if (artefact.id === id) {
-    //         return artefact;
-    //     }
-    // }
     return this.getNosqlDatabases().find(r => r.id === id);
 }
 OkitJson.prototype.deleteNosqlDatabase = function(id) {

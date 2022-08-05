@@ -51,8 +51,11 @@ class OkitJson {
                 return r
             }, {})
     }
+    getResources() {return Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], [])}
     getResource(id='') {
-        const resource = Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter((r) => r.id === id)[0]
+        // const resource = Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter((r) => r.id === id)[0]
+        // const resource = Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).find((r) => r.id === id)
+        const resource = this.getResources().find((r) => r.id === id)
         console.info('Resource', resource)
         return resource
     }
@@ -502,11 +505,11 @@ class OkitArtifact {
     generateResourceNameFromDisplayName = (name) => titleCase(name.split('_').join('-')).split(' ').join('').replaceAll('-','_')
 
     estimateCost = () => {
-        const get_sku_function = `get${this.constructor.name}BoM`
+        const get_price_function = OkitOciProductPricing.getPriceFunctionName(this.constructor.name)
         const pricing = okitOciProductPricing ? okitOciProductPricing : new OkitOciProductPricing()
+        console.info('>>>>>> Estimating Cost')
         try {
-            const bom_details = pricing[get_sku_function](this)
-            return OkitOciProductPricing.formatPrice(bom_details.price_per_month, pricing.currency)
+            return OkitOciProductPricing.formatPrice(pricing[get_price_function](this), pricing.currency)
         } catch (e) {
             console.debug(e)
             return OkitOciProductPricing.formatPrice(0, pricing.currency)

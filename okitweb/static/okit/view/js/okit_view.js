@@ -28,6 +28,8 @@ class OkitJsonView {
         // Load Model to View
         this.load();
     }
+    get model() {return this.okitjson;}
+    get data() {return this.oci_data;}
 
     static toSvgIconDef(title) {return title.replace(/ /g, '').toLowerCase() + 'Svg';}
 
@@ -161,6 +163,7 @@ class OkitArtefactView {
 
     constructor(artefact=null, json_view) {
         this.artefact = artefact;
+        this.view = json_view
         // this.artefact = new Proxy(artefact, model_proxy_handler);
         this.collapsed = true;
         this._recalculate_dimensions = true;
@@ -185,6 +188,10 @@ class OkitArtefactView {
         // Create Properties Sheet Object
         this.newPropertiesSheet()
     }
+    get model() {return this.view.model}
+
+    getChildren = () => Object.values(this.view()).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter((r) => r.parent_id === this.id)
+    getThemeCssClass = () => this.getArtifactReference().toLowerCase().replaceAll(' ', '-')
 
     get resource() {return this.artefact}
     // Instance Constants
@@ -206,7 +213,7 @@ class OkitArtefactView {
     get children() {return Object.values(this.getJsonView()).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter((r) => r.parent_id === this.id)}
     // get children() {return [];}
     get display_name() {return this.artefact ? this.artefact.display_name : '';}
-    get definition() {return this.artefact ? this.artefact.definition : '';}
+    get documentation() {return this.artefact ? this.artefact.documentation : '';}
     get is_collapsed() {return this.parent ? this.collapsed || this.parent.is_collapsed : this.collapsed;}
     // -- SVG Definitions
     // --- Standard

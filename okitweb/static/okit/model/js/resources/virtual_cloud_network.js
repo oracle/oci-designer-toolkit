@@ -18,14 +18,13 @@ class VirtualCloudNetwork extends OkitArtifact {
         // Generate Cidr
         this.cidr_blocks = [];
         this.dns_label = '';
-        this.dns_label = this.generateDnsLabel();
+        // this.dns_label = this.generateDnsLabel();
         this.is_ipv6enabled = false;
         this.ipv6cidr_blocks = [];
         // Update with any passed data
         this.merge(data);
         this.convert();
         Object.defineProperty(this, 'cidr_block', {get: function() {return this.cidr_blocks[0];}, set: function(cidr) {this.cidr_blocks[0] = cidr;}, enumerable: false });
-
     }
 
     /*
