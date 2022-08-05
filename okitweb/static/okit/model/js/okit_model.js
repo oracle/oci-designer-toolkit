@@ -51,8 +51,11 @@ class OkitJson {
                 return r
             }, {})
     }
+    getResources() {return Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], [])}
     getResource(id='') {
-        const resource = Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter((r) => r.id === id)[0]
+        // const resource = Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter((r) => r.id === id)[0]
+        // const resource = Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).find((r) => r.id === id)
+        const resource = this.getResources().find((r) => r.id === id)
         console.info('Resource', resource)
         return resource
     }

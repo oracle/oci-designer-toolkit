@@ -29,18 +29,16 @@ class OkitDesignerJsonView extends OkitJsonView {
         
     }
 
+    getRootContainers = () => Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter((r) => r instanceof OkitContainerDesignerArtefactView && (r.parent_id === null || r.parent_id === '' || r.parent_id === 'canvas'))
+
     drawContainer(container) {
-        // const resources = Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []);
-        // console.info('Resources: ', resources)
-        // console.info('Container Resources: ', resources.filter((r) => r instanceof OkitContainerArtefactView))
-        // console.info('Simple Resources: ', resources.filter((r) => !(r instanceof OkitContainerArtefactView)))
         container.draw();
         const children = Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter((r) => r.parent_id === container.id);
         console.info('Children: ', children)
-        console.info('Container Children: ', children.filter((r) => r instanceof OkitContainerArtefactView))
-        console.info('Simple Children: ', children.filter((r) => !(r instanceof OkitContainerArtefactView)))
-        children.filter((r) => r instanceof OkitContainerArtefactView).forEach((e) => this.drawContainer(e))
-        children.filter((r) => !(r instanceof OkitContainerArtefactView)).forEach((e) => e.draw())
+        console.info('Container Children: ', children.filter((r) => r instanceof OkitContainerDesignerArtefactView))
+        console.info('Simple Children: ', children.filter((r) => !(r instanceof OkitContainerDesignerArtefactView)))
+        children.filter((r) => r instanceof OkitContainerDesignerArtefactView).forEach((e) => this.drawContainer(e))
+        children.filter((r) => !(r instanceof OkitContainerDesignerArtefactView)).forEach((e) => e.draw())
     }
 
     draw(for_export=false) {
@@ -62,7 +60,7 @@ class OkitDesignerJsonView extends OkitJsonView {
         let canvas_svg = this.canvas
 
         // Get Canvas Root Containers
-        Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter((r) => r instanceof OkitContainerArtefactView && (r.parent_id === null || r.parent_id === '' || r.parent_id === 'canvas')).forEach((e) => this.drawContainer(e))
+        Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter((r) => r instanceof OkitContainerDesignerArtefactView && (r.parent_id === null || r.parent_id === '' || r.parent_id === 'canvas')).forEach((e) => this.drawContainer(e))
 
         // Resize Main Canvas if required
         $(jqId("canvas-svg")).children("svg [data-type='" + Compartment.getArtifactReference() + "']").each(function () {
@@ -79,7 +77,7 @@ class OkitDesignerJsonView extends OkitJsonView {
     }
 
     drawConnections() {
-        Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter((r) => !(r instanceof OkitContainerArtefactView)).forEach((e) => e.drawConnections())
+        Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter((r) => !(r instanceof OkitContainerDesignerArtefactView)).forEach((e) => e.drawConnections())
     }
 
     /*
