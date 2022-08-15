@@ -163,7 +163,7 @@ class OkitArtefactView {
 
     constructor(artefact=null, json_view) {
         this.artefact = artefact;
-        this.view = json_view
+        // this.view = json_view
         // this.artefact = new Proxy(artefact, model_proxy_handler);
         this.collapsed = true;
         this._recalculate_dimensions = true;
@@ -189,6 +189,7 @@ class OkitArtefactView {
         this.newPropertiesSheet()
     }
     get model() {return this.view.model}
+    get view() {return this.getJsonView()}
 
     getChildren = () => Object.values(this.view()).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter((r) => r.parent_id === this.id)
     getThemeCssClass = () => this.getArtifactReference().toLowerCase().replaceAll(' ', '-')
