@@ -7,7 +7,10 @@ import time
 from common.okitLogging import getLogger
 from concurrent.futures import ThreadPoolExecutor
 
-from .models import ExtendedTagSummary, ExtendedDrgRouteDistributionStatement, ExtendedDrgRouteRule, ExtendedAutoScalingPolicySummary, ExtendedDbNodeSummary, ExtendedNetworkSecurityGroupVnic, ExtendedPreauthenticatedRequestSummary, ExtendedSecurityRule, ExtendedSourceApplicationSummary, ExtendedExportSummary, ExtendedMySQLBackup, ExtendedMySQLBackupSummary, ExtendedVirtualCircuitBandwidthShape
+from .models import ExtendedTagSummary, ExtendedDrgRouteDistributionStatement, ExtendedDrgRouteRule, ExtendedAutoScalingPolicySummary
+from .models import ExtendedDbNodeSummary, ExtendedNetworkSecurityGroupVnic, ExtendedPreauthenticatedRequestSummary, ExtendedSecurityRule
+from .models import ExtendedSourceApplicationSummary, ExtendedExportSummary, ExtendedMySQLBackup, ExtendedMySQLBackupSummary
+from .models import ExtendedVirtualCircuitBandwidthShape, ExtendedNoSQLIndexSummary
 
 DEFAULT_MAX_WORKERS = 32
 DEFAULT_TIMEOUT = 120
@@ -39,6 +42,9 @@ class OciResourceDiscoveryClient(object):
         "MySQLDbSystemDetails": (oci.mysql.DbSystemClient, "get_db_system"), # used to get full details of the result as list_db_systems does not include all attributes
         # oci.mysql.MysqlaasClient
         "MySQLConfiguration": (oci.mysql.MysqlaasClient, "get_configuration"), # used to get details of the Default configurations
+        # oci.nosql.NosqlClient
+        "NoSQLTableDetails": (oci.nosql.NosqlClient, "get_table"), # get full details
+        "NoSQLIndexDetails": (oci.nosql.NosqlClient, "get_index"), # get full details
         # oci.os_management.OsManagementClient
         "OsmsManagedInstance": (oci.os_management.OsManagementClient, "get_managed_instance"),
     }
@@ -496,7 +502,9 @@ class OciResourceDiscoveryClient(object):
 
     @classmethod
     def get_supported_resources(cls):
-        return sorted({resource for resource, ignore in cls.list_resource_client_methods.items()})
+        resource_types = {resource for resource, ignore in cls.list_resource_client_methods.items()}
+        resource_types.union({resource for resource, ignore in cls.get_resource_client_methods.items() if not resource.endswith("Details")})
+        return sorted(resource_types)
 
     @classmethod
     def get_supported_clients(cls):
@@ -545,6 +553,13 @@ class OciResourceDiscoveryClient(object):
             exit(1)
         self.timeout = timeout
         self.max_workers = max_workers
+
+        if include_resource_types and "ALL" in include_resource_types:
+            self.include_resource_types = self.get_supported_resources()
+        else:
+            self.include_resource_types = set(include_resource_types) if include_resource_types else None
+        logger.debug(f'Including resource types {self.include_resource_types}')
+
         self.include_resource_types = set(include_resource_types) if include_resource_types else None
         self.exclude_resource_types = set(exclude_resource_types) if exclude_resource_types else None
 
@@ -713,12 +728,15 @@ class OciResourceDiscoveryClient(object):
         # list of all supported resource types that can be queried through search
         searchable_resource_types = self.searchable_resource_types_by_region(self.regions)
         ignore_resource_types = [
-            "Compartment", "ConsoleHistory", "OrmJob", "OsmsSoftwareSource"
+            # don't search for resources that are fetched as children of a parent resource 
+            "ApiGatewaySdk",
+            "BigDataServiceMetastoreConfig",
         ]
         search_resource_types = dict()
         for region in searchable_resource_types:
-            supported_searchable_resource_types = [resource for resource in self.list_resource_client_methods]
+            supported_searchable_resource_types = [resource for resource in self.list_resource_client_methods if resource not in ignore_resource_types]
             supported_searchable_resource_types.extend(["Vnic"])
+            logger.debug("Skipping unsupported resources types " + ", ".join(sorted(list(set(searchable_resource_types[region]) - set(supported_searchable_resource_types) - set(ignore_resource_types)))))
 
             search_resource_types[region] = set(supported_searchable_resource_types).intersection(set(searchable_resource_types[region]))
             if self.include_resource_types:
@@ -799,7 +817,7 @@ class OciResourceDiscoveryClient(object):
 
                 if resource_type not in (list(self.get_resource_client_methods.keys()) + list(self.list_resource_client_methods.keys()) + list(self.static_resource_client_methods.keys())):
                     logger.warn(f"unsupported resource type {resource_type}")
-                    continue                    
+                    continue
 
                 # do a get for resources that need full details or don't have a list method
                 if resource_type in self.get_resource_client_methods and item[2]:
@@ -837,6 +855,15 @@ class OciResourceDiscoveryClient(object):
                         db_system_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, db_system_id=db_system_id)
                         futures_list.update({(region, resource_type, compartment_id, db_system_id):future})
+                    elif resource_type == "NoSQLIndexDetails" and method_name == "get_index":
+                        table_id = item[2][0]
+                        index_name = item[2][1]
+                        future = executor.submit(self.list_resources, klass, method_name, region, table_name_or_id=table_id, index_name=index_name)
+                        futures_list.update({(region, resource_type, compartment_id, (table_id, index_name)):future})                    
+                    elif resource_type == "NoSQLTableDetails" and method_name == "get_table":
+                        table_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, table_name_or_id=table_id)
+                        futures_list.update({(region, resource_type, compartment_id, table_id):future})                    
                     elif resource_type == "OsmsManagedInstance" and method_name == "get_managed_instance":
                         managed_instance_id=item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, managed_instance_id=managed_instance_id)
@@ -892,6 +919,10 @@ class OciResourceDiscoveryClient(object):
                         source_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, source_id=source_id)
                         futures_list.update({(region, resource_type, compartment_id, source_id):future})
+                    elif resource_type == "ApiGatewaySdk" and method_name == "list_sdks":
+                        api_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, api_id=api_id)
+                        futures_list.update({(region, resource_type, None, api_id):future})
                     elif resource_type == "AutonomousContainerDatabaseDataguardAssociation" and method_name == "list_autonomous_container_database_dataguard_associations":
                         autonomous_container_database_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, adb_id=autonomous_container_database_id)
@@ -929,7 +960,7 @@ class OciResourceDiscoveryClient(object):
                     elif resource_type == "BigDataServiceMetastoreConfig" and method_name == "list_bds_metastore_configurations":
                         bds_instance_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, bds_instance_id=bds_instance_id)
-                        futures_list.update({(region, resource_type, compartment_id, bds_instance_id):future})                    
+                        futures_list.update({(region, resource_type, None, bds_instance_id):future})                    
                     elif resource_type == "Bucket" and method_name == "list_buckets":
                         namespace_name = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, namespace_name=namespace_name)
@@ -1129,7 +1160,7 @@ class OciResourceDiscoveryClient(object):
                         # handle the varient cases to list regional and AD specific public ips
                         availability_domain = item[2]
                         for availability_domain in self.availability_domains[region]:
-                            future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, scope="AVAILABILITY_DOMAIN", availability_domain=availability_domain)
+                            future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, scope="AVAILABILITY_DOMAIN", availability_domain=availability_domain, lifetime="EPHEMERAL")
                             futures_list.update({(region, resource_type, availability_domain):future})
                         future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, scope="REGION")
                         futures_list.update({(region, resource_type, compartment_id, "REGION"):future})
@@ -1238,6 +1269,10 @@ class OciResourceDiscoveryClient(object):
                         # map MySQL Backup into extended version with compartment id
                         new_result = [ExtendedMySQLBackupSummary(future[2],backup) for backup in result]
                         result = new_result
+                    elif resource_type == "NoSQLIndex":
+                        # map NoSQL Index into extended version with compartment id and table id
+                        new_result = [ExtendedNoSQLIndexSummary(future[2], future[3], index) for index in result]
+                        result = new_result
                     elif resource_type == "NetworkSecurityGroupSecurityRule":
                         # map Security Rules into extended verison with parent id
                         new_result = [ExtendedSecurityRule(future[3],rule) for rule in result]
@@ -1266,6 +1301,7 @@ class OciResourceDiscoveryClient(object):
                         "ExportSetDetails",
                         "Image",
                         "MySQLConfiguration", "MySQLDbSystemDetails",
+                        "NoSQLIndexDetails", "NoSQLTableDetails",
                         "OsmsManagedInstance",
                     ]:
                         # if the response is from a get request, wrap it in a list
@@ -1399,6 +1435,9 @@ class OciResourceDiscoveryClient(object):
                 if resource.resource_type == "AmsSource":
                     # get Applications for Ams Source
                     regional_resource_requests.add(("AmsSourceApplication", resource.compartment_id, resource.identifier))
+                elif resource.resource_type == "ApiGatewayApi":
+                    # get SDKs for API
+                    regional_resource_requests.add(("ApiGatewaySdk", resource.compartment_id, resource.identifier))
                 elif resource.resource_type == "AutonomousContainerDatabase":
                     # get Dataguard Association for Autonomous Container Database
                     regional_resource_requests.add(("AutonomousContainerDatabaseDataguardAssociation", resource.compartment_id, resource.identifier))
@@ -1413,6 +1452,9 @@ class OciResourceDiscoveryClient(object):
                 elif resource.resource_type == "Bastion" and (self.include_resource_types == None or "BastionSession" in self.include_resource_types):
                     # get Sessions for Bastion
                     regional_resource_requests.add(("BastionSession", resource.compartment_id, resource.identifier))
+                elif resource.resource_type == "BigDataService" and (self.include_resource_types == None or "BigDataServiceMetastoreConfig" in self.include_resource_types):
+                    # get BigDataServiceMetastoreConfig config for BigDataService
+                    regional_resource_requests.add(("BigDataServiceMetastoreConfig", resource.compartment_id, resource.identifier))
                 elif resource.resource_type == "Bucket" and (self.include_resource_types == None or "PreauthenticatedRequest" in self.include_resource_types):
                     # get Preauthenticated Requests for Bucket
                     regional_resource_requests.add(("PreauthenticatedRequest", resource.compartment_id, resource.display_name))
@@ -1659,6 +1701,16 @@ class OciResourceDiscoveryClient(object):
             if "Bastion" in resources_by_region[region]:
                 for resource in resources_by_region[region]["Bastion"]:
                     regional_resource_requests.add(("BastionDetails", resource.compartment_id, resource.id))
+            # get extra details for NoSQLndex
+            if "NoSQLIndex" in resources_by_region[region]:
+                for resource in resources_by_region[region]["NoSQLIndex"]:
+                    logger.error(resource)
+                    regional_resource_requests.add(("NoSQLIndexDetails", resource.compartment_id, (resource.table_id, resource.name)))
+            # get extra details for NoSQLTable
+            if "NoSQLTable" in resources_by_region[region]:
+                for resource in resources_by_region[region]["NoSQLTable"]:
+                    logger.error(resource)
+                    regional_resource_requests.add(("NoSQLTableDetails", None, resource.id))
 
             extra_resource_requests.update({region:regional_resource_requests})
 
@@ -1711,6 +1763,8 @@ class OciResourceDiscoveryClient(object):
             self.replace_resource_details(resources_by_region, region, "DataFlowRun", "DataFlowRunDetails")
             self.replace_resource_details(resources_by_region, region, "ExportSet", "ExportSetDetails")
             self.replace_resource_details(resources_by_region, region, "Bastion", "BastionDetails")
+            self.replace_resource_details(resources_by_region, region, "NoSQLTable", "NoSQLTableDetails")
+            self.replace_resource_details(resources_by_region, region, "NoSQLIndex", "NoSQLIndexDetails")
 
         if len(resources_by_region) == 0:
             logger.warn("Resource discovery results are empty")  
