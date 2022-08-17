@@ -97,8 +97,16 @@ class OkitOciProductPricing {
                 const get_sku_function = OkitOciProductPricing.getBoMFunctionName(titleCase(resource_name.replaceAll('_', ' ')).replaceAll(' ', '').slice(0, -1))
                 console.info('Get Sku Function:', get_sku_function)
                 if (this[get_sku_function]) {
-                    const bom_details = this[get_sku_function](resource)
+                    const bom_details = this[get_sku_function](resource, this)
                     console.info('BoM Details:', bom_details)
+                    bom_details.skus.filter(sb => sb.sku && sb.sku !== '').forEach((sku_bom) => {
+                        const bom_entry = this.getBoMSkuEntry(sku_bom.sku)
+                        bom_entry.quantity += sku_bom.quantity
+                        bom_entry.utilization += sku_bom.utilization
+                        bom_entry.units += sku_bom.units
+                        bom_entry.price_per_month += sku_bom.price_per_month
+                    })
+                    this.updateCostEstimate(resource.getArtifactReference(), bom_details.price_per_month)
                 } else {
                     console.info(`>> Unable to get SKU for ${titleCase(resource_name.replaceAll('_', ' ')).slice(0, -1)} - ${resource.display_name}`)
                 }
@@ -235,6 +243,7 @@ class OkitOciPricingResource {
 
     get sku_map() {return this.pricing.sku_map}
 
+    newSkuEntry(sku='') {return {sku: sku, quantity:0, utilization: 0, units: 0, price_per_month: 0}}
     getPrice(resource) {return 0}
     getBoM(resource) {return {}}
     updateCostEstimate = (resource, price=0) => this.pricing.updateCostEstimate(resource, price)
