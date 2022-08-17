@@ -1704,12 +1704,10 @@ class OciResourceDiscoveryClient(object):
             # get extra details for NoSQLndex
             if "NoSQLIndex" in resources_by_region[region]:
                 for resource in resources_by_region[region]["NoSQLIndex"]:
-                    logger.error(resource)
                     regional_resource_requests.add(("NoSQLIndexDetails", resource.compartment_id, (resource.table_id, resource.name)))
             # get extra details for NoSQLTable
             if "NoSQLTable" in resources_by_region[region]:
                 for resource in resources_by_region[region]["NoSQLTable"]:
-                    logger.error(resource)
                     regional_resource_requests.add(("NoSQLTableDetails", None, resource.id))
 
             extra_resource_requests.update({region:regional_resource_requests})
