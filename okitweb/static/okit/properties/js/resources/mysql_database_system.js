@@ -90,8 +90,6 @@ class MysqlDatabaseSystemProperties extends OkitResourceProperties {
     loadResource() {
         // Load Select Inputs
         this.loadSelect(this.subnet_id, 'subnet', true)
-        // this.loadReferenceSelect(this.shape_name, 'getMySQLShapes', false, undefined, undefined, '', 'name', 'name')
-        // this.loadReferenceSelect(this.mysql_version, 'getMySQLVersions', true, undefined, undefined, 'System Default', 'version', 'description')
         this.loadMySQLShapes()
         this.loadMySQLVersions()
         // Assign Values
