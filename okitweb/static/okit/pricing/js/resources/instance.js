@@ -14,16 +14,11 @@ class InstanceOciPricing extends OkitOciPricingResource {
         this.balanced_performance = 10
     }
 
-    get boot_vol_performance_sku() {return 'B91962'} // Performance
-    get boot_vol_capacity_sku() {return 'B91961'} // Capacity
-    // get monthly_utilization() {return 744}
-
     getPrice(resource) {
         resource = resource ? resource : this.resource
         const bsv = new BlockStorageVolume({size_in_gbs: +resource.source_details.boot_volume_size_in_gbs, vpus_per_gb: this.balanced_performance}, new OkitJson())
         const bsv_pricing = new BlockStorageVolumeOciPricing(bsv, this.pricing)
         const price_per_month = this.getShapeCost(resource) + this.getOsCost(resource) + bsv_pricing.getPrice(bsv)
-        // const price_per_month = this.getShapeCost(resource) + this.getBootVolumePerformanceCost(resource) + this.getBootVolumeCapacityCost(resource) + this.getOsCost(resource)
         console.info('Price', resource, price_per_month)
         return price_per_month
     }
@@ -33,8 +28,7 @@ class InstanceOciPricing extends OkitOciPricingResource {
         const bsv = new BlockStorageVolume({size_in_gbs: +resource.source_details.boot_volume_size_in_gbs, vpus_per_gb: this.balanced_performance}, new OkitJson())
         const bsv_pricing = new BlockStorageVolumeOciPricing(bsv, this.pricing)
         const bom = {
-            skus: [this.getShapeBoMEntry(resource), this.gethOsBoMEntry(resource), ...bsv_pricing.getBoM(bsv).skus], 
-            // skus: [this.getShapeBoMEntry(resource), this.getBootVolumePerformanceBoMEntry(resource), this.getBootVolumeCapacityBoMEntry(resource), this.gethOsBoMEntry(resource)], 
+            skus: [this.getShapeBoMEntry(resource), this.getOsBoMEntry(resource), ...bsv_pricing.getBoM(bsv).skus], 
             price_per_month: this.getPrice(resource)
         }
         return bom
@@ -50,27 +44,7 @@ class InstanceOciPricing extends OkitOciPricingResource {
         return bom_entry
     }
 
-    // getBootVolumePerformanceBoMEntry(resource) {
-    //     const sku = this.boot_vol_performance_sku // Performance
-    //     const bom_entry = this.newSkuEntry(sku)
-    //     bom_entry.quantity = 1
-    //     bom_entry.utilization = 10 // VPUS / GB
-    //     bom_entry.units = +resource.source_details.boot_volume_size_in_gbs
-    //     bom_entry.price_per_month = this.getBootVolumePerformanceCost(resource)
-    //     return bom_entry
-    // }
-
-    // getBootVolumeCapacityBoMEntry(resource) {
-    //     const sku = this.boot_vol_capacity_sku // Capacity
-    //     const bom_entry = this.newSkuEntry(sku)
-    //     bom_entry.quantity = 1
-    //     bom_entry.utilization = 1
-    //     bom_entry.units = +resource.source_details.boot_volume_size_in_gbs
-    //     bom_entry.price_per_month = this.getBootVolumeCapacityCost(resource)
-    //     return bom_entry
-    // }
-
-    gethOsBoMEntry(resource) {
+    getOsBoMEntry(resource) {
         const sku = this.sku_map.os[resource.source_details.os.toLowerCase()]
         const bom_entry = this.newSkuEntry(sku)
         if (sku) {
@@ -86,23 +60,8 @@ class InstanceOciPricing extends OkitOciPricingResource {
         // Process Shape Information
         const sku = this.sku_map.instance.shape[resource.shape]
         const list_price = this.getSkuCost(sku)
+        // const price_per_month = list_price * +((+resource.shape_config.ocpus * this.monthly_utilization) + (+resource.shape_config.ocpus * 16 ))
         const price_per_month = list_price * +resource.shape_config.ocpus * this.monthly_utilization
-        return price_per_month
-    }
-
-    getBootVolumePerformanceCost(resource) {
-        // Process Boot Volume Performance Information
-        const sku = this.boot_vol_performance_sku // Performance
-        const list_price = this.getSkuCost(sku)
-        const price_per_month = list_price * +resource.source_details.boot_volume_size_in_gbs * 10
-        return price_per_month
-    }
-
-    getBootVolumeCapacityCost(resource) {
-        // Process Boot Volume Performance Information
-        const sku = this.boot_vol_capacity_sku // Capacity
-        const list_price = this.getSkuCost(sku)
-        const price_per_month = list_price * +resource.source_details.boot_volume_size_in_gbs
         return price_per_month
     }
 

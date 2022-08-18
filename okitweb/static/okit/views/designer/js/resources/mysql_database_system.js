@@ -12,8 +12,15 @@ class MysqlDatabaseSystemView extends OkitDesignerArtefactView {
         super(artefact, json_view);
     }
 
-    get parent_id() {return this.artefact.subnet_id;}
-    get parent() {return this.getJsonView().getSubnet(this.parent_id);}
+    get parent_id() {
+        let primary_subnet = this.getJsonView().getSubnet(this.artefact.subnet_id);
+        if (primary_subnet && primary_subnet.compartment_id === this.artefact.compartment_id) {
+            return this.artefact.subnet_id;
+        } else {
+            return this.artefact.compartment_id;
+        }
+    }
+    get parent() {return this.getJsonView().getSubnet(this.parent_id) ? this.getJsonView().getSubnet(this.parent_id) : this.getJsonView().getCompartment(this.parent_id);}
     // Direct Subnet Access
     set subnet_id(id) {this.artefact.subnet_id = id;}
 
@@ -24,7 +31,10 @@ class MysqlDatabaseSystemView extends OkitDesignerArtefactView {
     /*
     ** Property Sheet Load function
      */
-    loadProperties() {
+    newPropertiesSheet() {
+        this.properties_sheet = new MysqlDatabaseSystemProperties(this.artefact)
+    }
+    loadProperties1() {
         let okitJson = this.getOkitJson();
         let me = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/mysql_database_system.html", () => {
@@ -73,7 +83,7 @@ class MysqlDatabaseSystemView extends OkitDesignerArtefactView {
     }
 
     static getDropTargets() {
-        return [Subnet.getArtifactReference()];
+        return [Subnet.getArtifactReference(), Compartment.getArtifactReference()];
     }
 
 }
@@ -82,8 +92,15 @@ class MysqlDatabaseSystemView extends OkitDesignerArtefactView {
 */
 OkitJsonView.prototype.dropMysqlDatabaseSystemView = function(target) {
     let view_artefact = this.newMysqlDatabaseSystem();
-    view_artefact.getArtefact().subnet_id = target.id;
-    view_artefact.getArtefact().compartment_id = target.compartment_id;
+    // view_artefact.getArtefact().subnet_id = target.id;
+    // view_artefact.getArtefact().compartment_id = target.compartment_id;
+    if (target.type === Subnet.getArtifactReference()) {
+        view_artefact.getArtefact().primary_vnic.subnet_id = target.id;
+        view_artefact.artefact.primary_vnic.assign_public_ip = !this.getSubnet(target.id).prohibit_public_ip_on_vnic;
+        view_artefact.getArtefact().compartment_id = target.compartment_id;
+    } else if (target.type === Compartment.getArtifactReference()) {
+        view_artefact.getArtefact().compartment_id = target.id;
+    }
     view_artefact.recalculate_dimensions = true;
     return view_artefact;
 }

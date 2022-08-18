@@ -368,20 +368,22 @@ class OkitOCIData {
         return this.dropdown_data.loadbalancer_shapes;
     }
 
-    getMySQLConfigurations(shape_name='') {
-        if (shape_name === '') {
-            return this.dropdown_data.mysql_configurations;
-        } else {
-            return this.dropdown_data.mysql_configurations.filter(function(dss) {return dss.shape_name === shape_name;});
-        }
-    }
-    getMySQLConfiguration(id) {
-        for (let shape of this.getMySQLConfigurations()) {
-            if (shape.id === id) {
-                return shape;
-            }
-        }
-    }
+    // getMySQLConfigurations(shape_name='') {
+    //     if (shape_name === '') {
+    //         return this.dropdown_data.mysql_configurations;
+    //     } else {
+    //         return this.dropdown_data.mysql_configurations.filter(function(dss) {return dss.shape_name === shape_name;});
+    //     }
+    // }
+    getMySQLConfigurations = (filter=() => true) => this.dropdown_data.mysql_configurations.filter(filter)
+    getMySQLConfiguration = (id) => this.getMySQLConfigurations().find((c) => c.id === id)
+    // getMySQLConfiguration(id) {
+    //     for (let shape of this.getMySQLConfigurations()) {
+    //         if (shape.id === id) {
+    //             return shape;
+    //         }
+    //     }
+    // }
 
     getVolumeBackupPolicies() {
         return this.dropdown_data.volume_backup_policy ? this.dropdown_data.volume_backup_policy : []

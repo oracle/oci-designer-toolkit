@@ -25,7 +25,7 @@ class InstanceProperties extends OkitResourceProperties {
         this.append(this.core_tbody, ad.row)
         // Fault Domain
         const fd_data = this.fd_data
-        const fd = this.createInput('select', 'Fault Domain', `${self.id}_availability_domain`, '', (d, i, n) => self.resource.fault_domain = n[i].value, fd_data)
+        const fd = this.createInput('select', 'Fault Domain', `${self.id}_fault_domain`, '', (d, i, n) => self.resource.fault_domain = n[i].value, fd_data)
         this.fault_domain = fd.input
         this.append(this.core_tbody, fd.row)
         // Image & Shape

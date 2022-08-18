@@ -446,19 +446,19 @@ class OkitResourceProperties {
         return id
     }
 
-    loadReferenceSelect(select, resource_type, empty_option=false, filter=undefined, groups=undefined, empty_value='') {
+    loadReferenceSelect(select, resource_type, empty_option=false, filter=undefined, groups=undefined, empty_value='', id_element='id', display_element='display_name') {
         select.selectAll('*').remove()
         filter = filter ? filter : () => true
         if (empty_option) select.append('option').attr('value', '').attr('selected', 'selected').text(empty_value ? empty_value : '')
         let id = ''
         const resources = okitOciData[resource_type](filter)
-        console.info('Resources', resources)
+        console.info('Resources', resource_type, resources, okitOciData[resource_type])
         if (groups) {
             Object.entries(groups).forEach(([k, v]) => {
                 const optgrp = select.append('optgroup').attr('label', k)
                 resources.filter(v).forEach((r, i) => {
                     r = r instanceof Object ? r : {id: r, display_name: r}
-                    const option = optgrp.append('option').attr('value', r.id).text(r.display_name)
+                    const option = optgrp.append('option').attr('value', r[id_element]).text(r[display_element])
                     if (!empty_option && i === 0 && id === '') {
                         option.attr('selected', 'selected')
                         id = r.id
@@ -469,7 +469,7 @@ class OkitResourceProperties {
             filter = () => true
             resources.filter(filter).forEach((r, i) => {
                 r = r instanceof Object ? r : {id: r, display_name: r}
-                const option = select.append('option').attr('value', r.id).text(r.display_name)
+                const option = select.append('option').attr('value', r[id_element]).text(r[display_element])
                 if (!empty_option && i === 0) {
                     option.attr('selected', 'selected')
                     id = r.id
