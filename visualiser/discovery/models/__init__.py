@@ -7,6 +7,7 @@ from .file_storage import ExtendedExportSummary
 from .identity import ExtendedTagSummary
 from .object_storage import ExtendedPreauthenticatedRequestSummary
 from .mysql import ExtendedMySQLBackup, ExtendedMySQLBackupSummary
+from .nosql import ExtendedNoSQLIndexSummary
 from .database import ExtendedDbNodeSummary
 from .virtual_network import ExtendedDrgRouteDistributionStatement, ExtendedDrgRouteRule, ExtendedVirtualCircuitBandwidthShape
 
@@ -19,6 +20,7 @@ __all__ = [
   "ExtendedMySQLBackup",
   "ExtendedMySQLBackupSummary",
   "ExtendedNetworkSecurityGroupVnic",
+  "ExtendedNoSQLIndexSummary",
   "ExtendedPreauthenticatedRequestSummary",
   "ExtendedSecurityRule",
   "ExtendedSourceApplicationSummary",
