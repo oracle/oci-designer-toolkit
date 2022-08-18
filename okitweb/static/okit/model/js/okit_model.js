@@ -507,9 +507,9 @@ class OkitArtifact {
     estimateCost = () => {
         const get_price_function = OkitOciProductPricing.getPriceFunctionName(this.constructor.name)
         const pricing = okitOciProductPricing ? okitOciProductPricing : new OkitOciProductPricing()
-        console.info('>>>>>> Estimating Cost')
+        console.info(`>>>>>> Estimating Resource Cost: ${get_price_function}`)
         try {
-            return OkitOciProductPricing.formatPrice(pricing[get_price_function](this), pricing.currency)
+            return OkitOciProductPricing.formatPrice(pricing[get_price_function](this, pricing), pricing.currency)
         } catch (e) {
             console.debug(e)
             return OkitOciProductPricing.formatPrice(0, pricing.currency)

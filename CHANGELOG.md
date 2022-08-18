@@ -2,9 +2,11 @@
 
 
 ## Version 0.40.0
-**Release Date**: 17th August 2022
+**Release Date**: 7th September 2022
 ### Features
 1. Streamline / refactor backend javascript / css file identification and load functionality
+2. Update Properties sheet for MySQL Database
+3. Update Discovery process to execute gets for NoSQL Tables and Indexes.
 ### Bug Fixes
 1. In markdown generation switch to using documentation not definition
 2. Move logging debug message in generate "GET" that accesses unknown element.
