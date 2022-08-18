@@ -391,8 +391,8 @@ class OCIQuery(OCIConnection):
     def nosql_databases(self, databases, resources):
         indexes = resources.get("NoSQLIndex", [])
         for database in databases:
-            logger.info(jsonToFormattedString(database))
-        logger.info(jsonToFormattedString(indexes))
+            logger.info(f'NoSQL Tables {jsonToFormattedString(database)}')
+        logger.info(f'NoSQL Indexes {jsonToFormattedString(indexes)}')
         return databases
 
     def object_storage_buckets(self, buckets, resources):

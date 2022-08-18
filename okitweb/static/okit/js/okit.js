@@ -251,6 +251,8 @@ class OkitOCIData {
         }
     }
 
+    // getDBSystemShapes = (filter=() => true) => dropdown_data.db_system_shapes.filter(filter)
+
     getDBSystemShapes(family='') {
         if (family === '') {
             return this.dropdown_data.db_system_shapes;
