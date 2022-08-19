@@ -29,6 +29,11 @@ class NosqlDatabase extends OkitArtifact {
         this.convert();
     }
 
+    convert() {
+        super.convert()
+        this.indexes.forEach((i) => i.resource_name = i.resource_name ? i.resource_name : `${this.resource_name}Index`)
+    }
+
     newIndex() {
         return {
             resource_name: `${this.generateResourceName()}Index`,

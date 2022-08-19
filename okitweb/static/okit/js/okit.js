@@ -252,6 +252,7 @@ class OkitOCIData {
     }
 
     // getDBSystemShapes = (filter=() => true) => dropdown_data.db_system_shapes.filter(filter)
+    getExadataDBSystemShapes = (filter=() => true) => this.getDBSystemShapes((ds) => ds.family === 'EXADATA').filter(filter).sort((a, b) => a.name - b.name)
 
     getDBSystemShapes(family='') {
         if (family === '') {
