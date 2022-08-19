@@ -391,6 +391,7 @@ class OCIQuery(OCIConnection):
     def nosql_databases(self, databases, resources):
         indexes = resources.get("NoSQLIndex", [])
         for database in databases:
+            database['indexes'] = [i for i in indexes if i['table_id'] == database['id']]
             logger.info(f'NoSQL Tables {jsonToFormattedString(database)}')
         logger.info(f'NoSQL Indexes {jsonToFormattedString(indexes)}')
         return databases
