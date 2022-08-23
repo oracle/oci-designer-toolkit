@@ -29,7 +29,7 @@ class DatabaseSystem extends OkitArtifact {
         this.hostname = this.display_name.toLowerCase();
         this.shape = '';
         this.ssh_public_keys = '';
-        this.subnet_id = data.parent_id;
+        this.subnet_id = '';
         this.backup_network_nsg_ids = [];
         this.backup_subnet_id = '';
         this.cluster_name = '';
@@ -45,9 +45,9 @@ class DatabaseSystem extends OkitArtifact {
         this.license_model = 'LICENSE_INCLUDED';
         this.node_count = 1;
         this.nsg_ids = [];
-        this.source = 'NONE'
-        this.sparse_diskgroup = false;
-        this.time_zone = '+00:00';
+        // this.source = 'NONE'
+        // this.sparse_diskgroup = false;
+        // this.time_zone = '';
         // Update with any passed data
         this.merge(data);
         this.convert();

@@ -251,10 +251,13 @@ class OkitOCIData {
         }
     }
 
-    // getDBSystemShapes = (filter=() => true) => dropdown_data.db_system_shapes.filter(filter)
-    getExadataDBSystemShapes = (filter=() => true) => this.getDBSystemShapes((ds) => ds.family === 'EXADATA').filter(filter).sort((a, b) => a.name - b.name)
+    getDBSystemShapes = (filter=() => true) => this.dropdown_data.db_system_shapes.filter(filter).sort((a, b) => a.name.localeCompare(b.name))
+    getBareMetalDBSystemShapes = (filter=() => true) => this.getDBSystemShapes((ds) => ds.shape_family === 'SINGLENODE').filter(filter)
+    getExaCCDBSystemShapes = (filter=() => true) => this.getDBSystemShapes((ds) => ds.shape_family === 'EXACC').filter(filter)
+    getExadataDBSystemShapes = (filter=() => true) => this.getDBSystemShapes((ds) => ds.shape_family === 'EXADATA').filter(filter)
+    getVirtualMachineDBSystemShapes = (filter=() => true) => this.getDBSystemShapes((ds) => ds.shape_family === 'VIRTUALMACHINE').filter(filter)
 
-    getDBSystemShapes(family='') {
+    getDBSystemShapes1(family='') {
         if (family === '') {
             return this.dropdown_data.db_system_shapes;
         } else {
