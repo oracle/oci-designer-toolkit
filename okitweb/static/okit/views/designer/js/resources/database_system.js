@@ -25,8 +25,15 @@ class DatabaseSystemView extends OkitDesignerArtefactView {
     }
     // ---- Icon
     get icon_definition_id() {return this.shape.startsWith('Exadata.') ? OkitJsonView.toSvgIconDef('ExadataDatabaseSystem') : super.icon_definition_id;}
-    get parent_id() {return this.artefact.subnet_id;}
-    get parent() {return this.getJsonView().getSubnet(this.parent_id);}
+    get parent_id() {
+        let primary_subnet = this.getJsonView().getSubnet(this.artefact.subnet_id);
+        if (primary_subnet && primary_subnet.compartment_id === this.artefact.compartment_id) {
+            return this.artefact.subnet_id;
+        } else {
+            return this.artefact.compartment_id;
+        }
+    }
+    get parent() {return this.getJsonView().getSubnet(this.parent_id) ? this.getJsonView().getSubnet(this.parent_id) : this.getJsonView().getCompartment(this.parent_id);}
     // Direct Subnet Access
     set subnet_id(id) {this.artefact.subnet_id = id;}
 
@@ -37,7 +44,10 @@ class DatabaseSystemView extends OkitDesignerArtefactView {
     /*
     ** Property Sheet Load function
      */
-    loadProperties() {
+    newPropertiesSheet() {
+        this.properties_sheet = new DatabaseSystemProperties(this.artefact)
+    }
+    loadProperties1() {
         let okitJson = this.getOkitJson();
         let me = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/database_system.html", () => {
@@ -120,7 +130,7 @@ class DatabaseSystemView extends OkitDesignerArtefactView {
     }
 
     static getDropTargets() {
-        return [Subnet.getArtifactReference()];
+        return [Subnet.getArtifactReference(), Compartment.getArtifactReference()];
     }
 
 }
@@ -129,8 +139,14 @@ class DatabaseSystemView extends OkitDesignerArtefactView {
 */
 OkitJsonView.prototype.dropDatabaseSystemView = function(target) {
     let view_artefact = this.newDatabaseSystem();
-    view_artefact.getArtefact().subnet_id = target.id;
-    view_artefact.getArtefact().compartment_id = target.compartment_id;
+    // view_artefact.getArtefact().subnet_id = target.id;
+    // view_artefact.getArtefact().compartment_id = target.compartment_id;
+    if (target.type === Subnet.getArtifactReference()) {
+        view_artefact.getArtefact().subnet_id = target.id;
+        view_artefact.getArtefact().compartment_id = target.compartment_id;
+    } else if (target.type === Compartment.getArtifactReference()) {
+        view_artefact.getArtefact().compartment_id = target.id;
+    }
     view_artefact.recalculate_dimensions = true;
     return view_artefact;
 }

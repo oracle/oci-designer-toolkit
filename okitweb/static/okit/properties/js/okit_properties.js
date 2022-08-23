@@ -326,6 +326,14 @@ class OkitResourceProperties {
         } else if (type === 'multiselect') {
             title = row.append('div').attr('class', 'td property-label').text(label)
             input = row.append('div').attr('class', 'td').append('div').attr('id', this.inputId(id, idx)).attr('class', 'okit-multiple-select').on('change', callback)
+            if (data && data.options) {
+                Object.entries(data.options).forEach(([k, v]) => {
+                    const div = input.append('div')
+                    const safeid = k.replace(/[\W_]+/g,"_")
+                    div.append('input').attr('type', 'checkbox').attr('id', safeid).attr('value', k)
+                    div.append('label').attr('for', safeid).text(v)
+                    })
+            }
         } else if (type === 'checkbox') {
             row.append('div').attr('class', 'td property-label')
             cell = row.append('div').attr('class', 'td')
@@ -455,6 +463,7 @@ class OkitResourceProperties {
         console.info('Resources', resource_type, resources, okitOciData[resource_type])
         if (groups) {
             Object.entries(groups).forEach(([k, v]) => {
+                console.info('Group', k, 'Filter', v)
                 const optgrp = select.append('optgroup').attr('label', k)
                 resources.filter(v).forEach((r, i) => {
                     r = r instanceof Object ? r : {id: r, display_name: r}
@@ -480,6 +489,7 @@ class OkitResourceProperties {
     }
 
     loadMultiSelect(select, resource_type, empty_option=false, filter=undefined) {
+        console.info('Select:', select)
         select.selectAll('*').remove()
         if (!filter) filter = () => true
         const resources = this.resource.okit_json[`${resource_type}s`] ? this.resource.okit_json[`${resource_type}s`] : this.resource.okit_json[`${resource_type}`] ? this.resource.okit_json[`${resource_type}`] : []

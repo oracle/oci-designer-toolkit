@@ -34,46 +34,6 @@ class MysqlDatabaseSystemView extends OkitDesignerArtefactView {
     newPropertiesSheet() {
         this.properties_sheet = new MysqlDatabaseSystemProperties(this.artefact)
     }
-    loadProperties1() {
-        let okitJson = this.getOkitJson();
-        let me = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/mysql_database_system.html", () => {
-            // Load DB System Configurations
-            let configuration_select = $(jqId('configuration_id'));
-            // Load DB System Shapes
-            let shape_select = $(jqId('shape_name'));
-            $(shape_select).empty();
-            for (let shape of okitOciData.getMySQLShapes()) {
-                shape_select.append($('<option>').attr('value', shape.name).text(shape.name));
-            }
-            $(shape_select).on('change', function() {
-                console.info('Selected Shape ' + $(this).val());
-                $(configuration_select).empty();
-                for (let configuration of okitOciData.getMySQLConfigurations($(this).val())) {
-                    configuration_select.append($('<option>').attr('value', configuration.id).text(configuration.display_name));
-                }
-                $(configuration_select).change();
-            });
-            // Load MySQL System Versions
-            let version_select = $(jqId('mysql_version'));
-            $(version_select).empty();
-            version_select.append($('<option>').attr('value', '').text('System Default'));
-            for (let version of okitOciData.getMySQLVersions()) {
-                version_select.append($('<option>').attr('value', version.version).text(version.description));
-            }
-            // Load Properties
-            loadPropertiesSheet(me.artefact);
-            // Click Select Lists we have added dynamic on click to
-            $(shape_select).change();
-        });
-    }
-
-    /*
-    ** Load and display Value Proposition
-     */
-    loadValueProposition() {
-        $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/mysql_database_system.html");
-    }
 
     /*
     ** Static Functionality
@@ -95,8 +55,7 @@ OkitJsonView.prototype.dropMysqlDatabaseSystemView = function(target) {
     // view_artefact.getArtefact().subnet_id = target.id;
     // view_artefact.getArtefact().compartment_id = target.compartment_id;
     if (target.type === Subnet.getArtifactReference()) {
-        view_artefact.getArtefact().primary_vnic.subnet_id = target.id;
-        view_artefact.artefact.primary_vnic.assign_public_ip = !this.getSubnet(target.id).prohibit_public_ip_on_vnic;
+        view_artefact.getArtefact().subnet_id = target.id;
         view_artefact.getArtefact().compartment_id = target.compartment_id;
     } else if (target.type === Compartment.getArtifactReference()) {
         view_artefact.getArtefact().compartment_id = target.id;

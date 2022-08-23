@@ -86,6 +86,7 @@ resource "oci_database_db_system" "{{ resource_name }}" {
     hostname        = {{ hostname | safe }}
     shape           = {{ shape | safe }}
     ssh_public_keys = [{{ ssh_public_keys | safe }}]
+    {# ssh_public_keys = [{% for ssh_public_key in ssh_public_keys %}"{{ ssh_public_key | safe }}"{% if not loop.last %},{% endif %}{% endfor %}] #}
     subnet_id       = {{ subnet_id }}
     #Optional
 {% if backup_network_nsg_ids is defined %}
@@ -120,7 +121,7 @@ resource "oci_database_db_system" "{{ resource_name }}" {
     domain                  = {{ domain | safe }}
 {% endif %}
 {% if fault_domains is defined %}
-    #fault_domains           = {{ fault_domains | safe }}
+    {# fault_domains           = {{ fault_domains | safe }} #}
     fault_domains           = [{% for fault_domain in fault_domains %}"{{ fault_domain | safe }}"{% if not loop.last %},{% endif %}{% endfor %}]
 {% endif %}
 {% if license_model is defined %}
@@ -147,7 +148,8 @@ resource "oci_database_db_system" "{{ resource_name }}" {
     node_count       = {{ node_count | safe }}
 {% endif %}
 {% if nsg_ids is defined %}
-    nsg_ids          = {{ nsg_ids | safe }}
+    {# nsg_ids          = {{ nsg_ids | safe }} #}
+    nsg_ids          = [{% for id in nsg_ids %}"{{ id | safe }}"{% if not loop.last %},{% endif %}{% endfor %}]
 {% endif %}
 {% if source is defined %}
     source           = {{ source | safe }}
