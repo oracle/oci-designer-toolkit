@@ -227,7 +227,7 @@ class DatabaseSystemProperties extends OkitResourceProperties {
         const shape_groups = {
             'Virtual Machine': (ds) => ds.shape_family === 'VIRTUALMACHINE',
             'Bare Metal': (ds) => ds.shape_family === 'SINGLENODE',
-            'ExaData': (ds) => ds.shape_family === 'EXADATA',
+            // 'ExaData': (ds) => ds.shape_family === 'EXADATA',
             // 'ExaCC': (ds) => ds.shape_family === 'EXACC'
         }
         const shape = this.loadReferenceSelect(this.shape, 'getDBSystemShapes', false, undefined, shape_groups)
