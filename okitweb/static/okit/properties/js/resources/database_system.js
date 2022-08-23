@@ -34,7 +34,7 @@ class DatabaseSystemProperties extends OkitResourceProperties {
         this.shape_row = shape.row
         // Node Count
         const node_count_data = {options: {1: 1, 2: 2}}
-        const node_count = this.createInput('select', 'Node Count', `${this.id}_node_count`, '', (d, i, n) => this.resource.node_count = n[i].value, node_count_data)
+        const node_count = this.createInput('select', 'Node Count', `${this.id}_node_count`, '', (d, i, n) => {this.resource.node_count = n[i].value; this.handleNodeCountChanged()}, node_count_data)
         this.node_count = node_count.input
         this.node_count_row = node_count.row
         this.append(this.core_tbody, node_count.row)
@@ -199,6 +199,11 @@ class DatabaseSystemProperties extends OkitResourceProperties {
         this.showCollapseShapeRows(shape)
     }
 
+    handleNodeCountChanged() {
+        this.showCollapseShapeRows()
+        if (this.resource.node_count === 1) this.resource.cluster_name = ''
+    }
+
     showCollapseShapeRows(shape) {
         shape = shape ? shape : this.resource.shape
         const shape_data = okitOciData.getDBSystemShape(shape)
@@ -208,7 +213,7 @@ class DatabaseSystemProperties extends OkitResourceProperties {
         this.data_storage_percentage_row.classed('collapsed', is_vm)
         this.cpu_core_count_row.classed('collapsed', is_vm)
         this.node_count_row.classed('collapsed', !is_vm || (is_vm && shape_data.maximum_node_count <= 1))
-        this.cluster_name_row.classed('collapsed', !is_vm || (is_vm && shape_data.maximum_node_count <= 1))
+        this.cluster_name_row.classed('collapsed', !is_vm || (is_vm && (shape_data.maximum_node_count <= 1 || this.resource.node_count === 1)))
         if (is_vm && shape_data.maximum_node_count <= 1) {
             this.resource.node_count = 1
             this.resource.cluster_name = null
@@ -223,7 +228,7 @@ class DatabaseSystemProperties extends OkitResourceProperties {
             'Virtual Machine': (ds) => ds.shape_family === 'VIRTUALMACHINE',
             'Bare Metal': (ds) => ds.shape_family === 'SINGLENODE',
             'ExaData': (ds) => ds.shape_family === 'EXADATA',
-            'ExaCC': (ds) => ds.shape_family === 'EXACC'
+            // 'ExaCC': (ds) => ds.shape_family === 'EXACC'
         }
         const shape = this.loadReferenceSelect(this.shape, 'getDBSystemShapes', false, undefined, shape_groups)
         if (!this.resource.shape || this.resource.shape === '') this.resource.shape = shape
