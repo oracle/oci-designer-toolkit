@@ -5,9 +5,13 @@
 **Release Date**: 7th September 2022
 ### Features
 1. Streamline / refactor backend javascript / css file identification and load functionality
-2. Update Properties sheet for MySQL Database and allow drop on Compartment.
+2. Update Properties sheet for 
+    1. MySQL Database and allow drop on Compartment.
+    2. Database Systems.
+    3. Autonomous Database.
 3. Update Discovery process to execute gets for NoSQL Tables and Indexes.
 4. Extend NoSQL Query to display DDL & Indexes in properties.
+5. Drop ExaData from Database System Shapes because this is no longer the preferred implementation.
 ### Bug Fixes
 1. In markdown generation switch to using documentation not definition
 2. Move logging debug message in generate "GET" that accesses unknown element.

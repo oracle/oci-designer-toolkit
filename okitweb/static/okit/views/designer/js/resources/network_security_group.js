@@ -50,7 +50,11 @@ class NetworkSecurityGroupView extends OkitDesignerArtefactView {
     /*
     ** Property Sheet Load function
      */
-    loadProperties() {
+    newPropertiesSheet() {
+        this.properties_sheet = new NetworkSecurityGroupProperties(this.artefact)
+    }
+
+    loadProperties1() {
         let okitJson = this.getOkitJson();
         let me = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/network_security_group.html", () => {

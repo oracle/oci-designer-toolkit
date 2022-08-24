@@ -31,6 +31,20 @@ class OkitResourceProperties {
             'FAULT-DOMAIN-3': 'Fault Domain 3'
         }
     }
+    // License Model
+    license_model_data = {
+        options: {
+            LICENSE_INCLUDED: 'License Included', 
+            BRING_YOUR_OWN_LICENSE: 'Bring Your Own License'
+        }
+    }
+    // Database Workload
+    db_workload_data = {
+        options: {
+            OLTP: 'Transaction Processing', 
+            DW: 'Data Warehouse'
+        }
+    }
     // DNS Label
     dns_data = {
         maxlength: '15',

@@ -92,22 +92,12 @@ class DatabaseSystemProperties extends OkitResourceProperties {
         this.db_version = db_version.input
         this.db_version_row = db_version.row
         // Workload
-        const db_workload_data = {
-            options: {
-                OLTP: 'Transaction Processing', 
-                DW: 'Data Warehouse'
-            }
-        }
+        const db_workload_data = this.db_workload_data
         const db_workload = this.createInput('select', 'Workload', `${this.id}_db_workload`, '', (d, i, n) => this.resource.db_home.database.db_workload = n[i].value, db_workload_data)
         this.db_workload = db_workload.input
         this.append(this.database_tbody, db_workload.row)
         // License Model
-        const license_model_data = {
-            options: {
-                LICENSE_INCLUDED: 'License Included', 
-                BRING_YOUR_OWN_LICENSE: 'Bring Your Own License'
-            }
-        }
+        const license_model_data = this.license_model_data
         const license_model = this.createInput('select', 'License Model', `${this.id}_license_model`, '', (d, i, n) => this.resource.license_model = n[i].value, license_model_data)
         this.license_model = license_model.input
         this.append(this.database_tbody, license_model.row)
@@ -227,7 +217,7 @@ class DatabaseSystemProperties extends OkitResourceProperties {
         const shape_groups = {
             'Virtual Machine': (ds) => ds.shape_family === 'VIRTUALMACHINE',
             'Bare Metal': (ds) => ds.shape_family === 'SINGLENODE',
-            'ExaData': (ds) => ds.shape_family === 'EXADATA',
+            // 'ExaData': (ds) => ds.shape_family === 'EXADATA',
             // 'ExaCC': (ds) => ds.shape_family === 'EXACC'
         }
         const shape = this.loadReferenceSelect(this.shape, 'getDBSystemShapes', false, undefined, shape_groups)

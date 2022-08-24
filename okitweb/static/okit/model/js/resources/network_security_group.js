@@ -25,6 +25,8 @@ class NetworkSecurityGroup extends OkitArtifact {
 
     get egress_rules() {return this.security_rules.filter((r) => r.direction === 'EGRESS')}
     get ingress_rules() {return this.security_rules.filter((r) => r.direction === 'INGRESS')}
+    get egress_security_rules() {return this.security_rules.filter((r) => r.direction === 'EGRESS')}
+    get ingress_security_rules() {return this.security_rules.filter((r) => r.direction === 'INGRESS')}
 
     convert() {
         super.convert()
@@ -41,12 +43,63 @@ class NetworkSecurityGroup extends OkitArtifact {
             is_stateless: false, 
             description: "",
             source_type: "CIDR_BLOCK", 
+            source: "0.0.0.0/0"
+        }
+    }
+
+    newIngressRule() {
+        return {
+            resource_name: `${this.generateResourceName()}Rule`,
+            direction: "INGRESS", 
+            protocol: "all", 
+            is_stateless: false, 
+            description: "",
+            destination_type: "CIDR_BLOCK", 
+            destination: "0.0.0.0/0"
+        }
+    }
+
+    newEgressRule() {
+        return {
+            resource_name: `${this.generateResourceName()}Rule`,
+            direction: "EGRESS", 
+            protocol: "all", 
+            is_stateless: false, 
+            description: "",
+            source_type: "CIDR_BLOCK", 
             source: "0.0.0.0/0",
             destination_type: "CIDR_BLOCK", 
             destination: "0.0.0.0/0"
         }
     }
 
+    newTcpOptions() {
+        return {
+            source_port_range: this.newPortRange(),
+            destination_port_range: this.newPortRange()
+        }
+    }
+
+    newUdpOptions() {
+        return {
+            source_port_range: this.newPortRange(),
+            destination_port_range: this.newPortRange()
+        }
+    }
+
+    newPortRange() {
+        return {
+            min: '',
+            max: ''
+        }
+    }
+
+    newIcmpOptions() {
+        return {
+            type: '3',
+            code: '4'
+        }
+    }
 
     /*
     ** Delete Processing
