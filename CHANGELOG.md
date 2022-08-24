@@ -8,6 +8,7 @@
 2. Update Properties sheet for 
     1. MySQL Database and allow drop on Compartment.
     2. Database Systems.
+    3. Autonomous Database.
 3. Update Discovery process to execute gets for NoSQL Tables and Indexes.
 4. Extend NoSQL Query to display DDL & Indexes in properties.
 5. Drop ExaData from Database System Shapes because this is no longer the preferred implementation.
