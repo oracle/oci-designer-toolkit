@@ -71,6 +71,15 @@ def pricingPrices():
     else:
         return '404'
 
+@bp.route('shapes', methods=(["GET"]))
+def pricingShapes():
+    if request.method == 'GET':
+        bom_dir = os.path.abspath(os.path.join(bp.static_folder, 'json', 'bom'))
+        products_file = os.path.abspath(os.path.join(bom_dir, 'shapes.json'))
+        return readJsonFile(products_file)
+    else:
+        return '404'
+
 @bp.route('sku_map', methods=(["GET"]))
 def pricingSkuMap():
     if request.method == 'GET':

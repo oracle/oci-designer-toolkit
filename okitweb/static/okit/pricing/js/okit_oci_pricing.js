@@ -75,11 +75,23 @@ class OkitOciProductPricing {
         console.info('>>>>>> Loading Price <<<<<<<')
         const oci_products = $.getJSON(this.oci_products_url, {cache: false})
         const products = $.getJSON('pricing/products', {cache: false})
+        const shapes = $.getJSON('pricing/shapes', {cache: false})
         // const prices = $.getJSON('pricing/prices', {cache: false})
         const sku_map = $.getJSON('pricing/sku_map', {cache: false})
-        Promise.allSettled([oci_products, products, sku_map]).then(results => {
+        Promise.allSettled([oci_products, products, sku_map, shapes]).then(results => {
             this.products = results[0].status === 'fulfilled' ? results[0].value : results[1].value
             this.sku_map = results[2].value
+            if (results[3].status === 'fulfilled'){
+                let shape_sku_map = {}
+                results[3].value.items.forEach((item) => {
+                    let shape_skus = {} 
+                    item.products.forEach((p) => shape_skus[p.type.value] = p.partNumber)
+                    shape_sku_map[item.name] = shape_skus
+                })
+                console.info('Generated Shape SKU Map', shape_sku_map)
+                this.sku_map.instance.shape = shape_sku_map
+                console.info('Generated Shape SKU Map', this.sku_map)
+            }
             console.debug(this)
         })
 
