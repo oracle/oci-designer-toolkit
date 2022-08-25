@@ -127,7 +127,8 @@ class OkitResourceProperties {
 
     buildCostEstimate() {
         this.cost_estimate_div = this.properties_div.append('div')
-                                .attr('class', `property-editor-cost-estimate ${!developer_mode ? 'hidden' : ''}`)
+                                .attr('class', `property-editor-cost-estimate`)
+                                // .attr('class', `property-editor-cost-estimate ${!developer_mode ? 'hidden' : ''}`)
         const right_div = this.cost_estimate_div.append('div')
         const estimate_label = right_div.append('label').text('Estimated Monthly Cost')
         this.cost_estimate = right_div.append('label').text('')

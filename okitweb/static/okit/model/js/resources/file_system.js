@@ -19,6 +19,7 @@ class FileSystem extends OkitArtifact {
         this.availability_domain = 1;
         this.kms_key_id = '';
         this.source_snapshot_id = '';
+        this.estimated_capacity_per_month_gbs = 0
         // Update with any passed data
         this.merge(data);
         this.convert();

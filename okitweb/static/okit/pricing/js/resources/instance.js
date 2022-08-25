@@ -14,9 +14,6 @@ class InstanceOciPricing extends OkitOciPricingResource {
         this.balanced_performance = 10
     }
 
-    /*
-    ** Pricing Functions
-    */
     getPrice(resource) {
         resource = resource ? resource : this.resource
         const skus = this.sku_map.instance.shape[resource.shape]
@@ -29,6 +26,23 @@ class InstanceOciPricing extends OkitOciPricingResource {
         return price_per_month
     }
 
+    getBoM(resource) {
+        resource = resource ? resource : this.resource
+        const skus = this.sku_map.instance.shape[resource.shape]
+        let bom = {
+            skus: [], 
+            price_per_month: this.getPrice(resource)
+        }
+        if (skus.ocpu) {bom.skus.push(this.getOcpuBoMEntry(skus.ocpu, resource))}
+        if (skus.memory) {bom.skus.push(this.getMemoryBoMEntry(skus.memory, resource))}
+        if (skus.disk) {bom.skus.push(this.getDiskBoMEntry(skus.disk, resource))} else {bom.skus= [...bom.skus, ...this.getBootVolumeBoMEntry(resource)]}
+        if (resource.source_details.os.toLowerCase() === 'windows') {bom.skus.push(this.getOsBoMEntry(resource))}
+        return bom
+    }
+
+    /*
+    ** Pricing Functions
+    */
     getOcpuCost(sku, resource) {
         resource = resource ? resource : this.resource
         const list_price = this.getSkuCost(sku)
@@ -68,20 +82,6 @@ class InstanceOciPricing extends OkitOciPricingResource {
     /*
     ** BoM functions
     */
-    getBoM(resource) {
-        resource = resource ? resource : this.resource
-        const skus = this.sku_map.instance.shape[resource.shape]
-        let bom = {
-            skus: [], 
-            price_per_month: this.getPrice(resource)
-        }
-        if (skus.ocpu) {bom.skus.push(this.getOcpuBoMEntry(skus.ocpu, resource))}
-        if (skus.memory) {bom.skus.push(this.getMemoryBoMEntry(skus.memory, resource))}
-        if (skus.disk) {bom.skus.push(this.getDiskBoMEntry(skus.disk, resource))} else {bom.skus= [...bom.skus, ...this.getBootVolumeBoMEntry(resource)]}
-        if (resource.source_details.os.toLowerCase() === 'windows') {bom.skus.push(this.getOsBoMEntry(resource))}
-        return bom
-    }
-
     getOcpuBoMEntry(sku, resource) {
         resource = resource ? resource : this.resource
         sku = sku ? sku : this.sku_map.instance.shape[resource.shape].ocpu

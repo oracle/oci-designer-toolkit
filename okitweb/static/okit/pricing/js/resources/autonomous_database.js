@@ -21,7 +21,7 @@ class AutonomousDatabaseOciPricing extends OkitOciPricingResource {
 
     getBoM(resource) {
         const resource_name = resource.getArtifactReference()
-        const bom = {skus: [], price_per_month: 0}
+        const bom = {skus: [], price_per_month: this.getPrice(resource)}
         return bom
     }
 }

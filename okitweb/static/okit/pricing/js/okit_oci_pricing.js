@@ -88,9 +88,7 @@ class OkitOciProductPricing {
                     item.products.forEach((p) => shape_skus[p.type.value] = p.partNumber)
                     shape_sku_map[item.name] = shape_skus
                 })
-                console.info('Generated Shape SKU Map', shape_sku_map)
                 this.sku_map.instance.shape = shape_sku_map
-                console.info('Generated Shape SKU Map', this.sku_map)
             }
             console.debug(this)
         })

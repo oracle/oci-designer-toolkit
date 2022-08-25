@@ -3,6 +3,9 @@
         "capacity": "B91961",
         "performance": "B91962"
     },
+    "file_system": {
+        "usage": "B89057"
+    },
     "instance": {
         "os": {
             "windows": "B88318"
