@@ -84,14 +84,15 @@ class OkitBoMView extends OkitJsonView {
         tr.append('div').attr('class', 'th').text('Utilisation')
         tr.append('div').attr('class', 'th').text('Price per Month')
         const tbody = table.append('div').attr('class', 'tbody')
-        // const bom = okitOciProductPricing ? okitOciProductPricing.generateBoM(this.model) : {bom: {}}
         Object.entries(this.bom).sort((a, b) => a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0).forEach(([k, v]) => {
             const tr = thead.append('div').attr('class', 'tr')
             tr.append('div').attr('class', 'td').text(k)
             tr.append('div').attr('class', 'td right-align').text(v.quantity)
             tr.append('div').attr('class', 'td').text(v.description)
             tr.append('div').attr('class', 'td').text(v.metric)
-            tr.append('div').attr('class', 'td right-align').text(`${this.currencies[this.currency].symbol}${v.list_price.toFixed(5)}`)
+            tr.append('div').attr('class', 'td right-align').append('pre').text(`${v.list_price}`)
+            // tr.append('div').attr('class', 'td right-align').text(`${v.list_price}`)
+            // tr.append('div').attr('class', 'td right-align').text(`${this.currencies[this.currency].symbol}${v.list_price.toFixed(5)}`)
             tr.append('div').attr('class', 'td right-align').text(v.units)
             tr.append('div').attr('class', 'td right-align').text(v.utilization)
             tr.append('div').attr('class', 'td right-align').text(`${this.currencies[this.currency].symbol}${(Math.round((v.price_per_month + Number.EPSILON) * 100)/100).toFixed(2)}`)
@@ -144,7 +145,8 @@ class BoMWorkbook extends OkitWorkbook {
         bom = bom || this.bom || {}
         estimate = estimate || this.estimate || {}
         const bom_headings = ['Part', 'Quantity', 'Description', 'List Price', 'Units', 'Utilisation', 'Monthly Cost']
-        const bom_data = Object.entries(bom).reduce((arr, [k, v]) => [...arr, [k, v.quantity, `${v.description} (${v.metric})`, `${this.currencies[this.currency].symbol}${v.list_price.toFixed(5)}`, v.units, v.utilization, `${this.currencies[this.currency].symbol}${(Math.round((v.price_per_month + Number.EPSILON) * 100)/100).toFixed(2)}`]], [])
+        // const bom_data = Object.entries(bom).reduce((arr, [k, v]) => [...arr, [k, v.quantity, `${v.description} (${v.metric})`, `${this.currencies[this.currency].symbol}${v.list_price.toFixed(5)}`, v.units, v.utilization, `${this.currencies[this.currency].symbol}${(Math.round((v.price_per_month + Number.EPSILON) * 100)/100).toFixed(2)}`]], [])
+        const bom_data = Object.entries(bom).sort((a, b) => a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0).reduce((arr, [k, v]) => [...arr, [k, v.quantity, `${v.description} (${v.metric})`, v.list_price, v.units, v.utilization, `${this.currencies[this.currency].symbol}${(Math.round((v.price_per_month + Number.EPSILON) * 100)/100).toFixed(2)}`]], [])
         const bom_sheet = new BoMWorksheet('Bill of Materials', bom_data, bom_headings)
         const estimate_headings = ['OCI Resource', 'Monthly Cost']
         const estimate_data = Object.entries(estimate).reduce((arr, [k, v]) => [...arr, [k, `${this.currencies[this.currency].symbol}${(Math.round((v + Number.EPSILON) * 100)/100).toFixed(2)}`]], [])

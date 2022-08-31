@@ -56,6 +56,11 @@ details {
     margin-top: 1em;
 }
 
+pre {
+    margin: 0;
+    font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+}
+
 summary {
     width: 100%;
     font-weight: bold;

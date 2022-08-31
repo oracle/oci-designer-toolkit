@@ -45,24 +45,33 @@ class InstanceOciPricing extends OkitOciPricingResource {
     */
     getOcpuCost(sku, resource) {
         resource = resource ? resource : this.resource
-        const list_price = this.getSkuCost(sku)
-        const price_per_month = list_price * +resource.shape_config.ocpus * this.monthly_utilization
-        return price_per_month
+        // const list_price = this.getSkuCost(sku)
+        // const price_per_month = list_price * +resource.shape_config.ocpus * this.monthly_utilization
+        // return price_per_month
+        const sku_prices = this.getSkuCost(sku)
+        const units = +resource.shape_config.ocpus * this.monthly_utilization
+        return this.getMonthlyCost(sku_prices, units)
     }
 
     getMemoryCost(sku, resource) {
         resource = resource ? resource : this.resource
-        const list_price = this.getSkuCost(sku)
-        const price_per_month = list_price * +resource.shape_config.memory_in_gbs * this.monthly_utilization
-        return price_per_month
+        // const list_price = this.getSkuCost(sku)
+        // const price_per_month = list_price * +resource.shape_config.memory_in_gbs * this.monthly_utilization
+        // return price_per_month
+        const sku_prices = this.getSkuCost(sku)
+        const units = +resource.shape_config.memory_in_gbs * this.monthly_utilization
+        return this.getMonthlyCost(sku_prices, units)
     }
 
     getDiskCost(sku, resource) {
         resource = resource ? resource : this.resource
-        const list_price = this.getSkuCost(sku)
         const shape = this.getShapeDetails(resource.shape)
-        const price_per_month = list_price * +shape.local_disks_total_size_in_gbs * this.monthly_utilization
-        return price_per_month
+        // const list_price = this.getSkuCost(sku)
+        // const price_per_month = list_price * +shape.local_disks_total_size_in_gbs * this.monthly_utilization
+        // return price_per_month
+        const sku_prices = this.getSkuCost(sku)
+        const units = +shape.local_disks_total_size_in_gbs * this.monthly_utilization
+        return this.getMonthlyCost(sku_prices, units)
     }
 
     getBootVolumeCost(resource) {
@@ -74,9 +83,12 @@ class InstanceOciPricing extends OkitOciPricingResource {
 
     getOsCost(resource) {
         const sku = this.sku_map.instance.os[resource.source_details.os.toLowerCase()]
-        const list_price = this.getSkuCost(sku)
-        const price_per_month = sku ? list_price * this.monthly_utilization * +resource.shape_config.ocpus : 0
-        return price_per_month
+        // const list_price = this.getSkuCost(sku)
+        // const price_per_month = sku ? list_price * this.monthly_utilization * +resource.shape_config.ocpus : 0
+        // return price_per_month
+        const sku_prices = this.getSkuCost(sku)
+        const units = this.monthly_utilization * +resource.shape_config.ocpus
+        return sku ? this.getMonthlyCost(sku_prices, units) : 0
     }
 
     /*

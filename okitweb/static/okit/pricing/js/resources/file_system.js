@@ -31,9 +31,12 @@ class FileSystemOciPricing extends OkitOciPricingResource {
     ** Pricing Functions
     */
     getUsageCost(sku, resource) {
-        const list_price = this.getSkuCost(sku)
-        const price_per_month = list_price * +resource.estimated_capacity_per_month_gbs
-        return price_per_month
+        // const list_price = this.getSkuCost(sku)
+        // const price_per_month = list_price * +resource.estimated_capacity_per_month_gbs
+        // return price_per_month
+        const sku_prices = this.getSkuCost(sku)
+        const units = +resource.estimated_capacity_per_month_gbs
+        return this.getMonthlyCost(sku_prices, units)
     }
 
     /*

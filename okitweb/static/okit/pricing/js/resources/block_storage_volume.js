@@ -37,15 +37,21 @@ class BlockStorageVolumeOciPricing extends OkitOciPricingResource {
     ** Pricing Functions
     */
     getPerformanceCost(sku, resource) {
-        const list_price = this.getSkuCost(sku)
-        const price_per_month = list_price * +resource.vpus_per_gb * +resource.size_in_gbs
-        return price_per_month
+        // const list_price = this.getSkuCost(sku)
+        // const price_per_month = list_price * +resource.vpus_per_gb * +resource.size_in_gbs
+        // return price_per_month
+        const sku_prices = this.getSkuCost(sku)
+        const units = +resource.vpus_per_gb * +resource.size_in_gbs
+        return this.getMonthlyCost(sku_prices, units)
     }
 
     getCapacityCost(sku, resource) {
-        const list_price = this.getSkuCost(sku)
-        const price_per_month = list_price * +resource.size_in_gbs
-        return price_per_month
+        // const list_price = this.getSkuCost(sku)
+        // const price_per_month = list_price * +resource.size_in_gbs
+        // return price_per_month
+        const sku_prices = this.getSkuCost(sku)
+        const units = +resource.size_in_gbs
+        return this.getMonthlyCost(sku_prices, units)
     }
 
     /*

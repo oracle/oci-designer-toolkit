@@ -24,6 +24,9 @@ class ObjectStorageBucket extends OkitArtifact {
         this.versioning = 'Disabled'
         this.auto_tiering = 'Disabled'
         this.kms_key_id = '';
+        // Pricing Only
+        this.estimated_monthly_capacity_gbs = 0
+        this.estimated_monthly_requests = 0
         // Update with any passed data
         this.merge(data);
         this.convert();

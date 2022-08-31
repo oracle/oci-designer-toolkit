@@ -128,5 +128,20 @@
                 "memory": "B93298"
             }
         }
+    },
+    "object_storage_bucket": {
+        "tier": {
+            "Standard": {
+                "requests": "B91627",
+                "capacity": "B91628"
+            },
+            "Archive": {
+                "capacity": "B91633"
+            },
+            "Infrequent": {
+                "requests": "B93001",
+                "capacity": "B93000"
+            }
+        }
     }
 }
