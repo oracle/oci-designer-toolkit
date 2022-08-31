@@ -16,61 +16,140 @@ class InstanceOciPricing extends OkitOciPricingResource {
 
     getPrice(resource) {
         resource = resource ? resource : this.resource
-        const bsv = new BlockStorageVolume({size_in_gbs: +resource.source_details.boot_volume_size_in_gbs, vpus_per_gb: this.balanced_performance}, new OkitJson())
-        const bsv_pricing = new BlockStorageVolumeOciPricing(bsv, this.pricing)
-        const price_per_month = this.getShapeCost(resource) + this.getOsCost(resource) + bsv_pricing.getPrice(bsv)
+        const skus = this.sku_map.instance.shape[resource.shape]
+        let price_per_month = 0
+        price_per_month += skus.ocpu  ? this.getOcpuCost(skus.ocpu, resource) : 0
+        price_per_month += skus.memory  ? this.getMemoryCost(skus.memory, resource) : 0
+        price_per_month += skus.disk  ? this.getDiskCost(skus.disk, resource) : this.getBootVolumeCost(resource)
+        price_per_month += resource.source_details.os.toLowerCase() === 'windows' ? this.getOsCost(resource) : 0
         console.info('Price', resource, price_per_month)
         return price_per_month
     }
 
     getBoM(resource) {
         resource = resource ? resource : this.resource
-        const bsv = new BlockStorageVolume({size_in_gbs: +resource.source_details.boot_volume_size_in_gbs, vpus_per_gb: this.balanced_performance}, new OkitJson())
-        const bsv_pricing = new BlockStorageVolumeOciPricing(bsv, this.pricing)
-        const bom = {
-            skus: [this.getShapeBoMEntry(resource), this.getOsBoMEntry(resource), ...bsv_pricing.getBoM(bsv).skus], 
+        const skus = this.sku_map.instance.shape[resource.shape]
+        let bom = {
+            skus: [], 
             price_per_month: this.getPrice(resource)
         }
+        if (skus.ocpu) {bom.skus.push(this.getOcpuBoMEntry(skus.ocpu, resource))}
+        if (skus.memory) {bom.skus.push(this.getMemoryBoMEntry(skus.memory, resource))}
+        if (skus.disk) {bom.skus.push(this.getDiskBoMEntry(skus.disk, resource))} else {bom.skus= [...bom.skus, ...this.getBootVolumeBoMEntry(resource)]}
+        if (resource.source_details.os.toLowerCase() === 'windows') {bom.skus.push(this.getOsBoMEntry(resource))}
         return bom
     }
 
-    getShapeBoMEntry(resource) {
-        const sku = this.sku_map.instance.shape[resource.shape]
+    /*
+    ** Pricing Functions
+    */
+    getOcpuCost(sku, resource) {
+        resource = resource ? resource : this.resource
+        // const list_price = this.getSkuCost(sku)
+        // const price_per_month = list_price * +resource.shape_config.ocpus * this.monthly_utilization
+        // return price_per_month
+        const sku_prices = this.getSkuCost(sku)
+        const units = +resource.shape_config.ocpus * this.monthly_utilization
+        return this.getMonthlyCost(sku_prices, units)
+    }
+
+    getMemoryCost(sku, resource) {
+        resource = resource ? resource : this.resource
+        // const list_price = this.getSkuCost(sku)
+        // const price_per_month = list_price * +resource.shape_config.memory_in_gbs * this.monthly_utilization
+        // return price_per_month
+        const sku_prices = this.getSkuCost(sku)
+        const units = +resource.shape_config.memory_in_gbs * this.monthly_utilization
+        return this.getMonthlyCost(sku_prices, units)
+    }
+
+    getDiskCost(sku, resource) {
+        resource = resource ? resource : this.resource
+        const shape = this.getShapeDetails(resource.shape)
+        // const list_price = this.getSkuCost(sku)
+        // const price_per_month = list_price * +shape.local_disks_total_size_in_gbs * this.monthly_utilization
+        // return price_per_month
+        const sku_prices = this.getSkuCost(sku)
+        const units = +shape.local_disks_total_size_in_gbs * this.monthly_utilization
+        return this.getMonthlyCost(sku_prices, units)
+    }
+
+    getBootVolumeCost(resource) {
+        resource = resource ? resource : this.resource
+        const bsv = new BlockStorageVolume({size_in_gbs: +resource.source_details.boot_volume_size_in_gbs, vpus_per_gb: this.balanced_performance}, new OkitJson())
+        const bsv_pricing = new BlockStorageVolumeOciPricing(bsv, this.pricing)
+        return bsv_pricing.getPrice(bsv)
+    }
+
+    getOsCost(resource) {
+        const sku = this.sku_map.instance.os[resource.source_details.os.toLowerCase()]
+        // const list_price = this.getSkuCost(sku)
+        // const price_per_month = sku ? list_price * this.monthly_utilization * +resource.shape_config.ocpus : 0
+        // return price_per_month
+        const sku_prices = this.getSkuCost(sku)
+        const units = this.monthly_utilization * +resource.shape_config.ocpus
+        return sku ? this.getMonthlyCost(sku_prices, units) : 0
+    }
+
+    /*
+    ** BoM functions
+    */
+    getOcpuBoMEntry(sku, resource) {
+        resource = resource ? resource : this.resource
+        sku = sku ? sku : this.sku_map.instance.shape[resource.shape].ocpu
         const bom_entry = this.newSkuEntry(sku)
         bom_entry.quantity = 1
-        bom_entry.utilization = +this.monthly_utilization // Hrs/ Month
+        bom_entry.utilization = +this.monthly_utilization // Hrs/Month
         bom_entry.units = +resource.shape_config.ocpus // OCPUs
-        bom_entry.price_per_month = this.getShapeCost(resource)
+        bom_entry.price_per_month = this.getOcpuCost(sku, resource)
         return bom_entry
     }
 
+    getMemoryBoMEntry(sku, resource) {
+        resource = resource ? resource : this.resource
+        sku = sku ? sku : this.sku_map.instance.shape[resource.shape].ocpu
+        const bom_entry = this.newSkuEntry(sku)
+        bom_entry.quantity = 1
+        bom_entry.utilization = +this.monthly_utilization // Hrs/ Month
+        bom_entry.units = +resource.shape_config.memory_in_gbs // Memory in Gbs
+        bom_entry.price_per_month = this.getMemoryCost(sku, resource)
+        return bom_entry
+    }
+
+    getDiskBoMEntry(sku, resource) {
+        resource = resource ? resource : this.resource
+        sku = sku ? sku : this.sku_map.instance.shape[resource.shape].ocpu
+        const shape = this.getShapeDetails(resource.shape)
+        const bom_entry = this.newSkuEntry(sku)
+        bom_entry.quantity = 1
+        bom_entry.utilization = +this.monthly_utilization // Hrs/ Month
+        bom_entry.units = +shape.local_disks_total_size_in_gbs/1000 // Disk in Tbs
+        bom_entry.price_per_month = this.getDiskCost(sku, resource)
+        return bom_entry
+    }
+
+    getBootVolumeBoMEntry(resource) {
+        const bsv = new BlockStorageVolume({size_in_gbs: +resource.source_details.boot_volume_size_in_gbs, vpus_per_gb: this.balanced_performance}, new OkitJson())
+        const bsv_pricing = new BlockStorageVolumeOciPricing(bsv, this.pricing)
+        return bsv_pricing.getBoM(bsv).skus
+    }
+
     getOsBoMEntry(resource) {
-        const sku = this.sku_map.os[resource.source_details.os.toLowerCase()]
+        const sku = this.sku_map.instance.os[resource.source_details.os.toLowerCase()]
         const bom_entry = this.newSkuEntry(sku)
         if (sku) {
             bom_entry.quantity = 1
             bom_entry.utilization = +this.monthly_utilization // Hrs/ Month
-            bom_entry.units = 1
+            bom_entry.units = +resource.shape_config.ocpus // OCPUs
             bom_entry.price_per_month = this.getOsCost(resource)
         }
         return bom_entry
     }
 
-    getShapeCost(resource) {
-        // Process Shape Information
-        const sku = this.sku_map.instance.shape[resource.shape]
-        const list_price = this.getSkuCost(sku)
-        // const price_per_month = list_price * +((+resource.shape_config.ocpus * this.monthly_utilization) + (+resource.shape_config.ocpus * 16 ))
-        const price_per_month = list_price * +resource.shape_config.ocpus * this.monthly_utilization
-        return price_per_month
-    }
-
-    getOsCost(resource) {
-        const sku = this.sku_map.os[resource.source_details.os.toLowerCase()]
-        const list_price = this.getSkuCost(sku)
-        const price_per_month = sku ? list_price * this.monthly_utilization : 0
-        return price_per_month
-    }
+    /*
+    ** Shape information
+    */
+    getShapeDetails = (shape) => okitOciData.getInstanceShape(shape)
 }
 
 OkitOciProductPricing.prototype.getInstancePrice = function(resource, pricing) {
