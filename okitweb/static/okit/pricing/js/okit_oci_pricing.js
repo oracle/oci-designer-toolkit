@@ -55,12 +55,12 @@ class OkitOciProductPricing {
         VND: {name: 'Vietnamese Dong', symbol: 'VND'},
         ZAR: {name: 'South African Rand', symbol: 'ZAR'},
     }
-    static formatPrice = (price=0, currency='USD') => `${OkitOciProductPricing.currencies[currency].symbol}${(Math.round((price + Number.EPSILON) * 100)/100).toFixed(2)}`
+    static formatPrice = (price=0, currency='GBP') => `${OkitOciProductPricing.currencies[currency].symbol}${(Math.round((price + Number.EPSILON) * 100)/100).toFixed(2)}`
     static getBoMFunctionName = (base_name) => `get${base_name}BoM`
     static getPriceFunctionName = (base_name) => `get${base_name}Price`
 
     constructor() {
-        this.currency = 'USD'
+        this.currency = 'GBP'
         this.bom = {}
         this.cost_estimate = {}
         this.sku_map = {instance: {shape: {}}, os: {}}
@@ -96,7 +96,7 @@ class OkitOciProductPricing {
         // $.getJSON(this.oci_products_url, {cache: false}).done((results) => console.info('>>>>>> Product Pricing:', results)).fail((xhr, status, error) => {ajaxCallFailed(xhr, status, error)})
     }
 
-    generateBoM(model, currency='USD') {
+    generateBoM(model, currency='GBP') {
         this.currency = currency
         this.bom = {}
         this.cost_estimate = {}

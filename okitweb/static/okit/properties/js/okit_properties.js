@@ -338,6 +338,7 @@ class OkitResourceProperties {
             if (data && data.options) {
                 Object.entries(data.options).forEach(([k, v]) => input.append('option').attr('value', k).text(v))
             }
+            this.addExtraAttributes(input, data)
         } else if (type === 'multiselect') {
             title = row.append('div').attr('class', 'td property-label').text(label)
             input = row.append('div').attr('class', 'td').append('div').attr('id', this.inputId(id, idx)).attr('class', 'okit-multiple-select').on('change', callback)
@@ -354,6 +355,7 @@ class OkitResourceProperties {
             cell = row.append('div').attr('class', 'td')
             input = cell.append('input').attr('type', 'checkbox').attr('id', this.inputId(id, idx)).attr('class', 'okit-property-value').on('input', callback)
             cell.append('label').attr('for', this.inputId(id, idx)).text(label)
+            this.addExtraAttributes(input, data)
         } else {
             alert(`Unknown Type ${type}`)
         }
@@ -379,7 +381,7 @@ class OkitResourceProperties {
     }
 
     addExtraAttributes(input, data) {
-        const attributes = ['min', 'max', 'step', 'minlength', 'maxlength', 'pattern', 'title', 'placeholder', 'readonly', 'required']
+        const attributes = ['disabled', 'min', 'max', 'step', 'minlength', 'maxlength', 'pattern', 'title', 'placeholder', 'readonly', 'required']
         if (data) {
             Object.entries(data).forEach(([k, v]) => {
                 if (attributes.includes(k)) input.attr(k, v)
