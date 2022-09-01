@@ -136,6 +136,60 @@
                 "memory": "B92963",
                 "storage": "B92426",
                 "backup": "B92483"
+            },
+            "MySQL.VM.Standard.E3.1.16GB": {
+                "ocpu": "B92962",
+                "memory": "B92963",
+                "storage": "B92426",
+                "backup": "B92483"
+            },
+            "MySQL.VM.Standard.E3.2.32GB": {
+                "ocpu": "B92962",
+                "memory": "B92963",
+                "storage": "B92426",
+                "backup": "B92483"
+            },
+            "MySQL.VM.Standard.E3.4.64GB": {
+                "ocpu": "B92962",
+                "memory": "B92963",
+                "storage": "B92426",
+                "backup": "B92483"
+            },
+            "MySQL.VM.Standard.E3.8.128GB": {
+                "ocpu": "B92962",
+                "memory": "B92963",
+                "storage": "B92426",
+                "backup": "B92483"
+            },
+            "MySQL.VM.Standard.E3.16.256GB": {
+                "ocpu": "B92962",
+                "memory": "B92963",
+                "storage": "B92426",
+                "backup": "B92483"
+            },
+            "MySQL.VM.Standard.E3.24.384GB": {
+                "ocpu": "B92962",
+                "memory": "B92963",
+                "storage": "B92426",
+                "backup": "B92483"
+            },
+            "MySQL.VM.Standard.E3.32.512GB": {
+                "ocpu": "B92962",
+                "memory": "B92963",
+                "storage": "B92426",
+                "backup": "B92483"
+            },
+            "MySQL.VM.Standard.E3.48.768GB": {
+                "ocpu": "B92962",
+                "memory": "B92963",
+                "storage": "B92426",
+                "backup": "B92483"
+            },
+            "MySQL.VM.Standard.E3.64.1024GB": {
+                "ocpu": "B92962",
+                "memory": "B92963",
+                "storage": "B92426",
+                "backup": "B92483"
             }
         }
     },
