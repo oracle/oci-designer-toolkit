@@ -437,6 +437,7 @@ summary:focus {
     display: inline-block;
     margin-left: auto;
     align-items: right;
+    vertical-align: middle;
 }
 
 .okit-toolbar-right > div {

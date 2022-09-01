@@ -30,11 +30,14 @@ class OkitBoMView extends OkitJsonView {
         const canvas_div = d3.select(d3Id(this.parent_id));
         // Empty existing Canvas
         canvas_div.selectAll('*').remove();
+        // Heading 
+        this.heading_div = canvas_div.append('div').attr('id', 'bom_heading_div').attr('class', 'bom_heading')
         // Toolbar
-        const toolbar = canvas_div.append('div')
-            .attr('class', 'okit-toolbar')
-            .attr('id', 'tabular_view_toolbar')
-        const export_excel = toolbar.append('div')
+        const heading_left_div = this.heading_div.append('div')
+            .attr('class', 'okit-toolbar-left')
+            .attr('id', 'bom_view_toolbar')
+        const buttons_div = heading_left_div.append('div')
+        const export_excel = buttons_div.append('div')
             .attr('class', 'excel okit-toolbar-button')
             .attr('title', 'Export to Excel')
             .on('click', () => {
@@ -43,13 +46,13 @@ class OkitBoMView extends OkitJsonView {
                 const name = 'okit-bom.xls'
                 triggerDownload(uri, name)
             })
-        // Heading and Safe Harbour
-        this.heading_div = canvas_div.append('div').attr('id', 'bom_heading_div').attr('class', 'bom_heading')
-        this.safe_harbour_div = this.heading_div.append('div')
-        this.safe_harbour_div.append('p').attr('class', 'okit-cost-small-print')
-            .text("The values displayed are purely for estimation purposes only and are generated from our public pricing pages. For accurate costing you will need to consult your OCI Account Manager.")
-        this.currency_div = this.heading_div.append('div').attr('class', 'align-right')
-        const currency_select = this.currency_div.append('select').attr('id', 'bom_currency_select')
+        // this.currency_div = this.heading_div.append('div').attr('class', 'align-right')
+        const heading_right_div = this.heading_div.append('div')
+            .attr('class', 'okit-toolbar-right')
+            .attr('id', 'bom_view_currency_estimate')
+        const currency_estimate_div = heading_right_div.append('div')
+        // this.currency_div = this.heading_div.append('div')
+        const currency_select = currency_estimate_div.append('select').attr('id', 'bom_currency_select')
             .on('change', (d, i, n) => {
                 this.currency = n[i].value
                 this.getBoM()
@@ -58,6 +61,27 @@ class OkitBoMView extends OkitJsonView {
             })
         Object.entries(this.currencies).forEach(([k, v]) => currency_select.append('option').attr('value', k).text(`${k} - ${v.name}`))
         currency_select.property('value', this.currency)
+        // this.header_estimate_div = this.heading_div.append('div')
+        currency_estimate_div.append('span').text('Estimated Monthly Cost')
+        this.header_estimate = currency_estimate_div.append('label').attr('class', 'bom_header_estimate').text('$0.00')
+        // Safe Harbour
+        this.safe_harbour_div = canvas_div.append('div').attr('id', 'bom_safe_harbour_div').attr('class', 'bom_safe_harbour')
+        this.safe_harbour_div.append('p').attr('class', 'okit-cost-small-print')
+            .text("The values displayed are purely for estimation purposes only and are generated from our public pricing pages. For accurate costing you will need to consult your OCI Account Manager.")
+        // this.heading_div = canvas_div.append('div').attr('id', 'bom_heading_div').attr('class', 'bom_heading')
+        // this.safe_harbour_div = this.heading_div.append('div')
+        // this.safe_harbour_div.append('p').attr('class', 'okit-cost-small-print')
+        //     .text("The values displayed are purely for estimation purposes only and are generated from our public pricing pages. For accurate costing you will need to consult your OCI Account Manager.")
+        // this.currency_div = this.heading_div.append('div').attr('class', 'align-right')
+        // const currency_select = this.currency_div.append('select').attr('id', 'bom_currency_select')
+        //     .on('change', (d, i, n) => {
+        //         this.currency = n[i].value
+        //         this.getBoM()
+        //         this.drawBoMPanel()
+        //         this.drawEstimatePanel()
+        //     })
+        // Object.entries(this.currencies).forEach(([k, v]) => currency_select.append('option').attr('value', k).text(`${k} - ${v.name}`))
+        // currency_select.property('value', this.currency)
         // BoM
         this.bom_div = canvas_div.append('div').attr('id', 'bom_div').attr('class', 'okit-bom-bom-details')
         this.bom_details = this.bom_div.append('details').attr('class', 'okit-details').attr('open', true)
@@ -97,6 +121,10 @@ class OkitBoMView extends OkitJsonView {
             tr.append('div').attr('class', 'td right-align').text(v.utilization)
             tr.append('div').attr('class', 'td right-align').text(`${this.currencies[this.currency].symbol}${(Math.round((v.price_per_month + Number.EPSILON) * 100)/100).toFixed(2)}`)
         })
+        const estimate = Object.values(this.bom).reduce((p, v) => p + v.price_per_month, 0)
+        console.info('Estimate Total', estimate)
+        this.header_estimate.property('value', `${this.currencies[this.currency].symbol}${(Math.round((estimate + Number.EPSILON) * 100)/100).toFixed(2)}`)
+        this.header_estimate.text(`${this.currencies[this.currency].symbol}${(Math.round((estimate + Number.EPSILON) * 100)/100).toFixed(2)}`)
     }
 
     drawEstimatePanel() {

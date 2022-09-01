@@ -9,5 +9,8 @@
     --console-toolbar-height: 25px;
     --console-footer-height: 30px;
     --tab-bar-height: 30px;
-    --tab-content-height: calc(100% - var(--tab-bar-height))
+    --tab-content-height: calc(100% - var(--tab-bar-height));
+    --oci-blue: #024b7e;    
+    --oci-blue-60: rgba(2, 75, 126, 0.6);
+    --oci-blue-20: rgba(2, 75, 126, 0.2);
 }
