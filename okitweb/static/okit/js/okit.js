@@ -398,6 +398,7 @@ class OkitOCIData {
     getMySQLShapes() {
         return this.dropdown_data.mysql_shapes;
     }
+    getMySQLShape = (shape) => this.getMySQLShapes().find(s => s.name === shape)
 
     getMySQLVersions(family='') {
         return this.dropdown_data.mysql_versions[0].versions;

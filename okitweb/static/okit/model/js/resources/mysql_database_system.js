@@ -27,7 +27,7 @@ class MysqlDatabaseSystem extends OkitArtifact {
         this.mysql_version = '';
         this.port = '';
         this.port_x = '';
-        this.data_storage_size_in_gb = 256;
+        this.data_storage_size_in_gb = 50;
         this.fault_domain = '';
         this.description = this.name;
         // Update with any passed data

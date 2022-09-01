@@ -129,6 +129,16 @@
             }
         }
     },
+    "mysql_database_system": {
+        "shape": {
+            "MySQL.VM.Standard.E3.1.8GB": {
+                "ocpu": "B92962",
+                "memory": "B92963",
+                "storage": "B92426",
+                "backup": "B92483"
+            }
+        }
+    },
     "object_storage_bucket": {
         "tier": {
             "Standard": {

@@ -41,7 +41,7 @@ class MysqlDatabaseSystemProperties extends OkitResourceProperties {
         this.shape_name = shape_name.input
         this.append(this.shape_and_config_tbody, shape_name.row)
         // Configuration
-        const configuration_id = this.createInput('select', 'Configuration', `${this.id}_configuration_id`, '', (d, i, n) => {this.resource.configuration_id = n[i].value})
+        const configuration_id = this.createInput('select', 'Configuration', `${this.id}_configuration_id`, '', (d, i, n) => {this.resource.configuration_id = n[i].value; this.resource.configuration_name = n[i].options[n[i].options.selectedIndex].label; this.showShapeConfigData()})
         this.configuration_id = configuration_id.input
         this.append(this.shape_and_config_tbody, configuration_id.row)
         // Version
@@ -49,9 +49,25 @@ class MysqlDatabaseSystemProperties extends OkitResourceProperties {
         this.mysql_version = mysql_version.input
         this.append(this.shape_and_config_tbody, mysql_version.row)
         // Size
-        const data_storage_size_in_gb = this.createInput('number', 'Size (in GB)', `${this.id}_data_storage_size_in_gb`, '', (d, i, n) => this.resource.data_storage_size_in_gb = n[i].value)
+        const data_storage_size_in_gb_data = {min: 50, step: 50}
+        const data_storage_size_in_gb = this.createInput('number', 'Size (in GB)', `${this.id}_data_storage_size_in_gb`, '', (d, i, n) => this.resource.data_storage_size_in_gb = n[i].value, data_storage_size_in_gb_data)
         this.data_storage_size_in_gb = data_storage_size_in_gb.input
         this.append(this.shape_and_config_tbody, data_storage_size_in_gb.row)
+        // CPU Count
+        const cpu_core_count_data = {disabled: 'disabled'}
+        const cpu_core_count = this.createInput('number', 'CPU Cores', `${this.id}_cpu_core_count`, '', (d, i, n) => this.resource.cpu_core_count = n[i].value, cpu_core_count_data)
+        this.cpu_core_count = cpu_core_count.input
+        this.append(this.shape_and_config_tbody, cpu_core_count.row)
+        // Memory in GBs
+        const memory_size_in_gbs_data = {disabled: 'disabled'}
+        const memory_size_in_gbs = this.createInput('number', 'Memory in GBs', `${this.id}_memory_size_in_gbs`, '', (d, i, n) => this.resource.memory_size_in_gbs = n[i].value, memory_size_in_gbs_data)
+        this.memory_size_in_gbs = memory_size_in_gbs.input
+        this.append(this.shape_and_config_tbody, memory_size_in_gbs.row)
+        // HA
+        const is_ha_data = {disabled: 'disabled'}
+        const is_ha = this.createInput('checkbox', 'High Availability', `${this.id}_is_ha`, '', (d, i, n) => this.resource.is_ha = n[i].checked, is_ha_data)
+        this.is_ha = is_ha.input
+        this.append(this.shape_and_config_tbody, is_ha.row)
         // Admin Username
         const admin_username = this.createInput('text', 'Admin Username', `${this.id}_admin_username`, '', (d, i, n) => this.resource.admin_username = n[i].value)
         this.admin_username = admin_username.input
@@ -107,15 +123,32 @@ class MysqlDatabaseSystemProperties extends OkitResourceProperties {
         this.hostname_label.property('value', this.resource.hostname_label)
         this.port.property('value', this.resource.port)
         this.port_x.property('value', this.resource.port_x)
+        // Show reference data
+        this.showShapeConfigData()
+    }
+
+    showShapeConfigData() {
+        const shape = okitOciData.getMySQLShape(this.resource.shape_name)
+        this.cpu_core_count.property('value', shape.cpu_core_count)
+        this.memory_size_in_gbs.property('value', shape.memory_size_in_gbs)
+        this.is_ha.property('checked', this.resource.configuration_name ? this.resource.configuration_name.endsWith('.HA') : false)
     }
 
     handleShapeChange(shape_name=undefined) {
         shape_name = shape_name ? shape_name : this.resource.shape_name
         this.loadMySQLConfigurations(shape_name)
+        this.showShapeConfigData()
     }
 
     loadMySQLShapes() {
-        this.loadReferenceSelect(this.shape_name, 'getMySQLShapes', false, undefined, undefined, '', 'name', 'name')
+        const shape_groups = {
+            'Standard - AMD E3': (ds) => ds.name.includes('MySQL.VM.Standard.E3'),
+            'Standard - AMD E4': (ds) => ds.name.includes('MySQL.VM.Standard.E4'),
+            'Standard - Intel X7': (ds) => ds.name.includes('MySQL.VM.Standard2'),
+            'Standard - Intel X9': (ds) => ds.name.includes('MySQL.VM.Standard3'),
+            'Optimised - Intel X9': (ds) => ds.name.includes('MySQL.VM.Optimized3'),
+        }
+        this.loadReferenceSelect(this.shape_name, 'getMySQLShapes', false, undefined, shape_groups, '', 'name', 'name')
         const options = Array.from(this.shape_name.node().options).map((opt) => opt.value)
         this.resource.shape_name = options.includes(this.resource.shape_name) ? this.resource.shape_name : options.length > 0 ? options[0] : ''
     }
