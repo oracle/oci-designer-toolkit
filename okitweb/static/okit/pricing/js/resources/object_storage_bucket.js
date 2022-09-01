@@ -64,9 +64,9 @@ class ObjectStorageBucketOciPricing extends OkitOciPricingResource {
         sku = sku ? sku : this.sku_map.object_storage_bucket.tier[resource.storage_tier].requests
         const bom_entry = this.newSkuEntry(sku)
         bom_entry.quantity = 1
-        bom_entry.utilization = +resource.estimated_monthly_requests
-        bom_entry.units = 1
-        bom_entry.price_per_month = this.getCapacityCost(sku, resource)
+        bom_entry.utilization = 1
+        bom_entry.units = +resource.estimated_monthly_requests
+        bom_entry.price_per_month = this.getRequestsCost(sku, resource)
         return bom_entry
     }
 }
