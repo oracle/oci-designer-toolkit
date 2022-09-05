@@ -23,6 +23,8 @@
 1. In markdown generation switch to using documentation not definition
 2. Move logging debug message in generate "GET" that accesses unknown element.
 3. Resolve Config validation issue where configs with only DEFAULT reported an error.
+4. Add missing Route Rule information when querying PCA.
+5. Test if Health Checker data specified when exporting to Markdown.
 
 
 ## Version 0.39.0

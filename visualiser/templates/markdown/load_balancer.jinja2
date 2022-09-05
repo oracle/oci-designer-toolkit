@@ -9,7 +9,7 @@
 {{ common.document_property("Private", resource.is_private) }}
 {{ common.document_property("Protocol", resource.protocol) }}
 {{ common.document_property("Port", resource.port) }}
-{{ common.document_property("Health Check URL", resource.health_checker.url_path) }}
+{% if resource.health_checker is defined -%}{{ common.document_property("Health Check URL", resource.health_checker.url_path) }}{% endif %}
 {{ common.document_property("Policy", resource.backend_policy | replace("_", " ") | title) }}
     {% for id in resource.instance_ids -%}
         {{ common.instance_property(id, "Backend Instance") }}
