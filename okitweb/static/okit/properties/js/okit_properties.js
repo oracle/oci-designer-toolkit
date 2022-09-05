@@ -492,11 +492,6 @@ class OkitResourceProperties {
                 })
             })
         } else {
-            console.info('resource_type', resource_type)
-            console.info('filter', filter)
-            console.info('resources', resources)
-            // filter = () => true
-            // resources.filter(filter).forEach((r, i) => {
             resources.forEach((r, i) => {
                 r = r instanceof Object ? r : {id: r, display_name: r}
                 const option = select.append('option').attr('value', r[id_element]).text(r[display_element])
