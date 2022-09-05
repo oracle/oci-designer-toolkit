@@ -190,6 +190,184 @@
                 "memory": "B92963",
                 "storage": "B92426",
                 "backup": "B92483"
+            },
+
+            "MySQL.VM.Standard.E4.1.8GB": {
+                "ocpu": "B95435",
+                "memory": "B95436",
+                "storage": "B92426",
+                "backup": "B92483"
+            },
+            "MySQL.VM.Standard.E4.1.16GB": {
+                "ocpu": "B95435",
+                "memory": "B95436",
+                "storage": "B92426",
+                "backup": "B92483"
+            },
+            "MySQL.VM.Standard.E4.2.32GB": {
+                "ocpu": "B95435",
+                "memory": "B95436",
+                "storage": "B92426",
+                "backup": "B92483"
+            },
+            "MySQL.VM.Standard.E4.4.64GB": {
+                "ocpu": "B95435",
+                "memory": "B95436",
+                "storage": "B92426",
+                "backup": "B92483"
+            },
+            "MySQL.VM.Standard.E4.8.128GB": {
+                "ocpu": "B95435",
+                "memory": "B95436",
+                "storage": "B92426",
+                "backup": "B92483"
+            },
+            "MySQL.VM.Standard.E4.16.256GB": {
+                "ocpu": "B95435",
+                "memory": "B95436",
+                "storage": "B92426",
+                "backup": "B92483"
+            },
+            "MySQL.VM.Standard.E4.24.384GB": {
+                "ocpu": "B95435",
+                "memory": "B95436",
+                "storage": "B92426",
+                "backup": "B92483"
+            },
+            "MySQL.VM.Standard.E4.32.512GB": {
+                "ocpu": "B95435",
+                "memory": "B95436",
+                "storage": "B92426",
+                "backup": "B92483"
+            },
+            "MySQL.VM.Standard.E4.48.768GB": {
+                "ocpu": "B95435",
+                "memory": "B95436",
+                "storage": "B92426",
+                "backup": "B92483"
+            },
+            "MySQL.VM.Standard.E4.64.1024GB": {
+                "ocpu": "B95435",
+                "memory": "B95436",
+                "storage": "B92426",
+                "backup": "B92483"
+            },
+
+            "MySQL.VM.Standard2.1.15GB": {
+                "ocpu": "B95437",
+                "memory": "B95438",
+                "storage": "B92426",
+                "backup": "B92483"
+            },
+            "MySQL.VM.Standard2.2.30GB": {
+                "ocpu": "B95437",
+                "memory": "B95438",
+                "storage": "B92426",
+                "backup": "B92483"
+            },
+            "MySQL.VM.Standard2.4.60GB": {
+                "ocpu": "B95437",
+                "memory": "B95438",
+                "storage": "B92426",
+                "backup": "B92483"
+            },
+            "MySQL.VM.Standard2.8.120GB": {
+                "ocpu": "B95437",
+                "memory": "B95438",
+                "storage": "B92426",
+                "backup": "B92483"
+            },
+            "MySQL.VM.Standard2.16.240GB": {
+                "ocpu": "B95437",
+                "memory": "B95438",
+                "storage": "B92426",
+                "backup": "B92483"
+            },
+
+            "MySQL.VM.Standard3.1.8GB": {
+                "ocpu": "B95439",
+                "memory": "B95440",
+                "storage": "B92426",
+                "backup": "B92483"
+            },
+            "MySQL.VM.Standard3.1.16GB": {
+                "ocpu": "B95439",
+                "memory": "B95440",
+                "storage": "B92426",
+                "backup": "B92483"
+            },
+            "MySQL.VM.Standard3.2.32GB": {
+                "ocpu": "B95439",
+                "memory": "B95440",
+                "storage": "B92426",
+                "backup": "B92483"
+            },
+            "MySQL.VM.Standard3.4.64GB": {
+                "ocpu": "B95439",
+                "memory": "B95440",
+                "storage": "B92426",
+                "backup": "B92483"
+            },
+            "MySQL.VM.Standard3.8.128GB": {
+                "ocpu": "B95439",
+                "memory": "B95440",
+                "storage": "B92426",
+                "backup": "B92483"
+            },
+            "MySQL.VM.Standard3.16.256GB": {
+                "ocpu": "B95439",
+                "memory": "B95440",
+                "storage": "B92426",
+                "backup": "B92483"
+            },
+            "MySQL.VM.Standard3.24.384GB": {
+                "ocpu": "B95439",
+                "memory": "B95440",
+                "storage": "B92426",
+                "backup": "B92483"
+            },
+            "MySQL.VM.Standard3.32.512GB": {
+                "ocpu": "B95439",
+                "memory": "B95440",
+                "storage": "B92426",
+                "backup": "B92483"
+            },
+
+            "MySQL.VM.Optimized3.1.8GB": {
+                "ocpu": "B95441",
+                "memory": "B95442",
+                "storage": "B92426",
+                "backup": "B92483"
+            },
+            "MySQL.VM.Optimized3.1.16GB": {
+                "ocpu": "B95441",
+                "memory": "B95442",
+                "storage": "B92426",
+                "backup": "B92483"
+            },
+            "MySQL.VM.Optimized3.2.32GB": {
+                "ocpu": "B95441",
+                "memory": "B95442",
+                "storage": "B92426",
+                "backup": "B92483"
+            },
+            "MySQL.VM.Optimized3.4.64GB": {
+                "ocpu": "B95441",
+                "memory": "B95442",
+                "storage": "B92426",
+                "backup": "B92483"
+            },
+            "MySQL.VM.Optimized3.8.128GB": {
+                "ocpu": "B95441",
+                "memory": "B95442",
+                "storage": "B92426",
+                "backup": "B92483"
+            },
+            "MySQL.VM.Optimized3.16.256GB": {
+                "ocpu": "B95441",
+                "memory": "B95442",
+                "storage": "B92426",
+                "backup": "B92483"
             }
         }
     },
