@@ -673,6 +673,27 @@ class PCAQuery(OCIConnection):
             # Convert to Json object
             resources = self.toJson(results)
             self.dropdown_json[array].extend(resources)
+        # Post Process Map Rule Target Type
+        rule_type_map = {'internetgateway': 'internet_gateway',
+                         'natgateway':'nat_gateway',
+                         'localpeeringgateway': 'local_peering_gateway',
+                         'dynamicroutinggateway': 'dynamic_routing_gateway',
+                         'drg': 'drg_attachment',
+                        #  'drg': 'dynamic_routing_gateway',
+                         'privateip':'private_ip',
+                         'servicegateway': 'service_gateway',
+                         'vcn': 'vcn'}
+        for route_table in self.dropdown_json[array]:
+            for rule in route_table.get('route_rules', []):
+                if len(rule['network_entity_id']) > 0:
+                    rule['target_type'] = rule_type_map[rule['network_entity_id'].split('.')[1]]
+                else:
+                    rule['target_type'] = ''
+                if rule['target_type'] == 'service_gateway':
+                    if rule['destination'].startswith('all-') and rule['destination'].endswith('services-network'):
+                        rule['destination'] = 'all_services_destination'
+                    else:
+                        rule['destination'] = 'objectstorage_services_destination'
         return self.dropdown_json[array]
 
     def security_lists(self):

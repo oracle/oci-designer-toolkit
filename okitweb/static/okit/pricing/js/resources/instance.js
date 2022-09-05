@@ -18,10 +18,12 @@ class InstanceOciPricing extends OkitOciPricingResource {
         resource = resource ? resource : this.resource
         const skus = this.sku_map.instance.shape[resource.shape]
         let price_per_month = 0
-        price_per_month += skus.ocpu  ? this.getOcpuCost(skus.ocpu, resource) : 0
-        price_per_month += skus.memory  ? this.getMemoryCost(skus.memory, resource) : 0
-        price_per_month += skus.disk  ? this.getDiskCost(skus.disk, resource) : this.getBootVolumeCost(resource)
-        price_per_month += resource.source_details.os.toLowerCase() === 'windows' ? this.getOsCost(resource) : 0
+        if (skus) {
+            price_per_month += skus.ocpu  ? this.getOcpuCost(skus.ocpu, resource) : 0
+            price_per_month += skus.memory  ? this.getMemoryCost(skus.memory, resource) : 0
+            price_per_month += skus.disk  ? this.getDiskCost(skus.disk, resource) : this.getBootVolumeCost(resource)
+            price_per_month += resource.source_details.os.toLowerCase() === 'windows' ? this.getOsCost(resource) : 0
+        }
         console.info('Price', resource, price_per_month)
         return price_per_month
     }
@@ -33,10 +35,12 @@ class InstanceOciPricing extends OkitOciPricingResource {
             skus: [], 
             price_per_month: this.getPrice(resource)
         }
-        if (skus.ocpu) {bom.skus.push(this.getOcpuBoMEntry(skus.ocpu, resource))}
-        if (skus.memory) {bom.skus.push(this.getMemoryBoMEntry(skus.memory, resource))}
-        if (skus.disk) {bom.skus.push(this.getDiskBoMEntry(skus.disk, resource))} else {bom.skus= [...bom.skus, ...this.getBootVolumeBoMEntry(resource)]}
-        if (resource.source_details.os.toLowerCase() === 'windows') {bom.skus.push(this.getOsBoMEntry(resource))}
+        if (skus) {
+            if (skus.ocpu) {bom.skus.push(this.getOcpuBoMEntry(skus.ocpu, resource))}
+            if (skus.memory) {bom.skus.push(this.getMemoryBoMEntry(skus.memory, resource))}
+            if (skus.disk) {bom.skus.push(this.getDiskBoMEntry(skus.disk, resource))} else {bom.skus= [...bom.skus, ...this.getBootVolumeBoMEntry(resource)]}
+            if (resource.source_details.os.toLowerCase() === 'windows') {bom.skus.push(this.getOsBoMEntry(resource))}
+        }
         return bom
     }
 
