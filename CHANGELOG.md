@@ -12,6 +12,12 @@
 3. Update Discovery process to execute gets for NoSQL Tables and Indexes.
 4. Extend NoSQL Query to display DDL & Indexes in properties.
 5. Drop ExaData from Database System Shapes because this is no longer the preferred implementation.
+6. Implement Version 2 of Cost Estimation / BoM ([Matches new online estimation tool](https://www.oracle.com/uk/cloud/costestimator.html))
+    1. Block Storage Volume
+    1. File Storage System (Properties allow for usage Estimates)
+    1. Instance
+    1. MySQL Database System
+    1. Object Storage Bucket (Properties allow for usage Estimates)
 ### Bug Fixes
 1. In markdown generation switch to using documentation not definition
 2. Move logging debug message in generate "GET" that accesses unknown element.
