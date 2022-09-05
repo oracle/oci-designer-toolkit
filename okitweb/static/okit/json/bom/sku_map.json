@@ -371,6 +371,18 @@
             }
         }
     },
+    "nosql_database": {
+       "storage": "B89739",
+        "ondemand": {
+            "read": "B93711",
+            "write": "B93710"
+        },
+        "provisioned": {
+            "read": "B89738",
+            "write": "B89737"
+        },
+        "hosted": "B93712"
+    },
     "object_storage_bucket": {
         "tier": {
             "Standard": {

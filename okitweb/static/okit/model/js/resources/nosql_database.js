@@ -24,6 +24,10 @@ class NosqlDatabase extends OkitArtifact {
         }
         this.is_auto_reclaimable = true        
         this.indexes = []
+        this.pricing_estimates = {
+            estimated_on_demand_reads_per_month: 0,
+            estimated_on_demand_writes_per_month: 0
+        }
         // Update with any passed data
         this.merge(data);
         this.convert();

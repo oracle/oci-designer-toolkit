@@ -42,6 +42,25 @@ class NosqlDatabaseProperties extends OkitResourceProperties {
         this.max_write_units = max_write_units.input
         this.max_write_units_row = max_write_units.row
         this.append(this.core_tbody, max_write_units.row)
+        // Pricing Estimates
+        const pricing_estimates_details = this.createDetailsSection('Pricing Estimates', `${this.id}_pricing_estimates_details`)
+        this. pricing_estimates_details =  pricing_estimates_details.details
+        this.append(this.properties_contents, pricing_estimates_details.details)
+        const pricing_estimates_table = this.createTable('', `${this.id}_pricing_estimates_properties`)
+        this.pricing_estimates_tbody = pricing_estimates_table.tbody
+        this.append(pricing_estimates_details.div, pricing_estimates_table.table)
+        // On Demand Reads
+        const estimated_on_demand_reads_per_month_data = {min: 0}
+        const estimated_on_demand_reads_per_month = this.createInput('number', 'Estimated Monthly On Demand Reads', `${this.id}_estimated_on_demand_reads_per_month`, '', (d, i, n) => {n[i].reportValidity(); this.resource.pricing_estimates.estimated_on_demand_reads_per_month = n[i].value}, estimated_on_demand_reads_per_month_data)
+        this.append(this.pricing_estimates_tbody, estimated_on_demand_reads_per_month.row)
+        this.estimated_on_demand_reads_per_month = estimated_on_demand_reads_per_month.input
+        this.estimated_on_demand_reads_per_month_row = estimated_on_demand_reads_per_month.row
+        // On Demand Reads
+        const estimated_on_demand_writes_per_month_data = {min: 0}
+        const estimated_on_demand_writes_per_month = this.createInput('number', 'Estimated Monthly On Demand Writes', `${this.id}_estimated_on_demand_writes_per_month`, '', (d, i, n) => {n[i].reportValidity(); this.resource.pricing_estimates.estimated_on_demand_writes_per_month = n[i].value}, estimated_on_demand_writes_per_month_data)
+        this.append(this.pricing_estimates_tbody, estimated_on_demand_writes_per_month.row)
+        this.estimated_on_demand_writes_per_month = estimated_on_demand_writes_per_month.input
+        this.estimated_on_demand_writes_per_month_row = estimated_on_demand_writes_per_month.row
         // DDL Statement
         const ddl_statement_data = {placeholder: `CREATE TABLE users (
     id INTEGER,
@@ -77,6 +96,8 @@ PRIMARY KEY (id)
         this.max_storage_in_gbs.property('value', this.resource.table_limits.max_storage_in_gbs)
         this.max_read_units.property('value', this.resource.table_limits.max_read_units)
         this.max_write_units.property('value', this.resource.table_limits.max_write_units)
+        this.estimated_on_demand_reads_per_month.property('value', this.resource.pricing_estimates.estimated_on_demand_reads_per_month)
+        this.estimated_on_demand_writes_per_month.property('value', this.resource.pricing_estimates.estimated_on_demand_writes_per_month)
         this.showHideReadWrite()
         this.loadIndexes()
     }
@@ -179,6 +200,7 @@ PRIMARY KEY (id)
     }
 
     showHideReadWrite() {
+        this.pricing_estimates_details.classed('hidden', this.resource.table_limits.capacity_mode !== 'ON_DEMAND')
         this.max_read_units_row.classed('collapsed', this.resource.table_limits.capacity_mode === 'ON_DEMAND')
         this.max_write_units_row.classed('collapsed', this.resource.table_limits.capacity_mode === 'ON_DEMAND')
         this.max_read_units.property('value', this.resource.table_limits.max_read_units)
