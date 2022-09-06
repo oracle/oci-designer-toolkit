@@ -32,6 +32,9 @@ class AnalyticsInstance extends OkitArtifact {
             whitelisted_ips: [],
             whitelisted_vcns: []
         }
+        this.pricing_estimates = {
+            estimated_ocpu_per_hour: 1
+        }
         // Update with any passed data
         this.merge(data);
         this.convert();

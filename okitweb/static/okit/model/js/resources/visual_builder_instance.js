@@ -20,6 +20,9 @@ class VisualBuilderInstance extends OkitArtifact {
         this.custom_endpoint = this.newCustomEndpoint()
         this.idcs_open_id = ''
         this.is_visual_builder_enabled = true
+        this.pricing_estimates = {
+            estimated_ocpu_per_hour: 1
+        }
         // Update with any passed data
         this.merge(data);
         this.convert();
