@@ -49,21 +49,25 @@ class InstanceOciPricing extends OkitOciPricingResource {
     */
     getOcpuCost(sku, resource) {
         resource = resource ? resource : this.resource
+        const shape = this.getShapeDetails(resource.shape)
         // const list_price = this.getSkuCost(sku)
         // const price_per_month = list_price * +resource.shape_config.ocpus * this.monthly_utilization
         // return price_per_month
         const sku_prices = this.getSkuCost(sku)
-        const units = +resource.shape_config.ocpus * this.monthly_utilization
+        // const units = +resource.shape_config.ocpus * this.monthly_utilization
+        const units = (shape.is_flexible ? +resource.shape_config.ocpus : shape.ocpus) * this.monthly_utilization
         return this.getMonthlyCost(sku_prices, units)
     }
 
     getMemoryCost(sku, resource) {
         resource = resource ? resource : this.resource
+        const shape = this.getShapeDetails(resource.shape)
         // const list_price = this.getSkuCost(sku)
         // const price_per_month = list_price * +resource.shape_config.memory_in_gbs * this.monthly_utilization
         // return price_per_month
         const sku_prices = this.getSkuCost(sku)
-        const units = +resource.shape_config.memory_in_gbs * this.monthly_utilization
+        // const units = +resource.shape_config.memory_in_gbs * this.monthly_utilization
+        const units = (shape.is_flexible ? +resource.shape_config.memory_in_gbs : shape.memory_in_gbs) * this.monthly_utilization
         return this.getMonthlyCost(sku_prices, units)
     }
 
@@ -101,10 +105,12 @@ class InstanceOciPricing extends OkitOciPricingResource {
     getOcpuBoMEntry(sku, resource) {
         resource = resource ? resource : this.resource
         sku = sku ? sku : this.sku_map.instance.shape[resource.shape].ocpu
+        const shape = this.getShapeDetails(resource.shape)
         const bom_entry = this.newSkuEntry(sku)
         bom_entry.quantity = 1
         bom_entry.utilization = +this.monthly_utilization // Hrs/Month
-        bom_entry.units = +resource.shape_config.ocpus // OCPUs
+        // bom_entry.units = +resource.shape_config.ocpus // OCPUs
+        bom_entry.units = shape.is_flexible ? +resource.shape_config.ocpus : shape.ocpus // OCPUs
         bom_entry.price_per_month = this.getOcpuCost(sku, resource)
         return bom_entry
     }
@@ -112,10 +118,12 @@ class InstanceOciPricing extends OkitOciPricingResource {
     getMemoryBoMEntry(sku, resource) {
         resource = resource ? resource : this.resource
         sku = sku ? sku : this.sku_map.instance.shape[resource.shape].ocpu
+        const shape = this.getShapeDetails(resource.shape)
         const bom_entry = this.newSkuEntry(sku)
         bom_entry.quantity = 1
         bom_entry.utilization = +this.monthly_utilization // Hrs/ Month
-        bom_entry.units = +resource.shape_config.memory_in_gbs // Memory in Gbs
+        // bom_entry.units = +resource.shape_config.memory_in_gbs // Memory in Gbs
+        bom_entry.units = shape.is_flexible ? +resource.shape_config.memory_in_gbs : shape.memory_in_gbs // Memory in Gbs
         bom_entry.price_per_month = this.getMemoryCost(sku, resource)
         return bom_entry
     }

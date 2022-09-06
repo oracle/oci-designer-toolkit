@@ -6,56 +6,56 @@ console.debug('Loaded OKIT OCI Pricing Javascript');
 
 class OkitOciProductPricing {
     static currencies = {
-        GBP: {name: 'British Pound', symbol: '£'},
-        USD: {name: 'US Dollar', symbol: '$'},
-        EUR: {name: 'Euro', symbol: '€'},
-        AUD: {name: 'Australian Dollar', symbol: 'A$'},
-        CAD: {name: 'Canadian Dollar', symbol: 'CA$'},
-        NZD: {name: 'New Zealand Dollar', symbol: 'NZ$'},
-        SEK: {name: 'Swedish Krona', symbol: 'SEK '},
-        NOK: {name: 'Norwegian Krone', symbol: 'NOK '},
-        AED: {name: 'UAE Dirham', symbol: 'AED'},
-        ARS: {name: 'Argentine Peso', symbol: 'ARS'},
-        BDT: {name: 'Bangladeshi Taka', symbol: 'BDT'},
-        BGN: {name: 'Bulgarian Lev', symbol: 'BGN'},
-        BHD: {name: 'Bahraini Dinar', symbol: 'BHD'},
-        BRL: {name: 'Brazilian Real', symbol: 'BRL'},
-        CHF: {name: 'Swiss Franc', symbol: 'CHF'},
-        CLP: {name: 'Chilean Peso', symbol: 'CLP'},
-        CNY: {name: 'Chinese Yuan', symbol: 'CNY'},
-        COP: {name: 'Colombian Peso', symbol: 'COP'},
-        CRC: {name: 'Costa Rican Colón', symbol: 'CRC'},
-        CZK: {name: 'Česká Koruna', symbol: 'CZK'},
-        DKK: {name: 'Danish Krone', symbol: 'DKK'},
-        EGP: {name: 'Egyptian Pound', symbol: 'EGP'},
-        HKD: {name: 'Hong Kong Dollar', symbol: 'HKD'},
-        HRK: {name: 'Croatian Kuna', symbol: 'HRK'},
-        HUF: {name: 'Hungarian Forint', symbol: 'HUF'},
-        IDR: {name: 'Indonesian Rupiah', symbol: 'IDR'},
-        ILS: {name: 'Israeli New Shekel', symbol: 'ILS'},
-        INR: {name: 'Indian Rupee', symbol: 'INR'},
-        ISK: {name: 'Icelandic Króna', symbol: 'ISK'},
-        JPY: {name: 'Japanese Yen', symbol: 'JPY'},
-        KRW: {name: 'South Korean Won', symbol: 'KRW'},
-        KWD: {name: 'Kuwaiti Dinar', symbol: 'KWD'},
-        MXN: {name: 'Mexican Peso', symbol: 'MXN'},
-        MYR: {name: 'Malaysian Ringgit', symbol: 'MYR'},
-        PEN: {name: 'Peruvian Sol', symbol: 'PEN'},
-        PHP: {name: 'Philippine Peso', symbol: 'PHP'},
-        PKR: {name: 'Pakistani Rupee', symbol: 'PKR'},
-        PLN: {name: 'Polish Zloty', symbol: 'PLN '},
-        QAR: {name: 'Qatari Rial', symbol: 'QAR'},
-        RON: {name: 'Romanian Leu', symbol: 'RON'},
-        RSD: {name: 'Serbian Dinar', symbol: 'RSD'},
-        RUB: {name: 'Russian Ruble', symbol: 'RUB'},
-        SAR: {name: 'Saudi Riyal', symbol: 'SAR'},
-        SGD: {name: 'Singapore Dollar', symbol: 'SGD'},
-        TRY: {name: 'Turkish Lira', symbol: 'TRY'},
-        TWD: {name: 'New Taiwan Dollar', symbol: 'TWD'},
-        VND: {name: 'Vietnamese Dong', symbol: 'VND'},
-        ZAR: {name: 'South African Rand', symbol: 'ZAR'},
+        GBP: {name: 'British Pound', symbol: '£', locale: 'en-GB'},
+        USD: {name: 'US Dollar', symbol: '$', locale: 'en-US'},
+        EUR: {name: 'Euro', symbol: '€', locale: ''},
+        AUD: {name: 'Australian Dollar', symbol: 'A$', locale: ''},
+        CAD: {name: 'Canadian Dollar', symbol: 'CA$', locale: ''},
+        NZD: {name: 'New Zealand Dollar', symbol: 'NZ$', locale: ''},
+        SEK: {name: 'Swedish Krona', symbol: 'SEK ', locale: ''},
+        NOK: {name: 'Norwegian Krone', symbol: 'NOK ', locale: ''},
+        AED: {name: 'UAE Dirham', symbol: 'AED', locale: ''},
+        ARS: {name: 'Argentine Peso', symbol: 'ARS', locale: ''},
+        BDT: {name: 'Bangladeshi Taka', symbol: 'BDT', locale: ''},
+        BGN: {name: 'Bulgarian Lev', symbol: 'BGN', locale: ''},
+        BHD: {name: 'Bahraini Dinar', symbol: 'BHD', locale: ''},
+        BRL: {name: 'Brazilian Real', symbol: 'BRL', locale: ''},
+        CHF: {name: 'Swiss Franc', symbol: 'CHF', locale: ''},
+        CLP: {name: 'Chilean Peso', symbol: 'CLP', locale: ''},
+        CNY: {name: 'Chinese Yuan', symbol: 'CNY', locale: ''},
+        COP: {name: 'Colombian Peso', symbol: 'COP', locale: ''},
+        CRC: {name: 'Costa Rican Colón', symbol: 'CRC', locale: ''},
+        CZK: {name: 'Česká Koruna', symbol: 'CZK', locale: ''},
+        DKK: {name: 'Danish Krone', symbol: 'DKK', locale: ''},
+        EGP: {name: 'Egyptian Pound', symbol: 'EGP', locale: ''},
+        HKD: {name: 'Hong Kong Dollar', symbol: 'HKD', locale: ''},
+        HRK: {name: 'Croatian Kuna', symbol: 'HRK', locale: ''},
+        HUF: {name: 'Hungarian Forint', symbol: 'HUF', locale: ''},
+        IDR: {name: 'Indonesian Rupiah', symbol: 'IDR', locale: ''},
+        ILS: {name: 'Israeli New Shekel', symbol: 'ILS', locale: ''},
+        INR: {name: 'Indian Rupee', symbol: 'INR', locale: ''},
+        ISK: {name: 'Icelandic Króna', symbol: 'ISK', locale: ''},
+        JPY: {name: 'Japanese Yen', symbol: 'JPY', locale: ''},
+        KRW: {name: 'South Korean Won', symbol: 'KRW', locale: ''},
+        KWD: {name: 'Kuwaiti Dinar', symbol: 'KWD', locale: ''},
+        MXN: {name: 'Mexican Peso', symbol: 'MXN', locale: ''},
+        MYR: {name: 'Malaysian Ringgit', symbol: 'MYR', locale: ''},
+        PEN: {name: 'Peruvian Sol', symbol: 'PEN', locale: ''},
+        PHP: {name: 'Philippine Peso', symbol: 'PHP', locale: ''},
+        PKR: {name: 'Pakistani Rupee', symbol: 'PKR', locale: ''},
+        PLN: {name: 'Polish Zloty', symbol: 'PLN ', locale: ''},
+        QAR: {name: 'Qatari Rial', symbol: 'QAR', locale: ''},
+        RON: {name: 'Romanian Leu', symbol: 'RON', locale: ''},
+        RSD: {name: 'Serbian Dinar', symbol: 'RSD', locale: ''},
+        RUB: {name: 'Russian Ruble', symbol: 'RUB', locale: ''},
+        SAR: {name: 'Saudi Riyal', symbol: 'SAR', locale: ''},
+        SGD: {name: 'Singapore Dollar', symbol: 'SGD', locale: ''},
+        TRY: {name: 'Turkish Lira', symbol: 'TRY', locale: ''},
+        TWD: {name: 'New Taiwan Dollar', symbol: 'TWD', locale: ''},
+        VND: {name: 'Vietnamese Dong', symbol: 'VND', locale: ''},
+        ZAR: {name: 'South African Rand', symbol: 'ZAR', locale: ''},
     }
-    static formatPrice = (price=0, currency='GBP') => `${OkitOciProductPricing.currencies[currency].symbol}${(Math.round((price + Number.EPSILON) * 100)/100).toFixed(2)}`
+    static formatPrice = (price=0, currency='GBP') => `${OkitOciProductPricing.currencies[currency].symbol} ${(Math.round((price + Number.EPSILON) * 100)/100).toFixed(2)}`
     static getBoMFunctionName = (base_name) => `get${base_name}BoM`
     static getPriceFunctionName = (base_name) => `get${base_name}Price`
 
@@ -173,21 +173,6 @@ class OkitOciProductPricing {
         }
     }
 
-}
-
-class OkitOciPricingResource {
-    constructor(resource, pricing) {
-        this.resource = resource
-        this.pricing = pricing
-    }
-
-    get sku_map() {return this.pricing.sku_map}
-
-    newSkuEntry(sku='') {return {sku: sku, quantity:0, utilization: 0, units: 0, price_per_month: 0}}
-    getPrice(resource) {return 0}
-    getBoM(resource) {return {skus: [], price_per_month: this.getPrice(resource)}}
-    updateCostEstimate = (resource, price=0) => this.pricing.updateCostEstimate(resource, price)
-    getSkuCost = (sku, model="PAY_AS_YOU_GO", currency_code=undefined) => this.pricing.getSkuCost(sku, model, currency_code)
     getMonthlyCost(sku_prices, units) {
         let monthly_cost = 0
         if (sku_prices && sku_prices.length === 1) monthly_cost = sku_prices[0].value * units
@@ -205,6 +190,39 @@ class OkitOciPricingResource {
         }
         return monthly_cost
     }
+}
+
+class OkitOciPricingResource {
+    constructor(resource, pricing) {
+        this.resource = resource
+        this.pricing = pricing
+    }
+
+    get sku_map() {return this.pricing.sku_map}
+
+    newSkuEntry(sku='') {return {sku: sku, quantity:0, utilization: 0, units: 0, price_per_month: 0}}
+    getPrice(resource) {return 0}
+    getBoM(resource) {return {skus: [], price_per_month: this.getPrice(resource)}}
+    updateCostEstimate = (resource, price=0) => this.pricing.updateCostEstimate(resource, price)
+    getSkuCost = (sku, model="PAY_AS_YOU_GO", currency_code=undefined) => this.pricing.getSkuCost(sku, model, currency_code)
+    getMonthlyCost = (sku_prices, units) => this.pricing.getMonthlyCost(sku_prices, units)
+    // getMonthlyCost(sku_prices, units) {
+    //     let monthly_cost = 0
+    //     if (sku_prices && sku_prices.length === 1) monthly_cost = sku_prices[0].value * units
+    //     else if (sku_prices && sku_prices.length > 1) {
+    //         sku_prices.sort((a, b) => a.rangeMin - b.rangeMin).forEach((p) => {
+    //             const range = p.rangeMax - p.rangeMin
+    //             if (range <= units) {
+    //                 monthly_cost += p.value * range
+    //                 units -= range
+    //             } else if (units <= range) {
+    //                 monthly_cost += p.value * units
+    //                 units = 0
+    //             }
+    //         })
+    //     }
+    //     return monthly_cost
+    // }
 }
 
 let okitOciProductPricing = null

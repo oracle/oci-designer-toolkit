@@ -1,4 +1,7 @@
 {
+    "analytics_instance": {
+        "ocpu": "B94568"
+    },
     "block_storage_volume": {
         "capacity": "B91961",
         "performance": "B91962"
@@ -128,6 +131,14 @@
                 "memory": "B93298"
             }
         }
+    },
+    "integration_instance": {
+        "standard": "",
+        "enterprise": ""
+    },
+    "load_balancer": {
+        "base": "B93030",
+        "bandwidth": "B93031"
     },
     "mysql_database_system": {
         "shape": {
@@ -397,5 +408,8 @@
                 "capacity": "B93000"
             }
         }
+    },
+    "visual_builder_instance": {
+        "ocpu": "B89646"
     }
 }

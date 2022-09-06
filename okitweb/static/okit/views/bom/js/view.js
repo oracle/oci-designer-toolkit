@@ -92,6 +92,10 @@ class OkitBoMView extends OkitJsonView {
         this.estimate_details = this.estimate_div.append('details').attr('class', 'okit-details').attr('open', true)
         this.estimate_details.append('summary').attr('class', 'summary-background').append('label').text('Cost Estimate')
         this.estimate_details_div = this.estimate_details.append('div').attr('class', 'okit-details-body')
+        // Disclaimer
+        this.disclaimer_div = canvas_div.append('div').attr('id', 'bom_disclaimer_div').attr('class', 'bom_disclaimer')
+        this.disclaimer_div.append('p').attr('class', 'okit-cost-small-print')
+            .text("Disclaimer:  This sample quote is provided solely for evaluation purposes and is intended to further discussions between you and Oracle.  This sample quote is not eligible for acceptance by you and is not a binding contract between you and Oracle for the services specified.  If you would like to purchase the services specified in this sample quote, please request that Oracle issue you a formal quote (which may include an OMA or a CSA if you do not already have an appropriate agreement in place with Oracle) for your acceptance and execution.  Your formal quote will be effective only upon Oracle's acceptance of the formal quote (and the OMA or CSA, if required).						")
     }
 
     drawBoMPanel() {
