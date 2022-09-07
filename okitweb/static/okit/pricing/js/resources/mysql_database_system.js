@@ -69,12 +69,12 @@ class MysqlDatabaseSystemOciPricing extends OkitOciPricingResource {
         return this.getMonthlyCost(sku_prices, units)
     }
 
-     /*
+    /*
     ** BoM functions
     */
     getOcpuBoMEntry(sku, resource) {
         resource = resource ? resource : this.resource
-        sku = sku ? sku : this.sku_map.instance.shape[resource.shape].ocpu
+        sku = sku ? sku : this.sku_map.mysql_database_system.shape[resource.shape_name].ocpu
         const shape = this.getShapeDetails(resource.shape_name)
         const bom_entry = this.newSkuEntry(sku)
         bom_entry.quantity = 1
@@ -86,7 +86,7 @@ class MysqlDatabaseSystemOciPricing extends OkitOciPricingResource {
 
     getMemoryBoMEntry(sku, resource) {
         resource = resource ? resource : this.resource
-        sku = sku ? sku : this.sku_map.instance.shape[resource.shape].ocpu
+        sku = sku ? sku : this.sku_map.mysql_database_system.shape[resource.shape_name].memory
         const shape = this.getShapeDetails(resource.shape_name)
         const bom_entry = this.newSkuEntry(sku)
         bom_entry.quantity = 1
@@ -98,7 +98,7 @@ class MysqlDatabaseSystemOciPricing extends OkitOciPricingResource {
 
     getStorageBoMEntry(sku, resource) {
         resource = resource ? resource : this.resource
-        sku = sku ? sku : this.sku_map.instance.shape[resource.shape].ocpu
+        sku = sku ? sku : this.sku_map.mysql_database_system.shape[resource.shape_name].storage
         const shape = this.getShapeDetails(resource.shape_name)
         const bom_entry = this.newSkuEntry(sku)
         bom_entry.quantity = 1
@@ -110,7 +110,7 @@ class MysqlDatabaseSystemOciPricing extends OkitOciPricingResource {
 
     getBackupBoMEntry(sku, resource) {
         resource = resource ? resource : this.resource
-        sku = sku ? sku : this.sku_map.instance.shape[resource.shape].ocpu
+        sku = sku ? sku : this.sku_map.mysql_database_system.shape[resource.shape_name].backup
         const shape = this.getShapeDetails(resource.shape_name)
         const bom_entry = this.newSkuEntry(sku)
         bom_entry.quantity = 1

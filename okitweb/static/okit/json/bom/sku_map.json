@@ -6,6 +6,13 @@
         "capacity": "B91961",
         "performance": "B91962"
     },
+    "database_system": {
+        "standard_edition": "B90569",
+        "enterprise_edition": "B90570",
+        "enterprise_edition_high_performance": "B90571",
+        "enterprise_edition_extreme_performance": "B90572",
+        "byol": "B90573"
+    },
     "file_system": {
         "usage": "B89057"
     },
