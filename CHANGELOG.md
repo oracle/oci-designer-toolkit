@@ -15,6 +15,7 @@
 6. Implement Version 2 of Cost Estimation / BoM ([Matches new online estimation tool](https://www.oracle.com/uk/cloud/costestimator.html))
     1. Analytics Instance
     1. Block Storage Volume
+    1. Database System
     1. File System (Properties allow for usage Estimates)
     1. Instance
     1. Load Balancer

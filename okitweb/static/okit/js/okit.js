@@ -256,19 +256,10 @@ class OkitOCIData {
     getExaCCDBSystemShapes = (filter=() => true) => this.getDBSystemShapes((ds) => ds.shape_family === 'EXACC').filter(filter)
     getExadataDBSystemShapes = (filter=() => true) => this.getDBSystemShapes((ds) => ds.shape_family === 'EXADATA').filter(filter)
     getVirtualMachineDBSystemShapes = (filter=() => true) => this.getDBSystemShapes((ds) => ds.shape_family === 'VIRTUALMACHINE').filter(filter)
-
-    getDBSystemShapes1(family='') {
-        if (family === '') {
-            return this.dropdown_data.db_system_shapes;
-        } else {
-            return this.dropdown_data.db_system_shapes.filter(function(dss) {return dss.shape_family === family;});
-        }
-    }
-
-    getDBSystemShape(shape) {
-        console.log('Get DB Shape ' + shape);
-        return this.dropdown_data.db_system_shapes.filter(function(dss) {return dss.shape === shape;})[0];
-    }
+    getDBSystemShape = (shape) => this.getDBSystemShapes().find(s => s.shape === shape)
+    // getDBSystemShape(shape) {
+    //     return this.getDBSystemShapes().find(s => s.shape === shape);
+    // }
 
     getDBVersions() {
         return this.dropdown_data.db_versions;
