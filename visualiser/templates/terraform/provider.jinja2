@@ -7,7 +7,7 @@ terraform {
             version = "= 4.50.0"
         }
     }
-{% endif %}
+{% endif %} {# End PCA Check #}
     required_version = ">= 0.12.0"
 }
 
@@ -38,7 +38,7 @@ locals {
 locals {
     home_region = {{ region }}
 }
-{% endif %}
+{% endif %} {# End PCA Check #}
 
 provider "oci" {
     alias            = "home_region"

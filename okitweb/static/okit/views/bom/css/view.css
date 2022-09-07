@@ -1,0 +1,61 @@
+/*
+# Copyright (c) 2020, 2022, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+ */
+
+.bom_heading {
+    display: grid;
+    grid-auto-flow: column;
+    /* grid-template-columns: auto 250px; */
+    margin: 10px 3px 10px 2px;
+    width: 100%;
+    max-width: 100%;
+    background-color: var(--oci-blue);
+    color: white;
+}
+
+.bom_heading > div > div {
+    vertical-align: middle;
+    min-height: 100%;
+}
+
+.bom_heading select {
+    margin: 1px 5px 1px 5px;
+}
+
+.bom_heading span {
+    margin: auto 5px;
+}
+
+.bom_heading .okit-toolbar-right {
+    margin-right: 15px;
+}
+
+.bom_heading label {
+    margin: auto 5px;
+    font-weight: bolder;
+}
+
+.bom_safe_harbour {
+    display: grid;
+    grid-template-columns: auto 250px;
+    max-width: 100%;
+}
+
+.okit-bom-bom-details {
+    margin: 1px 3px 1px 2px;
+}
+
+.okit-bom-estimate-details {
+    margin: 1px 3px 1px 2px;
+}
+
+.bom-toolbar {
+    min-height: var(--console-toolbar-height);
+    max-height: var(--console-toolbar-height);
+    height: var(--console-toolbar-height);
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-auto-flow: column;
+}

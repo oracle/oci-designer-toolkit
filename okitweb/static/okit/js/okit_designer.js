@@ -140,7 +140,7 @@ function newDesignerView() {
 // }
 function setTitleDescription() {
     okitJsonModel ? $('#json_title').val(okitJsonModel.title) : $('#json_title').val('');
-    okitJsonModel ? $('#json_description').val(okitJsonModel.description) : $('#json_description').val('');
+    okitJsonModel ? $('#json_description').val(okitJsonModel.documentation) : $('#json_description').val('');
     okitJsonModel ? $('#freeform_terraform').val(okitJsonModel.user_defined.terraform) : $('#freeform_terraform').val('');
     okitJsonModel ? setTargetPlatform() : $('#deployment_platform').val('oci');
 }
@@ -148,7 +148,7 @@ function updateJsonTitle() {
     okitJsonModel.title = $('#json_title').val();
 }
 function updateJsonDescription() {
-    okitJsonModel.description = $('#json_description').val();
+    okitJsonModel.documentation = $('#json_description').val();
 }
 function updateFreeformTerraform() {
     okitJsonModel.user_defined.terraform = $('#freeform_terraform').val();

@@ -56,6 +56,11 @@ details {
     margin-top: 1em;
 }
 
+pre {
+    margin: 0;
+    font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+}
+
 summary {
     width: 100%;
     font-weight: bold;
@@ -432,6 +437,7 @@ summary:focus {
     display: inline-block;
     margin-left: auto;
     align-items: right;
+    vertical-align: middle;
 }
 
 .okit-toolbar-right > div {
@@ -671,9 +677,14 @@ li a.parent-item:hover {
     overflow: auto;
 }
 
-.okit-table .td > input[type="text"], input[type="email"], input[type="password"], input[type="range"] {
+.okit-table .td > input[type="text"], input[type="email"], input[type="password"], input[type="range"], input[type="number"] {
     width: 100%;
 }
+
+/* .okit-table .td > input[type="number"] {
+    text-align: end;
+    padding-right: 5px;
+} */
 
 .okit-table .td > textarea {
     width: 100%;

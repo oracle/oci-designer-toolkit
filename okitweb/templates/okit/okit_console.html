@@ -15,7 +15,6 @@
     <script type="text/javascript">const oci_mode = {{ oci_mode | lower }};</script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_common.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_console.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='okit/model/js/okit_model.js') }}"></script>
     {% if use_modules is defined %}
     <script type="module" src="{{ url_for('static', filename='okit/modules/model/okit_model.js') }}"></script>
     {% endif %}

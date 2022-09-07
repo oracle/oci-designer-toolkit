@@ -14,7 +14,7 @@ class OkitJson {
     constructor(okitjson) {
         const now = getCurrentDateTime();
         this.title = "OKIT OCI Visualiser Json";
-        this.description = `# Description\n__Created ${getCurrentDateTime()}__\n\n--------------------------------------\n\n`;
+        this.documentation = `# Description\n__Created ${getCurrentDateTime()}__\n\n--------------------------------------\n\n`;
         this.metadata = {
             resource_count: 0,
             platform: pca_mode ? 'pca' : 'oci',
@@ -51,8 +51,11 @@ class OkitJson {
                 return r
             }, {})
     }
+    getResources() {return Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], [])}
     getResource(id='') {
-        const resource = Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter((r) => r.id === id)[0]
+        // const resource = Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter((r) => r.id === id)[0]
+        // const resource = Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).find((r) => r.id === id)
+        const resource = this.getResources().find((r) => r.id === id)
         console.info('Resource', resource)
         return resource
     }
@@ -101,7 +104,8 @@ class OkitJson {
         this.convert(okit_json)
         // Title & Description
         if (okit_json.title) {this.title = okit_json.title;}
-        if (okit_json.description) {this.description = okit_json.description;}
+        if (okit_json.description) {this.documentation = okit_json.description;}
+        if (okit_json.documentation) {this.documentation = okit_json.documentation;}
         if (okit_json.user_defined && okit_json.user_defined.terraform) {this.user_defined.terraform = okit_json.user_defined.terraform}
         if (okit_json.freeform_tags) {this.freeform_tags = okit_json.freeform_tags}
         if (okit_json.defined_tags) {this.defined_tags = okit_json.defined_tags}
@@ -501,11 +505,11 @@ class OkitArtifact {
     generateResourceNameFromDisplayName = (name) => titleCase(name.split('_').join('-')).split(' ').join('').replaceAll('-','_')
 
     estimateCost = () => {
-        const get_sku_function = `get${this.constructor.name}BoM`
+        const get_price_function = OkitOciProductPricing.getPriceFunctionName(this.constructor.name)
         const pricing = okitOciProductPricing ? okitOciProductPricing : new OkitOciProductPricing()
+        console.info(`>>>>>> Estimating Resource Cost: ${get_price_function}`)
         try {
-            const bom_details = pricing[get_sku_function](this)
-            return OkitOciProductPricing.formatPrice(bom_details.price_per_month, pricing.currency)
+            return OkitOciProductPricing.formatPrice(pricing[get_price_function](this, pricing), pricing.currency)
         } catch (e) {
             console.debug(e)
             return OkitOciProductPricing.formatPrice(0, pricing.currency)

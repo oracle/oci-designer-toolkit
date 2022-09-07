@@ -1,6 +1,37 @@
 # Release Notes
 
 
+## Version 0.40.0
+**Release Date**: 7th September 2022
+### Features
+1. Streamline / refactor backend javascript / css file identification and load functionality
+2. Update Properties sheet for 
+    1. MySQL Database and allow drop on Compartment.
+    2. Database Systems.
+    3. Autonomous Database.
+3. Update Discovery process to execute gets for NoSQL Tables and Indexes.
+4. Extend NoSQL Query to display DDL & Indexes in properties.
+5. Drop ExaData from Database System Shapes because this is no longer the preferred implementation.
+6. Implement Version 2 of Cost Estimation / BoM ([Matches new online estimation tool](https://www.oracle.com/uk/cloud/costestimator.html))
+    1. Analytics Instance
+    1. Block Storage Volume
+    1. Database System
+    1. File System (Properties allow for usage Estimates)
+    1. Instance
+    1. Load Balancer
+    1. MySQL Database System
+    1. NoSQL Database
+    1. Object Storage Bucket (Properties allow for usage Estimates)
+    1. Visual Builder Instance
+7. GitHub Enhancement #537 : Problem with object with subnet in different compartment (resolved for Database System)
+### Bug Fixes
+1. In markdown generation switch to using documentation not definition
+2. Move logging debug message in generate "GET" that accesses unknown element.
+3. Resolve Config validation issue where configs with only DEFAULT reported an error.
+4. Add missing Route Rule information when querying PCA.
+5. Test if Health Checker data specified when exporting to Markdown.
+
+
 ## Version 0.39.0
 **Release Date**: 27th July 2022
 ### Features

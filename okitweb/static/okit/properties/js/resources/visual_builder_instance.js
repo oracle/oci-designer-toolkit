@@ -50,6 +50,18 @@ class VisualBuilderInstanceProperties extends OkitResourceProperties {
         this.append(this.advanced_tbody, idcs_open_id.row)
 
         // this.idcs_open_id = ''
+        // Pricing Estimates
+        const pricing_estimates_details = this.createDetailsSection('Pricing Estimates', `${this.id}_pricing_estimates_details`)
+        this.append(this.properties_contents, pricing_estimates_details.details)
+        const pricing_estimates_table = this.createTable('', `${this.id}_pricing_estimates_properties`)
+        this.pricing_estimates_tbody = pricing_estimates_table.tbody
+        this.append(pricing_estimates_details.div, pricing_estimates_table.table)
+        // OCPUs
+        const estimated_ocpu_per_hour_data = {min: 1}
+        const estimated_ocpu_per_hour = this.createInput('number', 'Estimated OCPUs per Hour', `${this.id}_estimated_ocpu_per_hour`, '', (d, i, n) => {n[i].reportValidity(); this.resource.pricing_estimates.estimated_ocpu_per_hour = n[i].value}, estimated_ocpu_per_hour_data)
+        this.append(this.pricing_estimates_tbody, estimated_ocpu_per_hour.row)
+        this.estimated_ocpu_per_hour = estimated_ocpu_per_hour.input
+        this.estimated_ocpu_per_hour_row = estimated_ocpu_per_hour.row
     }
 
     // Load Additional Resource Specific Properties
@@ -62,6 +74,7 @@ class VisualBuilderInstanceProperties extends OkitResourceProperties {
         this.is_visual_builder_enabled.property('checked', this.resource.is_visual_builder_enabled)
         this.custom_endpoint_hostname.property('value', this.resource.custom_endpoint.hostname)
         this.idcs_open_id.property('value', this.resource.idcs_open_id)
+        this.estimated_ocpu_per_hour.property('value', this.resource.pricing_estimates.estimated_ocpu_per_hour)
     }
 
     loadConsumptionModelSelect(select) {

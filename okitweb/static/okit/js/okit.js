@@ -251,18 +251,15 @@ class OkitOCIData {
         }
     }
 
-    getDBSystemShapes(family='') {
-        if (family === '') {
-            return this.dropdown_data.db_system_shapes;
-        } else {
-            return this.dropdown_data.db_system_shapes.filter(function(dss) {return dss.shape_family === family;});
-        }
-    }
-
-    getDBSystemShape(shape) {
-        console.log('Get DB Shape ' + shape);
-        return this.dropdown_data.db_system_shapes.filter(function(dss) {return dss.shape === shape;})[0];
-    }
+    getDBSystemShapes = (filter=() => true) => this.dropdown_data.db_system_shapes.filter(filter).sort((a, b) => a.name.localeCompare(b.name))
+    getBareMetalDBSystemShapes = (filter=() => true) => this.getDBSystemShapes((ds) => ds.shape_family === 'SINGLENODE').filter(filter)
+    getExaCCDBSystemShapes = (filter=() => true) => this.getDBSystemShapes((ds) => ds.shape_family === 'EXACC').filter(filter)
+    getExadataDBSystemShapes = (filter=() => true) => this.getDBSystemShapes((ds) => ds.shape_family === 'EXADATA').filter(filter)
+    getVirtualMachineDBSystemShapes = (filter=() => true) => this.getDBSystemShapes((ds) => ds.shape_family === 'VIRTUALMACHINE').filter(filter)
+    getDBSystemShape = (shape) => this.getDBSystemShapes().find(s => s.shape === shape)
+    // getDBSystemShape(shape) {
+    //     return this.getDBSystemShapes().find(s => s.shape === shape);
+    // }
 
     getDBVersions() {
         return this.dropdown_data.db_versions;
@@ -368,20 +365,22 @@ class OkitOCIData {
         return this.dropdown_data.loadbalancer_shapes;
     }
 
-    getMySQLConfigurations(shape_name='') {
-        if (shape_name === '') {
-            return this.dropdown_data.mysql_configurations;
-        } else {
-            return this.dropdown_data.mysql_configurations.filter(function(dss) {return dss.shape_name === shape_name;});
-        }
-    }
-    getMySQLConfiguration(id) {
-        for (let shape of this.getMySQLConfigurations()) {
-            if (shape.id === id) {
-                return shape;
-            }
-        }
-    }
+    // getMySQLConfigurations(shape_name='') {
+    //     if (shape_name === '') {
+    //         return this.dropdown_data.mysql_configurations;
+    //     } else {
+    //         return this.dropdown_data.mysql_configurations.filter(function(dss) {return dss.shape_name === shape_name;});
+    //     }
+    // }
+    getMySQLConfigurations = (filter=() => true) => this.dropdown_data.mysql_configurations.filter(filter)
+    getMySQLConfiguration = (id) => this.getMySQLConfigurations().find((c) => c.id === id)
+    // getMySQLConfiguration(id) {
+    //     for (let shape of this.getMySQLConfigurations()) {
+    //         if (shape.id === id) {
+    //             return shape;
+    //         }
+    //     }
+    // }
 
     getVolumeBackupPolicies() {
         return this.dropdown_data.volume_backup_policy ? this.dropdown_data.volume_backup_policy : []
@@ -390,6 +389,7 @@ class OkitOCIData {
     getMySQLShapes() {
         return this.dropdown_data.mysql_shapes;
     }
+    getMySQLShape = (shape) => this.getMySQLShapes().find(s => s.name === shape)
 
     getMySQLVersions(family='') {
         return this.dropdown_data.mysql_versions[0].versions;

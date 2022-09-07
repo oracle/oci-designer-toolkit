@@ -31,6 +31,20 @@ class OkitResourceProperties {
             'FAULT-DOMAIN-3': 'Fault Domain 3'
         }
     }
+    // License Model
+    license_model_data = {
+        options: {
+            LICENSE_INCLUDED: 'License Included', 
+            BRING_YOUR_OWN_LICENSE: 'Bring Your Own License'
+        }
+    }
+    // Database Workload
+    db_workload_data = {
+        options: {
+            OLTP: 'Transaction Processing', 
+            DW: 'Data Warehouse'
+        }
+    }
     // DNS Label
     dns_data = {
         maxlength: '15',
@@ -113,7 +127,8 @@ class OkitResourceProperties {
 
     buildCostEstimate() {
         this.cost_estimate_div = this.properties_div.append('div')
-                                .attr('class', `property-editor-cost-estimate ${!developer_mode ? 'hidden' : ''}`)
+                                .attr('class', `property-editor-cost-estimate`)
+                                // .attr('class', `property-editor-cost-estimate ${!developer_mode ? 'hidden' : ''}`)
         const right_div = this.cost_estimate_div.append('div')
         const estimate_label = right_div.append('label').text('Estimated Monthly Cost')
         this.cost_estimate = right_div.append('label').text('')
@@ -323,14 +338,24 @@ class OkitResourceProperties {
             if (data && data.options) {
                 Object.entries(data.options).forEach(([k, v]) => input.append('option').attr('value', k).text(v))
             }
+            this.addExtraAttributes(input, data)
         } else if (type === 'multiselect') {
             title = row.append('div').attr('class', 'td property-label').text(label)
             input = row.append('div').attr('class', 'td').append('div').attr('id', this.inputId(id, idx)).attr('class', 'okit-multiple-select').on('change', callback)
+            if (data && data.options) {
+                Object.entries(data.options).forEach(([k, v]) => {
+                    const div = input.append('div')
+                    const safeid = k.replace(/[\W_]+/g,"_")
+                    div.append('input').attr('type', 'checkbox').attr('id', safeid).attr('value', k)
+                    div.append('label').attr('for', safeid).text(v)
+                    })
+            }
         } else if (type === 'checkbox') {
             row.append('div').attr('class', 'td property-label')
             cell = row.append('div').attr('class', 'td')
             input = cell.append('input').attr('type', 'checkbox').attr('id', this.inputId(id, idx)).attr('class', 'okit-property-value').on('input', callback)
             cell.append('label').attr('for', this.inputId(id, idx)).text(label)
+            this.addExtraAttributes(input, data)
         } else {
             alert(`Unknown Type ${type}`)
         }
@@ -356,7 +381,7 @@ class OkitResourceProperties {
     }
 
     addExtraAttributes(input, data) {
-        const attributes = ['min', 'max', 'step', 'minlength', 'maxlength', 'pattern', 'title', 'placeholder', 'readonly', 'required']
+        const attributes = ['disabled', 'min', 'max', 'step', 'minlength', 'maxlength', 'pattern', 'title', 'placeholder', 'readonly', 'required']
         if (data) {
             Object.entries(data).forEach(([k, v]) => {
                 if (attributes.includes(k)) input.attr(k, v)
@@ -446,19 +471,20 @@ class OkitResourceProperties {
         return id
     }
 
-    loadReferenceSelect(select, resource_type, empty_option=false, filter=undefined, groups=undefined, empty_value='') {
+    loadReferenceSelect(select, resource_type, empty_option=false, filter=undefined, groups=undefined, empty_value='', id_element='id', display_element='display_name') {
         select.selectAll('*').remove()
         filter = filter ? filter : () => true
         if (empty_option) select.append('option').attr('value', '').attr('selected', 'selected').text(empty_value ? empty_value : '')
         let id = ''
         const resources = okitOciData[resource_type](filter)
-        console.info('Resources', resources)
+        console.info('Resources', resource_type, resources, okitOciData[resource_type])
         if (groups) {
             Object.entries(groups).forEach(([k, v]) => {
+                console.info('Group', k, 'Filter', v)
                 const optgrp = select.append('optgroup').attr('label', k)
                 resources.filter(v).forEach((r, i) => {
                     r = r instanceof Object ? r : {id: r, display_name: r}
-                    const option = optgrp.append('option').attr('value', r.id).text(r.display_name)
+                    const option = optgrp.append('option').attr('value', r[id_element]).text(r[display_element])
                     if (!empty_option && i === 0 && id === '') {
                         option.attr('selected', 'selected')
                         id = r.id
@@ -466,10 +492,9 @@ class OkitResourceProperties {
                 })
             })
         } else {
-            filter = () => true
-            resources.filter(filter).forEach((r, i) => {
+            resources.forEach((r, i) => {
                 r = r instanceof Object ? r : {id: r, display_name: r}
-                const option = select.append('option').attr('value', r.id).text(r.display_name)
+                const option = select.append('option').attr('value', r[id_element]).text(r[display_element])
                 if (!empty_option && i === 0) {
                     option.attr('selected', 'selected')
                     id = r.id
@@ -480,6 +505,7 @@ class OkitResourceProperties {
     }
 
     loadMultiSelect(select, resource_type, empty_option=false, filter=undefined) {
+        console.info('Select:', select)
         select.selectAll('*').remove()
         if (!filter) filter = () => true
         const resources = this.resource.okit_json[`${resource_type}s`] ? this.resource.okit_json[`${resource_type}s`] : this.resource.okit_json[`${resource_type}`] ? this.resource.okit_json[`${resource_type}`] : []

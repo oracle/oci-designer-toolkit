@@ -126,7 +126,7 @@ def validateConfigFile(config_file='~/.oci/config'):
         config = configparser.ConfigParser()
         config.read(abs_config_file)
         # if os.path.exists(abs_config_file) and os.path.isfile(abs_config_file):
-        if len(config.sections()) == 0 and not config.has_section('DEFAULT'):
+        if len(config.sections()) == 0 and 'DEFAULT' not in config:
             results["valid"] = False
             results["errors"].append('OCI Connect Config file is either missing or empty.')
         else:
@@ -167,6 +167,14 @@ def readGitConfigFile(config_file='~/.oci/git_repositories'):
         repo_list.append({'label': each_git_section, 'branch': config[each_git_section]['branch'], 'url': config[each_git_section]['url']})
     logger.info(repo_list)
     return repo_list
+
+def readStaticFiles(root):
+    all_files = []
+    for path, dirnames, filenames in os.walk(os.path.join(bp.static_folder, root)):
+        # logger.info(f'Static: {bp.static_folder} \n\tPath: {path} \n\tRelative Path: {os.path.relpath(path, bp.static_folder)} \n\tDirectories: {dirnames} \n\tFiles: {filenames}')
+        all_files.extend([os.path.join(path, filename) for filename in filenames])
+    sorted_files = sorted(all_files, key=lambda file: (os.path.dirname(file), os.path.basename(file)))
+    return sorted_files
 
 #
 # Define Error Handlers
@@ -281,16 +289,15 @@ def designer():
     ansible_mode = (request.args.get('ansible', default='false') == 'true')
     if ansible_mode:
         logger.info("<<<<<<<<<<<<<<<<<<<<<<<< Ansible Mode >>>>>>>>>>>>>>>>>>>>>>>>")
-    # Read Artifact Model Specific JavaScript Files
-    artefact_model_js_files = sorted(os.listdir(os.path.join(bp.static_folder, 'model', 'js', 'artefacts')))
-    # Read Artifact View Specific JavaScript Files
-    if os.path.exists(os.path.join(bp.static_folder, 'view', 'js', 'artefacts')) and os.path.isdir(os.path.join(bp.static_folder, 'view', 'js', 'artefacts')):
-        artefact_view_js_files = sorted(os.listdir(os.path.join(bp.static_folder, 'view', 'js', 'artefacts')))
-    else:
-        artefact_view_js_files = []
-    artefact_view_js_files.extend(sorted(os.listdir(os.path.join(bp.static_folder, 'view', 'designer', 'js', 'artefacts'))))
-    # Read Resource Specific JavaScript Properties Files
-    resource_properties_js_files = sorted(os.listdir(os.path.join(bp.static_folder, 'properties', 'js', 'resources')))
+    # Define Resource directories
+    # Process Javascript & css files
+    resource_dirs = ['model', 'view', 'properties', 'panels', 'pricing', 'spreadsheet', 'views']
+    resource_files = {'js': [], 'css': []}
+    for dir in resource_dirs:
+        sorted_files = readStaticFiles(dir)
+        resource_files['js'].extend([os.path.relpath(path, bp.static_folder) for path in sorted_files if os.path.splitext(path)[1] == '.js'])
+        resource_files['css'].extend([os.path.relpath(path, bp.static_folder) for path in sorted_files if os.path.splitext(path)[1] == '.css'])
+    logger.debug(jsonToFormattedString(resource_files))
 
     # Read Palette Json
     palette_json = readJsonFile(os.path.join(bp.static_folder, 'palette', 'palette.json'))
@@ -303,14 +310,9 @@ def designer():
             with open(os.path.join(bp.static_folder, 'palette', 'svg', resource['svg']), 'r') as svgFile:
                 palette_json['svg'][resource['title'].lower()] = ''.join(svgFile.read().splitlines())
 
-    # config_sections = {"sections": readAndValidateConfigFileSections()}
-    # config_sections = {"sections": readConfigFileSections()}
-
     #Render The Template
     return render_template('okit/okit_designer.html',
-                           artefact_model_js_files=artefact_model_js_files,
-                           artefact_view_js_files=artefact_view_js_files,
-                           resource_properties_js_files=resource_properties_js_files,
+                           resource_files=resource_files,
                            palette_json=palette_json,
                            local_okit=local,
                            developer_mode=developer_mode, 
@@ -507,8 +509,8 @@ def valueproposition(sheet):
 def generate(language, destination):
     logger.info('Language : {0:s} - {1:s}'.format(str(language), str(request.method)))
     logger.info('Destination : {0:s} - {1:s}'.format(str(destination), str(request.method)))
-    logger.debug('JSON     : {0:s}'.format(str(request.json)))
     if request.method == 'POST':
+        logger.debug('JSON     : {0:s}'.format(str(request.json)))
         use_vars = request.json.get("use_variables", True)
         try:
             if destination == 'git':
@@ -557,6 +559,7 @@ def generate(language, destination):
             logger.exception(e)
             return str(e), 500
     else:
+        logger.info(f'Returning /tmp/okit-{language}.zip')
         return send_from_directory('/tmp', "okit-{0:s}.zip".format(str(language)), mimetype='application/zip', as_attachment=True)
 
 
