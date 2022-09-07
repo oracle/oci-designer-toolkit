@@ -14,6 +14,7 @@
 5. Drop ExaData from Database System Shapes because this is no longer the preferred implementation.
 6. Implement Version 2 of Cost Estimation / BoM ([Matches new online estimation tool](https://www.oracle.com/uk/cloud/costestimator.html))
     1. Analytics Instance
+    1. Autonomous Database
     1. Block Storage Volume
     1. Database System
     1. File System (Properties allow for usage Estimates)
