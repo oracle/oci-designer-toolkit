@@ -23,6 +23,7 @@
     1. NoSQL Database
     1. Object Storage Bucket (Properties allow for usage Estimates)
     1. Visual Builder Instance
+7. GitHub Enhancement #537 : Problem with object with subnet in different compartment (resolved for Database System)
 ### Bug Fixes
 1. In markdown generation switch to using documentation not definition
 2. Move logging debug message in generate "GET" that accesses unknown element.
