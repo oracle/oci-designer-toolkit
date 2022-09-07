@@ -2,6 +2,13 @@
     "analytics_instance": {
         "ocpu": "B94568"
     },
+    "autonomous_database": {
+        "ocpu": {
+            "included": "B89040",
+            "byol": "B89039"
+        },
+        "storage": "B89041"
+    },
     "block_storage_volume": {
         "capacity": "B91961",
         "performance": "B91962"
