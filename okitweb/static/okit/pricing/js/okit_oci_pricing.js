@@ -55,7 +55,8 @@ class OkitOciProductPricing {
         VND: {name: 'Vietnamese Dong', symbol: 'VND', locale: ''},
         ZAR: {name: 'South African Rand', symbol: 'ZAR', locale: ''},
     }
-    static formatPrice = (price=0, currency='GBP') => `${OkitOciProductPricing.currencies[currency].symbol} ${(Math.round((price + Number.EPSILON) * 100)/100).toFixed(2)}`
+    // static formatPrice = (price=0, currency='GBP') => `${OkitOciProductPricing.currencies[currency].symbol} ${(Math.round((price + Number.EPSILON) * 100)/100).toFixed(2)}`
+    static formatPrice = (price=0, currency='GBP') => `${(Math.round((price + Number.EPSILON) * 100)/100).toLocaleString('en-GB', {style: 'currency', currency: currency, currencyDisplay: 'symbol'})}`
     static getBoMFunctionName = (base_name) => `get${base_name}BoM`
     static getPriceFunctionName = (base_name) => `get${base_name}Price`
 

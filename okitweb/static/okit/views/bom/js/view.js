@@ -68,20 +68,6 @@ class OkitBoMView extends OkitJsonView {
         this.safe_harbour_div = canvas_div.append('div').attr('id', 'bom_safe_harbour_div').attr('class', 'bom_safe_harbour')
         this.safe_harbour_div.append('p').attr('class', 'okit-cost-small-print')
             .text("The values displayed are purely for estimation purposes only and are generated from our public pricing pages. For accurate costing you will need to consult your OCI Account Manager.")
-        // this.heading_div = canvas_div.append('div').attr('id', 'bom_heading_div').attr('class', 'bom_heading')
-        // this.safe_harbour_div = this.heading_div.append('div')
-        // this.safe_harbour_div.append('p').attr('class', 'okit-cost-small-print')
-        //     .text("The values displayed are purely for estimation purposes only and are generated from our public pricing pages. For accurate costing you will need to consult your OCI Account Manager.")
-        // this.currency_div = this.heading_div.append('div').attr('class', 'align-right')
-        // const currency_select = this.currency_div.append('select').attr('id', 'bom_currency_select')
-        //     .on('change', (d, i, n) => {
-        //         this.currency = n[i].value
-        //         this.getBoM()
-        //         this.drawBoMPanel()
-        //         this.drawEstimatePanel()
-        //     })
-        // Object.entries(this.currencies).forEach(([k, v]) => currency_select.append('option').attr('value', k).text(`${k} - ${v.name}`))
-        // currency_select.property('value', this.currency)
         // BoM
         this.bom_div = canvas_div.append('div').attr('id', 'bom_div').attr('class', 'okit-bom-bom-details')
         this.bom_details = this.bom_div.append('details').attr('class', 'okit-details').attr('open', true)
@@ -123,12 +109,14 @@ class OkitBoMView extends OkitJsonView {
             // tr.append('div').attr('class', 'td right-align').text(`${this.currencies[this.currency].symbol}${v.list_price.toFixed(5)}`)
             tr.append('div').attr('class', 'td right-align').text(v.units)
             tr.append('div').attr('class', 'td right-align').text(v.utilization)
-            tr.append('div').attr('class', 'td right-align').text(`${this.currencies[this.currency].symbol}${(Math.round((v.price_per_month + Number.EPSILON) * 100)/100).toFixed(2)}`)
+            tr.append('div').attr('class', 'td right-align').text(OkitOciProductPricing.formatPrice(v.price_per_month, this.currency))
+            // tr.append('div').attr('class', 'td right-align').text(`${this.currencies[this.currency].symbol}${(Math.round((v.price_per_month + Number.EPSILON) * 100)/100).toFixed(2)}`)
         })
         const estimate = Object.values(this.bom).reduce((p, v) => p + v.price_per_month, 0)
         console.info('Estimate Total', estimate)
-        this.header_estimate.property('value', `${this.currencies[this.currency].symbol}${(Math.round((estimate + Number.EPSILON) * 100)/100).toFixed(2)}`)
-        this.header_estimate.text(`${this.currencies[this.currency].symbol}${(Math.round((estimate + Number.EPSILON) * 100)/100).toFixed(2)}`)
+        // this.header_estimate.property('value', `${this.currencies[this.currency].symbol}${(Math.round((estimate + Number.EPSILON) * 100)/100).toFixed(2)}`)
+        // this.header_estimate.text(`${this.currencies[this.currency].symbol}${(Math.round((estimate + Number.EPSILON) * 100)/100).toFixed(2)}`)
+        this.header_estimate.text(OkitOciProductPricing.formatPrice(estimate, this.currency))
     }
 
     drawEstimatePanel() {
@@ -143,7 +131,8 @@ class OkitBoMView extends OkitJsonView {
         Object.entries(this.estimate).sort((a, b) => a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0).forEach(([k, v]) => {
             const tr = thead.append('div').attr('class', 'tr')
             tr.append('div').attr('class', 'td').text(k)
-            tr.append('div').attr('class', 'td right-align').text(`${this.currencies[this.currency].symbol}${(Math.round((v + Number.EPSILON) * 100)/100).toFixed(2)}`)
+            tr.append('div').attr('class', 'td right-align').text(OkitOciProductPricing.formatPrice(v, this.currency))
+            // tr.append('div').attr('class', 'td right-align').text(`${this.currencies[this.currency].symbol}${(Math.round((v + Number.EPSILON) * 100)/100).toFixed(2)}`)
         })
     }
 
