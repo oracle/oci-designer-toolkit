@@ -192,11 +192,12 @@
             <select id="toolbar_view_select" class="okit-toolbar-select" onchange="handleViewSelect()">
                 <option id="designer_view_option"  value="designer" selected="selected">Designer</option>
                 <option id="identity_view_option"  value="identity">Users/Groups</option>
-                <option id="tabular_view_option" value="tabular">Tabular</option>
-                <option id="relationship_view_option" value="relationship">Relationship</option>
-                <option id="json_view_option" value="json">Json</option>
-                <option id="tf_view_option" value="terraform">Terraform</option>
                 <option id="bom_view_option" value="bom">BoM</option>
+                <option id="tabular_view_option" value="tabular">Tabular</option>
+                <option id="variables_view_option" value="variables">Variables</option>
+                <option id="relationship_view_option" value="relationship">Relationship</option>
+                <option id="tf_view_option" value="terraform">Terraform</option>
+                <option id="json_view_option" value="json">Json</option>
                 {%- if developer_mode -%}<option id="markdown_view_option" value="markdown">Markdown</option>{%- endif -%}
                 {%- if developer_mode -%}<option id="cache_view_option" value="cache">Cache</option>{%- endif -%}
             </select>
@@ -215,7 +216,7 @@
             <div id="settings_toolbar_button" class="settings okit-toolbar-button" title="Settings" onclick="handleSettings()"></div>
             <div id="validate_toolbar_button" class="validate okit-toolbar-button" title="Validate" onclick="handleValidate()"></div>
             <div id="properties_toolbar_button" class="properties okit-toolbar-button" title="Resource Properties" onclick="handleOpenProperties()"></div>
-            {%- if developer_mode -%}<div id="cost_toolbar_button" class="cost-estimate okit-toolbar-button" title="Cost Estimate" onclick="handleEstimateCost()"></div>{%- endif -%}
+            <div id="cost_toolbar_button" class="cost-estimate okit-toolbar-button" title="Cost Estimate" onclick="handleEstimateCost()"></div>
             <div id="documentation_toolbar_button" class="documentation okit-toolbar-button" title="Documentation" onclick="handleDocumentation()"></div>
             <div id="terraform_toolbar_button" class="terraform okit-toolbar-button" title="Terraform" onclick="handleFreeformTerraform()"></div>
             <div id="tags_toolbar_button" class="global-tags okit-toolbar-button" title="Global Tags" onclick="handleGlobalTags()"></div>
@@ -261,6 +262,7 @@
             <div id="terraform-div" class="okit-terraform-canvas hidden"></div>
             <div id="bom-div" class="okit-bom-canvas hidden"></div>
             <div id="markdown-div" class="okit-markdown-canvas hidden"></div>
+            <div id="variables-div" class="okit-variables-canvas hidden"></div>
         </div>
     </div>   
     <div class="hidden"><input type="file" id="files" class="file-button toolbar-button" name="file[]" accept="application/json" onclick="this.value = null"></div>

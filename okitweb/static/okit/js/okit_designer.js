@@ -714,7 +714,8 @@ function handleValidate(evt) {
 /*
 ** Estimate Cost
  */
-function handleEstimateCost(evt) {
+handleEstimateCost = () => {$("#toolbar_view_select").val('bom');handleViewSelect()}
+function handleEstimateCost1(evt) {
     // $('#cost_estimate_panel').toggleClass('okit-slide-hide-right')
     slideRightPanel('cost_estimate_panel')
     $(jqId(COST_ESTIMATE_PANEL)).empty();
