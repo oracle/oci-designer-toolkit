@@ -18,7 +18,7 @@ from flask import request
 import json
 from common.okitCommon import logJson
 from common.okitCommon import readJsonFile
-from model.okitCostEstimator import OCIPriceEstimator
+# from model.okitCostEstimator import OCIPriceEstimator
 from common.okitLogging import getLogger
 
 # Configure logging
@@ -28,30 +28,30 @@ bp = Blueprint('pricing', __name__, url_prefix='/okit/pricing', static_folder='s
 
 debug_mode = bool(str(os.getenv('DEBUG_MODE', 'False')).title())
 
-@bp.route('estimate', methods=(['POST']))
-def pricingEstimate():
-    logger.debug('JSON : {0:s}'.format(str(request.json)))
-    if request.method == 'POST':
-        logJson(request.json)
-        # Price input json
-        estimator = OCIPriceEstimator(request.json)
-        return json.dumps(estimator.estimate(), sort_keys=False, indent=2, separators=(',', ': '))
-    else:
-        return '404'
+# @bp.route('estimate', methods=(['POST']))
+# def pricingEstimate():
+#     logger.debug('JSON : {0:s}'.format(str(request.json)))
+#     if request.method == 'POST':
+#         logJson(request.json)
+#         # Price input json
+#         estimator = OCIPriceEstimator(request.json)
+#         return json.dumps(estimator.estimate(), sort_keys=False, indent=2, separators=(',', ': '))
+#     else:
+#         return '404'
 
-@bp.route('downloadbom', methods=(['GET', 'POST']))
-def pricingEstimateDownload():
-    logger.debug('JSON : {0:s}'.format(str(request.form['hdnJson'])))
-    #logger.debug('JSON : {0:s}'.format(str(request.json)))
-    if request.method == 'GET' or request.method == 'POST':
-        # logJson(request.json)
-        logJson(request.form['hdnJson'])
-        estimator = OCIPriceEstimator(request.form['hdnJson'])
-        #estimator = OCIPriceEstimator(request.json)
-        xlsx_data = estimator.downloadbom()
-        return xlsx_data
-    else:
-        return '404'
+# @bp.route('downloadbom', methods=(['GET', 'POST']))
+# def pricingEstimateDownload():
+#     logger.debug('JSON : {0:s}'.format(str(request.form['hdnJson'])))
+#     #logger.debug('JSON : {0:s}'.format(str(request.json)))
+#     if request.method == 'GET' or request.method == 'POST':
+#         # logJson(request.json)
+#         logJson(request.form['hdnJson'])
+#         estimator = OCIPriceEstimator(request.form['hdnJson'])
+#         #estimator = OCIPriceEstimator(request.json)
+#         xlsx_data = estimator.downloadbom()
+#         return xlsx_data
+#     else:
+#         return '404'
 
 @bp.route('products', methods=(["GET"]))
 def pricingProducts():
