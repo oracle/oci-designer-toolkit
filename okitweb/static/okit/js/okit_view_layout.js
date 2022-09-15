@@ -20,14 +20,15 @@ function handleViewSelect(e) {
     // const selected = $("#console_header_view_select").val();
     const selected = $("#toolbar_view_select").val();
     if (selected === 'designer') handleSwitchToCompartmentView(e)
-    else if (selected === 'tabular') handleSwitchToTabularView(e)
-    else if (selected === 'relationship') handleSwitchToRelationshipView(e)
-    else if (selected === 'json') handleSwitchToTextJsonView(e)
+    else if (selected === 'bom') handleSwitchBoMView(e)
     else if (selected === 'cache') handleSwitchToTextCacheView(e)
     else if (selected === 'identity') handleSwitchToIdentityView(e)
-    else if (selected === 'terraform') handleSwitchTerraformView(e)
-    else if (selected === 'bom') handleSwitchBoMView(e)
+    else if (selected === 'json') handleSwitchToTextJsonView(e)
     else if (selected === 'markdown') handleSwitchMarkdownView(e)
+    else if (selected === 'relationship') handleSwitchToRelationshipView(e)
+    else if (selected === 'tabular') handleSwitchToTabularView(e)
+    else if (selected === 'terraform') handleSwitchTerraformView(e)
+    else if (selected === 'variables') handleSwitchVariablesView(e)
     else console.warn('Unknown View', selected)
 }
 
@@ -44,6 +45,7 @@ function handleSwitchToCompartmentView(e) {
     $("#canvas-div").removeClass('hidden');
     showSideBars();
     $("#zoom_controls > div").each((i, e) => $(e).removeClass('hidden'))
+    loadVariablesDatalist()
 }
 
 function handleSwitchToTabularView(e) {
@@ -125,4 +127,12 @@ function handleSwitchMarkdownView(e) {
     hideSideBars();
     okitMarkdownView = OkitMarkdownView.newView(okitJsonModel, okitOciData, resource_icons);
     okitMarkdownView.draw();
+}
+
+function handleSwitchVariablesView(e) {
+    hideAllViewDivs();
+    $("#variables-div").removeClass('hidden');
+    hideSideBars();
+    okitVariablesView = OkitVariablesView.newView(okitJsonModel, okitOciData, resource_icons);
+    okitVariablesView.draw();
 }

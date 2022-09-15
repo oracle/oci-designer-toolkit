@@ -79,7 +79,10 @@ class OCIGenerator(object):
         # ---- Compartment Id
         self.jinja2_variables["compartment_id"] = self.getLocalReference(resource.pop('compartment_id', None))
         # ---- Display Name
-        self.jinja2_variables['display_name'] = self.formatJinja2Value(resource.pop('display_name', 'Missing Display Name'))
+        if resource.get('display_name', '').startswith('var.'):
+            self.jinja2_variables['display_name'] = self.formatJinja2Variable(resource.pop('display_name', 'Missing Display Name')[4:])
+        else:
+            self.jinja2_variables['display_name'] = self.formatJinja2Value(resource.pop('display_name', 'Missing Display Name'))
         # ---- Read Only
         self.jinja2_variables['read_only'] = resource.pop('read_only', False)
         # ---- Id
@@ -178,6 +181,7 @@ class OCIGenerator(object):
         "load_balancers": "networking",
         "local_peering_gateways": "networking",
         "nat_gateways": "networking",
+        "network_firewalls": "networking",
         "network_load_balancers": "networking",
         "network_security_groups": "networking",
         "remote_peering_connections": "networking",
@@ -297,10 +301,14 @@ class OCIGenerator(object):
                     #     parent[key] = self.formatJinja2Value(ids)
                     if key == 'resource_name':
                         parent[key] = val
-                    elif (key.endswith('_id') or key == 'id') and  val != '':
+                    elif (key.endswith('_id') or key == 'id') and val != '':
                         # Simple Reference
                         parent[key] = self.getLocalReference(val)
                         parent[f'{key}_resource_name'] = self.id_name_map.get(val, 'unknown')
+                    elif val != '' and val.startswith('var.'):
+                        # Add Variable
+                        parent[key] = self.formatJinja2Variable(val[4:].replace('\n', '\\n').replace('"', '\\"'))
+                        # parent[key] = self.formatJinja2Value(val)
                     elif val != '':
                         # Add Simple Value
                         parent[key] = self.formatJinja2Value(val.replace('\n', '\\n').replace('"', '\\"'))

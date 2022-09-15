@@ -315,10 +315,11 @@ class OkitResourceProperties {
         }
     }
 
-    createInput(type='text', label='', id='', idx='', callback_function=undefined, data={}) {
+    createInput(type='text', label='', id='', idx='', callback_function=undefined, data={}, action_button_class=undefined, action_callback=undefined) {
         const callback = callback_function === undefined ? this.loadCostEstimate() : (d, i, n) => {callback_function(d, i, n);this.loadCostEstimate()}
         const row = d3.create('div').attr('class', 'tr').attr('id', this.trId(id, idx))
         let input = undefined
+        let title_cell = undefined
         let cell = undefined
         let title = undefined
         // Check for special formatting type e.g. ipv4
@@ -327,7 +328,9 @@ class OkitResourceProperties {
             type = 'text'
         }
         if (['text', 'password', 'email', 'date', 'number', 'range'].includes(type)) {
-            title = row.append('div').attr('class', 'td property-label').text(label)
+            title_cell = row.append('div').attr('class', 'td property-label')
+            title = title_cell.append('div').attr('class', action_button_class ? `${action_button_class} property-action-label` : '').text(label).on('click', action_callback)
+            // title = row.append('div').attr('class', 'td property-label').text(label)
             cell = row.append('div').attr('class', 'td')
             input = cell.append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', type).attr('class', 'okit-property-value').attr('list', 'variables_datalist').on('change', callback).on('blur', (d, i, n) => n[i].reportValidity())
             this.addExtraAttributes(input, data)
@@ -356,6 +359,13 @@ class OkitResourceProperties {
             input = cell.append('input').attr('type', 'checkbox').attr('id', this.inputId(id, idx)).attr('class', 'okit-property-value').on('input', callback)
             cell.append('label').attr('for', this.inputId(id, idx)).text(label)
             this.addExtraAttributes(input, data)
+        } else if (type === 'textarea') {
+            title_cell = row.append('div').attr('class', 'td property-label')
+            title = title_cell.append('div').attr('class', action_button_class ? `${action_button_class} property-action-label` : '').text(label)
+            // title = row.append('div').attr('class', 'td property-label').text(label)
+            cell = row.append('div').attr('class', 'td')
+            input = cell.append('textarea').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('class', 'okit-property-value').attr('wrap', 'soft').on('change', callback).on('blur', (d, i, n) => n[i].reportValidity())
+            this.addExtraAttributes(input, data)
         } else {
             alert(`Unknown Type ${type}`)
         }
@@ -381,7 +391,7 @@ class OkitResourceProperties {
     }
 
     addExtraAttributes(input, data) {
-        const attributes = ['disabled', 'min', 'max', 'step', 'minlength', 'maxlength', 'pattern', 'title', 'placeholder', 'readonly', 'required']
+        const attributes = ['disabled', 'min', 'max', 'step', 'minlength', 'maxlength', 'pattern', 'rows', 'title', 'placeholder', 'readonly', 'required']
         if (data) {
             Object.entries(data).forEach(([k, v]) => {
                 if (attributes.includes(k)) input.attr(k, v)

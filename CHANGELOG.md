@@ -1,6 +1,12 @@
 # Release Notes
 
 
+## Version 0.41.0
+**Release Date**: 28th September 2022
+### Features
+### Bug Fixes
+
+
 ## Version 0.40.0
 **Release Date**: 7th September 2022
 ### Features

@@ -88,6 +88,15 @@ class OCITerraformGenerator(OCIGenerator):
             else:
                 variable_values.append('{0!s:s} = "{1}"'.format(key, value))
             variable_definitions.append('variable "{0:s}" {{}}'.format(key))
+        for var in [v for v in self.visualiser_json.get('variables_schema', {}).get('variables',[]) if v['name'] != '']:
+            var_def = ['{']
+            if var['default'] != '':
+                var_def.append(f'    default = "{var["default"]}"')
+            if var['description'] != '':
+                var_def.append(f'    description = "{var["description"]}"')
+            var_def.append('}')
+            var_def = "\n".join(var_def)
+            variable_definitions.append(f'variable "{var["name"]}" {var_def}')
         return variable_definitions
     
     def getVariableValues(self):
