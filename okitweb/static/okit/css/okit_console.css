@@ -646,6 +646,13 @@ li a.parent-item:hover {
     font-weight: bolder;
 }
 
+.okit-property-editor .okit-table .tr .property-action-label {
+    background-position-y: center;
+    background-position-x: right;
+    background-repeat: no-repeat;
+    background-size: 1em;
+}
+
 .okit-table {
     border: #aeaeae 1px solid;
     border-collapse: collapse;

@@ -181,6 +181,7 @@ class OCIGenerator(object):
         "load_balancers": "networking",
         "local_peering_gateways": "networking",
         "nat_gateways": "networking",
+        "network_firewalls": "networking",
         "network_load_balancers": "networking",
         "network_security_groups": "networking",
         "remote_peering_connections": "networking",

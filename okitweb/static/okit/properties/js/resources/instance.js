@@ -125,7 +125,8 @@ class InstanceProperties extends OkitResourceProperties {
         this.ssh_key_tbody = ssh_key_table.tbody
         this.append(ssh_key_details.div, ssh_key_table.table)
         // Authorised Keys
-        const ssh_authorized_keys = this.createInput('text', 'Authorised Keys', `${self.id}_ssh_authorized_keys`, '', (d, i, n) => self.resource.metadata.ssh_authorized_keys = n[i].value)
+        const ssh_authorized_keys_data = {}
+        const ssh_authorized_keys = this.createInput('text', 'Authorised Keys', `${self.id}_ssh_authorized_keys`, '', (d, i, n) => self.resource.metadata.ssh_authorized_keys = n[i].value, ssh_authorized_keys_data, 'add-property', () => alert('clicked'))
         this.ssh_authorized_keys = ssh_authorized_keys.input
         this.append(this.ssh_key_tbody, ssh_authorized_keys.row)
         // Cloud Init Tab

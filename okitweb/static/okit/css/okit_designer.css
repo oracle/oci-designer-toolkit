@@ -413,6 +413,10 @@
     height: calc(100vh - 200px);
 }
 
+.okit-resource-properties-panel .okit-tab-contents textarea.okit-property-value {
+    height: 10em;
+}
+
 .okit-property-sheet {
     opacity: 1;
     height: 100%;
