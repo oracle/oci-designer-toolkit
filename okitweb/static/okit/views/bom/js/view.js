@@ -99,7 +99,7 @@ class OkitBoMView extends OkitJsonView {
         tr.append('div').attr('class', 'th').text('Price per Month')
         const tbody = table.append('div').attr('class', 'tbody')
         Object.entries(this.bom).sort((a, b) => a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0).forEach(([k, v]) => {
-            const tr = thead.append('div').attr('class', 'tr')
+            const tr = tbody.append('div').attr('class', 'tr')
             tr.append('div').attr('class', 'td').text(k)
             tr.append('div').attr('class', 'td right-align').text(v.quantity)
             tr.append('div').attr('class', 'td').text(v.description)
@@ -129,7 +129,7 @@ class OkitBoMView extends OkitJsonView {
         const tbody = table.append('div').attr('class', 'tbody')
         // const bom = okitOciProductPricing ? okitOciProductPricing.generateBoM(this.model) : {estimate: {}}
         Object.entries(this.estimate).sort((a, b) => a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0).forEach(([k, v]) => {
-            const tr = thead.append('div').attr('class', 'tr')
+            const tr = tbody.append('div').attr('class', 'tr')
             tr.append('div').attr('class', 'td').text(k)
             tr.append('div').attr('class', 'td right-align').text(OkitOciProductPricing.formatPrice(v, this.currency))
             // tr.append('div').attr('class', 'td right-align').text(`${this.currencies[this.currency].symbol}${(Math.round((v + Number.EPSILON) * 100)/100).toFixed(2)}`)

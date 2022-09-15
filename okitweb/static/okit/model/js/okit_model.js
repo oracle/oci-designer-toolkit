@@ -52,13 +52,7 @@ class OkitJson {
             }, {})
     }
     getResources() {return Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], [])}
-    getResource(id='') {
-        // const resource = Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter((r) => r.id === id)[0]
-        // const resource = Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).find((r) => r.id === id)
-        const resource = this.getResources().find((r) => r.id === id)
-        console.info('Resource', resource)
-        return resource
-    }
+    getResource(id='') {return this.getResources().find((r) => r.id === id)}
 
     newFileData() {
         return {
@@ -70,23 +64,25 @@ class OkitJson {
 
     newVariableSchema() {
         return {
-            groups: [],
+            groups: [this.newVariableGroup('Undefined')],
             variables: []
         }
     }
 
-    newVariableGroup() {
+    newVariableGroup(name='') {
         return {
-            name: '',
-            default: ''
+            name: name,
+            default: '',
+            description: ''
         }
     }
 
-    newVariable() {
+    newVariable(name='', group='Undefined') {
         return {
-            group: '',
-            name: '',
-            default: ''
+            group: group,
+            name: name,
+            default: '',
+            description: ''
         }
     }
 
@@ -109,6 +105,7 @@ class OkitJson {
         if (okit_json.user_defined && okit_json.user_defined.terraform) {this.user_defined.terraform = okit_json.user_defined.terraform}
         if (okit_json.freeform_tags) {this.freeform_tags = okit_json.freeform_tags}
         if (okit_json.defined_tags) {this.defined_tags = okit_json.defined_tags}
+        if (okit_json.variables_schema) {this.variables_schema = okit_json.variables_schema}
         if (okit_json.metadata) {this.metadata = {...this.metadata, ...okit_json.metadata}}
         // Update from older versions of file
         if (okit_json.created) {this.metadata.created = okit_json.created}
@@ -490,18 +487,9 @@ class OkitArtifact {
     getAvailabilityDomainNumber(availability_domain) {
         console.info(`getAvailabilityDomainNumber(${availability_domain}) ${typeof availability_domain} ${typeof availability_domain.toString()}`)
         return availability_domain.toString().slice(-1)
-        // if (availability_domain) {
-        //     return +availability_domain.slice(-1);
-        // } else {
-        //     return +availability_domain;
-        // }
     }
 
     generateResourceName = () => `Okit_${this.getArtifactReference().split(' ').map((r) => r[0]).join('')}_${Date.now()}`
-    // generateResourceName() {return `Okit_${this.getArtifactReference().split(' ').map((r) => r[0]).join('')}_${Date.now()}`}
-    // generateResourceName() {return `Okit${this.getArtifactReference().split(' ').join('')}${Date.now()}`}
-
-    // generateResourceNameFromDisplayName(name) {return titleCase(name).split(' ').join('').replaceAll('-','_')}
     generateResourceNameFromDisplayName = (name) => titleCase(name.split('_').join('-')).split(' ').join('').replaceAll('-','_')
 
     estimateCost = () => {
