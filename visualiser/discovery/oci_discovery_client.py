@@ -42,6 +42,9 @@ class OciResourceDiscoveryClient(object):
         "MySQLDbSystemDetails": (oci.mysql.DbSystemClient, "get_db_system"), # used to get full details of the result as list_db_systems does not include all attributes
         # oci.mysql.MysqlaasClient
         "MySQLConfiguration": (oci.mysql.MysqlaasClient, "get_configuration"), # used to get details of the Default configurations
+        # oci.network_firewall.NetworkFirewallClient
+        "NetworkFirewallDetails": (oci.network_firewall.NetworkFirewallClient, "get_network_firewall"), # get full details
+        "NetworkFirewallPolicyDetails": (oci.network_firewall.NetworkFirewallClient, "get_network_firewall_policy"), # get full details
         # oci.nosql.NosqlClient
         "NoSQLTableDetails": (oci.nosql.NosqlClient, "get_table"), # get full details
         "NoSQLIndexDetails": (oci.nosql.NosqlClient, "get_index"), # get full details
@@ -389,6 +392,9 @@ class OciResourceDiscoveryClient(object):
         "MySQLDbSystem": (oci.mysql.DbSystemClient, "list_db_systems"), # note: use get_db_system to get additional resource details
         # oci.mysql.MysqlaasClient
         "MySQLConfiguration": (oci.mysql.MysqlaasClient, "list_configurations"),
+        # oci.network_firewall.NetworkFirewallClient
+        "NetworkFirewall": (oci.network_firewall.NetworkFirewallClient, "list_network_firewalls"),
+        "NetworkFirewallPolicy": (oci.network_firewall.NetworkFirewallClient, "list_network_firewall_policies"),
         # oci.network_load_balancer.NetworkLoadBalancerClient
         "NetworkLoadBalancer": (oci.network_load_balancer.NetworkLoadBalancerClient, "list_network_load_balancers"),
         # "NetworkLoadBalancerBackendSet": (oci.network_load_balancer.NetworkLoadBalancerClient, "list_backend_sets"), # NOT USED - backend sets are returned in the parent Load Balancer response
@@ -855,6 +861,14 @@ class OciResourceDiscoveryClient(object):
                         db_system_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, db_system_id=db_system_id)
                         futures_list.update({(region, resource_type, compartment_id, db_system_id):future})
+                    elif resource_type == "NetworkFirewallDetails" and method_name == "get_network_firewall":
+                        network_firewall_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, network_firewall_id=network_firewall_id)
+                        futures_list.update({(region, resource_type, compartment_id, network_firewall_id):future})                    
+                    elif resource_type == "NetworkFirewallPolicyDetails" and method_name == "get_network_firewall_policy":
+                        network_firewall_policy_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, network_firewall_policy_id=network_firewall_policy_id)
+                        futures_list.update({(region, resource_type, compartment_id, network_firewall_policy_id):future})                    
                     elif resource_type == "NoSQLIndexDetails" and method_name == "get_index":
                         table_id = item[2][0]
                         index_name = item[2][1]
@@ -1301,6 +1315,7 @@ class OciResourceDiscoveryClient(object):
                         "ExportSetDetails",
                         "Image",
                         "MySQLConfiguration", "MySQLDbSystemDetails",
+                        "NetworkFirewallDetails", "NetworkFirewallPolicyDetails",
                         "NoSQLIndexDetails", "NoSQLTableDetails",
                         "OsmsManagedInstance",
                     ]:
@@ -1634,7 +1649,8 @@ class OciResourceDiscoveryClient(object):
                 "LogGroup", "LogSavedSearch", # Loging
                 "ManagementDashboard", "ManagementSavedSearch", # Dashboard
                 "MySQLDbSystem", "MySQLChannel", "MySQLConfiguration", # MySQL
-                "NetworkLoadBalancer", # NetworkLoadBalancer
+                "NetworkFirewall", # BUG? network firewall is not getting returned from RQS, so need to manually query all compartments
+                "NetworkLoadBalancer", # BUG? network loadbalancer is not getting returned from RQS, so need to manually query all compartments
                 "DatabaseInsight", "SQLPlan", "SQLSearch", "SQLText", # OperationalInsight
                 "RoverCluster", "RoverEntitlement", "RoverNode", # Roving Edge
                 "StreamPool", # Streams
@@ -1709,6 +1725,14 @@ class OciResourceDiscoveryClient(object):
             if "NoSQLTable" in resources_by_region[region]:
                 for resource in resources_by_region[region]["NoSQLTable"]:
                     regional_resource_requests.add(("NoSQLTableDetails", None, resource.id))
+            # get extra details for NetworkFirewall
+            if "NetworkFirewall" in resources_by_region[region]:
+                for resource in resources_by_region[region]["NetworkFirewall"]:
+                    regional_resource_requests.add(("NetworkFirewallDetails", None, resource.id))
+            # get extra details for NetworkFirewallPolicy
+            if "NetworkFirewallPolicy" in resources_by_region[region]:
+                for resource in resources_by_region[region]["NetworkFirewallPolicy"]:
+                    regional_resource_requests.add(("NetworkFirewallPolicyDetails", None, resource.id))
 
             extra_resource_requests.update({region:regional_resource_requests})
 
@@ -1763,6 +1787,8 @@ class OciResourceDiscoveryClient(object):
             self.replace_resource_details(resources_by_region, region, "Bastion", "BastionDetails")
             self.replace_resource_details(resources_by_region, region, "NoSQLTable", "NoSQLTableDetails")
             self.replace_resource_details(resources_by_region, region, "NoSQLIndex", "NoSQLIndexDetails")
+            self.replace_resource_details(resources_by_region, region, "NetworkFirewall", "NetworkFirewallDetails")
+            self.replace_resource_details(resources_by_region, region, "NetworkFirewallPolicy", "NetworkFirewallPolicyDetails")
 
         if len(resources_by_region) == 0:
             logger.warn("Resource discovery results are empty")  
