@@ -56,6 +56,14 @@ details {
     margin-top: 1em;
 }
 
+details:not([open]) {
+    transition: all 2.5s ease-in-out;
+}
+
+details[open] {
+    transition: all 2.5s ease-in-out;
+}
+
 pre {
     margin: 0;
     font-family: Helvetica Neue,Helvetica,Arial,sans-serif;

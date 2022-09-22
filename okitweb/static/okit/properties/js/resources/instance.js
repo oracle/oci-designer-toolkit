@@ -125,8 +125,27 @@ class InstanceProperties extends OkitResourceProperties {
         this.ssh_key_tbody = ssh_key_table.tbody
         this.append(ssh_key_details.div, ssh_key_table.table)
         // Authorised Keys
+        const add_click = () => {
+            /*
+            ** Add Load File Handling
+            */
+            $('#files').off('change').on('change', (e) => {
+                const files = e.target.files
+                let reader = new FileReader()
+                reader.onload = (evt) => {
+                    this.resource.metadata.ssh_authorized_keys = evt.target.result
+                    this.ssh_authorized_keys.property('value', this.resource.metadata.ssh_authorized_keys)
+                }
+                reader.onerror = (evt) => {console.info('Error: ' + evt.target.error.name)}
+                reader.readAsText(files[0])
+            });
+            $('#files').attr('accept', '.pub')
+            // Click Files Element
+            let fileinput = document.getElementById("files")
+            fileinput.click()
+        }
         const ssh_authorized_keys_data = {}
-        const ssh_authorized_keys = this.createInput('text', 'Authorised Keys', `${self.id}_ssh_authorized_keys`, '', (d, i, n) => self.resource.metadata.ssh_authorized_keys = n[i].value, ssh_authorized_keys_data, 'add-property', () => alert('clicked'))
+        const ssh_authorized_keys = this.createInput('text', 'Authorised Keys', `${self.id}_ssh_authorized_keys`, '', (d, i, n) => self.resource.metadata.ssh_authorized_keys = n[i].value, ssh_authorized_keys_data, 'add-property', add_click)
         this.ssh_authorized_keys = ssh_authorized_keys.input
         this.append(this.ssh_key_tbody, ssh_authorized_keys.row)
         // Cloud Init Tab

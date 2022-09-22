@@ -434,6 +434,15 @@ class OkitResourceProperties {
         return elements
     }
 
+    createMapTable(label='', id='', idx='', callback=undefined, data={}) {
+        const elements = this.createTable(label, id, idx, callback, data)
+        const row = elements.thead.append('div').attr('class', 'tr')
+        row.append('div').attr('class', 'th').text('Key')
+        row.append('div').attr('class', 'th').text(label)
+        row.append('div').attr('class', 'th add-property action-button-background action-button-column').on('click', callback)
+        return elements
+    }
+
     createDetailsSection(label='', id='', idx='', callback=undefined, data={}, open=true) {
         // const details = d3.create('details').attr('class', 'okit-details').attr('open', open)
         const details = d3.create('details').attr('class', 'okit-details').on('toggle', callback)
@@ -448,6 +457,22 @@ class OkitResourceProperties {
         const div = row.append('div').attr('class', 'td')
         row.append('div').attr('class', 'td delete-property action-button-background delete').on('click', callback)
         return {row: row, div: div}
+    }
+
+    createMapDeleteRow(type='text', id='', idx='', key_callback=undefined, value_callback=undefined, action_callback=undefined, data={}) {
+        // Check for special formatting type e.g. ipv4
+        if (Object.keys(this.formatting).includes(type)) {
+            data = data ? {...data, ...this.formatting[type]} : formatting[type]
+            type = 'text'
+        }
+        const row = d3.create('div').attr('class', 'tr').attr('id', this.trId(id, idx))
+        const key_cell = row.append('div').attr('class', 'td property-label')
+        const key_input = key_cell.append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', 'text').attr('list', 'variables_datalist').on('change', key_callback).on('blur', (d, i, n) => n[i].reportValidity())
+        const val_cell = row.append('div').attr('class', 'td')
+        const val_input = val_cell.append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', type).attr('class', 'okit-property-value').attr('list', 'variables_datalist').on('change', value_callback).on('blur', (d, i, n) => n[i].reportValidity())
+        row.append('div').attr('class', 'td delete-property action-button-background delete').on('click', action_callback)
+        this.addExtraAttributes(val_input, data)
+        return {row: row, key_input: key_input, val_input: val_input}
     }
 
     createMultiValueRow(label='', id='', idx='', callback=undefined, data={}) {

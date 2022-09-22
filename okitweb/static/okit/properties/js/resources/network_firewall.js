@@ -49,6 +49,23 @@ class NetworkFirewallProperties extends OkitResourceProperties {
         this.estimated_gb_data_processed = estimated_gb_data_processed.input
         this.estimated_gb_data_processed_row = estimated_gb_data_processed.row
         // Policy
+        const policy_details = this.createDetailsSection('Policy', `${this.id}_policy_details`)
+        this.append(this.policy_contents, policy_details.details)
+        this.policy_div = policy_details.div
+        const policy_props = this.createTable('', `${this.id}_policy_props`, '')
+        this.policy_tbody = policy_props.tbody
+        this.append(this.policy_div, policy_props.table)    
+        // Display Name
+        const policy_display_name = this.createInput('text', 'Name', `${this.id}_policy_display_name`, '', (d, i, n) => {n[i].reportValidity(); this.resource.network_firewall_policy.display_name = n[i].value})
+        this.policy_display_name = policy_display_name.input
+        this.append(this.policy_tbody, policy_display_name.row)
+        // IP Addresses
+        const ip_address_lists = this.createDetailsSection('IP Address Lists', `${this.id}_ip_address_lists_details`)
+        this.append(this.policy_div, ip_address_lists.details)
+        this.ip_address_lists_div = ip_address_lists.div
+        const ip_address_lists_table = this.createMapTable('IP Addresses', `${this.id}_ip_address_lists`, '', () => this.addIPAddressList())
+        this.ip_address_lists_tbody = ip_address_lists_table.tbody
+        this.append(ip_address_lists.div, ip_address_lists_table.table)
     }
 
     // Load Additional Resource Specific Properties
@@ -63,6 +80,43 @@ class NetworkFirewallProperties extends OkitResourceProperties {
         this.subnet_id.property('value', this.resource.subnet_id)
         // Pricing
         this.estimated_gb_data_processed.property('value', this.resource.pricing_estimates.estimated_gb_data_processed)
-    }
 
+        // Policy
+        // Display Name
+        this.policy_display_name.property('value', this.resource.network_firewall_policy.display_name)
+        // IP Lists
+        this.loadIPAddressLists()
+    }
+    loadIPAddressLists() {
+        this.ip_address_lists_tbody.selectAll('*').remove()
+        Object.entries(this.resource.network_firewall_policy.ip_address_lists).forEach(([k, v], i) => this.addIPAddressListHtml(k, v, i+1))
+        this.ip_address_lists_idx = Object.keys(this.resource.network_firewall_policy.ip_address_lists).length;
+    }
+    addIPAddressListHtml(key, value, idx) {
+        const id = `${this.id}_ip_list`
+        const key_changed = (d, i, n) => {
+            const ip_address_lists = this.resource.network_firewall_policy.ip_address_lists
+            this.resource.network_firewall_policy.ip_address_lists = Object.fromEntries(Object.entries(ip_address_lists).map(([o_key, o_val]) => (o_key === key) ? [n[i].value, o_val] : [o_key, o_val]));
+            this.loadIPAddressLists()
+        }
+        const value_changed = (d, i, n) => {
+            const ip_address_lists = this.resource.network_firewall_policy.ip_address_lists
+            ip_address_lists[key] = n[i].value.split(',')
+        }
+        const delete_row = this.createMapDeleteRow('ipv4_cidr_list', id, idx, key_changed, value_changed, () => this.deleteIPAddressList(id, idx, key))
+        this.append(this.ip_address_lists_tbody, delete_row.row)
+        delete_row.key_input.property('value', key)
+        delete_row.val_input.property('value', value.join(','))
+    }
+    addIPAddressList() {
+        this.ip_address_lists_idx += 1
+        const key = `IPList${this.ip_address_lists_idx}`
+        const value = []
+        this.resource.network_firewall_policy.ip_address_lists[key] = value
+        this.addIPAddressListHtml(key, value, this.ip_address_lists_idx)
+    }
+    deleteIPAddressList(id, idx, key) {
+        delete this.resource.network_firewall_policy.ip_address_lists[key]
+        this.loadIPAddressLists()
+    }
 }

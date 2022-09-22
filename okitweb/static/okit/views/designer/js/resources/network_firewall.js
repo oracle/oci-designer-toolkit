@@ -24,6 +24,7 @@ class NetworkFirewallView extends OkitArtefactView {
     /*
     ** SVG Processing
     */
+    getLinks() {return super.getLinks().filter((id) => id !== this.resource.network_firewall_policy_id)}
     /*
     ** Property Sheet Load function
     */
