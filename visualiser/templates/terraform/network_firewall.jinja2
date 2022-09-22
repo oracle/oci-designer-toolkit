@@ -7,10 +7,10 @@ resource "oci_network_firewall_network_firewall_policy" "{{ network_firewall_pol
     display_name        = {{ network_firewall_policy.display_name | safe }}
 
     #Optional
-{% if application_lists is defined %}
+{% if network_firewall_policy.application_lists is defined %}
     application_lists = var.network_firewall_policy_application_lists
 {% endif %}
-{% if decryption_profiles is defined %}
+{% if network_firewall_policy.decryption_profiles is defined %}
     decryption_profiles {
         #Required
         is_out_of_capacity_blocked = var.network_firewall_policy_decryption_profiles_is_out_of_capacity_blocked
@@ -27,7 +27,7 @@ resource "oci_network_firewall_network_firewall_policy" "{{ network_firewall_pol
         is_untrusted_issuer_blocked = var.network_firewall_policy_decryption_profiles_is_untrusted_issuer_blocked
     }
 {% endif %}
-{% if decryption_rules is defined %}
+{% if network_firewall_policy.decryption_rules is defined %}
     decryption_rules {
         #Required
         action = var.network_firewall_policy_decryption_rules_action
@@ -44,10 +44,17 @@ resource "oci_network_firewall_network_firewall_policy" "{{ network_firewall_pol
         secret = var.network_firewall_policy_decryption_rules_secret
     }
 {% endif %}
-{% if ip_address_lists is defined %}
-    ip_address_lists = var.network_firewall_policy_ip_address_lists
+{% if network_firewall_policy.ip_address_lists is defined %}
+    ip_address_lists = {
+    {% for key, value in network_firewall_policy.ip_address_lists.items() %}
+        {% set keyloop = loop %}
+        {{key}} = [{% for ip in value %}"{{ ip }}"{% if not loop.last %},{% endif %}{% endfor %}]{% if not keyloop.last %},
+        {% endif %}
+    {% endfor %}
+    
+    }
 {% endif %}
-{% if mapped_secrets is defined %}
+{% if network_firewall_policy.mapped_secrets is defined %}
     mapped_secrets {
         #Required
         source = var.network_firewall_policy_mapped_secrets_source
@@ -56,7 +63,7 @@ resource "oci_network_firewall_network_firewall_policy" "{{ network_firewall_pol
         version_number = var.network_firewall_policy_mapped_secrets_version_number
     }
 {% endif %}
-{% if security_rules is defined %}
+{% if network_firewall_policy.security_rules is defined %}
     security_rules {
         #Required
         action = var.network_firewall_policy_security_rules_action
@@ -74,13 +81,13 @@ resource "oci_network_firewall_network_firewall_policy" "{{ network_firewall_pol
         inspection = var.network_firewall_policy_security_rules_inspection
     }
 {% endif %}
-{% if url_lists is defined %}
+{% if network_firewall_policy.url_lists is defined %}
     url_lists = var.network_firewall_policy_url_lists
 {% endif %}
-{% if defined_tags is defined %}
+{% if network_firewall_policy.defined_tags is defined %}
     defined_tags   = {{ defined_tags | safe }}
 {% endif %}
-{% if freeform_tags is defined %}
+{% if network_firewall_policy.freeform_tags is defined %}
     freeform_tags  = {{ freeform_tags | safe }}
 {% endif %}
 }

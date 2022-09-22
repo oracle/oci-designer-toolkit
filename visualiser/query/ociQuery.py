@@ -73,6 +73,8 @@ class OCIQuery(OCIConnection):
         "MountTarget",
         "MySqlDbSystem",
         "NatGateway",
+        "NetworkFirewall",
+        "NetworkFirewallPolicy",
         "NetworkLoadBalancer",
         "NetworkSecurityGroup",
         "NetworkSecurityGroupSecurityRule",
@@ -130,6 +132,7 @@ class OCIQuery(OCIConnection):
         "MountTarget": "mount_targets",
         "MySqlDbSystem": "mysql_database_systems",
         "NatGateway": "nat_gateways",
+        "NetworkFirewall": "network_firewalls",
         "NetworkLoadBalancer": "network_load_balancers",
         "NetworkSecurityGroup": "network_security_groups",
         "NoSQLTable": "nosql_databases",
@@ -246,6 +249,8 @@ class OCIQuery(OCIConnection):
                         resource_list = self.service_gateways(resource_list, resources)
                     elif resource_type == "Group":
                         resource_list = self.groups(resource_list, resources)
+                    elif resource_type == "NetworkFirewall":
+                        resource_list = self.network_firewalls(resource_list, resources)
                     elif resource_type == "NetworkLoadBalancer":
                         resource_list = self.network_load_balancers(resource_list, resources)
                     elif resource_type == "NoSQLTable":
@@ -366,6 +371,14 @@ class OCIQuery(OCIConnection):
             db_system["mysql_version"] = db_system["mysql_version"].split('-')[0]
         return database_systems
 
+    def network_firewalls(self, firewalls, resources):
+        policies = resources.get("NetworkFirewallPolicy", [])
+        logger.info(f'Policies {jsonToFormattedString(policies)}')
+        for firewall in firewalls:
+            if firewall["network_firewall_policy_id"] != '':
+                firewall["network_firewall_policy"] = next(iter([p for p in policies if p["id"] == firewall["network_firewall_policy_id"]]), None)
+        return firewalls
+
     def network_load_balancers(self, nlbs, resources):
         private_ips = resources.get("PrivateIp", [])
         vnic_attachments = resources.get("VnicAttachment", [])
@@ -392,8 +405,6 @@ class OCIQuery(OCIConnection):
         indexes = resources.get("NoSQLIndex", [])
         for database in databases:
             database['indexes'] = [i for i in indexes if i['table_id'] == database['id']]
-            logger.info(f'NoSQL Tables {jsonToFormattedString(database)}')
-        logger.info(f'NoSQL Indexes {jsonToFormattedString(indexes)}')
         return databases
 
     def object_storage_buckets(self, buckets, resources):

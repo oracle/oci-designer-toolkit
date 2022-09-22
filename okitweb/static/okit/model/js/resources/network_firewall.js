@@ -32,8 +32,18 @@ class NetworkFirewall extends OkitArtifact {
     newNetworkFirewallPolicy() {
         return {
             resource_name: `${this.generateResourceName()}Policy`,
-            display_name: `${this.display_name} Policy`
+            display_name: `${this.display_name} Policy`,
+            ip_address_lists: {},
+            url_lists: {},
+            security_rules: [],
+            decryption_rules: []
         }
+    }
+    newSecurityRule() {
+        return {}
+    }
+    newDecryptionRule() {
+        return {}
     }
 
     /*
