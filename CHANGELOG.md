@@ -4,7 +4,12 @@
 ## Version 0.41.0
 **Release Date**: 28th September 2022
 ### Features
+1. Add import button for Instance SSH Key.
+2. Add Network Firewall Resource.
+3. Add Variables View allowing specification of Terraform Variables that can be used within the design.
+4. Update Cost Estimator to include Network Firewall.
 ### Bug Fixes
+1. Resolve issue where Properties sheets were not unlocked following "Enable R/W"
 
 
 ## Version 0.40.0
