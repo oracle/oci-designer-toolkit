@@ -48,6 +48,8 @@ class Instance extends OkitArtifact {
         this.vnic_attachments = []
         this.preserve_boot_volume = false;
         this.is_pv_encryption_in_transit_enabled = false;
+        // Terraform Provisioner
+        // this.terraform_provisioners = {connection: this.newTFConnection(),provisioners: []}
         // Update with any passed data
         this.merge(data);
         this.convert();
@@ -128,6 +130,15 @@ class Instance extends OkitArtifact {
             is_read_only: false,
             is_shareable: false
         }
+    }
+    /*
+    ** Terraform Provisioner
+    */
+    nerTFConnection() {
+        return {}
+    }
+    newTFProvisioner() {
+        return {}
     }
 
     /*

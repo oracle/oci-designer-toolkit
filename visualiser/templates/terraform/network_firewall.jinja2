@@ -1,0 +1,144 @@
+{% if read_only %} {# Read Only Check #}
+{% else %} {# Read Only Check #}
+# ------ Create Network Firewall Policy
+resource "oci_network_firewall_network_firewall_policy" "{{ network_firewall_policy.resource_name }}" {
+    #Required
+    compartment_id = {{ compartment_id }}
+    display_name        = {{ network_firewall_policy.display_name | safe }}
+
+    #Optional
+{# {% if network_firewall_policy.application_lists is defined %}
+    application_lists = var.network_firewall_policy_application_lists
+{% endif %} #}
+{# {% if network_firewall_policy.decryption_profiles is defined %}
+    decryption_profiles {
+        #Required
+        is_out_of_capacity_blocked = var.network_firewall_policy_decryption_profiles_is_out_of_capacity_blocked
+        is_unsupported_cipher_blocked = var.network_firewall_policy_decryption_profiles_is_unsupported_cipher_blocked
+        is_unsupported_version_blocked = var.network_firewall_policy_decryption_profiles_is_unsupported_version_blocked
+        type = var.network_firewall_policy_decryption_profiles_type
+
+        #Optional
+        are_certificate_extensions_restricted = var.network_firewall_policy_decryption_profiles_are_certificate_extensions_restricted
+        is_auto_include_alt_name = var.network_firewall_policy_decryption_profiles_is_auto_include_alt_name
+        is_expired_certificate_blocked = var.network_firewall_policy_decryption_profiles_is_expired_certificate_blocked
+        is_revocation_status_timeout_blocked = var.network_firewall_policy_decryption_profiles_is_revocation_status_timeout_blocked
+        is_unknown_revocation_status_blocked = var.network_firewall_policy_decryption_profiles_is_unknown_revocation_status_blocked
+        is_untrusted_issuer_blocked = var.network_firewall_policy_decryption_profiles_is_untrusted_issuer_blocked
+    }
+{% endif %} #}
+{# {% if network_firewall_policy.decryption_rules is defined %}
+    decryption_rules {
+        #Required
+        action = var.network_firewall_policy_decryption_rules_action
+        condition {
+
+            #Optional
+            destinations = var.network_firewall_policy_decryption_rules_condition_destinations
+            sources = var.network_firewall_policy_decryption_rules_condition_sources
+        }
+        name = var.network_firewall_policy_decryption_rules_name
+
+        #Optional
+        decryption_profile = var.network_firewall_policy_decryption_rules_decryption_profile
+        secret = var.network_firewall_policy_decryption_rules_secret
+    }
+{% endif %} #}
+{% if network_firewall_policy.ip_address_lists is defined %}
+    {# ip_address_lists = {
+    {% for key, value in network_firewall_policy.ip_address_lists.items() %}
+        {% set keyloop = loop %}
+        "{{key}}": [{% for ip in value %}"{{ ip }}"{% if not loop.last %},{% endif %}{% endfor %}]{% if not keyloop.last %},
+        {% endif %}
+    {% endfor %} #}
+    ip_address_lists = {
+    {% for key, value in network_firewall_policy.ip_address_lists.items() %}
+        {% set keyloop = loop %}
+        "{{key}}" = [{% for ip in value %}"{{ ip }}"{% if not loop.last %},{% endif %}{% endfor %}]{% if not keyloop.last %},
+        {% endif %}
+    {% endfor %}
+    
+    }
+{% endif %}
+{# {% if network_firewall_policy.mapped_secrets is defined %}
+    mapped_secrets {
+        #Required
+        source = var.network_firewall_policy_mapped_secrets_source
+        type = var.network_firewall_policy_mapped_secrets_type
+        vault_secret_id = oci_vault_secret.test_secret.id
+        version_number = var.network_firewall_policy_mapped_secrets_version_number
+    }
+{% endif %} #}
+{# {% if network_firewall_policy.security_rules is defined %
+    security_rules {
+        #Required
+        action = var.network_firewall_policy_security_rules_action
+        condition {
+
+            #Optional
+            applications = var.network_firewall_policy_security_rules_condition_applications
+            destinations = var.network_firewall_policy_security_rules_condition_destinations
+            sources = var.network_firewall_policy_security_rules_condition_sources
+            urls = var.network_firewall_policy_security_rules_condition_urls
+        }
+        name = var.network_firewall_policy_security_rules_name
+
+        #Optional
+        inspection = var.network_firewall_policy_security_rules_inspection
+    }
+{% endif %} #}
+{% if network_firewall_policy.url_lists is defined %}
+    url_lists = {
+    {% for key, value in network_firewall_policy.url_lists.items() %}
+        {% set keyloop = loop %}
+        {{key}} = [{% for url in value %}{ "pattern": {{ url.pattern | safe }}, "type": {{ url.type | safe }} }{% if not loop.last %},{% endif %}{% endfor %}]{% if not keyloop.last %},
+        {% endif %}
+    {% endfor %}
+    
+    }
+{% endif %}
+{% if network_firewall_policy.defined_tags is defined %}
+    defined_tags   = {{ defined_tags | safe }}
+{% endif %}
+{% if network_firewall_policy.freeform_tags is defined %}
+    freeform_tags  = {{ freeform_tags | safe }}
+{% endif %}
+}
+
+locals {
+    {{ network_firewall_policy.resource_name }}_id = oci_network_firewall_network_firewall_policy.{{ network_firewall_policy.resource_name }}.id
+}
+
+# ------ Create Network Firewall
+resource "oci_network_firewall_network_firewall" "{{ resource_name }}" {
+    #Required
+    compartment_id = {{ compartment_id }}
+    network_firewall_policy_id = local.{{ network_firewall_policy.resource_name }}_id
+    subnet_id = {{ subnet_id | safe }}
+    display_name        = {{ display_name | safe }}
+
+    #Optional
+{% if availability_domain is defined %}
+    availability_domain = data.oci_identity_availability_domains.AvailabilityDomains.availability_domains[{{ availability_domain | safe }} - 1]["name"]
+{% endif %}
+{% if ipv4address is defined %}
+    ipv4address = [{% for ip in ipv4address %}{{ ip }}{% if not loop.last %},{% endif %}{% endfor %}]
+{% endif %}
+{% if ipv6address is defined %}
+    ipv6address = [{% for ip in ipv6address %}{{ ip }}{% if not loop.last %},{% endif %}{% endfor %}]
+{% endif %}
+{% if network_security_group_ids is defined %}
+    network_security_group_ids = [{% for nsg_id in network_security_group_ids %}{{ nsg_id }}{% if not loop.last %},{% endif %}{% endfor %}]
+{% endif %}
+{% if defined_tags is defined %}
+    defined_tags   = {{ defined_tags | safe }}
+{% endif %}
+{% if freeform_tags is defined %}
+    freeform_tags  = {{ freeform_tags | safe }}
+{% endif %}
+}
+
+locals {
+    {{ resource_name }}_id = oci_network_firewall_network_firewall.{{ resource_name }}.id
+}
+{% endif %} {# Read Only Check #}

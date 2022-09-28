@@ -141,6 +141,7 @@ class OkitResourceProperties {
         const properties = this.createTable('', `${self.id}_core_properties`)
         this.core_tbody = properties.tbody
         this.append(core.div, properties.table)
+        // ocid
         const ocid_data = {
             readonly: true
         }
@@ -148,6 +149,14 @@ class OkitResourceProperties {
         this.ocid = ocid.input
         this.append(this.core_tbody, ocid.row)
         ocid.row.classed('collapsed', !okitSettings.show_ocids)
+        // Resource Name
+        const resource_name_data = {
+            readonly: true
+        }
+        const resource_name = this.createInput('text', 'Resource Name', `${self.id}_resource_name`, '', undefined, resource_name_data)
+        this.resource_name = resource_name.input
+        this.append(this.core_tbody, resource_name.row)
+        resource_name.row.classed('collapsed', !okitSettings.show_resource_name)
         const display_name = this.createInput('text', 'Name', `${self.id}_display_name`, '', (d, i, n) => {this.resource.display_name = n[i].value; this.redraw(); this.setTitle(); this.handleDisplayNameChange()})
         this.display_name = display_name.input
         this.append(this.core_tbody, display_name.row)
@@ -200,9 +209,15 @@ class OkitResourceProperties {
     }
 
     loadCore() {
+        // ocid
         this.ocid.property('value', this.resource.id)
         okitSettings.show_ocids ? this.showProperty(`${this.id}_ocid`, '') : this.hideProperty(`${this.id}_ocid`, '')
+        // Resource Name
+        this.resource_name.property('value', this.resource.resource_name)
+        okitSettings.show_resource_name ? this.showProperty(`${this.id}_resource_name`, '') : this.hideProperty(`${this.id}_resource_name`, '')
+        // Display Name
         this.display_name.property('value', this.resource.display_name)
+        // Documentation
         this.documentation.property('value', this.resource.documentation)
         this.setTitle()
     }
@@ -312,13 +327,19 @@ class OkitResourceProperties {
         },
         dns_name: {
             pattern: "^[\w\._-]+$"
+        },
+        url_no_http: {
+            placeholder: 'www.yoursite.com',
+            pattern: "^[\w\._]+$",
+            title: 'URL with no protocol'
         }
     }
 
-    createInput(type='text', label='', id='', idx='', callback_function=undefined, data={}) {
+    createInput(type='text', label='', id='', idx='', callback_function=undefined, data={}, action_button_class=undefined, action_callback=undefined) {
         const callback = callback_function === undefined ? this.loadCostEstimate() : (d, i, n) => {callback_function(d, i, n);this.loadCostEstimate()}
         const row = d3.create('div').attr('class', 'tr').attr('id', this.trId(id, idx))
         let input = undefined
+        let title_cell = undefined
         let cell = undefined
         let title = undefined
         // Check for special formatting type e.g. ipv4
@@ -327,7 +348,9 @@ class OkitResourceProperties {
             type = 'text'
         }
         if (['text', 'password', 'email', 'date', 'number', 'range'].includes(type)) {
-            title = row.append('div').attr('class', 'td property-label').text(label)
+            title_cell = row.append('div').attr('class', 'td property-label')
+            title = title_cell.append('div').attr('class', action_button_class ? `${action_button_class} property-action-label` : '').text(label).on('click', action_callback)
+            // title = row.append('div').attr('class', 'td property-label').text(label)
             cell = row.append('div').attr('class', 'td')
             input = cell.append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', type).attr('class', 'okit-property-value').attr('list', 'variables_datalist').on('change', callback).on('blur', (d, i, n) => n[i].reportValidity())
             this.addExtraAttributes(input, data)
@@ -356,6 +379,13 @@ class OkitResourceProperties {
             input = cell.append('input').attr('type', 'checkbox').attr('id', this.inputId(id, idx)).attr('class', 'okit-property-value').on('input', callback)
             cell.append('label').attr('for', this.inputId(id, idx)).text(label)
             this.addExtraAttributes(input, data)
+        } else if (type === 'textarea') {
+            title_cell = row.append('div').attr('class', 'td property-label')
+            title = title_cell.append('div').attr('class', action_button_class ? `${action_button_class} property-action-label` : '').text(label)
+            // title = row.append('div').attr('class', 'td property-label').text(label)
+            cell = row.append('div').attr('class', 'td')
+            input = cell.append('textarea').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('class', 'okit-property-value').attr('wrap', 'soft').on('change', callback).on('blur', (d, i, n) => n[i].reportValidity())
+            this.addExtraAttributes(input, data)
         } else {
             alert(`Unknown Type ${type}`)
         }
@@ -381,7 +411,7 @@ class OkitResourceProperties {
     }
 
     addExtraAttributes(input, data) {
-        const attributes = ['disabled', 'min', 'max', 'step', 'minlength', 'maxlength', 'pattern', 'title', 'placeholder', 'readonly', 'required']
+        const attributes = ['disabled', 'min', 'max', 'step', 'minlength', 'maxlength', 'pattern', 'rows', 'title', 'placeholder', 'readonly', 'required']
         if (data) {
             Object.entries(data).forEach(([k, v]) => {
                 if (attributes.includes(k)) input.attr(k, v)
@@ -424,6 +454,15 @@ class OkitResourceProperties {
         return elements
     }
 
+    createMapTable(label='', id='', idx='', callback=undefined, data={}) {
+        const elements = this.createTable(label, id, idx, callback, data)
+        const row = elements.thead.append('div').attr('class', 'tr')
+        row.append('div').attr('class', 'th').text('Key')
+        row.append('div').attr('class', 'th').text(label)
+        row.append('div').attr('class', 'th add-property action-button-background action-button-column').on('click', callback)
+        return elements
+    }
+
     createDetailsSection(label='', id='', idx='', callback=undefined, data={}, open=true) {
         // const details = d3.create('details').attr('class', 'okit-details').attr('open', open)
         const details = d3.create('details').attr('class', 'okit-details').on('toggle', callback)
@@ -438,6 +477,27 @@ class OkitResourceProperties {
         const div = row.append('div').attr('class', 'td')
         row.append('div').attr('class', 'td delete-property action-button-background delete').on('click', callback)
         return {row: row, div: div}
+    }
+
+    createMapDeleteRow(type='text', id='', idx='', key_callback=undefined, value_callback=undefined, action_callback=undefined, data={}) {
+        // Check for special formatting type e.g. ipv4
+        if (Object.keys(this.formatting).includes(type)) {
+            data = data ? {...data, ...this.formatting[type]} : formatting[type]
+            type = 'text'
+        }
+        const row = d3.create('div').attr('class', 'tr').attr('id', this.trId(id, idx))
+        const key_cell = row.append('div').attr('class', 'td property-label')
+        const key_input = key_cell.append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', 'text').attr('list', 'variables_datalist').on('change', key_callback).on('blur', (d, i, n) => n[i].reportValidity())
+        const val_cell = row.append('div').attr('class', 'td')
+        let val_input = undefined
+        if (type === 'textarea') {
+            val_input = val_cell.append('textarea').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('class', 'okit-property-value').attr('wrap', 'soft').on('change', value_callback).on('blur', (d, i, n) => n[i].reportValidity())
+        } else {
+            val_input = val_cell.append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', type).attr('class', 'okit-property-value').attr('list', 'variables_datalist').on('change', value_callback).on('blur', (d, i, n) => n[i].reportValidity())
+        }
+        row.append('div').attr('class', 'td delete-property action-button-background delete').on('click', action_callback)
+        this.addExtraAttributes(val_input, data)
+        return {row: row, key_input: key_input, val_input: val_input}
     }
 
     createMultiValueRow(label='', id='', idx='', callback=undefined, data={}) {

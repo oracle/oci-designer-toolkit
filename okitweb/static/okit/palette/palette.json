@@ -138,6 +138,11 @@
                     "svg": "DHCPOptions.svg"
                 },
                 {
+                    "title": "Network Firewall",
+                    "targets": ["oci"],
+                    "svg": "NetworkFirewall.svg"
+                },
+                {
                     "title": "IPSec Connection",
                     "targets": ["oci", "freetier"],
                     "svg": "VirtualPrivateNetworkVPN.svg"

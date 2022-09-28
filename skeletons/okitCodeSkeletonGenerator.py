@@ -50,7 +50,7 @@ def processWorkflow(args):
         jinja2_template = jinja2_environment.get_template("artefact_model.js.jinja2")
         rendered = jinja2_template.render(jinja2_variables)
         #logger.info(rendered)
-        filename = "../okitweb/static/okit/model/js/artefacts/{0!s:s}.js".format(standardised_name)
+        filename = "../okitweb/static/okit/model/js/resources/{0!s:s}.js".format(standardised_name)
         writeFile(filename, rendered, overwrite)
         # ---- Model Functions JavaScript
         #jinja2_template = jinja2_environment.get_template("model_functions.jinja2")
@@ -62,7 +62,7 @@ def processWorkflow(args):
         jinja2_template = jinja2_environment.get_template("artefact_view.js.jinja2")
         rendered = jinja2_template.render(jinja2_variables)
         #logger.info(rendered)
-        filename = "../okitweb/static/okit/view/designer/js/artefacts/{0!s:s}.js".format(standardised_name)
+        filename = "../okitweb/static/okit/views/designer/js/resources/{0!s:s}.js".format(standardised_name)
         writeFile(filename, rendered, overwrite)
         # --- Resource Properties JavaScript
         jinja2_template = jinja2_environment.get_template("artefact_properties.js.jinja2")

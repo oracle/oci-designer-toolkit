@@ -396,6 +396,10 @@
             }
         }
     },
+    "network_firewall": {
+        "instance": "B95403",
+        "data": "B95404"
+    },
     "nosql_database": {
        "storage": "B89739",
         "ondemand": {

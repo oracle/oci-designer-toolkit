@@ -56,6 +56,14 @@ details {
     margin-top: 1em;
 }
 
+details:not([open]) {
+    transition: all 2.5s ease-in-out;
+}
+
+details[open] {
+    transition: all 2.5s ease-in-out;
+}
+
 pre {
     margin: 0;
     font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
@@ -644,6 +652,13 @@ li a.parent-item:hover {
 .okit-property-editor .okit-table .tr .property-label {
     width: 20em;
     font-weight: bolder;
+}
+
+.okit-property-editor .okit-table .tr .property-action-label {
+    background-position-y: center;
+    background-position-x: right;
+    background-repeat: no-repeat;
+    background-size: 1em;
 }
 
 .okit-table {

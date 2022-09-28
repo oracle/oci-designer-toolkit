@@ -186,6 +186,7 @@ function handleEnableCreate(event) {
     if (okitJsonModel) {
         Object.values(okitJsonModel).filter((v) => Array.isArray(v)).forEach((v) => v.forEach((r) => r.read_only = false));
         okitJsonModel.title = `${okitJsonModel.title} - Read/Write Copy`;
+        okitJsonView = OkitDesignerJsonView.newView(okitJsonModel, okitOciData, resource_icons);
         redrawSVGCanvas();
     }
 }
@@ -714,7 +715,8 @@ function handleValidate(evt) {
 /*
 ** Estimate Cost
  */
-function handleEstimateCost(evt) {
+handleEstimateCost = () => {$("#toolbar_view_select").val('bom');handleViewSelect()}
+function handleEstimateCost1(evt) {
     // $('#cost_estimate_panel').toggleClass('okit-slide-hide-right')
     slideRightPanel('cost_estimate_panel')
     $(jqId(COST_ESTIMATE_PANEL)).empty();
