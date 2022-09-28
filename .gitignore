@@ -54,6 +54,7 @@ containers/ssh/*
 okitweb/static/okit/json/dropdown_data/*
 okitweb/static/okit/templates/user/*
 
+test
 **/test/model
 **/test/properties
 

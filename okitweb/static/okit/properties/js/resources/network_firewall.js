@@ -66,6 +66,13 @@ class NetworkFirewallProperties extends OkitResourceProperties {
         const ip_address_lists_table = this.createMapTable('IP Addresses', `${this.id}_ip_address_lists`, '', () => this.addIPAddressList())
         this.ip_address_lists_tbody = ip_address_lists_table.tbody
         this.append(ip_address_lists.div, ip_address_lists_table.table)
+        // URLs
+        const url_lists = this.createDetailsSection('URL Lists', `${this.id}_url_lists_details`)
+        this.append(this.policy_div, url_lists.details)
+        this.url_lists_div = url_lists.div
+        const url_lists_table = this.createMapTable('URLs', `${this.id}_url_lists`, '', () => this.addURLList())
+        this.url_lists_tbody = url_lists_table.tbody
+        this.append(url_lists.div, url_lists_table.table)
     }
 
     // Load Additional Resource Specific Properties
@@ -86,7 +93,10 @@ class NetworkFirewallProperties extends OkitResourceProperties {
         this.policy_display_name.property('value', this.resource.network_firewall_policy.display_name)
         // IP Lists
         this.loadIPAddressLists()
+        // URL Lists
+        this.loadURLLists()
     }
+    // IP Address Lists
     loadIPAddressLists() {
         this.ip_address_lists_tbody.selectAll('*').remove()
         Object.entries(this.resource.network_firewall_policy.ip_address_lists).forEach(([k, v], i) => this.addIPAddressListHtml(k, v, i+1))
@@ -118,5 +128,39 @@ class NetworkFirewallProperties extends OkitResourceProperties {
     deleteIPAddressList(id, idx, key) {
         delete this.resource.network_firewall_policy.ip_address_lists[key]
         this.loadIPAddressLists()
+    }
+    // URL Lists
+    loadURLLists() {
+        this.url_lists_tbody.selectAll('*').remove()
+        Object.entries(this.resource.network_firewall_policy.url_lists).forEach(([k, v], i) => this.addURLListHtml(k, v, i+1))
+        this.url_lists_idx = Object.keys(this.resource.network_firewall_policy.url_lists).length;
+    }
+    addURLListHtml(key, value, idx) {
+        const id = `${this.id}_url_list`
+        const key_changed = (d, i, n) => {
+            const url_lists = this.resource.network_firewall_policy.url_lists
+            this.resource.network_firewall_policy.url_lists = Object.fromEntries(Object.entries(url_lists).map(([o_key, o_val]) => (o_key === key) ? [n[i].value, o_val] : [o_key, o_val]));
+            this.loadURLLists()
+        }
+        const value_changed = (d, i, n) => {
+            const url_lists = this.resource.network_firewall_policy.url_lists
+            url_lists[key] = n[i].value.split('\n').map(v => {return {pattern: v, type: 'SIMPLE'}})
+        }
+        const delete_row_data = {rows: 10}
+        const delete_row = this.createMapDeleteRow('textarea', id, idx, key_changed, value_changed, () => this.deleteURLList(id, idx, key), delete_row_data)
+        this.append(this.url_lists_tbody, delete_row.row)
+        delete_row.key_input.property('value', key)
+        delete_row.val_input.property('value', value.map(v => v.pattern).join('\n'))
+    }
+    addURLList() {
+        this.url_lists_idx += 1
+        const key = `URLList${this.url_lists_idx}`
+        const value = []
+        this.resource.network_firewall_policy.url_lists[key] = value
+        this.addURLListHtml(key, value, this.url_lists_idx)
+    }
+    deleteURLList(id, idx, key) {
+        delete this.resource.network_firewall_policy.url_lists[key]
+        this.loadURLLists()
     }
 }

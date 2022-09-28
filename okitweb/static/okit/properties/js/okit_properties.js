@@ -141,6 +141,7 @@ class OkitResourceProperties {
         const properties = this.createTable('', `${self.id}_core_properties`)
         this.core_tbody = properties.tbody
         this.append(core.div, properties.table)
+        // ocid
         const ocid_data = {
             readonly: true
         }
@@ -148,6 +149,14 @@ class OkitResourceProperties {
         this.ocid = ocid.input
         this.append(this.core_tbody, ocid.row)
         ocid.row.classed('collapsed', !okitSettings.show_ocids)
+        // Resource Name
+        const resource_name_data = {
+            readonly: true
+        }
+        const resource_name = this.createInput('text', 'Resource Name', `${self.id}_resource_name`, '', undefined, resource_name_data)
+        this.resource_name = resource_name.input
+        this.append(this.core_tbody, resource_name.row)
+        resource_name.row.classed('collapsed', !okitSettings.show_resource_name)
         const display_name = this.createInput('text', 'Name', `${self.id}_display_name`, '', (d, i, n) => {this.resource.display_name = n[i].value; this.redraw(); this.setTitle(); this.handleDisplayNameChange()})
         this.display_name = display_name.input
         this.append(this.core_tbody, display_name.row)
@@ -200,9 +209,15 @@ class OkitResourceProperties {
     }
 
     loadCore() {
+        // ocid
         this.ocid.property('value', this.resource.id)
         okitSettings.show_ocids ? this.showProperty(`${this.id}_ocid`, '') : this.hideProperty(`${this.id}_ocid`, '')
+        // Resource Name
+        this.resource_name.property('value', this.resource.resource_name)
+        okitSettings.show_resource_name ? this.showProperty(`${this.id}_resource_name`, '') : this.hideProperty(`${this.id}_resource_name`, '')
+        // Display Name
         this.display_name.property('value', this.resource.display_name)
+        // Documentation
         this.documentation.property('value', this.resource.documentation)
         this.setTitle()
     }
@@ -312,6 +327,11 @@ class OkitResourceProperties {
         },
         dns_name: {
             pattern: "^[\w\._-]+$"
+        },
+        url_no_http: {
+            placeholder: 'www.yoursite.com',
+            pattern: "^[\w\._]+$",
+            title: 'URL with no protocol'
         }
     }
 
@@ -469,7 +489,12 @@ class OkitResourceProperties {
         const key_cell = row.append('div').attr('class', 'td property-label')
         const key_input = key_cell.append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', 'text').attr('list', 'variables_datalist').on('change', key_callback).on('blur', (d, i, n) => n[i].reportValidity())
         const val_cell = row.append('div').attr('class', 'td')
-        const val_input = val_cell.append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', type).attr('class', 'okit-property-value').attr('list', 'variables_datalist').on('change', value_callback).on('blur', (d, i, n) => n[i].reportValidity())
+        let val_input = undefined
+        if (type === 'textarea') {
+            val_input = val_cell.append('textarea').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('class', 'okit-property-value').attr('wrap', 'soft').on('change', value_callback).on('blur', (d, i, n) => n[i].reportValidity())
+        } else {
+            val_input = val_cell.append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', type).attr('class', 'okit-property-value').attr('list', 'variables_datalist').on('change', value_callback).on('blur', (d, i, n) => n[i].reportValidity())
+        }
         row.append('div').attr('class', 'td delete-property action-button-background delete').on('click', action_callback)
         this.addExtraAttributes(val_input, data)
         return {row: row, key_input: key_input, val_input: val_input}

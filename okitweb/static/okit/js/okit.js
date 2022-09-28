@@ -532,6 +532,7 @@ class OkitSettings {
         this.name_prefix = 'okit';
         this.auto_save = false;
         this.show_ocids = false;
+        this.show_resource_name = false;
         this.validate_markdown = false;
         this.fast_discovery = true;
         this.load();
@@ -630,6 +631,8 @@ class OkitSettings {
             this.addHighlightAssociations(tbody, autosave);
             // Display OCIDs
             this.addShowOcids(tbody, autosave);
+            // Display Resource Name
+            this.addShowResourceName(tbody, autosave);
             // Validate Before Markdowns
             this.addValidateMarkdown(tbody, autosave);
             // Fast Discovery
@@ -904,6 +907,27 @@ class OkitSettings {
         td.append('label')
             .attr('for', 'show_ocids')
             .text('Display OCIDs');
+    }
+
+    addShowResourceName(tbody, autosave) {
+        let self = this;
+        let tr = tbody.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'td').text('');
+        let td = tr.append('div').attr('class', 'td');
+        td.append('input')
+            .attr('id', 'show_resource_name')
+            .attr('name', 'show_resource_name')
+            .attr('type', 'checkbox')
+            .property('checked', this.show_resource_name)
+            .on('change', function () {
+                if (autosave) {
+                    self.show_resource_name = $('#show_resource_name').is(':checked');
+                    self.saveAndRedraw();
+                }
+            });
+        td.append('label')
+            .attr('for', 'show_resource_name')
+            .text('Display Resource Name');
     }
 
     addValidateMarkdown(tbody, autosave) {
