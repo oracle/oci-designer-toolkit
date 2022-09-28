@@ -112,12 +112,19 @@ resource "oci_core_instance" "{{ resource_name }}" {
 {% endif %}
 }
 
+data "oci_core_private_ips" "{{ resource_name }}_private_ip" {
+    #Optional
+    ip_address = oci_core_instance.{{ resource_name }}.private_ip
+    subnet_id = {{ vnic_attachments[0].subnet_id }}
+}
+
 locals {
     {{ resource_name }}_id            = oci_core_instance.{{ resource_name }}.id
     {{ resource_name }}_public_ip     = oci_core_instance.{{ resource_name }}.public_ip
     {{ resource_name }}_private_ip    = oci_core_instance.{{ resource_name }}.private_ip
     {{ resource_name }}_display_name  = oci_core_instance.{{ resource_name }}.display_name
     {{ resource_name }}_hostname      = {{ vnic_attachments[0].hostname_label | safe }}
+    {{ resource_name }}_primary_vnic_id  = data.oci_core_private_ips.{{ resource_name }}_private_ip.private_ips[0].vnic_id
 }
 
 output "{{ resource_name }}PublicIP" {
