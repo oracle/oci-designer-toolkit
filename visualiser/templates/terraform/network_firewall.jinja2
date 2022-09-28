@@ -7,10 +7,10 @@ resource "oci_network_firewall_network_firewall_policy" "{{ network_firewall_pol
     display_name        = {{ network_firewall_policy.display_name | safe }}
 
     #Optional
-{% if network_firewall_policy.application_lists is defined %}
+{# {% if network_firewall_policy.application_lists is defined %}
     application_lists = var.network_firewall_policy_application_lists
-{% endif %}
-{% if network_firewall_policy.decryption_profiles is defined %}
+{% endif %} #}
+{# {% if network_firewall_policy.decryption_profiles is defined %}
     decryption_profiles {
         #Required
         is_out_of_capacity_blocked = var.network_firewall_policy_decryption_profiles_is_out_of_capacity_blocked
@@ -26,8 +26,8 @@ resource "oci_network_firewall_network_firewall_policy" "{{ network_firewall_pol
         is_unknown_revocation_status_blocked = var.network_firewall_policy_decryption_profiles_is_unknown_revocation_status_blocked
         is_untrusted_issuer_blocked = var.network_firewall_policy_decryption_profiles_is_untrusted_issuer_blocked
     }
-{% endif %}
-{% if network_firewall_policy.decryption_rules is defined %}
+{% endif %} #}
+{# {% if network_firewall_policy.decryption_rules is defined %}
     decryption_rules {
         #Required
         action = var.network_firewall_policy_decryption_rules_action
@@ -43,18 +43,24 @@ resource "oci_network_firewall_network_firewall_policy" "{{ network_firewall_pol
         decryption_profile = var.network_firewall_policy_decryption_rules_decryption_profile
         secret = var.network_firewall_policy_decryption_rules_secret
     }
-{% endif %}
+{% endif %} #}
 {% if network_firewall_policy.ip_address_lists is defined %}
+    {# ip_address_lists = {
+    {% for key, value in network_firewall_policy.ip_address_lists.items() %}
+        {% set keyloop = loop %}
+        "{{key}}": [{% for ip in value %}"{{ ip }}"{% if not loop.last %},{% endif %}{% endfor %}]{% if not keyloop.last %},
+        {% endif %}
+    {% endfor %} #}
     ip_address_lists = {
     {% for key, value in network_firewall_policy.ip_address_lists.items() %}
         {% set keyloop = loop %}
-        {{key}} = [{% for ip in value %}"{{ ip }}"{% if not loop.last %},{% endif %}{% endfor %}]{% if not keyloop.last %},
+        "{{key}}" = [{% for ip in value %}"{{ ip }}"{% if not loop.last %},{% endif %}{% endfor %}]{% if not keyloop.last %},
         {% endif %}
     {% endfor %}
     
     }
 {% endif %}
-{% if network_firewall_policy.mapped_secrets is defined %}
+{# {% if network_firewall_policy.mapped_secrets is defined %}
     mapped_secrets {
         #Required
         source = var.network_firewall_policy_mapped_secrets_source
@@ -62,8 +68,8 @@ resource "oci_network_firewall_network_firewall_policy" "{{ network_firewall_pol
         vault_secret_id = oci_vault_secret.test_secret.id
         version_number = var.network_firewall_policy_mapped_secrets_version_number
     }
-{% endif %}
-{% if network_firewall_policy.security_rules is defined %}
+{% endif %} #}
+{# {% if network_firewall_policy.security_rules is defined %
     security_rules {
         #Required
         action = var.network_firewall_policy_security_rules_action
@@ -80,9 +86,16 @@ resource "oci_network_firewall_network_firewall_policy" "{{ network_firewall_pol
         #Optional
         inspection = var.network_firewall_policy_security_rules_inspection
     }
-{% endif %}
+{% endif %} #}
 {% if network_firewall_policy.url_lists is defined %}
-    url_lists = var.network_firewall_policy_url_lists
+    url_lists = {
+    {% for key, value in network_firewall_policy.url_lists.items() %}
+        {% set keyloop = loop %}
+        {{key}} = [{% for url in value %}{ "pattern": {{ url.pattern | safe }}, "type": {{ url.type | safe }} }{% if not loop.last %},{% endif %}{% endfor %}]{% if not keyloop.last %},
+        {% endif %}
+    {% endfor %}
+    
+    }
 {% endif %}
 {% if network_firewall_policy.defined_tags is defined %}
     defined_tags   = {{ defined_tags | safe }}

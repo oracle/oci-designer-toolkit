@@ -116,7 +116,8 @@ locals {
     {{ resource_name }}_id            = oci_core_instance.{{ resource_name }}.id
     {{ resource_name }}_public_ip     = oci_core_instance.{{ resource_name }}.public_ip
     {{ resource_name }}_private_ip    = oci_core_instance.{{ resource_name }}.private_ip
-    {{ resource_name }}_display_name    = oci_core_instance.{{ resource_name }}.display_name
+    {{ resource_name }}_display_name  = oci_core_instance.{{ resource_name }}.display_name
+    {{ resource_name }}_hostname      = {{ vnic_attachments[0].hostname_label | safe }}
 }
 
 output "{{ resource_name }}PublicIP" {

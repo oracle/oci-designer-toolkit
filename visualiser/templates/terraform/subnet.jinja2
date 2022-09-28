@@ -57,5 +57,6 @@ resource "oci_core_subnet" "{{ resource_name }}" {
 locals {
     {{ resource_name }}_id              = oci_core_subnet.{{ resource_name }}.id
     {{ resource_name }}_domain_name     = oci_core_subnet.{{ resource_name }}.subnet_domain_name
+    {{ resource_name }}_netmask         = substr(oci_core_subnet.{{ resource_name }}.cidr_block, -2, -1)
 }
 {% endif %}
