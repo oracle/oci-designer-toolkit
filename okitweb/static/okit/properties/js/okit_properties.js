@@ -45,6 +45,15 @@ class OkitResourceProperties {
             DW: 'Data Warehouse'
         }
     }
+    // Database Workload
+    autonomous_db_workload_data = {
+        options: {
+            OLTP: 'Transaction Processing', 
+            DW: 'Data Warehouse',
+            AJD: 'JSON Database',
+            APEX: 'Oracle APEX Application Development'
+        }
+    }
     // DNS Label
     dns_data = {
         maxlength: '15',

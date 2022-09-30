@@ -56,7 +56,7 @@ class AutonomousDatabaseProperties extends OkitResourceProperties {
         this.append(this.database_tbody, admin_password.row)
         this.admin_password = admin_password.input
         // Workload
-        const db_workload_data = this.db_workload_data
+        const db_workload_data = {options: {...this.db_workload_data.options, AJD: 'JSON Database', APEX: 'Oracle APEX Application Development'}}
         const db_workload = this.createInput('select', 'Workload', `${this.id}_db_workload`, '', (d, i, n) => this.resource.db_workload = n[i].value, db_workload_data)
         this.db_workload = db_workload.input
         this.append(this.database_tbody, db_workload.row)
