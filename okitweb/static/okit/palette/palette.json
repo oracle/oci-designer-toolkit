@@ -66,6 +66,21 @@
                     "svg": "AutonomousDatabaseCloudServiceADCS.svg"
                 },
                 {
+                    "title": "Autonomous Data Warehouse",
+                    "targets": ["hidden"],
+                    "svg": "AutonomousDataWarehouse.svg"
+                },
+                {
+                    "title": "Autonomous Transaction Processing",
+                    "targets": ["hidden"],
+                    "svg": "AutonomousTransactionProcessingATP.svg"
+                },
+                {
+                    "title": "Autonomous APEX",
+                    "targets": ["hidden"],
+                    "svg": "APEX.svg"
+                },
+                {
                     "title": "Database System",
                     "targets": ["oci"],
                     "svg": "DatabaseSystemDBS.svg"
