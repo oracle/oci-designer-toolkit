@@ -8,3 +8,4 @@ mkdir -p $(dirname $file) && touch "$file"
 #pip install python-magic --user
 export OCI_CLI_AUTH=instance_principal
 export OKIT_VM_COMPARTMENT='oci-metadata -g "compartmentID" --value-only'
+tenancy_id=$(curl -L -s 'http://169.254.169.254/opc/v1/instance/' | jq -r '.freeformTags."user-tenancy-ocid"')
