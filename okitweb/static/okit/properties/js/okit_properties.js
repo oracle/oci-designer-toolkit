@@ -366,7 +366,8 @@ class OkitResourceProperties {
             // return this.createSimplePropertyRow(type, label, id, idx, callback, data)
         } else if (type === 'select') {
             title = row.append('div').attr('class', 'td property-label').text(label)
-            input = row.append('div').attr('class', 'td').append('select').attr('id', this.inputId(id, idx)).attr('class', 'okit-property-value').on('change', callback)
+            // input = row.append('div').attr('class', 'td').append('select').attr('id', this.inputId(id, idx)).attr('class', 'okit-property-value').on('change', callback)
+            input = row.append('div').attr('class', 'td').append('select').attr('id', this.inputId(id, idx)).attr('class', 'okit-property-value').on('change', (d, i, n) => {callback(d, i, n);this.redraw()})
             if (data && data.options) {
                 Object.entries(data.options).forEach(([k, v]) => input.append('option').attr('value', k).text(v))
             }

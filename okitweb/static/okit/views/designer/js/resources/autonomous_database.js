@@ -25,6 +25,8 @@ class AutonomousDatabaseView extends OkitDesignerArtefactView {
     get parent() {return this.getJsonView().getSubnet(this.parent_id) ? this.getJsonView().getSubnet(this.parent_id) : this.getJsonView().getCompartment(this.parent_id);}
     // Direct Subnet Access
     set subnet_id(id) {this.artefact.subnet_id = id;}
+    // ---- Icon
+    get icon_definition_id() {return this.resource.db_workload === 'OLTP' ? OkitJsonView.toSvgIconDef('AutonomousTransactionProcessing') : this.resource.db_workload === 'DW' ? OkitJsonView.toSvgIconDef('AutonomousDataWarehouse') : this.resource.db_workload === 'APEX' ? OkitJsonView.toSvgIconDef('AutonomousAPEX') : super.icon_definition_id;}
 
     /*
      ** SVG Processing
