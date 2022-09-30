@@ -41,7 +41,7 @@ class OCIConnection(object):
             if os.getenv('OCI_CLI_AUTH', 'config') == 'instance_principal':
                 self.signerFromInstancePrincipal()
             elif os.getenv('OCI_CLI_AUTH', 'config') == 'instance_obo_user':
-                self.signerFromSecurityToken()
+                self.signerFromDelegationToken()
             elif os.getenv('OCI_CLI_AUTH', 'config') == 'x509_cert':
                 self.signerFromX509Cert()
             else:
@@ -76,7 +76,8 @@ class OCIConnection(object):
             logger.warn('Instance Principal is not available')
             self.signerFromConfig()
 
-    def signerFromSecurityToken(self):
+    def signerFromDelegationToken(self):
+        self.loadConfig()
         try:
             # Get region
             if self.region is None:
@@ -85,11 +86,14 @@ class OCIConnection(object):
                 else:
                     self.region = os.getenv('OKIT_VM_REGION', 'uk-london-1')
            # Get Signer from Instance Principal
-            self.signer = oci.auth.signers.SecurityTokenSigner()
-            self.config = {"region": self.region}
-            self.instance_principal = False
+            delegation_token_location = self.config["delegation_token_file"]
+            with open(delegation_token_location, 'r') as delegation_token_file:
+                delegation_token = delegation_token_file.read().strip()
+                # get signer from delegation token
+                self.signer = oci.auth.signers.InstancePrincipalsDelegationTokenSigner(delegation_token=delegation_token)
+            self.instance_principal = True
         except Exception:
-            logger.warn('Security Token is not available')
+            logger.warn('Delegation Token is not available')
             self.signerFromConfig()
 
     def signerFromX509Cert(self):
