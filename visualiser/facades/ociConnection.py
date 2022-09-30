@@ -38,7 +38,7 @@ class OCIConnection(object):
         # Create Instance Security Signer
         logger.info('OCI_CLI_AUTH = ' + os.getenv('OCI_CLI_AUTH', 'Undefined'))
         if signer is None:
-            if os.getenv('OCI_CLI_AUTH', 'config') == 'instance_principal':
+            if os.getenv('OCI_CLI_AUTH', 'config') in ('instance_principal', 'instance_obo_user'):
                 self.signerFromInstancePrincipal()
             elif os.getenv('OCI_CLI_AUTH', 'config') == 'x509_cert':
                 self.signerFromX509Cert()
