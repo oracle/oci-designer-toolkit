@@ -38,8 +38,10 @@ class OCIConnection(object):
         # Create Instance Security Signer
         logger.info('OCI_CLI_AUTH = ' + os.getenv('OCI_CLI_AUTH', 'Undefined'))
         if signer is None:
-            if os.getenv('OCI_CLI_AUTH', 'config') in ('instance_principal', 'instance_obo_user'):
+            if os.getenv('OCI_CLI_AUTH', 'config') == 'instance_principal':
                 self.signerFromInstancePrincipal()
+            elif os.getenv('OCI_CLI_AUTH', 'config') == 'instance_obo_user':
+                self.signerFromSecurityToken()
             elif os.getenv('OCI_CLI_AUTH', 'config') == 'x509_cert':
                 self.signerFromX509Cert()
             else:
@@ -72,6 +74,22 @@ class OCIConnection(object):
             self.instance_principal = True
         except Exception:
             logger.warn('Instance Principal is not available')
+            self.signerFromConfig()
+
+    def signerFromSecurityToken(self):
+        try:
+            # Get region
+            if self.region is None:
+                if self.config is not None:
+                    self.region = self.config.get('region', os.getenv('OKIT_VM_REGION', 'uk-london-1'))
+                else:
+                    self.region = os.getenv('OKIT_VM_REGION', 'uk-london-1')
+           # Get Signer from Instance Principal
+            self.signer = oci.auth.signers.SecurityTokenSigner()
+            self.config = {"region": self.region}
+            self.instance_principal = False
+        except Exception:
+            logger.warn('Security Token is not available')
             self.signerFromConfig()
 
     def signerFromX509Cert(self):
