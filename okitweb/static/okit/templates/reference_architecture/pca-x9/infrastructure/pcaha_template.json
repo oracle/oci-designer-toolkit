@@ -1,0 +1,439 @@
+{
+  "compartments": [
+    {
+      "compartment_id": null,
+      "defined_tags": {},
+      "description": "Represents the deployment location for the resources specified within the design.",
+      "display_name": "Deployment Compartment",
+      "documentation": "Logical Compartment that represents the deployment location for the resources specified within the design. This compartment will not be created during the build process.",
+      "freeform_tags": {},
+      "id": "okit.compartment.0ee68d82-c52b-4227-8a18-73066660644e",
+      "okit_reference": "okit-4b7a5eb3-56b4-480a-8233-efdfadf84c68",
+      "read_only": true,
+      "resource_name": "DeploymentCompartment"
+    }
+  ],
+  "defined_tags": {},
+  "dhcp_options": [
+    {
+      "compartment_id": "okit.compartment.0ee68d82-c52b-4227-8a18-73066660644e",
+      "default": true,
+      "defined_tags": {},
+      "display_name": "hado",
+      "documentation": "",
+      "freeform_tags": {},
+      "id": "okit.dhcpoption.56a8cda9-0ed1-49c8-aac9-b984687348be",
+      "okit_reference": "okit-2d57f51a-32ba-466e-8961-f5eb7ff82e3c",
+      "options": [
+        {
+          "custom_dns_servers": [],
+          "search_domain_names": [],
+          "server_type": "VcnLocalPlusInternet",
+          "type": "DomainNameServer"
+        },
+        {
+          "custom_dns_servers": [],
+          "search_domain_names": [
+            "hado.oraclevcn.com"
+          ],
+          "server_type": "",
+          "type": "SearchDomain"
+        }
+      ],
+      "read_only": false,
+      "resource_name": "Okit_DO_1664281595537",
+      "vcn_id": "okit.virtualcloudnetwork.929097e2-ec13-4a2f-95b7-83875ca072d1"
+    }
+  ],
+  "documentation": "# Description\n__Created 2022-9-27 12:58:33__\n\n--------------------------------------\n\n",
+  "freeform_tags": {},
+  "instances": [
+    {
+      "agent_config": {
+        "is_management_disabled": false,
+        "is_monitoring_disabled": false
+      },
+      "availability_domain": "1",
+      "chipset": "intel",
+      "compartment_id": "okit.compartment.0ee68d82-c52b-4227-8a18-73066660644e",
+      "count": 1,
+      "defined_tags": {},
+      "display_name": "node1",
+      "documentation": "",
+      "fault_domain": "FAULT-DOMAIN-1",
+      "flex_shape": false,
+      "freeform_tags": {},
+      "id": "okit.instance.3a3b26de-f458-4c02-8232-cedf81e8ede9",
+      "instance_type": "vm",
+      "is_pv_encryption_in_transit_enabled": false,
+      "metadata": {
+        "ssh_authorized_keys": "var.public_key",
+        "user_data": ""
+      },
+      "okit_reference": "okit-89548118-ddeb-490b-b43e-fb0c42dd44ff",
+      "preserve_boot_volume": false,
+      "primary_vnic": {
+        "assign_public_ip": true,
+        "display_name": "node1",
+        "hostname_label": "node1",
+        "nsg_ids": [],
+        "resource_name": "Okit_I_1664281601688VnicAttachment",
+        "skip_source_dest_check": false,
+        "subnet_id": "okit.subnet.aa577f87-0d2f-4756-941b-d58083ba9ffe"
+      },
+      "read_only": false,
+      "resource_name": "Okit_I_1664281601687",
+      "shape": "VM.PCAStandard1.1",
+      "shape_config": {
+        "memory_in_gbs": "",
+        "ocpus": ""
+      },
+      "shape_series": "intel",
+      "source_details": {
+        "boot_volume_size_in_gbs": "50",
+        "image_id": "ocid1.image.AK00905695.x9pca1.ye9e8d6csmggarq48dr9268w8pqj0o20klp42v70hrzds21xcgx2oxwo4o3w",
+        "image_source": "custom",
+        "os": "OracleLinux",
+        "source_type": "image",
+        "version": "8"
+      },
+      "subnet_id": "okit.subnet.aa577f87-0d2f-4756-941b-d58083ba9ffe",
+      "vnic_attachments": [
+        {
+          "assign_public_ip": true,
+          "display_name": "node1",
+          "hostname_label": "node1",
+          "nsg_ids": [],
+          "resource_name": "Okit_I_1664281601688VnicAttachment",
+          "skip_source_dest_check": false,
+          "subnet_id": "okit.subnet.aa577f87-0d2f-4756-941b-d58083ba9ffe"
+        }
+      ],
+      "volume_attachments": []
+    },
+    {
+      "agent_config": {
+        "is_management_disabled": false,
+        "is_monitoring_disabled": false
+      },
+      "availability_domain": "1",
+      "chipset": "intel",
+      "compartment_id": "okit.compartment.0ee68d82-c52b-4227-8a18-73066660644e",
+      "count": 1,
+      "defined_tags": {},
+      "display_name": "node2",
+      "documentation": "",
+      "fault_domain": "FAULT-DOMAIN-2",
+      "flex_shape": false,
+      "freeform_tags": {},
+      "id": "okit.instance.a39e855b-88fc-421a-891f-beaaba21a306",
+      "instance_type": "vm",
+      "is_pv_encryption_in_transit_enabled": false,
+      "metadata": {
+        "ssh_authorized_keys": "var.public_key",
+        "user_data": ""
+      },
+      "okit_reference": "okit-53cd4f47-b553-4a74-ae83-06af3becd7af",
+      "preserve_boot_volume": false,
+      "primary_vnic": {
+        "assign_public_ip": true,
+        "display_name": "node2",
+        "hostname_label": "node2",
+        "nsg_ids": [],
+        "resource_name": "Okit_I_1664281604172VnicAttachment",
+        "skip_source_dest_check": false,
+        "subnet_id": "okit.subnet.aa577f87-0d2f-4756-941b-d58083ba9ffe"
+      },
+      "read_only": false,
+      "resource_name": "Okit_I_1664281604172",
+      "shape": "VM.PCAStandard1.1",
+      "shape_config": {
+        "memory_in_gbs": "",
+        "ocpus": ""
+      },
+      "shape_series": "intel",
+      "source_details": {
+        "boot_volume_size_in_gbs": "50",
+        "image_id": "ocid1.image.AK00905695.x9pca1.ye9e8d6csmggarq48dr9268w8pqj0o20klp42v70hrzds21xcgx2oxwo4o3w",
+        "image_source": "custom",
+        "os": "OracleLinux",
+        "source_type": "image",
+        "version": "8"
+      },
+      "subnet_id": "okit.subnet.aa577f87-0d2f-4756-941b-d58083ba9ffe",
+      "vnic_attachments": [
+        {
+          "assign_public_ip": true,
+          "display_name": "node2",
+          "hostname_label": "node2",
+          "nsg_ids": [],
+          "resource_name": "Okit_I_1664281604172VnicAttachment",
+          "skip_source_dest_check": false,
+          "subnet_id": "okit.subnet.aa577f87-0d2f-4756-941b-d58083ba9ffe"
+        }
+      ],
+      "volume_attachments": []
+    }
+  ],
+  "internet_gateways": [
+    {
+      "compartment_id": "okit.compartment.0ee68d82-c52b-4227-8a18-73066660644e",
+      "defined_tags": {},
+      "display_name": "haig",
+      "documentation": "",
+      "enabled": true,
+      "freeform_tags": {},
+      "id": "okit.internetgateway.a59df84f-1791-4897-b91d-c70b83855fc0",
+      "okit_reference": "okit-6617763c-d16d-4ef0-bfd1-3ac5b81cb4af",
+      "read_only": false,
+      "resource_name": "Okit_IG_1664286673217",
+      "vcn_id": "okit.virtualcloudnetwork.929097e2-ec13-4a2f-95b7-83875ca072d1"
+    }
+  ],
+  "metadata": {
+    "created": "2022-9-27 12:58:33",
+    "file": {
+      "generate_terraform": true,
+      "name": "/pca-x9/pcaha_template.json",
+      "terraform_dir": "/pca-x9/pcaha"
+    },
+    "okit_model_id": "okit-model-bbdf2fee-0544-45ae-b2b1-249676c90c8d",
+    "okit_version": "0.41.0 - nightly -",
+    "platform": "pca",
+    "resource_count": 100,
+    "updated": "2022-9-27 12:58:33"
+  },
+  "route_tables": [
+    {
+      "compartment_id": "okit.compartment.0ee68d82-c52b-4227-8a18-73066660644e",
+      "default": true,
+      "defined_tags": {},
+      "display_name": "hart",
+      "documentation": "",
+      "freeform_tags": {},
+      "id": "okit.routetable.0cc8bb62-d440-4131-9b2e-1cdd435e1cae",
+      "okit_reference": "okit-c691aef7-0916-41c1-9d88-cf25f241305e",
+      "read_only": false,
+      "resource_name": "Okit_RT_1664281595529",
+      "route_rules": [
+        {
+          "description": "",
+          "destination": "0.0.0.0/0",
+          "destination_type": "CIDR_BLOCK",
+          "network_entity_id": "okit.internetgateway.a59df84f-1791-4897-b91d-c70b83855fc0",
+          "target_type": "internet_gateway"
+        }
+      ],
+      "vcn_id": "okit.virtualcloudnetwork.929097e2-ec13-4a2f-95b7-83875ca072d1"
+    }
+  ],
+  "security_lists": [
+    {
+      "compartment_id": "okit.compartment.0ee68d82-c52b-4227-8a18-73066660644e",
+      "default": true,
+      "defined_tags": {},
+      "display_name": "hasl",
+      "documentation": "",
+      "egress_security_rules": [
+        {
+          "description": "",
+          "destination": "0.0.0.0/0",
+          "destination_type": "CIDR_BLOCK",
+          "is_stateless": false,
+          "protocol": "all"
+        }
+      ],
+      "freeform_tags": {},
+      "id": "okit.securitylist.7d871ada-0098-428e-9001-885d7e6f9841",
+      "ingress_security_rules": [
+        {
+          "description": "",
+          "is_stateless": false,
+          "protocol": "6",
+          "source": "0.0.0.0/0",
+          "source_type": "CIDR_BLOCK",
+          "tcp_options": {
+            "destination_port_range": {
+              "max": 22,
+              "min": 22
+            },
+            "source_port_range": {
+              "max": "",
+              "min": ""
+            }
+          }
+        },
+        {
+          "description": "",
+          "icmp_options": {
+            "code": 4,
+            "type": 3
+          },
+          "is_stateless": false,
+          "protocol": "1",
+          "source": "0.0.0.0/0",
+          "source_type": "CIDR_BLOCK"
+        },
+        {
+          "description": "",
+          "icmp_options": {
+            "type": 3
+          },
+          "is_stateless": false,
+          "protocol": "1",
+          "source": "10.0.0.0/16",
+          "source_type": "CIDR_BLOCK"
+        },
+        {
+          "description": "All VM Can Communicate",
+          "is_stateless": false,
+          "protocol": "all",
+          "source": "10.0.0.0/24",
+          "source_type": "CIDR_BLOCK"
+        }
+      ],
+      "okit_reference": "okit-0ce140a8-f83f-4ad1-be8f-e66fccafb14f",
+      "read_only": false,
+      "resource_name": "Okit_SL_1664281595534",
+      "vcn_id": "okit.virtualcloudnetwork.929097e2-ec13-4a2f-95b7-83875ca072d1"
+    }
+  ],
+  "subnets": [
+    {
+      "availability_domain": "0",
+      "cidr_block": "10.0.0.0/28",
+      "compartment_id": "okit.compartment.0ee68d82-c52b-4227-8a18-73066660644e",
+      "defined_tags": {},
+      "dhcp_options_id": "okit.dhcpoption.56a8cda9-0ed1-49c8-aac9-b984687348be",
+      "display_name": "hapubsn",
+      "dns_label": "hapubsn",
+      "documentation": "",
+      "freeform_tags": {},
+      "id": "okit.subnet.aa577f87-0d2f-4756-941b-d58083ba9ffe",
+      "ipv6cidr_block": "",
+      "ipv6cidr_blocks": "",
+      "is_ipv6enabled": false,
+      "okit_reference": "okit-7eafdb5a-db99-4986-8fb0-7b4d4fa4db2b",
+      "prohibit_public_ip_on_vnic": false,
+      "read_only": false,
+      "resource_name": "Okit_S_1664281598733",
+      "route_table_id": "okit.routetable.0cc8bb62-d440-4131-9b2e-1cdd435e1cae",
+      "security_list_ids": [
+        "okit.securitylist.7d871ada-0098-428e-9001-885d7e6f9841"
+      ],
+      "vcn_id": "okit.virtualcloudnetwork.929097e2-ec13-4a2f-95b7-83875ca072d1"
+    }
+  ],
+  "title": "Automatic Virtual IP Failover in Cluster Deployment",
+  "user_defined": {
+    "terraform": "# Create Private IP for VNIC\nresource \"oci_core_private_ip\" \"two-node-vip-private-ip\" {\n    display_name = var.cluster_name\n    hostname_label = var.cluster_hostname\n    ip_address = var.cluster_vip\n    vnic_id = local.Okit_I_1664281601687_primary_vnic_id\n}\n# Create Public IP\nresource \"oci_core_public_ip\" \"two-node-vip-public-ip\" {\n    #Required\n    compartment_id = local.Okit_I_1664281601687_compartment_id\n    lifetime = \"RESERVED\"\n\n    #Optional\n    display_name = var.cluster_name\n    private_ip_id = oci_core_private_ip.two-node-vip-private-ip.id\n}\n# Install VIP Functionality\nresource \"null_resource\" \"two-node-vip-node1\" {\n    # Node 1 System Preparation\n    connection {\n        type = \"ssh\"\n        user = \"opc\"\n        private_key = file(\"${var.private_key_file}\")\n        host = local.Okit_I_1664281601687_public_ip\n    }\n\n    provisioner \"remote-exec\" {\n      inline = [\n        \"sudo bash -c 'echo \\\"proxy=${var.yum_proxy}\\\" >> /etc/yum.conf'\",\n        \"sudo yum install -y corosync pacemaker pcs\",\n        \"sudo yum install -y python36-oci-cli\",\n        \"sudo mkdir -p /root/.oci\",\n        \"mkdir -p /home/opc/.oci\"\n      ]\n    }\n\n    provisioner \"file\" {\n      source = \"${var.local_config_file}\"\n      destination = \"${var.remote_config_file}\"\n    }\n\n    provisioner \"file\" {\n      source = \"${var.cert_bundle_local_file}\"\n      destination = \"${var.cert_bundle_remote_file}\"\n      on_failure = continue\n    }\n\n    provisioner \"file\" {\n      source = \"${var.oci_connection_local_key_file}\"\n      destination = \"${var.oci_connection_remote_key_file}\"\n    }\n\n    provisioner \"remote-exec\" {\n      inline = [\n        \"sudo cp /usr/lib/ocf/resource.d/heartbeat/IPaddr2 /usr/lib/ocf/resource.d/heartbeat/IPaddr2.bck\",\n\n        \"sudo sed -i '/delete_interface ()/a\\\\delete_interface_orig () {' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     echo \\\"Deleting Interface Calling Original\\\" >> /tmp/error.log' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     delete_interface_orig $1 $2 $3' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     echo \\\"Deleting Interface Creating Private IP\\\" >> /tmp/error.log' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     export server=\\\"${local.Okit_I_1664281601687_hostname}\\\"' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     export node1vnic=\\\"${local.Okit_I_1664281601687_primary_vnic_id}\\\"' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     export node2vnic=\\\"${local.Okit_I_1664281604172_primary_vnic_id}\\\"' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     export vnicip=\\\"${var.cluster_vip}\\\"' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     export OCI_CLI_CERT_BUNDLE=\\\"${var.cert_bundle_remote_file}\\\"' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     export OCI_CLI_SUPPRESS_FILE_PERMISSIONS_WARNING=True' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     export LC_ALL=C.UTF-8' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     export LANG=C.UTF-8' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     echo \\\"Creating Private IP on $node2vnic\\\" >> /tmp/error.log' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     oci network vnic assign-private-ip --unassign-if-already-assigned --vnic-id $node2vnic --ip-address $vnicip >> /tmp/error.log' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     return $OCF_SUCCESS' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     }' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n\n        \"sudo usermod -p $(echo ${var.hacluser_password} | openssl passwd -1 -stdin) hacluster\",\n        \"sudo bash -c \\\"echo '${local.Okit_I_1664281601687_private_ip}  ${local.Okit_I_1664281601687_hostname}' >> /etc/hosts\\\"\",\n        \"sudo bash -c \\\"echo '${local.Okit_I_1664281604172_private_ip}  ${local.Okit_I_1664281604172_hostname}' >> /etc/hosts\\\"\",\n        \"sudo mkdir -p /root/.oci\",\n        \"sudo cp -v ${var.remote_config_file} /root/.oci/config\",\n        \"sudo cp -v ${var.oci_connection_remote_key_file} /root/.oci/\",\n        \"sudo systemctl start pcsd\",\n        \"sudo systemctl enable pacemaker\",\n        \"sudo systemctl enable corosync\",\n        \"sudo systemctl enable pcsd\",\n        \"sudo firewall-cmd --permanent --add-service=high-availability\",\n        \"sudo firewall-cmd --add-service=high-availability\"\n      ]\n    }\n\n    depends_on = [\n        oci_core_instance.Okit_I_1664281601687,\n        oci_core_instance.Okit_I_1664281604172\n    ]    \n}\n\nresource \"null_resource\" \"two-node-vip-node2\" {\n    # Node 2 System Preparation\n    connection {\n        type = \"ssh\"\n        user = \"opc\"\n        private_key = file(\"${var.private_key_file}\")\n        host = local.Okit_I_1664281604172_public_ip\n    }\n\n    provisioner \"remote-exec\" {\n      inline = [\n        \"sudo bash -c 'echo \\\"proxy=${var.yum_proxy}\\\" >> /etc/yum.conf'\",\n        \"sudo yum install -y corosync pacemaker pcs\",\n        \"sudo yum install -y python36-oci-cli\",\n        \"sudo mkdir -p /root/.oci\",\n        \"mkdir -p /home/opc/.oci\"\n      ]\n    }\n\n    provisioner \"file\" {\n      source = \"${var.local_config_file}\"\n      destination = \"${var.remote_config_file}\"\n    }\n\n    provisioner \"file\" {\n      source = \"${var.cert_bundle_local_file}\"\n      destination = \"${var.cert_bundle_remote_file}\"\n      on_failure = continue\n    }\n\n    provisioner \"file\" {\n      source = \"${var.oci_connection_local_key_file}\"\n      destination = \"${var.oci_connection_remote_key_file}\"\n    }\n\n    provisioner \"remote-exec\" {\n      inline = [\n        \"sudo cp /usr/lib/ocf/resource.d/heartbeat/IPaddr2 /usr/lib/ocf/resource.d/heartbeat/IPaddr2.bck\",\n\n        \"sudo sed -i '/delete_interface ()/a\\\\delete_interface_orig () {' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     echo \\\"Deleting Interface Calling Original\\\" >> /tmp/error.log' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     delete_interface_orig $1 $2 $3' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     echo \\\"Deleting Interface Creating Private IP\\\" >> /tmp/error.log' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     export server=\\\"${local.Okit_I_1664281604172_hostname}\\\"' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     export node1vnic=\\\"${local.Okit_I_1664281601687_primary_vnic_id}\\\"' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     export node2vnic=\\\"${local.Okit_I_1664281604172_primary_vnic_id}\\\"' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     export vnicip=\\\"${var.cluster_vip}\\\"' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     export OCI_CLI_CERT_BUNDLE=\\\"${var.cert_bundle_remote_file}\\\"' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     export OCI_CLI_SUPPRESS_FILE_PERMISSIONS_WARNING=True' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     export LC_ALL=C.UTF-8' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     export LANG=C.UTF-8' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     echo \\\"Creating Private IP on $node1vnic\\\" >> /tmp/error.log' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     oci network vnic assign-private-ip --unassign-if-already-assigned --vnic-id $node1vnic --ip-address $vnicip >> /tmp/error.log' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     return $OCF_SUCCESS' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     }' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n\n        \"sudo usermod -p $(echo ${var.hacluser_password} | openssl passwd -1 -stdin) hacluster\",\n        \"sudo bash -c \\\"echo '${local.Okit_I_1664281601687_private_ip}  ${local.Okit_I_1664281601687_hostname}' >> /etc/hosts\\\"\",\n        \"sudo bash -c \\\"echo '${local.Okit_I_1664281604172_private_ip}  ${local.Okit_I_1664281604172_hostname}' >> /etc/hosts\\\"\",\n        \"sudo mkdir -p /root/.oci\",\n        \"sudo cp -v ${var.remote_config_file} /root/.oci/config\",\n        \"sudo cp -v ${var.oci_connection_remote_key_file} /root/.oci/\",\n        \"sudo systemctl start pcsd\",\n        \"sudo systemctl enable pacemaker\",\n        \"sudo systemctl enable corosync\",\n        \"sudo systemctl enable pcsd\",\n        \"sudo firewall-cmd --permanent --add-service=high-availability\",\n        \"sudo firewall-cmd --add-service=high-availability\"\n      ]\n    }\n\n    depends_on = [\n        oci_core_instance.Okit_I_1664281601687,\n        oci_core_instance.Okit_I_1664281604172\n    ]    \n}\n\nresource \"null_resource\" \"two-node-vip-validate-and-start\" {\n    # Node 1 Validation\n    connection {\n        type = \"ssh\"\n        user = \"opc\"\n        private_key = file(\"${var.private_key_file}\")\n        host = local.Okit_I_1664281601687_public_ip\n    }\n\n    # Create Cluster\n    provisioner \"remote-exec\" {\n      inline = [\n        \"sudo pcs host auth ${local.Okit_I_1664281601687_hostname} ${local.Okit_I_1664281604172_hostname} -u hacluster -p ${var.hacluser_password}\",\n        \"sudo pcs cluster setup ${var.cluster_name} ${local.Okit_I_1664281601687_hostname} ${local.Okit_I_1664281604172_hostname}\",\n        \"sudo pcs cluster start --all\",\n        \"sudo pcs cluster enable --all\",\n        \"sudo pcs property set stonith-enabled=false\",\n        \"sudo pcs property set no-quorum-policy=ignore\",\n        \"sudo pcs cluster status\",\n        \"sudo pcs resource create ${var.cluster_resource_name} ocf:heartbeat:IPaddr2 ip=${var.cluster_vip} cidr_netmask=${local.Okit_S_1664281598733_netmask} op monitor interval=20\"\n      ]\n    }\n\n    depends_on = [\n        oci_core_instance.Okit_I_1664281601687,\n        oci_core_instance.Okit_I_1664281604172,\n        null_resource.two-node-vip-node1,\n        null_resource.two-node-vip-node2,\n        oci_core_public_ip.two-node-vip-public-ip\n    ]    \n}\n"
+  },
+  "variables_schema": {
+    "groups": [
+      {
+        "default": "",
+        "description": "",
+        "name": "Undefined"
+      }
+    ],
+    "variables": [
+      {
+        "default": "",
+        "description": "",
+        "group": "Undefined",
+        "name": "local_config_file"
+      },
+      {
+        "default": "",
+        "description": "",
+        "group": "Undefined",
+        "name": "private_key_file"
+      },
+      {
+        "default": "",
+        "description": "",
+        "group": "Undefined",
+        "name": "cert_bundle_local_file"
+      },
+      {
+        "default": "",
+        "description": "",
+        "group": "Undefined",
+        "name": "cert_bundle_remote_file"
+      },
+      {
+        "default": "",
+        "description": "",
+        "group": "Undefined",
+        "name": "hacluser_password"
+      },
+      {
+        "default": "",
+        "description": "",
+        "group": "Undefined",
+        "name": "public_key"
+      },
+      {
+        "default": "/home/opc/.oci/config",
+        "description": "",
+        "group": "Undefined",
+        "name": "remote_config_file"
+      },
+      {
+        "default": "",
+        "description": "",
+        "group": "Undefined",
+        "name": "cluster_vip"
+      },
+      {
+        "default": "HACluster",
+        "description": "",
+        "group": "Undefined",
+        "name": "cluster_name"
+      },
+      {
+        "default": "HAFailover",
+        "description": "",
+        "group": "Undefined",
+        "name": "cluster_resource_name"
+      },
+      {
+        "default": "",
+        "description": "",
+        "group": "Undefined",
+        "name": "oci_connection_local_key_file"
+      },
+      {
+        "default": "/home/opc/.oci/oci_api_key.pem",
+        "description": "",
+        "group": "Undefined",
+        "name": "oci_connection_remote_key_file"
+      },
+      {
+        "default": "",
+        "description": "",
+        "group": "Undefined",
+        "name": "yum_proxy"
+      }
+    ]
+  },
+  "virtual_cloud_networks": [
+    {
+      "cidr_blocks": [
+        "10.0.0.0/24"
+      ],
+      "compartment_id": "okit.compartment.0ee68d82-c52b-4227-8a18-73066660644e",
+      "defined_tags": {},
+      "display_name": "havcn",
+      "dns_label": "havcn",
+      "documentation": "",
+      "freeform_tags": {},
+      "id": "okit.virtualcloudnetwork.929097e2-ec13-4a2f-95b7-83875ca072d1",
+      "ipv6cidr_blocks": [],
+      "is_ipv6enabled": false,
+      "okit_reference": "okit-504876fe-abf7-4877-8f3d-85df9e771f74",
+      "read_only": false,
+      "resource_name": "Okit_VCN_1664281595520"
+    }
+  ]
+}
