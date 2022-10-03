@@ -1,6 +1,15 @@
 # Release Notes
 
 
+## Version 0.42.0
+**Release Date**: 19th October 2022
+### Features
+1. Autonomous JSON Database.
+2. Autonomous APEX Database.
+### Bug Fixes
+1. Issue #540 : Check does not verify DNS-Label 
+
+
 ## Version 0.41.0
 **Release Date**: 28th September 2022
 ### Features
