@@ -7,4 +7,4 @@ file="$OKIT_DIR/log/okit.log"
 mkdir -p $(dirname $file) && touch "$file"
 pip install python-magic --user
 tenancy_id=$(curl -L -s 'http://169.254.169.254/opc/v1/instance/' | jq -r '.freeformTags."user-tenancy-ocid"')
-python visualiser/okit_query.py -p eu-paris-1 -r eu-paris-1 -j okit.json -c $tenancy_id -t $tenancy_id -s True
+python visualiser/okit_query.py -p eu-paris-1 -r eu-paris-1 -j okit.json -c $tenancy_id -t $tenancy_id -s
