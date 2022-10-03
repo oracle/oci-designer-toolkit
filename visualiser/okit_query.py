@@ -36,6 +36,7 @@ def processWorkflow(args):
             logger.info('Using Profile : {0!s:s}'.format(config_profile))
             config = {'region': region}
             query = OCIQuery(config=config, profile=config_profile)
+            query.tenancy_ocid = args['tenancy_id']
             response = query.executeQuery(regions=[regions] if regions else None, compartments=[compartments] if compartments else None, include_sub_compartments=sub_compartments)
             logJson(response)
             writeJsonFile(response, output_json)
@@ -52,6 +53,7 @@ def defaultArgs():
     args = {}
     args['profile'] = "DEFAULT"
     args['json'] = "./okit.json"
+    args['tenancy_id'] = ""
     args['compartment_id'] = ""
     args['region'] = ""
     args['sub_compartments'] = False
@@ -69,6 +71,8 @@ def readargs(opts, args):
             moduleargs['json'] = arg
         elif opt in ("-p", "--profile"):
             moduleargs['profile'] = arg
+        elif opt in ("-t", "--tenancy_id"):
+            moduleargs['tenancy_id'] = arg
         elif opt in ("-c", "--compartment_id"):
             moduleargs['compartment_id'] = arg
         elif opt in ("-r", "--region"):
@@ -84,6 +88,7 @@ def usage():
     print()
     print('python3 okit_query.py -p <profile> -r <region> -j <Output JSON> -c <compartment id> -s')
     print('               -r | --region           : Region to query.')
+    print('               -t | --tenancy_id       : OCID of Tenancy to be queried.')
     print('               -c | --compartment_id   : OCID of Compartment to be queried.')
     print('               -p | --profile          : (Optional) Profile to be used within the config file.')
     print('               -j | --json             : (Optional) Json Output file.')
@@ -92,8 +97,8 @@ def usage():
 # Main processing function
 def main(argv):
     # Configure Parameters and Options
-    options = 'j:p:c:r:sh?'
-    longOptions = ['json=', 'profile=', 'compartment_id=', 'region=', 'sub_compartments', 'help']
+    options = 'j:p:t:c:r:sh?'
+    longOptions = ['json=', 'profile=', 'tenancy_id=', 'compartment_id=', 'region=', 'sub_compartments', 'help']
     # Get Options & Arguments
     try:
         opts, args = getopt.getopt(argv, options, longOptions)
