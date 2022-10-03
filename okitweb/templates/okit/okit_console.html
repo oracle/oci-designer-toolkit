@@ -47,10 +47,12 @@
                 <div class="td okit-console-header-dropdown"><select id="console_header_region_select" onchange="handleRegionChanged()">
                     <option value="" selected="selected">Loading.....</option>
                 </select></div>
-                <div class="td okit-console-header-icon cloud"><a id="oci_link" class="okit-icon-link" href="https://console.us-phoenix-1.oraclecloud.com" target="_blank" rel="noopener noreferrer"></a></div>
+                <div class="td okit-console-header-icon cloud"><a id="oci_link" class="okit-icon-link" href="https://cloud.oracle.com/?region=us-ashburn-1" target="_blank" rel="noopener noreferrer"></a></div>
+                <!-- <div class="td okit-console-header-icon cloud"><a id="oci_link" class="okit-icon-link" href="https://console.us-phoenix-1.oraclecloud.com" target="_blank" rel="noopener noreferrer"></a></div> -->
                 {% elif session['username'] %}
                 <div class="td okit-console-header-right"><a href="javascript:void(0)">{{ session['username'] }}</a>&nbsp;&nbsp;<a href="{{ session['logout'] }}">Logout</a></div>
-                <div class="td okit-console-header-icon cloud"><a id="oci_link" class="okit-icon-link" href="https://console.{{ session['home_region'] }}.oraclecloud.com/?tenant={{ session['tenant'] }}&provider=OracleIdentityCloudService" target="_blank" rel="noopener noreferrer"></a></div>
+                <div class="td okit-console-header-icon cloud"><a id="oci_link" class="okit-icon-link" href="https://cloud.oracle.com/?region={{ session['home_region'] }}&tenant={{ session['tenant'] }}&provider=OracleIdentityCloudService" target="_blank" rel="noopener noreferrer"></a></div>
+                <!-- <div class="td okit-console-header-icon cloud"><a id="oci_link" class="okit-icon-link" href="https://console.{{ session['home_region'] }}.oraclecloud.com/?tenant={{ session['tenant'] }}&provider=OracleIdentityCloudService" target="_blank" rel="noopener noreferrer"></a></div> -->
                 {% else %}
                 <div class="td okit-console-header-right"><a href="/okit/login">Login</a></div>
                 {% endif %}

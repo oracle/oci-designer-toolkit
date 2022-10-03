@@ -48,27 +48,8 @@ function resetCompartment() {
 ** Set OCI Link
  */
 function setOCILink() {
-    if (okitSettings.region && okitSettings.region != '') $(jqId('oci_link')).attr('href', `https://console.${okitSettings.region}.oraclecloud.com`)
-}
-function setOCILinkOld() {
-    $.ajax({
-        cache: false,
-        type: 'get',
-        url: `config/region/${okitSettings.profile}`,
-        dataType: 'text',
-        contentType: 'application/json',
-        success: function(resp) {
-            //console.info('Response : ' + resp);
-            let jsonBody = JSON.parse(resp)
-            let oci_href = `https://console.${jsonBody.name}.oraclecloud.com`;
-            console.info('OCI Console url :' + oci_href);
-            $(jqId('oci_link')).attr('href', oci_href);
-        },
-        error: function(xhr, status, error) {
-            console.info('Status : '+ status)
-            console.info('Error : '+ error)
-        }
-    });
+    // if (okitSettings.region && okitSettings.region != '') $(jqId('oci_link')).attr('href', `https://console.${okitSettings.region}.oraclecloud.com`)
+    if (okitSettings.region && okitSettings.region != '') $(jqId('oci_link')).attr('href', `https://cloud.oracle.com/?region=${okitSettings.region}`)
 }
 /*
 ** Navigation Menu handlers
