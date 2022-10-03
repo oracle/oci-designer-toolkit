@@ -86,7 +86,7 @@ def readargs(opts, args):
 
 def usage():
     print()
-    print('python3 okit_query.py -p <profile> -r <region> -j <Output JSON> -c <compartment id> -s')
+    print('python3 okit_query.py -p <profile> -r <region> -t <tenancy id>-j <Output JSON> -c <compartment id> -s')
     print('               -r | --region           : Region to query.')
     print('               -t | --tenancy_id       : OCID of Tenancy to be queried.')
     print('               -c | --compartment_id   : OCID of Compartment to be queried.')
