@@ -39,7 +39,7 @@ function hideAllViewDivs() {
 }
 
 function handleSwitchToCompartmentView(e) {
-    //okitJsonView = new OkitDesignerJsonView(okitJsonModel);
+    //okitJsonView = new OkitCompartmentJsonView(okitJsonModel);
     okitJsonView.update();
     hideAllViewDivs();
     $("#canvas-div").removeClass('hidden');

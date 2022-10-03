@@ -50,9 +50,9 @@ function hclJsonLoad(evt) {
             let response_json = JSON.parse(resp);
             // okitJsonModel = new OkitJson(JSON.stringify(response_json.okit_json));
             newModel(JSON.stringify(response_json.okit_json));
-            newDesignerView();
+            newCompartmentView();
             displayOkitJson();
-            displayDesignerView();
+            displayCompartmentView();
             displayTreeView();
         },
         error: function(xhr, status, error) {
@@ -110,9 +110,9 @@ function TFStateJsonLoad(evt) {
             console.info(response_json.okit_json)
             // okitJsonModel = new OkitJson(JSON.stringify(response_json.okit_json));
             newModel(JSON.stringify(response_json.okit_json));
-            newDesignerView();
+            newCompartmentView();
             displayOkitJson();
-            displayDesignerView();
+            displayCompartmentView();
             displayTreeView();
         }).fail((xhr, status, error) => {
             console.info('Status : '+ status)
@@ -174,9 +174,9 @@ function cceJsonLoad(evt) {
             console.info(response_json);
             // okitJsonModel = new OkitJson(JSON.stringify(response_json.okit_json));
             newModel(JSON.stringify(response_json.okit_json));
-            newDesignerView();
+            newCompartmentView();
             displayOkitJson();
-            displayDesignerView();
+            displayCompartmentView();
             displayTreeView();
         },
         error: function(xhr, status, error) {
@@ -232,9 +232,9 @@ function cd3XlsxLoad(form_data) {
             console.info(response_json);
             // okitJsonModel = new OkitJson(JSON.stringify(response_json.okit_json));
             newModel(JSON.stringify(response_json.okit_json));
-            newDesignerView();
+            newCompartmentView();
             displayOkitJson();
-            displayDesignerView();
+            displayCompartmentView();
             displayTreeView();
         },
         error: function(xhr, status, error) {

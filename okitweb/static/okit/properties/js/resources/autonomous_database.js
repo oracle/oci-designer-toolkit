@@ -57,7 +57,7 @@ class AutonomousDatabaseProperties extends OkitResourceProperties {
         this.admin_password = admin_password.input
         // Workload
         const db_workload_data = {options: {...this.db_workload_data.options, AJD: 'JSON Database', APEX: 'Oracle APEX Application Development'}}
-        const db_workload = this.createInput('select', 'Workload', `${this.id}_db_workload`, '', (d, i, n) => this.resource.db_workload = n[i].value, db_workload_data)
+        const db_workload = this.createInput('select', 'Workload', `${this.id}_db_workload`, '', (d, i, n) => {this.resource.db_workload = n[i].value; this.showCollapseWorkloadRows(this.resource.db_workload)}, db_workload_data)
         this.db_workload = db_workload.input
         this.append(this.database_tbody, db_workload.row)
         // License Model
@@ -104,8 +104,9 @@ class AutonomousDatabaseProperties extends OkitResourceProperties {
         this.data_storage_size_in_tbs.property('value', this.resource.data_storage_size_in_tbs)
         this.cpu_core_count.property('value', this.resource.cpu_core_count)
         this.is_auto_scaling_enabled.property('checked', this.resource.is_auto_scaling_enabled)
-        // Shop / Collapse
+        // Show / Collapse
         this.showCollapseFreeTierRows()
+        this.showCollapseWorkloadRows()
     }
 
     handleFreeTierChanged(is_free_tier) {
@@ -126,5 +127,14 @@ class AutonomousDatabaseProperties extends OkitResourceProperties {
         this.license_model_row.classed('collapsed', is_free_tier)
         this.is_auto_scaling_enabled_row.classed('collapsed', is_free_tier)
         this.private_endpoint_label_row.classed('collapsed', is_free_tier)
+    }
+
+    showCollapseWorkloadRows(db_workload) {
+        db_workload = db_workload !== undefined ? db_workload : this.resource.db_workload
+        const is_ajd_apex = db_workload === 'AJD' || db_workload === 'APEX'
+        if (is_ajd_apex) {
+            this.resource.license_model = 'LICENSE_INCLUDED'
+        }
+        this.license_model_row.classed('collapsed', is_ajd_apex)
     }
 }

@@ -38,7 +38,7 @@ class SubnetProperties extends OkitResourceProperties {
         this.append(this.advanced_network_tbody, ad.row)
         // DNS Label
         const dns_data = this.dns_data
-        const dns = this.createInput('text', 'DNS Label', `${self.id}_dns_label`, '', (d, i, n) => {n[i].reportValidity(); self.resource.dns_label = n[i].value}, dns_data)
+        const dns = this.createInput('text', 'DNS Label', `${self.id}_dns_label`, '', (d, i, n) => {if (n[i].reportValidity()) self.resource.dns_label = n[i].value}, dns_data)
         this.dns_label = dns.input
         this.append(this.advanced_network_tbody, dns.row)
         // Private

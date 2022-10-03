@@ -253,7 +253,7 @@ class OkitTabularJsonView extends OkitJsonView {
         let first = true;
         let cnt = 1;
         for (let resource of this.okitjson[resource_type]) {
-            // Designer View Object
+            // Compartment View Object
             const view_resource = this.getViewResource(resource.getArtifactReference(), resource.id);
             const tr = tbody.append('div').attr('class', 'tr okit-tr-first-column-count').on('click', function() {
                 // view_resource.loadSlidePanels()

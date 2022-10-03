@@ -8,9 +8,9 @@ console.debug('Loaded {{ artefact_name }} View Javascript');
 ** Define {{ artefact_name }} View Class
 */
 {% if container_artefact is not defined %}
-class {{ model_class_name }}View extends OkitArtefactView {
+class {{ model_class_name }}View extends OkitCompartmentArtefactView {
 {% else %}
-class {{ model_class_name }}View extends OkitContainerArtefactView {
+class {{ model_class_name }}View extends OkitContainerCompartmentArtefactView {
 {% endif %}
     constructor(artefact=null, json_view) {
         if (!json_view.{{ artefact_json_list }}) json_view.{{ artefact_json_list }} = [];
