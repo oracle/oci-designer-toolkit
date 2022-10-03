@@ -2,7 +2,7 @@
 ** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
-console.debug('Loaded Designer Ready Javascript');
+console.debug('Loaded Compartment Ready Javascript');
 
 /*
 ** Define variables for Artefact classes
@@ -30,8 +30,8 @@ $(document).ready(function() {
     okitOciProductPricing = new OkitOciProductPricing()
     // okitJsonModel = new OkitJson();
     newModel()
-    okitJsonView = OkitDesignerJsonView.newView(okitJsonModel, okitOciData, resource_icons);
-    // okitJsonView = new OkitDesignerJsonView(okitJsonModel);
+    okitJsonView = OkitCompartmentJsonView.newView(okitJsonModel, okitOciData, resource_icons);
+    // okitJsonView = new OkitCompartmentJsonView(okitJsonModel);
     // okitTabularView = new OkitTabularJsonView(okitJsonModel);
     okitTabularView = OkitTabularJsonView.newView(okitJsonModel, okitOciData, resource_icons);
     console.info(okitJsonView);
@@ -55,7 +55,7 @@ $(document).ready(function() {
     /*
     ** Add handler functionality
      */
-    console.info('Adding Designer Handlers');
+    console.info('Adding Compartment Handlers');
 
     // Left Bar & Panels
     /*
@@ -104,7 +104,7 @@ $(document).ready(function() {
             slideLeftPanel('git_panel')
         });
 
-    console.info('Added Designer Handlers');
+    console.info('Added Compartment Handlers');
 
     /*
     ** Add Load File Handling

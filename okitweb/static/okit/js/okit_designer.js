@@ -2,7 +2,7 @@
 ** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
-console.debug('Loaded Designer Javascript');
+console.debug('Loaded Compartment Javascript');
 
 /*
  * Define designer working variables
@@ -32,11 +32,11 @@ let right_drag_bar_start_x = 0;
 // Automation details
 let ociRegions = [];
 
-function resetDesigner() {
+function resetCompartment() {
     $("#toolbar_view_select").val('designer');
     handleSwitchToCompartmentView();
     newModel();
-    newDesignerView();
+    newCompartmentView();
     regionOkitJson = {};
     clearRegionTabBar();
     hideRegionTabBar();
@@ -83,12 +83,12 @@ function handlePreferences(evt) {
 let recovered_model = undefined;
 function handleRecover(evt) {
     if (recovered_model) {
-        resetDesigner();
+        resetCompartment();
         // okitJsonModel = new OkitJson(JSON.stringify(recovered_model));
         newModel(JSON.stringify(recovered_model));
-        newDesignerView();
+        newCompartmentView();
         displayOkitJson();
-        displayDesignerView();
+        displayCompartmentView();
         displayTreeView();
     }
     hideRecoverMenuItem();
@@ -101,7 +101,7 @@ function hideRecoverMenuItem() {
  */
 function handleNew(evt) {
     hideNavMenu();
-    resetDesigner();
+    resetCompartment();
     newDiagram();
     redrawSVGCanvas();
     hideRecoverMenuItem();
@@ -116,7 +116,7 @@ function newDiagram() {
     }
     const data = {compartments: [compartment]}
     newModel(data);
-    newDesignerView();
+    newCompartmentView();
     // okitJsonView.newCanvas();
     // okitJsonView.newCompartment();
     // // Set Top Compartment as deployment compartment
@@ -127,9 +127,9 @@ function newDiagram() {
     // resource.definition = 'Logical Compartment that represents the deployment location for the resources specified within the design. This compartment will not be created during the build process.'
     console.info(okitJsonView);
 }
-function newDesignerView() {
-    // okitJsonView = new OkitDesignerJsonView(okitJsonModel, 'canvas-div', palette_svg);
-    okitJsonView = OkitDesignerJsonView.newView(okitJsonModel, okitOciData, resource_icons);
+function newCompartmentView() {
+    // okitJsonView = new OkitCompartmentJsonView(okitJsonModel, 'canvas-div', palette_svg);
+    okitJsonView = OkitCompartmentJsonView.newView(okitJsonModel, okitOciData, resource_icons);
     loadVariablesDatalist()
 }
 // function newModel() {
@@ -186,7 +186,7 @@ function handleEnableCreate(event) {
     if (okitJsonModel) {
         Object.values(okitJsonModel).filter((v) => Array.isArray(v)).forEach((v) => v.forEach((r) => r.read_only = false));
         okitJsonModel.title = `${okitJsonModel.title} - Read/Write Copy`;
-        okitJsonView = OkitDesignerJsonView.newView(okitJsonModel, okitOciData, resource_icons);
+        okitJsonView = OkitCompartmentJsonView.newView(okitJsonModel, okitOciData, resource_icons);
         redrawSVGCanvas();
     }
 }
@@ -196,7 +196,7 @@ function handleEnableCreate(event) {
  */
 function handleLoad(evt) {
     hideNavMenu();
-    resetDesigner();
+    resetCompartment();
     /*
     ** Add Load File Handling
      */
@@ -232,7 +232,7 @@ function loaded(evt) {
         console.info('>> Single Region File')
         // okitJsonModel = new OkitJson(fileString);
         newModel(fileString)
-        newDesignerView();
+        newCompartmentView();
     } else {
         console.info('>> Multi Region File.')
         showRegionTabBar();
@@ -243,13 +243,13 @@ function loaded(evt) {
             if (okitJsonModel === null) {
                 // okitJsonModel = regionOkitJson[region];
                 newModel(regionOkitJson[region]);
-                newDesignerView();
+                newCompartmentView();
                 $(jqId(regionTabName(region))).trigger("click");
             }
         }
     }
     displayOkitJson();
-    displayDesignerView();
+    displayCompartmentView();
     displayTreeView();
     hideRecoverMenuItem();
 }
@@ -669,7 +669,7 @@ function handleRedraw(evt) {
 }
 function redrawSVGCanvas(recalculate=false) {
     if (recalculate) {resetRecalculateFlag();}
-    displayDesignerView();
+    displayCompartmentView();
     // displayOkitJson();
 }
 function redrawTerraformView() {
@@ -870,7 +870,7 @@ function handleThreeDotsMenu(evt) {
  */
 function loadTemplate(template_url) {
     hideNavMenu();
-    resetDesigner();
+    resetCompartment();
     $.ajax({
         cache: false,
         type: 'get',
@@ -883,9 +883,9 @@ function loadTemplate(template_url) {
         success: function(resp) {
             // okitJsonModel = new OkitJson(resp);
             newModel(resp)
-            newDesignerView();
+            newCompartmentView();
             displayOkitJson();
-            displayDesignerView();
+            displayCompartmentView();
             displayTreeView();
             slideLeftPanel('icons_palette')
         },
@@ -934,7 +934,7 @@ function importTemplate(template_url, event) {
                                 okitJsonModel.load(JSON.parse(resp))
                                 okitJsonView.load()
                                 displayOkitJson();
-                                displayDesignerView();
+                                displayCompartmentView();
                                 displayTreeView();
                             },
                             error: function(xhr, status, error) {
@@ -1304,7 +1304,7 @@ function showQueryOCIResults() {
     clearRegionTabBar();
     showRegionTabBar();
     newModel();
-    newDesignerView();
+    newCompartmentView();
     okitJsonView.newCanvas();
     console.info('Regions Ids : ' + regions);
     // newRegionsModel();
@@ -1327,7 +1327,7 @@ function showQueryOCIResults() {
             console.info('Complete ' + region);
             // okitJsonModel = regionOkitJson[region];
             newModel(regionOkitJson[region]);
-            newDesignerView();
+            newCompartmentView();
             redrawSVGCanvas(region);
             displayTreeView();
             $(jqId('modal_loading_wrapper')).addClass('hidden');
@@ -1453,7 +1453,7 @@ function queryPCA(callback=undefined) {
     clearRegionTabBar();
     showRegionTabBar();
     newModel();
-    newDesignerView();
+    newCompartmentView();
     okitJsonView.newCanvas();
     console.info('Regions Ids : ' + regions);
     console.info(`Request : ${request}`);
@@ -1479,7 +1479,7 @@ function showQueryPCAResults(region) {
     console.info(regionOkitJson[region])
     // okitJsonModel = regionOkitJson[region];
     newModel(regionOkitJson[region]);
-    newDesignerView();
+    newCompartmentView();
     redrawSVGCanvas(region);
     displayTreeView();
 }
@@ -1620,7 +1620,7 @@ function addRegionTab(region) {
             activeRegion = region;
             // okitJsonModel = regionOkitJson[region];
             newModel(regionOkitJson[region]);
-            newDesignerView();
+            newCompartmentView();
             redrawSVGCanvas();
         });
 }
@@ -1670,7 +1670,7 @@ function displayOkitJson() {
 /*
 ** Draw Canvas
  */
-function displayDesignerView() {
+function displayCompartmentView() {
     okitJsonView.draw();
     // redrawViews()
     setTitleDescription();
