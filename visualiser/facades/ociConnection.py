@@ -91,7 +91,6 @@ class OCIConnection(object):
                 delegation_token = delegation_token_file.read().strip()
                 # get signer from delegation token
                 self.signer = oci.auth.signers.InstancePrincipalsDelegationTokenSigner(delegation_token=delegation_token)
-            self.instance_principal = True
         except Exception:
             logger.warn('Delegation Token is not available')
             self.signerFromConfig()
