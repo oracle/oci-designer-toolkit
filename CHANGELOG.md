@@ -6,6 +6,7 @@
 ### Features
 1. Autonomous JSON Database.
 2. Autonomous APEX Database.
+3. Update OCI Link to new common cloud url.
 ### Bug Fixes
 1. Issue #540 : Check does not verify DNS-Label 
 
