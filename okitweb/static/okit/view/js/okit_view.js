@@ -110,12 +110,15 @@ class OkitJsonView {
     /*
     ** Artefact Processing
      */
+    getResources = () => Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], [])
+    getResource = (id='') => this.getResources().find((r) => r.id === id)
 
-    getResource(id='') {
-        const resource = Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter((r) => r.id === id)[0]
-        console.info('Resource', resource)
-        return resource
-    }
+    // getResource(id='') {
+    //     // const resource = Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter((r) => r.id === id)[0]
+    //     const resource = Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).find((r) => r.id === id)
+    //     console.info('Resource', resource)
+    //     return resource
+    // }
 
     // Fragment
     dropFragmentView(target) {
