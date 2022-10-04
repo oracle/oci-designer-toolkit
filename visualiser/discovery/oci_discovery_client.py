@@ -690,7 +690,7 @@ class OciResourceDiscoveryClient(object):
         if tenancy_override:
             tenancy = identity.get_tenancy(tenancy_override).data
         else:
-            logger.info(self.config['tenancy'])
+            logger.debug(self.config['tenancy'])
             tenancy = identity.get_tenancy(self.config["tenancy"]).data
         return tenancy
 

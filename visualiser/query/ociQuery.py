@@ -179,7 +179,7 @@ class OCIQuery(OCIConnection):
         logger.info('Request : {0!s:s}'.format(str(include_sub_compartments)))
         if self.instance_principal:
             self.config['tenancy'] = self.getTenancy()
-        logger.info(self.config['tenancy'])
+        logger.debug(self.config['tenancy'])
         # if "cert-bundle" in self.config:
         #     cert_bundle = self.config["cert-bundle"]
         # else:

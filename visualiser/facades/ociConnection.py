@@ -152,7 +152,7 @@ class OCIConnection(object):
             if self.instance_principal:
                 client = oci.identity.IdentityClient(config=self.config, signer=self.signer)
                 compartment_id = os.getenv('OKIT_VM_COMPARTMENT', '')
-                logger.info(compartment_id)
+                logger.debug(compartment_id)
                 if compartment_id is not None and compartment_id != '':
                     while '.tenancy.' not in compartment_id:
                         compartment = self.toJson(client.get_compartment(compartment_id=compartment_id).data)
