@@ -1,0 +1,9 @@
+{% import "common_macros.jinja2" as common with context %}
+{% macro document_variable(variable) -%}
+{{ "| %-15s | %s |%s |" | format(variable.name, variable.default, variable.description) }}
+{%- endmacro %}
+| Name | Default        | Description    |
+| ---- | -------------- | -------------- |
+{% for variable in variables_schema.variables -%}
+    {{ document_variable(variable) }}
+{% endfor %}
