@@ -9,6 +9,8 @@
 3. Update OCI Link to new common cloud url.
 ### Bug Fixes
 1. Issue #540 : Check does not verify DNS-Label 
+2. Convert VCN CIDR_BLOCKS to string in MArkdown export.
+3. Add correct DBHome & Database information to Database System following query.
 
 
 ## Version 0.41.0

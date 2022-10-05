@@ -255,6 +255,8 @@ class OCIQuery(OCIConnection):
                         resource_list = self.network_load_balancers(resource_list, resources)
                     elif resource_type == "NoSQLTable":
                         resource_list = self.nosql_databases(resource_list, resources)
+                    elif resource_type == "DbSystem":
+                        resource_list = self.database_systems(resource_list, resources)
                     # elif resource_type == "AnalyticsInstance":
                     #     resource_list = self.analytics_instances(resource_list, resources)
                     # Check Life Cycle State
@@ -274,6 +276,12 @@ class OCIQuery(OCIConnection):
         for ai in analytics_instances:
             logger.info(jsonToFormattedString(ai))
         return analytics_instances
+
+    def database_systems(self, database_systems, resources):
+        for db_system in database_systems:
+            db_system['db_home'] = [r for r in resources.get("DbHome", []) if r["db_system_id"] == db_system["id"]][0]
+            db_system['db_home']['database'] = [r for r in resources.get("Database", []) if r["db_home_id"] == db_system['db_home']["id"]][0]
+        return database_systems
 
     def dynamic_routing_gateways(self, drgs, resources):
         for drg in drgs:
