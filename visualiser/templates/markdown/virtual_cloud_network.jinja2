@@ -3,7 +3,7 @@
 {{ common.document_common_details(resource) }}
 {{ common.document_common_properties(resource) }}
 {{ common.document_property("DNS Label", resource.dns_label) }}
-{{ common.document_property("CIDR Blocks", resource.cidr_blocks) }}
+{{ common.document_property("CIDR Blocks", resource.cidr_blocks | join(', ')) }}
     {% if resource.is_ipv6enabled %}
 {{ common.document_property("IPv6 Enabled", resource.is_ipv6enabled) }}
 {{ common.document_property("IPv6 CIDR Block", resource.ipv6cidr_block) }}
