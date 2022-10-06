@@ -112,6 +112,8 @@ class OkitJsonView {
      */
     getResources = () => Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], [])
     getResource = (id='') => this.getResources().find((r) => r.id === id)
+    getFunction(resource_type) {return `get${titleCase(resource_type).split(' ').join('')}`}
+    getArrayFunction(resource_type) {return `${this.getFunction(resource_type)}s`}
 
     // getResource(id='') {
     //     // const resource = Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter((r) => r.id === id)[0]

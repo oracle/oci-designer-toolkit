@@ -59,12 +59,12 @@ OkitJsonView.prototype.getNosqlDatabases = function() {
     return this.nosql_databases;
 }
 OkitJsonView.prototype.getNosqlDatabase = function(id='') {
-    for (let artefact of this.getNosqlDatabases()) {
-        if (artefact.id === id) {
-            return artefact;
-        }
-    }
-    return undefined;
+    // for (let artefact of this.getNosqlDatabases()) {
+    //     if (artefact.id === id) {
+    //         return artefact;
+    //     }
+    // }
+    return this.getNosqlDatabases().find(r => r.id === id);
 }
 OkitJsonView.prototype.loadNosqlDatabases = function(nosql_databases) {
     for (const artefact of nosql_databases) {
