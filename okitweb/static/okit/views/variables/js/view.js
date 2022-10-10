@@ -49,7 +49,7 @@ class OkitVariablesView extends OkitJsonView {
     addVariableHtml(tbody, v) {
         const tr = tbody.append('div').attr('class', 'tr')
         const name_regex = '^(?=^.{1,}$)([a-zA-Z]+[a-zA-Z0-9_]*)$'
-        tr.append('div').attr('class', 'td').append('input').attr('type', 'text').attr('class', 'okit-property-value').attr('pattern', name_regex).attr('title', 'Only alphanumeric characters and underscores.').attr('minlength', 1).on('blur', (d, i, n) => {n[i].reportValidity(); v.name = n[i].value}).property('value', v.name)
+        tr.append('div').attr('class', 'td').append('input').attr('type', 'text').attr('class', 'okit-property-value').attr('pattern', name_regex).attr('title', 'Only alphanumeric characters and underscores.').attr('minlength', 1).on('blur', (d, i, n) => {if (n[i].reportValidity()) v.name = n[i].value}).property('value', v.name)
         tr.append('div').attr('class', 'td').append('input').attr('type', 'text').attr('class', 'okit-property-value').on('blur', (d, i, n) => v.default = n[i].value).property('value', v.default)
         tr.append('div').attr('class', 'td').append('input').attr('type', 'text').attr('class', 'okit-property-value').on('blur', (d, i, n) => v.description = n[i].value).property('value', v.description)
         tr.append('div').attr('class', 'td delete-property action-button-background delete').on('click', () => this.deleteVariable(tr, v))
