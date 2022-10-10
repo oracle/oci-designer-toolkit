@@ -10,7 +10,11 @@
     margin: 0;
     height: 100%;
     width: 100%;
-    overflow: hidden;
+    overflow: scroll;
     font-family: Arial, Helvetica, sans-serif;
     font-size: smaller;
+}
+
+.okit-markdown-canvas p {
+    font-size: larger;
 }

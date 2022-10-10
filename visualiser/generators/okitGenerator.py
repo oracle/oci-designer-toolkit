@@ -128,6 +128,10 @@ class OCIGenerator(object):
     def toJson(self):
         pass
 
+    def toText(self):
+        main_rendered = self.getRenderedMain()
+        return '\n'.join(main_rendered)
+
     def formatJinja2Variable(self, variable_name):
         pass
 

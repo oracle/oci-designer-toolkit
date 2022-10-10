@@ -7,6 +7,7 @@
 1. Autonomous JSON Database.
 2. Autonomous APEX Database.
 3. Update OCI Link to new common cloud url.
+4. Add Markdown View
 ### Bug Fixes
 1. Issue #540 : Check does not verify DNS-Label 
 2. Convert VCN CIDR_BLOCKS to string in MArkdown export.

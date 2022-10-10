@@ -27,11 +27,15 @@ class OkitMarkdownView extends OkitJsonView {
         // Empty existing Canvas
         canvas_div.selectAll('*').remove();
         // Add TextArea
-        this.generate()
-        const tab_content = canvas_div.append('textarea')
-            .attr('class', 'code')
-            .attr('readonly', 'readonly')
-            .text(this.markdown);
+        // this.generate()
+        // // const tab_content = canvas_div.append('textarea')
+        // //     .attr('class', 'code')
+        // //     .attr('readonly', 'readonly')
+        // //     .text(this.markdown);
+        // console.info('Remarkable', remarkable)
+        // const md_converter = new remarkable.Remarkable()
+        // canvas_div.html(md_converter.render(this.markdown))
+        this.generateMarkdown()
     }
 
     getSections() {
@@ -53,7 +57,7 @@ class OkitMarkdownView extends OkitJsonView {
     }
 
     generate() {
-        const md =[ 
+        const md = [ 
             `# ${this.model.title}`,
             this.model.documentation,
             this.model.svg ? this.model.svg : '',
@@ -63,6 +67,69 @@ class OkitMarkdownView extends OkitJsonView {
             ]
         this.markdown = md.filter(s => s !== '').join('\n')
     }
+
+    generateMarkdown() {
+        let requestJson = JSON.clone(this.model);
+        requestJson.use_variables = okitSettings.is_variables;
+        const dimensions = setExportDisplay();
+        console.info('Canvas Dimensions', dimensions)
+        const okitcanvas = document.getElementById("canvas-svg");
+        okitcanvas.setAttribute('width', dimensions.width)
+        okitcanvas.setAttribute('height', dimensions.height)
+        okitcanvas.setAttribute('viewBox', `0 0 ${dimensions.width} ${dimensions.height}`)
+        const svg_string = okitcanvas.outerHTML.replaceAll('\n', ' ');
+        const b64svg = btoa(svg_string)
+        const uri_encoded = encodeURI(b64svg)
+        // requestJson.svg = `![Design](data:image/svg+xml;base64,${uri_encoded}, "Design")`
+        // requestJson.svg = `![Design](data:image/svg+xml,${encodeURI(svg_string)}, "Design")`
+        // requestJson.svg = `<div>${svg_string}</div>`
+        requestJson.svg = okitcanvas.outerHTML.replaceAll('\n', ' ');
+        // Add Style and Def to Compartment SVG
+        for (let compartment of requestJson.compartments) {
+            let svg_id = okitJsonView.getCompartment(compartment.id).svg_id;
+            let svg = d3.select(d3Id(svg_id));
+            okitJsonView.addDefinitions(svg);
+            const svg_string = document.getElementById(svg_id).outerHTML.replaceAll('\n', ' ');
+            const b64svg = btoa(svg_string)
+            const uri_encoded = encodeURI(b64svg)
+            compartment.svg = `![Design](data:image/svg+xml;base64,${uri_encoded}, "Design")`
+        }
+        // Add Style and Def to VCN SVG
+        if (requestJson.virtual_cloud_networks) {
+            for (let vcn of requestJson.virtual_cloud_networks) {
+                let svg_id = okitJsonView.getVirtualCloudNetwork(vcn.id).svg_id;
+                let svg = d3.select(d3Id(svg_id));
+                okitJsonView.addDefinitions(svg);
+                vcn.svg = document.getElementById(svg_id).outerHTML.replaceAll('\n', ' ');
+            }
+        }
+        // Add Style and Def to Subnet SVG
+        if (requestJson.subnets) {
+            for (let subnet of requestJson.subnets) {
+                let svg_id = okitJsonView.getSubnet(subnet.id).svg_id;
+                let svg = d3.select(d3Id(svg_id));
+                okitJsonView.addDefinitions(svg);
+                subnet.svg = document.getElementById(svg_id).outerHTML.replaceAll('\n', ' ');
+            }
+        }
+        okitJsonView.draw();
+        $.ajax({
+            cache: false,
+            type: 'get',
+            url: 'export/markdown',
+            dataType: 'text',
+            contentType: 'text',
+            data: {
+                design: JSON.stringify(requestJson)
+            }
+        }).done((resp) => {
+            const canvas_div = d3.select(d3Id(this.parent_id));
+            const md_converter = new remarkable.Remarkable({html: true})
+            this.markdown = resp
+            canvas_div.html(md_converter.render(this.markdown))    
+        })
+    }
+    
 
     documentSection(section, resources) {
         console.info(`Section: ${section} Resources:`, resources)
