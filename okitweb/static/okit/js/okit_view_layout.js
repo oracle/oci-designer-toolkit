@@ -20,6 +20,7 @@ function handleViewSelect(e) {
     // const selected = $("#console_header_view_select").val();
     const selected = $("#toolbar_view_select").val();
     if (selected === 'designer') handleSwitchToCompartmentView(e)
+    else if (selected === 'freeform') handleSwitchFreeFormView(e)
     else if (selected === 'bom') handleSwitchBoMView(e)
     else if (selected === 'cache') handleSwitchToTextCacheView(e)
     else if (selected === 'identity') handleSwitchToIdentityView(e)
@@ -46,6 +47,19 @@ function handleSwitchToCompartmentView(e) {
     showSideBars();
     $("#zoom_controls > div").each((i, e) => $(e).removeClass('hidden'))
     loadVariablesDatalist()
+}
+
+function handleSwitchFreeFormView(e) {
+    hideAllViewDivs();
+    $("#freeform-div").removeClass('hidden');
+    hideSideBars();
+    const okitFile = new OkitFile()
+    console.info('File', okitFile)
+    Object.entries(okitJsonModel).forEach(([k,v]) => {
+        if (Array.isArray(v)) okitFile.model.oci.region.undefined.resources[k] = v
+    })
+    okitFreeformView = OkitFreeformView.newView(okitFile, okitOciData, resource_icons);
+    okitFreeformView.draw();
 }
 
 function handleSwitchToTabularView(e) {

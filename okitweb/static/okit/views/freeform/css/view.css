@@ -1,0 +1,43 @@
+/*
+# Copyright (c) 2020, 2022, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+*/
+
+:root {
+    --resource-selection-width: 200px;
+ }
+
+ .okit-freeform-canvas {
+    display: block;
+    height: 100%;
+ }
+
+.fv-resource-list {
+    /* border: 1px solid green; */
+    display: block;
+    float: left;
+    height: 100%;
+    width: var(--resource-selection-width);
+    border-right: black solid 1px;
+    overflow: scroll;
+}
+
+.fv-layouts {
+    border: 1px solid greenyellow;
+    display: block;
+    float: left;
+    height: 100%;
+    width: calc(100% - var(--resource-selection-width));
+    background: #fff;
+    padding: 0;
+    margin: 0;
+    overflow: scroll;
+}
+
+.fv-layouts-header {
+    border: 1px solid red;
+}
+
+.fv-layouts-tab-bar {
+    border: 1px solid blue;
+}
