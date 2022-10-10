@@ -42,7 +42,8 @@ class OkitCompartmentJsonView extends OkitJsonView {
     }
 
     draw(for_export=false) {
-        console.info('Drawing Compartment Canvas');
+        console.info(`Drawing Compartment Canvas: For Export ${for_export}`);
+        console.info('Canvas', this.canvas)
         // Display Json
         this.displayOkitJson();
         if (!this.canvas) {

@@ -77,22 +77,13 @@ class OkitMarkdownView extends OkitJsonView {
         okitcanvas.setAttribute('width', dimensions.width)
         okitcanvas.setAttribute('height', dimensions.height)
         okitcanvas.setAttribute('viewBox', `0 0 ${dimensions.width} ${dimensions.height}`)
-        const svg_string = okitcanvas.outerHTML.replaceAll('\n', ' ');
-        const b64svg = btoa(svg_string)
-        const uri_encoded = encodeURI(b64svg)
-        // requestJson.svg = `![Design](data:image/svg+xml;base64,${uri_encoded}, "Design")`
-        // requestJson.svg = `![Design](data:image/svg+xml,${encodeURI(svg_string)}, "Design")`
-        // requestJson.svg = `<div>${svg_string}</div>`
         requestJson.svg = okitcanvas.outerHTML.replaceAll('\n', ' ');
         // Add Style and Def to Compartment SVG
         for (let compartment of requestJson.compartments) {
             let svg_id = okitJsonView.getCompartment(compartment.id).svg_id;
             let svg = d3.select(d3Id(svg_id));
             okitJsonView.addDefinitions(svg);
-            const svg_string = document.getElementById(svg_id).outerHTML.replaceAll('\n', ' ');
-            const b64svg = btoa(svg_string)
-            const uri_encoded = encodeURI(b64svg)
-            compartment.svg = `![Design](data:image/svg+xml;base64,${uri_encoded}, "Design")`
+            compartment.svg = document.getElementById(svg_id).outerHTML.replaceAll('\n', ' ');
         }
         // Add Style and Def to VCN SVG
         if (requestJson.virtual_cloud_networks) {
@@ -112,7 +103,7 @@ class OkitMarkdownView extends OkitJsonView {
                 subnet.svg = document.getElementById(svg_id).outerHTML.replaceAll('\n', ' ');
             }
         }
-        okitJsonView.draw();
+        // okitJsonView.draw();
         $.ajax({
             cache: false,
             type: 'get',

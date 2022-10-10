@@ -18,3 +18,22 @@
 .okit-markdown-canvas p {
     font-size: larger;
 }
+
+.okit-markdown-canvas table,th,td {
+    border: 1px solid grey;
+    border-collapse: collapse;}
+
+.okit-markdown-canvas tr:nth-child(even) {
+    background-color: lightsteelblue;
+    height: 1.5em;
+}
+
+.okit-markdown-canvas th {
+    font-size: larger;
+    padding: 2px;
+}
+
+.okit-markdown-canvas td {
+    font-size: larger;
+    padding: 2px;
+}

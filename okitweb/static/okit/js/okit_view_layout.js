@@ -40,7 +40,9 @@ function hideAllViewDivs() {
 }
 
 function handleSwitchToCompartmentView(e) {
-    //okitJsonView = new OkitCompartmentJsonView(okitJsonModel);
+    // okitJsonView = new OkitCompartmentJsonView(okitJsonModel, okitOciData, resource_icons);
+    // Clear the SVG info in the Markdown Panel
+    d3.select(d3Id('markdown-div')).selectAll('*').remove()
     okitJsonView.update();
     hideAllViewDivs();
     $("#canvas-div").removeClass('hidden');
