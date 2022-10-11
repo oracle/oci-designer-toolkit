@@ -19,6 +19,11 @@
     font-size: larger;
 }
 
+.okit-markdown-canvas code {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: larger;
+}
+
 .okit-markdown-canvas table,th,td {
     border: 1px solid grey;
     border-collapse: collapse;}
