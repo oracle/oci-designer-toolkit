@@ -285,7 +285,8 @@ class OkitArtefactView {
     // --- Dimensions
     get recalculate_dimensions() {return this._recalculate_dimensions;}
     set recalculate_dimensions(recalculate) {this._recalculate_dimensions = true;this.parent ? this.parent.recalculate_dimensions = true : recalculate = false;}
-    get width_multiplier() {return this.show_label ? okitSettings.show_label === 'name' ? 1.5 : 2 : 1;}
+    // get width_multiplier() {return this.show_label ? okitSettings.show_label === 'name' ? 1.5 : 2 : 1;}
+    get width_multiplier() {return this.show_label ? okitSettings.show_label === 'name' ? 2.5 : 3 : 1;}
     get height_multiplier() {return this.show_label ?  1.5 : 1;}
     get icon_dimensions() {return {width: this.icon_width, height: this.icon_height};}
     get collapsed_dimensions() {return {width: this.icon_width * this.width_multiplier, height: this.icon_height * this.height_multiplier};}
