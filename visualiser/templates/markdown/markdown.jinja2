@@ -218,7 +218,7 @@
 ```
 {%- endif %}
 
-{% if freeform_tags is defined or defined_tags is defined -%}
+{% if (freeform_tags is defined and freeform_tags.keys()|length > 0) or (defined_tags is defined and defined_tags.keys()|length > 0) -%}
 ## Global Tags
     {% if freeform_tags is defined -%}
         {{ common.document_freeform_tags(freeform_tags) }}
@@ -226,5 +226,10 @@
     {% if defined_tags is defined -%}
         {{ common.document_defined_tags(defined_tags) }}
     {%- endif %}
+{%- endif %}
+
+{% if variables_schema is defined and variables_schema.variables is defined and variables_schema.variables|length > 0 -%}
+## Variables 
+    {% include "variables.jinja2" ignore missing with context %}
 {%- endif %}
 

@@ -191,14 +191,15 @@
         <div>
             <select id="toolbar_view_select" class="okit-toolbar-select" onchange="handleViewSelect()">
                 <option id="designer_view_option"  value="designer" selected="selected">Designer</option>
+                {%- if developer_mode -%}<option id="freeform_view_option" value="freeform">Freeform</option>{%- endif -%}
                 <option id="identity_view_option"  value="identity">Users/Groups</option>
                 <option id="bom_view_option" value="bom">BoM</option>
                 <option id="tabular_view_option" value="tabular">Tabular</option>
                 <option id="variables_view_option" value="variables">Variables</option>
                 <option id="relationship_view_option" value="relationship">Relationship</option>
                 <option id="tf_view_option" value="terraform">Terraform</option>
+                <option id="markdown_view_option" value="markdown">Markdown</option>
                 <option id="json_view_option" value="json">Json</option>
-                {%- if developer_mode -%}<option id="markdown_view_option" value="markdown">Markdown</option>{%- endif -%}
                 {%- if developer_mode -%}<option id="cache_view_option" value="cache">Cache</option>{%- endif -%}
             </select>
         </div>
@@ -263,6 +264,7 @@
             <div id="bom-div" class="okit-bom-canvas hidden"></div>
             <div id="markdown-div" class="okit-markdown-canvas hidden"></div>
             <div id="variables-div" class="okit-variables-canvas hidden"></div>
+            <div id="freeform-div" class="okit-freeform-canvas hidden"></div>
         </div>
     </div>   
     <div class="hidden"><input type="file" id="files" class="file-button toolbar-button" name="file[]" accept="application/json" onclick="this.value = null"></div>

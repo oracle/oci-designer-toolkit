@@ -38,7 +38,7 @@ class OkitOciImportView extends OkitJsonView {
                     self.getOkitJson()[k] = self.getOkitJson()[k] ? [...self.getOkitJson()[k], ...this.import_json[k].filter((r) => v.includes(r.id))] : this.import_json[k].filter((r) => v.includes(r.id))
                 })
                 self.getOkitJson().checkCompartmentIds()
-                newDesignerView()
+                newCompartmentView()
                 redrawSVGCanvas()
             })
     }

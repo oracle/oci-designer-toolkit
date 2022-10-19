@@ -99,3 +99,15 @@ def terraform():
     else:
         return '404'
 
+@bp.route('markdown', methods=(['GET']))
+def markdown():
+    if request.method == 'GET':
+        design = json.loads(request.args.get('design', default='{}'))
+        destination_dir = tempfile.mkdtemp()
+        generator = OkitMarkdownGenerator(template_root, destination_dir, design)
+        generator.generate()
+        markdown = generator.toText()
+        return markdown
+    else:
+        return '404'
+

@@ -17,7 +17,7 @@ class VirtualCloudNetworkProperties extends OkitResourceProperties {
     buildResource() {
         const self = this
         // IPv4 CIDR Blocks
-        const ipv4 = this.createInput('ipv4_cidr_list', 'IPv4 CIDR(s)', `${self.id}_cidr_blocks`, '', (d, i, n) => {n[i].reportValidity(); self.resource.cidr_blocks = n[i].value.replace(' ', '').split(',')})
+        const ipv4 = this.createInput('ipv4_cidr_list', 'IPv4 CIDR(s)', `${self.id}_cidr_blocks`, '', (d, i, n) => {if (n[i].reportValidity()) self.resource.cidr_blocks = n[i].value.replace(' ', '').split(',').filter(c => c != '')})
         this.cidr_blocks = ipv4.input
         this.append(this.core_tbody, ipv4.row)
         // DNS Label
@@ -26,7 +26,7 @@ class VirtualCloudNetworkProperties extends OkitResourceProperties {
         //     pattern: '^[a-zA-Z][a-zA-Z0-9]{0,15}$',
         //     title: 'Only letters and numbers, starting with a letter. 15 characters max.'
         // }
-        const dns = this.createInput('text', 'DNS Label', `${self.id}_dns_label`, '', (d, i, n) => {n[i].reportValidity(); self.resource.dns_label = n[i].value}, this.dns_data)
+        const dns = this.createInput('text', 'DNS Label', `${self.id}_dns_label`, '', (d, i, n) => {if (n[i].reportValidity()) self.resource.dns_label = n[i].value}, this.dns_data)
         this.dns_label = dns.input
         this.append(this.core_tbody, dns.row)
         // Optional Properties
@@ -36,11 +36,11 @@ class VirtualCloudNetworkProperties extends OkitResourceProperties {
         this.optional_network_tbody = ont.tbody
         this.append(ond.div, ont.table)
         // IPv6 CIDR Allowed
-        const ipv6flag = this.createInput('checkbox', 'IPv6 Allowed', `${self.id}_is_ipv6enabled`, '', (d, i, n) => {n[i].reportValidity(); self.resource.is_ipv6enabled = n[i].checked; self.ipv6EnabledChange()})
+        const ipv6flag = this.createInput('checkbox', 'IPv6 Allowed', `${self.id}_is_ipv6enabled`, '', (d, i, n) => {self.resource.is_ipv6enabled = n[i].checked; self.ipv6EnabledChange()})
         this.is_ipv6enabled = ipv6flag.input
         this.append(this.optional_network_tbody, ipv6flag.row)
         // IPv6 CIDR Blocks
-        const ipv6 = this.createInput('ipv6_cidr_list', 'IPv6 CIDR(s)', `${self.id}_ipv6cidr_blocks`, '', (d, i, n) => {n[i].reportValidity(); self.resource.ipv6cidr_blocks = n[i].value.replace(' ', '').split(',')})
+        const ipv6 = this.createInput('ipv6_cidr_list', 'IPv6 CIDR(s)', `${self.id}_ipv6cidr_blocks`, '', (d, i, n) => {if (n[i].reportValidity()) self.resource.ipv6cidr_blocks = n[i].value.replace(' ', '').split(',')})
         this.ipv6cidr_blocks = ipv6.input
         this.append(this.optional_network_tbody, ipv6.row)
     }

@@ -291,7 +291,7 @@ def designer():
         logger.info("<<<<<<<<<<<<<<<<<<<<<<<< Ansible Mode >>>>>>>>>>>>>>>>>>>>>>>>")
     # Define Resource directories
     # Process Javascript & css files
-    resource_dirs = ['model', 'view', 'properties', 'panels', 'pricing', 'spreadsheet', 'views']
+    resource_dirs = ['model', 'view', 'properties', 'file', 'panels', 'pricing', 'spreadsheet', 'views']
     resource_files = {'js': [], 'css': []}
     for dir in resource_dirs:
         sorted_files = readStaticFiles(dir)

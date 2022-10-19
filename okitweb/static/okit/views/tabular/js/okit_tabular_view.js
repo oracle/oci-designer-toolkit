@@ -253,7 +253,7 @@ class OkitTabularJsonView extends OkitJsonView {
         let first = true;
         let cnt = 1;
         for (let resource of this.okitjson[resource_type]) {
-            // Designer View Object
+            // Compartment View Object
             const view_resource = this.getViewResource(resource.getArtifactReference(), resource.id);
             const tr = tbody.append('div').attr('class', 'tr okit-tr-first-column-count').on('click', function() {
                 // view_resource.loadSlidePanels()
@@ -269,10 +269,10 @@ class OkitTabularJsonView extends OkitJsonView {
                 let cell_data = '';
                 if (value.lookup) {
                     if (Array.isArray(resource[value.property])) {
-                        const array_data = resource[value.property].map(id => self.getResource(value.lookup, id).display_name);
+                        const array_data = resource[value.property].map(id => self.lookupResource(value.lookup, id).display_name);
                         cell_data = array_data.join(', ');
                     } else {
-                        const lookup = this.getResource(value.lookup, resource[value.property]);
+                        const lookup = self.lookupResource(value.lookup, resource[value.property]);
                         if (lookup && Array.isArray(lookup)) {
                             cell_data = lookup.map(l => l.display_name).join(', ');
                         } else if (lookup) {
@@ -355,7 +355,7 @@ class OkitTabularJsonView extends OkitJsonView {
         this.loadTabContent(resource_type);
     }
 
-    getResource(lookup, id) {
+    lookupResource(lookup, id) {
         const sections = lookup.split('.');
         const obj = sections[0];
         const getFunction = sections[1];
@@ -364,7 +364,8 @@ class OkitTabularJsonView extends OkitJsonView {
     }
 
     getViewResource(type, id) {
-        const getFunction = `get${type.split(' ').join('')}`;
+        // const getFunction = `get${type.split(' ').join('')}`;
+        const getFunction = this.getFunction(type);
         return okitJsonView[getFunction](id);
     }
 
@@ -424,10 +425,10 @@ class OkitTabularJsonView extends OkitJsonView {
         let cell_data = '';
         if (value.lookup) {
             if (Array.isArray(resource[value.property])) {
-                const array_data = resource[value.property].map(id => this.getResource(value.lookup, id).display_name);
+                const array_data = resource[value.property].map(id => this.lookupResource(value.lookup, id).display_name);
                 cell_data = array_data.join(', ');
             } else {
-                const lookup = this.getResource(value.lookup, resource[value.property]);
+                const lookup = this.lookupResource(value.lookup, resource[value.property]);
                 if (lookup && Array.isArray(lookup)) {
                     cell_data = lookup.map(l => l.display_name).join(', ');
                 } else if (lookup) {
@@ -465,7 +466,7 @@ class TabularWorkbook extends OkitWorkbook {
 
     generateSheetName(name) {return titleCase(name.replaceAll('_', ' '))}
 
-    getResource(lookup, id) {
+    lookupResource(lookup, id) {
         const sections = lookup.split('.');
         const obj = sections[0];
         const getFunction = sections[1];
@@ -513,10 +514,10 @@ class TabularWorksheetRow extends OkitWorksheetRow {
         let cell_data = '';
         if (value.lookup) {
             if (Array.isArray(resource[value.property])) {
-                const array_data = resource[value.property].map(id => workbook.getResource(value.lookup, id).display_name);
+                const array_data = resource[value.property].map(id => workbook.lookupResource(value.lookup, id).display_name);
                 cell_data = array_data.join(', ');
             } else {
-                const lookup = workbook.getResource(value.lookup, resource[value.property]);
+                const lookup = workbook.lookupResource(value.lookup, resource[value.property]);
                 if (lookup && Array.isArray(lookup)) {
                     cell_data = lookup.map(l => l.display_name).join(', ');
                 } else if (lookup) {

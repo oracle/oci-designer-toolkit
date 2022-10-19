@@ -1,0 +1,451 @@
+{
+  "compartments": [
+    {
+      "compartment_id": null,
+      "defined_tags": {},
+      "description": "Represents the deployment location for the resources specified within the design.",
+      "display_name": "Deployment Compartment",
+      "documentation": "Logical Compartment that represents the deployment location for the resources specified within the design. This compartment will not be created during the build process.",
+      "freeform_tags": {},
+      "id": "okit.compartment.0ee68d82-c52b-4227-8a18-73066660644e",
+      "okit_reference": "okit-4b7a5eb3-56b4-480a-8233-efdfadf84c68",
+      "read_only": true,
+      "resource_name": "DeploymentCompartment"
+    }
+  ],
+  "defined_tags": {},
+  "dhcp_options": [
+    {
+      "compartment_id": "okit.compartment.0ee68d82-c52b-4227-8a18-73066660644e",
+      "default": true,
+      "defined_tags": {},
+      "display_name": "hado",
+      "documentation": "",
+      "freeform_tags": {},
+      "id": "okit.dhcpoption.56a8cda9-0ed1-49c8-aac9-b984687348be",
+      "okit_reference": "okit-2d57f51a-32ba-466e-8961-f5eb7ff82e3c",
+      "options": [
+        {
+          "custom_dns_servers": [],
+          "search_domain_names": [],
+          "server_type": "VcnLocalPlusInternet",
+          "type": "DomainNameServer"
+        },
+        {
+          "custom_dns_servers": [],
+          "search_domain_names": [
+            "hado.oraclevcn.com"
+          ],
+          "server_type": "",
+          "type": "SearchDomain"
+        }
+      ],
+      "read_only": false,
+      "resource_name": "Okit_DO_1664281595537",
+      "vcn_id": "okit.virtualcloudnetwork.929097e2-ec13-4a2f-95b7-83875ca072d1"
+    }
+  ],
+  "documentation": "# Oracle Private Cloud Appliance X9-2: Automatic Virtual IP Failover in Cluster Deployment\n\nThe Oracle Private Cloud Appliance X9-2 supports secondary private IP provisioning with the release of the latest PCA-X9-2 software, 3.0.1.\n\nThis capability will provision a secondary IP and ensure automatic virtual IP failover in\ncase of an unexpected instance failure. Oracle PCA X9-2 allows users to assign a secondary private IP after an instance is launched. The secondary private IP must be\nfrom the CIDR of the VNIC\u2019s subnet and can also be moved to another instance\u2019s VNIC in the same subnet. The secondary private IP can be automatically assigned to another cluster instance member, if the primary instance encounters a failure. \n\nThe assigned Public IP moves with the Private IP, and hence Automatic Virtual IP failover provides the capability to keep the application running in case of unexpected instance failure in a clustered environment running on the PCA X9-2.\n\nFor more information: \n\n[Oracle Systems Blog Posting](https://blogs.oracle.com/oracle-systems/post/pca-x9-automatic-virtual-ip-failover) \n\n[Technical paper](https://www.oracle.com/a/otn/docs/Oracle_PCA_X9_2_Automatic-Virtual-IP-Failover-in-Cluster-Deployment.pdf?source=:em:nl:mt::::PCATP) \n   \nThis Oracle Designer Toolkit template provides the user with a way to create the infrastructure and set up the automatic ip failover capability within their PCA X9-2 tenancy.\n\nThe following instructions will guide you through taking this template, adding the appropriate user configuration and generating the terraform that can then be used to build everything required. These instructions assume a basic level of knowledge around terraform and how it needs to be configured to operate against the PCA-X9-2.\n\n## Shape and Operating System Changes\n\nBefore the template can be used, you will need to open the properties for the 2 instances and select the correct custom image for your specific PCA-X9-2. OKIT will need to have a working connection to your PCA-X9-2 and you will then be able to select the Oracle Linux 8 platform image as the operating system for both nodes.\n\nSelect the appropriate instance shape for your requirements. In order to do a simple test, the PCAStandard1.1 will suffice.\n\nOnce you have modified these properties, the design can be saved locally and the terraform generated.\n\n## Variables\n\nAs part of the provisioning the IP failover, both instances in the cluster require the setting up of the OCI cli with associated user configuration artefacts. OKIT and the subsequent generated Terraform require a number of additional variables to be populated alongside your regular user specific information needed to drive terraform provisioning.\n\nYou will need to create a new Terraform tfvars file (example pcahavip.tfvars) and place it in the same directory where you plan to perform the plan and apply of the generated Terraform. The file will need to have the following contents but with the specific values for your environment. The key below should help you fill out all the values.\n\nprivate_key_file = \"\"  \npublic_key = \"\"  \ncert_bundle_local_file = \"\"  \ncert_bundle_remote_file = \"\"  \nhacluster_password = \"\"  \nlocal_config_file = \"\"  \nremote_config_file = \"\"  \ncluster_vip = \"\"  \ncluster_hostname = \"\"\ncluster_name= \"\"  \ncluster_resource_name= \"\"  \noci_connection_local_key_file = \"\"  \noci_connection_remote_key_file = \"\"  \nyum_proxy = \"\"  \npublic_ip_ocid = \"\"\n\nwhere:\n\n**private_key_file** \nThe full path to your private ssh key, associated with the public key used to access the instances, on the host where you will run the terraform plan and apply. An example value being \"/Users/mark/.oci/pcakey.priv\"\n\n**public_key**\nThe full text string of your public ssh key, associated with the private key (private_key_file) used to access the instances.\n\n**cert_bundle_local_file**\nThe full path to the certificate bundle associated with your specific PCA X9 you will be provisioning the infrastructure. The path has to be on the host you will run the terraform plan and apply. An example being \"/Users/mark/.oci/mypca.crt\".\n\n**cert_bundle_remote_file**\nThis is the name and location of the certificate bundle when it is copied to the instances during provisioning. This value should remain at the default of \"/home/opc/.oci/ca.crt\".\n\n**hacluster_password**\nPassword for the hacluster user that is created as part of provisioning. The password must contain at least 8 characters and have at least 1 lowercase, 1 uppercase, 1 numerical and 1 non-alphanumeric. An example value being \"W3lcom3!23\"\n\n**local_config_file**\nThe full path to the oci config file that contains the specific details to be able to access your tenancy on the PCA X9. The 2 instances require the oci cli to be set up and have valid oci api configuration to be able to set up the secondary ip. The config file should only contain the oci config for the PCA tenancy you are using and ensure that the profile name is [DEFAULT].\n\n**remote_config_file**\nThis is the name and location of the oci config file when it is copied to the instances during provisioning. This value should remain at the default of \"/home/opc/.oci/config\".\n\n**cluster_vip**\nThis is a private ip address on the subnet you are creating to host the instances. In the default subnet that forms this template, an example ip address would be \"10.0.0.13\". Try to not use the first ip's in the subnet range as these will be allocated to the 2 instances and they obviously cannot clash.\n\n**cluster_hostname**\nThe hostname associated with the cluster vip\n\n**cluster_name**\nThe name of the HA cluster. The default value being \"HACluster\"\n\n**cluster_resource_name**\nThe name of the HA cluster resource. The default value being \"HAFailover\"\n\n**oci_connection_local_key_file**\nThe full path to the api signing key that is associated with the user that you will be provisioning the infrastructure with. The path has to be on the host where the terraform plan and apply will be performed. An example value being \"/Users/mark/.oci/mmpca_api_key.pem\"\n\n**oci_connection_remote_key_file**\nThis is the name and location of the api signing key when it is copied to the instances during provisioning. This value should remain at the default of \"/home/opc/.oci/pca_api_key.pem\".\n\n**yum_proxy**\nIf you operate your PCA-X9-2 behind a proxy, you will need to provide a valid proxy address to the yum configuration. This value will be injected into the yum.conf file during instance provisioning. An example value being \"http://138.3.50.180:80\". Leave this as \"\" if you do not use a proxy.\n\n**public_ip_ocid**  \nThis example will grab an available public ip from the pool but if you would like to use a specific public ip, you should firstly reserve a public ip from the oci cli and then add it's ocid to this variable. If you leave an empty value (eg \"\") terraform will grab a free public ip.\n\n## Example tfvars file\n\nTo help illustrate the point, here is an example tfvars file dummy values, just to give an idea of what your should look like.\n\n```bash\nprivate_key_file = \"/Users/mark/.oci/pcakey.priv\"  \npublic_key = \"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCs7FYAZs+\"\ncert_bundle_local_file = \"/Users/mark/.oci/oscemea.crt\"\ncert_bundle_remote_file = \"/home/opc/.oci/ca.crt\"\nhacluster_password = \"W3lcom3!23\"\nlocal_config_file = \"/Users/mark/.oci/config.viptest\"\nremote_config_file = \"/home/opc/.oci/config\"\ncluster_vip = \"10.0.0.13\"\ncluster_hostname=\"hahost\"\noci_connection_local_key_file = \"/Users/mark/.oci/oscpca_api_key.pem\"\noci_connection_remote_key_file = \"/home/opc/.oci/oscpca_api_key.pem\"\nyum_proxy = \"http://138.3.44.165:80\"\npublic_ip_ocid = \"ocid1.publicip.PB0007775.xxxxxx.t9a9lfrti697aas551yg7ubj7uux5thsqvg1d5l6gqhnj3cumdtipqqy4yvg\"\n```\n\n\nWith the appropriate values configured in the new pcahavip.tfvars file you can now execute the terraform commands. \n\n**To plan**\nterraform plan -var-file=pcahavip.tfvars -var-file=pcaoci.tfvars -out ha.out\n\n**To apply**\nterraform apply \"ha.out\"\n\n**To destroy**\nterraform destroy -var-file=pcahavip.tfvars -var-file=pcaoci.tfvars \n\n\n## Testing\n\nOpen the PCA compute enclave UI for your tenancy and locate node1 of  2 nodes that you have provisioned in the appropriate compartment\n\nSelect Attached VNIC's\nSelect the Attached VNIC\nYou should see a secondary IP assigned with a second public IP.\n\nSSH to node1 using the user opc and the private key you specified belonging to the public key and issue the following:\n\n```bash\nsudo pcs status \n```\nThe resource should be active on node1\n```bash\nsudo pcs resource move HAFailover node2 \n```\nThis will fail the resource to the other node in the cluster\n\nIn the PCA console you should see the secondary public and private ip get torn down and then plumbed up on node2.\n\nThese commands will be different if you have have used non default node names and cluster_resource_name.\n\n**Be sure to fail back to node1 prior to destroying the environment via terraform**\n\n\n\n\n\n\n",
+  "freeform_tags": {},
+  "instances": [
+    {
+      "agent_config": {
+        "is_management_disabled": false,
+        "is_monitoring_disabled": false
+      },
+      "availability_domain": "1",
+      "chipset": "intel",
+      "compartment_id": "okit.compartment.0ee68d82-c52b-4227-8a18-73066660644e",
+      "count": 1,
+      "defined_tags": {},
+      "display_name": "node1",
+      "documentation": "",
+      "fault_domain": "FAULT-DOMAIN-1",
+      "flex_shape": false,
+      "freeform_tags": {},
+      "id": "okit.instance.3a3b26de-f458-4c02-8232-cedf81e8ede9",
+      "instance_type": "vm",
+      "is_pv_encryption_in_transit_enabled": false,
+      "metadata": {
+        "ssh_authorized_keys": "var.public_key",
+        "user_data": ""
+      },
+      "okit_reference": "okit-89548118-ddeb-490b-b43e-fb0c42dd44ff",
+      "preserve_boot_volume": false,
+      "primary_vnic": {
+        "assign_public_ip": true,
+        "display_name": "node1",
+        "hostname_label": "node1",
+        "nsg_ids": [],
+        "resource_name": "Okit_I_1664281601688VnicAttachment",
+        "skip_source_dest_check": false,
+        "subnet_id": "okit.subnet.aa577f87-0d2f-4756-941b-d58083ba9ffe"
+      },
+      "read_only": false,
+      "resource_name": "Okit_I_1664281601687",
+      "shape": "VM.PCAStandard1.1",
+      "shape_config": {
+        "memory_in_gbs": "",
+        "ocpus": ""
+      },
+      "shape_series": "intel",
+      "source_details": {
+        "boot_volume_size_in_gbs": "50",
+        "image_id": "ocid1.image.AK00905695.x9pca1.ye9e8d6csmggarq48dr9268w8pqj0o20klp42v70hrzds21xcgx2oxwo4o3w",
+        "image_source": "custom",
+        "os": "OracleLinux",
+        "source_type": "image",
+        "version": "8"
+      },
+      "subnet_id": "okit.subnet.aa577f87-0d2f-4756-941b-d58083ba9ffe",
+      "vnic_attachments": [
+        {
+          "assign_public_ip": true,
+          "display_name": "node1",
+          "hostname_label": "node1",
+          "nsg_ids": [],
+          "resource_name": "Okit_I_1664281601688VnicAttachment",
+          "skip_source_dest_check": false,
+          "subnet_id": "okit.subnet.aa577f87-0d2f-4756-941b-d58083ba9ffe"
+        }
+      ],
+      "volume_attachments": []
+    },
+    {
+      "agent_config": {
+        "is_management_disabled": false,
+        "is_monitoring_disabled": false
+      },
+      "availability_domain": "1",
+      "chipset": "intel",
+      "compartment_id": "okit.compartment.0ee68d82-c52b-4227-8a18-73066660644e",
+      "count": 1,
+      "defined_tags": {},
+      "display_name": "node2",
+      "documentation": "",
+      "fault_domain": "FAULT-DOMAIN-2",
+      "flex_shape": false,
+      "freeform_tags": {},
+      "id": "okit.instance.a39e855b-88fc-421a-891f-beaaba21a306",
+      "instance_type": "vm",
+      "is_pv_encryption_in_transit_enabled": false,
+      "metadata": {
+        "ssh_authorized_keys": "var.public_key",
+        "user_data": ""
+      },
+      "okit_reference": "okit-53cd4f47-b553-4a74-ae83-06af3becd7af",
+      "preserve_boot_volume": false,
+      "primary_vnic": {
+        "assign_public_ip": true,
+        "display_name": "node2",
+        "hostname_label": "node2",
+        "nsg_ids": [],
+        "resource_name": "Okit_I_1664281604172VnicAttachment",
+        "skip_source_dest_check": false,
+        "subnet_id": "okit.subnet.aa577f87-0d2f-4756-941b-d58083ba9ffe"
+      },
+      "read_only": false,
+      "resource_name": "Okit_I_1664281604172",
+      "shape": "VM.PCAStandard1.1",
+      "shape_config": {
+        "memory_in_gbs": "",
+        "ocpus": ""
+      },
+      "shape_series": "intel",
+      "source_details": {
+        "boot_volume_size_in_gbs": "50",
+        "image_id": "ocid1.image.AK00905695.x9pca1.ye9e8d6csmggarq48dr9268w8pqj0o20klp42v70hrzds21xcgx2oxwo4o3w",
+        "image_source": "custom",
+        "os": "OracleLinux",
+        "source_type": "image",
+        "version": "8"
+      },
+      "subnet_id": "okit.subnet.aa577f87-0d2f-4756-941b-d58083ba9ffe",
+      "vnic_attachments": [
+        {
+          "assign_public_ip": true,
+          "display_name": "node2",
+          "hostname_label": "node2",
+          "nsg_ids": [],
+          "resource_name": "Okit_I_1664281604172VnicAttachment",
+          "skip_source_dest_check": false,
+          "subnet_id": "okit.subnet.aa577f87-0d2f-4756-941b-d58083ba9ffe"
+        }
+      ],
+      "volume_attachments": []
+    }
+  ],
+  "internet_gateways": [
+    {
+      "compartment_id": "okit.compartment.0ee68d82-c52b-4227-8a18-73066660644e",
+      "defined_tags": {},
+      "display_name": "haig",
+      "documentation": "",
+      "enabled": true,
+      "freeform_tags": {},
+      "id": "okit.internetgateway.a59df84f-1791-4897-b91d-c70b83855fc0",
+      "okit_reference": "okit-6617763c-d16d-4ef0-bfd1-3ac5b81cb4af",
+      "read_only": false,
+      "resource_name": "Okit_IG_1664286673217",
+      "vcn_id": "okit.virtualcloudnetwork.929097e2-ec13-4a2f-95b7-83875ca072d1"
+    }
+  ],
+  "metadata": {
+    "created": "2022-9-27 12:58:33",
+    "file": {
+      "generate_terraform": true,
+      "name": "/okitdemo/automatic_virtual_ip_failover_in_cluster_deployment.json",
+      "terraform_dir": "/okitdemo/automatic_virtual_ip_failover_in_cluster_deployment"
+    },
+    "okit_model_id": "okit-model-bbdf2fee-0544-45ae-b2b1-249676c90c8d",
+    "okit_version": "0.41.0 - nightly -",
+    "platform": "pca",
+    "resource_count": 244,
+    "updated": "2022-9-27 12:58:33"
+  },
+  "route_tables": [
+    {
+      "compartment_id": "okit.compartment.0ee68d82-c52b-4227-8a18-73066660644e",
+      "default": true,
+      "defined_tags": {},
+      "display_name": "hart",
+      "documentation": "",
+      "freeform_tags": {},
+      "id": "okit.routetable.0cc8bb62-d440-4131-9b2e-1cdd435e1cae",
+      "okit_reference": "okit-c691aef7-0916-41c1-9d88-cf25f241305e",
+      "read_only": false,
+      "resource_name": "Okit_RT_1664281595529",
+      "route_rules": [
+        {
+          "description": "",
+          "destination": "0.0.0.0/0",
+          "destination_type": "CIDR_BLOCK",
+          "network_entity_id": "okit.internetgateway.a59df84f-1791-4897-b91d-c70b83855fc0",
+          "target_type": "internet_gateway"
+        }
+      ],
+      "vcn_id": "okit.virtualcloudnetwork.929097e2-ec13-4a2f-95b7-83875ca072d1"
+    }
+  ],
+  "security_lists": [
+    {
+      "compartment_id": "okit.compartment.0ee68d82-c52b-4227-8a18-73066660644e",
+      "default": true,
+      "defined_tags": {},
+      "display_name": "hasl",
+      "documentation": "",
+      "egress_security_rules": [
+        {
+          "description": "",
+          "destination": "0.0.0.0/0",
+          "destination_type": "CIDR_BLOCK",
+          "is_stateless": false,
+          "protocol": "all"
+        }
+      ],
+      "freeform_tags": {},
+      "id": "okit.securitylist.7d871ada-0098-428e-9001-885d7e6f9841",
+      "ingress_security_rules": [
+        {
+          "description": "",
+          "is_stateless": false,
+          "protocol": "6",
+          "source": "0.0.0.0/0",
+          "source_type": "CIDR_BLOCK",
+          "tcp_options": {
+            "destination_port_range": {
+              "max": 22,
+              "min": 22
+            },
+            "source_port_range": {
+              "max": "",
+              "min": ""
+            }
+          }
+        },
+        {
+          "description": "",
+          "icmp_options": {
+            "code": 4,
+            "type": 3
+          },
+          "is_stateless": false,
+          "protocol": "1",
+          "source": "0.0.0.0/0",
+          "source_type": "CIDR_BLOCK"
+        },
+        {
+          "description": "",
+          "icmp_options": {
+            "type": 3
+          },
+          "is_stateless": false,
+          "protocol": "1",
+          "source": "10.0.0.0/16",
+          "source_type": "CIDR_BLOCK"
+        },
+        {
+          "description": "All VM Can Communicate",
+          "is_stateless": false,
+          "protocol": "all",
+          "source": "10.0.0.0/24",
+          "source_type": "CIDR_BLOCK"
+        }
+      ],
+      "okit_reference": "okit-0ce140a8-f83f-4ad1-be8f-e66fccafb14f",
+      "read_only": false,
+      "resource_name": "Okit_SL_1664281595534",
+      "vcn_id": "okit.virtualcloudnetwork.929097e2-ec13-4a2f-95b7-83875ca072d1"
+    }
+  ],
+  "subnets": [
+    {
+      "availability_domain": "0",
+      "cidr_block": "10.0.0.0/28",
+      "compartment_id": "okit.compartment.0ee68d82-c52b-4227-8a18-73066660644e",
+      "defined_tags": {},
+      "dhcp_options_id": "okit.dhcpoption.56a8cda9-0ed1-49c8-aac9-b984687348be",
+      "display_name": "hapubsn",
+      "dns_label": "hapubsn",
+      "documentation": "",
+      "freeform_tags": {},
+      "id": "okit.subnet.aa577f87-0d2f-4756-941b-d58083ba9ffe",
+      "ipv6cidr_block": "",
+      "ipv6cidr_blocks": "",
+      "is_ipv6enabled": false,
+      "okit_reference": "okit-7eafdb5a-db99-4986-8fb0-7b4d4fa4db2b",
+      "prohibit_public_ip_on_vnic": false,
+      "read_only": false,
+      "resource_name": "Okit_S_1664281598733",
+      "route_table_id": "okit.routetable.0cc8bb62-d440-4131-9b2e-1cdd435e1cae",
+      "security_list_ids": [
+        "okit.securitylist.7d871ada-0098-428e-9001-885d7e6f9841"
+      ],
+      "vcn_id": "okit.virtualcloudnetwork.929097e2-ec13-4a2f-95b7-83875ca072d1"
+    }
+  ],
+  "title": "Automatic Virtual IP Failover in Cluster Deployment",
+  "user_defined": {
+    "terraform": "# Create Private IP for VNIC\nresource \"oci_core_private_ip\" \"two-node-vip-private-ip\" {\n    display_name = var.cluster_name\n    hostname_label = var.cluster_hostname\n    ip_address = var.cluster_vip\n    vnic_id = local.Okit_I_1664281601687_primary_vnic_id\n}\nlocals {\n  cluster_vip = oci_core_private_ip.two-node-vip-private-ip.ip_address\n}\n# Create Public IP\nresource \"oci_core_public_ip\" \"two-node-vip-public-ip\" {\n    count = length(var.public_ip_ocid) == 0 ? 1 : 0\n    #Required\n    compartment_id = local.Okit_I_1664281601687_compartment_id\n    lifetime = \"RESERVED\"\n\n    #Optional\n    display_name = var.cluster_name\n    private_ip_id = oci_core_private_ip.two-node-vip-private-ip.id\n}\nlocals {\n  public_ip_ocid = length(var.public_ip_ocid) == 0 ? oci_core_public_ip.two-node-vip-public-ip[0].id : var.public_ip_ocid\n}\n# Install VIP Functionality\nresource \"null_resource\" \"two-node-vip-node1\" {\n    # Node 1 System Preparation\n    connection {\n        type = \"ssh\"\n        user = \"opc\"\n        private_key = file(\"${var.private_key_file}\")\n        host = local.Okit_I_1664281601687_public_ip\n    }\n\n    provisioner \"remote-exec\" {\n      inline = [\n        \"sudo bash -c 'echo \\\"proxy=${var.yum_proxy}\\\" >> /etc/yum.conf'\",\n        \"sudo bash -c 'echo \\\"timeout=3000\\\" >> /etc/yum.conf'\",\n        \"sudo bash -c 'echo \\\"retries=100\\\" >> /etc/yum.conf'\",\n        \"sudo yum check-update\",\n        \"sudo yum install -y corosync pacemaker pcs\",\n        \"sudo yum install -y python36-oci-cli\",\n        \"sudo mkdir -p /root/.oci\",\n        \"mkdir -p /home/opc/.oci\"\n      ]\n    }\n\n    provisioner \"file\" {\n      source = \"${var.local_config_file}\"\n      destination = \"${var.remote_config_file}\"\n    }\n\n    provisioner \"file\" {\n      source = \"${var.cert_bundle_local_file}\"\n      destination = \"${var.cert_bundle_remote_file}\"\n      on_failure = continue\n    }\n\n    provisioner \"file\" {\n      source = \"${var.oci_connection_local_key_file}\"\n      destination = \"${var.oci_connection_remote_key_file}\"\n    }\n\n    provisioner \"remote-exec\" {\n      inline = [\n        \"sudo cp /usr/lib/ocf/resource.d/heartbeat/IPaddr2 /usr/lib/ocf/resource.d/heartbeat/IPaddr2.bck\",\n\n        \"sudo sed -i '/delete_interface ()/a\\\\delete_interface_orig () {' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     echo \\\"Deleting Interface Calling Original\\\" >> /tmp/error.log' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     delete_interface_orig $1 $2 $3' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     echo \\\"Deleting Interface Creating Private IP\\\" >> /tmp/error.log' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     export server=\\\"${local.Okit_I_1664281601687_hostname}\\\"' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     export node1vnic=\\\"${local.Okit_I_1664281601687_primary_vnic_id}\\\"' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     export node2vnic=\\\"${local.Okit_I_1664281604172_primary_vnic_id}\\\"' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     export vnicip=\\\"${local.cluster_vip}\\\"' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     export OCI_CLI_CERT_BUNDLE=\\\"${var.cert_bundle_remote_file}\\\"' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     export OCI_CLI_SUPPRESS_FILE_PERMISSIONS_WARNING=True' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     export LC_ALL=C.UTF-8' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     export LANG=C.UTF-8' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     echo \\\"Creating Private IP on $node2vnic\\\" >> /tmp/error.log' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     oci network vnic assign-private-ip --unassign-if-already-assigned --vnic-id $node2vnic --ip-address $vnicip >> /tmp/error.log' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     return $OCF_SUCCESS' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     }' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n\n        \"sudo usermod -p $(echo ${var.hacluster_password} | openssl passwd -1 -stdin) hacluster\",\n        \"sudo bash -c \\\"echo '${local.Okit_I_1664281601687_private_ip}  ${local.Okit_I_1664281601687_hostname}' >> /etc/hosts\\\"\",\n        \"sudo bash -c \\\"echo '${local.Okit_I_1664281604172_private_ip}  ${local.Okit_I_1664281604172_hostname}' >> /etc/hosts\\\"\",\n        \"sudo mkdir -p /root/.oci\",\n        \"sudo cp -v ${var.remote_config_file} /root/.oci/config\",\n        \"sudo cp -v ${var.oci_connection_remote_key_file} /root/.oci/\",\n        \"sudo systemctl start pcsd\",\n        \"sudo systemctl enable pacemaker\",\n        \"sudo systemctl enable corosync\",\n        \"sudo systemctl enable pcsd\",\n        \"sudo firewall-cmd --permanent --add-service=high-availability\",\n        \"sudo firewall-cmd --add-service=high-availability\",\n        \"sudo oci network public-ip update --public-ip-id ${local.public_ip_ocid} --private-ip-id ${oci_core_private_ip.two-node-vip-private-ip.id} --cert-bundle ${var.cert_bundle_remote_file}\"\n      ]\n    }\n\n    depends_on = [\n        oci_core_instance.Okit_I_1664281601687,\n        oci_core_instance.Okit_I_1664281604172\n    ]    \n}\n\nresource \"null_resource\" \"two-node-vip-node2\" {\n    # Node 2 System Preparation\n    connection {\n        type = \"ssh\"\n        user = \"opc\"\n        private_key = file(\"${var.private_key_file}\")\n        host = local.Okit_I_1664281604172_public_ip\n    }\n\n    provisioner \"remote-exec\" {\n      inline = [\n        \"sudo bash -c 'echo \\\"proxy=${var.yum_proxy}\\\" >> /etc/yum.conf'\",\n        \"sudo bash -c 'echo \\\"timeout=3000\\\" >> /etc/yum.conf'\",\n        \"sudo bash -c 'echo \\\"retries=100\\\" >> /etc/yum.conf'\",\n        \"sudo yum check-update\",\n        \"sudo yum install -y corosync pacemaker pcs\",\n        \"sudo yum install -y python36-oci-cli\",\n        \"sudo mkdir -p /root/.oci\",\n        \"mkdir -p /home/opc/.oci\"\n      ]\n    }\n\n    provisioner \"file\" {\n      source = \"${var.local_config_file}\"\n      destination = \"${var.remote_config_file}\"\n    }\n\n    provisioner \"file\" {\n      source = \"${var.cert_bundle_local_file}\"\n      destination = \"${var.cert_bundle_remote_file}\"\n      on_failure = continue\n    }\n\n    provisioner \"file\" {\n      source = \"${var.oci_connection_local_key_file}\"\n      destination = \"${var.oci_connection_remote_key_file}\"\n    }\n\n    provisioner \"remote-exec\" {\n      inline = [\n        \"sudo cp /usr/lib/ocf/resource.d/heartbeat/IPaddr2 /usr/lib/ocf/resource.d/heartbeat/IPaddr2.bck\",\n\n        \"sudo sed -i '/delete_interface ()/a\\\\delete_interface_orig () {' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     echo \\\"Deleting Interface Calling Original\\\" >> /tmp/error.log' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     delete_interface_orig $1 $2 $3' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     echo \\\"Deleting Interface Creating Private IP\\\" >> /tmp/error.log' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     export server=\\\"${local.Okit_I_1664281604172_hostname}\\\"' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     export node1vnic=\\\"${local.Okit_I_1664281601687_primary_vnic_id}\\\"' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     export node2vnic=\\\"${local.Okit_I_1664281604172_primary_vnic_id}\\\"' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     export vnicip=\\\"${local.cluster_vip}\\\"' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     export OCI_CLI_CERT_BUNDLE=\\\"${var.cert_bundle_remote_file}\\\"' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     export OCI_CLI_SUPPRESS_FILE_PERMISSIONS_WARNING=True' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     export LC_ALL=C.UTF-8' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     export LANG=C.UTF-8' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     echo \\\"Creating Private IP on $node1vnic\\\" >> /tmp/error.log' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     oci network vnic assign-private-ip --unassign-if-already-assigned --vnic-id $node1vnic --ip-address $vnicip >> /tmp/error.log' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     return $OCF_SUCCESS' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n        \"sudo sed -i '/delete_interface_orig ()/i\\\\     }' /usr/lib/ocf/resource.d/heartbeat/IPaddr2\",\n\n        \"sudo usermod -p $(echo ${var.hacluster_password} | openssl passwd -1 -stdin) hacluster\",\n        \"sudo bash -c \\\"echo '${local.Okit_I_1664281601687_private_ip}  ${local.Okit_I_1664281601687_hostname}' >> /etc/hosts\\\"\",\n        \"sudo bash -c \\\"echo '${local.Okit_I_1664281604172_private_ip}  ${local.Okit_I_1664281604172_hostname}' >> /etc/hosts\\\"\",\n        \"sudo mkdir -p /root/.oci\",\n        \"sudo cp -v ${var.remote_config_file} /root/.oci/config\",\n        \"sudo cp -v ${var.oci_connection_remote_key_file} /root/.oci/\",\n        \"sudo systemctl start pcsd\",\n        \"sudo systemctl enable pacemaker\",\n        \"sudo systemctl enable corosync\",\n        \"sudo systemctl enable pcsd\",\n        \"sudo firewall-cmd --permanent --add-service=high-availability\",\n        \"sudo firewall-cmd --add-service=high-availability\"\n      ]\n    }\n\n    depends_on = [\n        oci_core_instance.Okit_I_1664281601687,\n        oci_core_instance.Okit_I_1664281604172\n    ]    \n}\n\nresource \"null_resource\" \"two-node-vip-validate-and-start\" {\n    # Node 1 Validation\n    connection {\n        type = \"ssh\"\n        user = \"opc\"\n        private_key = file(\"${var.private_key_file}\")\n        host = local.Okit_I_1664281601687_public_ip\n    }\n\n    # Create Cluster\n    provisioner \"remote-exec\" {\n      inline = [\n        \"sudo pcs host auth ${local.Okit_I_1664281601687_hostname} ${local.Okit_I_1664281604172_hostname} -u hacluster -p ${var.hacluster_password}\",\n        \"sudo pcs cluster setup ${var.cluster_name} ${local.Okit_I_1664281601687_hostname} ${local.Okit_I_1664281604172_hostname}\",\n        \"sudo pcs cluster start --all\",\n        \"sudo pcs cluster enable --all\",\n        \"sudo pcs property set stonith-enabled=false\",\n        \"sudo pcs property set no-quorum-policy=ignore\",\n        \"sudo pcs cluster status\",\n        \"sudo pcs resource create ${var.cluster_resource_name} ocf:heartbeat:IPaddr2 ip=${local.cluster_vip} cidr_netmask=${local.Okit_S_1664281598733_netmask} op monitor interval=20\"\n      ]\n    }\n\n    depends_on = [\n        oci_core_instance.Okit_I_1664281601687,\n        oci_core_instance.Okit_I_1664281604172,\n        null_resource.two-node-vip-node1,\n        null_resource.two-node-vip-node2,\n        oci_core_public_ip.two-node-vip-public-ip\n    ]    \n}\n"
+  },
+  "variables_schema": {
+    "groups": [
+      {
+        "default": "",
+        "description": "",
+        "name": "Undefined"
+      }
+    ],
+    "variables": [
+      {
+        "default": "",
+        "description": "The full path to the oci config file that contains the specific details to be able to access your tenancy on the PCA X9. ",
+        "group": "Undefined",
+        "name": "local_config_file"
+      },
+      {
+        "default": "/home/opc/.oci/config",
+        "description": "This is the name and location of the oci config file when it is copied to the instances during provisioning.",
+        "group": "Undefined",
+        "name": "remote_config_file"
+      },
+      {
+        "default": "",
+        "description": "The full path to your private ssh key, associated with the public key used to access the instances, on the host where you will run the terraform plan and apply.",
+        "group": "Undefined",
+        "name": "private_key_file"
+      },
+      {
+        "default": "",
+        "description": "The full text string of your public ssh key, associated with the private key (private_key_file) used to access the instances.",
+        "group": "Undefined",
+        "name": "public_key"
+      },
+      {
+        "default": "",
+        "description": "The full path to the certificate bundle associated with your specific PCA X9 you will be provisioning the infrastructure.",
+        "group": "Undefined",
+        "name": "cert_bundle_local_file"
+      },
+      {
+        "default": "",
+        "description": "This is the name and location of the certificate bundle when it is copied to the instances during provisioning.",
+        "group": "Undefined",
+        "name": "cert_bundle_remote_file"
+      },
+      {
+        "default": "",
+        "description": "The full path to the api signing key that is associated with the user that you will be provisioning the infrastructure with.",
+        "group": "Undefined",
+        "name": "oci_connection_local_key_file"
+      },
+      {
+        "default": "/home/opc/.oci/oci_api_key.pem",
+        "description": "This is the name and location of the api signing key when it is copied to the instances during provisioning.",
+        "group": "Undefined",
+        "name": "oci_connection_remote_key_file"
+      },
+      {
+        "default": "",
+        "description": "If you operate your PCA-X9-2 behind a proxy, you will need to provide a valid proxy address to the yum configuration.",
+        "group": "Undefined",
+        "name": "yum_proxy"
+      },
+      {
+        "default": "HACluster",
+        "description": "The name of the HA cluster.",
+        "group": "Undefined",
+        "name": "cluster_name"
+      },
+      {
+        "default": "HAFailover",
+        "description": "The name of the HA cluster resource.",
+        "group": "Undefined",
+        "name": "cluster_resource_name"
+      },
+      {
+        "default": "node3",
+        "description": "The hostname associated with the cluster vip",
+        "group": "Undefined",
+        "name": "cluster_hostname"
+      },
+      {
+        "default": "",
+        "description": "This is a private ip address on the subnet you are creating to host the instances.",
+        "group": "Undefined",
+        "name": "cluster_vip"
+      },
+      {
+        "default": "",
+        "description": "Password for the hacluster user that is created as part of provisioning. The password must contain at least 8 characters and have at least 1 lowercase, 1 uppercase, 1 numerical and 1 non-alphanumeric.",
+        "group": "Undefined",
+        "name": "hacluster_password"
+      },
+      {
+        "default": "",
+        "description": "OCID of reserved public IP",
+        "group": "Undefined",
+        "name": "public_ip_ocid"
+      }
+    ]
+  },
+  "virtual_cloud_networks": [
+    {
+      "cidr_blocks": [
+        "10.0.0.0/24"
+      ],
+      "compartment_id": "okit.compartment.0ee68d82-c52b-4227-8a18-73066660644e",
+      "defined_tags": {},
+      "display_name": "havcn",
+      "dns_label": "havcn",
+      "documentation": "",
+      "freeform_tags": {},
+      "id": "okit.virtualcloudnetwork.929097e2-ec13-4a2f-95b7-83875ca072d1",
+      "ipv6cidr_blocks": [],
+      "is_ipv6enabled": false,
+      "okit_reference": "okit-504876fe-abf7-4877-8f3d-85df9e771f74",
+      "read_only": false,
+      "resource_name": "Okit_VCN_1664281595520"
+    }
+  ]
+}

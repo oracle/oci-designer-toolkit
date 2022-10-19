@@ -1,6 +1,20 @@
 # Release Notes
 
 
+## Version 0.42.0
+**Release Date**: 19th October 2022
+### Features
+1. Autonomous JSON Database.
+2. Autonomous APEX Database.
+3. Update OCI Link to new common cloud url.
+4. Add Markdown View
+5. Increase Resource display width when name display is selected.
+### Bug Fixes
+1. Issue #540 : Check does not verify DNS-Label 
+2. Convert VCN CIDR_BLOCKS to string in MArkdown export.
+3. Add correct DBHome & Database information to Database System following query.
+
+
 ## Version 0.41.0
 **Release Date**: 28th September 2022
 ### Features

@@ -19,7 +19,7 @@ python modules are installed and in addition provide a simple flask server that 
     2. [Lima (MacOS)](#lima-macos)
     3. [Vagrant / VirtualBox](#vagrant--virtualbox)
 5. [Native](#native)
-    1. [Oracle Linux](oracle-linux)
+    1. [Oracle Linux](#oracle-linux)
     2. [macOS](#macos)
 3. [Build From Source](#build-from-source)
     1. [OKIT Repository](#okit-repository)
