@@ -48,6 +48,7 @@ class Instance extends OkitArtifact {
         this.vnic_attachments = []
         this.preserve_boot_volume = false;
         this.is_pv_encryption_in_transit_enabled = false;
+        this.lifecycle_state = ""
         // Terraform Provisioner
         // this.terraform_provisioners = {connection: this.newTFConnection(),provisioners: []}
         // Update with any passed data
