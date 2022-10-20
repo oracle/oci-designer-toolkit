@@ -9,6 +9,7 @@
 3. Update OCI Link to new common cloud url.
 4. Add Markdown View
 5. Increase Resource display width when name display is selected.
+6. New PCA-X9 Template for HA VIP Configuration
 ### Bug Fixes
 1. Issue #540 : Check does not verify DNS-Label 
 2. Convert VCN CIDR_BLOCKS to string in MArkdown export.
