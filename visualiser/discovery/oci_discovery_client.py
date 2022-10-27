@@ -23,6 +23,8 @@ class OciResourceDiscoveryClient(object):
     # methods. Creates a map of:
     #     { resource_name -> (Client, list_method) }
     get_resource_client_methods = {
+        # oci.apigateway.UsagePlansClient
+        "ApiGatewayUsagePlanDetails": (oci.apigateway.UsagePlansClient, "get_usage_plan"), # used to get full details 
         # oci.bastion.BastionClient
         "BastionDetails": (oci.bastion.BastionClient, "get_bastion"), # used to get full details
         # oci.core.BlockstorageClient
@@ -74,6 +76,10 @@ class OciResourceDiscoveryClient(object):
         "ApiDeployment": (oci.apigateway.DeploymentClient, "list_deployments"),
         # oci.apigateway.GatewayClient
         "ApiGateway": (oci.apigateway.GatewayClient, "list_gateways"),
+        # oci.apigateway.SubscribersClient
+        "ApiGatewaySubscriber": (oci.apigateway.SubscribersClient, "list_subscribers"),
+        #  oci.apigateway.UsagePlansClient
+        "ApiGatewayUsagePlan": ( oci.apigateway.UsagePlansClient, "list_usage_plans"), 
         # oci.apm_control_plane.ApmDomainClient
         "ApmDomain": ( oci.apm_control_plane.ApmDomainClient, "list_apm_domains"),
         # oci.application_migration.ApplicationMigrationClient
@@ -496,6 +502,7 @@ class OciResourceDiscoveryClient(object):
         # oci.database.DatabaseClient
         "DbSystemShape": (oci.database.DatabaseClient, "list_db_system_shapes"),
         "DbVersion": (oci.database.DatabaseClient, "list_db_versions"),
+        # "GiVersion": (oci.database.DatabaseClient, "list_gi_versions"), # Handled as a special case to get all Gi Versons by shape, see list_gi_versions_by_shape
         # oci.limits.LimitsClient
         "Service": (oci.limits.LimitsClient, "list_services"),
         # oci.load_balancer.LoadBalancerClient
@@ -828,7 +835,11 @@ class OciResourceDiscoveryClient(object):
                 # do a get for resources that need full details or don't have a list method
                 if resource_type in self.get_resource_client_methods and item[2]:
                     klass, method_name = self.get_resource_client_methods[resource_type]
-                    if resource_type == "BastionDetails" and method_name == "get_bastion":
+                    if resource_type == "ApiGatewayUsagePlanDetails" and method_name == "get_usage_plan":
+                        usage_plan_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, usage_plan_id=usage_plan_id)
+                        futures_list.update({(region, resource_type, compartment_id, usage_plan_id):future})                    
+                    elif resource_type == "BastionDetails" and method_name == "get_bastion":
                         bastion_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, bastion_id=bastion_id)
                         futures_list.update({(region, resource_type, None, bastion_id):future})
@@ -1309,6 +1320,7 @@ class OciResourceDiscoveryClient(object):
                         new_result = [ExtendedVirtualCircuitBandwidthShape(fastconnect_provider_id, shape) for shape in result]
                         result = new_result
                     elif resource_type in [
+                        "ApiGatewayUsagePlanDetails",
                         "BastionDetails",
                         "ClusterOptions",
                         "DataFlowApplicationDetails", "DataFlowRunDetails",
@@ -1670,6 +1682,11 @@ class OciResourceDiscoveryClient(object):
 
         resources_by_region = self.get_resources(resource_requests)
 
+        # special cases
+        if "GiVersion" in self.include_resource_types:
+            for region in self.regions:
+                resources_by_region[region.region_name]["GiVersion"] = self.list_gi_versions_by_shape(region)
+
         # get additional resource details
         # this currently needs all regions to complete the first query before starting the next set of requests
         # TODO opportunity to future optimization
@@ -1695,12 +1712,14 @@ class OciResourceDiscoveryClient(object):
                 image_ids = [image.id for image in resources_by_region[region]["Image"]]
                 if boot_volume_backup.image_id not in image_ids:
                     regional_resource_requests.add(("Image", None, boot_volume_backup.image_id))
-            # get extra details for MySQLDbSystems
-            if "MySQLDbSystem" in resources_by_region[region]:
-                for mysql_db_system in resources_by_region[region]["MySQLDbSystem"]:
-                    regional_resource_requests.add(("MySQLDbSystemDetails", mysql_db_system.compartment_id, mysql_db_system.id))
-                    if (self.include_resource_types == None or "MySQLBackup" in self.include_resource_types):
-                        regional_resource_requests.add(("MySQLBackup", mysql_db_system.compartment_id, mysql_db_system.id))
+            # get extra details for ApiGatewayUsagePlanDetails
+            if "ApiGatewayUsagePlan" in resources_by_region[region]:
+                for resource in resources_by_region[region]["ApiGatewayUsagePlan"]:
+                    regional_resource_requests.add(("ApiGatewayUsagePlanDetails", None, resource.id))
+            # get extra details for Bastion
+            if "Bastion" in resources_by_region[region]:
+                for resource in resources_by_region[region]["Bastion"]:
+                    regional_resource_requests.add(("BastionDetails", resource.compartment_id, resource.id))
             # get extra details for DataFlowApplication
             if "DataFlowApplication" in resources_by_region[region]:
                 for resource in resources_by_region[region]["DataFlowApplication"]:
@@ -1713,18 +1732,12 @@ class OciResourceDiscoveryClient(object):
             if "ExportSet" in resources_by_region[region]:
                 for resource in resources_by_region[region]["ExportSet"]:
                     regional_resource_requests.add(("ExportSetDetails", resource.compartment_id, resource.id))
-            # get extra details for Bastion
-            if "Bastion" in resources_by_region[region]:
-                for resource in resources_by_region[region]["Bastion"]:
-                    regional_resource_requests.add(("BastionDetails", resource.compartment_id, resource.id))
-            # get extra details for NoSQLndex
-            if "NoSQLIndex" in resources_by_region[region]:
-                for resource in resources_by_region[region]["NoSQLIndex"]:
-                    regional_resource_requests.add(("NoSQLIndexDetails", resource.compartment_id, (resource.table_id, resource.name)))
-            # get extra details for NoSQLTable
-            if "NoSQLTable" in resources_by_region[region]:
-                for resource in resources_by_region[region]["NoSQLTable"]:
-                    regional_resource_requests.add(("NoSQLTableDetails", None, resource.id))
+            # get extra details for MySQLDbSystems
+            if "MySQLDbSystem" in resources_by_region[region]:
+                for mysql_db_system in resources_by_region[region]["MySQLDbSystem"]:
+                    regional_resource_requests.add(("MySQLDbSystemDetails", mysql_db_system.compartment_id, mysql_db_system.id))
+                    if (self.include_resource_types == None or "MySQLBackup" in self.include_resource_types):
+                        regional_resource_requests.add(("MySQLBackup", mysql_db_system.compartment_id, mysql_db_system.id))
             # get extra details for NetworkFirewall
             if "NetworkFirewall" in resources_by_region[region]:
                 for resource in resources_by_region[region]["NetworkFirewall"]:
@@ -1733,7 +1746,14 @@ class OciResourceDiscoveryClient(object):
             if "NetworkFirewallPolicy" in resources_by_region[region]:
                 for resource in resources_by_region[region]["NetworkFirewallPolicy"]:
                     regional_resource_requests.add(("NetworkFirewallPolicyDetails", None, resource.id))
-
+            # get extra details for NoSQLndex
+            if "NoSQLIndex" in resources_by_region[region]:
+                for resource in resources_by_region[region]["NoSQLIndex"]:
+                    regional_resource_requests.add(("NoSQLIndexDetails", resource.compartment_id, (resource.table_id, resource.name)))
+            # get extra details for NoSQLTable
+            if "NoSQLTable" in resources_by_region[region]:
+                for resource in resources_by_region[region]["NoSQLTable"]:
+                    regional_resource_requests.add(("NoSQLTableDetails", None, resource.id))
             extra_resource_requests.update({region:regional_resource_requests})
 
         second_pass_resources_by_region = self.get_resources(extra_resource_requests)
@@ -1780,13 +1800,14 @@ class OciResourceDiscoveryClient(object):
 
         for region in resources_by_region:
             # replace summary result with resource details
-            self.replace_resource_details(resources_by_region, region, "MySQLDbSystem", "MySQLDbSystemDetails")
+            self.replace_resource_details(resources_by_region, region, "ApiGatewayUsagePlan", "ApiGatewayUsagePlanDetails")
+            self.replace_resource_details(resources_by_region, region, "Bastion", "BastionDetails")
             self.replace_resource_details(resources_by_region, region, "DataFlowApplication", "DataFlowApplicationDetails")
             self.replace_resource_details(resources_by_region, region, "DataFlowRun", "DataFlowRunDetails")
             self.replace_resource_details(resources_by_region, region, "ExportSet", "ExportSetDetails")
-            self.replace_resource_details(resources_by_region, region, "Bastion", "BastionDetails")
-            self.replace_resource_details(resources_by_region, region, "NoSQLTable", "NoSQLTableDetails")
+            self.replace_resource_details(resources_by_region, region, "MySQLDbSystem", "MySQLDbSystemDetails")
             self.replace_resource_details(resources_by_region, region, "NoSQLIndex", "NoSQLIndexDetails")
+            self.replace_resource_details(resources_by_region, region, "NoSQLTable", "NoSQLTableDetails")
             self.replace_resource_details(resources_by_region, region, "NetworkFirewall", "NetworkFirewallDetails")
             self.replace_resource_details(resources_by_region, region, "NetworkFirewallPolicy", "NetworkFirewallPolicyDetails")
 
@@ -1825,4 +1846,19 @@ class OciResourceDiscoveryClient(object):
             del resources_by_region[region][summary_type]
             del resources_by_region[region][details_type]
             resources_by_region[region][summary_type] = resources
-            
+
+    # special method to get Database Grid Infrastructure versions
+    # need to get Db Shapes and requst GI version for each shape separately
+    def list_gi_versions_by_shape(self, region=None):
+        logger.info("fetching database gi versions")
+        config = self.config
+        if region:
+            config["region"] = region.region_name
+        database = oci.database.DatabaseClient(config=config, signer=self.signer)
+        shapes = database.list_db_system_shapes(compartment_id=self.tenancy.id)
+        results = {}
+        for shape in [s for s in shapes.data if s.shape_family == "EXADATA"]:
+            gi_versions = database.list_gi_versions(compartment_id=self.tenancy.id, shape=shape.shape)
+            results[shape.shape] = gi_versions.data
+        return results
+
