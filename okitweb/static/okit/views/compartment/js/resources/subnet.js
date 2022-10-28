@@ -144,7 +144,8 @@ class SubnetView extends OkitContainerCompartmentArtefactView {
 
     getBottomArtifacts() {
         return [Instance.getArtifactReference(), InstancePool.getArtifactReference(), DatabaseSystem.getArtifactReference(), 
-            AutonomousDatabase.getArtifactReference(), MysqlDatabaseSystem.getArtifactReference(), AnalyticsInstance.getArtifactReference()];
+            AutonomousDatabase.getArtifactReference(), MysqlDatabaseSystem.getArtifactReference(), AnalyticsInstance.getArtifactReference(), 
+            ExadataCloudInfrastructure.getArtifactReference()];
     }
 
     getLeftArtifacts() {

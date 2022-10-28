@@ -42,6 +42,8 @@ class OCIQuery(OCIConnection):
         "BootVolume",
         "BootVolumeAttachment",
         "Bucket",
+        "CloudExadataInfrastructure",
+        "CloudVmCluster",
         "Cluster",
         "Cpe",
         "Database",
@@ -108,6 +110,7 @@ class OCIQuery(OCIConnection):
         "Bastion": "bastions",
         #"BootVolume": "block_storage_volumes",
         "Bucket": "object_storage_buckets",
+        "CloudExadataInfrastructure": "exadata_cloud_infrastructures",
         "Cluster": "oke_clusters",
         "Cpe": "customer_premise_equipments",
         "Database": "databases",
@@ -257,6 +260,8 @@ class OCIQuery(OCIConnection):
                         resource_list = self.nosql_databases(resource_list, resources)
                     elif resource_type == "DbSystem":
                         resource_list = self.database_systems(resource_list, resources)
+                    elif resource_type == "CloudExadataInfrastructure":
+                        resource_list = self.exadata_cloud_infrastructures(resource_list, resources)
                     # elif resource_type == "AnalyticsInstance":
                     #     resource_list = self.analytics_instances(resource_list, resources)
                     # Check Life Cycle State
@@ -295,6 +300,16 @@ class OCIQuery(OCIConnection):
             # drg["vcn_id"] = attachments[0]["vcn_id"] if len(attachments) else ""
             # drg["route_table_id"] = attachments[0]["route_table_id"] if len(attachments) else ""
         return drgs
+
+    def exadata_cloud_infrastructures(self, exadata_cloud_infrastructures, resources):
+        for eci in exadata_cloud_infrastructures:
+            clusters = [c for c in resources.get("CloudVmCluster", []) if c["cloud_exadata_infrastructure_id"] == eci["id"]]
+            if len(clusters) > 0:
+                eci["create_cluster"] = True
+                eci["cluster"] = clusters[0]
+            else:
+                eci["create_cluster"] = False
+        return exadata_cloud_infrastructures
 
     def file_storage_systems(self, file_storage_systems, resources):
         for fs in file_storage_systems:

@@ -20,6 +20,7 @@
         "enterprise_edition_extreme_performance": "B90572",
         "byol": "B90573"
     },
+    "exadata_cloud_infrastructure": {},
     "file_system": {
         "usage": "B89057"
     },
