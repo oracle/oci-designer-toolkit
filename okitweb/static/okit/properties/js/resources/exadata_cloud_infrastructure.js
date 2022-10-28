@@ -183,6 +183,7 @@ class ExadataCloudInfrastructureProperties extends OkitResourceProperties {
         this.loadSelect(this.backup_subnet_id, 'subnet', true)
         this.loadMultiSelect(this.backup_network_nsg_ids, 'network_security_group', false, this.nsg_filter)
         this.loadShapes()
+        this.loadGIVersions()
         // Assign Values
         this.availability_domain.property('value', this.resource.availability_domain)
         this.shape.property('value', this.resource.shape)
@@ -228,11 +229,20 @@ class ExadataCloudInfrastructureProperties extends OkitResourceProperties {
         if (!this.resource.shape || this.resource.shape === '') this.resource.shape = shape
     }
 
+    loadGIVersions(shape) {
+        shape = shape ? shape : this.resource.shape
+        const gi_versions = okitOciData.getGIVersions(shape)
+        console.info('GI versions', gi_versions)
+        const version = this.loadReferenceSelect(this.gi_version, 'getGIVersions', false, shape)
+        if (!this.resource.cluster.gi_version || this.resource.cluster.gi_version === '') this.resource.cluster.gi_version = version
+    }
+
     handleShapeChanged(shape) {
         shape = shape ? shape : this.resource.shape
         const shape_data = okitOciData.getDBSystemShape(shape)
         // Show / Hide Rows
         this.showCollapseShapeRows(shape)
+        this.loadGIVersions(shape)
     }
 
     showCollapseShapeRows(shape) {
