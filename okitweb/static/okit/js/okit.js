@@ -273,6 +273,8 @@ class OkitOCIData {
         }
     }
 
+    getGIVersions = (shape) => this.dropdown_data.gi_versions[shape].map((v) => v.version)
+
     getBareMetalInstanceShapes = () => this.dropdown_data.shapes.filter(s => s.shape.startsWith('BM.'))
     getVirtualMachineInstanceShapes = () => this.dropdown_data.shapes.filter(s => s.shape.startsWith('VM.'))
     getIntelInstanceShapes = () => this.dropdown_data.shapes.filter(s => s.shape.startsWith('VM.') && !s.shape.includes('.A') && !s.shape.includes('.E'))

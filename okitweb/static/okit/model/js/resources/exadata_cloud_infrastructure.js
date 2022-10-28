@@ -37,7 +37,7 @@ class ExadataCloudInfrastructure extends OkitArtifact {
             backup_subnet_id: '',
             cpu_core_count: 0,
             display_name: `${this.display_name}VMCluster`,
-            gi_version: '19.15.0.0.0',
+            gi_version: '',
             hostname: this.display_name,
             ssh_public_keys: '',
             subnet_id: '',

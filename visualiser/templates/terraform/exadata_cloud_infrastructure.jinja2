@@ -86,9 +86,9 @@ resource "oci_database_cloud_vm_cluster" "{{ cluster.resource_name }}" {
     data_collection_options {
 
         #Optional
-        is_diagnostics_events_enabled = {{ cluster.data_collection_options.is_diagnostics_events_enabled | safe }}
-        is_health_monitoring_enabled = {{ cluster.data_collection_options.is_health_monitoring_enabled | safe }}
-        is_incident_logs_enabled = {{ cluster.data_collection_options.is_incident_logs_enabled | safe }}
+        is_diagnostics_events_enabled = {{ cluster.data_collection_options.is_diagnostics_events_enabled | safe | lower }}
+        is_health_monitoring_enabled = {{ cluster.data_collection_options.is_health_monitoring_enabled | safe | lower }}
+        is_incident_logs_enabled = {{ cluster.data_collection_options.is_incident_logs_enabled | safe | lower }}
     }
 {% endif %}
 {% if cluster.data_storage_percentage is defined %}
@@ -98,10 +98,10 @@ resource "oci_database_cloud_vm_cluster" "{{ cluster.resource_name }}" {
     domain = {{ cluster.domain | safe }}
 {% endif %}
 {% if cluster.is_local_backup_enabled is defined %}
-    is_local_backup_enabled = {{ cluster.is_local_backup_enabled | safe }}
+    is_local_backup_enabled = {{ cluster.is_local_backup_enabled | safe | lower }}
 {% endif %}
 {% if cluster.is_sparse_diskgroup_enabled is defined %}
-    is_sparse_diskgroup_enabled = {{ cluster.is_sparse_diskgroup_enabled | safe }}
+    is_sparse_diskgroup_enabled = {{ cluster.is_sparse_diskgroup_enabled | safe | lower }}
 {% endif %}
 {% if cluster.license_model is defined %}
     license_model = {{ cluster.license_model | safe }}
