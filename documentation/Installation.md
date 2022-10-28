@@ -20,7 +20,8 @@ python modules are installed and in addition provide a simple flask server that 
     3. [Vagrant / VirtualBox](#vagrant--virtualbox)
 5. [Native](#native)
     1. [Oracle Linux](#oracle-linux)
-    2. [macOS](#macos)
+    2. [MacOS](#macos)
+    3. [Windows 10 / WSL (Ubuntu)](#windows-10--wsl-ubuntu)
 3. [Build From Source](#build-from-source)
     1. [OKIT Repository](#okit-repository)
     2. [Create Container](#create-container)
@@ -377,7 +378,7 @@ ${OKIT_DIR}/.venv/bin/gunicorn okitweb.wsgi:app --config ${OKIT_DIR}/config/guni
 sudo apt install git
 sudo apt install python3
 sudo apt install libmagic-dev
-sudo apt install python3.8-venv
+sudo apt install python3-venv
 ```
 
 #### Install
