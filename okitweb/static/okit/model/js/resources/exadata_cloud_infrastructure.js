@@ -43,7 +43,7 @@ class ExadataCloudInfrastructure extends OkitArtifact {
             subnet_id: '',
         
             backup_network_nsg_ids: [],
-            cluster_name: `${this.display_name}VMCluster`,
+            cluster_name: `${this.display_name}`,
             data_collection_options: {
                 is_diagnostics_events_enabled: true,
                 is_health_monitoring_enabled: true,

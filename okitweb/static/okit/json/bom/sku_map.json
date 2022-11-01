@@ -20,7 +20,102 @@
         "enterprise_edition_extreme_performance": "B90572",
         "byol": "B90573"
     },
-    "exadata_cloud_infrastructure": {},
+    "exadata_cloud_infrastructure": {
+        "shape" : {
+            "Exadata.Base.48": {
+                "base": "B90777",
+                "ocpu": {
+                    "included": "B88592",
+                    "byol": "B88847"
+                }
+            },
+            "Exadata.Quarter1.84": {
+                "base": "B91535",
+                "ocpu": {
+                    "included": "B88592",
+                    "byol": "B88847"
+                }
+            },
+            "Exadata.Quarter2.92": {
+                "base": "B91535",
+                "ocpu": {
+                    "included": "B88592",
+                    "byol": "B88847"
+                }
+            },
+            "Exadata.Quarter3.100": {
+                "base": "B91535",
+                "ocpu": {
+                    "included": "B88592",
+                    "byol": "B88847"
+                }
+            },
+            "Exadata.Half1.168": {
+                "base": "B91536",
+                "ocpu": {
+                    "included": "B88592",
+                    "byol": "B88847"
+                }
+            },
+            "Exadata.Half2.184": {
+                "base": "B91536",
+                "ocpu": {
+                    "included": "B88592",
+                    "byol": "B88847"
+                }
+            },
+            "Exadata.Half3.200": {
+                "base": "B91536",
+                "ocpu": {
+                    "included": "B88592",
+                    "byol": "B88847"
+                }
+            },
+            "Exadata.Full1.336": {
+                "base": "B91537",
+                "ocpu": {
+                    "included": "B88592",
+                    "byol": "B88847"
+                }
+            },
+            "Exadata.Full2.368": {
+                "base": "B91537",
+                "ocpu": {
+                    "included": "B88592",
+                    "byol": "B88847"
+                }
+            },
+            "Exadata.Full3.400": {
+                "base": "B91537",
+                "ocpu": {
+                    "included": "B88592",
+                    "byol": "B88847"
+                }
+            },
+            "Exadata.X8M": {
+                "base": "B92380",
+                "ocpu": {
+                    "included": "B88592",
+                    "byol": "B88847"
+                },
+                "server": {
+                    "storage": "B93382",
+                    "database": "B93381"
+                }
+            },
+            "Exadata.X9M": {
+                "base": "B92380",
+                "ocpu": {
+                    "included": "B88592",
+                    "byol": "B88847"
+                },
+                "server": {
+                    "storage": "B93382",
+                    "database": "B93381"
+                }
+            }
+        }
+    },
     "file_system": {
         "usage": "B89057"
     },

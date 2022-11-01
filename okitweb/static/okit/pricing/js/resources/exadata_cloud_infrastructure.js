@@ -14,11 +14,13 @@ class ExadataCloudInfrastructureOciPricing extends OkitOciPricingResource {
     }
     
     getPrice(resource) {
-        return 0
         resource = resource ? resource : this.resource
-        const skus = this.sku_map.exadata_cloud_infrastructure
-        let price_per_month = this.getOcpuCost(skus[resource.shape.toLowerCase()], resource)
-        price_per_month += resource.license_model === 'BRING_YOUR_OWN_LICENSE' ? this.getByolCost(skus.byol, resource) : 0
+        const skus = this.sku_map.exadata_cloud_infrastructure.shape[resource.shape]
+        let price_per_month = this.getBaseCost(skus.base, resource)
+        price_per_month += resource.cluster.license_model === 'BRING_YOUR_OWN_LICENSE' ? this.getByolCost(skus.ocpu.byol, resource) : this.getByolCost(skus.ocpu.included, resource)
+        if (skus.server) {
+
+        }
         console.info('Price', resource, price_per_month)
         return price_per_month
     }
@@ -26,7 +28,7 @@ class ExadataCloudInfrastructureOciPricing extends OkitOciPricingResource {
     getBoM(resource) {
         return {skus: [], price_per_month: this.getPrice(resource)}
         const resource_name = resource.getArtifactReference()
-        const skus = this.sku_map.exadata_cloud_infrastructure
+        const skus = this.sku_map.exadata_cloud_infrastructure.shape[resource.shape]
         let bom = {
             skus: [this.getOcpuBoMEntry(skus[resource.shape.toLowerCase()], resource)], 
             price_per_month: this.getPrice(resource)
@@ -38,7 +40,14 @@ class ExadataCloudInfrastructureOciPricing extends OkitOciPricingResource {
     /*
     ** Pricing Functions
     */
-    getOcpuCost(sku, resource) {
+    getBaseCost(sku, resource) {
+        resource = resource ? resource : this.resource
+        const shape = this.getShapeDetails(resource.shape)
+        const sku_prices = this.getSkuCost(sku)
+        const units = this.monthly_utilization
+        return this.getMonthlyCost(sku_prices, units)
+    }
+    getIncludedCost(sku, resource) {
         resource = resource ? resource : this.resource
         const shape = this.getShapeDetails(resource.shape)
         const sku_prices = this.getSkuCost(sku)
@@ -47,6 +56,22 @@ class ExadataCloudInfrastructureOciPricing extends OkitOciPricingResource {
     }
 
     getByolCost(sku, resource) {
+        resource = resource ? resource : this.resource
+        const shape = this.getShapeDetails(resource.shape)
+        const sku_prices = this.getSkuCost(sku)
+        const units = +shape.available_core_count * this.monthly_utilization
+        return this.getMonthlyCost(sku_prices, units)
+    }
+
+    getDatabaseServerCost(sku, resource) {
+        resource = resource ? resource : this.resource
+        const shape = this.getShapeDetails(resource.shape)
+        const sku_prices = this.getSkuCost(sku)
+        const units = +shape.available_core_count * this.monthly_utilization
+        return this.getMonthlyCost(sku_prices, units)
+    }
+
+    getStorageServerCost(sku, resource) {
         resource = resource ? resource : this.resource
         const shape = this.getShapeDetails(resource.shape)
         const sku_prices = this.getSkuCost(sku)

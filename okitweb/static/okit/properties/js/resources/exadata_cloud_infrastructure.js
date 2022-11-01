@@ -58,7 +58,7 @@ class ExadataCloudInfrastructureProperties extends OkitResourceProperties {
         this.cluster_display_name = cluster_display_name.input
         this.cluster_display_name_row = cluster_display_name.row
         // Cluster Name
-        const cluster_name_data = {}
+        const cluster_name_data = {pattern: '^[a-zA-Z][a-zA-Z0-9]{1,10}$', title: 'Only letters and numbers, starting with a letter. 10 characters max.'}
         const cluster_name = this.createInput('text', 'Cluster Name', `${this.id}_cluster_name`, '', (d, i, n) => {n[i].reportValidity(); this.resource.cluster.cluster_name = n[i].value}, cluster_name_data)
         this.append(this.cluster_tbody, cluster_name.row)
         this.cluster_name = cluster_name.input
