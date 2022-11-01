@@ -7,7 +7,9 @@
 1. Exadata Cloud Infrastructure
 2. Allow Load Balancer to be dropped on Compartment.
 3. Allow Network Load Balancer to be dropped on Compartment.
+4. Switch Service Gateway Properties to new style
 ### Bug Fixes
+1. Fix NSG Rule local reference in generated Terraform.
 
 
 ## Version 0.42.0

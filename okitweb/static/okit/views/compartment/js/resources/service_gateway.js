@@ -68,7 +68,10 @@ class ServiceGatewayView extends OkitCompartmentArtefactView {
     /*
     ** Property Sheet Load function
      */
-    loadProperties() {
+    newPropertiesSheet() {
+        this.properties_sheet = new ServiceGatewayProperties(this.artefact)
+    }
+    loadProperties1() {
         let okitJson = this.getOkitJson();
         let me = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/service_gateway.html", () => {
