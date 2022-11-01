@@ -12,8 +12,13 @@ class LoadBalancerView extends OkitCompartmentArtefactView {
         super(artefact, json_view);
     }
 
-    get parent_id() {return this.artefact.subnet_ids[0];}
-    get parent() {return this.getJsonView().getSubnet(this.parent_id);}
+    // get parent_id() {return this.artefact.subnet_ids[0];}
+    // get parent() {return this.getJsonView().getSubnet(this.parent_id);}
+    get parent_id() {
+        const subnet = this.getJsonView().getSubnet(this.artefact.subnet_id)
+        return (subnet && subnet.compartment_id === this.artefact.compartment_id) ? this.artefact.subnet_id : this.artefact.compartment_id
+    }
+    get parent() {return this.getJsonView().getSubnet(this.parent_id) ? this.getJsonView().getSubnet(this.parent_id) : this.getJsonView().getCompartment(this.parent_id);}
     // Direct Subnet Access
     get subnet_id() {return this.artefact.subnet_ids[0];}
     set subnet_id(id) {this.artefact.subnet_ids[0] = id;}
@@ -69,7 +74,7 @@ class LoadBalancerView extends OkitCompartmentArtefactView {
     }
 
     static getDropTargets() {
-        return [Subnet.getArtifactReference()];
+        return [Subnet.getArtifactReference(), Compartment.getArtifactReference()];
     }
 
 }
@@ -78,9 +83,14 @@ class LoadBalancerView extends OkitCompartmentArtefactView {
 */
 OkitJsonView.prototype.dropLoadBalancerView = function(target) {
     let view_artefact = this.newLoadBalancer();
-    view_artefact.getArtefact().subnet_ids.push(target.id);
-    view_artefact.getArtefact().compartment_id = target.compartment_id;
-    view_artefact.recalculate_dimensions = true;
+    if (target.type === Compartment.getArtifactReference()) {
+        view_artefact.artefact.compartment_id = target.id;
+    }
+    else if (target.type === Subnet.getArtifactReference()) {
+        view_artefact.getArtefact().subnet_ids.push(target.id);
+        view_artefact.getArtefact().compartment_id = target.compartment_id;
+        view_artefact.recalculate_dimensions = true;
+    }
     return view_artefact;
 }
 OkitJsonView.prototype.newLoadBalancer = function(loadbalancer) {

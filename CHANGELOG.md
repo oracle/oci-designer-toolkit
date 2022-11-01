@@ -1,6 +1,15 @@
 # Release Notes
 
 
+## Version 0.43.0
+**Release Date**: 9th November 2022
+### Features
+1. Exadata Cloud Infrastructure
+2. Allow Load Balancer to be dropped on Compartment.
+3. Allow Network Load Balancer to be dropped on Compartment.
+### Bug Fixes
+
+
 ## Version 0.42.0
 **Release Date**: 19th October 2022
 ### Features
