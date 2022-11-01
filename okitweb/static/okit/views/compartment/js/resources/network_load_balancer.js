@@ -12,8 +12,11 @@ class NetworkLoadBalancerView extends OkitCompartmentArtefactView {
         if (!json_view.network_load_balancers) json_view.network_load_balancers = [];
         super(artefact, json_view);
     }
-    get parent_id() {return this.artefact.subnet_id;}
-    get parent() {return this.getJsonView().getSubnet(this.parent_id);}
+    get parent_id() {
+        const subnet = this.getJsonView().getSubnet(this.artefact.subnet_id)
+        return (subnet && subnet.compartment_id === this.artefact.compartment_id) ? this.artefact.subnet_id : this.artefact.compartment_id
+    }
+    get parent() {return this.getJsonView().getSubnet(this.parent_id) ? this.getJsonView().getSubnet(this.parent_id) : this.getJsonView().getCompartment(this.parent_id);}
     /*
     ** SVG Processing
     */
@@ -42,7 +45,7 @@ class NetworkLoadBalancerView extends OkitCompartmentArtefactView {
         return NetworkLoadBalancer.getArtifactReference();
     }
     static getDropTargets() {
-        return [Subnet.getArtifactReference()];
+        return [Subnet.getArtifactReference(), Compartment.getArtifactReference()];
     }
 }
 /*
