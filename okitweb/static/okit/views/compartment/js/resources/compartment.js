@@ -72,6 +72,10 @@ class CompartmentView extends OkitContainerCompartmentArtefactView {
     /*
     ** Child Type Functions
      */
+    getLeftEdgeArtifacts() {
+        return [WebApplicationFirewall.getArtifactReference()]
+    }
+
     getTopArtifacts() {
         return [Instance.getArtifactReference(), AnalyticsInstance.getArtifactReference(), LoadBalancer.getArtifactReference(), NetworkLoadBalancer.getArtifactReference(),
             IntegrationInstance.getArtifactReference(), OracleDigitalAssistant.getArtifactReference(), 
