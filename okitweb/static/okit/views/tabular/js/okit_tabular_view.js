@@ -25,6 +25,10 @@ class OkitTabularJsonView extends OkitJsonView {
                 'Name': {property: 'display_name'},
                 'Compartment': {property: 'compartment_id', lookup: 'model.getCompartment'}
             },
+            tags: {
+                'Defined Tags': {property: 'defined_tags'},
+                'Freeform Tags': {property: 'freeform_tags'}
+            },
             compartments: {
                 'Description': {property: 'description'}
             },
@@ -225,7 +229,7 @@ class OkitTabularJsonView extends OkitJsonView {
 
     loadTabContent(resource_type) {
         // Merge Property Maps
-        const property_map = {...this.resource_property_map['common'], ...this.resource_property_map[resource_type]}
+        const property_map = {...this.resource_property_map['common'], ...this.resource_property_map[resource_type], ...this.resource_property_map['tags']}
         const contents_div = d3.select(d3Id('tabular_view_tab_contents'));
         // Empty existing Canvas
         contents_div.selectAll('*').remove();
@@ -375,7 +379,7 @@ class OkitTabularJsonView extends OkitJsonView {
         if (keys.length > 1) {
             return this.getValue(resource[keys[0]], keys.slice(1).join('.'));
         } else {
-            return resource[key];
+            return typeof resource[key] === 'object' ? JSON.stringify(resource[key]) : resource[key];
         }
     }
 
