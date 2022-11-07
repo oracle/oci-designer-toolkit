@@ -163,6 +163,11 @@
                     "svg": "NetworkFirewall.svg"
                 },
                 {
+                    "title": "Web Application Firewall",
+                    "targets": ["hidden"],
+                    "svg": "WebApplicationFirewall.svg"
+                },
+                {
                     "title": "IPSec Connection",
                     "targets": ["oci", "freetier"],
                     "svg": "VirtualPrivateNetworkVPN.svg"

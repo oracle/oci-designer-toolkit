@@ -1410,6 +1410,14 @@ class OkitArtefactView {
     }
 
     // Left Edge
+    getFirstLeftEdgeChildOffset() {
+        let offset = {
+            dx: 0,
+            dy: Math.round(positional_adjustments.padding.y * 2 + positional_adjustments.spacing.y * 2)
+        };
+        return offset;
+    }
+
     getLeftEdgeChildOffset() {
         alert('Get Left Edge Child function "getLeftEdgeChildOffset()" has not been implemented.');
     }
