@@ -169,6 +169,8 @@ class OkitTabularJsonView extends OkitJsonView {
         };
     }
 
+    property_map = (resource_type) => {return {...this.resource_property_map['common'], ...this.resource_property_map[resource_type], ...this.resource_property_map['tags']}}
+
     draw(for_export=false) {
         this.newCanvas()
     }
@@ -229,7 +231,8 @@ class OkitTabularJsonView extends OkitJsonView {
 
     loadTabContent(resource_type) {
         // Merge Property Maps
-        const property_map = {...this.resource_property_map['common'], ...this.resource_property_map[resource_type], ...this.resource_property_map['tags']}
+        // const property_map = {...this.resource_property_map['common'], ...this.resource_property_map[resource_type], ...this.resource_property_map['tags']}
+        const property_map = this.property_map(resource_type)
         const contents_div = d3.select(d3Id('tabular_view_tab_contents'));
         // Empty existing Canvas
         contents_div.selectAll('*').remove();
@@ -383,6 +386,7 @@ class OkitTabularJsonView extends OkitJsonView {
         }
     }
 
+    /*
     exportToXls() {
         const workbook = this.buildWorkbook()
         console.info(workbook)
@@ -409,7 +413,8 @@ class OkitTabularJsonView extends OkitJsonView {
 
     buildWorksheet(resource_type, resources) {
         console.info(`Build Worksheet ${resource_type}`, resources)
-        const property_map = {...this.resource_property_map['common'], ...this.resource_property_map[resource_type]}
+        // const property_map = {...this.resource_property_map['common'], ...this.resource_property_map[resource_type], ...this.resource_property_map['tags']}
+        const property_map = this.property_map(resource_type)
         const sheet = `
         <Worksheet ss:Name="${this.generateTabName(resource_type)}">
         <Table>
@@ -447,6 +452,7 @@ class OkitTabularJsonView extends OkitJsonView {
         }
         return cell_data
     }
+    */
 
 }
 
@@ -466,7 +472,7 @@ class TabularWorkbook extends OkitWorkbook {
     build(model, elements) {
         model = model || this.model || {}
         elements = elements || this.elements || {}
-        Object.entries(model.getResourceLists()).sort((a, b) => a[0].localeCompare(b[0])).forEach(([key, value]) => {if (value.length) this.worksheets.push(new TabularWorksheet(this.generateSheetName(key), value, {...elements['common'], ...elements[key]}, this));})
+        Object.entries(model.getResourceLists()).sort((a, b) => a[0].localeCompare(b[0])).forEach(([key, value]) => {if (value.length) this.worksheets.push(new TabularWorksheet(this.generateSheetName(key), value, {...elements['common'], ...elements[key], ...elements['tags']}, this));})
     }
 
     generateSheetName(name) {return titleCase(name.replaceAll('_', ' '))}
@@ -542,7 +548,7 @@ class TabularWorksheetRow extends OkitWorksheetRow {
         if (keys.length > 1) {
             return this.getValue(resource[keys[0]], keys.slice(1).join('.'));
         } else {
-            return resource[key];
+            return typeof resource[key] === 'object' ? JSON.stringify(resource[key]) : resource[key];
         }
     }
 }
