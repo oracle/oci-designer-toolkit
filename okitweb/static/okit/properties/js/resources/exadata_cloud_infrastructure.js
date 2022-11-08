@@ -28,13 +28,13 @@ class ExadataCloudInfrastructureProperties extends OkitResourceProperties {
         this.shape_row = shape.row
         // CPU Count
         const compute_count_data = {min: 2, max: 32}
-        const compute_count = this.createInput('number', 'Compute Count', `${this.id}_compute_count`, '', (d, i, n) => {n[i].reportValidity(); this.resource.compute_count = n[i].value}, compute_count_data)
+        const compute_count = this.createInput('number', 'Database Servers', `${this.id}_compute_count`, '', (d, i, n) => {n[i].reportValidity(); this.resource.compute_count = n[i].value}, compute_count_data)
         this.append(this.core_tbody, compute_count.row)
         this.compute_count = compute_count.input
         this.compute_count_row = compute_count.row
         // Storage Count
         const storage_count_data = {min: 3, max: 64}
-        const storage_count = this.createInput('number', 'Storage Count', `${this.id}_storage_count`, '', (d, i, n) => {n[i].reportValidity(); this.resource.storage_count = n[i].value}, storage_count_data)
+        const storage_count = this.createInput('number', 'Storage Servers', `${this.id}_storage_count`, '', (d, i, n) => {n[i].reportValidity(); this.resource.storage_count = n[i].value}, storage_count_data)
         this.append(this.core_tbody, storage_count.row)
         this.storage_count = storage_count.input
         this.storage_count_row = storage_count.row
@@ -258,9 +258,17 @@ class ExadataCloudInfrastructureProperties extends OkitResourceProperties {
             this.compute_count.property('value', this.resource.compute_count)
             this.storage_count.property('value', this.resource.storage_count)
         } else {
+            // this.resource.compute_count = shape_data.minimum_node_count * shape_data.core_count_increment
             this.resource.compute_count = null
             this.resource.storage_count = null
         }
+        const core_count = shape_data.available_core_count ? shape_data.available_core_count : shape_data.available_core_count_per_node
+        this.cpu_core_count.property('min', shape_data.minimum_core_count)
+        this.cpu_core_count.property('max', shape_data.core_count)
+        this.cpu_core_count.property('step', shape_data.core_count_increment)
+        if (this.resource.cluster.cpu_core_count < shape_data.minimum_core_count) this.resource.cluster.cpu_core_count = shape_data.minimum_core_count
+        if (this.resource.cluster.cpu_core_count > shape_data.core_count) this.resource.cluster.cpu_core_count = shape_data.minimum_core_count
+        this.cpu_core_count.property('value', this.resource.cluster.cpu_core_count)
     }
 
 }

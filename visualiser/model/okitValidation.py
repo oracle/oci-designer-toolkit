@@ -34,102 +34,10 @@ class OCIJsonValidator(object):
         self.target = self.okit_json.get('metadata', {}).get('platform', 'oci')
         if self.target == 'pca':
             self.validateSupportedResources('PCA-X9', self.pca_resources)
-            # self.validatePCA()
         elif self.target == 'freetier':
             self.validateSupportedResources('Free Tier', self.freetier_resources)
-            # self.validateFreeTier()
-        # else:
-        #     self.validateOCI()
         self.validateResources()
         return self.valid
-
-    def validateOCI(self):
-        self.validateAnalyticsInstances()
-        self.validateAutonomousDatabases()
-        self.validateBastions()
-        self.validateBlockStorageVolumes()
-        self.validateCompartments()
-        self.validateCustomerPremiseEquipments()
-        self.validateDhcpOptions()
-        self.validateDatabaseSystems()
-        self.validateDynamicRoutingGateways()
-        self.validateFastConnects()
-        self.validateFileStorageSystems()
-        self.validateGroups()
-        self.validateInstances()
-        self.validateInternetGateways()
-        self.validateIPSecConnections()
-        self.validateLoadBalancers()
-        self.validateLocalPeeringGateways()
-        self.validateMySqlDatabaseSystems()
-        self.validateNATGateways()
-        self.validateNetworkSecurityGroups()
-        self.validateObjectStorageBuckets()
-        self.validatePolicies()
-        self.validateRemotePeeringConnections()
-        self.validateRouteTables()
-        self.validateSecurityLists()
-        self.validateServiceGateways()
-        self.validateSubnets()
-        self.validateUsers()
-        self.validateVirtualCloudNetworks()
-        return
-    
-    def validateFreeTier(self):
-        self.validateSupportedResources('Free Tier', self.freetier_resources)
-        # self.validateAutonomousDatabases()
-        # self.validateBastions()
-        # self.validateBlockStorageVolumes()
-        # self.validateCompartments()
-        # self.validateCustomerPremiseEquipments()
-        # self.validateDhcpOptions()
-        # self.validateDatabaseSystems()
-        # self.validateDynamicRoutingGateways()
-        # self.validateFastConnects()
-        # self.validateFileStorageSystems()
-        # self.validateGroups()
-        # self.validateInstances()
-        # self.validateInternetGateways()
-        # self.validateIPSecConnections()
-        # self.validateLoadBalancers()
-        # self.validateLocalPeeringGateways()
-        # self.validateMySqlDatabaseSystems()
-        # self.validateNATGateways()
-        # self.validateNetworkSecurityGroups()
-        # self.validateObjectStorageBuckets()
-        # self.validatePolicies()
-        # self.validateRemotePeeringConnections()
-        # self.validateRouteTables()
-        # self.validateSecurityLists()
-        # self.validateServiceGateways()
-        # self.validateSubnets()
-        # self.validateUsers()
-        # self.validateVirtualCloudNetworks()
-        self.validateResources()
-        return
-
-    def validatePCA(self):
-        self.validateSupportedResources('PCA-X9', self.pca_resources)
-        # self.validateBlockStorageVolumes()
-        # self.validateCompartments()
-        # self.validateDhcpOptions()
-        # self.validateDynamicRoutingGateways()
-        # self.validateFileStorageSystems()
-        # self.validateGroups()
-        # self.validateInstances()
-        # self.validateInternetGateways()
-        # self.validateLocalPeeringGateways()
-        # self.validateNATGateways()
-        # self.validateNetworkSecurityGroups()
-        # self.validateObjectStorageBuckets()
-        # self.validatePolicies()
-        # self.validateRouteTables()
-        # self.validateSecurityLists()
-        # self.validateSubnets()
-        # self.validateUsers()
-        # self.validateVirtualCloudNetworks()
-        self.validateResources()
-        return
 
     def validateResources(self):
         self.validateAnalyticsInstances()
@@ -141,6 +49,7 @@ class OCIJsonValidator(object):
         self.validateDhcpOptions()
         self.validateDatabaseSystems()
         self.validateDynamicRoutingGateways()
+        self.validateExadataCloudInfrastructure()
         self.validateFastConnects()
         self.validateFileStorageSystems()
         self.validateGroups()
@@ -445,6 +354,53 @@ class OCIJsonValidator(object):
                             }
                             self.results['errors'].append(error)
 
+    def validateExadataCloudInfrastructure(self):
+        for resource in self.okit_json.get('exadata_cloud_infrastructures', []):
+            logger.info('Validating {!s}'.format(resource['display_name']))
+            # Check ssh Key
+            if resource['cluster']['ssh_public_keys'] == '':
+                self.valid = False
+                error = {
+                    'id': resource['id'],
+                    'type': 'Exadata Cloud Infrastructure',
+                    'artefact': resource['display_name'],
+                    'message': 'Public Keys must be specified.',
+                    'element': 'ssh_public_keys'
+                }
+                self.results['errors'].append(error)
+            # Hostname
+            if resource['cluster']['hostname'] == '':
+                self.valid = False
+                error = {
+                    'id': resource['id'],
+                    'type': 'Exadata Cloud Infrastructure',
+                    'artefact': resource['display_name'],
+                    'message': 'Hostname must be specified.',
+                    'element': 'hostname'
+                }
+                self.results['errors'].append(error)
+            # Subnet Id
+            if resource['cluster']['subnet_id'] == '':
+                self.valid = False
+                error = {
+                    'id': resource['id'],
+                    'type': 'Exadata Cloud Infrastructure',
+                    'artefact': resource['display_name'],
+                    'message': 'Subnet must be specified.',
+                    'element': 'subnet_id'
+                }
+                self.results['errors'].append(error)
+            # Backup Subnet Id
+            if resource['cluster']['backup_subnet_id'] == '':
+                self.valid = False
+                error = {
+                    'id': resource['id'],
+                    'type': 'Exadata Cloud Infrastructure',
+                    'artefact': resource['display_name'],
+                    'message': 'Backup Subnet must be specified.',
+                    'element': 'backup_subnet_id'
+                }
+                self.results['errors'].append(error)
 
     # Fast Connect
     def validateFastConnects(self):
