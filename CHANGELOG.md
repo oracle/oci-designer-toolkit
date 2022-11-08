@@ -9,6 +9,10 @@
 3. Allow Network Load Balancer to be dropped on Compartment.
 4. Switch Service Gateway Properties to new style.
 5. Display Tags in Tabular View
+6. Modify default view to not display connections.
+    1. Add property to resource that allows the user to specify if connection should be drawn for this resource.
+    2. Add setting to allow the user to display all connections.
+    3. Add setting to allow the user to display connections on Mouse Over.
 ### Bug Fixes
 1. Fix NSG Rule local reference in generated Terraform.
 
