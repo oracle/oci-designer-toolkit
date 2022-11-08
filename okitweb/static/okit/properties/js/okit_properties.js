@@ -222,6 +222,8 @@ class OkitResourceProperties {
     }
 
     loadCore() {
+        // Show Connections
+        this.show_connections.property('checked', this.resource.show_connections)
         // ocid
         this.ocid.property('value', this.resource.id)
         okitSettings.show_ocids ? this.showProperty(`${this.id}_ocid`, '') : this.hideProperty(`${this.id}_ocid`, '')
