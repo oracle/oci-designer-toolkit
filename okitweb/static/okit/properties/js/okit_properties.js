@@ -150,6 +150,10 @@ class OkitResourceProperties {
         const properties = this.createTable('', `${self.id}_core_properties`)
         this.core_tbody = properties.tbody
         this.append(core.div, properties.table)
+        // Show Connections
+        const show_connections = this.createInput('checkbox', 'Show Connections', `${self.id}_prohibit_public_ip_on_vnic`, '', (d, i, n) => {self.resource.show_connections = n[i].checked; this.redraw()})
+        this.show_connections = show_connections.input
+        this.append(this.core_tbody, show_connections.row)
         // ocid
         const ocid_data = {
             readonly: true
