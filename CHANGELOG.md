@@ -1,6 +1,22 @@
 # Release Notes
 
 
+## Version 0.43.0
+**Release Date**: 9th November 2022
+### Features
+1. Exadata Cloud Infrastructure
+2. Allow Load Balancer to be dropped on Compartment.
+3. Allow Network Load Balancer to be dropped on Compartment.
+4. Switch Service Gateway Properties to new style.
+5. Display Tags in Tabular View
+6. Modify default view to not display connections.
+    1. Add property to resource that allows the user to specify if connection should be drawn for this resource.
+    2. Add setting to allow the user to display all connections.
+    3. Add setting to allow the user to display connections on Mouse Over.
+### Bug Fixes
+1. Fix NSG Rule local reference in generated Terraform.
+
+
 ## Version 0.42.0
 **Release Date**: 19th October 2022
 ### Features
@@ -9,6 +25,7 @@
 3. Update OCI Link to new common cloud url.
 4. Add Markdown View
 5. Increase Resource display width when name display is selected.
+6. New PCA-X9 Template for HA VIP Configuration
 ### Bug Fixes
 1. Issue #540 : Check does not verify DNS-Label 
 2. Convert VCN CIDR_BLOCKS to string in MArkdown export.

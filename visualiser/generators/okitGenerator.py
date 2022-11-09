@@ -27,7 +27,7 @@ from model.okitValidation import OCIJsonValidator
 logger = getLogger()
 
 class OCIGenerator(object):
-    OKIT_VERSION = "0.42.0"
+    OKIT_VERSION = "0.43.0"
     def __init__(self, template_dir, output_dir, visualiser_json, use_vars=False, add_provider=True):
         # Initialise generator output data variables
         self.rendered_resources = {}
@@ -205,6 +205,7 @@ class OCIGenerator(object):
 
         "autonomous_databases": "database",
         "database_systems": "database",
+        "exadata_cloud_infrastructures": "database",
         "mysql_database_systems": "database",
         "nosql_databases": "database",
 

@@ -12,6 +12,8 @@ class SubnetView extends OkitContainerCompartmentArtefactView {
         super(artefact, json_view);
     }
 
+    getAttachedIds = () => [this.resource.route_table_id, this.resource.dhcp_options_id, ...this.resource.security_list_ids]
+
     get parent_id_orig() {return this.artefact.vcn_id;}
     get parent_orig() {return this.getJsonView().getVirtualCloudNetwork(this.parent_id);}
     get parent_id() {
@@ -144,7 +146,8 @@ class SubnetView extends OkitContainerCompartmentArtefactView {
 
     getBottomArtifacts() {
         return [Instance.getArtifactReference(), InstancePool.getArtifactReference(), DatabaseSystem.getArtifactReference(), 
-            AutonomousDatabase.getArtifactReference(), MysqlDatabaseSystem.getArtifactReference(), AnalyticsInstance.getArtifactReference()];
+            AutonomousDatabase.getArtifactReference(), MysqlDatabaseSystem.getArtifactReference(), AnalyticsInstance.getArtifactReference(), 
+            ExadataCloudInfrastructure.getArtifactReference()];
     }
 
     getLeftArtifacts() {

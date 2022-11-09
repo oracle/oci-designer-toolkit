@@ -25,6 +25,10 @@ class OkitTabularJsonView extends OkitJsonView {
                 'Name': {property: 'display_name'},
                 'Compartment': {property: 'compartment_id', lookup: 'model.getCompartment'}
             },
+            tags: {
+                'Defined Tags': {property: 'defined_tags'},
+                'Freeform Tags': {property: 'freeform_tags'}
+            },
             compartments: {
                 'Description': {property: 'description'}
             },
@@ -79,6 +83,7 @@ class OkitTabularJsonView extends OkitJsonView {
                 'OCPUs': {property: 'ocpus', type: 'number'},
                 'Subnet': {property: 'subnet_id', lookup: 'model.getSubnet'},
                 'Block Volumes': {property: 'block_storage_volume_ids', lookup: 'model.getBlockStorageVolume'},
+                'Status': {property: 'lifecycle_state'},
             },
             instance_pools: {},
             internet_gateways: {
@@ -164,6 +169,8 @@ class OkitTabularJsonView extends OkitJsonView {
         };
     }
 
+    property_map = (resource_type) => {return {...this.resource_property_map['common'], ...this.resource_property_map[resource_type], ...this.resource_property_map['tags']}}
+
     draw(for_export=false) {
         this.newCanvas()
     }
@@ -224,7 +231,8 @@ class OkitTabularJsonView extends OkitJsonView {
 
     loadTabContent(resource_type) {
         // Merge Property Maps
-        const property_map = {...this.resource_property_map['common'], ...this.resource_property_map[resource_type]}
+        // const property_map = {...this.resource_property_map['common'], ...this.resource_property_map[resource_type], ...this.resource_property_map['tags']}
+        const property_map = this.property_map(resource_type)
         const contents_div = d3.select(d3Id('tabular_view_tab_contents'));
         // Empty existing Canvas
         contents_div.selectAll('*').remove();
@@ -374,73 +382,8 @@ class OkitTabularJsonView extends OkitJsonView {
         if (keys.length > 1) {
             return this.getValue(resource[keys[0]], keys.slice(1).join('.'));
         } else {
-            return resource[key];
+            return typeof resource[key] === 'object' ? JSON.stringify(resource[key]) : resource[key];
         }
-    }
-
-    exportToXls() {
-        const workbook = this.buildWorkbook()
-        console.info(workbook)
-        // document.open('data:Application/octet-stream,' + encodeURIComponent(workbook))
-        return workbook
-    }
-
-    buildWorkbook() {
-        const workbook = `
-        <?xml version="1.0" encoding="UTF-8"?>
-        <?mso-application progid="Excel.Sheet"?>
-        <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet" xmlns:html="https://www.w3.org/TR/html401/">
-        ${this.buildWorksheets().join('')}
-        </Workbook>
-        `
-        return workbook
-    }
-
-    buildWorksheets() {
-        let sheets = []
-        Object.entries(this.getOkitJson().getResourceLists()).sort((a, b) => a[0].localeCompare(b[0])).forEach(([key, value]) => {if (value.length) sheets.push(this.buildWorksheet(key, value));})
-        return sheets
-    }
-
-    buildWorksheet(resource_type, resources) {
-        console.info(`Build Worksheet ${resource_type}`, resources)
-        const property_map = {...this.resource_property_map['common'], ...this.resource_property_map[resource_type]}
-        const sheet = `
-        <Worksheet ss:Name="${this.generateTabName(resource_type)}">
-        <Table>
-        ${Object.keys(property_map).map((k, i) => `<Column ss:Index="${i + 1}" ss:AutoFitWidth="1"/>`).join('\n')}
-        <Row>
-        ${Object.keys(property_map).map((k, i) => `<Cell><Data ss:Type="String">${k}</Data></Cell>`).join('\n')}
-        </Row>
-        ${resources.map((r, i) => `<Row>
-        ${Object.values(property_map).map((v) => `<Cell><Data ss:Type="String">${this.getCellData(r, v)}</Data></Cell>`).join('\n')}
-        </Row>`).join('\n')}
-        </Table>
-        </Worksheet>
-        `
-        return sheet
-    }
-
-    getCellData(resource, value) {
-        let cell_data = '';
-        if (value.lookup) {
-            if (Array.isArray(resource[value.property])) {
-                const array_data = resource[value.property].map(id => this.lookupResource(value.lookup, id).display_name);
-                cell_data = array_data.join(', ');
-            } else {
-                const lookup = this.lookupResource(value.lookup, resource[value.property]);
-                if (lookup && Array.isArray(lookup)) {
-                    cell_data = lookup.map(l => l.display_name).join(', ');
-                } else if (lookup) {
-                    cell_data = lookup.display_name;
-                } else {
-                    cell_data = '';
-                }
-            }
-        } else {
-            cell_data = this.getValue(resource, value.property);
-        }
-        return cell_data
     }
 
 }
@@ -461,7 +404,7 @@ class TabularWorkbook extends OkitWorkbook {
     build(model, elements) {
         model = model || this.model || {}
         elements = elements || this.elements || {}
-        Object.entries(model.getResourceLists()).sort((a, b) => a[0].localeCompare(b[0])).forEach(([key, value]) => {if (value.length) this.worksheets.push(new TabularWorksheet(this.generateSheetName(key), value, {...elements['common'], ...elements[key]}, this));})
+        Object.entries(model.getResourceLists()).sort((a, b) => a[0].localeCompare(b[0])).forEach(([key, value]) => {if (value.length) this.worksheets.push(new TabularWorksheet(this.generateSheetName(key), value, {...elements['common'], ...elements[key], ...elements['tags']}, this));})
     }
 
     generateSheetName(name) {return titleCase(name.replaceAll('_', ' '))}
@@ -537,7 +480,7 @@ class TabularWorksheetRow extends OkitWorksheetRow {
         if (keys.length > 1) {
             return this.getValue(resource[keys[0]], keys.slice(1).join('.'));
         } else {
-            return resource[key];
+            return typeof resource[key] === 'object' ? JSON.stringify(resource[key]) : resource[key];
         }
     }
 }

@@ -273,6 +273,8 @@ class OkitOCIData {
         }
     }
 
+    getGIVersions = (shape) => this.dropdown_data.gi_versions[shape].map((v) => v.version)
+
     getBareMetalInstanceShapes = () => this.dropdown_data.shapes.filter(s => s.shape.startsWith('BM.'))
     getVirtualMachineInstanceShapes = () => this.dropdown_data.shapes.filter(s => s.shape.startsWith('VM.'))
     getIntelInstanceShapes = () => this.dropdown_data.shapes.filter(s => s.shape.startsWith('VM.') && !s.shape.includes('.A') && !s.shape.includes('.E'))
@@ -526,7 +528,9 @@ class OkitSettings {
         this.last_used_region = '';
         this.last_used_compartment = '';
         this.hide_attached = true;
-        this.highlight_association = true;
+        this.show_all_connections = false;
+        this.show_connections_on_mouseover = true;
+        this.highlight_association = false;
         this.show_label = 'none';
         this.tooltip_type = 'simple';
         this.name_prefix = 'okit';
@@ -629,6 +633,10 @@ class OkitSettings {
             this.addHideAttachedArtefacts(tbody, autosave);
             // Highlight Associations
             this.addHighlightAssociations(tbody, autosave);
+            // Show Connections on Mouse Over
+            this.addShowConnectionsOnMouseover(tbody, autosave);
+            // Show All Connections
+            this.addShowAllConnections(tbody, autosave);
             // Display OCIDs
             this.addShowOcids(tbody, autosave);
             // Display Resource Name
@@ -886,6 +894,50 @@ class OkitSettings {
         td.append('label')
             .attr('for', 'highlight_association')
             .text('Highlight Associations');
+    }
+
+    addShowConnectionsOnMouseover(tbody, autosave) {
+        // Highlight Associations
+        let self = this;
+        let tr = tbody.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'td').text('');
+        let td = tr.append('div').attr('class', 'td');
+        td.append('input')
+            .attr('id', 'show_connections_on_mouseover')
+            .attr('name', 'show_connections_on_mouseover')
+            .attr('type', 'checkbox')
+            .property('checked', this.show_connections_on_mouseover)
+            .on('change', function () {
+                if (autosave) {
+                    self.show_connections_on_mouseover = $('#show_connections_on_mouseover').is(':checked');
+                    self.saveAndRedraw();
+                }
+            });
+        td.append('label')
+            .attr('for', 'show_connections_on_mouseover')
+            .text('Show Connections On Mouseover');
+    }
+
+    addShowAllConnections(tbody, autosave) {
+        // Highlight Associations
+        let self = this;
+        let tr = tbody.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'td').text('');
+        let td = tr.append('div').attr('class', 'td');
+        td.append('input')
+            .attr('id', 'show_all_connections')
+            .attr('name', 'show_all_connections')
+            .attr('type', 'checkbox')
+            .property('checked', this.show_all_connections)
+            .on('change', function () {
+                if (autosave) {
+                    self.show_all_connections = $('#show_all_connections').is(':checked');
+                    self.saveAndRedraw();
+                }
+            });
+        td.append('label')
+            .attr('for', 'show_all_connections')
+            .text('Show All Connections');
     }
 
     addShowOcids(tbody, autosave) {

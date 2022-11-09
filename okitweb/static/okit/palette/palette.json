@@ -101,6 +101,11 @@
                     "svg": "AutonomousDataWarehouseCloudService.svg"
                 },
                 {
+                    "title": "Exadata Cloud Infrastructure",
+                    "targets": ["oci"],
+                    "svg": "ExadataDatabaseSystem.svg"
+                },
+                {
                     "title": "Exadata Database System",
                     "targets": ["hidden"],
                     "svg": "ExadataDatabaseSystem.svg"
@@ -156,6 +161,11 @@
                     "title": "Network Firewall",
                     "targets": ["oci"],
                     "svg": "NetworkFirewall.svg"
+                },
+                {
+                    "title": "Web Application Firewall",
+                    "targets": ["hidden"],
+                    "svg": "WebApplicationFirewall.svg"
                 },
                 {
                     "title": "IPSec Connection",

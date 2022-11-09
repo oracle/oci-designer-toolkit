@@ -72,8 +72,15 @@ class CompartmentView extends OkitContainerCompartmentArtefactView {
     /*
     ** Child Type Functions
      */
+    getLeftEdgeArtifacts() {
+        return [WebApplicationFirewall.getArtifactReference()]
+    }
+
     getTopArtifacts() {
-        return [Instance.getArtifactReference(), AnalyticsInstance.getArtifactReference(), IntegrationInstance.getArtifactReference(), OracleDigitalAssistant.getArtifactReference(), DataIntegrationWorkspace.getArtifactReference(), VisualBuilderInstance.getArtifactReference(), MysqlDatabaseSystem.getArtifactReference(), DatabaseSystem.getArtifactReference(), NetworkFirewall.getArtifactReference()];
+        return [Instance.getArtifactReference(), AnalyticsInstance.getArtifactReference(), LoadBalancer.getArtifactReference(), NetworkLoadBalancer.getArtifactReference(),
+            IntegrationInstance.getArtifactReference(), OracleDigitalAssistant.getArtifactReference(), 
+            DataIntegrationWorkspace.getArtifactReference(), VisualBuilderInstance.getArtifactReference(), 
+            MysqlDatabaseSystem.getArtifactReference(), DatabaseSystem.getArtifactReference(), NetworkFirewall.getArtifactReference()];
     }
 
     getContainerArtifacts() {
@@ -88,7 +95,7 @@ class CompartmentView extends OkitContainerCompartmentArtefactView {
         return [DynamicRoutingGateway.getArtifactReference(), AutonomousDatabase.getArtifactReference(),
             ObjectStorageBucket.getArtifactReference(), FastConnect.getArtifactReference(),
             IpsecConnection.getArtifactReference(), RemotePeeringConnection.getArtifactReference(),
-            Drg.getArtifactReference(), NosqlDatabase.getArtifactReference()];
+            Drg.getArtifactReference(), NosqlDatabase.getArtifactReference(), ExadataCloudInfrastructure.getArtifactReference()];
     }
 
     getRightEdgeArtifacts() {

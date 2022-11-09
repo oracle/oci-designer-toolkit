@@ -198,6 +198,7 @@ class OkitArtefactView {
 
     getChildren = () => Object.values(this.view()).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter((r) => r.parent_id === this.id)
     getThemeCssClass = () => this.getArtifactReference().toLowerCase().replaceAll(' ', '-')
+    getAttachedIds = () => []
 
     get resource() {return this.artefact}
     // Instance Constants
@@ -724,24 +725,27 @@ class OkitArtefactView {
 
     addMouseOverEvents(svg) {
         const self = this;
+        const display_mouseover_links = okitSettings.show_connections_on_mouseover && !okitSettings.show_all_connections && !this.resource.show_connections
         svg.on('mouseenter', () => {
-            if (okitSettings.highlight_association) {self.addAssociationHighlighting();}
-            $(jqId(self.id)).addClass('highlight-rect');
             d3.event.stopPropagation();
+            if (okitSettings.highlight_association) {self.addAssociationHighlighting();}
+            if (display_mouseover_links) {this.getLinks().forEach((id) => this.drawConnection(this.id, id))}
+            $(jqId(self.id)).addClass('highlight-rect');
         })
         svg.on('mouseleave', () => {
-            if (okitSettings.highlight_association) {self.removeAssociationHighlighting();}
-            $(jqId(self.id)).removeClass('highlight-rect');
             d3.event.stopPropagation();
+            if (okitSettings.highlight_association) {self.removeAssociationHighlighting();}
+            if (display_mouseover_links) {this.getLinks().forEach((id) => this.removeConnection(this.id, id))}
+            $(jqId(self.id)).removeClass('highlight-rect');
         });
     }
 
     getAssociations() {return this.getResource().getAssociations().filter((id) => id !== this.compartment_id && id !== this.parent_id && !this.children.includes(id))}
-    getLinks() {return this.getResource().getLinks().filter((id) => id !== this.compartment_id && id !== this.parent_id && !this.children.includes(id))}
+    getLinks() {return this.getResource().getLinks().filter((id) => id !== this.compartment_id && id !== this.parent_id && !this.children.includes(id) && !this.getAttachedIds().includes(id))}
 
-    addAssociationHighlighting() {}
+    // addAssociationHighlighting() {}
 
-    removeAssociationHighlighting() {}
+    // removeAssociationHighlighting() {}
 
     addDragEvents(svg) {
         svg.on("dragenter",  dragEnter)
@@ -866,7 +870,8 @@ class OkitArtefactView {
 
     drawAttachments() {}
 
-    drawConnections() {this.getLinks().forEach((id) => this.drawConnection(this.id, id))}
+    // drawConnections() {this.getLinks().forEach((id) => this.drawConnection(this.id, id))}
+    drawConnections() {if (okitSettings.show_all_connections || this.resource.show_connections) this.getLinks().forEach((id) => this.drawConnection(this.id, id))}
 
     drawConnection(start_id, end_id) {
         if (this.parent && !this.parent.is_collapsed) {
@@ -1087,12 +1092,14 @@ class OkitArtefactView {
         }
     }
 
+    removeConnections() {this.getLinks().forEach((id) => this.removeConnection(this.id, id))}
+
     removeConnection(start_id, end_id) {
         d3.select(`#${this.generateConnectorId(end_id, start_id)}`).remove()
     }
 
-    hideConnection = () => d3.select(`#${this.generateConnectorId(end_id, start_id)}`).classed('hidden', true)
-    showConnection = () => d3.select(`#${this.generateConnectorId(end_id, start_id)}`).classed('hidden', false)
+    hideConnection = (start_id, end_id) => d3.select(`#${this.generateConnectorId(end_id, start_id)}`).classed('hidden', true)
+    showConnection = (start_id, end_id) => d3.select(`#${this.generateConnectorId(end_id, start_id)}`).classed('hidden', false)
     addAssociationHighlighting = () => this.getAssociations().forEach((id) => $(jqId(id)).addClass('highlight-association'))
     removeAssociationHighlighting = () => this.getAssociations().forEach((id) => $(jqId(id)).removeClass('highlight-association'))
 
@@ -1410,6 +1417,14 @@ class OkitArtefactView {
     }
 
     // Left Edge
+    getFirstLeftEdgeChildOffset() {
+        let offset = {
+            dx: 0,
+            dy: Math.round(positional_adjustments.padding.y * 2 + positional_adjustments.spacing.y * 2)
+        };
+        return offset;
+    }
+
     getLeftEdgeChildOffset() {
         alert('Get Left Edge Child function "getLeftEdgeChildOffset()" has not been implemented.');
     }
