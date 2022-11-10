@@ -84,6 +84,7 @@ class OkitTabularJsonView extends OkitJsonView {
                 'Subnet': {property: 'subnet_id', lookup: 'model.getSubnet'},
                 'Block Volumes': {property: 'block_storage_volume_ids', lookup: 'model.getBlockStorageVolume'},
                 'Status': {property: 'lifecycle_state'},
+                'Fault Domain': {property: 'fault_domain'}
             },
             instance_pools: {},
             internet_gateways: {
@@ -292,7 +293,7 @@ class OkitTabularJsonView extends OkitJsonView {
                 } else {
                     cell_data = this.getValue(resource, value.property);
                 }
-                tr.append('div').attr('class', 'td').text(cell_data);
+                tr.append('div').attr('class', 'td').append('pre').text(cell_data);
             });
         }
     }
@@ -382,7 +383,8 @@ class OkitTabularJsonView extends OkitJsonView {
         if (keys.length > 1) {
             return this.getValue(resource[keys[0]], keys.slice(1).join('.'));
         } else {
-            return typeof resource[key] === 'object' ? JSON.stringify(resource[key]) : resource[key];
+            // return typeof resource[key] === 'object' ? JSON.stringify(resource[key]) : resource[key];
+            return typeof resource[key] === 'object' ? JSON.stringify(resource[key], null, 4) : resource[key];
         }
     }
 
