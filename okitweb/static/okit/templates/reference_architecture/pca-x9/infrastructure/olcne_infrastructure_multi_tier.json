@@ -10,7 +10,8 @@
       "id": "okit.compartment.200e584b-c0b6-4e98-962f-e675e83476fe",
       "okit_reference": "okit-e3a3b1f7-65df-44d8-a56b-850666d18b4d",
       "read_only": true,
-      "resource_name": "DeploymentCompartment"
+      "resource_name": "DeploymentCompartment",
+      "show_connections": false
     }
   ],
   "defined_tags": {},
@@ -42,6 +43,7 @@
       ],
       "read_only": false,
       "resource_name": "Okit_DO_1662125212843",
+      "show_connections": false,
       "vcn_id": "okit.virtualcloudnetwork.9e7f064e-b486-4db9-88fa-dc10e0395470"
     }
   ],
@@ -92,6 +94,7 @@
         "ocpus": ""
       },
       "shape_series": "intel",
+      "show_connections": false,
       "source_details": {
         "boot_volume_size_in_gbs": "50",
         "image_id": "ocid1.image.AK00905695.x9pca1.ye9e8d6csmggarq48dr9268w8pqj0o20klp42v70hrzds21xcgx2oxwo4o3w",
@@ -158,6 +161,7 @@
         "ocpus": ""
       },
       "shape_series": "intel",
+      "show_connections": false,
       "source_details": {
         "boot_volume_size_in_gbs": "50",
         "image_id": "ocid1.image.AK00905695.x9pca1.ye9e8d6csmggarq48dr9268w8pqj0o20klp42v70hrzds21xcgx2oxwo4o3w",
@@ -224,6 +228,7 @@
         "ocpus": ""
       },
       "shape_series": "intel",
+      "show_connections": false,
       "source_details": {
         "boot_volume_size_in_gbs": "50",
         "image_id": "ocid1.image.AK00905695.x9pca1.ye9e8d6csmggarq48dr9268w8pqj0o20klp42v70hrzds21xcgx2oxwo4o3w",
@@ -290,6 +295,7 @@
         "ocpus": ""
       },
       "shape_series": "intel",
+      "show_connections": false,
       "source_details": {
         "boot_volume_size_in_gbs": "50",
         "image_id": "ocid1.image.AK00905695.x9pca1.ye9e8d6csmggarq48dr9268w8pqj0o20klp42v70hrzds21xcgx2oxwo4o3w",
@@ -356,6 +362,7 @@
         "ocpus": ""
       },
       "shape_series": "intel",
+      "show_connections": false,
       "source_details": {
         "boot_volume_size_in_gbs": "50",
         "image_id": "ocid1.image.AK00905695.x9pca1.ye9e8d6csmggarq48dr9268w8pqj0o20klp42v70hrzds21xcgx2oxwo4o3w",
@@ -422,6 +429,7 @@
         "ocpus": ""
       },
       "shape_series": "intel",
+      "show_connections": false,
       "source_details": {
         "boot_volume_size_in_gbs": "50",
         "image_id": "ocid1.image.AK00905695.x9pca1.ye9e8d6csmggarq48dr9268w8pqj0o20klp42v70hrzds21xcgx2oxwo4o3w",
@@ -488,6 +496,7 @@
         "ocpus": ""
       },
       "shape_series": "intel",
+      "show_connections": false,
       "source_details": {
         "boot_volume_size_in_gbs": "50",
         "image_id": "ocid1.image.AK00905695.x9pca1.ye9e8d6csmggarq48dr9268w8pqj0o20klp42v70hrzds21xcgx2oxwo4o3w",
@@ -523,6 +532,7 @@
       "okit_reference": "okit-4a91bee3-0177-4aab-95c4-32ae5cf5c579",
       "read_only": false,
       "resource_name": "Okit_IG_1662125250653",
+      "show_connections": false,
       "vcn_id": "okit.virtualcloudnetwork.9e7f064e-b486-4db9-88fa-dc10e0395470"
     }
   ],
@@ -536,7 +546,7 @@
     "okit_model_id": "okit-model-e35d4184-4cbd-4989-9002-f611c67b9686",
     "okit_version": "0.40.0 - nightly -",
     "platform": "pca",
-    "resource_count": 390,
+    "resource_count": 462,
     "updated": "2022-9-2 14:26:40"
   },
   "nat_gateways": [
@@ -551,6 +561,7 @@
       "okit_reference": "okit-96bc170b-c06f-40e7-af4c-55d6af390899",
       "read_only": false,
       "resource_name": "Okit_NG_1667478314988",
+      "show_connections": false,
       "vcn_id": "okit.virtualcloudnetwork.9e7f064e-b486-4db9-88fa-dc10e0395470"
     }
   ],
@@ -575,6 +586,7 @@
           "target_type": "internet_gateway"
         }
       ],
+      "show_connections": false,
       "vcn_id": "okit.virtualcloudnetwork.9e7f064e-b486-4db9-88fa-dc10e0395470"
     },
     {
@@ -597,6 +609,7 @@
           "target_type": "nat_gateway"
         }
       ],
+      "show_connections": false,
       "vcn_id": "okit.virtualcloudnetwork.9e7f064e-b486-4db9-88fa-dc10e0395470"
     }
   ],
@@ -637,6 +650,7 @@
       "okit_reference": "okit-747f9fb0-f09d-480d-a2de-839ca1c3f3f3",
       "read_only": false,
       "resource_name": "Okit_SL_1662125212841",
+      "show_connections": false,
       "vcn_id": "okit.virtualcloudnetwork.9e7f064e-b486-4db9-88fa-dc10e0395470"
     },
     {
@@ -712,6 +726,7 @@
       "okit_reference": "okit-2f62ed4f-4a0b-43a5-984e-f6a92f4ae585",
       "read_only": false,
       "resource_name": "Okit_SL_1667389313457",
+      "show_connections": false,
       "vcn_id": "okit.virtualcloudnetwork.9e7f064e-b486-4db9-88fa-dc10e0395470"
     }
   ],
@@ -738,6 +753,7 @@
       "security_list_ids": [
         "okit.securitylist.71233472-a18a-4fb0-9b3d-597769dfa736"
       ],
+      "show_connections": false,
       "vcn_id": "okit.virtualcloudnetwork.9e7f064e-b486-4db9-88fa-dc10e0395470"
     },
     {
@@ -762,10 +778,11 @@
       "security_list_ids": [
         "okit.securitylist.ba957157-a3d1-4089-abc8-26386c9fe620"
       ],
+      "show_connections": false,
       "vcn_id": "okit.virtualcloudnetwork.9e7f064e-b486-4db9-88fa-dc10e0395470"
     }
   ],
-  "title": "OLCNE Infrastructure",
+  "title": "Oracle Cloud Native Environment Infrastructure Multi Tier",
   "user_defined": {
     "terraform": "# Define Local CNE Types\n# If VMs are added to the design add there Public IP reference to the appropriate list.\nlocals {\n    cne_operator_public_ips = [local.Okit_I_1662125763009_public_ip]\n\n    cne_master_private_ips = [local.Okit_I_1662125754075_private_ip, local.Okit_I_1662125756226_private_ip, local.Okit_I_1667554801819_private_ip]\n\n    cne_worker_private_ips = [local.Okit_I_1662125758459_private_ip, local.Okit_I_1662125760511_private_ip, local.Okit_I_1667554808555_private_ip]\n}\n\n# Install Operator Pre-Reqs\nresource \"null_resource\" \"cne-operator-pre-reqs\" {\n    count = length(local.cne_operator_public_ips)\n    connection {\n        type = \"ssh\"\n        user = \"opc\"\n        private_key = file(\"${var.private_key_file}\")\n        host = local.cne_operator_public_ips[count.index]\n    }\n\n    provisioner \"file\" {\n      source = \"${var.private_key_file}\"\n      destination = \"${var.remote_private_key_file}\"\n    }\n\n    provisioner \"remote-exec\" {\n      inline = [\n        \"sudo bash -c 'echo \\\"proxy=${var.yum_proxy}\\\" >> /etc/yum.conf'\",\n        \"sudo bash -c 'echo \\\"timeout=3000\\\" >> /etc/yum.conf'\",\n        \"sudo bash -c 'echo \\\"retries=100\\\" >> /etc/yum.conf'\",\n        \"sudo yum check-update\",\n        \"sudo bash -c 'echo \\\"proxy=${var.yum_proxy}\\\" >> /etc/dnf/dnf.conf'\",\n        \"sudo bash -c 'echo \\\"timeout=3000\\\" >> /etc/dnf/dnf.conf'\",\n        \"sudo bash -c 'echo \\\"retries=100\\\" >> /etc/dnf/dnf.conf'\",\n        \"sudo dnf --refresh check-update\",\n        \"sudo dnf install -y oracle-olcne-release-el8\",\n        \"sudo dnf config-manager --enable ol8_olcne15 ol8_addons ol8_baseos_latest ol8_appstream ol8_UEKR6\",\n        \"sudo dnf config-manager --disable ol8_olcne14 ol8_olcne13 ol8_olcne12 ol8_developer\",\n\n        \"sudo sed -i 's/^SELINUX=enforcing/SELINUX=permissive/' /etc/selinux/config\",\n        \"sudo /usr/sbin/setenforce 0\",\n\n        \"sudo firewall-cmd --add-port=8091/tcp --permanent\",\n        \"sudo systemctl restart firewalld.service\",\n\n        \"sudo chmod 600 ${var.remote_private_key_file}\"\n      ]\n    }\n}\n\n# Install Master (Control) Pre-Reqs\nresource \"null_resource\" \"cne-master-pre-reqs\" {\n    count = length(local.cne_master_private_ips)\n    connection {\n        type = \"ssh\"\n        bastion_host = local.cne_operator_public_ips[0]\n        bastion_user = \"opc\"\n        bastion_private_key = file(\"${var.private_key_file}\")\n        host = local.cne_master_private_ips[count.index]\n        user = \"opc\"\n        private_key = file(\"${var.private_key_file}\")\n    }\n\n    provisioner \"file\" {\n      source = \"${var.private_key_file}\"\n      destination = \"${var.remote_private_key_file}\"\n    }\n\n    provisioner \"remote-exec\" {\n      inline = [\n        \"sudo bash -c 'echo \\\"proxy=${var.yum_proxy}\\\" >> /etc/yum.conf'\",\n        \"sudo bash -c 'echo \\\"timeout=3000\\\" >> /etc/yum.conf'\",\n        \"sudo bash -c 'echo \\\"retries=100\\\" >> /etc/yum.conf'\",\n        \"sudo yum check-update\",\n        \"sudo bash -c 'echo \\\"proxy=${var.yum_proxy}\\\" >> /etc/dnf/dnf.conf'\",\n        \"sudo bash -c 'echo \\\"timeout=3000\\\" >> /etc/dnf/dnf.conf'\",\n        \"sudo bash -c 'echo \\\"retries=100\\\" >> /etc/dnf/dnf.conf'\",\n        \"sudo dnf --refresh check-update\",\n        \"sudo dnf install -y oracle-olcne-release-el8\",\n        \"sudo dnf config-manager --enable ol8_olcne15 ol8_addons ol8_baseos_latest ol8_appstream ol8_UEKR6\",\n        \"sudo dnf config-manager --disable ol8_olcne14 ol8_olcne13 ol8_olcne12 ol8_developer\",\n        \"sudo yum install -y chrony\",\n        \"sudo echo 'Add NTP Server to /etc/chrony.conf'\",\n        \"sudo swapoff -a\",\n        \"sudo sed -i '/ swap /d' /etc/fstab\",\n\n        \"sudo sed -i 's/^SELINUX=enforcing/SELINUX=permissive/' /etc/selinux/config\",\n        \"sudo /usr/sbin/setenforce 0\",\n\n        \"sudo firewall-cmd --zone=trusted --add-interface=cni0 --permanent\",\n        \"sudo firewall-cmd --add-port=8090/tcp --permanent\",\n        \"sudo firewall-cmd --add-port=10250/tcp --permanent\",\n        \"sudo firewall-cmd --add-port=10255/tcp --permanent\",\n        \"sudo firewall-cmd --add-port=8472/udp --permanent\",\n        \"sudo firewall-cmd --add-port=6443/tcp --permanent\",\n        \"sudo firewall-cmd --add-port=10251/tcp --permanent\",\n        \"sudo firewall-cmd --add-port=10252/tcp --permanent\",\n        \"sudo firewall-cmd --add-port=2379/tcp --permanent\",\n        \"sudo firewall-cmd --add-port=2380/tcp --permanent\",\n        \"sudo systemctl restart firewalld.service\",\n\n        \"sudo chmod 600 ${var.remote_private_key_file}\"\n      ]\n    }\n\n    depends_on = [\n        null_resource.cne-operator-pre-reqs\n    ]    \n}\n\n# Install Worker Pre-Reqs\nresource \"null_resource\" \"cne-worker-pre-reqs\" {\n    count = length(local.cne_worker_private_ips)\n    connection {\n        type = \"ssh\"\n        bastion_host = local.cne_operator_public_ips[0]\n        bastion_user = \"opc\"\n        bastion_private_key = file(\"${var.private_key_file}\")\n        user = \"opc\"\n        private_key = file(\"${var.private_key_file}\")\n        host = local.cne_worker_private_ips[count.index]\n    }\n\n    provisioner \"file\" {\n      source = \"${var.private_key_file}\"\n      destination = \"${var.remote_private_key_file}\"\n    }\n\n    provisioner \"remote-exec\" {\n      inline = [\n        \"sudo bash -c 'echo \\\"proxy=${var.yum_proxy}\\\" >> /etc/yum.conf'\",\n        \"sudo bash -c 'echo \\\"timeout=3000\\\" >> /etc/yum.conf'\",\n        \"sudo bash -c 'echo \\\"retries=100\\\" >> /etc/yum.conf'\",\n        \"sudo yum check-update\",\n        \"sudo bash -c 'echo \\\"proxy=${var.yum_proxy}\\\" >> /etc/dnf/dnf.conf'\",\n        \"sudo bash -c 'echo \\\"timeout=3000\\\" >> /etc/dnf/dnf.conf'\",\n        \"sudo bash -c 'echo \\\"retries=100\\\" >> /etc/dnf/dnf.conf'\",\n        \"sudo dnf --refresh check-update\",\n        \"sudo dnf install -y oracle-olcne-release-el8\",\n        \"sudo dnf config-manager --enable ol8_olcne15 ol8_addons ol8_baseos_latest ol8_appstream ol8_UEKR6\",\n        \"sudo dnf config-manager --disable ol8_olcne14 ol8_olcne13 ol8_olcne12 ol8_developer\",\n        \"sudo yum install -y chrony\",\n        \"sudo echo 'Add NTP Server to /etc/chrony.conf'\",\n        \"sudo swapoff -a\",\n        \"sudo sed -i '/ swap /d' /etc/fstab\",\n\n        \"sudo sed -i 's/^SELINUX=enforcing/SELINUX=permissive/' /etc/selinux/config\",\n        \"sudo /usr/sbin/setenforce 0\",\n\n        \"sudo firewall-cmd --zone=trusted --add-interface=cni0 --permanent\",\n        \"sudo firewall-cmd --add-port=8090/tcp --permanent\",\n        \"sudo firewall-cmd --add-port=10250/tcp --permanent\",\n        \"sudo firewall-cmd --add-port=10255/tcp --permanent\",\n        \"sudo firewall-cmd --add-port=8472/udp --permanent\",\n        \"sudo systemctl restart firewalld.service\",\n\n        \"sudo chmod 600 ${var.remote_private_key_file}\"\n      ]\n    }\n\n    depends_on = [\n        null_resource.cne-operator-pre-reqs\n    ]    \n}\n\n# Install Master (Control)\nresource \"null_resource\" \"cne-master-install\" {\n    count = length(local.cne_master_private_ips)\n    connection {\n        type = \"ssh\"\n        bastion_host = local.cne_operator_public_ips[0]\n        bastion_user = \"opc\"\n        bastion_private_key = file(\"${var.private_key_file}\")\n        user = \"opc\"\n        private_key = file(\"${var.private_key_file}\")\n        host = local.cne_master_private_ips[count.index]\n    }\n\n    provisioner \"remote-exec\" {\n      inline = [\n        \"sudo yum check-update\",\n        \"sudo dnf --refresh check-update\",\n        \"sudo dnf install -y olcne-agent olcne-utils\",\n        \"sudo systemctl enable olcne-agent.service\",\n        \"sudo mkdir /etc/systemd/system/crio.service.d\",\n        \"sudo bash -c 'echo \\\"[Service]\\\" > /etc/systemd/system/crio.service.d/proxy.conf'\",\n        \"sudo bash -c 'echo \\\"Environment=\\\\\\\"HTTP_PROXY=${var.http_proxy}\\\\\\\"\\\" >> /etc/systemd/system/crio.service.d/proxy.conf'\",\n        \"sudo bash -c 'echo \\\"Environment=\\\\\\\"HTTPS_PROXY=${var.https_proxy}\\\\\\\"\\\" >> /etc/systemd/system/crio.service.d/proxy.conf'\",\n        \"sudo bash -c 'echo \\\"Environment=\\\\\\\"NO_PROXY=${length(var.no_proxy) > 0 ? var.no_proxy : local.cne_operator_public_ips[0]}\\\\\\\"\\\" >> /etc/systemd/system/crio.service.d/proxy.conf'\"\n      ]\n    }\n\n    depends_on = [\n        null_resource.cne-master-pre-reqs,\n        null_resource.cne-worker-pre-reqs,\n        null_resource.cne-operator-pre-reqs\n    ]    \n}\n\n# Install Worker\nresource \"null_resource\" \"cne-worker-install\" {\n    count = length(local.cne_worker_private_ips)\n    connection {\n        type = \"ssh\"\n        bastion_host = local.cne_operator_public_ips[0]\n        bastion_user = \"opc\"\n        bastion_private_key = file(\"${var.private_key_file}\")\n        user = \"opc\"\n        private_key = file(\"${var.private_key_file}\")\n        host = local.cne_worker_private_ips[count.index]\n    }\n\n    provisioner \"remote-exec\" {\n      inline = [\n        \"sudo yum check-update\",\n        \"sudo dnf --refresh check-update\",\n        \"sudo dnf install -y olcne-agent olcne-utils\",\n        \"sudo systemctl enable olcne-agent.service \",\n        \"sudo mkdir /etc/systemd/system/crio.service.d\",\n        \"sudo bash -c 'echo \\\"[Service]\\\" > /etc/systemd/system/crio.service.d/proxy.conf'\",\n        \"sudo bash -c 'echo \\\"Environment=\\\\\\\"HTTP_PROXY=${var.http_proxy}\\\\\\\"\\\" >> /etc/systemd/system/crio.service.d/proxy.conf'\",\n        \"sudo bash -c 'echo \\\"Environment=\\\\\\\"HTTPS_PROXY=${var.https_proxy}\\\\\\\"\\\" >> /etc/systemd/system/crio.service.d/proxy.conf'\",\n        \"sudo bash -c 'echo \\\"Environment=\\\\\\\"NO_PROXY=${length(var.no_proxy) > 0 ? var.no_proxy : local.cne_operator_public_ips[0]}\\\\\\\"\\\" >> /etc/systemd/system/crio.service.d/proxy.conf'\"\n      ]\n    }\n\n    depends_on = [\n        null_resource.cne-master-pre-reqs,\n        null_resource.cne-worker-pre-reqs,\n        null_resource.cne-operator-pre-reqs\n    ]    \n}\n\n# Install Operator\nresource \"null_resource\" \"cne-operator-install\" {\n    count = length(local.cne_operator_public_ips)\n    connection {\n        type = \"ssh\"\n        user = \"opc\"\n        private_key = file(\"${var.private_key_file}\")\n        host = local.cne_operator_public_ips[count.index]\n    }\n\n    provisioner \"remote-exec\" {\n      inline = [\n        \"sudo yum check-update\",\n        \"sudo dnf --refresh check-update\",\n        \"sudo dnf install -y olcnectl olcne-api-server olcne-utils\",\n        \"sudo systemctl enable olcne-api-server.service\",\n        \"sudo mkdir /etc/systemd/system/crio.service.d\",\n        \"sudo bash -c 'echo \\\"[Service]\\\" > /etc/systemd/system/crio.service.d/proxy.conf'\",\n        \"sudo bash -c 'echo \\\"Environment=\\\\\\\"HTTP_PROXY=${var.http_proxy}\\\\\\\"\\\" >> /etc/systemd/system/crio.service.d/proxy.conf'\",\n        \"sudo bash -c 'echo \\\"Environment=\\\\\\\"HTTPS_PROXY=${var.https_proxy}\\\\\\\"\\\" >> /etc/systemd/system/crio.service.d/proxy.conf'\",\n        \"sudo bash -c 'echo \\\"Environment=\\\\\\\"NO_PROXY=${var.no_proxy}\\\\\\\"\\\" >> /etc/systemd/system/crio.service.d/proxy.conf'\"\n      ]\n    }\n\n    depends_on = [\n        null_resource.cne-master-pre-reqs,\n        null_resource.cne-worker-pre-reqs,\n        null_resource.cne-operator-pre-reqs\n    ]    \n}\n"
   },
@@ -838,7 +855,8 @@
       "is_ipv6enabled": false,
       "okit_reference": "okit-6ee1c358-8577-4619-a387-537c61dfe7f7",
       "read_only": false,
-      "resource_name": "Okit_VCN_1662125212836"
+      "resource_name": "Okit_VCN_1662125212836",
+      "show_connections": false
     }
   ]
 }
