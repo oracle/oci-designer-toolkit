@@ -745,6 +745,10 @@ class PCAQuery(OCIConnection):
             results = oci.pagination.list_call_get_all_results(client.list_vcns, compartment_id=compartment_id).data
             # Convert to Json object
             resources = self.toJson(results)
+            for resource in resources:
+                if resource['dns_label'] is None:
+                    logger.info(f"{resource['display_name']} has Null dns_label")
+                    resource['dns_label'] = ''
             self.dropdown_json[array].extend(resources)
         return self.dropdown_json[array]
 
