@@ -135,7 +135,7 @@ class Instance extends OkitArtifact {
     /*
     ** Terraform Provisioner
     */
-    nerTFConnection() {
+    newTFConnection() {
         return {}
     }
     newTFProvisioner() {

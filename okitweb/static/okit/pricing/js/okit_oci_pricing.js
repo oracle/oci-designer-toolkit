@@ -101,6 +101,7 @@ class OkitOciProductPricing {
         this.currency = currency
         this.bom = {}
         this.cost_estimate = {}
+        if (model.metadata.platform !== 'oci') return {bom: this.bom, estimate: this.cost_estimate}
         if (model && this.sku_map) {
             Object.entries(model).filter(([k, v]) => Array.isArray(v)).forEach(([resource_name, resource_list]) => resource_list.forEach((resource) => {
                 console.info('Processing Resource', resource_name)

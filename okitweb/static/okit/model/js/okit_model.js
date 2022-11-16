@@ -494,6 +494,7 @@ class OkitArtifact {
     generateResourceNameFromDisplayName = (name) => titleCase(name.split('_').join('-')).split(' ').join('').replaceAll('-','_')
 
     estimateCost = () => {
+        if (this.getOkitJson().metadata.platform == 'pca') return ''
         const get_price_function = OkitOciProductPricing.getPriceFunctionName(this.constructor.name)
         const pricing = okitOciProductPricing ? okitOciProductPricing : new OkitOciProductPricing()
         console.info(`>>>>>> Estimating Resource Cost: ${get_price_function}`)

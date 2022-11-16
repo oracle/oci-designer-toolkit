@@ -1,6 +1,14 @@
 # Release Notes
 
 
+## Version 0.44.0
+**Release Date**: 30th November 2022
+### Features
+### Bug Fixes
+1. Write missing Variables to Resource Manager stack
+2. Resolve auto generation of incorrect dns labels
+
+
 ## Version 0.43.0
 **Release Date**: 9th November 2022
 ### Features
