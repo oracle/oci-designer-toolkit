@@ -41,7 +41,7 @@ class OCIResourceManagerGenerator(OCITerraformGenerator):
         super(OCIResourceManagerGenerator, self).initialiseJinja2Variables()
         self.jinja2_variables["resource_manager"] = True
 
-    def writeFiles(self):
+    def writeFilesOriginal(self):
         # Write Provider tf file
         writeTerraformFile(os.path.join(self.output_dir, self.PROVIDER_FILE_NAME), self.getProvider())
         # Write Metadata tf file
@@ -71,4 +71,19 @@ class OCIResourceManagerGenerator(OCITerraformGenerator):
         if user_defined_terraform.rstrip() != '':
             writeTerraformFile(os.path.join(self.output_dir, self.USER_DEFINED_FILE_NAME), [user_defined_terraform])
 
+        return
+    
+    def writeFiles(self):
+        # Delete Provider Variables
+        del self.run_variables['user_ocid']
+        del self.run_variables['private_key_path']
+        del self.run_variables['fingerprint']
+        # Specify Values for Resource Manager Connection
+        self.run_variables['tenancy_ocid'] = self.resource_manager_keys['tenancy_ocid']
+        self.run_variables['region'] = self.resource_manager_keys['region']
+        self.run_variables['compartment_ocid'] = self.resource_manager_keys['compartment_ocid']
+        # Get Data
+        generated_tf = self.toJson(True)
+        for key, value in generated_tf.items():
+            writeTerraformFile(os.path.join(self.output_dir, key), value)
         return
