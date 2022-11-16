@@ -728,12 +728,14 @@ class OkitArtefactView {
         const display_mouseover_links = okitSettings.show_connections_on_mouseover && !okitSettings.show_all_connections && !this.resource.show_connections
         svg.on('mouseenter', () => {
             d3.event.stopPropagation();
+            d3.event.preventDefault();
             if (okitSettings.highlight_association) {self.addAssociationHighlighting();}
             if (display_mouseover_links) {this.getLinks().forEach((id) => this.drawConnection(this.id, id))}
             $(jqId(self.id)).addClass('highlight-rect');
         })
         svg.on('mouseleave', () => {
             d3.event.stopPropagation();
+            d3.event.preventDefault();
             if (okitSettings.highlight_association) {self.removeAssociationHighlighting();}
             if (display_mouseover_links) {this.getLinks().forEach((id) => this.removeConnection(this.id, id))}
             $(jqId(self.id)).removeClass('highlight-rect');
