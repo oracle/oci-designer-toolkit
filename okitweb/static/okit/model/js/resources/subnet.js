@@ -71,7 +71,8 @@ class Subnet extends OkitArtifact {
         this.cidr_block = `${subnet_ip}/24`;
         return this.cidr_block;
     }
-    generateDnsLabel = () => this.display_name.toLowerCase().replaceAll(' ', '').slice(0, 15)
+    generateDnsLabel = () => this.display_name.toLowerCase().replace(/[^a-z]/g, '').slice(0, 15)
+    // generateDnsLabel = () => this.display_name.toLowerCase().replaceAll(' ', '').slice(0, 15)
 
     /*
     ** Container Specific Overrides
