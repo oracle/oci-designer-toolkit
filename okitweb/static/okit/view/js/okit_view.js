@@ -743,7 +743,7 @@ class OkitArtefactView {
     }
 
     getAssociations() {return this.getResource().getAssociations().filter((id) => id !== this.compartment_id && id !== this.parent_id && !this.children.includes(id))}
-    getLinks() {return this.getResource().getLinks().filter((id) => id !== this.compartment_id && id !== this.parent_id && !this.children.includes(id) && !this.getAttachedIds().includes(id))}
+    getLinks() {return this.getResource().getLinks().filter((id) => id !== this.compartment_id && id !== this.parent_id && id !== this.parent.parent_id && !this.children.includes(id) && !this.getAttachedIds().includes(id))}
 
     // addAssociationHighlighting() {}
 
