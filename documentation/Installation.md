@@ -281,7 +281,11 @@ modify the OKIT_DIR environment variable. In addition the __/etc/systemd/system/
 files will need to modified to reflect this new location.
 
 ```bash
-export OKIT_DIR='/okit'
+export OKIT_DIR=${HOME}/okit
+export OKIT_GITHUB_DIR=${HOME}/okit_github
+export OKIT_BRANCH='master'
+mkdir -p ${OKIT_DIR}
+mkdir -p ${OKIT_GITHUB_DIR}
 # Install Required Packages 
 sudo bash -c "yum install -y git"
 sudo bash -c "yum install -y openssl"
@@ -293,10 +297,18 @@ sudo bash -c "python3 -m pip install -U pip"
 sudo bash -c "python3 -m pip install -U setuptools"
 sudo bash -c "python3 -m pip install --no-cache-dir authlib flask gitpython git-url-parse gunicorn oci openpyxl python-magic pyyaml requests "
 # Clone OKIT
-sudo bash -c "git clone -b master --depth 1 https://github.com/oracle/oci-designer-toolkit.git ${OKIT_DIR}"
-sudo bash -c "mkdir -p ${OKIT_DIR}/{git,local,log,instance/git,instance/local,instance/templates/user,workspace,ssl}"
-# Link Reference Architecture Templates to Template Directory
-sudo bash -c "ln -sv ${OKIT_DIR}/okitweb/static/okit/templates/reference_architecture ${OKIT_DIR}/instance/templates/reference_architecture"
+git clone -b ${OKIT_BRANCH} https://github.com/oracle/oci-designer-toolkit.git ${OKIT_GITHUB_DIR}/oci-designer-toolkit
+mkdir -p ${OKIT_DIR}/{log,instance/git,instance/local,instance/templates/user,workspace,ssl}
+ln -sv ${OKIT_GITHUB_DIR}/oci-designer-toolkit/config ${OKIT_DIR}/config
+ln -sv ${OKIT_GITHUB_DIR}/oci-designer-toolkit/okitweb ${OKIT_DIR}/okitweb
+ln -sv ${OKIT_GITHUB_DIR}/oci-designer-toolkit/visualiser ${OKIT_DIR}/visualiser
+ln -sv ${OKIT_GITHUB_DIR}/oci-designer-toolkit/okitweb/static/okit/templates/reference_architecture ${OKIT_DIR}/instance/templates/reference_architecture
+# Link to root level okit directory
+sudo bash -c "ln -sv ${OKIT_DIR} /okit"
+# Open Firewall
+sudo firewall-offline-cmd  --add-port=80/tcp
+sudo firewall-offline-cmd  --add-port=443/tcp
+sudo systemctl restart firewalld
 # Add additional environment information 
 sudo bash -c "echo 'export OKIT_DIR=:${OKIT_DIR}' >> /etc/bashrc"
 sudo bash -c "echo 'export PYTHONPATH=:${OKIT_DIR}/visualiser:${OKIT_DIR}/okitweb:/okit' >> /etc/bashrc"
@@ -318,10 +330,6 @@ sudo bash -c "cp -v ${OKIT_DIR}/containers/services/gunicorn.http.service /etc/s
 # Enable Gunicorn Service
 sudo systemctl enable gunicorn.service
 sudo systemctl start gunicorn.service
-# Open Firewall
-sudo firewall-offline-cmd  --add-port=80/tcp
-sudo firewall-offline-cmd  --add-port=443/tcp
-sudo systemctl restart firewalld
 ```
 
 ### MacOS
