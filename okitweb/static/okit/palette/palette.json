@@ -158,6 +158,11 @@
                     "svg": "DHCPOptions.svg"
                 },
                 {
+                    "title": "DNS Zone",
+                    "targets": ["oci", "freetier", "pca"],
+                    "svg": "DomainNameSystemDNS.svg"
+                },
+                {
                     "title": "Network Firewall",
                     "targets": ["oci"],
                     "svg": "NetworkFirewall.svg"
