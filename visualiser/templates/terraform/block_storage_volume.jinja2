@@ -1,22 +1,4 @@
 
-# ------ Get List Volume Backup Policies
-data "oci_core_volume_backup_policies" "{{ resource_name }}VolumeBackupPolicies" {
-}
-{% if backup_policy is defined %}
-data "template_file" "{{ resource_name }}VolumeBackupPolicyIds" {
-    count    = length(data.oci_core_volume_backup_policies.{{ resource_name }}VolumeBackupPolicies.volume_backup_policies)
-    template = data.oci_core_volume_backup_policies.{{ resource_name }}VolumeBackupPolicies.volume_backup_policies[count.index]["id"]
-}
-data "template_file" "{{ resource_name }}VolumeBackupPolicyNames" {
-    count    = length(data.oci_core_volume_backup_policies.{{ resource_name }}VolumeBackupPolicies.volume_backup_policies)
-    template = data.oci_core_volume_backup_policies.{{ resource_name }}VolumeBackupPolicies.volume_backup_policies[count.index]["display_name"]
-}
-data "template_file" "{{ resource_name }}VolumeBackupPolicyIdx" {
-    count    = length(data.template_file.{{ resource_name }}VolumeBackupPolicyNames.*.rendered)
-    template = index(data.template_file.{{ resource_name }}VolumeBackupPolicyNames.*.rendered, {{ backup_policy | safe }})
-}
-{% endif %}
-
 {% if read_only %}
 # ------ Read Block Storage Volume
 data "oci_core_volume" "{{ resource_name }}" {
@@ -54,9 +36,15 @@ locals {
 
 {% if backup_policy is defined %}
 # ------ Create Block Storage Backup Policy
+data "oci_core_volume_backup_policies" "{{ resource_name }}VolumeBackupPolicies" {
+    filter {
+        name = "display_name"
+        values = [{{ backup_policy | safe }}]
+    }
+}
 resource "oci_core_volume_backup_policy_assignment" "{{ resource_name }}BackupPolicy" {
     asset_id  = local.{{ resource_name }}_id
-    policy_id = data.template_file.{{ resource_name }}VolumeBackupPolicyIds.*.rendered[index(data.template_file.{{ resource_name }}VolumeBackupPolicyNames.*.rendered, {{ backup_policy | safe }})]
+    policy_id = data.oci_core_volume_backup_policies.{{ resource_name }}VolumeBackupPolicies.volume_backup_policies[0].id
 }
 {% endif %}
 {% endif %}

@@ -53,6 +53,7 @@ class OCIQuery(OCIConnection):
         "DbSystem",
         "DHCPOptions",
         "DISWorkspace",
+        "DnsView",
         "Drg",
         "DrgAttachment",
         "DrgRouteDistribution",
