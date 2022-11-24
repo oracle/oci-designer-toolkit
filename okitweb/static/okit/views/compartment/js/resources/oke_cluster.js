@@ -12,8 +12,17 @@ class OkeClusterView extends OkitCompartmentArtefactView {
         super(artefact, json_view);
     }
 
-    get parent_id() {return this.artefact.vcn_id;}
-    get parent() {return this.getJsonView().getVirtualCloudNetwork(this.parent_id);}
+    // get parent_id() {return this.artefact.vcn_id;}
+    // get parent() {return this.getJsonView().getVirtualCloudNetwork(this.parent_id);}
+    get parent_id() {
+        let vcn = this.getJsonView().getVirtualCloudNetwork(this.artefact.vcn_id);
+        if (vcn && vcn.compartment_id === this.artefact.compartment_id) {
+            return this.artefact.vcn_id;
+        } else {
+            return this.artefact.compartment_id;
+        }
+    }
+    get parent() {return this.getJsonView().getVirtualCloudNetwork(this.parent_id) ? this.getJsonView().getVirtualCloudNetwork(this.parent_id) : this.getJsonView().getCompartment(this.parent_id);}
     // ---- Okit View Functions
 
     /*
@@ -334,8 +343,14 @@ class OkeClusterView extends OkitCompartmentArtefactView {
 */
 OkitJsonView.prototype.dropOkeClusterView = function(target) {
     let view_artefact = this.newOkeCluster();
-    view_artefact.getArtefact().vcn_id = target.id;
-    view_artefact.getArtefact().compartment_id = target.compartment_id;
+    // view_artefact.getArtefact().vcn_id = target.id;
+    // view_artefact.getArtefact().compartment_id = target.compartment_id;
+    if (target.type === VirtualCloudNetwork.getArtifactReference()) {
+        view_artefact.getArtefact().vcn_id = target.id;
+        view_artefact.getArtefact().compartment_id = target.compartment_id;
+    } else if (target.type === Compartment.getArtifactReference()) {
+        view_artefact.getArtefact().compartment_id = target.id;
+    }
     view_artefact.recalculate_dimensions = true;
     return view_artefact;
 }

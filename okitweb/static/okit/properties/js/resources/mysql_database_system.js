@@ -64,10 +64,10 @@ class MysqlDatabaseSystemProperties extends OkitResourceProperties {
         this.memory_size_in_gbs = memory_size_in_gbs.input
         this.append(this.shape_and_config_tbody, memory_size_in_gbs.row)
         // HA
-        const is_ha_data = {disabled: 'disabled'}
-        const is_ha = this.createInput('checkbox', 'High Availability', `${this.id}_is_ha`, '', (d, i, n) => this.resource.is_ha = n[i].checked, is_ha_data)
-        this.is_ha = is_ha.input
-        this.append(this.shape_and_config_tbody, is_ha.row)
+        const is_highly_available_data = {disabled: 'disabled'}
+        const is_highly_available = this.createInput('checkbox', 'High Availability', `${this.id}_is_highly_available`, '', (d, i, n) => this.resource.is_highly_available = n[i].checked, is_highly_available_data)
+        this.is_highly_available = is_highly_available.input
+        this.append(this.shape_and_config_tbody, is_highly_available.row)
         // Admin Username
         const admin_username = this.createInput('text', 'Admin Username', `${this.id}_admin_username`, '', (d, i, n) => this.resource.admin_username = n[i].value)
         this.admin_username = admin_username.input
@@ -131,7 +131,8 @@ class MysqlDatabaseSystemProperties extends OkitResourceProperties {
         const shape = okitOciData.getMySQLShape(this.resource.shape_name)
         this.cpu_core_count.property('value', shape.cpu_core_count)
         this.memory_size_in_gbs.property('value', shape.memory_size_in_gbs)
-        this.is_ha.property('checked', this.resource.configuration_name ? this.resource.configuration_name.endsWith('.HA') : false)
+        this.resource.is_highly_available = this.resource.configuration_name ? this.resource.configuration_name.endsWith('.HA') : false
+        this.is_highly_available.property('checked', this.resource.is_highly_available)
     }
 
     handleShapeChange(shape_name=undefined) {
