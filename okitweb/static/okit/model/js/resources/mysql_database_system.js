@@ -30,6 +30,7 @@ class MysqlDatabaseSystem extends OkitArtifact {
         this.data_storage_size_in_gb = 50;
         this.fault_domain = '';
         this.description = this.name;
+        this.is_highly_available = false
         // Update with any passed data
         this.merge(data);
         this.convert();

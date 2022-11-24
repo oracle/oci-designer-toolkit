@@ -16,7 +16,7 @@ resource "oci_mysql_mysql_db_system" "{{ resource_name }}" {
     admin_password = {{ admin_password | safe }}
     admin_username = {{ admin_username | safe }}
     availability_domain = data.oci_identity_availability_domains.AvailabilityDomains.availability_domains[{{ availability_domain | safe }} - 1]["name"]
-    compartment_id      = {{ compartment_ocid }}
+    compartment_id      = {{ compartment_id }}
     configuration_id = {{ configuration_id | safe }}
     shape_name = {{ shape_name | safe }}
     subnet_id = {{ subnet_id }}
@@ -53,6 +53,9 @@ resource "oci_mysql_mysql_db_system" "{{ resource_name }}" {
 {% endif %}
 {% if ip_address is defined %}
     ip_address = {{ ip_address | safe }}
+{% endif %}
+{% if is_highly_available is defined %}
+    is_highly_available = {{ is_highly_available | safe | lower }}
 {% endif %}
 {% if maintenance is defined %}
     maintenance {
