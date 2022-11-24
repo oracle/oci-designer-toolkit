@@ -103,7 +103,7 @@ resource "oci_core_network_security_group_security_rule" "{{ rule.resource_name 
 }
 
 locals {
-    {{ resource_name }}_Rule{{ loop.index }}_id = oci_core_network_security_group_security_rule.{{ rule.resource_name }}.id
+    {{ rule.resource_name }}_id = oci_core_network_security_group_security_rule.{{ rule.resource_name }}.id
 }
 {% endfor %}
 {% endif %}

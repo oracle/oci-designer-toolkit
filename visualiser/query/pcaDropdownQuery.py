@@ -373,7 +373,10 @@ class PCADropdownQuery(OCIConnection):
         resources.extend(self.toJson(results))
         platform = ['Bronze', 'Silver', 'Gold']
         for policy in resources:
+            policy['ocid'] = policy['id']
+            policy['id'] = policy['display_name']
             if policy['compartment_id'] is None:
+                # Platform
                 policy['display_name'] = policy['display_name'].title()
                 policy['sort_key'] = str(platform.index(policy['display_name']))
             else:
