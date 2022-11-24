@@ -12,6 +12,7 @@ from .models import ExtendedDbNodeSummary, ExtendedNetworkSecurityGroupVnic, Ext
 from .models import ExtendedSourceApplicationSummary, ExtendedExportSummary, ExtendedMySQLBackup, ExtendedMySQLBackupSummary
 from .models import ExtendedVirtualCircuitBandwidthShape, ExtendedNoSQLIndexSummary
 from .models import ExtendedRRSet
+from .models import ExtendedInstanceAgentPluginSummary
 
 DEFAULT_MAX_WORKERS = 32
 DEFAULT_TIMEOUT = 120
@@ -160,6 +161,8 @@ class OciResourceDiscoveryClient(object):
         "MigrationPlan": (oci.cloud_migrations.MigrationClient, "list_migration_plans"),
         "ReplicationSchedule": (oci.cloud_migrations.MigrationClient, "list_replication_schedules"),
         "TargetAsset": (oci.cloud_migrations.MigrationClient, "list_target_assets"), 
+        # oci.compute_instance_agent.PluginClient
+        "InstanceAgentPlugin": (oci.compute_instance_agent.PluginClient, "list_instance_agent_plugins"),
         # oci.container_engine.ContainerEngineClient
         "Cluster": (oci.container_engine.ContainerEngineClient, "list_clusters"),
         "NodePool": (oci.container_engine.ContainerEngineClient, "list_node_pools"),
@@ -1158,6 +1161,10 @@ class OciResourceDiscoveryClient(object):
                             # only if compartment is set, otherwise its handled above as a get request
                             future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id)
                             futures_list.update({(region, resource_type, compartment_id, None):future})
+                    elif resource_type == "InstanceAgentPlugin" and method_name == "list_instance_agent_plugins":
+                        instanceagent_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, instanceagent_id=instanceagent_id)
+                        futures_list.update({(region, resource_type, compartment_id, instanceagent_id):future})
                     elif resource_type == "IpSecConnectionTunnel" and method_name == "list_ip_sec_connection_tunnels":
                         ipsec_connection_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, ipsc_id=ipsec_connection_id)
@@ -1348,24 +1355,28 @@ class OciResourceDiscoveryClient(object):
                         result = new_result
                     elif resource_type == "AutoScalingPolicy":
                         # map Auto Scaling Policy into extended verison parent id
-                        new_result =  [ExtendedAutoScalingPolicySummary(future[3],policy) for policy in result]
+                        new_result = [ExtendedAutoScalingPolicySummary(future[3],policy) for policy in result]
                         result = new_result
                     elif resource_type == "DbNode":
                         # map DbNode into extended verison with compartment id
                         if future[3].startswith("ocid1.vmcluster"):
-                            new_result =  [ExtendedDbNodeSummary(future[3],dbnode) for dbnode in result]
+                            new_result = [ExtendedDbNodeSummary(future[3],dbnode) for dbnode in result]
                             result = new_result
                     elif resource_type == "DrgRouteDistributionStatement":
                         # map DrgRouteDistributionStatement to ExtendedDrgRouteDistributionStatement
-                        new_result =  [ExtendedDrgRouteDistributionStatement(future[2],future[3],statement) for statement in result]
+                        new_result = [ExtendedDrgRouteDistributionStatement(future[2],future[3],statement) for statement in result]
                         result = new_result
                     elif resource_type == "DrgRouteRule":
                         # map DrgRouteRule to ExtendedDrgRouteRule
-                        new_result =  [ExtendedDrgRouteRule(future[2],future[3],rule) for rule in result]
+                        new_result = [ExtendedDrgRouteRule(future[2],future[3],rule) for rule in result]
                         result = new_result
                     elif resource_type == "Export":
                         # map Export into extended verison with compartment id
-                        new_result =  [ExtendedExportSummary(future[2],export) for export in result]
+                        new_result = [ExtendedExportSummary(future[2],export) for export in result]
+                        result = new_result
+                    elif resource_type == "InstanceAgentPlugin":
+                        # map InstanceAgentPlugin to ExtendedInstanceAgentPlugin
+                        new_result = [ExtendedInstanceAgentPluginSummary(future[2], future[3], plugin) for plugin in result]
                         result = new_result
                     elif resource_type == "MySQLBackup":
                         # map MySQL Backup into extended version with compartment id
@@ -1623,6 +1634,8 @@ class OciResourceDiscoveryClient(object):
                 elif resource.resource_type == "Instance":
                     if self.include_resource_types == None or "BootVolumeAttachment" in self.include_resource_types:
                         regional_resource_requests.add(("BootVolumeAttachment", resource.compartment_id, resource.availability_domain))
+                    if self.include_resource_types == None or "InstanceAgentPlugin" in self.include_resource_types:
+                        regional_resource_requests.add(("InstanceAgentPlugin", resource.compartment_id, resource.identifier))
                     if self.include_resource_types == None or "VnicAttachment" in self.include_resource_types:
                         regional_resource_requests.add(("VnicAttachment", resource.compartment_id, None))
                     if self.include_resource_types == None or "VolumeAttachment" in self.include_resource_types:
