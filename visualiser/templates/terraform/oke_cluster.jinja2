@@ -18,7 +18,7 @@ locals {
 # ------ Create OKE Cluster
 resource "oci_containerengine_cluster" "{{ resource_name }}" {
     #Required
-    compartment_id     = {{ compartment_ocid }}
+    compartment_id     = {{ compartment_id }}
     kubernetes_version = {{ kubernetes_version | safe }}
     name               = {{ display_name | safe }}
     vcn_id             = {{ vcn_id }}
@@ -76,7 +76,7 @@ locals {
 resource "oci_containerengine_node_pool" "{{ resource_name }}NodePool{{ loop.index }}" {
     #Required
     cluster_id         = local.{{ resource_name }}_id
-    compartment_id     = {{ compartment_ocid }}
+    compartment_id     = {{ compartment_id }}
     kubernetes_version = {{ kubernetes_version | safe }}
     name               = {{ display_name | safe }}
     node_shape         = {{ pool.node_shape | safe }}
