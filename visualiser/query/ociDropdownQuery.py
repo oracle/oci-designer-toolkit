@@ -41,7 +41,8 @@ class OCIDropdownQuery(OCIConnection):
         "GiVersion",
         "Image",
         "ImageShapeCompatibility",
-        # "Instance",
+        "InstanceAgentPlugin",
+        "Instance",
         "MySQLShape", 
         "MySQLVersion", 
         "MySQLConfiguration", 
@@ -58,6 +59,7 @@ class OCIDropdownQuery(OCIConnection):
         "FastConnectProviderService": "fast_connect_provider_services", 
         "GiVersion": "gi_versions",
         "Image": "images",
+        "InstanceAgentPlugin": "instance_agent_plugins",
         "MySQLShape": "mysql_shapes", 
         "MySQLVersion": "mysql_versions", 
         "MySQLConfiguration": "mysql_configurations", 
@@ -85,9 +87,10 @@ class OCIDropdownQuery(OCIConnection):
         #     cert_bundle = None
         logger.info(f'cert_bundle={self.cert_bundle}')
         include_sub_compartments = True
+        logger.info(f'Resources {self.SUPPORTED_RESOURCES}')
         discovery_client = OciResourceDiscoveryClient(self.config, signer=self.signer, cert_bundle=self.cert_bundle, regions=regions, include_resource_types=self.SUPPORTED_RESOURCES, compartments=[self.config['tenancy']], include_sub_compartments=include_sub_compartments)
         # Get Supported Resources
-        logger.debug(f'Discovery Response {discovery_client.get_all_resources()}')
+        # logger.debug(f'Discovery Response {discovery_client.get_all_resources()}')
         response = self.response_to_json(discovery_client.get_all_resources())
         logger.debug('Response JSON : {0!s:s}'.format(jsonToFormattedString(response)))
         response_json = self.convert(response)
