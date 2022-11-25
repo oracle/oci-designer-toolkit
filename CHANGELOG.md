@@ -6,6 +6,7 @@
 ### Features
 1. Update Linux Install Instructions.
 2. Add DNS Zones Resource.
+3. Remove deprecated Terraform 'template_file' usage this will require a Cache refresh and potentially resetting the Block Volume Backup Policy.
 ### Bug Fixes
 1. Issue: #556 Variables are not reflected in stack export (Write missing Variables to Resource Manager stack)
 2. Resolve auto generation of incorrect dns labels
