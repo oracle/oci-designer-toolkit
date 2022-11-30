@@ -11,6 +11,7 @@
 2. Resolve auto generation of incorrect dns labels
 3. Issue: #561 OKE and Mysql always created in okit deployment compartment (use compartment_id not compartment_ocid)
 4. Issue: #557 Creating mysql cloud service with HA creates Standalone mysql database #557 (Set HA Flag)
+5. Remove display of VCN Default Id connections when mouse over VCN.
 
 
 ## Version 0.43.0
