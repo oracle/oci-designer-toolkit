@@ -46,12 +46,14 @@ class OCIQuery(OCIConnection):
         "CloudVmCluster",
         "Cluster",
         "Cpe",
+        "CustomerDnsZone",
         "Database",
         "DbHome",
         "DbNode",
         "DbSystem",
         "DHCPOptions",
         "DISWorkspace",
+        "DnsView",
         "Drg",
         "DrgAttachment",
         "DrgRouteDistribution",
@@ -89,6 +91,7 @@ class OCIQuery(OCIConnection):
         "PublicIp",
         "RemotePeeringConnection",
         "RouteTable",
+        "RRSet",
         "SecurityList",
         "ServiceGateway",
         "Subnet",
@@ -113,6 +116,7 @@ class OCIQuery(OCIConnection):
         "CloudExadataInfrastructure": "exadata_cloud_infrastructures",
         "Cluster": "oke_clusters",
         "Cpe": "customer_premise_equipments",
+        # "CustomerDnsZone": "dns_zones",
         "Database": "databases",
         "DbHome": "db_homes",
         "DbNode": "db_nodes",
@@ -230,38 +234,40 @@ class OCIQuery(OCIConnection):
                 logger.info(f"Processing Resource : {resource_type} {len(resource_list)}")
                 # logger.info(jsonToFormattedString(resource_list))
                 if resource_type in map_keys:
-                    if resource_type == "Drg":
+                    if resource_type == "Bucket":
+                        resource_list = self.object_storage_buckets(resource_list, resources)
+                    elif resource_type == "CloudExadataInfrastructure":
+                        resource_list = self.exadata_cloud_infrastructures(resource_list, resources)
+                    elif resource_type == "Cluster":
+                        resource_list = self.oke_clusters(resource_list, resources)
+                    elif resource_type == "CustomerDnsZone":
+                        resource_list = self.dns_zones(resource_list, resources)
+                    elif resource_type == "DbSystem":
+                        resource_list = self.database_systems(resource_list, resources)
+                    elif resource_type == "Drg":
                         resource_list = self.dynamic_routing_gateways(resource_list, resources)
-                    elif resource_type == "MountTarget":
-                        resource_list = self.mount_targets(resource_list, resources)
+                    elif resource_type == "Group":
+                        resource_list = self.groups(resource_list, resources)
                     elif resource_type == "Instance":
                         resource_list = self.instances(resource_list, resources)
                     elif resource_type == "LoadBalancer":
                         resource_list = self.load_balancers(resource_list, resources)
+                    elif resource_type == "MountTarget":
+                        resource_list = self.mount_targets(resource_list, resources)
                     elif resource_type == "MySqlDbSystem":
                         resource_list = self.mysql_database_systems(resource_list, resources)
-                    elif resource_type == "NetworkSecurityGroup":
-                        resource_list = self.network_security_group(resource_list, resources)
-                    elif resource_type == "Bucket":
-                        resource_list = self.object_storage_buckets(resource_list, resources)
-                    elif resource_type == "Cluster":
-                        resource_list = self.oke_clusters(resource_list, resources)
-                    elif resource_type == "RouteTable":
-                        resource_list = self.route_tables(resource_list, resources)
-                    elif resource_type == "ServiceGateway":
-                        resource_list = self.service_gateways(resource_list, resources)
-                    elif resource_type == "Group":
-                        resource_list = self.groups(resource_list, resources)
                     elif resource_type == "NetworkFirewall":
                         resource_list = self.network_firewalls(resource_list, resources)
                     elif resource_type == "NetworkLoadBalancer":
                         resource_list = self.network_load_balancers(resource_list, resources)
+                    elif resource_type == "NetworkSecurityGroup":
+                        resource_list = self.network_security_group(resource_list, resources)
                     elif resource_type == "NoSQLTable":
                         resource_list = self.nosql_databases(resource_list, resources)
-                    elif resource_type == "DbSystem":
-                        resource_list = self.database_systems(resource_list, resources)
-                    elif resource_type == "CloudExadataInfrastructure":
-                        resource_list = self.exadata_cloud_infrastructures(resource_list, resources)
+                    elif resource_type == "RouteTable":
+                        resource_list = self.route_tables(resource_list, resources)
+                    elif resource_type == "ServiceGateway":
+                        resource_list = self.service_gateways(resource_list, resources)
                     # elif resource_type == "AnalyticsInstance":
                     #     resource_list = self.analytics_instances(resource_list, resources)
                     # Check Life Cycle State
@@ -287,6 +293,19 @@ class OCIQuery(OCIConnection):
             db_system['db_home'] = [r for r in resources.get("DbHome", []) if r["db_system_id"] == db_system["id"]][0]
             db_system['db_home']['database'] = [r for r in resources.get("Database", []) if r["db_home_id"] == db_system['db_home']["id"]][0]
         return database_systems
+
+    def dns_zones(self, dns_zones, resources):
+        dns_zones = [d for d in dns_zones if not d["is_protected"]]
+        for dns_zone in dns_zones:
+            # logger.info(f'DNS Zone {dns_zone}')
+            dns_zone['rrsets'] = [r for r in resources.get("RRSet", []) if r["zone_id"] == dns_zone["id"]]
+            for r in dns_zone['rrsets']:
+                r['rtype'] = r['items'][0]['rtype']
+            if dns_zone["view_id"] is not None:
+                dns_zone['view'] = [r for r in resources.get("DnsView", []) if r["id"] == dns_zone["view_id"]]
+        # logger.info(f'DNS Views: {resources.get("DnsView")}')
+        # logger.info(f'RR Sets: {resources.get("RRSet")}')
+        return dns_zones
 
     def dynamic_routing_gateways(self, drgs, resources):
         for drg in drgs:

@@ -158,6 +158,11 @@
                     "svg": "DHCPOptions.svg"
                 },
                 {
+                    "title": "DNS Zone",
+                    "targets": ["hidden"],
+                    "svg": "DomainNameSystemDNS.svg"
+                },
+                {
                     "title": "Network Firewall",
                     "targets": ["oci"],
                     "svg": "NetworkFirewall.svg"

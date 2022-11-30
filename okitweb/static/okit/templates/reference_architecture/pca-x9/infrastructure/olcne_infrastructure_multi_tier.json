@@ -1,0 +1,862 @@
+{
+  "compartments": [
+    {
+      "compartment_id": null,
+      "defined_tags": {},
+      "description": "Represents the deployment location for the resources specified within the design.",
+      "display_name": "Deployment Compartment",
+      "documentation": "Logical Compartment that represents the deployment location for the resources specified within the design. This compartment will not be created during the build process.",
+      "freeform_tags": {},
+      "id": "okit.compartment.200e584b-c0b6-4e98-962f-e675e83476fe",
+      "okit_reference": "okit-e3a3b1f7-65df-44d8-a56b-850666d18b4d",
+      "read_only": true,
+      "resource_name": "DeploymentCompartment",
+      "show_connections": false
+    }
+  ],
+  "defined_tags": {},
+  "dhcp_options": [
+    {
+      "compartment_id": "okit.compartment.200e584b-c0b6-4e98-962f-e675e83476fe",
+      "default": true,
+      "defined_tags": {},
+      "display_name": "dhcpo",
+      "documentation": "",
+      "freeform_tags": {},
+      "id": "okit.dhcpoption.98849ead-91b9-4004-9e96-005bef915ae0",
+      "okit_reference": "okit-b7441dad-a690-44e2-9c23-6b2f4a269cbf",
+      "options": [
+        {
+          "custom_dns_servers": [],
+          "search_domain_names": [],
+          "server_type": "VcnLocalPlusInternet",
+          "type": "DomainNameServer"
+        },
+        {
+          "custom_dns_servers": [],
+          "search_domain_names": [
+            "olcne.oraclevcn.com"
+          ],
+          "server_type": "",
+          "type": "SearchDomain"
+        }
+      ],
+      "read_only": false,
+      "resource_name": "Okit_DO_1662125212843",
+      "show_connections": false,
+      "vcn_id": "okit.virtualcloudnetwork.9e7f064e-b486-4db9-88fa-dc10e0395470"
+    }
+  ],
+  "documentation": "# Description\n__Created 2022-9-2 14:26:40__\n\n--------------------------------------\n\n",
+  "freeform_tags": {},
+  "instances": [
+    {
+      "agent_config": {
+        "is_management_disabled": false,
+        "is_monitoring_disabled": false
+      },
+      "availability_domain": "1",
+      "chipset": "intel",
+      "compartment_id": "okit.compartment.200e584b-c0b6-4e98-962f-e675e83476fe",
+      "count": 1,
+      "defined_tags": {},
+      "display_name": "k8smstr1",
+      "documentation": "",
+      "fault_domain": "FAULT-DOMAIN-1",
+      "flex_shape": false,
+      "freeform_tags": {
+        "OLCNE": "master"
+      },
+      "id": "okit.instance.b0af0fc9-2496-46b5-9d82-1452d11d2c3c",
+      "instance_type": "vm",
+      "is_pv_encryption_in_transit_enabled": false,
+      "lifecycle_state": "",
+      "metadata": {
+        "ssh_authorized_keys": "var.public_key",
+        "user_data": ""
+      },
+      "okit_reference": "okit-de78d8b9-05ee-4dd9-bb4b-f73fb17547e9",
+      "preserve_boot_volume": false,
+      "primary_vnic": {
+        "assign_public_ip": false,
+        "display_name": "k8smstr1",
+        "hostname_label": "k8smstr1",
+        "nsg_ids": [],
+        "resource_name": "Okit_I_1662125754076VnicAttachment",
+        "skip_source_dest_check": false,
+        "subnet_id": "okit.subnet.ccd6a17b-1f43-4a30-8793-2cfd11e7ac2f"
+      },
+      "read_only": false,
+      "resource_name": "Okit_I_1662125754075",
+      "shape": "VM.PCAStandard1.4",
+      "shape_config": {
+        "memory_in_gbs": "",
+        "ocpus": ""
+      },
+      "shape_series": "intel",
+      "show_connections": false,
+      "source_details": {
+        "boot_volume_size_in_gbs": "50",
+        "image_id": "ocid1.image.AK00905695.x9pca1.ye9e8d6csmggarq48dr9268w8pqj0o20klp42v70hrzds21xcgx2oxwo4o3w",
+        "image_source": "custom",
+        "os": "OracleLinux",
+        "source_type": "image",
+        "version": "8"
+      },
+      "subnet_id": "okit.subnet.ccd6a17b-1f43-4a30-8793-2cfd11e7ac2f",
+      "vnic_attachments": [
+        {
+          "assign_public_ip": false,
+          "display_name": "k8smstr1",
+          "hostname_label": "k8smstr1",
+          "nsg_ids": [],
+          "resource_name": "Okit_I_1662125754076VnicAttachment",
+          "skip_source_dest_check": false,
+          "subnet_id": "okit.subnet.ccd6a17b-1f43-4a30-8793-2cfd11e7ac2f"
+        }
+      ],
+      "volume_attachments": []
+    },
+    {
+      "agent_config": {
+        "is_management_disabled": false,
+        "is_monitoring_disabled": false
+      },
+      "availability_domain": "1",
+      "chipset": "intel",
+      "compartment_id": "okit.compartment.200e584b-c0b6-4e98-962f-e675e83476fe",
+      "count": 1,
+      "defined_tags": {},
+      "display_name": "k8smstr2",
+      "documentation": "",
+      "fault_domain": "FAULT-DOMAIN-2",
+      "flex_shape": false,
+      "freeform_tags": {
+        "OLCNE": "master"
+      },
+      "id": "okit.instance.97ee85e9-56df-489a-a762-1534aca3c1e5",
+      "instance_type": "vm",
+      "is_pv_encryption_in_transit_enabled": false,
+      "lifecycle_state": "",
+      "metadata": {
+        "ssh_authorized_keys": "var.public_key",
+        "user_data": ""
+      },
+      "okit_reference": "okit-5237e308-3769-46a0-9d14-2d7a057c99ab",
+      "preserve_boot_volume": false,
+      "primary_vnic": {
+        "assign_public_ip": false,
+        "display_name": "k8smstr2",
+        "hostname_label": "k8smstr2",
+        "nsg_ids": [],
+        "resource_name": "Okit_I_1662125756226VnicAttachment",
+        "skip_source_dest_check": false,
+        "subnet_id": "okit.subnet.ccd6a17b-1f43-4a30-8793-2cfd11e7ac2f"
+      },
+      "read_only": false,
+      "resource_name": "Okit_I_1662125756226",
+      "shape": "VM.PCAStandard1.4",
+      "shape_config": {
+        "memory_in_gbs": "",
+        "ocpus": ""
+      },
+      "shape_series": "intel",
+      "show_connections": false,
+      "source_details": {
+        "boot_volume_size_in_gbs": "50",
+        "image_id": "ocid1.image.AK00905695.x9pca1.ye9e8d6csmggarq48dr9268w8pqj0o20klp42v70hrzds21xcgx2oxwo4o3w",
+        "image_source": "custom",
+        "os": "OracleLinux",
+        "source_type": "image",
+        "version": "8"
+      },
+      "subnet_id": "okit.subnet.ccd6a17b-1f43-4a30-8793-2cfd11e7ac2f",
+      "vnic_attachments": [
+        {
+          "assign_public_ip": false,
+          "display_name": "k8smstr2",
+          "hostname_label": "k8smstr2",
+          "nsg_ids": [],
+          "resource_name": "Okit_I_1662125756226VnicAttachment",
+          "skip_source_dest_check": false,
+          "subnet_id": "okit.subnet.ccd6a17b-1f43-4a30-8793-2cfd11e7ac2f"
+        }
+      ],
+      "volume_attachments": []
+    },
+    {
+      "agent_config": {
+        "is_management_disabled": false,
+        "is_monitoring_disabled": false
+      },
+      "availability_domain": "1",
+      "chipset": "intel",
+      "compartment_id": "okit.compartment.200e584b-c0b6-4e98-962f-e675e83476fe",
+      "count": 1,
+      "defined_tags": {},
+      "display_name": "k8smstr3",
+      "documentation": "",
+      "fault_domain": "FAULT-DOMAIN-3",
+      "flex_shape": false,
+      "freeform_tags": {
+        "OLCNE": "master"
+      },
+      "id": "okit.instance.17cdc44a-3ca3-4bf0-9a62-30697d2b4def",
+      "instance_type": "vm",
+      "is_pv_encryption_in_transit_enabled": false,
+      "lifecycle_state": "",
+      "metadata": {
+        "ssh_authorized_keys": "var.public_key",
+        "user_data": ""
+      },
+      "okit_reference": "okit-de78d8b9-05ee-4dd9-bb4b-f73fb17547e9",
+      "preserve_boot_volume": false,
+      "primary_vnic": {
+        "assign_public_ip": false,
+        "display_name": "k8smstr3",
+        "hostname_label": "k8smstr3",
+        "nsg_ids": [],
+        "resource_name": "Okit_I_1662125754076VnicAttachment",
+        "skip_source_dest_check": false,
+        "subnet_id": "okit.subnet.ccd6a17b-1f43-4a30-8793-2cfd11e7ac2f"
+      },
+      "read_only": false,
+      "resource_name": "Okit_I_1667554801819",
+      "shape": "VM.PCAStandard1.4",
+      "shape_config": {
+        "memory_in_gbs": "",
+        "ocpus": ""
+      },
+      "shape_series": "intel",
+      "show_connections": false,
+      "source_details": {
+        "boot_volume_size_in_gbs": "50",
+        "image_id": "ocid1.image.AK00905695.x9pca1.ye9e8d6csmggarq48dr9268w8pqj0o20klp42v70hrzds21xcgx2oxwo4o3w",
+        "image_source": "custom",
+        "os": "OracleLinux",
+        "source_type": "image",
+        "version": "8"
+      },
+      "subnet_id": "okit.subnet.ccd6a17b-1f43-4a30-8793-2cfd11e7ac2f",
+      "vnic_attachments": [
+        {
+          "assign_public_ip": false,
+          "display_name": "k8smstr3",
+          "hostname_label": "k8smstr3",
+          "nsg_ids": [],
+          "resource_name": "Okit_I_1662125754076VnicAttachment",
+          "skip_source_dest_check": false,
+          "subnet_id": "okit.subnet.ccd6a17b-1f43-4a30-8793-2cfd11e7ac2f"
+        }
+      ],
+      "volume_attachments": []
+    },
+    {
+      "agent_config": {
+        "is_management_disabled": false,
+        "is_monitoring_disabled": false
+      },
+      "availability_domain": "1",
+      "chipset": "intel",
+      "compartment_id": "okit.compartment.200e584b-c0b6-4e98-962f-e675e83476fe",
+      "count": 1,
+      "defined_tags": {},
+      "display_name": "k8swkr1",
+      "documentation": "",
+      "fault_domain": "FAULT-DOMAIN-1",
+      "flex_shape": false,
+      "freeform_tags": {
+        "OLCNE": "worker"
+      },
+      "id": "okit.instance.bc0f7735-8dbf-4012-90c1-c339b4b68e61",
+      "instance_type": "vm",
+      "is_pv_encryption_in_transit_enabled": false,
+      "lifecycle_state": "",
+      "metadata": {
+        "ssh_authorized_keys": "var.public_key",
+        "user_data": ""
+      },
+      "okit_reference": "okit-6b133730-713c-47d5-a278-f2c735cf749a",
+      "preserve_boot_volume": false,
+      "primary_vnic": {
+        "assign_public_ip": false,
+        "display_name": "k8swkr1",
+        "hostname_label": "k8swkr1",
+        "nsg_ids": [],
+        "resource_name": "Okit_I_1662125758459VnicAttachment",
+        "skip_source_dest_check": false,
+        "subnet_id": "okit.subnet.ccd6a17b-1f43-4a30-8793-2cfd11e7ac2f"
+      },
+      "read_only": false,
+      "resource_name": "Okit_I_1662125758459",
+      "shape": "VM.PCAStandard1.4",
+      "shape_config": {
+        "memory_in_gbs": "",
+        "ocpus": ""
+      },
+      "shape_series": "intel",
+      "show_connections": false,
+      "source_details": {
+        "boot_volume_size_in_gbs": "50",
+        "image_id": "ocid1.image.AK00905695.x9pca1.ye9e8d6csmggarq48dr9268w8pqj0o20klp42v70hrzds21xcgx2oxwo4o3w",
+        "image_source": "custom",
+        "os": "OracleLinux",
+        "source_type": "image",
+        "version": "8"
+      },
+      "subnet_id": "okit.subnet.ccd6a17b-1f43-4a30-8793-2cfd11e7ac2f",
+      "vnic_attachments": [
+        {
+          "assign_public_ip": false,
+          "display_name": "k8swkr1",
+          "hostname_label": "k8swkr1",
+          "nsg_ids": [],
+          "resource_name": "Okit_I_1662125758459VnicAttachment",
+          "skip_source_dest_check": false,
+          "subnet_id": "okit.subnet.ccd6a17b-1f43-4a30-8793-2cfd11e7ac2f"
+        }
+      ],
+      "volume_attachments": []
+    },
+    {
+      "agent_config": {
+        "is_management_disabled": false,
+        "is_monitoring_disabled": false
+      },
+      "availability_domain": "1",
+      "chipset": "intel",
+      "compartment_id": "okit.compartment.200e584b-c0b6-4e98-962f-e675e83476fe",
+      "count": 1,
+      "defined_tags": {},
+      "display_name": "k8swkr2",
+      "documentation": "",
+      "fault_domain": "FAULT-DOMAIN-2",
+      "flex_shape": false,
+      "freeform_tags": {
+        "OLCNE": "worker"
+      },
+      "id": "okit.instance.72f4ac7c-c4a3-45a7-a53c-f75b0f00767c",
+      "instance_type": "vm",
+      "is_pv_encryption_in_transit_enabled": false,
+      "lifecycle_state": "",
+      "metadata": {
+        "ssh_authorized_keys": "var.public_key",
+        "user_data": ""
+      },
+      "okit_reference": "okit-8ec0c1ee-cad8-4a48-8dd7-93c8fec0ad18",
+      "preserve_boot_volume": false,
+      "primary_vnic": {
+        "assign_public_ip": false,
+        "display_name": "k8swkr2",
+        "hostname_label": "k8swkr2",
+        "nsg_ids": [],
+        "resource_name": "Okit_I_1662125760511VnicAttachment",
+        "skip_source_dest_check": false,
+        "subnet_id": "okit.subnet.ccd6a17b-1f43-4a30-8793-2cfd11e7ac2f"
+      },
+      "read_only": false,
+      "resource_name": "Okit_I_1662125760511",
+      "shape": "VM.PCAStandard1.4",
+      "shape_config": {
+        "memory_in_gbs": "",
+        "ocpus": ""
+      },
+      "shape_series": "intel",
+      "show_connections": false,
+      "source_details": {
+        "boot_volume_size_in_gbs": "50",
+        "image_id": "ocid1.image.AK00905695.x9pca1.ye9e8d6csmggarq48dr9268w8pqj0o20klp42v70hrzds21xcgx2oxwo4o3w",
+        "image_source": "custom",
+        "os": "OracleLinux",
+        "source_type": "image",
+        "version": "8"
+      },
+      "subnet_id": "okit.subnet.ccd6a17b-1f43-4a30-8793-2cfd11e7ac2f",
+      "vnic_attachments": [
+        {
+          "assign_public_ip": false,
+          "display_name": "k8swkr2",
+          "hostname_label": "k8swkr2",
+          "nsg_ids": [],
+          "resource_name": "Okit_I_1662125760511VnicAttachment",
+          "skip_source_dest_check": false,
+          "subnet_id": "okit.subnet.ccd6a17b-1f43-4a30-8793-2cfd11e7ac2f"
+        }
+      ],
+      "volume_attachments": []
+    },
+    {
+      "agent_config": {
+        "is_management_disabled": false,
+        "is_monitoring_disabled": false
+      },
+      "availability_domain": "1",
+      "chipset": "intel",
+      "compartment_id": "okit.compartment.200e584b-c0b6-4e98-962f-e675e83476fe",
+      "count": 1,
+      "defined_tags": {},
+      "display_name": "k8swkr3",
+      "documentation": "",
+      "fault_domain": "FAULT-DOMAIN-3",
+      "flex_shape": false,
+      "freeform_tags": {
+        "OLCNE": "worker"
+      },
+      "id": "okit.instance.93ab75b3-9d2d-404d-a8e1-8e5f36828f11",
+      "instance_type": "vm",
+      "is_pv_encryption_in_transit_enabled": false,
+      "lifecycle_state": "",
+      "metadata": {
+        "ssh_authorized_keys": "var.public_key",
+        "user_data": ""
+      },
+      "okit_reference": "okit-6b133730-713c-47d5-a278-f2c735cf749a",
+      "preserve_boot_volume": false,
+      "primary_vnic": {
+        "assign_public_ip": false,
+        "display_name": "k8swkr3",
+        "hostname_label": "k8swkr3",
+        "nsg_ids": [],
+        "resource_name": "Okit_I_1662125758459VnicAttachment",
+        "skip_source_dest_check": false,
+        "subnet_id": "okit.subnet.ccd6a17b-1f43-4a30-8793-2cfd11e7ac2f"
+      },
+      "read_only": false,
+      "resource_name": "Okit_I_1667554808555",
+      "shape": "VM.PCAStandard1.4",
+      "shape_config": {
+        "memory_in_gbs": "",
+        "ocpus": ""
+      },
+      "shape_series": "intel",
+      "show_connections": false,
+      "source_details": {
+        "boot_volume_size_in_gbs": "50",
+        "image_id": "ocid1.image.AK00905695.x9pca1.ye9e8d6csmggarq48dr9268w8pqj0o20klp42v70hrzds21xcgx2oxwo4o3w",
+        "image_source": "custom",
+        "os": "OracleLinux",
+        "source_type": "image",
+        "version": "8"
+      },
+      "subnet_id": "okit.subnet.ccd6a17b-1f43-4a30-8793-2cfd11e7ac2f",
+      "vnic_attachments": [
+        {
+          "assign_public_ip": false,
+          "display_name": "k8swkr3",
+          "hostname_label": "k8swkr3",
+          "nsg_ids": [],
+          "resource_name": "Okit_I_1662125758459VnicAttachment",
+          "skip_source_dest_check": false,
+          "subnet_id": "okit.subnet.ccd6a17b-1f43-4a30-8793-2cfd11e7ac2f"
+        }
+      ],
+      "volume_attachments": []
+    },
+    {
+      "agent_config": {
+        "is_management_disabled": false,
+        "is_monitoring_disabled": false
+      },
+      "availability_domain": "1",
+      "chipset": "intel",
+      "compartment_id": "okit.compartment.200e584b-c0b6-4e98-962f-e675e83476fe",
+      "count": 1,
+      "defined_tags": {},
+      "display_name": "opnode",
+      "documentation": "",
+      "fault_domain": "FAULT-DOMAIN-3",
+      "flex_shape": false,
+      "freeform_tags": {
+        "OLCNE": "operator"
+      },
+      "id": "okit.instance.87d8c083-f7b1-4cc9-acc5-2dae8bf7f81b",
+      "instance_type": "vm",
+      "is_pv_encryption_in_transit_enabled": false,
+      "lifecycle_state": "",
+      "metadata": {
+        "ssh_authorized_keys": "var.public_key",
+        "user_data": ""
+      },
+      "okit_reference": "okit-81872062-1d15-4eb4-b60a-b0968dbb24a1",
+      "preserve_boot_volume": false,
+      "primary_vnic": {
+        "assign_public_ip": true,
+        "display_name": "opnode",
+        "hostname_label": "opnode",
+        "nsg_ids": [],
+        "resource_name": "Okit_I_1662125763010VnicAttachment",
+        "skip_source_dest_check": false,
+        "subnet_id": "okit.subnet.e8c9f1e0-83dd-46b9-932f-2a7ee3d48c3b"
+      },
+      "read_only": false,
+      "resource_name": "Okit_I_1662125763009",
+      "shape": "VM.PCAStandard1.4",
+      "shape_config": {
+        "memory_in_gbs": "",
+        "ocpus": ""
+      },
+      "shape_series": "intel",
+      "show_connections": false,
+      "source_details": {
+        "boot_volume_size_in_gbs": "50",
+        "image_id": "ocid1.image.AK00905695.x9pca1.ye9e8d6csmggarq48dr9268w8pqj0o20klp42v70hrzds21xcgx2oxwo4o3w",
+        "image_source": "custom",
+        "os": "OracleLinux",
+        "source_type": "image",
+        "version": "8"
+      },
+      "subnet_id": "okit.subnet.e8c9f1e0-83dd-46b9-932f-2a7ee3d48c3b",
+      "vnic_attachments": [
+        {
+          "assign_public_ip": true,
+          "display_name": "opnode",
+          "hostname_label": "opnode",
+          "nsg_ids": [],
+          "resource_name": "Okit_I_1662125763010VnicAttachment",
+          "skip_source_dest_check": false,
+          "subnet_id": "okit.subnet.e8c9f1e0-83dd-46b9-932f-2a7ee3d48c3b"
+        }
+      ],
+      "volume_attachments": []
+    }
+  ],
+  "internet_gateways": [
+    {
+      "compartment_id": "okit.compartment.200e584b-c0b6-4e98-962f-e675e83476fe",
+      "defined_tags": {},
+      "display_name": "olcne-ig",
+      "documentation": "",
+      "enabled": true,
+      "freeform_tags": {},
+      "id": "okit.internetgateway.c25339a4-7df4-405c-9df3-951a77b2be08",
+      "okit_reference": "okit-4a91bee3-0177-4aab-95c4-32ae5cf5c579",
+      "read_only": false,
+      "resource_name": "Okit_IG_1662125250653",
+      "show_connections": false,
+      "vcn_id": "okit.virtualcloudnetwork.9e7f064e-b486-4db9-88fa-dc10e0395470"
+    }
+  ],
+  "metadata": {
+    "created": "2022-9-2 14:26:40",
+    "file": {
+      "generate_terraform": true,
+      "name": "/okitdemo/olcne_infrastructure_multi_sm.json",
+      "terraform_dir": "/okitdemo/olcne_infrastructure"
+    },
+    "okit_model_id": "okit-model-e35d4184-4cbd-4989-9002-f611c67b9686",
+    "okit_version": "0.40.0 - nightly -",
+    "platform": "pca",
+    "resource_count": 462,
+    "updated": "2022-9-2 14:26:40"
+  },
+  "nat_gateways": [
+    {
+      "block_traffic": false,
+      "compartment_id": "okit.compartment.200e584b-c0b6-4e98-962f-e675e83476fe",
+      "defined_tags": {},
+      "display_name": "olcne-ng",
+      "documentation": "",
+      "freeform_tags": {},
+      "id": "okit.natgateway.587009c2-7e28-436e-819d-62eead7db451",
+      "okit_reference": "okit-96bc170b-c06f-40e7-af4c-55d6af390899",
+      "read_only": false,
+      "resource_name": "Okit_NG_1667478314988",
+      "show_connections": false,
+      "vcn_id": "okit.virtualcloudnetwork.9e7f064e-b486-4db9-88fa-dc10e0395470"
+    }
+  ],
+  "route_tables": [
+    {
+      "compartment_id": "okit.compartment.200e584b-c0b6-4e98-962f-e675e83476fe",
+      "default": true,
+      "defined_tags": {},
+      "display_name": "cne-rt",
+      "documentation": "",
+      "freeform_tags": {},
+      "id": "okit.routetable.7d74cfb4-4e7d-4f4d-8cea-9b99fc66fb97",
+      "okit_reference": "okit-d4e2646a-7cf3-4ea4-a8d2-20b5d50cdb40",
+      "read_only": false,
+      "resource_name": "Okit_RT_1662125212839",
+      "route_rules": [
+        {
+          "description": "",
+          "destination": "0.0.0.0/0",
+          "destination_type": "CIDR_BLOCK",
+          "network_entity_id": "okit.internetgateway.c25339a4-7df4-405c-9df3-951a77b2be08",
+          "target_type": "internet_gateway"
+        }
+      ],
+      "show_connections": false,
+      "vcn_id": "okit.virtualcloudnetwork.9e7f064e-b486-4db9-88fa-dc10e0395470"
+    },
+    {
+      "compartment_id": "okit.compartment.200e584b-c0b6-4e98-962f-e675e83476fe",
+      "default": false,
+      "defined_tags": {},
+      "display_name": "cne-priv-rt",
+      "documentation": "",
+      "freeform_tags": {},
+      "id": "okit.routetable.d99888cf-79ea-4f46-a735-c17a2fbece88",
+      "okit_reference": "okit-17175b03-d2f1-4c4a-b5db-b5670fa4e7fd",
+      "read_only": false,
+      "resource_name": "Okit_RT_1667488743982",
+      "route_rules": [
+        {
+          "description": "",
+          "destination": "0.0.0.0/0",
+          "destination_type": "CIDR_BLOCK",
+          "network_entity_id": "okit.natgateway.587009c2-7e28-436e-819d-62eead7db451",
+          "target_type": "nat_gateway"
+        }
+      ],
+      "show_connections": false,
+      "vcn_id": "okit.virtualcloudnetwork.9e7f064e-b486-4db9-88fa-dc10e0395470"
+    }
+  ],
+  "security_lists": [
+    {
+      "compartment_id": "okit.compartment.200e584b-c0b6-4e98-962f-e675e83476fe",
+      "default": true,
+      "defined_tags": {},
+      "display_name": "cne-sl",
+      "documentation": "",
+      "egress_security_rules": [
+        {
+          "description": "",
+          "destination": "0.0.0.0/0",
+          "destination_type": "CIDR_BLOCK",
+          "is_stateless": false,
+          "protocol": "all"
+        }
+      ],
+      "freeform_tags": {},
+      "id": "okit.securitylist.ba957157-a3d1-4089-abc8-26386c9fe620",
+      "ingress_security_rules": [
+        {
+          "description": "",
+          "is_stateless": false,
+          "protocol": "all",
+          "source": "10.0.0.16/28",
+          "source_type": "CIDR_BLOCK"
+        },
+        {
+          "description": "",
+          "is_stateless": false,
+          "protocol": "all",
+          "source": "10.0.0.0/28",
+          "source_type": "CIDR_BLOCK"
+        }
+      ],
+      "okit_reference": "okit-747f9fb0-f09d-480d-a2de-839ca1c3f3f3",
+      "read_only": false,
+      "resource_name": "Okit_SL_1662125212841",
+      "show_connections": false,
+      "vcn_id": "okit.virtualcloudnetwork.9e7f064e-b486-4db9-88fa-dc10e0395470"
+    },
+    {
+      "compartment_id": "okit.compartment.200e584b-c0b6-4e98-962f-e675e83476fe",
+      "default": false,
+      "defined_tags": {},
+      "display_name": "cneop-sl",
+      "documentation": "",
+      "egress_security_rules": [
+        {
+          "description": "",
+          "destination": "0.0.0.0/0",
+          "destination_type": "CIDR_BLOCK",
+          "is_stateless": false,
+          "protocol": "all"
+        }
+      ],
+      "freeform_tags": {},
+      "id": "okit.securitylist.71233472-a18a-4fb0-9b3d-597769dfa736",
+      "ingress_security_rules": [
+        {
+          "description": "",
+          "is_stateless": false,
+          "protocol": "6",
+          "source": "0.0.0.0/0",
+          "source_type": "CIDR_BLOCK",
+          "tcp_options": {
+            "destination_port_range": {
+              "max": "22",
+              "min": "22"
+            },
+            "source_port_range": {
+              "max": "",
+              "min": ""
+            }
+          }
+        },
+        {
+          "description": "",
+          "is_stateless": false,
+          "protocol": "6",
+          "source": "0.0.0.0/0",
+          "source_type": "CIDR_BLOCK",
+          "tcp_options": {
+            "destination_port_range": {
+              "max": "6443",
+              "min": "6443"
+            },
+            "source_port_range": {
+              "max": "",
+              "min": ""
+            }
+          }
+        },
+        {
+          "description": "",
+          "is_stateless": false,
+          "protocol": "6",
+          "source": "10.0.0.0/28",
+          "source_type": "CIDR_BLOCK",
+          "tcp_options": {
+            "destination_port_range": {
+              "max": "8091",
+              "min": "8091"
+            },
+            "source_port_range": {
+              "max": "",
+              "min": ""
+            }
+          }
+        }
+      ],
+      "okit_reference": "okit-2f62ed4f-4a0b-43a5-984e-f6a92f4ae585",
+      "read_only": false,
+      "resource_name": "Okit_SL_1667389313457",
+      "show_connections": false,
+      "vcn_id": "okit.virtualcloudnetwork.9e7f064e-b486-4db9-88fa-dc10e0395470"
+    }
+  ],
+  "subnets": [
+    {
+      "availability_domain": "0",
+      "cidr_block": "10.0.0.16/28",
+      "compartment_id": "okit.compartment.200e584b-c0b6-4e98-962f-e675e83476fe",
+      "defined_tags": {},
+      "dhcp_options_id": "okit.dhcpoption.98849ead-91b9-4004-9e96-005bef915ae0",
+      "display_name": "olcneop-sn",
+      "dns_label": "olcneop-sn",
+      "documentation": "",
+      "freeform_tags": {},
+      "id": "okit.subnet.e8c9f1e0-83dd-46b9-932f-2a7ee3d48c3b",
+      "ipv6cidr_block": "",
+      "ipv6cidr_blocks": "",
+      "is_ipv6enabled": false,
+      "okit_reference": "okit-a05892d9-f06c-4f8a-b969-cfe000e520df",
+      "prohibit_public_ip_on_vnic": false,
+      "read_only": false,
+      "resource_name": "Okit_S_1667389188594",
+      "route_table_id": "okit.routetable.7d74cfb4-4e7d-4f4d-8cea-9b99fc66fb97",
+      "security_list_ids": [
+        "okit.securitylist.71233472-a18a-4fb0-9b3d-597769dfa736"
+      ],
+      "show_connections": false,
+      "vcn_id": "okit.virtualcloudnetwork.9e7f064e-b486-4db9-88fa-dc10e0395470"
+    },
+    {
+      "availability_domain": "0",
+      "cidr_block": "10.0.0.0/28",
+      "compartment_id": "okit.compartment.200e584b-c0b6-4e98-962f-e675e83476fe",
+      "defined_tags": {},
+      "dhcp_options_id": "okit.dhcpoption.98849ead-91b9-4004-9e96-005bef915ae0",
+      "display_name": "olcne-sn",
+      "dns_label": "olcne-sn",
+      "documentation": "",
+      "freeform_tags": {},
+      "id": "okit.subnet.ccd6a17b-1f43-4a30-8793-2cfd11e7ac2f",
+      "ipv6cidr_block": "",
+      "ipv6cidr_blocks": "",
+      "is_ipv6enabled": false,
+      "okit_reference": "okit-55e1992a-4d51-42c5-8800-38aeb2803022",
+      "prohibit_public_ip_on_vnic": true,
+      "read_only": false,
+      "resource_name": "Okit_S_1662125295039",
+      "route_table_id": "okit.routetable.d99888cf-79ea-4f46-a735-c17a2fbece88",
+      "security_list_ids": [
+        "okit.securitylist.ba957157-a3d1-4089-abc8-26386c9fe620"
+      ],
+      "show_connections": false,
+      "vcn_id": "okit.virtualcloudnetwork.9e7f064e-b486-4db9-88fa-dc10e0395470"
+    }
+  ],
+  "title": "Oracle Cloud Native Environment Infrastructure Multi Tier",
+  "user_defined": {
+    "terraform": "# Define Local CNE Types\n# If VMs are added to the design add there Public IP reference to the appropriate list.\nlocals {\n    cne_operator_public_ips = [local.Okit_I_1662125763009_public_ip]\n\n    cne_master_private_ips = [local.Okit_I_1662125754075_private_ip, local.Okit_I_1662125756226_private_ip, local.Okit_I_1667554801819_private_ip]\n\n    cne_worker_private_ips = [local.Okit_I_1662125758459_private_ip, local.Okit_I_1662125760511_private_ip, local.Okit_I_1667554808555_private_ip]\n}\n\n# Install Operator Pre-Reqs\nresource \"null_resource\" \"cne-operator-pre-reqs\" {\n    count = length(local.cne_operator_public_ips)\n    connection {\n        type = \"ssh\"\n        user = \"opc\"\n        private_key = file(\"${var.private_key_file}\")\n        host = local.cne_operator_public_ips[count.index]\n    }\n\n    provisioner \"file\" {\n      source = \"${var.private_key_file}\"\n      destination = \"${var.remote_private_key_file}\"\n    }\n\n    provisioner \"remote-exec\" {\n      inline = [\n        \"sudo bash -c 'echo \\\"proxy=${var.yum_proxy}\\\" >> /etc/yum.conf'\",\n        \"sudo bash -c 'echo \\\"timeout=3000\\\" >> /etc/yum.conf'\",\n        \"sudo bash -c 'echo \\\"retries=100\\\" >> /etc/yum.conf'\",\n        \"sudo yum check-update\",\n        \"sudo bash -c 'echo \\\"proxy=${var.yum_proxy}\\\" >> /etc/dnf/dnf.conf'\",\n        \"sudo bash -c 'echo \\\"timeout=3000\\\" >> /etc/dnf/dnf.conf'\",\n        \"sudo bash -c 'echo \\\"retries=100\\\" >> /etc/dnf/dnf.conf'\",\n        \"sudo dnf --refresh check-update\",\n        \"sudo dnf install -y oracle-olcne-release-el8\",\n        \"sudo dnf config-manager --enable ol8_olcne15 ol8_addons ol8_baseos_latest ol8_appstream ol8_UEKR6\",\n        \"sudo dnf config-manager --disable ol8_olcne14 ol8_olcne13 ol8_olcne12 ol8_developer\",\n\n        \"sudo sed -i 's/^SELINUX=enforcing/SELINUX=permissive/' /etc/selinux/config\",\n        \"sudo /usr/sbin/setenforce 0\",\n\n        \"sudo firewall-cmd --add-port=8091/tcp --permanent\",\n        \"sudo systemctl restart firewalld.service\",\n\n        \"sudo chmod 600 ${var.remote_private_key_file}\"\n      ]\n    }\n}\n\n# Install Master (Control) Pre-Reqs\nresource \"null_resource\" \"cne-master-pre-reqs\" {\n    count = length(local.cne_master_private_ips)\n    connection {\n        type = \"ssh\"\n        bastion_host = local.cne_operator_public_ips[0]\n        bastion_user = \"opc\"\n        bastion_private_key = file(\"${var.private_key_file}\")\n        host = local.cne_master_private_ips[count.index]\n        user = \"opc\"\n        private_key = file(\"${var.private_key_file}\")\n    }\n\n    provisioner \"file\" {\n      source = \"${var.private_key_file}\"\n      destination = \"${var.remote_private_key_file}\"\n    }\n\n    provisioner \"remote-exec\" {\n      inline = [\n        \"sudo bash -c 'echo \\\"proxy=${var.yum_proxy}\\\" >> /etc/yum.conf'\",\n        \"sudo bash -c 'echo \\\"timeout=3000\\\" >> /etc/yum.conf'\",\n        \"sudo bash -c 'echo \\\"retries=100\\\" >> /etc/yum.conf'\",\n        \"sudo yum check-update\",\n        \"sudo bash -c 'echo \\\"proxy=${var.yum_proxy}\\\" >> /etc/dnf/dnf.conf'\",\n        \"sudo bash -c 'echo \\\"timeout=3000\\\" >> /etc/dnf/dnf.conf'\",\n        \"sudo bash -c 'echo \\\"retries=100\\\" >> /etc/dnf/dnf.conf'\",\n        \"sudo dnf --refresh check-update\",\n        \"sudo dnf install -y oracle-olcne-release-el8\",\n        \"sudo dnf config-manager --enable ol8_olcne15 ol8_addons ol8_baseos_latest ol8_appstream ol8_UEKR6\",\n        \"sudo dnf config-manager --disable ol8_olcne14 ol8_olcne13 ol8_olcne12 ol8_developer\",\n        \"sudo yum install -y chrony\",\n        \"sudo echo 'Add NTP Server to /etc/chrony.conf'\",\n        \"sudo swapoff -a\",\n        \"sudo sed -i '/ swap /d' /etc/fstab\",\n\n        \"sudo sed -i 's/^SELINUX=enforcing/SELINUX=permissive/' /etc/selinux/config\",\n        \"sudo /usr/sbin/setenforce 0\",\n\n        \"sudo firewall-cmd --zone=trusted --add-interface=cni0 --permanent\",\n        \"sudo firewall-cmd --add-port=8090/tcp --permanent\",\n        \"sudo firewall-cmd --add-port=10250/tcp --permanent\",\n        \"sudo firewall-cmd --add-port=10255/tcp --permanent\",\n        \"sudo firewall-cmd --add-port=8472/udp --permanent\",\n        \"sudo firewall-cmd --add-port=6443/tcp --permanent\",\n        \"sudo firewall-cmd --add-port=10251/tcp --permanent\",\n        \"sudo firewall-cmd --add-port=10252/tcp --permanent\",\n        \"sudo firewall-cmd --add-port=2379/tcp --permanent\",\n        \"sudo firewall-cmd --add-port=2380/tcp --permanent\",\n        \"sudo systemctl restart firewalld.service\",\n\n        \"sudo chmod 600 ${var.remote_private_key_file}\"\n      ]\n    }\n\n    depends_on = [\n        null_resource.cne-operator-pre-reqs\n    ]    \n}\n\n# Install Worker Pre-Reqs\nresource \"null_resource\" \"cne-worker-pre-reqs\" {\n    count = length(local.cne_worker_private_ips)\n    connection {\n        type = \"ssh\"\n        bastion_host = local.cne_operator_public_ips[0]\n        bastion_user = \"opc\"\n        bastion_private_key = file(\"${var.private_key_file}\")\n        user = \"opc\"\n        private_key = file(\"${var.private_key_file}\")\n        host = local.cne_worker_private_ips[count.index]\n    }\n\n    provisioner \"file\" {\n      source = \"${var.private_key_file}\"\n      destination = \"${var.remote_private_key_file}\"\n    }\n\n    provisioner \"remote-exec\" {\n      inline = [\n        \"sudo bash -c 'echo \\\"proxy=${var.yum_proxy}\\\" >> /etc/yum.conf'\",\n        \"sudo bash -c 'echo \\\"timeout=3000\\\" >> /etc/yum.conf'\",\n        \"sudo bash -c 'echo \\\"retries=100\\\" >> /etc/yum.conf'\",\n        \"sudo yum check-update\",\n        \"sudo bash -c 'echo \\\"proxy=${var.yum_proxy}\\\" >> /etc/dnf/dnf.conf'\",\n        \"sudo bash -c 'echo \\\"timeout=3000\\\" >> /etc/dnf/dnf.conf'\",\n        \"sudo bash -c 'echo \\\"retries=100\\\" >> /etc/dnf/dnf.conf'\",\n        \"sudo dnf --refresh check-update\",\n        \"sudo dnf install -y oracle-olcne-release-el8\",\n        \"sudo dnf config-manager --enable ol8_olcne15 ol8_addons ol8_baseos_latest ol8_appstream ol8_UEKR6\",\n        \"sudo dnf config-manager --disable ol8_olcne14 ol8_olcne13 ol8_olcne12 ol8_developer\",\n        \"sudo yum install -y chrony\",\n        \"sudo echo 'Add NTP Server to /etc/chrony.conf'\",\n        \"sudo swapoff -a\",\n        \"sudo sed -i '/ swap /d' /etc/fstab\",\n\n        \"sudo sed -i 's/^SELINUX=enforcing/SELINUX=permissive/' /etc/selinux/config\",\n        \"sudo /usr/sbin/setenforce 0\",\n\n        \"sudo firewall-cmd --zone=trusted --add-interface=cni0 --permanent\",\n        \"sudo firewall-cmd --add-port=8090/tcp --permanent\",\n        \"sudo firewall-cmd --add-port=10250/tcp --permanent\",\n        \"sudo firewall-cmd --add-port=10255/tcp --permanent\",\n        \"sudo firewall-cmd --add-port=8472/udp --permanent\",\n        \"sudo systemctl restart firewalld.service\",\n\n        \"sudo chmod 600 ${var.remote_private_key_file}\"\n      ]\n    }\n\n    depends_on = [\n        null_resource.cne-operator-pre-reqs\n    ]    \n}\n\n# Install Master (Control)\nresource \"null_resource\" \"cne-master-install\" {\n    count = length(local.cne_master_private_ips)\n    connection {\n        type = \"ssh\"\n        bastion_host = local.cne_operator_public_ips[0]\n        bastion_user = \"opc\"\n        bastion_private_key = file(\"${var.private_key_file}\")\n        user = \"opc\"\n        private_key = file(\"${var.private_key_file}\")\n        host = local.cne_master_private_ips[count.index]\n    }\n\n    provisioner \"remote-exec\" {\n      inline = [\n        \"sudo yum check-update\",\n        \"sudo dnf --refresh check-update\",\n        \"sudo dnf install -y olcne-agent olcne-utils\",\n        \"sudo systemctl enable olcne-agent.service\",\n        \"sudo mkdir /etc/systemd/system/crio.service.d\",\n        \"sudo bash -c 'echo \\\"[Service]\\\" > /etc/systemd/system/crio.service.d/proxy.conf'\",\n        \"sudo bash -c 'echo \\\"Environment=\\\\\\\"HTTP_PROXY=${var.http_proxy}\\\\\\\"\\\" >> /etc/systemd/system/crio.service.d/proxy.conf'\",\n        \"sudo bash -c 'echo \\\"Environment=\\\\\\\"HTTPS_PROXY=${var.https_proxy}\\\\\\\"\\\" >> /etc/systemd/system/crio.service.d/proxy.conf'\",\n        \"sudo bash -c 'echo \\\"Environment=\\\\\\\"NO_PROXY=${length(var.no_proxy) > 0 ? var.no_proxy : local.cne_operator_public_ips[0]}\\\\\\\"\\\" >> /etc/systemd/system/crio.service.d/proxy.conf'\"\n      ]\n    }\n\n    depends_on = [\n        null_resource.cne-master-pre-reqs,\n        null_resource.cne-worker-pre-reqs,\n        null_resource.cne-operator-pre-reqs\n    ]    \n}\n\n# Install Worker\nresource \"null_resource\" \"cne-worker-install\" {\n    count = length(local.cne_worker_private_ips)\n    connection {\n        type = \"ssh\"\n        bastion_host = local.cne_operator_public_ips[0]\n        bastion_user = \"opc\"\n        bastion_private_key = file(\"${var.private_key_file}\")\n        user = \"opc\"\n        private_key = file(\"${var.private_key_file}\")\n        host = local.cne_worker_private_ips[count.index]\n    }\n\n    provisioner \"remote-exec\" {\n      inline = [\n        \"sudo yum check-update\",\n        \"sudo dnf --refresh check-update\",\n        \"sudo dnf install -y olcne-agent olcne-utils\",\n        \"sudo systemctl enable olcne-agent.service \",\n        \"sudo mkdir /etc/systemd/system/crio.service.d\",\n        \"sudo bash -c 'echo \\\"[Service]\\\" > /etc/systemd/system/crio.service.d/proxy.conf'\",\n        \"sudo bash -c 'echo \\\"Environment=\\\\\\\"HTTP_PROXY=${var.http_proxy}\\\\\\\"\\\" >> /etc/systemd/system/crio.service.d/proxy.conf'\",\n        \"sudo bash -c 'echo \\\"Environment=\\\\\\\"HTTPS_PROXY=${var.https_proxy}\\\\\\\"\\\" >> /etc/systemd/system/crio.service.d/proxy.conf'\",\n        \"sudo bash -c 'echo \\\"Environment=\\\\\\\"NO_PROXY=${length(var.no_proxy) > 0 ? var.no_proxy : local.cne_operator_public_ips[0]}\\\\\\\"\\\" >> /etc/systemd/system/crio.service.d/proxy.conf'\"\n      ]\n    }\n\n    depends_on = [\n        null_resource.cne-master-pre-reqs,\n        null_resource.cne-worker-pre-reqs,\n        null_resource.cne-operator-pre-reqs\n    ]    \n}\n\n# Install Operator\nresource \"null_resource\" \"cne-operator-install\" {\n    count = length(local.cne_operator_public_ips)\n    connection {\n        type = \"ssh\"\n        user = \"opc\"\n        private_key = file(\"${var.private_key_file}\")\n        host = local.cne_operator_public_ips[count.index]\n    }\n\n    provisioner \"remote-exec\" {\n      inline = [\n        \"sudo yum check-update\",\n        \"sudo dnf --refresh check-update\",\n        \"sudo dnf install -y olcnectl olcne-api-server olcne-utils\",\n        \"sudo systemctl enable olcne-api-server.service\",\n        \"sudo mkdir /etc/systemd/system/crio.service.d\",\n        \"sudo bash -c 'echo \\\"[Service]\\\" > /etc/systemd/system/crio.service.d/proxy.conf'\",\n        \"sudo bash -c 'echo \\\"Environment=\\\\\\\"HTTP_PROXY=${var.http_proxy}\\\\\\\"\\\" >> /etc/systemd/system/crio.service.d/proxy.conf'\",\n        \"sudo bash -c 'echo \\\"Environment=\\\\\\\"HTTPS_PROXY=${var.https_proxy}\\\\\\\"\\\" >> /etc/systemd/system/crio.service.d/proxy.conf'\",\n        \"sudo bash -c 'echo \\\"Environment=\\\\\\\"NO_PROXY=${var.no_proxy}\\\\\\\"\\\" >> /etc/systemd/system/crio.service.d/proxy.conf'\"\n      ]\n    }\n\n    depends_on = [\n        null_resource.cne-master-pre-reqs,\n        null_resource.cne-worker-pre-reqs,\n        null_resource.cne-operator-pre-reqs\n    ]    \n}\n"
+  },
+  "variables_schema": {
+    "groups": [],
+    "variables": [
+      {
+        "default": "",
+        "description": "",
+        "group": "Undefined",
+        "name": "public_key"
+      },
+      {
+        "default": "",
+        "description": "",
+        "group": "Undefined",
+        "name": "private_key_file"
+      },
+      {
+        "default": "",
+        "description": "",
+        "group": "Undefined",
+        "name": "yum_proxy"
+      },
+      {
+        "default": "",
+        "description": "",
+        "group": "Undefined",
+        "name": "http_proxy"
+      },
+      {
+        "default": "",
+        "description": "",
+        "group": "Undefined",
+        "name": "https_proxy"
+      },
+      {
+        "default": "",
+        "description": "",
+        "group": "Undefined",
+        "name": "no_proxy"
+      },
+      {
+        "default": "",
+        "description": "",
+        "group": "Undefined",
+        "name": "ntp_server"
+      },
+      {
+        "default": "/home/opc/.ssh/bastion_key",
+        "description": "",
+        "group": "Undefined",
+        "name": "remote_private_key_file"
+      }
+    ]
+  },
+  "virtual_cloud_networks": [
+    {
+      "cidr_blocks": [
+        "10.0.0.0/24"
+      ],
+      "compartment_id": "okit.compartment.200e584b-c0b6-4e98-962f-e675e83476fe",
+      "defined_tags": {},
+      "display_name": "olcne-vcn",
+      "dns_label": "olcne-vcn",
+      "documentation": "",
+      "freeform_tags": {},
+      "id": "okit.virtualcloudnetwork.9e7f064e-b486-4db9-88fa-dc10e0395470",
+      "ipv6cidr_blocks": [],
+      "is_ipv6enabled": false,
+      "okit_reference": "okit-6ee1c358-8577-4619-a387-537c61dfe7f7",
+      "read_only": false,
+      "resource_name": "Okit_VCN_1662125212836",
+      "show_connections": false
+    }
+  ]
+}

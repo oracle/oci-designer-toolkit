@@ -119,7 +119,8 @@ class VirtualCloudNetwork extends OkitArtifact {
         this.cidr_blocks = [`${ip}/16`];
         return this.cidr_blocks;
     }
-    generateDnsLabel = () => this.display_name.toLowerCase().replaceAll(' ', '').slice(0, 15)
+    generateDnsLabel = () => this.display_name.toLowerCase().replace(/[^a-z]/g, '').slice(0, 15)
+    // generateDnsLabel = () => this.display_name.toLowerCase().replaceAll(' ', '').slice(0, 15)
 
     /*
     ** Static Functionality

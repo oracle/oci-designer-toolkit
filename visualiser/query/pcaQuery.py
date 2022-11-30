@@ -49,6 +49,7 @@ class PCAQuery(OCIConnection):
     SUPPORTED_RESOURCES = [
         "Compartment", # Must be first because we will use the resulting list to query other resources in the selected and potentially child compartments
         "Bucket", 
+        "CustomerDnsZone",
         "DHCPOptions", 
         "Drg", 
         "FileSystem", 
@@ -107,6 +108,11 @@ class PCAQuery(OCIConnection):
                 "method": self.compartments, 
                 "client": "identity", 
                 "array": "compartments"
+                }, 
+            "CustomerDnsZone": {
+                "method": self.dns_zones, 
+                "client": "dns", 
+                "array": "dns_zones"
                 }, 
             "DHCPOptions": {
                 "method": self.dhcp_options, 
@@ -232,6 +238,7 @@ class PCAQuery(OCIConnection):
             "object": oci.object_storage.ObjectStorageClient(config=self.config, signer=self.signer),
             "filestorage": oci.file_storage.FileStorageClient(config=self.config, signer=self.signer),
             "identity": oci.identity.IdentityClient(config=self.config, signer=self.signer),
+            "dns": oci.dns.DnsClient(config=self.config, signer=self.signer),
             # "container": oci.container_engine.ContainerEngineClient(config=self.config, signer=self.signer),
             # "database": oci.database.DatabaseClient(config=self.config, signer=self.signer),
             # "limits":  oci.limits.LimitsClient(config=self.config, signer=self.signer),
@@ -462,6 +469,19 @@ class PCAQuery(OCIConnection):
         self.dropdown_json[array] = []
         for compartment_id in self.query_compartments:
             results = oci.pagination.list_call_get_all_results(client.list_dhcp_options, compartment_id=compartment_id).data
+            # Convert to Json object
+            resources = self.toJson(results)
+            self.dropdown_json[array].extend(resources)
+        return self.dropdown_json[array]
+
+    def dns_zones(self):
+        resource_map = self.resource_map["CustomerDnsZone"]
+        client = self.clients[resource_map["client"]]
+        array = resource_map["array"]
+        resources = []
+        self.dropdown_json[array] = []
+        for compartment_id in self.query_compartments:
+            results = oci.pagination.list_call_get_all_results(client.list_zones, compartment_id=compartment_id).data
             # Convert to Json object
             resources = self.toJson(results)
             self.dropdown_json[array].extend(resources)
@@ -719,6 +739,9 @@ class PCAQuery(OCIConnection):
             results = oci.pagination.list_call_get_all_results(client.list_subnets, compartment_id=compartment_id).data
             # Convert to Json object
             resources = self.toJson(results)
+            for resource in resources:
+                if resource['dns_label'] is None:
+                    resource['dns_label'] = ''
             self.dropdown_json[array].extend(resources)
         return self.dropdown_json[array]
 
@@ -745,6 +768,9 @@ class PCAQuery(OCIConnection):
             results = oci.pagination.list_call_get_all_results(client.list_vcns, compartment_id=compartment_id).data
             # Convert to Json object
             resources = self.toJson(results)
+            for resource in resources:
+                if resource['dns_label'] is None:
+                    resource['dns_label'] = ''
             self.dropdown_json[array].extend(resources)
         return self.dropdown_json[array]
 

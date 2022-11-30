@@ -137,9 +137,9 @@ class OkitJson {
         okitSettings.is_vcn_defaults = okitSettingsClone.is_vcn_defaults;
         // Check for VCN Defaults
         this.getVirtualCloudNetworks().forEach((vcn) => {
-            if (vcn.default_route_table_id && this.getRouteTable(vcn.default_route_table_id)) this.getRouteTable(vcn.default_route_table_id).default = true;
-            if (vcn.default_security_list_id && this.getSecurityList(vcn.default_security_list_id)) this.getSecurityList(vcn.default_security_list_id).default = true;
-            if (vcn.default_dhcp_options_id && this.getDhcpOption(vcn.default_dhcp_options_id)) this.getDhcpOption(vcn.default_dhcp_options_id).default = true;
+            if (vcn.default_route_table_id && this.getRouteTable(vcn.default_route_table_id)) {this.getRouteTable(vcn.default_route_table_id).default = true; delete vcn.default_route_table_id}
+            if (vcn.default_security_list_id && this.getSecurityList(vcn.default_security_list_id)) {this.getSecurityList(vcn.default_security_list_id).default = true; delete vcn.default_security_list_id}
+            if (vcn.default_dhcp_options_id && this.getDhcpOption(vcn.default_dhcp_options_id)) {this.getDhcpOption(vcn.default_dhcp_options_id).default = true; delete vcn.default_dhcp_options_id}
         });
         // Check for root compartment
         this.checkCompartmentIds();
@@ -494,6 +494,7 @@ class OkitArtifact {
     generateResourceNameFromDisplayName = (name) => titleCase(name.split('_').join('-')).split(' ').join('').replaceAll('-','_')
 
     estimateCost = () => {
+        if (this.getOkitJson().metadata.platform == 'pca') return ''
         const get_price_function = OkitOciProductPricing.getPriceFunctionName(this.constructor.name)
         const pricing = okitOciProductPricing ? okitOciProductPricing : new OkitOciProductPricing()
         console.info(`>>>>>> Estimating Resource Cost: ${get_price_function}`)
