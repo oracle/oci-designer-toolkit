@@ -159,7 +159,7 @@
                 },
                 {
                     "title": "DNS Zone",
-                    "targets": ["oci", "freetier", "pca"],
+                    "targets": ["hidden"],
                     "svg": "DomainNameSystemDNS.svg"
                 },
                 {
