@@ -116,7 +116,7 @@ class OCIQuery(OCIConnection):
         "CloudExadataInfrastructure": "exadata_cloud_infrastructures",
         "Cluster": "oke_clusters",
         "Cpe": "customer_premise_equipments",
-        "CustomerDnsZone": "dns_zones",
+        # "CustomerDnsZone": "dns_zones",
         "Database": "databases",
         "DbHome": "db_homes",
         "DbNode": "db_nodes",
@@ -295,9 +295,12 @@ class OCIQuery(OCIConnection):
         return database_systems
 
     def dns_zones(self, dns_zones, resources):
+        dns_zones = [d for d in dns_zones if not d["is_protected"]]
         for dns_zone in dns_zones:
             # logger.info(f'DNS Zone {dns_zone}')
-            dns_zone['rrset'] = [r for r in resources.get("RRSet", []) if r["zone_id"] == dns_zone["id"]]
+            dns_zone['rrsets'] = [r for r in resources.get("RRSet", []) if r["zone_id"] == dns_zone["id"]]
+            for r in dns_zone['rrsets']:
+                r['rtype'] = r['items'][0]['rtype']
             if dns_zone["view_id"] is not None:
                 dns_zone['view'] = [r for r in resources.get("DnsView", []) if r["id"] == dns_zone["view_id"]]
         # logger.info(f'DNS Views: {resources.get("DnsView")}')
