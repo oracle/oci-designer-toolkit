@@ -105,6 +105,8 @@ class Instance extends OkitArtifact {
             delete this.block_storage_volume_ids
         }
     }
+    get subnet_ids() {return this.vnic_attachments.map((v) => v.subnet_id)}
+    get nsg_ids() {const nsg_ids = this.vnic_attachments.reduce((n, v) => [...n, ...v.nsg_ids], []); console.info('NSG Ids:', nsg_ids); return nsg_ids}
     /*
     ** Create Secondary Network (VNIC)
     */
