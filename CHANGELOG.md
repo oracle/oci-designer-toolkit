@@ -1,6 +1,14 @@
 # Release Notes
 
 
+## Version 0.45.0
+**Release Date**: 30th November 2022
+### Features
+1. DNS Zone Resource
+### Bug Fixes
+1. Clear saved cache file when refreshing cache.
+
+
 ## Version 0.44.0
 **Release Date**: 30th November 2022
 ### Features

@@ -2108,7 +2108,8 @@ function handleRefreshDropdownData(event) {
     event = event || window.event;
     event.stopPropagation()
     okitRegions.clearLocalStorage()
-    okitOciData.clearLocalStorage()
+    // okitOciData.clearLocalStorage()
+    okitOciData.clear()
     okitRegions.load(okitSettings.profile)
     okitOciData.load(okitSettings.profile, okitSettings.region)
 }

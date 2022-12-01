@@ -74,6 +74,7 @@ class PCAQuery(OCIConnection):
         "BootVolumeAttachment", 
         "Export",
         "Image", 
+        # "RRSet",
         # "UserGroupMembership",
         "VnicAttachment", 
         "VolumeAttachment", 
@@ -183,6 +184,11 @@ class PCAQuery(OCIConnection):
                 "method": self.route_tables, 
                 "client": "network", 
                 "array": "route_tables"
+                }, 
+            "RRSet": {
+                "method": self.rrsets, 
+                "client": "dns", 
+                "array": "rrsets"
                 }, 
             "SecurityList": {
                 "method": self.security_lists, 
@@ -362,6 +368,19 @@ class PCAQuery(OCIConnection):
         # Convert to Json object
         resources = self.toJson(results)
         self.ancillary_resources[array] = resources
+        return self.ancillary_resources[array]
+
+    def rrsets(self):
+        resource_map = self.resource_map["RRSet"]
+        client = self.clients[resource_map["client"]]
+        array = resource_map["array"]
+        resources = []
+        self.ancillary_resources[array] = []
+        for compartment_id in self.query_compartments:
+            results = oci.pagination.list_call_get_all_results(client.list_rrsets, compartment_id=compartment_id).data
+            # Convert to Json object
+            resources = self.toJson(results)
+            self.ancillary_resources[array].extend(resources)
         return self.ancillary_resources[array]
 
     def user_group_memberships(self):
