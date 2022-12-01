@@ -67,6 +67,7 @@ class Instance extends OkitArtifact {
         Object.defineProperty(this, 'vnics', {get: () => {return this.vnic_attachments}})
         Object.defineProperty(this, 'memory_in_gbs', {get: () => {return this.flex_shape ? this.shape_config.memory_in_gbs : okitOciData.getInstanceShape(this.shape) ? okitOciData.getInstanceShape(this.shape).memory_in_gbs : 0}})
         Object.defineProperty(this, 'ocpus', {get: () => {return this.flex_shape ? this.shape_config.ocpus : okitOciData.getInstanceShape(this.shape) ? okitOciData.getInstanceShape(this.shape).ocpus : 0}})
+        // Object.defineProperty(this, 'nsg_ids', {get: function() {const nsg_ids = this.vnic_attachments.reduce((n, v) => [...n, ...v.nsg_ids], []); console.info('NSG Ids:', nsg_ids); return nsg_ids}, enumerable: true });
     }
 
     /*
@@ -105,6 +106,8 @@ class Instance extends OkitArtifact {
             delete this.block_storage_volume_ids
         }
     }
+    get subnet_ids() {return this.vnic_attachments.map((v) => v.subnet_id)}
+    get nsg_ids() {const nsg_ids = this.vnic_attachments.reduce((n, v) => [...n, ...v.nsg_ids], []); console.info('NSG Ids:', nsg_ids); return nsg_ids}
     /*
     ** Create Secondary Network (VNIC)
     */
