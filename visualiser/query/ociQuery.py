@@ -116,7 +116,7 @@ class OCIQuery(OCIConnection):
         "CloudExadataInfrastructure": "exadata_cloud_infrastructures",
         "Cluster": "oke_clusters",
         "Cpe": "customer_premise_equipments",
-        # "CustomerDnsZone": "dns_zones",
+        "CustomerDnsZone": "dns_zones",
         "Database": "databases",
         "DbHome": "db_homes",
         "DbNode": "db_nodes",

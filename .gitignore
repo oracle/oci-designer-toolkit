@@ -59,3 +59,4 @@ test
 **/test/properties
 
 okitweb/static/okit/json/dropdown/profiles/*
+okitweb/static/okit/json/cache.json
