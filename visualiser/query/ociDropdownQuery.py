@@ -41,8 +41,8 @@ class OCIDropdownQuery(OCIConnection):
         "GiVersion",
         "Image",
         "ImageShapeCompatibility",
+        "Instance",
         "InstanceAgentAvailablePlugin",
-        # "Instance",
         "MySQLShape", 
         "MySQLVersion", 
         "MySQLConfiguration", 
@@ -114,21 +114,23 @@ class OCIDropdownQuery(OCIConnection):
                 logger.info("Processing Resource : {0!s:s}".format(resource_type))
                 # logger.info(jsonToFormattedString(resource_list))
                 if resource_type in map_keys:
-                    logger.info(f'Resource Type : {resource_type}')
-                    if resource_type == "Image":
+                    # logger.info(f'Resource Type : {resource_type}')
+                    if resource_type == "ClusterOptions":
+                        resource_list = self.cluster_options(resource_list, resources)                       
+                    elif resource_type == "DbSystemShape":
+                        resource_list = self.db_system_shapes(resource_list, resources)                       
+                    elif resource_type == "Image":
                         resource_list = self.images(resource_list, resources)
+                    elif resource_type == "InstanceAgentAvailablePlugin":
+                        resource_list = self.instance_agent_plugins(resource_list, resources)                       
+                    elif resource_type == "LoadBalancerShape":
+                        resource_list = self.load_balancer_shapes(resource_list, resources)                       
                     elif resource_type == "Shape":
                         resource_list = self.shapes(resource_list, resources)
                         response_json["compute_shapes"] = resource_list                       
                         response_json["shapes_list"] = [r["shape"] for r in resource_list]                       
-                    elif resource_type == "LoadBalancerShape":
-                        resource_list = self.load_balancer_shapes(resource_list, resources)                       
                     elif resource_type == "VolumeBackupPolicy":
                         resource_list = self.volume_backup_policies(resource_list, resources)                       
-                    elif resource_type == "ClusterOptions":
-                        resource_list = self.cluster_options(resource_list, resources)                       
-                    elif resource_type == "DbSystemShape":
-                        resource_list = self.db_system_shapes(resource_list, resources)                       
                     response_json[self.DISCOVER_OKIT_MAP[resource_type]] = resource_list
         return response_json
 
@@ -168,6 +170,12 @@ class OCIDropdownQuery(OCIConnection):
                 seen.append(shape['shape'])
         # logger.info(sorted([s["shape"] for s in deduplicated]))
         return sorted(deduplicated, key=lambda k: k['sort_key'])
+
+    def instance_agent_plugins(self, plugins, resources):
+        logger.info(f'Plugins {plugins}')
+        plugins = [p for p in plugins if p['status'] in ['RUNNING', 'STOPPED']]
+        logger.info(f'Plug-ins {plugins}')
+        return plugins
 
     def load_balancer_shapes(self, shapes, resources):
         for shape in shapes:

@@ -647,6 +647,43 @@ def dropdownData(profile, region):
     else:
         return 'Unknown Method', 500
 
+@bp.route('dropdown', methods=(['DELETE', 'GET']))
+def dropdownRemove():
+    if request.method == 'DELETE':
+        dropdown_dir = os.path.abspath(os.path.join(bp.static_folder, 'json', 'dropdown'))
+        profile_dropdown_dir = os.path.abspath(os.path.join(dropdown_dir, 'profiles'))
+        shutil.rmtree(profile_dropdown_dir)
+        return '', 200
+    elif request.method == 'GET':
+        dropdown_dir = os.path.abspath(os.path.join(bp.static_folder, 'json', 'dropdown'))
+        dropdown_file = os.path.abspath(os.path.join(dropdown_dir, 'dropdown.json'))
+        dropdown_json = readJsonFile(dropdown_file)
+        return dropdown_json
+    else:
+        return 'Unknown Method', 500
+
+
+@bp.route('cache', methods=(['GET', 'POST']))
+def okitCache():
+    dropdown_dir = os.path.abspath(os.path.join(bp.static_folder, 'json', 'dropdown'))
+    shipped_dropdown_file = os.path.abspath(os.path.join(dropdown_dir, 'dropdown.json'))
+    cache_file = os.path.abspath(os.path.join(bp.static_folder, 'json', 'cache.json'))
+    if request.method == 'GET':
+        cache = {}
+        logger.info('>>>>> Reading Cache')
+        if os.path.exists(cache_file):
+            cache = readJsonFile(cache_file)
+        if cache.get('default', None) is None:
+            cache['default'] = readJsonFile(shipped_dropdown_file)
+            cache['profile'] = {}
+        logger.debug(jsonToFormattedString(cache))
+        return cache
+    elif request.method == 'POST':
+        writeJsonFile(request.json, cache_file)
+        return
+    else:
+        return 'Unknown Method', 500
+
 
 @bp.route('config/sections', methods=(['GET']))
 def configSections():
