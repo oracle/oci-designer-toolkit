@@ -320,16 +320,17 @@ sudo bash -c "openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ${OKIT
 #####                        If HTTPS / 443 Is required                                                      #####
 ##### Copy GUnicorn Service File (HTTPS)                                                                     #####
 ##################################################################################################################
-sudo bash -c "cp -v ${OKIT_DIR}/containers/services/gunicorn.https.service /etc/systemd/system/gunicorn.service"
+sudo bash -c "cp -v ${OKIT_GITHUB_DIR}/oci-designer-toolkit/containers/services/gunicorn.https.service /etc/systemd/system/gunicorn.service"
 ##################################################################################################################
 #####                        If HTTP / 80 Is required                                                        #####
 ##### Copy GUnicorn Service File (HTTP)                                                                      #####
 ##################################################################################################################
-sudo bash -c "cp -v ${OKIT_DIR}/containers/services/gunicorn.http.service /etc/systemd/system/gunicorn.service"
+sudo bash -c "cp -v ${OKIT_GITHUB_DIR}/oci-designer-toolkit/containers/services/gunicorn.http.service /etc/systemd/system/gunicorn.service"
 
 # Enable Gunicorn Service
 sudo systemctl enable gunicorn.service
 sudo systemctl start gunicorn.service
+sudo systemctl status gunicorn.service
 ```
 
 ### MacOS
@@ -380,6 +381,7 @@ ${OKIT_DIR}/.venv/bin/gunicorn okitweb.wsgi:app --config ${OKIT_DIR}/config/guni
 ```
 
 ### Windows 10 / WSL (Ubuntu)
+This installation procedure assumes you have previously installed Windows Subsystem for Linux 2.
 
 #### Package Install
 ```bash

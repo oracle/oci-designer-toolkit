@@ -15,6 +15,9 @@ class DnsZone extends OkitArtifact {
         super(okitjson);
         // Configure default values
         this.compartment_id = data.parent_id;
+        this.zone_type = ''
+        this.scope = ''
+        this.rrsets = []
         /*
         ** TODO: Add Resource / Artefact specific parameters and default
         */
@@ -36,6 +39,24 @@ class DnsZone extends OkitArtifact {
     */
     static getArtifactReference() {
         return 'Dns Zone';
+    }
+
+    newRRSet() {
+        return {
+            rtype: '',
+            scope: '',
+            view_id: '',
+            items: []
+        }
+    }
+
+    newRecord() {
+        return {
+            domain: '',
+            rdata: '',
+            rtype: '',
+            ttl: ''
+        }
     }
 }
 /*
