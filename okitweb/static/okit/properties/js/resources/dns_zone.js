@@ -9,7 +9,7 @@ console.debug('Loaded Dns Zone Properties Javascript');
 */
 class DnsZoneProperties extends OkitResourceProperties {
     constructor (resource) {
-        const resource_tabs = []
+        const resource_tabs = ['Record Sets']
         super(resource, resource_tabs)
     }
 
