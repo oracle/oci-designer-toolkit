@@ -287,6 +287,7 @@ export OKIT_BRANCH='master'
 mkdir -p ${OKIT_DIR}
 mkdir -p ${OKIT_GITHUB_DIR}
 # Install Required Packages 
+sudo bash -c "yum update -y"
 sudo bash -c "yum install -y git"
 sudo bash -c "yum install -y openssl"
 sudo bash -c "yum install -y oci-utils"
