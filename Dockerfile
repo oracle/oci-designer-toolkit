@@ -75,6 +75,6 @@ RUN yum install -y \
  #&& ln -sv /okit/templates /okit/okitweb/static/okit/templates/user \
  && chmod a+x /root/bin/run-server.sh \
 # Install required python modules
- && pip3 install --no-cache-dir -r /github/oci-designer-toolkit/requirements.txt
+ && python3 -m pip install --no-cache-dir -r /github/oci-designer-toolkit/requirements.txt
 # Add entrypoint to automatically start webserver
 CMD ["run-server.sh"]

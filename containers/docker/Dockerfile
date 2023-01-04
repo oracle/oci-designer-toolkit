@@ -46,16 +46,17 @@ RUN yum install -y \
  && python3 -m pip install --upgrade pip \
 # Install required python modules
  && python3 -m pip install --no-cache-dir \
-        authlib \
-        flask \
-        gitpython \
-        git-url-parse \
-        gunicorn \
-        oci \
-        openpyxl \
-        python-magic \
-        pyyaml \
-        requests \
+        # authlib \
+        # flask \
+        # gitpython \
+        # git-url-parse \
+        # gunicorn \
+        # oci \
+        # openpyxl \
+        # python-magic \
+        # pyyaml \
+        # requests \
+        -r requirements.txt \
 # Create Workspace
  && mkdir -p /okit/{config,git,instance/git,instance/local,instance/templates/user,local,log,ssl,visualiser,okitweb,workspace,skeletons} \
 #  && mkdir -p /okit/okitweb/static/okit/templates \
