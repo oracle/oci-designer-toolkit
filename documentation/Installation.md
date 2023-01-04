@@ -293,12 +293,14 @@ sudo bash -c "yum install -y openssl"
 sudo bash -c "yum install -y oci-utils"
 # This is not required for OL8
 sudo bash -c "yum install -y python-oci-cli"
-# Install Required Python Modules
+# Update Python Modules
 sudo bash -c "python3 -m pip install -U pip"
 sudo bash -c "python3 -m pip install -U setuptools"
-sudo bash -c "python3 -m pip install --no-cache-dir authlib flask gitpython git-url-parse gunicorn oci openpyxl python-magic pyyaml requests "
 # Clone OKIT
 git clone -b ${OKIT_BRANCH} https://github.com/oracle/oci-designer-toolkit.git ${OKIT_GITHUB_DIR}/oci-designer-toolkit
+# Install OKIT Required python modules
+sudo bash -c "python3 -m pip install --no-cache-dir -r ${OKIT_GITHUB_DIR}/oci-designer-toolkit/requirements.txt"
+# Create OKIT Required Directories
 mkdir -p ${OKIT_DIR}/{log,instance/git,instance/local,instance/templates/user,workspace,ssl}
 ln -sv ${OKIT_GITHUB_DIR}/oci-designer-toolkit/config ${OKIT_DIR}/config
 ln -sv ${OKIT_GITHUB_DIR}/oci-designer-toolkit/okitweb ${OKIT_DIR}/okitweb
@@ -355,12 +357,13 @@ mkdir -p ${OKIT_GITHUB_DIR}
 python3 -m venv ${OKIT_DIR}/.venv
 # Activate Virtual Environment
 source ${OKIT_DIR}/.venv/bin/activate
-# Update python & Install modules
+# Update python modules
 python3 -m pip install -U pip
 python3 -m pip install -U setuptools
-python3 -m pip install --no-cache-dir authlib flask gitpython git-url-parse gunicorn oci openpyxl python-magic pyyaml requests 
 # Clone OKIT 
 git clone -b ${OKIT_BRANCH} https://github.com/oracle/oci-designer-toolkit.git ${OKIT_GITHUB_DIR}/oci-designer-toolkit
+# Install OKIT Required python modules
+python3 -m pip install --no-cache-dir -r ${OKIT_GITHUB_DIR}/oci-designer-toolkit/requirements.txt
 # Create OKIT Required Directories
 mkdir -p ${OKIT_DIR}/{log,instance/git,instance/local,instance/templates/user,workspace,ssl}
 # Link Directories
@@ -403,12 +406,13 @@ mkdir -p ${OKIT_GITHUB_DIR}
 python3 -m venv ${OKIT_DIR}/.venv
 # Activate Virtual Environment
 source ${OKIT_DIR}/.venv/bin/activate
-# Update python & Install modules
+# Update python modules
 python3 -m pip install -U pip
 python3 -m pip install -U setuptools
-python3 -m pip install --no-cache-dir authlib flask gitpython git-url-parse gunicorn oci openpyxl python-magic pyyaml requests 
 # Clone OKIT 
 git clone -b ${OKIT_BRANCH} https://github.com/oracle/oci-designer-toolkit.git ${OKIT_GITHUB_DIR}/oci-designer-toolkit
+# Install OKIT Required python modules
+python3 -m pip install --no-cache-dir -r ${OKIT_GITHUB_DIR}/oci-designer-toolkit/requirements.txt 
 # Create OKIT Required Directories
 mkdir -p ${OKIT_DIR}/{git,local,log,instance/git,instance/local,instance/templates/user,workspace,ssl}
 # Link Directories
