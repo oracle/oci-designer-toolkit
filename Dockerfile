@@ -46,17 +46,17 @@ RUN yum install -y \
 # Upgrade pip
  && python3 -m pip install --upgrade pip \
 # Install required python modules
- && pip3 install --no-cache-dir \
-        authlib \
-        flask \
-        gitpython \
-        git-url-parse \
-        gunicorn \
-        oci \
-        openpyxl \
-        python-magic \
-        pyyaml \
-        requests \
+#  && pip3 install --no-cache-dir \
+#         authlib \
+#         flask \
+#         gitpython \
+#         git-url-parse \
+#         gunicorn \
+#         oci \
+#         openpyxl \
+#         python-magic \
+#         pyyaml \
+#         requests \
 # Create Workspace
  && mkdir -p /github \
  && echo "Branch: $BRANCH" \
@@ -73,6 +73,8 @@ RUN yum install -y \
  && ln -sv /github/oci-designer-toolkit/okitweb/static/okit/templates/reference_architecture /okit/instance/templates/reference_architecture \
  #&& mkdir -p /okit/okitweb/static/okit/templates \
  #&& ln -sv /okit/templates /okit/okitweb/static/okit/templates/user \
- && chmod a+x /root/bin/run-server.sh
+ && chmod a+x /root/bin/run-server.sh \
+# Install required python modules
+ && pip3 install --no-cache-dir -r /github/oci-designer-toolkit/requirements.txt
 # Add entrypoint to automatically start webserver
 CMD ["run-server.sh"]

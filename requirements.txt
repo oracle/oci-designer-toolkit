@@ -1,6 +1,10 @@
 authlib>=0.15.3
 flask>=1.1.2
+gitpython
+git-url-parse
 gunicorn>=20.0.4
+oci
+openpyxl
 python-magic>=0.4.22
 pyyaml>=5.4.1
 requests>=2.25.1
