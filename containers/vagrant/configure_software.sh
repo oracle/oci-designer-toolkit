@@ -47,12 +47,13 @@ chmod 777 ${OKIT_GITHUB_DIR}
 python3 -m venv ${OKIT_DIR}/.venv
 # Activate Virtual Environment
 source ${OKIT_DIR}/.venv/bin/activate
-# Update python & Install modules
+# Update python modules
 python3 -m pip install -U pip
 python3 -m pip install -U setuptools
-python3 -m pip install --no-cache-dir authlib flask gitpython git-url-parse gunicorn oci openpyxl python-magic pyyaml requests
 # Clone OKIT 
 git clone -b ${OKIT_BRANCH} https://github.com/oracle/oci-designer-toolkit.git ${OKIT_GITHUB_DIR}/oci-designer-toolkit
+# Install OKIT Required python modules
+python3 -m pip install --no-cache-dir -r ${OKIT_GITHUB_DIR}/oci-designer-toolkit/requirements.txt
 # Create OKIT Required Directories
 mkdir -p ${OKIT_DIR}/{log,instance/git,instance/local,instance/templates/user,workspace,ssl}
 # Link Directories

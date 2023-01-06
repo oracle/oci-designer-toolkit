@@ -98,6 +98,7 @@ class OCIQuery(OCIConnection):
         "User",
         "UserGroupMembership",
         "Vault",
+        "VaultSecret",
         "Vcn",
         "VisualBuilderInstance",
         "VmCluster",
@@ -152,6 +153,7 @@ class OCIQuery(OCIConnection):
         "Subnet": "subnets",
         "User": "users",
         "Vault": "vaults",
+        "VaultSecret": "vault_secrets",
         "VisualBuilderInstance": "Visual_builder_instances",
         "Vcn": "virtual_cloud_networks",
         "VmCluster": "vm_clusters",
@@ -268,11 +270,17 @@ class OCIQuery(OCIConnection):
                         resource_list = self.route_tables(resource_list, resources)
                     elif resource_type == "ServiceGateway":
                         resource_list = self.service_gateways(resource_list, resources)
+                    elif resource_type == "VaultSecret":
+                        resource_list = self.vault_secrets(resource_list, resources)
                     # elif resource_type == "AnalyticsInstance":
                     #     resource_list = self.analytics_instances(resource_list, resources)
                     # Check Life Cycle State
                     # logger.info(f'Processing {resource_type} : {resource_list}')
                     response_json[self.DISCOVERY_OKIT_MAP[resource_type]] = [self.addResourceName(r) for r in resource_list if "lifecycle_state" not in r or r["lifecycle_state"] in self.VALID_LIFECYCLE_STATES]
+
+        policies = resources.get("NetworkFirewallPolicy", [])
+        logger.info(f'Policies {jsonToFormattedString(policies)}')
+
         return response_json
     
     def addResourceName(self,resource):
@@ -415,7 +423,7 @@ class OCIQuery(OCIConnection):
 
     def network_firewalls(self, firewalls, resources):
         policies = resources.get("NetworkFirewallPolicy", [])
-        logger.info(f'Policies {jsonToFormattedString(policies)}')
+        # logger.info(f'Policies {jsonToFormattedString(policies)}')
         for firewall in firewalls:
             if firewall["network_firewall_policy_id"] != '':
                 firewall["network_firewall_policy"] = next(iter([p for p in policies if p["id"] == firewall["network_firewall_policy_id"]]), None)
@@ -494,6 +502,11 @@ class OCIQuery(OCIConnection):
                     # At the moment we only have 2 optiona All or OCI Object Storage hence we just need the first 3 characters
                     gateway['service_name'] = service_elements[0]
         return gateways
+
+    def vault_secrets(self, secrets, resources):
+        for secret in secrets:
+            secret['display_name'] = secret['secret_name']
+        return secrets
 
     def ip_to_instance(self, ip, resources):
         return

@@ -4,7 +4,9 @@
 ## Version 0.45.0
 **Release Date**: 30th November 2022
 ### Features
-1. DNS Zone Resource
+1. Update Network Firewall to use fixed Terraform Resource.
+2. Add Vault Secret Resource.
+3. Modify Muild process to use resourses.txt.
 ### Bug Fixes
 1. Clear saved cache file when refreshing cache.
 
