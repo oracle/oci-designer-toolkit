@@ -286,7 +286,12 @@
                 {
                     "title": "Vault",
                     "targets": ["oci", "freetier"],
-                    "svg": "KeyVault.svg"
+                    "svg": "Vault.svg"
+                },
+                {
+                    "title": "Vault Secret",
+                    "targets": ["oci", "freetier"],
+                    "svg": "VaultSecret.svg"
                 },
                 {
                     "title": "Key",
