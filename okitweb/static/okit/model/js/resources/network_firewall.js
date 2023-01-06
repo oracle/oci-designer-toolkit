@@ -36,7 +36,22 @@ class NetworkFirewall extends OkitArtifact {
             ip_address_lists: {},
             url_lists: {},
             security_rules: [],
-            decryption_rules: []
+            decryption_rules: [],
+            mapped_secrets: {},
+            decryption_profiles: {}
+        }
+    }
+    newIPAddressList(count=0) {
+        return {
+            name: `${this.display_name} IPList${count}`,
+            ip_addresses: []
+        }
+    }
+    newUrlList(count=0) {
+        return {
+            name: `${this.display_name} URLList${count}`,
+            type: 'SIMPLE',
+            urls: []
         }
     }
     newSecurityRule() {
@@ -44,6 +59,28 @@ class NetworkFirewall extends OkitArtifact {
     }
     newDecryptionRule() {
         return {}
+    }
+    newDecryptionProfile() {
+        return {
+            is_out_of_capacity_blocked: false,
+            is_unsupported_cipher_blocked: true,
+            is_unsupported_version_blocked: true,
+            type: 'SSL_FORWARD_PROXY',            
+            is_expired_certificate_blocked: true,
+            is_untrusted_issuer_blocked: true,
+            is_unknown_revocation_status_blocked: true,
+            is_revocation_status_timeout_blocked: false,
+            are_certificate_extensions_restricted: true,
+            is_auto_include_alt_name: true,
+        }
+    }
+    newMappedSecret() {
+        return {
+            source: 'OCI_VAULT',
+            type: 'SSL_FORWARD_PROXY',
+            vault_secret_id: '',
+            version_number: 1    
+        }
     }
 
     /*

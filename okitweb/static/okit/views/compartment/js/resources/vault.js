@@ -29,7 +29,7 @@ class VaultView extends OkitContainerCompartmentArtefactView {
     ** Child Artifact Functions
      */
     getContainerArtifacts() {
-        return [Key.getArtifactReference()];
+        return [Key.getArtifactReference(), VaultSecret.getArtifactReference()];
     }
     /*
     ** Static Functionality
