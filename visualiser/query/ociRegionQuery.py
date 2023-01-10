@@ -37,7 +37,7 @@ class OCIRegionQuery(OCIConnection):
         pass
 
     def executeQuery(self, **kwargs):
-        logger.info('Querying Regions' + str(self.config))
+        logger.info('>>>>> Querying Regions' + str(self.config))
         if self.instance_principal:
             self.config['tenancy'] = self.getTenancy()
         # if "cert-bundle" in self.config:
@@ -48,6 +48,7 @@ class OCIRegionQuery(OCIConnection):
 
         discovery_client = OciResourceDiscoveryClient(self.config, signer=self.signer, cert_bundle=self.cert_bundle, include_resource_types=self.SUPPORTED_RESOURCES)
         regions = self.response_to_json(discovery_client.regions)
+        logger.info(f'>>>>> Queried Regions {regions}')
         for region in regions:
             # logger.info(jsonToFormattedString(region))
             region["id"] = region["region_name"]

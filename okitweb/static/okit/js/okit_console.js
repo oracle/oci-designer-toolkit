@@ -120,7 +120,7 @@ function handleConfigChanged(event) {
     console_header_region_select.append($('<option>').attr('value', '').text('Retrieving....'))
     okitRegions.clearLocalStorage()
     okitRegions.load(okitSettings.profile)
-    okitOciData.load(okitSettings.profile, okitSettings.region)
+    // okitOciData.load(okitSettings.profile, okitSettings.region)
     setOCILink()
 }
 
