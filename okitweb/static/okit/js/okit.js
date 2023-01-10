@@ -529,21 +529,46 @@ class OkitRegions {
             const start = new Date().getTime()
 
             $.getJSON('oci/subscription', {
-                profile: profile
+                profile: profile,
+                cache: false
             }).done((resp) => {
                 const response = resp
                 const end = new Date().getTime()
                 console.info('Region Subscription for', profile, 'took', end - start, 'ms')
                 console.info('Region Subscriptions', typeof(response), response)
+                $.getJSON(`oci/regions/${profile}`, {
+                    profile: profile,
+                    cache: false
+                }).done((resp) => {
+                    const end = new Date().getTime()
+                    console.info('Load Regions took', end - start, 'ms')
+                    self.regions = resp
+                    self.storeLocal(profile);
+                    if (self.loaded_callback) self.loaded_callback();
+                })
+            }).fail((xhr, status, error) => {
+                console.info(`Subscription Test Failed Connected to a PCA ${profile}`)
+                console.warn('Status : ' + status)
+                console.warn('Error : ' + error)
+                $.getJSON(`pca/regions`, {
+                    profile: profile,
+                    cache: false
+                }).done((resp) => {
+                    const end = new Date().getTime()
+                    console.info('Load Regions took', end - start, 'ms')
+                    self.regions = resp
+                    self.storeLocal(profile);
+                    if (self.loaded_callback) self.loaded_callback();
+                })
             })
+            // $.getJSON(`oci/regions/${profile}`, (resp) => {
+            //     const end = new Date().getTime()
+            //     console.info('Load Regions took', end - start, 'ms')
+            //     self.regions = resp
+            //     self.storeLocal(profile);
+            //     if (self.loaded_callback) self.loaded_callback();
+            // });
 
-            $.getJSON(`oci/regions/${profile}`, (resp) => {
-                const end = new Date().getTime()
-                console.info('Load Regions took', end - start, 'ms')
-                self.regions = resp
-                self.storeLocal(profile);
-                if (self.loaded_callback) self.loaded_callback();
-            });
         } else if (self.loaded_callback) self.loaded_callback();
     }
 
