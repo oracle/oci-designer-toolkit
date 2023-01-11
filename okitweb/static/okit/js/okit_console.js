@@ -121,7 +121,7 @@ function handleConfigChanged(event) {
     okitRegions.clearLocalStorage()
     okitRegions.load(okitSettings.profile)
     // okitOciData.load(okitSettings.profile, okitSettings.region)
-    setOCILink()
+    // setOCILink()
 }
 
 function loadHeaderRegionsDropDown() {
@@ -136,13 +136,14 @@ function loadHeaderRegionsDropDown() {
         okitSettings.save()
     }
     console.info('Region:', okitSettings.region)
-    console_header_region_select.val(okitSettings.region)
-    setOCILink()
+    console_header_region_select.val(okitSettings.region).change()
+    // okitOciData.load(okitSettings.profile, okitSettings.region)
+    // setOCILink()
 }
 
 function handleRegionChanged(event) {
     event = event || window.event;
-    event.stopPropagation()
+    if (event) event.stopPropagation()
     okitSettings.region = $('#console_header_region_select').val()
     okitSettings.save()
     okitOciData.load(okitSettings.profile, okitSettings.region)
