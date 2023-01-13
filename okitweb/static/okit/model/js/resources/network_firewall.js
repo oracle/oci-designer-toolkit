@@ -55,10 +55,29 @@ class NetworkFirewall extends OkitArtifact {
         }
     }
     newSecurityRule() {
-        return {}
+        return {
+            name: `${this.display_name} SecurityRule`,
+            action: 'DROP',
+            condition: {
+                applications: [],
+                destinations: [],
+                sources: [],
+                urls: []        
+            },
+            inspection: ''
+        }
     }
     newDecryptionRule() {
-        return {}
+        return {
+            name: `${this.display_name} DecryptionRule`,
+            action: 'DROP',
+            condition: {
+                destinations: [],
+                sources: [],
+            },
+            decryption_profile: '',
+            secret: ''
+        }
     }
     newDecryptionProfile() {
         return {

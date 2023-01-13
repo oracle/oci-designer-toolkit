@@ -13,12 +13,12 @@ resource "oci_network_firewall_network_firewall_policy" "{{ network_firewall_pol
 {% if network_firewall_policy.decryption_profiles is defined %}
     {% for key, value in network_firewall_policy.decryption_profiles.items() %}
     decryption_profiles {
+        key = "{{ key }}"
         #Required
         is_out_of_capacity_blocked = {{ value.is_out_of_capacity_blocked | safe | lower }}
         is_unsupported_cipher_blocked = {{ value.is_unsupported_cipher_blocked | safe | lower }}
         is_unsupported_version_blocked = {{ value.is_unsupported_version_blocked | safe | lower }}
-        type = {{value.type | safe}}
-        key = "{{key}}"
+        type = {{ value.type | safe }}
         {% if "SSL_FORWARD_PROXY" in value.type| safe %}
         #Optional
         are_certificate_extensions_restricted = {{ value.are_certificate_extensions_restricted | safe | lower }}
@@ -51,20 +51,23 @@ resource "oci_network_firewall_network_firewall_policy" "{{ network_firewall_pol
 {% if network_firewall_policy.ip_address_lists is defined %}
     {% for key, value in network_firewall_policy.ip_address_lists.items() %}
     ip_address_lists {
-        ip_address_list_name = "{{key}}"
+        ip_address_list_name = "{{ key }}"
         ip_address_list_value = [{% for ip in value %}"{{ ip }}"{% if not loop.last %},{% endif %}{% endfor %}]
     }
     {% endfor %}
 {% endif %}
-{# {% if network_firewall_policy.mapped_secrets is defined %}
+{% if network_firewall_policy.mapped_secrets is defined %}
+    {% for key, value in network_firewall_policy.mapped_secrets.items() %}
     mapped_secrets {
+        key = "{{ key }}"
         #Required
-        source = var.network_firewall_policy_mapped_secrets_source
-        type = var.network_firewall_policy_mapped_secrets_type
-        vault_secret_id = oci_vault_secret.test_secret.id
-        version_number = var.network_firewall_policy_mapped_secrets_version_number
+        source = {{ value.source | safe }}
+        type = {{ value.type | safe }}
+        vault_secret_id = {{ value.vault_secret_id }}
+        version_number = {{ value.version_number | safe }}
     }
-{% endif %} #}
+    {% endfor %}
+{% endif %}
 {# {% if network_firewall_policy.security_rules is defined %
     security_rules {
         #Required

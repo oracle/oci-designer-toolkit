@@ -47,6 +47,12 @@ OkitJsonView.prototype.dropVaultSecretView = function(target) {
         view_artefact.artefact.compartment_id = target.compartment_id;
     }
     view_artefact.recalculate_dimensions = true;
+    this.okitjson.variables_schema.variables.push({
+        group: 'Undefined',
+        name: view_artefact.artefact.secret_content.content.substring(4),
+        default: '',
+        description: ''
+    })
     return view_artefact;
 }
 OkitJsonView.prototype.newVaultSecret = function(obj) {

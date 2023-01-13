@@ -6,7 +6,7 @@
 ### Features
 1. Update Network Firewall to use fixed Terraform Resource.
 2. Add Vault Secret Resource.
-3. Modify Muild process to use resourses.txt.
+3. Modify Build process to use resourses.txt.
 ### Bug Fixes
 1. Clear saved cache file when refreshing cache.
 

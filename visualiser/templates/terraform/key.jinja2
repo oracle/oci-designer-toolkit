@@ -3,6 +3,7 @@
 data "oci_kms_keys" "{{ resource_name }}" {
     #Required
     compartment_id = {{ compartment_id }}
+    management_endpoint = local.{{ vault_id_resource_name }}_management_endpoint
     filter {
         name = "id"
         values = [{{ ocid | safe }}]
