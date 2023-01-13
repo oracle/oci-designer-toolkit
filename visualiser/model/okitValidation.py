@@ -71,6 +71,7 @@ class OCIJsonValidator(object):
         self.validateServiceGateways()
         self.validateSubnets()
         self.validateUsers()
+        self.validateVaultSecrets()
         self.validateVirtualCloudNetworks()
         return
 
@@ -972,6 +973,21 @@ class OCIJsonValidator(object):
                     'artefact': resource['display_name'],
                     'message': 'User Description must be specified.',
                     'element': 'description'
+                }
+                self.results['errors'].append(error)
+
+    # Secrets
+    def validateVaultSecrets(self):
+        for resource in self.okit_json.get('vault_secrets', []):
+            logger.info('Validating {!s}'.format(resource['display_name']))
+            if resource['key_id'] == '':
+                self.valid = False
+                error = {
+                    'id': resource['id'],
+                    'type': 'Vault Secret',
+                    'artefact': resource['display_name'],
+                    'message': 'Encryption Key must be specified.',
+                    'element': 'key_id'
                 }
                 self.results['errors'].append(error)
 
