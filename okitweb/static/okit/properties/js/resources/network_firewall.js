@@ -93,14 +93,14 @@ class NetworkFirewallProperties extends OkitResourceProperties {
         const decryption_rules = this.createDetailsSection('Decryption Rules', `${this.id}_decryption_rules_details`)
         this.append(this.policy_div, decryption_rules.details)
         this.decryption_rules_div = decryption_rules.div
-        const decryption_rules_table = this.createMapTable('Rules', `${this.id}_decryption_rules`, '', () => this.addDecryptionRule())
+        const decryption_rules_table = this.createArrayTable('Rules', `${this.id}_decryption_rules`, '', () => this.addDecryptionRule())
         this.decryption_rules_tbody = decryption_rules_table.tbody
         this.append(decryption_rules.div, decryption_rules_table.table)
         // Security Rules
         const security_rules = this.createDetailsSection('Security Rules', `${this.id}_security_rules_details`)
         this.append(this.policy_div, security_rules.details)
         this.security_rules_div = security_rules.div
-        const security_rules_table = this.createMapTable('Rules', `${this.id}_security_rules`, '', () => this.addDecryptionRule())
+        const security_rules_table = this.createArrayTable('Rules', `${this.id}_security_rules`, '', () => this.addSecurityRule())
         this.security_rules_tbody = security_rules_table.tbody
         this.append(security_rules.div, security_rules_table.table)
     }
@@ -129,6 +129,10 @@ class NetworkFirewallProperties extends OkitResourceProperties {
         this.loadDecryptionProfiles()
         // Mapped Secrets
         this.loadMappedSecrets()
+        // Security Rules
+        this.loadSecurityRules()
+        // Decryption Rules
+        this.loadDecryptionRules()
     }
     // IP Address Lists
     loadIPAddressLists() {
@@ -314,7 +318,7 @@ class NetworkFirewallProperties extends OkitResourceProperties {
         this.append(rt.tbody, mstype.row)
         mstype.input.property('value', value.type)
         // Secret
-        const vault_secret_id = this.createInput('select', 'Secret', `${id}_vault_secret_id`, idx, (d, i, n) => {values.vault_secret_id = n[i].value; console.info('Network Entity Id', values.vault_secret_id); this.showRuleRows(rule, id, idx)})
+        const vault_secret_id = this.createInput('select', 'Secret', `${id}_vault_secret_id`, idx, (d, i, n) => {value.vault_secret_id = n[i].value})
         this.append(rt.tbody, vault_secret_id.row)
         this.loadSelect(vault_secret_id.input, 'vault_secrets', true)
         vault_secret_id.input.property('value', value.vault_secret_id)
@@ -329,5 +333,112 @@ class NetworkFirewallProperties extends OkitResourceProperties {
     deleteMappedSecret(id, idx, key) {
         delete this.resource.network_firewall_policy.mapped_secrets[key]
         this.loadMappedSecrets()
+    }
+
+    // Security Rules
+    loadSecurityRules() {
+        this.security_rules_tbody.selectAll('*').remove()
+        this.resource.network_firewall_policy.security_rules.forEach((e, i) => this.addSecurityRuleHtml(e, i+1))
+        this.security_rule_idx = this.resource.network_firewall_policy.security_rules.length;
+    }
+    addSecurityRuleHtml(rule, idx) {
+        const id = `${this.id}_security_rule${idx}`
+        const delete_row = this.createDeleteRow(id, idx, () => this.deleteSecurityRule(id, idx, rule))
+        this.append(this.security_rules_tbody, delete_row.row)
+        const rule_details = this.createDetailsSection('Rule', `${id}_details`, idx)
+        this.append(delete_row.div, rule_details.details)
+        const rule_table = this.createTable('', `${id}_table`, '')
+        this.append(rule_details.div, rule_table.table)
+        // Name
+        const name = this.createInput('text', 'Name', `${id}_name`, '', (d, i, n) => rule.name = n[i].value)
+        this.append(rule_table.tbody, name.row)
+        name.input.property('value', rule.name)
+        // Action
+        const action_data = {
+            options: {
+                ALLOW: 'Allow',
+                DROP: 'Drop',
+                INSPECT: 'Inspect',
+                REJECT: 'Reject'
+            }
+        }
+        const action = this.createInput('select', 'Action', `${id}_action${idx}`, '', (d, i, n) => {rule.action = n[i].value; this.showInspectionRows(rule, id, idx)}, action_data)
+        this.append(rule_table.tbody, action.row)
+        action.input.property('value', rule.action)
+        // Inspection
+        const inspection_data = {
+            options: {
+                INTRUSION_DETECTION: 'Intrusion Detection',
+                INTRUSION_PREVENTION: 'Intrusion Prevention'
+            }
+        }
+        const inspection = this.createInput('select', 'Inspection', `${id}_inspection${idx}`, '', (d, i, n) => rule.inspection = n[i].value, inspection_data)
+        this.append(rule_table.tbody, inspection.row)
+        inspection.input.property('value', rule.inspection)
+
+        this.showInspectionRows(rule, id, idx)
+    }
+    addSecurityRule() {
+        const rule = this.resource.newSecurityRule();
+        this.resource.network_firewall_policy.security_rules.push(rule);
+        this.security_rule_idx += 1
+        this.addSecurityRuleHtml(rule, this.security_rule_idx);
+    }
+    deleteSecurityRule(id, idx, rule) {
+        this.resource.network_firewall_policy.security_rules = this.resource.network_firewall_policy.security_rules.filter((e) => e !== rule)
+        $(`#${id}${idx}_row`).remove()
+    }
+    showInspectionRows(value, id, idx) {
+        console.info(`Action: ${value.action} Id: ${id}_inspection ${idx}`)
+        if (value.action === 'INSPECT') {
+            this.showProperty(`${id}_inspection`, idx)
+            if (!value.inspection || value.inspection === '') value.inspection ='INTRUSION_DETECTION'
+            this.setPropertyValue(`${id}_inspection`, idx, value.inspection)
+        }
+        else {
+            this.hideProperty(`${id}_inspection`, idx)
+            value.inspection = ''
+        }
+    }
+
+    // Decryption Rules
+    loadDecryptionRules() {
+        this.decryption_rules_tbody.selectAll('*').remove()
+        this.resource.network_firewall_policy.decryption_rules.forEach((e, i) => this.addDecryptionRuleHtml(e, i+1))
+        this.decryption_rule_idx = this.resource.network_firewall_policy.decryption_rules.length;
+    }
+    addDecryptionRuleHtml(rule, idx) {
+        const id = `${this.id}_decryption_rule${idx}`
+        const delete_row = this.createDeleteRow(id, idx, () => this.deleteDecryptionRule(id, idx, rule))
+        this.append(this.decryption_rules_tbody, delete_row.row)
+        const rule_details = this.createDetailsSection('Rule', `${id}_details`, idx)
+        this.append(delete_row.div, rule_details.details)
+        const rule_table = this.createTable('', `${id}_table`, '')
+        this.append(rule_details.div, rule_table.table)
+        // Name
+        const name = this.createInput('text', 'Name', `${id}_name`, '', (d, i, n) => rule.name = n[i].value)
+        this.append(rule_table.tbody, name.row)
+        name.input.property('value', rule.name)
+        // Action
+        const action_data = {
+            options: {
+                DECRYPT: 'Decrypt',
+                NO_DECRYPT: 'Do not Decrypt'
+            }
+        }
+        const action = this.createInput('select', 'Action', `${id}_action${idx}`, '', (d, i, n) => {rule.action = n[i].value; this.showInspectionRows(rule, id, idx)}, action_data)
+        this.append(rule_table.tbody, action.row)
+        action.input.property('value', rule.action)
+
+    }
+    addDecryptionRule() {
+        const rule = this.resource.newDecryptionRule();
+        this.resource.network_firewall_policy.decryption_rules.push(rule);
+        this.decryption_rule_idx += 1
+        this.addDecryptionRuleHtml(rule, this.decryption_rule_idx);
+    }
+    deleteDecryptionRule(id, idx, rule) {
+        this.resource.network_firewall_policy.decryption_rules = this.resource.network_firewall_policy.decryption_rules.filter((e) => e !== rule)
+        $(`#${id}${idx}_row`).remove()
     }
 }
