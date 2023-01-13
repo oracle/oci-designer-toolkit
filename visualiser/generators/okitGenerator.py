@@ -178,6 +178,7 @@ class OCIGenerator(object):
         "keys": "identity",
         "users": "identity",
         "vaults": "identity",
+        "vault_secrets": "identity",
 
         "dhcp_options": "networking",
         "drg_attachments": "networking",

@@ -11,6 +11,7 @@ data "oci_kms_vaults" "{{ resource_name }}" {
 
 locals {
     {{ resource_name }}_id              = {{ ocid | safe }}
+    {{ resource_name }}_management_endpoint = {{ management_endpoint | safe }}
 }
 {% else %}
 # ------ Create Vault
