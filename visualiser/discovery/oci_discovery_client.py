@@ -64,6 +64,8 @@ class OciResourceDiscoveryClient(object):
         "NoSQLIndexDetails": (oci.nosql.NosqlClient, "get_index"), # get full details
         # oci.os_management.OsManagementClient
         "OsmsManagedInstance": (oci.os_management.OsManagementClient, "get_managed_instance"),
+        # oci.vault.VaultsClient
+        "VaultSecretDetails": (oci.vault.VaultsClient, "get_secret"), # get full details as list_secrets does not include all attributes
     }
 
     # map suppoted resources types to the OCI SDK client type and its "list"
@@ -950,6 +952,10 @@ class OciResourceDiscoveryClient(object):
                         managed_instance_id=item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, managed_instance_id=managed_instance_id)
                         futures_list.update({(region, resource_type, None, managed_instance_id):future})
+                    elif resource_type == "VaultSecretDetails" and method_name == "get_secret":
+                        secret_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, secret_id=secret_id)
+                        futures_list.update({(region, resource_type, compartment_id, secret_id):future})
                     elif resource_type == "Vnic" and method_name == "get_vnic":
                         vnic_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, vnic_id=vnic_id)
@@ -1448,6 +1454,7 @@ class OciResourceDiscoveryClient(object):
                         "NetworkFirewallDetails", "NetworkFirewallPolicyDetails",
                         "NoSQLIndexDetails", "NoSQLTableDetails",
                         "OsmsManagedInstance",
+                        "VaultSecretDetails",
                     ]:
                         # if the response is from a get request, wrap it in a list
                         if type(result) is not list:
@@ -1848,6 +1855,9 @@ class OciResourceDiscoveryClient(object):
             if "NoSQLTable" in resources_by_region[region]:
                 for resource in resources_by_region[region]["NoSQLTable"]:
                     regional_resource_requests.add(("NoSQLTableDetails", None, resource.id))
+            if "VaultSecret" in resources_by_region[region]:
+                for resource in resources_by_region[region]["VaultSecret"]:
+                    regional_resource_requests.add(("VaultSecretDetails", resource.compartment_id, resource.id))
             extra_resource_requests.update({region:regional_resource_requests})
 
         second_pass_resources_by_region = self.get_resources(extra_resource_requests)
@@ -1904,6 +1914,7 @@ class OciResourceDiscoveryClient(object):
             self.replace_resource_details(resources_by_region, region, "NoSQLTable", "NoSQLTableDetails")
             self.replace_resource_details(resources_by_region, region, "NetworkFirewall", "NetworkFirewallDetails")
             self.replace_resource_details(resources_by_region, region, "NetworkFirewallPolicy", "NetworkFirewallPolicyDetails")
+            self.replace_resource_details(resources_by_region, region, "VaultSecret", "VaultSecretDetails")
 
         if len(resources_by_region) == 0:
             logger.warn("Resource discovery results are empty")  
