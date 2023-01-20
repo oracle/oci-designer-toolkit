@@ -54,7 +54,7 @@ class PCARegionQuery(OCIConnection):
         self.parents = {}
 
     def connect(self):
-        logger.info(f'<<< Connecting PCA Clients >>> {self.cert_bundle}')
+        logger.info(f'<<< PCARegionQuery Connecting PCA Clients >>> {self.cert_bundle}')
         self.clients = {
             "identity": oci.identity.IdentityClient(config=self.config, signer=self.signer)
         }
@@ -63,7 +63,7 @@ class PCARegionQuery(OCIConnection):
                 client.base_client.session.verify = self.cert_bundle
 
     def executeQuery(self, **kwargs):
-        logger.info(f'>>>>>>>>> PCA Querying - Regions')
+        logger.info(f'>>>>>>>>> PCARegionQuery PCA Querying - Regions')
         if self.instance_principal:
             self.config['tenancy'] = self.getTenancy()
         regions = [self.config['region']]
