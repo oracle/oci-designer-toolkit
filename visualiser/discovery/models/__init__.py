@@ -6,6 +6,7 @@ from .core import ExtendedSecurityRule, ExtendedNetworkSecurityGroupVnic
 from .dns import ExtendedRRSet
 from .file_storage import ExtendedExportSummary
 from .identity import ExtendedTagSummary
+from .instance_agent import ExtendedAvailablePluginSummary
 from .instance_agent import ExtendedInstanceAgentPluginSummary
 from .object_storage import ExtendedPreauthenticatedRequestSummary
 from .mysql import ExtendedMySQLBackup, ExtendedMySQLBackupSummary
@@ -14,6 +15,7 @@ from .database import ExtendedDbNodeSummary
 from .virtual_network import ExtendedDrgRouteDistributionStatement, ExtendedDrgRouteRule, ExtendedVirtualCircuitBandwidthShape
 
 __all__ = [
+  "ExtendedAvailablePluginSummary",
   "ExtendedAutoScalingPolicySummary",
   "ExtendedDbNodeSummary",
   "ExtendedDrgRouteDistributionStatement",

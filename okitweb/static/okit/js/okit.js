@@ -150,6 +150,7 @@ class OkitOCIData {
         if (profile && !cache.hasOwnProperty(profile)) cache[profile] = {}
         if (profile) cache[profile][region] = this.dropdown_data
         localStorage.setItem(this.key, JSON.stringify(cache))
+        console.info('Stored Local Storage', this.key, localStorage)
         // console.info(this.dropdown_data)
         // console.info('Platform Images', this.getPlatformImages())
         // console.info('Custom Images', this.getCustomImages())
@@ -216,12 +217,14 @@ class OkitOCIData {
         const start = new Date().getTime()
         // Get Shipped
         $.getJSON('dropdown', {cache: false}).done((resp) => {
+            console.info('Retrieved Shipped Dropdown Data');
             self.dropdown_data = resp
             // Test Region Subscription
             $.getJSON('oci/subscription', {
                 cache: false,
                 profile: profile
             }).done((resp) => {
+                console.info('Querying OCI Dropdown data for', profile, region);
                 const response = resp
                 const end = new Date().getTime()
                 console.info('Region Subscription for', profile, 'took', end - start, 'ms')
@@ -249,6 +252,7 @@ class OkitOCIData {
             }).fail((xhr, status, error) => {
                 console.warn('Status : '+ status)
                 console.warn('Error : '+ error)
+                console.info('Querying PCA Dropdown data for', profile, region);
                 // Region Subscription does not appear to be support so we will drop back to PCA Dropdown Query
                 $.getJSON('pca/dropdown', {
                     cache: false,

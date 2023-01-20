@@ -2,7 +2,7 @@
 
 
 ## Version 0.45.0
-**Release Date**: 30th November 2022
+**Release Date**: 25th January 2023
 ### Features
 1. Update Network Firewall to use fixed Terraform Resource.
 2. Add Vault Secret Resource.

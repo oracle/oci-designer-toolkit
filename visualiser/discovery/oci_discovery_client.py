@@ -12,7 +12,7 @@ from .models import ExtendedDbNodeSummary, ExtendedNetworkSecurityGroupVnic, Ext
 from .models import ExtendedSourceApplicationSummary, ExtendedExportSummary, ExtendedMySQLBackup, ExtendedMySQLBackupSummary
 from .models import ExtendedVirtualCircuitBandwidthShape, ExtendedNoSQLIndexSummary
 from .models import ExtendedRRSet
-from .models import ExtendedInstanceAgentPluginSummary
+from .models import ExtendedAvailablePluginSummary, ExtendedInstanceAgentPluginSummary
 
 DEFAULT_MAX_WORKERS = 32
 DEFAULT_TIMEOUT = 120
@@ -20,6 +20,14 @@ DEFAULT_TIMEOUT = 120
 logger = getLogger()
 
 dns_record_types = ["A", "AAAA", "CNAME", "MX", "NS", "PTR", "SOA", "SRV", "TXT", "CAA"]
+agent_plugin_os_versions = [
+    ("Canonical Ubuntu", "18.04"), ("Canonical Ubuntu", "20.04"), ("Canonical Ubuntu", "22.04"),
+    ("CentOS", "7"), ("CentOS", "8 Stream"),
+    ("Oracle Autonomous Linux", "7.9"),
+    ("Oracle Linux", "6.10"), ("Oracle Linux", "7.9"), ("Oracle Linux", "8"), ("Oracle Linux", "9"),
+    ("Oracle Linux Cloud Developer", "8"),    
+    ("Windows", "2012ServerR2"),  ("Windows", "2016Server"), ("Windows", "2019Server"), ("Windows", "2022Server"),
+]
 
 class OciResourceDiscoveryClient(object):
 
@@ -56,6 +64,8 @@ class OciResourceDiscoveryClient(object):
         "NoSQLIndexDetails": (oci.nosql.NosqlClient, "get_index"), # get full details
         # oci.os_management.OsManagementClient
         "OsmsManagedInstance": (oci.os_management.OsManagementClient, "get_managed_instance"),
+        # oci.vault.VaultsClient
+        "VaultSecretDetails": (oci.vault.VaultsClient, "get_secret"), # get full details as list_secrets does not include all attributes
     }
 
     # map suppoted resources types to the OCI SDK client type and its "list"
@@ -163,6 +173,8 @@ class OciResourceDiscoveryClient(object):
         "TargetAsset": (oci.cloud_migrations.MigrationClient, "list_target_assets"), 
         # oci.compute_instance_agent.PluginClient
         "InstanceAgentPlugin": (oci.compute_instance_agent.PluginClient, "list_instance_agent_plugins"),
+        # oci.compute_instance_agent.PluginconfigClient
+        "InstanceAgentAvailablePlugin": (oci.compute_instance_agent.PluginconfigClient, "list_instanceagent_available_plugins"),
         # oci.container_engine.ContainerEngineClient
         "Cluster": (oci.container_engine.ContainerEngineClient, "list_clusters"),
         "NodePool": (oci.container_engine.ContainerEngineClient, "list_node_pools"),
@@ -940,6 +952,10 @@ class OciResourceDiscoveryClient(object):
                         managed_instance_id=item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, managed_instance_id=managed_instance_id)
                         futures_list.update({(region, resource_type, None, managed_instance_id):future})
+                    elif resource_type == "VaultSecretDetails" and method_name == "get_secret":
+                        secret_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, secret_id=secret_id)
+                        futures_list.update({(region, resource_type, compartment_id, secret_id):future})
                     elif resource_type == "Vnic" and method_name == "get_vnic":
                         vnic_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, vnic_id=vnic_id)
@@ -1161,6 +1177,11 @@ class OciResourceDiscoveryClient(object):
                             # only if compartment is set, otherwise its handled above as a get request
                             future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id)
                             futures_list.update({(region, resource_type, compartment_id, None):future})
+                    elif resource_type == "InstanceAgentAvailablePlugin" and method_name == "list_instanceagent_available_plugins":
+                        if compartment_id == self.tenancy.id: # only fetch for root compartment
+                            for os_version in agent_plugin_os_versions:
+                                future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=self.tenancy.id, os_name=os_version[0], os_version=os_version[1])
+                                futures_list.update({(region, resource_type, compartment_id, os_version):future})
                     elif resource_type == "InstanceAgentPlugin" and method_name == "list_instance_agent_plugins":
                         instanceagent_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, instanceagent_id=instanceagent_id)
@@ -1374,6 +1395,10 @@ class OciResourceDiscoveryClient(object):
                         # map Export into extended verison with compartment id
                         new_result = [ExtendedExportSummary(future[2],export) for export in result]
                         result = new_result
+                    elif resource_type == "InstanceAgentAvailablePlugin":
+                        # map InstanceAgentAvailablePlugin to ExtendedAvailablePluginSummary
+                        new_result = [ExtendedAvailablePluginSummary(future[3][0], future[3][1], plugin) for plugin in result]
+                        result = new_result
                     elif resource_type == "InstanceAgentPlugin":
                         # map InstanceAgentPlugin to ExtendedInstanceAgentPlugin
                         new_result = [ExtendedInstanceAgentPluginSummary(future[2], future[3], plugin) for plugin in result]
@@ -1429,6 +1454,7 @@ class OciResourceDiscoveryClient(object):
                         "NetworkFirewallDetails", "NetworkFirewallPolicyDetails",
                         "NoSQLIndexDetails", "NoSQLTableDetails",
                         "OsmsManagedInstance",
+                        "VaultSecretDetails",
                     ]:
                         # if the response is from a get request, wrap it in a list
                         if type(result) is not list:
@@ -1725,6 +1751,7 @@ class OciResourceDiscoveryClient(object):
                 "DataSafeOnPremConnector", # Data Safe
                 "DnsView", # BUG? not getting DnsView results returned from RQS, so need to manually query all compartments
                 "EmailSuppression", # Email
+                "InstanceAgentAvailablePlugin", # InstanceAgentAvailablePlugin
                 "LogGroup", "LogSavedSearch", # Loging
                 "ManagementDashboard", "ManagementSavedSearch", # Dashboard
                 "MySQLDbSystem", "MySQLChannel", "MySQLConfiguration", # MySQL
@@ -1737,8 +1764,11 @@ class OciResourceDiscoveryClient(object):
 
             # only fetch additional resource types if explictly included
             resource_types = resource_types.intersection(set(self.include_resource_types)) if self.include_resource_types else []
-            for compartment_id in self.compartments if self.compartments else [compartment.id for compartment in self.all_compartments]:
-                for resource_type in resource_types:
+            for resource_type in resource_types:
+                # search in the root compartment
+                brute_force_requests.add((resource_type, self.tenancy.id, None)) 
+                # search all child compartments
+                for compartment_id in self.compartments if self.compartments else [compartment.id for compartment in self.all_compartments]:
                     brute_force_requests.add((resource_type, compartment_id, None))
 
             # TODO temp fix for region missing 
@@ -1825,6 +1855,9 @@ class OciResourceDiscoveryClient(object):
             if "NoSQLTable" in resources_by_region[region]:
                 for resource in resources_by_region[region]["NoSQLTable"]:
                     regional_resource_requests.add(("NoSQLTableDetails", None, resource.id))
+            if "VaultSecret" in resources_by_region[region]:
+                for resource in resources_by_region[region]["VaultSecret"]:
+                    regional_resource_requests.add(("VaultSecretDetails", resource.compartment_id, resource.id))
             extra_resource_requests.update({region:regional_resource_requests})
 
         second_pass_resources_by_region = self.get_resources(extra_resource_requests)
@@ -1881,6 +1914,7 @@ class OciResourceDiscoveryClient(object):
             self.replace_resource_details(resources_by_region, region, "NoSQLTable", "NoSQLTableDetails")
             self.replace_resource_details(resources_by_region, region, "NetworkFirewall", "NetworkFirewallDetails")
             self.replace_resource_details(resources_by_region, region, "NetworkFirewallPolicy", "NetworkFirewallPolicyDetails")
+            self.replace_resource_details(resources_by_region, region, "VaultSecret", "VaultSecretDetails")
 
         if len(resources_by_region) == 0:
             logger.warn("Resource discovery results are empty")  
