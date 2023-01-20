@@ -144,7 +144,7 @@ class PCADropdownQuery(OCIConnection):
         self.getTenancy()
 
     def connect(self):
-        logger.info(f'<<< Connecting PCA Clients >>> {self.cert_bundle}')
+        logger.info(f'<<< PCADropdownQuery Connecting PCA Clients >>> {self.cert_bundle}')
         self.clients = {
             "volume": oci.core.BlockstorageClient(config=self.config, signer=self.signer),
             "compute": oci.core.ComputeClient(config=self.config, signer=self.signer),
@@ -162,7 +162,7 @@ class PCADropdownQuery(OCIConnection):
                 client.base_client.session.verify = self.cert_bundle
 
     def executeQuery(self, regions=None, **kwargs):
-        logger.info(f'PCA Querying Dropdowns - Region: {regions} {self}')
+        logger.info(f'PCADropdownQuery PCA Querying Dropdowns - Region: {regions} {self}')
         if self.instance_principal:
             self.config['tenancy'] = self.getTenancy()
         if regions is None:
@@ -184,6 +184,7 @@ class PCADropdownQuery(OCIConnection):
         return self.dropdown_json
 
     def tenancy_compartments(self):
+        logger.info(f'>> PCADropdownQuery - Getting Tenancy Compartments')
         resource_map = self.resource_map["Compartment"]
         client = self.clients[resource_map["client"]]
         # Get Tenancy
@@ -195,12 +196,15 @@ class PCADropdownQuery(OCIConnection):
         # self.all_compartments = self.toJson(results)
         self.all_compartments.extend(self.toJson(results))
         self.all_compartment_ids = [c['id'] for c in self.all_compartments]
+        logger.info(f'>> PCADropdownQuery - Getting Tenancy Compartments')
+        logger.info(f'>>>>                - Found {len(self.all_compartment_ids)} Tenancy Compartments')
         return 
     
     def compartments(self):
         return
     
     def cpe_device_shapes(self):
+        logger.info(f'>>>> PCADropdownQuery - Getting CPE Device Shapes')
         resource_map = self.resource_map["CpeDeviceShape"]
         client = self.clients[resource_map["client"]]
         array = resource_map["array"]
@@ -210,9 +214,11 @@ class PCADropdownQuery(OCIConnection):
         # Convert to Json object
         resources = self.toJson(results)
         self.dropdown_json[array] = resources
+        logger.info(f'>>>>>>                - Found {len(self.dropdown_json[array])} CPE Device Shapes')
         return self.dropdown_json[array]
 
     def db_system_shapes(self):
+        logger.info(f'>>>> PCADropdownQuery - Getting DB System Shapes')
         resource_map = self.resource_map["DbSystemShape"]
         client = self.clients[resource_map["client"]]
         array = resource_map["array"]
@@ -221,9 +227,11 @@ class PCADropdownQuery(OCIConnection):
         # Convert to Json object
         resources = self.toJson(results)
         self.dropdown_json[array] = sorted(self.deduplicate(resources, 'shape'), key=lambda k: k['shape'])
+        logger.info(f'>>>>>>                - Found {len(self.dropdown_json[array])} DB System Shapes')
         return self.dropdown_json[array]
 
     def db_versions(self):
+        logger.info(f'>>>> PCADropdownQuery - Getting DB Versions')
         resource_map = self.resource_map["DbVersion"]
         client = self.clients[resource_map["client"]]
         array = resource_map["array"]
@@ -232,6 +240,7 @@ class PCADropdownQuery(OCIConnection):
         # Convert to Json object
         resources = self.toJson(results)
         self.dropdown_json[array] = resources
+        logger.info(f'>>>>>>                - Found {len(self.dropdown_json[array])} DB Versions')
         return self.dropdown_json[array]
 
     def fast_connect_provider_services(self):
@@ -239,16 +248,21 @@ class PCADropdownQuery(OCIConnection):
         client = self.clients[resource_map["client"]]
         array = resource_map["array"]
         resources = []
+        logger.info(f'>>>>>>                - Found {len(self.dropdown_json[array])}')
         return resources
 
     def images(self):
+        logger.info(f'>>>> PCADropdownQuery - Getting Images')
         resource_map = self.resource_map["Image"]
         client = self.clients[resource_map["client"]]
         array = resource_map["array"]
         resources = []
         self.dropdown_json[array] = []
         # results = oci.pagination.list_call_get_all_results(client.list_images, compartment_id=self.tenancy_ocid).data
+        cnt = 0
         for compartment_id in self.all_compartment_ids:
+            cnt += 1
+            logger.info(f'>>>>>>>> PCADropdownQuery - {cnt} Getting Images in {compartment_id}')
             # Images
             results = oci.pagination.list_call_get_all_results(client.list_images, compartment_id=compartment_id).data
             # results = oci.pagination.list_call_get_all_results(client.list_images, compartment_id=self.tenancy_ocid).data
@@ -268,9 +282,11 @@ class PCADropdownQuery(OCIConnection):
                         not_found = True
                         r['shapes'] = self.dropdown_json['shapes']
             self.dropdown_json[array] = [r for r in self.dropdown_json[array] if r['lifecycle_state'] in self.LIFECYCLE_STATES]
+        logger.info(f'>>>>>>                - Found {len(self.dropdown_json[array])} Images')
         return self.dropdown_json[array]
 
     def kubernetes_versions(self):
+        logger.info(f'>>>> PCADropdownQuery - Getting K8 Versions')
         resource_map = self.resource_map["ClusterOptions"]
         client = self.clients[resource_map["client"]]
         array = resource_map["array"]
@@ -279,9 +295,11 @@ class PCADropdownQuery(OCIConnection):
         # Convert to Json object
         resources = [{"name": v, "version": v} for v in results]
         self.dropdown_json[array] = resources
+        logger.info(f'>>>>>>                - Found {len(self.dropdown_json[array])} K8 Versions')
         return self.dropdown_json[array]
 
     def loadbalancer_shapes(self):
+        logger.info(f'>>>> PCADropdownQuery - Getting Loadbalancer Shapes')
         resource_map = self.resource_map["LoadBalancerShape"]
         client = self.clients[resource_map["client"]]
         array = resource_map["array"]
@@ -291,9 +309,11 @@ class PCADropdownQuery(OCIConnection):
         # Convert to Json object
         resources = self.toJson(results)
         self.dropdown_json[array] = resources
+        logger.info(f'>>>>>>                - Found {len(self.dropdown_json[array])} Loadbalancer Shapes')
         return self.dropdown_json[array]
 
     def mysql_shapes(self):
+        logger.info(f'>>>> PCADropdownQuery - Getting MySQL Shapes')
         resource_map = self.resource_map["MySQLShape"]
         client = self.clients[resource_map["client"]]
         array = resource_map["array"]
@@ -303,9 +323,11 @@ class PCADropdownQuery(OCIConnection):
         # Convert to Json object
         resources = self.toJson(results)
         self.dropdown_json[array] = resources
+        logger.info(f'>>>>>>                - Found {len(self.dropdown_json[array])} MySQL Shapes')
         return self.dropdown_json[array]
 
     def mysql_versions(self):
+        logger.info(f'>>>> PCADropdownQuery - Getting MySQL Versions')
         resource_map = self.resource_map["MySQLVersion"]
         client = self.clients[resource_map["client"]]
         array = resource_map["array"]
@@ -315,9 +337,11 @@ class PCADropdownQuery(OCIConnection):
         # Convert to Json object
         resources = self.toJson(results)
         self.dropdown_json[array] = resources
+        logger.info(f'>>>>>>                - Found {len(self.dropdown_json[array])} MySQL Versions')
         return self.dropdown_json[array]
 
     def mysql_configurations(self):
+        logger.info(f'>>>> PCADropdownQuery - Getting MySQL Configurations')
         resource_map = self.resource_map["MySQLConfiguration"]
         client = self.clients[resource_map["client"]]
         array = resource_map["array"]
@@ -327,9 +351,11 @@ class PCADropdownQuery(OCIConnection):
         # Convert to Json object
         resources = self.toJson(results)
         self.dropdown_json[array] = resources
+        logger.info(f'>>>>>>                - Found {len(self.dropdown_json[array])} MySQL Configurations')
         return self.dropdown_json[array]
 
     def services(self):
+        logger.info(f'>>>> PCADropdownQuery - Getting Services')
         resource_map = self.resource_map["Service"]
         client = self.clients[resource_map["client"]]
         array = resource_map["array"]
@@ -341,9 +367,11 @@ class PCADropdownQuery(OCIConnection):
         self.dropdown_json[array] = sorted(resources, key=lambda k: k['name'])
         for r in self.dropdown_json[array]:
             r['display_name'] = r['name']
+        logger.info(f'>>>>>>                - Found {len(self.dropdown_json[array])} Services')
         return self.dropdown_json[array]
 
     def shapes(self):
+        logger.info(f'>>>> PCADropdownQuery - Getting Compute Shapes')
         resource_map = self.resource_map["Shape"]
         client = self.clients[resource_map["client"]]
         array = resource_map["array"]
@@ -356,9 +384,11 @@ class PCADropdownQuery(OCIConnection):
         for resource in self.dropdown_json[array]:
             resource['display_name'] = resource['shape']
             resource['sort_key'] = resource['shape']
+        logger.info(f'>>>>>>                - Found {len(self.dropdown_json[array])} Compute Shapes')
         return self.dropdown_json[array]
     
     def volume_backup_policy(self):
+        logger.info(f'>>>> PCADropdownQuery - Getting Volume Backup Policies')
         resource_map = self.resource_map["VolumeBackupPolicy"]
         client = self.clients[resource_map["client"]]
         array = resource_map["array"]
@@ -382,6 +412,7 @@ class PCADropdownQuery(OCIConnection):
             else:
                 policy['sort_key'] = policy['display_name']
         self.dropdown_json[array] = sorted(resources, key=lambda k: k['sort_key'])
+        logger.info(f'>>>>>>                - Found {len(self.dropdown_json[array])} Volume Backup Policies')
         return self.dropdown_json[array]
     
     def deduplicate(self, resources, key):
