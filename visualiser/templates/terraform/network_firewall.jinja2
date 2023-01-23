@@ -31,23 +31,32 @@ resource "oci_network_firewall_network_firewall_policy" "{{ network_firewall_pol
     }
     {% endfor %}
 {% endif %}
-{# {% if network_firewall_policy.decryption_rules is defined %}
+{% if network_firewall_policy.decryption_rules is defined %}
+    {% for rule in network_firewall_policy.decryption_rules %}
     decryption_rules {
         #Required
-        action = var.network_firewall_policy_decryption_rules_action
+        action = {{ rule.action | safe }}
         condition {
-
             #Optional
-            destinations = var.network_firewall_policy_decryption_rules_condition_destinations
-            sources = var.network_firewall_policy_decryption_rules_condition_sources
+            {% if rule.condition.destinations is defined %}
+            destinations = [{% for destination in rule.condition.destinations %}"{{ destination }}"{% if not loop.last %},{% endif %}{% endfor %}]
+            {% endif %}
+            {% if rule.condition.sources is defined %}
+            sources = [{% for source in rule.condition.sources %}"{{ source }}"{% if not loop.last %},{% endif %}{% endfor %}]
+            {% endif %}
         }
-        name = var.network_firewall_policy_decryption_rules_name
+        name = {{ rule.name | safe }}
 
         #Optional
-        decryption_profile = var.network_firewall_policy_decryption_rules_decryption_profile
-        secret = var.network_firewall_policy_decryption_rules_secret
+        {% if rule.decryption_profile is defined %}
+        decryption_profile = {{ rule.decryption_profile | safe }}
+        {% endif %}
+        {% if rule.secret is defined %}
+        secret = {{ rule.secret | safe }}
+        {% endif %}
     }
-{% endif %} #}
+    {% endfor %}
+{% endif %}
 {% if network_firewall_policy.ip_address_lists is defined %}
     {% for key, value in network_firewall_policy.ip_address_lists.items() %}
     ip_address_lists {
@@ -61,31 +70,42 @@ resource "oci_network_firewall_network_firewall_policy" "{{ network_firewall_pol
     mapped_secrets {
         key = "{{ key }}"
         #Required
-        source = {{ value.source | safe }}
+        {# source = {{ value.source | safe }} #}
         type = {{ value.type | safe }}
         vault_secret_id = {{ value.vault_secret_id }}
         version_number = {{ value.version_number | safe }}
     }
     {% endfor %}
 {% endif %}
-{# {% if network_firewall_policy.security_rules is defined %
+{% if network_firewall_policy.security_rules is defined %}
+    {% for rule in network_firewall_policy.security_rules %}
     security_rules {
         #Required
-        action = var.network_firewall_policy_security_rules_action
+        action = {{ rule.action | safe }}
         condition {
-
             #Optional
-            applications = var.network_firewall_policy_security_rules_condition_applications
-            destinations = var.network_firewall_policy_security_rules_condition_destinations
-            sources = var.network_firewall_policy_security_rules_condition_sources
-            urls = var.network_firewall_policy_security_rules_condition_urls
+            {% if rule.condition.applications is defined %}
+            applications = [{% for application in rule.condition.applications %}"{{ application }}"{% if not loop.last %},{% endif %}{% endfor %}]
+            {% endif %}
+            {% if rule.condition.destinations is defined %}
+            destinations = [{% for destination in rule.condition.destinations %}"{{ destination }}"{% if not loop.last %},{% endif %}{% endfor %}]
+            {% endif %}
+            {% if rule.condition.sources is defined %}
+            sources = [{% for source in rule.condition.sources %}"{{ source }}"{% if not loop.last %},{% endif %}{% endfor %}]
+            {% endif %}
+            {% if rule.condition.urls is defined %}
+            urls = [{% for url in rule.condition.urls %}"{{ url }}"{% if not loop.last %},{% endif %}{% endfor %}]
+            {% endif %}
         }
-        name = var.network_firewall_policy_security_rules_name
+        name = {{ rule.name | safe }}
 
         #Optional
-        inspection = var.network_firewall_policy_security_rules_inspection
+        {% if rule.inspection is defined %}
+        inspection = {{ rule.inspection | safe }}
+        {% endif %}
     }
-{% endif %} #}
+    {% endfor %}
+{% endif %}
 {% if network_firewall_policy.url_lists is defined %}
     {% for key, value in network_firewall_policy.url_lists.items() %}
     url_lists {

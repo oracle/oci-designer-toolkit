@@ -278,8 +278,8 @@ class OCIQuery(OCIConnection):
                     # logger.info(f'Processing {resource_type} : {resource_list}')
                     response_json[self.DISCOVERY_OKIT_MAP[resource_type]] = [self.addResourceName(r) for r in resource_list if "lifecycle_state" not in r or r["lifecycle_state"] in self.VALID_LIFECYCLE_STATES]
 
-        policies = resources.get("NetworkFirewallPolicy", [])
-        logger.info(f'Policies {jsonToFormattedString(policies)}')
+        # policies = resources.get("NetworkFirewallPolicy", [])
+        # logger.info(f'Policies {jsonToFormattedString(policies)}')
 
         return response_json
     

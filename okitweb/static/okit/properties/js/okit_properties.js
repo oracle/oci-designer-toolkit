@@ -354,6 +354,9 @@ class OkitResourceProperties {
             placeholder: 'www.yoursite.com',
             pattern: "^[\w\._]+$",
             title: 'URL with no protocol'
+        },
+        name_no_space: {
+            pattern: ".*(?:^[a-zA-Z](-?[a-zA-Z_0-9])*$).*"
         }
     }
 
@@ -593,6 +596,17 @@ class OkitResourceProperties {
         if (!filter) filter = () => true
         const resources = this.resource.okit_json[`${resource_type}s`] ? this.resource.okit_json[`${resource_type}s`] : this.resource.okit_json[`${resource_type}`] ? this.resource.okit_json[`${resource_type}`] : []
         resources.filter(filter).forEach((r) => {
+            const div = select.append('div')
+            const safeid = r.id.replace(/[\W_]+/g,"_")
+            div.append('input').attr('type', 'checkbox').attr('id', safeid).attr('value', r.id)
+            div.append('label').attr('for', safeid).text(r.display_name)
+        })
+    }
+
+    loadMultiSelectFromList(select, resources) {
+        console.info('Select:', select)
+        select.selectAll('*').remove()
+        resources.forEach((r) => {
             const div = select.append('div')
             const safeid = r.id.replace(/[\W_]+/g,"_")
             div.append('input').attr('type', 'checkbox').attr('id', safeid).attr('value', r.id)
