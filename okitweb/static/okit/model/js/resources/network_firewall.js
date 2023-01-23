@@ -32,8 +32,9 @@ class NetworkFirewall extends OkitArtifact {
     newNetworkFirewallPolicy() {
         return {
             resource_name: `${this.generateResourceName()}Policy`,
-            display_name: `${this.display_name} Policy`,
+            display_name: `${this.display_name}Policy`,
             ip_address_lists: {},
+            application_lists: {},
             url_lists: {},
             security_rules: [],
             decryption_rules: [],
@@ -43,20 +44,20 @@ class NetworkFirewall extends OkitArtifact {
     }
     newIPAddressList(count=0) {
         return {
-            name: `${this.display_name} IPList${count}`,
+            name: `${this.display_name}IPList${count}`,
             ip_addresses: []
         }
     }
     newUrlList(count=0) {
         return {
-            name: `${this.display_name} URLList${count}`,
+            name: `${this.display_name}URLList${count}`,
             type: 'SIMPLE',
             urls: []
         }
     }
     newSecurityRule() {
         return {
-            name: `${this.display_name} SecurityRule`,
+            name: `${this.display_name}SecurityRule`,
             action: 'DROP',
             condition: {
                 applications: [],
@@ -69,8 +70,8 @@ class NetworkFirewall extends OkitArtifact {
     }
     newDecryptionRule() {
         return {
-            name: `${this.display_name} DecryptionRule`,
-            action: 'DROP',
+            name: `${this.display_name}DecryptionRule`,
+            action: 'NO_DECRYPT',
             condition: {
                 destinations: [],
                 sources: [],
