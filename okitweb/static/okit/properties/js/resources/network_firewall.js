@@ -375,6 +375,26 @@ class NetworkFirewallProperties extends OkitResourceProperties {
         const inspection = this.createInput('select', 'Inspection', `${id}_inspection${idx}`, '', (d, i, n) => rule.inspection = n[i].value, inspection_data)
         this.append(rule_table.tbody, inspection.row)
         inspection.input.property('value', rule.inspection)
+        // Sources
+        const sources = this.createInput('multiselect', 'Source IPs', `${id}_sources`, '', (d, i, n) => {rule.condition.sources = Array.from(n[i].querySelectorAll('input[type="checkbox"]:checked')).map((n) => n.value); this.redraw()})
+        this.append(rule_table.tbody, sources.row)
+        this.loadMultiSelectFromList(sources.input, Object.keys(this.resource.network_firewall_policy.ip_address_lists).map((k) => {return {id: k, display_name: k}}))
+        this.setMultiSelect(sources.input, rule.condition.sources)
+        // Destinations
+        const destinations = this.createInput('multiselect', 'Destination IPs', `${id}_destinations`, '', (d, i, n) => {rule.condition.destinations = Array.from(n[i].querySelectorAll('input[type="checkbox"]:checked')).map((n) => n.value); this.redraw()})
+        this.append(rule_table.tbody, destinations.row)
+        this.loadMultiSelectFromList(destinations.input, Object.keys(this.resource.network_firewall_policy.ip_address_lists).map((k) => {return {id: k, display_name: k}}))
+        this.setMultiSelect(destinations.input, rule.condition.destinations)
+        // Applications
+        const applications = this.createInput('multiselect', 'Applications', `${id}_applications`, '', (d, i, n) => {rule.condition.applications = Array.from(n[i].querySelectorAll('input[type="checkbox"]:checked')).map((n) => n.value); this.redraw()})
+        this.append(rule_table.tbody, applications.row)
+        this.loadMultiSelectFromList(applications.input, Object.keys(this.resource.network_firewall_policy.application_lists).map((k) => {return {id: k, display_name: k}}))
+        this.setMultiSelect(applications.input, rule.condition.applications)
+        // URLs
+        const urls = this.createInput('multiselect', 'URLs', `${id}_urls`, '', (d, i, n) => {rule.condition.urls = Array.from(n[i].querySelectorAll('input[type="checkbox"]:checked')).map((n) => n.value); this.redraw()})
+        this.append(rule_table.tbody, urls.row)
+        this.loadMultiSelectFromList(urls.input, Object.keys(this.resource.network_firewall_policy.url_lists).map((k) => {return {id: k, display_name: k}}))
+        this.setMultiSelect(urls.input, rule.condition.urls)
 
         this.showInspectionRows(rule, id, idx)
     }
@@ -426,10 +446,33 @@ class NetworkFirewallProperties extends OkitResourceProperties {
                 NO_DECRYPT: 'Do not Decrypt'
             }
         }
-        const action = this.createInput('select', 'Action', `${id}_action${idx}`, '', (d, i, n) => {rule.action = n[i].value; this.showInspectionRows(rule, id, idx)}, action_data)
+        const action = this.createInput('select', 'Action', `${id}_action${idx}`, '', (d, i, n) => {rule.action = n[i].value; this.showDecryptionRows(rule, id, idx)}, action_data)
         this.append(rule_table.tbody, action.row)
         action.input.property('value', rule.action)
+        // Sources
+        const sources = this.createInput('multiselect', 'Source IPs', `${id}_sources`, '', (d, i, n) => {rule.condition.sources = Array.from(n[i].querySelectorAll('input[type="checkbox"]:checked')).map((n) => n.value); this.redraw()})
+        this.append(rule_table.tbody, sources.row)
+        this.loadMultiSelectFromList(sources.input, Object.keys(this.resource.network_firewall_policy.ip_address_lists).map((k) => {return {id: k, display_name: k}}))
+        this.setMultiSelect(sources.input, rule.condition.sources)
+        // Destinations
+        const destinations = this.createInput('multiselect', 'Destination IPs', `${id}_destinations`, '', (d, i, n) => {rule.condition.destinations = Array.from(n[i].querySelectorAll('input[type="checkbox"]:checked')).map((n) => n.value); this.redraw()})
+        this.append(rule_table.tbody, destinations.row)
+        this.loadMultiSelectFromList(destinations.input, Object.keys(this.resource.network_firewall_policy.ip_address_lists).map((k) => {return {id: k, display_name: k}}))
+        this.setMultiSelect(destinations.input, rule.condition.destinations)
+        // Decryption Profile
+        const decryption_profile = this.createInput('select', 'Decription Profile', `${id}_decryption_profile${idx}`, '', (d, i, n) => {rule.decryption_profile = n[i].value})
+        this.append(rule_table.tbody, decryption_profile.row)
+        decryption_profile.input.property('value', rule.decryption_profile)
+        this.loadSelectFromList(decryption_profile.input, Object.keys(this.resource.network_firewall_policy.decryption_profiles).map((k) => {return {id: k, display_name: k}}))
+        decryption_profile.input.property('value', rule.decryption_profile)
+        // Secret
+        const secret = this.createInput('select', 'Secret', `${id}_secret${idx}`, '', (d, i, n) => {rule.secret = n[i].value})
+        this.append(rule_table.tbody, secret.row)
+        secret.input.property('value', rule.secret)
+        this.loadSelectFromList(secret.input, Object.keys(this.resource.network_firewall_policy.mapped_secrets).map((k) => {return {id: k, display_name: k}}))
+        secret.input.property('value', rule.secret)
 
+        this.showDecryptionRows(rule, id, idx)
     }
     addDecryptionRule() {
         const rule = this.resource.newDecryptionRule();
@@ -440,5 +483,20 @@ class NetworkFirewallProperties extends OkitResourceProperties {
     deleteDecryptionRule(id, idx, rule) {
         this.resource.network_firewall_policy.decryption_rules = this.resource.network_firewall_policy.decryption_rules.filter((e) => e !== rule)
         $(`#${id}${idx}_row`).remove()
+    }
+    showDecryptionRows(value, id, idx) {
+        console.info(`Action: ${value.action} Id: ${id} ${idx}`)
+        if (value.action === 'DECRYPT') {
+            this.showProperty(`${id}_decryption_profile`, idx)
+            this.setPropertyValue(`${id}_decryption_profile`, idx, value.decryption_profile)
+            this.showProperty(`${id}_secret`, idx)
+            this.setPropertyValue(`${id}_secret`, idx, value.secret)
+        }
+        else {
+            this.hideProperty(`${id}_decryption_profile`, idx)
+            value.decryption_profile = ''
+            this.hideProperty(`${id}_secret`, idx)
+            value.secret = ''
+        }
     }
 }
