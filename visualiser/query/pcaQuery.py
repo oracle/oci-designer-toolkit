@@ -715,6 +715,7 @@ class PCAQuery(OCIConnection):
         # Post Process Map Rule Target Type
         rule_type_map = {'internetgateway': 'internet_gateway',
                          'natgateway':'nat_gateway',
+                         'nat':'nat_gateway',
                          'localpeeringgateway': 'local_peering_gateway',
                          'dynamicroutinggateway': 'dynamic_routing_gateway',
                          'drg': 'drg_attachment',
