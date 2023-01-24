@@ -270,19 +270,20 @@ class PCADropdownQuery(OCIConnection):
             resources = self.toJson(results)
             for r in resources:
                 r['sort_key'] = f"{r['operating_system']} {r['operating_system_version']} {r['display_name']}"
-            self.dropdown_json[array].extend(sorted(self.deduplicate(resources, 'sort_key'), key=lambda k: k['sort_key']))
+            deduplicated  = sorted(self.deduplicate(resources, 'sort_key'), key=lambda k: k['sort_key'])
             not_found = False
-            for r in self.dropdown_json[array]:
+            for r in deduplicated:
                 if not_found:
                     r['shapes'] = self.dropdown_json['shapes']
                 else:
                     try:
+                        logger.info('>> Reading Shape Data For Image')
                         r['shapes'] = [s.shape for s in oci.pagination.list_call_get_all_results(client.list_image_shape_compatibility_entries, image_id=r['id']).data]
                     except oci.exceptions.ServiceError as e:
                         not_found = True
                         r['shapes'] = self.dropdown_json['shapes']
-            self.dropdown_json[array] = [r for r in self.dropdown_json[array] if r['lifecycle_state'] in self.LIFECYCLE_STATES]
-        logger.info(f'>>>>>>                - Found {len(self.dropdown_json[array])} Images')
+            self.dropdown_json[array].extend([r for r in deduplicated if r['lifecycle_state'] in self.LIFECYCLE_STATES])
+        logger.info(f'>>>>>>                - Found {len(deduplicated)} Images')
         return self.dropdown_json[array]
 
     def kubernetes_versions(self):
