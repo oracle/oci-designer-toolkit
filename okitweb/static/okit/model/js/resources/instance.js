@@ -67,6 +67,7 @@ class Instance extends OkitArtifact {
         Object.defineProperty(this, 'vnics', {get: () => {return this.vnic_attachments}})
         Object.defineProperty(this, 'memory_in_gbs', {get: () => {return this.flex_shape ? this.shape_config.memory_in_gbs : okitOciData.getInstanceShape(this.shape) ? okitOciData.getInstanceShape(this.shape).memory_in_gbs : 0}})
         Object.defineProperty(this, 'ocpus', {get: () => {return this.flex_shape ? this.shape_config.ocpus : okitOciData.getInstanceShape(this.shape) ? okitOciData.getInstanceShape(this.shape).ocpus : 0}})
+        Object.defineProperty(this, 'assign_public_ip', {get: () => {return this.primary_vnic.assign_public_ip}})
     }
 
     /*

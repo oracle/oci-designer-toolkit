@@ -7,6 +7,8 @@
 1. Update Network Firewall to use fixed Terraform Resource.
 2. Add Vault Secret Resource.
 3. Modify Build process to use resourses.txt.
+4. Display if public IP assigned to instance in tabular view.
+5. Sum Instance Memory and display in title on tabular view.
 ### Bug Fixes
 1. Clear saved cache file when refreshing cache.
 
