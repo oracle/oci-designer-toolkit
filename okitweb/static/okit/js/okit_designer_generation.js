@@ -627,16 +627,26 @@ function generateMarkdown(results) {
         // Add Style and Def to Compartment SVG
         for (let compartment of requestJson.compartments) {
             let svg_id = okitJsonView.getCompartment(compartment.id).svg_id;
+            const rect_id = okitJsonView.getCompartment(compartment.id).rect_id
             let svg = d3.select(d3Id(svg_id));
             okitJsonView.addDefinitions(svg);
+                let rect = svg.insert('rect', d3Id(rect_id))
+                        .attr("width", "100%")
+                        .attr("height", "100%")
+                        .attr("fill", "white");    
             compartment.svg = document.getElementById(svg_id).outerHTML.replaceAll('\n', ' ');
         }
         // Add Style and Def to VCN SVG
         if (requestJson.virtual_cloud_networks) {
             for (let vcn of requestJson.virtual_cloud_networks) {
                 let svg_id = okitJsonView.getVirtualCloudNetwork(vcn.id).svg_id;
+                const rect_id = okitJsonView.getVirtualCloudNetwork(vcn.id).rect_id
                 let svg = d3.select(d3Id(svg_id));
                 okitJsonView.addDefinitions(svg);
+                let rect = svg.insert('rect', d3Id(rect_id))
+                        .attr("width", "100%")
+                        .attr("height", "100%")
+                        .attr("fill", "white");    
                 vcn.svg = document.getElementById(svg_id).outerHTML.replaceAll('\n', ' ');
             }
         }
@@ -644,8 +654,13 @@ function generateMarkdown(results) {
         if (requestJson.subnets) {
             for (let subnet of requestJson.subnets) {
                 let svg_id = okitJsonView.getSubnet(subnet.id).svg_id;
+                const rect_id = okitJsonView.getSubnet(subnet.id).rect_id
                 let svg = d3.select(d3Id(svg_id));
                 okitJsonView.addDefinitions(svg);
+                let rect = svg.insert('rect', d3Id(rect_id))
+                        .attr("width", "100%")
+                        .attr("height", "100%")
+                        .attr("fill", "white");    
                 subnet.svg = document.getElementById(svg_id).outerHTML.replaceAll('\n', ' ');
             }
         }
