@@ -80,7 +80,7 @@ class OkitTabularJsonView extends OkitJsonView {
             instances: {
                 'Shape': {property: 'shape'},
                 'Memory ({total} Gbs)': {property: 'memory_in_gbs', type: 'number', sum: true},
-                'OCPUs': {property: 'ocpus', type: 'number'},
+                '{total} OCPUs': {property: 'ocpus', type: 'number', sum: true},
                 'Subnet': {property: 'subnet_id', lookup: 'model.getSubnet'},
                 'Block Volumes': {property: 'block_storage_volume_ids', lookup: 'model.getBlockStorageVolume'},
                 'Status': {property: 'lifecycle_state'},
