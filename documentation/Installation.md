@@ -287,17 +287,20 @@ export OKIT_BRANCH='master'
 mkdir -p ${OKIT_DIR}
 mkdir -p ${OKIT_GITHUB_DIR}
 # Install Required Packages 
+sudo bash -c "yum update -y"
 sudo bash -c "yum install -y git"
 sudo bash -c "yum install -y openssl"
 sudo bash -c "yum install -y oci-utils"
 # This is not required for OL8
 sudo bash -c "yum install -y python-oci-cli"
-# Install Required Python Modules
+# Update Python Modules
 sudo bash -c "python3 -m pip install -U pip"
 sudo bash -c "python3 -m pip install -U setuptools"
-sudo bash -c "python3 -m pip install --no-cache-dir authlib flask gitpython git-url-parse gunicorn oci openpyxl python-magic pyyaml requests "
 # Clone OKIT
 git clone -b ${OKIT_BRANCH} https://github.com/oracle/oci-designer-toolkit.git ${OKIT_GITHUB_DIR}/oci-designer-toolkit
+# Install OKIT Required python modules
+sudo bash -c "python3 -m pip install --no-cache-dir -r ${OKIT_GITHUB_DIR}/oci-designer-toolkit/requirements.txt"
+# Create OKIT Required Directories
 mkdir -p ${OKIT_DIR}/{log,instance/git,instance/local,instance/templates/user,workspace,ssl}
 ln -sv ${OKIT_GITHUB_DIR}/oci-designer-toolkit/config ${OKIT_DIR}/config
 ln -sv ${OKIT_GITHUB_DIR}/oci-designer-toolkit/okitweb ${OKIT_DIR}/okitweb
@@ -320,16 +323,17 @@ sudo bash -c "openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ${OKIT
 #####                        If HTTPS / 443 Is required                                                      #####
 ##### Copy GUnicorn Service File (HTTPS)                                                                     #####
 ##################################################################################################################
-sudo bash -c "cp -v ${OKIT_DIR}/containers/services/gunicorn.https.service /etc/systemd/system/gunicorn.service"
+sudo bash -c "cp -v ${OKIT_GITHUB_DIR}/oci-designer-toolkit/containers/services/gunicorn.https.service /etc/systemd/system/gunicorn.service"
 ##################################################################################################################
 #####                        If HTTP / 80 Is required                                                        #####
 ##### Copy GUnicorn Service File (HTTP)                                                                      #####
 ##################################################################################################################
-sudo bash -c "cp -v ${OKIT_DIR}/containers/services/gunicorn.http.service /etc/systemd/system/gunicorn.service"
+sudo bash -c "cp -v ${OKIT_GITHUB_DIR}/oci-designer-toolkit/containers/services/gunicorn.http.service /etc/systemd/system/gunicorn.service"
 
 # Enable Gunicorn Service
 sudo systemctl enable gunicorn.service
 sudo systemctl start gunicorn.service
+sudo systemctl status gunicorn.service
 ```
 
 ### MacOS
@@ -353,12 +357,13 @@ mkdir -p ${OKIT_GITHUB_DIR}
 python3 -m venv ${OKIT_DIR}/.venv
 # Activate Virtual Environment
 source ${OKIT_DIR}/.venv/bin/activate
-# Update python & Install modules
+# Update python modules
 python3 -m pip install -U pip
 python3 -m pip install -U setuptools
-python3 -m pip install --no-cache-dir authlib flask gitpython git-url-parse gunicorn oci openpyxl python-magic pyyaml requests 
 # Clone OKIT 
 git clone -b ${OKIT_BRANCH} https://github.com/oracle/oci-designer-toolkit.git ${OKIT_GITHUB_DIR}/oci-designer-toolkit
+# Install OKIT Required python modules
+python3 -m pip install --no-cache-dir -r ${OKIT_GITHUB_DIR}/oci-designer-toolkit/requirements.txt
 # Create OKIT Required Directories
 mkdir -p ${OKIT_DIR}/{log,instance/git,instance/local,instance/templates/user,workspace,ssl}
 # Link Directories
@@ -380,6 +385,7 @@ ${OKIT_DIR}/.venv/bin/gunicorn okitweb.wsgi:app --config ${OKIT_DIR}/config/guni
 ```
 
 ### Windows 10 / WSL (Ubuntu)
+This installation procedure assumes you have previously installed Windows Subsystem for Linux 2.
 
 #### Package Install
 ```bash
@@ -400,12 +406,13 @@ mkdir -p ${OKIT_GITHUB_DIR}
 python3 -m venv ${OKIT_DIR}/.venv
 # Activate Virtual Environment
 source ${OKIT_DIR}/.venv/bin/activate
-# Update python & Install modules
+# Update python modules
 python3 -m pip install -U pip
 python3 -m pip install -U setuptools
-python3 -m pip install --no-cache-dir authlib flask gitpython git-url-parse gunicorn oci openpyxl python-magic pyyaml requests 
 # Clone OKIT 
 git clone -b ${OKIT_BRANCH} https://github.com/oracle/oci-designer-toolkit.git ${OKIT_GITHUB_DIR}/oci-designer-toolkit
+# Install OKIT Required python modules
+python3 -m pip install --no-cache-dir -r ${OKIT_GITHUB_DIR}/oci-designer-toolkit/requirements.txt 
 # Create OKIT Required Directories
 mkdir -p ${OKIT_DIR}/{git,local,log,instance/git,instance/local,instance/templates/user,workspace,ssl}
 # Link Directories

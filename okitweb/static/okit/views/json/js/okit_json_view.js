@@ -139,10 +139,10 @@ class OkitTextJsonView extends OkitJsonView {
         // Create Element Name Label
         if (key !== '') {
             span.appendChild(document.createTextNode(`"${key}"`))
-            span.setAttribute('class', 'key')
+            span.setAttribute('class', 'json-key')
             colon.appendChild(document.createTextNode(':'))
             colon.setAttribute('class', 'colon')
-            label.setAttribute('class', 'key')
+            label.setAttribute('class', 'json-key')
             label.appendChild(span)
             label.appendChild(colon)
             label.setAttribute('class', 'key-displayed')

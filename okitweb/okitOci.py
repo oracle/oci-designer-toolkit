@@ -256,10 +256,11 @@ def ociRegionSubscription():
 
 @bp.route('/regions/<string:profile>', methods=(['GET']))
 def ociRegions(profile):
+    logger.info(f'>>>>>>>>> Getting Regions for {profile}')
     oci_region_query = OCIRegionQuery(profile=profile)
     regions = oci_region_query.executeQuery()
     response = jsonToFormattedString(regions)
-    logger.debug(">>>>>>>>> Regions: {0!s:s}".format(response))
+    logger.info(">>>>>>>>> Regions: {0!s:s}".format(response))
     return response
 
 

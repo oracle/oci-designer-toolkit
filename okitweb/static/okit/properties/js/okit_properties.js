@@ -76,15 +76,22 @@ class OkitResourceProperties {
         min: 0,
         max: 65535
     }
+    // Force Variable
+    variable_only_data = {
+        pattern: '^var.[\\w-]*$',
+        title: 'Only Variables are allowed. (var.*)'
+    }
 
     // Common Filters
     compartment_filter = (r) => r.compartment_id.toString() === this.resource.compartment_id.toString()
-    vcn_filter = (r) => r.vcn_id.toString() === this.resource.vcn_id.toString()
-    subnet_filter = (r) => r.subnet_id.toString() === this.resource.subnet_id.toString()
-    oci_defined_filter = (r) => r.compartment_id === null
-    user_defined_filter = (r) => r.compartment_id !== null
-    nsg_filter = (r) => r.vcn_id === [...(this.resource.okit_json.subnet ? this.resource.okit_json.subnet : this.resource.okit_json.subnets ? this.resource.okit_json.subnets : [])].filter((s) => s.id === this.resource.subnet_id)[0].vcn_id
     fss_filter = (r) => r.availability_domain.toString() === this.resource.availability_domain.toString()
+    key_filter = (r) => r.key_id.toString() === this.resource.key_id.toString()
+    nsg_filter = (r) => r.vcn_id === [...(this.resource.okit_json.subnet ? this.resource.okit_json.subnet : this.resource.okit_json.subnets ? this.resource.okit_json.subnets : [])].filter((s) => s.id === this.resource.subnet_id)[0].vcn_id
+    oci_defined_filter = (r) => r.compartment_id === null
+    subnet_filter = (r) => r.subnet_id.toString() === this.resource.subnet_id.toString()
+    user_defined_filter = (r) => r.compartment_id !== null
+    vault_filter = (r) => r.vault_id.toString() === this.resource.vault_id.toString()
+    vcn_filter = (r) => r.vcn_id.toString() === this.resource.vcn_id.toString()
 
     // Build Sheet
     build() {
@@ -347,6 +354,9 @@ class OkitResourceProperties {
             placeholder: 'www.yoursite.com',
             pattern: "^[\w\._]+$",
             title: 'URL with no protocol'
+        },
+        name_no_space: {
+            pattern: ".*(?:^[a-zA-Z](-?[a-zA-Z_0-9])*$).*"
         }
     }
 
@@ -586,6 +596,17 @@ class OkitResourceProperties {
         if (!filter) filter = () => true
         const resources = this.resource.okit_json[`${resource_type}s`] ? this.resource.okit_json[`${resource_type}s`] : this.resource.okit_json[`${resource_type}`] ? this.resource.okit_json[`${resource_type}`] : []
         resources.filter(filter).forEach((r) => {
+            const div = select.append('div')
+            const safeid = r.id.replace(/[\W_]+/g,"_")
+            div.append('input').attr('type', 'checkbox').attr('id', safeid).attr('value', r.id)
+            div.append('label').attr('for', safeid).text(r.display_name)
+        })
+    }
+
+    loadMultiSelectFromList(select, resources) {
+        console.info('Select:', select)
+        select.selectAll('*').remove()
+        resources.forEach((r) => {
             const div = select.append('div')
             const safeid = r.id.replace(/[\W_]+/g,"_")
             div.append('input').attr('type', 'checkbox').attr('id', safeid).attr('value', r.id)

@@ -1,6 +1,18 @@
 # Release Notes
 
 
+## Version 0.45.0
+**Release Date**: 25th January 2023
+### Features
+1. Update Network Firewall to use fixed Terraform Resource.
+2. Add Vault Secret Resource.
+3. Modify Build process to use resourses.txt.
+4. Display if public IP assigned to instance in tabular view.
+5. Sum Instance Memory and display in title on tabular view.
+### Bug Fixes
+1. Clear saved cache file when refreshing cache.
+
+
 ## Version 0.44.0
 **Release Date**: 30th November 2022
 ### Features

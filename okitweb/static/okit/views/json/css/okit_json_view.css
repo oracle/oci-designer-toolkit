@@ -126,11 +126,11 @@
     border: #aeaeae 1px;
 }
 
-.okit-text-json-canvas label.key {
+.okit-text-json-canvas label.json-key {
     padding-right: 10px;
 }
 
-.okit-text-json-canvas label span.key {
+.okit-text-json-canvas label span.json-key {
     color: #2C5967;
 }
 

@@ -79,12 +79,13 @@ class OkitTabularJsonView extends OkitJsonView {
             },
             instances: {
                 'Shape': {property: 'shape'},
-                'Memory (Gbs)': {property: 'memory_in_gbs', type: 'number'},
-                'OCPUs': {property: 'ocpus', type: 'number'},
+                'Memory ({total} Gbs)': {property: 'memory_in_gbs', type: 'number', sum: true},
+                '{total} OCPUs': {property: 'ocpus', type: 'number', sum: true},
                 'Subnet': {property: 'subnet_id', lookup: 'model.getSubnet'},
                 'Block Volumes': {property: 'block_storage_volume_ids', lookup: 'model.getBlockStorageVolume'},
                 'Status': {property: 'lifecycle_state'},
-                'Fault Domain': {property: 'fault_domain'}
+                'Fault Domain': {property: 'fault_domain'},
+                'Assign Public IP': {property: 'assign_public_ip'}
             },
             instance_pools: {},
             internet_gateways: {
@@ -251,8 +252,16 @@ class OkitTabularJsonView extends OkitJsonView {
         const tr = thead.append('div').attr('class', 'tr');
         tr.append('div').attr('class', 'th').text(this.okitjson[resource_type].length);
         Object.entries(property_map).forEach(([key, value]) => {
-            tr.append('div').attr('class', 'th').text(key);
+            if (value.sum) {
+                tr.append('div').attr('class', 'th').text(key.replace('{total}', this.getColumnTotal(resource_type, value.property)));
+            } else {
+                tr.append('div').attr('class', 'th').text(key);
+            }
         });
+    }
+
+    getColumnTotal(resource_type, property) {
+        return this.okitjson[resource_type].reduce((accumulator, resource) => accumulator + resource[property], 0)
     }
 
     addTableBody(table, property_map, resource_type) {

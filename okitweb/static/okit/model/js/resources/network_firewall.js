@@ -32,18 +32,75 @@ class NetworkFirewall extends OkitArtifact {
     newNetworkFirewallPolicy() {
         return {
             resource_name: `${this.generateResourceName()}Policy`,
-            display_name: `${this.display_name} Policy`,
+            display_name: `${this.display_name}Policy`,
             ip_address_lists: {},
+            application_lists: {},
             url_lists: {},
             security_rules: [],
-            decryption_rules: []
+            decryption_rules: [],
+            mapped_secrets: {},
+            decryption_profiles: {}
+        }
+    }
+    newIPAddressList(count=0) {
+        return {
+            name: `${this.display_name}IPList${count}`,
+            ip_addresses: []
+        }
+    }
+    newUrlList(count=0) {
+        return {
+            name: `${this.display_name}URLList${count}`,
+            type: 'SIMPLE',
+            urls: []
         }
     }
     newSecurityRule() {
-        return {}
+        return {
+            name: `${this.display_name}SecurityRule`,
+            action: 'DROP',
+            condition: {
+                applications: [],
+                destinations: [],
+                sources: [],
+                urls: []        
+            },
+            inspection: ''
+        }
     }
     newDecryptionRule() {
-        return {}
+        return {
+            name: `${this.display_name}DecryptionRule`,
+            action: 'NO_DECRYPT',
+            condition: {
+                destinations: [],
+                sources: [],
+            },
+            decryption_profile: '',
+            secret: ''
+        }
+    }
+    newDecryptionProfile() {
+        return {
+            is_out_of_capacity_blocked: false,
+            is_unsupported_cipher_blocked: true,
+            is_unsupported_version_blocked: true,
+            type: 'SSL_FORWARD_PROXY',            
+            is_expired_certificate_blocked: true,
+            is_untrusted_issuer_blocked: true,
+            is_unknown_revocation_status_blocked: true,
+            is_revocation_status_timeout_blocked: false,
+            are_certificate_extensions_restricted: true,
+            is_auto_include_alt_name: true,
+        }
+    }
+    newMappedSecret() {
+        return {
+            source: 'OCI_VAULT',
+            type: 'SSL_FORWARD_PROXY',
+            vault_secret_id: '',
+            version_number: 1    
+        }
     }
 
     /*
