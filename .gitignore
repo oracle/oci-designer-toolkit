@@ -1,3 +1,4 @@
+# IDE Directories and Files
 .idea
 **/*.iml
 **/.DS_Store
@@ -6,38 +7,32 @@
 .vscode/*.json
 .vscode/settings.json
 
+.scannerwork
+
+# Python Environments
 venv/
 .venv/
 
+# Python Cache
 *.pyc
 __pycache__/
-
-/instance/
-
 .pytest_cache/
-.coverage
-htmlcov/
-
-dist/
-build/
 *.egg-info/
-
 okit.wpr
 
-output/
-log/
+# Node / React / Electron
+**/dist/
+**/build/
+**/node_modules
+**/package-lock.json
 
-.scannerwork
-
+# Containers
 .vagrant
-
 containers/.oci
 **/*.pem
-
 containers/oci/*
 !containers/oci/example_config
 !containers/cloud
-
 containers/ssh/*
 !containers/ssh/example_config
 
@@ -48,15 +43,20 @@ containers/ssh/*
 /containers/lima/
 /containers/vbox/
 
-**/node_modules
-**/package-lock.json
-
+# Runtime Generated Files
 okitweb/static/okit/json/dropdown_data/*
 okitweb/static/okit/templates/user/*
+okitweb/static/okit/json/dropdown/profiles/*
+okitweb/static/okit/json/cache.json
+output/
+log/
+/instance/
 
+# Testing
 test
 **/test/model
 **/test/properties
 
-okitweb/static/okit/json/dropdown/profiles/*
-okitweb/static/okit/json/cache.json
+# Others
+.coverage
+htmlcov/
