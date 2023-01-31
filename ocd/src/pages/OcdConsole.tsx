@@ -3,7 +3,7 @@
 ** Licensed under the GNU GENERAL PUBLIC LICENSE v 3.0 as shown at https://www.gnu.org/licenses/.
 */
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import OcdDesigner from './OcdDesigner'
 import OcdDocument from '../components/OcdDocument'
 import OcdConsoleMenuBar from '../components/OcdConsoleMenuBar'
@@ -54,6 +54,34 @@ const OcdConsoleHeader = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, 
     )
 }
 
+const OcdConsoleConfigEditor = ({ ocdConsoleConfig, setOcdConsoleConfig }: any): JSX.Element => {
+    const [dropdown, setDropdown] = useState(false)
+    const onMouseEnter = () => {setDropdown(true)}
+    const onMouseLeave = () => {setDropdown(false)}
+    const closeDropdown = () => {setDropdown(!dropdown)}
+    const toggleDropdown = () => {setDropdown(!dropdown)}
+    const cbRef = useRef<HTMLInputElement>(null)
+    const onChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+        console.info('Ref:', cbRef)
+        if (cbRef.current) ocdConsoleConfig.config[cbRef.current.id] = cbRef.current.checked
+        setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+    }
+    return (
+        <div className='ocd-console-toolbar-dropdown'>
+            <ul>
+                <li className='ocd-console-toolbar-dropdown-item' onClick={toggleDropdown}>
+                    <div className='left-palette ocd-console-toolbar-icon'></div>
+                    <ul className={`${dropdown ? 'show' : 'hidden'}`}>
+                        <li className='ocd-dropdown-menu-item'><div><input id='detailedResource' type='checkbox' onChange={onChange} ref={cbRef} checked={ocdConsoleConfig.config.detailedResource}/>Resource Details</div></li>
+                        <li className='ocd-dropdown-menu-item'><div><input id='verboseProviderPalette' type='checkbox' onChange={onChange} ref={cbRef} checked={ocdConsoleConfig.config.verboseProviderPalette}/>Verbose Palette</div></li>
+                        <li className='ocd-dropdown-menu-item'><div><input id='showModelPalette' type='checkbox' onChange={onChange} ref={cbRef} checked={ocdConsoleConfig.config.showModelPalette}/>Model Palette</div></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    )
+}
+
 const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument }: ConsolePageProps): JSX.Element => {
     const onValidateClick = () => {
         console.info('Validate Clicked')
@@ -65,14 +93,15 @@ const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument,
     const onEstimateClick = () => {
         console.info('Estimate Clicked')
     }
-    const onLeftPaletteClick = () => {
-        console.info('Left Palette Click')
-    }
     return (
         <div className='ocd-console-toolbar ocd-console-toolbar-colour'>
             <div className='ocd-toolbar-left'>
                 <div>
-                    <div className='left-palette ocd-console-toolbar-icon' onClick={onLeftPaletteClick}></div>
+                    {/* <div className='left-palette ocd-console-toolbar-icon' onClick={onLeftPaletteClick} ref={leftPaletteRef}></div> */}
+                    <OcdConsoleConfigEditor 
+                        ocdConsoleConfig={ocdConsoleConfig} 
+                        setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} 
+                        />
                 </div>
             </div>
             <div className='ocd-toolbar-right'>

@@ -144,7 +144,7 @@ const OcdForeignObject = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
             <div 
             // @ts-ignore 
             xmlns='http://www.w3.org/1999/xhtml'>
-                <div className={backgroundColourClass}>
+                <div className={backgroundColourClass} title={ocdDocument.getDisplayName(resource.ocid)}>
                     <div className={`${resource.class} ocd-svg-icon`}></div>
                 </div>
                 <div className='ocd-svg-foreign-object-display-name'>
