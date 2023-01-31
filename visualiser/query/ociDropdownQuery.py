@@ -173,7 +173,7 @@ class OCIDropdownQuery(OCIConnection):
 
     def instance_agent_plugins(self, plugins, resources):
         logger.info(f'Plugins {plugins}')
-        plugins = [p for p in plugins if p['status'] in ['RUNNING', 'STOPPED']]
+        plugins = [p for p in plugins if p.get('status', '') in ['RUNNING', 'STOPPED']]
         logger.info(f'Plug-ins {plugins}')
         return plugins
 
