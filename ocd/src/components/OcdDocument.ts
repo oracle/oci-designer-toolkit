@@ -68,7 +68,7 @@ export class OcdDocument {
     // @ts-ignore 
     getLayerName = (id: string): string => this.design.model.oci.resources.compartment.find((c) => c.id === id).name
     // @ts-ignore 
-    getActiveLayer = (pageId: string) => this.getActivePage(pageId).layers.find((l: OcdViewLayer) => l.selected)
+    getActiveLayer = (pageId: string): OcdViewLayer => this.getActivePage(pageId).layers.find((l: OcdViewLayer) => l.selected)
 
     // @ts-ignore 
     getPage = (id: string): OcdViewPage => this.design.view.pages.find((v) => v.id === id)

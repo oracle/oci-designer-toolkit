@@ -7,8 +7,9 @@ import OcdDocument from './OcdDocument'
 import OcdResourceSvg from './OcdResourceSvg'
 import { OcdViewCoords, OcdViewLayer, OcdViewPage } from '../model/OcdDesign'
 import { OcdResource } from '../model/OcdResource'
+import { CanvasProps } from '../types/ReactComponentProperties'
 
-export const OcdCanvas = ({ dragData, ocdDocument, setOcdDocument }: any): JSX.Element => {
+export const OcdCanvas = ({ dragData, ocdConsoleConfig, ocdDocument, setOcdDocument }: CanvasProps): JSX.Element => {
     console.info('OCD Document:', ocdDocument)
 
     const onDragOver = (e: React.MouseEvent<HTMLElement>) => {
@@ -92,6 +93,7 @@ export const OcdCanvas = ({ dragData, ocdDocument, setOcdDocument }: any): JSX.E
                     <g>
                         {page.coords && page.coords.filter((r: OcdViewCoords) => visibleResourceIds.includes(r.ocid)).map((r: OcdViewCoords) => {
                             return <OcdResourceSvg
+                                        ocdConsoleConfig={ocdConsoleConfig}
                                         ocdDocument={ocdDocument}
                                         setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)}
                                         resource={r}

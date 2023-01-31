@@ -10,10 +10,11 @@ import { OcdViewCoords } from '../model/OcdDesign'
 import { ResourceRectProps, ResourceForeignObjectProps, ResourceSvgProps } from '../types/ReactComponentProperties'
 import { OcdViewPage } from '../model/OcdDesign'
 
-const OcdSimpleRect = ({ ocdDocument, setOcdDocument, resource }: ResourceRectProps): JSX.Element => {
+const OcdSimpleRect = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resource }: ResourceRectProps): JSX.Element => {
     const id = `${resource.id}-rect`
+    const rectClass = `ocd-svg-simple ${ocdConsoleConfig.config.detailedResource ? 'ocd-svg-resource-detailed' : 'ocd-svg-resource-simple'}`
     return (
-        <rect className='ocd-svg-simple' 
+        <rect className={rectClass} 
             id={id} 
             x='0' 
             y='0' 
@@ -27,7 +28,7 @@ const OcdSimpleRect = ({ ocdDocument, setOcdDocument, resource }: ResourceRectPr
     )
 }
 
-const OcdContainerRect = ({ ocdDocument, setOcdDocument, resource }: ResourceRectProps): JSX.Element => {
+const OcdContainerRect = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resource }: ResourceRectProps): JSX.Element => {
     const [dimensions, setDimensions] = useState({ w: 0, h: 0 });
     const container_rect_offset = 0
     const id = `${resource.id}-rect`
@@ -129,16 +130,17 @@ const OcdResizePoint = ({resource, cx, cy, position, setDimensions, onResizeEnd}
     )
 }
 
-const OcdForeignObject = ({ ocdDocument, setOcdDocument, resource }: ResourceForeignObjectProps) => {
+const OcdForeignObject = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resource }: ResourceForeignObjectProps) => {
     const id = `${resource.id}-fo`
     const backgroundColourClass = `${resource.class}-background-colour`
+    const foreignObjectClass = `ocd-svg-foreign-object ${ocdConsoleConfig.config.detailedResource || resource.container ? 'ocd-svg-resource-detailed' : 'ocd-svg-resource-simple'}`
     const resourceType = resource.class.split('-').slice(1).reduce((a, c) => `${a}${c.charAt(0).toUpperCase()}${c.slice(1).toLowerCase()}`, '')
     const onChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         ocdDocument.setDisplayName(resource.ocid, e.target.value.trim())
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
     return (
-        <foreignObject id={id} className='ocd-svg-foreign-object'>
+        <foreignObject id={id} className={foreignObjectClass}>
             <div 
             // @ts-ignore 
             xmlns='http://www.w3.org/1999/xhtml'>
@@ -154,7 +156,7 @@ const OcdForeignObject = ({ ocdDocument, setOcdDocument, resource }: ResourceFor
     )
 }
 
-export const OcdResourceSvg = ({ ocdDocument, setOcdDocument, resource }: ResourceSvgProps): JSX.Element => {
+export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resource }: ResourceSvgProps): JSX.Element => {
     const [dragging, setDragging] = useState(false)
     const [coordinates, setCoordinates] = useState({ x: 0, y: 0 });
     const [origin, setOrigin] = useState({ x: 0, y: 0 });
@@ -216,17 +218,20 @@ export const OcdResourceSvg = ({ ocdDocument, setOcdDocument, resource }: Resour
             onMouseLeave={onResourceDragEnd}
             >
                 <SvgRect 
+                    ocdConsoleConfig={ocdConsoleConfig}
                     ocdDocument={ocdDocument}
                     setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)}
                     resource={resource}
                     />
                 <OcdForeignObject 
+                    ocdConsoleConfig={ocdConsoleConfig}
                     ocdDocument={ocdDocument}
                     setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)}
                     resource={resource}
                     />
                 {resource.coords && resource.coords.map((r:any) => {
                     return <OcdResourceSvg
+                                ocdConsoleConfig={ocdConsoleConfig}
                                 ocdDocument={ocdDocument}
                                 setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)}
                                 resource={r}

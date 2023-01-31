@@ -18,3 +18,12 @@ export interface DragData {
     resourceType?: string,
     resource?: OcdResource
 }
+
+export function newDragData(): DragData {
+    return {
+        dragObject: {container: false, title: '', class: ''},
+        offset: {x: 0, y:0},
+        existingResource: false
+    }
+}
+

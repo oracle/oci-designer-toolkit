@@ -7,20 +7,31 @@ import React from 'react'
 import { OcdConsoleConfig } from '../components/OcdConsoleConfiguration'
 import OcdDocument from '../components/OcdDocument'
 import { OcdViewCoords } from '../model/OcdDesign'
+import { DragData } from './DragData'
+
+export interface CanvasProps {
+    dragData: DragData
+    ocdConsoleConfig: OcdConsoleConfig
+    ocdDocument: OcdDocument
+    setOcdDocument: React.Dispatch<any>
+}
 
 export interface ResourceRectProps {
+    ocdConsoleConfig: OcdConsoleConfig
     ocdDocument: OcdDocument
     setOcdDocument: React.Dispatch<any>
     resource: OcdViewCoords
 }
 
 export interface ResourceForeignObjectProps {
+    ocdConsoleConfig: OcdConsoleConfig
     ocdDocument: OcdDocument
     setOcdDocument: React.Dispatch<any>
     resource: OcdViewCoords
 }
 
 export interface ResourceSvgProps {
+    ocdConsoleConfig: OcdConsoleConfig
     ocdDocument: OcdDocument
     setOcdDocument: React.Dispatch<any>
     resource: OcdViewCoords

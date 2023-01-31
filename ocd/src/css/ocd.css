@@ -11,6 +11,8 @@
     --console-palette-width: 200px;
     --canvas-icon-height: 40px;
     --canvas-icon-width: 40px;
+    --canvas-resource-simple-width: 40px;
+    --canvas-resource-detailed-width: 150px;
 }
 
 body {
@@ -756,12 +758,21 @@ body {
 }
 
 .ocd-svg-simple {
-    width: 150px;
+    width: var(--canvas-icon-width);
     height: var(--canvas-icon-height);
     stroke: #161513;
     stroke-width: 0.5px;
-    stroke-opacity: 0.1;
+    stroke-opacity: 0.5;
     rx: 5;
+}
+
+.ocd-svg-resource-simple {
+    width: var(--canvas-resource-simple-width);
+    stroke-opacity: 0;
+}
+
+.ocd-svg-resource-detailed {
+    width: var(--canvas-resource-detailed-width);
 }
 
 .ocd-svg-resize {
@@ -793,7 +804,6 @@ body {
 }
 
 .ocd-svg-foreign-object {
-    width: 150px;
     height: var(--canvas-icon-height);
 }
 

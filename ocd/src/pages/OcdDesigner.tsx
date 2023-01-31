@@ -9,8 +9,11 @@ import OcdCanvas from '../components/OcdCanvas'
 import OcdCanvasLayers from '../components/OcdCanvasLayers'
 import OcdCanvasPages from '../components/OcdCanvasPages'
 import OcdDocument from '../components/OcdDocument'
+import { CanvasProps } from '../types/ReactComponentProperties'
+import { ConsolePageProps } from '../types/Console'
+import { newDragData } from '../types/DragData'
 
-const OcdCanvasView = ({ dragData, ocdDocument, setOcdDocument }: any): JSX.Element => {
+const OcdCanvasView = ({ dragData, ocdConsoleConfig, ocdDocument, setOcdDocument }: CanvasProps): JSX.Element => {
     return (
         <div className='ocd-designer-view'>
             <OcdCanvasLayers 
@@ -19,6 +22,7 @@ const OcdCanvasView = ({ dragData, ocdDocument, setOcdDocument }: any): JSX.Elem
                 />
             <OcdCanvas 
                 dragData={dragData} 
+                ocdConsoleConfig={ocdConsoleConfig}
                 ocdDocument={ocdDocument} 
                 setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} 
                 />
@@ -30,8 +34,8 @@ const OcdCanvasView = ({ dragData, ocdDocument, setOcdDocument }: any): JSX.Elem
     )
 }
 
-const OcdDesigner = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument}: any): JSX.Element => {
-    const [dragData, setDragData] = useState(null)
+const OcdDesigner = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument}: ConsolePageProps): JSX.Element => {
+    const [dragData, setDragData] = useState(newDragData())
     return (
         <div className='ocd-designer'>
             <OcdPalette 
@@ -41,6 +45,7 @@ const OcdDesigner = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOc
                 />
             <OcdCanvasView 
                 dragData={dragData} 
+                ocdConsoleConfig={ocdConsoleConfig}
                 ocdDocument={ocdDocument} 
                 setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} 
                 />
