@@ -162,42 +162,42 @@ export const menuItems = [
                 label: 'Designer',
                 click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
                     ocdConsoleConfig.config.displayPage = 'designer'
-                    setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig.config))
+                    setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
                 }
             },
             {
                 label: 'Variables',
                 click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
                     ocdConsoleConfig.config.displayPage = 'variables'
-                    setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig.config))
+                    setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
                 }
             },
             {
                 label: 'BoM',
                 click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
                     ocdConsoleConfig.config.displayPage = 'bom'
-                    setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig.config))
+                    setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
                 }
             },
             {
                 label: 'Markdown',
                 click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
                     ocdConsoleConfig.config.displayPage = 'markdown'
-                    setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig.config))
+                    setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
                 }
             },
             {
                 label: 'Tabular',
                 click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
                     ocdConsoleConfig.config.displayPage = 'tabular'
-                    setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig.config))
+                    setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
                 }
             },
             {
                 label: 'Terraform',
                 click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
                     ocdConsoleConfig.config.displayPage = 'terraform'
-                    setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig.config))
+                    setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
                 }
             }
         ]

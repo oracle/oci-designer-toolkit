@@ -189,7 +189,7 @@ const OcdProviderPaletteGroup = ({ provider, group, ocdConsoleConfig, setDragDat
         <div className='ocd-designer-palette-group'>
             <details id={group.title} open={open}>
                 <summary><div className={group.class}><label>{group.title}</label></div></summary>
-                <div className={`${ocdConsoleConfig.config.verboseProviderPalette ? 'ocd-designer-palette-verbose-resource' : 'ocd-designer-palette-group-grid'}`}>
+                <div className={`${ocdConsoleConfig.config.verboseProviderPalette ? 'ocd-designer-palette-group-verbose-grid' : 'ocd-designer-palette-group-grid'}`}>
                     {group.resources.map((resource: PaletteResource) => {
                         resource.provider = provider
                         return <OcdProviderPaletteResource 

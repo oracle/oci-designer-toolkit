@@ -61,9 +61,16 @@ const OcdConsoleConfigEditor = ({ ocdConsoleConfig, setOcdConsoleConfig }: any):
     const closeDropdown = () => {setDropdown(!dropdown)}
     const toggleDropdown = () => {setDropdown(!dropdown)}
     const cbRef = useRef<HTMLInputElement>(null)
-    const onChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-        console.info('Ref:', cbRef)
-        if (cbRef.current) ocdConsoleConfig.config[cbRef.current.id] = cbRef.current.checked
+    const detailedResourceOnChange = () => {
+        ocdConsoleConfig.config.detailedResource = !ocdConsoleConfig.config.detailedResource
+        setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+    }
+    const verboseProviderPaletteOnChange = () => {
+        ocdConsoleConfig.config.verboseProviderPalette = !ocdConsoleConfig.config.verboseProviderPalette
+        setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+    }
+    const showModelPaletteOnChange = () => {
+        ocdConsoleConfig.config.showModelPalette = !ocdConsoleConfig.config.showModelPalette
         setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
     }
     return (
@@ -72,9 +79,9 @@ const OcdConsoleConfigEditor = ({ ocdConsoleConfig, setOcdConsoleConfig }: any):
                 <li className='ocd-console-toolbar-dropdown-item' onClick={toggleDropdown}>
                     <div className='left-palette ocd-console-toolbar-icon'></div>
                     <ul className={`${dropdown ? 'show' : 'hidden'}`}>
-                        <li className='ocd-dropdown-menu-item'><div><input id='detailedResource' type='checkbox' onChange={onChange} ref={cbRef} checked={ocdConsoleConfig.config.detailedResource}/>Resource Details</div></li>
-                        <li className='ocd-dropdown-menu-item'><div><input id='verboseProviderPalette' type='checkbox' onChange={onChange} ref={cbRef} checked={ocdConsoleConfig.config.verboseProviderPalette}/>Verbose Palette</div></li>
-                        <li className='ocd-dropdown-menu-item'><div><input id='showModelPalette' type='checkbox' onChange={onChange} ref={cbRef} checked={ocdConsoleConfig.config.showModelPalette}/>Model Palette</div></li>
+                        <li className='ocd-dropdown-menu-item'><div><input id='detailedResource' type='checkbox' onChange={detailedResourceOnChange} ref={cbRef} checked={ocdConsoleConfig.config.detailedResource}/>Resource Details</div></li>
+                        <li className='ocd-dropdown-menu-item'><div><input id='verboseProviderPalette' type='checkbox' onChange={verboseProviderPaletteOnChange} ref={cbRef} checked={ocdConsoleConfig.config.verboseProviderPalette}/>Verbose Palette</div></li>
+                        <li className='ocd-dropdown-menu-item'><div><input id='showModelPalette' type='checkbox' onChange={showModelPaletteOnChange} ref={cbRef} checked={ocdConsoleConfig.config.showModelPalette}/>Model Palette</div></li>
                     </ul>
                 </li>
             </ul>
