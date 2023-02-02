@@ -334,7 +334,7 @@ class OkeClusterView extends OkitCompartmentArtefactView {
     }
 
     static getDropTargets() {
-        return [VirtualCloudNetwork.getArtifactReference()];
+        return [Compartment.getArtifactReference(), VirtualCloudNetwork.getArtifactReference()];
     }
 
 }
