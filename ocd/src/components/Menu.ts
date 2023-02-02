@@ -90,16 +90,18 @@ export const menuItems = [
                                 ],
                             }
                             // @ts-ignore 
-                            const handle = await window.showSaveFilePicker(options);
-                            const writable = await handle.createWritable();
-                            await writable.write(JSON.stringify(ocdDocument.design, null, 2));
-                            await writable.close();
-                            return handle;
+                            const handle = await window.showSaveFilePicker(options)
+                            const writable = await handle.createWritable()
+                            const okitJson = JSON.stringify(ocdDocument.design, null, 2)
+                            console.info('Writing', okitJson, ocdDocument)
+                            await writable.write(okitJson)
+                            await writable.close()
+                            return handle
                         } catch (err: any) {
                             console.error(err.name, err.message);
                         }
                     }
-                    saveFile(ocdDocument).then((resp) => console.info('Saved' + resp))             
+                    saveFile(ocdDocument).then((resp) => console.info('Saved', resp))             
                 }
             },
             {
