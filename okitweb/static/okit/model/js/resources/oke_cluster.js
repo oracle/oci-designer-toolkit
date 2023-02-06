@@ -19,6 +19,7 @@ class OkeCluster extends OkitArtifact {
         this.vcn_id = '';
         this.kubernetes_version = '';
         this.options = this.newOptions();
+        this.endpoint_config = this.newEndpointConfig()
         this.pools = []
             /*
             Each pool entry will have the following structure
@@ -74,6 +75,14 @@ class OkeCluster extends OkitArtifact {
         return {
             pods_cidr: '', 
             services_cidr: ''
+        }
+    }
+
+    newEndpointConfig() {
+        return {
+            is_public_ip_enabled: false,
+            nsg_ids: [],
+            subnet_id: ''
         }
     }
 

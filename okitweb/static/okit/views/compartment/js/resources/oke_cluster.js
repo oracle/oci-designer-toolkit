@@ -7,13 +7,11 @@ console.debug('Loaded Compartment OKE View Javascript');
 /*
 ** Define Compartment View Artifact Class
  */
-class OkeClusterView extends OkitCompartmentArtefactView {
+class OkeClusterView extends OkitContainerCompartmentArtefactView {
     constructor(artefact = null, json_view) {
         super(artefact, json_view);
     }
 
-    // get parent_id() {return this.artefact.vcn_id;}
-    // get parent() {return this.getJsonView().getVirtualCloudNetwork(this.parent_id);}
     get parent_id() {
         let vcn = this.getJsonView().getVirtualCloudNetwork(this.artefact.vcn_id);
         if (vcn && vcn.compartment_id === this.artefact.compartment_id) {
@@ -22,12 +20,17 @@ class OkeClusterView extends OkitCompartmentArtefactView {
             return this.artefact.compartment_id;
         }
     }
-    get parent() {return this.getJsonView().getVirtualCloudNetwork(this.parent_id) ? this.getJsonView().getVirtualCloudNetwork(this.parent_id) : this.getJsonView().getCompartment(this.parent_id);}
     // ---- Okit View Functions
 
     /*
     ** SVG Processing
      */
+    /*
+    ** Property Sheet Load function
+    */
+    newPropertiesSheet() {
+        this.properties_sheet = new OkeClusterProperties(this.artefact)
+    }
 
     /*
     ** Property Sheet Load function
@@ -324,6 +327,13 @@ class OkeClusterView extends OkitCompartmentArtefactView {
      */
     loadValueProposition() {
         $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/oke_cluster.html");
+    }
+
+    /*
+    ** Child Type Functions
+     */
+    getTopArtifacts() {
+        return [NodePool.getArtifactReference()];
     }
 
     /*
