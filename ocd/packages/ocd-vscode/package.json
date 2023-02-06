@@ -1,0 +1,17 @@
+{
+  "name": "ocd-vscode",
+  "version": "0.1.0",
+  "description": "OKIT OCD Visual Studio Code Extension",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ocd",
+    "okit",
+    "extension"
+  ],
+  "author": "Andrew Hopkinson",
+  "license": "UPL-1.0"
+}

@@ -1,0 +1,15 @@
+{
+  "name": "ocd-core",
+  "version": "0.1.0",
+  "description": "Core OKIT OCD functionality ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ocd",
+    "okit"
+  ],
+  "author": "Andrew Hopkinson",
+  "license": "UPL-1.0"
+}

@@ -1,0 +1,17 @@
+{
+  "name": "ocd-react",
+  "version": "0.1.0",
+  "description": "OKIT OCD React Based Web Application",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ocd",
+    "okit",
+    "web"
+  ],
+  "author": "Andrew Hopkinson",
+  "license": "UPL-1.0"
+}

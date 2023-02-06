@@ -1,0 +1,17 @@
+{
+  "name": "ocd-desktop",
+  "version": "0.1.0",
+  "description": "OKIT OCD Native Desktop Application",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ocd",
+    "okit",
+    "desktop"
+  ],
+  "author": "Andrew Hopkinson",
+  "license": "UPL-1.0"
+}
