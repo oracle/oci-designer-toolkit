@@ -5,7 +5,7 @@
 
 import { useState } from 'react'
 import { menuItems, MenuItem } from './Menu'
-import OcdDocument from '../components/OcdDocument'
+import OcdDocument from './OcdDocument'
 import { ConsolePageProps } from '../types/Console'
 import OcdConsoleConfig from './OcdConsoleConfiguration'
 
