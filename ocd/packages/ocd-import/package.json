@@ -2,6 +2,13 @@
   "name": "ocd-import",
   "version": "0.1.0",
   "description": "OKIT OCD Import Functionality",
+  "author": {
+    "name": "Andrew Hopkinson",
+    "email": "andrew.hopkinson@oracle.com",
+    "url": "https://github.com/oracle/oci-designer-toolkit"
+  },
+  "bugs": "https://github.com/oracle/oci-designer-toolkit/issues",
+  "homepage": "https://github.com/oracle/oci-designer-toolkit",
   "main": "index.js",
   "devDependencies": {},
   "scripts": {
@@ -12,6 +19,5 @@
     "okit",
     "import"
   ],
-  "author": "Andrew Hopkinson",
   "license": "UPL-1.0"
 }

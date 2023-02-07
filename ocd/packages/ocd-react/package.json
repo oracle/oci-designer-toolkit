@@ -2,8 +2,12 @@
   "name": "ocd-react",
   "description": "OKIT Open Cloud Designer",
   "author": {
-    "name": "Andrew Hopkinson"
+    "name": "Andrew Hopkinson",
+    "email": "andrew.hopkinson@oracle.com",
+    "url": "https://github.com/oracle/oci-designer-toolkit"
   },
+  "bugs": "https://github.com/oracle/oci-designer-toolkit/issues",
+  "homepage": "https://github.com/oracle/oci-designer-toolkit",
   "version": "0.1.0",
   "private": true,
   "main": "public/electron.js",
@@ -73,7 +77,6 @@
     ]
   },
   "devDependencies": {
-    "@types/d3": "^7.4.0",
     "electron": "^22.0.0",
     "electron-builder": "^23.6.0"
   },
