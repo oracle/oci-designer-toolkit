@@ -2,6 +2,12 @@
     "name": "ocd",
     "description": "OKIT Open Cloud Designer",
     "workspaces": [
-        
+        "packages/ocd-core",
+        "packages/ocd-export",
+        "packages/ocd-import",
+        "packages/ocd-query",
+        "packages/ocd-react",
+        "packages/ocd-desktop",
+        "packages/ocd-vscode"
     ]
 }
