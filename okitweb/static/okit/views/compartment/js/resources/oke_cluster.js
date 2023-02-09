@@ -35,7 +35,7 @@ class OkeClusterView extends OkitContainerCompartmentArtefactView {
     /*
     ** Property Sheet Load function
      */
-    loadProperties() {
+    loadProperties1() {
         let me = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/oke_cluster.html", () => {
             let service_lb_subnet_select = d3.select(d3Id('service_lb_subnet_ids'));

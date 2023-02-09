@@ -313,6 +313,7 @@ class OkitOCIData {
     }
 
     getInstanceShapes(type='') {
+        console.info(`Getting Shapes for type = '${type}'`)
         if (type === '') {
             return this.dropdown_data.shapes;
         } else {
@@ -322,6 +323,7 @@ class OkitOCIData {
 
     getGIVersions = (shape) => this.dropdown_data.gi_versions[shape].map((v) => v.version)
 
+    getAllInstanceShapes = () => this.dropdown_data.shapes
     getBareMetalInstanceShapes = () => this.dropdown_data.shapes.filter(s => s.shape.startsWith('BM.'))
     getVirtualMachineInstanceShapes = () => this.dropdown_data.shapes.filter(s => s.shape.startsWith('VM.'))
     getIntelInstanceShapes = () => this.dropdown_data.shapes.filter(s => s.shape.startsWith('VM.') && !s.shape.includes('.A') && !s.shape.includes('.E'))

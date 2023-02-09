@@ -17,12 +17,14 @@ class NodePool extends OkitArtifact {
         this.compartment_id = data.parent_id;
         this.cluster_id = ''
         this.node_shape = ''
+        this.node_shape_config = {
+            memory_in_gbs: '',
+            ocpus: ''
+        }
         // Update with any passed data
         this.merge(data);
         this.convert();
-        // TODO: If the Resource is within a Subnet but the subnet_iss is not at the top level then raise it with the following functions if not required delete them.
-        // Expose subnet_id at the top level
-        Object.defineProperty(this, 'subnet_id', {get: function() {return this.primary_mount_target.subnet_id;}, set: function(id) {this.primary_mount_target.subnet_id = id;}, enumerable: false });
+        Object.defineProperty(this, 'flex_shape', {get: function() {return !this.node_shape ? false : this.node_shape.endsWith('.Flex')}, set: function(flex_shape) {}, enumerable: true });
     }
     /*
     ** Name Generation

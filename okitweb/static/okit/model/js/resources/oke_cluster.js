@@ -39,14 +39,14 @@ class OkeCluster extends OkitArtifact {
         this.merge(data);
         this.convert();
         // Check if built from a query
-        for (let pool of this.pools) {
-            for (let config of pool.node_config_details.placement_configs) {
-                if (config.availability_domain.length > 1) {
-                    config.region_availability_domain = config.availability_domain;
-                    config.availability_domain = this.getAvailabilityDomainNumber(config.region_availability_domain);
-                }
-            }
-        }
+        // for (let pool of this.pools) {
+        //     for (let config of pool.node_config_details.placement_configs) {
+        //         if (config.availability_domain.length > 1) {
+        //             config.region_availability_domain = config.availability_domain;
+        //             config.availability_domain = this.getAvailabilityDomainNumber(config.region_availability_domain);
+        //         }
+        //     }
+        // }
     }
 
     /*
@@ -91,6 +91,10 @@ class OkeCluster extends OkitArtifact {
      */
     convert() {
         super.convert();
+        if (this.pools) {
+            this.pools.forEach((pool) => this.getOkitJson().newNodePool(pool))
+            delete this.pools
+        }
     }
 
     getNamePrefix() {
