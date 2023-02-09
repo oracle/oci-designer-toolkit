@@ -178,6 +178,9 @@ class OciResourceDiscoveryClient(object):
         # oci.container_engine.ContainerEngineClient
         "Cluster": (oci.container_engine.ContainerEngineClient, "list_clusters"),
         "NodePool": (oci.container_engine.ContainerEngineClient, "list_node_pools"),
+        #  oci.container_instances.ContainerInstanceClient
+        "ContainerInstance": (oci.container_instances.ContainerInstanceClient, "list_container_instances"),
+        "Container": (oci.container_instances.ContainerInstanceClient, "list_containers"),
         # oci.core.BlockstorageClient
         "VolumeReplica": (oci.core.BlockstorageClient, "list_block_volume_replicas"), # TODO need to query replicas in destination region
         "BootVolume": (oci.core.BlockstorageClient, "list_boot_volumes"),
@@ -539,6 +542,8 @@ class OciResourceDiscoveryClient(object):
     static_resource_client_methods = {
         # oci.container_engine.ContainerEngineClient
         "ClusterOptions": (oci.container_engine.ContainerEngineClient, "get_cluster_options"), # use cluster_option_id="all"
+        #  oci.container_instances.ContainerInstanceClient
+        "ContainerInstanceShape": (oci.container_instances.ContainerInstanceClient, "list_container_instance_shapes"),
         # oci.core.ComputeClient
         "ImageShapeCompatibility": (oci.core.ComputeClient, "list_image_shape_compatibility_entries"),
         "Shape": (oci.core.ComputeClient, "list_shapes"),
