@@ -16,14 +16,26 @@ class NodePool extends OkitArtifact {
         // Configure default values
         this.compartment_id = data.parent_id;
         this.cluster_id = ''
-        this.node_shape = ''
+        this.node_shape = 'VM.Standard3.Flex'
         this.node_shape_config = {
-            memory_in_gbs: '',
-            ocpus: ''
+            memory_in_gbs: 16,
+            ocpus: 1
+        }
+        this.node_source_details = {
+            image_id: '',
+            image: '',
+            source_type: 'IMAGE',
+            boot_volume_size_in_gbs: 50
+        }
+        this.node_config_details = {
+            placement_configs: [],
+            size: 3,
+            nsg_ids: []
         }
         // Update with any passed data
         this.merge(data);
         this.convert();
+        Object.defineProperty(this, 'vcn_id', {get: function() {return this.getOkitJson().getResource(this.cluster_id).vcn_id;}});
         Object.defineProperty(this, 'flex_shape', {get: function() {return !this.node_shape ? false : this.node_shape.endsWith('.Flex')}, set: function(flex_shape) {}, enumerable: true });
     }
     /*

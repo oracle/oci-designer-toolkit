@@ -20,10 +20,10 @@ class NodePoolProperties extends OkitResourceProperties {
         this.kubernetes_version = kubernetes_version.input
         this.append(this.core_tbody, kubernetes_version.row)
         // Image & Shape
-        const shape_and_image = this.createDetailsSection('Shape and Image', `${self.id}_shape_and_image_details`)
+        const shape_and_image = this.createDetailsSection('Shape and Image', `${this.id}_shape_and_image_details`)
         this.append(this.properties_contents, shape_and_image.details)
         this.shape_and_image_div = shape_and_image.div
-        const shape_and_image_table = this.createTable('', `${self.id}_image`)
+        const shape_and_image_table = this.createTable('', `${this.id}_shape_and_image_table`)
         this.shape_and_image_tbody = shape_and_image_table.tbody
         this.append(this.shape_and_image_div, shape_and_image_table.table)
         // Shape
@@ -42,22 +42,57 @@ class NodePoolProperties extends OkitResourceProperties {
         this.memory_in_gbs = memory_in_gbs.input
         this.memory_in_gbs_row = memory_in_gbs.row
         this.append(this.shape_and_image_tbody, memory_in_gbs.row)
+        // Image Id (Custom Image)
+        const image_id = this.createInput('select', 'Image', `${this.id}_image_id`, '', (d, i, n) => {this.resource.node_source_details.image_id = n[i].value; this.resource.node_source_details.image = n[i].selectedOptions[0].text;})
+        this.image_id = image_id.input
+        this.image_id_row = image_id.row
+        this.append(this.shape_and_image_tbody, image_id.row)
+        // Node Config
+        const node_config = this.createDetailsSection('Advanced', `${this.id}_node_config_details`)
+        this.append(this.properties_contents, node_config.details)
+        this.node_config_div = node_config.div
+        const node_config_table = this.createTable('', `${this.id}_node_config_table`)
+        this.node_config_tbody = node_config_table.tbody
+        this.append(this.node_config_div, node_config_table.table)
+        // Size
+        const size_data = {min: 3}
+        const size = this.createInput('number', 'Size', `${this.id}_size`, '', (d, i, n) => this.resource.node_config_details.size = n[i].value, size_data)
+        this.size = size.input
+        this.size_row = size.row
+        this.append(this.node_config_tbody, size.row)
+        // NSG Lists
+        const nsg_ids = this.createInput('multiselect', 'Network Security Groups', `${this.id}_nsg_ids`, '', (d, i, n) => this.resource.node_config_details.nsg_ids = Array.from(n[i].querySelectorAll('input[type="checkbox"]:checked')).map((n) => n.value))
+        this.nsg_ids = nsg_ids.input
+        this.append(this.node_config_tbody, nsg_ids.row)
+        // Placement
     }
 
+    nsg_filter = (r) => r.vcn_id === this.resource.vcn_id
     // Load Additional Resource Specific Properties
     loadResource() {
         // Load Selects
-        this.loadReferenceSelect(this.node_shape, 'getAllInstanceShapes', true)
         this.loadReferenceSelect(this.kubernetes_version, 'getKubernetesVersions', true)
+        this.loadReferenceSelect(this.node_shape, 'getAllInstanceShapes', false)
+        this.loadReferenceSelect(this.image_id, 'getPlatformImages', false, (r) => r.operating_system === 'Oracle Linux' && r.shapes.includes(this.resource.node_shape), undefined, '', 'display_name')
+        this.loadMultiSelect(this.nsg_ids, 'network_security_group', false, this.nsg_filter)
         // Assign Values
         this.kubernetes_version.property('value', this.resource.kubernetes_version)
         // Shape
         this.node_shape.property('value', this.resource.node_shape)
         this.memory_in_gbs.property('value', this.resource.node_shape_config.memory_in_gbs)
         this.ocpus.property('value', this.resource.node_shape_config.ocpus)
+        if (this.resource.node_source_details.image_id === '') {
+            this.resource.node_source_details.image_id = okitOciData.getPlatformImages((r) => r.operating_system === 'Oracle Linux' && r.shapes.includes(this.resource.node_shape))[0].display_name 
+            this.resource.node_source_details.image = this.resource.node_source_details.image_id
+        }
+        this.image_id.property('value', this.resource.node_source_details.image_id)
+        // Advanced
+        this.size.property('value', this.resource.node_config_details.size)
+        this.setMultiSelect(this.nsg_ids, this.resource.node_config_details.nsg_ids)
         // Collapse where appropriate
         this.memory_in_gbs_row.classed('collapsed', !this.resource.flex_shape)
         this.ocpus_row.classed('collapsed', !this.resource.flex_shape)
+        this.handleShapeChange()
     }
 
     handleShapeChange(shape=undefined) {
@@ -66,6 +101,11 @@ class NodePoolProperties extends OkitResourceProperties {
         this.ocpus_row.classed('collapsed', !this.resource.flex_shape)
         this.loadOCPUs(shape)
         this.loadMemoryInGbp(shape)
+        this.loadReferenceSelect(this.image_id, 'getPlatformImages', false, (r) => r.operating_system === 'Oracle Linux' && r.shapes.includes(shape), undefined, '', 'display_name')
+    }
+
+    handleOcpusChanged(ocpus=undefined) {
+        this.loadMemoryInGbp()
     }
 
     loadOCPUs(shape=undefined) {

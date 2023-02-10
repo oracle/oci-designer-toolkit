@@ -215,6 +215,7 @@ class OCIGenerator(object):
         "ipsec_connections": "customer_connectivity",
 
         "oke_clusters": "containers",
+        "node_pools": "containers",
     }
     resource_template_map = {
         "drgs": ["drg.jinja2", "drg_route_distribution.jinja2", "drg_route_table.jinja2"],
