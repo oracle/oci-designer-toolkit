@@ -38,6 +38,10 @@ class NodePool extends OkitArtifact {
         Object.defineProperty(this, 'vcn_id', {get: function() {return this.getOkitJson().getResource(this.cluster_id).vcn_id;}});
         Object.defineProperty(this, 'flex_shape', {get: function() {return !this.node_shape ? false : this.node_shape.endsWith('.Flex')}, set: function(flex_shape) {}, enumerable: true });
     }
+
+    newPlacementConfig() {
+
+    }
     /*
     ** Name Generation
     */

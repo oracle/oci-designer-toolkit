@@ -60,7 +60,7 @@ class OkeClusterProperties extends OkitResourceProperties {
         this.pods_cidr = pods_cidr.input
         this.append(this.network_tbody, pods_cidr.row)
         // Service Loadbalancer Subnets
-        const service_lb_subnet_ids = this.createInput('multiselect', 'Service Loadbalancer Subnets', `${this.id}_service_lb_subnet_ids`, '', (d, i, n) => this.resource.options.service_lb_subnet_ids = Array.from(n[i].querySelectorAll('input[type="checkbox"]:checked')).map((n) => n.value))
+        const service_lb_subnet_ids = this.createInput('select', 'Service Loadbalancer Regional Subnet', `${this.id}_service_lb_subnet_ids`, '', (d, i, n) => this.resource.options.service_lb_subnet_ids = [n[i].value])
         this.service_lb_subnet_ids = service_lb_subnet_ids.input
         this.append(this.network_tbody, service_lb_subnet_ids.row)
 
@@ -90,6 +90,7 @@ class OkeClusterProperties extends OkitResourceProperties {
         // Load Reference Selects
         this.loadSelect(this.vcn_id, 'virtual_cloud_network', true)
         this.loadSelect(this.subnet_id, 'subnet', true, this.vcn_filter)
+        this.loadSelect(this.service_lb_subnet_ids, 'subnet', true, this.vcn_filter)
         this.loadReferenceSelect(this.kubernetes_version, 'getKubernetesVersions')
         this.loadMultiSelect(this.nsg_ids, 'network_security_group', false, this.vcn_filter)
         // Assign Values
@@ -102,7 +103,7 @@ class OkeClusterProperties extends OkitResourceProperties {
         // Networking
         this.services_cidr.property('value', this.resource.options.kubernetes_network_config.services_cidr)
         this.pods_cidr.property('value', this.resource.options.kubernetes_network_config.pods_cidr)
-        this.setMultiSelect(this.service_lb_subnet_ids, this.resource.options.service_lb_subnet_ids)
+        this.service_lb_subnet_ids.property('value', this.resource.options.service_lb_subnet_ids[0])
         // Endpoint
         this.subnet_id.property('value', this.resource.endpoint_config.subnet_id)
         this.is_public_ip_enabled.property('checked', this.resource.endpoint_config.is_public_ip_enabled)

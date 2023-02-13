@@ -65,6 +65,12 @@ class NodePoolProperties extends OkitResourceProperties {
         this.nsg_ids = nsg_ids.input
         this.append(this.node_config_tbody, nsg_ids.row)
         // Placement
+        const placement_configs_details = this.createDetailsSection('Placement Configs', `${self.id}_placement_configs_details`)
+        this.append(this.properties_contents, placement_configs_details.details)
+        this.placement_configs_div = placement_configs_details.div
+        const placement_configs_table = this.createArrayTable('Rules', `${self.id}_placement_configs_table`, '', () => self.addPlacementConfig())
+        this.placement_configs_tbody = placement_configs_table.tbody
+        this.append(placement_configs_details.div, placement_configs_table.table)
     }
 
     nsg_filter = (r) => r.vcn_id === this.resource.vcn_id
@@ -93,6 +99,32 @@ class NodePoolProperties extends OkitResourceProperties {
         this.memory_in_gbs_row.classed('collapsed', !this.resource.flex_shape)
         this.ocpus_row.classed('collapsed', !this.resource.flex_shape)
         this.handleShapeChange()
+    }
+
+    // Placement Config
+    loadPlacementConfigs() {
+        this.placement_configs_tbody.selectAll('*').remove()
+        this.resource.node_config_details.placement_configs.forEach((e, i) => this.addPlacementConfigHtml(e, i+1))
+        this.placement_configs_idx = this.resource.node_config_details.placement_configs.length;
+    }
+    addPlacementConfig() {
+        const placement_config = this.resource.newPlacementConfig();
+        this.resource.node_config_details.placement_configs.push(placement_config);
+        this.placement_config_idx += 1
+        this.addPlacementConfigHtml(placement_config, this.placement_config_idx);
+    }
+    deletePlacementConfig(id, idx, placement_config) {
+        this.resource.node_config_details.placement_configs = this.resource.node_config_details.placement_configs.filter((e) => e !== placement_config)
+        $(`#${id}${idx}_row`).remove()
+    }
+    addPlacementConfigHtml(config, idx) {
+        const id = `${this.id}_config`
+        const delete_row = this.createDeleteRow(id, idx, () => this.deletePlacementConfig(id, idx, config))
+        this.append(this.placement_configs_tbody, delete_row.row)
+        const config_details = this.createDetailsSection('Config', `${id}_config_details`, idx)
+        this.append(delete_row.div, config_details.details)
+        const config_table = this.createTable('', `${id}_config_table`, '')
+        this.append(config_details.div, config_table.table)
     }
 
     handleShapeChange(shape=undefined) {
