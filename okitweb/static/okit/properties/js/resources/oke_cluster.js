@@ -40,7 +40,7 @@ class OkeClusterProperties extends OkitResourceProperties {
         this.is_tiller_enabled = is_tiller_enabled.input
         this.append(this.options_tbody, is_tiller_enabled.row)
         // Pod Security
-        const is_pod_security_policy_enabled = this.createInput('checkbox', 'Pod Security', `${this.id}_is_pod_security_policy_enabled`, '', (d, i, n) => {this.resource.options.add_ons.is_pod_security_policy_enabled = n[i].checked})
+        const is_pod_security_policy_enabled = this.createInput('checkbox', 'Pod Security', `${this.id}_is_pod_security_policy_enabled`, '', (d, i, n) => {this.resource.options.admission_controller_options.is_pod_security_policy_enabled = n[i].checked})
         this.is_pod_security_policy_enabled = is_pod_security_policy_enabled.input
         this.append(this.options_tbody, is_pod_security_policy_enabled.row)
 
@@ -89,7 +89,7 @@ class OkeClusterProperties extends OkitResourceProperties {
     loadResource() {
         // Load Reference Selects
         this.loadSelect(this.vcn_id, 'virtual_cloud_network', true)
-        this.loadSelect(this.subnet_id, 'subnet', true, this.vcn_filter)
+        this.loadSelect(this.subnet_id, 'subnet', false, this.vcn_filter)
         this.loadSelect(this.service_lb_subnet_ids, 'subnet', true, this.vcn_filter)
         this.loadReferenceSelect(this.kubernetes_version, 'getKubernetesVersions')
         this.loadMultiSelect(this.nsg_ids, 'network_security_group', false, this.vcn_filter)
@@ -99,7 +99,7 @@ class OkeClusterProperties extends OkitResourceProperties {
         // Options
         this.is_kubernetes_dashboard_enabled.property('checked', this.resource.options.add_ons.is_kubernetes_dashboard_enabled)
         this.is_tiller_enabled.property('checked', this.resource.options.add_ons.is_tiller_enabled)
-        this.is_pod_security_policy_enabled.property('checked', this.resource.options.add_ons.is_pod_security_policy_enabled)
+        this.is_pod_security_policy_enabled.property('checked', this.resource.options.admission_controller_options.is_pod_security_policy_enabled)
         // Networking
         this.services_cidr.property('value', this.resource.options.kubernetes_network_config.services_cidr)
         this.pods_cidr.property('value', this.resource.options.kubernetes_network_config.pods_cidr)

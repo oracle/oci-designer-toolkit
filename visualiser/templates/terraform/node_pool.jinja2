@@ -19,13 +19,15 @@ locals {
 # ------ Create Container Node Pool
 resource "oci_containerengine_node_pool" "{{ resource_name }}" {
     #Required
-    cluster_id         = local.{{ resource_name }}_id
+    cluster_id         = {{ cluster_id }}
     compartment_id     = {{ compartment_id }}
-    kubernetes_version = {{ kubernetes_version | safe }}
     name               = {{ display_name | safe }}
     node_shape         = {{ node_shape | safe }}
 
     #Optional
+{% if kubernetes_version is defined %}
+    kubernetes_version = {{ kubernetes_version | safe }}
+{% endif %}
 {% if initial_node_labels is defined %}
     initial_node_labels {
         #Optional
@@ -36,12 +38,39 @@ resource "oci_containerengine_node_pool" "{{ resource_name }}" {
 {% if node_config_details is defined %}
     node_config_details {
     {% for config in node_config_details.placement_configs %}
-        placement_configs {
-            availability_domain = data.oci_identity_availability_domains.AvailabilityDomains.availability_domains[{{ config.availability_domain | safe }} - 1]["name"]
-            subnet_id        = {{ config.subnet_id }}
-            }
+    placement_configs {
+        {# Get last character of AD from between the quotes this is the AD numerical value #}
+        availability_domain = data.oci_identity_availability_domains.AvailabilityDomains.availability_domains[{{ config.availability_domain[-2:-1] | safe | int }} - 1]["name"]
+        subnet_id        = {{ config.subnet_id }}
+        }
     {% endfor %}
-        size = {{ node_config_details.size | safe }}
+    size = {{ node_config_details.size | safe }}
+    {% if node_config_details.node_pool_pod_network_option_details is defined %}
+    node_pool_pod_network_option_details {
+        #Required
+        cni_type = {{ node_config_details.node_pool_pod_network_option_details.cni_type | safe }}
+
+        #Optional
+        {% if node_config_details.node_pool_pod_network_option_details.max_pods_per_node is defined %}
+        max_pods_per_node = {{ node_config_details.node_pool_pod_network_option_details.max_pods_per_node | safe }}
+        {% endif %}
+        {% if node_config_details.node_pool_pod_network_option_details.pod_nsg_ids is defined %}
+        pod_nsg_ids = [{% for id in node_config_details.node_pool_pod_network_option_details.pod_nsg_ids %}{{ id }}{% if not loop.last %},{% endif %}{% endfor %}]
+        {% endif %}
+        {% if node_config_details.node_pool_pod_network_option_details.pod_subnet_ids is defined %}
+        pod_subnet_ids = [{% for id in node_config_details.node_pool_pod_network_option_details.pod_subnet_ids %}{{ id }}{% if not loop.last %},{% endif %}{% endfor %}]
+        {% endif %}
+    }
+    {% if node_config_details.nsg_ids is defined %}
+    nsg_ids = [{% for id in node_config_details.nsg_ids %}{{ id }}{% if not loop.last %},{% endif %}{% endfor %}]
+    {% endif %}
+    {% endif %}
+    }
+{% endif %}
+{% if node_shape_config is defined %}
+    node_shape_config {
+        memory_in_gbs = {{ node_shape_config.memory_in_gbs | safe }}
+        ocpus = {{ node_shape_config.ocpus | safe }}
     }
 {% endif %}
 {% if node_metadata is defined %}
@@ -64,4 +93,9 @@ resource "oci_containerengine_node_pool" "{{ resource_name }}" {
     freeform_tags  = {{ freeform_tags | safe }}
 {% endif %}
 }
+
+locals {
+    {{ resource_name }}_id            = oci_containerengine_node_pool.{{ resource_name }}.id
+}
+
 {% endif %}

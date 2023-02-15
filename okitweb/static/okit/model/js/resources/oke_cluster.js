@@ -18,9 +18,10 @@ class OkeCluster extends OkitArtifact {
         // this.display_name = this.generateDefaultName(okitjson.oke_clusters.length + 1);
         this.vcn_id = '';
         this.kubernetes_version = '';
+        this.cluster_pod_network_options = [this.newClusterPodNetworkOption()]
         this.options = this.newOptions();
         this.endpoint_config = this.newEndpointConfig()
-        this.pools = []
+        // this.pools = []
             /*
             Each pool entry will have the following structure
             {
@@ -86,6 +87,12 @@ class OkeCluster extends OkitArtifact {
         }
     }
 
+    newClusterPodNetworkOption() {
+        return {
+            cni_type: 'OCI_VCN_IP_NATIVE'
+        }
+    }
+
     /*
     ** Conversion Routine allowing loading of old json
      */
@@ -93,7 +100,7 @@ class OkeCluster extends OkitArtifact {
         super.convert();
         if (this.pools) {
             this.pools.forEach((pool) => this.getOkitJson().newNodePool(pool))
-            delete this.pools
+            // delete this.pools
         }
     }
 

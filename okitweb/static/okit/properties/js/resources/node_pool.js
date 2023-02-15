@@ -19,6 +19,30 @@ class NodePoolProperties extends OkitResourceProperties {
         const kubernetes_version = this.createInput('select', 'Kubernetes Version', `${this.id}_kubernetes_version`, '', (d, i, n) => this.resource.kubernetes_version = n[i].value)
         this.kubernetes_version = kubernetes_version.input
         this.append(this.core_tbody, kubernetes_version.row)
+        // Authorised Keys
+        const add_click = () => {
+            /*
+            ** Add Load File Handling
+            */
+            $('#files').off('change').on('change', (e) => {
+                const files = e.target.files
+                let reader = new FileReader()
+                reader.onload = (evt) => {
+                    this.resource.ssh_public_key = evt.target.result
+                    this.ssh_public_key.property('value', this.resource.ssh_public_key)
+                }
+                reader.onerror = (evt) => {console.info('Error: ' + evt.target.error.name)}
+                reader.readAsText(files[0])
+            });
+            $('#files').attr('accept', '.pub')
+            // Click Files Element
+            let fileinput = document.getElementById("files")
+            fileinput.click()
+        }
+        const ssh_public_key_data = {}
+        const ssh_public_key = this.createInput('text', 'SSH Public Key', `${this.id}_ssh_public_key`, '', (d, i, n) => this.resource.ssh_public_key = n[i].value, ssh_public_key_data, 'add-property', add_click)
+        this.ssh_public_key = ssh_public_key.input
+        this.append(this.core_tbody, ssh_public_key.row)
         // Image & Shape
         const shape_and_image = this.createDetailsSection('Shape and Image', `${this.id}_shape_and_image_details`)
         this.append(this.properties_contents, shape_and_image.details)
@@ -48,7 +72,7 @@ class NodePoolProperties extends OkitResourceProperties {
         this.image_id_row = image_id.row
         this.append(this.shape_and_image_tbody, image_id.row)
         // Node Config
-        const node_config = this.createDetailsSection('Advanced', `${this.id}_node_config_details`)
+        const node_config = this.createDetailsSection('Node Pool Config', `${this.id}_node_config_details`)
         this.append(this.properties_contents, node_config.details)
         this.node_config_div = node_config.div
         const node_config_table = this.createTable('', `${this.id}_node_config_table`)
@@ -64,11 +88,32 @@ class NodePoolProperties extends OkitResourceProperties {
         const nsg_ids = this.createInput('multiselect', 'Network Security Groups', `${this.id}_nsg_ids`, '', (d, i, n) => this.resource.node_config_details.nsg_ids = Array.from(n[i].querySelectorAll('input[type="checkbox"]:checked')).map((n) => n.value))
         this.nsg_ids = nsg_ids.input
         this.append(this.node_config_tbody, nsg_ids.row)
+        // Pod Config
+        const pod_config = this.createDetailsSection('Pod Communication Config', `${this.id}_pod_config_details`)
+        this.append(this.properties_contents, pod_config.details)
+        this.pod_config_div = pod_config.div
+        const pod_config_table = this.createTable('', `${this.id}_pod_config_table`)
+        this.pod_config_tbody = pod_config_table.tbody
+        this.append(this.pod_config_div, pod_config_table.table)
+        // Max Pods per Node
+        const max_pods_per_node_data = {min: 3, max: 31}
+        const max_pods_per_node = this.createInput('number', 'Max Pods per Node', `${this.id}_max_pods_per_node`, '', (d, i, n) => this.resource.node_config_details.node_pool_pod_network_option_details.max_pods_per_node = n[i].value, max_pods_per_node_data)
+        this.max_pods_per_node = max_pods_per_node.input
+        this.max_pods_per_node_row = max_pods_per_node.row
+        this.append(this.pod_config_tbody, max_pods_per_node.row)
+        // Pod NSG Lists
+        const pod_nsg_ids = this.createInput('multiselect', 'Pod Network Security Groups', `${this.id}_pod_nsg_ids`, '', (d, i, n) => this.resource.node_config_details.node_pool_pod_network_option_details.pod_nsg_ids = Array.from(n[i].querySelectorAll('input[type="checkbox"]:checked')).map((n) => n.value))
+        this.pod_nsg_ids = pod_nsg_ids.input
+        this.append(this.pod_config_tbody, pod_nsg_ids.row)
+        // Pod Subnets
+        const pod_subnet_ids = this.createInput('select', 'Pod Regional Subnet', `${this.id}_pod_subnet_ids`, '', (d, i, n) => this.resource.node_config_details.node_pool_pod_network_option_details.pod_subnet_ids = [n[i].value])
+        this.pod_subnet_ids = pod_subnet_ids.input
+        this.append(this.pod_config_tbody, pod_subnet_ids.row)
         // Placement
-        const placement_configs_details = this.createDetailsSection('Placement Configs', `${self.id}_placement_configs_details`)
+        const placement_configs_details = this.createDetailsSection('Placement Configs', `${this.id}_placement_configs_details`)
         this.append(this.properties_contents, placement_configs_details.details)
         this.placement_configs_div = placement_configs_details.div
-        const placement_configs_table = this.createArrayTable('Rules', `${self.id}_placement_configs_table`, '', () => self.addPlacementConfig())
+        const placement_configs_table = this.createArrayTable('Rules', `${this.id}_placement_configs_table`, '', () => this.addPlacementConfig())
         this.placement_configs_tbody = placement_configs_table.tbody
         this.append(placement_configs_details.div, placement_configs_table.table)
     }
@@ -81,8 +126,11 @@ class NodePoolProperties extends OkitResourceProperties {
         this.loadReferenceSelect(this.node_shape, 'getAllInstanceShapes', false)
         this.loadReferenceSelect(this.image_id, 'getPlatformImages', false, (r) => r.operating_system === 'Oracle Linux' && r.shapes.includes(this.resource.node_shape), undefined, '', 'display_name')
         this.loadMultiSelect(this.nsg_ids, 'network_security_group', false, this.nsg_filter)
+        this.loadMultiSelect(this.pod_nsg_ids, 'network_security_group', false, this.nsg_filter)
+        this.loadSelect(this.pod_subnet_ids, 'subnet', false, this.vcn_filter)
         // Assign Values
         this.kubernetes_version.property('value', this.resource.kubernetes_version)
+        this.ssh_public_key.property('value', this.resource.ssh_public_key)
         // Shape
         this.node_shape.property('value', this.resource.node_shape)
         this.memory_in_gbs.property('value', this.resource.node_shape_config.memory_in_gbs)
@@ -95,10 +143,17 @@ class NodePoolProperties extends OkitResourceProperties {
         // Advanced
         this.size.property('value', this.resource.node_config_details.size)
         this.setMultiSelect(this.nsg_ids, this.resource.node_config_details.nsg_ids)
+        this.max_pods_per_node.property('value', this.resource.node_config_details.node_pool_pod_network_option_details.max_pods_per_node)
+        if (this.resource.node_config_details.node_pool_pod_network_option_details.pod_subnet_ids.length === 0) {
+            this.resource.node_config_details.node_pool_pod_network_option_details.pod_subnet_ids = [this.resource.getOkitJson().getSubnets().filter(this.vcn_filter).map(r => r.id)[0]]
+        }
+        this.pod_subnet_ids.property('value', this.resource.node_config_details.node_pool_pod_network_option_details.pod_subnet_ids[0])
+        this.setMultiSelect(this.pod_nsg_ids, this.resource.node_config_details.node_pool_pod_network_option_details.pod_nsg_ids)
         // Collapse where appropriate
         this.memory_in_gbs_row.classed('collapsed', !this.resource.flex_shape)
         this.ocpus_row.classed('collapsed', !this.resource.flex_shape)
         this.handleShapeChange()
+        this.loadPlacementConfigs()
     }
 
     // Placement Config
@@ -125,6 +180,16 @@ class NodePoolProperties extends OkitResourceProperties {
         this.append(delete_row.div, config_details.details)
         const config_table = this.createTable('', `${id}_config_table`, '')
         this.append(config_details.div, config_table.table)
+        // Availability Domain
+        const availability_domain_data = this.ad_data
+        const availability_domain = this.createInput('select', 'Availability Domain', `${id}_availability_domain`, '', (d, i, n) => config.availability_domain = n[i].value, availability_domain_data)
+        this.append(config_table.tbody, availability_domain.row)
+        availability_domain.input.property('value', config.availability_domain.slice(-1))
+        // Subnet
+        const subnet_id = this.createInput('select', 'Worker Regional Subnet', `${id}_subnet_id`, idx, (d, i, n) => config.subnet_id = n[i].value)
+        this.append(config_table.tbody, subnet_id.row)
+        this.loadSelect(subnet_id.input, 'subnet', true, this.vcn_filter)
+        subnet_id.input.property('value', config.subnet_id)
     }
 
     handleShapeChange(shape=undefined) {

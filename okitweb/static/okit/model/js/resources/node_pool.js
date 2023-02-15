@@ -30,8 +30,15 @@ class NodePool extends OkitArtifact {
         this.node_config_details = {
             placement_configs: [],
             size: 3,
-            nsg_ids: []
+            nsg_ids: [],
+            node_pool_pod_network_option_details: {
+                cni_type: 'OCI_VCN_IP_NATIVE',
+                max_pods_per_node: 31,
+                pod_nsg_ids: [],
+                pod_subnet_ids: []
+            }
         }
+        this.ssh_public_key = ''
         // Update with any passed data
         this.merge(data);
         this.convert();
@@ -40,7 +47,10 @@ class NodePool extends OkitArtifact {
     }
 
     newPlacementConfig() {
-
+        return {
+            availability_domain: '1',
+            subnet_id: ''
+        }
     }
     /*
     ** Name Generation
