@@ -42,6 +42,7 @@ class OciResourceDiscoveryClient(object):
         # oci.container_engine.ContainerEngineClient
         "ClusterDetails": (oci.container_engine.ContainerEngineClient, "get_cluster"), # used to get full details
         "NodePoolDetails": (oci.container_engine.ContainerEngineClient, "get_node_pool"), # used to get full details
+        "NodePoolOptions": (oci.container_engine.ContainerEngineClient, "get_node_pool_options"), # used special case to get the supported images
         # oci.core.BlockstorageClient
         "VolumeBackupPolicyAssignment": (oci.core.BlockstorageClient, "get_volume_backup_policy_asset_assignment"),
         # oci.core.ComputeClient
@@ -954,7 +955,11 @@ class OciResourceDiscoveryClient(object):
                     elif resource_type == "NetworkFirewallPolicyDetails" and method_name == "get_network_firewall_policy":
                         network_firewall_policy_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, network_firewall_policy_id=network_firewall_policy_id)
-                        futures_list.update({(region, resource_type, compartment_id, network_firewall_policy_id):future})                    
+                        futures_list.update({(region, resource_type, compartment_id, network_firewall_policy_id):future})
+                    elif resource_type == "NodePoolOptions" and method_name == "get_node_pool_options":
+                        node_pool_option_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, node_pool_option_id=node_pool_option_id)
+                        futures_list.update({(region, resource_type, None, node_pool_option_id):future})                
                     elif resource_type == "NoSQLIndexDetails" and method_name == "get_index":
                         table_id = item[2][0]
                         index_name = item[2][1]
@@ -1469,7 +1474,7 @@ class OciResourceDiscoveryClient(object):
                         "Image",
                         "MySQLConfiguration", "MySQLDbSystemDetails",
                         "NetworkFirewallDetails", "NetworkFirewallPolicyDetails",
-                        "NodePoolDetails",
+                        "NodePoolDetails", "NodePoolOptions",
                         "NoSQLIndexDetails", "NoSQLTableDetails",
                         "OsmsManagedInstance",
                         "VaultSecretDetails",
@@ -1554,6 +1559,10 @@ class OciResourceDiscoveryClient(object):
             if self.include_resource_types != None and "Image" in self.include_resource_types:
                 # If Image is specifically requested search for platform images in the root Compartment
                 regional_resource_requests.add(("Image", self.tenancy.id, None))
+
+            if self.include_resource_types != None and "NodePoolOptions" in self.include_resource_types:
+                # If NodePoolOptions is specifically requested search for all configurations
+                regional_resource_requests.add(("NodePoolOptions", None, "all"))
 
             if self.include_resource_types != None and "VolumeBackupPolicy" in self.include_resource_types:
                 # If VolumeBackupPolicy is specifically requested search for platform policies where Compartment is None
