@@ -85,7 +85,7 @@ class OkitTabularJsonView extends OkitJsonView {
                 'Block Volumes': {property: 'block_storage_volume_ids', lookup: 'model.getBlockStorageVolume'},
                 'Status': {property: 'lifecycle_state'},
                 'Fault Domain': {property: 'fault_domain'},
-                'Assign Public IP': {property: 'assign_public_ip'}
+                // 'Assign Public IP': {property: 'assign_public_ip'}
             },
             instance_pools: {},
             internet_gateways: {

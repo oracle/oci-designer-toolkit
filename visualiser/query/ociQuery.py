@@ -143,6 +143,7 @@ class OCIQuery(OCIConnection):
         "NetworkFirewall": "network_firewalls",
         "NetworkLoadBalancer": "network_load_balancers",
         "NetworkSecurityGroup": "network_security_groups",
+        "NodePool": "node_pools",
         "NoSQLTable": "nosql_databases",
         "OdaInstance": "oracle_digital_assistants",
         "Policy": "policys", # Yes we know it's spelt incorrectly but the okitCodeSkeletonGenerator.py is simple
@@ -241,7 +242,8 @@ class OCIQuery(OCIConnection):
                     elif resource_type == "CloudExadataInfrastructure":
                         resource_list = self.exadata_cloud_infrastructures(resource_list, resources)
                     elif resource_type == "Cluster":
-                        resource_list = self.oke_clusters(resource_list, resources)
+                        logger.info(f'Clusters {jsonToFormattedString(resource_list)}')
+                        # resource_list = self.oke_clusters(resource_list, resources)
                     elif resource_type == "CustomerDnsZone":
                         resource_list = self.dns_zones(resource_list, resources)
                     elif resource_type == "DbSystem":
@@ -264,6 +266,8 @@ class OCIQuery(OCIConnection):
                         resource_list = self.network_load_balancers(resource_list, resources)
                     elif resource_type == "NetworkSecurityGroup":
                         resource_list = self.network_security_group(resource_list, resources)
+                    elif resource_type == "NodePool":
+                        logger.info(f'Node Pools {jsonToFormattedString(resource_list)}')
                     elif resource_type == "NoSQLTable":
                         resource_list = self.nosql_databases(resource_list, resources)
                     elif resource_type == "RouteTable":
@@ -463,8 +467,8 @@ class OCIQuery(OCIConnection):
         return buckets
 
     def oke_clusters(self, clusters, resources):
-        for cluster in clusters:
-            cluster["pools"] = [p for p in resources.get("NodePool", []) if p["cluster_id"] == cluster["id"]]
+        # for cluster in clusters:
+        #     cluster["pools"] = [p for p in resources.get("NodePool", []) if p["cluster_id"] == cluster["id"]]
         return clusters
 
     def route_tables(self, route_tables, resources):

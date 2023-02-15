@@ -1,4 +1,4 @@
-# Copyright (c) 2020, 2022, Oracle and/or its affiliates.
+# Copyright (c) 2020, 2023, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 import oci
@@ -39,6 +39,10 @@ class OciResourceDiscoveryClient(object):
         "ApiGatewayUsagePlanDetails": (oci.apigateway.UsagePlansClient, "get_usage_plan"), # used to get full details 
         # oci.bastion.BastionClient
         "BastionDetails": (oci.bastion.BastionClient, "get_bastion"), # used to get full details
+        # oci.container_engine.ContainerEngineClient
+        "ClusterDetails": (oci.container_engine.ContainerEngineClient, "get_cluster"), # used to get full details
+        "NodePoolDetails": (oci.container_engine.ContainerEngineClient, "get_node_pool"), # used to get full details
+        "NodePoolOptions": (oci.container_engine.ContainerEngineClient, "get_node_pool_options"), # used special case to get the supported images
         # oci.core.BlockstorageClient
         "VolumeBackupPolicyAssignment": (oci.core.BlockstorageClient, "get_volume_backup_policy_asset_assignment"),
         # oci.core.ComputeClient
@@ -178,6 +182,9 @@ class OciResourceDiscoveryClient(object):
         # oci.container_engine.ContainerEngineClient
         "Cluster": (oci.container_engine.ContainerEngineClient, "list_clusters"),
         "NodePool": (oci.container_engine.ContainerEngineClient, "list_node_pools"),
+        #  oci.container_instances.ContainerInstanceClient
+        "ContainerInstance": (oci.container_instances.ContainerInstanceClient, "list_container_instances"),
+        "Container": (oci.container_instances.ContainerInstanceClient, "list_containers"),
         # oci.core.BlockstorageClient
         "VolumeReplica": (oci.core.BlockstorageClient, "list_block_volume_replicas"), # TODO need to query replicas in destination region
         "BootVolume": (oci.core.BlockstorageClient, "list_boot_volumes"),
@@ -539,6 +546,8 @@ class OciResourceDiscoveryClient(object):
     static_resource_client_methods = {
         # oci.container_engine.ContainerEngineClient
         "ClusterOptions": (oci.container_engine.ContainerEngineClient, "get_cluster_options"), # use cluster_option_id="all"
+        #  oci.container_instances.ContainerInstanceClient
+        "ContainerInstanceShape": (oci.container_instances.ContainerInstanceClient, "list_container_instance_shapes"),
         # oci.core.ComputeClient
         "ImageShapeCompatibility": (oci.core.ComputeClient, "list_image_shape_compatibility_entries"),
         "Shape": (oci.core.ComputeClient, "list_shapes"),
@@ -906,6 +915,10 @@ class OciResourceDiscoveryClient(object):
                         cloud_vm_cluster_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, cloud_vm_cluster_id=cloud_vm_cluster_id)
                         futures_list.update({(region, resource_type, None, cloud_vm_cluster_id):future})
+                    elif resource_type == "ClusterDetails" and method_name == "get_cluster":
+                        cluster_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, cluster_id=cluster_id)
+                        futures_list.update({(region, resource_type, None, cluster_id):future})
                     elif resource_type == "DataFlowApplicationDetails" and method_name == "get_application":
                         application_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, application_id=application_id)
@@ -931,6 +944,10 @@ class OciResourceDiscoveryClient(object):
                         db_system_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, db_system_id=db_system_id)
                         futures_list.update({(region, resource_type, compartment_id, db_system_id):future})
+                    elif resource_type == "NodePoolDetails" and method_name == "get_node_pool":
+                        node_pool_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, node_pool_id=node_pool_id)
+                        futures_list.update({(region, resource_type, None, node_pool_id):future})
                     elif resource_type == "NetworkFirewallDetails" and method_name == "get_network_firewall":
                         network_firewall_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, network_firewall_id=network_firewall_id)
@@ -938,7 +955,11 @@ class OciResourceDiscoveryClient(object):
                     elif resource_type == "NetworkFirewallPolicyDetails" and method_name == "get_network_firewall_policy":
                         network_firewall_policy_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, network_firewall_policy_id=network_firewall_policy_id)
-                        futures_list.update({(region, resource_type, compartment_id, network_firewall_policy_id):future})                    
+                        futures_list.update({(region, resource_type, compartment_id, network_firewall_policy_id):future})
+                    elif resource_type == "NodePoolOptions" and method_name == "get_node_pool_options":
+                        node_pool_option_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, node_pool_option_id=node_pool_option_id)
+                        futures_list.update({(region, resource_type, None, node_pool_option_id):future})                
                     elif resource_type == "NoSQLIndexDetails" and method_name == "get_index":
                         table_id = item[2][0]
                         index_name = item[2][1]
@@ -1446,12 +1467,14 @@ class OciResourceDiscoveryClient(object):
                     elif resource_type in [
                         "ApiGatewayUsagePlanDetails",
                         "BastionDetails",
+                        "ClusterDetails",
                         "ClusterOptions",
                         "DataFlowApplicationDetails", "DataFlowRunDetails",
                         "ExportSetDetails",
                         "Image",
                         "MySQLConfiguration", "MySQLDbSystemDetails",
                         "NetworkFirewallDetails", "NetworkFirewallPolicyDetails",
+                        "NodePoolDetails", "NodePoolOptions",
                         "NoSQLIndexDetails", "NoSQLTableDetails",
                         "OsmsManagedInstance",
                         "VaultSecretDetails",
@@ -1505,6 +1528,8 @@ class OciResourceDiscoveryClient(object):
             retry_results = self.get_resources(retry_tasks)
             for region in retry_results:
                 for resource_type in retry_results[region]:
+                    if region not in results:
+                        results[region] = {}
                     if resource_type in results[region]:
                         results[region][resource_type].extend(retry_results[region][resource_type])
                     else:
@@ -1534,6 +1559,10 @@ class OciResourceDiscoveryClient(object):
             if self.include_resource_types != None and "Image" in self.include_resource_types:
                 # If Image is specifically requested search for platform images in the root Compartment
                 regional_resource_requests.add(("Image", self.tenancy.id, None))
+
+            if self.include_resource_types != None and "NodePoolOptions" in self.include_resource_types:
+                # If NodePoolOptions is specifically requested search for all configurations
+                regional_resource_requests.add(("NodePoolOptions", None, "all"))
 
             if self.include_resource_types != None and "VolumeBackupPolicy" in self.include_resource_types:
                 # If VolumeBackupPolicy is specifically requested search for platform policies where Compartment is None
@@ -1745,7 +1774,7 @@ class OciResourceDiscoveryClient(object):
             resource_types = {
                 "AlarmStatus",
                 "AmsMigration", "AmsSource", "AmsSourceApplication", # Force a search across all compartments 
-                "Backup" # Database Backups. Force a search across all compartments to find unattached backups.
+                "Backup", # Database Backups. Force a search across all compartments to find unattached backups.
                 "Cluster", "NodePool", # OKE
                 "DataFlowPrivateEndpoint", # Data Flow 
                 "DataSafeOnPremConnector", # Data Safe
@@ -1821,6 +1850,10 @@ class OciResourceDiscoveryClient(object):
             if "Bastion" in resources_by_region[region]:
                 for resource in resources_by_region[region]["Bastion"]:
                     regional_resource_requests.add(("BastionDetails", resource.compartment_id, resource.id))
+            # get extra details for Cluster
+            if "Cluster" in resources_by_region[region]:
+                for resource in resources_by_region[region]["Cluster"]:
+                    regional_resource_requests.add(("ClusterDetails", resource.compartment_id, resource.id))
             # get extra details for DataFlowApplication
             if "DataFlowApplication" in resources_by_region[region]:
                 for resource in resources_by_region[region]["DataFlowApplication"]:
@@ -1847,6 +1880,10 @@ class OciResourceDiscoveryClient(object):
             if "NetworkFirewallPolicy" in resources_by_region[region]:
                 for resource in resources_by_region[region]["NetworkFirewallPolicy"]:
                     regional_resource_requests.add(("NetworkFirewallPolicyDetails", None, resource.id))
+            # get extra details for NodePool
+            if "NodePool" in resources_by_region[region]:
+                for resource in resources_by_region[region]["NodePool"]:
+                    regional_resource_requests.add(("NodePoolDetails", resource.compartment_id, resource.id))
             # get extra details for NoSQLndex
             if "NoSQLIndex" in resources_by_region[region]:
                 for resource in resources_by_region[region]["NoSQLIndex"]:
@@ -1906,10 +1943,12 @@ class OciResourceDiscoveryClient(object):
             # replace summary result with resource details
             self.replace_resource_details(resources_by_region, region, "ApiGatewayUsagePlan", "ApiGatewayUsagePlanDetails")
             self.replace_resource_details(resources_by_region, region, "Bastion", "BastionDetails")
+            self.replace_resource_details(resources_by_region, region, "Cluster", "ClusterDetails")
             self.replace_resource_details(resources_by_region, region, "DataFlowApplication", "DataFlowApplicationDetails")
             self.replace_resource_details(resources_by_region, region, "DataFlowRun", "DataFlowRunDetails")
             self.replace_resource_details(resources_by_region, region, "ExportSet", "ExportSetDetails")
             self.replace_resource_details(resources_by_region, region, "MySQLDbSystem", "MySQLDbSystemDetails")
+            self.replace_resource_details(resources_by_region, region, "NodePool", "NodePoolDetails")
             self.replace_resource_details(resources_by_region, region, "NoSQLIndex", "NoSQLIndexDetails")
             self.replace_resource_details(resources_by_region, region, "NoSQLTable", "NoSQLTableDetails")
             self.replace_resource_details(resources_by_region, region, "NetworkFirewall", "NetworkFirewallDetails")
