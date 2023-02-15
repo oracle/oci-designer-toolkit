@@ -5,8 +5,8 @@
 console.debug('Loaded Console Javascript');
 
 
-const okitVersion = '0.45.0';
-const okitReleaseDate = '25th January 2023';
+const okitVersion = '0.46.0';
+const okitReleaseDate = '15th February 2023';
 
 // Validation
 const validate_error_colour = "#ff4d4d";

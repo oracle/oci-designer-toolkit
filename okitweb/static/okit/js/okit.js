@@ -313,6 +313,7 @@ class OkitOCIData {
     }
 
     getInstanceShapes(type='') {
+        console.info(`Getting Shapes for type = '${type}'`)
         if (type === '') {
             return this.dropdown_data.shapes;
         } else {
@@ -322,6 +323,7 @@ class OkitOCIData {
 
     getGIVersions = (shape) => this.dropdown_data.gi_versions[shape].map((v) => v.version)
 
+    getAllInstanceShapes = () => this.dropdown_data.shapes
     getBareMetalInstanceShapes = () => this.dropdown_data.shapes.filter(s => s.shape.startsWith('BM.'))
     getVirtualMachineInstanceShapes = () => this.dropdown_data.shapes.filter(s => s.shape.startsWith('VM.'))
     getIntelInstanceShapes = () => this.dropdown_data.shapes.filter(s => s.shape.startsWith('VM.') && !s.shape.includes('.A') && !s.shape.includes('.E'))
@@ -382,8 +384,8 @@ class OkitOCIData {
         return [...new Set(images)].sort((a, b) => b - a);
     }
 
-    getPlatformImages() {
-        return this.dropdown_data.images.filter(i => !i.compartment_id || i.compartment_id === null)
+    getPlatformImages(filter=() => true) {
+        return this.dropdown_data.images.filter(i => !i.compartment_id || i.compartment_id === null).filter(filter)
     }
     getPlatformImageOSs() {
         return [...new Set(this.dropdown_data.images.filter(i => !i.compartment_id || i.compartment_id === null).map((i) => i.operating_system))].sort();

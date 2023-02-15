@@ -17,6 +17,11 @@
                     "svg": "ContainerEngineForKubernetes.svg"
                 },
                 {
+                    "title": "Node Pool",
+                    "targets": ["oci"],
+                    "svg": "NodePool.svg"
+                },
+                {
                     "title": "Data Integration Workspace",
                     "targets": ["oci"],
                     "svg": "DataIntegrationSystemDIS.svg"

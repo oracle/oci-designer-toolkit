@@ -46,6 +46,7 @@ class OCIDropdownQuery(OCIConnection):
         "MySQLShape", 
         "MySQLVersion", 
         "MySQLConfiguration", 
+        "NodePoolOptions",
         "LoadBalancerShape", 
         "ClusterOptions",
         "VolumeBackupPolicy"
@@ -63,6 +64,7 @@ class OCIDropdownQuery(OCIConnection):
         "MySQLShape": "mysql_shapes", 
         "MySQLVersion": "mysql_versions", 
         "MySQLConfiguration": "mysql_configurations", 
+        "NodePoolOptions": "node_pool_options",
         "LoadBalancerShape": "loadbalancer_shapes", 
         "ClusterOptions": "kubernetes_versions",
         "VolumeBackupPolicy": "volume_backup_policy"
@@ -125,6 +127,8 @@ class OCIDropdownQuery(OCIConnection):
                         resource_list = self.instance_agent_plugins(resource_list, resources)                       
                     elif resource_type == "LoadBalancerShape":
                         resource_list = self.load_balancer_shapes(resource_list, resources)                       
+                    elif resource_type == "NodePoolOptions":
+                        logger.info(jsonToFormattedString(resource_list))
                     elif resource_type == "Shape":
                         resource_list = self.shapes(resource_list, resources)
                         response_json["compute_shapes"] = resource_list                       
@@ -162,6 +166,7 @@ class OCIDropdownQuery(OCIConnection):
         for shape in shapes:
             if shape['shape'] not in seen:
                 shape['sort_key'] = shape['shape']
+                shape['id'] = shape['shape']
                 shape['display_name'] = shape['shape']
                 if 'ocpus' in shape:
                     split_shape = shape['shape'].split('.')
@@ -173,7 +178,7 @@ class OCIDropdownQuery(OCIConnection):
 
     def instance_agent_plugins(self, plugins, resources):
         logger.info(f'Plugins {plugins}')
-        plugins = [p for p in plugins if p['status'] in ['RUNNING', 'STOPPED']]
+        plugins = [p for p in plugins if p.get('status', '') in ['RUNNING', 'STOPPED']]
         logger.info(f'Plug-ins {plugins}')
         return plugins
 

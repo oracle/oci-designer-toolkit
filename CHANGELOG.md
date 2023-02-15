@@ -1,6 +1,16 @@
 # Release Notes
 
 
+## Version 0.46.0
+**Release Date**: 15th February 2023
+### Features
+1. Update OKE Cluster functionality to be a container styles resource.
+2. Add Node Pool as a separate resource.
+3. Allow OKE Cluster to be dropped on compartment.
+4. Update Cache to include Node Pool Options.
+### Bug Fixes
+
+
 ## Version 0.45.0
 **Release Date**: 25th January 2023
 ### Features

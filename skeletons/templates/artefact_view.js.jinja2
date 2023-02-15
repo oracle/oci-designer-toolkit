@@ -18,7 +18,6 @@ class {{ model_class_name }}View extends OkitContainerCompartmentArtefactView {
     }
     // TODO: Change as appropriate
     get parent_id() {return this.artefact.compartment_id;}
-    get parent() {return this.getJsonView().getCompartment(this.parent_id);}
     /*
     ** SVG Processing
     */

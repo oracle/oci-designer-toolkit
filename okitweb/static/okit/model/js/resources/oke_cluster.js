@@ -18,8 +18,10 @@ class OkeCluster extends OkitArtifact {
         // this.display_name = this.generateDefaultName(okitjson.oke_clusters.length + 1);
         this.vcn_id = '';
         this.kubernetes_version = '';
+        this.cluster_pod_network_options = [this.newClusterPodNetworkOption()]
         this.options = this.newOptions();
-        this.pools = []
+        this.endpoint_config = this.newEndpointConfig()
+        // this.pools = []
             /*
             Each pool entry will have the following structure
             {
@@ -38,14 +40,14 @@ class OkeCluster extends OkitArtifact {
         this.merge(data);
         this.convert();
         // Check if built from a query
-        for (let pool of this.pools) {
-            for (let config of pool.node_config_details.placement_configs) {
-                if (config.availability_domain.length > 1) {
-                    config.region_availability_domain = config.availability_domain;
-                    config.availability_domain = this.getAvailabilityDomainNumber(config.region_availability_domain);
-                }
-            }
-        }
+        // for (let pool of this.pools) {
+        //     for (let config of pool.node_config_details.placement_configs) {
+        //         if (config.availability_domain.length > 1) {
+        //             config.region_availability_domain = config.availability_domain;
+        //             config.availability_domain = this.getAvailabilityDomainNumber(config.region_availability_domain);
+        //         }
+        //     }
+        // }
     }
 
     /*
@@ -77,11 +79,29 @@ class OkeCluster extends OkitArtifact {
         }
     }
 
+    newEndpointConfig() {
+        return {
+            is_public_ip_enabled: false,
+            nsg_ids: [],
+            subnet_id: ''
+        }
+    }
+
+    newClusterPodNetworkOption() {
+        return {
+            cni_type: 'OCI_VCN_IP_NATIVE'
+        }
+    }
+
     /*
     ** Conversion Routine allowing loading of old json
      */
     convert() {
         super.convert();
+        if (this.pools) {
+            this.pools.forEach((pool) => this.getOkitJson().newNodePool(pool))
+            // delete this.pools
+        }
     }
 
     getNamePrefix() {

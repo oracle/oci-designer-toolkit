@@ -27,7 +27,7 @@ from model.okitValidation import OCIJsonValidator
 logger = getLogger()
 
 class OCIGenerator(object):
-    OKIT_VERSION = "0.45.0"
+    OKIT_VERSION = "0.46.0"
     def __init__(self, template_dir, output_dir, visualiser_json, use_vars=False, add_provider=True):
         # Initialise generator output data variables
         self.rendered_resources = {}
@@ -215,6 +215,7 @@ class OCIGenerator(object):
         "ipsec_connections": "customer_connectivity",
 
         "oke_clusters": "containers",
+        "node_pools": "containers",
     }
     resource_template_map = {
         "drgs": ["drg.jinja2", "drg_route_distribution.jinja2", "drg_route_table.jinja2"],
