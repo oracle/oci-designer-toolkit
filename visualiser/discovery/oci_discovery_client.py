@@ -1838,6 +1838,12 @@ class OciResourceDiscoveryClient(object):
                 image_ids = [image.id for image in resources_by_region[region]["Image"]]
                 if boot_volume_backup.image_id not in image_ids:
                     regional_resource_requests.add(("Image", None, boot_volume_backup.image_id))
+            # find references to images that are in teh NodePoolOption sources and go an explict get
+            for node_pool_option in resources_by_region[region]["NodePoolOptions"] if (self.include_resource_types == None or "Image" in self.include_resource_types) else []:
+                image_ids = [source.image_id for source in node_pool_option.sources]
+                for image_id in image_ids:
+                    logger.debug(image_id)
+                    regional_resource_requests.add(("Image", None, image_id))
             # get RRSets for Dns Zones
             for dns_zone in resources_by_region[region]["CustomerDnsZone"] if "CustomerDnsZone" in resources_by_region[region] and (self.include_resource_types == None or "RRSet" in self.include_resource_types) else []:
                 for record_type in dns_record_types:
