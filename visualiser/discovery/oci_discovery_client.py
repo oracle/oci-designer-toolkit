@@ -1839,7 +1839,7 @@ class OciResourceDiscoveryClient(object):
                 if boot_volume_backup.image_id not in image_ids:
                     regional_resource_requests.add(("Image", None, boot_volume_backup.image_id))
             # find references to images that are in teh NodePoolOption sources and go an explict get
-            for node_pool_option in resources_by_region[region]["NodePoolOptions"] if (self.include_resource_types == None or "Image" in self.include_resource_types) else []:
+            for node_pool_option in resources_by_region[region]["NodePoolOptions"] if (self.include_resource_types == None or "Image" in self.include_resource_types) and "NodePoolOptions" in resources_by_region[region] else []:
                 image_ids = [source.image_id for source in node_pool_option.sources]
                 for image_id in image_ids:
                     logger.debug(image_id)
