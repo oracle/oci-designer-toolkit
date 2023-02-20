@@ -25,7 +25,8 @@ export class OcdDocument {
         const today = new Date();
         const date = `${today.getFullYear()}-${(today.getMonth() + 1)}-${today.getDate()}`;
         const time = `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
-        const compartment = ociResources.OciCompartmentClient.new()
+        const compartment = ociResources.OciCompartment.newResource()
+        // const compartment = ociResources.OciCompartmentClient.new()
         const layer: OcdViewLayer = {
             id: compartment.id,
             class: 'oci-compartment',
@@ -82,10 +83,10 @@ export class OcdDocument {
     getResources() {return this.getOciResources()}
     getResource(id='') {return this.getResources().find((r: any) => r.id === id)}
     addResource(paletteResource: PaletteResource, compartmentId: string) {
-        const resource_list = paletteResource.class.split('-').slice(1).join('_')
-        const resource_class = paletteResource.class.toLowerCase().split('-').map((w) => `${w.charAt(0).toUpperCase()}${w.slice(1)}`).join('')
-        const resourceClient: string = `${resource_class}Client`
-        console.info('List:', resource_list, 'Class:', resource_class, 'Client:', resourceClient)
+        const resourceList = paletteResource.class.split('-').slice(1).join('_')
+        const resourceClass = paletteResource.class.toLowerCase().split('-').map((w) => `${w.charAt(0).toUpperCase()}${w.slice(1)}`).join('')
+        const resourceClient: string = `${resourceClass}Client`
+        console.info('List:', resourceList, 'Class:', resourceClass, 'Client:', resourceClient)
         console.info(`ociResource`, ociResources)
         let modelResource = undefined
         if (paletteResource.provider === 'oci') {
@@ -93,12 +94,14 @@ export class OcdDocument {
             // @ts-ignore 
             const client = ociResources[resourceClient]
             modelResource = client.new()
+            // @ts-ignore 
+            modelResource = ociResources[resourceClass].newResource()
             modelResource.compartmentId = compartmentId
-            // modelResource = new ociResources[resource_class]()
+            // modelResource = new ociResources[resourceClass]()
             console.info(modelResource)
             // const region = this.design.model.oci.region.undefined
-            // region.resources[resource_list] ? region.resources[resource_list].push(modelResource) : region.resources[resource_list] = [modelResource]
-            this.design.model.oci.resources[resource_list] ? this.design.model.oci.resources[resource_list].push(modelResource) : this.design.model.oci.resources[resource_list] = [modelResource]
+            // region.resources[resourceList] ? region.resources[resourceList].push(modelResource) : region.resources[resourceList] = [modelResource]
+            this.design.model.oci.resources[resourceList] ? this.design.model.oci.resources[resourceList].push(modelResource) : this.design.model.oci.resources[resourceList] = [modelResource]
         }
         console.info('Added Resource:', modelResource)
         return modelResource

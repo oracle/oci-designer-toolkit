@@ -8,13 +8,26 @@ import { models } from "oci-core"
 
 export interface OciVcn extends OciResource, models.Vcn {}
 
+export namespace OciVcn {
+    export function newResource(): OciVcn {
+        return {
+            ...OciResource.newResource('vcn'),
+            cidrBlock: '',
+            cidrBlocks: [],
+            lifecycleState: models.Vcn.LifecycleState.UnknownValue,
+            timeCreated: new Date()
+        }
+    }
+}
+
 export class OciVcnClient {
     static new(): OciVcn {
         return {
-            region: '',
-            compartmentId: '',
-            id: OciResource.uuid('vcn'),
-            displayName: 'OCD Vcn',
+            ...OciResource.newResource('vcn'),
+            // region: '',
+            // compartmentId: '',
+            // id: OciResource.uuid('vcn'),
+            // displayName: 'OCD Vcn',
             cidrBlock: '',
             cidrBlocks: [],
             lifecycleState: models.Vcn.LifecycleState.UnknownValue,

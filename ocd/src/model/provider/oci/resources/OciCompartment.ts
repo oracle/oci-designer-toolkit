@@ -8,12 +8,25 @@ import { models } from "oci-identity"
 
 export interface OciCompartment extends OciResource, models.Compartment {}
 
+export namespace OciCompartment {
+    export function newResource(): OciCompartment {
+        return {
+            ...OciResource.newResource('compartment'),
+            name: 'OCD Compartment',
+            description: 'OCD Created Compartment',
+            lifecycleState: models.Compartment.LifecycleState.UnknownValue,
+            timeCreated: new Date()
+        }
+    }
+}
+
 export class OciCompartmentClient {
     static new(): OciCompartment {
         return {
-            region: '',
-            compartmentId: '',
-            id: OciResource.uuid('compartment'),
+            ...OciResource.newResource('compartment'),
+            // region: '',
+            // compartmentId: '',
+            // id: OciResource.uuid('compartment'),
             name: 'OCD Compartment',
             description: 'OCD Created Compartment',
             lifecycleState: models.Compartment.LifecycleState.UnknownValue,

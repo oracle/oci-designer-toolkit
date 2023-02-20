@@ -8,14 +8,31 @@ import { models } from "oci-core"
 
 export interface OciSubnet extends OciResource, models.Subnet {}
 
+export namespace OciSubnet {
+    export function newResource(): OciSubnet {
+        return {
+            ...OciResource.newResource('subnet'),
+            vcnId: '',
+            cidrBlock: '',
+            routeTableId: '',
+            securityListIds: [],
+            virtualRouterIp: '',
+            virtualRouterMac: '',
+            lifecycleState: models.Subnet.LifecycleState.UnknownValue,
+            timeCreated: new Date()
+        }
+    }
+}
+
 export class OciSubnetClient {
     static new(): OciSubnet {
         return {
-            region: '',
-            compartmentId: '',
-            id: OciResource.uuid('vcn'),
+            ...OciResource.newResource('subnet'),
+            // region: '',
+            // compartmentId: '',
+            // id: OciResource.uuid('vcn'),
+            // displayName: 'OCD Subnet',
             vcnId: '',
-            displayName: 'OCD Subnet',
             cidrBlock: '',
             routeTableId: '',
             securityListIds: [],

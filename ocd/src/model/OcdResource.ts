@@ -5,4 +5,5 @@
 
 export interface OcdResource {
     id: string
+    documentation?: string
 }

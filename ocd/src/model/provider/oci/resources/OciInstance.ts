@@ -8,14 +8,27 @@ import { models } from "oci-core"
 
 export interface OciInstance extends OciResource, models.Instance {}
 
+export namespace OciInstance {
+    export function newResource(): OciInstance {
+        return {
+            ...OciResource.newResource('instance'),
+            availabilityDomain: '',
+            lifecycleState: models.Instance.LifecycleState.UnknownValue,
+            shape: '',
+            timeCreated: new Date()
+        }
+    }
+}
+
 export class OciInstanceClient {
     static new(): OciInstance {
         console.info('>> New Instance')
         return {
-            region: '',
-            compartmentId: '',
-            id: OciResource.uuid('instance'),
-            displayName: `OCD Instance`,
+            ...OciResource.newResource('instance'),
+            // region: '',
+            // compartmentId: '',
+            // id: OciResource.uuid('instance'),
+            // displayName: `OCD Instance`,
             availabilityDomain: '',
             lifecycleState: models.Instance.LifecycleState.UnknownValue,
             shape: '',
