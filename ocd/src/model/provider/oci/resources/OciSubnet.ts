@@ -26,21 +26,7 @@ export namespace OciSubnet {
 
 export class OciSubnetClient {
     static new(): OciSubnet {
-        return {
-            ...OciResource.newResource('subnet'),
-            // region: '',
-            // compartmentId: '',
-            // id: OciResource.uuid('vcn'),
-            // displayName: 'OCD Subnet',
-            vcnId: '',
-            cidrBlock: '',
-            routeTableId: '',
-            securityListIds: [],
-            virtualRouterIp: '',
-            virtualRouterMac: '',
-            lifecycleState: models.Subnet.LifecycleState.UnknownValue,
-            timeCreated: new Date()
-        }
+        return OciSubnet.newResource()
     }
 
     static newOci() {}

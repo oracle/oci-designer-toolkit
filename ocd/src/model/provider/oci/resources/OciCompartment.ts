@@ -22,16 +22,7 @@ export namespace OciCompartment {
 
 export class OciCompartmentClient {
     static new(): OciCompartment {
-        return {
-            ...OciResource.newResource('compartment'),
-            // region: '',
-            // compartmentId: '',
-            // id: OciResource.uuid('compartment'),
-            name: 'OCD Compartment',
-            description: 'OCD Created Compartment',
-            lifecycleState: models.Compartment.LifecycleState.UnknownValue,
-            timeCreated: new Date()
-        }
+        return OciCompartment.newResource()
     }
 
     static newOci() {}

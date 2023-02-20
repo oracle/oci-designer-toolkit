@@ -23,17 +23,7 @@ export namespace OciInstance {
 export class OciInstanceClient {
     static new(): OciInstance {
         console.info('>> New Instance')
-        return {
-            ...OciResource.newResource('instance'),
-            // region: '',
-            // compartmentId: '',
-            // id: OciResource.uuid('instance'),
-            // displayName: `OCD Instance`,
-            availabilityDomain: '',
-            lifecycleState: models.Instance.LifecycleState.UnknownValue,
-            shape: '',
-            timeCreated: new Date()
-        }
+        return OciInstance.newResource()
     }
 
     static newOci() {}

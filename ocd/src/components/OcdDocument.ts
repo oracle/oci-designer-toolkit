@@ -92,8 +92,8 @@ export class OcdDocument {
         if (paletteResource.provider === 'oci') {
             modelResource = {id: this.uuid()}
             // @ts-ignore 
-            const client = ociResources[resourceClient]
-            modelResource = client.new()
+            // const client = ociResources[resourceClient]
+            // modelResource = client.new()
             // @ts-ignore 
             modelResource = ociResources[resourceClass].newResource()
             modelResource.compartmentId = compartmentId

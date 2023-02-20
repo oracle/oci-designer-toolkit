@@ -22,17 +22,7 @@ export namespace OciVcn {
 
 export class OciVcnClient {
     static new(): OciVcn {
-        return {
-            ...OciResource.newResource('vcn'),
-            // region: '',
-            // compartmentId: '',
-            // id: OciResource.uuid('vcn'),
-            // displayName: 'OCD Vcn',
-            cidrBlock: '',
-            cidrBlocks: [],
-            lifecycleState: models.Vcn.LifecycleState.UnknownValue,
-            timeCreated: new Date()
-        }
+        return OciVcn.newResource()
     }
 
     static newOci() {}
