@@ -451,15 +451,27 @@ body {
     height: 100%;
 }
 
+.ocd-designer-left-panel {
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    box-sizing: border-box;
+    width: var(--console-palette-width);
+    min-height: 100%;
+    border-right: #555555 1px solid;
+}
+
 .ocd-designer-palette {
     display: block;
     direction: rtl;
     overflow-x: hidden;
     overflow-y: scroll;
     box-sizing: border-box;
-    width: var(--console-palette-width);
+    /* width: var(--console-palette-width); */
+    width: 100%;
     min-height: 100%;
-    border-right: #555555 1px solid;
+    /* border-right: #555555 1px solid; */
 }
 
 .ocd-model-palette {
