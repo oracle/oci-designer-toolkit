@@ -6,6 +6,7 @@
 ### Features
 1. Add OKE Specific Images
 ### Bug Fixes
+1. Resolve issue where results for reference selects were no sorted correctly and the call would cause a JavaScript error.
 
 
 ## Version 0.46.0
