@@ -10,7 +10,7 @@
     --console-layers-bar-height: 25px;
     --console-pages-bar-height: 25px;
     --console-palette-width: 200px;
-    --console-properties-width: 400px;
+    --console-properties-width: 500px;
     --canvas-icon-height: 40px;
     --canvas-icon-width: 40px;
     --canvas-resource-simple-width: 40px;
@@ -79,6 +79,10 @@ body {
     border-right: #555555 solid 1px;
     padding-right: 5px;
     font-size: smaller;
+}
+
+.ocd-designer-tab:hover {
+    box-shadow: 0 0 5px #1d2733;
 }
 
 .ocd-designer-tab > span {
@@ -955,6 +959,7 @@ body {
     box-sizing: border-box;
     width: 100%;
     padding: 10px 5px;
+    border-bottom: 1px solid #d1d1d4;
 }
 
 .property-editor-title {
@@ -967,6 +972,7 @@ body {
     background-position-y: center;
     background-repeat: no-repeat;
     background-size: 20px 20px;
+    font-weight: bolder;
 }
 
 .heading-background {

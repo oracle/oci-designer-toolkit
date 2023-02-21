@@ -137,7 +137,7 @@ export class OcdDocument {
     }
     getDisplayName(id: string): string {
         const resource = this.getResource(id)
-        return resource ? resource.name ? resource.name : resource.displayName : 'Unknown'
+        return resource ? resource.name ? resource.name : resource.displayName : ''
     }
     setDisplayName(id: string, displayName: string) {
         const resource = this.getResource(id)
