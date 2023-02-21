@@ -5,6 +5,7 @@
 
 import React, { useState } from 'react'
 import OcdPalette from '../components/OcdPalette'
+import OcdProperties from '../components/OcdProperties'
 import OcdCanvas from '../components/OcdCanvas'
 import OcdCanvasLayers from '../components/OcdCanvasLayers'
 import OcdCanvasPages from '../components/OcdCanvasPages'
@@ -49,6 +50,10 @@ const OcdDesigner = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOc
                 ocdDocument={ocdDocument} 
                 setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} 
                 />
+            <OcdProperties 
+                ocdDocument={ocdDocument} 
+                setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} 
+            />
         </div>
     )
 }

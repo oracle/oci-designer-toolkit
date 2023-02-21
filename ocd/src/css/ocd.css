@@ -6,9 +6,11 @@
     --console-footer-height: 30px;
     --console-logo-height: 50px;
     --console-logo-width: 50px;
+    --console-tab-bar-height: 25px;
     --console-layers-bar-height: 25px;
     --console-pages-bar-height: 25px;
     --console-palette-width: 200px;
+    --console-properties-width: 400px;
     --canvas-icon-height: 40px;
     --canvas-icon-width: 40px;
     --canvas-resource-simple-width: 40px;
@@ -57,6 +59,33 @@ body {
     cursor: -moz-grabbing;
     cursor: grabbing;
 }
+
+.ocd-designer-tab-bar {
+    display: flex;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    height: var(--console-tab-bar-height);
+    min-height: var(--console-tab-bar-height);
+    max-height: var(--console-tab-bar-height);
+    width: 100%;
+    border-bottom: #312D2A solid 1px;
+}
+
+.ocd-designer-tab {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-right: #555555 solid 1px;
+    padding-right: 5px;
+    font-size: smaller;
+}
+
+.ocd-designer-tab > span {
+    margin: 0 5px 0 5px;
+}
+
+
 
 
 
@@ -910,12 +939,110 @@ body {
 ** Properties
 */
 
+.ocd-designer-properties {
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    box-sizing: border-box;
+    width: var(--console-properties-width);
+    min-height: 100%;
+    border-left: #555555 1px solid;
+}
+
+.ocd-properties-panel {
+    display: block;
+    box-sizing: border-box;
+    flex-grow: 1;
+    width: var(--console-properties-width);
+    overflow-y: scroll;
+}
+
+.ocd-properties-documentation-panel > textarea {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    resize: none;
+}
+
+.ocd-properties-arrangement-panel {
+    display: flex;
+    flex-direction: column;
+    font-size: smaller;
+}
+
+.ocd-arrangement-z-positioning {
+    display: grid;
+    grid-template-columns: auto auto;
+    border-bottom: 1px solid #d1d1d4;
+    margin: 5px 0 5px 0;
+    padding: 5px;
+}
+
+.ocd-arrangement-z-positioning > div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border: 1px solid #d1d1d4;
+    border-radius: 0.5rem;
+    margin: 2px;
+    padding: 2px;
+}
+
+.ocd-arrangement-z-positioning > div > span {
+    margin: auto;
+}
+
+.ocd-arrangement-size {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    border-bottom: 1px solid #d1d1d4;
+    margin: 5px 0 5px 0;
+    padding: 5px;
+}
+
+.ocd-arrangement-size > div {
+    display: block;
+    margin: 2px;
+    padding: 2px;
+}
+
+.ocd-arrangement-size > div > span {
+    opacity: 0.5;
+}
+
+.ocd-arrangement-xy-positioning {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    border-bottom: 1px solid #d1d1d4;
+    margin: 5px 0 5px 0;
+    padding: 5px;
+}
+
+.ocd-arrangement-xy-positioning > div {
+    display: block;
+    margin: 2px;
+    padding: 2px;
+}
+
+.ocd-arrangement-xy-positioning > div > span {
+    opacity: 0.5;
+}
+
+
+
+
+
+/*
+** Properties
+*/
+
 .ocd-empty-relative {
     position: relative;
     z-index: 100;
 }
 
-.ocd-properties-panel {
+.ocd-properties-panel-old {
     display: block;
     position: absolute;
     top: 0px;

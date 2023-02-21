@@ -9,17 +9,25 @@ import { OcdDesign, OcdViewPage, OcdViewCoords, OcdViewLayer, OcdBaseModel } fro
 import { PaletteResource } from '../model/OcdPalette'
 import { OcdResource } from '../model/OcdResource'
 
+export interface OcdSelectedResource {
+    modelId: string
+    pageId: string
+    coordsId: string
+}
+
 export class OcdDocument {
-    design:OcdDesign
-    constructor(design:any = undefined) {
+    design: OcdDesign
+    selectedResource: OcdSelectedResource
+    constructor(design?: string | OcdDesign, resource?: OcdSelectedResource) {
         if (typeof design === 'string' && design.length > 0) this.design = JSON.parse(design)
         else if (design instanceof Object) this.design = design
         else this.design = this.newDesign()
+        this.selectedResource = resource ? resource : this.newSelectedResource()
     }
 
     static new = () => new OcdDocument()
 
-    static clone = (ocdDocument:OcdDocument) => new OcdDocument(ocdDocument.design)
+    static clone = (ocdDocument:OcdDocument) => new OcdDocument(ocdDocument.design, ocdDocument.selectedResource)
 
     newDesign(): OcdDesign {
         const today = new Date();
@@ -63,6 +71,14 @@ export class OcdDocument {
                     }
                 ]
             }
+        }
+    }
+
+    newSelectedResource(): OcdSelectedResource {
+        return {
+            modelId: '',
+            pageId: '',
+            coordsId: ''
         }
     }
 

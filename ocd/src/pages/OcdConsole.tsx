@@ -44,7 +44,7 @@ const OcdConsoleTitleBar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument
 
 const OcdConsoleHeader = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument }: ConsolePageProps): JSX.Element => {
     return (
-        <div className='ocd-console-header ocd-console-header-colour'>
+        <div className='ocd-console-header ocd-console-header-theme'>
             <div className='ocd-image ocd-logo'></div>
             <div className='ocd-title-and-menu'>
                 <OcdConsoleTitleBar ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig:any) => setOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)}/>
@@ -56,9 +56,9 @@ const OcdConsoleHeader = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, 
 
 const OcdConsoleConfigEditor = ({ ocdConsoleConfig, setOcdConsoleConfig }: any): JSX.Element => {
     const [dropdown, setDropdown] = useState(false)
-    const onMouseEnter = () => {setDropdown(true)}
-    const onMouseLeave = () => {setDropdown(false)}
-    const closeDropdown = () => {setDropdown(!dropdown)}
+    // const onMouseEnter = () => {setDropdown(true)}
+    // const onMouseLeave = () => {setDropdown(false)}
+    // const closeDropdown = () => {setDropdown(!dropdown)}
     const toggleDropdown = () => {setDropdown(!dropdown)}
     const cbRef = useRef<HTMLInputElement>(null)
     const detailedResourceOnChange = () => {
@@ -101,7 +101,7 @@ const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument,
         console.info('Estimate Clicked')
     }
     return (
-        <div className='ocd-console-toolbar ocd-console-toolbar-colour'>
+        <div className='ocd-console-toolbar ocd-console-toolbar-theme'>
             <div className='ocd-toolbar-left'>
                 <div>
                     {/* <div className='left-palette ocd-console-toolbar-icon' onClick={onLeftPaletteClick} ref={leftPaletteRef}></div> */}
@@ -132,7 +132,6 @@ const OcdConsoleBody = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, se
                         OcdDesigner
     return (
         <div className='ocd-console-body'>
-            {/* <OcdPropertiesPanel ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument) => setOcdDocument(ocdDocument)} ocdResource={resource} /> */}
             {/* <OcdDesigner ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig:any) => setOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} /> */}
             <DisplayPage 
                 ocdConsoleConfig={ocdConsoleConfig} 
@@ -141,13 +140,14 @@ const OcdConsoleBody = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, se
                 setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} 
                 key={`${ocdConsoleConfig.config.displayPage}-page`}
                 />
+            {/* <OcdPropertiesPanel ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument) => setOcdDocument(ocdDocument)} ocdResource={resource} /> */}
         </div>
     )
 }
 
 const OcdConsoleFooter = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument }: ConsolePageProps): JSX.Element => {
     return (
-        <div className='ocd-console-footer ocd-console-footer-colour'></div>
+        <div className='ocd-console-footer ocd-console-footer-theme'></div>
     )
 }
 

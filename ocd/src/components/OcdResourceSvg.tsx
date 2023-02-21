@@ -5,7 +5,7 @@
 */
 
 import { useState } from 'react'
-import OcdDocument from './OcdDocument'
+import OcdDocument, { OcdSelectedResource } from './OcdDocument'
 import { OcdViewCoords } from '../model/OcdDesign'
 import { ResourceRectProps, ResourceForeignObjectProps, ResourceSvgProps } from '../types/ReactComponentProperties'
 import { OcdViewPage } from '../model/OcdDesign'
@@ -202,6 +202,17 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
         // setViewPage(structuredClone(ocdDocument.getPage(viewPage.id)))
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
+    const onResourceClick = (e: any) => {
+        console.info('Clicked', resource.id)
+        const clone = OcdDocument.clone(ocdDocument)
+        const selectedResource: OcdSelectedResource = {
+            modelId: resource.ocid,
+            pageId: ocdDocument.getActivePage().id,
+            coordsId: resource.id
+        }
+        clone.selectedResource = selectedResource
+        setOcdDocument(clone)
+    }
     return (
         <g className='ocd-designer-resource' 
             id={resource.id} 
@@ -216,6 +227,7 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
             onMouseMove={onResourceDrag}
             onMouseUp={onResourceDragEnd}
             onMouseLeave={onResourceDragEnd}
+            onClick={onResourceClick}
             >
                 <SvgRect 
                     ocdConsoleConfig={ocdConsoleConfig}

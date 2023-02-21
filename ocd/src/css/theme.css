@@ -60,3 +60,23 @@
 .left-palette {
     background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTM4IDE0SDJtMTIgMjRWMTRNMiAyaDM2djM2SDJWMnoiIHN0cm9rZT0iIzE2MTUxMyIgc3Ryb2tlLXdpZHRoPSI0Ii8+PC9zdmc+");
 }
+
+/*
+** Element Themes
+*/
+
+.ocd-designer-tab-bar-theme {
+    background-color: white;
+}
+
+.ocd-designer-tab-theme {
+    background-color: white;
+}
+
+.ocd-designer-active-tab-theme {
+    background-color: #d1d1d4;
+}
+
+.ocd-properties-panel-theme {
+    background-color: white;
+}
