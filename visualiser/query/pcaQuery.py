@@ -586,9 +586,9 @@ class PCAQuery(OCIConnection):
             if user_data != '':
                 resource['metadata']['user_data'] = userDataDecode(user_data)
             # Add Vnic Attachments
-            resource['vnics'] = sorted([va for va in self.ancillary_resources['vnic_attachments'] if va['instance_id'] == resource['id']], key=lambda k: k['nic_index'])
+            resource['vnic_attachments'] = sorted([va for va in self.ancillary_resources['vnic_attachments'] if va['instance_id'] == resource['id']], key=lambda k: k['nic_index'])
             # Add Volume Attachments
-            resource['block_storage_volume'] = [va for va in self.ancillary_resources['volume_attachments'] if va['instance_id'] == resource['id']]
+            resource['volume_attachments'] = [va for va in self.ancillary_resources['volume_attachments'] if va['instance_id'] == resource['id']]
             # Add Boot Volume Details
             boot_volume_attachments = [r for r in self.ancillary_resources['boot_volume_attachments'] if r['id'] == resource['id']]
             if len(boot_volume_attachments) > 0:

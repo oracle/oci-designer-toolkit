@@ -375,10 +375,11 @@ class OCIQuery(OCIConnection):
             if "metadata" in instance and "user_data" in instance["metadata"]:
                 instance["metadata"]["user_data"] = userDataDecode(instance["metadata"]["user_data"])
             # Add Attached Block Storage Volumes
-            instance['block_storage_volume_ids'] = [va['volume_id'] for va in resources.get("VolumeAttachment", []) if va['instance_id'] == instance['id']]
+            # instance['block_storage_volume_ids'] = [va['volume_id'] for va in resources.get("VolumeAttachment", []) if va['instance_id'] == instance['id']]
+            instance['volume_attachments'] = [va for va in resources.get("VolumeAttachment", []) if va['instance_id'] == instance['id']]
             # Add Vnic Attachments
             attachments_vnic_ids = [va["vnic_id"] for va in resources.get("VnicAttachment", []) if va['instance_id'] == instance['id']]
-            instance['vnics'] = [vnic for vnic in resources.get("Vnic", []) if vnic["id"] in attachments_vnic_ids]
+            instance['vnic_attachments'] = [vnic for vnic in resources.get("Vnic", []) if vnic["id"] in attachments_vnic_ids]
             # Get Volume Attachments as a single call and loop through them to see if they are associated with the instance.
             boot_volume_attachments = [va for va in resources.get("BootVolumeAttachment", []) if va['instance_id'] == instance['id']]
             boot_volumes = [va for va in resources.get("BootVolume", []) if va['id'] == boot_volume_attachments[0]['boot_volume_id']] if len(boot_volume_attachments) else []

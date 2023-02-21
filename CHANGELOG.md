@@ -7,6 +7,7 @@
 1. Add OKE Specific Images
 ### Bug Fixes
 1. Resolve issue where results for reference selects were no sorted correctly and the call would cause a JavaScript error.
+2. Resolve issue where query was not returning block volume attachments correctly for instance.
 
 
 ## Version 0.46.0
