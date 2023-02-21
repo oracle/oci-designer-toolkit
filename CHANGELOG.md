@@ -1,8 +1,8 @@
 # Release Notes
 
 
-## Version 0.47.0
-**Release Date**: 8th March 2023
+## Version 0.46.1
+**Release Date**: 21st February 2023
 ### Features
 1. Add OKE Specific Images
 ### Bug Fixes
