@@ -19,6 +19,7 @@ export namespace OciResource {
     }
     export function newResource(type: string): OciResource {
         return {
+            ...OcdResource.newResource(type),
             region: '',
             compartmentId: '',
             id: OciResource.uuid(type),

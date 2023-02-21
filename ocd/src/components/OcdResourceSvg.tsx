@@ -208,7 +208,8 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
         const selectedResource: OcdSelectedResource = {
             modelId: resource.ocid,
             pageId: ocdDocument.getActivePage().id,
-            coordsId: resource.id
+            coordsId: resource.id,
+            class: resource.class
         }
         clone.selectedResource = selectedResource
         setOcdDocument(clone)

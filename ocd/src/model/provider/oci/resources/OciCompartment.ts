@@ -12,6 +12,7 @@ export namespace OciCompartment {
     export function newResource(): OciCompartment {
         return {
             ...OciResource.newResource('compartment'),
+            resourceType: 'Compartment',
             name: 'OCD Compartment',
             description: 'OCD Created Compartment',
             lifecycleState: models.Compartment.LifecycleState.UnknownValue,

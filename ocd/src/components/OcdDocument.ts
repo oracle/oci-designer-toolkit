@@ -13,6 +13,7 @@ export interface OcdSelectedResource {
     modelId: string
     pageId: string
     coordsId: string
+    class: string
 }
 
 export class OcdDocument {
@@ -78,9 +79,12 @@ export class OcdDocument {
         return {
             modelId: '',
             pageId: '',
-            coordsId: ''
+            coordsId: '',
+            class: 'ocd-image'
         }
     }
+    getSelectedResource = () => this.getResource(this.selectedResource.modelId)
+    getSelectedResourceCoords = () => this.getCoords(this.selectedResource.coordsId)
 
     // @ts-ignore 
     getLayerName = (id: string): string => this.design.model.oci.resources.compartment.find((c) => c.id === id).name
@@ -177,6 +181,7 @@ export class OcdDocument {
         this.design.view.pages.forEach((p: OcdViewPage) => p.layers = p.layers.filter((l) => l.id !== id))
     }
 
+    getCoords = (id: string) => {return this.design.view.pages.map(p => p.coords).reduce((a, c) => [...a, ...c], []).find(c => c.id === id)}
     addCoords(coords: OcdViewCoords, viewId: string, pgid: string = '') {
         const view: OcdViewPage = this.getPage(viewId)
         if (view) view.coords.push(coords)

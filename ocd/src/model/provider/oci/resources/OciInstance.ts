@@ -12,6 +12,7 @@ export namespace OciInstance {
     export function newResource(): OciInstance {
         return {
             ...OciResource.newResource('instance'),
+            resourceType: 'Instance',
             availabilityDomain: '',
             lifecycleState: models.Instance.LifecycleState.UnknownValue,
             shape: '',

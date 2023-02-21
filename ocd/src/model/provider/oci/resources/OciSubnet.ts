@@ -12,6 +12,7 @@ export namespace OciSubnet {
     export function newResource(): OciSubnet {
         return {
             ...OciResource.newResource('subnet'),
+            resourceType: 'Subnet',
             vcnId: '',
             cidrBlock: '',
             routeTableId: '',

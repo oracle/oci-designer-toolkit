@@ -8,6 +8,18 @@ import { OcdViewPage } from '../model/OcdDesign'
 import { DesignerResourceProperties } from '../types/DesignerResourceProperties'
 import OcdDocument from './OcdDocument'
 
+const OcdResourcePropertiesHeader = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
+    const selectedResource = ocdDocument.getSelectedResource()
+    const padlock: string = selectedResource ? selectedResource.locked ? 'padlock-closed' : 'padlock-open' : 'padlock-open'
+    return (
+        <div className='ocd-properties-header'>
+            <div className={`property-editor-title ${ocdDocument.selectedResource.class}`}>
+                <h3 className={`heading-background ${padlock}`}>{ocdDocument.selectedResource.class} {ocdDocument.getDisplayName(ocdDocument.selectedResource.modelId)}</h3>
+            </div>
+        </div>
+    )
+}
+
 const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
     return (
         <div className={`ocd-properties-panel ocd-properties-panel-theme`}>
@@ -100,6 +112,10 @@ const OcdProperties = ({ocdDocument, setOcdDocument}: DesignerResourceProperties
                 <div className={`ocd-designer-tab ocd-designer-tab-theme ${activeTab === 'documentation' ? 'ocd-designer-active-tab-theme' : ''}`} onClick={() => onPropertiesTabClick('Documentation')}><span>Documentation</span></div>
                 <div className={`ocd-designer-tab ocd-designer-tab-theme ${activeTab === 'arrange' ? 'ocd-designer-active-tab-theme' : ''}`} onClick={() => onPropertiesTabClick('Arrange')}><span>Arrange</span></div>
             </div>
+            <OcdResourcePropertiesHeader
+                ocdDocument={ocdDocument} 
+                setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} 
+            />
             <ActiveTab
                 ocdDocument={ocdDocument} 
                 setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} 

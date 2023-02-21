@@ -12,6 +12,7 @@ export namespace OciVcn {
     export function newResource(): OciVcn {
         return {
             ...OciResource.newResource('vcn'),
+            resourceType: 'Virtual Cloud Network',
             cidrBlock: '',
             cidrBlocks: [],
             lifecycleState: models.Vcn.LifecycleState.UnknownValue,
