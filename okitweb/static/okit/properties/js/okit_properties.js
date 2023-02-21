@@ -563,6 +563,7 @@ class OkitResourceProperties {
         if (empty_option) select.append('option').attr('value', '').attr('selected', 'selected').text(empty_value ? empty_value : '')
         let id = ''
         const resources = okitOciData[resource_type](filter)
+        // console.info('Reference Resources', resources, display_element)
         if (groups) {
             Object.entries(groups).forEach(([k, v]) => {
                 console.info('Group', k, 'Filter', v)
@@ -577,7 +578,7 @@ class OkitResourceProperties {
                 })
             })
         } else {
-            resources.sort((a, b) => a[display_element].localeCompare(b[display_element])).forEach((r, i) => {
+            resources.sort((a, b) => a instanceof Object ? a[display_element].localeCompare(b[display_element]) : a.localeCompare(b)).forEach((r, i) => {
                 r = r instanceof Object ? r : {id: r, display_name: r}
                 const option = select.append('option').attr('value', r[id_element]).text(r[display_element])
                 if (!empty_option && i === 0) {
