@@ -81,7 +81,7 @@ const OcdConsoleConfigEditor = ({ ocdConsoleConfig, setOcdConsoleConfig }: any):
                     <ul className={`${dropdown ? 'show' : 'hidden'}`}>
                         <li className='ocd-dropdown-menu-item'><div><input id='detailedResource' type='checkbox' onChange={detailedResourceOnChange} ref={cbRef} checked={ocdConsoleConfig.config.detailedResource}/>Resource Details</div></li>
                         <li className='ocd-dropdown-menu-item'><div><input id='verboseProviderPalette' type='checkbox' onChange={verboseProviderPaletteOnChange} ref={cbRef} checked={ocdConsoleConfig.config.verboseProviderPalette}/>Verbose Palette</div></li>
-                        <li className='ocd-dropdown-menu-item'><div><input id='showModelPalette' type='checkbox' onChange={showModelPaletteOnChange} ref={cbRef} checked={ocdConsoleConfig.config.showModelPalette}/>Model Palette</div></li>
+                        {/* <li className='ocd-dropdown-menu-item'><div><input id='showModelPalette' type='checkbox' onChange={showModelPaletteOnChange} ref={cbRef} checked={ocdConsoleConfig.config.showModelPalette}/>Model Palette</div></li> */}
                     </ul>
                 </li>
             </ul>

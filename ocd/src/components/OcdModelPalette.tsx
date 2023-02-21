@@ -7,48 +7,45 @@ import { useState } from 'react'
 import { PaletteResource } from '../model/OcdPalette'
 import { DragData, Point } from '../types/DragData'
 import { PaletteProps } from '../types/ReactComponentProperties'
+import { OcdUtils } from '../utils/OcdUtils'
 
 const OcdModelPalette = ({ ocdConsoleConfig, setDragData, ocdDocument }: PaletteProps): JSX.Element => {
     return (
+    <div className='ocd-model-palette'>
+        {Object.entries(ocdDocument.design.model).map(([p, m]) => {
+            return <OcdModelPaletteProviders 
+                        provider={p} 
+                        model={m} 
+                        setDragData={(dragData:any) => setDragData(dragData)}
+                        key={`${p}-model-palette-providers`}
+                        />
+        })}
+    </div>
+)
+}
+
+const OcdModelPaletteProviders = ({ provider, model, setDragData }: any): JSX.Element => {
+    const open = true
+    const modelExcludeResources = ['compartment']
+    return (
         <div className='ocd-designer-palette-provider'>
-            <details id='ocd-model-palette' open>
-                <summary><div><label>Model</label></div></summary>
-                <div className='ocd-model-palette'>
+            <details id={provider.title} open={open}>
+                <summary><div className={provider}><label>{provider.toUpperCase()}</label></div></summary>
+                <div>
                     <ul>
-                        {Object.entries(ocdDocument.design.model).map(([p, m]) => {
-                            return <OcdModelPaletteProviders 
-                                        provider={p} 
-                                        model={m} 
+                        {Object.entries(model.resources).filter(([k, v]) => !modelExcludeResources.includes(k)).sort((a, b) => a[0].localeCompare(b[0])).map(([k, resources]) => {
+                            return <OcdModelPaletteResources 
+                                        provider={provider}
+                                        type={k} 
+                                        resources={resources} 
                                         setDragData={(dragData:any) => setDragData(dragData)}
-                                        key={`${p}-model-palette-providers`}
+                                        key={`${provider}-${k}-model-palette-resources`}
                                         />
                         })}
                     </ul>
                 </div>
             </details>
         </div>
-    )
-}
-
-const OcdModelPaletteProviders = ({ provider, model, setDragData }: any): JSX.Element => {
-    const modelExcludeResources = ['compartment']
-    const [collapsed, setCollapsed] = useState(false)
-    const onClick = () => {setCollapsed(!collapsed)}
-    return (
-        <li className='collapsible-list-element'>
-            <div className={collapsed ? 'tree-collapsed' : ''} onClick={onClick}><label>{provider}</label></div>
-            <ul className={collapsed ? 'hidden' : ''}>
-                {Object.entries(model.resources).filter(([k, v]) => !modelExcludeResources.includes(k)).sort((a, b) => a[0].localeCompare(b[0])).map(([k, resources]) => {
-                    return <OcdModelPaletteResources 
-                                provider={provider}
-                                type={k} 
-                                resources={resources} 
-                                setDragData={(dragData:any) => setDragData(dragData)}
-                                key={`${provider}-${k}-model-palette-resources`}
-                                />
-                })}
-            </ul>
-        </li>
     )
 }
 
@@ -59,7 +56,7 @@ const OcdModelPaletteResources = ({ provider, type, resources, setDragData }: an
     const onDragEnd = () => {}
     return (
         <li className='collapsible-list-element'>
-            <div className={collapsed ? 'tree-collapsed' : ''} onClick={onClick}><label>{type}</label></div>
+            <div className={collapsed ? 'tree-collapsed' : ''} onClick={onClick}><label>{OcdUtils.toTitleCase(type)}</label></div>
             <ul className={collapsed ? 'hidden' : ''}>
                 {resources.map((r: any) => {
                     return <OcdModelPaletteResource 

@@ -31,23 +31,5 @@ const OcdPalette = ({ ocdConsoleConfig, setDragData, ocdDocument }: PaletteProps
     )
 
 }
-// const OcdPalette1 = ({ ocdConsoleConfig, setDragData, ocdDocument }: PaletteProps): JSX.Element => {
-//     const modelPalette = <OcdModelPalette ocdConsoleConfig={ocdConsoleConfig} setDragData={(dragData:any) => setDragData(dragData)} ocdDocument={ocdDocument}></OcdModelPalette>
-//     // eslint-disable-next-line
-//     const providerPalette = <OcdProviderPalette ocdConsoleConfig={ocdConsoleConfig} setDragData={(dragData:any) => setDragData(dragData)} ocdDocument={ocdDocument}></OcdProviderPalette>
-//     return (
-//         <div className='ocd-designer-palette'>
-//             {ocdConsoleConfig.config.showModelPalette && modelPalette}
-//             {palette.providers.map((provider) => {
-//                 return <OcdProviderPalette 
-//                             provider={provider} 
-//                             ocdConsoleConfig={ocdConsoleConfig}
-//                             setDragData={(dragData:any) => setDragData(dragData)} 
-//                             key={provider.title}
-//                             />
-//                         })}
-//         </div>
-//     )
-// }
 
 export default OcdPalette
