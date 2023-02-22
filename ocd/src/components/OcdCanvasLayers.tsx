@@ -22,16 +22,18 @@ const OcdCanvasLayer = ({ ocdDocument, setOcdDocument, layer } : any): JSX.Eleme
         // setViewPage(structuredClone(page))
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
+    const onChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+        ocdDocument.setDisplayName(layer.id, e.target.value.trim())
+        setOcdDocument(OcdDocument.clone(ocdDocument))
+    }
     const title = ocdDocument.getLayerName(layer.id)
     return (
         <div className={`ocd-designer-canvas-layer ${layer.selected ? 'ocd-layer-selected' : ''}`}>
             <div className={`ocd-layer-visiblity-icon ${layer.visible ? 'eye-show' : 'eye-hide'}`}
                 onClick={() => onVisibilityClick()}
             ></div>
-            <div className={`ocd-canvas-layer-name ${layer.class}`}
-                onClick={() => onLayerSelectedClick()}
-            >
-                <span>{title}</span>
+            <div className={`ocd-canvas-layer-name ${layer.class}`} onClick={() => onLayerSelectedClick()}>
+                <input type='text' value={title} onChange={onChange} tabIndex={-1}></input>
             </div>
         </div>
     )

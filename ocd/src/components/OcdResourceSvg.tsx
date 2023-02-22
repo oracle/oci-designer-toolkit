@@ -149,7 +149,7 @@ const OcdForeignObject = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
                 </div>
                 <div className='ocd-svg-foreign-object-display-name'>
                     <span>{resourceType}</span>
-                    <input type='text' value={ocdDocument.getDisplayName(resource.ocid)} onChange={onChange}></input>
+                    <input type='text' value={ocdDocument.getDisplayName(resource.ocid)} onChange={onChange} tabIndex={-1}></input>
                 </div>
             </div>
         </foreignObject>

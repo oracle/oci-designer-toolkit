@@ -95,6 +95,8 @@ export class OcdDocument {
     getPage = (id: string): OcdViewPage => this.design.view.pages.find((v) => v.id === id)
     // @ts-ignore 
     getActivePage = (): OcdViewPage => this.design.view.pages.find((p: OcdViewPage) => p.selected)
+    // @ts-ignore 
+    setPageTitle = (id: string, title: string): void => this.design.view.pages.find((v) => v.id === id).title = title
 
     // @ts-ignore 
     uuid = (prefix='view') => `${prefix}-${([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,c =>(c^(((window.crypto||window.Crypto).getRandomValues(new Uint8Array(1))[0]&15)>>c/4)).toString(16))}`

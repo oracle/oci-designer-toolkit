@@ -12,10 +12,19 @@ const OcdCanvasPage = ({ ocdDocument, setOcdDocument, page } : any): JSX.Element
         // setViewPage(structuredClone(page))
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
+    const onChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+        ocdDocument.setPageTitle(page.id, e.target.value.trim())
+        setOcdDocument(OcdDocument.clone(ocdDocument))
+    }
+    const onBlur = (e: React.ChangeEvent<HTMLSpanElement | HTMLInputElement>) => {
+        ocdDocument.setPageTitle(page.id, e.target.textContent)
+        setOcdDocument(OcdDocument.clone(ocdDocument))
+    }
     return (
         <div className={`ocd-designer-canvas-page ${page.selected ? 'ocd-page-selected' : ''}`}>
             <div className={`ocd-canvas-page-name`} onClick={() => onPageSelectedClick()}>
-                <span>{page.title}</span>
+                <span contentEditable={true} onBlur={onBlur} suppressContentEditableWarning={true}>{page.title}</span>
+                {/* <input type='text' value={page.title} onChange={onChange} tabIndex={-1}></input> */}
             </div>
         </div>
     )

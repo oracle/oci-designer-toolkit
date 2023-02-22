@@ -25,6 +25,25 @@ body {
     overflow: hidden;
 }
 
+[contenteditable="true"] {
+    padding-left: 0.25em;
+    padding-right: 0.25em;
+}
+
+[contenteditable="true"]:empty {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+}
+
+[contenteditable="true"]:empty::before {
+    content: 0;
+    color: red;
+}
+
+[contenteditable="true"] br {
+    display: none;
+}
+
 .hidden {
     display: none !important;
     visibility: hidden !important;
@@ -797,6 +816,16 @@ body {
     background-position-y: center;
     background-size: 20px;
     flex-grow: 1;
+}
+
+.ocd-canvas-layer-name > input, .ocd-canvas-page-name > input {
+    display: block;
+    text-overflow: ellipsis;
+    margin: 0;
+    padding: 0;
+    border: none;
+    box-sizing: border-box;
+    background-color: inherit;
 }
 
 .ocd-designer-canvas-pages {
