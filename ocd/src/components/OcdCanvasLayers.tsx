@@ -3,7 +3,7 @@
 ** Licensed under the GNU GENERAL PUBLIC LICENSE v 3.0 as shown at https://www.gnu.org/licenses/.
 */
 
-import OcdDocument from './OcdDocument'
+import OcdDocument, { OcdSelectedResource } from './OcdDocument'
 import { OcdViewLayer, OcdViewPage } from '../model/OcdDesign'
 import * as ociResources from '../model/provider/oci/resources'
 
@@ -19,11 +19,19 @@ const OcdCanvasLayer = ({ ocdDocument, setOcdDocument, layer } : any): JSX.Eleme
     const onLayerSelectedClick = () => {
         const page: OcdViewPage = ocdDocument.getActivePage()
         page.layers.forEach((l: OcdViewLayer) => l.selected = l.id === layer.id)
-        // setViewPage(structuredClone(page))
-        setOcdDocument(OcdDocument.clone(ocdDocument))
+        const clone = OcdDocument.clone(ocdDocument)
+        const selectedResource: OcdSelectedResource = {
+            modelId: layer.id,
+            pageId: ocdDocument.getActivePage().id,
+            coordsId: '',
+            class: layer.class
+        }
+        clone.selectedResource = selectedResource
+        setOcdDocument(clone)
+        // setOcdDocument(OcdDocument.clone(ocdDocument))
     }
     const onChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-        ocdDocument.setDisplayName(layer.id, e.target.value.trim())
+        ocdDocument.setDisplayName(layer.id, e.target.value)
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
     const title = ocdDocument.getLayerName(layer.id)

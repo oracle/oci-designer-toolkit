@@ -111,7 +111,7 @@ const OcdProperties = ({ocdDocument, setOcdDocument}: DesignerResourceProperties
             <div className={`ocd-designer-tab-bar ocd-designer-tab-bar-theme`}>
                 <div className={`ocd-designer-tab ocd-designer-tab-theme ${activeTab === 'properties' ? 'ocd-designer-active-tab-theme' : ''}`} onClick={() => onPropertiesTabClick('Properties')}><span>Properties</span></div>
                 <div className={`ocd-designer-tab ocd-designer-tab-theme ${activeTab === 'documentation' ? 'ocd-designer-active-tab-theme' : ''}`} onClick={() => onPropertiesTabClick('Documentation')}><span>Documentation</span></div>
-                <div className={`ocd-designer-tab ocd-designer-tab-theme ${activeTab === 'arrange' ? 'ocd-designer-active-tab-theme' : ''}`} onClick={() => onPropertiesTabClick('Arrange')}><span>Arrange</span></div>
+                <div className={`ocd-designer-tab ocd-designer-tab-theme ${activeTab === 'arrange' ? 'ocd-designer-active-tab-theme' : ''} ${ocdDocument.selectedResource.coordsId === '' ? 'hidden' : ''}`} onClick={() => onPropertiesTabClick('Arrange')}><span>Arrange</span></div>
             </div>
             <OcdResourcePropertiesHeader
                 ocdDocument={ocdDocument} 
