@@ -1064,13 +1064,17 @@ body {
     padding: 2px;
 }
 
+.ocd-arrangement-z-positioning > div:hover {
+    background-color: #d1d1d4;
+}
+
 .ocd-arrangement-z-positioning > div > span {
     margin: auto;
 }
 
 .ocd-arrangement-size {
     display: grid;
-    grid-template-columns: auto auto auto;
+    grid-template-columns: 10em auto auto;
     border-bottom: 1px solid #d1d1d4;
     margin: 5px 0 5px 0;
     padding: 5px;
@@ -1088,7 +1092,7 @@ body {
 
 .ocd-arrangement-xy-positioning {
     display: grid;
-    grid-template-columns: auto auto auto;
+    grid-template-columns: 10em auto auto;
     border-bottom: 1px solid #d1d1d4;
     margin: 5px 0 5px 0;
     padding: 5px;
