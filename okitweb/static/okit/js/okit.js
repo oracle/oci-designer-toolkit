@@ -437,9 +437,7 @@ class OkitOCIData {
         return this.dropdown_data.volume_backup_policy ? this.dropdown_data.volume_backup_policy : []
     } 
 
-    getMySQLShapes() {
-        return this.dropdown_data.mysql_shapes;
-    }
+    getMySQLShapes = (filter=() => true) => this.dropdown_data.mysql_shapes.filter(filter)
     getMySQLShape = (shape) => this.getMySQLShapes().find(s => s.name === shape)
 
     getMySQLVersions(family='') {
