@@ -17,10 +17,12 @@ class MysqlDatabaseSystemOciPricing extends OkitOciPricingResource {
         resource = resource ? resource : this.resource
         const skus = this.sku_map.mysql_database_system.shape[resource.shape_name]
         let price_per_month = 0
-        price_per_month += skus.ocpu  ? this.getOcpuCost(skus.ocpu, resource) : 0
-        price_per_month += skus.memory  ? this.getMemoryCost(skus.memory, resource) : 0
-        price_per_month += skus.storage  ? this.getStorageCost(skus.storage, resource) : 0
-        // price_per_month += skus.backup  ? this.getBackupCost(skus.backup, resource) : 0
+        if (skus) {
+            price_per_month += skus.ocpu  ? this.getOcpuCost(skus.ocpu, resource) : 0
+            price_per_month += skus.memory  ? this.getMemoryCost(skus.memory, resource) : 0
+            price_per_month += skus.storage  ? this.getStorageCost(skus.storage, resource) : 0
+            // price_per_month += skus.backup  ? this.getBackupCost(skus.backup, resource) : 0
+        }
         console.info('Price', resource, price_per_month)
         return price_per_month
     }
@@ -29,10 +31,12 @@ class MysqlDatabaseSystemOciPricing extends OkitOciPricingResource {
         const resource_name = resource.getArtifactReference()
         const skus = this.sku_map.mysql_database_system.shape[resource.shape_name]
         let bom = {skus: [], price_per_month: this.getPrice(resource)}
-        if (skus.ocpu) {bom.skus.push(this.getOcpuBoMEntry(skus.ocpu, resource))}
-        if (skus.memory) {bom.skus.push(this.getMemoryBoMEntry(skus.memory, resource))}
-        if (skus.storage) {bom.skus.push(this.getStorageBoMEntry(skus.storage, resource))}
-        // if (skus.backup) {bom.skus.push(this.getBackupBoMEntry(skus.storage, backup))}
+        if (skus) {
+            if (skus.ocpu) {bom.skus.push(this.getOcpuBoMEntry(skus.ocpu, resource))}
+            if (skus.memory) {bom.skus.push(this.getMemoryBoMEntry(skus.memory, resource))}
+            if (skus.storage) {bom.skus.push(this.getStorageBoMEntry(skus.storage, resource))}
+            // if (skus.backup) {bom.skus.push(this.getBackupBoMEntry(skus.storage, backup))}
+        }
         return bom
     }
 

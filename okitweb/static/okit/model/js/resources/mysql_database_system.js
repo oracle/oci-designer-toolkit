@@ -14,7 +14,6 @@ class MysqlDatabaseSystem extends OkitArtifact {
     constructor (data={}, okitjson={}) {
         super(okitjson);
         // Configure default values
-        // this.display_name = this.generateDefaultName(okitjson.mysql_database_systems.length + 1);
         this.compartment_id = data.parent_id;
         this.availability_domain = 1;
         this.hostname_label = this.display_name.toLowerCase();
@@ -31,6 +30,12 @@ class MysqlDatabaseSystem extends OkitArtifact {
         this.fault_domain = '';
         this.description = this.name;
         this.is_highly_available = false
+        this.deletion_policy = {
+            automatic_backup_retention: true,
+            final_backup: true,
+            is_delete_protected: true
+        }
+        this.heatwave_cluster = undefined
         // Update with any passed data
         this.merge(data);
         this.convert();
@@ -38,6 +43,15 @@ class MysqlDatabaseSystem extends OkitArtifact {
         if (this.availability_domain.length > 1) {
             this.region_availability_domain = this.availability_domain;
             this.availability_domain = this.getAvailabilityDomainNumber(this.region_availability_domain);
+        }
+        Object.defineProperty(this, 'heatwave', {get: function() {return !this.shape_name ? false : this.shape_name.includes('MySQL.HeatWave')}, set: function(flex_shape) {}, enumerable: true });
+    }
+
+    newHeatwaveCluster() {
+        return {
+            resource_name: `${this.generateResourceName()}HeatWaveCluster`,
+            shape_name: '',
+            cluster_size: 1
         }
     }
 

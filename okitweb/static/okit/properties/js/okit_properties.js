@@ -563,7 +563,8 @@ class OkitResourceProperties {
         if (empty_option) select.append('option').attr('value', '').attr('selected', 'selected').text(empty_value ? empty_value : '')
         let id = ''
         const resources = okitOciData[resource_type](filter)
-        // console.info('Reference Resources', resources, display_element)
+        console.info('Filter', filter)
+        console.info('Reference Resources', resources, display_element)
         if (groups) {
             Object.entries(groups).forEach(([k, v]) => {
                 console.info('Group', k, 'Filter', v)
