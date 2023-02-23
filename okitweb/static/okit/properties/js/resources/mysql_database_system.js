@@ -148,6 +148,7 @@ class MysqlDatabaseSystemProperties extends OkitResourceProperties {
             'Standard - Intel X7': (ds) => ds.name.includes('MySQL.VM.Standard2'),
             'Standard - Intel X9': (ds) => ds.name.includes('MySQL.VM.Standard3'),
             'Optimised - Intel X9': (ds) => ds.name.includes('MySQL.VM.Optimized3'),
+            'Heatwave': (ds) => ds.name.includes('MySQL.HeatWave'),
         }
         this.loadReferenceSelect(this.shape_name, 'getMySQLShapes', false, undefined, shape_groups, '', 'name', 'name')
         const options = Array.from(this.shape_name.node().options).map((opt) => opt.value)

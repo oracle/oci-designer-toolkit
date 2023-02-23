@@ -31,6 +31,7 @@ class MysqlDatabaseSystem extends OkitArtifact {
         this.fault_domain = '';
         this.description = this.name;
         this.is_highly_available = false
+        this.heatwave = false
         // Update with any passed data
         this.merge(data);
         this.convert();
@@ -38,6 +39,13 @@ class MysqlDatabaseSystem extends OkitArtifact {
         if (this.availability_domain.length > 1) {
             this.region_availability_domain = this.availability_domain;
             this.availability_domain = this.getAvailabilityDomainNumber(this.region_availability_domain);
+        }
+        // Object.defineProperty(this, 'heatwave', {get: function() {return !this.shape_name ? false : this.shape_name.includes('MySQL.HeatWave')}, set: function(flex_shape) {}, enumerable: true });
+    }
+
+    newHeatwaveCluster() {
+        return {
+
         }
     }
 
