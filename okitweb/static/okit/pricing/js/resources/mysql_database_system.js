@@ -21,6 +21,8 @@ class MysqlDatabaseSystemOciPricing extends OkitOciPricingResource {
             price_per_month += skus.ocpu  ? this.getOcpuCost(skus.ocpu, resource) : 0
             price_per_month += skus.memory  ? this.getMemoryCost(skus.memory, resource) : 0
             price_per_month += skus.storage  ? this.getStorageCost(skus.storage, resource) : 0
+            price_per_month += skus.database  ? this.getHeatwaveDatabaseCost(skus.database, resource) : 0
+            price_per_month += skus.node  ? this.getHeatwaveNodeCost(skus.node, resource) : 0
             // price_per_month += skus.backup  ? this.getBackupCost(skus.backup, resource) : 0
         }
         console.info('Price', resource, price_per_month)
@@ -34,6 +36,8 @@ class MysqlDatabaseSystemOciPricing extends OkitOciPricingResource {
         if (skus) {
             if (skus.ocpu) {bom.skus.push(this.getOcpuBoMEntry(skus.ocpu, resource))}
             if (skus.memory) {bom.skus.push(this.getMemoryBoMEntry(skus.memory, resource))}
+            if (skus.database) {bom.skus.push(this.getHeatwaveDatabaseCost(skus.database, resource))}
+            if (skus.node) {bom.skus.push(this.getHeatwaveNodeCost(skus.node, resource))}
             if (skus.storage) {bom.skus.push(this.getStorageBoMEntry(skus.storage, resource))}
             // if (skus.backup) {bom.skus.push(this.getBackupBoMEntry(skus.storage, backup))}
         }
@@ -70,6 +74,20 @@ class MysqlDatabaseSystemOciPricing extends OkitOciPricingResource {
         resource = resource ? resource : this.resource
         const sku_prices = this.getSkuCost(sku)
         const units = +resource.backup_data_storage_size_in_gb
+        return this.getMonthlyCost(sku_prices, units)
+    }
+
+    getHeatwaveDatabaseCost(sku, resource) {
+        resource = resource ? resource : this.resource
+        const sku_prices = this.getSkuCost(sku)
+        const units = +this.monthly_utilization
+        return this.getMonthlyCost(sku_prices, units)
+    }
+
+    getHeatwaveNodeCost(sku, resource) {
+        resource = resource ? resource : this.resource
+        const sku_prices = this.getSkuCost(sku)
+        const units = +resource.heatwave_cluster.cluster_size * this.monthly_utilization
         return this.getMonthlyCost(sku_prices, units)
     }
 

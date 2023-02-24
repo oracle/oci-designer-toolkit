@@ -59,7 +59,7 @@ class MysqlDatabaseSystem extends OkitArtifact {
         return {
             resource_name: `${this.generateResourceName()}HeatWaveCluster`,
             shape_name: '',
-            cluster_size: 1
+            cluster_size: 3
         }
     }
 
