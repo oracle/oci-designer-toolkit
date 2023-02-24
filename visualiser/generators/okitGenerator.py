@@ -202,7 +202,10 @@ class OCIGenerator(object):
         "object_storage_buckets": "storage",
 
         "analytics_instances": "compute",
+        "data_science_projects": "compute",
         "instances": "compute",
+        "oracle_digital_assistants": "compute",
+        "visual_builder_instances": "compute",
 
         "autonomous_databases": "database",
         "database_systems": "database",
