@@ -31,15 +31,19 @@ resource "oci_mysql_mysql_db_system" "{{ resource_name }}" {
     {% if freeform_tags is defined %}
         freeform_tags            = {{ freeform_tags | safe }}
     {% endif %}
-        is_enabled = var.mysql_db_system_backup_policy_is_enabled
-        retention_in_days = var.mysql_db_system_backup_policy_retention_in_days
-        window_start_time = var.mysql_db_system_backup_policy_window_start_time
+        is_enabled = {{ backup_policy.is_enabled | safe | lower }}
+        pitr_policy {
+            #Required
+            is_enabled = {{ backup_policy.pitr_policy.is_enabled | safe | lower }}
+        }
+        retention_in_days = {{ backup_policy.retention_in_days | safe }}
+        {# window_start_time = {{ backup_policy.window_start_time | safe }} #}
     }
 {% endif %}
 {% if deletion_policy is defined %}
     deletion_policy {
-        automatic_backup_retention = {{ deletion_policy.automatic_backup_retention | safe | lower }}
-        final_backup = {{ deletion_policy.final_backup | safe | lower }}
+        automatic_backup_retention = {{ deletion_policy.automatic_backup_retention | safe }}
+        final_backup = {{ deletion_policy.final_backup | safe }}
         is_delete_protected = {{ deletion_policy.is_delete_protected | safe | lower }}
     }
 {% endif %}

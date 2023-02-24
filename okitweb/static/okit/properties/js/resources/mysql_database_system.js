@@ -125,18 +125,41 @@ class MysqlDatabaseSystemProperties extends OkitResourceProperties {
         const deletion_policy_table = this.createTable('', `${this.id}_deletion_policy_table`)
         this.deletion_policy_tbody = deletion_policy_table.tbody
         this.append(this.deletion_policy_div, deletion_policy_table.table)
-        // Automatic Backup Retention
-        const automatic_backup_retention = this.createInput('checkbox', 'Automatic Backup Retention', `${this.id}_automatic_backup_retention`, '', (d, i, n) => this.resource.deletion_policy.automatic_backup_retention = n[i].checked)
-        this.automatic_backup_retention = automatic_backup_retention.input
-        this.append(this.deletion_policy_tbody, automatic_backup_retention.row)
-        // Final Backup
-        const final_backup = this.createInput('checkbox', 'Final Backup', `${this.id}_final_backup`, '', (d, i, n) => this.resource.deletion_policy.final_backup = n[i].checked)
-        this.final_backup = final_backup.input
-        this.append(this.deletion_policy_tbody, final_backup.row)
         // Delete Protected
         const is_delete_protected = this.createInput('checkbox', 'Delete Protected', `${this.id}_is_delete_protected`, '', (d, i, n) => this.resource.deletion_policy.is_delete_protected = n[i].checked)
         this.is_delete_protected = is_delete_protected.input
         this.append(this.deletion_policy_tbody, is_delete_protected.row)
+        // Automatic Backup Retention
+        const automatic_backup_retention_data = {options: {DELETE: 'Delete', RETAIN: 'Retain'}}
+        const automatic_backup_retention = this.createInput('select', 'Automatic Backup Retention', `${this.id}_automatic_backup_retention`, '', (d, i, n) => this.resource.deletion_policy.automatic_backup_retention = n[i].value, automatic_backup_retention_data)
+        this.automatic_backup_retention = automatic_backup_retention.input
+        this.append(this.deletion_policy_tbody, automatic_backup_retention.row)
+        // Final Backup
+        const final_backup_data = {options: {REQUIRE_FINAL_BACKUP: 'Require', SKIP_FINAL_BACKUP: 'Skip'}}
+        const final_backup = this.createInput('select', 'Final Backup', `${this.id}_final_backup`, '', (d, i, n) => this.resource.deletion_policy.final_backup = n[i].value, final_backup_data)
+        this.final_backup = final_backup.input
+        this.append(this.deletion_policy_tbody, final_backup.row)
+        // Backup Policy
+        const backup_policy = this.createDetailsSection('Backup Policy', `${this.id}_backup_policy_details`)
+        this.append(this.properties_contents, backup_policy.details)
+        this.backup_policy_details = backup_policy.details
+        this.backup_policy_div = backup_policy.div
+        const backup_policy_table = this.createTable('', `${this.id}_backup_policy_table`)
+        this.backup_policy_tbody = backup_policy_table.tbody
+        this.append(this.backup_policy_div, backup_policy_table.table)
+        // Enabled
+        const is_enabled = this.createInput('checkbox', 'Enabled', `${this.id}_is_enabled`, '', (d, i, n) => this.resource.backup_policy.is_enabled = n[i].checked)
+        this.is_enabled = is_enabled.input
+        this.append(this.backup_policy_tbody, is_enabled.row)
+        // PITA
+        const pitr_policy_is_enabled = this.createInput('checkbox', 'Point In Time Recovery', `${this.id}_pitr_policy_is_enabled`, '', (d, i, n) => this.resource.backup_policy.pitr_policy.is_enabled = n[i].checked)
+        this.pitr_policy_is_enabled = pitr_policy_is_enabled.input
+        this.append(this.backup_policy_tbody, pitr_policy_is_enabled.row)
+        // Retention in Days
+        const retention_in_days_data = {min: 1}
+        const retention_in_days = this.createInput('number', 'Retention in Days', `${this.id}_retention_in_days`, '', (d, i, n) => this.resource.backup_policy.retention_in_days = n[i].value, retention_in_days_data)
+        this.retention_in_days = retention_in_days.input
+        this.append(this.backup_policy_tbody, retention_in_days.row)
     }
 
     // Load Additional Resource Specific Properties
@@ -161,9 +184,14 @@ class MysqlDatabaseSystemProperties extends OkitResourceProperties {
         this.port.property('value', this.resource.port)
         this.port_x.property('value', this.resource.port_x)
         // Deletion Policy
-        this.automatic_backup_retention.property('checked', this.resource.deletion_policy.automatic_backup_retention)
-        this.final_backup.property('checked', this.resource.deletion_policy.final_backup)
+        this.automatic_backup_retention.property('value', this.resource.deletion_policy.automatic_backup_retention)
+        this.final_backup.property('value', this.resource.deletion_policy.final_backup)
         this.is_delete_protected.property('checked', this.resource.deletion_policy.is_delete_protected)
+        // Backup Policy
+        this.is_enabled.property('checked', this.resource.backup_policy.is_enabled)
+        this.pitr_policy_is_enabled.property('checked', this.resource.backup_policy.pitr_policy.is_enabled)
+        this.retention_in_days.property('value', this.resource.backup_policy.retention_in_days)
+
         // Show reference data
         this.showShapeConfigData()
         this.checkHeatwave()
@@ -199,12 +227,12 @@ class MysqlDatabaseSystemProperties extends OkitResourceProperties {
 
     loadMySQLShapes() {
         const shape_groups = {
+            'Heatwave': (ds) => ds.name.includes('MySQL.HeatWave') && ds.is_supported_for.includes('DBSYSTEM'),
             'Standard - AMD E3': (ds) => ds.name.includes('MySQL.VM.Standard.E3') && ds.is_supported_for.includes('DBSYSTEM'),
             'Standard - AMD E4': (ds) => ds.name.includes('MySQL.VM.Standard.E4') && ds.is_supported_for.includes('DBSYSTEM'),
             'Standard - Intel X7': (ds) => ds.name.includes('MySQL.VM.Standard2') && ds.is_supported_for.includes('DBSYSTEM'),
             'Standard - Intel X9': (ds) => ds.name.includes('MySQL.VM.Standard3') && ds.is_supported_for.includes('DBSYSTEM'),
             'Optimised - Intel X9': (ds) => ds.name.includes('MySQL.VM.Optimized3') && ds.is_supported_for.includes('DBSYSTEM'),
-            'Heatwave': (ds) => ds.name.includes('MySQL.HeatWave') && ds.is_supported_for.includes('DBSYSTEM'),
         }
         this.loadReferenceSelect(this.shape_name, 'getMySQLShapes', false, undefined, shape_groups, '', 'name', 'name')
         const options = Array.from(this.shape_name.node().options).map((opt) => opt.value)
