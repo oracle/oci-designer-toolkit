@@ -308,37 +308,37 @@ class OkitResourceProperties {
         // IPv4 IP Address
         ipv4: {
             placeholder: '0.0.0.0',
-            pattern: "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$)+",
+            pattern: "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$)+|^var\.+$",
             title: 'IPv4 Address'
         },
         // IPv4 IP Address List
         ipv4_list: {
             placeholder: '0.0.0.0,0.0.0.0',
-            pattern: "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(,\s?|$))+",
+            pattern: "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(,\s?|$))+|^(var\.+(,\s?|$))",
             title: 'Comma separated IPv4 Addresses'
         },
         // IPv4 CIDR
         ipv4_cidr: {
             placeholder: '0.0.0.0/0',
-            pattern: "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(3[0-2]|[1-2][0-9]|[0-9]))$)+",
+            pattern: "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(3[0-2]|[1-2][0-9]|[0-9]))$)+|^var\.+$",
             title: 'IPv4 CIDR block'
         },
         // IPv4 CIDR List
         ipv4_cidr_list: {
             placeholder: '0.0.0.0/0,0.0.0.0/0',
-            pattern: "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(3[0-2]|[1-2][0-9]|[0-9]))(,\s?|$))+",
+            pattern: "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(3[0-2]|[1-2][0-9]|[0-9]))(,\s?|$))+|^(var\.+(,\s?|$))",
             title: 'Comma separated IPv4 CIDR blocks'
         },
         // IPv4 CIDR List
         ipv4_single_cidr_list: {
             placeholder: '0.0.0.0/0,0.0.0.0/0',
-            pattern: "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(32))(,\s?|$))+",
+            pattern: "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(32))(,\s?|$))+|^(var\.+(,\s?|$))",
             title: 'Comma separated Single IPv4 CIDR (/32)'
         },
         // IPv6 CIDR List
         ipv6_cidr_list: {
             placeholder: '2001:0db8:0123:45::/56',
-            pattern: "^((((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*|((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4})){7})(,\s?|$))+",
+            pattern: "^((((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*|((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4})){7})(,\s?|$))+|^(var\.+(,\s?|$))",
             title: 'Comma separated IPv6 CIDR blocks'
         },
         // Port Range
@@ -348,7 +348,7 @@ class OkitResourceProperties {
             title: 'Port range 80, 20-22'
         },
         dns_name: {
-            pattern: "^[\w\._-]+$"
+            pattern: "^[\w\._-]+$|^var\.+$|^var\.+$"
         },
         url_no_http: {
             placeholder: 'www.yoursite.com',
@@ -356,7 +356,7 @@ class OkitResourceProperties {
             title: 'URL with no protocol'
         },
         name_no_space: {
-            pattern: ".*(?:^[a-zA-Z](-?[a-zA-Z_0-9])*$).*"
+            pattern: ".*(?:^[a-zA-Z](-?[a-zA-Z_0-9])*$).*|^var\.+$"
         }
     }
 
@@ -563,11 +563,8 @@ class OkitResourceProperties {
         if (empty_option) select.append('option').attr('value', '').attr('selected', 'selected').text(empty_value ? empty_value : '')
         let id = ''
         const resources = okitOciData[resource_type](filter)
-        console.info('Filter', filter)
-        console.info('Reference Resources', resources, display_element)
         if (groups) {
             Object.entries(groups).forEach(([k, v]) => {
-                console.info('Group', k, 'Filter', v)
                 const optgrp = select.append('optgroup').attr('label', k)
                 resources.filter(v).forEach((r, i) => {
                     r = r instanceof Object ? r : {id: r, display_name: r}

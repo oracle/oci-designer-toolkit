@@ -127,6 +127,8 @@ class OCIDropdownQuery(OCIConnection):
                         resource_list = self.instance_agent_plugins(resource_list, resources)                       
                     elif resource_type == "LoadBalancerShape":
                         resource_list = self.load_balancer_shapes(resource_list, resources)                       
+                    elif resource_type == "MySQLShape":
+                        resource_list = self.mysql_shapes(resource_list, resources)                       
                     elif resource_type == "NodePoolOptions":
                         logger.info(jsonToFormattedString(resource_list))
                     elif resource_type == "Shape":
@@ -183,6 +185,12 @@ class OCIDropdownQuery(OCIConnection):
         return plugins
 
     def load_balancer_shapes(self, shapes, resources):
+        for shape in shapes:
+            shape['id'] = shape['name']
+            shape['display_name'] = shape['name'].title()
+        return shapes
+
+    def mysql_shapes(self, shapes, resources):
         for shape in shapes:
             shape['id'] = shape['name']
             shape['display_name'] = shape['name'].title()
