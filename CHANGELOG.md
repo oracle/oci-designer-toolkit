@@ -1,6 +1,14 @@
 # Release Notes
 
 
+## Version 0.47.0
+**Release Date**: 8th March 2023
+### Features
+1. Add Heatwave functionality to MySQL DB System
+2. Allow spcification of Deletion and Backup Policies for MySQL DB Systems.
+### Bug Fixes
+
+
 ## Version 0.46.1
 **Release Date**: 21st February 2023
 ### Features

@@ -31,9 +31,17 @@ class MysqlDatabaseSystem extends OkitArtifact {
         this.description = this.name;
         this.is_highly_available = false
         this.deletion_policy = {
-            automatic_backup_retention: true,
-            final_backup: true,
+            automatic_backup_retention: 'DELETE',
+            final_backup: 'SKIP_FINAL_BACKUP',
             is_delete_protected: true
+        }
+        this.backup_policy = {
+            is_enabled: true,
+            pitr_policy: {
+                is_enabled: true
+            },
+            retention_in_days: 7,
+            window_start_time: '00:30:00'
         }
         this.heatwave_cluster = undefined
         // Update with any passed data
