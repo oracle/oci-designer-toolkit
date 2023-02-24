@@ -1,0 +1,38 @@
+
+{% if read_only %}
+# ------ Read Data Science Project
+data "oci_datascience_project" "{{ resource_name }}" {
+    # Required
+    id = {{ ocid | safe }}
+}
+
+locals {
+    {{ resource_name }}_id = data.oci_datascience_project.{{ resource_name }}.id
+}
+{% else %}
+# ------ Create Data Science Project
+resource "oci_datascience_project" "{{ resource_name }}" {
+    #Required
+    compartment_id = {{ compartment_id }}
+    display_name   = {{ display_name | safe }}
+
+    #Optional
+    {% if description is defined %}
+    description = {{ description | safe }}
+    {% endif %}
+    {% if defined_tags is defined %}
+        defined_tags   = {{ defined_tags | safe }}
+    {% endif %}
+    {% if freeform_tags is defined %}
+        freeform_tags  = {{ freeform_tags | safe }}
+    {% endif %}
+}
+
+locals {
+    {{ resource_name }}_id = oci_datascience_project.{{ resource_name }}.id
+}
+{% endif %}
+
+output "{{ resource_name }}Id" {
+    value = local.{{ resource_name }}_id
+}
