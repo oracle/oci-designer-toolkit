@@ -202,6 +202,35 @@ export class OcdDocument {
             oldCoords.h = coords.h
         }
     }
+    switchCoords = (coords: OcdViewCoords[], idx1: number, idx2: number) => [coords[idx1], coords[idx2]] = [coords[idx2], coords[idx1]]
+    bringForward = (viewId: string, coordsId: string) => {
+        const page = this.getPage(viewId)
+        if (page && coordsId !== '') {
+            const idx = page.coords.findIndex(c => c.id === coordsId)
+            if (idx < page.coords.length) this.switchCoords(page.coords, idx, idx + 1)
+        }
+    }
+    sendBackward = (viewId: string, coordsId: string) => {
+        const page = this.getPage(viewId)
+        if (page && coordsId !== '') {
+            const idx = page.coords.findIndex(c => c.id === coordsId)
+            if (idx > 0) this.switchCoords(page.coords, idx, idx - 1)
+        }
+    }
+    toFront = (viewId: string, coordsId: string) => {
+        const page = this.getPage(viewId)
+        if (page && coordsId !== '') {
+            const idx = page.coords.findIndex(c => c.id === coordsId)
+            page.coords = [...page.coords.slice(0, idx), ...page.coords.slice(idx + 1), page.coords[idx]]
+        }
+    }
+    toBack = (viewId: string, coordsId: string) => {
+        const page = this.getPage(viewId)
+        if (page && coordsId !== '') {
+            const idx = page.coords.findIndex(c => c.id === coordsId)
+            page.coords = [page.coords[idx], ...page.coords.slice(0, idx), ...page.coords.slice(idx + 1)]
+        }
+    }
 
 }
 

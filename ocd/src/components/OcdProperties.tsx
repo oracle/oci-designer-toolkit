@@ -40,9 +40,10 @@ const OcdResourceDocumentation = ({ocdDocument, setOcdDocument}: DesignerResourc
 const OcdResourceArrangement = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
     const selectedResource = ocdDocument.selectedResource
     const page: OcdViewPage = ocdDocument.getActivePage()
-    console.info('Selected Resource', selectedResource)
+    // console.info('Selected Resource', selectedResource)
     // @ts-ignore
     const coords = ocdDocument.design.view.pages.find((p => p.selected)).coords.find(c => c.id === selectedResource.coordsId)
+    const coordsId = coords ? coords.id : ''
     const width = coords ? coords.w : 0
     const height = coords ? coords.h : 0
     const left = coords ? coords.x : 0
@@ -69,13 +70,29 @@ const OcdResourceArrangement = ({ocdDocument, setOcdDocument}: DesignerResourceP
         if (coords) {ocdDocument.updateCoords({...coords, y: parseInt(value)}, page.id)}
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
+    const toFrontClick = () => {
+        ocdDocument.toFront(page.id, coordsId)
+        setOcdDocument(OcdDocument.clone(ocdDocument))
+    }
+    const toBackClick = () => {
+        ocdDocument.toBack(page.id, coordsId)
+        setOcdDocument(OcdDocument.clone(ocdDocument))
+    }
+    const bringForwardClick = () => {
+        ocdDocument.bringForward(page.id, coordsId)
+        setOcdDocument(OcdDocument.clone(ocdDocument))
+    }
+    const sendBackwardClick = () => {
+        ocdDocument.sendBackward(page.id, coordsId)
+        setOcdDocument(OcdDocument.clone(ocdDocument))
+    }
     return (
         <div className={`ocd-properties-panel ocd-properties-panel-theme ocd-properties-arrangement-panel`}>
             <div className={`ocd-arrangement-z-positioning`}>
-                <div><span>To Front</span></div>
-                <div><span>To Back</span></div>
-                <div><span>Bring Forward</span></div>
-                <div><span>Send Backward</span></div>
+                <div onClick={() => toFrontClick()}><span>To Front</span></div>
+                <div onClick={() => toBackClick()}><span>To Back</span></div>
+                <div onClick={() => bringForwardClick()}><span>Bring Forward</span></div>
+                <div onClick={() => sendBackwardClick()}><span>Send Backward</span></div>
             </div>
             <div className={`ocd-arrangement-size ${!container ? 'hidden' : ''}`}>
                 <div><span>Size</span></div>

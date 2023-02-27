@@ -232,23 +232,35 @@ export const menuItems = [
         submenu: [
             {
                 label: 'To Front',
-                click: undefined,
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
+                    ocdDocument.toFront(ocdDocument.selectedResource.pageId, ocdDocument.selectedResource.coordsId)
+                    setOcdDocument(OcdDocument.clone(ocdDocument))            
+                }
             },
             {
                 label: 'To Back',
-                click: undefined
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
+                    ocdDocument.toBack(ocdDocument.selectedResource.pageId, ocdDocument.selectedResource.coordsId)
+                    setOcdDocument(OcdDocument.clone(ocdDocument))            
+                }
             },
             {
                 label: 'Bring Forward',
-                click: undefined
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
+                    ocdDocument.bringForward(ocdDocument.selectedResource.pageId, ocdDocument.selectedResource.coordsId)
+                    setOcdDocument(OcdDocument.clone(ocdDocument))            
+                }
             },
             {
-                label: 'Send Back',
-                click: undefined
+                label: 'Send Backward',
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
+                    ocdDocument.sendBackward(ocdDocument.selectedResource.pageId, ocdDocument.selectedResource.coordsId)
+                    setOcdDocument(OcdDocument.clone(ocdDocument))            
+                }
             },
             {
                 label: 'Auto Arrange',
-                click: undefined
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {}
             }
         ]
     }
