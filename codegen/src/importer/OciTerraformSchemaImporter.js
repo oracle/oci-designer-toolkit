@@ -7,16 +7,21 @@ import { OcdSchemaImporter } from './OcdSchemaImporter.js'
 
 class OciTerraformSchemaImporter extends OcdSchemaImporter {
     resource_map = {
-        oci_containerengine_cluster: 'cluster',
-        oci_containerengine_node_pool: 'node_pool',
+        // oci_containerengine_cluster: 'cluster',
+        // oci_containerengine_node_pool: 'node_pool',
 
-        oci_core_cpe: 'cpe',
+        // oci_core_cpe: 'cpe',
         oci_core_dhcp_options: 'dhcp_options',
         oci_core_drg: 'drg',
+        oci_core_drg_attachment: 'drg_attachment',
+        oci_core_drg_route_distribution: 'drg_route_distribution',
+        oci_core_drg_route_distribution_statement: 'drg_route_distribution_statement',
+        oci_core_drg_route_table: 'drg_route_table',
+        oci_core_drg_route_table_route_rule: 'drg_route_table_route_rule',
         oci_core_instance: 'instance',
-        oci_core_instance_pool: 'instance_pool',
+        // oci_core_instance_pool: 'instance_pool',
         oci_core_internet_gateway: 'internet_gateway',
-        oci_core_ipsec: 'ipsec',
+        // oci_core_ipsec: 'ipsec',
         oci_core_local_peering_gateway: 'local_peering_gateway',
         oci_core_nat_gateway: 'nat_gateway',
         oci_core_network_security_group: 'network_security_group',
@@ -27,20 +32,20 @@ class OciTerraformSchemaImporter extends OcdSchemaImporter {
         oci_core_subnet: 'subnet',
         oci_core_vcn: 'vcn',
         oci_core_volume: 'volume',
-        oci_core_volume_group: 'volume_group',
+        // oci_core_volume_group: 'volume_group',
 
-        oci_database_autonomous_database: 'autonomous_database',
-        oci_database_db_system: 'db_system',
+        // oci_database_autonomous_database: 'autonomous_database',
+        // oci_database_db_system: 'db_system',
 
-        oci_file_storage_file_system: 'file_system',
+        // oci_file_storage_file_system: 'file_system',
 
         oci_identity_compartment: 'compartment',
 
-        oci_load_balancer_load_balancer: 'load_balancer',
-        oci_load_balancer_backend: 'backend',
-        oci_load_balancer_backend_set: 'backend_set',
+        // oci_load_balancer_load_balancer: 'load_balancer',
+        // oci_load_balancer_backend: 'backend',
+        // oci_load_balancer_backend_set: 'backend_set',
 
-        oci_mysql_mysql_db_system: 'mysql_db_system',
+        // oci_mysql_mysql_db_system: 'mysql_db_system',
 
         oci_objectstorage_bucket: 'bucket',
     }
@@ -70,6 +75,12 @@ class OciTerraformSchemaImporter extends OcdSchemaImporter {
             'time_of_last_switchover',
             'time_of_next_refresh',
             'time_reclamation_of_free_autonomous_database'
+        ],
+        oci_core_drg: [
+            'default_drg_route_tables'
+        ],
+        oci_core_drg_attachment: [
+            'remove_export_drg_route_distribution_trigger'
         ]
     }
 

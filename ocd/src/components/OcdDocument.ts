@@ -89,7 +89,7 @@ export class OcdDocument {
     getSelectedResourceCoords = () => this.getCoords(this.selectedResource.coordsId)
 
     // @ts-ignore 
-    getLayerName = (id: string): string => this.design.model.oci.resources.compartment.find((c) => c.id === id).name
+    getLayerName = (id: string): string => this.design.model.oci.resources.compartment.find((c) => c.id === id).displayName
     // @ts-ignore 
     getActiveLayer = (pageId: string): OcdViewLayer => this.getActivePage(pageId).layers.find((l: OcdViewLayer) => l.selected)
 

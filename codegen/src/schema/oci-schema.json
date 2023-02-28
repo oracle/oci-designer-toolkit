@@ -1,587 +1,4 @@
 {
-  "cluster": {
-    "type": "object",
-    "subtype": "",
-    "attributes": {
-      "available_kubernetes_upgrades": {
-        "name": "available_kubernetes_upgrades",
-        "type": "list",
-        "subtype": "string",
-        "required": false,
-        "label": "Available Kubernetes Upgrades",
-        "id": "available_kubernetes_upgrades"
-      },
-      "compartment_id": {
-        "name": "compartment_id",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Compartment",
-        "id": "compartment_id"
-      },
-      "endpoints": {
-        "name": "endpoints",
-        "type": "list",
-        "subtype": [
-          "object",
-          {
-            "kubernetes": "string",
-            "private_endpoint": "string",
-            "public_endpoint": "string"
-          }
-        ],
-        "required": false,
-        "label": "Endpoints",
-        "id": "endpoints"
-      },
-      "kms_key_id": {
-        "name": "kms_key_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Kms Key",
-        "id": "kms_key_id"
-      },
-      "kubernetes_version": {
-        "name": "kubernetes_version",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Kubernetes Version",
-        "id": "kubernetes_version"
-      },
-      "lifecycle_details": {
-        "name": "lifecycle_details",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Lifecycle Details",
-        "id": "lifecycle_details"
-      },
-      "metadata": {
-        "name": "metadata",
-        "type": "list",
-        "subtype": [
-          "object",
-          {
-            "created_by_user_id": "string",
-            "created_by_work_request_id": "string",
-            "deleted_by_user_id": "string",
-            "deleted_by_work_request_id": "string",
-            "time_created": "string",
-            "time_deleted": "string",
-            "time_updated": "string",
-            "updated_by_user_id": "string",
-            "updated_by_work_request_id": "string"
-          }
-        ],
-        "required": false,
-        "label": "Metadata",
-        "id": "metadata"
-      },
-      "name": {
-        "name": "name",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Name",
-        "id": "name"
-      },
-      "vcn_id": {
-        "name": "vcn_id",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Vcn",
-        "id": "vcn_id"
-      },
-      "endpoint_config": {
-        "name": "endpoint_config",
-        "type": "object",
-        "subtype": "",
-        "required": false,
-        "label": "Endpoint Config",
-        "id": "endpoint_config",
-        "attributes": {
-          "is_public_ip_enabled": {
-            "name": "is_public_ip_enabled",
-            "type": "bool",
-            "subtype": "",
-            "required": false,
-            "label": "Is Public Ip Enabled",
-            "id": "endpoint_config.is_public_ip_enabled"
-          },
-          "nsg_ids": {
-            "name": "nsg_ids",
-            "type": "set",
-            "subtype": "string",
-            "required": false,
-            "label": "Nsg Ids",
-            "id": "endpoint_config.nsg_ids"
-          },
-          "subnet_id": {
-            "name": "subnet_id",
-            "type": "string",
-            "subtype": "",
-            "required": true,
-            "label": "Subnet",
-            "id": "endpoint_config.subnet_id"
-          }
-        }
-      },
-      "image_policy_config": {
-        "name": "image_policy_config",
-        "type": "object",
-        "subtype": "",
-        "required": false,
-        "label": "Image Policy Config",
-        "id": "image_policy_config",
-        "attributes": {
-          "is_policy_enabled": {
-            "name": "is_policy_enabled",
-            "type": "bool",
-            "subtype": "",
-            "required": false,
-            "label": "Is Policy Enabled",
-            "id": "image_policy_config.is_policy_enabled"
-          },
-          "key_details": {
-            "name": "key_details",
-            "type": "list",
-            "subtype": "",
-            "required": false,
-            "label": "Key Details",
-            "id": "image_policy_config.key_details",
-            "attributes": {
-              "kms_key_id": {
-                "name": "kms_key_id",
-                "type": "string",
-                "subtype": "",
-                "required": false,
-                "label": "Kms Key",
-                "id": "image_policy_config.key_details.kms_key_id"
-              }
-            }
-          }
-        }
-      },
-      "options": {
-        "name": "options",
-        "type": "object",
-        "subtype": "",
-        "required": false,
-        "label": "Options",
-        "id": "options",
-        "attributes": {
-          "service_lb_subnet_ids": {
-            "name": "service_lb_subnet_ids",
-            "type": "list",
-            "subtype": "string",
-            "required": false,
-            "label": "Service Lb Subnet Ids",
-            "id": "options.service_lb_subnet_ids"
-          },
-          "add_ons": {
-            "name": "add_ons",
-            "type": "object",
-            "subtype": "",
-            "required": false,
-            "label": "Add Ons",
-            "id": "options.add_ons",
-            "attributes": {
-              "is_kubernetes_dashboard_enabled": {
-                "name": "is_kubernetes_dashboard_enabled",
-                "type": "bool",
-                "subtype": "",
-                "required": false,
-                "label": "Is Kubernetes Dashboard Enabled",
-                "id": "options.add_ons.is_kubernetes_dashboard_enabled"
-              },
-              "is_tiller_enabled": {
-                "name": "is_tiller_enabled",
-                "type": "bool",
-                "subtype": "",
-                "required": false,
-                "label": "Is Tiller Enabled",
-                "id": "options.add_ons.is_tiller_enabled"
-              }
-            }
-          },
-          "admission_controller_options": {
-            "name": "admission_controller_options",
-            "type": "object",
-            "subtype": "",
-            "required": false,
-            "label": "Admission Controller Options",
-            "id": "options.admission_controller_options",
-            "attributes": {
-              "is_pod_security_policy_enabled": {
-                "name": "is_pod_security_policy_enabled",
-                "type": "bool",
-                "subtype": "",
-                "required": false,
-                "label": "Is Pod Security Policy Enabled",
-                "id": "options.admission_controller_options.is_pod_security_policy_enabled"
-              }
-            }
-          },
-          "kubernetes_network_config": {
-            "name": "kubernetes_network_config",
-            "type": "object",
-            "subtype": "",
-            "required": false,
-            "label": "Kubernetes Network Config",
-            "id": "options.kubernetes_network_config",
-            "attributes": {
-              "pods_cidr": {
-                "name": "pods_cidr",
-                "type": "string",
-                "subtype": "",
-                "required": false,
-                "label": "Pods Cidr",
-                "id": "options.kubernetes_network_config.pods_cidr"
-              },
-              "services_cidr": {
-                "name": "services_cidr",
-                "type": "string",
-                "subtype": "",
-                "required": false,
-                "label": "Services Cidr",
-                "id": "options.kubernetes_network_config.services_cidr"
-              }
-            }
-          }
-        }
-      }
-    }
-  },
-  "node_pool": {
-    "type": "object",
-    "subtype": "",
-    "attributes": {
-      "cluster_id": {
-        "name": "cluster_id",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Cluster",
-        "id": "cluster_id"
-      },
-      "compartment_id": {
-        "name": "compartment_id",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Compartment",
-        "id": "compartment_id"
-      },
-      "kubernetes_version": {
-        "name": "kubernetes_version",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Kubernetes Version",
-        "id": "kubernetes_version"
-      },
-      "name": {
-        "name": "name",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Name",
-        "id": "name"
-      },
-      "node_image_id": {
-        "name": "node_image_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Node Image",
-        "id": "node_image_id"
-      },
-      "node_image_name": {
-        "name": "node_image_name",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Node Image Name",
-        "id": "node_image_name"
-      },
-      "node_metadata": {
-        "name": "node_metadata",
-        "type": "map",
-        "subtype": "string",
-        "required": false,
-        "label": "Node Metadata",
-        "id": "node_metadata"
-      },
-      "node_shape": {
-        "name": "node_shape",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Node Shape",
-        "id": "node_shape"
-      },
-      "node_source": {
-        "name": "node_source",
-        "type": "list",
-        "subtype": [
-          "object",
-          {
-            "image_id": "string",
-            "source_name": "string",
-            "source_type": "string"
-          }
-        ],
-        "required": false,
-        "label": "Node Source",
-        "id": "node_source"
-      },
-      "nodes": {
-        "name": "nodes",
-        "type": "list",
-        "subtype": [
-          "object",
-          {
-            "availability_domain": "string",
-            "error": [
-              "list",
-              [
-                "object",
-                {
-                  "code": "string",
-                  "message": "string",
-                  "status": "string"
-                }
-              ]
-            ],
-            "fault_domain": "string",
-            "id": "string",
-            "kubernetes_version": "string",
-            "lifecycle_details": "string",
-            "name": "string",
-            "node_pool_id": "string",
-            "private_ip": "string",
-            "public_ip": "string",
-            "state": "string",
-            "subnet_id": "string"
-          }
-        ],
-        "required": false,
-        "label": "Nodes",
-        "id": "nodes"
-      },
-      "quantity_per_subnet": {
-        "name": "quantity_per_subnet",
-        "type": "number",
-        "subtype": "",
-        "required": false,
-        "label": "Quantity Per Subnet",
-        "id": "quantity_per_subnet"
-      },
-      "ssh_public_key": {
-        "name": "ssh_public_key",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Ssh Public Key",
-        "id": "ssh_public_key"
-      },
-      "subnet_ids": {
-        "name": "subnet_ids",
-        "type": "set",
-        "subtype": "string",
-        "required": false,
-        "label": "Subnet Ids",
-        "id": "subnet_ids"
-      },
-      "initial_node_labels": {
-        "name": "initial_node_labels",
-        "type": "list",
-        "subtype": "",
-        "required": false,
-        "label": "Initial Node Labels",
-        "id": "initial_node_labels",
-        "attributes": {
-          "key": {
-            "name": "key",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Key",
-            "id": "initial_node_labels.key"
-          },
-          "value": {
-            "name": "value",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Value",
-            "id": "initial_node_labels.value"
-          }
-        }
-      },
-      "node_config_details": {
-        "name": "node_config_details",
-        "type": "object",
-        "subtype": "",
-        "required": false,
-        "label": "Node Config Details",
-        "id": "node_config_details",
-        "attributes": {
-          "size": {
-            "name": "size",
-            "type": "number",
-            "subtype": "",
-            "required": true,
-            "label": "Size",
-            "id": "node_config_details.size"
-          },
-          "placement_configs": {
-            "name": "placement_configs",
-            "type": "list",
-            "subtype": "object",
-            "required": false,
-            "label": "Placement Configs",
-            "id": "node_config_details.placement_configs",
-            "attributes": {
-              "availability_domain": {
-                "name": "availability_domain",
-                "type": "string",
-                "subtype": "",
-                "required": true,
-                "label": "Availability Domain",
-                "id": "node_config_details.placement_configs.availability_domain"
-              },
-              "subnet_id": {
-                "name": "subnet_id",
-                "type": "string",
-                "subtype": "",
-                "required": true,
-                "label": "Subnet",
-                "id": "node_config_details.placement_configs.subnet_id"
-              }
-            }
-          }
-        }
-      },
-      "node_shape_config": {
-        "name": "node_shape_config",
-        "type": "object",
-        "subtype": "",
-        "required": false,
-        "label": "Node Shape Config",
-        "id": "node_shape_config",
-        "attributes": {
-          "memory_in_gbs": {
-            "name": "memory_in_gbs",
-            "type": "number",
-            "subtype": "",
-            "required": false,
-            "label": "Memory In Gbs",
-            "id": "node_shape_config.memory_in_gbs"
-          },
-          "ocpus": {
-            "name": "ocpus",
-            "type": "number",
-            "subtype": "",
-            "required": false,
-            "label": "Ocpus",
-            "id": "node_shape_config.ocpus"
-          }
-        }
-      },
-      "node_source_details": {
-        "name": "node_source_details",
-        "type": "object",
-        "subtype": "",
-        "required": false,
-        "label": "Node Source Details",
-        "id": "node_source_details",
-        "attributes": {
-          "boot_volume_size_in_gbs": {
-            "name": "boot_volume_size_in_gbs",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Boot Volume Size In Gbs",
-            "id": "node_source_details.boot_volume_size_in_gbs"
-          },
-          "image_id": {
-            "name": "image_id",
-            "type": "string",
-            "subtype": "",
-            "required": true,
-            "label": "Image",
-            "id": "node_source_details.image_id"
-          },
-          "source_type": {
-            "name": "source_type",
-            "type": "string",
-            "subtype": "",
-            "required": true,
-            "label": "Source Type",
-            "id": "node_source_details.source_type"
-          }
-        }
-      }
-    }
-  },
-  "cpe": {
-    "type": "object",
-    "subtype": "",
-    "attributes": {
-      "compartment_id": {
-        "name": "compartment_id",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Compartment",
-        "id": "compartment_id"
-      },
-      "cpe_device_shape_id": {
-        "name": "cpe_device_shape_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Cpe Device Shape",
-        "id": "cpe_device_shape_id"
-      },
-      "defined_tags": {
-        "name": "defined_tags",
-        "type": "map",
-        "subtype": "string",
-        "required": false,
-        "label": "Defined Tags",
-        "id": "defined_tags"
-      },
-      "display_name": {
-        "name": "display_name",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Display Name",
-        "id": "display_name"
-      },
-      "freeform_tags": {
-        "name": "freeform_tags",
-        "type": "map",
-        "subtype": "string",
-        "required": false,
-        "label": "Freeform Tags",
-        "id": "freeform_tags"
-      },
-      "ip_address": {
-        "name": "ip_address",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Ip Address",
-        "id": "ip_address"
-      }
-    }
-  },
   "dhcp_options": {
     "type": "object",
     "subtype": "",
@@ -682,22 +99,6 @@
         "label": "Compartment",
         "id": "compartment_id"
       },
-      "default_drg_route_tables": {
-        "name": "default_drg_route_tables",
-        "type": "list",
-        "subtype": [
-          "object",
-          {
-            "ipsec_tunnel": "string",
-            "remote_peering_connection": "string",
-            "vcn": "string",
-            "virtual_circuit": "string"
-          }
-        ],
-        "required": false,
-        "label": "Default Drg Route Tables",
-        "id": "default_drg_route_tables"
-      },
       "default_export_drg_route_distribution_id": {
         "name": "default_export_drg_route_distribution_id",
         "type": "string",
@@ -737,6 +138,384 @@
         "required": false,
         "label": "Redundancy Status",
         "id": "redundancy_status"
+      }
+    }
+  },
+  "drg_attachment": {
+    "type": "object",
+    "subtype": "",
+    "attributes": {
+      "compartment_id": {
+        "name": "compartment_id",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Compartment",
+        "id": "compartment_id"
+      },
+      "defined_tags": {
+        "name": "defined_tags",
+        "type": "map",
+        "subtype": "string",
+        "required": false,
+        "label": "Defined Tags",
+        "id": "defined_tags"
+      },
+      "display_name": {
+        "name": "display_name",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Display Name",
+        "id": "display_name"
+      },
+      "drg_id": {
+        "name": "drg_id",
+        "type": "string",
+        "subtype": "",
+        "required": true,
+        "label": "Drg",
+        "id": "drg_id"
+      },
+      "drg_route_table_id": {
+        "name": "drg_route_table_id",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Drg Route Table",
+        "id": "drg_route_table_id"
+      },
+      "export_drg_route_distribution_id": {
+        "name": "export_drg_route_distribution_id",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Export Drg Route Distribution",
+        "id": "export_drg_route_distribution_id"
+      },
+      "freeform_tags": {
+        "name": "freeform_tags",
+        "type": "map",
+        "subtype": "string",
+        "required": false,
+        "label": "Freeform Tags",
+        "id": "freeform_tags"
+      },
+      "is_cross_tenancy": {
+        "name": "is_cross_tenancy",
+        "type": "bool",
+        "subtype": "",
+        "required": false,
+        "label": "Is Cross Tenancy",
+        "id": "is_cross_tenancy"
+      },
+      "route_table_id": {
+        "name": "route_table_id",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Route Table",
+        "id": "route_table_id"
+      },
+      "vcn_id": {
+        "name": "vcn_id",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Vcn",
+        "id": "vcn_id"
+      },
+      "network_details": {
+        "name": "network_details",
+        "type": "object",
+        "subtype": "",
+        "required": false,
+        "label": "Network Details",
+        "id": "network_details",
+        "attributes": {
+          "ipsec_connection_id": {
+            "name": "ipsec_connection_id",
+            "type": "string",
+            "subtype": "",
+            "required": false,
+            "label": "Ipsec Connection",
+            "id": "network_details.ipsec_connection_id"
+          },
+          "route_table_id": {
+            "name": "route_table_id",
+            "type": "string",
+            "subtype": "",
+            "required": false,
+            "label": "Route Table",
+            "id": "network_details.route_table_id"
+          },
+          "type": {
+            "name": "type",
+            "type": "string",
+            "subtype": "",
+            "required": true,
+            "label": "Type",
+            "id": "network_details.type"
+          }
+        }
+      }
+    }
+  },
+  "drg_route_distribution": {
+    "type": "object",
+    "subtype": "",
+    "attributes": {
+      "compartment_id": {
+        "name": "compartment_id",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Compartment",
+        "id": "compartment_id"
+      },
+      "defined_tags": {
+        "name": "defined_tags",
+        "type": "map",
+        "subtype": "string",
+        "required": false,
+        "label": "Defined Tags",
+        "id": "defined_tags"
+      },
+      "display_name": {
+        "name": "display_name",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Display Name",
+        "id": "display_name"
+      },
+      "distribution_type": {
+        "name": "distribution_type",
+        "type": "string",
+        "subtype": "",
+        "required": true,
+        "label": "Distribution Type",
+        "id": "distribution_type"
+      },
+      "drg_id": {
+        "name": "drg_id",
+        "type": "string",
+        "subtype": "",
+        "required": true,
+        "label": "Drg",
+        "id": "drg_id"
+      },
+      "freeform_tags": {
+        "name": "freeform_tags",
+        "type": "map",
+        "subtype": "string",
+        "required": false,
+        "label": "Freeform Tags",
+        "id": "freeform_tags"
+      }
+    }
+  },
+  "drg_route_distribution_statement": {
+    "type": "object",
+    "subtype": "",
+    "attributes": {
+      "action": {
+        "name": "action",
+        "type": "string",
+        "subtype": "",
+        "required": true,
+        "label": "Action",
+        "id": "action"
+      },
+      "drg_route_distribution_id": {
+        "name": "drg_route_distribution_id",
+        "type": "string",
+        "subtype": "",
+        "required": true,
+        "label": "Drg Route Distribution",
+        "id": "drg_route_distribution_id"
+      },
+      "priority": {
+        "name": "priority",
+        "type": "number",
+        "subtype": "",
+        "required": true,
+        "label": "Priority",
+        "id": "priority"
+      },
+      "match_criteria": {
+        "name": "match_criteria",
+        "type": "object",
+        "subtype": "",
+        "required": false,
+        "label": "Match Criteria",
+        "id": "match_criteria",
+        "attributes": {
+          "attachment_type": {
+            "name": "attachment_type",
+            "type": "string",
+            "subtype": "",
+            "required": false,
+            "label": "Attachment Type",
+            "id": "match_criteria.attachment_type"
+          },
+          "drg_attachment_id": {
+            "name": "drg_attachment_id",
+            "type": "string",
+            "subtype": "",
+            "required": false,
+            "label": "Drg Attachment",
+            "id": "match_criteria.drg_attachment_id"
+          },
+          "match_type": {
+            "name": "match_type",
+            "type": "string",
+            "subtype": "",
+            "required": false,
+            "label": "Match Type",
+            "id": "match_criteria.match_type"
+          }
+        }
+      }
+    }
+  },
+  "drg_route_table": {
+    "type": "object",
+    "subtype": "",
+    "attributes": {
+      "compartment_id": {
+        "name": "compartment_id",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Compartment",
+        "id": "compartment_id"
+      },
+      "defined_tags": {
+        "name": "defined_tags",
+        "type": "map",
+        "subtype": "string",
+        "required": false,
+        "label": "Defined Tags",
+        "id": "defined_tags"
+      },
+      "display_name": {
+        "name": "display_name",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Display Name",
+        "id": "display_name"
+      },
+      "drg_id": {
+        "name": "drg_id",
+        "type": "string",
+        "subtype": "",
+        "required": true,
+        "label": "Drg",
+        "id": "drg_id"
+      },
+      "freeform_tags": {
+        "name": "freeform_tags",
+        "type": "map",
+        "subtype": "string",
+        "required": false,
+        "label": "Freeform Tags",
+        "id": "freeform_tags"
+      },
+      "import_drg_route_distribution_id": {
+        "name": "import_drg_route_distribution_id",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Import Drg Route Distribution",
+        "id": "import_drg_route_distribution_id"
+      },
+      "is_ecmp_enabled": {
+        "name": "is_ecmp_enabled",
+        "type": "bool",
+        "subtype": "",
+        "required": false,
+        "label": "Is Ecmp Enabled",
+        "id": "is_ecmp_enabled"
+      },
+      "remove_import_trigger": {
+        "name": "remove_import_trigger",
+        "type": "bool",
+        "subtype": "",
+        "required": false,
+        "label": "Remove Import Trigger",
+        "id": "remove_import_trigger"
+      }
+    }
+  },
+  "drg_route_table_route_rule": {
+    "type": "object",
+    "subtype": "",
+    "attributes": {
+      "destination": {
+        "name": "destination",
+        "type": "string",
+        "subtype": "",
+        "required": true,
+        "label": "Destination",
+        "id": "destination"
+      },
+      "destination_type": {
+        "name": "destination_type",
+        "type": "string",
+        "subtype": "",
+        "required": true,
+        "label": "Destination Type",
+        "id": "destination_type"
+      },
+      "drg_route_table_id": {
+        "name": "drg_route_table_id",
+        "type": "string",
+        "subtype": "",
+        "required": true,
+        "label": "Drg Route Table",
+        "id": "drg_route_table_id"
+      },
+      "is_blackhole": {
+        "name": "is_blackhole",
+        "type": "bool",
+        "subtype": "",
+        "required": false,
+        "label": "Is Blackhole",
+        "id": "is_blackhole"
+      },
+      "is_conflict": {
+        "name": "is_conflict",
+        "type": "bool",
+        "subtype": "",
+        "required": false,
+        "label": "Is Conflict",
+        "id": "is_conflict"
+      },
+      "next_hop_drg_attachment_id": {
+        "name": "next_hop_drg_attachment_id",
+        "type": "string",
+        "subtype": "",
+        "required": true,
+        "label": "Next Hop Drg Attachment",
+        "id": "next_hop_drg_attachment_id"
+      },
+      "route_provenance": {
+        "name": "route_provenance",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Route Provenance",
+        "id": "route_provenance"
+      },
+      "route_type": {
+        "name": "route_type",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Route Type",
+        "id": "route_type"
       }
     }
   },
@@ -1392,178 +1171,6 @@
       }
     }
   },
-  "instance_pool": {
-    "type": "object",
-    "subtype": "",
-    "attributes": {
-      "actual_size": {
-        "name": "actual_size",
-        "type": "number",
-        "subtype": "",
-        "required": false,
-        "label": "Actual Size",
-        "id": "actual_size"
-      },
-      "compartment_id": {
-        "name": "compartment_id",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Compartment",
-        "id": "compartment_id"
-      },
-      "defined_tags": {
-        "name": "defined_tags",
-        "type": "map",
-        "subtype": "string",
-        "required": false,
-        "label": "Defined Tags",
-        "id": "defined_tags"
-      },
-      "display_name": {
-        "name": "display_name",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Display Name",
-        "id": "display_name"
-      },
-      "freeform_tags": {
-        "name": "freeform_tags",
-        "type": "map",
-        "subtype": "string",
-        "required": false,
-        "label": "Freeform Tags",
-        "id": "freeform_tags"
-      },
-      "instance_configuration_id": {
-        "name": "instance_configuration_id",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Instance Configuration",
-        "id": "instance_configuration_id"
-      },
-      "size": {
-        "name": "size",
-        "type": "number",
-        "subtype": "",
-        "required": true,
-        "label": "Size",
-        "id": "size"
-      },
-      "load_balancers": {
-        "name": "load_balancers",
-        "type": "list",
-        "subtype": "",
-        "required": false,
-        "label": "Load Balancers",
-        "id": "load_balancers",
-        "attributes": {
-          "backend_set_name": {
-            "name": "backend_set_name",
-            "type": "string",
-            "subtype": "",
-            "required": true,
-            "label": "Backend Set Name",
-            "id": "load_balancers.backend_set_name"
-          },
-          "instance_pool_id": {
-            "name": "instance_pool_id",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Instance Pool",
-            "id": "load_balancers.instance_pool_id"
-          },
-          "load_balancer_id": {
-            "name": "load_balancer_id",
-            "type": "string",
-            "subtype": "",
-            "required": true,
-            "label": "Load Balancer",
-            "id": "load_balancers.load_balancer_id"
-          },
-          "port": {
-            "name": "port",
-            "type": "number",
-            "subtype": "",
-            "required": true,
-            "label": "Port",
-            "id": "load_balancers.port"
-          },
-          "vnic_selection": {
-            "name": "vnic_selection",
-            "type": "string",
-            "subtype": "",
-            "required": true,
-            "label": "Vnic Selection",
-            "id": "load_balancers.vnic_selection"
-          }
-        }
-      },
-      "placement_configurations": {
-        "name": "placement_configurations",
-        "type": "list",
-        "subtype": "",
-        "required": false,
-        "label": "Placement Configurations",
-        "id": "placement_configurations",
-        "attributes": {
-          "availability_domain": {
-            "name": "availability_domain",
-            "type": "string",
-            "subtype": "",
-            "required": true,
-            "label": "Availability Domain",
-            "id": "placement_configurations.availability_domain"
-          },
-          "fault_domains": {
-            "name": "fault_domains",
-            "type": "list",
-            "subtype": "string",
-            "required": false,
-            "label": "Fault Domains",
-            "id": "placement_configurations.fault_domains"
-          },
-          "primary_subnet_id": {
-            "name": "primary_subnet_id",
-            "type": "string",
-            "subtype": "",
-            "required": true,
-            "label": "Primary Subnet",
-            "id": "placement_configurations.primary_subnet_id"
-          },
-          "secondary_vnic_subnets": {
-            "name": "secondary_vnic_subnets",
-            "type": "list",
-            "subtype": "",
-            "required": false,
-            "label": "Secondary Vnic Subnets",
-            "id": "placement_configurations.secondary_vnic_subnets",
-            "attributes": {
-              "display_name": {
-                "name": "display_name",
-                "type": "string",
-                "subtype": "",
-                "required": false,
-                "label": "Display Name",
-                "id": "placement_configurations.secondary_vnic_subnets.display_name"
-              },
-              "subnet_id": {
-                "name": "subnet_id",
-                "type": "string",
-                "subtype": "",
-                "required": true,
-                "label": "Subnet",
-                "id": "placement_configurations.secondary_vnic_subnets.subnet_id"
-              }
-            }
-          }
-        }
-      }
-    }
-  },
   "internet_gateway": {
     "type": "object",
     "subtype": "",
@@ -1615,84 +1222,6 @@
         "required": true,
         "label": "Vcn",
         "id": "vcn_id"
-      }
-    }
-  },
-  "ipsec": {
-    "type": "object",
-    "subtype": "",
-    "attributes": {
-      "compartment_id": {
-        "name": "compartment_id",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Compartment",
-        "id": "compartment_id"
-      },
-      "cpe_id": {
-        "name": "cpe_id",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Cpe",
-        "id": "cpe_id"
-      },
-      "cpe_local_identifier": {
-        "name": "cpe_local_identifier",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Cpe Local Identifier",
-        "id": "cpe_local_identifier"
-      },
-      "cpe_local_identifier_type": {
-        "name": "cpe_local_identifier_type",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Cpe Local Identifier Type",
-        "id": "cpe_local_identifier_type"
-      },
-      "defined_tags": {
-        "name": "defined_tags",
-        "type": "map",
-        "subtype": "string",
-        "required": false,
-        "label": "Defined Tags",
-        "id": "defined_tags"
-      },
-      "display_name": {
-        "name": "display_name",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Display Name",
-        "id": "display_name"
-      },
-      "drg_id": {
-        "name": "drg_id",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Drg",
-        "id": "drg_id"
-      },
-      "freeform_tags": {
-        "name": "freeform_tags",
-        "type": "map",
-        "subtype": "string",
-        "required": false,
-        "label": "Freeform Tags",
-        "id": "freeform_tags"
-      },
-      "static_routes": {
-        "name": "static_routes",
-        "type": "list",
-        "subtype": "string",
-        "required": true,
-        "label": "Static Routes",
-        "id": "static_routes"
       }
     }
   },
@@ -3004,1564 +2533,6 @@
       }
     }
   },
-  "volume_group": {
-    "type": "object",
-    "subtype": "",
-    "attributes": {
-      "availability_domain": {
-        "name": "availability_domain",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Availability Domain",
-        "id": "availability_domain"
-      },
-      "backup_policy_id": {
-        "name": "backup_policy_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Backup Policy",
-        "id": "backup_policy_id"
-      },
-      "compartment_id": {
-        "name": "compartment_id",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Compartment",
-        "id": "compartment_id"
-      },
-      "defined_tags": {
-        "name": "defined_tags",
-        "type": "map",
-        "subtype": "string",
-        "required": false,
-        "label": "Defined Tags",
-        "id": "defined_tags"
-      },
-      "display_name": {
-        "name": "display_name",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Display Name",
-        "id": "display_name"
-      },
-      "freeform_tags": {
-        "name": "freeform_tags",
-        "type": "map",
-        "subtype": "string",
-        "required": false,
-        "label": "Freeform Tags",
-        "id": "freeform_tags"
-      },
-      "is_hydrated": {
-        "name": "is_hydrated",
-        "type": "bool",
-        "subtype": "",
-        "required": false,
-        "label": "Is Hydrated",
-        "id": "is_hydrated"
-      },
-      "size_in_gbs": {
-        "name": "size_in_gbs",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Size In Gbs",
-        "id": "size_in_gbs"
-      },
-      "size_in_mbs": {
-        "name": "size_in_mbs",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Size In Mbs",
-        "id": "size_in_mbs"
-      },
-      "volume_ids": {
-        "name": "volume_ids",
-        "type": "list",
-        "subtype": "string",
-        "required": false,
-        "label": "Volume Ids",
-        "id": "volume_ids"
-      },
-      "source_details": {
-        "name": "source_details",
-        "type": "object",
-        "subtype": "",
-        "required": false,
-        "label": "Source Details",
-        "id": "source_details",
-        "attributes": {
-          "type": {
-            "name": "type",
-            "type": "string",
-            "subtype": "",
-            "required": true,
-            "label": "Type",
-            "id": "source_details.type"
-          },
-          "volume_group_backup_id": {
-            "name": "volume_group_backup_id",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Volume Group Backup",
-            "id": "source_details.volume_group_backup_id"
-          },
-          "volume_group_id": {
-            "name": "volume_group_id",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Volume Group",
-            "id": "source_details.volume_group_id"
-          },
-          "volume_ids": {
-            "name": "volume_ids",
-            "type": "set",
-            "subtype": "string",
-            "required": false,
-            "label": "Volume Ids",
-            "id": "source_details.volume_ids"
-          }
-        }
-      }
-    }
-  },
-  "autonomous_database": {
-    "type": "object",
-    "subtype": "",
-    "attributes": {
-      "admin_password": {
-        "name": "admin_password",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Admin Password",
-        "id": "admin_password"
-      },
-      "apex_details": {
-        "name": "apex_details",
-        "type": "list",
-        "subtype": [
-          "object",
-          {
-            "apex_version": "string",
-            "ords_version": "string"
-          }
-        ],
-        "required": false,
-        "label": "Apex Details",
-        "id": "apex_details"
-      },
-      "are_primary_whitelisted_ips_used": {
-        "name": "are_primary_whitelisted_ips_used",
-        "type": "bool",
-        "subtype": "",
-        "required": false,
-        "label": "Are Primary Whitelisted Ips Used",
-        "id": "are_primary_whitelisted_ips_used"
-      },
-      "autonomous_container_database_id": {
-        "name": "autonomous_container_database_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Autonomous Container Database",
-        "id": "autonomous_container_database_id"
-      },
-      "autonomous_database_backup_id": {
-        "name": "autonomous_database_backup_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Autonomous Database Backup",
-        "id": "autonomous_database_backup_id"
-      },
-      "autonomous_database_id": {
-        "name": "autonomous_database_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Autonomous Database",
-        "id": "autonomous_database_id"
-      },
-      "available_upgrade_versions": {
-        "name": "available_upgrade_versions",
-        "type": "list",
-        "subtype": "string",
-        "required": false,
-        "label": "Available Upgrade Versions",
-        "id": "available_upgrade_versions"
-      },
-      "backup_config": {
-        "name": "backup_config",
-        "type": "list",
-        "subtype": [
-          "object",
-          {
-            "manual_backup_bucket_name": "string",
-            "manual_backup_type": "string"
-          }
-        ],
-        "required": false,
-        "label": "Backup Config",
-        "id": "backup_config"
-      },
-      "clone_type": {
-        "name": "clone_type",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Clone Type",
-        "id": "clone_type"
-      },
-      "compartment_id": {
-        "name": "compartment_id",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Compartment",
-        "id": "compartment_id"
-      },
-      "connection_strings": {
-        "name": "connection_strings",
-        "type": "list",
-        "subtype": [
-          "object",
-          {
-            "all_connection_strings": [
-              "map",
-              "string"
-            ],
-            "dedicated": "string",
-            "high": "string",
-            "low": "string",
-            "medium": "string"
-          }
-        ],
-        "required": false,
-        "label": "Connection Strings",
-        "id": "connection_strings"
-      },
-      "connection_urls": {
-        "name": "connection_urls",
-        "type": "list",
-        "subtype": [
-          "object",
-          {
-            "apex_url": "string",
-            "graph_studio_url": "string",
-            "machine_learning_user_management_url": "string",
-            "sql_dev_web_url": "string"
-          }
-        ],
-        "required": false,
-        "label": "Connection Urls",
-        "id": "connection_urls"
-      },
-      "cpu_core_count": {
-        "name": "cpu_core_count",
-        "type": "number",
-        "subtype": "",
-        "required": true,
-        "label": "Cpu Core Count",
-        "id": "cpu_core_count"
-      },
-      "data_safe_status": {
-        "name": "data_safe_status",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Data Safe Status",
-        "id": "data_safe_status"
-      },
-      "data_storage_size_in_gb": {
-        "name": "data_storage_size_in_gb",
-        "type": "number",
-        "subtype": "",
-        "required": false,
-        "label": "Data Storage Size In Gb",
-        "id": "data_storage_size_in_gb"
-      },
-      "data_storage_size_in_tbs": {
-        "name": "data_storage_size_in_tbs",
-        "type": "number",
-        "subtype": "",
-        "required": false,
-        "label": "Data Storage Size In Tbs",
-        "id": "data_storage_size_in_tbs"
-      },
-      "db_name": {
-        "name": "db_name",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Db Name",
-        "id": "db_name"
-      },
-      "db_version": {
-        "name": "db_version",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Db Version",
-        "id": "db_version"
-      },
-      "db_workload": {
-        "name": "db_workload",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Db Workload",
-        "id": "db_workload"
-      },
-      "defined_tags": {
-        "name": "defined_tags",
-        "type": "map",
-        "subtype": "string",
-        "required": false,
-        "label": "Defined Tags",
-        "id": "defined_tags"
-      },
-      "display_name": {
-        "name": "display_name",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Display Name",
-        "id": "display_name"
-      },
-      "failed_data_recovery_in_seconds": {
-        "name": "failed_data_recovery_in_seconds",
-        "type": "number",
-        "subtype": "",
-        "required": false,
-        "label": "Failed Data Recovery In Seconds",
-        "id": "failed_data_recovery_in_seconds"
-      },
-      "freeform_tags": {
-        "name": "freeform_tags",
-        "type": "map",
-        "subtype": "string",
-        "required": false,
-        "label": "Freeform Tags",
-        "id": "freeform_tags"
-      },
-      "infrastructure_type": {
-        "name": "infrastructure_type",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Infrastructure Type",
-        "id": "infrastructure_type"
-      },
-      "is_access_control_enabled": {
-        "name": "is_access_control_enabled",
-        "type": "bool",
-        "subtype": "",
-        "required": false,
-        "label": "Is Access Control Enabled",
-        "id": "is_access_control_enabled"
-      },
-      "is_auto_scaling_enabled": {
-        "name": "is_auto_scaling_enabled",
-        "type": "bool",
-        "subtype": "",
-        "required": false,
-        "label": "Is Auto Scaling Enabled",
-        "id": "is_auto_scaling_enabled"
-      },
-      "is_data_guard_enabled": {
-        "name": "is_data_guard_enabled",
-        "type": "bool",
-        "subtype": "",
-        "required": false,
-        "label": "Is Data Guard Enabled",
-        "id": "is_data_guard_enabled"
-      },
-      "is_dedicated": {
-        "name": "is_dedicated",
-        "type": "bool",
-        "subtype": "",
-        "required": false,
-        "label": "Is Dedicated",
-        "id": "is_dedicated"
-      },
-      "is_free_tier": {
-        "name": "is_free_tier",
-        "type": "bool",
-        "subtype": "",
-        "required": false,
-        "label": "Is Free Tier",
-        "id": "is_free_tier"
-      },
-      "is_preview": {
-        "name": "is_preview",
-        "type": "bool",
-        "subtype": "",
-        "required": false,
-        "label": "Is Preview",
-        "id": "is_preview"
-      },
-      "is_preview_version_with_service_terms_accepted": {
-        "name": "is_preview_version_with_service_terms_accepted",
-        "type": "bool",
-        "subtype": "",
-        "required": false,
-        "label": "Is Preview Version With Service Terms Accepted",
-        "id": "is_preview_version_with_service_terms_accepted"
-      },
-      "is_refreshable_clone": {
-        "name": "is_refreshable_clone",
-        "type": "bool",
-        "subtype": "",
-        "required": false,
-        "label": "Is Refreshable Clone",
-        "id": "is_refreshable_clone"
-      },
-      "key_store_id": {
-        "name": "key_store_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Key Store",
-        "id": "key_store_id"
-      },
-      "key_store_wallet_name": {
-        "name": "key_store_wallet_name",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Key Store Wallet Name",
-        "id": "key_store_wallet_name"
-      },
-      "license_model": {
-        "name": "license_model",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "License Model",
-        "id": "license_model"
-      },
-      "lifecycle_details": {
-        "name": "lifecycle_details",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Lifecycle Details",
-        "id": "lifecycle_details"
-      },
-      "nsg_ids": {
-        "name": "nsg_ids",
-        "type": "set",
-        "subtype": "string",
-        "required": false,
-        "label": "Nsg Ids",
-        "id": "nsg_ids"
-      },
-      "open_mode": {
-        "name": "open_mode",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Open Mode",
-        "id": "open_mode"
-      },
-      "operations_insights_status": {
-        "name": "operations_insights_status",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Operations Insights Status",
-        "id": "operations_insights_status"
-      },
-      "permission_level": {
-        "name": "permission_level",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Permission Level",
-        "id": "permission_level"
-      },
-      "private_endpoint": {
-        "name": "private_endpoint",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Private Endpoint",
-        "id": "private_endpoint"
-      },
-      "private_endpoint_ip": {
-        "name": "private_endpoint_ip",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Private Endpoint Ip",
-        "id": "private_endpoint_ip"
-      },
-      "private_endpoint_label": {
-        "name": "private_endpoint_label",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Private Endpoint Label",
-        "id": "private_endpoint_label"
-      },
-      "refreshable_mode": {
-        "name": "refreshable_mode",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Refreshable Mode",
-        "id": "refreshable_mode"
-      },
-      "refreshable_status": {
-        "name": "refreshable_status",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Refreshable Status",
-        "id": "refreshable_status"
-      },
-      "role": {
-        "name": "role",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Role",
-        "id": "role"
-      },
-      "rotate_key_trigger": {
-        "name": "rotate_key_trigger",
-        "type": "bool",
-        "subtype": "",
-        "required": false,
-        "label": "Rotate Key Trigger",
-        "id": "rotate_key_trigger"
-      },
-      "service_console_url": {
-        "name": "service_console_url",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Service Console Url",
-        "id": "service_console_url"
-      },
-      "source": {
-        "name": "source",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Source",
-        "id": "source"
-      },
-      "source_id": {
-        "name": "source_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Source",
-        "id": "source_id"
-      },
-      "standby_db": {
-        "name": "standby_db",
-        "type": "list",
-        "subtype": [
-          "object",
-          {
-            "lag_time_in_seconds": "number",
-            "lifecycle_details": "string",
-            "state": "string"
-          }
-        ],
-        "required": false,
-        "label": "Standby Db",
-        "id": "standby_db"
-      },
-      "standby_whitelisted_ips": {
-        "name": "standby_whitelisted_ips",
-        "type": "list",
-        "subtype": "string",
-        "required": false,
-        "label": "Standby Whitelisted Ips",
-        "id": "standby_whitelisted_ips"
-      },
-      "subnet_id": {
-        "name": "subnet_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Subnet",
-        "id": "subnet_id"
-      },
-      "switchover_to": {
-        "name": "switchover_to",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Switchover To",
-        "id": "switchover_to"
-      },
-      "timestamp": {
-        "name": "timestamp",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Timestamp",
-        "id": "timestamp"
-      },
-      "used_data_storage_size_in_tbs": {
-        "name": "used_data_storage_size_in_tbs",
-        "type": "number",
-        "subtype": "",
-        "required": false,
-        "label": "Used Data Storage Size In Tbs",
-        "id": "used_data_storage_size_in_tbs"
-      },
-      "whitelisted_ips": {
-        "name": "whitelisted_ips",
-        "type": "set",
-        "subtype": "string",
-        "required": false,
-        "label": "Whitelisted Ips",
-        "id": "whitelisted_ips"
-      },
-      "customer_contacts": {
-        "name": "customer_contacts",
-        "type": "list",
-        "subtype": "",
-        "required": false,
-        "label": "Customer Contacts",
-        "id": "customer_contacts",
-        "attributes": {
-          "email": {
-            "name": "email",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Email",
-            "id": "customer_contacts.email"
-          }
-        }
-      }
-    }
-  },
-  "db_system": {
-    "type": "object",
-    "subtype": "",
-    "attributes": {
-      "availability_domain": {
-        "name": "availability_domain",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Availability Domain",
-        "id": "availability_domain"
-      },
-      "backup_network_nsg_ids": {
-        "name": "backup_network_nsg_ids",
-        "type": "set",
-        "subtype": "string",
-        "required": false,
-        "label": "Backup Network Nsg Ids",
-        "id": "backup_network_nsg_ids"
-      },
-      "backup_subnet_id": {
-        "name": "backup_subnet_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Backup Subnet",
-        "id": "backup_subnet_id"
-      },
-      "cluster_name": {
-        "name": "cluster_name",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Cluster Name",
-        "id": "cluster_name"
-      },
-      "compartment_id": {
-        "name": "compartment_id",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Compartment",
-        "id": "compartment_id"
-      },
-      "cpu_core_count": {
-        "name": "cpu_core_count",
-        "type": "number",
-        "subtype": "",
-        "required": false,
-        "label": "Cpu Core Count",
-        "id": "cpu_core_count"
-      },
-      "data_storage_percentage": {
-        "name": "data_storage_percentage",
-        "type": "number",
-        "subtype": "",
-        "required": false,
-        "label": "Data Storage Percentage",
-        "id": "data_storage_percentage"
-      },
-      "data_storage_size_in_gb": {
-        "name": "data_storage_size_in_gb",
-        "type": "number",
-        "subtype": "",
-        "required": false,
-        "label": "Data Storage Size In Gb",
-        "id": "data_storage_size_in_gb"
-      },
-      "database_edition": {
-        "name": "database_edition",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Database Edition",
-        "id": "database_edition"
-      },
-      "defined_tags": {
-        "name": "defined_tags",
-        "type": "map",
-        "subtype": "string",
-        "required": false,
-        "label": "Defined Tags",
-        "id": "defined_tags"
-      },
-      "disk_redundancy": {
-        "name": "disk_redundancy",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Disk Redundancy",
-        "id": "disk_redundancy"
-      },
-      "display_name": {
-        "name": "display_name",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Display Name",
-        "id": "display_name"
-      },
-      "domain": {
-        "name": "domain",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Domain",
-        "id": "domain"
-      },
-      "fault_domains": {
-        "name": "fault_domains",
-        "type": "list",
-        "subtype": "string",
-        "required": false,
-        "label": "Fault Domains",
-        "id": "fault_domains"
-      },
-      "freeform_tags": {
-        "name": "freeform_tags",
-        "type": "map",
-        "subtype": "string",
-        "required": false,
-        "label": "Freeform Tags",
-        "id": "freeform_tags"
-      },
-      "hostname": {
-        "name": "hostname",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Hostname",
-        "id": "hostname"
-      },
-      "iorm_config_cache": {
-        "name": "iorm_config_cache",
-        "type": "list",
-        "subtype": [
-          "object",
-          {
-            "db_plans": [
-              "list",
-              [
-                "object",
-                {
-                  "db_name": "string",
-                  "flash_cache_limit": "string",
-                  "share": "number"
-                }
-              ]
-            ],
-            "db_system_id": "string",
-            "lifecycle_details": "string",
-            "objective": "string",
-            "state": "string"
-          }
-        ],
-        "required": false,
-        "label": "Iorm Config Cache",
-        "id": "iorm_config_cache"
-      },
-      "kms_key_id": {
-        "name": "kms_key_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Kms Key",
-        "id": "kms_key_id"
-      },
-      "kms_key_version_id": {
-        "name": "kms_key_version_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Kms Key Version",
-        "id": "kms_key_version_id"
-      },
-      "last_maintenance_run_id": {
-        "name": "last_maintenance_run_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Last Maintenance Run",
-        "id": "last_maintenance_run_id"
-      },
-      "last_patch_history_entry_id": {
-        "name": "last_patch_history_entry_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Last Patch History Entry",
-        "id": "last_patch_history_entry_id"
-      },
-      "license_model": {
-        "name": "license_model",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "License Model",
-        "id": "license_model"
-      },
-      "lifecycle_details": {
-        "name": "lifecycle_details",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Lifecycle Details",
-        "id": "lifecycle_details"
-      },
-      "listener_port": {
-        "name": "listener_port",
-        "type": "number",
-        "subtype": "",
-        "required": false,
-        "label": "Listener Port",
-        "id": "listener_port"
-      },
-      "maintenance_window": {
-        "name": "maintenance_window",
-        "type": "list",
-        "subtype": [
-          "object",
-          {
-            "days_of_week": [
-              "list",
-              [
-                "object",
-                {
-                  "name": "string"
-                }
-              ]
-            ],
-            "hours_of_day": [
-              "list",
-              "number"
-            ],
-            "lead_time_in_weeks": "number",
-            "months": [
-              "list",
-              [
-                "object",
-                {
-                  "name": "string"
-                }
-              ]
-            ],
-            "preference": "string",
-            "weeks_of_month": [
-              "list",
-              "number"
-            ]
-          }
-        ],
-        "required": false,
-        "label": "Maintenance Window",
-        "id": "maintenance_window"
-      },
-      "next_maintenance_run_id": {
-        "name": "next_maintenance_run_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Next Maintenance Run",
-        "id": "next_maintenance_run_id"
-      },
-      "node_count": {
-        "name": "node_count",
-        "type": "number",
-        "subtype": "",
-        "required": false,
-        "label": "Node Count",
-        "id": "node_count"
-      },
-      "nsg_ids": {
-        "name": "nsg_ids",
-        "type": "set",
-        "subtype": "string",
-        "required": false,
-        "label": "Nsg Ids",
-        "id": "nsg_ids"
-      },
-      "point_in_time_data_disk_clone_timestamp": {
-        "name": "point_in_time_data_disk_clone_timestamp",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Point In Time Data Disk Clone Timestamp",
-        "id": "point_in_time_data_disk_clone_timestamp"
-      },
-      "private_ip": {
-        "name": "private_ip",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Private Ip",
-        "id": "private_ip"
-      },
-      "reco_storage_size_in_gb": {
-        "name": "reco_storage_size_in_gb",
-        "type": "number",
-        "subtype": "",
-        "required": false,
-        "label": "Reco Storage Size In Gb",
-        "id": "reco_storage_size_in_gb"
-      },
-      "scan_dns_name": {
-        "name": "scan_dns_name",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Scan Dns Name",
-        "id": "scan_dns_name"
-      },
-      "scan_dns_record_id": {
-        "name": "scan_dns_record_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Scan Dns Record",
-        "id": "scan_dns_record_id"
-      },
-      "scan_ip_ids": {
-        "name": "scan_ip_ids",
-        "type": "list",
-        "subtype": "string",
-        "required": false,
-        "label": "Scan Ip Ids",
-        "id": "scan_ip_ids"
-      },
-      "shape": {
-        "name": "shape",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Shape",
-        "id": "shape"
-      },
-      "source": {
-        "name": "source",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Source",
-        "id": "source"
-      },
-      "source_db_system_id": {
-        "name": "source_db_system_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Source Db System",
-        "id": "source_db_system_id"
-      },
-      "sparse_diskgroup": {
-        "name": "sparse_diskgroup",
-        "type": "bool",
-        "subtype": "",
-        "required": false,
-        "label": "Sparse Diskgroup",
-        "id": "sparse_diskgroup"
-      },
-      "ssh_public_keys": {
-        "name": "ssh_public_keys",
-        "type": "set",
-        "subtype": "string",
-        "required": true,
-        "label": "Ssh Public Keys",
-        "id": "ssh_public_keys"
-      },
-      "subnet_id": {
-        "name": "subnet_id",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Subnet",
-        "id": "subnet_id"
-      },
-      "time_zone": {
-        "name": "time_zone",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Time Zone",
-        "id": "time_zone"
-      },
-      "version": {
-        "name": "version",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Version",
-        "id": "version"
-      },
-      "vip_ids": {
-        "name": "vip_ids",
-        "type": "list",
-        "subtype": "string",
-        "required": false,
-        "label": "Vip Ids",
-        "id": "vip_ids"
-      },
-      "zone_id": {
-        "name": "zone_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Zone",
-        "id": "zone_id"
-      },
-      "db_home": {
-        "name": "db_home",
-        "type": "object",
-        "subtype": "",
-        "required": false,
-        "label": "Db Home",
-        "id": "db_home",
-        "attributes": {
-          "create_async": {
-            "name": "create_async",
-            "type": "bool",
-            "subtype": "",
-            "required": false,
-            "label": "Create Async",
-            "id": "db_home.create_async"
-          },
-          "database_software_image_id": {
-            "name": "database_software_image_id",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Database Software Image",
-            "id": "db_home.database_software_image_id"
-          },
-          "db_home_location": {
-            "name": "db_home_location",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Db Home Location",
-            "id": "db_home.db_home_location"
-          },
-          "db_version": {
-            "name": "db_version",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Db Version",
-            "id": "db_home.db_version"
-          },
-          "defined_tags": {
-            "name": "defined_tags",
-            "type": "map",
-            "subtype": "string",
-            "required": false,
-            "label": "Defined Tags",
-            "id": "db_home.defined_tags"
-          },
-          "display_name": {
-            "name": "display_name",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Display Name",
-            "id": "db_home.display_name"
-          },
-          "freeform_tags": {
-            "name": "freeform_tags",
-            "type": "map",
-            "subtype": "string",
-            "required": false,
-            "label": "Freeform Tags",
-            "id": "db_home.freeform_tags"
-          },
-          "last_patch_history_entry_id": {
-            "name": "last_patch_history_entry_id",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Last Patch History Entry",
-            "id": "db_home.last_patch_history_entry_id"
-          },
-          "lifecycle_details": {
-            "name": "lifecycle_details",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Lifecycle Details",
-            "id": "db_home.lifecycle_details"
-          },
-          "database": {
-            "name": "database",
-            "type": "object",
-            "subtype": "",
-            "required": false,
-            "label": "Database",
-            "id": "db_home.database",
-            "attributes": {
-              "admin_password": {
-                "name": "admin_password",
-                "type": "string",
-                "subtype": "",
-                "required": true,
-                "label": "Admin Password",
-                "id": "db_home.database.admin_password"
-              },
-              "backup_id": {
-                "name": "backup_id",
-                "type": "string",
-                "subtype": "",
-                "required": false,
-                "label": "Backup",
-                "id": "db_home.database.backup_id"
-              },
-              "backup_tde_password": {
-                "name": "backup_tde_password",
-                "type": "string",
-                "subtype": "",
-                "required": false,
-                "label": "Backup Tde Password",
-                "id": "db_home.database.backup_tde_password"
-              },
-              "character_set": {
-                "name": "character_set",
-                "type": "string",
-                "subtype": "",
-                "required": false,
-                "label": "Character Set",
-                "id": "db_home.database.character_set"
-              },
-              "connection_strings": {
-                "name": "connection_strings",
-                "type": "list",
-                "subtype": [
-                  "object",
-                  {
-                    "all_connection_strings": [
-                      "map",
-                      "string"
-                    ],
-                    "cdb_default": "string",
-                    "cdb_ip_default": "string"
-                  }
-                ],
-                "required": false,
-                "label": "Connection Strings",
-                "id": "db_home.database.connection_strings"
-              },
-              "database_id": {
-                "name": "database_id",
-                "type": "string",
-                "subtype": "",
-                "required": false,
-                "label": "Database",
-                "id": "db_home.database.database_id"
-              },
-              "database_software_image_id": {
-                "name": "database_software_image_id",
-                "type": "string",
-                "subtype": "",
-                "required": false,
-                "label": "Database Software Image",
-                "id": "db_home.database.database_software_image_id"
-              },
-              "db_domain": {
-                "name": "db_domain",
-                "type": "string",
-                "subtype": "",
-                "required": false,
-                "label": "Db Domain",
-                "id": "db_home.database.db_domain"
-              },
-              "db_name": {
-                "name": "db_name",
-                "type": "string",
-                "subtype": "",
-                "required": false,
-                "label": "Db Name",
-                "id": "db_home.database.db_name"
-              },
-              "db_unique_name": {
-                "name": "db_unique_name",
-                "type": "string",
-                "subtype": "",
-                "required": false,
-                "label": "Db Unique Name",
-                "id": "db_home.database.db_unique_name"
-              },
-              "db_workload": {
-                "name": "db_workload",
-                "type": "string",
-                "subtype": "",
-                "required": false,
-                "label": "Db Workload",
-                "id": "db_home.database.db_workload"
-              },
-              "defined_tags": {
-                "name": "defined_tags",
-                "type": "map",
-                "subtype": "string",
-                "required": false,
-                "label": "Defined Tags",
-                "id": "db_home.database.defined_tags"
-              },
-              "freeform_tags": {
-                "name": "freeform_tags",
-                "type": "map",
-                "subtype": "string",
-                "required": false,
-                "label": "Freeform Tags",
-                "id": "db_home.database.freeform_tags"
-              },
-              "lifecycle_details": {
-                "name": "lifecycle_details",
-                "type": "string",
-                "subtype": "",
-                "required": false,
-                "label": "Lifecycle Details",
-                "id": "db_home.database.lifecycle_details"
-              },
-              "ncharacter_set": {
-                "name": "ncharacter_set",
-                "type": "string",
-                "subtype": "",
-                "required": false,
-                "label": "Ncharacter Set",
-                "id": "db_home.database.ncharacter_set"
-              },
-              "pdb_name": {
-                "name": "pdb_name",
-                "type": "string",
-                "subtype": "",
-                "required": false,
-                "label": "Pdb Name",
-                "id": "db_home.database.pdb_name"
-              },
-              "tde_wallet_password": {
-                "name": "tde_wallet_password",
-                "type": "string",
-                "subtype": "",
-                "required": false,
-                "label": "Tde Wallet Password",
-                "id": "db_home.database.tde_wallet_password"
-              },
-              "time_stamp_for_point_in_time_recovery": {
-                "name": "time_stamp_for_point_in_time_recovery",
-                "type": "string",
-                "subtype": "",
-                "required": false,
-                "label": "Time Stamp For Point In Time Recovery",
-                "id": "db_home.database.time_stamp_for_point_in_time_recovery"
-              },
-              "db_backup_config": {
-                "name": "db_backup_config",
-                "type": "object",
-                "subtype": "",
-                "required": false,
-                "label": "Db Backup Config",
-                "id": "db_home.database.db_backup_config",
-                "attributes": {
-                  "auto_backup_enabled": {
-                    "name": "auto_backup_enabled",
-                    "type": "bool",
-                    "subtype": "",
-                    "required": false,
-                    "label": "Auto Backup Enabled",
-                    "id": "db_home.database.db_backup_config.auto_backup_enabled"
-                  },
-                  "auto_backup_window": {
-                    "name": "auto_backup_window",
-                    "type": "string",
-                    "subtype": "",
-                    "required": false,
-                    "label": "Auto Backup Window",
-                    "id": "db_home.database.db_backup_config.auto_backup_window"
-                  },
-                  "recovery_window_in_days": {
-                    "name": "recovery_window_in_days",
-                    "type": "number",
-                    "subtype": "",
-                    "required": false,
-                    "label": "Recovery Window In Days",
-                    "id": "db_home.database.db_backup_config.recovery_window_in_days"
-                  },
-                  "backup_destination_details": {
-                    "name": "backup_destination_details",
-                    "type": "list",
-                    "subtype": "",
-                    "required": false,
-                    "label": "Backup Destination Details",
-                    "id": "db_home.database.db_backup_config.backup_destination_details",
-                    "attributes": {
-                      "type": {
-                        "name": "type",
-                        "type": "string",
-                        "subtype": "",
-                        "required": false,
-                        "label": "Type",
-                        "id": "db_home.database.db_backup_config.backup_destination_details.type"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "db_system_options": {
-        "name": "db_system_options",
-        "type": "object",
-        "subtype": "",
-        "required": false,
-        "label": "Db System Options",
-        "id": "db_system_options",
-        "attributes": {
-          "storage_management": {
-            "name": "storage_management",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Storage Management",
-            "id": "db_system_options.storage_management"
-          }
-        }
-      },
-      "maintenance_window_details": {
-        "name": "maintenance_window_details",
-        "type": "object",
-        "subtype": "",
-        "required": false,
-        "label": "Maintenance Window Details",
-        "id": "maintenance_window_details",
-        "attributes": {
-          "hours_of_day": {
-            "name": "hours_of_day",
-            "type": "list",
-            "subtype": "number",
-            "required": false,
-            "label": "Hours Of Day",
-            "id": "maintenance_window_details.hours_of_day"
-          },
-          "lead_time_in_weeks": {
-            "name": "lead_time_in_weeks",
-            "type": "number",
-            "subtype": "",
-            "required": false,
-            "label": "Lead Time In Weeks",
-            "id": "maintenance_window_details.lead_time_in_weeks"
-          },
-          "preference": {
-            "name": "preference",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Preference",
-            "id": "maintenance_window_details.preference"
-          },
-          "weeks_of_month": {
-            "name": "weeks_of_month",
-            "type": "list",
-            "subtype": "number",
-            "required": false,
-            "label": "Weeks Of Month",
-            "id": "maintenance_window_details.weeks_of_month"
-          },
-          "days_of_week": {
-            "name": "days_of_week",
-            "type": "list",
-            "subtype": "",
-            "required": false,
-            "label": "Days Of Week",
-            "id": "maintenance_window_details.days_of_week",
-            "attributes": {
-              "name": {
-                "name": "name",
-                "type": "string",
-                "subtype": "",
-                "required": false,
-                "label": "Name",
-                "id": "maintenance_window_details.days_of_week.name"
-              }
-            }
-          },
-          "months": {
-            "name": "months",
-            "type": "list",
-            "subtype": "",
-            "required": false,
-            "label": "Months",
-            "id": "maintenance_window_details.months",
-            "attributes": {
-              "name": {
-                "name": "name",
-                "type": "string",
-                "subtype": "",
-                "required": false,
-                "label": "Name",
-                "id": "maintenance_window_details.months.name"
-              }
-            }
-          }
-        }
-      }
-    }
-  },
-  "file_system": {
-    "type": "object",
-    "subtype": "",
-    "attributes": {
-      "availability_domain": {
-        "name": "availability_domain",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Availability Domain",
-        "id": "availability_domain"
-      },
-      "compartment_id": {
-        "name": "compartment_id",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Compartment",
-        "id": "compartment_id"
-      },
-      "defined_tags": {
-        "name": "defined_tags",
-        "type": "map",
-        "subtype": "string",
-        "required": false,
-        "label": "Defined Tags",
-        "id": "defined_tags"
-      },
-      "display_name": {
-        "name": "display_name",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Display Name",
-        "id": "display_name"
-      },
-      "freeform_tags": {
-        "name": "freeform_tags",
-        "type": "map",
-        "subtype": "string",
-        "required": false,
-        "label": "Freeform Tags",
-        "id": "freeform_tags"
-      },
-      "is_clone_parent": {
-        "name": "is_clone_parent",
-        "type": "bool",
-        "subtype": "",
-        "required": false,
-        "label": "Is Clone Parent",
-        "id": "is_clone_parent"
-      },
-      "is_hydrated": {
-        "name": "is_hydrated",
-        "type": "bool",
-        "subtype": "",
-        "required": false,
-        "label": "Is Hydrated",
-        "id": "is_hydrated"
-      },
-      "kms_key_id": {
-        "name": "kms_key_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Kms Key",
-        "id": "kms_key_id"
-      },
-      "lifecycle_details": {
-        "name": "lifecycle_details",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Lifecycle Details",
-        "id": "lifecycle_details"
-      },
-      "metered_bytes": {
-        "name": "metered_bytes",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Metered Bytes",
-        "id": "metered_bytes"
-      },
-      "source_details": {
-        "name": "source_details",
-        "type": "list",
-        "subtype": [
-          "object",
-          {
-            "parent_file_system_id": "string",
-            "source_snapshot_id": "string"
-          }
-        ],
-        "required": false,
-        "label": "Source Details",
-        "id": "source_details"
-      },
-      "source_snapshot_id": {
-        "name": "source_snapshot_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Source Snapshot",
-        "id": "source_snapshot_id"
-      }
-    }
-  },
   "compartment": {
     "type": "object",
     "subtype": "",
@@ -4613,926 +2584,6 @@
         "required": true,
         "label": "Name",
         "id": "name"
-      }
-    }
-  },
-  "backend": {
-    "type": "object",
-    "subtype": "",
-    "attributes": {
-      "backendset_name": {
-        "name": "backendset_name",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Backendset Name",
-        "id": "backendset_name"
-      },
-      "backup": {
-        "name": "backup",
-        "type": "bool",
-        "subtype": "",
-        "required": false,
-        "label": "Backup",
-        "id": "backup"
-      },
-      "drain": {
-        "name": "drain",
-        "type": "bool",
-        "subtype": "",
-        "required": false,
-        "label": "Drain",
-        "id": "drain"
-      },
-      "ip_address": {
-        "name": "ip_address",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Ip Address",
-        "id": "ip_address"
-      },
-      "load_balancer_id": {
-        "name": "load_balancer_id",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Load Balancer",
-        "id": "load_balancer_id"
-      },
-      "name": {
-        "name": "name",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Name",
-        "id": "name"
-      },
-      "offline": {
-        "name": "offline",
-        "type": "bool",
-        "subtype": "",
-        "required": false,
-        "label": "Offline",
-        "id": "offline"
-      },
-      "port": {
-        "name": "port",
-        "type": "number",
-        "subtype": "",
-        "required": true,
-        "label": "Port",
-        "id": "port"
-      },
-      "weight": {
-        "name": "weight",
-        "type": "number",
-        "subtype": "",
-        "required": false,
-        "label": "Weight",
-        "id": "weight"
-      }
-    }
-  },
-  "backend_set": {
-    "type": "object",
-    "subtype": "",
-    "attributes": {
-      "backend": {
-        "name": "backend",
-        "type": "set",
-        "subtype": [
-          "object",
-          {
-            "backup": "bool",
-            "drain": "bool",
-            "ip_address": "string",
-            "name": "string",
-            "offline": "bool",
-            "port": "number",
-            "weight": "number"
-          }
-        ],
-        "required": false,
-        "label": "Backend",
-        "id": "backend"
-      },
-      "load_balancer_id": {
-        "name": "load_balancer_id",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Load Balancer",
-        "id": "load_balancer_id"
-      },
-      "name": {
-        "name": "name",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Name",
-        "id": "name"
-      },
-      "policy": {
-        "name": "policy",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Policy",
-        "id": "policy"
-      },
-      "health_checker": {
-        "name": "health_checker",
-        "type": "object",
-        "subtype": "",
-        "required": false,
-        "label": "Health Checker",
-        "id": "health_checker",
-        "attributes": {
-          "interval_ms": {
-            "name": "interval_ms",
-            "type": "number",
-            "subtype": "",
-            "required": false,
-            "label": "Interval Ms",
-            "id": "health_checker.interval_ms"
-          },
-          "port": {
-            "name": "port",
-            "type": "number",
-            "subtype": "",
-            "required": false,
-            "label": "Port",
-            "id": "health_checker.port"
-          },
-          "protocol": {
-            "name": "protocol",
-            "type": "string",
-            "subtype": "",
-            "required": true,
-            "label": "Protocol",
-            "id": "health_checker.protocol"
-          },
-          "response_body_regex": {
-            "name": "response_body_regex",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Response Body Regex",
-            "id": "health_checker.response_body_regex"
-          },
-          "retries": {
-            "name": "retries",
-            "type": "number",
-            "subtype": "",
-            "required": false,
-            "label": "Retries",
-            "id": "health_checker.retries"
-          },
-          "return_code": {
-            "name": "return_code",
-            "type": "number",
-            "subtype": "",
-            "required": false,
-            "label": "Return Code",
-            "id": "health_checker.return_code"
-          },
-          "timeout_in_millis": {
-            "name": "timeout_in_millis",
-            "type": "number",
-            "subtype": "",
-            "required": false,
-            "label": "Timeout In Millis",
-            "id": "health_checker.timeout_in_millis"
-          },
-          "url_path": {
-            "name": "url_path",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Url Path",
-            "id": "health_checker.url_path"
-          }
-        }
-      },
-      "lb_cookie_session_persistence_configuration": {
-        "name": "lb_cookie_session_persistence_configuration",
-        "type": "object",
-        "subtype": "",
-        "required": false,
-        "label": "Lb Cookie Session Persistence Configuration",
-        "id": "lb_cookie_session_persistence_configuration",
-        "attributes": {
-          "cookie_name": {
-            "name": "cookie_name",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Cookie Name",
-            "id": "lb_cookie_session_persistence_configuration.cookie_name"
-          },
-          "disable_fallback": {
-            "name": "disable_fallback",
-            "type": "bool",
-            "subtype": "",
-            "required": false,
-            "label": "Disable Fallback",
-            "id": "lb_cookie_session_persistence_configuration.disable_fallback"
-          },
-          "domain": {
-            "name": "domain",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Domain",
-            "id": "lb_cookie_session_persistence_configuration.domain"
-          },
-          "is_http_only": {
-            "name": "is_http_only",
-            "type": "bool",
-            "subtype": "",
-            "required": false,
-            "label": "Is Http Only",
-            "id": "lb_cookie_session_persistence_configuration.is_http_only"
-          },
-          "is_secure": {
-            "name": "is_secure",
-            "type": "bool",
-            "subtype": "",
-            "required": false,
-            "label": "Is Secure",
-            "id": "lb_cookie_session_persistence_configuration.is_secure"
-          },
-          "max_age_in_seconds": {
-            "name": "max_age_in_seconds",
-            "type": "number",
-            "subtype": "",
-            "required": false,
-            "label": "Max Age In Seconds",
-            "id": "lb_cookie_session_persistence_configuration.max_age_in_seconds"
-          },
-          "path": {
-            "name": "path",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Path",
-            "id": "lb_cookie_session_persistence_configuration.path"
-          }
-        }
-      },
-      "session_persistence_configuration": {
-        "name": "session_persistence_configuration",
-        "type": "object",
-        "subtype": "",
-        "required": false,
-        "label": "Session Persistence Configuration",
-        "id": "session_persistence_configuration",
-        "attributes": {
-          "cookie_name": {
-            "name": "cookie_name",
-            "type": "string",
-            "subtype": "",
-            "required": true,
-            "label": "Cookie Name",
-            "id": "session_persistence_configuration.cookie_name"
-          },
-          "disable_fallback": {
-            "name": "disable_fallback",
-            "type": "bool",
-            "subtype": "",
-            "required": false,
-            "label": "Disable Fallback",
-            "id": "session_persistence_configuration.disable_fallback"
-          }
-        }
-      },
-      "ssl_configuration": {
-        "name": "ssl_configuration",
-        "type": "object",
-        "subtype": "",
-        "required": false,
-        "label": "Ssl Configuration",
-        "id": "ssl_configuration",
-        "attributes": {
-          "certificate_name": {
-            "name": "certificate_name",
-            "type": "string",
-            "subtype": "",
-            "required": true,
-            "label": "Certificate Name",
-            "id": "ssl_configuration.certificate_name"
-          },
-          "cipher_suite_name": {
-            "name": "cipher_suite_name",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Cipher Suite Name",
-            "id": "ssl_configuration.cipher_suite_name"
-          },
-          "protocols": {
-            "name": "protocols",
-            "type": "list",
-            "subtype": "string",
-            "required": false,
-            "label": "Protocols",
-            "id": "ssl_configuration.protocols"
-          },
-          "server_order_preference": {
-            "name": "server_order_preference",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Server Order Preference",
-            "id": "ssl_configuration.server_order_preference"
-          },
-          "verify_depth": {
-            "name": "verify_depth",
-            "type": "number",
-            "subtype": "",
-            "required": false,
-            "label": "Verify Depth",
-            "id": "ssl_configuration.verify_depth"
-          },
-          "verify_peer_certificate": {
-            "name": "verify_peer_certificate",
-            "type": "bool",
-            "subtype": "",
-            "required": false,
-            "label": "Verify Peer Certificate",
-            "id": "ssl_configuration.verify_peer_certificate"
-          }
-        }
-      }
-    }
-  },
-  "load_balancer": {
-    "type": "object",
-    "subtype": "",
-    "attributes": {
-      "compartment_id": {
-        "name": "compartment_id",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Compartment",
-        "id": "compartment_id"
-      },
-      "defined_tags": {
-        "name": "defined_tags",
-        "type": "map",
-        "subtype": "string",
-        "required": false,
-        "label": "Defined Tags",
-        "id": "defined_tags"
-      },
-      "display_name": {
-        "name": "display_name",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Display Name",
-        "id": "display_name"
-      },
-      "freeform_tags": {
-        "name": "freeform_tags",
-        "type": "map",
-        "subtype": "string",
-        "required": false,
-        "label": "Freeform Tags",
-        "id": "freeform_tags"
-      },
-      "ip_address_details": {
-        "name": "ip_address_details",
-        "type": "list",
-        "subtype": [
-          "object",
-          {
-            "ip_address": "string",
-            "is_public": "bool",
-            "reserved_ip": [
-              "list",
-              [
-                "object",
-                {
-                  "id": "string"
-                }
-              ]
-            ]
-          }
-        ],
-        "required": false,
-        "label": "Ip Address Details",
-        "id": "ip_address_details"
-      },
-      "ip_addresses": {
-        "name": "ip_addresses",
-        "type": "list",
-        "subtype": "string",
-        "required": false,
-        "label": "Ip Addresses",
-        "id": "ip_addresses"
-      },
-      "ip_mode": {
-        "name": "ip_mode",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Ip Mode",
-        "id": "ip_mode"
-      },
-      "is_private": {
-        "name": "is_private",
-        "type": "bool",
-        "subtype": "",
-        "required": false,
-        "label": "Is Private",
-        "id": "is_private"
-      },
-      "network_security_group_ids": {
-        "name": "network_security_group_ids",
-        "type": "set",
-        "subtype": "string",
-        "required": false,
-        "label": "Network Security Group Ids",
-        "id": "network_security_group_ids"
-      },
-      "shape": {
-        "name": "shape",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Shape",
-        "id": "shape"
-      },
-      "subnet_ids": {
-        "name": "subnet_ids",
-        "type": "list",
-        "subtype": "string",
-        "required": true,
-        "label": "Subnet Ids",
-        "id": "subnet_ids"
-      },
-      "reserved_ips": {
-        "name": "reserved_ips",
-        "type": "list",
-        "subtype": "",
-        "required": false,
-        "label": "Reserved Ips",
-        "id": "reserved_ips",
-        "attributes": {}
-      },
-      "shape_details": {
-        "name": "shape_details",
-        "type": "object",
-        "subtype": "",
-        "required": false,
-        "label": "Shape Details",
-        "id": "shape_details",
-        "attributes": {
-          "maximum_bandwidth_in_mbps": {
-            "name": "maximum_bandwidth_in_mbps",
-            "type": "number",
-            "subtype": "",
-            "required": true,
-            "label": "Maximum Bandwidth In Mbps",
-            "id": "shape_details.maximum_bandwidth_in_mbps"
-          },
-          "minimum_bandwidth_in_mbps": {
-            "name": "minimum_bandwidth_in_mbps",
-            "type": "number",
-            "subtype": "",
-            "required": true,
-            "label": "Minimum Bandwidth In Mbps",
-            "id": "shape_details.minimum_bandwidth_in_mbps"
-          }
-        }
-      }
-    }
-  },
-  "mysql_db_system": {
-    "type": "object",
-    "subtype": "",
-    "attributes": {
-      "admin_password": {
-        "name": "admin_password",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Admin Password",
-        "id": "admin_password"
-      },
-      "admin_username": {
-        "name": "admin_username",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Admin Username",
-        "id": "admin_username"
-      },
-      "analytics_cluster": {
-        "name": "analytics_cluster",
-        "type": "list",
-        "subtype": [
-          "object",
-          {
-            "cluster_size": "number",
-            "shape_name": "string",
-            "state": "string",
-            "time_created": "string",
-            "time_updated": "string"
-          }
-        ],
-        "required": false,
-        "label": "Analytics Cluster",
-        "id": "analytics_cluster"
-      },
-      "availability_domain": {
-        "name": "availability_domain",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Availability Domain",
-        "id": "availability_domain"
-      },
-      "channels": {
-        "name": "channels",
-        "type": "list",
-        "subtype": [
-          "object",
-          {
-            "compartment_id": "string",
-            "defined_tags": [
-              "map",
-              "string"
-            ],
-            "display_name": "string",
-            "freeform_tags": [
-              "map",
-              "string"
-            ],
-            "id": "string",
-            "is_enabled": "bool",
-            "lifecycle_details": "string",
-            "source": [
-              "list",
-              [
-                "object",
-                {
-                  "hostname": "string",
-                  "port": "number",
-                  "source_type": "string",
-                  "ssl_ca_certificate": [
-                    "list",
-                    [
-                      "object",
-                      {
-                        "certificate_type": "string",
-                        "contents": "string"
-                      }
-                    ]
-                  ],
-                  "ssl_mode": "string",
-                  "username": "string"
-                }
-              ]
-            ],
-            "state": "string",
-            "target": [
-              "list",
-              [
-                "object",
-                {
-                  "applier_username": "string",
-                  "channel_name": "string",
-                  "db_system_id": "string",
-                  "target_type": "string"
-                }
-              ]
-            ],
-            "time_created": "string",
-            "time_updated": "string"
-          }
-        ],
-        "required": false,
-        "label": "Channels",
-        "id": "channels"
-      },
-      "compartment_id": {
-        "name": "compartment_id",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Compartment",
-        "id": "compartment_id"
-      },
-      "configuration_id": {
-        "name": "configuration_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Configuration",
-        "id": "configuration_id"
-      },
-      "current_placement": {
-        "name": "current_placement",
-        "type": "list",
-        "subtype": [
-          "object",
-          {
-            "availability_domain": "string",
-            "fault_domain": "string"
-          }
-        ],
-        "required": false,
-        "label": "Current Placement",
-        "id": "current_placement"
-      },
-      "data_storage_size_in_gb": {
-        "name": "data_storage_size_in_gb",
-        "type": "number",
-        "subtype": "",
-        "required": false,
-        "label": "Data Storage Size In Gb",
-        "id": "data_storage_size_in_gb"
-      },
-      "defined_tags": {
-        "name": "defined_tags",
-        "type": "map",
-        "subtype": "string",
-        "required": false,
-        "label": "Defined Tags",
-        "id": "defined_tags"
-      },
-      "description": {
-        "name": "description",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Description",
-        "id": "description"
-      },
-      "display_name": {
-        "name": "display_name",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Display Name",
-        "id": "display_name"
-      },
-      "endpoints": {
-        "name": "endpoints",
-        "type": "list",
-        "subtype": [
-          "object",
-          {
-            "hostname": "string",
-            "ip_address": "string",
-            "modes": [
-              "list",
-              "string"
-            ],
-            "port": "number",
-            "port_x": "number",
-            "status": "string",
-            "status_details": "string"
-          }
-        ],
-        "required": false,
-        "label": "Endpoints",
-        "id": "endpoints"
-      },
-      "fault_domain": {
-        "name": "fault_domain",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Fault Domain",
-        "id": "fault_domain"
-      },
-      "freeform_tags": {
-        "name": "freeform_tags",
-        "type": "map",
-        "subtype": "string",
-        "required": false,
-        "label": "Freeform Tags",
-        "id": "freeform_tags"
-      },
-      "heat_wave_cluster": {
-        "name": "heat_wave_cluster",
-        "type": "list",
-        "subtype": [
-          "object",
-          {
-            "cluster_size": "number",
-            "shape_name": "string",
-            "state": "string",
-            "time_created": "string",
-            "time_updated": "string"
-          }
-        ],
-        "required": false,
-        "label": "Heat Wave Cluster",
-        "id": "heat_wave_cluster"
-      },
-      "hostname_label": {
-        "name": "hostname_label",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Hostname Label",
-        "id": "hostname_label"
-      },
-      "ip_address": {
-        "name": "ip_address",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Ip Address",
-        "id": "ip_address"
-      },
-      "is_analytics_cluster_attached": {
-        "name": "is_analytics_cluster_attached",
-        "type": "bool",
-        "subtype": "",
-        "required": false,
-        "label": "Is Analytics Cluster Attached",
-        "id": "is_analytics_cluster_attached"
-      },
-      "is_heat_wave_cluster_attached": {
-        "name": "is_heat_wave_cluster_attached",
-        "type": "bool",
-        "subtype": "",
-        "required": false,
-        "label": "Is Heat Wave Cluster Attached",
-        "id": "is_heat_wave_cluster_attached"
-      },
-      "is_highly_available": {
-        "name": "is_highly_available",
-        "type": "bool",
-        "subtype": "",
-        "required": false,
-        "label": "Is Highly Available",
-        "id": "is_highly_available"
-      },
-      "lifecycle_details": {
-        "name": "lifecycle_details",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Lifecycle Details",
-        "id": "lifecycle_details"
-      },
-      "mysql_version": {
-        "name": "mysql_version",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Mysql Version",
-        "id": "mysql_version"
-      },
-      "port": {
-        "name": "port",
-        "type": "number",
-        "subtype": "",
-        "required": false,
-        "label": "Port",
-        "id": "port"
-      },
-      "port_x": {
-        "name": "port_x",
-        "type": "number",
-        "subtype": "",
-        "required": false,
-        "label": "Port X",
-        "id": "port_x"
-      },
-      "shape_name": {
-        "name": "shape_name",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Shape Name",
-        "id": "shape_name"
-      },
-      "shutdown_type": {
-        "name": "shutdown_type",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Shutdown Type",
-        "id": "shutdown_type"
-      },
-      "subnet_id": {
-        "name": "subnet_id",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "Subnet",
-        "id": "subnet_id"
-      },
-      "time_updated": {
-        "name": "time_updated",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Time Updated",
-        "id": "time_updated"
-      },
-      "backup_policy": {
-        "name": "backup_policy",
-        "type": "object",
-        "subtype": "",
-        "required": false,
-        "label": "Backup Policy",
-        "id": "backup_policy",
-        "attributes": {
-          "defined_tags": {
-            "name": "defined_tags",
-            "type": "map",
-            "subtype": "string",
-            "required": false,
-            "label": "Defined Tags",
-            "id": "backup_policy.defined_tags"
-          },
-          "freeform_tags": {
-            "name": "freeform_tags",
-            "type": "map",
-            "subtype": "string",
-            "required": false,
-            "label": "Freeform Tags",
-            "id": "backup_policy.freeform_tags"
-          },
-          "is_enabled": {
-            "name": "is_enabled",
-            "type": "bool",
-            "subtype": "",
-            "required": false,
-            "label": "Is Enabled",
-            "id": "backup_policy.is_enabled"
-          },
-          "retention_in_days": {
-            "name": "retention_in_days",
-            "type": "number",
-            "subtype": "",
-            "required": false,
-            "label": "Retention In Days",
-            "id": "backup_policy.retention_in_days"
-          },
-          "window_start_time": {
-            "name": "window_start_time",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Window Start Time",
-            "id": "backup_policy.window_start_time"
-          }
-        }
-      },
-      "maintenance": {
-        "name": "maintenance",
-        "type": "object",
-        "subtype": "",
-        "required": false,
-        "label": "Maintenance",
-        "id": "maintenance",
-        "attributes": {
-          "window_start_time": {
-            "name": "window_start_time",
-            "type": "string",
-            "subtype": "",
-            "required": true,
-            "label": "Window Start Time",
-            "id": "maintenance.window_start_time"
-          }
-        }
-      },
-      "source": {
-        "name": "source",
-        "type": "object",
-        "subtype": "",
-        "required": false,
-        "label": "Source",
-        "id": "source",
-        "attributes": {
-          "backup_id": {
-            "name": "backup_id",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Backup",
-            "id": "source.backup_id"
-          },
-          "source_type": {
-            "name": "source_type",
-            "type": "string",
-            "subtype": "",
-            "required": true,
-            "label": "Source Type",
-            "id": "source.source_type"
-          }
-        }
       }
     }
   },

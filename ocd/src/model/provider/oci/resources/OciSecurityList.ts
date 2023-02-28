@@ -13,28 +13,30 @@
 
 import { OciResource } from "../OciResource"
 
-export interface OciCompartment extends OciResource {
-    description: string
-    enableDelete?: boolean
+export interface OciSecurityList extends OciResource {
+    vcnId: string
+    egressSecurityRules?: object[]
+    ingressSecurityRules?: object[]
 }
 
 
 
-export namespace OciCompartment {
-    export function newResource(): OciCompartment {
+export namespace OciSecurityList {
+    export function newResource(): OciSecurityList {
         return {
-            ...OciResource.newResource('compartment'),
-            description: '',
-            enableDelete: false
+            ...OciResource.newResource('security_list'),
+            vcnId: '',
+            egressSecurityRules: [],
+            ingressSecurityRules: []
         }
     }
     
 }
 
-export class OciCompartmentClient {
-    static new(): OciCompartment {
-        return OciCompartment.newResource()
+export class OciSecurityListClient {
+    static new(): OciSecurityList {
+        return OciSecurityList.newResource()
     }
 }
 
-export default OciCompartmentClient
+export default OciSecurityListClient

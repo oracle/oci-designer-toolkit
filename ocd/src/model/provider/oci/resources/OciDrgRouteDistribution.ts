@@ -13,28 +13,28 @@
 
 import { OciResource } from "../OciResource"
 
-export interface OciCompartment extends OciResource {
-    description: string
-    enableDelete?: boolean
+export interface OciDrgRouteDistribution extends OciResource {
+    distributionType: string
+    drgId: string
 }
 
 
 
-export namespace OciCompartment {
-    export function newResource(): OciCompartment {
+export namespace OciDrgRouteDistribution {
+    export function newResource(): OciDrgRouteDistribution {
         return {
-            ...OciResource.newResource('compartment'),
-            description: '',
-            enableDelete: false
+            ...OciResource.newResource('drg_route_distribution'),
+            distributionType: '',
+            drgId: ''
         }
     }
     
 }
 
-export class OciCompartmentClient {
-    static new(): OciCompartment {
-        return OciCompartment.newResource()
+export class OciDrgRouteDistributionClient {
+    static new(): OciDrgRouteDistribution {
+        return OciDrgRouteDistribution.newResource()
     }
 }
 
-export default OciCompartmentClient
+export default OciDrgRouteDistributionClient

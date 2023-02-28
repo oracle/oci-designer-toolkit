@@ -1,36 +1,64 @@
 /*
-** Copyright (c) 2021, Andrew Hopkinson.
-** Licensed under the GNU GENERAL PUBLIC LICENSE v 3.0 as shown at https://www.gnu.org/licenses/.
+** Copyright (c) 2020, 2023, Oracle and/or its affiliates.
+** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+*/
+/*
+** ======================================================================
+** === Auto Generated Code All Edits Will Be Lost During Regeneration ===
+** ======================================================================
+**
+** Generated : 28/02/2023 17:29:49
+**
 */
 
 import { OciResource } from "../OciResource"
-import { models } from "oci-core"
 
-export interface OciSubnet extends OciResource, models.Subnet {}
+export interface OciSubnet extends OciResource {
+    availabilityDomain?: string
+    cidrBlock: string
+    dhcpOptionsId?: string
+    dnsLabel?: string
+    ipv6cidrBlock?: string
+    ipv6virtualRouterIp?: string
+    prohibitInternetIngress?: boolean
+    prohibitPublicIpOnVnic?: boolean
+    routeTableId?: string
+    securityListIds?: string[]
+    subnetDomainName?: string
+    vcnId: string
+    virtualRouterIp?: string
+    virtualRouterMac?: string
+}
+
+
 
 export namespace OciSubnet {
     export function newResource(): OciSubnet {
         return {
             ...OciResource.newResource('subnet'),
-            resourceType: 'Subnet',
-            vcnId: '',
+            availabilityDomain: '',
             cidrBlock: '',
+            dhcpOptionsId: '',
+            dnsLabel: '',
+            ipv6cidrBlock: '',
+            ipv6virtualRouterIp: '',
+            prohibitInternetIngress: false,
+            prohibitPublicIpOnVnic: false,
             routeTableId: '',
             securityListIds: [],
+            subnetDomainName: '',
+            vcnId: '',
             virtualRouterIp: '',
-            virtualRouterMac: '',
-            lifecycleState: models.Subnet.LifecycleState.UnknownValue,
-            timeCreated: new Date()
+            virtualRouterMac: ''
         }
     }
+    
 }
 
 export class OciSubnetClient {
     static new(): OciSubnet {
         return OciSubnet.newResource()
     }
-
-    static newOci() {}
 }
 
 export default OciSubnetClient

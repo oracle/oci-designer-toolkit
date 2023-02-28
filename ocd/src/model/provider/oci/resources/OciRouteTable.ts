@@ -13,28 +13,28 @@
 
 import { OciResource } from "../OciResource"
 
-export interface OciCompartment extends OciResource {
-    description: string
-    enableDelete?: boolean
+export interface OciRouteTable extends OciResource {
+    vcnId: string
+    routeRules?: object[]
 }
 
 
 
-export namespace OciCompartment {
-    export function newResource(): OciCompartment {
+export namespace OciRouteTable {
+    export function newResource(): OciRouteTable {
         return {
-            ...OciResource.newResource('compartment'),
-            description: '',
-            enableDelete: false
+            ...OciResource.newResource('route_table'),
+            vcnId: '',
+            routeRules: []
         }
     }
     
 }
 
-export class OciCompartmentClient {
-    static new(): OciCompartment {
-        return OciCompartment.newResource()
+export class OciRouteTableClient {
+    static new(): OciRouteTable {
+        return OciRouteTable.newResource()
     }
 }
 
-export default OciCompartmentClient
+export default OciRouteTableClient

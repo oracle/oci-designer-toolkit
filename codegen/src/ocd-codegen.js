@@ -25,13 +25,12 @@ if (command.toLocaleLowerCase() === 'generate') {
         // Generated root directory will be second in the list after command
         const output_dir = args[3]
         const schema = JSON.parse(input_data)
-        let resources = []
         let generator = undefined
         if (subcommand.toLocaleLowerCase() === 'oci-model-js') generator = new OcdModelGenerator()
         else if (subcommand.toLocaleLowerCase() === 'oci-properties-js') generator = new OcdPropertiesGenerator()
         else if (subcommand.toLocaleLowerCase() === 'oci-terraform-js') generator = new OciTerraformGenerator()
         Object.entries(schema).forEach(([key, value]) => {
-            // generator.generate(key, value)
+            generator.generate(key, value)
             const file_dir = path.join(output_dir, generator.generateResourcesDirectory(key))
             // console.info(`File Dir : ${file_dir}`)
             // const super_file_dir = path.join(output_dir, generator.generateClassDir(key), generator.generateSuperClassDir(key))
@@ -41,13 +40,14 @@ if (command.toLocaleLowerCase() === 'generate') {
             if (!fs.existsSync(file_dir)) fs.mkdirSync(file_dir, {recursive: true})
             // if (!fs.existsSync(super_file_dir)) fs.mkdirSync(super_file_dir, {recursive: true})
             // fs.writeFileSync(super_file_name, generator.resource_class_file)
-            fs.writeFileSync(file_name, generator.content(key, value))
-            // if (!fs.existsSync(file_name)) fs.writeFileSync(file_name, generator.content(key, value))
+            fs.writeFileSync(file_name, generator.resourceDefinitionFile)
+            // if (!fs.existsSync(file_name)) fs.writeFileSync(file_name, generator.resourceDefinitionFile)
         })
-        // if (generator.resources.length > 0) {
-        //     const resource_file_name = path.join(output_dir, 'resources.js')
-        //     fs.writeFileSync(resource_file_name, generator.resource_file)
-        // }
+        if (generator.resources.length > 0) {
+            // console.info(generator.resourceFile)
+            const resource_file_name = path.join(output_dir, 'resources.ts')
+            fs.writeFileSync(resource_file_name, generator.resourceFile)
+        }
     } 
 } else if (command.toLocaleLowerCase() === 'import') {
         // Source Schema file will be first in the list after command

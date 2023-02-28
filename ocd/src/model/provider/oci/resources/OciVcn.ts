@@ -1,32 +1,46 @@
 /*
-** Copyright (c) 2021, Andrew Hopkinson.
-** Licensed under the GNU GENERAL PUBLIC LICENSE v 3.0 as shown at https://www.gnu.org/licenses/.
+** Copyright (c) 2020, 2023, Oracle and/or its affiliates.
+** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+*/
+/*
+** ======================================================================
+** === Auto Generated Code All Edits Will Be Lost During Regeneration ===
+** ======================================================================
+**
+** Generated : 28/02/2023 17:29:49
+**
 */
 
 import { OciResource } from "../OciResource"
-import { models } from "oci-core"
 
-export interface OciVcn extends OciResource, models.Vcn {}
+export interface OciVcn extends OciResource {
+    cidrBlock?: string
+    cidrBlocks?: string[]
+    dnsLabel?: string
+    ipv6cidrBlocks?: string[]
+    isIpv6enabled?: boolean
+}
+
+
 
 export namespace OciVcn {
     export function newResource(): OciVcn {
         return {
             ...OciResource.newResource('vcn'),
-            resourceType: 'Virtual Cloud Network',
             cidrBlock: '',
             cidrBlocks: [],
-            lifecycleState: models.Vcn.LifecycleState.UnknownValue,
-            timeCreated: new Date()
+            dnsLabel: '',
+            ipv6cidrBlocks: [],
+            isIpv6enabled: false
         }
     }
+    
 }
 
 export class OciVcnClient {
     static new(): OciVcn {
         return OciVcn.newResource()
     }
-
-    static newOci() {}
 }
 
 export default OciVcnClient

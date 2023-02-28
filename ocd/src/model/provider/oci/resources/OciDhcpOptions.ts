@@ -13,28 +13,28 @@
 
 import { OciResource } from "../OciResource"
 
-export interface OciCompartment extends OciResource {
-    description: string
-    enableDelete?: boolean
+export interface OciDhcpOptions extends OciResource {
+    vcnId: string
+    options?: object[]
 }
 
 
 
-export namespace OciCompartment {
-    export function newResource(): OciCompartment {
+export namespace OciDhcpOptions {
+    export function newResource(): OciDhcpOptions {
         return {
-            ...OciResource.newResource('compartment'),
-            description: '',
-            enableDelete: false
+            ...OciResource.newResource('dhcp_options'),
+            vcnId: '',
+            options: []
         }
     }
     
 }
 
-export class OciCompartmentClient {
-    static new(): OciCompartment {
-        return OciCompartment.newResource()
+export class OciDhcpOptionsClient {
+    static new(): OciDhcpOptions {
+        return OciDhcpOptions.newResource()
     }
 }
 
-export default OciCompartmentClient
+export default OciDhcpOptionsClient

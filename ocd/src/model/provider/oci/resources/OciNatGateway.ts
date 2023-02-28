@@ -13,28 +13,32 @@
 
 import { OciResource } from "../OciResource"
 
-export interface OciCompartment extends OciResource {
-    description: string
-    enableDelete?: boolean
+export interface OciNatGateway extends OciResource {
+    blockTraffic?: boolean
+    natIp?: string
+    publicIpId?: string
+    vcnId: string
 }
 
 
 
-export namespace OciCompartment {
-    export function newResource(): OciCompartment {
+export namespace OciNatGateway {
+    export function newResource(): OciNatGateway {
         return {
-            ...OciResource.newResource('compartment'),
-            description: '',
-            enableDelete: false
+            ...OciResource.newResource('nat_gateway'),
+            blockTraffic: false,
+            natIp: '',
+            publicIpId: '',
+            vcnId: ''
         }
     }
     
 }
 
-export class OciCompartmentClient {
-    static new(): OciCompartment {
-        return OciCompartment.newResource()
+export class OciNatGatewayClient {
+    static new(): OciNatGateway {
+        return OciNatGateway.newResource()
     }
 }
 
-export default OciCompartmentClient
+export default OciNatGatewayClient

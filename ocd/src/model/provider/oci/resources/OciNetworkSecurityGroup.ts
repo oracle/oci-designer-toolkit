@@ -13,28 +13,26 @@
 
 import { OciResource } from "../OciResource"
 
-export interface OciCompartment extends OciResource {
-    description: string
-    enableDelete?: boolean
+export interface OciNetworkSecurityGroup extends OciResource {
+    vcnId: string
 }
 
 
 
-export namespace OciCompartment {
-    export function newResource(): OciCompartment {
+export namespace OciNetworkSecurityGroup {
+    export function newResource(): OciNetworkSecurityGroup {
         return {
-            ...OciResource.newResource('compartment'),
-            description: '',
-            enableDelete: false
+            ...OciResource.newResource('network_security_group'),
+            vcnId: ''
         }
     }
     
 }
 
-export class OciCompartmentClient {
-    static new(): OciCompartment {
-        return OciCompartment.newResource()
+export class OciNetworkSecurityGroupClient {
+    static new(): OciNetworkSecurityGroup {
+        return OciNetworkSecurityGroup.newResource()
     }
 }
 
-export default OciCompartmentClient
+export default OciNetworkSecurityGroupClient
