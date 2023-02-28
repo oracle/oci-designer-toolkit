@@ -4,8 +4,9 @@
 */
 
 export interface OcdMetadata {
-    ocd_version: string,
-    ocd_schema_version: string,
+    ocdVersion: string,
+    ocdSchemaVersion: string,
+    ocdModelId: string,
     title: string,
     documentation: string,
     created: string,

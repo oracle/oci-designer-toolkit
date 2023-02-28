@@ -3,6 +3,7 @@
 ** Licensed under the GNU GENERAL PUBLIC LICENSE v 3.0 as shown at https://www.gnu.org/licenses/.
 */
 
+import { v4 as uuidv4 } from 'uuid'
 import * as ociResources from '../model/provider/oci/resources'
 import version from '../json/version.json'
 import { OcdDesign, OcdViewPage, OcdViewCoords, OcdViewLayer, OcdBaseModel } from '../model/OcdDesign'
@@ -44,8 +45,9 @@ export class OcdDocument {
         } 
         return {
             metadata: {
-                ocd_version: version.version,
-                ocd_schema_version: version.schema_version,
+                ocdVersion: version.version,
+                ocdSchemaVersion: version.schema_version,
+                ocdModelId: `ocd-model-${uuidv4()}`,
                 title: 'Open Cloud Architecture',
                 documentation: '',
                 created: `${date} ${time}`,

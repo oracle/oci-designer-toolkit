@@ -1,5 +1,6 @@
 {
   "name": "ocd",
+  "version": "0.1.0",
   "description": "OKIT Open Cloud Designer",
   "author": {
     "name": "Andrew Hopkinson",
@@ -7,30 +8,27 @@
     "url": "https://github.com/oracle/oci-designer-toolkit"
   },
   "bugs": "https://github.com/oracle/oci-designer-toolkit/issues",
-  "version": "0.1.0",
   "private": true,
   "main": "./build/extension.js",
   "homepage": "./",
-	"engines": {
-		"vscode": "^1.74.0"
-	},  
-
-	"categories": [
-		"Other"
-	],
-	"activationEvents": [
-		"onWebviewPanel:okitOcd"
-	],
-	"contributes": {
-		"commands": [
-			{
-				"command": "okitOcd.start",
-				"title": "Start OKIT OCD Session",
-				"category": "Okit Ocd"
-			}
-		]
-	},
-
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onWebviewPanel:okitOcd"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "okitOcd.start",
+        "title": "Start OKIT OCD Session",
+        "category": "Okit Ocd"
+      }
+    ]
+  },
   "build": {
     "appId": "com.oracle.okit-ocd",
     "files": [
@@ -72,17 +70,15 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-
     "electron-start": "electron .",
     "preelectron-release-pack": "npm run build",
     "electron-release-pack": "electron-builder build --x64 --macos --win --linux -c.extraMetadata.main=build/electron.js",
     "preelectron-pack": "npm run build",
     "electron-pack": "electron-builder build -c.extraMetadata.main=build/electron.js",
-
-		"vscode:prepublish": "npm run compile",
-		"compile": "tsc -p ./",
-		"lint": "eslint \"src/**/*.ts\"",
-		"watch": "tsc -w -p ./"
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "lint": "eslint \"src/**/*.ts\"",
+    "watch": "tsc -w -p ./"
   },
   "eslintConfig": {
     "extends": [
@@ -103,8 +99,9 @@
     ]
   },
   "devDependencies": {
-		"@types/vscode": "^1.73.0",
-		"@types/vscode-webview": "^1.57.0",
+    "@types/uuid": "^9.0.1",
+    "@types/vscode": "^1.73.0",
+    "@types/vscode-webview": "^1.57.0",
     "electron": "^22.0.0",
     "electron-builder": "^23.6.0"
   },
