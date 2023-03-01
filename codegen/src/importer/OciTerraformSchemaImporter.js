@@ -7,6 +7,8 @@ import { OcdSchemaImporter } from './OcdSchemaImporter.js'
 
 class OciTerraformSchemaImporter extends OcdSchemaImporter {
     resource_map = {
+        oci_analytics_analytics_instance: 'analytics_instance',
+        
         // oci_containerengine_cluster: 'cluster',
         // oci_containerengine_node_pool: 'node_pool',
 
@@ -59,6 +61,13 @@ class OciTerraformSchemaImporter extends OcdSchemaImporter {
             'system_tags',
             'time_created'
         ],
+        oci_core_drg: [
+            'default_drg_route_tables',
+            'default_export_drg_route_distribution_id'
+        ],
+        oci_core_drg_attachment: [
+            'remove_export_drg_route_distribution_trigger'
+        ],
         oci_core_vcn: [
             'default_dhcp_options_id',
             'default_route_table_id',
@@ -77,11 +86,9 @@ class OciTerraformSchemaImporter extends OcdSchemaImporter {
             'time_of_next_refresh',
             'time_reclamation_of_free_autonomous_database'
         ],
-        oci_core_drg: [
-            'default_drg_route_tables'
-        ],
-        oci_core_drg_attachment: [
-            'remove_export_drg_route_distribution_trigger'
+        oci_objectstorage_bucket: [
+            'etag',
+            'object_lifecycle_policy_etag'
         ]
     }
 

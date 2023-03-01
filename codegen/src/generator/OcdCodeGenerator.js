@@ -80,7 +80,7 @@ ${resources.sort().map((r) => `export { ${this.generateNamespaceName(r)}, ${this
     toTitleCase = (str) => str.replace(/\b\w+/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase();}).replaceAll('-', '_').replace(/\W+/g, ' ')
     toCamelCase = (str) => `${this.toTitleCase(str.split('_').join(' ')).split(' ').map((e, i) => i === 0 ? e.toLowerCase() : e).join('')}`
 
-    getSchemaObjects = (schema) => Object.values(schema.attributes).filter(f => f.attributes).reduce((a, c) => [...a, c, ...this.getSchemaObjects(c)], [])
+    getSchemaObjects = (schema) => Object.values(schema.attributes).filter(f => f.attributes).reduce((a, c) => [...a, c, ...this.getSchemaObjects(c)], []).reduce((a, c) => [...a, ...a.find((o) => o.name === c.name) ? [] : [c]], [])
     // getSchemaObjects = (schema) => Object.values(schema.attributes).filter(f => f.type === 'object').reduce((a, c) => [...a, c, ...this.getSchemaObjects(c)], [])
     // .filter(f => f.type === 'object').reduce((a, c) => [...a, c, ...this.getSchemaObjects(c)], [])
     // ...c.attributes.filter(f => f.type === 'object')
