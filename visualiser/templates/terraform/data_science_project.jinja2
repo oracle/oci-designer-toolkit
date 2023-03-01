@@ -31,8 +31,67 @@ resource "oci_datascience_project" "{{ resource_name }}" {
 locals {
     {{ resource_name }}_id = oci_datascience_project.{{ resource_name }}.id
 }
+# ------ Create Data Science Notebook Sessions
+{% if notebook_sessions is defined %}
+    {% for session in notebook_sessions %}
+resource "oci_datascience_notebook_session" "{{ session.resource_name }}" {
+    #Required
+    compartment_id = {{ compartment_id }}
+    display_name   = {{ session.display_name | safe }}
+    project_id = local.{{ resource_name }}_id
+
+    #Optional
+    notebook_session_config_details {
+        #Required
+        shape = {{ session.notebook_session_config_details.shape | safe  }}
+
+        #Optional
+        block_storage_size_in_gbs = {{ session.notebook_session_config_details.block_storage_size_in_gbs | safe  }}
+        notebook_session_shape_config_details {
+
+            #Optional
+            memory_in_gbs = {{ session.notebook_session_config_details.notebook_session_shape_config_details.memory_in_gbs | safe  }}
+            ocpus = {{ session.notebook_session_config_details.notebook_session_shape_config_details.ocpus | safe  }}
+        }
+        {% if session.notebook_session_config_details.subnet_id is defined %}
+        subnet_id = {{ session.notebook_session_config_details.subnet_id | safe  }}
+        {% endif %}
+    }
+    {# notebook_session_configuration_details {
+        #Required
+        shape = var.notebook_session_notebook_session_configuration_details_shape
+        subnet_id = oci_core_subnet.test_subnet.id
+
+        #Optional
+        block_storage_size_in_gbs = var.notebook_session_notebook_session_configuration_details_block_storage_size_in_gbs
+        notebook_session_shape_config_details {
+
+            #Optional
+            memory_in_gbs = var.notebook_session_notebook_session_configuration_details_notebook_session_shape_config_details_memory_in_gbs
+            ocpus = var.notebook_session_notebook_session_configuration_details_notebook_session_shape_config_details_ocpus
+        }
+    } #}
+    {# notebook_session_runtime_config_details {
+
+        #Optional
+        custom_environment_variables = var.notebook_session_notebook_session_runtime_config_details_custom_environment_variables
+        notebook_session_git_config_details {
+
+            #Optional
+            notebook_session_git_repo_config_collection {
+                #Required
+                url = var.notebook_session_notebook_session_runtime_config_details_notebook_session_git_config_details_notebook_session_git_repo_config_collection_url
+            }
+        }
+    } #}
+    {% if defined_tags is defined %}
+        defined_tags   = {{ defined_tags | safe }}
+    {% endif %}
+    {% if freeform_tags is defined %}
+        freeform_tags  = {{ freeform_tags | safe }}
+    {% endif %}
+}
+    {% endfor %}
+{% endif %}
 {% endif %}
 
-output "{{ resource_name }}Id" {
-    value = local.{{ resource_name }}_id
-}

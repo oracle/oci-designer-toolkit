@@ -250,6 +250,8 @@ class OCIQuery(OCIConnection):
                         # resource_list = self.oke_clusters(resource_list, resources)
                     elif resource_type == "CustomerDnsZone":
                         resource_list = self.dns_zones(resource_list, resources)
+                    elif resource_type == "DataScienceProject":
+                        resource_list = self.data_science_projects(resource_list, resources)
                     elif resource_type == "DbSystem":
                         resource_list = self.database_systems(resource_list, resources)
                     elif resource_type == "Drg":
@@ -303,6 +305,11 @@ class OCIQuery(OCIConnection):
         for ai in analytics_instances:
             logger.info(jsonToFormattedString(ai))
         return analytics_instances
+
+    def data_science_projects(self, data_science_projects, resources):
+        for project in data_science_projects:
+            project['notebook_sessions'] = [r for r in resources.get("DataScienceNotebookSession", []) if r["project_id"] == project["id"]]
+        return data_science_projects
 
     def database_systems(self, database_systems, resources):
         for db_system in database_systems:
