@@ -16,9 +16,39 @@ class DataScienceProject extends OkitArtifact {
         // Configure default values
         this.compartment_id = data.parent_id;
         this.description = ''
+        this.notebook_sessions = []
         // Update with any passed data
         this.merge(data);
         this.convert();
+    }
+
+    newNotebookSession() {
+        return {
+            resource_name: `${this.generateResourceName()}NotebookSession`,
+            display_name: this.display_name,
+            notebook_session_config_details: this.newNotebookSessionConfig()
+            // notebook_session_runtime_config_details: this.newNotebookSessionRuntimeConfig()
+        }
+    }
+
+    newNotebookSessionConfig() {
+        return {
+            shape: '',
+            block_storage_size_in_gbs: 50,
+            notebook_session_shape_config_details: {
+                memory_in_gbs: 16,
+                ocpus: 1
+            },
+            subnet_id: ''
+        }
+    }
+
+    newNotebookSessionRuntimeConfig() {
+        return {
+            notebook_session_git_config_details: {
+                url: ''
+            }
+        }
     }
     /*
     ** Name Generation
