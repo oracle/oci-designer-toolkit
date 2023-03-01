@@ -51,12 +51,13 @@ class OciTerraformSchemaImporter extends OcdSchemaImporter {
     }
     ignore_elements = {
         common: [
+            'created_by',
             'id',
             'inactive_state', 
             'is_accessible',
             'state', 
-            'time_created',
-            'system_tags'
+            'system_tags',
+            'time_created'
         ],
         oci_core_vcn: [
             'default_dhcp_options_id',

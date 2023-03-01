@@ -50,8 +50,8 @@ export default ${this.generateClassName(resource)}
         else if (attribute.type === 'bool')   return `${this.toCamelCase(name)}${attribute.required ? '' : '?'}: boolean`
         else if (attribute.type === 'number') return `${this.toCamelCase(name)}${attribute.required ? '' : '?'}: number`
         else if (attribute.type === 'object') return `${this.toCamelCase(name)}${attribute.required ? '' : '?'}: ${this.generateInterfaceName(name)}`
-        else if (attribute.type === 'list')   return `${this.toCamelCase(name)}${attribute.required ? '' : '?'}: ${attribute.subtype}[]`
-        else if (attribute.type === 'set')   return `${this.toCamelCase(name)}${attribute.required ? '' : '?'}: ${attribute.subtype}[]`
+        else if (attribute.type === 'list')   return `${this.toCamelCase(name)}${attribute.required ? '' : '?'}: ${attribute.subtype === 'object' ? this.generateInterfaceName(name) : attribute.subtype}[]`
+        else if (attribute.type === 'set')    return `${this.toCamelCase(name)}${attribute.required ? '' : '?'}: ${attribute.subtype}[]`
         else if (attribute.type === 'map')    return `${this.toCamelCase(name)}${attribute.required ? '' : '?'}: {[key: string]: string}`
         else return ''
     }
@@ -62,7 +62,7 @@ export default ${this.generateClassName(resource)}
         else if (attribute.type === 'number') return `${this.toCamelCase(name)}: 0`
         else if (attribute.type === 'object') return `${this.toCamelCase(name)}: ${this.generateNamespaceName(resource)}.${this.namespaceFunctionName(name)}()`
         else if (attribute.type === 'list')   return `${this.toCamelCase(name)}: []`
-        else if (attribute.type === 'set')   return `${this.toCamelCase(name)}: []`
+        else if (attribute.type === 'set')    return `${this.toCamelCase(name)}: []`
         else if (attribute.type === 'map')    return `${this.toCamelCase(name)}: {}`
         else return ''
     }
