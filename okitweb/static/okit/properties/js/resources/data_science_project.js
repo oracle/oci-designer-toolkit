@@ -96,7 +96,7 @@ class DataScienceProjectProperties extends OkitResourceProperties {
         }
         this.loadReferenceSelect(select, 'getAllInstanceShapes', false, undefined, shape_groups)
         const options = Array.from(select.node().options).map((opt) => opt.value)
-        session.notebook_session_config_details.shape = options.includes(session.notebook_session_config_details.shape) ? session.notebook_session_config_details.shape : options.length > 0 ? options[1] : ''
+        session.notebook_session_config_details.shape = options.includes(session.notebook_session_config_details.shape) ? session.notebook_session_config_details.shape : options.length > 0 ? options[0] : ''
     }
     handleShapeChange(shape, session, ocpus, memory_in_gbs) {
         this.loadOCPUs(shape, session, ocpus)
