@@ -3,12 +3,10 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 /*
+**
 ** ======================================================================
 ** === Auto Generated Code All Edits Will Be Lost During Regeneration ===
 ** ======================================================================
-**
-** Generated : 02/03/2023 15:56:07
-**
 */
 
 export { OciAnalyticsInstance, OciAnalyticsInstanceClient } from './resources/OciAnalyticsInstance'
