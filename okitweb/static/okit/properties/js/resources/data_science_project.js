@@ -91,10 +91,10 @@ class DataScienceProjectProperties extends OkitResourceProperties {
     }
     loadShapes(select, session) {
         const shape_groups = {
-            'AMD  ': (s) => s.shape.startsWith('VM.') && s.shape.includes('.Flex') && s.shape.includes('.E') && !s.shape.includes('.Dense'),
-            'Intel': (s) => s.shape.startsWith('VM.') && s.shape.includes('.Flex') && !s.shape.includes('.A') && !s.shape.includes('.E'),
+            'AMD  ': (s) => s.name.startsWith('VM.') && s.name.includes('.Flex') && s.name.includes('.E') && !s.name.includes('.Dense'),
+            'Intel': (s) => s.name.startsWith('VM.') && s.name.includes('.Flex') && !s.name.includes('.A') && !s.name.includes('.E'),
         }
-        this.loadReferenceSelect(select, 'getAllInstanceShapes', false, undefined, shape_groups)
+        this.loadReferenceSelect(select, 'getDataScienceNotebookSessionShape', false, undefined, shape_groups)
         const options = Array.from(select.node().options).map((opt) => opt.value)
         session.notebook_session_config_details.shape = options.includes(session.notebook_session_config_details.shape) ? session.notebook_session_config_details.shape : options.length > 0 ? options[0] : ''
     }

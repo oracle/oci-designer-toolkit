@@ -7,7 +7,7 @@
 1. Add Heatwave functionality to MySQL DB System
 2. Allow spcification of Deletion and Backup Policies for MySQL DB Systems.
 3. Allow creation of VCN With a variable for CIDR Block (Issue: #554)
-4. Add Basic Data Science Project
+4. Add Basic Data Science Project / Notebook Session
 ### Bug Fixes
 
 

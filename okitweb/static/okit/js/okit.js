@@ -312,6 +312,8 @@ class OkitOCIData {
         return this.dropdown_data.db_versions;
     }
 
+    getDataScienceNotebookSessionShape = (filter=() => true) => this.dropdown_data.data_science_notebook_session_shapes.filter(filter)
+
     getInstanceShapes(type='') {
         console.info(`Getting Shapes for type = '${type}'`)
         if (type === '') {
