@@ -525,7 +525,6 @@ class OciResourceDiscoveryClient(object):
         # "RecoverySystemNetworkInterface": (oci.recovery.DatabaseRecoveryClient, ""),
         # "RecoverySystemPolicy": (oci.recovery.DatabaseRecoveryClient, ""),
         # oci.resource_manager.ResourceManagerClient
-        "OrmStack": (oci.resource_manager.ResourceManagerClient, "list_stacks"),
         "OrmConfigSourceProvider": (oci.resource_manager.ResourceManagerClient, "list_configuration_source_providers"),
         "OrmJob":  (oci.resource_manager.ResourceManagerClient, "list_jobs"),
         "OrmStack": (oci.resource_manager.ResourceManagerClient, "list_stacks"),
@@ -607,6 +606,8 @@ class OciResourceDiscoveryClient(object):
         "DbSystemShape": (oci.database.DatabaseClient, "list_db_system_shapes"),
         "DbVersion": (oci.database.DatabaseClient, "list_db_versions"),
         # "GiVersion": (oci.database.DatabaseClient, "list_gi_versions"), # Handled as a special case to get all Gi Versons by shape, see list_gi_versions_by_shape
+        # oci.data_science.DataScienceClient
+        "DataScienceNotebookSessionShape": (oci.data_science.DataScienceClient, "list_notebook_session_shapes"),
         # oci.limits.LimitsClient
         "Service": (oci.limits.LimitsClient, "list_services"),
         # oci.load_balancer.LoadBalancerClient
