@@ -7,14 +7,13 @@
 ** === Auto Generated Code All Edits Will Be Lost During Regeneration ===
 ** ======================================================================
 **
-** Generated : 28/02/2023 17:29:49
+** Generated : 01/03/2023 17:21:08
 **
 */
 
 import { OciResource } from "../OciResource"
 
 export interface OciDrg extends OciResource {
-    defaultExportDrgRouteDistributionId?: string
     redundancyStatus?: string
 }
 
@@ -24,7 +23,6 @@ export namespace OciDrg {
     export function newResource(): OciDrg {
         return {
             ...OciResource.newResource('drg'),
-            defaultExportDrgRouteDistributionId: '',
             redundancyStatus: ''
         }
     }

@@ -7,7 +7,7 @@
 ** === Auto Generated Code All Edits Will Be Lost During Regeneration ===
 ** ======================================================================
 **
-** Generated : 28/02/2023 17:29:49
+** Generated : 01/03/2023 17:21:08
 **
 */
 
@@ -19,20 +19,29 @@ export interface OciBucket extends OciResource {
     approximateSize?: string
     autoTiering?: string
     bucketId?: string
-    createdBy?: string
-    etag?: string
     isReadOnly?: boolean
     kmsKeyId?: string
     metadata?: {[key: string]: string}
     namespace: string
     objectEventsEnabled?: boolean
-    objectLifecyclePolicyEtag?: string
     replicationEnabled?: boolean
     storageTier?: string
     versioning?: string
-    retentionRules?: object[]
+    retentionRules?: OciRetentionRules[]
 }
 
+
+export interface OciRetentionRules {
+    retentionRuleId?: string
+    timeModified?: string
+    timeRuleLocked?: string
+    duration?: OciDuration
+}
+
+export interface OciDuration {
+    timeAmount: string
+    timeUnit: string
+}
 
 
 export namespace OciBucket {
@@ -44,14 +53,11 @@ export namespace OciBucket {
             approximateSize: '',
             autoTiering: '',
             bucketId: '',
-            createdBy: '',
-            etag: '',
             isReadOnly: false,
             kmsKeyId: '',
             metadata: {},
             namespace: '',
             objectEventsEnabled: false,
-            objectLifecyclePolicyEtag: '',
             replicationEnabled: false,
             storageTier: '',
             versioning: '',
@@ -59,6 +65,22 @@ export namespace OciBucket {
         }
     }
     
+    export function newOciRetentionRules(): OciRetentionRules {
+        return {
+            retentionRuleId: '',
+            timeModified: '',
+            timeRuleLocked: '',
+            duration: OciBucket.newOciDuration()
+        }
+    }
+
+    export function newOciDuration(): OciDuration {
+        return {
+            timeAmount: '',
+            timeUnit: ''
+        }
+    }
+
 }
 
 export class OciBucketClient {

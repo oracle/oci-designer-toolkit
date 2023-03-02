@@ -1,4 +1,200 @@
 {
+  "analytics_instance": {
+    "type": "object",
+    "subtype": "",
+    "attributes": {
+      "compartment_id": {
+        "name": "compartment_id",
+        "type": "string",
+        "subtype": "",
+        "required": true,
+        "label": "Compartment",
+        "id": "compartment_id"
+      },
+      "defined_tags": {
+        "name": "defined_tags",
+        "type": "map",
+        "subtype": "string",
+        "required": false,
+        "label": "Defined Tags",
+        "id": "defined_tags"
+      },
+      "description": {
+        "name": "description",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Description",
+        "id": "description"
+      },
+      "email_notification": {
+        "name": "email_notification",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Email Notification",
+        "id": "email_notification"
+      },
+      "feature_set": {
+        "name": "feature_set",
+        "type": "string",
+        "subtype": "",
+        "required": true,
+        "label": "Feature Set",
+        "id": "feature_set"
+      },
+      "freeform_tags": {
+        "name": "freeform_tags",
+        "type": "map",
+        "subtype": "string",
+        "required": false,
+        "label": "Freeform Tags",
+        "id": "freeform_tags"
+      },
+      "idcs_access_token": {
+        "name": "idcs_access_token",
+        "type": "string",
+        "subtype": "",
+        "required": true,
+        "label": "Idcs Access Token",
+        "id": "idcs_access_token"
+      },
+      "license_type": {
+        "name": "license_type",
+        "type": "string",
+        "subtype": "",
+        "required": true,
+        "label": "License Type",
+        "id": "license_type"
+      },
+      "name": {
+        "name": "name",
+        "type": "string",
+        "subtype": "",
+        "required": true,
+        "label": "Name",
+        "id": "name"
+      },
+      "private_access_channels": {
+        "name": "private_access_channels",
+        "type": "map",
+        "subtype": "string",
+        "required": false,
+        "label": "Private Access Channels",
+        "id": "private_access_channels"
+      },
+      "service_url": {
+        "name": "service_url",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Service Url",
+        "id": "service_url"
+      },
+      "time_updated": {
+        "name": "time_updated",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Time Updated",
+        "id": "time_updated"
+      },
+      "vanity_url_details": {
+        "name": "vanity_url_details",
+        "type": "map",
+        "subtype": "string",
+        "required": false,
+        "label": "Vanity Url Details",
+        "id": "vanity_url_details"
+      },
+      "capacity": {
+        "name": "capacity",
+        "type": "object",
+        "subtype": "",
+        "required": false,
+        "label": "Capacity",
+        "id": "capacity",
+        "attributes": {
+          "capacity_type": {
+            "name": "capacity_type",
+            "type": "string",
+            "subtype": "",
+            "required": true,
+            "label": "Capacity Type",
+            "id": "capacity.capacity_type"
+          },
+          "capacity_value": {
+            "name": "capacity_value",
+            "type": "number",
+            "subtype": "",
+            "required": true,
+            "label": "Capacity Value",
+            "id": "capacity.capacity_value"
+          }
+        }
+      },
+      "network_endpoint_details": {
+        "name": "network_endpoint_details",
+        "type": "object",
+        "subtype": "",
+        "required": false,
+        "label": "Network Endpoint Details",
+        "id": "network_endpoint_details",
+        "attributes": {
+          "network_endpoint_type": {
+            "name": "network_endpoint_type",
+            "type": "string",
+            "subtype": "",
+            "required": true,
+            "label": "Network Endpoint Type",
+            "id": "network_endpoint_details.network_endpoint_type"
+          },
+          "subnet_id": {
+            "name": "subnet_id",
+            "type": "string",
+            "subtype": "",
+            "required": false,
+            "label": "Subnet",
+            "id": "network_endpoint_details.subnet_id"
+          },
+          "vcn_id": {
+            "name": "vcn_id",
+            "type": "string",
+            "subtype": "",
+            "required": false,
+            "label": "Vcn",
+            "id": "network_endpoint_details.vcn_id"
+          },
+          "whitelisted_ips": {
+            "name": "whitelisted_ips",
+            "type": "list",
+            "subtype": "string",
+            "required": false,
+            "label": "Whitelisted Ips",
+            "id": "network_endpoint_details.whitelisted_ips"
+          },
+          "whitelisted_vcns": {
+            "name": "whitelisted_vcns",
+            "type": "list",
+            "subtype": "",
+            "required": false,
+            "label": "Whitelisted Vcns",
+            "id": "network_endpoint_details.whitelisted_vcns",
+            "attributes": {
+              "whitelisted_ips": {
+                "name": "whitelisted_ips",
+                "type": "list",
+                "subtype": "string",
+                "required": false,
+                "label": "Whitelisted Ips",
+                "id": "network_endpoint_details.whitelisted_vcns.whitelisted_ips"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
   "dhcp_options": {
     "type": "object",
     "subtype": "",
@@ -98,14 +294,6 @@
         "required": true,
         "label": "Compartment",
         "id": "compartment_id"
-      },
-      "default_export_drg_route_distribution_id": {
-        "name": "default_export_drg_route_distribution_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Default Export Drg Route Distribution",
-        "id": "default_export_drg_route_distribution_id"
       },
       "defined_tags": {
         "name": "defined_tags",
@@ -2639,14 +2827,6 @@
         "label": "Compartment",
         "id": "compartment_id"
       },
-      "created_by": {
-        "name": "created_by",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Created By",
-        "id": "created_by"
-      },
       "defined_tags": {
         "name": "defined_tags",
         "type": "map",
@@ -2654,14 +2834,6 @@
         "required": false,
         "label": "Defined Tags",
         "id": "defined_tags"
-      },
-      "etag": {
-        "name": "etag",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Etag",
-        "id": "etag"
       },
       "freeform_tags": {
         "name": "freeform_tags",
@@ -2718,14 +2890,6 @@
         "required": false,
         "label": "Object Events Enabled",
         "id": "object_events_enabled"
-      },
-      "object_lifecycle_policy_etag": {
-        "name": "object_lifecycle_policy_etag",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Object Lifecycle Policy Etag",
-        "id": "object_lifecycle_policy_etag"
       },
       "replication_enabled": {
         "name": "replication_enabled",

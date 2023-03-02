@@ -7,7 +7,7 @@
 ** === Auto Generated Code All Edits Will Be Lost During Regeneration ===
 ** ======================================================================
 **
-** Generated : 28/02/2023 17:29:49
+** Generated : 01/03/2023 17:21:08
 **
 */
 
@@ -30,6 +30,11 @@ export interface OciVolume extends OciResource {
     sourceDetails?: OciSourceDetails
 }
 
+
+export interface OciBlockVolumeReplicas {
+    availabilityDomain: string
+    blockVolumeReplicaId?: string
+}
 
 export interface OciSourceDetails {
     type: string
@@ -57,6 +62,13 @@ export namespace OciVolume {
         }
     }
     
+    export function newOciBlockVolumeReplicas(): OciBlockVolumeReplicas {
+        return {
+            availabilityDomain: '',
+            blockVolumeReplicaId: ''
+        }
+    }
+
     export function newOciSourceDetails(): OciSourceDetails {
         return {
             type: ''

@@ -7,7 +7,7 @@
 ** === Auto Generated Code All Edits Will Be Lost During Regeneration ===
 ** ======================================================================
 **
-** Generated : 28/02/2023 17:29:49
+** Generated : 01/03/2023 17:21:08
 **
 */
 
@@ -49,6 +49,10 @@ export interface OciAgentConfig {
     isManagementDisabled?: boolean
     isMonitoringDisabled?: boolean
     pluginsConfig?: []
+}
+
+export interface OciPluginsConfig {
+    desiredState: string
 }
 
 export interface OciAvailabilityConfig {
@@ -156,6 +160,12 @@ export namespace OciInstance {
             isManagementDisabled: false,
             isMonitoringDisabled: false,
             pluginsConfig: []
+        }
+    }
+
+    export function newOciPluginsConfig(): OciPluginsConfig {
+        return {
+            desiredState: ''
         }
     }
 

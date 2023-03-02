@@ -7,7 +7,7 @@
 ** === Auto Generated Code All Edits Will Be Lost During Regeneration ===
 ** ======================================================================
 **
-** Generated : 28/02/2023 17:29:49
+** Generated : 01/03/2023 17:21:08
 **
 */
 
@@ -15,9 +15,16 @@ import { OciResource } from "../OciResource"
 
 export interface OciDhcpOptions extends OciResource {
     vcnId: string
-    options?: object[]
+    options?: OciOptions[]
 }
 
+
+export interface OciOptions {
+    customDnsServers?: string[]
+    searchDomainNames?: string[]
+    serverType?: string
+    type: string
+}
 
 
 export namespace OciDhcpOptions {
@@ -29,6 +36,15 @@ export namespace OciDhcpOptions {
         }
     }
     
+    export function newOciOptions(): OciOptions {
+        return {
+            customDnsServers: [],
+            searchDomainNames: [],
+            serverType: '',
+            type: ''
+        }
+    }
+
 }
 
 export class OciDhcpOptionsClient {

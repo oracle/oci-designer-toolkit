@@ -7,7 +7,7 @@
 ** === Auto Generated Code All Edits Will Be Lost During Regeneration ===
 ** ======================================================================
 **
-** Generated : 28/02/2023 17:29:49
+** Generated : 01/03/2023 17:21:08
 **
 */
 
@@ -17,9 +17,14 @@ export interface OciServiceGateway extends OciResource {
     blockTraffic?: boolean
     routeTableId?: string
     vcnId: string
-    services?: object[]
+    services?: OciServices[]
 }
 
+
+export interface OciServices {
+    serviceId: string
+    serviceName?: string
+}
 
 
 export namespace OciServiceGateway {
@@ -33,6 +38,13 @@ export namespace OciServiceGateway {
         }
     }
     
+    export function newOciServices(): OciServices {
+        return {
+            serviceId: '',
+            serviceName: ''
+        }
+    }
+
 }
 
 export class OciServiceGatewayClient {

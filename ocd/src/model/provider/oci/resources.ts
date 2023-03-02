@@ -7,10 +7,11 @@
 ** === Auto Generated Code All Edits Will Be Lost During Regeneration ===
 ** ======================================================================
 **
-** Generated : 28/02/2023 17:29:49
+** Generated : 01/03/2023 17:21:08
 **
 */
 
+export { OciAnalyticsInstance, OciAnalyticsInstanceClient } from './resources/OciAnalyticsInstance'
 export { OciBucket, OciBucketClient } from './resources/OciBucket'
 export { OciCompartment, OciCompartmentClient } from './resources/OciCompartment'
 export { OciDhcpOptions, OciDhcpOptionsClient } from './resources/OciDhcpOptions'
