@@ -43,6 +43,9 @@ containers/ssh/*
 /containers/lima/
 /containers/vbox/
 
+# Auto Generated Code that can be created during build
+**/resources/generated/*.ts
+
 # Runtime Generated Files
 okitweb/static/okit/json/dropdown_data/*
 okitweb/static/okit/templates/user/*
