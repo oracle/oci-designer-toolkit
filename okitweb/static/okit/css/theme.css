@@ -398,6 +398,26 @@ details[open] > summary.summary-background {
 }
 
 /*
+** Life cycle State
+*/
+.available, .active {
+    /* fill: greenyellow;
+    fill-opacity: 1 !important; */
+    stroke: green !important;
+    stroke-width: 2px !important;
+    stroke-opacity: 1 !important;
+
+}
+
+.stopped {
+    /* fill: skyblue;
+    fill-opacity: 1 !important; */
+    stroke: blue !important;
+    stroke-width: 2px !important;
+    stroke-opacity: 1 !important;
+}
+
+/*
 ** Third Party
 */
 .excel {
