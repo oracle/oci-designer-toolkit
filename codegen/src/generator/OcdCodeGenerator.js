@@ -65,6 +65,7 @@ ${resources.sort().map((r) => `export { ${this.generateNamespaceName(r)}, ${this
 ** ======================================================================
 ** === Auto Generated Code All Edits Will Be Lost During Regeneration ===
 ** ======================================================================
+**
 */`
     }
 
