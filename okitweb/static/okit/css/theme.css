@@ -400,7 +400,7 @@ details[open] > summary.summary-background {
 /*
 ** Life cycle State
 */
-.available, .active {
+.available, .active, .running {
     /* fill: greenyellow;
     fill-opacity: 1 !important; */
     stroke: green !important;
