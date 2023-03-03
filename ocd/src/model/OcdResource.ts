@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { OcdUtils } from '../utils/OcdUtils'
 
 export interface OcdResource {
+    provider: string
     locked: boolean
     terraformResourceName: string
     okitReference: string
@@ -17,11 +18,13 @@ export interface OcdResource {
 
 export namespace OcdResource {
     export function newResource(type?: string): OcdResource {
+        const resourceType = `${OcdUtils.toTitleCase(type ? type.split('_').join(' ') : 'Unknown').replace(/\W+/g, '')}`
         return {
+            provider: '',
             locked: false,
-            terraformResourceName: `Okit${type ? type.toUpperCase() : ''}${Date.now()}`,
+            terraformResourceName: `Okit${resourceType}${Date.now()}`,
             okitReference: `okit-${uuidv4()}`,
-            resourceType: `${OcdUtils.toTitleCase(type)}`,
+            resourceType: `${resourceType}`,
             id: ''
         }
     }

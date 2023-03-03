@@ -25,11 +25,11 @@
     "main": "src/ocd-codegen.js",
     "scripts": {
         "start": "node .",
-        "generate-oci-model": "node src/ocd-codegen.js generate oci-model-js ./src/schema/oci-schema.json ../ocd/src/model/provider/oci",
-        "generate-oci-properties": "node src/ocd-codegen.js generate oci-properties-js ./src/schema/oci-schema.json ./test/ocd/src/properties/providers/oci",
-        "generate-oci-ansible": "node src/ocd-codegen.js generate oci-ansible-js ./src/schema/oci-schema.json ./test/ocd/src/generators/providers/oci/ansible",
-        "generate-oci-terraform": "node src/ocd-codegen.js generate oci-terraform-js ./src/schema/oci-schema.json ./test/ocd/src/generators/providers/oci/terraform",
-        "generate-oci-markdown": "node src/ocd-codegen.js generate oci-markdown-js ./src/schema/oci-schema.json ./test/ocd/src/generators/providers/oci/markdown",
+        "generate-oci-model":      "node src/ocd-codegen.js generate oci-model-js      ./src/schema/oci-schema.json ../ocd/src/model/provider/oci",
+        "generate-oci-properties": "node src/ocd-codegen.js generate oci-properties-js ./src/schema/oci-schema.json ../ocd/src/components/properties/providers/oci",
+        "generate-oci-ansible":    "node src/ocd-codegen.js generate oci-ansible-js    ./src/schema/oci-schema.json ../test/ocd/src/export/providers/oci/ansible",
+        "generate-oci-terraform":  "node src/ocd-codegen.js generate oci-terraform-js  ./src/schema/oci-schema.json ../test/ocd/src/export/providers/oci/terraform",
+        "generate-oci-markdown":   "node src/ocd-codegen.js generate oci-markdown-js   ./src/schema/oci-schema.json ../test/ocd/src/export/providers/oci/markdown",
         "import-oci-terraform-schema": "node src/ocd-codegen.js import terraform-schema  ./src/schema/tf-schema.json ./src/schema/oci-schema.json"
     },
     "private": true,

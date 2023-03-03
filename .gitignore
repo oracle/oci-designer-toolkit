@@ -45,6 +45,7 @@ containers/ssh/*
 
 # Auto Generated Code that can be created during build
 **/resources/generated/*.ts
+**/resources/generated/*.tsx
 
 # Runtime Generated Files
 okitweb/static/okit/json/dropdown_data/*

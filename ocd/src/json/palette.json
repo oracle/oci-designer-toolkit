@@ -152,12 +152,12 @@
                         {
                             "container": false,
                             "title": "Block Storage Volume",
-                            "class": "oci-block-storage-volume"
+                            "class": "oci-volume"
                         },
                         {
                             "container": false,
                             "title": "Object Storage Bucket",
-                            "class": "oci-object-storage-bucket"
+                            "class": "oci-bucket"
                         },
                         {
                             "container": false,

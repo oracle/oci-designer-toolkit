@@ -4,6 +4,7 @@
 */
 
 import { v4 as uuidv4 } from 'uuid'
+import { OcdUtils } from '../../../utils/OcdUtils'
 import { OcdResource } from "../../OcdResource"
 
 export interface OciResource extends OcdResource {
@@ -16,12 +17,14 @@ export interface OciResource extends OcdResource {
 export namespace OciResource {
     export function uuid(prefix: string) {return `okit.${prefix}.${uuidv4()}`}
     export function newResource(type: string): OciResource {
+        const displayName = `${OcdUtils.toTitleCase(type ? type.split('_').join(' ') : 'Unknown')}`
         return {
             ...OcdResource.newResource(type),
+            provider: 'oci',
             region: '',
             compartmentId: '',
             id: OciResource.uuid(type),
-            displayName: `OCD ${type}`,
+            displayName: `${displayName}`,
             documentation: ''
         }
     }

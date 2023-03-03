@@ -5,8 +5,11 @@
 
 import { useState } from 'react'
 import { OcdViewPage } from '../model/OcdDesign'
+import { OcdResource } from '../model/OcdResource'
 import { DesignerResourceProperties } from '../types/DesignerResourceProperties'
+import { OcdUtils } from '../utils/OcdUtils'
 import OcdDocument from './OcdDocument'
+import * as ociResources from './properties/providers/oci/resources'
 
 const OcdResourcePropertiesHeader = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
     const selectedResource = ocdDocument.getSelectedResource()
@@ -22,14 +25,26 @@ const OcdResourcePropertiesHeader = ({ocdDocument, setOcdDocument}: DesignerReso
 }
 
 const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
+    const selectedResource: OcdResource = ocdDocument.getSelectedResource()
+    console.info('Selected Resource', selectedResource)
+    const resourceJSXMethod = selectedResource ? `${OcdUtils.toTitleCase(selectedResource.provider)}${selectedResource.resourceType}` : ''
+    console.info('JSX Method', resourceJSXMethod)
+    // @ts-ignore 
+    const ResourceProperties = ociResources[resourceJSXMethod]
+    console.info('Resource Properties', ResourceProperties)
     return (
         <div className={`ocd-properties-panel ocd-properties-panel-theme`}>
-
+            {selectedResource && <ResourceProperties 
+                ocdDocument={ocdDocument} 
+                setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} 
+                resource={selectedResource}
+            />}
         </div>
     )
 }
 
 const OcdResourceDocumentation = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
+    const selectedResource = ocdDocument.getSelectedResource()
     return (
         <div className={`ocd-properties-panel ocd-properties-panel-theme ocd-properties-documentation-panel`}>
             <textarea></textarea>
