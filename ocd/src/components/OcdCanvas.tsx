@@ -61,6 +61,13 @@ export const OcdCanvas = ({ dragData, ocdConsoleConfig, ocdDocument, setOcdDocum
             container: container
         }
         ocdDocument.addCoords(coords, page.id)
+        // Set as selected
+        ocdDocument.selectedResource = {
+            modelId: modelResource.id,
+            pageId: ocdDocument.getActivePage().id,
+            coordsId: coords.id,
+            class: dragData.dragObject.class
+        }
         // Redraw
         console.info('Design:', ocdDocument)
         // const page: OcdViewPage = ocdDocument.getPage(viewPage.id)
