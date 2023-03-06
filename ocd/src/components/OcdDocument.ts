@@ -103,6 +103,7 @@ export class OcdDocument {
     // @ts-ignore 
     uuid = (prefix='view') => `${prefix}-${([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,c =>(c^(((window.crypto||window.Crypto).getRandomValues(new Uint8Array(1))[0]&15)>>c/4)).toString(16))}`
 
+    getOciResourceList(key: string) {return this.design.model.oci.resources[key] ? this.design.model.oci.resources[key] : []}
     getOciResources() {return Object.values(this.design.model.oci.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], [])}
     getResources() {return this.getOciResources()}
     getResource(id='') {return this.getResources().find((r: any) => r.id === id)}

@@ -7,6 +7,8 @@ import { OcdResource } from '../../model/OcdResource'
 import { OcdDocument } from '../OcdDocument'
 
 export interface ResourcePropertyAttributes {
+    provider: string
+    key: string
     name: string
     type: string
     subtype: string
@@ -14,6 +16,7 @@ export interface ResourcePropertyAttributes {
     label: string
     id: string
     attributes?: {[key: string]: ResourcePropertyAttributes}
+    referenceResource?: string
 }
 
 export interface ResourceProperties {
@@ -26,29 +29,64 @@ export interface ResourceProperty extends ResourceProperties {
     attribute: ResourcePropertyAttributes
 }
 
-export const OcdStringProperty = ({ ocdDocument, setOcdDocument, resource, attribute }: ResourceProperty): JSX.Element => {
+export const OcdTextProperty = ({ ocdDocument, setOcdDocument, resource, attribute }: ResourceProperty): JSX.Element => {
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        resource[attribute.key] = e.target.value
+        setOcdDocument(OcdDocument.clone(ocdDocument))
+    }
     return (
         <div className='ocd-property-row'>
             <div><label>{attribute.label}</label></div>
-            <div><input type={'string'}></input></div>
+            <div><input type='text' defaultValue={resource[attribute.key]} onChange={onChange}></input></div>
         </div>
     )
 }
 
 export const OcdNumberProperty = ({ ocdDocument, setOcdDocument, resource, attribute }: ResourceProperty): JSX.Element => {
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        resource[attribute.key] = e.target.value
+        setOcdDocument(OcdDocument.clone(ocdDocument))
+    }
     return (
         <div className='ocd-property-row'>
             <div><label>{attribute.label}</label></div>
-            <div><input type={'number'}></input></div>
+            <div><input type='number' defaultValue={resource[attribute.key]} onChange={onChange}></input></div>
         </div>
     )
 }
 
 export const OcdBooleanProperty = ({ ocdDocument, setOcdDocument, resource, attribute }: ResourceProperty): JSX.Element => {
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        resource[attribute.key] = e.target.checked
+        setOcdDocument(OcdDocument.clone(ocdDocument))
+    }
     return (
         <div className='ocd-property-row'>
-            <div><input type={'checkbox'}></input></div>
+            <div></div>
+            <div><input type='checkbox' defaultChecked={resource[attribute.key]} onChange={onChange}></input><label>{attribute.label}</label></div>
+        </div>
+    )
+}
+
+export const OcdResourceReferenceProperty = ({ ocdDocument, setOcdDocument, resource, attribute }: ResourceProperty): JSX.Element => {
+    const resources = attribute.provider === 'oci' ? ocdDocument.getOciResourceList(attribute.referenceResource ? attribute.referenceResource : '') : []
+    const resourceType = OcdResource.toResourceType(attribute.referenceResource)
+    console.info('Resources', resources)
+    const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        resource[attribute.key] = e.target.value
+        setOcdDocument(OcdDocument.clone(ocdDocument))
+    }
+    return (
+        <div className='ocd-property-row'>
             <div><label>{attribute.label}</label></div>
+            <div>
+                <select value={resource[attribute.key]} onChange={onChange}>
+                    {!attribute.required && <option defaultValue='' key={`${attribute.referenceResource}-empty-option`}></option> }
+                    {resources.filter((r) => r.resourceType !== resourceType || r.id !== resource.id).map((r: OcdResource) => {
+                        return <option value={r.id} key={r.id}>{r.displayName}</option>
+                    })}
+                </select>
+            </div>
         </div>
     )
 }

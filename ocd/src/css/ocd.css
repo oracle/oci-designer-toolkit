@@ -25,6 +25,71 @@ body {
     overflow: hidden;
 }
 
+details {
+    display: block;
+    box-sizing: border-box;
+    margin-top: 1em;
+    width: 100%;
+}
+
+details:not([open]) {
+    transition: all 2.5s ease-in-out;
+}
+
+details[open] {
+    transition: all 2.5s ease-in-out;
+}
+
+details > summary::-webkit-details-marker {
+    display:none;
+}
+
+details > summary:after {
+    border-radius: 5px;
+    content: "+";
+    color: #aeaeae;
+    float: right;
+    margin: 2px;
+    padding: 0;
+    text-align: center;
+    width: 10px;
+}
+
+details[open] > summary:after {
+    content: "-";
+}
+
+details:focus {
+    outline: none;
+}
+
+details > summary.summary-background {
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgdHJhbnNmb3JtPSJtYXRyaXgoLTEgMCAwIDEgMjAgMCkiPjxlbGxpcHNlIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwMCIgY3g9IjYuMTEiIGN5PSIzLjU1IiByeD0iMi4xMSIgcnk9IjIuMTUiLz48ZWxsaXBzZSBmaWxsPSJub25lIiBzdHJva2U9IiMwMDAiIGN4PSI2LjExIiBjeT0iMTUuNTUiIHJ4PSIyLjExIiByeT0iMi4xNSIvPjxjaXJjbGUgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBjeD0iMTMuMTUiIGN5PSI5LjU1IiByPSIyLjE1Ii8+PHBhdGggZD0iTTEgM2gzdjFIMXpNMTAgM2g4djFoLTh6TTEgOWg4djFIMXpNMTUgOWgzdjFoLTN6TTEgMTVoM3YxSDF6TTEwIDE1aDh2MWgtOHoiLz48L2c+PC9zdmc+");
+}
+
+details[open] > summary.summary-background {
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGVsbGlwc2UgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBjeD0iNi4xMSIgY3k9IjMuNTUiIHJ4PSIyLjExIiByeT0iMi4xNSIvPjxlbGxpcHNlIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwMCIgY3g9IjYuMTEiIGN5PSIxNS41NSIgcng9IjIuMTEiIHJ5PSIyLjE1Ii8+PGNpcmNsZSBmaWxsPSJub25lIiBzdHJva2U9IiMwMDAiIGN4PSIxMy4xNSIgY3k9IjkuNTUiIHI9IjIuMTUiLz48cGF0aCBkPSJNMSAzaDN2MUgxek0xMCAzaDh2MWgtOHpNMSA5aDh2MUgxek0xNSA5aDN2MWgtM3pNMSAxNWgzdjFIMXpNMTAgMTVoOHYxaC04eiIvPjwvc3ZnPg==");
+}
+
+summary {
+    width: 100%;
+    box-sizing: border-box;
+    font-weight: bold;
+    min-height: 20px;
+    display: inline-block;
+    vertical-align: middle;
+    text-align: left;
+    margin-bottom: 5px;
+}
+
+.summary-background {
+    background-position: left center;
+    background-repeat: no-repeat;
+    background-size: 20px;
+    padding-left: 25px;
+    margin-right: 1em;
+}
+
 [contenteditable="true"] {
     padding-left: 0.25em;
     padding-right: 0.25em;
@@ -1108,6 +1173,40 @@ body {
     opacity: 0.5;
 }
 
+.ocd-property-row {
+    display: grid;
+    grid-template-columns: 150px auto;
+    box-sizing: border-box;
+    margin: 1px 3px 1px 2px;
+    padding: 1px 3px 1px 2px;
+    border: 1px solid lightgray;
+    width: 100%;
+}
+
+.ocd-property-row label {
+    font-size: smaller;
+}
+
+.ocd-property-row div > input[type="text"], input[type="email"], input[type="password"], input[type="range"], input[type="number"] {
+    box-sizing: border-box;
+    width: 100%;
+    margin: 1px;
+}
+
+.ocd-property-row > div {
+    box-sizing: content-box;
+    padding: 0 5px 0 5px;
+}
+
+.ocd-property-row > div:first-child {
+    border-right: 1px solid lightgray;
+    text-overflow: ellipsis;
+}
+
+.ocd-property-row > div:first-child > label {
+    font-weight: bolder;
+}
+
 
 
 
@@ -1116,6 +1215,7 @@ body {
 ** Properties
 */
 
+/* 
 .ocd-empty-relative {
     position: relative;
     z-index: 100;
@@ -1174,7 +1274,8 @@ body {
 
 .ocd-property>input {
     margin: 2px;
-}
+} 
+*/
 
 
 

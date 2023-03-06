@@ -9,6 +9,7 @@ import { OcdResource } from '../model/OcdResource'
 import { DesignerResourceProperties } from '../types/DesignerResourceProperties'
 import { OcdUtils } from '../utils/OcdUtils'
 import OcdDocument from './OcdDocument'
+import { OcdResourceReferenceProperty, OcdTextProperty, ResourceProperties } from './properties/OcdPropertyTypes'
 import * as ociResources from './properties/providers/oci/resources'
 
 const OcdResourcePropertiesHeader = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
@@ -24,16 +25,34 @@ const OcdResourcePropertiesHeader = ({ocdDocument, setOcdDocument}: DesignerReso
     )
 }
 
+const OciCommonResourceProperties = ({ocdDocument, setOcdDocument, resource}: ResourceProperties): JSX.Element => {
+    const displayName = {"provider": "oci", "key": "displayName", "name": "displayName", "type": "string", "subtype": "", "required": true, "label": "Name", "id": "displayName"}
+    const compartmentId = {"provider": "oci", "key": "compartmentId", "name": "compartmentId", "type": "string", "subtype": "", "required": false, "label": "Compartment", "id": "compartmentId", "referenceResource": "compartment"}
+    return (
+        <div>
+            <details open={true}>
+                <summary className='summary-background'>Core</summary>
+                <div>
+                <OcdTextProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} attribute={displayName} />
+                <OcdResourceReferenceProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} attribute={compartmentId} />
+                </div>
+            </details>
+        </div>
+    )
+}
+
 const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
     const selectedResource: OcdResource = ocdDocument.getSelectedResource()
-    console.info('Selected Resource', selectedResource)
     const resourceJSXMethod = selectedResource ? `${OcdUtils.toTitleCase(selectedResource.provider)}${selectedResource.resourceType}` : ''
-    console.info('JSX Method', resourceJSXMethod)
     // @ts-ignore 
     const ResourceProperties = ociResources[resourceJSXMethod]
-    console.info('Resource Properties', ResourceProperties)
     return (
         <div className={`ocd-properties-panel ocd-properties-panel-theme`}>
+            {selectedResource && selectedResource.provider === 'oci' && <OciCommonResourceProperties 
+                ocdDocument={ocdDocument} 
+                setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} 
+                resource={selectedResource}
+            />}
             {selectedResource && <ResourceProperties 
                 ocdDocument={ocdDocument} 
                 setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} 
@@ -45,9 +64,13 @@ const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourcePr
 
 const OcdResourceDocumentation = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
     const selectedResource = ocdDocument.getSelectedResource()
+    const onChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+        selectedResource.documentation = e.target.value
+        setOcdDocument(OcdDocument.clone(ocdDocument))
+    }
     return (
         <div className={`ocd-properties-panel ocd-properties-panel-theme ocd-properties-documentation-panel`}>
-            <textarea></textarea>
+            <textarea onChange={onChange}></textarea>
         </div>
     )
 }

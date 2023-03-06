@@ -111,6 +111,8 @@ class OciTerraformSchemaImporter extends OcdSchemaImporter {
         // Simple attributes
         let attributes = block.attributes ? Object.entries(block.attributes).filter(([k, v]) => !ignore_attributes.includes(k)).reduce((r, [k, v]) => {
             r[k] = {
+                provider: 'oci',
+                key: this.toCamelCase(k),
                 name: k,
                 type: Array.isArray(v.type) ? v.type[0] : v.type,
                 subtype: Array.isArray(v.type) ? v.type[1] : '',
@@ -124,6 +126,8 @@ class OciTerraformSchemaImporter extends OcdSchemaImporter {
         if (block.block_types) {
             attributes = Object.entries(block.block_types).filter(([k, v]) => !ignore_block_types.includes(k)).reduce((r, [k, v]) => {
                 r[k] = {
+                    provider: 'oci',
+                    key: this.toCamelCase(k),
                     name: k,
                     type: v.nesting_mode === 'list' && v.max_items === 1 ? 'object' : v.nesting_mode === 'set' ? 'list' : v.nesting_mode,
                     subtype: v.nesting_mode === 'set' ? 'object' : '',

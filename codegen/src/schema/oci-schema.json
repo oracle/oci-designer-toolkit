@@ -4,6 +4,7 @@
     "subtype": "",
     "attributes": {
       "compartment_id": {
+        "key": "compartmentId",
         "name": "compartment_id",
         "type": "string",
         "subtype": "",
@@ -12,6 +13,7 @@
         "id": "compartment_id"
       },
       "defined_tags": {
+        "key": "definedTags",
         "name": "defined_tags",
         "type": "map",
         "subtype": "string",
@@ -20,6 +22,7 @@
         "id": "defined_tags"
       },
       "description": {
+        "key": "description",
         "name": "description",
         "type": "string",
         "subtype": "",
@@ -28,6 +31,7 @@
         "id": "description"
       },
       "email_notification": {
+        "key": "emailNotification",
         "name": "email_notification",
         "type": "string",
         "subtype": "",
@@ -36,6 +40,7 @@
         "id": "email_notification"
       },
       "feature_set": {
+        "key": "featureSet",
         "name": "feature_set",
         "type": "string",
         "subtype": "",
@@ -44,6 +49,7 @@
         "id": "feature_set"
       },
       "freeform_tags": {
+        "key": "freeformTags",
         "name": "freeform_tags",
         "type": "map",
         "subtype": "string",
@@ -52,6 +58,7 @@
         "id": "freeform_tags"
       },
       "idcs_access_token": {
+        "key": "idcsAccessToken",
         "name": "idcs_access_token",
         "type": "string",
         "subtype": "",
@@ -60,6 +67,7 @@
         "id": "idcs_access_token"
       },
       "license_type": {
+        "key": "licenseType",
         "name": "license_type",
         "type": "string",
         "subtype": "",
@@ -68,6 +76,7 @@
         "id": "license_type"
       },
       "name": {
+        "key": "name",
         "name": "name",
         "type": "string",
         "subtype": "",
@@ -76,6 +85,7 @@
         "id": "name"
       },
       "private_access_channels": {
+        "key": "privateAccessChannels",
         "name": "private_access_channels",
         "type": "map",
         "subtype": "string",
@@ -84,6 +94,7 @@
         "id": "private_access_channels"
       },
       "service_url": {
+        "key": "serviceUrl",
         "name": "service_url",
         "type": "string",
         "subtype": "",
@@ -92,6 +103,7 @@
         "id": "service_url"
       },
       "time_updated": {
+        "key": "timeUpdated",
         "name": "time_updated",
         "type": "string",
         "subtype": "",
@@ -100,6 +112,7 @@
         "id": "time_updated"
       },
       "vanity_url_details": {
+        "key": "vanityUrlDetails",
         "name": "vanity_url_details",
         "type": "map",
         "subtype": "string",
@@ -108,6 +121,7 @@
         "id": "vanity_url_details"
       },
       "capacity": {
+        "key": "capacity",
         "name": "capacity",
         "type": "object",
         "subtype": "",
@@ -116,6 +130,7 @@
         "id": "capacity",
         "attributes": {
           "capacity_type": {
+            "key": "capacityType",
             "name": "capacity_type",
             "type": "string",
             "subtype": "",
@@ -124,6 +139,7 @@
             "id": "capacity.capacity_type"
           },
           "capacity_value": {
+            "key": "capacityValue",
             "name": "capacity_value",
             "type": "number",
             "subtype": "",
@@ -134,6 +150,7 @@
         }
       },
       "network_endpoint_details": {
+        "key": "networkEndpointDetails",
         "name": "network_endpoint_details",
         "type": "object",
         "subtype": "",
@@ -142,6 +159,7 @@
         "id": "network_endpoint_details",
         "attributes": {
           "network_endpoint_type": {
+            "key": "networkEndpointType",
             "name": "network_endpoint_type",
             "type": "string",
             "subtype": "",
@@ -150,6 +168,7 @@
             "id": "network_endpoint_details.network_endpoint_type"
           },
           "subnet_id": {
+            "key": "subnetId",
             "name": "subnet_id",
             "type": "string",
             "subtype": "",
@@ -158,6 +177,7 @@
             "id": "network_endpoint_details.subnet_id"
           },
           "vcn_id": {
+            "key": "vcnId",
             "name": "vcn_id",
             "type": "string",
             "subtype": "",
@@ -166,6 +186,7 @@
             "id": "network_endpoint_details.vcn_id"
           },
           "whitelisted_ips": {
+            "key": "whitelistedIps",
             "name": "whitelisted_ips",
             "type": "list",
             "subtype": "string",
@@ -174,6 +195,7 @@
             "id": "network_endpoint_details.whitelisted_ips"
           },
           "whitelisted_vcns": {
+            "key": "whitelistedVcns",
             "name": "whitelisted_vcns",
             "type": "list",
             "subtype": "",
@@ -182,6 +204,7 @@
             "id": "network_endpoint_details.whitelisted_vcns",
             "attributes": {
               "whitelisted_ips": {
+                "key": "whitelistedIps",
                 "name": "whitelisted_ips",
                 "type": "list",
                 "subtype": "string",
@@ -200,6 +223,7 @@
     "subtype": "",
     "attributes": {
       "compartment_id": {
+        "key": "compartmentId",
         "name": "compartment_id",
         "type": "string",
         "subtype": "",
@@ -208,6 +232,7 @@
         "id": "compartment_id"
       },
       "defined_tags": {
+        "key": "definedTags",
         "name": "defined_tags",
         "type": "map",
         "subtype": "string",
@@ -216,6 +241,7 @@
         "id": "defined_tags"
       },
       "display_name": {
+        "key": "displayName",
         "name": "display_name",
         "type": "string",
         "subtype": "",
@@ -224,6 +250,7 @@
         "id": "display_name"
       },
       "freeform_tags": {
+        "key": "freeformTags",
         "name": "freeform_tags",
         "type": "map",
         "subtype": "string",
@@ -232,6 +259,7 @@
         "id": "freeform_tags"
       },
       "vcn_id": {
+        "key": "vcnId",
         "name": "vcn_id",
         "type": "string",
         "subtype": "",
@@ -240,6 +268,7 @@
         "id": "vcn_id"
       },
       "options": {
+        "key": "options",
         "name": "options",
         "type": "list",
         "subtype": "object",
@@ -248,6 +277,7 @@
         "id": "options",
         "attributes": {
           "custom_dns_servers": {
+            "key": "customDnsServers",
             "name": "custom_dns_servers",
             "type": "list",
             "subtype": "string",
@@ -256,6 +286,7 @@
             "id": "options.custom_dns_servers"
           },
           "search_domain_names": {
+            "key": "searchDomainNames",
             "name": "search_domain_names",
             "type": "list",
             "subtype": "string",
@@ -264,6 +295,7 @@
             "id": "options.search_domain_names"
           },
           "server_type": {
+            "key": "serverType",
             "name": "server_type",
             "type": "string",
             "subtype": "",
@@ -272,6 +304,7 @@
             "id": "options.server_type"
           },
           "type": {
+            "key": "type",
             "name": "type",
             "type": "string",
             "subtype": "",
@@ -288,6 +321,7 @@
     "subtype": "",
     "attributes": {
       "compartment_id": {
+        "key": "compartmentId",
         "name": "compartment_id",
         "type": "string",
         "subtype": "",
@@ -296,6 +330,7 @@
         "id": "compartment_id"
       },
       "defined_tags": {
+        "key": "definedTags",
         "name": "defined_tags",
         "type": "map",
         "subtype": "string",
@@ -304,6 +339,7 @@
         "id": "defined_tags"
       },
       "display_name": {
+        "key": "displayName",
         "name": "display_name",
         "type": "string",
         "subtype": "",
@@ -312,6 +348,7 @@
         "id": "display_name"
       },
       "freeform_tags": {
+        "key": "freeformTags",
         "name": "freeform_tags",
         "type": "map",
         "subtype": "string",
@@ -320,6 +357,7 @@
         "id": "freeform_tags"
       },
       "redundancy_status": {
+        "key": "redundancyStatus",
         "name": "redundancy_status",
         "type": "string",
         "subtype": "",
@@ -334,6 +372,7 @@
     "subtype": "",
     "attributes": {
       "compartment_id": {
+        "key": "compartmentId",
         "name": "compartment_id",
         "type": "string",
         "subtype": "",
@@ -342,6 +381,7 @@
         "id": "compartment_id"
       },
       "defined_tags": {
+        "key": "definedTags",
         "name": "defined_tags",
         "type": "map",
         "subtype": "string",
@@ -350,6 +390,7 @@
         "id": "defined_tags"
       },
       "display_name": {
+        "key": "displayName",
         "name": "display_name",
         "type": "string",
         "subtype": "",
@@ -358,6 +399,7 @@
         "id": "display_name"
       },
       "drg_id": {
+        "key": "drgId",
         "name": "drg_id",
         "type": "string",
         "subtype": "",
@@ -366,6 +408,7 @@
         "id": "drg_id"
       },
       "drg_route_table_id": {
+        "key": "drgRouteTableId",
         "name": "drg_route_table_id",
         "type": "string",
         "subtype": "",
@@ -374,6 +417,7 @@
         "id": "drg_route_table_id"
       },
       "export_drg_route_distribution_id": {
+        "key": "exportDrgRouteDistributionId",
         "name": "export_drg_route_distribution_id",
         "type": "string",
         "subtype": "",
@@ -382,6 +426,7 @@
         "id": "export_drg_route_distribution_id"
       },
       "freeform_tags": {
+        "key": "freeformTags",
         "name": "freeform_tags",
         "type": "map",
         "subtype": "string",
@@ -390,6 +435,7 @@
         "id": "freeform_tags"
       },
       "is_cross_tenancy": {
+        "key": "isCrossTenancy",
         "name": "is_cross_tenancy",
         "type": "bool",
         "subtype": "",
@@ -398,6 +444,7 @@
         "id": "is_cross_tenancy"
       },
       "route_table_id": {
+        "key": "routeTableId",
         "name": "route_table_id",
         "type": "string",
         "subtype": "",
@@ -406,6 +453,7 @@
         "id": "route_table_id"
       },
       "vcn_id": {
+        "key": "vcnId",
         "name": "vcn_id",
         "type": "string",
         "subtype": "",
@@ -414,6 +462,7 @@
         "id": "vcn_id"
       },
       "network_details": {
+        "key": "networkDetails",
         "name": "network_details",
         "type": "object",
         "subtype": "",
@@ -422,6 +471,7 @@
         "id": "network_details",
         "attributes": {
           "ipsec_connection_id": {
+            "key": "ipsecConnectionId",
             "name": "ipsec_connection_id",
             "type": "string",
             "subtype": "",
@@ -430,6 +480,7 @@
             "id": "network_details.ipsec_connection_id"
           },
           "route_table_id": {
+            "key": "routeTableId",
             "name": "route_table_id",
             "type": "string",
             "subtype": "",
@@ -438,6 +489,7 @@
             "id": "network_details.route_table_id"
           },
           "type": {
+            "key": "type",
             "name": "type",
             "type": "string",
             "subtype": "",
@@ -454,6 +506,7 @@
     "subtype": "",
     "attributes": {
       "compartment_id": {
+        "key": "compartmentId",
         "name": "compartment_id",
         "type": "string",
         "subtype": "",
@@ -462,6 +515,7 @@
         "id": "compartment_id"
       },
       "defined_tags": {
+        "key": "definedTags",
         "name": "defined_tags",
         "type": "map",
         "subtype": "string",
@@ -470,6 +524,7 @@
         "id": "defined_tags"
       },
       "display_name": {
+        "key": "displayName",
         "name": "display_name",
         "type": "string",
         "subtype": "",
@@ -478,6 +533,7 @@
         "id": "display_name"
       },
       "distribution_type": {
+        "key": "distributionType",
         "name": "distribution_type",
         "type": "string",
         "subtype": "",
@@ -486,6 +542,7 @@
         "id": "distribution_type"
       },
       "drg_id": {
+        "key": "drgId",
         "name": "drg_id",
         "type": "string",
         "subtype": "",
@@ -494,6 +551,7 @@
         "id": "drg_id"
       },
       "freeform_tags": {
+        "key": "freeformTags",
         "name": "freeform_tags",
         "type": "map",
         "subtype": "string",
@@ -508,6 +566,7 @@
     "subtype": "",
     "attributes": {
       "action": {
+        "key": "action",
         "name": "action",
         "type": "string",
         "subtype": "",
@@ -516,6 +575,7 @@
         "id": "action"
       },
       "drg_route_distribution_id": {
+        "key": "drgRouteDistributionId",
         "name": "drg_route_distribution_id",
         "type": "string",
         "subtype": "",
@@ -524,6 +584,7 @@
         "id": "drg_route_distribution_id"
       },
       "priority": {
+        "key": "priority",
         "name": "priority",
         "type": "number",
         "subtype": "",
@@ -532,6 +593,7 @@
         "id": "priority"
       },
       "match_criteria": {
+        "key": "matchCriteria",
         "name": "match_criteria",
         "type": "object",
         "subtype": "",
@@ -540,6 +602,7 @@
         "id": "match_criteria",
         "attributes": {
           "attachment_type": {
+            "key": "attachmentType",
             "name": "attachment_type",
             "type": "string",
             "subtype": "",
@@ -548,6 +611,7 @@
             "id": "match_criteria.attachment_type"
           },
           "drg_attachment_id": {
+            "key": "drgAttachmentId",
             "name": "drg_attachment_id",
             "type": "string",
             "subtype": "",
@@ -556,6 +620,7 @@
             "id": "match_criteria.drg_attachment_id"
           },
           "match_type": {
+            "key": "matchType",
             "name": "match_type",
             "type": "string",
             "subtype": "",
@@ -572,6 +637,7 @@
     "subtype": "",
     "attributes": {
       "compartment_id": {
+        "key": "compartmentId",
         "name": "compartment_id",
         "type": "string",
         "subtype": "",
@@ -580,6 +646,7 @@
         "id": "compartment_id"
       },
       "defined_tags": {
+        "key": "definedTags",
         "name": "defined_tags",
         "type": "map",
         "subtype": "string",
@@ -588,6 +655,7 @@
         "id": "defined_tags"
       },
       "display_name": {
+        "key": "displayName",
         "name": "display_name",
         "type": "string",
         "subtype": "",
@@ -596,6 +664,7 @@
         "id": "display_name"
       },
       "drg_id": {
+        "key": "drgId",
         "name": "drg_id",
         "type": "string",
         "subtype": "",
@@ -604,6 +673,7 @@
         "id": "drg_id"
       },
       "freeform_tags": {
+        "key": "freeformTags",
         "name": "freeform_tags",
         "type": "map",
         "subtype": "string",
@@ -612,6 +682,7 @@
         "id": "freeform_tags"
       },
       "import_drg_route_distribution_id": {
+        "key": "importDrgRouteDistributionId",
         "name": "import_drg_route_distribution_id",
         "type": "string",
         "subtype": "",
@@ -620,6 +691,7 @@
         "id": "import_drg_route_distribution_id"
       },
       "is_ecmp_enabled": {
+        "key": "isEcmpEnabled",
         "name": "is_ecmp_enabled",
         "type": "bool",
         "subtype": "",
@@ -628,6 +700,7 @@
         "id": "is_ecmp_enabled"
       },
       "remove_import_trigger": {
+        "key": "removeImportTrigger",
         "name": "remove_import_trigger",
         "type": "bool",
         "subtype": "",
@@ -642,6 +715,7 @@
     "subtype": "",
     "attributes": {
       "destination": {
+        "key": "destination",
         "name": "destination",
         "type": "string",
         "subtype": "",
@@ -650,6 +724,7 @@
         "id": "destination"
       },
       "destination_type": {
+        "key": "destinationType",
         "name": "destination_type",
         "type": "string",
         "subtype": "",
@@ -658,6 +733,7 @@
         "id": "destination_type"
       },
       "drg_route_table_id": {
+        "key": "drgRouteTableId",
         "name": "drg_route_table_id",
         "type": "string",
         "subtype": "",
@@ -666,6 +742,7 @@
         "id": "drg_route_table_id"
       },
       "is_blackhole": {
+        "key": "isBlackhole",
         "name": "is_blackhole",
         "type": "bool",
         "subtype": "",
@@ -674,6 +751,7 @@
         "id": "is_blackhole"
       },
       "is_conflict": {
+        "key": "isConflict",
         "name": "is_conflict",
         "type": "bool",
         "subtype": "",
@@ -682,6 +760,7 @@
         "id": "is_conflict"
       },
       "next_hop_drg_attachment_id": {
+        "key": "nextHopDrgAttachmentId",
         "name": "next_hop_drg_attachment_id",
         "type": "string",
         "subtype": "",
@@ -690,6 +769,7 @@
         "id": "next_hop_drg_attachment_id"
       },
       "route_provenance": {
+        "key": "routeProvenance",
         "name": "route_provenance",
         "type": "string",
         "subtype": "",
@@ -698,6 +778,7 @@
         "id": "route_provenance"
       },
       "route_type": {
+        "key": "routeType",
         "name": "route_type",
         "type": "string",
         "subtype": "",
@@ -712,6 +793,7 @@
     "subtype": "",
     "attributes": {
       "availability_domain": {
+        "key": "availabilityDomain",
         "name": "availability_domain",
         "type": "string",
         "subtype": "",
@@ -720,6 +802,7 @@
         "id": "availability_domain"
       },
       "boot_volume_id": {
+        "key": "bootVolumeId",
         "name": "boot_volume_id",
         "type": "string",
         "subtype": "",
@@ -728,6 +811,7 @@
         "id": "boot_volume_id"
       },
       "capacity_reservation_id": {
+        "key": "capacityReservationId",
         "name": "capacity_reservation_id",
         "type": "string",
         "subtype": "",
@@ -736,6 +820,7 @@
         "id": "capacity_reservation_id"
       },
       "compartment_id": {
+        "key": "compartmentId",
         "name": "compartment_id",
         "type": "string",
         "subtype": "",
@@ -744,6 +829,7 @@
         "id": "compartment_id"
       },
       "dedicated_vm_host_id": {
+        "key": "dedicatedVmHostId",
         "name": "dedicated_vm_host_id",
         "type": "string",
         "subtype": "",
@@ -752,6 +838,7 @@
         "id": "dedicated_vm_host_id"
       },
       "defined_tags": {
+        "key": "definedTags",
         "name": "defined_tags",
         "type": "map",
         "subtype": "string",
@@ -760,6 +847,7 @@
         "id": "defined_tags"
       },
       "display_name": {
+        "key": "displayName",
         "name": "display_name",
         "type": "string",
         "subtype": "",
@@ -768,6 +856,7 @@
         "id": "display_name"
       },
       "extended_metadata": {
+        "key": "extendedMetadata",
         "name": "extended_metadata",
         "type": "map",
         "subtype": "string",
@@ -776,6 +865,7 @@
         "id": "extended_metadata"
       },
       "fault_domain": {
+        "key": "faultDomain",
         "name": "fault_domain",
         "type": "string",
         "subtype": "",
@@ -784,6 +874,7 @@
         "id": "fault_domain"
       },
       "freeform_tags": {
+        "key": "freeformTags",
         "name": "freeform_tags",
         "type": "map",
         "subtype": "string",
@@ -792,6 +883,7 @@
         "id": "freeform_tags"
       },
       "hostname_label": {
+        "key": "hostnameLabel",
         "name": "hostname_label",
         "type": "string",
         "subtype": "",
@@ -800,6 +892,7 @@
         "id": "hostname_label"
       },
       "image": {
+        "key": "image",
         "name": "image",
         "type": "string",
         "subtype": "",
@@ -808,6 +901,7 @@
         "id": "image"
       },
       "ipxe_script": {
+        "key": "ipxeScript",
         "name": "ipxe_script",
         "type": "string",
         "subtype": "",
@@ -816,6 +910,7 @@
         "id": "ipxe_script"
       },
       "is_pv_encryption_in_transit_enabled": {
+        "key": "isPvEncryptionInTransitEnabled",
         "name": "is_pv_encryption_in_transit_enabled",
         "type": "bool",
         "subtype": "",
@@ -824,6 +919,7 @@
         "id": "is_pv_encryption_in_transit_enabled"
       },
       "launch_mode": {
+        "key": "launchMode",
         "name": "launch_mode",
         "type": "string",
         "subtype": "",
@@ -832,6 +928,7 @@
         "id": "launch_mode"
       },
       "metadata": {
+        "key": "metadata",
         "name": "metadata",
         "type": "map",
         "subtype": "string",
@@ -840,6 +937,7 @@
         "id": "metadata"
       },
       "preserve_boot_volume": {
+        "key": "preserveBootVolume",
         "name": "preserve_boot_volume",
         "type": "bool",
         "subtype": "",
@@ -848,6 +946,7 @@
         "id": "preserve_boot_volume"
       },
       "private_ip": {
+        "key": "privateIp",
         "name": "private_ip",
         "type": "string",
         "subtype": "",
@@ -856,6 +955,7 @@
         "id": "private_ip"
       },
       "public_ip": {
+        "key": "publicIp",
         "name": "public_ip",
         "type": "string",
         "subtype": "",
@@ -864,6 +964,7 @@
         "id": "public_ip"
       },
       "region": {
+        "key": "region",
         "name": "region",
         "type": "string",
         "subtype": "",
@@ -872,6 +973,7 @@
         "id": "region"
       },
       "shape": {
+        "key": "shape",
         "name": "shape",
         "type": "string",
         "subtype": "",
@@ -880,6 +982,7 @@
         "id": "shape"
       },
       "subnet_id": {
+        "key": "subnetId",
         "name": "subnet_id",
         "type": "string",
         "subtype": "",
@@ -888,6 +991,7 @@
         "id": "subnet_id"
       },
       "time_maintenance_reboot_due": {
+        "key": "timeMaintenanceRebootDue",
         "name": "time_maintenance_reboot_due",
         "type": "string",
         "subtype": "",
@@ -896,6 +1000,7 @@
         "id": "time_maintenance_reboot_due"
       },
       "agent_config": {
+        "key": "agentConfig",
         "name": "agent_config",
         "type": "object",
         "subtype": "",
@@ -904,6 +1009,7 @@
         "id": "agent_config",
         "attributes": {
           "are_all_plugins_disabled": {
+            "key": "areAllPluginsDisabled",
             "name": "are_all_plugins_disabled",
             "type": "bool",
             "subtype": "",
@@ -912,6 +1018,7 @@
             "id": "agent_config.are_all_plugins_disabled"
           },
           "is_management_disabled": {
+            "key": "isManagementDisabled",
             "name": "is_management_disabled",
             "type": "bool",
             "subtype": "",
@@ -920,6 +1027,7 @@
             "id": "agent_config.is_management_disabled"
           },
           "is_monitoring_disabled": {
+            "key": "isMonitoringDisabled",
             "name": "is_monitoring_disabled",
             "type": "bool",
             "subtype": "",
@@ -928,6 +1036,7 @@
             "id": "agent_config.is_monitoring_disabled"
           },
           "plugins_config": {
+            "key": "pluginsConfig",
             "name": "plugins_config",
             "type": "list",
             "subtype": "",
@@ -936,6 +1045,7 @@
             "id": "agent_config.plugins_config",
             "attributes": {
               "desired_state": {
+                "key": "desiredState",
                 "name": "desired_state",
                 "type": "string",
                 "subtype": "",
@@ -944,6 +1054,7 @@
                 "id": "agent_config.plugins_config.desired_state"
               },
               "name": {
+                "key": "name",
                 "name": "name",
                 "type": "string",
                 "subtype": "",
@@ -956,6 +1067,7 @@
         }
       },
       "availability_config": {
+        "key": "availabilityConfig",
         "name": "availability_config",
         "type": "object",
         "subtype": "",
@@ -964,6 +1076,7 @@
         "id": "availability_config",
         "attributes": {
           "is_live_migration_preferred": {
+            "key": "isLiveMigrationPreferred",
             "name": "is_live_migration_preferred",
             "type": "bool",
             "subtype": "",
@@ -972,6 +1085,7 @@
             "id": "availability_config.is_live_migration_preferred"
           },
           "recovery_action": {
+            "key": "recoveryAction",
             "name": "recovery_action",
             "type": "string",
             "subtype": "",
@@ -982,6 +1096,7 @@
         }
       },
       "create_vnic_details": {
+        "key": "createVnicDetails",
         "name": "create_vnic_details",
         "type": "object",
         "subtype": "",
@@ -990,6 +1105,7 @@
         "id": "create_vnic_details",
         "attributes": {
           "assign_private_dns_record": {
+            "key": "assignPrivateDnsRecord",
             "name": "assign_private_dns_record",
             "type": "bool",
             "subtype": "",
@@ -998,6 +1114,7 @@
             "id": "create_vnic_details.assign_private_dns_record"
           },
           "assign_public_ip": {
+            "key": "assignPublicIp",
             "name": "assign_public_ip",
             "type": "string",
             "subtype": "",
@@ -1006,6 +1123,7 @@
             "id": "create_vnic_details.assign_public_ip"
           },
           "defined_tags": {
+            "key": "definedTags",
             "name": "defined_tags",
             "type": "map",
             "subtype": "string",
@@ -1014,6 +1132,7 @@
             "id": "create_vnic_details.defined_tags"
           },
           "display_name": {
+            "key": "displayName",
             "name": "display_name",
             "type": "string",
             "subtype": "",
@@ -1022,6 +1141,7 @@
             "id": "create_vnic_details.display_name"
           },
           "freeform_tags": {
+            "key": "freeformTags",
             "name": "freeform_tags",
             "type": "map",
             "subtype": "string",
@@ -1030,6 +1150,7 @@
             "id": "create_vnic_details.freeform_tags"
           },
           "hostname_label": {
+            "key": "hostnameLabel",
             "name": "hostname_label",
             "type": "string",
             "subtype": "",
@@ -1038,6 +1159,7 @@
             "id": "create_vnic_details.hostname_label"
           },
           "nsg_ids": {
+            "key": "nsgIds",
             "name": "nsg_ids",
             "type": "set",
             "subtype": "string",
@@ -1046,6 +1168,7 @@
             "id": "create_vnic_details.nsg_ids"
           },
           "private_ip": {
+            "key": "privateIp",
             "name": "private_ip",
             "type": "string",
             "subtype": "",
@@ -1054,6 +1177,7 @@
             "id": "create_vnic_details.private_ip"
           },
           "skip_source_dest_check": {
+            "key": "skipSourceDestCheck",
             "name": "skip_source_dest_check",
             "type": "bool",
             "subtype": "",
@@ -1062,6 +1186,7 @@
             "id": "create_vnic_details.skip_source_dest_check"
           },
           "subnet_id": {
+            "key": "subnetId",
             "name": "subnet_id",
             "type": "string",
             "subtype": "",
@@ -1070,6 +1195,7 @@
             "id": "create_vnic_details.subnet_id"
           },
           "vlan_id": {
+            "key": "vlanId",
             "name": "vlan_id",
             "type": "string",
             "subtype": "",
@@ -1080,6 +1206,7 @@
         }
       },
       "instance_options": {
+        "key": "instanceOptions",
         "name": "instance_options",
         "type": "object",
         "subtype": "",
@@ -1088,6 +1215,7 @@
         "id": "instance_options",
         "attributes": {
           "are_legacy_imds_endpoints_disabled": {
+            "key": "areLegacyImdsEndpointsDisabled",
             "name": "are_legacy_imds_endpoints_disabled",
             "type": "bool",
             "subtype": "",
@@ -1098,6 +1226,7 @@
         }
       },
       "launch_options": {
+        "key": "launchOptions",
         "name": "launch_options",
         "type": "object",
         "subtype": "",
@@ -1106,6 +1235,7 @@
         "id": "launch_options",
         "attributes": {
           "boot_volume_type": {
+            "key": "bootVolumeType",
             "name": "boot_volume_type",
             "type": "string",
             "subtype": "",
@@ -1114,6 +1244,7 @@
             "id": "launch_options.boot_volume_type"
           },
           "firmware": {
+            "key": "firmware",
             "name": "firmware",
             "type": "string",
             "subtype": "",
@@ -1122,6 +1253,7 @@
             "id": "launch_options.firmware"
           },
           "is_consistent_volume_naming_enabled": {
+            "key": "isConsistentVolumeNamingEnabled",
             "name": "is_consistent_volume_naming_enabled",
             "type": "bool",
             "subtype": "",
@@ -1130,6 +1262,7 @@
             "id": "launch_options.is_consistent_volume_naming_enabled"
           },
           "is_pv_encryption_in_transit_enabled": {
+            "key": "isPvEncryptionInTransitEnabled",
             "name": "is_pv_encryption_in_transit_enabled",
             "type": "bool",
             "subtype": "",
@@ -1138,6 +1271,7 @@
             "id": "launch_options.is_pv_encryption_in_transit_enabled"
           },
           "network_type": {
+            "key": "networkType",
             "name": "network_type",
             "type": "string",
             "subtype": "",
@@ -1146,6 +1280,7 @@
             "id": "launch_options.network_type"
           },
           "remote_data_volume_type": {
+            "key": "remoteDataVolumeType",
             "name": "remote_data_volume_type",
             "type": "string",
             "subtype": "",
@@ -1156,6 +1291,7 @@
         }
       },
       "platform_config": {
+        "key": "platformConfig",
         "name": "platform_config",
         "type": "object",
         "subtype": "",
@@ -1164,6 +1300,7 @@
         "id": "platform_config",
         "attributes": {
           "numa_nodes_per_socket": {
+            "key": "numaNodesPerSocket",
             "name": "numa_nodes_per_socket",
             "type": "string",
             "subtype": "",
@@ -1172,6 +1309,7 @@
             "id": "platform_config.numa_nodes_per_socket"
           },
           "type": {
+            "key": "type",
             "name": "type",
             "type": "string",
             "subtype": "",
@@ -1182,6 +1320,7 @@
         }
       },
       "preemptible_instance_config": {
+        "key": "preemptibleInstanceConfig",
         "name": "preemptible_instance_config",
         "type": "object",
         "subtype": "",
@@ -1190,6 +1329,7 @@
         "id": "preemptible_instance_config",
         "attributes": {
           "preemption_action": {
+            "key": "preemptionAction",
             "name": "preemption_action",
             "type": "object",
             "subtype": "",
@@ -1198,6 +1338,7 @@
             "id": "preemptible_instance_config.preemption_action",
             "attributes": {
               "preserve_boot_volume": {
+                "key": "preserveBootVolume",
                 "name": "preserve_boot_volume",
                 "type": "bool",
                 "subtype": "",
@@ -1206,6 +1347,7 @@
                 "id": "preemptible_instance_config.preemption_action.preserve_boot_volume"
               },
               "type": {
+                "key": "type",
                 "name": "type",
                 "type": "string",
                 "subtype": "",
@@ -1218,6 +1360,7 @@
         }
       },
       "shape_config": {
+        "key": "shapeConfig",
         "name": "shape_config",
         "type": "object",
         "subtype": "",
@@ -1226,6 +1369,7 @@
         "id": "shape_config",
         "attributes": {
           "baseline_ocpu_utilization": {
+            "key": "baselineOcpuUtilization",
             "name": "baseline_ocpu_utilization",
             "type": "string",
             "subtype": "",
@@ -1234,6 +1378,7 @@
             "id": "shape_config.baseline_ocpu_utilization"
           },
           "gpu_description": {
+            "key": "gpuDescription",
             "name": "gpu_description",
             "type": "string",
             "subtype": "",
@@ -1242,6 +1387,7 @@
             "id": "shape_config.gpu_description"
           },
           "gpus": {
+            "key": "gpus",
             "name": "gpus",
             "type": "number",
             "subtype": "",
@@ -1250,6 +1396,7 @@
             "id": "shape_config.gpus"
           },
           "local_disk_description": {
+            "key": "localDiskDescription",
             "name": "local_disk_description",
             "type": "string",
             "subtype": "",
@@ -1258,6 +1405,7 @@
             "id": "shape_config.local_disk_description"
           },
           "local_disks": {
+            "key": "localDisks",
             "name": "local_disks",
             "type": "number",
             "subtype": "",
@@ -1266,6 +1414,7 @@
             "id": "shape_config.local_disks"
           },
           "local_disks_total_size_in_gbs": {
+            "key": "localDisksTotalSizeInGbs",
             "name": "local_disks_total_size_in_gbs",
             "type": "number",
             "subtype": "",
@@ -1274,6 +1423,7 @@
             "id": "shape_config.local_disks_total_size_in_gbs"
           },
           "max_vnic_attachments": {
+            "key": "maxVnicAttachments",
             "name": "max_vnic_attachments",
             "type": "number",
             "subtype": "",
@@ -1282,6 +1432,7 @@
             "id": "shape_config.max_vnic_attachments"
           },
           "memory_in_gbs": {
+            "key": "memoryInGbs",
             "name": "memory_in_gbs",
             "type": "number",
             "subtype": "",
@@ -1290,6 +1441,7 @@
             "id": "shape_config.memory_in_gbs"
           },
           "networking_bandwidth_in_gbps": {
+            "key": "networkingBandwidthInGbps",
             "name": "networking_bandwidth_in_gbps",
             "type": "number",
             "subtype": "",
@@ -1298,6 +1450,7 @@
             "id": "shape_config.networking_bandwidth_in_gbps"
           },
           "ocpus": {
+            "key": "ocpus",
             "name": "ocpus",
             "type": "number",
             "subtype": "",
@@ -1306,6 +1459,7 @@
             "id": "shape_config.ocpus"
           },
           "processor_description": {
+            "key": "processorDescription",
             "name": "processor_description",
             "type": "string",
             "subtype": "",
@@ -1316,6 +1470,7 @@
         }
       },
       "source_details": {
+        "key": "sourceDetails",
         "name": "source_details",
         "type": "object",
         "subtype": "",
@@ -1324,6 +1479,7 @@
         "id": "source_details",
         "attributes": {
           "boot_volume_size_in_gbs": {
+            "key": "bootVolumeSizeInGbs",
             "name": "boot_volume_size_in_gbs",
             "type": "string",
             "subtype": "",
@@ -1332,6 +1488,7 @@
             "id": "source_details.boot_volume_size_in_gbs"
           },
           "kms_key_id": {
+            "key": "kmsKeyId",
             "name": "kms_key_id",
             "type": "string",
             "subtype": "",
@@ -1340,6 +1497,7 @@
             "id": "source_details.kms_key_id"
           },
           "source_id": {
+            "key": "sourceId",
             "name": "source_id",
             "type": "string",
             "subtype": "",
@@ -1348,6 +1506,7 @@
             "id": "source_details.source_id"
           },
           "source_type": {
+            "key": "sourceType",
             "name": "source_type",
             "type": "string",
             "subtype": "",
@@ -1364,6 +1523,7 @@
     "subtype": "",
     "attributes": {
       "compartment_id": {
+        "key": "compartmentId",
         "name": "compartment_id",
         "type": "string",
         "subtype": "",
@@ -1372,6 +1532,7 @@
         "id": "compartment_id"
       },
       "defined_tags": {
+        "key": "definedTags",
         "name": "defined_tags",
         "type": "map",
         "subtype": "string",
@@ -1380,6 +1541,7 @@
         "id": "defined_tags"
       },
       "display_name": {
+        "key": "displayName",
         "name": "display_name",
         "type": "string",
         "subtype": "",
@@ -1388,6 +1550,7 @@
         "id": "display_name"
       },
       "enabled": {
+        "key": "enabled",
         "name": "enabled",
         "type": "bool",
         "subtype": "",
@@ -1396,6 +1559,7 @@
         "id": "enabled"
       },
       "freeform_tags": {
+        "key": "freeformTags",
         "name": "freeform_tags",
         "type": "map",
         "subtype": "string",
@@ -1404,6 +1568,7 @@
         "id": "freeform_tags"
       },
       "vcn_id": {
+        "key": "vcnId",
         "name": "vcn_id",
         "type": "string",
         "subtype": "",
@@ -1418,6 +1583,7 @@
     "subtype": "",
     "attributes": {
       "compartment_id": {
+        "key": "compartmentId",
         "name": "compartment_id",
         "type": "string",
         "subtype": "",
@@ -1426,6 +1592,7 @@
         "id": "compartment_id"
       },
       "defined_tags": {
+        "key": "definedTags",
         "name": "defined_tags",
         "type": "map",
         "subtype": "string",
@@ -1434,6 +1601,7 @@
         "id": "defined_tags"
       },
       "display_name": {
+        "key": "displayName",
         "name": "display_name",
         "type": "string",
         "subtype": "",
@@ -1442,6 +1610,7 @@
         "id": "display_name"
       },
       "freeform_tags": {
+        "key": "freeformTags",
         "name": "freeform_tags",
         "type": "map",
         "subtype": "string",
@@ -1450,6 +1619,7 @@
         "id": "freeform_tags"
       },
       "is_cross_tenancy_peering": {
+        "key": "isCrossTenancyPeering",
         "name": "is_cross_tenancy_peering",
         "type": "bool",
         "subtype": "",
@@ -1458,6 +1628,7 @@
         "id": "is_cross_tenancy_peering"
       },
       "peer_advertised_cidr": {
+        "key": "peerAdvertisedCidr",
         "name": "peer_advertised_cidr",
         "type": "string",
         "subtype": "",
@@ -1466,6 +1637,7 @@
         "id": "peer_advertised_cidr"
       },
       "peer_advertised_cidr_details": {
+        "key": "peerAdvertisedCidrDetails",
         "name": "peer_advertised_cidr_details",
         "type": "list",
         "subtype": "string",
@@ -1474,6 +1646,7 @@
         "id": "peer_advertised_cidr_details"
       },
       "peer_id": {
+        "key": "peerId",
         "name": "peer_id",
         "type": "string",
         "subtype": "",
@@ -1482,6 +1655,7 @@
         "id": "peer_id"
       },
       "peering_status": {
+        "key": "peeringStatus",
         "name": "peering_status",
         "type": "string",
         "subtype": "",
@@ -1490,6 +1664,7 @@
         "id": "peering_status"
       },
       "peering_status_details": {
+        "key": "peeringStatusDetails",
         "name": "peering_status_details",
         "type": "string",
         "subtype": "",
@@ -1498,6 +1673,7 @@
         "id": "peering_status_details"
       },
       "route_table_id": {
+        "key": "routeTableId",
         "name": "route_table_id",
         "type": "string",
         "subtype": "",
@@ -1506,6 +1682,7 @@
         "id": "route_table_id"
       },
       "vcn_id": {
+        "key": "vcnId",
         "name": "vcn_id",
         "type": "string",
         "subtype": "",
@@ -1520,6 +1697,7 @@
     "subtype": "",
     "attributes": {
       "block_traffic": {
+        "key": "blockTraffic",
         "name": "block_traffic",
         "type": "bool",
         "subtype": "",
@@ -1528,6 +1706,7 @@
         "id": "block_traffic"
       },
       "compartment_id": {
+        "key": "compartmentId",
         "name": "compartment_id",
         "type": "string",
         "subtype": "",
@@ -1536,6 +1715,7 @@
         "id": "compartment_id"
       },
       "defined_tags": {
+        "key": "definedTags",
         "name": "defined_tags",
         "type": "map",
         "subtype": "string",
@@ -1544,6 +1724,7 @@
         "id": "defined_tags"
       },
       "display_name": {
+        "key": "displayName",
         "name": "display_name",
         "type": "string",
         "subtype": "",
@@ -1552,6 +1733,7 @@
         "id": "display_name"
       },
       "freeform_tags": {
+        "key": "freeformTags",
         "name": "freeform_tags",
         "type": "map",
         "subtype": "string",
@@ -1560,6 +1742,7 @@
         "id": "freeform_tags"
       },
       "nat_ip": {
+        "key": "natIp",
         "name": "nat_ip",
         "type": "string",
         "subtype": "",
@@ -1568,6 +1751,7 @@
         "id": "nat_ip"
       },
       "public_ip_id": {
+        "key": "publicIpId",
         "name": "public_ip_id",
         "type": "string",
         "subtype": "",
@@ -1576,6 +1760,7 @@
         "id": "public_ip_id"
       },
       "vcn_id": {
+        "key": "vcnId",
         "name": "vcn_id",
         "type": "string",
         "subtype": "",
@@ -1590,6 +1775,7 @@
     "subtype": "",
     "attributes": {
       "compartment_id": {
+        "key": "compartmentId",
         "name": "compartment_id",
         "type": "string",
         "subtype": "",
@@ -1598,6 +1784,7 @@
         "id": "compartment_id"
       },
       "defined_tags": {
+        "key": "definedTags",
         "name": "defined_tags",
         "type": "map",
         "subtype": "string",
@@ -1606,6 +1793,7 @@
         "id": "defined_tags"
       },
       "display_name": {
+        "key": "displayName",
         "name": "display_name",
         "type": "string",
         "subtype": "",
@@ -1614,6 +1802,7 @@
         "id": "display_name"
       },
       "freeform_tags": {
+        "key": "freeformTags",
         "name": "freeform_tags",
         "type": "map",
         "subtype": "string",
@@ -1622,6 +1811,7 @@
         "id": "freeform_tags"
       },
       "vcn_id": {
+        "key": "vcnId",
         "name": "vcn_id",
         "type": "string",
         "subtype": "",
@@ -1636,6 +1826,7 @@
     "subtype": "",
     "attributes": {
       "compartment_id": {
+        "key": "compartmentId",
         "name": "compartment_id",
         "type": "string",
         "subtype": "",
@@ -1644,6 +1835,7 @@
         "id": "compartment_id"
       },
       "defined_tags": {
+        "key": "definedTags",
         "name": "defined_tags",
         "type": "map",
         "subtype": "string",
@@ -1652,6 +1844,7 @@
         "id": "defined_tags"
       },
       "display_name": {
+        "key": "displayName",
         "name": "display_name",
         "type": "string",
         "subtype": "",
@@ -1660,6 +1853,7 @@
         "id": "display_name"
       },
       "drg_id": {
+        "key": "drgId",
         "name": "drg_id",
         "type": "string",
         "subtype": "",
@@ -1668,6 +1862,7 @@
         "id": "drg_id"
       },
       "freeform_tags": {
+        "key": "freeformTags",
         "name": "freeform_tags",
         "type": "map",
         "subtype": "string",
@@ -1676,6 +1871,7 @@
         "id": "freeform_tags"
       },
       "is_cross_tenancy_peering": {
+        "key": "isCrossTenancyPeering",
         "name": "is_cross_tenancy_peering",
         "type": "bool",
         "subtype": "",
@@ -1684,6 +1880,7 @@
         "id": "is_cross_tenancy_peering"
       },
       "peer_id": {
+        "key": "peerId",
         "name": "peer_id",
         "type": "string",
         "subtype": "",
@@ -1692,6 +1889,7 @@
         "id": "peer_id"
       },
       "peer_region_name": {
+        "key": "peerRegionName",
         "name": "peer_region_name",
         "type": "string",
         "subtype": "",
@@ -1700,6 +1898,7 @@
         "id": "peer_region_name"
       },
       "peer_tenancy_id": {
+        "key": "peerTenancyId",
         "name": "peer_tenancy_id",
         "type": "string",
         "subtype": "",
@@ -1708,6 +1907,7 @@
         "id": "peer_tenancy_id"
       },
       "peering_status": {
+        "key": "peeringStatus",
         "name": "peering_status",
         "type": "string",
         "subtype": "",
@@ -1722,6 +1922,7 @@
     "subtype": "",
     "attributes": {
       "compartment_id": {
+        "key": "compartmentId",
         "name": "compartment_id",
         "type": "string",
         "subtype": "",
@@ -1730,6 +1931,7 @@
         "id": "compartment_id"
       },
       "defined_tags": {
+        "key": "definedTags",
         "name": "defined_tags",
         "type": "map",
         "subtype": "string",
@@ -1738,6 +1940,7 @@
         "id": "defined_tags"
       },
       "display_name": {
+        "key": "displayName",
         "name": "display_name",
         "type": "string",
         "subtype": "",
@@ -1746,6 +1949,7 @@
         "id": "display_name"
       },
       "freeform_tags": {
+        "key": "freeformTags",
         "name": "freeform_tags",
         "type": "map",
         "subtype": "string",
@@ -1754,6 +1958,7 @@
         "id": "freeform_tags"
       },
       "vcn_id": {
+        "key": "vcnId",
         "name": "vcn_id",
         "type": "string",
         "subtype": "",
@@ -1762,6 +1967,7 @@
         "id": "vcn_id"
       },
       "route_rules": {
+        "key": "routeRules",
         "name": "route_rules",
         "type": "list",
         "subtype": "object",
@@ -1770,6 +1976,7 @@
         "id": "route_rules",
         "attributes": {
           "cidr_block": {
+            "key": "cidrBlock",
             "name": "cidr_block",
             "type": "string",
             "subtype": "",
@@ -1778,6 +1985,7 @@
             "id": "route_rules.cidr_block"
           },
           "description": {
+            "key": "description",
             "name": "description",
             "type": "string",
             "subtype": "",
@@ -1786,6 +1994,7 @@
             "id": "route_rules.description"
           },
           "destination": {
+            "key": "destination",
             "name": "destination",
             "type": "string",
             "subtype": "",
@@ -1794,6 +2003,7 @@
             "id": "route_rules.destination"
           },
           "destination_type": {
+            "key": "destinationType",
             "name": "destination_type",
             "type": "string",
             "subtype": "",
@@ -1802,6 +2012,7 @@
             "id": "route_rules.destination_type"
           },
           "network_entity_id": {
+            "key": "networkEntityId",
             "name": "network_entity_id",
             "type": "string",
             "subtype": "",
@@ -1818,6 +2029,7 @@
     "subtype": "",
     "attributes": {
       "compartment_id": {
+        "key": "compartmentId",
         "name": "compartment_id",
         "type": "string",
         "subtype": "",
@@ -1826,6 +2038,7 @@
         "id": "compartment_id"
       },
       "defined_tags": {
+        "key": "definedTags",
         "name": "defined_tags",
         "type": "map",
         "subtype": "string",
@@ -1834,6 +2047,7 @@
         "id": "defined_tags"
       },
       "display_name": {
+        "key": "displayName",
         "name": "display_name",
         "type": "string",
         "subtype": "",
@@ -1842,6 +2056,7 @@
         "id": "display_name"
       },
       "freeform_tags": {
+        "key": "freeformTags",
         "name": "freeform_tags",
         "type": "map",
         "subtype": "string",
@@ -1850,6 +2065,7 @@
         "id": "freeform_tags"
       },
       "vcn_id": {
+        "key": "vcnId",
         "name": "vcn_id",
         "type": "string",
         "subtype": "",
@@ -1858,6 +2074,7 @@
         "id": "vcn_id"
       },
       "egress_security_rules": {
+        "key": "egressSecurityRules",
         "name": "egress_security_rules",
         "type": "list",
         "subtype": "object",
@@ -1866,6 +2083,7 @@
         "id": "egress_security_rules",
         "attributes": {
           "description": {
+            "key": "description",
             "name": "description",
             "type": "string",
             "subtype": "",
@@ -1874,6 +2092,7 @@
             "id": "egress_security_rules.description"
           },
           "destination": {
+            "key": "destination",
             "name": "destination",
             "type": "string",
             "subtype": "",
@@ -1882,6 +2101,7 @@
             "id": "egress_security_rules.destination"
           },
           "destination_type": {
+            "key": "destinationType",
             "name": "destination_type",
             "type": "string",
             "subtype": "",
@@ -1890,6 +2110,7 @@
             "id": "egress_security_rules.destination_type"
           },
           "protocol": {
+            "key": "protocol",
             "name": "protocol",
             "type": "string",
             "subtype": "",
@@ -1898,6 +2119,7 @@
             "id": "egress_security_rules.protocol"
           },
           "stateless": {
+            "key": "stateless",
             "name": "stateless",
             "type": "bool",
             "subtype": "",
@@ -1906,6 +2128,7 @@
             "id": "egress_security_rules.stateless"
           },
           "icmp_options": {
+            "key": "icmpOptions",
             "name": "icmp_options",
             "type": "object",
             "subtype": "",
@@ -1914,6 +2137,7 @@
             "id": "egress_security_rules.icmp_options",
             "attributes": {
               "code": {
+                "key": "code",
                 "name": "code",
                 "type": "number",
                 "subtype": "",
@@ -1922,6 +2146,7 @@
                 "id": "egress_security_rules.icmp_options.code"
               },
               "type": {
+                "key": "type",
                 "name": "type",
                 "type": "number",
                 "subtype": "",
@@ -1932,6 +2157,7 @@
             }
           },
           "tcp_options": {
+            "key": "tcpOptions",
             "name": "tcp_options",
             "type": "object",
             "subtype": "",
@@ -1940,6 +2166,7 @@
             "id": "egress_security_rules.tcp_options",
             "attributes": {
               "max": {
+                "key": "max",
                 "name": "max",
                 "type": "number",
                 "subtype": "",
@@ -1948,6 +2175,7 @@
                 "id": "egress_security_rules.tcp_options.max"
               },
               "min": {
+                "key": "min",
                 "name": "min",
                 "type": "number",
                 "subtype": "",
@@ -1956,6 +2184,7 @@
                 "id": "egress_security_rules.tcp_options.min"
               },
               "source_port_range": {
+                "key": "sourcePortRange",
                 "name": "source_port_range",
                 "type": "object",
                 "subtype": "",
@@ -1964,6 +2193,7 @@
                 "id": "egress_security_rules.tcp_options.source_port_range",
                 "attributes": {
                   "max": {
+                    "key": "max",
                     "name": "max",
                     "type": "number",
                     "subtype": "",
@@ -1972,6 +2202,7 @@
                     "id": "egress_security_rules.tcp_options.source_port_range.max"
                   },
                   "min": {
+                    "key": "min",
                     "name": "min",
                     "type": "number",
                     "subtype": "",
@@ -1984,6 +2215,7 @@
             }
           },
           "udp_options": {
+            "key": "udpOptions",
             "name": "udp_options",
             "type": "object",
             "subtype": "",
@@ -1992,6 +2224,7 @@
             "id": "egress_security_rules.udp_options",
             "attributes": {
               "max": {
+                "key": "max",
                 "name": "max",
                 "type": "number",
                 "subtype": "",
@@ -2000,6 +2233,7 @@
                 "id": "egress_security_rules.udp_options.max"
               },
               "min": {
+                "key": "min",
                 "name": "min",
                 "type": "number",
                 "subtype": "",
@@ -2008,6 +2242,7 @@
                 "id": "egress_security_rules.udp_options.min"
               },
               "source_port_range": {
+                "key": "sourcePortRange",
                 "name": "source_port_range",
                 "type": "object",
                 "subtype": "",
@@ -2016,6 +2251,7 @@
                 "id": "egress_security_rules.udp_options.source_port_range",
                 "attributes": {
                   "max": {
+                    "key": "max",
                     "name": "max",
                     "type": "number",
                     "subtype": "",
@@ -2024,6 +2260,7 @@
                     "id": "egress_security_rules.udp_options.source_port_range.max"
                   },
                   "min": {
+                    "key": "min",
                     "name": "min",
                     "type": "number",
                     "subtype": "",
@@ -2038,6 +2275,7 @@
         }
       },
       "ingress_security_rules": {
+        "key": "ingressSecurityRules",
         "name": "ingress_security_rules",
         "type": "list",
         "subtype": "object",
@@ -2046,6 +2284,7 @@
         "id": "ingress_security_rules",
         "attributes": {
           "description": {
+            "key": "description",
             "name": "description",
             "type": "string",
             "subtype": "",
@@ -2054,6 +2293,7 @@
             "id": "ingress_security_rules.description"
           },
           "protocol": {
+            "key": "protocol",
             "name": "protocol",
             "type": "string",
             "subtype": "",
@@ -2062,6 +2302,7 @@
             "id": "ingress_security_rules.protocol"
           },
           "source": {
+            "key": "source",
             "name": "source",
             "type": "string",
             "subtype": "",
@@ -2070,6 +2311,7 @@
             "id": "ingress_security_rules.source"
           },
           "source_type": {
+            "key": "sourceType",
             "name": "source_type",
             "type": "string",
             "subtype": "",
@@ -2078,6 +2320,7 @@
             "id": "ingress_security_rules.source_type"
           },
           "stateless": {
+            "key": "stateless",
             "name": "stateless",
             "type": "bool",
             "subtype": "",
@@ -2086,6 +2329,7 @@
             "id": "ingress_security_rules.stateless"
           },
           "icmp_options": {
+            "key": "icmpOptions",
             "name": "icmp_options",
             "type": "object",
             "subtype": "",
@@ -2094,6 +2338,7 @@
             "id": "ingress_security_rules.icmp_options",
             "attributes": {
               "code": {
+                "key": "code",
                 "name": "code",
                 "type": "number",
                 "subtype": "",
@@ -2102,6 +2347,7 @@
                 "id": "ingress_security_rules.icmp_options.code"
               },
               "type": {
+                "key": "type",
                 "name": "type",
                 "type": "number",
                 "subtype": "",
@@ -2112,6 +2358,7 @@
             }
           },
           "tcp_options": {
+            "key": "tcpOptions",
             "name": "tcp_options",
             "type": "object",
             "subtype": "",
@@ -2120,6 +2367,7 @@
             "id": "ingress_security_rules.tcp_options",
             "attributes": {
               "max": {
+                "key": "max",
                 "name": "max",
                 "type": "number",
                 "subtype": "",
@@ -2128,6 +2376,7 @@
                 "id": "ingress_security_rules.tcp_options.max"
               },
               "min": {
+                "key": "min",
                 "name": "min",
                 "type": "number",
                 "subtype": "",
@@ -2136,6 +2385,7 @@
                 "id": "ingress_security_rules.tcp_options.min"
               },
               "source_port_range": {
+                "key": "sourcePortRange",
                 "name": "source_port_range",
                 "type": "object",
                 "subtype": "",
@@ -2144,6 +2394,7 @@
                 "id": "ingress_security_rules.tcp_options.source_port_range",
                 "attributes": {
                   "max": {
+                    "key": "max",
                     "name": "max",
                     "type": "number",
                     "subtype": "",
@@ -2152,6 +2403,7 @@
                     "id": "ingress_security_rules.tcp_options.source_port_range.max"
                   },
                   "min": {
+                    "key": "min",
                     "name": "min",
                     "type": "number",
                     "subtype": "",
@@ -2164,6 +2416,7 @@
             }
           },
           "udp_options": {
+            "key": "udpOptions",
             "name": "udp_options",
             "type": "object",
             "subtype": "",
@@ -2172,6 +2425,7 @@
             "id": "ingress_security_rules.udp_options",
             "attributes": {
               "max": {
+                "key": "max",
                 "name": "max",
                 "type": "number",
                 "subtype": "",
@@ -2180,6 +2434,7 @@
                 "id": "ingress_security_rules.udp_options.max"
               },
               "min": {
+                "key": "min",
                 "name": "min",
                 "type": "number",
                 "subtype": "",
@@ -2188,6 +2443,7 @@
                 "id": "ingress_security_rules.udp_options.min"
               },
               "source_port_range": {
+                "key": "sourcePortRange",
                 "name": "source_port_range",
                 "type": "object",
                 "subtype": "",
@@ -2196,6 +2452,7 @@
                 "id": "ingress_security_rules.udp_options.source_port_range",
                 "attributes": {
                   "max": {
+                    "key": "max",
                     "name": "max",
                     "type": "number",
                     "subtype": "",
@@ -2204,6 +2461,7 @@
                     "id": "ingress_security_rules.udp_options.source_port_range.max"
                   },
                   "min": {
+                    "key": "min",
                     "name": "min",
                     "type": "number",
                     "subtype": "",
@@ -2224,6 +2482,7 @@
     "subtype": "",
     "attributes": {
       "block_traffic": {
+        "key": "blockTraffic",
         "name": "block_traffic",
         "type": "bool",
         "subtype": "",
@@ -2232,6 +2491,7 @@
         "id": "block_traffic"
       },
       "compartment_id": {
+        "key": "compartmentId",
         "name": "compartment_id",
         "type": "string",
         "subtype": "",
@@ -2240,6 +2500,7 @@
         "id": "compartment_id"
       },
       "defined_tags": {
+        "key": "definedTags",
         "name": "defined_tags",
         "type": "map",
         "subtype": "string",
@@ -2248,6 +2509,7 @@
         "id": "defined_tags"
       },
       "display_name": {
+        "key": "displayName",
         "name": "display_name",
         "type": "string",
         "subtype": "",
@@ -2256,6 +2518,7 @@
         "id": "display_name"
       },
       "freeform_tags": {
+        "key": "freeformTags",
         "name": "freeform_tags",
         "type": "map",
         "subtype": "string",
@@ -2264,6 +2527,7 @@
         "id": "freeform_tags"
       },
       "route_table_id": {
+        "key": "routeTableId",
         "name": "route_table_id",
         "type": "string",
         "subtype": "",
@@ -2272,6 +2536,7 @@
         "id": "route_table_id"
       },
       "vcn_id": {
+        "key": "vcnId",
         "name": "vcn_id",
         "type": "string",
         "subtype": "",
@@ -2280,6 +2545,7 @@
         "id": "vcn_id"
       },
       "services": {
+        "key": "services",
         "name": "services",
         "type": "list",
         "subtype": "object",
@@ -2288,6 +2554,7 @@
         "id": "services",
         "attributes": {
           "service_id": {
+            "key": "serviceId",
             "name": "service_id",
             "type": "string",
             "subtype": "",
@@ -2296,6 +2563,7 @@
             "id": "services.service_id"
           },
           "service_name": {
+            "key": "serviceName",
             "name": "service_name",
             "type": "string",
             "subtype": "",
@@ -2312,6 +2580,7 @@
     "subtype": "",
     "attributes": {
       "availability_domain": {
+        "key": "availabilityDomain",
         "name": "availability_domain",
         "type": "string",
         "subtype": "",
@@ -2320,6 +2589,7 @@
         "id": "availability_domain"
       },
       "cidr_block": {
+        "key": "cidrBlock",
         "name": "cidr_block",
         "type": "string",
         "subtype": "",
@@ -2328,6 +2598,7 @@
         "id": "cidr_block"
       },
       "compartment_id": {
+        "key": "compartmentId",
         "name": "compartment_id",
         "type": "string",
         "subtype": "",
@@ -2336,6 +2607,7 @@
         "id": "compartment_id"
       },
       "defined_tags": {
+        "key": "definedTags",
         "name": "defined_tags",
         "type": "map",
         "subtype": "string",
@@ -2344,6 +2616,7 @@
         "id": "defined_tags"
       },
       "dhcp_options_id": {
+        "key": "dhcpOptionsId",
         "name": "dhcp_options_id",
         "type": "string",
         "subtype": "",
@@ -2352,6 +2625,7 @@
         "id": "dhcp_options_id"
       },
       "display_name": {
+        "key": "displayName",
         "name": "display_name",
         "type": "string",
         "subtype": "",
@@ -2360,6 +2634,7 @@
         "id": "display_name"
       },
       "dns_label": {
+        "key": "dnsLabel",
         "name": "dns_label",
         "type": "string",
         "subtype": "",
@@ -2368,6 +2643,7 @@
         "id": "dns_label"
       },
       "freeform_tags": {
+        "key": "freeformTags",
         "name": "freeform_tags",
         "type": "map",
         "subtype": "string",
@@ -2376,6 +2652,7 @@
         "id": "freeform_tags"
       },
       "ipv6cidr_block": {
+        "key": "ipv6cidrBlock",
         "name": "ipv6cidr_block",
         "type": "string",
         "subtype": "",
@@ -2384,6 +2661,7 @@
         "id": "ipv6cidr_block"
       },
       "ipv6virtual_router_ip": {
+        "key": "ipv6virtualRouterIp",
         "name": "ipv6virtual_router_ip",
         "type": "string",
         "subtype": "",
@@ -2392,6 +2670,7 @@
         "id": "ipv6virtual_router_ip"
       },
       "prohibit_internet_ingress": {
+        "key": "prohibitInternetIngress",
         "name": "prohibit_internet_ingress",
         "type": "bool",
         "subtype": "",
@@ -2400,6 +2679,7 @@
         "id": "prohibit_internet_ingress"
       },
       "prohibit_public_ip_on_vnic": {
+        "key": "prohibitPublicIpOnVnic",
         "name": "prohibit_public_ip_on_vnic",
         "type": "bool",
         "subtype": "",
@@ -2408,6 +2688,7 @@
         "id": "prohibit_public_ip_on_vnic"
       },
       "route_table_id": {
+        "key": "routeTableId",
         "name": "route_table_id",
         "type": "string",
         "subtype": "",
@@ -2416,6 +2697,7 @@
         "id": "route_table_id"
       },
       "security_list_ids": {
+        "key": "securityListIds",
         "name": "security_list_ids",
         "type": "set",
         "subtype": "string",
@@ -2424,6 +2706,7 @@
         "id": "security_list_ids"
       },
       "subnet_domain_name": {
+        "key": "subnetDomainName",
         "name": "subnet_domain_name",
         "type": "string",
         "subtype": "",
@@ -2432,6 +2715,7 @@
         "id": "subnet_domain_name"
       },
       "vcn_id": {
+        "key": "vcnId",
         "name": "vcn_id",
         "type": "string",
         "subtype": "",
@@ -2440,6 +2724,7 @@
         "id": "vcn_id"
       },
       "virtual_router_ip": {
+        "key": "virtualRouterIp",
         "name": "virtual_router_ip",
         "type": "string",
         "subtype": "",
@@ -2448,6 +2733,7 @@
         "id": "virtual_router_ip"
       },
       "virtual_router_mac": {
+        "key": "virtualRouterMac",
         "name": "virtual_router_mac",
         "type": "string",
         "subtype": "",
@@ -2462,6 +2748,7 @@
     "subtype": "",
     "attributes": {
       "cidr_block": {
+        "key": "cidrBlock",
         "name": "cidr_block",
         "type": "string",
         "subtype": "",
@@ -2470,6 +2757,7 @@
         "id": "cidr_block"
       },
       "cidr_blocks": {
+        "key": "cidrBlocks",
         "name": "cidr_blocks",
         "type": "list",
         "subtype": "string",
@@ -2478,6 +2766,7 @@
         "id": "cidr_blocks"
       },
       "compartment_id": {
+        "key": "compartmentId",
         "name": "compartment_id",
         "type": "string",
         "subtype": "",
@@ -2486,6 +2775,7 @@
         "id": "compartment_id"
       },
       "defined_tags": {
+        "key": "definedTags",
         "name": "defined_tags",
         "type": "map",
         "subtype": "string",
@@ -2494,6 +2784,7 @@
         "id": "defined_tags"
       },
       "display_name": {
+        "key": "displayName",
         "name": "display_name",
         "type": "string",
         "subtype": "",
@@ -2502,6 +2793,7 @@
         "id": "display_name"
       },
       "dns_label": {
+        "key": "dnsLabel",
         "name": "dns_label",
         "type": "string",
         "subtype": "",
@@ -2510,6 +2802,7 @@
         "id": "dns_label"
       },
       "freeform_tags": {
+        "key": "freeformTags",
         "name": "freeform_tags",
         "type": "map",
         "subtype": "string",
@@ -2518,6 +2811,7 @@
         "id": "freeform_tags"
       },
       "ipv6cidr_blocks": {
+        "key": "ipv6cidrBlocks",
         "name": "ipv6cidr_blocks",
         "type": "list",
         "subtype": "string",
@@ -2526,6 +2820,7 @@
         "id": "ipv6cidr_blocks"
       },
       "is_ipv6enabled": {
+        "key": "isIpv6enabled",
         "name": "is_ipv6enabled",
         "type": "bool",
         "subtype": "",
@@ -2540,6 +2835,7 @@
     "subtype": "",
     "attributes": {
       "auto_tuned_vpus_per_gb": {
+        "key": "autoTunedVpusPerGb",
         "name": "auto_tuned_vpus_per_gb",
         "type": "string",
         "subtype": "",
@@ -2548,6 +2844,7 @@
         "id": "auto_tuned_vpus_per_gb"
       },
       "availability_domain": {
+        "key": "availabilityDomain",
         "name": "availability_domain",
         "type": "string",
         "subtype": "",
@@ -2556,6 +2853,7 @@
         "id": "availability_domain"
       },
       "backup_policy_id": {
+        "key": "backupPolicyId",
         "name": "backup_policy_id",
         "type": "string",
         "subtype": "",
@@ -2564,6 +2862,7 @@
         "id": "backup_policy_id"
       },
       "block_volume_replicas_deletion": {
+        "key": "blockVolumeReplicasDeletion",
         "name": "block_volume_replicas_deletion",
         "type": "bool",
         "subtype": "",
@@ -2572,6 +2871,7 @@
         "id": "block_volume_replicas_deletion"
       },
       "compartment_id": {
+        "key": "compartmentId",
         "name": "compartment_id",
         "type": "string",
         "subtype": "",
@@ -2580,6 +2880,7 @@
         "id": "compartment_id"
       },
       "defined_tags": {
+        "key": "definedTags",
         "name": "defined_tags",
         "type": "map",
         "subtype": "string",
@@ -2588,6 +2889,7 @@
         "id": "defined_tags"
       },
       "display_name": {
+        "key": "displayName",
         "name": "display_name",
         "type": "string",
         "subtype": "",
@@ -2596,6 +2898,7 @@
         "id": "display_name"
       },
       "freeform_tags": {
+        "key": "freeformTags",
         "name": "freeform_tags",
         "type": "map",
         "subtype": "string",
@@ -2604,6 +2907,7 @@
         "id": "freeform_tags"
       },
       "is_auto_tune_enabled": {
+        "key": "isAutoTuneEnabled",
         "name": "is_auto_tune_enabled",
         "type": "bool",
         "subtype": "",
@@ -2612,6 +2916,7 @@
         "id": "is_auto_tune_enabled"
       },
       "is_hydrated": {
+        "key": "isHydrated",
         "name": "is_hydrated",
         "type": "bool",
         "subtype": "",
@@ -2620,6 +2925,7 @@
         "id": "is_hydrated"
       },
       "kms_key_id": {
+        "key": "kmsKeyId",
         "name": "kms_key_id",
         "type": "string",
         "subtype": "",
@@ -2628,6 +2934,7 @@
         "id": "kms_key_id"
       },
       "size_in_gbs": {
+        "key": "sizeInGbs",
         "name": "size_in_gbs",
         "type": "string",
         "subtype": "",
@@ -2636,6 +2943,7 @@
         "id": "size_in_gbs"
       },
       "size_in_mbs": {
+        "key": "sizeInMbs",
         "name": "size_in_mbs",
         "type": "string",
         "subtype": "",
@@ -2644,6 +2952,7 @@
         "id": "size_in_mbs"
       },
       "volume_backup_id": {
+        "key": "volumeBackupId",
         "name": "volume_backup_id",
         "type": "string",
         "subtype": "",
@@ -2652,6 +2961,7 @@
         "id": "volume_backup_id"
       },
       "volume_group_id": {
+        "key": "volumeGroupId",
         "name": "volume_group_id",
         "type": "string",
         "subtype": "",
@@ -2660,6 +2970,7 @@
         "id": "volume_group_id"
       },
       "vpus_per_gb": {
+        "key": "vpusPerGb",
         "name": "vpus_per_gb",
         "type": "string",
         "subtype": "",
@@ -2668,6 +2979,7 @@
         "id": "vpus_per_gb"
       },
       "block_volume_replicas": {
+        "key": "blockVolumeReplicas",
         "name": "block_volume_replicas",
         "type": "list",
         "subtype": "",
@@ -2676,6 +2988,7 @@
         "id": "block_volume_replicas",
         "attributes": {
           "availability_domain": {
+            "key": "availabilityDomain",
             "name": "availability_domain",
             "type": "string",
             "subtype": "",
@@ -2684,6 +2997,7 @@
             "id": "block_volume_replicas.availability_domain"
           },
           "block_volume_replica_id": {
+            "key": "blockVolumeReplicaId",
             "name": "block_volume_replica_id",
             "type": "string",
             "subtype": "",
@@ -2692,6 +3006,7 @@
             "id": "block_volume_replicas.block_volume_replica_id"
           },
           "display_name": {
+            "key": "displayName",
             "name": "display_name",
             "type": "string",
             "subtype": "",
@@ -2702,6 +3017,7 @@
         }
       },
       "source_details": {
+        "key": "sourceDetails",
         "name": "source_details",
         "type": "object",
         "subtype": "",
@@ -2710,6 +3026,7 @@
         "id": "source_details",
         "attributes": {
           "type": {
+            "key": "type",
             "name": "type",
             "type": "string",
             "subtype": "",
@@ -2726,6 +3043,7 @@
     "subtype": "",
     "attributes": {
       "compartment_id": {
+        "key": "compartmentId",
         "name": "compartment_id",
         "type": "string",
         "subtype": "",
@@ -2734,6 +3052,7 @@
         "id": "compartment_id"
       },
       "defined_tags": {
+        "key": "definedTags",
         "name": "defined_tags",
         "type": "map",
         "subtype": "string",
@@ -2742,6 +3061,7 @@
         "id": "defined_tags"
       },
       "description": {
+        "key": "description",
         "name": "description",
         "type": "string",
         "subtype": "",
@@ -2750,6 +3070,7 @@
         "id": "description"
       },
       "enable_delete": {
+        "key": "enableDelete",
         "name": "enable_delete",
         "type": "bool",
         "subtype": "",
@@ -2758,6 +3079,7 @@
         "id": "enable_delete"
       },
       "freeform_tags": {
+        "key": "freeformTags",
         "name": "freeform_tags",
         "type": "map",
         "subtype": "string",
@@ -2766,6 +3088,7 @@
         "id": "freeform_tags"
       },
       "name": {
+        "key": "name",
         "name": "name",
         "type": "string",
         "subtype": "",
@@ -2780,6 +3103,7 @@
     "subtype": "",
     "attributes": {
       "access_type": {
+        "key": "accessType",
         "name": "access_type",
         "type": "string",
         "subtype": "",
@@ -2788,6 +3112,7 @@
         "id": "access_type"
       },
       "approximate_count": {
+        "key": "approximateCount",
         "name": "approximate_count",
         "type": "string",
         "subtype": "",
@@ -2796,6 +3121,7 @@
         "id": "approximate_count"
       },
       "approximate_size": {
+        "key": "approximateSize",
         "name": "approximate_size",
         "type": "string",
         "subtype": "",
@@ -2804,6 +3130,7 @@
         "id": "approximate_size"
       },
       "auto_tiering": {
+        "key": "autoTiering",
         "name": "auto_tiering",
         "type": "string",
         "subtype": "",
@@ -2812,6 +3139,7 @@
         "id": "auto_tiering"
       },
       "bucket_id": {
+        "key": "bucketId",
         "name": "bucket_id",
         "type": "string",
         "subtype": "",
@@ -2820,6 +3148,7 @@
         "id": "bucket_id"
       },
       "compartment_id": {
+        "key": "compartmentId",
         "name": "compartment_id",
         "type": "string",
         "subtype": "",
@@ -2828,6 +3157,7 @@
         "id": "compartment_id"
       },
       "defined_tags": {
+        "key": "definedTags",
         "name": "defined_tags",
         "type": "map",
         "subtype": "string",
@@ -2836,6 +3166,7 @@
         "id": "defined_tags"
       },
       "freeform_tags": {
+        "key": "freeformTags",
         "name": "freeform_tags",
         "type": "map",
         "subtype": "string",
@@ -2844,6 +3175,7 @@
         "id": "freeform_tags"
       },
       "is_read_only": {
+        "key": "isReadOnly",
         "name": "is_read_only",
         "type": "bool",
         "subtype": "",
@@ -2852,6 +3184,7 @@
         "id": "is_read_only"
       },
       "kms_key_id": {
+        "key": "kmsKeyId",
         "name": "kms_key_id",
         "type": "string",
         "subtype": "",
@@ -2860,6 +3193,7 @@
         "id": "kms_key_id"
       },
       "metadata": {
+        "key": "metadata",
         "name": "metadata",
         "type": "map",
         "subtype": "string",
@@ -2868,6 +3202,7 @@
         "id": "metadata"
       },
       "name": {
+        "key": "name",
         "name": "name",
         "type": "string",
         "subtype": "",
@@ -2876,6 +3211,7 @@
         "id": "name"
       },
       "namespace": {
+        "key": "namespace",
         "name": "namespace",
         "type": "string",
         "subtype": "",
@@ -2884,6 +3220,7 @@
         "id": "namespace"
       },
       "object_events_enabled": {
+        "key": "objectEventsEnabled",
         "name": "object_events_enabled",
         "type": "bool",
         "subtype": "",
@@ -2892,6 +3229,7 @@
         "id": "object_events_enabled"
       },
       "replication_enabled": {
+        "key": "replicationEnabled",
         "name": "replication_enabled",
         "type": "bool",
         "subtype": "",
@@ -2900,6 +3238,7 @@
         "id": "replication_enabled"
       },
       "storage_tier": {
+        "key": "storageTier",
         "name": "storage_tier",
         "type": "string",
         "subtype": "",
@@ -2908,6 +3247,7 @@
         "id": "storage_tier"
       },
       "versioning": {
+        "key": "versioning",
         "name": "versioning",
         "type": "string",
         "subtype": "",
@@ -2916,6 +3256,7 @@
         "id": "versioning"
       },
       "retention_rules": {
+        "key": "retentionRules",
         "name": "retention_rules",
         "type": "list",
         "subtype": "object",
@@ -2924,6 +3265,7 @@
         "id": "retention_rules",
         "attributes": {
           "display_name": {
+            "key": "displayName",
             "name": "display_name",
             "type": "string",
             "subtype": "",
@@ -2932,6 +3274,7 @@
             "id": "retention_rules.display_name"
           },
           "retention_rule_id": {
+            "key": "retentionRuleId",
             "name": "retention_rule_id",
             "type": "string",
             "subtype": "",
@@ -2940,6 +3283,7 @@
             "id": "retention_rules.retention_rule_id"
           },
           "time_modified": {
+            "key": "timeModified",
             "name": "time_modified",
             "type": "string",
             "subtype": "",
@@ -2948,6 +3292,7 @@
             "id": "retention_rules.time_modified"
           },
           "time_rule_locked": {
+            "key": "timeRuleLocked",
             "name": "time_rule_locked",
             "type": "string",
             "subtype": "",
@@ -2956,6 +3301,7 @@
             "id": "retention_rules.time_rule_locked"
           },
           "duration": {
+            "key": "duration",
             "name": "duration",
             "type": "object",
             "subtype": "",
@@ -2964,6 +3310,7 @@
             "id": "retention_rules.duration",
             "attributes": {
               "time_amount": {
+                "key": "timeAmount",
                 "name": "time_amount",
                 "type": "string",
                 "subtype": "",
@@ -2972,6 +3319,7 @@
                 "id": "retention_rules.duration.time_amount"
               },
               "time_unit": {
+                "key": "timeUnit",
                 "name": "time_unit",
                 "type": "string",
                 "subtype": "",

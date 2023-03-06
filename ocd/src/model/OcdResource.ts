@@ -6,7 +6,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import { OcdUtils } from '../utils/OcdUtils'
 
-export interface OcdResource {
+export interface OcdResource extends Record<string, any> {
     provider: string
     locked: boolean
     terraformResourceName: string
@@ -18,7 +18,7 @@ export interface OcdResource {
 
 export namespace OcdResource {
     export function newResource(type?: string): OcdResource {
-        const resourceType = `${OcdUtils.toTitleCase(type ? type.split('_').join(' ') : 'Unknown').replace(/\W+/g, '')}`
+        const resourceType = OcdResource.toResourceType(type)
         return {
             provider: '',
             locked: false,
@@ -28,5 +28,6 @@ export namespace OcdResource {
             id: ''
         }
     }
+    export function toResourceType(type?: string): string {return `${OcdUtils.toTitleCase(type ? type.split('_').join(' ') : 'Unknown').replace(/\W+/g, '')}`}
 }
 
