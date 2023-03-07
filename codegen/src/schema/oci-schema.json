@@ -4,6 +4,7 @@
     "subtype": "",
     "attributes": {
       "compartment_id": {
+        "provider": "oci",
         "key": "compartmentId",
         "name": "compartment_id",
         "type": "string",
@@ -13,6 +14,7 @@
         "id": "compartment_id"
       },
       "defined_tags": {
+        "provider": "oci",
         "key": "definedTags",
         "name": "defined_tags",
         "type": "map",
@@ -22,6 +24,7 @@
         "id": "defined_tags"
       },
       "description": {
+        "provider": "oci",
         "key": "description",
         "name": "description",
         "type": "string",
@@ -31,6 +34,7 @@
         "id": "description"
       },
       "email_notification": {
+        "provider": "oci",
         "key": "emailNotification",
         "name": "email_notification",
         "type": "string",
@@ -40,6 +44,7 @@
         "id": "email_notification"
       },
       "feature_set": {
+        "provider": "oci",
         "key": "featureSet",
         "name": "feature_set",
         "type": "string",
@@ -49,6 +54,7 @@
         "id": "feature_set"
       },
       "freeform_tags": {
+        "provider": "oci",
         "key": "freeformTags",
         "name": "freeform_tags",
         "type": "map",
@@ -58,6 +64,7 @@
         "id": "freeform_tags"
       },
       "idcs_access_token": {
+        "provider": "oci",
         "key": "idcsAccessToken",
         "name": "idcs_access_token",
         "type": "string",
@@ -67,6 +74,7 @@
         "id": "idcs_access_token"
       },
       "license_type": {
+        "provider": "oci",
         "key": "licenseType",
         "name": "license_type",
         "type": "string",
@@ -76,6 +84,7 @@
         "id": "license_type"
       },
       "name": {
+        "provider": "oci",
         "key": "name",
         "name": "name",
         "type": "string",
@@ -85,6 +94,7 @@
         "id": "name"
       },
       "private_access_channels": {
+        "provider": "oci",
         "key": "privateAccessChannels",
         "name": "private_access_channels",
         "type": "map",
@@ -94,6 +104,7 @@
         "id": "private_access_channels"
       },
       "service_url": {
+        "provider": "oci",
         "key": "serviceUrl",
         "name": "service_url",
         "type": "string",
@@ -103,6 +114,7 @@
         "id": "service_url"
       },
       "time_updated": {
+        "provider": "oci",
         "key": "timeUpdated",
         "name": "time_updated",
         "type": "string",
@@ -112,6 +124,7 @@
         "id": "time_updated"
       },
       "vanity_url_details": {
+        "provider": "oci",
         "key": "vanityUrlDetails",
         "name": "vanity_url_details",
         "type": "map",
@@ -121,6 +134,7 @@
         "id": "vanity_url_details"
       },
       "capacity": {
+        "provider": "oci",
         "key": "capacity",
         "name": "capacity",
         "type": "object",
@@ -130,6 +144,7 @@
         "id": "capacity",
         "attributes": {
           "capacity_type": {
+            "provider": "oci",
             "key": "capacityType",
             "name": "capacity_type",
             "type": "string",
@@ -139,6 +154,7 @@
             "id": "capacity.capacity_type"
           },
           "capacity_value": {
+            "provider": "oci",
             "key": "capacityValue",
             "name": "capacity_value",
             "type": "number",
@@ -150,6 +166,7 @@
         }
       },
       "network_endpoint_details": {
+        "provider": "oci",
         "key": "networkEndpointDetails",
         "name": "network_endpoint_details",
         "type": "object",
@@ -159,6 +176,7 @@
         "id": "network_endpoint_details",
         "attributes": {
           "network_endpoint_type": {
+            "provider": "oci",
             "key": "networkEndpointType",
             "name": "network_endpoint_type",
             "type": "string",
@@ -168,6 +186,7 @@
             "id": "network_endpoint_details.network_endpoint_type"
           },
           "subnet_id": {
+            "provider": "oci",
             "key": "subnetId",
             "name": "subnet_id",
             "type": "string",
@@ -177,6 +196,7 @@
             "id": "network_endpoint_details.subnet_id"
           },
           "vcn_id": {
+            "provider": "oci",
             "key": "vcnId",
             "name": "vcn_id",
             "type": "string",
@@ -186,6 +206,7 @@
             "id": "network_endpoint_details.vcn_id"
           },
           "whitelisted_ips": {
+            "provider": "oci",
             "key": "whitelistedIps",
             "name": "whitelisted_ips",
             "type": "list",
@@ -195,6 +216,7 @@
             "id": "network_endpoint_details.whitelisted_ips"
           },
           "whitelisted_vcns": {
+            "provider": "oci",
             "key": "whitelistedVcns",
             "name": "whitelisted_vcns",
             "type": "list",
@@ -204,6 +226,7 @@
             "id": "network_endpoint_details.whitelisted_vcns",
             "attributes": {
               "whitelisted_ips": {
+                "provider": "oci",
                 "key": "whitelistedIps",
                 "name": "whitelisted_ips",
                 "type": "list",
@@ -223,6 +246,7 @@
     "subtype": "",
     "attributes": {
       "compartment_id": {
+        "provider": "oci",
         "key": "compartmentId",
         "name": "compartment_id",
         "type": "string",
@@ -232,6 +256,7 @@
         "id": "compartment_id"
       },
       "defined_tags": {
+        "provider": "oci",
         "key": "definedTags",
         "name": "defined_tags",
         "type": "map",
@@ -241,6 +266,7 @@
         "id": "defined_tags"
       },
       "display_name": {
+        "provider": "oci",
         "key": "displayName",
         "name": "display_name",
         "type": "string",
@@ -250,6 +276,7 @@
         "id": "display_name"
       },
       "freeform_tags": {
+        "provider": "oci",
         "key": "freeformTags",
         "name": "freeform_tags",
         "type": "map",
@@ -259,6 +286,7 @@
         "id": "freeform_tags"
       },
       "vcn_id": {
+        "provider": "oci",
         "key": "vcnId",
         "name": "vcn_id",
         "type": "string",
@@ -268,6 +296,7 @@
         "id": "vcn_id"
       },
       "options": {
+        "provider": "oci",
         "key": "options",
         "name": "options",
         "type": "list",
@@ -277,6 +306,7 @@
         "id": "options",
         "attributes": {
           "custom_dns_servers": {
+            "provider": "oci",
             "key": "customDnsServers",
             "name": "custom_dns_servers",
             "type": "list",
@@ -286,6 +316,7 @@
             "id": "options.custom_dns_servers"
           },
           "search_domain_names": {
+            "provider": "oci",
             "key": "searchDomainNames",
             "name": "search_domain_names",
             "type": "list",
@@ -295,6 +326,7 @@
             "id": "options.search_domain_names"
           },
           "server_type": {
+            "provider": "oci",
             "key": "serverType",
             "name": "server_type",
             "type": "string",
@@ -304,6 +336,7 @@
             "id": "options.server_type"
           },
           "type": {
+            "provider": "oci",
             "key": "type",
             "name": "type",
             "type": "string",
@@ -321,6 +354,7 @@
     "subtype": "",
     "attributes": {
       "compartment_id": {
+        "provider": "oci",
         "key": "compartmentId",
         "name": "compartment_id",
         "type": "string",
@@ -330,6 +364,7 @@
         "id": "compartment_id"
       },
       "defined_tags": {
+        "provider": "oci",
         "key": "definedTags",
         "name": "defined_tags",
         "type": "map",
@@ -339,6 +374,7 @@
         "id": "defined_tags"
       },
       "display_name": {
+        "provider": "oci",
         "key": "displayName",
         "name": "display_name",
         "type": "string",
@@ -348,6 +384,7 @@
         "id": "display_name"
       },
       "freeform_tags": {
+        "provider": "oci",
         "key": "freeformTags",
         "name": "freeform_tags",
         "type": "map",
@@ -357,6 +394,7 @@
         "id": "freeform_tags"
       },
       "redundancy_status": {
+        "provider": "oci",
         "key": "redundancyStatus",
         "name": "redundancy_status",
         "type": "string",
@@ -372,6 +410,7 @@
     "subtype": "",
     "attributes": {
       "compartment_id": {
+        "provider": "oci",
         "key": "compartmentId",
         "name": "compartment_id",
         "type": "string",
@@ -381,6 +420,7 @@
         "id": "compartment_id"
       },
       "defined_tags": {
+        "provider": "oci",
         "key": "definedTags",
         "name": "defined_tags",
         "type": "map",
@@ -390,6 +430,7 @@
         "id": "defined_tags"
       },
       "display_name": {
+        "provider": "oci",
         "key": "displayName",
         "name": "display_name",
         "type": "string",
@@ -399,6 +440,7 @@
         "id": "display_name"
       },
       "drg_id": {
+        "provider": "oci",
         "key": "drgId",
         "name": "drg_id",
         "type": "string",
@@ -408,6 +450,7 @@
         "id": "drg_id"
       },
       "drg_route_table_id": {
+        "provider": "oci",
         "key": "drgRouteTableId",
         "name": "drg_route_table_id",
         "type": "string",
@@ -417,6 +460,7 @@
         "id": "drg_route_table_id"
       },
       "export_drg_route_distribution_id": {
+        "provider": "oci",
         "key": "exportDrgRouteDistributionId",
         "name": "export_drg_route_distribution_id",
         "type": "string",
@@ -426,6 +470,7 @@
         "id": "export_drg_route_distribution_id"
       },
       "freeform_tags": {
+        "provider": "oci",
         "key": "freeformTags",
         "name": "freeform_tags",
         "type": "map",
@@ -435,6 +480,7 @@
         "id": "freeform_tags"
       },
       "is_cross_tenancy": {
+        "provider": "oci",
         "key": "isCrossTenancy",
         "name": "is_cross_tenancy",
         "type": "bool",
@@ -444,6 +490,7 @@
         "id": "is_cross_tenancy"
       },
       "route_table_id": {
+        "provider": "oci",
         "key": "routeTableId",
         "name": "route_table_id",
         "type": "string",
@@ -453,6 +500,7 @@
         "id": "route_table_id"
       },
       "vcn_id": {
+        "provider": "oci",
         "key": "vcnId",
         "name": "vcn_id",
         "type": "string",
@@ -462,6 +510,7 @@
         "id": "vcn_id"
       },
       "network_details": {
+        "provider": "oci",
         "key": "networkDetails",
         "name": "network_details",
         "type": "object",
@@ -471,6 +520,7 @@
         "id": "network_details",
         "attributes": {
           "ipsec_connection_id": {
+            "provider": "oci",
             "key": "ipsecConnectionId",
             "name": "ipsec_connection_id",
             "type": "string",
@@ -480,6 +530,7 @@
             "id": "network_details.ipsec_connection_id"
           },
           "route_table_id": {
+            "provider": "oci",
             "key": "routeTableId",
             "name": "route_table_id",
             "type": "string",
@@ -489,6 +540,7 @@
             "id": "network_details.route_table_id"
           },
           "type": {
+            "provider": "oci",
             "key": "type",
             "name": "type",
             "type": "string",
@@ -506,6 +558,7 @@
     "subtype": "",
     "attributes": {
       "compartment_id": {
+        "provider": "oci",
         "key": "compartmentId",
         "name": "compartment_id",
         "type": "string",
@@ -515,6 +568,7 @@
         "id": "compartment_id"
       },
       "defined_tags": {
+        "provider": "oci",
         "key": "definedTags",
         "name": "defined_tags",
         "type": "map",
@@ -524,6 +578,7 @@
         "id": "defined_tags"
       },
       "display_name": {
+        "provider": "oci",
         "key": "displayName",
         "name": "display_name",
         "type": "string",
@@ -533,6 +588,7 @@
         "id": "display_name"
       },
       "distribution_type": {
+        "provider": "oci",
         "key": "distributionType",
         "name": "distribution_type",
         "type": "string",
@@ -542,6 +598,7 @@
         "id": "distribution_type"
       },
       "drg_id": {
+        "provider": "oci",
         "key": "drgId",
         "name": "drg_id",
         "type": "string",
@@ -551,6 +608,7 @@
         "id": "drg_id"
       },
       "freeform_tags": {
+        "provider": "oci",
         "key": "freeformTags",
         "name": "freeform_tags",
         "type": "map",
@@ -566,6 +624,7 @@
     "subtype": "",
     "attributes": {
       "action": {
+        "provider": "oci",
         "key": "action",
         "name": "action",
         "type": "string",
@@ -575,6 +634,7 @@
         "id": "action"
       },
       "drg_route_distribution_id": {
+        "provider": "oci",
         "key": "drgRouteDistributionId",
         "name": "drg_route_distribution_id",
         "type": "string",
@@ -584,6 +644,7 @@
         "id": "drg_route_distribution_id"
       },
       "priority": {
+        "provider": "oci",
         "key": "priority",
         "name": "priority",
         "type": "number",
@@ -593,6 +654,7 @@
         "id": "priority"
       },
       "match_criteria": {
+        "provider": "oci",
         "key": "matchCriteria",
         "name": "match_criteria",
         "type": "object",
@@ -602,6 +664,7 @@
         "id": "match_criteria",
         "attributes": {
           "attachment_type": {
+            "provider": "oci",
             "key": "attachmentType",
             "name": "attachment_type",
             "type": "string",
@@ -611,6 +674,7 @@
             "id": "match_criteria.attachment_type"
           },
           "drg_attachment_id": {
+            "provider": "oci",
             "key": "drgAttachmentId",
             "name": "drg_attachment_id",
             "type": "string",
@@ -620,6 +684,7 @@
             "id": "match_criteria.drg_attachment_id"
           },
           "match_type": {
+            "provider": "oci",
             "key": "matchType",
             "name": "match_type",
             "type": "string",
@@ -637,6 +702,7 @@
     "subtype": "",
     "attributes": {
       "compartment_id": {
+        "provider": "oci",
         "key": "compartmentId",
         "name": "compartment_id",
         "type": "string",
@@ -646,6 +712,7 @@
         "id": "compartment_id"
       },
       "defined_tags": {
+        "provider": "oci",
         "key": "definedTags",
         "name": "defined_tags",
         "type": "map",
@@ -655,6 +722,7 @@
         "id": "defined_tags"
       },
       "display_name": {
+        "provider": "oci",
         "key": "displayName",
         "name": "display_name",
         "type": "string",
@@ -664,6 +732,7 @@
         "id": "display_name"
       },
       "drg_id": {
+        "provider": "oci",
         "key": "drgId",
         "name": "drg_id",
         "type": "string",
@@ -673,6 +742,7 @@
         "id": "drg_id"
       },
       "freeform_tags": {
+        "provider": "oci",
         "key": "freeformTags",
         "name": "freeform_tags",
         "type": "map",
@@ -682,6 +752,7 @@
         "id": "freeform_tags"
       },
       "import_drg_route_distribution_id": {
+        "provider": "oci",
         "key": "importDrgRouteDistributionId",
         "name": "import_drg_route_distribution_id",
         "type": "string",
@@ -691,6 +762,7 @@
         "id": "import_drg_route_distribution_id"
       },
       "is_ecmp_enabled": {
+        "provider": "oci",
         "key": "isEcmpEnabled",
         "name": "is_ecmp_enabled",
         "type": "bool",
@@ -700,6 +772,7 @@
         "id": "is_ecmp_enabled"
       },
       "remove_import_trigger": {
+        "provider": "oci",
         "key": "removeImportTrigger",
         "name": "remove_import_trigger",
         "type": "bool",
@@ -715,6 +788,7 @@
     "subtype": "",
     "attributes": {
       "destination": {
+        "provider": "oci",
         "key": "destination",
         "name": "destination",
         "type": "string",
@@ -724,6 +798,7 @@
         "id": "destination"
       },
       "destination_type": {
+        "provider": "oci",
         "key": "destinationType",
         "name": "destination_type",
         "type": "string",
@@ -733,6 +808,7 @@
         "id": "destination_type"
       },
       "drg_route_table_id": {
+        "provider": "oci",
         "key": "drgRouteTableId",
         "name": "drg_route_table_id",
         "type": "string",
@@ -742,6 +818,7 @@
         "id": "drg_route_table_id"
       },
       "is_blackhole": {
+        "provider": "oci",
         "key": "isBlackhole",
         "name": "is_blackhole",
         "type": "bool",
@@ -751,6 +828,7 @@
         "id": "is_blackhole"
       },
       "is_conflict": {
+        "provider": "oci",
         "key": "isConflict",
         "name": "is_conflict",
         "type": "bool",
@@ -760,6 +838,7 @@
         "id": "is_conflict"
       },
       "next_hop_drg_attachment_id": {
+        "provider": "oci",
         "key": "nextHopDrgAttachmentId",
         "name": "next_hop_drg_attachment_id",
         "type": "string",
@@ -769,6 +848,7 @@
         "id": "next_hop_drg_attachment_id"
       },
       "route_provenance": {
+        "provider": "oci",
         "key": "routeProvenance",
         "name": "route_provenance",
         "type": "string",
@@ -778,6 +858,7 @@
         "id": "route_provenance"
       },
       "route_type": {
+        "provider": "oci",
         "key": "routeType",
         "name": "route_type",
         "type": "string",
@@ -793,6 +874,7 @@
     "subtype": "",
     "attributes": {
       "availability_domain": {
+        "provider": "oci",
         "key": "availabilityDomain",
         "name": "availability_domain",
         "type": "string",
@@ -802,6 +884,7 @@
         "id": "availability_domain"
       },
       "boot_volume_id": {
+        "provider": "oci",
         "key": "bootVolumeId",
         "name": "boot_volume_id",
         "type": "string",
@@ -811,6 +894,7 @@
         "id": "boot_volume_id"
       },
       "capacity_reservation_id": {
+        "provider": "oci",
         "key": "capacityReservationId",
         "name": "capacity_reservation_id",
         "type": "string",
@@ -820,6 +904,7 @@
         "id": "capacity_reservation_id"
       },
       "compartment_id": {
+        "provider": "oci",
         "key": "compartmentId",
         "name": "compartment_id",
         "type": "string",
@@ -829,6 +914,7 @@
         "id": "compartment_id"
       },
       "dedicated_vm_host_id": {
+        "provider": "oci",
         "key": "dedicatedVmHostId",
         "name": "dedicated_vm_host_id",
         "type": "string",
@@ -838,6 +924,7 @@
         "id": "dedicated_vm_host_id"
       },
       "defined_tags": {
+        "provider": "oci",
         "key": "definedTags",
         "name": "defined_tags",
         "type": "map",
@@ -847,6 +934,7 @@
         "id": "defined_tags"
       },
       "display_name": {
+        "provider": "oci",
         "key": "displayName",
         "name": "display_name",
         "type": "string",
@@ -856,6 +944,7 @@
         "id": "display_name"
       },
       "extended_metadata": {
+        "provider": "oci",
         "key": "extendedMetadata",
         "name": "extended_metadata",
         "type": "map",
@@ -865,6 +954,7 @@
         "id": "extended_metadata"
       },
       "fault_domain": {
+        "provider": "oci",
         "key": "faultDomain",
         "name": "fault_domain",
         "type": "string",
@@ -874,6 +964,7 @@
         "id": "fault_domain"
       },
       "freeform_tags": {
+        "provider": "oci",
         "key": "freeformTags",
         "name": "freeform_tags",
         "type": "map",
@@ -883,6 +974,7 @@
         "id": "freeform_tags"
       },
       "hostname_label": {
+        "provider": "oci",
         "key": "hostnameLabel",
         "name": "hostname_label",
         "type": "string",
@@ -892,6 +984,7 @@
         "id": "hostname_label"
       },
       "image": {
+        "provider": "oci",
         "key": "image",
         "name": "image",
         "type": "string",
@@ -901,6 +994,7 @@
         "id": "image"
       },
       "ipxe_script": {
+        "provider": "oci",
         "key": "ipxeScript",
         "name": "ipxe_script",
         "type": "string",
@@ -910,6 +1004,7 @@
         "id": "ipxe_script"
       },
       "is_pv_encryption_in_transit_enabled": {
+        "provider": "oci",
         "key": "isPvEncryptionInTransitEnabled",
         "name": "is_pv_encryption_in_transit_enabled",
         "type": "bool",
@@ -919,6 +1014,7 @@
         "id": "is_pv_encryption_in_transit_enabled"
       },
       "launch_mode": {
+        "provider": "oci",
         "key": "launchMode",
         "name": "launch_mode",
         "type": "string",
@@ -928,6 +1024,7 @@
         "id": "launch_mode"
       },
       "metadata": {
+        "provider": "oci",
         "key": "metadata",
         "name": "metadata",
         "type": "map",
@@ -937,6 +1034,7 @@
         "id": "metadata"
       },
       "preserve_boot_volume": {
+        "provider": "oci",
         "key": "preserveBootVolume",
         "name": "preserve_boot_volume",
         "type": "bool",
@@ -946,6 +1044,7 @@
         "id": "preserve_boot_volume"
       },
       "private_ip": {
+        "provider": "oci",
         "key": "privateIp",
         "name": "private_ip",
         "type": "string",
@@ -955,6 +1054,7 @@
         "id": "private_ip"
       },
       "public_ip": {
+        "provider": "oci",
         "key": "publicIp",
         "name": "public_ip",
         "type": "string",
@@ -964,6 +1064,7 @@
         "id": "public_ip"
       },
       "region": {
+        "provider": "oci",
         "key": "region",
         "name": "region",
         "type": "string",
@@ -973,6 +1074,7 @@
         "id": "region"
       },
       "shape": {
+        "provider": "oci",
         "key": "shape",
         "name": "shape",
         "type": "string",
@@ -982,6 +1084,7 @@
         "id": "shape"
       },
       "subnet_id": {
+        "provider": "oci",
         "key": "subnetId",
         "name": "subnet_id",
         "type": "string",
@@ -991,6 +1094,7 @@
         "id": "subnet_id"
       },
       "time_maintenance_reboot_due": {
+        "provider": "oci",
         "key": "timeMaintenanceRebootDue",
         "name": "time_maintenance_reboot_due",
         "type": "string",
@@ -1000,6 +1104,7 @@
         "id": "time_maintenance_reboot_due"
       },
       "agent_config": {
+        "provider": "oci",
         "key": "agentConfig",
         "name": "agent_config",
         "type": "object",
@@ -1009,6 +1114,7 @@
         "id": "agent_config",
         "attributes": {
           "are_all_plugins_disabled": {
+            "provider": "oci",
             "key": "areAllPluginsDisabled",
             "name": "are_all_plugins_disabled",
             "type": "bool",
@@ -1018,6 +1124,7 @@
             "id": "agent_config.are_all_plugins_disabled"
           },
           "is_management_disabled": {
+            "provider": "oci",
             "key": "isManagementDisabled",
             "name": "is_management_disabled",
             "type": "bool",
@@ -1027,6 +1134,7 @@
             "id": "agent_config.is_management_disabled"
           },
           "is_monitoring_disabled": {
+            "provider": "oci",
             "key": "isMonitoringDisabled",
             "name": "is_monitoring_disabled",
             "type": "bool",
@@ -1036,6 +1144,7 @@
             "id": "agent_config.is_monitoring_disabled"
           },
           "plugins_config": {
+            "provider": "oci",
             "key": "pluginsConfig",
             "name": "plugins_config",
             "type": "list",
@@ -1045,6 +1154,7 @@
             "id": "agent_config.plugins_config",
             "attributes": {
               "desired_state": {
+                "provider": "oci",
                 "key": "desiredState",
                 "name": "desired_state",
                 "type": "string",
@@ -1054,6 +1164,7 @@
                 "id": "agent_config.plugins_config.desired_state"
               },
               "name": {
+                "provider": "oci",
                 "key": "name",
                 "name": "name",
                 "type": "string",
@@ -1067,6 +1178,7 @@
         }
       },
       "availability_config": {
+        "provider": "oci",
         "key": "availabilityConfig",
         "name": "availability_config",
         "type": "object",
@@ -1076,6 +1188,7 @@
         "id": "availability_config",
         "attributes": {
           "is_live_migration_preferred": {
+            "provider": "oci",
             "key": "isLiveMigrationPreferred",
             "name": "is_live_migration_preferred",
             "type": "bool",
@@ -1085,6 +1198,7 @@
             "id": "availability_config.is_live_migration_preferred"
           },
           "recovery_action": {
+            "provider": "oci",
             "key": "recoveryAction",
             "name": "recovery_action",
             "type": "string",
@@ -1096,6 +1210,7 @@
         }
       },
       "create_vnic_details": {
+        "provider": "oci",
         "key": "createVnicDetails",
         "name": "create_vnic_details",
         "type": "object",
@@ -1105,6 +1220,7 @@
         "id": "create_vnic_details",
         "attributes": {
           "assign_private_dns_record": {
+            "provider": "oci",
             "key": "assignPrivateDnsRecord",
             "name": "assign_private_dns_record",
             "type": "bool",
@@ -1114,6 +1230,7 @@
             "id": "create_vnic_details.assign_private_dns_record"
           },
           "assign_public_ip": {
+            "provider": "oci",
             "key": "assignPublicIp",
             "name": "assign_public_ip",
             "type": "string",
@@ -1123,6 +1240,7 @@
             "id": "create_vnic_details.assign_public_ip"
           },
           "defined_tags": {
+            "provider": "oci",
             "key": "definedTags",
             "name": "defined_tags",
             "type": "map",
@@ -1132,6 +1250,7 @@
             "id": "create_vnic_details.defined_tags"
           },
           "display_name": {
+            "provider": "oci",
             "key": "displayName",
             "name": "display_name",
             "type": "string",
@@ -1141,6 +1260,7 @@
             "id": "create_vnic_details.display_name"
           },
           "freeform_tags": {
+            "provider": "oci",
             "key": "freeformTags",
             "name": "freeform_tags",
             "type": "map",
@@ -1150,6 +1270,7 @@
             "id": "create_vnic_details.freeform_tags"
           },
           "hostname_label": {
+            "provider": "oci",
             "key": "hostnameLabel",
             "name": "hostname_label",
             "type": "string",
@@ -1159,6 +1280,7 @@
             "id": "create_vnic_details.hostname_label"
           },
           "nsg_ids": {
+            "provider": "oci",
             "key": "nsgIds",
             "name": "nsg_ids",
             "type": "set",
@@ -1168,6 +1290,7 @@
             "id": "create_vnic_details.nsg_ids"
           },
           "private_ip": {
+            "provider": "oci",
             "key": "privateIp",
             "name": "private_ip",
             "type": "string",
@@ -1177,6 +1300,7 @@
             "id": "create_vnic_details.private_ip"
           },
           "skip_source_dest_check": {
+            "provider": "oci",
             "key": "skipSourceDestCheck",
             "name": "skip_source_dest_check",
             "type": "bool",
@@ -1186,6 +1310,7 @@
             "id": "create_vnic_details.skip_source_dest_check"
           },
           "subnet_id": {
+            "provider": "oci",
             "key": "subnetId",
             "name": "subnet_id",
             "type": "string",
@@ -1195,6 +1320,7 @@
             "id": "create_vnic_details.subnet_id"
           },
           "vlan_id": {
+            "provider": "oci",
             "key": "vlanId",
             "name": "vlan_id",
             "type": "string",
@@ -1206,6 +1332,7 @@
         }
       },
       "instance_options": {
+        "provider": "oci",
         "key": "instanceOptions",
         "name": "instance_options",
         "type": "object",
@@ -1215,6 +1342,7 @@
         "id": "instance_options",
         "attributes": {
           "are_legacy_imds_endpoints_disabled": {
+            "provider": "oci",
             "key": "areLegacyImdsEndpointsDisabled",
             "name": "are_legacy_imds_endpoints_disabled",
             "type": "bool",
@@ -1226,6 +1354,7 @@
         }
       },
       "launch_options": {
+        "provider": "oci",
         "key": "launchOptions",
         "name": "launch_options",
         "type": "object",
@@ -1235,6 +1364,7 @@
         "id": "launch_options",
         "attributes": {
           "boot_volume_type": {
+            "provider": "oci",
             "key": "bootVolumeType",
             "name": "boot_volume_type",
             "type": "string",
@@ -1244,6 +1374,7 @@
             "id": "launch_options.boot_volume_type"
           },
           "firmware": {
+            "provider": "oci",
             "key": "firmware",
             "name": "firmware",
             "type": "string",
@@ -1253,6 +1384,7 @@
             "id": "launch_options.firmware"
           },
           "is_consistent_volume_naming_enabled": {
+            "provider": "oci",
             "key": "isConsistentVolumeNamingEnabled",
             "name": "is_consistent_volume_naming_enabled",
             "type": "bool",
@@ -1262,6 +1394,7 @@
             "id": "launch_options.is_consistent_volume_naming_enabled"
           },
           "is_pv_encryption_in_transit_enabled": {
+            "provider": "oci",
             "key": "isPvEncryptionInTransitEnabled",
             "name": "is_pv_encryption_in_transit_enabled",
             "type": "bool",
@@ -1271,6 +1404,7 @@
             "id": "launch_options.is_pv_encryption_in_transit_enabled"
           },
           "network_type": {
+            "provider": "oci",
             "key": "networkType",
             "name": "network_type",
             "type": "string",
@@ -1280,6 +1414,7 @@
             "id": "launch_options.network_type"
           },
           "remote_data_volume_type": {
+            "provider": "oci",
             "key": "remoteDataVolumeType",
             "name": "remote_data_volume_type",
             "type": "string",
@@ -1291,6 +1426,7 @@
         }
       },
       "platform_config": {
+        "provider": "oci",
         "key": "platformConfig",
         "name": "platform_config",
         "type": "object",
@@ -1300,6 +1436,7 @@
         "id": "platform_config",
         "attributes": {
           "numa_nodes_per_socket": {
+            "provider": "oci",
             "key": "numaNodesPerSocket",
             "name": "numa_nodes_per_socket",
             "type": "string",
@@ -1309,6 +1446,7 @@
             "id": "platform_config.numa_nodes_per_socket"
           },
           "type": {
+            "provider": "oci",
             "key": "type",
             "name": "type",
             "type": "string",
@@ -1320,6 +1458,7 @@
         }
       },
       "preemptible_instance_config": {
+        "provider": "oci",
         "key": "preemptibleInstanceConfig",
         "name": "preemptible_instance_config",
         "type": "object",
@@ -1329,6 +1468,7 @@
         "id": "preemptible_instance_config",
         "attributes": {
           "preemption_action": {
+            "provider": "oci",
             "key": "preemptionAction",
             "name": "preemption_action",
             "type": "object",
@@ -1338,6 +1478,7 @@
             "id": "preemptible_instance_config.preemption_action",
             "attributes": {
               "preserve_boot_volume": {
+                "provider": "oci",
                 "key": "preserveBootVolume",
                 "name": "preserve_boot_volume",
                 "type": "bool",
@@ -1347,6 +1488,7 @@
                 "id": "preemptible_instance_config.preemption_action.preserve_boot_volume"
               },
               "type": {
+                "provider": "oci",
                 "key": "type",
                 "name": "type",
                 "type": "string",
@@ -1360,6 +1502,7 @@
         }
       },
       "shape_config": {
+        "provider": "oci",
         "key": "shapeConfig",
         "name": "shape_config",
         "type": "object",
@@ -1369,6 +1512,7 @@
         "id": "shape_config",
         "attributes": {
           "baseline_ocpu_utilization": {
+            "provider": "oci",
             "key": "baselineOcpuUtilization",
             "name": "baseline_ocpu_utilization",
             "type": "string",
@@ -1378,6 +1522,7 @@
             "id": "shape_config.baseline_ocpu_utilization"
           },
           "gpu_description": {
+            "provider": "oci",
             "key": "gpuDescription",
             "name": "gpu_description",
             "type": "string",
@@ -1387,6 +1532,7 @@
             "id": "shape_config.gpu_description"
           },
           "gpus": {
+            "provider": "oci",
             "key": "gpus",
             "name": "gpus",
             "type": "number",
@@ -1396,6 +1542,7 @@
             "id": "shape_config.gpus"
           },
           "local_disk_description": {
+            "provider": "oci",
             "key": "localDiskDescription",
             "name": "local_disk_description",
             "type": "string",
@@ -1405,6 +1552,7 @@
             "id": "shape_config.local_disk_description"
           },
           "local_disks": {
+            "provider": "oci",
             "key": "localDisks",
             "name": "local_disks",
             "type": "number",
@@ -1414,6 +1562,7 @@
             "id": "shape_config.local_disks"
           },
           "local_disks_total_size_in_gbs": {
+            "provider": "oci",
             "key": "localDisksTotalSizeInGbs",
             "name": "local_disks_total_size_in_gbs",
             "type": "number",
@@ -1423,6 +1572,7 @@
             "id": "shape_config.local_disks_total_size_in_gbs"
           },
           "max_vnic_attachments": {
+            "provider": "oci",
             "key": "maxVnicAttachments",
             "name": "max_vnic_attachments",
             "type": "number",
@@ -1432,6 +1582,7 @@
             "id": "shape_config.max_vnic_attachments"
           },
           "memory_in_gbs": {
+            "provider": "oci",
             "key": "memoryInGbs",
             "name": "memory_in_gbs",
             "type": "number",
@@ -1441,6 +1592,7 @@
             "id": "shape_config.memory_in_gbs"
           },
           "networking_bandwidth_in_gbps": {
+            "provider": "oci",
             "key": "networkingBandwidthInGbps",
             "name": "networking_bandwidth_in_gbps",
             "type": "number",
@@ -1450,6 +1602,7 @@
             "id": "shape_config.networking_bandwidth_in_gbps"
           },
           "ocpus": {
+            "provider": "oci",
             "key": "ocpus",
             "name": "ocpus",
             "type": "number",
@@ -1459,6 +1612,7 @@
             "id": "shape_config.ocpus"
           },
           "processor_description": {
+            "provider": "oci",
             "key": "processorDescription",
             "name": "processor_description",
             "type": "string",
@@ -1470,6 +1624,7 @@
         }
       },
       "source_details": {
+        "provider": "oci",
         "key": "sourceDetails",
         "name": "source_details",
         "type": "object",
@@ -1479,6 +1634,7 @@
         "id": "source_details",
         "attributes": {
           "boot_volume_size_in_gbs": {
+            "provider": "oci",
             "key": "bootVolumeSizeInGbs",
             "name": "boot_volume_size_in_gbs",
             "type": "string",
@@ -1488,6 +1644,7 @@
             "id": "source_details.boot_volume_size_in_gbs"
           },
           "kms_key_id": {
+            "provider": "oci",
             "key": "kmsKeyId",
             "name": "kms_key_id",
             "type": "string",
@@ -1497,6 +1654,7 @@
             "id": "source_details.kms_key_id"
           },
           "source_id": {
+            "provider": "oci",
             "key": "sourceId",
             "name": "source_id",
             "type": "string",
@@ -1506,6 +1664,7 @@
             "id": "source_details.source_id"
           },
           "source_type": {
+            "provider": "oci",
             "key": "sourceType",
             "name": "source_type",
             "type": "string",
@@ -1523,6 +1682,7 @@
     "subtype": "",
     "attributes": {
       "compartment_id": {
+        "provider": "oci",
         "key": "compartmentId",
         "name": "compartment_id",
         "type": "string",
@@ -1532,6 +1692,7 @@
         "id": "compartment_id"
       },
       "defined_tags": {
+        "provider": "oci",
         "key": "definedTags",
         "name": "defined_tags",
         "type": "map",
@@ -1541,6 +1702,7 @@
         "id": "defined_tags"
       },
       "display_name": {
+        "provider": "oci",
         "key": "displayName",
         "name": "display_name",
         "type": "string",
@@ -1550,6 +1712,7 @@
         "id": "display_name"
       },
       "enabled": {
+        "provider": "oci",
         "key": "enabled",
         "name": "enabled",
         "type": "bool",
@@ -1559,6 +1722,7 @@
         "id": "enabled"
       },
       "freeform_tags": {
+        "provider": "oci",
         "key": "freeformTags",
         "name": "freeform_tags",
         "type": "map",
@@ -1568,6 +1732,7 @@
         "id": "freeform_tags"
       },
       "vcn_id": {
+        "provider": "oci",
         "key": "vcnId",
         "name": "vcn_id",
         "type": "string",
@@ -1583,6 +1748,7 @@
     "subtype": "",
     "attributes": {
       "compartment_id": {
+        "provider": "oci",
         "key": "compartmentId",
         "name": "compartment_id",
         "type": "string",
@@ -1592,6 +1758,7 @@
         "id": "compartment_id"
       },
       "defined_tags": {
+        "provider": "oci",
         "key": "definedTags",
         "name": "defined_tags",
         "type": "map",
@@ -1601,6 +1768,7 @@
         "id": "defined_tags"
       },
       "display_name": {
+        "provider": "oci",
         "key": "displayName",
         "name": "display_name",
         "type": "string",
@@ -1610,6 +1778,7 @@
         "id": "display_name"
       },
       "freeform_tags": {
+        "provider": "oci",
         "key": "freeformTags",
         "name": "freeform_tags",
         "type": "map",
@@ -1619,6 +1788,7 @@
         "id": "freeform_tags"
       },
       "is_cross_tenancy_peering": {
+        "provider": "oci",
         "key": "isCrossTenancyPeering",
         "name": "is_cross_tenancy_peering",
         "type": "bool",
@@ -1628,6 +1798,7 @@
         "id": "is_cross_tenancy_peering"
       },
       "peer_advertised_cidr": {
+        "provider": "oci",
         "key": "peerAdvertisedCidr",
         "name": "peer_advertised_cidr",
         "type": "string",
@@ -1637,6 +1808,7 @@
         "id": "peer_advertised_cidr"
       },
       "peer_advertised_cidr_details": {
+        "provider": "oci",
         "key": "peerAdvertisedCidrDetails",
         "name": "peer_advertised_cidr_details",
         "type": "list",
@@ -1646,6 +1818,7 @@
         "id": "peer_advertised_cidr_details"
       },
       "peer_id": {
+        "provider": "oci",
         "key": "peerId",
         "name": "peer_id",
         "type": "string",
@@ -1655,6 +1828,7 @@
         "id": "peer_id"
       },
       "peering_status": {
+        "provider": "oci",
         "key": "peeringStatus",
         "name": "peering_status",
         "type": "string",
@@ -1664,6 +1838,7 @@
         "id": "peering_status"
       },
       "peering_status_details": {
+        "provider": "oci",
         "key": "peeringStatusDetails",
         "name": "peering_status_details",
         "type": "string",
@@ -1673,6 +1848,7 @@
         "id": "peering_status_details"
       },
       "route_table_id": {
+        "provider": "oci",
         "key": "routeTableId",
         "name": "route_table_id",
         "type": "string",
@@ -1682,6 +1858,7 @@
         "id": "route_table_id"
       },
       "vcn_id": {
+        "provider": "oci",
         "key": "vcnId",
         "name": "vcn_id",
         "type": "string",
@@ -1697,6 +1874,7 @@
     "subtype": "",
     "attributes": {
       "block_traffic": {
+        "provider": "oci",
         "key": "blockTraffic",
         "name": "block_traffic",
         "type": "bool",
@@ -1706,6 +1884,7 @@
         "id": "block_traffic"
       },
       "compartment_id": {
+        "provider": "oci",
         "key": "compartmentId",
         "name": "compartment_id",
         "type": "string",
@@ -1715,6 +1894,7 @@
         "id": "compartment_id"
       },
       "defined_tags": {
+        "provider": "oci",
         "key": "definedTags",
         "name": "defined_tags",
         "type": "map",
@@ -1724,6 +1904,7 @@
         "id": "defined_tags"
       },
       "display_name": {
+        "provider": "oci",
         "key": "displayName",
         "name": "display_name",
         "type": "string",
@@ -1733,6 +1914,7 @@
         "id": "display_name"
       },
       "freeform_tags": {
+        "provider": "oci",
         "key": "freeformTags",
         "name": "freeform_tags",
         "type": "map",
@@ -1742,6 +1924,7 @@
         "id": "freeform_tags"
       },
       "nat_ip": {
+        "provider": "oci",
         "key": "natIp",
         "name": "nat_ip",
         "type": "string",
@@ -1751,6 +1934,7 @@
         "id": "nat_ip"
       },
       "public_ip_id": {
+        "provider": "oci",
         "key": "publicIpId",
         "name": "public_ip_id",
         "type": "string",
@@ -1760,6 +1944,7 @@
         "id": "public_ip_id"
       },
       "vcn_id": {
+        "provider": "oci",
         "key": "vcnId",
         "name": "vcn_id",
         "type": "string",
@@ -1775,6 +1960,7 @@
     "subtype": "",
     "attributes": {
       "compartment_id": {
+        "provider": "oci",
         "key": "compartmentId",
         "name": "compartment_id",
         "type": "string",
@@ -1784,6 +1970,7 @@
         "id": "compartment_id"
       },
       "defined_tags": {
+        "provider": "oci",
         "key": "definedTags",
         "name": "defined_tags",
         "type": "map",
@@ -1793,6 +1980,7 @@
         "id": "defined_tags"
       },
       "display_name": {
+        "provider": "oci",
         "key": "displayName",
         "name": "display_name",
         "type": "string",
@@ -1802,6 +1990,7 @@
         "id": "display_name"
       },
       "freeform_tags": {
+        "provider": "oci",
         "key": "freeformTags",
         "name": "freeform_tags",
         "type": "map",
@@ -1811,6 +2000,7 @@
         "id": "freeform_tags"
       },
       "vcn_id": {
+        "provider": "oci",
         "key": "vcnId",
         "name": "vcn_id",
         "type": "string",
@@ -1826,6 +2016,7 @@
     "subtype": "",
     "attributes": {
       "compartment_id": {
+        "provider": "oci",
         "key": "compartmentId",
         "name": "compartment_id",
         "type": "string",
@@ -1835,6 +2026,7 @@
         "id": "compartment_id"
       },
       "defined_tags": {
+        "provider": "oci",
         "key": "definedTags",
         "name": "defined_tags",
         "type": "map",
@@ -1844,6 +2036,7 @@
         "id": "defined_tags"
       },
       "display_name": {
+        "provider": "oci",
         "key": "displayName",
         "name": "display_name",
         "type": "string",
@@ -1853,6 +2046,7 @@
         "id": "display_name"
       },
       "drg_id": {
+        "provider": "oci",
         "key": "drgId",
         "name": "drg_id",
         "type": "string",
@@ -1862,6 +2056,7 @@
         "id": "drg_id"
       },
       "freeform_tags": {
+        "provider": "oci",
         "key": "freeformTags",
         "name": "freeform_tags",
         "type": "map",
@@ -1871,6 +2066,7 @@
         "id": "freeform_tags"
       },
       "is_cross_tenancy_peering": {
+        "provider": "oci",
         "key": "isCrossTenancyPeering",
         "name": "is_cross_tenancy_peering",
         "type": "bool",
@@ -1880,6 +2076,7 @@
         "id": "is_cross_tenancy_peering"
       },
       "peer_id": {
+        "provider": "oci",
         "key": "peerId",
         "name": "peer_id",
         "type": "string",
@@ -1889,6 +2086,7 @@
         "id": "peer_id"
       },
       "peer_region_name": {
+        "provider": "oci",
         "key": "peerRegionName",
         "name": "peer_region_name",
         "type": "string",
@@ -1898,6 +2096,7 @@
         "id": "peer_region_name"
       },
       "peer_tenancy_id": {
+        "provider": "oci",
         "key": "peerTenancyId",
         "name": "peer_tenancy_id",
         "type": "string",
@@ -1907,6 +2106,7 @@
         "id": "peer_tenancy_id"
       },
       "peering_status": {
+        "provider": "oci",
         "key": "peeringStatus",
         "name": "peering_status",
         "type": "string",
@@ -1922,6 +2122,7 @@
     "subtype": "",
     "attributes": {
       "compartment_id": {
+        "provider": "oci",
         "key": "compartmentId",
         "name": "compartment_id",
         "type": "string",
@@ -1931,6 +2132,7 @@
         "id": "compartment_id"
       },
       "defined_tags": {
+        "provider": "oci",
         "key": "definedTags",
         "name": "defined_tags",
         "type": "map",
@@ -1940,6 +2142,7 @@
         "id": "defined_tags"
       },
       "display_name": {
+        "provider": "oci",
         "key": "displayName",
         "name": "display_name",
         "type": "string",
@@ -1949,6 +2152,7 @@
         "id": "display_name"
       },
       "freeform_tags": {
+        "provider": "oci",
         "key": "freeformTags",
         "name": "freeform_tags",
         "type": "map",
@@ -1958,6 +2162,7 @@
         "id": "freeform_tags"
       },
       "vcn_id": {
+        "provider": "oci",
         "key": "vcnId",
         "name": "vcn_id",
         "type": "string",
@@ -1967,6 +2172,7 @@
         "id": "vcn_id"
       },
       "route_rules": {
+        "provider": "oci",
         "key": "routeRules",
         "name": "route_rules",
         "type": "list",
@@ -1976,6 +2182,7 @@
         "id": "route_rules",
         "attributes": {
           "cidr_block": {
+            "provider": "oci",
             "key": "cidrBlock",
             "name": "cidr_block",
             "type": "string",
@@ -1985,6 +2192,7 @@
             "id": "route_rules.cidr_block"
           },
           "description": {
+            "provider": "oci",
             "key": "description",
             "name": "description",
             "type": "string",
@@ -1994,6 +2202,7 @@
             "id": "route_rules.description"
           },
           "destination": {
+            "provider": "oci",
             "key": "destination",
             "name": "destination",
             "type": "string",
@@ -2003,6 +2212,7 @@
             "id": "route_rules.destination"
           },
           "destination_type": {
+            "provider": "oci",
             "key": "destinationType",
             "name": "destination_type",
             "type": "string",
@@ -2012,6 +2222,7 @@
             "id": "route_rules.destination_type"
           },
           "network_entity_id": {
+            "provider": "oci",
             "key": "networkEntityId",
             "name": "network_entity_id",
             "type": "string",
@@ -2029,6 +2240,7 @@
     "subtype": "",
     "attributes": {
       "compartment_id": {
+        "provider": "oci",
         "key": "compartmentId",
         "name": "compartment_id",
         "type": "string",
@@ -2038,6 +2250,7 @@
         "id": "compartment_id"
       },
       "defined_tags": {
+        "provider": "oci",
         "key": "definedTags",
         "name": "defined_tags",
         "type": "map",
@@ -2047,6 +2260,7 @@
         "id": "defined_tags"
       },
       "display_name": {
+        "provider": "oci",
         "key": "displayName",
         "name": "display_name",
         "type": "string",
@@ -2056,6 +2270,7 @@
         "id": "display_name"
       },
       "freeform_tags": {
+        "provider": "oci",
         "key": "freeformTags",
         "name": "freeform_tags",
         "type": "map",
@@ -2065,6 +2280,7 @@
         "id": "freeform_tags"
       },
       "vcn_id": {
+        "provider": "oci",
         "key": "vcnId",
         "name": "vcn_id",
         "type": "string",
@@ -2074,6 +2290,7 @@
         "id": "vcn_id"
       },
       "egress_security_rules": {
+        "provider": "oci",
         "key": "egressSecurityRules",
         "name": "egress_security_rules",
         "type": "list",
@@ -2083,6 +2300,7 @@
         "id": "egress_security_rules",
         "attributes": {
           "description": {
+            "provider": "oci",
             "key": "description",
             "name": "description",
             "type": "string",
@@ -2092,6 +2310,7 @@
             "id": "egress_security_rules.description"
           },
           "destination": {
+            "provider": "oci",
             "key": "destination",
             "name": "destination",
             "type": "string",
@@ -2101,6 +2320,7 @@
             "id": "egress_security_rules.destination"
           },
           "destination_type": {
+            "provider": "oci",
             "key": "destinationType",
             "name": "destination_type",
             "type": "string",
@@ -2110,6 +2330,7 @@
             "id": "egress_security_rules.destination_type"
           },
           "protocol": {
+            "provider": "oci",
             "key": "protocol",
             "name": "protocol",
             "type": "string",
@@ -2119,6 +2340,7 @@
             "id": "egress_security_rules.protocol"
           },
           "stateless": {
+            "provider": "oci",
             "key": "stateless",
             "name": "stateless",
             "type": "bool",
@@ -2128,6 +2350,7 @@
             "id": "egress_security_rules.stateless"
           },
           "icmp_options": {
+            "provider": "oci",
             "key": "icmpOptions",
             "name": "icmp_options",
             "type": "object",
@@ -2137,6 +2360,7 @@
             "id": "egress_security_rules.icmp_options",
             "attributes": {
               "code": {
+                "provider": "oci",
                 "key": "code",
                 "name": "code",
                 "type": "number",
@@ -2146,6 +2370,7 @@
                 "id": "egress_security_rules.icmp_options.code"
               },
               "type": {
+                "provider": "oci",
                 "key": "type",
                 "name": "type",
                 "type": "number",
@@ -2157,6 +2382,7 @@
             }
           },
           "tcp_options": {
+            "provider": "oci",
             "key": "tcpOptions",
             "name": "tcp_options",
             "type": "object",
@@ -2166,6 +2392,7 @@
             "id": "egress_security_rules.tcp_options",
             "attributes": {
               "max": {
+                "provider": "oci",
                 "key": "max",
                 "name": "max",
                 "type": "number",
@@ -2175,6 +2402,7 @@
                 "id": "egress_security_rules.tcp_options.max"
               },
               "min": {
+                "provider": "oci",
                 "key": "min",
                 "name": "min",
                 "type": "number",
@@ -2184,6 +2412,7 @@
                 "id": "egress_security_rules.tcp_options.min"
               },
               "source_port_range": {
+                "provider": "oci",
                 "key": "sourcePortRange",
                 "name": "source_port_range",
                 "type": "object",
@@ -2193,6 +2422,7 @@
                 "id": "egress_security_rules.tcp_options.source_port_range",
                 "attributes": {
                   "max": {
+                    "provider": "oci",
                     "key": "max",
                     "name": "max",
                     "type": "number",
@@ -2202,6 +2432,7 @@
                     "id": "egress_security_rules.tcp_options.source_port_range.max"
                   },
                   "min": {
+                    "provider": "oci",
                     "key": "min",
                     "name": "min",
                     "type": "number",
@@ -2215,6 +2446,7 @@
             }
           },
           "udp_options": {
+            "provider": "oci",
             "key": "udpOptions",
             "name": "udp_options",
             "type": "object",
@@ -2224,6 +2456,7 @@
             "id": "egress_security_rules.udp_options",
             "attributes": {
               "max": {
+                "provider": "oci",
                 "key": "max",
                 "name": "max",
                 "type": "number",
@@ -2233,6 +2466,7 @@
                 "id": "egress_security_rules.udp_options.max"
               },
               "min": {
+                "provider": "oci",
                 "key": "min",
                 "name": "min",
                 "type": "number",
@@ -2242,6 +2476,7 @@
                 "id": "egress_security_rules.udp_options.min"
               },
               "source_port_range": {
+                "provider": "oci",
                 "key": "sourcePortRange",
                 "name": "source_port_range",
                 "type": "object",
@@ -2251,6 +2486,7 @@
                 "id": "egress_security_rules.udp_options.source_port_range",
                 "attributes": {
                   "max": {
+                    "provider": "oci",
                     "key": "max",
                     "name": "max",
                     "type": "number",
@@ -2260,6 +2496,7 @@
                     "id": "egress_security_rules.udp_options.source_port_range.max"
                   },
                   "min": {
+                    "provider": "oci",
                     "key": "min",
                     "name": "min",
                     "type": "number",
@@ -2275,6 +2512,7 @@
         }
       },
       "ingress_security_rules": {
+        "provider": "oci",
         "key": "ingressSecurityRules",
         "name": "ingress_security_rules",
         "type": "list",
@@ -2284,6 +2522,7 @@
         "id": "ingress_security_rules",
         "attributes": {
           "description": {
+            "provider": "oci",
             "key": "description",
             "name": "description",
             "type": "string",
@@ -2293,6 +2532,7 @@
             "id": "ingress_security_rules.description"
           },
           "protocol": {
+            "provider": "oci",
             "key": "protocol",
             "name": "protocol",
             "type": "string",
@@ -2302,6 +2542,7 @@
             "id": "ingress_security_rules.protocol"
           },
           "source": {
+            "provider": "oci",
             "key": "source",
             "name": "source",
             "type": "string",
@@ -2311,6 +2552,7 @@
             "id": "ingress_security_rules.source"
           },
           "source_type": {
+            "provider": "oci",
             "key": "sourceType",
             "name": "source_type",
             "type": "string",
@@ -2320,6 +2562,7 @@
             "id": "ingress_security_rules.source_type"
           },
           "stateless": {
+            "provider": "oci",
             "key": "stateless",
             "name": "stateless",
             "type": "bool",
@@ -2329,6 +2572,7 @@
             "id": "ingress_security_rules.stateless"
           },
           "icmp_options": {
+            "provider": "oci",
             "key": "icmpOptions",
             "name": "icmp_options",
             "type": "object",
@@ -2338,6 +2582,7 @@
             "id": "ingress_security_rules.icmp_options",
             "attributes": {
               "code": {
+                "provider": "oci",
                 "key": "code",
                 "name": "code",
                 "type": "number",
@@ -2347,6 +2592,7 @@
                 "id": "ingress_security_rules.icmp_options.code"
               },
               "type": {
+                "provider": "oci",
                 "key": "type",
                 "name": "type",
                 "type": "number",
@@ -2358,6 +2604,7 @@
             }
           },
           "tcp_options": {
+            "provider": "oci",
             "key": "tcpOptions",
             "name": "tcp_options",
             "type": "object",
@@ -2367,6 +2614,7 @@
             "id": "ingress_security_rules.tcp_options",
             "attributes": {
               "max": {
+                "provider": "oci",
                 "key": "max",
                 "name": "max",
                 "type": "number",
@@ -2376,6 +2624,7 @@
                 "id": "ingress_security_rules.tcp_options.max"
               },
               "min": {
+                "provider": "oci",
                 "key": "min",
                 "name": "min",
                 "type": "number",
@@ -2385,6 +2634,7 @@
                 "id": "ingress_security_rules.tcp_options.min"
               },
               "source_port_range": {
+                "provider": "oci",
                 "key": "sourcePortRange",
                 "name": "source_port_range",
                 "type": "object",
@@ -2394,6 +2644,7 @@
                 "id": "ingress_security_rules.tcp_options.source_port_range",
                 "attributes": {
                   "max": {
+                    "provider": "oci",
                     "key": "max",
                     "name": "max",
                     "type": "number",
@@ -2403,6 +2654,7 @@
                     "id": "ingress_security_rules.tcp_options.source_port_range.max"
                   },
                   "min": {
+                    "provider": "oci",
                     "key": "min",
                     "name": "min",
                     "type": "number",
@@ -2416,6 +2668,7 @@
             }
           },
           "udp_options": {
+            "provider": "oci",
             "key": "udpOptions",
             "name": "udp_options",
             "type": "object",
@@ -2425,6 +2678,7 @@
             "id": "ingress_security_rules.udp_options",
             "attributes": {
               "max": {
+                "provider": "oci",
                 "key": "max",
                 "name": "max",
                 "type": "number",
@@ -2434,6 +2688,7 @@
                 "id": "ingress_security_rules.udp_options.max"
               },
               "min": {
+                "provider": "oci",
                 "key": "min",
                 "name": "min",
                 "type": "number",
@@ -2443,6 +2698,7 @@
                 "id": "ingress_security_rules.udp_options.min"
               },
               "source_port_range": {
+                "provider": "oci",
                 "key": "sourcePortRange",
                 "name": "source_port_range",
                 "type": "object",
@@ -2452,6 +2708,7 @@
                 "id": "ingress_security_rules.udp_options.source_port_range",
                 "attributes": {
                   "max": {
+                    "provider": "oci",
                     "key": "max",
                     "name": "max",
                     "type": "number",
@@ -2461,6 +2718,7 @@
                     "id": "ingress_security_rules.udp_options.source_port_range.max"
                   },
                   "min": {
+                    "provider": "oci",
                     "key": "min",
                     "name": "min",
                     "type": "number",
@@ -2482,6 +2740,7 @@
     "subtype": "",
     "attributes": {
       "block_traffic": {
+        "provider": "oci",
         "key": "blockTraffic",
         "name": "block_traffic",
         "type": "bool",
@@ -2491,6 +2750,7 @@
         "id": "block_traffic"
       },
       "compartment_id": {
+        "provider": "oci",
         "key": "compartmentId",
         "name": "compartment_id",
         "type": "string",
@@ -2500,6 +2760,7 @@
         "id": "compartment_id"
       },
       "defined_tags": {
+        "provider": "oci",
         "key": "definedTags",
         "name": "defined_tags",
         "type": "map",
@@ -2509,6 +2770,7 @@
         "id": "defined_tags"
       },
       "display_name": {
+        "provider": "oci",
         "key": "displayName",
         "name": "display_name",
         "type": "string",
@@ -2518,6 +2780,7 @@
         "id": "display_name"
       },
       "freeform_tags": {
+        "provider": "oci",
         "key": "freeformTags",
         "name": "freeform_tags",
         "type": "map",
@@ -2527,6 +2790,7 @@
         "id": "freeform_tags"
       },
       "route_table_id": {
+        "provider": "oci",
         "key": "routeTableId",
         "name": "route_table_id",
         "type": "string",
@@ -2536,6 +2800,7 @@
         "id": "route_table_id"
       },
       "vcn_id": {
+        "provider": "oci",
         "key": "vcnId",
         "name": "vcn_id",
         "type": "string",
@@ -2545,6 +2810,7 @@
         "id": "vcn_id"
       },
       "services": {
+        "provider": "oci",
         "key": "services",
         "name": "services",
         "type": "list",
@@ -2554,6 +2820,7 @@
         "id": "services",
         "attributes": {
           "service_id": {
+            "provider": "oci",
             "key": "serviceId",
             "name": "service_id",
             "type": "string",
@@ -2563,6 +2830,7 @@
             "id": "services.service_id"
           },
           "service_name": {
+            "provider": "oci",
             "key": "serviceName",
             "name": "service_name",
             "type": "string",
@@ -2580,6 +2848,7 @@
     "subtype": "",
     "attributes": {
       "availability_domain": {
+        "provider": "oci",
         "key": "availabilityDomain",
         "name": "availability_domain",
         "type": "string",
@@ -2589,6 +2858,7 @@
         "id": "availability_domain"
       },
       "cidr_block": {
+        "provider": "oci",
         "key": "cidrBlock",
         "name": "cidr_block",
         "type": "string",
@@ -2598,6 +2868,7 @@
         "id": "cidr_block"
       },
       "compartment_id": {
+        "provider": "oci",
         "key": "compartmentId",
         "name": "compartment_id",
         "type": "string",
@@ -2607,6 +2878,7 @@
         "id": "compartment_id"
       },
       "defined_tags": {
+        "provider": "oci",
         "key": "definedTags",
         "name": "defined_tags",
         "type": "map",
@@ -2616,6 +2888,7 @@
         "id": "defined_tags"
       },
       "dhcp_options_id": {
+        "provider": "oci",
         "key": "dhcpOptionsId",
         "name": "dhcp_options_id",
         "type": "string",
@@ -2625,6 +2898,7 @@
         "id": "dhcp_options_id"
       },
       "display_name": {
+        "provider": "oci",
         "key": "displayName",
         "name": "display_name",
         "type": "string",
@@ -2634,6 +2908,7 @@
         "id": "display_name"
       },
       "dns_label": {
+        "provider": "oci",
         "key": "dnsLabel",
         "name": "dns_label",
         "type": "string",
@@ -2643,6 +2918,7 @@
         "id": "dns_label"
       },
       "freeform_tags": {
+        "provider": "oci",
         "key": "freeformTags",
         "name": "freeform_tags",
         "type": "map",
@@ -2652,6 +2928,7 @@
         "id": "freeform_tags"
       },
       "ipv6cidr_block": {
+        "provider": "oci",
         "key": "ipv6cidrBlock",
         "name": "ipv6cidr_block",
         "type": "string",
@@ -2661,6 +2938,7 @@
         "id": "ipv6cidr_block"
       },
       "ipv6virtual_router_ip": {
+        "provider": "oci",
         "key": "ipv6virtualRouterIp",
         "name": "ipv6virtual_router_ip",
         "type": "string",
@@ -2670,6 +2948,7 @@
         "id": "ipv6virtual_router_ip"
       },
       "prohibit_internet_ingress": {
+        "provider": "oci",
         "key": "prohibitInternetIngress",
         "name": "prohibit_internet_ingress",
         "type": "bool",
@@ -2679,6 +2958,7 @@
         "id": "prohibit_internet_ingress"
       },
       "prohibit_public_ip_on_vnic": {
+        "provider": "oci",
         "key": "prohibitPublicIpOnVnic",
         "name": "prohibit_public_ip_on_vnic",
         "type": "bool",
@@ -2688,6 +2968,7 @@
         "id": "prohibit_public_ip_on_vnic"
       },
       "route_table_id": {
+        "provider": "oci",
         "key": "routeTableId",
         "name": "route_table_id",
         "type": "string",
@@ -2697,6 +2978,7 @@
         "id": "route_table_id"
       },
       "security_list_ids": {
+        "provider": "oci",
         "key": "securityListIds",
         "name": "security_list_ids",
         "type": "set",
@@ -2706,6 +2988,7 @@
         "id": "security_list_ids"
       },
       "subnet_domain_name": {
+        "provider": "oci",
         "key": "subnetDomainName",
         "name": "subnet_domain_name",
         "type": "string",
@@ -2715,6 +2998,7 @@
         "id": "subnet_domain_name"
       },
       "vcn_id": {
+        "provider": "oci",
         "key": "vcnId",
         "name": "vcn_id",
         "type": "string",
@@ -2724,6 +3008,7 @@
         "id": "vcn_id"
       },
       "virtual_router_ip": {
+        "provider": "oci",
         "key": "virtualRouterIp",
         "name": "virtual_router_ip",
         "type": "string",
@@ -2733,6 +3018,7 @@
         "id": "virtual_router_ip"
       },
       "virtual_router_mac": {
+        "provider": "oci",
         "key": "virtualRouterMac",
         "name": "virtual_router_mac",
         "type": "string",
@@ -2748,6 +3034,7 @@
     "subtype": "",
     "attributes": {
       "cidr_block": {
+        "provider": "oci",
         "key": "cidrBlock",
         "name": "cidr_block",
         "type": "string",
@@ -2757,6 +3044,7 @@
         "id": "cidr_block"
       },
       "cidr_blocks": {
+        "provider": "oci",
         "key": "cidrBlocks",
         "name": "cidr_blocks",
         "type": "list",
@@ -2766,6 +3054,7 @@
         "id": "cidr_blocks"
       },
       "compartment_id": {
+        "provider": "oci",
         "key": "compartmentId",
         "name": "compartment_id",
         "type": "string",
@@ -2775,6 +3064,7 @@
         "id": "compartment_id"
       },
       "defined_tags": {
+        "provider": "oci",
         "key": "definedTags",
         "name": "defined_tags",
         "type": "map",
@@ -2784,6 +3074,7 @@
         "id": "defined_tags"
       },
       "display_name": {
+        "provider": "oci",
         "key": "displayName",
         "name": "display_name",
         "type": "string",
@@ -2793,6 +3084,7 @@
         "id": "display_name"
       },
       "dns_label": {
+        "provider": "oci",
         "key": "dnsLabel",
         "name": "dns_label",
         "type": "string",
@@ -2802,6 +3094,7 @@
         "id": "dns_label"
       },
       "freeform_tags": {
+        "provider": "oci",
         "key": "freeformTags",
         "name": "freeform_tags",
         "type": "map",
@@ -2811,6 +3104,7 @@
         "id": "freeform_tags"
       },
       "ipv6cidr_blocks": {
+        "provider": "oci",
         "key": "ipv6cidrBlocks",
         "name": "ipv6cidr_blocks",
         "type": "list",
@@ -2820,6 +3114,7 @@
         "id": "ipv6cidr_blocks"
       },
       "is_ipv6enabled": {
+        "provider": "oci",
         "key": "isIpv6enabled",
         "name": "is_ipv6enabled",
         "type": "bool",
@@ -2835,6 +3130,7 @@
     "subtype": "",
     "attributes": {
       "auto_tuned_vpus_per_gb": {
+        "provider": "oci",
         "key": "autoTunedVpusPerGb",
         "name": "auto_tuned_vpus_per_gb",
         "type": "string",
@@ -2844,6 +3140,7 @@
         "id": "auto_tuned_vpus_per_gb"
       },
       "availability_domain": {
+        "provider": "oci",
         "key": "availabilityDomain",
         "name": "availability_domain",
         "type": "string",
@@ -2853,6 +3150,7 @@
         "id": "availability_domain"
       },
       "backup_policy_id": {
+        "provider": "oci",
         "key": "backupPolicyId",
         "name": "backup_policy_id",
         "type": "string",
@@ -2862,6 +3160,7 @@
         "id": "backup_policy_id"
       },
       "block_volume_replicas_deletion": {
+        "provider": "oci",
         "key": "blockVolumeReplicasDeletion",
         "name": "block_volume_replicas_deletion",
         "type": "bool",
@@ -2871,6 +3170,7 @@
         "id": "block_volume_replicas_deletion"
       },
       "compartment_id": {
+        "provider": "oci",
         "key": "compartmentId",
         "name": "compartment_id",
         "type": "string",
@@ -2880,6 +3180,7 @@
         "id": "compartment_id"
       },
       "defined_tags": {
+        "provider": "oci",
         "key": "definedTags",
         "name": "defined_tags",
         "type": "map",
@@ -2889,6 +3190,7 @@
         "id": "defined_tags"
       },
       "display_name": {
+        "provider": "oci",
         "key": "displayName",
         "name": "display_name",
         "type": "string",
@@ -2898,6 +3200,7 @@
         "id": "display_name"
       },
       "freeform_tags": {
+        "provider": "oci",
         "key": "freeformTags",
         "name": "freeform_tags",
         "type": "map",
@@ -2907,6 +3210,7 @@
         "id": "freeform_tags"
       },
       "is_auto_tune_enabled": {
+        "provider": "oci",
         "key": "isAutoTuneEnabled",
         "name": "is_auto_tune_enabled",
         "type": "bool",
@@ -2916,6 +3220,7 @@
         "id": "is_auto_tune_enabled"
       },
       "is_hydrated": {
+        "provider": "oci",
         "key": "isHydrated",
         "name": "is_hydrated",
         "type": "bool",
@@ -2925,6 +3230,7 @@
         "id": "is_hydrated"
       },
       "kms_key_id": {
+        "provider": "oci",
         "key": "kmsKeyId",
         "name": "kms_key_id",
         "type": "string",
@@ -2934,6 +3240,7 @@
         "id": "kms_key_id"
       },
       "size_in_gbs": {
+        "provider": "oci",
         "key": "sizeInGbs",
         "name": "size_in_gbs",
         "type": "string",
@@ -2943,6 +3250,7 @@
         "id": "size_in_gbs"
       },
       "size_in_mbs": {
+        "provider": "oci",
         "key": "sizeInMbs",
         "name": "size_in_mbs",
         "type": "string",
@@ -2952,6 +3260,7 @@
         "id": "size_in_mbs"
       },
       "volume_backup_id": {
+        "provider": "oci",
         "key": "volumeBackupId",
         "name": "volume_backup_id",
         "type": "string",
@@ -2961,6 +3270,7 @@
         "id": "volume_backup_id"
       },
       "volume_group_id": {
+        "provider": "oci",
         "key": "volumeGroupId",
         "name": "volume_group_id",
         "type": "string",
@@ -2970,6 +3280,7 @@
         "id": "volume_group_id"
       },
       "vpus_per_gb": {
+        "provider": "oci",
         "key": "vpusPerGb",
         "name": "vpus_per_gb",
         "type": "string",
@@ -2979,6 +3290,7 @@
         "id": "vpus_per_gb"
       },
       "block_volume_replicas": {
+        "provider": "oci",
         "key": "blockVolumeReplicas",
         "name": "block_volume_replicas",
         "type": "list",
@@ -2988,6 +3300,7 @@
         "id": "block_volume_replicas",
         "attributes": {
           "availability_domain": {
+            "provider": "oci",
             "key": "availabilityDomain",
             "name": "availability_domain",
             "type": "string",
@@ -2997,6 +3310,7 @@
             "id": "block_volume_replicas.availability_domain"
           },
           "block_volume_replica_id": {
+            "provider": "oci",
             "key": "blockVolumeReplicaId",
             "name": "block_volume_replica_id",
             "type": "string",
@@ -3006,6 +3320,7 @@
             "id": "block_volume_replicas.block_volume_replica_id"
           },
           "display_name": {
+            "provider": "oci",
             "key": "displayName",
             "name": "display_name",
             "type": "string",
@@ -3017,6 +3332,7 @@
         }
       },
       "source_details": {
+        "provider": "oci",
         "key": "sourceDetails",
         "name": "source_details",
         "type": "object",
@@ -3026,6 +3342,7 @@
         "id": "source_details",
         "attributes": {
           "type": {
+            "provider": "oci",
             "key": "type",
             "name": "type",
             "type": "string",
@@ -3043,6 +3360,7 @@
     "subtype": "",
     "attributes": {
       "compartment_id": {
+        "provider": "oci",
         "key": "compartmentId",
         "name": "compartment_id",
         "type": "string",
@@ -3052,6 +3370,7 @@
         "id": "compartment_id"
       },
       "defined_tags": {
+        "provider": "oci",
         "key": "definedTags",
         "name": "defined_tags",
         "type": "map",
@@ -3061,6 +3380,7 @@
         "id": "defined_tags"
       },
       "description": {
+        "provider": "oci",
         "key": "description",
         "name": "description",
         "type": "string",
@@ -3070,6 +3390,7 @@
         "id": "description"
       },
       "enable_delete": {
+        "provider": "oci",
         "key": "enableDelete",
         "name": "enable_delete",
         "type": "bool",
@@ -3079,6 +3400,7 @@
         "id": "enable_delete"
       },
       "freeform_tags": {
+        "provider": "oci",
         "key": "freeformTags",
         "name": "freeform_tags",
         "type": "map",
@@ -3088,6 +3410,7 @@
         "id": "freeform_tags"
       },
       "name": {
+        "provider": "oci",
         "key": "name",
         "name": "name",
         "type": "string",
@@ -3103,6 +3426,7 @@
     "subtype": "",
     "attributes": {
       "access_type": {
+        "provider": "oci",
         "key": "accessType",
         "name": "access_type",
         "type": "string",
@@ -3112,6 +3436,7 @@
         "id": "access_type"
       },
       "approximate_count": {
+        "provider": "oci",
         "key": "approximateCount",
         "name": "approximate_count",
         "type": "string",
@@ -3121,6 +3446,7 @@
         "id": "approximate_count"
       },
       "approximate_size": {
+        "provider": "oci",
         "key": "approximateSize",
         "name": "approximate_size",
         "type": "string",
@@ -3130,6 +3456,7 @@
         "id": "approximate_size"
       },
       "auto_tiering": {
+        "provider": "oci",
         "key": "autoTiering",
         "name": "auto_tiering",
         "type": "string",
@@ -3139,6 +3466,7 @@
         "id": "auto_tiering"
       },
       "bucket_id": {
+        "provider": "oci",
         "key": "bucketId",
         "name": "bucket_id",
         "type": "string",
@@ -3148,6 +3476,7 @@
         "id": "bucket_id"
       },
       "compartment_id": {
+        "provider": "oci",
         "key": "compartmentId",
         "name": "compartment_id",
         "type": "string",
@@ -3157,6 +3486,7 @@
         "id": "compartment_id"
       },
       "defined_tags": {
+        "provider": "oci",
         "key": "definedTags",
         "name": "defined_tags",
         "type": "map",
@@ -3166,6 +3496,7 @@
         "id": "defined_tags"
       },
       "freeform_tags": {
+        "provider": "oci",
         "key": "freeformTags",
         "name": "freeform_tags",
         "type": "map",
@@ -3175,6 +3506,7 @@
         "id": "freeform_tags"
       },
       "is_read_only": {
+        "provider": "oci",
         "key": "isReadOnly",
         "name": "is_read_only",
         "type": "bool",
@@ -3184,6 +3516,7 @@
         "id": "is_read_only"
       },
       "kms_key_id": {
+        "provider": "oci",
         "key": "kmsKeyId",
         "name": "kms_key_id",
         "type": "string",
@@ -3193,6 +3526,7 @@
         "id": "kms_key_id"
       },
       "metadata": {
+        "provider": "oci",
         "key": "metadata",
         "name": "metadata",
         "type": "map",
@@ -3202,6 +3536,7 @@
         "id": "metadata"
       },
       "name": {
+        "provider": "oci",
         "key": "name",
         "name": "name",
         "type": "string",
@@ -3211,6 +3546,7 @@
         "id": "name"
       },
       "namespace": {
+        "provider": "oci",
         "key": "namespace",
         "name": "namespace",
         "type": "string",
@@ -3220,6 +3556,7 @@
         "id": "namespace"
       },
       "object_events_enabled": {
+        "provider": "oci",
         "key": "objectEventsEnabled",
         "name": "object_events_enabled",
         "type": "bool",
@@ -3229,6 +3566,7 @@
         "id": "object_events_enabled"
       },
       "replication_enabled": {
+        "provider": "oci",
         "key": "replicationEnabled",
         "name": "replication_enabled",
         "type": "bool",
@@ -3238,6 +3576,7 @@
         "id": "replication_enabled"
       },
       "storage_tier": {
+        "provider": "oci",
         "key": "storageTier",
         "name": "storage_tier",
         "type": "string",
@@ -3247,6 +3586,7 @@
         "id": "storage_tier"
       },
       "versioning": {
+        "provider": "oci",
         "key": "versioning",
         "name": "versioning",
         "type": "string",
@@ -3256,6 +3596,7 @@
         "id": "versioning"
       },
       "retention_rules": {
+        "provider": "oci",
         "key": "retentionRules",
         "name": "retention_rules",
         "type": "list",
@@ -3265,6 +3606,7 @@
         "id": "retention_rules",
         "attributes": {
           "display_name": {
+            "provider": "oci",
             "key": "displayName",
             "name": "display_name",
             "type": "string",
@@ -3274,6 +3616,7 @@
             "id": "retention_rules.display_name"
           },
           "retention_rule_id": {
+            "provider": "oci",
             "key": "retentionRuleId",
             "name": "retention_rule_id",
             "type": "string",
@@ -3283,6 +3626,7 @@
             "id": "retention_rules.retention_rule_id"
           },
           "time_modified": {
+            "provider": "oci",
             "key": "timeModified",
             "name": "time_modified",
             "type": "string",
@@ -3292,6 +3636,7 @@
             "id": "retention_rules.time_modified"
           },
           "time_rule_locked": {
+            "provider": "oci",
             "key": "timeRuleLocked",
             "name": "time_rule_locked",
             "type": "string",
@@ -3301,6 +3646,7 @@
             "id": "retention_rules.time_rule_locked"
           },
           "duration": {
+            "provider": "oci",
             "key": "duration",
             "name": "duration",
             "type": "object",
@@ -3310,6 +3656,7 @@
             "id": "retention_rules.duration",
             "attributes": {
               "time_amount": {
+                "provider": "oci",
                 "key": "timeAmount",
                 "name": "time_amount",
                 "type": "string",
@@ -3319,6 +3666,7 @@
                 "id": "retention_rules.duration.time_amount"
               },
               "time_unit": {
+                "provider": "oci",
                 "key": "timeUnit",
                 "name": "time_unit",
                 "type": "string",
