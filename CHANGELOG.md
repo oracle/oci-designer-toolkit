@@ -4,7 +4,7 @@
 ## Version 0.47.0
 **Release Date**: 8th March 2023
 ### Features
-1. Add Heatwave functionality to MySQL DB System (Issue: ##268)
+1. Add Heatwave functionality to MySQL DB System (Issue: #268)
 2. Allow spcification of Deletion and Backup Policies for MySQL DB Systems.
 3. Allow creation of VCN With a variable for CIDR Block (Issue: #554)
 4. Add Basic Data Science Project / Notebook Session (Issue: #567)
