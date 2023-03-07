@@ -24,7 +24,10 @@ export type filterType = (r: any) => any[]
 export interface ResourceElementProperties extends Record<string, any> {
     pattern?: string
     min?: number
-    max: number
+    max?: number
+    title?: string
+    maxLength?: number
+    placeholder?: string
 }
 
 export interface ResourceElementConfig extends Record<string, any> {
@@ -50,20 +53,24 @@ export interface ResourceProperty extends ResourceProperties {
     attribute: ResourcePropertyAttributes
 }
 
-export const OcdTextProperty = ({ ocdDocument, setOcdDocument, resource, attribute }: ResourceProperty): JSX.Element => {
+export const OcdTextProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
+    const properties = config && config.properties ? config.properties : {}
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         resource[attribute.key] = e.target.value
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
+    const onBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.target.reportValidity()
+    }
     return (
         <div className='ocd-property-row ocd-simple-property-row'>
             <div><label>{attribute.label}</label></div>
-            <div><input type='text' defaultValue={resource[attribute.key]} onChange={onChange}></input></div>
+            <div><input type='text' defaultValue={resource[attribute.key]} {...properties} onChange={onChange} onBlur={onBlur}></input></div>
         </div>
     )
 }
 
-export const OcdNumberProperty = ({ ocdDocument, setOcdDocument, resource, attribute }: ResourceProperty): JSX.Element => {
+export const OcdNumberProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         resource[attribute.key] = e.target.value
         setOcdDocument(OcdDocument.clone(ocdDocument))
@@ -76,7 +83,7 @@ export const OcdNumberProperty = ({ ocdDocument, setOcdDocument, resource, attri
     )
 }
 
-export const OcdBooleanProperty = ({ ocdDocument, setOcdDocument, resource, attribute }: ResourceProperty): JSX.Element => {
+export const OcdBooleanProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         resource[attribute.key] = e.target.checked
         setOcdDocument(OcdDocument.clone(ocdDocument))
@@ -89,7 +96,7 @@ export const OcdBooleanProperty = ({ ocdDocument, setOcdDocument, resource, attr
     )
 }
 
-export const OcdResourceReferenceProperty = ({ ocdDocument, setOcdDocument, resource, attribute }: ResourceProperty): JSX.Element => {
+export const OcdResourceReferenceProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
     const resources = attribute.provider === 'oci' ? ocdDocument.getOciResourceList(attribute.referenceResource ? attribute.referenceResource : '') : []
     const resourceType = OcdResource.toResourceType(attribute.referenceResource)
     console.info('Resources', resources)
@@ -112,13 +119,13 @@ export const OcdResourceReferenceProperty = ({ ocdDocument, setOcdDocument, reso
     )
 }
 
-export const OcdObjectProperty = ({ ocdDocument, setOcdDocument, resource, attribute }: ResourceProperty): JSX.Element => {
+export const OcdObjectProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
     return (
         <div></div>
     )
 }
 
-export const OcdObjectListProperty = ({ ocdDocument, setOcdDocument, resource, attribute }: ResourceProperty): JSX.Element => {
+export const OcdObjectListProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
     return (
         <div className='ocd-property-row'>
             <details open={true}>
@@ -130,19 +137,19 @@ export const OcdObjectListProperty = ({ ocdDocument, setOcdDocument, resource, a
     )
 }
 
-export const OcdListProperty = ({ ocdDocument, setOcdDocument, resource, attribute }: ResourceProperty): JSX.Element => {
+export const OcdListProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
     return (
         <div></div>
     )
 }
 
-export const OcdSetProperty = ({ ocdDocument, setOcdDocument, resource, attribute }: ResourceProperty): JSX.Element => {
+export const OcdSetProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
     return (
         <div></div>
     )
 }
 
-export const OcdMapProperty = ({ ocdDocument, setOcdDocument, resource, attribute }: ResourceProperty): JSX.Element => {
+export const OcdMapProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
     return (
         <div></div>
     )
