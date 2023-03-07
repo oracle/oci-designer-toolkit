@@ -1,0 +1,50 @@
+{
+    "common": [
+        "created_by",
+        "id",
+        "inactive_state",
+        "is_accessible",
+        "state",
+        "system_tags",
+        "time_created"
+    ],
+    "oci_core_drg": [
+        "default_drg_route_tables",
+        "default_export_drg_route_distribution_id"
+    ],
+    "oci_core_drg_attachment": [
+        "remove_export_drg_route_distribution_trigger"
+    ],
+    "oci_core_instance": [
+        "boot_volume_id",
+        "capacity_reservation_id",
+        "dedicated_vm_host_id",
+        "extended_metadata",
+        "ipxe_script",
+        "preemptible_instance_config",
+        "preserve_boot_volume"
+    ],
+    "oci_core_vcn": [
+        "cidr_block",
+        "default_dhcp_options_id",
+        "default_route_table_id",
+        "default_security_list_id",
+        "ipv6public_cidr_block",
+        "vcn_domain_name"
+    ],
+    "oci_database_autonomous_database": [
+        "time_deletion_of_free_autonomous_database",
+        "time_maintenance_begin",
+        "time_maintenance_end",
+        "time_of_last_failover",
+        "time_of_last_refresh",
+        "time_of_last_refresh_point",
+        "time_of_last_switchover",
+        "time_of_next_refresh",
+        "time_reclamation_of_free_autonomous_database"
+    ],
+    "oci_objectstorage_bucket": [
+        "etag",
+        "object_lifecycle_policy_etag"
+    ]
+}

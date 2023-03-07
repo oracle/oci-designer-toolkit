@@ -883,26 +883,6 @@
         "label": "Availability Domain",
         "id": "availability_domain"
       },
-      "boot_volume_id": {
-        "provider": "oci",
-        "key": "bootVolumeId",
-        "name": "boot_volume_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Boot Volume",
-        "id": "boot_volume_id"
-      },
-      "capacity_reservation_id": {
-        "provider": "oci",
-        "key": "capacityReservationId",
-        "name": "capacity_reservation_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Capacity Reservation",
-        "id": "capacity_reservation_id"
-      },
       "compartment_id": {
         "provider": "oci",
         "key": "compartmentId",
@@ -912,16 +892,6 @@
         "required": true,
         "label": "Compartment",
         "id": "compartment_id"
-      },
-      "dedicated_vm_host_id": {
-        "provider": "oci",
-        "key": "dedicatedVmHostId",
-        "name": "dedicated_vm_host_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Dedicated Vm Host",
-        "id": "dedicated_vm_host_id"
       },
       "defined_tags": {
         "provider": "oci",
@@ -942,16 +912,6 @@
         "required": false,
         "label": "Display Name",
         "id": "display_name"
-      },
-      "extended_metadata": {
-        "provider": "oci",
-        "key": "extendedMetadata",
-        "name": "extended_metadata",
-        "type": "map",
-        "subtype": "string",
-        "required": false,
-        "label": "Extended Metadata",
-        "id": "extended_metadata"
       },
       "fault_domain": {
         "provider": "oci",
@@ -993,16 +953,6 @@
         "label": "Image",
         "id": "image"
       },
-      "ipxe_script": {
-        "provider": "oci",
-        "key": "ipxeScript",
-        "name": "ipxe_script",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Ipxe Script",
-        "id": "ipxe_script"
-      },
       "is_pv_encryption_in_transit_enabled": {
         "provider": "oci",
         "key": "isPvEncryptionInTransitEnabled",
@@ -1032,16 +982,6 @@
         "required": false,
         "label": "Metadata",
         "id": "metadata"
-      },
-      "preserve_boot_volume": {
-        "provider": "oci",
-        "key": "preserveBootVolume",
-        "name": "preserve_boot_volume",
-        "type": "bool",
-        "subtype": "",
-        "required": false,
-        "label": "Preserve Boot Volume",
-        "id": "preserve_boot_volume"
       },
       "private_ip": {
         "provider": "oci",
@@ -1477,16 +1417,6 @@
             "label": "Preemption Action",
             "id": "preemptible_instance_config.preemption_action",
             "attributes": {
-              "preserve_boot_volume": {
-                "provider": "oci",
-                "key": "preserveBootVolume",
-                "name": "preserve_boot_volume",
-                "type": "bool",
-                "subtype": "",
-                "required": false,
-                "label": "Preserve Boot Volume",
-                "id": "preemptible_instance_config.preemption_action.preserve_boot_volume"
-              },
               "type": {
                 "provider": "oci",
                 "key": "type",
@@ -3033,16 +2963,6 @@
     "type": "object",
     "subtype": "",
     "attributes": {
-      "cidr_block": {
-        "provider": "oci",
-        "key": "cidrBlock",
-        "name": "cidr_block",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Cidr Block",
-        "id": "cidr_block"
-      },
       "cidr_blocks": {
         "provider": "oci",
         "key": "cidrBlocks",

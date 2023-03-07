@@ -9,7 +9,7 @@ import { OcdResource } from '../model/OcdResource'
 import { DesignerResourceProperties } from '../types/DesignerResourceProperties'
 import { OcdUtils } from '../utils/OcdUtils'
 import OcdDocument from './OcdDocument'
-import { OcdResourceReferenceProperty, OcdTextProperty, ResourceProperties } from './properties/OcdPropertyTypes'
+import { OcdResourceReferenceProperty, OcdTextProperty, ResourceElementConfig, ResourceProperties } from './properties/OcdPropertyTypes'
 import * as ociResources from './properties/providers/oci/resources'
 
 const OcdResourcePropertiesHeader = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
@@ -26,6 +26,7 @@ const OcdResourcePropertiesHeader = ({ocdDocument, setOcdDocument}: DesignerReso
 }
 
 const OciCommonResourceProperties = ({ocdDocument, setOcdDocument, resource}: ResourceProperties): JSX.Element => {
+    const config: ResourceElementConfig | undefined = undefined
     const displayName = {"provider": "oci", "key": "displayName", "name": "displayName", "type": "string", "subtype": "", "required": true, "label": "Name", "id": "displayName"}
     const compartmentId = {"provider": "oci", "key": "compartmentId", "name": "compartmentId", "type": "string", "subtype": "", "required": false, "label": "Compartment", "id": "compartmentId", "referenceResource": "compartment"}
     return (
@@ -33,8 +34,8 @@ const OciCommonResourceProperties = ({ocdDocument, setOcdDocument, resource}: Re
             <details open={true}>
                 <summary className='summary-background'>Core</summary>
                 <div>
-                <OcdTextProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} attribute={displayName} />
-                <OcdResourceReferenceProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} attribute={compartmentId} />
+                <OcdTextProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={config} attribute={displayName} />
+                <OcdResourceReferenceProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={config} attribute={compartmentId} />
                 </div>
             </details>
         </div>

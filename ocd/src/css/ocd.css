@@ -1174,13 +1174,16 @@ summary {
 }
 
 .ocd-property-row {
-    display: grid;
-    grid-template-columns: 150px auto;
     box-sizing: border-box;
     margin: 1px 3px 1px 2px;
     padding: 1px 3px 1px 2px;
-    border: 1px solid lightgray;
     width: 100%;
+}
+
+.ocd-simple-property-row {
+    display: grid;
+    grid-template-columns: 150px auto;
+    border: 1px solid lightgray;
 }
 
 .ocd-property-row label {

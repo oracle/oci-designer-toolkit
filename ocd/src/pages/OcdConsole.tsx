@@ -69,10 +69,10 @@ const OcdConsoleConfigEditor = ({ ocdConsoleConfig, setOcdConsoleConfig }: any):
         ocdConsoleConfig.config.verboseProviderPalette = !ocdConsoleConfig.config.verboseProviderPalette
         setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
     }
-    const showModelPaletteOnChange = () => {
-        ocdConsoleConfig.config.showModelPalette = !ocdConsoleConfig.config.showModelPalette
-        setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
-    }
+    // const showModelPaletteOnChange = () => {
+    //     ocdConsoleConfig.config.showModelPalette = !ocdConsoleConfig.config.showModelPalette
+    //     setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+    // }
     return (
         <div className='ocd-console-toolbar-dropdown'>
             <ul>

@@ -19,13 +19,34 @@ export interface ResourcePropertyAttributes {
     referenceResource?: string
 }
 
+export type filterType = (r: any) => any[]
+
+export interface ResourceElementProperties extends Record<string, any> {
+    pattern?: string
+    min?: number
+    max: number
+}
+
+export interface ResourceElementConfig extends Record<string, any> {
+    id: string
+    properties: ResourceElementProperties
+    filter?: filterType                  // Filter function for Reference Selects
+    displayCondition?(): boolean         // Function to identify if conditional elements should be displayed
+    configs: ResourceElementConfig[]
+}
+
 export interface ResourceProperties {
     ocdDocument: OcdDocument
     setOcdDocument: React.Dispatch<any>
     resource: OcdResource
 }
 
+export interface GeneratedResourceProperties extends ResourceProperties {
+    configs: ResourceElementConfig[]
+}
+
 export interface ResourceProperty extends ResourceProperties {
+    config: ResourceElementConfig | undefined
     attribute: ResourcePropertyAttributes
 }
 
@@ -35,7 +56,7 @@ export const OcdTextProperty = ({ ocdDocument, setOcdDocument, resource, attribu
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
     return (
-        <div className='ocd-property-row'>
+        <div className='ocd-property-row ocd-simple-property-row'>
             <div><label>{attribute.label}</label></div>
             <div><input type='text' defaultValue={resource[attribute.key]} onChange={onChange}></input></div>
         </div>
@@ -48,7 +69,7 @@ export const OcdNumberProperty = ({ ocdDocument, setOcdDocument, resource, attri
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
     return (
-        <div className='ocd-property-row'>
+        <div className='ocd-property-row ocd-simple-property-row'>
             <div><label>{attribute.label}</label></div>
             <div><input type='number' defaultValue={resource[attribute.key]} onChange={onChange}></input></div>
         </div>
@@ -61,7 +82,7 @@ export const OcdBooleanProperty = ({ ocdDocument, setOcdDocument, resource, attr
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
     return (
-        <div className='ocd-property-row'>
+        <div className='ocd-property-row ocd-simple-property-row'>
             <div></div>
             <div><input type='checkbox' defaultChecked={resource[attribute.key]} onChange={onChange}></input><label>{attribute.label}</label></div>
         </div>
@@ -77,7 +98,7 @@ export const OcdResourceReferenceProperty = ({ ocdDocument, setOcdDocument, reso
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
     return (
-        <div className='ocd-property-row'>
+        <div className='ocd-property-row ocd-simple-property-row'>
             <div><label>{attribute.label}</label></div>
             <div>
                 <select value={resource[attribute.key]} onChange={onChange}>
@@ -94,6 +115,18 @@ export const OcdResourceReferenceProperty = ({ ocdDocument, setOcdDocument, reso
 export const OcdObjectProperty = ({ ocdDocument, setOcdDocument, resource, attribute }: ResourceProperty): JSX.Element => {
     return (
         <div></div>
+    )
+}
+
+export const OcdObjectListProperty = ({ ocdDocument, setOcdDocument, resource, attribute }: ResourceProperty): JSX.Element => {
+    return (
+        <div className='ocd-property-row'>
+            <details open={true}>
+                <summary className='summary-background'>{attribute.label}</summary>
+                <div className='ocd-resource-properties'>
+                </div>
+            </details>
+        </div>
     )
 }
 

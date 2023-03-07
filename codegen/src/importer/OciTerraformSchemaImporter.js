@@ -4,8 +4,11 @@
 */
 
 import { OcdSchemaImporter } from './OcdSchemaImporter.js'
+import ignoreElements from './json/oci_ignore_elements.json' assert { type: "json" }
+import resourceMap from './json/oci_resource_map.json' assert { type: "json" }
 
 class OciTerraformSchemaImporter extends OcdSchemaImporter {
+    /*
     resource_map = {
         oci_analytics_analytics_instance: 'analytics_instance',
         
@@ -68,7 +71,17 @@ class OciTerraformSchemaImporter extends OcdSchemaImporter {
         oci_core_drg_attachment: [
             'remove_export_drg_route_distribution_trigger'
         ],
+        oci_core_instance: [
+            'boot_volume_id',
+            'capacity_reservation_id',
+            'dedicated_vm_host_id',
+            'extended_metadata',
+            'ipxe_script',
+            'preemptible_instance_config',
+            'preserve_boot_volume'
+        ],
         oci_core_vcn: [
+            'cidr_block',
             'default_dhcp_options_id',
             'default_route_table_id',
             'default_security_list_id',
@@ -91,13 +104,14 @@ class OciTerraformSchemaImporter extends OcdSchemaImporter {
             'object_lifecycle_policy_etag'
         ]
     }
+    */
 
     convert(source_schema) {
         const self = this
         // console.info('Processing', Object.entries(source_schema.provider_schemas["registry.terraform.io/hashicorp/oci"].resource_schemas).filter(([k, v]) => Object.keys(self.resource_map).indexOf(k) >= 0))
-        Object.entries(source_schema.provider_schemas["registry.terraform.io/hashicorp/oci"].resource_schemas).filter(([k, v]) => Object.keys(self.resource_map).indexOf(k) >= 0).forEach(([key,value]) => {
+        Object.entries(source_schema.provider_schemas["registry.terraform.io/hashicorp/oci"].resource_schemas).filter(([k, v]) => Object.keys(resourceMap).indexOf(k) >= 0).forEach(([key,value]) => {
             console.info('Processing', key)
-            self.ocd_schema[this.resource_map[key]] = {
+            this.ocd_schema[resourceMap[key]] = {
                 'type': 'object',
                 'subtype': '',
                 'attributes': this.getAttributes(key, value.block)
@@ -107,7 +121,7 @@ class OciTerraformSchemaImporter extends OcdSchemaImporter {
 
     getAttributes(key, block, hierarchy=[]) {
         const ignore_block_types = ['timeouts']
-        const ignore_attributes = this.ignore_elements[key] ? [...this.ignore_elements.common, ...this.ignore_elements[key]] : this.ignore_elements.common
+        const ignore_attributes = ignoreElements[key] ? [...ignoreElements.common, ...ignoreElements[key]] : ignoreElements.common
         // Simple attributes
         let attributes = block.attributes ? Object.entries(block.attributes).filter(([k, v]) => !ignore_attributes.includes(k)).reduce((r, [k, v]) => {
             r[k] = {
