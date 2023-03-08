@@ -48,6 +48,8 @@ class OCIQuery(OCIConnection):
         "Cpe",
         "CustomerDnsZone",
         "Database",
+        "DataScienceNotebookSession",
+        "DataScienceProject",
         "DbHome",
         "DbNode",
         "DbSystem",
@@ -75,7 +77,8 @@ class OCIQuery(OCIConnection):
         "LoadBalancer",
         "LocalPeeringGateway",
         "MountTarget",
-        "MySqlDbSystem",
+        "MySQLDbSystem",
+        "MySQLHeatwaveCluster",
         "NatGateway",
         "NetworkFirewall",
         "NetworkFirewallPolicy",
@@ -119,6 +122,7 @@ class OCIQuery(OCIConnection):
         "Cpe": "customer_premise_equipments",
         "CustomerDnsZone": "dns_zones",
         "Database": "databases",
+        "DataScienceProject": "data_science_projects",
         "DbHome": "db_homes",
         "DbNode": "db_nodes",
         "DbSystem": "database_systems",
@@ -138,11 +142,12 @@ class OCIQuery(OCIConnection):
         "LoadBalancer": "load_balancers",
         "LocalPeeringGateway": "local_peering_gateways",
         "MountTarget": "mount_targets",
-        "MySqlDbSystem": "mysql_database_systems",
+        "MySQLDbSystem": "mysql_database_systems",
         "NatGateway": "nat_gateways",
         "NetworkFirewall": "network_firewalls",
         "NetworkLoadBalancer": "network_load_balancers",
         "NetworkSecurityGroup": "network_security_groups",
+        "NodePool": "node_pools",
         "NoSQLTable": "nosql_databases",
         "OdaInstance": "oracle_digital_assistants",
         "Policy": "policys", # Yes we know it's spelt incorrectly but the okitCodeSkeletonGenerator.py is simple
@@ -241,9 +246,12 @@ class OCIQuery(OCIConnection):
                     elif resource_type == "CloudExadataInfrastructure":
                         resource_list = self.exadata_cloud_infrastructures(resource_list, resources)
                     elif resource_type == "Cluster":
-                        resource_list = self.oke_clusters(resource_list, resources)
+                        logger.info(f'Clusters {jsonToFormattedString(resource_list)}')
+                        # resource_list = self.oke_clusters(resource_list, resources)
                     elif resource_type == "CustomerDnsZone":
                         resource_list = self.dns_zones(resource_list, resources)
+                    elif resource_type == "DataScienceProject":
+                        resource_list = self.data_science_projects(resource_list, resources)
                     elif resource_type == "DbSystem":
                         resource_list = self.database_systems(resource_list, resources)
                     elif resource_type == "Drg":
@@ -256,7 +264,7 @@ class OCIQuery(OCIConnection):
                         resource_list = self.load_balancers(resource_list, resources)
                     elif resource_type == "MountTarget":
                         resource_list = self.mount_targets(resource_list, resources)
-                    elif resource_type == "MySqlDbSystem":
+                    elif resource_type == "MySQLDbSystem":
                         resource_list = self.mysql_database_systems(resource_list, resources)
                     elif resource_type == "NetworkFirewall":
                         resource_list = self.network_firewalls(resource_list, resources)
@@ -264,6 +272,8 @@ class OCIQuery(OCIConnection):
                         resource_list = self.network_load_balancers(resource_list, resources)
                     elif resource_type == "NetworkSecurityGroup":
                         resource_list = self.network_security_group(resource_list, resources)
+                    elif resource_type == "NodePool":
+                        logger.info(f'Node Pools {jsonToFormattedString(resource_list)}')
                     elif resource_type == "NoSQLTable":
                         resource_list = self.nosql_databases(resource_list, resources)
                     elif resource_type == "RouteTable":
@@ -295,6 +305,11 @@ class OCIQuery(OCIConnection):
         for ai in analytics_instances:
             logger.info(jsonToFormattedString(ai))
         return analytics_instances
+
+    def data_science_projects(self, data_science_projects, resources):
+        for project in data_science_projects:
+            project['notebook_sessions'] = [r for r in resources.get("DataScienceNotebookSession", []) if r["project_id"] == project["id"]]
+        return data_science_projects
 
     def database_systems(self, database_systems, resources):
         for db_system in database_systems:
@@ -371,10 +386,11 @@ class OCIQuery(OCIConnection):
             if "metadata" in instance and "user_data" in instance["metadata"]:
                 instance["metadata"]["user_data"] = userDataDecode(instance["metadata"]["user_data"])
             # Add Attached Block Storage Volumes
-            instance['block_storage_volume_ids'] = [va['volume_id'] for va in resources.get("VolumeAttachment", []) if va['instance_id'] == instance['id']]
+            # instance['block_storage_volume_ids'] = [va['volume_id'] for va in resources.get("VolumeAttachment", []) if va['instance_id'] == instance['id']]
+            instance['volume_attachments'] = [va for va in resources.get("VolumeAttachment", []) if va['instance_id'] == instance['id']]
             # Add Vnic Attachments
             attachments_vnic_ids = [va["vnic_id"] for va in resources.get("VnicAttachment", []) if va['instance_id'] == instance['id']]
-            instance['vnics'] = [vnic for vnic in resources.get("Vnic", []) if vnic["id"] in attachments_vnic_ids]
+            instance['vnic_attachments'] = [vnic for vnic in resources.get("Vnic", []) if vnic["id"] in attachments_vnic_ids]
             # Get Volume Attachments as a single call and loop through them to see if they are associated with the instance.
             boot_volume_attachments = [va for va in resources.get("BootVolumeAttachment", []) if va['instance_id'] == instance['id']]
             boot_volumes = [va for va in resources.get("BootVolume", []) if va['id'] == boot_volume_attachments[0]['boot_volume_id']] if len(boot_volume_attachments) else []
@@ -416,9 +432,15 @@ class OCIQuery(OCIConnection):
         return mount_targets
 
     def mysql_database_systems(self, database_systems, resources):
+        clusters = resources.get("MySQLHeatwaveCluster", [])
+        logger.info(f'Clusters {jsonToFormattedString(clusters)}')
         for db_system in database_systems:
             # Trim version to just the number
             db_system["mysql_version"] = db_system["mysql_version"].split('-')[0]
+            for cluster in clusters:
+                if cluster["db_system_id"] == db_system["id"]:
+                    db_system["heatwave_cluster"] = cluster
+                    break
         return database_systems
 
     def network_firewalls(self, firewalls, resources):
@@ -463,8 +485,8 @@ class OCIQuery(OCIConnection):
         return buckets
 
     def oke_clusters(self, clusters, resources):
-        for cluster in clusters:
-            cluster["pools"] = [p for p in resources.get("NodePool", []) if p["cluster_id"] == cluster["id"]]
+        # for cluster in clusters:
+        #     cluster["pools"] = [p for p in resources.get("NodePool", []) if p["cluster_id"] == cluster["id"]]
         return clusters
 
     def route_tables(self, route_tables, resources):

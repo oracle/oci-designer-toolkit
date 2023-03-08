@@ -20,7 +20,7 @@ resource "oci_core_vcn" "{{ resource_name }}" {
     # Required
     compartment_id = {{ compartment_id }}
 {% if deployment_platform is defined and deployment_platform != "pca" %}
-    cidr_blocks    = [{% for cidr_block in cidr_blocks %}"{{ cidr_block }}"{% if not loop.last %},{% endif %}{% endfor %}]
+    cidr_blocks    = [{% for cidr_block in cidr_blocks %}{% if not cidr_block.startswith('var.') %}"{% endif %}{{ cidr_block }}{% if not cidr_block.startswith('var.') %}"{% endif %}{% if not loop.last %},{% endif %}{% endfor %}]
 {% else %}
     cidr_block     = {% for cidr_block in cidr_blocks %}{% if loop.first %}"{{ cidr_block }}"{% endif %}{% endfor %} 
 {% endif %}

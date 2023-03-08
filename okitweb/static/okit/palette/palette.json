@@ -17,6 +17,11 @@
                     "svg": "ContainerEngineForKubernetes.svg"
                 },
                 {
+                    "title": "Node Pool",
+                    "targets": ["oci"],
+                    "svg": "NodePool.svg"
+                },
+                {
                     "title": "Data Integration Workspace",
                     "targets": ["oci"],
                     "svg": "DataIntegrationSystemDIS.svg"
@@ -52,6 +57,11 @@
                     "title": "Visual Builder Instance",
                     "targets": ["oci"],
                     "svg": "VisualBuilderInstance.svg"
+                },
+                {
+                    "title": "Data Science Project",
+                    "targets": ["oci"],
+                    "svg": "DataScience.svg"
                 }
             ]
         },

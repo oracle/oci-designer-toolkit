@@ -44,7 +44,7 @@ class OkitTabularJsonView extends OkitJsonView {
             },
             block_storage_volumes: {
                 'Availability Domain': {property: 'availability_domain'},
-                'Size in Gbs': {property: 'size_in_gbs'},
+                'Size in Gbs ({total} Gbs)': {property: 'size_in_gbs', type: 'number', sum: true},
                 'Backup Policy': {property: 'backup_policy'},
                 'VPUS/Gb': {property: 'vpus_per_gb'},
                 'Attached Instances': {property: 'id', lookup: 'model.getInstanceByBlockVolumeId'},
@@ -85,7 +85,7 @@ class OkitTabularJsonView extends OkitJsonView {
                 'Block Volumes': {property: 'block_storage_volume_ids', lookup: 'model.getBlockStorageVolume'},
                 'Status': {property: 'lifecycle_state'},
                 'Fault Domain': {property: 'fault_domain'},
-                'Assign Public IP': {property: 'assign_public_ip'}
+                // 'Assign Public IP': {property: 'assign_public_ip'}
             },
             instance_pools: {},
             internet_gateways: {
@@ -378,6 +378,7 @@ class OkitTabularJsonView extends OkitJsonView {
         const obj = sections[0];
         const getFunction = sections[1];
         const resource = this[obj][getFunction](id);
+        console.info('Resoource Lookup', obj, getFunction, resource)
         return resource ? resource : {display_name: 'Unknown'}
     }
 

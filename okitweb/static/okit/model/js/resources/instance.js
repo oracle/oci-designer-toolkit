@@ -96,15 +96,16 @@ class Instance extends OkitArtifact {
             if (!vnic.hasOwnProperty('nsg_ids')) {vnic.nsg_ids = [];}
             if (vnic.availability_domain) {vnic.availability_domain = this.getAvailabilityDomainNumber(vnic.availability_domain)}
         })
-        if (this.block_storage_volume_ids) {
-            this.block_storage_volume_ids.forEach((bsv, i) => {
-                const va = this.newVolumeAttachment()
-                va.volume_id = bsv
-                va.resource_name = `${this.resource_name}VolumeAttachment${i+1}`
-                this.volume_attachments.push(va)
-            })
-            delete this.block_storage_volume_ids
-        }
+        // Storage
+        if (this.block_storage_volume_ids) {this.volume_attachments = this.block_storage_volume_ids.map(v => {return {volume_id: v}}); delete this.block_storage_volume_ids}
+        if (this.block_storage_volume) {this.volume_attachments = this.block_storage_volume; delete this.block_storage_volume}
+        this.volume_attachments.forEach((bsv, i) => {
+            if (!bsv.hasOwnProperty('resource_name')) bsv.resource_name = `${this.resource_name}VolumeAttachment${i+1}`
+            if (!bsv.hasOwnProperty('display_name')) bsv.display_name = `${this.display_name} Vnic`
+            if (!bsv.hasOwnProperty('attachment_type')) bsv.attachment_type = 'paravirtualized'
+            if (!bsv.hasOwnProperty('is_read_only')) bsv.is_read_only = false
+            if (!bsv.hasOwnProperty('is_shareable')) bsv.is_shareable = false
+        })
     }
     get subnet_ids() {return this.vnic_attachments.map((v) => v.subnet_id)}
     get nsg_ids() {const nsg_ids = this.vnic_attachments.reduce((n, v) => [...n, ...v.nsg_ids], []); console.info('NSG Ids:', nsg_ids); return nsg_ids}

@@ -1,6 +1,36 @@
 # Release Notes
 
 
+## Version 0.47.0
+**Release Date**: 8th March 2023
+### Features
+1. Add Heatwave functionality to MySQL DB System (Issue: #268)
+2. Allow spcification of Deletion and Backup Policies for MySQL DB Systems.
+3. Allow creation of VCN With a variable for CIDR Block (Issue: #554)
+4. Add Basic Data Science Project / Notebook Session (Issue: #567)
+5. Add setting to show state of queried resources by changing colour of resource boundary
+### Bug Fixes
+
+
+## Version 0.46.1
+**Release Date**: 21st February 2023
+### Features
+1. Add OKE Specific Images
+### Bug Fixes
+1. Resolve issue where results for reference selects were no sorted correctly and the call would cause a JavaScript error.
+2. Resolve issue where query was not returning block volume attachments correctly for instance.
+
+
+## Version 0.46.0
+**Release Date**: 15th February 2023
+### Features
+1. Update OKE Cluster functionality to be a container styles resource.
+2. Add Node Pool as a separate resource.
+3. Allow OKE Cluster to be dropped on compartment.
+4. Update Cache to include Node Pool Options.
+### Bug Fixes
+
+
 ## Version 0.45.0
 **Release Date**: 25th January 2023
 ### Features

@@ -312,7 +312,10 @@ class OkitOCIData {
         return this.dropdown_data.db_versions;
     }
 
+    getDataScienceNotebookSessionShape = (filter=() => true) => this.dropdown_data.data_science_notebook_session_shapes.filter(filter)
+
     getInstanceShapes(type='') {
+        console.info(`Getting Shapes for type = '${type}'`)
         if (type === '') {
             return this.dropdown_data.shapes;
         } else {
@@ -322,6 +325,7 @@ class OkitOCIData {
 
     getGIVersions = (shape) => this.dropdown_data.gi_versions[shape].map((v) => v.version)
 
+    getAllInstanceShapes = (filter=() => true) => this.dropdown_data.shapes.filter(filter)
     getBareMetalInstanceShapes = () => this.dropdown_data.shapes.filter(s => s.shape.startsWith('BM.'))
     getVirtualMachineInstanceShapes = () => this.dropdown_data.shapes.filter(s => s.shape.startsWith('VM.'))
     getIntelInstanceShapes = () => this.dropdown_data.shapes.filter(s => s.shape.startsWith('VM.') && !s.shape.includes('.A') && !s.shape.includes('.E'))
@@ -382,8 +386,8 @@ class OkitOCIData {
         return [...new Set(images)].sort((a, b) => b - a);
     }
 
-    getPlatformImages() {
-        return this.dropdown_data.images.filter(i => !i.compartment_id || i.compartment_id === null)
+    getPlatformImages(filter=() => true) {
+        return this.dropdown_data.images.filter(i => !i.compartment_id || i.compartment_id === null).filter(filter)
     }
     getPlatformImageOSs() {
         return [...new Set(this.dropdown_data.images.filter(i => !i.compartment_id || i.compartment_id === null).map((i) => i.operating_system))].sort();
@@ -435,9 +439,7 @@ class OkitOCIData {
         return this.dropdown_data.volume_backup_policy ? this.dropdown_data.volume_backup_policy : []
     } 
 
-    getMySQLShapes() {
-        return this.dropdown_data.mysql_shapes;
-    }
+    getMySQLShapes = (filter=() => true) => this.dropdown_data.mysql_shapes.filter(filter)
     getMySQLShape = (shape) => this.getMySQLShapes().find(s => s.name === shape)
 
     getMySQLVersions(family='') {
@@ -611,6 +613,7 @@ class OkitSettings {
         this.show_resource_name = false;
         this.validate_markdown = false;
         this.fast_discovery = true;
+        this.show_state = false
         this.load();
         // Disable variables
         this.is_variables = false;
@@ -687,6 +690,7 @@ class OkitSettings {
             this.addAutoSave(tbody, autosave);
             // Display Grid
             this.addDisplayGrid(tbody, autosave);
+            this.addShowState(tbody, autosave)
             // Default Route Table
             // this.addDefaultRouteTable(tbody, autosave)
             // // Default Security List
@@ -773,6 +777,27 @@ class OkitSettings {
         td.append('label')
             .attr('for', 'is_display_grid')
             .text('Display Grid');
+    }
+
+    addShowState(tbody, autosave) {
+        let self = this;
+        let tr = tbody.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'td').text('');
+        let td = tr.append('div').attr('class', 'td');
+        td.append('input')
+            .attr('id', 'show_state')
+            .attr('name', 'show_state')
+            .attr('type', 'checkbox')
+            .property('checked', this.show_state)
+            .on('change', function () {
+                if (autosave) {
+                    self.show_state = $('#show_state').is(':checked');
+                    self.saveAndRedraw();
+                }
+            });
+        td.append('label')
+            .attr('for', 'show_state')
+            .text('Show State');
     }
 
     addDefaultRouteTable(tbody, autosave) {

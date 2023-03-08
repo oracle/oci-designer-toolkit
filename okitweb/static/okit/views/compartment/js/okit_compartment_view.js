@@ -18,6 +18,9 @@ class OkitCompartmentJsonView extends OkitJsonView {
         this.newCanvas()
     }
 
+    getResources() {return Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], [])}
+    getResource(id='') {return this.getResources().find((r) => r.id === id)}
+
     static newView(model, oci_data=null, resource_icons={}, parent_id='canvas-div') {
         console.info(`>>>>>>> Resource Icons:`, resource_icons)
         return new OkitCompartmentJsonView(model, oci_data, resource_icons, parent_id)
@@ -249,6 +252,8 @@ class OkitCompartmentArtefactView extends OkitArtefactView {
         super(artefact, json_view);
     }
 
+    get parent() {return this.getJsonView().getResource(this.parent_id)}
+
     loadCustomerPremiseEquipments(select_id) {
         $(jqId(select_id)).empty();
         const cpe_select = $(jqId(select_id));
@@ -293,6 +298,8 @@ class OkitContainerCompartmentArtefactView extends OkitContainerArtefactView {
     constructor(artefact=null, json_view) {
         super(artefact, json_view);
     }
+
+    get parent() {return this.getJsonView().getResource(this.parent_id)}
 }
 
 okitViewClasses.push(OkitCompartmentJsonView);

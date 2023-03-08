@@ -63,7 +63,9 @@ class OCIJsonValidator(object):
         self.validateNATGateways()
         self.validateNetworkLoadBalancers()
         self.validateNetworkSecurityGroups()
+        self.validateNodePools()
         self.validateObjectStorageBuckets()
+        self.validateOkeClusters()
         self.validatePolicies()
         self.validateRemotePeeringConnections()
         self.validateRouteTables()
@@ -106,7 +108,7 @@ class OCIJsonValidator(object):
         for key in self.okit_json:
             if isinstance(self.okit_json[key], list):
                 for artefact in self.okit_json[key]:
-                    used_display_names[artefact['display_name']] = used_display_names.get(artefact['display_name'], 0) + 1;
+                    used_display_names[artefact['display_name']] = used_display_names.get(artefact['display_name'], 0) + 1
         for key in self.okit_json:
             if isinstance(self.okit_json[key], list):
                 for artefact in self.okit_json[key]:
@@ -124,7 +126,7 @@ class OCIJsonValidator(object):
         for key in self.okit_json:
             if isinstance(self.okit_json[key], list):
                 for artefact in self.okit_json[key]:
-                    used_resource_names[artefact['resource_name']] = used_resource_names.get(artefact['resource_name'], 0) + 1;
+                    used_resource_names[artefact['resource_name']] = used_resource_names.get(artefact['resource_name'], 0) + 1
         for key in self.okit_json:
             if isinstance(self.okit_json[key], list):
                 for artefact in self.okit_json[key]:
@@ -754,10 +756,56 @@ class OCIJsonValidator(object):
         for artefact in self.okit_json.get('network_security_groups', []):
             logger.info('Validating {!s}'.format(artefact['display_name']))
 
+    # OKE Cluster Node Pools
+    def validateNodePools(self):
+        for resource in self.okit_json.get('oke_clusters', []):
+            logger.info('Validating {!s}'.format(resource['display_name']))
+
     # Object Storage
     def validateObjectStorageBuckets(self):
         for artefact in self.okit_json.get('object_storage_buckets', []):
             logger.info('Validating {!s}'.format(artefact['display_name']))
+
+    # OKE Cluster
+    def validateOkeClusters(self):
+        for resource in self.okit_json.get('oke_clusters', []):
+            logger.info('Validating {!s}'.format(resource['display_name']))
+            # Check Connected to a VCN
+            if resource['vcn_id'] == '':
+                self.valid = False
+                error = {
+                    'id': resource['id'],
+                    'type': 'OKE Cluster',
+                    'artefact': resource['display_name'],
+                    'message': 'Cluster is not part of a VCN.',
+                    'element': 'vcn_id'
+                }
+                self.results['errors'].append(error)
+            # Check Overlaps
+            for subnet in self.okit_json.get('subnets', []):
+                if subnet['vcn_id'] == resource['vcn_id']:
+                    pods_cidr = resource.get('options', {}).get('kubernetes_network_config',{}).get('pods_cidr', '')
+                    services_cidr = resource.get('options', {}).get('kubernetes_network_config',{}).get('services_cidr', '')
+                    if subnet['cidr_block'] != '' and services_cidr != '' and self.overlaps(services_cidr, subnet['cidr_block']):
+                        self.valid = False
+                        error = {
+                            'id': resource['id'],
+                            'type': 'OKE Cluster',
+                            'artefact': resource['display_name'],
+                            'message': f'Services CIDR {services_cidr} overlaps Subnet {subnet["display_name"]} CIDR {subnet["cidr_block"]}.',
+                            'element': 'services_cidr'
+                        }
+                        self.results['errors'].append(error)
+                    if subnet['cidr_block'] != '' and pods_cidr != '' and self.overlaps(pods_cidr, subnet['cidr_block']):
+                        self.valid = False
+                        error = {
+                            'id': resource['id'],
+                            'type': 'OKE Cluster',
+                            'artefact': resource['display_name'],
+                            'message': f'Pods CIDR {pods_cidr} overlaps Subnet {subnet["display_name"]} CIDR {subnet["cidr_block"]}.',
+                            'element': 'pods_cidr'
+                        }
+                        self.results['errors'].append(error)
 
     # Policies
     def validatePolicies(self):

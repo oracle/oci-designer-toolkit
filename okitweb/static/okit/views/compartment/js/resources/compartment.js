@@ -89,14 +89,16 @@ class CompartmentView extends OkitContainerCompartmentArtefactView {
 
     getLeftArtifacts() {
         return [Policy.getArtifactReference(), Vault.getArtifactReference(), Bastion.getArtifactReference(), 
-            BlockStorageVolume.getArtifactReference(), FileSystem.getArtifactReference(), DnsZone.getArtifactReference(), OkeCluster.getArtifactReference()];
+            BlockStorageVolume.getArtifactReference(), FileSystem.getArtifactReference(), DnsZone.getArtifactReference(), 
+            OkeCluster.getArtifactReference(), DataScienceProject.getArtifactReference()];
     }
 
     getRightArtifacts() {
         return [DynamicRoutingGateway.getArtifactReference(), AutonomousDatabase.getArtifactReference(),
             ObjectStorageBucket.getArtifactReference(), FastConnect.getArtifactReference(),
             IpsecConnection.getArtifactReference(), RemotePeeringConnection.getArtifactReference(),
-            Drg.getArtifactReference(), NosqlDatabase.getArtifactReference(), ExadataCloudInfrastructure.getArtifactReference()];
+            Drg.getArtifactReference(), NosqlDatabase.getArtifactReference(), ExadataCloudInfrastructure.getArtifactReference(),
+            OkeCluster.getArtifactReference()];
     }
 
     getRightEdgeArtifacts() {
