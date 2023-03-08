@@ -34,6 +34,7 @@ class OCIDropdownQuery(OCIConnection):
     SUPPORTED_RESOURCES = [
         "Service", 
         "Shape", 
+        "DataScienceNotebookSessionShape",
         "DbSystemShape", 
         "DbVersion", 
         "CpeDeviceShape", 
@@ -54,6 +55,7 @@ class OCIDropdownQuery(OCIConnection):
     DISCOVER_OKIT_MAP = {
         "Service": "services", 
         "Shape": "shapes", 
+        "DataScienceNotebookSessionShape": "data_science_notebook_session_shapes",
         "DbSystemShape": "db_system_shapes", 
         "DbVersion": "db_versions", 
         "CpeDeviceShape": "cpe_device_shapes", 
@@ -119,6 +121,8 @@ class OCIDropdownQuery(OCIConnection):
                     # logger.info(f'Resource Type : {resource_type}')
                     if resource_type == "ClusterOptions":
                         resource_list = self.cluster_options(resource_list, resources)                       
+                    elif resource_type == "DataScienceNotebookSessionShape":
+                        resource_list = self.data_science_notebook_session_shapes(resource_list, resources)                       
                     elif resource_type == "DbSystemShape":
                         resource_list = self.db_system_shapes(resource_list, resources)                       
                     elif resource_type == "Image":
@@ -127,6 +131,8 @@ class OCIDropdownQuery(OCIConnection):
                         resource_list = self.instance_agent_plugins(resource_list, resources)                       
                     elif resource_type == "LoadBalancerShape":
                         resource_list = self.load_balancer_shapes(resource_list, resources)                       
+                    elif resource_type == "MySQLShape":
+                        resource_list = self.mysql_shapes(resource_list, resources)                       
                     elif resource_type == "NodePoolOptions":
                         logger.info(jsonToFormattedString(resource_list))
                     elif resource_type == "Shape":
@@ -140,6 +146,12 @@ class OCIDropdownQuery(OCIConnection):
 
     def cluster_options(self, cluster_options, resources):
         return [{"id": kv, "display_name": kv, "name": kv, "version": kv} for kv in cluster_options[0]["kubernetes_versions"]]
+
+    def data_science_notebook_session_shapes(self, session_shapes, resources):
+        for shape in session_shapes:
+            shape['id'] = shape['name']
+            shape['display_name'] = shape['name']
+        return session_shapes
 
     def db_system_shapes(self, db_system_shapes, resources):
         for shape in db_system_shapes:
@@ -183,6 +195,12 @@ class OCIDropdownQuery(OCIConnection):
         return plugins
 
     def load_balancer_shapes(self, shapes, resources):
+        for shape in shapes:
+            shape['id'] = shape['name']
+            shape['display_name'] = shape['name'].title()
+        return shapes
+
+    def mysql_shapes(self, shapes, resources):
         for shape in shapes:
             shape['id'] = shape['name']
             shape['display_name'] = shape['name'].title()

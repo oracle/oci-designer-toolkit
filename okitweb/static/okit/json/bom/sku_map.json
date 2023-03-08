@@ -489,6 +489,18 @@
                 "memory": "B95442",
                 "storage": "B92426",
                 "backup": "B92483"
+            },
+            "MySQL.HeatWave.VM.Standard.E3": {
+                "node": "B92023",
+                "database": "B92024",
+                "storage": "B92426",
+                "backup": "B92483"
+            },
+            "MySQL.HeatWave.VM.Standard": {
+                "node": "B92023",
+                "database": "B92024",
+                "storage": "B92426",
+                "backup": "B92483"
             }
         }
     },

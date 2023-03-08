@@ -58,6 +58,7 @@ class OciResourceDiscoveryClient(object):
         "ExportSetDetails": (oci.file_storage.FileStorageClient, "get_export_set"),
         # oci.mysql.DbSystemClient
         "MySQLDbSystemDetails": (oci.mysql.DbSystemClient, "get_db_system"), # used to get full details of the result as list_db_systems does not include all attributes
+        "MySQLHeatwaveCluster": (oci.mysql.DbSystemClient, "get_heat_wave_cluster"), # get heavewave cluster details for a MySQLDbSystem
         # oci.mysql.MysqlaasClient
         "MySQLConfiguration": (oci.mysql.MysqlaasClient, "get_configuration"), # used to get details of the Default configurations
         # oci.network_firewall.NetworkFirewallClient
@@ -84,6 +85,9 @@ class OciResourceDiscoveryClient(object):
         "AiAnomalyDetectionDataAsset": (oci.ai_anomaly_detection.AnomalyDetectionClient, "list_data_assets"),
         "AiAnomalyDetectionModel": (oci.ai_anomaly_detection.AnomalyDetectionClient, "list_models"),
         "AiAnomalyDetectionProject": (oci.ai_anomaly_detection.AnomalyDetectionClient, "list_projects"),
+        # oci.ai_document.AIServiceDocumentClient
+        # "AiDocumentModel": (oci.ai_document.AIServiceDocumentClient, ""), # TODO not documented
+        # "AiDocumentProject": (oci.ai_document.AIServiceDocumentClient, ""), # TODO not documented
         # oci.ai_language.AIServiceLanguageClient
         "AiLanguageEndpoint": (oci.ai_language.AIServiceLanguageClient, "list_endpoints"),
         "AiLanguageModel": (oci.ai_language.AIServiceLanguageClient, "list_models"),
@@ -152,9 +156,11 @@ class OciResourceDiscoveryClient(object):
         "OcbDiscoverySchedule": (oci.cloud_bridge.DiscoveryClient, "list_discovery_schedules"),
         # oci.cloud_bridge.InventoryClient
         "OcbInventoryAsset": (oci.cloud_bridge.InventoryClient, "list_assets"),
-        "OcbVmAsset": (oci.cloud_bridge.InventoryClient, "list_assets"), 
-        "OcbVmwareVmAsset": (oci.cloud_bridge.InventoryClient, "list_assets"), 
-        # "": (oci.cloud_bridge.InventoryClient, "list_historical_metrics"), # TODO
+        # "OcbInventoryRelation": (oci.cloud_bridge.InventoryClient, "list_relationships"), # TODO new
+        # "OcbOracleDbAsset": (oci.cloud_bridge.InventoryClient, "list_assets"), # TODO remove? subset of OcbInventoryAsset
+        # "OcbVmAsset": (oci.cloud_bridge.InventoryClient, "list_assets"), # TODO remove? subset of OcbInventoryAsset
+        # "OcbVmwareVmAsset": (oci.cloud_bridge.InventoryClient, "list_assets"), # TODO remove? subset of OcbInventoryAsset
+        # "": (oci.cloud_bridge.InventoryClient, "list_historical_metrics"), # TODO 
         "OcbInventory": (oci.cloud_bridge.InventoryClient, "list_inventories"),
         # oci.cloud_bridge.OcbAgentSvcClient
         "OcbAgentDependency": (oci.cloud_bridge.OcbAgentSvcClient, "list_agent_dependencies"),
@@ -287,7 +293,10 @@ class OciResourceDiscoveryClient(object):
         "DataScienceJobRun": (oci.data_science.DataScienceClient, "list_job_runs"),
         "DataScienceModel": (oci.data_science.DataScienceClient, "list_models"),
         "DataScienceModelDeployment": (oci.data_science.DataScienceClient, "list_model_deployments"),
+        "DataScienceModelVersionSet": (oci.data_science.DataScienceClient, "list_model_version_sets"),
         "DataScienceNotebookSession": (oci.data_science.DataScienceClient, "list_notebook_sessions"),
+        "DataSciencePipeline": (oci.data_science.DataScienceClient, "list_pipelines"),
+        "DataSciencePipelineRun": (oci.data_science.DataScienceClient, "list_pipeline_runs"),
         "DataScienceProject": (oci.data_science.DataScienceClient, "list_projects"),
         # oci.database.DatabaseClient
         "AutonomousContainerDatabase": (oci.database.DatabaseClient, "list_autonomous_container_databases"),
@@ -341,6 +350,7 @@ class OciResourceDiscoveryClient(object):
         "DevOpsDeployStage": (oci.devops.DevopsClient, "list_deploy_stages"),
         "DevOpsDeployment": (oci.devops.DevopsClient, "list_deployments"),
         "DevOpsProject": (oci.devops.DevopsClient, "list_projects"),
+        # - "DevOpsProjectPipeline": : (oci.devops.DevopsClient, ""), # TODO
         "DevOpsRepository": (oci.devops.DevopsClient, "list_repositories"),
         "DevOpsTrigger": (oci.devops.DevopsClient, "list_trigger"),
         # oci.dns.DnsClient
@@ -376,10 +386,16 @@ class OciResourceDiscoveryClient(object):
         "FileSystem": (oci.file_storage.FileStorageClient ,"list_file_systems"),
         "MountTarget": (oci.file_storage.FileStorageClient ,"list_mount_targets"),
         "Snapshot": (oci.file_storage.FileStorageClient, "list_snapshots"),
+        "FssReplication": (oci.file_storage.FileStorageClient, "list_replications"),
+        "FssReplicationTarget": (oci.file_storage.FileStorageClient, "list_replication_targets"),
         # oci.functions.FunctionsManagementClient
         "FunctionsApplication": (oci.functions.FunctionsManagementClient, "list_applications"), 
         "FunctionsFunction": (oci.functions.FunctionsManagementClient, "list_functions"),
+        # oci.fusion_apps.FusionApplicationsClient
+        "FusionEnvironment": (oci.fusion_apps.FusionApplicationsClient, "list_fusion_environments"),
+        "FusionEnvironmentFamily": (oci.fusion_apps.FusionApplicationsClient, "list_fusion_environment_families"),
         # oci.golden_gate.GoldenGateClient
+        "GoldenGateConnection": (oci.golden_gate.GoldenGateClient, "list_connections"),
         "GoldenGateDatabaseRegistration": (oci.golden_gate.GoldenGateClient, "list_database_registrations"),
         "GoldenGateDeployment": (oci.golden_gate.GoldenGateClient, "list_deployments"),
         "GoldenGateDeploymentBackup": (oci.golden_gate.GoldenGateClient, "list_deployment_backups"),
@@ -388,7 +404,7 @@ class OciResourceDiscoveryClient(object):
         "PingMonitor": (oci.healthchecks.HealthChecksClient, "list_ping_monitors"),
         # oci.identity.IdentityClient
         "AvailabilityDomain": (oci.identity.IdentityClient, "list_availability_domains"),
-        "DynamicGroup": (oci.identity.IdentityClient, "list_dynamic_groups"),
+        "DynamicResourceGroup": (oci.identity.IdentityClient, "list_dynamic_groups"),
         "DbCredential": (oci.identity.IdentityClient, "list_db_credentials"),
         "Group": (oci.identity.IdentityClient, "list_groups"),
         "IdentityProvider": (oci.identity.IdentityClient, "list_identity_providers"),
@@ -414,6 +430,9 @@ class OciResourceDiscoveryClient(object):
         # oci.key_management.KmsVaultClient
         "Vault": (oci.key_management.KmsVaultClient, "list_vaults"),
         "VaultReplica": (oci.key_management.KmsVaultClient, "list_vault_replicas"),
+        # oci.license_manager.LicenseManagerClient
+        "LicenseManagerLicenseRecord": (oci.license_manager.LicenseManagerClient, "list_license_records"),
+        "LicenseManagerProductLicense": (oci.license_manager.LicenseManagerClient, "list_product_licenses"),
         # oci.limits.QuotasClient
         "Quota": (oci.limits.QuotasClient, "list_quotas"),
         # oci.load_balancer.LoadBalancerClient
@@ -440,6 +459,13 @@ class OciResourceDiscoveryClient(object):
         # oci.management_dashboard.DashxApisClient
         "ManagementDashboard": (oci.management_dashboard.DashxApisClient, "list_management_dashboards"),
         "ManagementSavedSearch": (oci.management_dashboard.DashxApisClient, "list_management_saved_searches"),
+        # oci.media_services.MediaServicesClient
+        "MediaWorkflow": (oci.media_services.MediaServicesClient, "list_media_workflows"),
+        "MediaWorkflowConfiguration": (oci.media_services.MediaServicesClient, "list_media_workflow_configurations"),
+        # oci.media_services.MediaStreamClient # TODO
+        # "StreamCdnConfig": (oci.media_services.MediaStreamClient, ""),
+        # "StreamDistributionChannel": (oci.media_services.MediaStreamClient, ""),
+        # "StreamPackagingConfig": (oci.media_services.MediaStreamClient, ""),
         # oci.monitoring.MonitoringClient
         "Alarm": (oci.monitoring.MonitoringClient, "list_alarms"),
         "AlarmStatus": (oci.monitoring.MonitoringClient, "list_alarms_status"),
@@ -482,18 +508,27 @@ class OciResourceDiscoveryClient(object):
         # oci.ons.NotificationDataPlaneClient
         "OnsSubscription": (oci.ons.NotificationDataPlaneClient, "list_subscriptions"),
         # oci.opsi.OperationsInsightsClient
-        "DatabaseInsight": (oci.opsi.OperationsInsightsClient, "list_database_insights"),
-        "SQLPlan": (oci.opsi.OperationsInsightsClient, "list_sql_plans"), # TODO TypeError("list_sql_plans() missing 3 required positional arguments: 'database_id', 'sql_identifier', and 'plan_hash'")
-        "SQLSearch": (oci.opsi.OperationsInsightsClient, "list_sql_searches"), # TODO TypeError("list_sql_searches() missing 1 required positional argument: 'sql_identifier'")
-        "SQLText": (oci.opsi.OperationsInsightsClient, "list_sql_texts"), # TODO TypeError("list_sql_texts() missing 1 required positional argument: 'sql_identifier'")
+        "OpsiDatabaseInsight": (oci.opsi.OperationsInsightsClient, "list_database_insights"),
+        # "SQLPlan": (oci.opsi.OperationsInsightsClient, "list_sql_plans"), # TODO TypeError("list_sql_plans() missing 3 required positional arguments: 'database_id', 'sql_identifier', and 'plan_hash'")
+        # "SQLSearch": (oci.opsi.OperationsInsightsClient, "list_sql_searches"), # TODO TypeError("list_sql_searches() missing 1 required positional argument: 'sql_identifier'")
+        # "SQLText": (oci.opsi.OperationsInsightsClient, "list_sql_texts"), # TODO TypeError("list_sql_texts() missing 1 required positional argument: 'sql_identifier'")
         # oci.os_management.OsManagementClient
         # "OsmsManagedInstance": (oci.os_management.OsManagementClient, "list_managed_instances"),  # use get by instance id instead of list by compartment id  
         "OsmsManagedInstanceGroup": (oci.os_management.OsManagementClient, "list_managed_instance_groups"),
         "OsmsScheduledJob": (oci.os_management.OsManagementClient, "list_scheduled_jobs"),
         "OsmsSoftwareSource": (oci.os_management.OsManagementClient, "list_software_sources"),
+        # oci.queue.QueueAdminClient
+        "Queue": (oci.queue.QueueAdminClient, "list_queues"),
+        # oci.recovery.DatabaseRecoveryClient # TODO
+        # "RecoveryServiceSubnet": (oci.recovery.DatabaseRecoveryClient, "list_recovery_service_subnets"),
+        # "RecoverySystem": (oci.recovery.DatabaseRecoveryClient, ""),
+        # "RecoverySystemNetworkInterface": (oci.recovery.DatabaseRecoveryClient, ""),
+        # "RecoverySystemPolicy": (oci.recovery.DatabaseRecoveryClient, ""),
         # oci.resource_manager.ResourceManagerClient
-        "OrmStack": (oci.resource_manager.ResourceManagerClient, "list_stacks"),
         "OrmConfigSourceProvider": (oci.resource_manager.ResourceManagerClient, "list_configuration_source_providers"),
+        "OrmJob":  (oci.resource_manager.ResourceManagerClient, "list_jobs"),
+        "OrmStack": (oci.resource_manager.ResourceManagerClient, "list_stacks"),
+        "OrmPrivateEndpoint": (oci.resource_manager.ResourceManagerClient, "list_private_endpoints"),
         # "OrmPrivateEndpoint": (oci.resource_manager.ResourceManagerClient, "list_private_endpoints"),
         "OrmTemplate": (oci.resource_manager.ResourceManagerClient, "list_templates"),
         # oci.rover.RoverClusterClient
@@ -518,13 +553,25 @@ class OciResourceDiscoveryClient(object):
         "StreamPool": (oci.streaming.StreamAdminClient, "list_stream_pools"),
         # oci.vault.VaultsClient
         "VaultSecret": (oci.vault.VaultsClient, "list_secrets"),
+        # oci.vbs_inst.VbsInstanceClient
+        "VbsInstance": (oci.vbs_inst.VbsInstanceClient, "list_vbs_instances"),
         # oci.visual_builder.VbInstanceClient
         "VisualBuilderInstance": (oci.visual_builder.VbInstanceClient, "list_vb_instances"),
+        # oci.vn_monitoring.VnMonitoringClient
+        "PathAnalyzerTest": (oci.vn_monitoring.VnMonitoringClient, "list_path_analyzer_tests"),
         # oci.vulnerability_scanning.VulnerabilityScanningClient
         "VssContainerScanRecipe": ( oci.vulnerability_scanning.VulnerabilityScanningClient, "list_container_scan_recipes"),
         "VssContainerScanTarget": ( oci.vulnerability_scanning.VulnerabilityScanningClient, "list_container_scan_targets"),
         "VssHostScanRecipe": ( oci.vulnerability_scanning.VulnerabilityScanningClient, "list_host_scan_recipes"),
         "VssHostScanTarget": ( oci.vulnerability_scanning.VulnerabilityScanningClient, "list_host_scan_targets"),
+        "VssContainerScanResult": ( oci.vulnerability_scanning.VulnerabilityScanningClient, "list_container_scan_results"),
+        "VssHostAgentScanScanResult": ( oci.vulnerability_scanning.VulnerabilityScanningClient, "list_host_agent_scan_results"),
+        "VssHostCisBenchmarkScanResult": ( oci.vulnerability_scanning.VulnerabilityScanningClient, "list_host_cis_benchmark_scan_results"),
+        "VssHostEndpointProtectionScanResult": ( oci.vulnerability_scanning.VulnerabilityScanningClient, "list_host_endpoint_protection_scan_results"),
+        "VssHostPortScanResult": ( oci.vulnerability_scanning.VulnerabilityScanningClient, "list_host_port_scan_results"),
+        # oci.waa.WaaClient
+        "WebAppAcceleration": (oci.waa.WaaClient, "list_web_app_accelerations"),
+        "WebAppAccelerationPolicy": (oci.waa.WaaClient, "list_web_app_acceleration_policies"),
         # oci.waas.RedirectClient
         "HttpRedirect": (oci.waas.RedirectClient, "list_http_redirects"),
         # oci.waas.WaasClient
@@ -559,6 +606,8 @@ class OciResourceDiscoveryClient(object):
         "DbSystemShape": (oci.database.DatabaseClient, "list_db_system_shapes"),
         "DbVersion": (oci.database.DatabaseClient, "list_db_versions"),
         # "GiVersion": (oci.database.DatabaseClient, "list_gi_versions"), # Handled as a special case to get all Gi Versons by shape, see list_gi_versions_by_shape
+        # oci.data_science.DataScienceClient
+        "DataScienceNotebookSessionShape": (oci.data_science.DataScienceClient, "list_notebook_session_shapes"),
         # oci.limits.LimitsClient
         "Service": (oci.limits.LimitsClient, "list_services"),
         # oci.load_balancer.LoadBalancerClient
@@ -941,6 +990,10 @@ class OciResourceDiscoveryClient(object):
                         future = executor.submit(self.list_resources, klass, method_name, region, configuration_id=configuration_id)
                         futures_list.update({(region, resource_type, None, configuration_id):future})
                     elif resource_type == "MySQLDbSystemDetails" and method_name == "get_db_system":
+                        db_system_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, db_system_id=db_system_id)
+                        futures_list.update({(region, resource_type, compartment_id, db_system_id):future})
+                    elif resource_type == "MySQLHeatwaveCluster" and method_name == "get_heat_wave_cluster":
                         db_system_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, db_system_id=db_system_id)
                         futures_list.update({(region, resource_type, compartment_id, db_system_id):future})
@@ -1472,7 +1525,7 @@ class OciResourceDiscoveryClient(object):
                         "DataFlowApplicationDetails", "DataFlowRunDetails",
                         "ExportSetDetails",
                         "Image",
-                        "MySQLConfiguration", "MySQLDbSystemDetails",
+                        "MySQLConfiguration", "MySQLDbSystemDetails", "MySQLHeatwaveCluster",
                         "NetworkFirewallDetails", "NetworkFirewallPolicyDetails",
                         "NodePoolDetails", "NodePoolOptions",
                         "NoSQLIndexDetails", "NoSQLTableDetails",
@@ -1585,7 +1638,7 @@ class OciResourceDiscoveryClient(object):
                     regional_resource_requests.add((resource.resource_type, resource.compartment_id, resource.identifier))
 
                 # handle list resource query varient cases
-                if resource.resource_type in ["BootVolume", "FileSystem", "Instance", "MountTarget"]:
+                if resource.resource_type in ["BootVolume", "FileSystem", "FssReplication", "FssReplicationTarget", "Instance", "MountTarget"]:
                     # list by avaiability domain
                     regional_resource_requests.add((resource.resource_type, resource.compartment_id, resource.availability_domain))
                 elif resource.resource_type == "Bucket":
@@ -1767,10 +1820,6 @@ class OciResourceDiscoveryClient(object):
         for region in self.regions:
             brute_force_requests = set()
 
-            # get DynamicGroups in root compartment of home region
-            if region.region_name == self.home_region and (self.include_resource_types == None or "DynamicGroup" in self.include_resource_types):
-                brute_force_requests.add(("DynamicGroup", self.tenancy.id, None))
-
             resource_types = {
                 "AlarmStatus",
                 "AmsMigration", "AmsSource", "AmsSourceApplication", # Force a search across all compartments 
@@ -1878,6 +1927,8 @@ class OciResourceDiscoveryClient(object):
                     regional_resource_requests.add(("MySQLDbSystemDetails", mysql_db_system.compartment_id, mysql_db_system.id))
                     if (self.include_resource_types == None or "MySQLBackup" in self.include_resource_types):
                         regional_resource_requests.add(("MySQLBackup", mysql_db_system.compartment_id, mysql_db_system.id))
+                    if (self.include_resource_types == None or "MySQLHeatwaveCluster" in self.include_resource_types):
+                        regional_resource_requests.add(("MySQLHeatwaveCluster", mysql_db_system.compartment_id, mysql_db_system.id))
             # get extra details for NetworkFirewall
             if "NetworkFirewall" in resources_by_region[region]:
                 for resource in resources_by_region[region]["NetworkFirewall"]:

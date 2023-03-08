@@ -605,6 +605,7 @@ class OkitArtefactView {
     drawRect(svg) {
         const definition = this.rect_definition;
         const rect = svg.append("rect")
+            .attr("class",            okitSettings.show_state ? this.artefact.lifecycle_state ? this.artefact.lifecycle_state.toLowerCase() : '' : '')
             .attr("id",               definition.id)
             .attr("x",                definition.x)
             .attr("y",                definition.y)

@@ -48,6 +48,8 @@ class OCIQuery(OCIConnection):
         "Cpe",
         "CustomerDnsZone",
         "Database",
+        "DataScienceNotebookSession",
+        "DataScienceProject",
         "DbHome",
         "DbNode",
         "DbSystem",
@@ -75,7 +77,8 @@ class OCIQuery(OCIConnection):
         "LoadBalancer",
         "LocalPeeringGateway",
         "MountTarget",
-        "MySqlDbSystem",
+        "MySQLDbSystem",
+        "MySQLHeatwaveCluster",
         "NatGateway",
         "NetworkFirewall",
         "NetworkFirewallPolicy",
@@ -119,6 +122,7 @@ class OCIQuery(OCIConnection):
         "Cpe": "customer_premise_equipments",
         "CustomerDnsZone": "dns_zones",
         "Database": "databases",
+        "DataScienceProject": "data_science_projects",
         "DbHome": "db_homes",
         "DbNode": "db_nodes",
         "DbSystem": "database_systems",
@@ -138,7 +142,7 @@ class OCIQuery(OCIConnection):
         "LoadBalancer": "load_balancers",
         "LocalPeeringGateway": "local_peering_gateways",
         "MountTarget": "mount_targets",
-        "MySqlDbSystem": "mysql_database_systems",
+        "MySQLDbSystem": "mysql_database_systems",
         "NatGateway": "nat_gateways",
         "NetworkFirewall": "network_firewalls",
         "NetworkLoadBalancer": "network_load_balancers",
@@ -246,6 +250,8 @@ class OCIQuery(OCIConnection):
                         # resource_list = self.oke_clusters(resource_list, resources)
                     elif resource_type == "CustomerDnsZone":
                         resource_list = self.dns_zones(resource_list, resources)
+                    elif resource_type == "DataScienceProject":
+                        resource_list = self.data_science_projects(resource_list, resources)
                     elif resource_type == "DbSystem":
                         resource_list = self.database_systems(resource_list, resources)
                     elif resource_type == "Drg":
@@ -258,7 +264,7 @@ class OCIQuery(OCIConnection):
                         resource_list = self.load_balancers(resource_list, resources)
                     elif resource_type == "MountTarget":
                         resource_list = self.mount_targets(resource_list, resources)
-                    elif resource_type == "MySqlDbSystem":
+                    elif resource_type == "MySQLDbSystem":
                         resource_list = self.mysql_database_systems(resource_list, resources)
                     elif resource_type == "NetworkFirewall":
                         resource_list = self.network_firewalls(resource_list, resources)
@@ -299,6 +305,11 @@ class OCIQuery(OCIConnection):
         for ai in analytics_instances:
             logger.info(jsonToFormattedString(ai))
         return analytics_instances
+
+    def data_science_projects(self, data_science_projects, resources):
+        for project in data_science_projects:
+            project['notebook_sessions'] = [r for r in resources.get("DataScienceNotebookSession", []) if r["project_id"] == project["id"]]
+        return data_science_projects
 
     def database_systems(self, database_systems, resources):
         for db_system in database_systems:
@@ -421,9 +432,15 @@ class OCIQuery(OCIConnection):
         return mount_targets
 
     def mysql_database_systems(self, database_systems, resources):
+        clusters = resources.get("MySQLHeatwaveCluster", [])
+        logger.info(f'Clusters {jsonToFormattedString(clusters)}')
         for db_system in database_systems:
             # Trim version to just the number
             db_system["mysql_version"] = db_system["mysql_version"].split('-')[0]
+            for cluster in clusters:
+                if cluster["db_system_id"] == db_system["id"]:
+                    db_system["heatwave_cluster"] = cluster
+                    break
         return database_systems
 
     def network_firewalls(self, firewalls, resources):

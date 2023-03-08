@@ -100,6 +100,66 @@ class MysqlDatabaseSystemProperties extends OkitResourceProperties {
         const port_x = this.createInput('number', 'Port X', `${this.id}_port_x`, '', (d, i, n) => this.resource.port_x = n[i].value)
         this.port_x = port_x.input
         this.append(this.networking_tbody, port_x.row)
+        // Heatwave
+        const heatwave_cluster = this.createDetailsSection('Heatwave Cluster', `${this.id}_heatwave_cluster_details`)
+        this.append(this.properties_contents, heatwave_cluster.details)
+        this.heatwave_cluster_details = heatwave_cluster.details
+        this.heatwave_cluster_div = heatwave_cluster.div
+        const heatwave_cluster_table = this.createTable('', `${this.id}_heatwave_cluster_table`)
+        this.heatwave_cluster_tbody = heatwave_cluster_table.tbody
+        this.append(this.heatwave_cluster_div, heatwave_cluster_table.table)
+        // Cluster Size
+        const cluster_size_data = {min: 1}
+        const cluster_size = this.createInput('number', 'Cluster Size', `${this.id}_cluster_size`, '', (d, i, n) => this.resource.heatwave_cluster.cluster_size = n[i].value, cluster_size_data)
+        this.cluster_size = cluster_size.input
+        this.append(this.heatwave_cluster_tbody, cluster_size.row)
+        // Shape
+        const node_shape_name = this.createInput('select', 'Node Shape', `${this.id}_node_shape_name`, '', (d, i, n) => {this.resource.heatwave_cluster.shape_name = n[i].value})
+        this.node_shape_name = node_shape_name.input
+        this.append(this.heatwave_cluster_tbody, node_shape_name.row)
+        // Delete Policy
+        const deletion_policy = this.createDetailsSection('Deletion Policy', `${this.id}_deletion_policy_details`)
+        this.append(this.properties_contents, deletion_policy.details)
+        this.deletion_policy_details = deletion_policy.details
+        this.deletion_policy_div = deletion_policy.div
+        const deletion_policy_table = this.createTable('', `${this.id}_deletion_policy_table`)
+        this.deletion_policy_tbody = deletion_policy_table.tbody
+        this.append(this.deletion_policy_div, deletion_policy_table.table)
+        // Delete Protected
+        const is_delete_protected = this.createInput('checkbox', 'Delete Protected', `${this.id}_is_delete_protected`, '', (d, i, n) => this.resource.deletion_policy.is_delete_protected = n[i].checked)
+        this.is_delete_protected = is_delete_protected.input
+        this.append(this.deletion_policy_tbody, is_delete_protected.row)
+        // Automatic Backup Retention
+        const automatic_backup_retention_data = {options: {DELETE: 'Delete', RETAIN: 'Retain'}}
+        const automatic_backup_retention = this.createInput('select', 'Automatic Backup Retention', `${this.id}_automatic_backup_retention`, '', (d, i, n) => this.resource.deletion_policy.automatic_backup_retention = n[i].value, automatic_backup_retention_data)
+        this.automatic_backup_retention = automatic_backup_retention.input
+        this.append(this.deletion_policy_tbody, automatic_backup_retention.row)
+        // Final Backup
+        const final_backup_data = {options: {REQUIRE_FINAL_BACKUP: 'Require', SKIP_FINAL_BACKUP: 'Skip'}}
+        const final_backup = this.createInput('select', 'Final Backup', `${this.id}_final_backup`, '', (d, i, n) => this.resource.deletion_policy.final_backup = n[i].value, final_backup_data)
+        this.final_backup = final_backup.input
+        this.append(this.deletion_policy_tbody, final_backup.row)
+        // Backup Policy
+        const backup_policy = this.createDetailsSection('Backup Policy', `${this.id}_backup_policy_details`)
+        this.append(this.properties_contents, backup_policy.details)
+        this.backup_policy_details = backup_policy.details
+        this.backup_policy_div = backup_policy.div
+        const backup_policy_table = this.createTable('', `${this.id}_backup_policy_table`)
+        this.backup_policy_tbody = backup_policy_table.tbody
+        this.append(this.backup_policy_div, backup_policy_table.table)
+        // Enabled
+        const is_enabled = this.createInput('checkbox', 'Enabled', `${this.id}_is_enabled`, '', (d, i, n) => this.resource.backup_policy.is_enabled = n[i].checked)
+        this.is_enabled = is_enabled.input
+        this.append(this.backup_policy_tbody, is_enabled.row)
+        // PITA
+        const pitr_policy_is_enabled = this.createInput('checkbox', 'Point In Time Recovery', `${this.id}_pitr_policy_is_enabled`, '', (d, i, n) => this.resource.backup_policy.pitr_policy.is_enabled = n[i].checked)
+        this.pitr_policy_is_enabled = pitr_policy_is_enabled.input
+        this.append(this.backup_policy_tbody, pitr_policy_is_enabled.row)
+        // Retention in Days
+        const retention_in_days_data = {min: 1}
+        const retention_in_days = this.createInput('number', 'Retention in Days', `${this.id}_retention_in_days`, '', (d, i, n) => this.resource.backup_policy.retention_in_days = n[i].value, retention_in_days_data)
+        this.retention_in_days = retention_in_days.input
+        this.append(this.backup_policy_tbody, retention_in_days.row)
     }
 
     // Load Additional Resource Specific Properties
@@ -123,8 +183,31 @@ class MysqlDatabaseSystemProperties extends OkitResourceProperties {
         this.hostname_label.property('value', this.resource.hostname_label)
         this.port.property('value', this.resource.port)
         this.port_x.property('value', this.resource.port_x)
+        // Deletion Policy
+        this.automatic_backup_retention.property('value', this.resource.deletion_policy.automatic_backup_retention)
+        this.final_backup.property('value', this.resource.deletion_policy.final_backup)
+        this.is_delete_protected.property('checked', this.resource.deletion_policy.is_delete_protected)
+        // Backup Policy
+        this.is_enabled.property('checked', this.resource.backup_policy.is_enabled)
+        this.pitr_policy_is_enabled.property('checked', this.resource.backup_policy.pitr_policy.is_enabled)
+        this.retention_in_days.property('value', this.resource.backup_policy.retention_in_days)
+
         // Show reference data
         this.showShapeConfigData()
+        this.checkHeatwave()
+    }
+
+    checkHeatwave() {
+        this.heatwave_cluster_details.classed('hidden', !this.resource.heatwave)
+        if (this.resource.heatwave) {
+            this.resource.heatwave_cluster = !this.resource.heatwave_cluster ? this.resource.newHeatwaveCluster() : this.resource.heatwave_cluster 
+            this.resource.heatwave_cluster.shape_name = this.resource.heatwave_cluster.shape_name !== '' ? this.resource.heatwave_cluster.shape_name : this.resource.shape_name
+            this.loadMySQLHeatwaveShapes()
+            this.node_shape_name.property('value', this.resource.heatwave_cluster.shape_name)
+            this.cluster_size.property('value', this.resource.heatwave_cluster.cluster_size)
+        } else {
+            this.resource.heatwave_cluster = undefined
+        }
     }
 
     showShapeConfigData() {
@@ -139,19 +222,29 @@ class MysqlDatabaseSystemProperties extends OkitResourceProperties {
         shape_name = shape_name ? shape_name : this.resource.shape_name
         this.loadMySQLConfigurations(shape_name)
         this.showShapeConfigData()
+        this.checkHeatwave()
     }
 
     loadMySQLShapes() {
         const shape_groups = {
-            'Standard - AMD E3': (ds) => ds.name.includes('MySQL.VM.Standard.E3'),
-            'Standard - AMD E4': (ds) => ds.name.includes('MySQL.VM.Standard.E4'),
-            'Standard - Intel X7': (ds) => ds.name.includes('MySQL.VM.Standard2'),
-            'Standard - Intel X9': (ds) => ds.name.includes('MySQL.VM.Standard3'),
-            'Optimised - Intel X9': (ds) => ds.name.includes('MySQL.VM.Optimized3'),
+            'Heatwave': (ds) => ds.name.includes('MySQL.HeatWave') && ds.is_supported_for.includes('DBSYSTEM'),
+            'Standard - AMD E3': (ds) => ds.name.includes('MySQL.VM.Standard.E3') && ds.is_supported_for.includes('DBSYSTEM'),
+            'Standard - AMD E4': (ds) => ds.name.includes('MySQL.VM.Standard.E4') && ds.is_supported_for.includes('DBSYSTEM'),
+            'Standard - Intel X7': (ds) => ds.name.includes('MySQL.VM.Standard2') && ds.is_supported_for.includes('DBSYSTEM'),
+            'Standard - Intel X9': (ds) => ds.name.includes('MySQL.VM.Standard3') && ds.is_supported_for.includes('DBSYSTEM'),
+            'Optimised - Intel X9': (ds) => ds.name.includes('MySQL.VM.Optimized3') && ds.is_supported_for.includes('DBSYSTEM'),
         }
         this.loadReferenceSelect(this.shape_name, 'getMySQLShapes', false, undefined, shape_groups, '', 'name', 'name')
         const options = Array.from(this.shape_name.node().options).map((opt) => opt.value)
         this.resource.shape_name = options.includes(this.resource.shape_name) ? this.resource.shape_name : options.length > 0 ? options[0] : ''
+    }
+
+    loadMySQLHeatwaveShapes() {
+        const filter = (ds) => ds.name.includes('MySQL.HeatWave.VM') && ds.is_supported_for.includes('HEATWAVECLUSTER')
+        this.loadReferenceSelect(this.node_shape_name, 'getMySQLShapes', false, filter, undefined, '', 'name', 'name')
+        const options = Array.from(this.node_shape_name.node().options).map((opt) => opt.value)
+        this.resource.heatwave_cluster.shape_name = options.includes(this.resource.heatwave_cluster.shape_name) ? this.resource.heatwave_cluster.shape_name : options.length > 0 ? options[0] : ''
+        // this.node_shape_name.property('value', this.resource.heatwave_cluster.shape_name)
     }
 
     loadMySQLVersions() {

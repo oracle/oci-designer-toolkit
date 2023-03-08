@@ -57,6 +57,11 @@
                     "title": "Visual Builder Instance",
                     "targets": ["oci"],
                     "svg": "VisualBuilderInstance.svg"
+                },
+                {
+                    "title": "Data Science Project",
+                    "targets": ["oci"],
+                    "svg": "DataScience.svg"
                 }
             ]
         },
