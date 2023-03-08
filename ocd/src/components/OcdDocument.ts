@@ -31,7 +31,8 @@ export class OcdDocument {
 
     static clone = (ocdDocument:OcdDocument) => new OcdDocument(ocdDocument.design, ocdDocument.selectedResource)
 
-    newDesign(): OcdDesign {
+    newDesign = (): OcdDesign => OcdDesign.newDesign()
+    newDesign1(): OcdDesign {
         const today = new Date();
         const date = `${today.getFullYear()}-${(today.getMonth() + 1)}-${today.getDate()}`;
         const time = `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
@@ -63,10 +64,10 @@ export class OcdDocument {
                 }
             },
             view: {
-                id: this.uuid(),
+                id: `view-${uuidv4()}`,
                 pages: [
                     {
-                        id: this.uuid('page'),
+                        id: `pagel-${uuidv4()}`,
                         title: 'Open Cloud Design',
                         layers: [layer],
                         coords: [],
@@ -101,7 +102,7 @@ export class OcdDocument {
     setPageTitle = (id: string, title: string): void => this.design.view.pages.find((v) => v.id === id).title = title
 
     // @ts-ignore 
-    uuid = (prefix='view') => `${prefix}-${([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,c =>(c^(((window.crypto||window.Crypto).getRandomValues(new Uint8Array(1))[0]&15)>>c/4)).toString(16))}`
+    // uuid = (prefix='view') => `${prefix}-${([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,c =>(c^(((window.crypto||window.Crypto).getRandomValues(new Uint8Array(1))[0]&15)>>c/4)).toString(16))}`
 
     getOciResourceList(key: string) {return this.design.model.oci.resources[key] ? this.design.model.oci.resources[key] : []}
     getOciResources() {return Object.values(this.design.model.oci.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], [])}
@@ -115,7 +116,7 @@ export class OcdDocument {
         console.info(`ociResource`, ociResources)
         let modelResource = undefined
         if (paletteResource.provider === 'oci') {
-            modelResource = {id: this.uuid()}
+            modelResource = {id: `ocd-${paletteResource.class}-${uuidv4()}`}
             // @ts-ignore 
             // const client = ociResources[resourceClient]
             // modelResource = client.new()
@@ -156,7 +157,7 @@ export class OcdDocument {
         // @ts-ignore 
         const layers = this.design.model.oci.resources.compartment.map((c, i) => {return {id: c.id, class: 'oci-compartment', visible: true, selected: i === 0}})
         const viewPage: OcdViewPage = {
-            id: this.uuid('page'),
+            id: `page-${uuidv4()}`,
             title: `Page ${this.design.view.pages.length + 1}`,
             layers: layers,
             coords: [],

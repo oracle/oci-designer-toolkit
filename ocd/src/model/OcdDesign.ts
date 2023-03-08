@@ -2,6 +2,9 @@
 ** Copyright (c) 2021, Andrew Hopkinson.
 ** Licensed under the GNU GENERAL PUBLIC LICENSE v 3.0 as shown at https://www.gnu.org/licenses/.
 */
+import { v4 as uuidv4 } from 'uuid'
+import * as ociResources from '../model/provider/oci/resources'
+import version from '../json/version.json'
 
 export interface OcdMetadata {
     ocdVersion: string,
@@ -100,5 +103,52 @@ export interface OcdDesign {
         azure?: AzureModel
     },
     view: OcdView
+}
+
+export namespace OcdDesign {
+    export function newDesign(): OcdDesign {
+        const today = new Date();
+        const date = `${today.getFullYear()}-${(today.getMonth() + 1)}-${today.getDate()}`;
+        const time = `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
+        const compartment = ociResources.OciCompartment.newResource()
+        const layer: OcdViewLayer = {
+            id: compartment.id,
+            class: 'oci-compartment',
+            visible: true,
+            selected: true
+        } 
+        return {
+            metadata: {
+                ocdVersion: version.version,
+                ocdSchemaVersion: version.schema_version,
+                ocdModelId: `ocd-model-${uuidv4()}`,
+                title: 'Open Cloud Architecture',
+                documentation: '',
+                created: `${date} ${time}`,
+                updated: ''
+            },
+            model: {
+                oci: {
+                    tags: {},
+                    vars: [],
+                    resources: {
+                        compartment: [compartment]
+                    }
+                }
+            },
+            view: {
+                id: `view-${uuidv4()}`,
+                pages: [
+                    {
+                        id: `page-${uuidv4()}`,
+                        title: 'Open Cloud Design',
+                        layers: [layer],
+                        coords: [],
+                        selected: true
+                    }
+                ]
+            }
+        }
+    }
 }
 
