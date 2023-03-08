@@ -32,51 +32,6 @@ export class OcdDocument {
     static clone = (ocdDocument:OcdDocument) => new OcdDocument(ocdDocument.design, ocdDocument.selectedResource)
 
     newDesign = (): OcdDesign => OcdDesign.newDesign()
-    newDesign1(): OcdDesign {
-        const today = new Date();
-        const date = `${today.getFullYear()}-${(today.getMonth() + 1)}-${today.getDate()}`;
-        const time = `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
-        const compartment = ociResources.OciCompartment.newResource()
-        // const compartment = ociResources.OciCompartmentClient.new()
-        const layer: OcdViewLayer = {
-            id: compartment.id,
-            class: 'oci-compartment',
-            visible: true,
-            selected: true
-        } 
-        return {
-            metadata: {
-                ocdVersion: version.version,
-                ocdSchemaVersion: version.schema_version,
-                ocdModelId: `ocd-model-${uuidv4()}`,
-                title: 'Open Cloud Architecture',
-                documentation: '',
-                created: `${date} ${time}`,
-                updated: ''
-            },
-            model: {
-                oci: {
-                    tags: {},
-                    vars: [],
-                    resources: {
-                        compartment: [compartment]
-                    }
-                }
-            },
-            view: {
-                id: `view-${uuidv4()}`,
-                pages: [
-                    {
-                        id: `pagel-${uuidv4()}`,
-                        title: 'Open Cloud Design',
-                        layers: [layer],
-                        coords: [],
-                        selected: true
-                    }
-                ]
-            }
-        }
-    }
 
     newSelectedResource(): OcdSelectedResource {
         return {
