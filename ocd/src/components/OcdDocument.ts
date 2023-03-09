@@ -160,7 +160,7 @@ export class OcdDocument {
         const page = this.getPage(viewId)
         if (page && coordsId !== '') {
             const idx = page.coords.findIndex(c => c.id === coordsId)
-            if (idx < page.coords.length) this.switchCoords(page.coords, idx, idx + 1)
+            if (idx < page.coords.length - 1) this.switchCoords(page.coords, idx, idx + 1)
         }
     }
     sendBackward = (viewId: string, coordsId: string) => {
