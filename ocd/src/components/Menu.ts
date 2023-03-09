@@ -3,6 +3,7 @@
 ** Licensed under the GNU GENERAL PUBLIC LICENSE v 3.0 as shown at https://www.gnu.org/licenses/.
 */
 
+import OcdOKITImporter from '../import/OcdOKITImporter'
 import OcdConsoleConfig from './OcdConsoleConfiguration'
 import OcdDocument from './OcdDocument'
 
@@ -110,7 +111,39 @@ export const menuItems = [
                 submenu: [
                     {
                         label: 'OKIT Json',
-                        click: undefined
+                        click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
+                            const openFile = async () => {
+                                try {
+                                    const options = {
+                                        multiple: false,
+                                        types: [
+                                            {
+                                                description: 'OKIT Files',
+                                                accept: {
+                                                    'application/json': ['.json'],
+                                                    // 'text/plain': ['.md']
+                                                },
+                                            },
+                                        ],
+                                    }
+                                    // Always returns an array.
+                                    // @ts-ignore 
+                                    const [handle] = await window.showOpenFilePicker(options)
+                                    const file = await handle.getFile()
+                                    const contents = await file.text()
+                                    return contents
+                                } catch (err: any) {
+                                    console.error(err.name, err.message)
+                                    throw err
+                                }
+                            }
+                            openFile().then((resp) => {
+                                const ocdDocument = OcdDocument.new()
+                                const okitImporter = new OcdOKITImporter()
+                                ocdDocument.design = okitImporter.parse(resp)
+                                setOcdDocument(ocdDocument)
+                            })
+                        }
                     },
                     {
                         label: 'OCI Resources',

@@ -7,9 +7,13 @@ import { OcdDesign } from "../model/OcdDesign";
 import { OcdUtils } from "../utils/OcdUtils";
 
 class OcdImporter {
-    // design: OcdDesign
-    // constructor() {
-    // }
+    design: OcdDesign
+    constructor() {
+        this.design = OcdDesign.newDesign()
+    }
+
+    import = (source: string): OcdDesign => this.design
+    parse = (source: string) : OcdDesign => this.import(source)
 
     toTitleCase = (str: string) => OcdUtils.toTitleCase(str)
     toCamelCase = (str: string) => OcdUtils.toCamelCase(str)

@@ -10,6 +10,7 @@ export interface OcdMetadata {
     ocdVersion: string,
     ocdSchemaVersion: string,
     ocdModelId: string,
+    platform: 'oci' | 'pca'
     title: string,
     documentation: string,
     created: string,
@@ -70,6 +71,11 @@ export interface OcdViewPage {
     selected: boolean
 }
 
+export interface OcdUserDefined extends Record<string, any> {
+    terraform?: string
+    ansible?: string
+}
+
 export interface OcdVariable {
     name: string,
     default: string | number,
@@ -102,7 +108,8 @@ export interface OcdDesign {
         aws?: AwsModel,
         azure?: AzureModel
     },
-    view: OcdView
+    view: OcdView,
+    userDefined: OcdUserDefined
 }
 
 export namespace OcdDesign {
@@ -122,6 +129,7 @@ export namespace OcdDesign {
                 ocdVersion: version.version,
                 ocdSchemaVersion: version.schema_version,
                 ocdModelId: `ocd-model-${uuidv4()}`,
+                platform: 'oci',
                 title: 'Open Cloud Architecture',
                 documentation: '',
                 created: `${date} ${time}`,
@@ -147,7 +155,8 @@ export namespace OcdDesign {
                         selected: true
                     }
                 ]
-            }
+            },
+            userDefined: {}
         }
     }
 }
