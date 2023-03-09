@@ -54,19 +54,6 @@ class OcdOKITImporter extends OcdImporter {
     }
 
     convertResource = (resource: OkitResource ): OciResource => {
-        // const keyMap: Record<string, any> = {
-        //     resource_name: 'terraformResourceName',
-        //     read_only: 'locked'
-        // }
-        // const ocdResource: OciResource = Object.entries(resource).reduce((a: OciResource, [k, v]) => {
-        //     if (typeof v === 'string') a[Object.hasOwn(keyMap, k) ? keyMap[k] : this.toCamelCase(k)] = v
-        //     else if (typeof v === 'number') a[Object.hasOwn(keyMap, k) ? keyMap[k] : this.toCamelCase(k)] = v
-        //     else if (typeof v === 'boolean') a[Object.hasOwn(keyMap, k) ? keyMap[k] : this.toCamelCase(k)] = v
-        //     else if (Array.isArray(v) && typeof v[0] === 'string') a[Object.hasOwn(keyMap, k) ? keyMap[k] : this.toCamelCase(k)] = v
-        //     else if (Array.isArray(v) && typeof v[0] === 'number') a[Object.hasOwn(keyMap, k) ? keyMap[k] : this.toCamelCase(k)] = v
-        //     return a
-        // }, {region: '', provider: 'oci', locked: false} as OciResource)
-        // return ocdResource
         return this.convertObjectElement(resource, {region: '', provider: 'oci', locked: false}) as OciResource
     }
 
