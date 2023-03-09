@@ -5,7 +5,6 @@
 
 import { v4 as uuidv4 } from 'uuid'
 import * as ociResources from '../model/provider/oci/resources'
-import version from '../json/version.json'
 import { OcdDesign, OcdViewPage, OcdViewCoords, OcdViewLayer, OcdBaseModel } from '../model/OcdDesign'
 import { PaletteResource } from '../model/OcdPalette'
 import { OcdResource } from '../model/OcdResource'
@@ -43,21 +42,6 @@ export class OcdDocument {
     }
     getSelectedResource = () => this.getResource(this.selectedResource.modelId)
     getSelectedResourceCoords = () => this.getCoords(this.selectedResource.coordsId)
-
-    // @ts-ignore 
-    getLayerName = (id: string): string => this.design.model.oci.resources.compartment.find((c) => c.id === id).displayName
-    // @ts-ignore 
-    getActiveLayer = (pageId: string): OcdViewLayer => this.getActivePage(pageId).layers.find((l: OcdViewLayer) => l.selected)
-
-    // @ts-ignore 
-    getPage = (id: string): OcdViewPage => this.design.view.pages.find((v) => v.id === id)
-    // @ts-ignore 
-    getActivePage = (): OcdViewPage => this.design.view.pages.find((p: OcdViewPage) => p.selected)
-    // @ts-ignore 
-    setPageTitle = (id: string, title: string): void => this.design.view.pages.find((v) => v.id === id).title = title
-
-    // @ts-ignore 
-    // uuid = (prefix='view') => `${prefix}-${([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,c =>(c^(((window.crypto||window.Crypto).getRandomValues(new Uint8Array(1))[0]&15)>>c/4)).toString(16))}`
 
     getOciResourceList(key: string) {return this.design.model.oci.resources[key] ? this.design.model.oci.resources[key] : []}
     getOciResources() {return Object.values(this.design.model.oci.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], [])}
@@ -108,6 +92,12 @@ export class OcdDocument {
         }
     }
 
+    // @ts-ignore 
+    getPage = (id: string): OcdViewPage => this.design.view.pages.find((v) => v.id === id)
+    // @ts-ignore 
+    getActivePage = (): OcdViewPage => this.design.view.pages.find((p: OcdViewPage) => p.selected)
+    // @ts-ignore 
+    setPageTitle = (id: string, title: string): void => this.design.view.pages.find((v) => v.id === id).title = title
     addPage(): OcdViewPage {
         // @ts-ignore 
         const layers = this.design.model.oci.resources.compartment.map((c, i) => {return {id: c.id, class: 'oci-compartment', visible: true, selected: i === 0}})
@@ -127,6 +117,10 @@ export class OcdDocument {
         this.design.view.pages = this.design.view.pages.filter((p) => p.id !== id)
     }
 
+    // @ts-ignore 
+    getLayerName = (id: string): string => this.design.model.oci.resources.compartment.find((c) => c.id === id).displayName
+    // @ts-ignore 
+    getActiveLayer = (pageId: string): OcdViewLayer => this.getActivePage(pageId).layers.find((l: OcdViewLayer) => l.selected)
     addLayer(id: string, layerClass: string = 'oci-compartment') {
         this.design.view.pages.forEach((p: OcdViewPage) => {
             const layer: OcdViewLayer = {
@@ -190,6 +184,8 @@ export class OcdDocument {
             page.coords = [page.coords[idx], ...page.coords.slice(0, idx), ...page.coords.slice(idx + 1)]
         }
     }
+
+    autoArrange = (viewId: string) => {}
 
 }
 

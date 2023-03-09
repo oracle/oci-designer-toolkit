@@ -94,7 +94,7 @@ export const menuItems = [
                             const handle = await window.showSaveFilePicker(options)
                             const writable = await handle.createWritable()
                             const okitJson = JSON.stringify(ocdDocument.design, null, 2)
-                            console.info('Writing', okitJson, ocdDocument)
+                            // console.info('Writing', okitJson, ocdDocument)
                             await writable.write(okitJson)
                             await writable.close()
                             return handle
@@ -141,6 +141,7 @@ export const menuItems = [
                                 const ocdDocument = OcdDocument.new()
                                 const okitImporter = new OcdOKITImporter()
                                 ocdDocument.design = okitImporter.parse(resp)
+                                ocdDocument.autoArrange(ocdDocument.selectedResource.pageId)
                                 setOcdDocument(ocdDocument)
                             })
                         }
@@ -293,7 +294,10 @@ export const menuItems = [
             },
             {
                 label: 'Auto Arrange',
-                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {}
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
+                    ocdDocument.autoArrange(ocdDocument.selectedResource.pageId)
+                    setOcdDocument(OcdDocument.clone(ocdDocument))            
+                }
             }
         ]
     }

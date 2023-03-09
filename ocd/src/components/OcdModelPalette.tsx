@@ -56,7 +56,7 @@ const OcdModelPaletteResources = ({ provider, type, resources, setDragData }: an
     const onDragEnd = () => {}
     return (
         <li className='collapsible-list-element'>
-            <div className={collapsed ? 'tree-collapsed' : ''} onClick={onClick}><label>{OcdUtils.toTitleCase(type)}</label></div>
+            <div className={collapsed ? 'tree-collapsed' : ''} onClick={onClick}><label>{OcdUtils.toTitle(type)}</label></div>
             <ul className={collapsed ? 'hidden' : ''}>
                 {resources.map((r: any) => {
                     return <OcdModelPaletteResource 
@@ -74,7 +74,8 @@ const OcdModelPaletteResources = ({ provider, type, resources, setDragData }: an
 }
 
 const OcdModelPaletteResource = ({ provider, type, resource, onDragStart, onDragEnd }: any): JSX.Element => {
-    const classname = `${provider}-${type}`
+    // const classname = `${provider}-${type}`
+    const classname = OcdUtils.toCssClassName(provider, type)
     const containerResources = ['vcn', 'subnet']
     console.info('Classname:', classname)
     const onPaletteDragStart = (e: React.MouseEvent<HTMLElement>) => {
