@@ -18,7 +18,7 @@ export interface OcdResource extends Record<string, any> {
 
 export namespace OcdResource {
     export function newResource(type?: string): OcdResource {
-        const resourceType = OcdResource.toResourceType(type)
+        const resourceType = OcdUtils.toResourceType(type)
         return {
             provider: '',
             locked: false,
