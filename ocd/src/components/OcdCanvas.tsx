@@ -3,6 +3,7 @@
 ** Licensed under the GNU GENERAL PUBLIC LICENSE v 3.0 as shown at https://www.gnu.org/licenses/.
 */
 
+import { v4 as uuidv4 } from 'uuid'
 import OcdDocument from './OcdDocument'
 import OcdResourceSvg from './OcdResourceSvg'
 import { OcdViewCoords, OcdViewLayer, OcdViewPage } from '../model/OcdDesign'
@@ -76,8 +77,7 @@ export const OcdCanvas = ({ dragData, ocdConsoleConfig, ocdDocument, setOcdDocum
         return false
     }
 
-    // @ts-ignore 
-    const uuid = () => `gid-${([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,c =>(c^(((window.crypto||window.Crypto).getRandomValues(new Uint8Array(1))[0]&15)>>c/4)).toString(16))}`
+    const uuid = () => `gid-${uuidv4()}`
 
     const page: OcdViewPage = ocdDocument.getActivePage()
     const layers = page.layers.filter((l: OcdViewLayer) => l.visible).map((l: OcdViewLayer) => l.id)

@@ -9,6 +9,7 @@ import OcdDocument, { OcdSelectedResource } from './OcdDocument'
 import { OcdViewCoords } from '../model/OcdDesign'
 import { ResourceRectProps, ResourceForeignObjectProps, ResourceSvgProps } from '../types/ReactComponentProperties'
 import { OcdViewPage } from '../model/OcdDesign'
+import { OcdUtils } from '../utils/OcdUtils'
 
 const OcdSimpleRect = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resource }: ResourceRectProps): JSX.Element => {
     const id = `${resource.id}-rect`
@@ -134,7 +135,6 @@ const OcdForeignObject = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
     const id = `${resource.id}-fo`
     const backgroundColourClass = `${resource.class}-background-colour`
     const foreignObjectClass = `ocd-svg-foreign-object ${ocdConsoleConfig.config.detailedResource || resource.container ? 'ocd-svg-resource-detailed' : 'ocd-svg-resource-simple'}`
-    const resourceType = resource.class.split('-').slice(1).reduce((a, c) => `${a}${c.charAt(0).toUpperCase()}${c.slice(1).toLowerCase()}`, '')
     const onChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         ocdDocument.setDisplayName(resource.ocid, e.target.value.trim())
         setOcdDocument(OcdDocument.clone(ocdDocument))
@@ -148,7 +148,7 @@ const OcdForeignObject = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
                     <div className={`${resource.class} ocd-svg-icon`}></div>
                 </div>
                 <div className='ocd-svg-foreign-object-display-name'>
-                    <span>{resourceType}</span>
+                    <span>{resource.title}</span>
                     <input type='text' value={ocdDocument.getDisplayName(resource.ocid)} onChange={onChange} tabIndex={-1}></input>
                 </div>
             </div>

@@ -3,7 +3,7 @@
 ** Licensed under the GNU GENERAL PUBLIC LICENSE v 3.0 as shown at https://www.gnu.org/licenses/.
 */
 
-import OcdOKITImporter from '../import/OcdOKITImporter'
+import OcdOKITImporter from '../import/okit/OcdOKITImporter'
 import OcdConsoleConfig from './OcdConsoleConfiguration'
 import OcdDocument from './OcdDocument'
 
@@ -141,7 +141,7 @@ export const menuItems = [
                                 const ocdDocument = OcdDocument.new()
                                 const okitImporter = new OcdOKITImporter()
                                 ocdDocument.design = okitImporter.parse(resp)
-                                ocdDocument.autoArrange(ocdDocument.selectedResource.pageId)
+                                ocdDocument.autoLayout(ocdDocument.selectedResource.pageId)
                                 setOcdDocument(ocdDocument)
                             })
                         }
@@ -295,7 +295,7 @@ export const menuItems = [
             {
                 label: 'Auto Arrange',
                 click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
-                    ocdDocument.autoArrange(ocdDocument.selectedResource.pageId)
+                    ocdDocument.autoLayout(ocdDocument.selectedResource.pageId)
                     setOcdDocument(OcdDocument.clone(ocdDocument))            
                 }
             }

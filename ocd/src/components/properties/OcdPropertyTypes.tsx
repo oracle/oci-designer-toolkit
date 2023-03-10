@@ -4,6 +4,7 @@
 */
 
 import { OcdResource } from '../../model/OcdResource'
+import { OcdUtils } from '../../utils/OcdUtils'
 import { OcdDocument } from '../OcdDocument'
 
 export interface ResourcePropertyAttributes {
@@ -104,7 +105,7 @@ export const OcdBooleanProperty = ({ ocdDocument, setOcdDocument, resource, conf
 export const OcdResourceReferenceProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
     const properties = config && config.properties ? config.properties : {}
     const resources = attribute.provider === 'oci' ? ocdDocument.getOciResourceList(attribute.referenceResource ? attribute.referenceResource : '') : []
-    const resourceType = OcdResource.toResourceType(attribute.referenceResource)
+    const resourceType = OcdUtils.toResourceType(attribute.referenceResource)
     console.info('Resources', resources)
     const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         resource[attribute.key] = e.target.value

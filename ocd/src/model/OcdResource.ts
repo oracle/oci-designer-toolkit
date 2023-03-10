@@ -12,6 +12,7 @@ export interface OcdResource extends Record<string, any> {
     terraformResourceName: string
     okitReference: string
     resourceType: string
+    resourceTypeName: string
     id: string
     documentation?: string
 }
@@ -19,15 +20,16 @@ export interface OcdResource extends Record<string, any> {
 export namespace OcdResource {
     export function newResource(type?: string): OcdResource {
         const resourceType = OcdUtils.toResourceType(type)
+        const resourceTypeName = OcdUtils.toResourceTypeName(type)
         return {
             provider: '',
             locked: false,
             terraformResourceName: `Okit${resourceType}${Date.now()}`,
             okitReference: `okit-${uuidv4()}`,
             resourceType: `${resourceType}`,
+            resourceTypeName: `${resourceTypeName}`,
             id: ''
         }
     }
-    export function toResourceType(type?: string): string {return `${OcdUtils.toTitleCase(type ? type.split('_').join(' ') : 'Unknown').replace(/\W+/g, '')}`}
 }
 

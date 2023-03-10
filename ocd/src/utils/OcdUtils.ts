@@ -16,7 +16,10 @@ export namespace OcdUtils {
     export function toCssClassName(provider: string, str: string): string {
         return `${provider.toLowerCase()}-${str.toLowerCase().split('_').join('-')}`
     }
+    export function toResourceTypeName(type?: string): string {
+        return `${OcdUtils.toTitleCase(type ? type.split('_').join(' ') : 'Unknown')}`
+    }
     export function toResourceType(type?: string): string {
-        return `${OcdUtils.toTitleCase(type ? type.split('_').join(' ') : 'Unknown').replace(/\W+/g, '')}`
+        return `${OcdUtils.toResourceTypeName(type).replace(/\W+/g, '')}`
     }
 }

@@ -15,7 +15,7 @@ import * as ociResources from './properties/providers/oci/resources'
 const OcdResourcePropertiesHeader = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
     const selectedResource = ocdDocument.getSelectedResource()
     const padlock: string = selectedResource ? selectedResource.locked ? 'padlock-closed' : 'padlock-open' : 'padlock-open'
-    const title: string = selectedResource ? `${selectedResource.resourceType} (${ocdDocument.getDisplayName(ocdDocument.selectedResource.modelId)})` : ''
+    const title: string = selectedResource ? `${selectedResource.resourceTypeName} (${ocdDocument.getDisplayName(ocdDocument.selectedResource.modelId)})` : ''
     return (
         <div className='ocd-properties-header'>
             <div className={`property-editor-title ${ocdDocument.selectedResource.class}`}>

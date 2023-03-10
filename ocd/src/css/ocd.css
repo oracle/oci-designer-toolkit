@@ -609,18 +609,20 @@ summary {
 }
 
 .simple-list-element div > div.draggable {
-    width: 1.25em;
-    height: 1.25em;
+    display: block;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 15px 15px;
+    width: 20px;
+    height: 20px;
     flex: none;
 }
 
 .simple-list-element div > div.draggable:active {
-    min-width: 25px;
-    max-width: 25px;
-    width: 25px;
-    min-height: 25px;
-    max-height: 25px;
-    height: 25px;
+    width: 35px;
+    height: 35px;
+    background-size: 30px 30px;
+    border: 1px dashed red;
 }
 
 .simple-list-element > div > label {

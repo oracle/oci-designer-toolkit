@@ -3,9 +3,9 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import { OcdDesign } from "../model/OcdDesign";
-import { OciResource } from "../model/provider/oci/OciResource";
-import OcdImporter from "./OcdImporter";
+import { OcdDesign } from "../../model/OcdDesign";
+import { OciResource } from "../../model/provider/oci/OciResource";
+import OcdImporter from "../OcdImporter";
 
 interface OkitDesign extends Record<string, any> {}
 interface OkitResource extends Record<string, string | number | boolean> {}
@@ -49,12 +49,13 @@ class OcdOKITImporter extends OcdImporter {
         }
         Object.entries(this.okitDesign).filter(([k, v]) => Array.isArray(v)).forEach(([k, v]) => {
             const ocdModelName = Object.hasOwn(resourceMap, k) ? resourceMap[k] : k.slice(0, -1)
-            this.design.model.oci.resources[ocdModelName] = v.map((r: OkitResource) => this.convertResource(r))
+            this.design.model.oci.resources[ocdModelName] = v.map((r: OkitResource) => this.convertResource(ocdModelName, r))
         })
     }
 
-    convertResource = (resource: OkitResource ): OciResource => {
-        return this.convertObjectElement(resource, {region: '', provider: 'oci', locked: false}) as OciResource
+    convertResource = (ocdModelName: string, resource: OkitResource ): OciResource => {
+        const ociResource: OciResource = OciResource.newResource(ocdModelName)
+        return this.convertObjectElement(resource, ociResource) as OciResource
     }
 
     convertObjectElement = (element: OkitElement, initialObject: OkitElement): OkitElement => {

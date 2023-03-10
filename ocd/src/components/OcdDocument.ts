@@ -8,6 +8,7 @@ import * as ociResources from '../model/provider/oci/resources'
 import { OcdDesign, OcdViewPage, OcdViewCoords, OcdViewLayer, OcdBaseModel } from '../model/OcdDesign'
 import { PaletteResource } from '../model/OcdPalette'
 import { OcdResource } from '../model/OcdResource'
+import { OcdAutoLayout } from './OcdAutoLayout'
 
 export interface OcdSelectedResource {
     modelId: string
@@ -185,7 +186,11 @@ export class OcdDocument {
         }
     }
 
-    autoArrange = (viewId: string) => {}
+    autoLayout = (viewId: string) => {
+        const autoArranger = new OcdAutoLayout(this.design)
+        const page = this.getPage(viewId)
+        page.coords = autoArranger.layout()
+    }
 
 }
 
