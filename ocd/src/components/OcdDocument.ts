@@ -58,16 +58,15 @@ export class OcdDocument {
         if (paletteResource.provider === 'oci') {
             modelResource = {id: `ocd-${paletteResource.class}-${uuidv4()}`}
             // @ts-ignore 
-            // const client = ociResources[resourceClient]
-            // modelResource = client.new()
-            // @ts-ignore 
-            modelResource = ociResources[resourceClass].newResource()
-            modelResource.compartmentId = compartmentId
-            // modelResource = new ociResources[resourceClass]()
-            console.info(modelResource)
-            // const region = this.design.model.oci.region.undefined
-            // region.resources[resourceList] ? region.resources[resourceList].push(modelResource) : region.resources[resourceList] = [modelResource]
-            this.design.model.oci.resources[resourceList] ? this.design.model.oci.resources[resourceList].push(modelResource) : this.design.model.oci.resources[resourceList] = [modelResource]
+            const client = ociResources[resourceClass]
+            if (client) {
+                modelResource = client.newResource()
+                modelResource.compartmentId = compartmentId
+                console.info(modelResource)
+                this.design.model.oci.resources[resourceList] ? this.design.model.oci.resources[resourceList].push(modelResource) : this.design.model.oci.resources[resourceList] = [modelResource]
+            } else {
+                alert(`Resource ${resourceClass} has not been implemented yet.`)
+            }
         }
         console.info('Added Resource:', modelResource)
         return modelResource
