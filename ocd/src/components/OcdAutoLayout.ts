@@ -6,6 +6,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import { OcdDesign, OcdResources, OcdViewCoords, OciResources } from "../model/OcdDesign";
 import { OcdResource } from "../model/OcdResource";
+import { OciResource } from '../model/provider/oci/OciResource';
 import { OcdUtils } from '../utils/OcdUtils';
 
 export class OcdAutoLayout {
@@ -20,21 +21,21 @@ export class OcdAutoLayout {
     constructor(design: OcdDesign) {
         this.design = design
         this.coords = []
-        this.containerResources = {...this.getOciContainerResources(this.design.model.oci.resources)}
-        this.simpleResources = {...this.getOciSimpleResources(this.design.model.oci.resources)} as OcdResources
+        this.containerResources = this.getContainerResources()
+        this.simpleResources = this.getSimpleResources()
         this.addContainerCoords()
         console.info('Container Coords',this.coords)
         this.addSimpleCoords()
         console.info('Simple Coords', this.coords)
     }
 
-    getOciResources() {return Object.values(this.design.model.oci.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], [])}
-    getOciContainerResources(resources: OciResources): OcdResources {
-        return Object.keys(resources).filter(k => this.containers.includes(k) && !this.ignore.includes(k)).reduce((obj, key) => {return {...obj, [key]: resources[key]}}, {})
-    }
-    getOciSimpleResources(resources: OciResources): OcdResources {
-        return Object.keys(resources).filter(k => !this.containers.includes(k) && !this.ignore.includes(k)).reduce((obj, key) => {return {...obj, [key]: resources[key]}}, {})
-    }
+    getResources(): OcdResource[] {return [...this.getOciResources()]}
+    getContainerResources(): OcdResources {return {...this.getOciContainerResources(this.design.model.oci.resources)}}
+    getSimpleResources(): OcdResources {return {...this.getOciSimpleResources(this.design.model.oci.resources)}}
+
+    getOciResources(): OciResource[] {return Object.values(this.design.model.oci.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], [])}
+    getOciContainerResources(resources: OciResources): OciResources {return Object.keys(resources).filter(k => this.containers.includes(k) && !this.ignore.includes(k)).reduce((obj, key) => {return {...obj, [key]: resources[key]}}, {})}
+    getOciSimpleResources(resources: OciResources): OciResources {return Object.keys(resources).filter(k => !this.containers.includes(k) && !this.ignore.includes(k)).reduce((obj, key) => {return {...obj, [key]: resources[key]}}, {})}
 
     addContainerCoords() {
         this.containers.forEach((c) => {

@@ -65,7 +65,7 @@ export class OcdDocument {
                 console.info(modelResource)
                 this.design.model.oci.resources[resourceList] ? this.design.model.oci.resources[resourceList].push(modelResource) : this.design.model.oci.resources[resourceList] = [modelResource]
             } else {
-                alert(`Resource ${resourceClass} has not been implemented yet.`)
+                alert(`Resource ${resourceClass} has not yet been implemented.`)
             }
         }
         console.info('Added Resource:', modelResource)
