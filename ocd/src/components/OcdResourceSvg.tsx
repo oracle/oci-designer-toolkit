@@ -134,7 +134,7 @@ const OcdResizePoint = ({resource, cx, cy, position, setDimensions, onResizeEnd}
 const OcdForeignObject = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resource }: ResourceForeignObjectProps) => {
     const id = `${resource.id}-fo`
     const backgroundColourClass = `${resource.class}-background-colour`
-    const foreignObjectClass = `ocd-svg-foreign-object ${ocdConsoleConfig.config.detailedResource || resource.container ? 'ocd-svg-resource-detailed' : 'ocd-svg-resource-simple'}`
+    const foreignObjectClass = `ocd-svg-foreign-object ${resource.container ? 'ocd-svg-resource-container' :ocdConsoleConfig.config.detailedResource ? 'ocd-svg-resource-detailed' : 'ocd-svg-resource-simple'}`
     const onChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         ocdDocument.setDisplayName(resource.ocid, e.target.value.trim())
         setOcdDocument(OcdDocument.clone(ocdDocument))

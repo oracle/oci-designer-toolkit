@@ -15,6 +15,7 @@
     --canvas-icon-width: 40px;
     --canvas-resource-simple-width: 40px;
     --canvas-resource-detailed-width: 150px;
+    --canvas-resource-container-width: 200px;
 }
 
 body {
@@ -978,6 +979,10 @@ summary {
     width: var(--canvas-resource-detailed-width);
 }
 
+.ocd-svg-resource-container {
+    width: var(--canvas-resource-container-width);
+}
+
 .ocd-svg-resize {
     fill: purple;
 }
@@ -1025,12 +1030,16 @@ summary {
 
 .ocd-svg-foreign-object-display-name > span {
     display: block;
+    width: 100%;
     opacity: 0.8;
     margin: 0;
     padding: 0;
     border: none;
     box-sizing: border-box;
     font-size: smaller;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .ocd-svg-foreign-object-display-name > input {
