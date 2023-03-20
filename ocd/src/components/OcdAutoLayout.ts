@@ -12,6 +12,7 @@ import { OcdUtils } from '../utils/OcdUtils';
 export class OcdAutoLayout {
     coords: OcdViewCoords[]
     design: OcdDesign
+    // Specify Contains and their hierarchy. i.e. compartment -> vcn -> subnet
     containers: string[] = ['vcn', 'subnet']
     ignore: string[] = ['compartment']
     containerResources: OcdResources = {}
@@ -26,7 +27,7 @@ export class OcdAutoLayout {
         this.addContainerCoords()
         console.info('Container Coords',this.coords)
         this.addSimpleCoords()
-        console.info('Simple Coords', this.coords)
+        console.info('Added Simple Coords', this.coords)
     }
 
     getResources(): OcdResource[] {return [...this.getOciResources()]}
@@ -44,7 +45,7 @@ export class OcdAutoLayout {
                     id: this.uuid(),
                     pgid: '',
                     ocid: r.id,
-                    pocid: '',
+                    pocid: this.getParentId(r.id),
                     x: 0,
                     y: 0,
                     w: 200,
@@ -65,7 +66,7 @@ export class OcdAutoLayout {
                         id: this.uuid(),
                         pgid: '',
                         ocid: r.id,
-                        pocid: '',
+                        pocid: this.getParentId(r.id),
                         x: 0,
                         y: 0,
                         w: 32,
@@ -77,6 +78,12 @@ export class OcdAutoLayout {
                     return coords
             })]
         }, [] as OcdViewCoords[])]
+    }
+
+    getParentId(ocid: string): string {
+        const resource = this.getResources().find(r => r.id === ocid)
+        const id = !resource ? 'Undefined' : this.containers.reduce((a, c) => {return Object.hasOwn(resource, `${c}Id`) ? resource[`${c}Id`] : a}, 'Unknown')
+        return id
     }
 
     layout(): OcdViewCoords[] {
