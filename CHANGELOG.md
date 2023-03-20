@@ -1,6 +1,13 @@
 # Release Notes
 
 
+## Version 0.48.0
+**Release Date**: 29th March 2023
+### Features
+### Bug Fixes
+1. Remove vnics 'instance_id' entry from queried Instances
+
+
 ## Version 0.47.0
 **Release Date**: 8th March 2023
 ### Features

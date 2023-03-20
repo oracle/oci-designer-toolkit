@@ -94,6 +94,7 @@ class Instance extends OkitArtifact {
             if (!vnic.hasOwnProperty('assign_public_ip')) {vnic.assign_public_ip = true;}
             if (!vnic.hasOwnProperty('skip_source_dest_check')) {vnic.skip_source_dest_check = false;}
             if (!vnic.hasOwnProperty('nsg_ids')) {vnic.nsg_ids = [];}
+            if (vnic.hasOwnProperty('instance_id')) delete vnic.instance_id
             if (vnic.availability_domain) {vnic.availability_domain = this.getAvailabilityDomainNumber(vnic.availability_domain)}
         })
         // Storage
