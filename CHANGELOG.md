@@ -4,6 +4,7 @@
 ## Version 0.48.0
 **Release Date**: 29th March 2023
 ### Features
+1. Prometheus / Node Exporter Monitoring Template
 ### Bug Fixes
 1. Remove vnics 'instance_id' entry from queried Instances
 

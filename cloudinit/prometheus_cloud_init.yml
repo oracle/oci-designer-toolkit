@@ -23,16 +23,35 @@ write_files:
       WantedBy=multi-user.target
   # Prometheus Config
   - path: /etc/prometheus/prometheus.yml
-    owner: prometheus:prometheus
     content: |
       global:
         scrape_interval: 10s
 
       scrape_configs:
-        - job_name: 'prometheus'
+        - job_name: 'Prometheus'
           scrape_interval: 5s
           static_configs:
-            - targets: ['localhost:9090']
+            - targets: 
+                - localhost:9090
+
+        - job_name: 'Node Manager'
+          file_sd_configs:
+            - files:
+              - '/etc/prometheus/targets.json'
+  # Prometheus Targets
+  - path: /etc/prometheus/targets.json
+    content: |
+      [
+        {
+          "labels": {
+            "job": "Node Manager"
+          },
+          "targets": [
+            "linuxvm1.promprivsn.prometheusvcn.oraclevcn.com:9100",
+            "linuxvm2.promprivsn.prometheusvcn.oraclevcn.com:9100"
+          ]
+        }
+      ]
 
 runcmd:
   - echo ">>> Creating Directory"
@@ -44,8 +63,8 @@ runcmd:
   - echo ">>> Moving Prometheus"
   - sudo mkdir /etc/prometheus
   - sudo mkdir /var/lib/prometheus
-  - sudo chown prometheus:prometheus /etc/prometheus
-  - sudo chown prometheus:prometheus /var/lib/prometheus
+  - sudo chown -R prometheus:prometheus /etc/prometheus
+  - sudo chown -R prometheus:prometheus /var/lib/prometheus
   - sudo cp /run/install/prometheus/prometheus /usr/local/bin/
   - sudo cp /run/install/prometheus/promtool /usr/local/bin/
   - sudo chown prometheus:prometheus /usr/local/bin/prometheus
