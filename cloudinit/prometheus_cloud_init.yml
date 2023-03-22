@@ -32,8 +32,38 @@ write_files:
         - job_name: 'prometheus'
           scrape_interval: 5s
           static_configs:
-            - targets: ['localhost:9090']
+            - targets: 
+                - localhost:9090
 
+        - job_name: 'nodemanager'
+          scrape_interval: 5s
+          static_configs:
+            - targets:
+                - linuxvm1.promprivsn.prometheusvcn.oraclevcn.com:9100
+                - linuxvm2.promprivsn.prometheusvcn.oraclevcn.com:9100
+      
+        - job_name: 'dns'
+          scrape_interval: 5s
+          dns_sd_configs:
+            - names:
+                - promprivsn.prometheusvcn.oraclevcn.com
+              type: A
+              port: 9100
+
+        - job_name: 'node'
+          file_sd_configs:
+          - files:
+            - '/etc/prometheus/targets.yml'
+  # Prometheus Targets
+  - path: /etc/prometheus/targets.yml
+    owner: prometheus:prometheus
+    content: |
+      - targets:
+          - linuxvm1.promprivsn.prometheusvcn.oraclevcn.com:9100
+          - linuxvm2.promprivsn.prometheusvcn.oraclevcn.com:9100
+        labels:
+          - job: 'node'
+    
 runcmd:
   - echo ">>> Creating Directory"
   - sudo mkdir -p /run/install/prometheus
