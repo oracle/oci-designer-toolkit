@@ -53,7 +53,7 @@ write_files:
         - job_name: 'node'
           file_sd_configs:
           - files:
-            - '/etc/prometheus/targets.yml'
+            - '/etc/prometheus/targets.json'
   # Prometheus Targets
   - path: /etc/prometheus/targets.yml
     owner: prometheus:prometheus
@@ -63,7 +63,21 @@ write_files:
           - linuxvm2.promprivsn.prometheusvcn.oraclevcn.com:9100
         labels:
           - job: 'node'
-    
+  - path: /etc/prometheus/targets.json
+    owner: prometheus:prometheus
+    content: |
+      [
+        {
+          "labels": {
+            "job": "node"
+          },
+          "targets": [
+            "linuxvm1.promprivsn.prometheusvcn.oraclevcn.com:9100",
+            "linuxvm1.promprivsn.prometheusvcn.oraclevcn.com:9100"
+          ]
+        }
+      ]
+
 runcmd:
   - echo ">>> Creating Directory"
   - sudo mkdir -p /run/install/prometheus
