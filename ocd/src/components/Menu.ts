@@ -141,7 +141,7 @@ export const menuItems = [
                                 const ocdDocument = OcdDocument.new()
                                 const okitImporter = new OcdOKITImporter()
                                 ocdDocument.design = okitImporter.parse(resp)
-                                ocdDocument.autoLayout(ocdDocument.selectedResource.pageId)
+                                ocdDocument.autoLayout(ocdDocument.getActivePage().id)
                                 setOcdDocument(ocdDocument)
                             })
                         }

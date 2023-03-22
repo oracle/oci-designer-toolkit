@@ -12,6 +12,12 @@ import { OcdUtils } from '../utils/OcdUtils';
 export class OcdAutoLayout {
     coords: OcdViewCoords[]
     design: OcdDesign
+    maxColumns = 15
+    spacing = 32
+    detailed = true
+    detailedWidth = 150
+    simpleWidth = 32
+    simpleHeight = 32
     // Specify Contains and their hierarchy. i.e. compartment -> vcn -> subnet
     containers: string[] = ['vcn', 'subnet']
     ignore: string[] = ['compartment']
@@ -82,11 +88,63 @@ export class OcdAutoLayout {
 
     getParentId(ocid: string): string {
         const resource = this.getResources().find(r => r.id === ocid)
-        const id = !resource ? 'Undefined' : this.containers.reduce((a, c) => {return Object.hasOwn(resource, `${c}Id`) ? resource[`${c}Id`] : a}, 'Unknown')
+        const id = !resource ? 'Undefined' : this.containers.reduce((a, c) => {return Object.hasOwn(resource, `${c}Id`) ? resource[`${c}Id`] : a}, '')
         return id
     }
 
+    getChildren = (pocid: string) => this.coords.filter((c) => c.pocid === pocid)
+
     layout(): OcdViewCoords[] {
+        // Position Children in Container
+        this.coords.filter((c) => c.container).reverse().forEach((coords) => {
+            const children = this.getChildren(coords.ocid)
+            let childX = this.spacing
+            let childY = this.spacing + this.simpleHeight
+            let childCount = 0
+            children.filter((c) => !c.container).forEach((child) => {
+                childCount += 1
+                if (childCount > this.maxColumns) {
+                    childX = this.spacing
+                    childY += (this.spacing + this.simpleHeight)
+                    childCount = 0
+                }
+                child.x = childX
+                child.y = childY
+                // Add Spacing
+                childX += (this.spacing + (this.detailed ? this.detailedWidth : this.simpleWidth) as number)
+                // Size Container
+                coords.w = childX + this.spacing
+                coords.h = childY + this.spacing + this.simpleHeight
+            })
+            childX = this.spacing
+            children.filter((c) => c.container).forEach((child) => {
+                child.x = childX
+                child.y = childY
+                // Add Spacing
+                childY += (this.spacing + child.h)
+                // Size Container
+                coords.w = Math.max(coords.w, (child.w + (2 * this.spacing)))
+                coords.h += (this.spacing + child.h)
+            })
+        })
+        // Position Root Containers
+        const rootChildren = this.getChildren('')
+        let childX = this.spacing
+        let childY = this.spacing
+        rootChildren.forEach((child) => {
+            child.x = childX
+            child.y = childY
+            // Add Spacing
+            childY += (this.spacing + child.h)
+        })
+        // Adjust Children based on position of Parents
+        this.coords.filter((c) => c.container).forEach((parent) => {
+            const children = this.getChildren(parent.ocid)
+            children.forEach((child) => {
+                child.x += parent.x
+                child.y += parent.y
+            })
+        })
         return this.coords
     }
 }
