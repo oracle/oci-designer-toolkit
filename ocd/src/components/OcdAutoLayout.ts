@@ -12,9 +12,8 @@ import { OcdUtils } from '../utils/OcdUtils';
 export class OcdAutoLayout {
     coords: OcdViewCoords[]
     design: OcdDesign
-    maxColumns = 15
+    maxColumns = 5
     spacing = 32
-    detailed = true
     detailedWidth = 150
     simpleWidth = 32
     simpleHeight = 32
@@ -94,7 +93,7 @@ export class OcdAutoLayout {
 
     getChildren = (pocid: string) => this.coords.filter((c) => c.pocid === pocid)
 
-    layout(): OcdViewCoords[] {
+    layout(detailed: boolean = true): OcdViewCoords[] {
         // Position Children in Container
         this.coords.filter((c) => c.container).reverse().forEach((coords) => {
             const children = this.getChildren(coords.ocid)
@@ -111,12 +110,13 @@ export class OcdAutoLayout {
                 child.x = childX
                 child.y = childY
                 // Add Spacing
-                childX += (this.spacing + (this.detailed ? this.detailedWidth : this.simpleWidth) as number)
+                childX += (this.spacing + (detailed ? this.detailedWidth : this.simpleWidth) as number)
                 // Size Container
-                coords.w = childX + this.spacing
+                coords.w = Math.max(coords.w, (childX + this.spacing))
                 coords.h = childY + this.spacing + this.simpleHeight
             })
             childX = this.spacing
+            childY += (this.spacing + this.simpleHeight)
             children.filter((c) => c.container).forEach((child) => {
                 child.x = childX
                 child.y = childY
