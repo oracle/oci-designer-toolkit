@@ -94,8 +94,8 @@
                         },
                         {
                             "container": false,
-                            "title": "DHCP Option",
-                            "class": "oci-dhcp-option"
+                            "title": "DHCP Options",
+                            "class": "oci-dhcp-options"
                         },
                         {
                             "container": false,

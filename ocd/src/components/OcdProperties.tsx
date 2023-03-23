@@ -47,6 +47,9 @@ const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourcePr
     const resourceJSXMethod = selectedResource ? `${OcdUtils.toTitleCase(selectedResource.provider)}${selectedResource.resourceType}` : ''
     // @ts-ignore 
     const ResourceProperties = ociResources[resourceJSXMethod]
+    console.info('Selected Resource', selectedResource)
+    console.info('Resource JMX Method', resourceJSXMethod)
+    console.info('Properties Resource', ResourceProperties)
     return (
         <div className={`ocd-properties-panel ocd-properties-panel-theme`}>
             {selectedResource && selectedResource.provider === 'oci' && <OciCommonResourceProperties 

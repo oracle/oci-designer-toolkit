@@ -45,6 +45,7 @@ class OcdOKITImporter extends OcdImporter {
     }
     importResources = () => {
         const resourceMap: Record<string, any> = {
+            dhcp_options: 'dhcp_options',
             virtual_cloud_networks: 'vcn'
         }
         Object.entries(this.okitDesign).filter(([k, v]) => Array.isArray(v)).forEach(([k, v]) => {
