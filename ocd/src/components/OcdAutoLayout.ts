@@ -17,6 +17,8 @@ export class OcdAutoLayout {
     detailedWidth = 150
     simpleWidth = 32
     simpleHeight = 32
+    containerWidth = 200
+    containerHeight = 200
     // Specify Contains and their hierarchy. i.e. compartment -> vcn -> subnet
     containers: string[] = ['vcn', 'subnet']
     ignore: string[] = ['compartment']
@@ -53,8 +55,8 @@ export class OcdAutoLayout {
                     pocid: this.getParentId(r.id),
                     x: 0,
                     y: 0,
-                    w: 200,
-                    h: 200,
+                    w: this.containerWidth,
+                    h: this.containerHeight,
                     title: OcdUtils.toTitle(c),
                     class: OcdUtils.toCssClassName(r.provider, c),
                     container: true

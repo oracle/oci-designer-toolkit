@@ -1040,6 +1040,7 @@ summary {
     overflow-x: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    user-select: none;
 }
 
 .ocd-svg-foreign-object-display-name > input {
@@ -1051,6 +1052,7 @@ summary {
     border: none;
     box-sizing: border-box;
     font-weight: bolder;
+    background: transparent;
 }
 
 
