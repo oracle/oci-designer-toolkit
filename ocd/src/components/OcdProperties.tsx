@@ -47,9 +47,11 @@ const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourcePr
     const resourceJSXMethod = selectedResource ? `${OcdUtils.toTitleCase(selectedResource.provider)}${selectedResource.resourceType}` : ''
     // @ts-ignore 
     const ResourceProperties = ociResources[resourceJSXMethod]
-    console.info('Selected Resource', selectedResource)
-    console.info('Resource JMX Method', resourceJSXMethod)
-    console.info('Properties Resource', ResourceProperties)
+    // if (!ResourceProperties && selectedResource) {
+    //     console.warn('Selected Resource', selectedResource)
+    //     console.warn('Resource JMX Method', resourceJSXMethod)
+    //     console.warn('Properties Resource', ResourceProperties)
+    // }
     return (
         <div className={`ocd-properties-panel ocd-properties-panel-theme`}>
             {selectedResource && selectedResource.provider === 'oci' && <OciCommonResourceProperties 
@@ -57,7 +59,7 @@ const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourcePr
                 setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} 
                 resource={selectedResource}
             />}
-            {selectedResource && <ResourceProperties 
+            {selectedResource && ResourceProperties && <ResourceProperties 
                 ocdDocument={ocdDocument} 
                 setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} 
                 resource={selectedResource}
