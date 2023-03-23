@@ -4,6 +4,7 @@
 */
 
 import OcdOKITImporter from '../import/okit/OcdOKITImporter'
+import OcdOKITExporter from '../export/okit/OcdOKITExporter'
 import OcdConsoleConfig from './OcdConsoleConfiguration'
 import OcdDocument from './OcdDocument'
 
@@ -185,6 +186,37 @@ export const menuItems = [
                     {
                         label: 'Markdown',
                         click: undefined
+                    },
+                    {
+                        label: 'OKIT Json',
+                        click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
+                            const saveFile = async (ocdDocument: OcdDocument) => {
+                                try {
+                                    const options = {
+                                        types: [
+                                            {
+                                                description: 'OKIT Files',
+                                                accept: {
+                                                    'application/json': ['.json'],
+                                                },
+                                            },
+                                        ],
+                                    }
+                                    // @ts-ignore 
+                                    const handle = await window.showSaveFilePicker(options)
+                                    const writable = await handle.createWritable()
+                                    const okitExporter = new OcdOKITExporter()
+                                    const okitJson = okitExporter.export(ocdDocument.design)
+                                    // console.info('Writing', okitJson, ocdDocument)
+                                    await writable.write(okitJson)
+                                    await writable.close()
+                                    return handle
+                                } catch (err: any) {
+                                    console.error(err.name, err.message);
+                                }
+                            }
+                            saveFile(ocdDocument).then((resp) => console.info('Saved', resp))             
+                        }
                     }
                 ]
             }

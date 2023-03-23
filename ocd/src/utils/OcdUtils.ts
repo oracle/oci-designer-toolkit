@@ -16,6 +16,9 @@ export namespace OcdUtils {
     export function toCamelCase(str: string): string {
         return `${OcdUtils.toTitleCase(str.split('_').join(' ')).split(' ').map((e, i) => i === 0 ? e.toLowerCase() : e).join('')}`
     }
+    export function toUnderscoreCase(str: string): string {
+        return str.split(/(?=[A-Z])/).join('_').toLowerCase()
+    }
     export function toCssClassName(provider: string, str: string): string {
         return `${provider.toLowerCase()}-${str.toLowerCase().split('_').join('-')}`
     }

@@ -75,6 +75,7 @@ class OcdOKITImporter extends OcdImporter {
             else if (directCopy.includes(k)) a[Object.hasOwn(keyMap, k) ? keyMap[k] : this.toCamelCase(k)] = v
             // else if (typeof v === 'object') a[Object.hasOwn(keyMap, k) ? keyMap[k] : this.toCamelCase(k)] = v
             else if (Array.isArray(v) && v[0] instanceof Object) a[Object.hasOwn(keyMap, k) ? keyMap[k] : this.toCamelCase(k)] = v.map((e) => this.convertObjectElement(e as OkitElement, {}))
+            else if (Array.isArray(v)) a[Object.hasOwn(keyMap, k) ? keyMap[k] : this.toCamelCase(k)] = v
             else if (v instanceof Object) a[Object.hasOwn(keyMap, k) ? keyMap[k] : this.toCamelCase(k)] = this.convertObjectElement(v as OkitElement, {})
             return a
         }, initialObject)
