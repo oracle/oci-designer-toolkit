@@ -174,6 +174,12 @@ export const OcdSetProperty = ({ ocdDocument, setOcdDocument, resource, config, 
     )
 }
 
+export const OcdSetLookupProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
+    return (
+        <div></div>
+    )
+}
+
 export const OcdMapProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
     return (
         <div></div>
