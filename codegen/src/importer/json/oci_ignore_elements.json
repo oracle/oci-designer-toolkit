@@ -46,5 +46,9 @@
     "oci_objectstorage_bucket": [
         "etag",
         "object_lifecycle_policy_etag"
+    ],
+    "oci_core_subnet": [
+        "virtual_router_ip",
+        "virtual_router_mac"
     ]
 }
