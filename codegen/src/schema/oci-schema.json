@@ -11,7 +11,9 @@
         "subtype": "",
         "required": true,
         "label": "Compartment",
-        "id": "compartment_id"
+        "id": "compartment_id",
+        "lookup": true,
+        "lookupResource": "compartment"
       },
       "defined_tags": {
         "provider": "oci",
@@ -21,7 +23,9 @@
         "subtype": "string",
         "required": false,
         "label": "Defined Tags",
-        "id": "defined_tags"
+        "id": "defined_tags",
+        "lookup": false,
+        "lookupResource": ""
       },
       "description": {
         "provider": "oci",
@@ -31,7 +35,9 @@
         "subtype": "",
         "required": false,
         "label": "Description",
-        "id": "description"
+        "id": "description",
+        "lookup": false,
+        "lookupResource": ""
       },
       "email_notification": {
         "provider": "oci",
@@ -41,7 +47,9 @@
         "subtype": "",
         "required": false,
         "label": "Email Notification",
-        "id": "email_notification"
+        "id": "email_notification",
+        "lookup": false,
+        "lookupResource": ""
       },
       "feature_set": {
         "provider": "oci",
@@ -51,7 +59,9 @@
         "subtype": "",
         "required": true,
         "label": "Feature Set",
-        "id": "feature_set"
+        "id": "feature_set",
+        "lookup": false,
+        "lookupResource": ""
       },
       "freeform_tags": {
         "provider": "oci",
@@ -61,7 +71,9 @@
         "subtype": "string",
         "required": false,
         "label": "Freeform Tags",
-        "id": "freeform_tags"
+        "id": "freeform_tags",
+        "lookup": false,
+        "lookupResource": ""
       },
       "idcs_access_token": {
         "provider": "oci",
@@ -71,7 +83,9 @@
         "subtype": "",
         "required": true,
         "label": "Idcs Access Token",
-        "id": "idcs_access_token"
+        "id": "idcs_access_token",
+        "lookup": false,
+        "lookupResource": ""
       },
       "license_type": {
         "provider": "oci",
@@ -81,7 +95,9 @@
         "subtype": "",
         "required": true,
         "label": "License Type",
-        "id": "license_type"
+        "id": "license_type",
+        "lookup": false,
+        "lookupResource": ""
       },
       "name": {
         "provider": "oci",
@@ -91,7 +107,9 @@
         "subtype": "",
         "required": true,
         "label": "Name",
-        "id": "name"
+        "id": "name",
+        "lookup": false,
+        "lookupResource": ""
       },
       "private_access_channels": {
         "provider": "oci",
@@ -101,7 +119,9 @@
         "subtype": "string",
         "required": false,
         "label": "Private Access Channels",
-        "id": "private_access_channels"
+        "id": "private_access_channels",
+        "lookup": false,
+        "lookupResource": ""
       },
       "service_url": {
         "provider": "oci",
@@ -111,7 +131,9 @@
         "subtype": "",
         "required": false,
         "label": "Service Url",
-        "id": "service_url"
+        "id": "service_url",
+        "lookup": false,
+        "lookupResource": ""
       },
       "time_updated": {
         "provider": "oci",
@@ -121,7 +143,9 @@
         "subtype": "",
         "required": false,
         "label": "Time Updated",
-        "id": "time_updated"
+        "id": "time_updated",
+        "lookup": false,
+        "lookupResource": ""
       },
       "vanity_url_details": {
         "provider": "oci",
@@ -131,7 +155,9 @@
         "subtype": "string",
         "required": false,
         "label": "Vanity Url Details",
-        "id": "vanity_url_details"
+        "id": "vanity_url_details",
+        "lookup": false,
+        "lookupResource": ""
       },
       "capacity": {
         "provider": "oci",
@@ -151,7 +177,9 @@
             "subtype": "",
             "required": true,
             "label": "Capacity Type",
-            "id": "capacity.capacity_type"
+            "id": "capacity.capacity_type",
+            "lookup": false,
+            "lookupResource": ""
           },
           "capacity_value": {
             "provider": "oci",
@@ -161,7 +189,9 @@
             "subtype": "",
             "required": true,
             "label": "Capacity Value",
-            "id": "capacity.capacity_value"
+            "id": "capacity.capacity_value",
+            "lookup": false,
+            "lookupResource": ""
           }
         }
       },
@@ -183,7 +213,9 @@
             "subtype": "",
             "required": true,
             "label": "Network Endpoint Type",
-            "id": "network_endpoint_details.network_endpoint_type"
+            "id": "network_endpoint_details.network_endpoint_type",
+            "lookup": false,
+            "lookupResource": ""
           },
           "subnet_id": {
             "provider": "oci",
@@ -193,7 +225,9 @@
             "subtype": "",
             "required": false,
             "label": "Subnet",
-            "id": "network_endpoint_details.subnet_id"
+            "id": "network_endpoint_details.subnet_id",
+            "lookup": true,
+            "lookupResource": "subnet"
           },
           "vcn_id": {
             "provider": "oci",
@@ -203,7 +237,9 @@
             "subtype": "",
             "required": false,
             "label": "Vcn",
-            "id": "network_endpoint_details.vcn_id"
+            "id": "network_endpoint_details.vcn_id",
+            "lookup": true,
+            "lookupResource": "vcn"
           },
           "whitelisted_ips": {
             "provider": "oci",
@@ -213,7 +249,9 @@
             "subtype": "string",
             "required": false,
             "label": "Whitelisted Ips",
-            "id": "network_endpoint_details.whitelisted_ips"
+            "id": "network_endpoint_details.whitelisted_ips",
+            "lookup": false,
+            "lookupResource": ""
           },
           "whitelisted_vcns": {
             "provider": "oci",
@@ -233,7 +271,9 @@
                 "subtype": "string",
                 "required": false,
                 "label": "Whitelisted Ips",
-                "id": "network_endpoint_details.whitelisted_vcns.whitelisted_ips"
+                "id": "network_endpoint_details.whitelisted_vcns.whitelisted_ips",
+                "lookup": false,
+                "lookupResource": ""
               }
             }
           }
@@ -253,7 +293,9 @@
         "subtype": "",
         "required": true,
         "label": "Compartment",
-        "id": "compartment_id"
+        "id": "compartment_id",
+        "lookup": true,
+        "lookupResource": "compartment"
       },
       "defined_tags": {
         "provider": "oci",
@@ -263,7 +305,9 @@
         "subtype": "string",
         "required": false,
         "label": "Defined Tags",
-        "id": "defined_tags"
+        "id": "defined_tags",
+        "lookup": false,
+        "lookupResource": ""
       },
       "display_name": {
         "provider": "oci",
@@ -273,7 +317,9 @@
         "subtype": "",
         "required": false,
         "label": "Display Name",
-        "id": "display_name"
+        "id": "display_name",
+        "lookup": false,
+        "lookupResource": ""
       },
       "freeform_tags": {
         "provider": "oci",
@@ -283,7 +329,9 @@
         "subtype": "string",
         "required": false,
         "label": "Freeform Tags",
-        "id": "freeform_tags"
+        "id": "freeform_tags",
+        "lookup": false,
+        "lookupResource": ""
       },
       "vcn_id": {
         "provider": "oci",
@@ -293,7 +341,9 @@
         "subtype": "",
         "required": true,
         "label": "Vcn",
-        "id": "vcn_id"
+        "id": "vcn_id",
+        "lookup": true,
+        "lookupResource": "vcn"
       },
       "options": {
         "provider": "oci",
@@ -313,7 +363,9 @@
             "subtype": "string",
             "required": false,
             "label": "Custom Dns Servers",
-            "id": "options.custom_dns_servers"
+            "id": "options.custom_dns_servers",
+            "lookup": false,
+            "lookupResource": ""
           },
           "search_domain_names": {
             "provider": "oci",
@@ -323,7 +375,9 @@
             "subtype": "string",
             "required": false,
             "label": "Search Domain Names",
-            "id": "options.search_domain_names"
+            "id": "options.search_domain_names",
+            "lookup": false,
+            "lookupResource": ""
           },
           "server_type": {
             "provider": "oci",
@@ -333,7 +387,9 @@
             "subtype": "",
             "required": false,
             "label": "Server Type",
-            "id": "options.server_type"
+            "id": "options.server_type",
+            "lookup": false,
+            "lookupResource": ""
           },
           "type": {
             "provider": "oci",
@@ -343,7 +399,9 @@
             "subtype": "",
             "required": true,
             "label": "Type",
-            "id": "options.type"
+            "id": "options.type",
+            "lookup": false,
+            "lookupResource": ""
           }
         }
       }
@@ -361,7 +419,9 @@
         "subtype": "",
         "required": true,
         "label": "Compartment",
-        "id": "compartment_id"
+        "id": "compartment_id",
+        "lookup": true,
+        "lookupResource": "compartment"
       },
       "defined_tags": {
         "provider": "oci",
@@ -371,7 +431,9 @@
         "subtype": "string",
         "required": false,
         "label": "Defined Tags",
-        "id": "defined_tags"
+        "id": "defined_tags",
+        "lookup": false,
+        "lookupResource": ""
       },
       "display_name": {
         "provider": "oci",
@@ -381,7 +443,9 @@
         "subtype": "",
         "required": false,
         "label": "Display Name",
-        "id": "display_name"
+        "id": "display_name",
+        "lookup": false,
+        "lookupResource": ""
       },
       "freeform_tags": {
         "provider": "oci",
@@ -391,7 +455,9 @@
         "subtype": "string",
         "required": false,
         "label": "Freeform Tags",
-        "id": "freeform_tags"
+        "id": "freeform_tags",
+        "lookup": false,
+        "lookupResource": ""
       },
       "redundancy_status": {
         "provider": "oci",
@@ -401,7 +467,9 @@
         "subtype": "",
         "required": false,
         "label": "Redundancy Status",
-        "id": "redundancy_status"
+        "id": "redundancy_status",
+        "lookup": false,
+        "lookupResource": ""
       }
     }
   },
@@ -417,7 +485,9 @@
         "subtype": "",
         "required": false,
         "label": "Compartment",
-        "id": "compartment_id"
+        "id": "compartment_id",
+        "lookup": true,
+        "lookupResource": "compartment"
       },
       "defined_tags": {
         "provider": "oci",
@@ -427,7 +497,9 @@
         "subtype": "string",
         "required": false,
         "label": "Defined Tags",
-        "id": "defined_tags"
+        "id": "defined_tags",
+        "lookup": false,
+        "lookupResource": ""
       },
       "display_name": {
         "provider": "oci",
@@ -437,7 +509,9 @@
         "subtype": "",
         "required": false,
         "label": "Display Name",
-        "id": "display_name"
+        "id": "display_name",
+        "lookup": false,
+        "lookupResource": ""
       },
       "drg_id": {
         "provider": "oci",
@@ -447,7 +521,9 @@
         "subtype": "",
         "required": true,
         "label": "Drg",
-        "id": "drg_id"
+        "id": "drg_id",
+        "lookup": true,
+        "lookupResource": "drg"
       },
       "drg_route_table_id": {
         "provider": "oci",
@@ -457,7 +533,9 @@
         "subtype": "",
         "required": false,
         "label": "Drg Route Table",
-        "id": "drg_route_table_id"
+        "id": "drg_route_table_id",
+        "lookup": true,
+        "lookupResource": "drg_route_table"
       },
       "export_drg_route_distribution_id": {
         "provider": "oci",
@@ -467,7 +545,9 @@
         "subtype": "",
         "required": false,
         "label": "Export Drg Route Distribution",
-        "id": "export_drg_route_distribution_id"
+        "id": "export_drg_route_distribution_id",
+        "lookup": true,
+        "lookupResource": "export_drg_route_distribution"
       },
       "freeform_tags": {
         "provider": "oci",
@@ -477,7 +557,9 @@
         "subtype": "string",
         "required": false,
         "label": "Freeform Tags",
-        "id": "freeform_tags"
+        "id": "freeform_tags",
+        "lookup": false,
+        "lookupResource": ""
       },
       "is_cross_tenancy": {
         "provider": "oci",
@@ -487,7 +569,9 @@
         "subtype": "",
         "required": false,
         "label": "Is Cross Tenancy",
-        "id": "is_cross_tenancy"
+        "id": "is_cross_tenancy",
+        "lookup": false,
+        "lookupResource": ""
       },
       "route_table_id": {
         "provider": "oci",
@@ -497,7 +581,9 @@
         "subtype": "",
         "required": false,
         "label": "Route Table",
-        "id": "route_table_id"
+        "id": "route_table_id",
+        "lookup": true,
+        "lookupResource": "route_table"
       },
       "vcn_id": {
         "provider": "oci",
@@ -507,7 +593,9 @@
         "subtype": "",
         "required": false,
         "label": "Vcn",
-        "id": "vcn_id"
+        "id": "vcn_id",
+        "lookup": true,
+        "lookupResource": "vcn"
       },
       "network_details": {
         "provider": "oci",
@@ -527,7 +615,9 @@
             "subtype": "",
             "required": false,
             "label": "Ipsec Connection",
-            "id": "network_details.ipsec_connection_id"
+            "id": "network_details.ipsec_connection_id",
+            "lookup": true,
+            "lookupResource": "ipsec_connection"
           },
           "route_table_id": {
             "provider": "oci",
@@ -537,7 +627,9 @@
             "subtype": "",
             "required": false,
             "label": "Route Table",
-            "id": "network_details.route_table_id"
+            "id": "network_details.route_table_id",
+            "lookup": true,
+            "lookupResource": "route_table"
           },
           "type": {
             "provider": "oci",
@@ -547,7 +639,9 @@
             "subtype": "",
             "required": true,
             "label": "Type",
-            "id": "network_details.type"
+            "id": "network_details.type",
+            "lookup": false,
+            "lookupResource": ""
           }
         }
       }
@@ -565,7 +659,9 @@
         "subtype": "",
         "required": false,
         "label": "Compartment",
-        "id": "compartment_id"
+        "id": "compartment_id",
+        "lookup": true,
+        "lookupResource": "compartment"
       },
       "defined_tags": {
         "provider": "oci",
@@ -575,7 +671,9 @@
         "subtype": "string",
         "required": false,
         "label": "Defined Tags",
-        "id": "defined_tags"
+        "id": "defined_tags",
+        "lookup": false,
+        "lookupResource": ""
       },
       "display_name": {
         "provider": "oci",
@@ -585,7 +683,9 @@
         "subtype": "",
         "required": false,
         "label": "Display Name",
-        "id": "display_name"
+        "id": "display_name",
+        "lookup": false,
+        "lookupResource": ""
       },
       "distribution_type": {
         "provider": "oci",
@@ -595,7 +695,9 @@
         "subtype": "",
         "required": true,
         "label": "Distribution Type",
-        "id": "distribution_type"
+        "id": "distribution_type",
+        "lookup": false,
+        "lookupResource": ""
       },
       "drg_id": {
         "provider": "oci",
@@ -605,7 +707,9 @@
         "subtype": "",
         "required": true,
         "label": "Drg",
-        "id": "drg_id"
+        "id": "drg_id",
+        "lookup": true,
+        "lookupResource": "drg"
       },
       "freeform_tags": {
         "provider": "oci",
@@ -615,7 +719,9 @@
         "subtype": "string",
         "required": false,
         "label": "Freeform Tags",
-        "id": "freeform_tags"
+        "id": "freeform_tags",
+        "lookup": false,
+        "lookupResource": ""
       }
     }
   },
@@ -631,7 +737,9 @@
         "subtype": "",
         "required": true,
         "label": "Action",
-        "id": "action"
+        "id": "action",
+        "lookup": false,
+        "lookupResource": ""
       },
       "drg_route_distribution_id": {
         "provider": "oci",
@@ -641,7 +749,9 @@
         "subtype": "",
         "required": true,
         "label": "Drg Route Distribution",
-        "id": "drg_route_distribution_id"
+        "id": "drg_route_distribution_id",
+        "lookup": true,
+        "lookupResource": "drg_route_distribution"
       },
       "priority": {
         "provider": "oci",
@@ -651,7 +761,9 @@
         "subtype": "",
         "required": true,
         "label": "Priority",
-        "id": "priority"
+        "id": "priority",
+        "lookup": false,
+        "lookupResource": ""
       },
       "match_criteria": {
         "provider": "oci",
@@ -671,7 +783,9 @@
             "subtype": "",
             "required": false,
             "label": "Attachment Type",
-            "id": "match_criteria.attachment_type"
+            "id": "match_criteria.attachment_type",
+            "lookup": false,
+            "lookupResource": ""
           },
           "drg_attachment_id": {
             "provider": "oci",
@@ -681,7 +795,9 @@
             "subtype": "",
             "required": false,
             "label": "Drg Attachment",
-            "id": "match_criteria.drg_attachment_id"
+            "id": "match_criteria.drg_attachment_id",
+            "lookup": true,
+            "lookupResource": "drg_attachment"
           },
           "match_type": {
             "provider": "oci",
@@ -691,7 +807,9 @@
             "subtype": "",
             "required": false,
             "label": "Match Type",
-            "id": "match_criteria.match_type"
+            "id": "match_criteria.match_type",
+            "lookup": false,
+            "lookupResource": ""
           }
         }
       }
@@ -709,7 +827,9 @@
         "subtype": "",
         "required": false,
         "label": "Compartment",
-        "id": "compartment_id"
+        "id": "compartment_id",
+        "lookup": true,
+        "lookupResource": "compartment"
       },
       "defined_tags": {
         "provider": "oci",
@@ -719,7 +839,9 @@
         "subtype": "string",
         "required": false,
         "label": "Defined Tags",
-        "id": "defined_tags"
+        "id": "defined_tags",
+        "lookup": false,
+        "lookupResource": ""
       },
       "display_name": {
         "provider": "oci",
@@ -729,7 +851,9 @@
         "subtype": "",
         "required": false,
         "label": "Display Name",
-        "id": "display_name"
+        "id": "display_name",
+        "lookup": false,
+        "lookupResource": ""
       },
       "drg_id": {
         "provider": "oci",
@@ -739,7 +863,9 @@
         "subtype": "",
         "required": true,
         "label": "Drg",
-        "id": "drg_id"
+        "id": "drg_id",
+        "lookup": true,
+        "lookupResource": "drg"
       },
       "freeform_tags": {
         "provider": "oci",
@@ -749,7 +875,9 @@
         "subtype": "string",
         "required": false,
         "label": "Freeform Tags",
-        "id": "freeform_tags"
+        "id": "freeform_tags",
+        "lookup": false,
+        "lookupResource": ""
       },
       "import_drg_route_distribution_id": {
         "provider": "oci",
@@ -759,7 +887,9 @@
         "subtype": "",
         "required": false,
         "label": "Import Drg Route Distribution",
-        "id": "import_drg_route_distribution_id"
+        "id": "import_drg_route_distribution_id",
+        "lookup": true,
+        "lookupResource": "import_drg_route_distribution"
       },
       "is_ecmp_enabled": {
         "provider": "oci",
@@ -769,7 +899,9 @@
         "subtype": "",
         "required": false,
         "label": "Is Ecmp Enabled",
-        "id": "is_ecmp_enabled"
+        "id": "is_ecmp_enabled",
+        "lookup": false,
+        "lookupResource": ""
       },
       "remove_import_trigger": {
         "provider": "oci",
@@ -779,7 +911,9 @@
         "subtype": "",
         "required": false,
         "label": "Remove Import Trigger",
-        "id": "remove_import_trigger"
+        "id": "remove_import_trigger",
+        "lookup": false,
+        "lookupResource": ""
       }
     }
   },
@@ -795,7 +929,9 @@
         "subtype": "",
         "required": true,
         "label": "Destination",
-        "id": "destination"
+        "id": "destination",
+        "lookup": false,
+        "lookupResource": ""
       },
       "destination_type": {
         "provider": "oci",
@@ -805,7 +941,9 @@
         "subtype": "",
         "required": true,
         "label": "Destination Type",
-        "id": "destination_type"
+        "id": "destination_type",
+        "lookup": false,
+        "lookupResource": ""
       },
       "drg_route_table_id": {
         "provider": "oci",
@@ -815,7 +953,9 @@
         "subtype": "",
         "required": true,
         "label": "Drg Route Table",
-        "id": "drg_route_table_id"
+        "id": "drg_route_table_id",
+        "lookup": true,
+        "lookupResource": "drg_route_table"
       },
       "is_blackhole": {
         "provider": "oci",
@@ -825,7 +965,9 @@
         "subtype": "",
         "required": false,
         "label": "Is Blackhole",
-        "id": "is_blackhole"
+        "id": "is_blackhole",
+        "lookup": false,
+        "lookupResource": ""
       },
       "is_conflict": {
         "provider": "oci",
@@ -835,7 +977,9 @@
         "subtype": "",
         "required": false,
         "label": "Is Conflict",
-        "id": "is_conflict"
+        "id": "is_conflict",
+        "lookup": false,
+        "lookupResource": ""
       },
       "next_hop_drg_attachment_id": {
         "provider": "oci",
@@ -845,7 +989,9 @@
         "subtype": "",
         "required": true,
         "label": "Next Hop Drg Attachment",
-        "id": "next_hop_drg_attachment_id"
+        "id": "next_hop_drg_attachment_id",
+        "lookup": true,
+        "lookupResource": "next_hop_drg_attachment"
       },
       "route_provenance": {
         "provider": "oci",
@@ -855,7 +1001,9 @@
         "subtype": "",
         "required": false,
         "label": "Route Provenance",
-        "id": "route_provenance"
+        "id": "route_provenance",
+        "lookup": false,
+        "lookupResource": ""
       },
       "route_type": {
         "provider": "oci",
@@ -865,7 +1013,9 @@
         "subtype": "",
         "required": false,
         "label": "Route Type",
-        "id": "route_type"
+        "id": "route_type",
+        "lookup": false,
+        "lookupResource": ""
       }
     }
   },
@@ -881,7 +1031,9 @@
         "subtype": "",
         "required": true,
         "label": "Availability Domain",
-        "id": "availability_domain"
+        "id": "availability_domain",
+        "lookup": false,
+        "lookupResource": ""
       },
       "compartment_id": {
         "provider": "oci",
@@ -891,7 +1043,9 @@
         "subtype": "",
         "required": true,
         "label": "Compartment",
-        "id": "compartment_id"
+        "id": "compartment_id",
+        "lookup": true,
+        "lookupResource": "compartment"
       },
       "defined_tags": {
         "provider": "oci",
@@ -901,7 +1055,9 @@
         "subtype": "string",
         "required": false,
         "label": "Defined Tags",
-        "id": "defined_tags"
+        "id": "defined_tags",
+        "lookup": false,
+        "lookupResource": ""
       },
       "display_name": {
         "provider": "oci",
@@ -911,7 +1067,9 @@
         "subtype": "",
         "required": false,
         "label": "Display Name",
-        "id": "display_name"
+        "id": "display_name",
+        "lookup": false,
+        "lookupResource": ""
       },
       "fault_domain": {
         "provider": "oci",
@@ -921,7 +1079,9 @@
         "subtype": "",
         "required": false,
         "label": "Fault Domain",
-        "id": "fault_domain"
+        "id": "fault_domain",
+        "lookup": false,
+        "lookupResource": ""
       },
       "freeform_tags": {
         "provider": "oci",
@@ -931,7 +1091,9 @@
         "subtype": "string",
         "required": false,
         "label": "Freeform Tags",
-        "id": "freeform_tags"
+        "id": "freeform_tags",
+        "lookup": false,
+        "lookupResource": ""
       },
       "hostname_label": {
         "provider": "oci",
@@ -941,7 +1103,9 @@
         "subtype": "",
         "required": false,
         "label": "Hostname Label",
-        "id": "hostname_label"
+        "id": "hostname_label",
+        "lookup": false,
+        "lookupResource": ""
       },
       "image": {
         "provider": "oci",
@@ -951,7 +1115,9 @@
         "subtype": "",
         "required": false,
         "label": "Image",
-        "id": "image"
+        "id": "image",
+        "lookup": false,
+        "lookupResource": ""
       },
       "is_pv_encryption_in_transit_enabled": {
         "provider": "oci",
@@ -961,7 +1127,9 @@
         "subtype": "",
         "required": false,
         "label": "Is Pv Encryption In Transit Enabled",
-        "id": "is_pv_encryption_in_transit_enabled"
+        "id": "is_pv_encryption_in_transit_enabled",
+        "lookup": false,
+        "lookupResource": ""
       },
       "launch_mode": {
         "provider": "oci",
@@ -971,7 +1139,9 @@
         "subtype": "",
         "required": false,
         "label": "Launch Mode",
-        "id": "launch_mode"
+        "id": "launch_mode",
+        "lookup": false,
+        "lookupResource": ""
       },
       "metadata": {
         "provider": "oci",
@@ -981,7 +1151,9 @@
         "subtype": "string",
         "required": false,
         "label": "Metadata",
-        "id": "metadata"
+        "id": "metadata",
+        "lookup": false,
+        "lookupResource": ""
       },
       "private_ip": {
         "provider": "oci",
@@ -991,7 +1163,9 @@
         "subtype": "",
         "required": false,
         "label": "Private Ip",
-        "id": "private_ip"
+        "id": "private_ip",
+        "lookup": false,
+        "lookupResource": ""
       },
       "public_ip": {
         "provider": "oci",
@@ -1001,7 +1175,9 @@
         "subtype": "",
         "required": false,
         "label": "Public Ip",
-        "id": "public_ip"
+        "id": "public_ip",
+        "lookup": false,
+        "lookupResource": ""
       },
       "region": {
         "provider": "oci",
@@ -1011,7 +1187,9 @@
         "subtype": "",
         "required": false,
         "label": "Region",
-        "id": "region"
+        "id": "region",
+        "lookup": false,
+        "lookupResource": ""
       },
       "shape": {
         "provider": "oci",
@@ -1021,7 +1199,9 @@
         "subtype": "",
         "required": true,
         "label": "Shape",
-        "id": "shape"
+        "id": "shape",
+        "lookup": false,
+        "lookupResource": ""
       },
       "subnet_id": {
         "provider": "oci",
@@ -1031,7 +1211,9 @@
         "subtype": "",
         "required": false,
         "label": "Subnet",
-        "id": "subnet_id"
+        "id": "subnet_id",
+        "lookup": true,
+        "lookupResource": "subnet"
       },
       "time_maintenance_reboot_due": {
         "provider": "oci",
@@ -1041,7 +1223,9 @@
         "subtype": "",
         "required": false,
         "label": "Time Maintenance Reboot Due",
-        "id": "time_maintenance_reboot_due"
+        "id": "time_maintenance_reboot_due",
+        "lookup": false,
+        "lookupResource": ""
       },
       "agent_config": {
         "provider": "oci",
@@ -1061,7 +1245,9 @@
             "subtype": "",
             "required": false,
             "label": "Are All Plugins Disabled",
-            "id": "agent_config.are_all_plugins_disabled"
+            "id": "agent_config.are_all_plugins_disabled",
+            "lookup": false,
+            "lookupResource": ""
           },
           "is_management_disabled": {
             "provider": "oci",
@@ -1071,7 +1257,9 @@
             "subtype": "",
             "required": false,
             "label": "Is Management Disabled",
-            "id": "agent_config.is_management_disabled"
+            "id": "agent_config.is_management_disabled",
+            "lookup": false,
+            "lookupResource": ""
           },
           "is_monitoring_disabled": {
             "provider": "oci",
@@ -1081,7 +1269,9 @@
             "subtype": "",
             "required": false,
             "label": "Is Monitoring Disabled",
-            "id": "agent_config.is_monitoring_disabled"
+            "id": "agent_config.is_monitoring_disabled",
+            "lookup": false,
+            "lookupResource": ""
           },
           "plugins_config": {
             "provider": "oci",
@@ -1101,7 +1291,9 @@
                 "subtype": "",
                 "required": true,
                 "label": "Desired State",
-                "id": "agent_config.plugins_config.desired_state"
+                "id": "agent_config.plugins_config.desired_state",
+                "lookup": false,
+                "lookupResource": ""
               },
               "name": {
                 "provider": "oci",
@@ -1111,7 +1303,9 @@
                 "subtype": "",
                 "required": true,
                 "label": "Name",
-                "id": "agent_config.plugins_config.name"
+                "id": "agent_config.plugins_config.name",
+                "lookup": false,
+                "lookupResource": ""
               }
             }
           }
@@ -1135,7 +1329,9 @@
             "subtype": "",
             "required": false,
             "label": "Is Live Migration Preferred",
-            "id": "availability_config.is_live_migration_preferred"
+            "id": "availability_config.is_live_migration_preferred",
+            "lookup": false,
+            "lookupResource": ""
           },
           "recovery_action": {
             "provider": "oci",
@@ -1145,7 +1341,9 @@
             "subtype": "",
             "required": false,
             "label": "Recovery Action",
-            "id": "availability_config.recovery_action"
+            "id": "availability_config.recovery_action",
+            "lookup": false,
+            "lookupResource": ""
           }
         }
       },
@@ -1167,7 +1365,9 @@
             "subtype": "",
             "required": false,
             "label": "Assign Private Dns Record",
-            "id": "create_vnic_details.assign_private_dns_record"
+            "id": "create_vnic_details.assign_private_dns_record",
+            "lookup": false,
+            "lookupResource": ""
           },
           "assign_public_ip": {
             "provider": "oci",
@@ -1177,7 +1377,9 @@
             "subtype": "",
             "required": false,
             "label": "Assign Public Ip",
-            "id": "create_vnic_details.assign_public_ip"
+            "id": "create_vnic_details.assign_public_ip",
+            "lookup": false,
+            "lookupResource": ""
           },
           "defined_tags": {
             "provider": "oci",
@@ -1187,7 +1389,9 @@
             "subtype": "string",
             "required": false,
             "label": "Defined Tags",
-            "id": "create_vnic_details.defined_tags"
+            "id": "create_vnic_details.defined_tags",
+            "lookup": false,
+            "lookupResource": ""
           },
           "display_name": {
             "provider": "oci",
@@ -1197,7 +1401,9 @@
             "subtype": "",
             "required": false,
             "label": "Display Name",
-            "id": "create_vnic_details.display_name"
+            "id": "create_vnic_details.display_name",
+            "lookup": false,
+            "lookupResource": ""
           },
           "freeform_tags": {
             "provider": "oci",
@@ -1207,7 +1413,9 @@
             "subtype": "string",
             "required": false,
             "label": "Freeform Tags",
-            "id": "create_vnic_details.freeform_tags"
+            "id": "create_vnic_details.freeform_tags",
+            "lookup": false,
+            "lookupResource": ""
           },
           "hostname_label": {
             "provider": "oci",
@@ -1217,7 +1425,9 @@
             "subtype": "",
             "required": false,
             "label": "Hostname Label",
-            "id": "create_vnic_details.hostname_label"
+            "id": "create_vnic_details.hostname_label",
+            "lookup": false,
+            "lookupResource": ""
           },
           "nsg_ids": {
             "provider": "oci",
@@ -1226,8 +1436,10 @@
             "type": "set",
             "subtype": "string",
             "required": false,
-            "label": "Nsg Ids",
-            "id": "create_vnic_details.nsg_ids"
+            "label": "Nsg",
+            "id": "create_vnic_details.nsg_ids",
+            "lookup": true,
+            "lookupResource": "nsg"
           },
           "private_ip": {
             "provider": "oci",
@@ -1237,7 +1449,9 @@
             "subtype": "",
             "required": false,
             "label": "Private Ip",
-            "id": "create_vnic_details.private_ip"
+            "id": "create_vnic_details.private_ip",
+            "lookup": false,
+            "lookupResource": ""
           },
           "skip_source_dest_check": {
             "provider": "oci",
@@ -1247,7 +1461,9 @@
             "subtype": "",
             "required": false,
             "label": "Skip Source Dest Check",
-            "id": "create_vnic_details.skip_source_dest_check"
+            "id": "create_vnic_details.skip_source_dest_check",
+            "lookup": false,
+            "lookupResource": ""
           },
           "subnet_id": {
             "provider": "oci",
@@ -1257,7 +1473,9 @@
             "subtype": "",
             "required": false,
             "label": "Subnet",
-            "id": "create_vnic_details.subnet_id"
+            "id": "create_vnic_details.subnet_id",
+            "lookup": true,
+            "lookupResource": "subnet"
           },
           "vlan_id": {
             "provider": "oci",
@@ -1267,7 +1485,9 @@
             "subtype": "",
             "required": false,
             "label": "Vlan",
-            "id": "create_vnic_details.vlan_id"
+            "id": "create_vnic_details.vlan_id",
+            "lookup": true,
+            "lookupResource": "vlan"
           }
         }
       },
@@ -1289,7 +1509,9 @@
             "subtype": "",
             "required": false,
             "label": "Are Legacy Imds Endpoints Disabled",
-            "id": "instance_options.are_legacy_imds_endpoints_disabled"
+            "id": "instance_options.are_legacy_imds_endpoints_disabled",
+            "lookup": false,
+            "lookupResource": ""
           }
         }
       },
@@ -1311,7 +1533,9 @@
             "subtype": "",
             "required": false,
             "label": "Boot Volume Type",
-            "id": "launch_options.boot_volume_type"
+            "id": "launch_options.boot_volume_type",
+            "lookup": false,
+            "lookupResource": ""
           },
           "firmware": {
             "provider": "oci",
@@ -1321,7 +1545,9 @@
             "subtype": "",
             "required": false,
             "label": "Firmware",
-            "id": "launch_options.firmware"
+            "id": "launch_options.firmware",
+            "lookup": false,
+            "lookupResource": ""
           },
           "is_consistent_volume_naming_enabled": {
             "provider": "oci",
@@ -1331,7 +1557,9 @@
             "subtype": "",
             "required": false,
             "label": "Is Consistent Volume Naming Enabled",
-            "id": "launch_options.is_consistent_volume_naming_enabled"
+            "id": "launch_options.is_consistent_volume_naming_enabled",
+            "lookup": false,
+            "lookupResource": ""
           },
           "is_pv_encryption_in_transit_enabled": {
             "provider": "oci",
@@ -1341,7 +1569,9 @@
             "subtype": "",
             "required": false,
             "label": "Is Pv Encryption In Transit Enabled",
-            "id": "launch_options.is_pv_encryption_in_transit_enabled"
+            "id": "launch_options.is_pv_encryption_in_transit_enabled",
+            "lookup": false,
+            "lookupResource": ""
           },
           "network_type": {
             "provider": "oci",
@@ -1351,7 +1581,9 @@
             "subtype": "",
             "required": false,
             "label": "Network Type",
-            "id": "launch_options.network_type"
+            "id": "launch_options.network_type",
+            "lookup": false,
+            "lookupResource": ""
           },
           "remote_data_volume_type": {
             "provider": "oci",
@@ -1361,7 +1593,9 @@
             "subtype": "",
             "required": false,
             "label": "Remote Data Volume Type",
-            "id": "launch_options.remote_data_volume_type"
+            "id": "launch_options.remote_data_volume_type",
+            "lookup": false,
+            "lookupResource": ""
           }
         }
       },
@@ -1383,7 +1617,9 @@
             "subtype": "",
             "required": false,
             "label": "Numa Nodes Per Socket",
-            "id": "platform_config.numa_nodes_per_socket"
+            "id": "platform_config.numa_nodes_per_socket",
+            "lookup": false,
+            "lookupResource": ""
           },
           "type": {
             "provider": "oci",
@@ -1393,7 +1629,9 @@
             "subtype": "",
             "required": true,
             "label": "Type",
-            "id": "platform_config.type"
+            "id": "platform_config.type",
+            "lookup": false,
+            "lookupResource": ""
           }
         }
       },
@@ -1425,7 +1663,9 @@
                 "subtype": "",
                 "required": true,
                 "label": "Type",
-                "id": "preemptible_instance_config.preemption_action.type"
+                "id": "preemptible_instance_config.preemption_action.type",
+                "lookup": false,
+                "lookupResource": ""
               }
             }
           }
@@ -1449,7 +1689,9 @@
             "subtype": "",
             "required": false,
             "label": "Baseline Ocpu Utilization",
-            "id": "shape_config.baseline_ocpu_utilization"
+            "id": "shape_config.baseline_ocpu_utilization",
+            "lookup": false,
+            "lookupResource": ""
           },
           "gpu_description": {
             "provider": "oci",
@@ -1459,7 +1701,9 @@
             "subtype": "",
             "required": false,
             "label": "Gpu Description",
-            "id": "shape_config.gpu_description"
+            "id": "shape_config.gpu_description",
+            "lookup": false,
+            "lookupResource": ""
           },
           "gpus": {
             "provider": "oci",
@@ -1469,7 +1713,9 @@
             "subtype": "",
             "required": false,
             "label": "Gpus",
-            "id": "shape_config.gpus"
+            "id": "shape_config.gpus",
+            "lookup": false,
+            "lookupResource": ""
           },
           "local_disk_description": {
             "provider": "oci",
@@ -1479,7 +1725,9 @@
             "subtype": "",
             "required": false,
             "label": "Local Disk Description",
-            "id": "shape_config.local_disk_description"
+            "id": "shape_config.local_disk_description",
+            "lookup": false,
+            "lookupResource": ""
           },
           "local_disks": {
             "provider": "oci",
@@ -1489,7 +1737,9 @@
             "subtype": "",
             "required": false,
             "label": "Local Disks",
-            "id": "shape_config.local_disks"
+            "id": "shape_config.local_disks",
+            "lookup": false,
+            "lookupResource": ""
           },
           "local_disks_total_size_in_gbs": {
             "provider": "oci",
@@ -1499,7 +1749,9 @@
             "subtype": "",
             "required": false,
             "label": "Local Disks Total Size In Gbs",
-            "id": "shape_config.local_disks_total_size_in_gbs"
+            "id": "shape_config.local_disks_total_size_in_gbs",
+            "lookup": false,
+            "lookupResource": ""
           },
           "max_vnic_attachments": {
             "provider": "oci",
@@ -1509,7 +1761,9 @@
             "subtype": "",
             "required": false,
             "label": "Max Vnic Attachments",
-            "id": "shape_config.max_vnic_attachments"
+            "id": "shape_config.max_vnic_attachments",
+            "lookup": false,
+            "lookupResource": ""
           },
           "memory_in_gbs": {
             "provider": "oci",
@@ -1519,7 +1773,9 @@
             "subtype": "",
             "required": false,
             "label": "Memory In Gbs",
-            "id": "shape_config.memory_in_gbs"
+            "id": "shape_config.memory_in_gbs",
+            "lookup": false,
+            "lookupResource": ""
           },
           "networking_bandwidth_in_gbps": {
             "provider": "oci",
@@ -1529,7 +1785,9 @@
             "subtype": "",
             "required": false,
             "label": "Networking Bandwidth In Gbps",
-            "id": "shape_config.networking_bandwidth_in_gbps"
+            "id": "shape_config.networking_bandwidth_in_gbps",
+            "lookup": false,
+            "lookupResource": ""
           },
           "ocpus": {
             "provider": "oci",
@@ -1539,7 +1797,9 @@
             "subtype": "",
             "required": false,
             "label": "Ocpus",
-            "id": "shape_config.ocpus"
+            "id": "shape_config.ocpus",
+            "lookup": false,
+            "lookupResource": ""
           },
           "processor_description": {
             "provider": "oci",
@@ -1549,7 +1809,9 @@
             "subtype": "",
             "required": false,
             "label": "Processor Description",
-            "id": "shape_config.processor_description"
+            "id": "shape_config.processor_description",
+            "lookup": false,
+            "lookupResource": ""
           }
         }
       },
@@ -1571,7 +1833,9 @@
             "subtype": "",
             "required": false,
             "label": "Boot Volume Size In Gbs",
-            "id": "source_details.boot_volume_size_in_gbs"
+            "id": "source_details.boot_volume_size_in_gbs",
+            "lookup": false,
+            "lookupResource": ""
           },
           "kms_key_id": {
             "provider": "oci",
@@ -1581,7 +1845,9 @@
             "subtype": "",
             "required": false,
             "label": "Kms Key",
-            "id": "source_details.kms_key_id"
+            "id": "source_details.kms_key_id",
+            "lookup": true,
+            "lookupResource": "kms_key"
           },
           "source_id": {
             "provider": "oci",
@@ -1591,7 +1857,9 @@
             "subtype": "",
             "required": true,
             "label": "Source",
-            "id": "source_details.source_id"
+            "id": "source_details.source_id",
+            "lookup": true,
+            "lookupResource": "source"
           },
           "source_type": {
             "provider": "oci",
@@ -1601,7 +1869,9 @@
             "subtype": "",
             "required": true,
             "label": "Source Type",
-            "id": "source_details.source_type"
+            "id": "source_details.source_type",
+            "lookup": false,
+            "lookupResource": ""
           }
         }
       }
@@ -1619,7 +1889,9 @@
         "subtype": "",
         "required": true,
         "label": "Compartment",
-        "id": "compartment_id"
+        "id": "compartment_id",
+        "lookup": true,
+        "lookupResource": "compartment"
       },
       "defined_tags": {
         "provider": "oci",
@@ -1629,7 +1901,9 @@
         "subtype": "string",
         "required": false,
         "label": "Defined Tags",
-        "id": "defined_tags"
+        "id": "defined_tags",
+        "lookup": false,
+        "lookupResource": ""
       },
       "display_name": {
         "provider": "oci",
@@ -1639,7 +1913,9 @@
         "subtype": "",
         "required": false,
         "label": "Display Name",
-        "id": "display_name"
+        "id": "display_name",
+        "lookup": false,
+        "lookupResource": ""
       },
       "enabled": {
         "provider": "oci",
@@ -1649,7 +1925,9 @@
         "subtype": "",
         "required": false,
         "label": "Enabled",
-        "id": "enabled"
+        "id": "enabled",
+        "lookup": false,
+        "lookupResource": ""
       },
       "freeform_tags": {
         "provider": "oci",
@@ -1659,7 +1937,9 @@
         "subtype": "string",
         "required": false,
         "label": "Freeform Tags",
-        "id": "freeform_tags"
+        "id": "freeform_tags",
+        "lookup": false,
+        "lookupResource": ""
       },
       "vcn_id": {
         "provider": "oci",
@@ -1669,7 +1949,9 @@
         "subtype": "",
         "required": true,
         "label": "Vcn",
-        "id": "vcn_id"
+        "id": "vcn_id",
+        "lookup": true,
+        "lookupResource": "vcn"
       }
     }
   },
@@ -1685,7 +1967,9 @@
         "subtype": "",
         "required": true,
         "label": "Compartment",
-        "id": "compartment_id"
+        "id": "compartment_id",
+        "lookup": true,
+        "lookupResource": "compartment"
       },
       "defined_tags": {
         "provider": "oci",
@@ -1695,7 +1979,9 @@
         "subtype": "string",
         "required": false,
         "label": "Defined Tags",
-        "id": "defined_tags"
+        "id": "defined_tags",
+        "lookup": false,
+        "lookupResource": ""
       },
       "display_name": {
         "provider": "oci",
@@ -1705,7 +1991,9 @@
         "subtype": "",
         "required": false,
         "label": "Display Name",
-        "id": "display_name"
+        "id": "display_name",
+        "lookup": false,
+        "lookupResource": ""
       },
       "freeform_tags": {
         "provider": "oci",
@@ -1715,7 +2003,9 @@
         "subtype": "string",
         "required": false,
         "label": "Freeform Tags",
-        "id": "freeform_tags"
+        "id": "freeform_tags",
+        "lookup": false,
+        "lookupResource": ""
       },
       "is_cross_tenancy_peering": {
         "provider": "oci",
@@ -1725,7 +2015,9 @@
         "subtype": "",
         "required": false,
         "label": "Is Cross Tenancy Peering",
-        "id": "is_cross_tenancy_peering"
+        "id": "is_cross_tenancy_peering",
+        "lookup": false,
+        "lookupResource": ""
       },
       "peer_advertised_cidr": {
         "provider": "oci",
@@ -1735,7 +2027,9 @@
         "subtype": "",
         "required": false,
         "label": "Peer Advertised Cidr",
-        "id": "peer_advertised_cidr"
+        "id": "peer_advertised_cidr",
+        "lookup": false,
+        "lookupResource": ""
       },
       "peer_advertised_cidr_details": {
         "provider": "oci",
@@ -1745,7 +2039,9 @@
         "subtype": "string",
         "required": false,
         "label": "Peer Advertised Cidr Details",
-        "id": "peer_advertised_cidr_details"
+        "id": "peer_advertised_cidr_details",
+        "lookup": false,
+        "lookupResource": ""
       },
       "peer_id": {
         "provider": "oci",
@@ -1755,7 +2051,9 @@
         "subtype": "",
         "required": false,
         "label": "Peer",
-        "id": "peer_id"
+        "id": "peer_id",
+        "lookup": true,
+        "lookupResource": "peer"
       },
       "peering_status": {
         "provider": "oci",
@@ -1765,7 +2063,9 @@
         "subtype": "",
         "required": false,
         "label": "Peering Status",
-        "id": "peering_status"
+        "id": "peering_status",
+        "lookup": false,
+        "lookupResource": ""
       },
       "peering_status_details": {
         "provider": "oci",
@@ -1775,7 +2075,9 @@
         "subtype": "",
         "required": false,
         "label": "Peering Status Details",
-        "id": "peering_status_details"
+        "id": "peering_status_details",
+        "lookup": false,
+        "lookupResource": ""
       },
       "route_table_id": {
         "provider": "oci",
@@ -1785,7 +2087,9 @@
         "subtype": "",
         "required": false,
         "label": "Route Table",
-        "id": "route_table_id"
+        "id": "route_table_id",
+        "lookup": true,
+        "lookupResource": "route_table"
       },
       "vcn_id": {
         "provider": "oci",
@@ -1795,7 +2099,9 @@
         "subtype": "",
         "required": true,
         "label": "Vcn",
-        "id": "vcn_id"
+        "id": "vcn_id",
+        "lookup": true,
+        "lookupResource": "vcn"
       }
     }
   },
@@ -1811,7 +2117,9 @@
         "subtype": "",
         "required": false,
         "label": "Block Traffic",
-        "id": "block_traffic"
+        "id": "block_traffic",
+        "lookup": false,
+        "lookupResource": ""
       },
       "compartment_id": {
         "provider": "oci",
@@ -1821,7 +2129,9 @@
         "subtype": "",
         "required": true,
         "label": "Compartment",
-        "id": "compartment_id"
+        "id": "compartment_id",
+        "lookup": true,
+        "lookupResource": "compartment"
       },
       "defined_tags": {
         "provider": "oci",
@@ -1831,7 +2141,9 @@
         "subtype": "string",
         "required": false,
         "label": "Defined Tags",
-        "id": "defined_tags"
+        "id": "defined_tags",
+        "lookup": false,
+        "lookupResource": ""
       },
       "display_name": {
         "provider": "oci",
@@ -1841,7 +2153,9 @@
         "subtype": "",
         "required": false,
         "label": "Display Name",
-        "id": "display_name"
+        "id": "display_name",
+        "lookup": false,
+        "lookupResource": ""
       },
       "freeform_tags": {
         "provider": "oci",
@@ -1851,7 +2165,9 @@
         "subtype": "string",
         "required": false,
         "label": "Freeform Tags",
-        "id": "freeform_tags"
+        "id": "freeform_tags",
+        "lookup": false,
+        "lookupResource": ""
       },
       "nat_ip": {
         "provider": "oci",
@@ -1861,7 +2177,9 @@
         "subtype": "",
         "required": false,
         "label": "Nat Ip",
-        "id": "nat_ip"
+        "id": "nat_ip",
+        "lookup": false,
+        "lookupResource": ""
       },
       "public_ip_id": {
         "provider": "oci",
@@ -1871,7 +2189,9 @@
         "subtype": "",
         "required": false,
         "label": "Public Ip",
-        "id": "public_ip_id"
+        "id": "public_ip_id",
+        "lookup": true,
+        "lookupResource": "public_ip"
       },
       "vcn_id": {
         "provider": "oci",
@@ -1881,7 +2201,9 @@
         "subtype": "",
         "required": true,
         "label": "Vcn",
-        "id": "vcn_id"
+        "id": "vcn_id",
+        "lookup": true,
+        "lookupResource": "vcn"
       }
     }
   },
@@ -1897,7 +2219,9 @@
         "subtype": "",
         "required": true,
         "label": "Compartment",
-        "id": "compartment_id"
+        "id": "compartment_id",
+        "lookup": true,
+        "lookupResource": "compartment"
       },
       "defined_tags": {
         "provider": "oci",
@@ -1907,7 +2231,9 @@
         "subtype": "string",
         "required": false,
         "label": "Defined Tags",
-        "id": "defined_tags"
+        "id": "defined_tags",
+        "lookup": false,
+        "lookupResource": ""
       },
       "display_name": {
         "provider": "oci",
@@ -1917,7 +2243,9 @@
         "subtype": "",
         "required": false,
         "label": "Display Name",
-        "id": "display_name"
+        "id": "display_name",
+        "lookup": false,
+        "lookupResource": ""
       },
       "freeform_tags": {
         "provider": "oci",
@@ -1927,7 +2255,9 @@
         "subtype": "string",
         "required": false,
         "label": "Freeform Tags",
-        "id": "freeform_tags"
+        "id": "freeform_tags",
+        "lookup": false,
+        "lookupResource": ""
       },
       "vcn_id": {
         "provider": "oci",
@@ -1937,7 +2267,9 @@
         "subtype": "",
         "required": true,
         "label": "Vcn",
-        "id": "vcn_id"
+        "id": "vcn_id",
+        "lookup": true,
+        "lookupResource": "vcn"
       }
     }
   },
@@ -1953,7 +2285,9 @@
         "subtype": "",
         "required": true,
         "label": "Compartment",
-        "id": "compartment_id"
+        "id": "compartment_id",
+        "lookup": true,
+        "lookupResource": "compartment"
       },
       "defined_tags": {
         "provider": "oci",
@@ -1963,7 +2297,9 @@
         "subtype": "string",
         "required": false,
         "label": "Defined Tags",
-        "id": "defined_tags"
+        "id": "defined_tags",
+        "lookup": false,
+        "lookupResource": ""
       },
       "display_name": {
         "provider": "oci",
@@ -1973,7 +2309,9 @@
         "subtype": "",
         "required": false,
         "label": "Display Name",
-        "id": "display_name"
+        "id": "display_name",
+        "lookup": false,
+        "lookupResource": ""
       },
       "drg_id": {
         "provider": "oci",
@@ -1983,7 +2321,9 @@
         "subtype": "",
         "required": true,
         "label": "Drg",
-        "id": "drg_id"
+        "id": "drg_id",
+        "lookup": true,
+        "lookupResource": "drg"
       },
       "freeform_tags": {
         "provider": "oci",
@@ -1993,7 +2333,9 @@
         "subtype": "string",
         "required": false,
         "label": "Freeform Tags",
-        "id": "freeform_tags"
+        "id": "freeform_tags",
+        "lookup": false,
+        "lookupResource": ""
       },
       "is_cross_tenancy_peering": {
         "provider": "oci",
@@ -2003,7 +2345,9 @@
         "subtype": "",
         "required": false,
         "label": "Is Cross Tenancy Peering",
-        "id": "is_cross_tenancy_peering"
+        "id": "is_cross_tenancy_peering",
+        "lookup": false,
+        "lookupResource": ""
       },
       "peer_id": {
         "provider": "oci",
@@ -2013,7 +2357,9 @@
         "subtype": "",
         "required": false,
         "label": "Peer",
-        "id": "peer_id"
+        "id": "peer_id",
+        "lookup": true,
+        "lookupResource": "peer"
       },
       "peer_region_name": {
         "provider": "oci",
@@ -2023,7 +2369,9 @@
         "subtype": "",
         "required": false,
         "label": "Peer Region Name",
-        "id": "peer_region_name"
+        "id": "peer_region_name",
+        "lookup": false,
+        "lookupResource": ""
       },
       "peer_tenancy_id": {
         "provider": "oci",
@@ -2033,7 +2381,9 @@
         "subtype": "",
         "required": false,
         "label": "Peer Tenancy",
-        "id": "peer_tenancy_id"
+        "id": "peer_tenancy_id",
+        "lookup": true,
+        "lookupResource": "peer_tenancy"
       },
       "peering_status": {
         "provider": "oci",
@@ -2043,7 +2393,9 @@
         "subtype": "",
         "required": false,
         "label": "Peering Status",
-        "id": "peering_status"
+        "id": "peering_status",
+        "lookup": false,
+        "lookupResource": ""
       }
     }
   },
@@ -2059,7 +2411,9 @@
         "subtype": "",
         "required": true,
         "label": "Compartment",
-        "id": "compartment_id"
+        "id": "compartment_id",
+        "lookup": true,
+        "lookupResource": "compartment"
       },
       "defined_tags": {
         "provider": "oci",
@@ -2069,7 +2423,9 @@
         "subtype": "string",
         "required": false,
         "label": "Defined Tags",
-        "id": "defined_tags"
+        "id": "defined_tags",
+        "lookup": false,
+        "lookupResource": ""
       },
       "display_name": {
         "provider": "oci",
@@ -2079,7 +2435,9 @@
         "subtype": "",
         "required": false,
         "label": "Display Name",
-        "id": "display_name"
+        "id": "display_name",
+        "lookup": false,
+        "lookupResource": ""
       },
       "freeform_tags": {
         "provider": "oci",
@@ -2089,7 +2447,9 @@
         "subtype": "string",
         "required": false,
         "label": "Freeform Tags",
-        "id": "freeform_tags"
+        "id": "freeform_tags",
+        "lookup": false,
+        "lookupResource": ""
       },
       "vcn_id": {
         "provider": "oci",
@@ -2099,7 +2459,9 @@
         "subtype": "",
         "required": true,
         "label": "Vcn",
-        "id": "vcn_id"
+        "id": "vcn_id",
+        "lookup": true,
+        "lookupResource": "vcn"
       },
       "route_rules": {
         "provider": "oci",
@@ -2119,7 +2481,9 @@
             "subtype": "",
             "required": false,
             "label": "Cidr Block",
-            "id": "route_rules.cidr_block"
+            "id": "route_rules.cidr_block",
+            "lookup": false,
+            "lookupResource": ""
           },
           "description": {
             "provider": "oci",
@@ -2129,7 +2493,9 @@
             "subtype": "",
             "required": false,
             "label": "Description",
-            "id": "route_rules.description"
+            "id": "route_rules.description",
+            "lookup": false,
+            "lookupResource": ""
           },
           "destination": {
             "provider": "oci",
@@ -2139,7 +2505,9 @@
             "subtype": "",
             "required": false,
             "label": "Destination",
-            "id": "route_rules.destination"
+            "id": "route_rules.destination",
+            "lookup": false,
+            "lookupResource": ""
           },
           "destination_type": {
             "provider": "oci",
@@ -2149,7 +2517,9 @@
             "subtype": "",
             "required": false,
             "label": "Destination Type",
-            "id": "route_rules.destination_type"
+            "id": "route_rules.destination_type",
+            "lookup": false,
+            "lookupResource": ""
           },
           "network_entity_id": {
             "provider": "oci",
@@ -2159,7 +2529,9 @@
             "subtype": "",
             "required": true,
             "label": "Network Entity",
-            "id": "route_rules.network_entity_id"
+            "id": "route_rules.network_entity_id",
+            "lookup": true,
+            "lookupResource": "network_entity"
           }
         }
       }
@@ -2177,7 +2549,9 @@
         "subtype": "",
         "required": true,
         "label": "Compartment",
-        "id": "compartment_id"
+        "id": "compartment_id",
+        "lookup": true,
+        "lookupResource": "compartment"
       },
       "defined_tags": {
         "provider": "oci",
@@ -2187,7 +2561,9 @@
         "subtype": "string",
         "required": false,
         "label": "Defined Tags",
-        "id": "defined_tags"
+        "id": "defined_tags",
+        "lookup": false,
+        "lookupResource": ""
       },
       "display_name": {
         "provider": "oci",
@@ -2197,7 +2573,9 @@
         "subtype": "",
         "required": false,
         "label": "Display Name",
-        "id": "display_name"
+        "id": "display_name",
+        "lookup": false,
+        "lookupResource": ""
       },
       "freeform_tags": {
         "provider": "oci",
@@ -2207,7 +2585,9 @@
         "subtype": "string",
         "required": false,
         "label": "Freeform Tags",
-        "id": "freeform_tags"
+        "id": "freeform_tags",
+        "lookup": false,
+        "lookupResource": ""
       },
       "vcn_id": {
         "provider": "oci",
@@ -2217,7 +2597,9 @@
         "subtype": "",
         "required": true,
         "label": "Vcn",
-        "id": "vcn_id"
+        "id": "vcn_id",
+        "lookup": true,
+        "lookupResource": "vcn"
       },
       "egress_security_rules": {
         "provider": "oci",
@@ -2237,7 +2619,9 @@
             "subtype": "",
             "required": false,
             "label": "Description",
-            "id": "egress_security_rules.description"
+            "id": "egress_security_rules.description",
+            "lookup": false,
+            "lookupResource": ""
           },
           "destination": {
             "provider": "oci",
@@ -2247,7 +2631,9 @@
             "subtype": "",
             "required": true,
             "label": "Destination",
-            "id": "egress_security_rules.destination"
+            "id": "egress_security_rules.destination",
+            "lookup": false,
+            "lookupResource": ""
           },
           "destination_type": {
             "provider": "oci",
@@ -2257,7 +2643,9 @@
             "subtype": "",
             "required": false,
             "label": "Destination Type",
-            "id": "egress_security_rules.destination_type"
+            "id": "egress_security_rules.destination_type",
+            "lookup": false,
+            "lookupResource": ""
           },
           "protocol": {
             "provider": "oci",
@@ -2267,7 +2655,9 @@
             "subtype": "",
             "required": true,
             "label": "Protocol",
-            "id": "egress_security_rules.protocol"
+            "id": "egress_security_rules.protocol",
+            "lookup": false,
+            "lookupResource": ""
           },
           "stateless": {
             "provider": "oci",
@@ -2277,7 +2667,9 @@
             "subtype": "",
             "required": false,
             "label": "Stateless",
-            "id": "egress_security_rules.stateless"
+            "id": "egress_security_rules.stateless",
+            "lookup": false,
+            "lookupResource": ""
           },
           "icmp_options": {
             "provider": "oci",
@@ -2297,7 +2689,9 @@
                 "subtype": "",
                 "required": false,
                 "label": "Code",
-                "id": "egress_security_rules.icmp_options.code"
+                "id": "egress_security_rules.icmp_options.code",
+                "lookup": false,
+                "lookupResource": ""
               },
               "type": {
                 "provider": "oci",
@@ -2307,7 +2701,9 @@
                 "subtype": "",
                 "required": true,
                 "label": "Type",
-                "id": "egress_security_rules.icmp_options.type"
+                "id": "egress_security_rules.icmp_options.type",
+                "lookup": false,
+                "lookupResource": ""
               }
             }
           },
@@ -2329,7 +2725,9 @@
                 "subtype": "",
                 "required": false,
                 "label": "Max",
-                "id": "egress_security_rules.tcp_options.max"
+                "id": "egress_security_rules.tcp_options.max",
+                "lookup": false,
+                "lookupResource": ""
               },
               "min": {
                 "provider": "oci",
@@ -2339,7 +2737,9 @@
                 "subtype": "",
                 "required": false,
                 "label": "Min",
-                "id": "egress_security_rules.tcp_options.min"
+                "id": "egress_security_rules.tcp_options.min",
+                "lookup": false,
+                "lookupResource": ""
               },
               "source_port_range": {
                 "provider": "oci",
@@ -2359,7 +2759,9 @@
                     "subtype": "",
                     "required": true,
                     "label": "Max",
-                    "id": "egress_security_rules.tcp_options.source_port_range.max"
+                    "id": "egress_security_rules.tcp_options.source_port_range.max",
+                    "lookup": false,
+                    "lookupResource": ""
                   },
                   "min": {
                     "provider": "oci",
@@ -2369,7 +2771,9 @@
                     "subtype": "",
                     "required": true,
                     "label": "Min",
-                    "id": "egress_security_rules.tcp_options.source_port_range.min"
+                    "id": "egress_security_rules.tcp_options.source_port_range.min",
+                    "lookup": false,
+                    "lookupResource": ""
                   }
                 }
               }
@@ -2393,7 +2797,9 @@
                 "subtype": "",
                 "required": false,
                 "label": "Max",
-                "id": "egress_security_rules.udp_options.max"
+                "id": "egress_security_rules.udp_options.max",
+                "lookup": false,
+                "lookupResource": ""
               },
               "min": {
                 "provider": "oci",
@@ -2403,7 +2809,9 @@
                 "subtype": "",
                 "required": false,
                 "label": "Min",
-                "id": "egress_security_rules.udp_options.min"
+                "id": "egress_security_rules.udp_options.min",
+                "lookup": false,
+                "lookupResource": ""
               },
               "source_port_range": {
                 "provider": "oci",
@@ -2423,7 +2831,9 @@
                     "subtype": "",
                     "required": true,
                     "label": "Max",
-                    "id": "egress_security_rules.udp_options.source_port_range.max"
+                    "id": "egress_security_rules.udp_options.source_port_range.max",
+                    "lookup": false,
+                    "lookupResource": ""
                   },
                   "min": {
                     "provider": "oci",
@@ -2433,7 +2843,9 @@
                     "subtype": "",
                     "required": true,
                     "label": "Min",
-                    "id": "egress_security_rules.udp_options.source_port_range.min"
+                    "id": "egress_security_rules.udp_options.source_port_range.min",
+                    "lookup": false,
+                    "lookupResource": ""
                   }
                 }
               }
@@ -2459,7 +2871,9 @@
             "subtype": "",
             "required": false,
             "label": "Description",
-            "id": "ingress_security_rules.description"
+            "id": "ingress_security_rules.description",
+            "lookup": false,
+            "lookupResource": ""
           },
           "protocol": {
             "provider": "oci",
@@ -2469,7 +2883,9 @@
             "subtype": "",
             "required": true,
             "label": "Protocol",
-            "id": "ingress_security_rules.protocol"
+            "id": "ingress_security_rules.protocol",
+            "lookup": false,
+            "lookupResource": ""
           },
           "source": {
             "provider": "oci",
@@ -2479,7 +2895,9 @@
             "subtype": "",
             "required": true,
             "label": "Source",
-            "id": "ingress_security_rules.source"
+            "id": "ingress_security_rules.source",
+            "lookup": false,
+            "lookupResource": ""
           },
           "source_type": {
             "provider": "oci",
@@ -2489,7 +2907,9 @@
             "subtype": "",
             "required": false,
             "label": "Source Type",
-            "id": "ingress_security_rules.source_type"
+            "id": "ingress_security_rules.source_type",
+            "lookup": false,
+            "lookupResource": ""
           },
           "stateless": {
             "provider": "oci",
@@ -2499,7 +2919,9 @@
             "subtype": "",
             "required": false,
             "label": "Stateless",
-            "id": "ingress_security_rules.stateless"
+            "id": "ingress_security_rules.stateless",
+            "lookup": false,
+            "lookupResource": ""
           },
           "icmp_options": {
             "provider": "oci",
@@ -2519,7 +2941,9 @@
                 "subtype": "",
                 "required": false,
                 "label": "Code",
-                "id": "ingress_security_rules.icmp_options.code"
+                "id": "ingress_security_rules.icmp_options.code",
+                "lookup": false,
+                "lookupResource": ""
               },
               "type": {
                 "provider": "oci",
@@ -2529,7 +2953,9 @@
                 "subtype": "",
                 "required": true,
                 "label": "Type",
-                "id": "ingress_security_rules.icmp_options.type"
+                "id": "ingress_security_rules.icmp_options.type",
+                "lookup": false,
+                "lookupResource": ""
               }
             }
           },
@@ -2551,7 +2977,9 @@
                 "subtype": "",
                 "required": false,
                 "label": "Max",
-                "id": "ingress_security_rules.tcp_options.max"
+                "id": "ingress_security_rules.tcp_options.max",
+                "lookup": false,
+                "lookupResource": ""
               },
               "min": {
                 "provider": "oci",
@@ -2561,7 +2989,9 @@
                 "subtype": "",
                 "required": false,
                 "label": "Min",
-                "id": "ingress_security_rules.tcp_options.min"
+                "id": "ingress_security_rules.tcp_options.min",
+                "lookup": false,
+                "lookupResource": ""
               },
               "source_port_range": {
                 "provider": "oci",
@@ -2581,7 +3011,9 @@
                     "subtype": "",
                     "required": true,
                     "label": "Max",
-                    "id": "ingress_security_rules.tcp_options.source_port_range.max"
+                    "id": "ingress_security_rules.tcp_options.source_port_range.max",
+                    "lookup": false,
+                    "lookupResource": ""
                   },
                   "min": {
                     "provider": "oci",
@@ -2591,7 +3023,9 @@
                     "subtype": "",
                     "required": true,
                     "label": "Min",
-                    "id": "ingress_security_rules.tcp_options.source_port_range.min"
+                    "id": "ingress_security_rules.tcp_options.source_port_range.min",
+                    "lookup": false,
+                    "lookupResource": ""
                   }
                 }
               }
@@ -2615,7 +3049,9 @@
                 "subtype": "",
                 "required": false,
                 "label": "Max",
-                "id": "ingress_security_rules.udp_options.max"
+                "id": "ingress_security_rules.udp_options.max",
+                "lookup": false,
+                "lookupResource": ""
               },
               "min": {
                 "provider": "oci",
@@ -2625,7 +3061,9 @@
                 "subtype": "",
                 "required": false,
                 "label": "Min",
-                "id": "ingress_security_rules.udp_options.min"
+                "id": "ingress_security_rules.udp_options.min",
+                "lookup": false,
+                "lookupResource": ""
               },
               "source_port_range": {
                 "provider": "oci",
@@ -2645,7 +3083,9 @@
                     "subtype": "",
                     "required": true,
                     "label": "Max",
-                    "id": "ingress_security_rules.udp_options.source_port_range.max"
+                    "id": "ingress_security_rules.udp_options.source_port_range.max",
+                    "lookup": false,
+                    "lookupResource": ""
                   },
                   "min": {
                     "provider": "oci",
@@ -2655,7 +3095,9 @@
                     "subtype": "",
                     "required": true,
                     "label": "Min",
-                    "id": "ingress_security_rules.udp_options.source_port_range.min"
+                    "id": "ingress_security_rules.udp_options.source_port_range.min",
+                    "lookup": false,
+                    "lookupResource": ""
                   }
                 }
               }
@@ -2677,7 +3119,9 @@
         "subtype": "",
         "required": false,
         "label": "Block Traffic",
-        "id": "block_traffic"
+        "id": "block_traffic",
+        "lookup": false,
+        "lookupResource": ""
       },
       "compartment_id": {
         "provider": "oci",
@@ -2687,7 +3131,9 @@
         "subtype": "",
         "required": true,
         "label": "Compartment",
-        "id": "compartment_id"
+        "id": "compartment_id",
+        "lookup": true,
+        "lookupResource": "compartment"
       },
       "defined_tags": {
         "provider": "oci",
@@ -2697,7 +3143,9 @@
         "subtype": "string",
         "required": false,
         "label": "Defined Tags",
-        "id": "defined_tags"
+        "id": "defined_tags",
+        "lookup": false,
+        "lookupResource": ""
       },
       "display_name": {
         "provider": "oci",
@@ -2707,7 +3155,9 @@
         "subtype": "",
         "required": false,
         "label": "Display Name",
-        "id": "display_name"
+        "id": "display_name",
+        "lookup": false,
+        "lookupResource": ""
       },
       "freeform_tags": {
         "provider": "oci",
@@ -2717,7 +3167,9 @@
         "subtype": "string",
         "required": false,
         "label": "Freeform Tags",
-        "id": "freeform_tags"
+        "id": "freeform_tags",
+        "lookup": false,
+        "lookupResource": ""
       },
       "route_table_id": {
         "provider": "oci",
@@ -2727,7 +3179,9 @@
         "subtype": "",
         "required": false,
         "label": "Route Table",
-        "id": "route_table_id"
+        "id": "route_table_id",
+        "lookup": true,
+        "lookupResource": "route_table"
       },
       "vcn_id": {
         "provider": "oci",
@@ -2737,7 +3191,9 @@
         "subtype": "",
         "required": true,
         "label": "Vcn",
-        "id": "vcn_id"
+        "id": "vcn_id",
+        "lookup": true,
+        "lookupResource": "vcn"
       },
       "services": {
         "provider": "oci",
@@ -2757,7 +3213,9 @@
             "subtype": "",
             "required": true,
             "label": "Service",
-            "id": "services.service_id"
+            "id": "services.service_id",
+            "lookup": true,
+            "lookupResource": "service"
           },
           "service_name": {
             "provider": "oci",
@@ -2767,7 +3225,9 @@
             "subtype": "",
             "required": false,
             "label": "Service Name",
-            "id": "services.service_name"
+            "id": "services.service_name",
+            "lookup": false,
+            "lookupResource": ""
           }
         }
       }
@@ -2785,7 +3245,9 @@
         "subtype": "",
         "required": false,
         "label": "Availability Domain",
-        "id": "availability_domain"
+        "id": "availability_domain",
+        "lookup": false,
+        "lookupResource": ""
       },
       "cidr_block": {
         "provider": "oci",
@@ -2795,7 +3257,9 @@
         "subtype": "",
         "required": true,
         "label": "Cidr Block",
-        "id": "cidr_block"
+        "id": "cidr_block",
+        "lookup": false,
+        "lookupResource": ""
       },
       "compartment_id": {
         "provider": "oci",
@@ -2805,7 +3269,9 @@
         "subtype": "",
         "required": true,
         "label": "Compartment",
-        "id": "compartment_id"
+        "id": "compartment_id",
+        "lookup": true,
+        "lookupResource": "compartment"
       },
       "defined_tags": {
         "provider": "oci",
@@ -2815,7 +3281,9 @@
         "subtype": "string",
         "required": false,
         "label": "Defined Tags",
-        "id": "defined_tags"
+        "id": "defined_tags",
+        "lookup": false,
+        "lookupResource": ""
       },
       "dhcp_options_id": {
         "provider": "oci",
@@ -2825,7 +3293,9 @@
         "subtype": "",
         "required": false,
         "label": "Dhcp Options",
-        "id": "dhcp_options_id"
+        "id": "dhcp_options_id",
+        "lookup": true,
+        "lookupResource": "dhcp_options"
       },
       "display_name": {
         "provider": "oci",
@@ -2835,7 +3305,9 @@
         "subtype": "",
         "required": false,
         "label": "Display Name",
-        "id": "display_name"
+        "id": "display_name",
+        "lookup": false,
+        "lookupResource": ""
       },
       "dns_label": {
         "provider": "oci",
@@ -2845,7 +3317,9 @@
         "subtype": "",
         "required": false,
         "label": "Dns Label",
-        "id": "dns_label"
+        "id": "dns_label",
+        "lookup": false,
+        "lookupResource": ""
       },
       "freeform_tags": {
         "provider": "oci",
@@ -2855,7 +3329,9 @@
         "subtype": "string",
         "required": false,
         "label": "Freeform Tags",
-        "id": "freeform_tags"
+        "id": "freeform_tags",
+        "lookup": false,
+        "lookupResource": ""
       },
       "ipv6cidr_block": {
         "provider": "oci",
@@ -2865,7 +3341,9 @@
         "subtype": "",
         "required": false,
         "label": "Ipv6cidr Block",
-        "id": "ipv6cidr_block"
+        "id": "ipv6cidr_block",
+        "lookup": false,
+        "lookupResource": ""
       },
       "ipv6virtual_router_ip": {
         "provider": "oci",
@@ -2875,7 +3353,9 @@
         "subtype": "",
         "required": false,
         "label": "Ipv6virtual Router Ip",
-        "id": "ipv6virtual_router_ip"
+        "id": "ipv6virtual_router_ip",
+        "lookup": false,
+        "lookupResource": ""
       },
       "prohibit_internet_ingress": {
         "provider": "oci",
@@ -2885,7 +3365,9 @@
         "subtype": "",
         "required": false,
         "label": "Prohibit Internet Ingress",
-        "id": "prohibit_internet_ingress"
+        "id": "prohibit_internet_ingress",
+        "lookup": false,
+        "lookupResource": ""
       },
       "prohibit_public_ip_on_vnic": {
         "provider": "oci",
@@ -2895,7 +3377,9 @@
         "subtype": "",
         "required": false,
         "label": "Prohibit Public Ip On Vnic",
-        "id": "prohibit_public_ip_on_vnic"
+        "id": "prohibit_public_ip_on_vnic",
+        "lookup": false,
+        "lookupResource": ""
       },
       "route_table_id": {
         "provider": "oci",
@@ -2905,7 +3389,9 @@
         "subtype": "",
         "required": false,
         "label": "Route Table",
-        "id": "route_table_id"
+        "id": "route_table_id",
+        "lookup": true,
+        "lookupResource": "route_table"
       },
       "security_list_ids": {
         "provider": "oci",
@@ -2914,8 +3400,10 @@
         "type": "set",
         "subtype": "string",
         "required": false,
-        "label": "Security List Ids",
-        "id": "security_list_ids"
+        "label": "Security List",
+        "id": "security_list_ids",
+        "lookup": true,
+        "lookupResource": "security_list"
       },
       "subnet_domain_name": {
         "provider": "oci",
@@ -2925,7 +3413,9 @@
         "subtype": "",
         "required": false,
         "label": "Subnet Domain Name",
-        "id": "subnet_domain_name"
+        "id": "subnet_domain_name",
+        "lookup": false,
+        "lookupResource": ""
       },
       "vcn_id": {
         "provider": "oci",
@@ -2935,27 +3425,9 @@
         "subtype": "",
         "required": true,
         "label": "Vcn",
-        "id": "vcn_id"
-      },
-      "virtual_router_ip": {
-        "provider": "oci",
-        "key": "virtualRouterIp",
-        "name": "virtual_router_ip",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Virtual Router Ip",
-        "id": "virtual_router_ip"
-      },
-      "virtual_router_mac": {
-        "provider": "oci",
-        "key": "virtualRouterMac",
-        "name": "virtual_router_mac",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Virtual Router Mac",
-        "id": "virtual_router_mac"
+        "id": "vcn_id",
+        "lookup": true,
+        "lookupResource": "vcn"
       }
     }
   },
@@ -2971,7 +3443,9 @@
         "subtype": "string",
         "required": false,
         "label": "Cidr Blocks",
-        "id": "cidr_blocks"
+        "id": "cidr_blocks",
+        "lookup": false,
+        "lookupResource": ""
       },
       "compartment_id": {
         "provider": "oci",
@@ -2981,7 +3455,9 @@
         "subtype": "",
         "required": true,
         "label": "Compartment",
-        "id": "compartment_id"
+        "id": "compartment_id",
+        "lookup": true,
+        "lookupResource": "compartment"
       },
       "defined_tags": {
         "provider": "oci",
@@ -2991,7 +3467,9 @@
         "subtype": "string",
         "required": false,
         "label": "Defined Tags",
-        "id": "defined_tags"
+        "id": "defined_tags",
+        "lookup": false,
+        "lookupResource": ""
       },
       "display_name": {
         "provider": "oci",
@@ -3001,7 +3479,9 @@
         "subtype": "",
         "required": false,
         "label": "Display Name",
-        "id": "display_name"
+        "id": "display_name",
+        "lookup": false,
+        "lookupResource": ""
       },
       "dns_label": {
         "provider": "oci",
@@ -3011,7 +3491,9 @@
         "subtype": "",
         "required": false,
         "label": "Dns Label",
-        "id": "dns_label"
+        "id": "dns_label",
+        "lookup": false,
+        "lookupResource": ""
       },
       "freeform_tags": {
         "provider": "oci",
@@ -3021,7 +3503,9 @@
         "subtype": "string",
         "required": false,
         "label": "Freeform Tags",
-        "id": "freeform_tags"
+        "id": "freeform_tags",
+        "lookup": false,
+        "lookupResource": ""
       },
       "ipv6cidr_blocks": {
         "provider": "oci",
@@ -3031,7 +3515,9 @@
         "subtype": "string",
         "required": false,
         "label": "Ipv6cidr Blocks",
-        "id": "ipv6cidr_blocks"
+        "id": "ipv6cidr_blocks",
+        "lookup": false,
+        "lookupResource": ""
       },
       "is_ipv6enabled": {
         "provider": "oci",
@@ -3041,7 +3527,9 @@
         "subtype": "",
         "required": false,
         "label": "Is Ipv6enabled",
-        "id": "is_ipv6enabled"
+        "id": "is_ipv6enabled",
+        "lookup": false,
+        "lookupResource": ""
       }
     }
   },
@@ -3057,7 +3545,9 @@
         "subtype": "",
         "required": false,
         "label": "Auto Tuned Vpus Per Gb",
-        "id": "auto_tuned_vpus_per_gb"
+        "id": "auto_tuned_vpus_per_gb",
+        "lookup": false,
+        "lookupResource": ""
       },
       "availability_domain": {
         "provider": "oci",
@@ -3067,7 +3557,9 @@
         "subtype": "",
         "required": true,
         "label": "Availability Domain",
-        "id": "availability_domain"
+        "id": "availability_domain",
+        "lookup": false,
+        "lookupResource": ""
       },
       "backup_policy_id": {
         "provider": "oci",
@@ -3077,7 +3569,9 @@
         "subtype": "",
         "required": false,
         "label": "Backup Policy",
-        "id": "backup_policy_id"
+        "id": "backup_policy_id",
+        "lookup": true,
+        "lookupResource": "backup_policy"
       },
       "block_volume_replicas_deletion": {
         "provider": "oci",
@@ -3087,7 +3581,9 @@
         "subtype": "",
         "required": false,
         "label": "Block Volume Replicas Deletion",
-        "id": "block_volume_replicas_deletion"
+        "id": "block_volume_replicas_deletion",
+        "lookup": false,
+        "lookupResource": ""
       },
       "compartment_id": {
         "provider": "oci",
@@ -3097,7 +3593,9 @@
         "subtype": "",
         "required": true,
         "label": "Compartment",
-        "id": "compartment_id"
+        "id": "compartment_id",
+        "lookup": true,
+        "lookupResource": "compartment"
       },
       "defined_tags": {
         "provider": "oci",
@@ -3107,7 +3605,9 @@
         "subtype": "string",
         "required": false,
         "label": "Defined Tags",
-        "id": "defined_tags"
+        "id": "defined_tags",
+        "lookup": false,
+        "lookupResource": ""
       },
       "display_name": {
         "provider": "oci",
@@ -3117,7 +3617,9 @@
         "subtype": "",
         "required": false,
         "label": "Display Name",
-        "id": "display_name"
+        "id": "display_name",
+        "lookup": false,
+        "lookupResource": ""
       },
       "freeform_tags": {
         "provider": "oci",
@@ -3127,7 +3629,9 @@
         "subtype": "string",
         "required": false,
         "label": "Freeform Tags",
-        "id": "freeform_tags"
+        "id": "freeform_tags",
+        "lookup": false,
+        "lookupResource": ""
       },
       "is_auto_tune_enabled": {
         "provider": "oci",
@@ -3137,7 +3641,9 @@
         "subtype": "",
         "required": false,
         "label": "Is Auto Tune Enabled",
-        "id": "is_auto_tune_enabled"
+        "id": "is_auto_tune_enabled",
+        "lookup": false,
+        "lookupResource": ""
       },
       "is_hydrated": {
         "provider": "oci",
@@ -3147,7 +3653,9 @@
         "subtype": "",
         "required": false,
         "label": "Is Hydrated",
-        "id": "is_hydrated"
+        "id": "is_hydrated",
+        "lookup": false,
+        "lookupResource": ""
       },
       "kms_key_id": {
         "provider": "oci",
@@ -3157,7 +3665,9 @@
         "subtype": "",
         "required": false,
         "label": "Kms Key",
-        "id": "kms_key_id"
+        "id": "kms_key_id",
+        "lookup": true,
+        "lookupResource": "kms_key"
       },
       "size_in_gbs": {
         "provider": "oci",
@@ -3167,7 +3677,9 @@
         "subtype": "",
         "required": false,
         "label": "Size In Gbs",
-        "id": "size_in_gbs"
+        "id": "size_in_gbs",
+        "lookup": false,
+        "lookupResource": ""
       },
       "size_in_mbs": {
         "provider": "oci",
@@ -3177,7 +3689,9 @@
         "subtype": "",
         "required": false,
         "label": "Size In Mbs",
-        "id": "size_in_mbs"
+        "id": "size_in_mbs",
+        "lookup": false,
+        "lookupResource": ""
       },
       "volume_backup_id": {
         "provider": "oci",
@@ -3187,7 +3701,9 @@
         "subtype": "",
         "required": false,
         "label": "Volume Backup",
-        "id": "volume_backup_id"
+        "id": "volume_backup_id",
+        "lookup": true,
+        "lookupResource": "volume_backup"
       },
       "volume_group_id": {
         "provider": "oci",
@@ -3197,7 +3713,9 @@
         "subtype": "",
         "required": false,
         "label": "Volume Group",
-        "id": "volume_group_id"
+        "id": "volume_group_id",
+        "lookup": true,
+        "lookupResource": "volume_group"
       },
       "vpus_per_gb": {
         "provider": "oci",
@@ -3207,7 +3725,9 @@
         "subtype": "",
         "required": false,
         "label": "Vpus Per Gb",
-        "id": "vpus_per_gb"
+        "id": "vpus_per_gb",
+        "lookup": false,
+        "lookupResource": ""
       },
       "block_volume_replicas": {
         "provider": "oci",
@@ -3227,7 +3747,9 @@
             "subtype": "",
             "required": true,
             "label": "Availability Domain",
-            "id": "block_volume_replicas.availability_domain"
+            "id": "block_volume_replicas.availability_domain",
+            "lookup": false,
+            "lookupResource": ""
           },
           "block_volume_replica_id": {
             "provider": "oci",
@@ -3237,7 +3759,9 @@
             "subtype": "",
             "required": false,
             "label": "Block Volume Replica",
-            "id": "block_volume_replicas.block_volume_replica_id"
+            "id": "block_volume_replicas.block_volume_replica_id",
+            "lookup": true,
+            "lookupResource": "block_volume_replica"
           },
           "display_name": {
             "provider": "oci",
@@ -3247,7 +3771,9 @@
             "subtype": "",
             "required": false,
             "label": "Display Name",
-            "id": "block_volume_replicas.display_name"
+            "id": "block_volume_replicas.display_name",
+            "lookup": false,
+            "lookupResource": ""
           }
         }
       },
@@ -3269,7 +3795,9 @@
             "subtype": "",
             "required": true,
             "label": "Type",
-            "id": "source_details.type"
+            "id": "source_details.type",
+            "lookup": false,
+            "lookupResource": ""
           }
         }
       }
@@ -3287,7 +3815,9 @@
         "subtype": "",
         "required": false,
         "label": "Compartment",
-        "id": "compartment_id"
+        "id": "compartment_id",
+        "lookup": true,
+        "lookupResource": "compartment"
       },
       "defined_tags": {
         "provider": "oci",
@@ -3297,7 +3827,9 @@
         "subtype": "string",
         "required": false,
         "label": "Defined Tags",
-        "id": "defined_tags"
+        "id": "defined_tags",
+        "lookup": false,
+        "lookupResource": ""
       },
       "description": {
         "provider": "oci",
@@ -3307,7 +3839,9 @@
         "subtype": "",
         "required": true,
         "label": "Description",
-        "id": "description"
+        "id": "description",
+        "lookup": false,
+        "lookupResource": ""
       },
       "enable_delete": {
         "provider": "oci",
@@ -3317,7 +3851,9 @@
         "subtype": "",
         "required": false,
         "label": "Enable Delete",
-        "id": "enable_delete"
+        "id": "enable_delete",
+        "lookup": false,
+        "lookupResource": ""
       },
       "freeform_tags": {
         "provider": "oci",
@@ -3327,7 +3863,9 @@
         "subtype": "string",
         "required": false,
         "label": "Freeform Tags",
-        "id": "freeform_tags"
+        "id": "freeform_tags",
+        "lookup": false,
+        "lookupResource": ""
       },
       "name": {
         "provider": "oci",
@@ -3337,7 +3875,9 @@
         "subtype": "",
         "required": true,
         "label": "Name",
-        "id": "name"
+        "id": "name",
+        "lookup": false,
+        "lookupResource": ""
       }
     }
   },
@@ -3353,7 +3893,9 @@
         "subtype": "",
         "required": false,
         "label": "Access Type",
-        "id": "access_type"
+        "id": "access_type",
+        "lookup": false,
+        "lookupResource": ""
       },
       "approximate_count": {
         "provider": "oci",
@@ -3363,7 +3905,9 @@
         "subtype": "",
         "required": false,
         "label": "Approximate Count",
-        "id": "approximate_count"
+        "id": "approximate_count",
+        "lookup": false,
+        "lookupResource": ""
       },
       "approximate_size": {
         "provider": "oci",
@@ -3373,7 +3917,9 @@
         "subtype": "",
         "required": false,
         "label": "Approximate Size",
-        "id": "approximate_size"
+        "id": "approximate_size",
+        "lookup": false,
+        "lookupResource": ""
       },
       "auto_tiering": {
         "provider": "oci",
@@ -3383,7 +3929,9 @@
         "subtype": "",
         "required": false,
         "label": "Auto Tiering",
-        "id": "auto_tiering"
+        "id": "auto_tiering",
+        "lookup": false,
+        "lookupResource": ""
       },
       "bucket_id": {
         "provider": "oci",
@@ -3393,7 +3941,9 @@
         "subtype": "",
         "required": false,
         "label": "Bucket",
-        "id": "bucket_id"
+        "id": "bucket_id",
+        "lookup": true,
+        "lookupResource": "bucket"
       },
       "compartment_id": {
         "provider": "oci",
@@ -3403,7 +3953,9 @@
         "subtype": "",
         "required": true,
         "label": "Compartment",
-        "id": "compartment_id"
+        "id": "compartment_id",
+        "lookup": true,
+        "lookupResource": "compartment"
       },
       "defined_tags": {
         "provider": "oci",
@@ -3413,7 +3965,9 @@
         "subtype": "string",
         "required": false,
         "label": "Defined Tags",
-        "id": "defined_tags"
+        "id": "defined_tags",
+        "lookup": false,
+        "lookupResource": ""
       },
       "freeform_tags": {
         "provider": "oci",
@@ -3423,7 +3977,9 @@
         "subtype": "string",
         "required": false,
         "label": "Freeform Tags",
-        "id": "freeform_tags"
+        "id": "freeform_tags",
+        "lookup": false,
+        "lookupResource": ""
       },
       "is_read_only": {
         "provider": "oci",
@@ -3433,7 +3989,9 @@
         "subtype": "",
         "required": false,
         "label": "Is Read Only",
-        "id": "is_read_only"
+        "id": "is_read_only",
+        "lookup": false,
+        "lookupResource": ""
       },
       "kms_key_id": {
         "provider": "oci",
@@ -3443,7 +4001,9 @@
         "subtype": "",
         "required": false,
         "label": "Kms Key",
-        "id": "kms_key_id"
+        "id": "kms_key_id",
+        "lookup": true,
+        "lookupResource": "kms_key"
       },
       "metadata": {
         "provider": "oci",
@@ -3453,7 +4013,9 @@
         "subtype": "string",
         "required": false,
         "label": "Metadata",
-        "id": "metadata"
+        "id": "metadata",
+        "lookup": false,
+        "lookupResource": ""
       },
       "name": {
         "provider": "oci",
@@ -3463,7 +4025,9 @@
         "subtype": "",
         "required": true,
         "label": "Name",
-        "id": "name"
+        "id": "name",
+        "lookup": false,
+        "lookupResource": ""
       },
       "namespace": {
         "provider": "oci",
@@ -3473,7 +4037,9 @@
         "subtype": "",
         "required": true,
         "label": "Namespace",
-        "id": "namespace"
+        "id": "namespace",
+        "lookup": false,
+        "lookupResource": ""
       },
       "object_events_enabled": {
         "provider": "oci",
@@ -3483,7 +4049,9 @@
         "subtype": "",
         "required": false,
         "label": "Object Events Enabled",
-        "id": "object_events_enabled"
+        "id": "object_events_enabled",
+        "lookup": false,
+        "lookupResource": ""
       },
       "replication_enabled": {
         "provider": "oci",
@@ -3493,7 +4061,9 @@
         "subtype": "",
         "required": false,
         "label": "Replication Enabled",
-        "id": "replication_enabled"
+        "id": "replication_enabled",
+        "lookup": false,
+        "lookupResource": ""
       },
       "storage_tier": {
         "provider": "oci",
@@ -3503,7 +4073,9 @@
         "subtype": "",
         "required": false,
         "label": "Storage Tier",
-        "id": "storage_tier"
+        "id": "storage_tier",
+        "lookup": false,
+        "lookupResource": ""
       },
       "versioning": {
         "provider": "oci",
@@ -3513,7 +4085,9 @@
         "subtype": "",
         "required": false,
         "label": "Versioning",
-        "id": "versioning"
+        "id": "versioning",
+        "lookup": false,
+        "lookupResource": ""
       },
       "retention_rules": {
         "provider": "oci",
@@ -3533,7 +4107,9 @@
             "subtype": "",
             "required": true,
             "label": "Display Name",
-            "id": "retention_rules.display_name"
+            "id": "retention_rules.display_name",
+            "lookup": false,
+            "lookupResource": ""
           },
           "retention_rule_id": {
             "provider": "oci",
@@ -3543,7 +4119,9 @@
             "subtype": "",
             "required": false,
             "label": "Retention Rule",
-            "id": "retention_rules.retention_rule_id"
+            "id": "retention_rules.retention_rule_id",
+            "lookup": true,
+            "lookupResource": "retention_rule"
           },
           "time_modified": {
             "provider": "oci",
@@ -3553,7 +4131,9 @@
             "subtype": "",
             "required": false,
             "label": "Time Modified",
-            "id": "retention_rules.time_modified"
+            "id": "retention_rules.time_modified",
+            "lookup": false,
+            "lookupResource": ""
           },
           "time_rule_locked": {
             "provider": "oci",
@@ -3563,7 +4143,9 @@
             "subtype": "",
             "required": false,
             "label": "Time Rule Locked",
-            "id": "retention_rules.time_rule_locked"
+            "id": "retention_rules.time_rule_locked",
+            "lookup": false,
+            "lookupResource": ""
           },
           "duration": {
             "provider": "oci",
@@ -3583,7 +4165,9 @@
                 "subtype": "",
                 "required": true,
                 "label": "Time Amount",
-                "id": "retention_rules.duration.time_amount"
+                "id": "retention_rules.duration.time_amount",
+                "lookup": false,
+                "lookupResource": ""
               },
               "time_unit": {
                 "provider": "oci",
@@ -3593,7 +4177,9 @@
                 "subtype": "",
                 "required": true,
                 "label": "Time Unit",
-                "id": "retention_rules.duration.time_unit"
+                "id": "retention_rules.duration.time_unit",
+                "lookup": false,
+                "lookupResource": ""
               }
             }
           }

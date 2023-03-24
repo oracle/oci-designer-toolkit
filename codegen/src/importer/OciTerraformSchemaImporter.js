@@ -34,8 +34,10 @@ class OciTerraformSchemaImporter extends OcdSchemaImporter {
                 type: Array.isArray(v.type) ? v.type[0] : v.type,
                 subtype: Array.isArray(v.type) ? v.type[1] : '',
                 required: v.required ? v.required : false,
-                label: k.endsWith('_id') || k.endsWith('_id') ? this.titleCase(k.split('_').slice(0, -1).join(' ')) : this.titleCase(k.split('_').join(' ')),
-                id: [...hierarchy, k].join('.')
+                label: k.endsWith('_id') || k.endsWith('_ids') ? this.titleCase(k.split('_').slice(0, -1).join(' ')) : this.titleCase(k.split('_').join(' ')),
+                id: [...hierarchy, k].join('.'),
+                lookup: this.isReference(k) || this.isMultiReference(k),
+                lookupResource: this.isReference(k) || this.isMultiReference(k) ? this.lookupResource(k) : ''
             }
             return r
         }, {}) : {}
@@ -59,9 +61,11 @@ class OciTerraformSchemaImporter extends OcdSchemaImporter {
         return attributes
     }
 
-    titleCase(str) {
-        return str.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase())
-    }
+    titleCase = (str) => str.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase())
+
+    isReference = (key) => key && key.endsWith('_id')
+    isMultiReference = (key) => key && key.endsWith('_ids')
+    lookupResource = (key) => key.split('_').slice(0, -1).join('_').toLowerCase()
 }
 
 export default OciTerraformSchemaImporter

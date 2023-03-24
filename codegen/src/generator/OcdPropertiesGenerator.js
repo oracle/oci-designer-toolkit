@@ -41,7 +41,7 @@ export const ${this.reactResourceName(resource)} = ({ ocdDocument, setOcdDocumen
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import OcdDocument from '../../../../../OcdDocument'
-import { GeneratedResourceProperties, OcdTextProperty, OcdBooleanProperty, OcdNumberProperty, OcdObjectProperty, OcdObjectListProperty, OcdListProperty, OcdSetProperty, OcdMapProperty } from '../../../../OcdPropertyTypes'
+import { GeneratedResourceProperties, OcdBooleanProperty, OcdListProperty, OcdLookupProperty, OcdMapProperty, OcdNumberProperty, OcdObjectProperty, OcdObjectListProperty, OcdSetProperty, OcdTextProperty} from '../../../../OcdPropertyTypes'
 
 export const ${this.reactResourceGeneratedName(resource)} = ({ ocdDocument, setOcdDocument, resource, configs }: GeneratedResourceProperties): JSX.Element => {
     return (
@@ -68,7 +68,8 @@ export const ${this.reactResourceGeneratedName(resource)} = ({ ocdDocument, setO
         // console.info('>> Resource:', resource)
         // console.info('>> Attribute:', attribute)
         const configFind = `configs.find((c) => c.id === '${attribute.id}')`
-        if (attribute.type === 'string')                                      return `<OcdTextProperty       ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} />`
+        if (attribute.type === 'string' && attribute.lookup)                  return `<OcdLookupProperty     ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} />`
+        else if (attribute.type === 'string')                                 return `<OcdTextProperty       ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} />`
         else if (attribute.type === 'bool')                                   return `<OcdBooleanProperty    ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} />`
         else if (attribute.type === 'number')                                 return `<OcdNumberProperty     ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} />`
         else if (attribute.type === 'object')                                 return `<OcdObjectProperty     ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} />`

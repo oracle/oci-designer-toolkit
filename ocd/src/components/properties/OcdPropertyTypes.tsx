@@ -17,7 +17,8 @@ export interface ResourcePropertyAttributes {
     label: string
     id: string
     attributes?: {[key: string]: ResourcePropertyAttributes}
-    referenceResource?: string
+    lookup?: boolean
+    lookupResource?: string
 }
 
 export type filterType = (r: any) => any[]
@@ -119,10 +120,10 @@ export const OcdBooleanProperty = ({ ocdDocument, setOcdDocument, resource, conf
     )
 }
 
-export const OcdResourceReferenceProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
+export const OcdLookupProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
     const properties = config && config.properties ? config.properties : {}
-    const resources = attribute.provider === 'oci' ? ocdDocument.getOciResourceList(attribute.referenceResource ? attribute.referenceResource : '') : []
-    const resourceType = OcdUtils.toResourceType(attribute.referenceResource)
+    const resources = attribute.provider === 'oci' ? ocdDocument.getOciResourceList(attribute.lookupResource ? attribute.lookupResource : '') : []
+    const resourceType = OcdUtils.toResourceType(attribute.lookupResource)
     console.info('Resources', resources)
     const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         resource[attribute.key] = e.target.value
@@ -133,7 +134,7 @@ export const OcdResourceReferenceProperty = ({ ocdDocument, setOcdDocument, reso
             <div><label>{attribute.label}</label></div>
             <div>
                 <select value={resource[attribute.key]} {...properties} onChange={onChange}>
-                    {!attribute.required && <option defaultValue='' key={`${attribute.referenceResource}-empty-option`}></option> }
+                    {!attribute.required && <option defaultValue='' key={`${attribute.lookupResource}-empty-option`}></option> }
                     {resources.filter((r) => r.resourceType !== resourceType || r.id !== resource.id).map((r: OcdResource) => {
                         return <option value={r.id} key={r.id}>{r.displayName}</option>
                     })}
