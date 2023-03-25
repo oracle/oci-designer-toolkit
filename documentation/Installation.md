@@ -496,12 +496,16 @@ The docker image is the recommended runtime server OKIT provides a simple Docker
 - Create local directory __~/okit/user/templates__ for storage of custom templates.
 - [Copy Config & Key Files](#copy-config--key-files)
 
-##### Docker Compose Build
+##### Docker Compose Build From oraclelinux:7-slim
 ```bash
 cd oci-designer-toolkit/containers/docker
 docker-compose up --detach
 ```
-
+##### Docker Compose Build From oraclelinux:8-slim
+```bash
+cd oci-designer-toolkit/containers/docker/8-slim
+docker-compose up --detach
+```
 ##### Docker Compose Update
 ```bash
 cd oci-designer-toolkit/containers/docker
