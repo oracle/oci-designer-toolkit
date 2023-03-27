@@ -67,6 +67,9 @@ export const ${this.reactResourceGeneratedName(resource)} = ({ ocdDocument, setO
         // console.info('Name:', name)
         // console.info('>> Resource:', resource)
         // console.info('>> Attribute:', attribute)
+
+        // For Objects need to create local Type
+        
         const configFind = `configs.find((c) => c.id === '${attribute.id}')`
         if (attribute.type === 'string' && attribute.lookup)                  return `<OcdLookupProperty     ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} />`
         else if (attribute.type === 'string')                                 return `<OcdTextProperty       ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} />`
