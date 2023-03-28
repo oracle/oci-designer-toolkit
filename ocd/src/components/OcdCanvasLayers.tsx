@@ -50,7 +50,7 @@ const OcdCanvasLayer = ({ ocdDocument, setOcdDocument, layer } : any): JSX.Eleme
 const OcdCanvasLayers = ({ ocdDocument, setOcdDocument }: any): JSX.Element => {
     const onClickAddLayer = () => {
         console.info('Adding Layer')
-        const compartment = ociResources.OciCompartmentClient.new()
+        const compartment = ociResources.OciCompartmentModel.newResource()
         ocdDocument.design.model.oci.resources.compartment.push(compartment)
         // Add Layer
         ocdDocument.addLayer(compartment.id)
