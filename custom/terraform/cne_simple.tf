@@ -26,7 +26,7 @@ resource "null_resource" "cne-operator-pre-reqs" {
 
     provisioner "file" {
       source = "${var.private_key_file}"
-      destination = "${var.remote_private_key_file}"
+      destination = "/home/opc/.ssh/id_rsa"
     }
 
     provisioner "remote-exec" {
@@ -43,13 +43,7 @@ resource "null_resource" "cne-operator-pre-reqs" {
         "sudo dnf config-manager --enable ol8_olcne15 ol8_addons ol8_baseos_latest ol8_appstream ol8_UEKR6",
         "sudo dnf config-manager --disable ol8_olcne14 ol8_olcne13 ol8_olcne12 ol8_developer",
 
-        "sudo sed -i 's/^SELINUX=enforcing/SELINUX=permissive/' /etc/selinux/config",
-        "sudo /usr/sbin/setenforce 0",
-
-        "sudo firewall-cmd --add-port=8091/tcp --permanent",
-        "sudo systemctl restart firewalld.service",
-
-        "sudo chmod 600 ${var.remote_private_key_file}"
+        "sudo chmod 600 /home/opc/.ssh/id_rsa"
       ]
     }
 }
@@ -69,7 +63,7 @@ resource "null_resource" "cne-master-pre-reqs" {
 
     provisioner "file" {
       source = "${var.private_key_file}"
-      destination = "${var.remote_private_key_file}"
+      destination = "/home/opc/.ssh/id_rsa"
     }
 
     provisioner "remote-exec" {
@@ -83,7 +77,7 @@ resource "null_resource" "cne-master-pre-reqs" {
         "sudo bash -c 'echo \"retries=100\" >> /etc/dnf/dnf.conf'",
         "sudo dnf --refresh check-update",
 
-        "sudo chmod 600 ${var.remote_private_key_file}"
+        "sudo chmod 600 /home/opc/.ssh/id_rsa"
       ]
     }
 
@@ -107,7 +101,7 @@ resource "null_resource" "cne-worker-pre-reqs" {
 
     provisioner "file" {
       source = "${var.private_key_file}"
-      destination = "${var.remote_private_key_file}"
+      destination = "/home/opc/.ssh/id_rsa"
     }
 
     provisioner "remote-exec" {
@@ -120,7 +114,7 @@ resource "null_resource" "cne-worker-pre-reqs" {
         "sudo bash -c 'echo \"timeout=3000\" >> /etc/dnf/dnf.conf'",
         "sudo bash -c 'echo \"retries=100\" >> /etc/dnf/dnf.conf'",
         "sudo dnf --refresh check-update",
-        "sudo chmod 600 ${var.remote_private_key_file}"
+        "sudo chmod 600 /home/opc/.ssh/id_rsa"
       ]
     }
 
@@ -147,7 +141,14 @@ resource "null_resource" "cne-operator-install" {
         "echo 'Host *' > /home/opc/.ssh/config",
         "echo '         StrictHostKeyChecking accept-new' >> /home/opc/.ssh/config",
         "sudo chmod 600 /home/opc/.ssh/config",
-        "olcnectl provision --api-server ${local.cne_operartor_node} --master-nodes ${local.cne_master_nodes} --worker-nodes ${local.cne_worker_nodes} --environment-name ${var.environment_name} --name ${var.cluster_name} --http_proxy ${var.http_proxy} --https_proxy ${var.https_proxy} --no_proxy ${local.Okit_S_1667389188594_cidr_block} --yes"
+        "olcnectl provision --api-server ${local.cne_operartor_node} --master-nodes ${replace(local.cne_master_nodes," ","")} --worker-nodes ${replace(local.cne_worker_nodes," ", "")} --environment-name ${var.environment_name} --name ${var.cluster_name} --http-proxy ${var.http_proxy} --https-proxy ${var.https_proxy} --no-proxy ${local.Okit_S_1667389188594_cidr_block} --yes --debug",
+        "olcnectl module instances --api-server ${local.cne_operartor_node}:8091 --environment-name ${var.environment_name} --update-config",
+        "olcnectl module report --environment-name ${var.environment_name} --name ${var.cluster_name} --children",
+        "mkdir -p $HOME/.kube",
+        "sudo cp -i /home/opc/kubeconfig.${var.environment_name}.${var.cluster_name} $HOME/.kube/config",
+        "sudo chown $(id -u):$(id -g) $HOME/.kube/config",
+        "export KUBECONFIG=$HOME/.kube/config",
+        "echo 'export KUBECONFIG=$HOME/.kube/config' >> $HOME/.bashrc"
       ]
     }
 
