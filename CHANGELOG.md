@@ -5,6 +5,7 @@
 **Release Date**: 29th March 2023
 ### Features
 1. Prometheus / Node Exporter Monitoring Template
+2. Update Oracle CNE Simple Template to use the olcne quick install.
 ### Bug Fixes
 1. Remove vnics 'instance_id' entry from queried Instances
 
