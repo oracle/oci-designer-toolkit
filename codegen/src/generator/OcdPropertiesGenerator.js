@@ -114,10 +114,14 @@ export const ${this.reactObjectName(attribute.name)} = ({ ocdDocument, setOcdDoc
     reactObjectListElement = (resource, attribute) => {
         return `
 export const ${this.reactObjectListName(attribute.name)} = ({ ocdDocument, setOcdDocument, resource, configs }: GeneratedResourceProperties): JSX.Element => {
+    const onClick = (e: React.MouseEvent<HTMLElement>) => {
+        e.stopPropagation()
+        e.preventDefault()
+    }
     return (
         <div className='ocd-property-row'>
             <details open={true}>
-                <summary className='summary-background'>${attribute.label}</summary>
+                <summary className='summary-background ocd-summary-row'><div>${attribute.label}</div><div className='add-property action-button-background action-button-column' onClick={onClick}></div></summary>
                 <div className='ocd-resource-properties'>
                 </div>
             </details>

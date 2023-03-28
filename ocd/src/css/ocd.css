@@ -45,7 +45,7 @@ details > summary::-webkit-details-marker {
     display:none;
 }
 
-details > summary:after {
+/* details > summary:after {
     border-radius: 5px;
     content: "+";
     color: #aeaeae;
@@ -58,7 +58,7 @@ details > summary:after {
 
 details[open] > summary:after {
     content: "-";
-}
+} */
 
 details:focus {
     outline: none;
@@ -1062,6 +1062,20 @@ summary {
 /*
 ** Properties
 */
+
+.action-button-background {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 1em;
+    width: 2em;
+    height: 1em;
+}
+
+.ocd-summary-row {
+    display: grid;
+    grid-template-columns: auto 2em;
+    border: none;
+}
 
 .ocd-designer-properties {
     display: flex;
