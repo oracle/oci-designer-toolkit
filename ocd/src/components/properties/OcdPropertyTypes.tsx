@@ -144,23 +144,23 @@ export const OcdLookupProperty = ({ ocdDocument, setOcdDocument, resource, confi
     )
 }
 
-export const OcdObjectProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
-    return (
-        <div></div>
-    )
-}
+// export const OcdObjectProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
+//     return (
+//         <div></div>
+//     )
+// }
 
-export const OcdObjectListProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
-    return (
-        <div className='ocd-property-row'>
-            <details open={true}>
-                <summary className='summary-background'>{attribute.label}</summary>
-                <div className='ocd-resource-properties'>
-                </div>
-            </details>
-        </div>
-    )
-}
+// export const OcdObjectListProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
+//     return (
+//         <div className='ocd-property-row'>
+//             <details open={true}>
+//                 <summary className='summary-background'>{attribute.label}</summary>
+//                 <div className='ocd-resource-properties'>
+//                 </div>
+//             </details>
+//         </div>
+//     )
+// }
 
 export const OcdListProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
     return (

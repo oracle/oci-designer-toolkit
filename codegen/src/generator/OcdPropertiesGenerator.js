@@ -42,9 +42,9 @@ export const ${this.reactResourceName(resource)} = ({ ocdDocument, setOcdDocumen
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import OcdDocument from '../../../../../OcdDocument'
-import { GeneratedResourceProperties, OcdBooleanProperty, OcdListProperty, OcdLookupProperty, OcdMapProperty, OcdNumberProperty, OcdObjectProperty, OcdSetLookupProperty, OcdSetProperty, OcdTextProperty, ResourceProperty} from '../../../../OcdPropertyTypes'
+import { GeneratedResourceProperties, OcdBooleanProperty, OcdListProperty, OcdLookupProperty, OcdMapProperty, OcdNumberProperty, OcdSetLookupProperty, OcdSetProperty, OcdTextProperty, ResourceProperty} from '../../../../OcdPropertyTypes'
 
-${schemaObjects.map(i => this.reactComplextElement(i)).filter(i => i.trim() !== '').join('')}
+${schemaObjects.map(i => this.reactComplextElement(resource, i)).filter(i => i.trim() !== '').join('')}
 
 export const ${this.reactResourceGeneratedName(resource)} = ({ ocdDocument, setOcdDocument, resource, configs }: GeneratedResourceProperties): JSX.Element => {
     return (
@@ -78,30 +78,31 @@ export const ${this.reactResourceGeneratedName(resource)} = ({ ocdDocument, setO
         else if (attribute.type === 'string')                                 return `<OcdTextProperty       ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} />`
         else if (attribute.type === 'bool')                                   return `<OcdBooleanProperty    ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} />`
         else if (attribute.type === 'number')                                 return `<OcdNumberProperty     ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} />`
-        else if (attribute.type === 'object')                                 return `<${this.reactObjectName(attribute.name)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} />`
+        else if (attribute.type === 'object')                                 return `<${this.reactObjectName(attribute.name)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource['${attribute.key}']} configs={configs} />`
         // else if (attribute.type === 'object')                                 return `<OcdObjectProperty     ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} />`
         // else if (attribute.type === 'list' && attribute.subtype === 'object') return `<OcdObjectListProperty ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} />`
-        else if (attribute.type === 'list' && attribute.subtype === 'object') return `<${this.reactObjectListName(attribute.name)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} />`
+        else if (attribute.type === 'list' && attribute.subtype === 'object') return `<${this.reactObjectListName(attribute.name)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource['${attribute.key}']} configs={configs} />`
         else if (attribute.type === 'list')                                   return `<OcdListProperty       ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} />`
         else if (attribute.type === 'set')                                    return `<OcdSetProperty        ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} />`
         else if (attribute.type === 'set' && attribute.lookup)                return `<OcdSetLookupProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} />`
         else if (attribute.type === 'map')                                    return `<OcdMapProperty        ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} />`
     }
 
-    reactComplextElement = (attribute) => {
-        if (attribute.type === 'object') return this.reactObjectElement(attribute)
-        else if (attribute.type === 'list' && attribute.subtype === 'object') return this.reactObjectListElement(attribute)
+    reactComplextElement = (resource, attribute) => {
+        if (attribute.type === 'object') return this.reactObjectElement(resource, attribute)
+        else if (attribute.type === 'list' && attribute.subtype === 'object') return this.reactObjectListElement(resource, attribute)
         else return ``
     }
 
-    reactObjectElement = (attribute) => {
+    reactObjectElement = (resource, attribute) => {
         return `
-export const ${this.reactObjectName(attribute.name)} = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
+export const ${this.reactObjectName(attribute.name)} = ({ ocdDocument, setOcdDocument, resource, configs }: GeneratedResourceProperties): JSX.Element => {
     return (
         <div className='ocd-property-row'>
             <details open={true}>
                 <summary className='summary-background'>${attribute.label}</summary>
                 <div className='ocd-resource-properties'>
+                    ${Object.entries(attribute.attributes).filter(([k, v]) => !this.ignoreAttributes.includes(k)).map(([k, a]) => this.reactAttributeElement(resource, k, a)).join('\n                    ')}
                 </div>
             </details>
         </div>
@@ -110,9 +111,9 @@ export const ${this.reactObjectName(attribute.name)} = ({ ocdDocument, setOcdDoc
 `
     }
 
-    reactObjectListElement = (attribute) => {
+    reactObjectListElement = (resource, attribute) => {
         return `
-export const ${this.reactObjectListName(attribute.name)} = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
+export const ${this.reactObjectListName(attribute.name)} = ({ ocdDocument, setOcdDocument, resource, configs }: GeneratedResourceProperties): JSX.Element => {
     return (
         <div className='ocd-property-row'>
             <details open={true}>
