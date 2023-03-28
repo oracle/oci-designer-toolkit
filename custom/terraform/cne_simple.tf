@@ -26,7 +26,7 @@ resource "null_resource" "cne-operator-pre-reqs" {
 
     provisioner "file" {
       source = "${var.private_key_file}"
-      destination = "${var.remote_private_key_file}"
+      destination = "/home/opc/.ssh/id_rsa"
     }
 
     provisioner "remote-exec" {
@@ -43,7 +43,7 @@ resource "null_resource" "cne-operator-pre-reqs" {
         "sudo dnf config-manager --enable ol8_olcne15 ol8_addons ol8_baseos_latest ol8_appstream ol8_UEKR6",
         "sudo dnf config-manager --disable ol8_olcne14 ol8_olcne13 ol8_olcne12 ol8_developer",
 
-        "sudo chmod 600 ${var.remote_private_key_file}"
+        "sudo chmod 600 /home/opc/.ssh/id_rsa"
       ]
     }
 }
@@ -63,7 +63,7 @@ resource "null_resource" "cne-master-pre-reqs" {
 
     provisioner "file" {
       source = "${var.private_key_file}"
-      destination = "${var.remote_private_key_file}"
+      destination = "/home/opc/.ssh/id_rsa"
     }
 
     provisioner "remote-exec" {
@@ -77,7 +77,7 @@ resource "null_resource" "cne-master-pre-reqs" {
         "sudo bash -c 'echo \"retries=100\" >> /etc/dnf/dnf.conf'",
         "sudo dnf --refresh check-update",
 
-        "sudo chmod 600 ${var.remote_private_key_file}"
+        "sudo chmod 600 /home/opc/.ssh/id_rsa"
       ]
     }
 
@@ -101,7 +101,7 @@ resource "null_resource" "cne-worker-pre-reqs" {
 
     provisioner "file" {
       source = "${var.private_key_file}"
-      destination = "${var.remote_private_key_file}"
+      destination = "/home/opc/.ssh/id_rsa"
     }
 
     provisioner "remote-exec" {
@@ -114,7 +114,7 @@ resource "null_resource" "cne-worker-pre-reqs" {
         "sudo bash -c 'echo \"timeout=3000\" >> /etc/dnf/dnf.conf'",
         "sudo bash -c 'echo \"retries=100\" >> /etc/dnf/dnf.conf'",
         "sudo dnf --refresh check-update",
-        "sudo chmod 600 ${var.remote_private_key_file}"
+        "sudo chmod 600 /home/opc/.ssh/id_rsa"
       ]
     }
 
