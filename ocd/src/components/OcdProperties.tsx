@@ -44,7 +44,7 @@ const OciCommonResourceProperties = ({ocdDocument, setOcdDocument, resource}: Re
 
 const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
     const selectedResource: OcdResource = ocdDocument.getSelectedResource()
-    const resourceJSXMethod = selectedResource ? `${OcdUtils.toTitleCase(selectedResource.provider)}${selectedResource.resourceType}` : ''
+    const resourceJSXMethod = selectedResource ? `${OcdUtils.toTitleCase(selectedResource.provider)}${selectedResource.resourceType}Properties` : ''
     // @ts-ignore 
     const ResourceProperties = ociResources[resourceJSXMethod]
     // if (!ResourceProperties && selectedResource) {
