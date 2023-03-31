@@ -164,10 +164,20 @@ You can find information on any known issues with OKIT here and under the Issues
 Any issues found with the tool should be raised on the projects issues page. Please check that the issue has not previously
 been reported. 
 
-
 ## Contributing
-OCI Designer Toolkit is an open source project. See [CONTRIBUTING](CONTRIBUTING.md) for details.
+
+This project welcomes contributions from the community. Before submitting a pull request, please [review our contribution guide](./CONTRIBUTING.md)
+
+## Security
+
+Please consult the [security guide](./SECURITY.md) for our responsible security vulnerability disclosure process
+
+## License
+
+Copyright (c) 2020, 2023 Oracle and/or its affiliates.
+
+Released under the Universal Permissive License v1.0 as shown at
+<https://oss.oracle.com/licenses/upl/>.
+
 
 If you would like to extend OKIT the development documentation can be found in [OCI Designer Toolkit Development Guide](documentation/Development.md)
-
-
