@@ -34,7 +34,7 @@ write_files:
             - targets: 
                 - localhost:9090
 
-        - job_name: 'Node Manager'
+        - job_name: 'Node Exporters'
           file_sd_configs:
             - files:
               - '/etc/prometheus/targets.json'
@@ -44,7 +44,7 @@ write_files:
       [
         {
           "labels": {
-            "job": "Node Manager"
+            "job": "Node Exporters"
           },
           "targets": [
             "linuxvm1.promprivsn.prometheusvcn.oraclevcn.com:9100",
