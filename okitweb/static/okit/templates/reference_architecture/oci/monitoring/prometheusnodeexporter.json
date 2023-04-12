@@ -370,7 +370,7 @@
     },
     "okit_model_id": "okit-model-6f63b12e-c6e7-4a8e-8cca-91489c008426",
     "okit_version": "0.47.0 Nightly",
-    "platform": "pca",
+    "platform": "oci",
     "resource_count": 215,
     "updated": "2023-3-3 13:31:34"
   },
