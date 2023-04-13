@@ -20,6 +20,13 @@ write_files:
 
       [Install]
       WantedBy=multi-user.target
+  # Wget Configuration
+  - path: /etc/wgetrc
+    append: true
+    content: |
+      #http_proxy = Add Proxy Here
+      #https_proxy = Add Proxy Here
+      #use_proxy = on
 
 runcmd:
   - echo ">>> Creating Directory"
