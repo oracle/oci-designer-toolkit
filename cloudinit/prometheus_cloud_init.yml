@@ -5,6 +5,13 @@ users:
     homedir: /bin/false
 
 write_files:
+  # Wget Configuration
+  - path: /etc/wgetrc
+    append: true
+    content: |
+      #http_proxy = Add Proxy Here
+      #https_proxy = Add Proxy Here
+      #use_proxy = on
   # Add Node Export Service file
   - path: /etc/systemd/system/prometheus.service
     content: |
@@ -52,41 +59,34 @@ write_files:
           ]
         }
       ]
-  # Wget Configuration
-  - path: /etc/wgetrc
-    append: true
-    content: |
-      #http_proxy = Add Proxy Here
-      #https_proxy = Add Proxy Here
-      #use_proxy = on
 
 runcmd:
   - echo ">>> Creating Directory"
-  - sudo mkdir -p /run/install/prometheus
+  - mkdir -p /run/install/prometheus
   - echo ">>> Getting Prometheus"
-  - sudo wget https://github.com/prometheus/prometheus/releases/download/v2.42.0/prometheus-2.42.0.linux-amd64.tar.gz -O /run/install/prometheus.tar.gz
+  - wget https://github.com/prometheus/prometheus/releases/download/v2.42.0/prometheus-2.42.0.linux-amd64.tar.gz -O /run/install/prometheus.tar.gz
   - echo ">>> Extracting Prometheus"
-  - sudo tar xvfz /run/install/prometheus.tar.gz -C /run/install/prometheus --strip-components=1
+  - tar xvfz /run/install/prometheus.tar.gz -C /run/install/prometheus --strip-components=1
   - echo ">>> Moving Prometheus"
-  - sudo mkdir /etc/prometheus
-  - sudo mkdir /var/lib/prometheus
-  - sudo chown -R prometheus:prometheus /etc/prometheus
-  - sudo chown -R prometheus:prometheus /var/lib/prometheus
-  - sudo cp /run/install/prometheus/prometheus /usr/local/bin/
-  - sudo cp /run/install/prometheus/promtool /usr/local/bin/
-  - sudo chown prometheus:prometheus /usr/local/bin/prometheus
-  - sudo chown prometheus:prometheus /usr/local/bin/promtool
-  - sudo cp -r /run/install/prometheus/consoles /etc/prometheus
-  - sudo cp -r /run/install/prometheus/console_libraries /etc/prometheus
-  - sudo chown -R prometheus:prometheus /etc/prometheus/consoles
-  - sudo chown -R prometheus:prometheus /etc/prometheus/console_libraries
+  - mkdir /etc/prometheus
+  - mkdir /var/lib/prometheus
+  - chown -R prometheus:prometheus /etc/prometheus
+  - chown -R prometheus:prometheus /var/lib/prometheus
+  - cp /run/install/prometheus/prometheus /usr/local/bin/
+  - cp /run/install/prometheus/promtool /usr/local/bin/
+  - chown prometheus:prometheus /usr/local/bin/prometheus
+  - chown prometheus:prometheus /usr/local/bin/promtool
+  - cp -r /run/install/prometheus/consoles /etc/prometheus
+  - cp -r /run/install/prometheus/console_libraries /etc/prometheus
+  - chown -R prometheus:prometheus /etc/prometheus/consoles
+  - chown -R prometheus:prometheus /etc/prometheus/console_libraries
   - echo ">>> Starting Prometheus Service"
-  - sudo systemctl daemon-reload
-  - sudo systemctl start prometheus
-  - sudo systemctl enable prometheus
+  - systemctl daemon-reload
+  - systemctl start prometheus
+  - systemctl enable prometheus
   - echo ">>> Configuring Firewall"
-  - sudo firewall-offline-cmd --add-port=9090/tcp
-  - sudo systemctl restart firewalld
+  - firewall-offline-cmd --add-port=9090/tcp
+  - systemctl restart firewalld
   - echo "alias sshopc='/usr/bin/ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -oConnectTimeout=10 -i ~/.ssh/id_rsa_opc'" >> /home/opc/.bashrc
 
 final_message: "**** The system is finally up, after $UPTIME seconds ****"
