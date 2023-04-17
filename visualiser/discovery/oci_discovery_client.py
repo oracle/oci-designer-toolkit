@@ -593,6 +593,8 @@ class OciResourceDiscoveryClient(object):
     static_resource_client_methods = {
         # oci.container_engine.ContainerEngineClient
         "ClusterOptions": (oci.container_engine.ContainerEngineClient, "get_cluster_options"), # use cluster_option_id="all"
+        # oci.container_engine.ContainerEngineClient
+        "PodShape": (oci.container_engine.ContainerEngineClient, "list_pod_shapes"),
         #  oci.container_instances.ContainerInstanceClient
         "ContainerInstanceShape": (oci.container_instances.ContainerInstanceClient, "list_container_instance_shapes"),
         # oci.core.ComputeClient
