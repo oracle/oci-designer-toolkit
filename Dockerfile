@@ -45,18 +45,6 @@ RUN yum install -y \
  && echo '  UserKnownHostsFile=/dev/null' >> /etc/ssh/ssh_config \
 # Upgrade pip
  && python3 -m pip install --upgrade pip \
-# Install required python modules
-#  && pip3 install --no-cache-dir \
-#         authlib \
-#         flask \
-#         gitpython \
-#         git-url-parse \
-#         gunicorn \
-#         oci \
-#         openpyxl \
-#         python-magic \
-#         pyyaml \
-#         requests \
 # Create Workspace
  && mkdir -p /github \
  && echo "Branch: $BRANCH" \
