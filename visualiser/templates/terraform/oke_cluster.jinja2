@@ -24,6 +24,9 @@ resource "oci_containerengine_cluster" "{{ resource_name }}" {
     vcn_id             = {{ vcn_id }}
 
     #Optional
+{% if type is defined %}
+    type               = {{ type | safe }}
+{% endif %}
 {% if kms_key_id is defined %}
     kms_key_id         = {{ kms_key_id | safe}}
 {% endif %}

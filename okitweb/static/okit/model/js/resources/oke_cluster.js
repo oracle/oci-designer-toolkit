@@ -21,6 +21,8 @@ class OkeCluster extends OkitArtifact {
         this.cluster_pod_network_options = [this.newClusterPodNetworkOption()]
         this.options = this.newOptions();
         this.endpoint_config = this.newEndpointConfig()
+        this.type = 'BASIC_CLUSTER'
+        this.node_pool_type = 'Managed'
         // this.pools = []
             /*
             Each pool entry will have the following structure

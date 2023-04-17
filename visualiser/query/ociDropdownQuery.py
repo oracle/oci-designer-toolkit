@@ -48,6 +48,7 @@ class OCIDropdownQuery(OCIConnection):
         "MySQLVersion", 
         "MySQLConfiguration", 
         "NodePoolOptions",
+        "PodShape",
         "LoadBalancerShape", 
         "ClusterOptions",
         "VolumeBackupPolicy"
@@ -67,6 +68,7 @@ class OCIDropdownQuery(OCIConnection):
         "MySQLVersion": "mysql_versions", 
         "MySQLConfiguration": "mysql_configurations", 
         "NodePoolOptions": "node_pool_options",
+        "PodShape": "pod_shapes",
         "LoadBalancerShape": "loadbalancer_shapes", 
         "ClusterOptions": "kubernetes_versions",
         "VolumeBackupPolicy": "volume_backup_policy"
@@ -118,7 +120,7 @@ class OCIDropdownQuery(OCIConnection):
                 logger.info("Processing Resource : {0!s:s}".format(resource_type))
                 # logger.info(jsonToFormattedString(resource_list))
                 if resource_type in map_keys:
-                    # logger.info(f'Resource Type : {resource_type}')
+                    logger.info(f'Resource Type : {resource_type}')
                     if resource_type == "ClusterOptions":
                         resource_list = self.cluster_options(resource_list, resources)                       
                     elif resource_type == "DataScienceNotebookSessionShape":
@@ -133,8 +135,8 @@ class OCIDropdownQuery(OCIConnection):
                         resource_list = self.load_balancer_shapes(resource_list, resources)                       
                     elif resource_type == "MySQLShape":
                         resource_list = self.mysql_shapes(resource_list, resources)                       
-                    elif resource_type == "NodePoolOptions":
-                        logger.info(jsonToFormattedString(resource_list))
+                    # elif resource_type == "NodePoolOptions":
+                    #     logger.info(jsonToFormattedString(resource_list))
                     elif resource_type == "Shape":
                         resource_list = self.shapes(resource_list, resources)
                         response_json["compute_shapes"] = resource_list                       
@@ -189,9 +191,9 @@ class OCIDropdownQuery(OCIConnection):
         return sorted(deduplicated, key=lambda k: k['sort_key'])
 
     def instance_agent_plugins(self, plugins, resources):
-        logger.info(f'Plugins {plugins}')
-        plugins = [p for p in plugins if p.get('status', '') in ['RUNNING', 'STOPPED']]
-        logger.info(f'Plug-ins {plugins}')
+        # logger.info(f'Plugins {plugins}')
+        # plugins = [p for p in plugins if p.get('status', '') in ['RUNNING', 'STOPPED']]
+        # logger.info(f'Plug-ins {plugins}')
         return plugins
 
     def load_balancer_shapes(self, shapes, resources):
