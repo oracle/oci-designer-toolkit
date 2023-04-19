@@ -1,6 +1,15 @@
 # Release Notes
 
 
+## Version 0.49.0
+**Release Date**: 19th April 2023
+### Features
+1. Add Pod Shapes and Enhanced Option to OKE Cluster / Node Pool (This update requires the later oci python API and existing installation will need to be updated)
+2. Update PCA-XA Prometheus TEMPLATE WITH DOCUMENTATION.
+### Bug Fixes
+1. Add OKE Cluster Pricing / BoM functionality for Basic Clusters (ISSUE #579)
+
+
 ## Version 0.48.0
 **Release Date**: 29th March 2023
 ### Features

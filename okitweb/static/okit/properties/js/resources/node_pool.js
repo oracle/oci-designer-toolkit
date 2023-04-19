@@ -123,7 +123,7 @@ class NodePoolProperties extends OkitResourceProperties {
     loadResource() {
         // Load Selects
         this.loadReferenceSelect(this.kubernetes_version, 'getKubernetesVersions', true)
-        this.loadReferenceSelect(this.node_shape, 'getAllInstanceShapes', false)
+        const shape = this.loadReferenceSelect(this.node_shape, this.resource.virtual_nodes ? 'getPodShapes' : 'getAllInstanceShapes', false)
         this.loadReferenceSelect(this.image_id, 'getPlatformImages', false, (r) => r.operating_system === 'Oracle Linux' && r.shapes.includes(this.resource.node_shape), undefined, '', 'display_name')
         this.loadMultiSelect(this.nsg_ids, 'network_security_group', false, this.nsg_filter)
         this.loadMultiSelect(this.pod_nsg_ids, 'network_security_group', false, this.nsg_filter)
@@ -135,7 +135,7 @@ class NodePoolProperties extends OkitResourceProperties {
         this.node_shape.property('value', this.resource.node_shape)
         this.memory_in_gbs.property('value', this.resource.node_shape_config.memory_in_gbs)
         this.ocpus.property('value', this.resource.node_shape_config.ocpus)
-        if (this.resource.node_source_details.image_id === '') {
+        if (this.resource.node_source_details.image_id === '' && !this.resource.virtual_nodes) {
             this.resource.node_source_details.image_id = okitOciData.getPlatformImages((r) => r.operating_system === 'Oracle Linux' && r.shapes.includes(this.resource.node_shape))[0].display_name 
             this.resource.node_source_details.image = this.resource.node_source_details.image_id
         }
@@ -194,11 +194,13 @@ class NodePoolProperties extends OkitResourceProperties {
 
     handleShapeChange(shape=undefined) {
         shape = shape ? shape : this.resource.node_shape
-        this.memory_in_gbs_row.classed('collapsed', !this.resource.flex_shape)
-        this.ocpus_row.classed('collapsed', !this.resource.flex_shape)
+        this.memory_in_gbs_row.classed('collapsed', !this.resource.flex_shape || this.resource.virtual_nodes)
+        this.ocpus_row.classed('collapsed', !this.resource.flex_shape || this.resource.virtual_nodes)
+        this.image_id_row.classed('collapsed', this.resource.virtual_nodes)
         this.loadOCPUs(shape)
         this.loadMemoryInGbp(shape)
-        this.loadReferenceSelect(this.image_id, 'getPlatformImages', false, (r) => r.operating_system === 'Oracle Linux' && r.shapes.includes(shape), undefined, '', 'display_name')
+        this.loadImages(shape)
+        // this.loadReferenceSelect(this.image_id, 'getPlatformImages', false, (r) => r.operating_system === 'Oracle Linux' && r.shapes.includes(shape), undefined, '', 'display_name')
     }
 
     handleOcpusChanged(ocpus=undefined) {
@@ -207,7 +209,7 @@ class NodePoolProperties extends OkitResourceProperties {
 
     loadOCPUs(shape=undefined) {
         shape = shape ? shape : this.resource.shape
-        if (this.resource.flex_shape) {
+        if (this.resource.flex_shape && !this.resource.virtual_nodes) {
             const instance_shape = okitOciData.getInstanceShape(shape)
             if (instance_shape && instance_shape.memory_options && instance_shape.ocpu_options) {
                 this.ocpus.attr('min', instance_shape.ocpu_options.min)
@@ -224,7 +226,7 @@ class NodePoolProperties extends OkitResourceProperties {
 
     loadMemoryInGbp(shape=undefined) {
         shape = shape ? shape : this.resource.shape
-        if (this.resource.flex_shape) {
+        if (this.resource.flex_shape && !this.resource.virtual_nodes) {
             const instance_shape = okitOciData.getInstanceShape(shape)
             if (instance_shape && instance_shape.memory_options && instance_shape.ocpu_options) {
                 const min = Math.max(instance_shape.memory_options.min_in_g_bs, (instance_shape.memory_options.min_per_ocpu_in_gbs * this.resource.node_shape_config.ocpus));
@@ -239,6 +241,15 @@ class NodePoolProperties extends OkitResourceProperties {
             this.resource.node_shape_config.memory_in_gbs = ''
         }
         this.memory_in_gbs.property('value', this.resource.node_shape_config.memory_in_gbs)
+    }
+
+    loadImages(shape=undefined) {
+        shape = shape ? shape : this.resource.shape
+        if (!this.resource.virtual_nodes) {
+            this.loadReferenceSelect(this.image_id, 'getPlatformImages', false, (r) => r.operating_system === 'Oracle Linux' && r.shapes.includes(shape), undefined, '', 'display_name')
+        } else {
+            this.resource.node_source_details.image_id = ''
+        }
     }
 
 }

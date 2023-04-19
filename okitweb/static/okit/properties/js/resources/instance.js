@@ -20,79 +20,79 @@ class InstanceProperties extends OkitResourceProperties {
         const self = this
         // Availability Domain
         const ad_data = this.ad_data
-        const ad = this.createInput('select', 'Availability Domain', `${self.id}_availability_domain`, '', (d, i, n) => self.resource.availability_domain = n[i].value, ad_data)
+        const ad = this.createInput('select', 'Availability Domain', `${this.id}_availability_domain`, '', (d, i, n) => this.resource.availability_domain = n[i].value, ad_data)
         this.availability_domain = ad.input
         this.append(this.core_tbody, ad.row)
         // Fault Domain
         const fd_data = this.fd_data
-        const fd = this.createInput('select', 'Fault Domain', `${self.id}_fault_domain`, '', (d, i, n) => self.resource.fault_domain = n[i].value, fd_data)
+        const fd = this.createInput('select', 'Fault Domain', `${this.id}_fault_domain`, '', (d, i, n) => this.resource.fault_domain = n[i].value, fd_data)
         this.fault_domain = fd.input
         this.append(this.core_tbody, fd.row)
         // Image & Shape
-        const image_and_shape = this.createDetailsSection('Image and Shape', `${self.id}_image_and_shape_details`)
+        const image_and_shape = this.createDetailsSection('Image and Shape', `${this.id}_image_and_shape_details`)
         this.append(this.properties_contents, image_and_shape.details)
         this.image_and_shape_div = image_and_shape.div
         // Image
-        const image = this.createDetailsSection('Image', `${self.id}_image_details`)
+        const image = this.createDetailsSection('Image', `${this.id}_image_details`)
         this.append(this.image_and_shape_div, image.details)
         this.image_div = image.div
-        const image_table = this.createTable('', `${self.id}_image`)
+        const image_table = this.createTable('', `${this.id}_image`)
         this.image_tbody = image_table.tbody
         this.append(this.image_div, image_table.table)
         // Image Source
         const is_data = {options: {platform: 'Platform Images', custom: 'Custom Images'}}
-        const image_source = this.createInput('select', 'Image source', `${self.id}_image_source`, '', (d, i, n) => {self.resource.source_details.image_source = n[i].value; this.handleImageSourceChange(n[i].value)}, is_data)
+        const image_source = this.createInput('select', 'Image source', `${this.id}_image_source`, '', (d, i, n) => {this.resource.source_details.image_source = n[i].value; this.handleImageSourceChange(n[i].value)}, is_data)
         this.image_source = image_source.input
         this.append(this.image_tbody, image_source.row)
         // Image OS
-        const image_os = this.createInput('select', 'Image OS', `${self.id}_image_os`, '', (d, i, n) => {self.resource.source_details.os = n[i].value; this.handleImageOSChange(n[i].value)})
+        const image_os = this.createInput('select', 'Image OS', `${this.id}_image_os`, '', (d, i, n) => {this.resource.source_details.os = n[i].value; this.handleImageOSChange(n[i].value)})
         this.image_os = image_os.input
         this.append(this.image_tbody, image_os.row)
         // Image Version
-        const image_version = this.createInput('select', 'Image Version', `${self.id}_image_version`, '', (d, i, n) => {self.resource.source_details.version = n[i].value; this.handleImageOSVersionChange()})
+        const image_version = this.createInput('select', 'Image Version', `${this.id}_image_version`, '', (d, i, n) => {this.resource.source_details.version = n[i].value; this.handleImageOSVersionChange()})
         this.image_version = image_version.input
         this.append(this.image_tbody, image_version.row)
         // Image Id (Custom Image)
-        const image_id = this.createInput('select', 'Custom Image', `${self.id}_image_id`, '', (d, i, n) => {self.resource.source_details.image_id = n[i].value})
+        const image_id = this.createInput('select', 'Custom Image', `${this.id}_image_id`, '', (d, i, n) => {this.resource.source_details.image_id = n[i].value})
         this.image_id = image_id.input
         this.image_id_row = image_id.row
         this.append(this.image_tbody, image_id.row)
         // Shape
-        const shape_details = this.createDetailsSection('Shape', `${self.id}_shape_details`)
+        const shape_details = this.createDetailsSection('Shape', `${this.id}_shape_details`)
         this.append(this.image_and_shape_div, shape_details.details)
         this.shape_div = shape_details.div
-        const shape_table = this.createTable('', `${self.id}_shape`)
+        const shape_table = this.createTable('', `${this.id}_shape`)
         this.shape_tbody = shape_table.tbody
         this.append(this.shape_div, shape_table.table)
         // Instance Type
         const it_data = {options: {vm: 'Virtual Machine', bm: 'Bare Metal'}}
-        const instance_type = this.createInput('select', 'Instance Type', `${self.id}_instance_type`, '', (d, i, n) => {self.resource.source_details.instance_type = n[i].value; this.handleInstanceTypeChange(n[i].value)}, it_data)
+        const instance_type = this.createInput('select', 'Instance Type', `${this.id}_instance_type`, '', (d, i, n) => {this.resource.source_details.instance_type = n[i].value; this.handleInstanceTypeChange(n[i].value)}, it_data)
         this.instance_type = instance_type.input
         this.append(this.shape_tbody, instance_type.row)
         // Shape Series
         const ss_data = {options: {amd: 'AMD', intel: 'Intel', arm: 'Ampere'}}
-        const shape_series = this.createInput('select', 'Shape Series', `${self.id}_shape_series`, '', (d, i, n) => {self.resource.source_details.shape_series = n[i].value; this.handleShapeSeriesChange(n[i].value)}, ss_data)
+        const shape_series = this.createInput('select', 'Shape Series', `${this.id}_shape_series`, '', (d, i, n) => {this.resource.source_details.shape_series = n[i].value; this.handleShapeSeriesChange(n[i].value)}, ss_data)
         this.shape_series = shape_series.input
         this.shape_series_row = shape_series.row
         this.append(this.shape_tbody, shape_series.row)
         // Shape
-        const shape = this.createInput('select', 'Shape', `${self.id}_shape`, '', (d, i, n) => {self.resource.shape = n[i].value; this.handleShapeChange(n[i].value)})
+        const shape = this.createInput('select', 'Shape', `${this.id}_shape`, '', (d, i, n) => {this.resource.shape = n[i].value; this.handleShapeChange(n[i].value)})
         this.shape = shape.input
         this.append(this.shape_tbody, shape.row)
         // OCPUS
         const ocpus_data = {min: 1, max: 64}
-        const ocpus = this.createInput('number', 'OCPUs', `${self.id}_ocpus`, '', (d, i, n) => {self.resource.shape_config.ocpus = n[i].value; this.handleOcpusChanged(n[i].value)}, ocpus_data)
+        const ocpus = this.createInput('number', 'OCPUs', `${this.id}_ocpus`, '', (d, i, n) => {this.resource.shape_config.ocpus = n[i].value; this.handleOcpusChanged(n[i].value)}, ocpus_data)
         this.ocpus = ocpus.input
         this.ocpus_row = ocpus.row
         this.append(this.shape_tbody, ocpus.row)
         // Memory
         const memory_data = {min: 1, max: 16}
-        const memory_in_gbs = this.createInput('number', 'Memory (in GB)', `${self.id}_memory_in_gbs`, '', (d, i, n) => self.resource.shape_config.memory_in_gbs = n[i].value, memory_data)
+        const memory_in_gbs = this.createInput('number', 'Memory (in GB)', `${this.id}_memory_in_gbs`, '', (d, i, n) => this.resource.shape_config.memory_in_gbs = n[i].value, memory_data)
         this.memory_in_gbs = memory_in_gbs.input
         this.memory_in_gbs_row = memory_in_gbs.row
         this.append(this.shape_tbody, memory_in_gbs.row)
         // Networking
-        const primary_network = this.addNetworkHtml(this.properties_contents, self.resource.primary_vnic)
+        const primary_network = this.addNetworkHtml(this.properties_contents, this.resource.primary_vnic)
         this.primary_network_display_name = primary_network.display_name
         this.subnet_id = primary_network.subnet_id
         this.hostname_label = primary_network.hostname_label
@@ -100,28 +100,28 @@ class InstanceProperties extends OkitResourceProperties {
         this.skip_source_dest_check = primary_network.skip_source_dest_check
         this.nsg_ids = primary_network.nsg_ids
         // Advanced
-        const advanced_details = this.createDetailsSection('Advanced', `${self.id}_advanced_details`)
+        const advanced_details = this.createDetailsSection('Advanced', `${this.id}_advanced_details`)
         this.append(this.properties_contents, advanced_details.details)
-        const advanced_table = this.createTable('', `${self.id}_advanced_properties`)
+        const advanced_table = this.createTable('', `${this.id}_advanced_properties`)
         this.advanced_tbody = advanced_table.tbody
         this.append(advanced_details.div, advanced_table.table)
         // Boot Volume Size
         const bv_data = {min: 50, max: 32768}
-        const boot_volume_size_in_gbs = this.createInput('number', 'Boot Disk Size (in GB)', `${self.id}_boot_volume_size_in_gbs`, '', (d, i, n) => self.resource.source_details.boot_volume_size_in_gbs = n[i].value, bv_data)
+        const boot_volume_size_in_gbs = this.createInput('number', 'Boot Disk Size (in GB)', `${this.id}_boot_volume_size_in_gbs`, '', (d, i, n) => this.resource.source_details.boot_volume_size_in_gbs = n[i].value, bv_data)
         this.boot_volume_size_in_gbs = boot_volume_size_in_gbs.input
         this.append(this.advanced_tbody, boot_volume_size_in_gbs.row)
         // Preserve Boot Volume
-        const preserve_boot_volume = this.createInput('checkbox', 'Preserve Boot Volume', `${self.id}_preserve_boot_volume`, '', (d, i, n) => self.resource.preserve_boot_volume = n[i].checked)
+        const preserve_boot_volume = this.createInput('checkbox', 'Preserve Boot Volume', `${this.id}_preserve_boot_volume`, '', (d, i, n) => this.resource.preserve_boot_volume = n[i].checked)
         this.preserve_boot_volume = preserve_boot_volume.input
         this.append(this.advanced_tbody, preserve_boot_volume.row)
         // In Transit Encryption
-        const is_pv_encryption_in_transit_enabled = this.createInput('checkbox', 'Use In-Transit Encryption', `${self.id}_is_pv_encryption_in_transit_enabled`, '', (d, i, n) => self.resource.is_pv_encryption_in_transit_enabled = n[i].checked)
+        const is_pv_encryption_in_transit_enabled = this.createInput('checkbox', 'Use In-Transit Encryption', `${this.id}_is_pv_encryption_in_transit_enabled`, '', (d, i, n) => this.resource.is_pv_encryption_in_transit_enabled = n[i].checked)
         this.is_pv_encryption_in_transit_enabled = is_pv_encryption_in_transit_enabled.input
         this.append(this.advanced_tbody, is_pv_encryption_in_transit_enabled.row)
         // SSH Keys
-        const ssh_key_details = this.createDetailsSection('SSH Keys', `${self.id}_ssh_key_details`)
+        const ssh_key_details = this.createDetailsSection('SSH Keys', `${this.id}_ssh_key_details`)
         this.append(this.properties_contents, ssh_key_details.details)
-        const ssh_key_table = this.createTable('', `${self.id}_ssh_key_properties`)
+        const ssh_key_table = this.createTable('', `${this.id}_ssh_key_properties`)
         this.ssh_key_tbody = ssh_key_table.tbody
         this.append(ssh_key_details.div, ssh_key_table.table)
         // Authorised Keys
@@ -145,41 +145,41 @@ class InstanceProperties extends OkitResourceProperties {
             fileinput.click()
         }
         const ssh_authorized_keys_data = {}
-        const ssh_authorized_keys = this.createInput('text', 'Authorised Keys', `${self.id}_ssh_authorized_keys`, '', (d, i, n) => self.resource.metadata.ssh_authorized_keys = n[i].value, ssh_authorized_keys_data, 'add-property', add_click)
+        const ssh_authorized_keys = this.createInput('text', 'Authorised Keys', `${this.id}_ssh_authorized_keys`, '', (d, i, n) => this.resource.metadata.ssh_authorized_keys = n[i].value, ssh_authorized_keys_data, 'add-property', add_click)
         this.ssh_authorized_keys = ssh_authorized_keys.input
         this.append(this.ssh_key_tbody, ssh_authorized_keys.row)
         // Cloud Init Tab
         const ci_data = {placeholder: 'Enter Standard Cloud Init YAML'}
-        const cloud_init = this.createTextArea(`${self.id}_cloud_init`, '', (d, i, n) => self.resource.metadata.user_data = n[i].value, ci_data)
+        const cloud_init = this.createTextArea(`${this.id}_cloud_init`, '', (d, i, n) => this.resource.metadata.user_data = n[i].value, ci_data)
         this.cloud_init = cloud_init.input
         this.append(this.cloud_init_contents, this.cloud_init)
         // Secondary Networks Tab
-        const secondary_networks = this.createDetailsSection('Secondary Networks', `${self.id}_secondary_network_details`)
+        const secondary_networks = this.createDetailsSection('Secondary Networks', `${this.id}_secondary_network_details`)
         this.append(this.secondary_networks_contents, secondary_networks.details)
         this.secondary_networks_div = secondary_networks.div
-        const secondary_vnics = this.createArrayTable('Networks', `${self.id}_secondary_vnics`, '', () => self.addSecondaryNetwork())
+        const secondary_vnics = this.createArrayTable('Networks', `${this.id}_secondary_vnics`, '', () => this.addSecondaryNetwork())
         this.secondary_networks_tbody = secondary_vnics.tbody
         this.append(this.secondary_networks_div, secondary_vnics.table)    
         // Volume Attachments Tab
-        const volumes = this.createDetailsSection('Volume Attachments', `${self.id}_volume_details`)
+        const volumes = this.createDetailsSection('Volume Attachments', `${this.id}_volume_details`)
         this.append(this.volumes_contents, volumes.details)
         this.volumes_div = volumes.div
-        const vol_attachments = this.createArrayTable('Attachments', `${self.id}_vol_attachments`, '', () => self.addVolumeAttachment())
+        const vol_attachments = this.createArrayTable('Attachments', `${this.id}_vol_attachments`, '', () => this.addVolumeAttachment())
         this.volumes_tbody = vol_attachments.tbody
         this.append(this.volumes_div, vol_attachments.table)    
         // Agent Tab
-        const agent_details = this.createDetailsSection('Oracle Cloud Agent', `${self.id}_agent_details`)
+        const agent_details = this.createDetailsSection('Oracle Cloud Agent', `${this.id}_agent_details`)
         this.append(this.agent_contents, agent_details.details)
         this.agent_div = agent_details.div
-        const agent_props = this.createTable('', `${self.id}_agent_props`, '')
+        const agent_props = this.createTable('', `${this.id}_agent_props`, '')
         this.agent_tbody = agent_props.tbody
         this.append(this.agent_div, agent_props.table)    
         // Management Disabled
-        const is_management_disabled = this.createInput('checkbox', 'Management Disabled', `${self.id}_is_management_disabled`, '', (d, i, n) => self.resource.agent_config.is_management_disabled = n[i].checked)
+        const is_management_disabled = this.createInput('checkbox', 'Management Disabled', `${this.id}_is_management_disabled`, '', (d, i, n) => this.resource.agent_config.is_management_disabled = n[i].checked)
         this.is_management_disabled = is_management_disabled.input
         this.append(this.agent_tbody, is_management_disabled.row)
         // Monitoring Disabled
-        const is_monitoring_disabled = this.createInput('checkbox', 'Monitoring Disabled', `${self.id}_is_monitoring_disabled`, '', (d, i, n) => self.resource.agent_config.is_monitoring_disabled = n[i].checked)
+        const is_monitoring_disabled = this.createInput('checkbox', 'Monitoring Disabled', `${this.id}_is_monitoring_disabled`, '', (d, i, n) => this.resource.agent_config.is_monitoring_disabled = n[i].checked)
         this.is_monitoring_disabled = is_monitoring_disabled.input
         this.append(this.agent_tbody, is_monitoring_disabled.row)
     }
@@ -249,7 +249,7 @@ class InstanceProperties extends OkitResourceProperties {
         elements.networking_tbody = networking_table.tbody
         this.append(elements.networking_div, networking_table.table)
         // Name
-        const display_name = this.createInput('text', 'Name', `${self.id}_display_name`, '', (d, i, n) => vnic.display_name = n[i].value)
+        const display_name = this.createInput('text', 'Name', `${this.id}_display_name`, '', (d, i, n) => vnic.display_name = n[i].value)
         elements.display_name = display_name.input
         this.append(elements.networking_tbody, display_name.row)
         // Subnet
@@ -450,7 +450,7 @@ class InstanceProperties extends OkitResourceProperties {
         const attachment_table = this.createTable('', `${id}_table`, '')
         this.append(attachment_details.div, attachment_table.table)
         // Name
-        const display_name = this.createInput('text', 'Name', `${self.id}_display_name`, '', (d, i, n) => attachment.display_name = n[i].value)
+        const display_name = this.createInput('text', 'Name', `${this.id}_display_name`, '', (d, i, n) => attachment.display_name = n[i].value)
         this.append(attachment_table.tbody, display_name.row)
         display_name.input.property('value', attachment.display_name)
         // Volume Id
