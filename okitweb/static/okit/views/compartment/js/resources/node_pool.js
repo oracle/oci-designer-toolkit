@@ -44,6 +44,7 @@ OkitJsonView.prototype.dropNodePoolView = function(target) {
     } else {
         view_artefact.artefact.cluster_id = target.id;
         view_artefact.artefact.compartment_id = target.compartment_id;
+        view_artefact.artefact.setDefaultShape()
     }
     view_artefact.recalculate_dimensions = true;
     return view_artefact;

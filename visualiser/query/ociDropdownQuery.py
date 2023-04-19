@@ -135,6 +135,8 @@ class OCIDropdownQuery(OCIConnection):
                         resource_list = self.load_balancer_shapes(resource_list, resources)                       
                     elif resource_type == "MySQLShape":
                         resource_list = self.mysql_shapes(resource_list, resources)                       
+                    elif resource_type == "PodShape":
+                        resource_list = self.pod_shapes(resource_list, resources)                       
                     # elif resource_type == "NodePoolOptions":
                     #     logger.info(jsonToFormattedString(resource_list))
                     elif resource_type == "Shape":
@@ -206,6 +208,12 @@ class OCIDropdownQuery(OCIConnection):
         for shape in shapes:
             shape['id'] = shape['name']
             shape['display_name'] = shape['name'].title()
+        return shapes
+
+    def pod_shapes(self, shapes, resources):
+        for shape in shapes:
+            shape['id'] = shape['name']
+            shape['display_name'] = shape['name']
         return shapes
 
     def volume_backup_policies(self, policies, resources):

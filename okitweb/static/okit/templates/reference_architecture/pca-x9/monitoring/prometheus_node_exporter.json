@@ -1,0 +1,679 @@
+{
+  "compartments": [
+    {
+      "compartment_id": null,
+      "defined_tags": {},
+      "description": "Prometheus Demo compartment",
+      "display_name": "PrometheusDemo",
+      "documentation": "",
+      "freeform_tags": {},
+      "id": "ocid1.compartment.AK00905695.x9pca1.zaplqn5j0om4epo236cm709jdp1mvz1gr0w04ms73hglew0slpy0iqmh90xk",
+      "lifecycle_state": "ACTIVE",
+      "okit_reference": "okit-a6f297e6-e3a8-4bde-987f-c352ea3a6033",
+      "read_only": false,
+      "resource_name": "Prometheusdemo",
+      "show_connections": false,
+      "time_created": "2023-03-02T10:21:01.861403+00:00"
+    }
+  ],
+  "defined_tags": {},
+  "dhcp_options": [
+    {
+      "compartment_id": "ocid1.compartment.AK00905695.x9pca1.zaplqn5j0om4epo236cm709jdp1mvz1gr0w04ms73hglew0slpy0iqmh90xk",
+      "default": true,
+      "defined_tags": {},
+      "display_name": "DHCP",
+      "documentation": "",
+      "freeform_tags": {},
+      "id": "ocid1.dhcpoptions.AK00905695.x9pca1.p5ubkkdxdk8wn4rn2qbvb05l5kshmkarut32ksjsvnc4cq4iiod47qaqx10p",
+      "lifecycle_state": "AVAILABLE",
+      "okit_reference": "okit-27120cf2-cc97-40c6-83dd-43f893a88763",
+      "options": [
+        {
+          "custom_dns_servers": [],
+          "search_domain_names": [],
+          "server_type": "VcnLocalPlusInternet",
+          "type": "DomainNameServer"
+        },
+        {
+          "search_domain_names": [
+            "prometheusvcn.oraclevcn.com"
+          ],
+          "type": "SearchDomain"
+        }
+      ],
+      "read_only": false,
+      "resource_name": "DefaultDhcpOptionsForPrometheusvcn",
+      "show_connections": false,
+      "time_created": "2023-03-02T10:21:48.890445+00:00",
+      "vcn_id": "ocid1.vcn.AK00905695.x9pca1.ft0babqq0v4qao5aga0xbzd9nr4b7dvsa5gc40e86hkmo98o9e14dcjs97vh"
+    }
+  ],
+  "documentation": "## Deploy Prometheus with Oracle Linux 8 instance targets to get metric and monitoring data\n\nThe PCA-X9 platform offers the ability to provision Oracle Linux 8 virtual machines and this template will assist those who want to automate the process of provisioning these instances to utilise a Prometheus Node Exporter. With each instance in a private subnet, a public facing instance is also deployed with Prometheus set up and configured to scrape the Linux VM targets.\n\nThis will give administrators the ability to see a huge array of metrics from each of the instances that can be further manipulated using the prometheus query language. It will also give the administrator the ability to utilise Grafana to visually display the metrics coming from the Prometheus data source.\n\nThe template uses cloud-init to perform the installation of the Prometheus and Node Exporter components on the instances. Changing resource names, CIDR block ranges, vm shapes etc is all possible. This template has only been tested with Oracle 8 Linux instances.\n\n**NOTE** If you have changed the dnslabel of your VCN or subnet, you will need to change the FQDN of each instance appropriately - see the section on 'Adding additional Linux Instances'\n\n\nThese instructions will give brief notes on how you use the template and what you need to do in order to extend it to include additional instances with the Node Exporter component installed.\n\n## Provisioning the Template\n\nThe template is provisioned in the same way any OKIT design is provisioned to the PCA-X9. You need to finalise your design, save it and generate the Terraform. If you are adding new instances or using a proxy then see those sections prior to saving and generating. You can then take the Terraform code to an environment where you are able to perform the plan and apply to the appropriate tenancy.\n\n## Using this template in an environment where your PCA-X9 requires a proxy to access the internet\n\nIn order for the Prometheus and Node Exporter components to be deployed, they are pulled from a public internet source. This means that if your PCA-X9 environment requires a proxy to do this, you will need to modify the cloud-init on _**every**_ instance. To do this:\n\nSelect _each_ of the instances in turn and view its properties.  \nSelect the Cloud-Init tab.  \nNear the top of the cloud-init code, you will see the following lines:\n\n      #http_proxy = Add Proxy Here  \n      #https_proxy = Add Proxy Here   \n      #use_proxy = on  \n\nThis needs to be changed to remove the # from each line and add your specific proxy configuration. Do not use quotes.  \n\nAn example being:  \n\n      http_proxy = http://159.4.35.192:80  \n      https_proxy = http://159.4.35.192:80   \n      use_proxy = on \n\nThis needs to be done for all Linux VM's in the private subnet and the Prometheus host.\n\n## Adding additional Linux Instances\n\nIf you want to extend your _initial_ Linux vm design estate, the simplest way to do this is to make the proxy cloud-init configuration change first if this is something you need to do and then use the OKIT clone functionality. Select one of the linux vm instances in designer view and right-click on it. Select Clone and a new instance will appear. You can then open the properties, change its core name, networking name and hostname to meet your naming convention.\n\nOne important step you need to do to complete this process is to open the properties of the Prometheus hosting instance and select the cloud-init tab.\n\nSearch the cloud-init code for these lines:  \n\n       \"targets\": [\n            \"linuxvm1.promprivsn.prometheusvcn.oraclevcn.com:9100\",\n            \"linuxvm2.promprivsn.prometheusvcn.oraclevcn.com:9100\"\n          ]  \n\nYou will need to add a new line to the target block with the fully qualified domain name of the new instance with the default Node Exporter port.  \n\nAn example being if you created a new instance called linuxvm3:  \n\n       \"targets\": [\n            \"linuxvm1.promprivsn.prometheusvcn.oraclevcn.com:9100\",\n            \"linuxvm2.promprivsn.prometheusvcn.oraclevcn.com:9100\",\n            \"linuxvm3.promprivsn.prometheusvcn.oraclevcn.com:9100\"\n          ]  \n\n**NOTE** If you have changed the dnslabel of your VCN or subnet, you will need to change the FQDN of each instance appropriately\n\n## Adding additional Linux Instances after initial Terraform deployment\n\nIf you want to extend your Linux vm design estate _after_ you have performed the initial Terraform provision, the simplest way to do this is to use the OKIT clone functionality. Select one of the linux vm instances in designer view and right-click on it. Select Clone and a new instance will appear. You can then open the properties, change its core name, networking name and hostname to meet your naming convention.\n\nOnce the new instance has been provisioned you will need to ssh on to the Prometheus instance and modify the target information file. \n\nYou will need to sudo vi the _/etc/prometheus/targets.json_ file  \nAdd an entry as this example shows.  \n\n         \"targets\": [\n            \"linuxvm1.promprivsn.prometheusvcn.oraclevcn.com:9100\",\n            \"linuxvm2.promprivsn.prometheusvcn.oraclevcn.com:9100\"\n          ]  \n\nYou will need to add a new line to the target block with the fully qualified domain name of the new instance with the default Node Exporter port.  \n\nAn example being if you created a new instance called linuxvm3:  \n\n       \"targets\": [\n            \"linuxvm1.promprivsn.prometheusvcn.oraclevcn.com:9100\",\n            \"linuxvm2.promprivsn.prometheusvcn.oraclevcn.com:9100\",\n            \"linuxvm3.promprivsn.prometheusvcn.oraclevcn.com:9100\"\n          ]  \n\n**NOTE** If you have changed the dnslabel of your VCN or subnet, you will need to change the FQDN of each instance appropriately\n\n## Using the Prometheus web based console\n\nOnce everything is provisioned cleanly, and the cloud-init has run, you can view the Prometheus console in a web browser.\n\nUse the public ip of the Prometheus hosting instance and type this into your browser.\n\nhttp://_yourpublicip_:9090/\n\nYou can use the [Prometheus](https://prometheus.io/community/) public documentation from here.\n\nIt would now be possible to install [Grafana](https://grafana.com/get/?pg=oss-graf&plcmt=hero-btn-1&tab=self-managed) locally and configure it to use the new Prometheus data source.  \n  \nOnce this has been done import the latest [Grafana Node Exporter dashboard](https://grafana.com/grafana/dashboards/1860-node-exporter-full/) to get the full extent of the metrics that this template has enabled for you PCA based vm estate.\n",
+  "freeform_tags": {},
+  "instances": [
+    {
+      "agent_config": {
+        "is_management_disabled": false,
+        "is_monitoring_disabled": false
+      },
+      "availability_domain": "1",
+      "chipset": "intel",
+      "compartment_id": "ocid1.compartment.AK00905695.x9pca1.zaplqn5j0om4epo236cm709jdp1mvz1gr0w04ms73hglew0slpy0iqmh90xk",
+      "count": 1,
+      "defined_tags": {},
+      "display_name": "linuxvm1",
+      "documentation": "",
+      "fault_domain": "FAULT-DOMAIN-2",
+      "flex_shape": true,
+      "freeform_tags": {},
+      "id": "ocid1.instance.AK00905695.x9pca1.w6zwzsp5fvk48k67u0vgfl2q0399ns5864x6ae6fkgnwhh4jotq46r48rpvp",
+      "image_id": "ocid1.image.AK00905695.x9pca1.u6p00idn2po123b2m4x9e1fsmfbvmb1afl12pj8m8n5d33prps4ljoy0pbio",
+      "instance_type": "vm",
+      "is_pv_encryption_in_transit_enabled": false,
+      "launch_mode": "PARAVIRTUALIZED",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": false,
+        "is_pv_encryption_in_transit_enabled": false,
+        "network_type": "PARAVIRTUALIZED",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "RUNNING",
+      "metadata": {
+        "ssh_authorized_keys": "var.public_key",
+        "user_data": "#cloud-config\nusers:\n  - default\n  - name: node_exporter\n    homedir: /bin/false\n\nwrite_files:\n  # Wget Configuration\n  - path: /etc/wgetrc\n    append: true\n    content: |\n      #http_proxy = Add Proxy Here\n      #https_proxy = Add Proxy Here\n      #use_proxy = on\n  # Add Node Export Service file\n  - path: /etc/systemd/system/node_exporter.service\n    content: |\n      [Unit]\n      Description=Node Exporter\n      After=network.target\n\n      [Service]\n      User=node_exporter\n      Group=node_exporter\n      Type=simple\n      ExecStart=/usr/local/bin/node_exporter --collector.processes --collector.systemd\n\n      [Install]\n      WantedBy=multi-user.target\n\nruncmd:\n  - echo \">>> Creating Directory\"\n  - mkdir -p /run/install/node_exporter\n  - echo \">>> Getting Node Exporter\"\n  - wget https://github.com/prometheus/node_exporter/releases/download/v1.5.0/node_exporter-1.5.0.linux-amd64.tar.gz -O /run/install/node_exporter.tar.gz\n  - echo \">>> Extracting Node Exporter\"\n  - tar xvfz /run/install/node_exporter.tar.gz -C /run/install/node_exporter --strip-components=1\n  - echo \">>> Moving Node Exporter\"\n  - mv /run/install/node_exporter/node_exporter /usr/local/bin/\n  - echo \">>> Starting Node Exporter Service\"\n  - systemctl daemon-reload\n  - systemctl start node_exporter\n  - systemctl enable node_exporter\n  - echo \">>> Configuring Firewall\"\n  - firewall-offline-cmd --add-port=9100/tcp \n  - systemctl restart firewalld\n\nfinal_message: \"**** The system is finally up, after $UPTIME seconds ****\"\n"
+      },
+      "okit_reference": "okit-ae95017c-e53e-4745-82ff-adad07de69f0",
+      "preserve_boot_volume": false,
+      "primary_vnic": {
+        "assign_public_ip": false,
+        "availability_domain": "1",
+        "compartment_id": "ocid1.compartment.AK00905695.x9pca1.zaplqn5j0om4epo236cm709jdp1mvz1gr0w04ms73hglew0slpy0iqmh90xk",
+        "display_name": "linuxvm",
+        "hostname_label": "linuxvm1",
+        "id": "ocid1.vnicattachment.AK00905695.x9pca1.s2tpg6qsaaq5fn28c94gjdufaf7p7h2ohvtp6s58sl72lv3gh61lva3dncgr",
+        "lifecycle_state": "ATTACHED",
+        "nic_index": 0,
+        "nsg_ids": [],
+        "resource_name": "LinuxvmVnicAttachment1",
+        "skip_source_dest_check": false,
+        "subnet_id": "ocid1.subnet.AK00905695.x9pca1.c9egie4i8feovlrdnzgbhjgejkoqbtznjm9jo96yzw0znn7v1dtlzo9g7fn5",
+        "time_created": "2023-01-23T17:14:43.990625+00:00",
+        "vlan_tag": 0,
+        "vnic_id": "ocid1.vnic.AK00905695.x9pca1.m153duh3y71xs3arxh3vxqo7ixe18kbhxp7ncwi2413hphrc767lsvzrvvh7"
+      },
+      "read_only": false,
+      "region": "x9pca1.osc.uk.oracle.com",
+      "resource_name": "Linuxvm",
+      "shape": "VM.PCAStandard1.Flex",
+      "shape_config": {
+        "max_vnic_attachments": 2,
+        "memory_in_gbs": "16",
+        "networking_bandwidth_in_gbps": 24.6,
+        "ocpus": 1
+      },
+      "shape_series": "intel",
+      "show_connections": false,
+      "source_details": {
+        "boot_volume_size_in_gbs": "50",
+        "image_id": "ocid1.image.AK00905695.x9pca1.ye9e8d6csmggarq48dr9268w8pqj0o20klp42v70hrzds21xcgx2oxwo4o3w",
+        "image_source": "platform",
+        "os": "OracleLinux",
+        "shape_series": "amd",
+        "source_type": "image",
+        "version": "8"
+      },
+      "subnet_id": "ocid1.subnet.AK00905695.x9pca1.c9egie4i8feovlrdnzgbhjgejkoqbtznjm9jo96yzw0znn7v1dtlzo9g7fn5",
+      "time_created": "2023-03-02T10:30:51.442074+00:00",
+      "vnic_attachments": [
+        {
+          "assign_public_ip": false,
+          "availability_domain": "1",
+          "compartment_id": "ocid1.compartment.AK00905695.x9pca1.zaplqn5j0om4epo236cm709jdp1mvz1gr0w04ms73hglew0slpy0iqmh90xk",
+          "display_name": "linuxvm",
+          "hostname_label": "linuxvm1",
+          "id": "ocid1.vnicattachment.AK00905695.x9pca1.s2tpg6qsaaq5fn28c94gjdufaf7p7h2ohvtp6s58sl72lv3gh61lva3dncgr",
+          "lifecycle_state": "ATTACHED",
+          "nic_index": 0,
+          "nsg_ids": [],
+          "resource_name": "LinuxvmVnicAttachment1",
+          "skip_source_dest_check": false,
+          "subnet_id": "ocid1.subnet.AK00905695.x9pca1.c9egie4i8feovlrdnzgbhjgejkoqbtznjm9jo96yzw0znn7v1dtlzo9g7fn5",
+          "time_created": "2023-01-23T17:14:43.990625+00:00",
+          "vlan_tag": 0,
+          "vnic_id": "ocid1.vnic.AK00905695.x9pca1.m153duh3y71xs3arxh3vxqo7ixe18kbhxp7ncwi2413hphrc767lsvzrvvh7"
+        }
+      ],
+      "volume_attachments": []
+    },
+    {
+      "agent_config": {
+        "is_management_disabled": false,
+        "is_monitoring_disabled": false
+      },
+      "availability_domain": "1",
+      "chipset": "intel",
+      "compartment_id": "ocid1.compartment.AK00905695.x9pca1.zaplqn5j0om4epo236cm709jdp1mvz1gr0w04ms73hglew0slpy0iqmh90xk",
+      "count": 1,
+      "defined_tags": {},
+      "display_name": "prometheusvm",
+      "documentation": "",
+      "fault_domain": "FAULT-DOMAIN-3",
+      "flex_shape": true,
+      "freeform_tags": {},
+      "id": "ocid1.instance.AK00905695.x9pca1.98dvbzagv97h0jp9fxlwab5vmqmzfq5oyzttfqktk0xh99s2xjg1zya36odp",
+      "image_id": "ocid1.image.AK00905695.x9pca1.5oc1d9h93x8plv894o2try0naai3nmsai7l0c5zx2e7i2oe6j7pm4pzv16df",
+      "instance_type": "vm",
+      "is_pv_encryption_in_transit_enabled": false,
+      "launch_mode": "PARAVIRTUALIZED",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": false,
+        "is_pv_encryption_in_transit_enabled": false,
+        "network_type": "PARAVIRTUALIZED",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "RUNNING",
+      "metadata": {
+        "ssh_authorized_keys": "var.public_key",
+        "user_data": "#cloud-config\nusers:\n  - default\n  - name: prometheus\n    homedir: /bin/false\n\nwrite_files:\n  # Wget Configuration\n  - path: /etc/wgetrc\n    append: true\n    content: |\n      #http_proxy = Add Proxy Here\n      #https_proxy = Add Proxy Here\n      #use_proxy = on\n  # Add Node Export Service file\n  - path: /etc/systemd/system/prometheus.service\n    content: |\n      [Unit]\n      Description=Prometheus\n      Wants=network-online.target\n      After=network.target\n\n      [Service]\n      User=prometheus\n      Group=prometheus\n      Type=simple\n      ExecStart=/usr/local/bin/prometheus --config.file /etc/prometheus/prometheus.yml --storage.tsdb.path /var/lib/prometheus/ --web.console.templates=/etc/prometheus/consoles --web.console.libraries=/etc/prometheus/console_libraries\n\n      [Install]\n      WantedBy=multi-user.target\n  # Prometheus Config\n  - path: /etc/prometheus/prometheus.yml\n    content: |\n      global:\n        scrape_interval: 10s\n\n      scrape_configs:\n        - job_name: 'Prometheus'\n          scrape_interval: 5s\n          static_configs:\n            - targets: \n                - localhost:9090\n\n        - job_name: 'Node Exporters'\n          file_sd_configs:\n            - files:\n              - '/etc/prometheus/targets.json'\n  # Prometheus Targets\n  - path: /etc/prometheus/targets.json\n    content: |\n      [\n        {\n          \"labels\": {\n            \"job\": \"Node Exporters\"\n          },\n          \"targets\": [\n            \"linuxvm1.promprivsn.prometheusvcn.oraclevcn.com:9100\",\n            \"linuxvm2.promprivsn.prometheusvcn.oraclevcn.com:9100\"\n          ]\n        }\n      ]\n\nruncmd:\n  - echo \">>> Creating Directory\"\n  - mkdir -p /run/install/prometheus\n  - echo \">>> Getting Prometheus\"\n  - wget https://github.com/prometheus/prometheus/releases/download/v2.42.0/prometheus-2.42.0.linux-amd64.tar.gz -O /run/install/prometheus.tar.gz\n  - echo \">>> Extracting Prometheus\"\n  - tar xvfz /run/install/prometheus.tar.gz -C /run/install/prometheus --strip-components=1\n  - echo \">>> Moving Prometheus\"\n  - mkdir /etc/prometheus\n  - mkdir /var/lib/prometheus\n  - chown -R prometheus:prometheus /etc/prometheus\n  - chown -R prometheus:prometheus /var/lib/prometheus\n  - cp /run/install/prometheus/prometheus /usr/local/bin/\n  - cp /run/install/prometheus/promtool /usr/local/bin/\n  - chown prometheus:prometheus /usr/local/bin/prometheus\n  - chown prometheus:prometheus /usr/local/bin/promtool\n  - cp -r /run/install/prometheus/consoles /etc/prometheus\n  - cp -r /run/install/prometheus/console_libraries /etc/prometheus\n  - chown -R prometheus:prometheus /etc/prometheus/consoles\n  - chown -R prometheus:prometheus /etc/prometheus/console_libraries\n  - echo \">>> Starting Prometheus Service\"\n  - systemctl daemon-reload\n  - systemctl start prometheus\n  - systemctl enable prometheus\n  - echo \">>> Configuring Firewall\"\n  - firewall-offline-cmd --add-port=9090/tcp\n  - systemctl restart firewalld\n  - echo \"alias sshopc='/usr/bin/ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -oConnectTimeout=10 -i ~/.ssh/id_rsa_opc'\" >> /home/opc/.bashrc\n\nfinal_message: \"**** The system is finally up, after $UPTIME seconds ****\"\n"
+      },
+      "okit_reference": "okit-21ff506c-8125-485e-a535-57986ef350ea",
+      "preserve_boot_volume": false,
+      "primary_vnic": {
+        "assign_public_ip": true,
+        "availability_domain": "1",
+        "compartment_id": "ocid1.compartment.AK00905695.x9pca1.zaplqn5j0om4epo236cm709jdp1mvz1gr0w04ms73hglew0slpy0iqmh90xk",
+        "display_name": "prometheusvm",
+        "hostname_label": "prometheusvm",
+        "id": "ocid1.vnicattachment.AK00905695.x9pca1.fmuz6gcw5otalupri24cmeye76joj2wz32ne8mq1poq1vgj8zzw77sqap1q3",
+        "lifecycle_state": "ATTACHED",
+        "nic_index": 0,
+        "nsg_ids": [],
+        "resource_name": "PrometheusvmVnicAttachment1",
+        "skip_source_dest_check": false,
+        "subnet_id": "ocid1.subnet.AK00905695.x9pca1.ds3u2xquawnvsarobefvb6elyg9haslr5kirnfnhhghlo1t6aq3he3gps04l",
+        "time_created": "2023-01-23T17:11:49.537212+00:00",
+        "vlan_tag": 0,
+        "vnic_id": "ocid1.vnic.AK00905695.x9pca1.6tvwdcx4ab2mhej86dc3b905ni0hpwtkk3vm3ru20wgcg4prksfv9k345ipg"
+      },
+      "read_only": false,
+      "region": "x9pca1.osc.uk.oracle.com",
+      "resource_name": "Prometheusvm",
+      "shape": "VM.PCAStandard1.Flex",
+      "shape_config": {
+        "max_vnic_attachments": 2,
+        "memory_in_gbs": "16",
+        "networking_bandwidth_in_gbps": 24.6,
+        "ocpus": 1
+      },
+      "shape_series": "intel",
+      "show_connections": false,
+      "source_details": {
+        "boot_volume_size_in_gbs": "50",
+        "image_id": "ocid1.image.AK00905695.x9pca1.ye9e8d6csmggarq48dr9268w8pqj0o20klp42v70hrzds21xcgx2oxwo4o3w",
+        "image_source": "platform",
+        "instance_type": "vm",
+        "os": "OracleLinux",
+        "shape_series": "amd",
+        "source_type": "image",
+        "version": "8"
+      },
+      "subnet_id": "ocid1.subnet.AK00905695.x9pca1.ds3u2xquawnvsarobefvb6elyg9haslr5kirnfnhhghlo1t6aq3he3gps04l",
+      "time_created": "2023-03-02T10:30:03.862829+00:00",
+      "vnic_attachments": [
+        {
+          "assign_public_ip": true,
+          "availability_domain": "1",
+          "compartment_id": "ocid1.compartment.AK00905695.x9pca1.zaplqn5j0om4epo236cm709jdp1mvz1gr0w04ms73hglew0slpy0iqmh90xk",
+          "display_name": "prometheusvm",
+          "hostname_label": "prometheusvm",
+          "id": "ocid1.vnicattachment.AK00905695.x9pca1.fmuz6gcw5otalupri24cmeye76joj2wz32ne8mq1poq1vgj8zzw77sqap1q3",
+          "lifecycle_state": "ATTACHED",
+          "nic_index": 0,
+          "nsg_ids": [],
+          "resource_name": "PrometheusvmVnicAttachment1",
+          "skip_source_dest_check": false,
+          "subnet_id": "ocid1.subnet.AK00905695.x9pca1.ds3u2xquawnvsarobefvb6elyg9haslr5kirnfnhhghlo1t6aq3he3gps04l",
+          "time_created": "2023-01-23T17:11:49.537212+00:00",
+          "vlan_tag": 0,
+          "vnic_id": "ocid1.vnic.AK00905695.x9pca1.6tvwdcx4ab2mhej86dc3b905ni0hpwtkk3vm3ru20wgcg4prksfv9k345ipg"
+        }
+      ],
+      "volume_attachments": []
+    },
+    {
+      "agent_config": {
+        "is_management_disabled": false,
+        "is_monitoring_disabled": false
+      },
+      "availability_domain": "1",
+      "chipset": "intel",
+      "compartment_id": "ocid1.compartment.AK00905695.x9pca1.zaplqn5j0om4epo236cm709jdp1mvz1gr0w04ms73hglew0slpy0iqmh90xk",
+      "count": 1,
+      "defined_tags": {},
+      "display_name": "linuxvm2",
+      "documentation": "",
+      "fault_domain": "FAULT-DOMAIN-1",
+      "flex_shape": true,
+      "freeform_tags": {},
+      "id": "okit.instance.f0956bd7-8d1a-44fc-a361-07e8b28f8576",
+      "image_id": "ocid1.image.AK00905695.x9pca1.u6p00idn2po123b2m4x9e1fsmfbvmb1afl12pj8m8n5d33prps4ljoy0pbio",
+      "instance_type": "vm",
+      "is_pv_encryption_in_transit_enabled": false,
+      "launch_mode": "PARAVIRTUALIZED",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": false,
+        "is_pv_encryption_in_transit_enabled": false,
+        "network_type": "PARAVIRTUALIZED",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "RUNNING",
+      "metadata": {
+        "ssh_authorized_keys": "var.public_key",
+        "user_data": "#cloud-config\nusers:\n  - default\n  - name: node_exporter\n    homedir: /bin/false\n\nwrite_files:\n  # Wget Configuration\n  - path: /etc/wgetrc\n    append: true\n    content: |\n      #http_proxy = Add Proxy Here\n      #https_proxy = Add Proxy Here\n      #use_proxy = on\n  # Add Node Export Service file\n  - path: /etc/systemd/system/node_exporter.service\n    content: |\n      [Unit]\n      Description=Node Exporter\n      After=network.target\n\n      [Service]\n      User=node_exporter\n      Group=node_exporter\n      Type=simple\n      ExecStart=/usr/local/bin/node_exporter --collector.processes --collector.systemd\n\n      [Install]\n      WantedBy=multi-user.target\n\nruncmd:\n  - echo \">>> Creating Directory\"\n  - mkdir -p /run/install/node_exporter\n  - echo \">>> Getting Node Exporter\"\n  - wget https://github.com/prometheus/node_exporter/releases/download/v1.5.0/node_exporter-1.5.0.linux-amd64.tar.gz -O /run/install/node_exporter.tar.gz\n  - echo \">>> Extracting Node Exporter\"\n  - tar xvfz /run/install/node_exporter.tar.gz -C /run/install/node_exporter --strip-components=1\n  - echo \">>> Moving Node Exporter\"\n  - mv /run/install/node_exporter/node_exporter /usr/local/bin/\n  - echo \">>> Starting Node Exporter Service\"\n  - systemctl daemon-reload\n  - systemctl start node_exporter\n  - systemctl enable node_exporter\n  - echo \">>> Configuring Firewall\"\n  - firewall-offline-cmd --add-port=9100/tcp \n  - systemctl restart firewalld\n\nfinal_message: \"**** The system is finally up, after $UPTIME seconds ****\"\n"
+      },
+      "okit_reference": "okit-ae95017c-e53e-4745-82ff-adad07de69f0",
+      "preserve_boot_volume": false,
+      "primary_vnic": {
+        "assign_public_ip": false,
+        "availability_domain": "1",
+        "compartment_id": "ocid1.compartment.AK00905695.x9pca1.zaplqn5j0om4epo236cm709jdp1mvz1gr0w04ms73hglew0slpy0iqmh90xk",
+        "display_name": "linuxvm",
+        "hostname_label": "linuxvm2",
+        "id": "ocid1.vnicattachment.AK00905695.x9pca1.s2tpg6qsaaq5fn28c94gjdufaf7p7h2ohvtp6s58sl72lv3gh61lva3dncgr",
+        "lifecycle_state": "ATTACHED",
+        "nic_index": 0,
+        "nsg_ids": [],
+        "resource_name": "LinuxvmVnicAttachment1",
+        "skip_source_dest_check": false,
+        "subnet_id": "ocid1.subnet.AK00905695.x9pca1.c9egie4i8feovlrdnzgbhjgejkoqbtznjm9jo96yzw0znn7v1dtlzo9g7fn5",
+        "time_created": "2023-01-23T17:14:43.990625+00:00",
+        "vlan_tag": 0,
+        "vnic_id": "ocid1.vnic.AK00905695.x9pca1.m153duh3y71xs3arxh3vxqo7ixe18kbhxp7ncwi2413hphrc767lsvzrvvh7"
+      },
+      "read_only": false,
+      "region": "x9pca1.osc.uk.oracle.com",
+      "resource_name": "Okit_I_1678975124647",
+      "shape": "VM.PCAStandard1.Flex",
+      "shape_config": {
+        "max_vnic_attachments": 2,
+        "memory_in_gbs": "16",
+        "networking_bandwidth_in_gbps": 24.6,
+        "ocpus": 1
+      },
+      "shape_series": "intel",
+      "show_connections": false,
+      "source_details": {
+        "boot_volume_size_in_gbs": "50",
+        "image_id": "ocid1.image.AK00905695.x9pca1.ye9e8d6csmggarq48dr9268w8pqj0o20klp42v70hrzds21xcgx2oxwo4o3w",
+        "image_source": "platform",
+        "os": "OracleLinux",
+        "shape_series": "amd",
+        "source_type": "image",
+        "version": "8"
+      },
+      "subnet_id": "ocid1.subnet.AK00905695.x9pca1.c9egie4i8feovlrdnzgbhjgejkoqbtznjm9jo96yzw0znn7v1dtlzo9g7fn5",
+      "time_created": "2023-03-02T10:30:51.442074+00:00",
+      "vnic_attachments": [
+        {
+          "assign_public_ip": false,
+          "availability_domain": "1",
+          "compartment_id": "ocid1.compartment.AK00905695.x9pca1.zaplqn5j0om4epo236cm709jdp1mvz1gr0w04ms73hglew0slpy0iqmh90xk",
+          "display_name": "linuxvm",
+          "hostname_label": "linuxvm2",
+          "id": "ocid1.vnicattachment.AK00905695.x9pca1.s2tpg6qsaaq5fn28c94gjdufaf7p7h2ohvtp6s58sl72lv3gh61lva3dncgr",
+          "lifecycle_state": "ATTACHED",
+          "nic_index": 0,
+          "nsg_ids": [],
+          "resource_name": "LinuxvmVnicAttachment1",
+          "skip_source_dest_check": false,
+          "subnet_id": "ocid1.subnet.AK00905695.x9pca1.c9egie4i8feovlrdnzgbhjgejkoqbtznjm9jo96yzw0znn7v1dtlzo9g7fn5",
+          "time_created": "2023-01-23T17:14:43.990625+00:00",
+          "vlan_tag": 0,
+          "vnic_id": "ocid1.vnic.AK00905695.x9pca1.m153duh3y71xs3arxh3vxqo7ixe18kbhxp7ncwi2413hphrc767lsvzrvvh7"
+        }
+      ],
+      "volume_attachments": []
+    }
+  ],
+  "internet_gateways": [
+    {
+      "compartment_id": "ocid1.compartment.AK00905695.x9pca1.zaplqn5j0om4epo236cm709jdp1mvz1gr0w04ms73hglew0slpy0iqmh90xk",
+      "defined_tags": {},
+      "display_name": "promig",
+      "documentation": "",
+      "enabled": true,
+      "freeform_tags": {},
+      "id": "ocid1.internetgateway.AK00905695.x9pca1.nu2sdvu8c0y1oucybg16o1o38yrl45hwedllzxfr1cgqf5hj6forrsow4hcm",
+      "is_enabled": true,
+      "lifecycle_state": "AVAILABLE",
+      "okit_reference": "okit-b8100e62-d0c4-4adc-b1ed-0655135b33bb",
+      "read_only": false,
+      "resource_name": "Promig",
+      "show_connections": false,
+      "time_created": "2023-03-02T10:23:59.784378+00:00",
+      "vcn_id": "ocid1.vcn.AK00905695.x9pca1.ft0babqq0v4qao5aga0xbzd9nr4b7dvsa5gc40e86hkmo98o9e14dcjs97vh"
+    }
+  ],
+  "metadata": {
+    "created": "2023-3-3 13:31:34",
+    "file": {
+      "generate_terraform": true,
+      "name": "/pcd-x9/prometheus_node_exporter.json",
+      "terraform_dir": "/pcd-x9/prometheus_node_exporter"
+    },
+    "okit_model_id": "okit-model-6f63b12e-c6e7-4a8e-8cca-91489c008426",
+    "okit_version": "0.47.0 Nightly",
+    "platform": "pca",
+    "resource_count": 299,
+    "updated": "2023-3-3 13:31:34"
+  },
+  "nat_gateways": [
+    {
+      "block_traffic": false,
+      "compartment_id": "ocid1.compartment.AK00905695.x9pca1.zaplqn5j0om4epo236cm709jdp1mvz1gr0w04ms73hglew0slpy0iqmh90xk",
+      "defined_tags": {},
+      "display_name": "promnat",
+      "documentation": "",
+      "freeform_tags": {},
+      "id": "ocid1.nat.AK00905695.x9pca1.hne3isxhnlvpf57mv87q317eg5rx6bgzrqecdpsvqzn6psubm2ez9qwlln2r",
+      "lifecycle_state": "AVAILABLE",
+      "nat_ip": "138.3.28.142",
+      "okit_reference": "okit-0050b91b-f970-45e3-b5f1-951967d79bbf",
+      "public_ip_id": "ocid1.publicip.AK00905695.x9pca1.0p8tpv76eb9pia7y7e99fpdqwv9pilai0l1qkirsm7lkc0u5ywvlahz7gn95",
+      "read_only": false,
+      "resource_name": "Promnat",
+      "show_connections": false,
+      "time_created": "2023-03-02T10:24:12.653068+00:00",
+      "vcn_id": "ocid1.vcn.AK00905695.x9pca1.ft0babqq0v4qao5aga0xbzd9nr4b7dvsa5gc40e86hkmo98o9e14dcjs97vh"
+    }
+  ],
+  "route_tables": [
+    {
+      "compartment_id": "ocid1.compartment.AK00905695.x9pca1.zaplqn5j0om4epo236cm709jdp1mvz1gr0w04ms73hglew0slpy0iqmh90xk",
+      "default": true,
+      "defined_tags": {},
+      "display_name": "publicrt",
+      "documentation": "",
+      "freeform_tags": {},
+      "id": "ocid1.routetable.AK00905695.x9pca1.tar4sei5vnldz5126daikepvz8favwypguuledeonctx115sbo71a9glbuug",
+      "lifecycle_state": "AVAILABLE",
+      "okit_reference": "okit-dd639b44-c773-472c-b045-9bc1371b6a53",
+      "read_only": false,
+      "resource_name": "Publicrt",
+      "route_rules": [
+        {
+          "destination": "0.0.0.0/0",
+          "destination_type": "CIDR_BLOCK",
+          "network_entity_id": "ocid1.internetgateway.AK00905695.x9pca1.nu2sdvu8c0y1oucybg16o1o38yrl45hwedllzxfr1cgqf5hj6forrsow4hcm",
+          "target_type": "internet_gateway"
+        }
+      ],
+      "show_connections": false,
+      "time_created": "2023-03-02T10:21:48.909773+00:00",
+      "vcn_id": "ocid1.vcn.AK00905695.x9pca1.ft0babqq0v4qao5aga0xbzd9nr4b7dvsa5gc40e86hkmo98o9e14dcjs97vh"
+    },
+    {
+      "compartment_id": "ocid1.compartment.AK00905695.x9pca1.zaplqn5j0om4epo236cm709jdp1mvz1gr0w04ms73hglew0slpy0iqmh90xk",
+      "default": false,
+      "defined_tags": {},
+      "display_name": "privatert",
+      "documentation": "",
+      "freeform_tags": {},
+      "id": "ocid1.routetable.AK00905695.x9pca1.xxr9qyfrazujct5mgrubbvlw3pkmpentqz352nenlc1kluxvdnxkfq0542lv",
+      "lifecycle_state": "AVAILABLE",
+      "okit_reference": "okit-09d56026-6d31-442a-91e3-200524c078cb",
+      "read_only": false,
+      "resource_name": "Privatert",
+      "route_rules": [
+        {
+          "destination": "0.0.0.0/0",
+          "destination_type": "CIDR_BLOCK",
+          "network_entity_id": "ocid1.nat.AK00905695.x9pca1.hne3isxhnlvpf57mv87q317eg5rx6bgzrqecdpsvqzn6psubm2ez9qwlln2r",
+          "target_type": "nat_gateway"
+        }
+      ],
+      "show_connections": false,
+      "time_created": "2023-03-02T10:23:21.744992+00:00",
+      "vcn_id": "ocid1.vcn.AK00905695.x9pca1.ft0babqq0v4qao5aga0xbzd9nr4b7dvsa5gc40e86hkmo98o9e14dcjs97vh"
+    }
+  ],
+  "security_lists": [
+    {
+      "compartment_id": "ocid1.compartment.AK00905695.x9pca1.zaplqn5j0om4epo236cm709jdp1mvz1gr0w04ms73hglew0slpy0iqmh90xk",
+      "default": true,
+      "defined_tags": {},
+      "display_name": "pubsl",
+      "documentation": "",
+      "egress_security_rules": [
+        {
+          "destination": "0.0.0.0/0",
+          "destination_type": "CIDR_BLOCK",
+          "is_stateless": false,
+          "protocol": "all"
+        }
+      ],
+      "freeform_tags": {},
+      "id": "ocid1.securitylist.AK00905695.x9pca1.yvfdrlyq31f4dwov44mehk9iy1wrwrcyer5cftjtenzfpwabvswtc1jzdxq0",
+      "ingress_security_rules": [
+        {
+          "icmp_options": {
+            "type": 3
+          },
+          "is_stateless": false,
+          "protocol": "1",
+          "source": "10.0.0.0/24",
+          "source_type": "CIDR_BLOCK"
+        },
+        {
+          "icmp_options": {
+            "code": 4,
+            "type": 3
+          },
+          "is_stateless": false,
+          "protocol": "1",
+          "source": "0.0.0.0/0",
+          "source_type": "CIDR_BLOCK"
+        },
+        {
+          "is_stateless": false,
+          "protocol": "6",
+          "source": "0.0.0.0/0",
+          "source_type": "CIDR_BLOCK",
+          "tcp_options": {
+            "destination_port_range": {
+              "max": 22,
+              "min": 22
+            }
+          }
+        },
+        {
+          "is_stateless": false,
+          "protocol": "all",
+          "source": "10.0.0.16/28",
+          "source_type": "CIDR_BLOCK"
+        },
+        {
+          "is_stateless": false,
+          "protocol": "6",
+          "source": "0.0.0.0/0",
+          "source_type": "CIDR_BLOCK",
+          "tcp_options": {
+            "destination_port_range": {
+              "max": 9090,
+              "min": 9090
+            }
+          }
+        },
+        {
+          "description": "",
+          "is_stateless": false,
+          "protocol": "6",
+          "source": "0.0.0.0/0",
+          "source_type": "CIDR_BLOCK",
+          "tcp_options": {
+            "destination_port_range": {
+              "max": "7777",
+              "min": "7777"
+            },
+            "source_port_range": {
+              "max": "",
+              "min": ""
+            }
+          }
+        }
+      ],
+      "lifecycle_state": "AVAILABLE",
+      "okit_reference": "okit-433fc6ff-02a4-4590-b814-1df627b807b8",
+      "read_only": false,
+      "resource_name": "Pubsl",
+      "show_connections": false,
+      "time_created": "2023-03-02T10:21:48.926064+00:00",
+      "vcn_id": "ocid1.vcn.AK00905695.x9pca1.ft0babqq0v4qao5aga0xbzd9nr4b7dvsa5gc40e86hkmo98o9e14dcjs97vh"
+    },
+    {
+      "compartment_id": "ocid1.compartment.AK00905695.x9pca1.zaplqn5j0om4epo236cm709jdp1mvz1gr0w04ms73hglew0slpy0iqmh90xk",
+      "default": false,
+      "defined_tags": {},
+      "display_name": "privsl",
+      "documentation": "",
+      "egress_security_rules": [
+        {
+          "destination": "0.0.0.0/0",
+          "destination_type": "CIDR_BLOCK",
+          "is_stateless": false,
+          "protocol": "all"
+        }
+      ],
+      "freeform_tags": {},
+      "id": "ocid1.securitylist.AK00905695.x9pca1.ad6aeuhm6817khyfivow5oo4kc5ynqkhbp7vl78kwipxfzpsjtxabwrz0ucq",
+      "ingress_security_rules": [
+        {
+          "is_stateless": false,
+          "protocol": "all",
+          "source": "10.0.0.0/28",
+          "source_type": "CIDR_BLOCK"
+        }
+      ],
+      "lifecycle_state": "AVAILABLE",
+      "okit_reference": "okit-2ac11b8a-1794-4543-aa2e-1e6b005cf570",
+      "read_only": false,
+      "resource_name": "Privsl",
+      "show_connections": false,
+      "time_created": "2023-03-02T10:26:01.616738+00:00",
+      "vcn_id": "ocid1.vcn.AK00905695.x9pca1.ft0babqq0v4qao5aga0xbzd9nr4b7dvsa5gc40e86hkmo98o9e14dcjs97vh"
+    }
+  ],
+  "subnets": [
+    {
+      "availability_domain": "1",
+      "cidr_block": "10.0.0.0/28",
+      "compartment_id": "ocid1.compartment.AK00905695.x9pca1.zaplqn5j0om4epo236cm709jdp1mvz1gr0w04ms73hglew0slpy0iqmh90xk",
+      "defined_tags": {},
+      "dhcp_options_id": "ocid1.dhcpoptions.AK00905695.x9pca1.p5ubkkdxdk8wn4rn2qbvb05l5kshmkarut32ksjsvnc4cq4iiod47qaqx10p",
+      "display_name": "prompubsn",
+      "dns_label": "prompubsn",
+      "documentation": "",
+      "freeform_tags": {},
+      "id": "ocid1.subnet.AK00905695.x9pca1.ds3u2xquawnvsarobefvb6elyg9haslr5kirnfnhhghlo1t6aq3he3gps04l",
+      "ipv6cidr_block": "",
+      "ipv6cidr_blocks": "",
+      "is_ipv6enabled": false,
+      "lifecycle_state": "AVAILABLE",
+      "okit_reference": "okit-2b273971-0d31-4eb1-9761-5d3565b61aef",
+      "prohibit_public_ip_on_vnic": false,
+      "read_only": false,
+      "resource_name": "Prompubsn",
+      "route_table_id": "ocid1.routetable.AK00905695.x9pca1.tar4sei5vnldz5126daikepvz8favwypguuledeonctx115sbo71a9glbuug",
+      "security_list_ids": [
+        "ocid1.securitylist.AK00905695.x9pca1.yvfdrlyq31f4dwov44mehk9iy1wrwrcyer5cftjtenzfpwabvswtc1jzdxq0"
+      ],
+      "show_connections": false,
+      "subnet_domain_name": "prompubsn.prometheusvcn.oraclevcn.com",
+      "time_created": "2023-03-02T10:27:13.853352+00:00",
+      "vcn_id": "ocid1.vcn.AK00905695.x9pca1.ft0babqq0v4qao5aga0xbzd9nr4b7dvsa5gc40e86hkmo98o9e14dcjs97vh",
+      "virtual_router_ip": "10.0.0.1",
+      "virtual_router_mac": "00:13:97:04:1a:11"
+    },
+    {
+      "availability_domain": "1",
+      "cidr_block": "10.0.1.0/24",
+      "compartment_id": "ocid1.compartment.AK00905695.x9pca1.zaplqn5j0om4epo236cm709jdp1mvz1gr0w04ms73hglew0slpy0iqmh90xk",
+      "defined_tags": {},
+      "dhcp_options_id": "ocid1.dhcpoptions.AK00905695.x9pca1.p5ubkkdxdk8wn4rn2qbvb05l5kshmkarut32ksjsvnc4cq4iiod47qaqx10p",
+      "display_name": "promprivsn",
+      "dns_label": "promprivsn",
+      "documentation": "",
+      "freeform_tags": {},
+      "id": "ocid1.subnet.AK00905695.x9pca1.c9egie4i8feovlrdnzgbhjgejkoqbtznjm9jo96yzw0znn7v1dtlzo9g7fn5",
+      "ipv6cidr_block": "",
+      "ipv6cidr_blocks": "",
+      "is_ipv6enabled": false,
+      "lifecycle_state": "AVAILABLE",
+      "okit_reference": "okit-e79a7c07-6356-4e9f-a19e-b2d464b46f12",
+      "prohibit_public_ip_on_vnic": true,
+      "read_only": false,
+      "resource_name": "Promprivsn",
+      "route_table_id": "ocid1.routetable.AK00905695.x9pca1.xxr9qyfrazujct5mgrubbvlw3pkmpentqz352nenlc1kluxvdnxkfq0542lv",
+      "security_list_ids": [
+        "ocid1.securitylist.AK00905695.x9pca1.ad6aeuhm6817khyfivow5oo4kc5ynqkhbp7vl78kwipxfzpsjtxabwrz0ucq"
+      ],
+      "show_connections": false,
+      "subnet_domain_name": "promprivsn.prometheusvcn.oraclevcn.com",
+      "time_created": "2023-03-02T10:28:19.042293+00:00",
+      "vcn_id": "ocid1.vcn.AK00905695.x9pca1.ft0babqq0v4qao5aga0xbzd9nr4b7dvsa5gc40e86hkmo98o9e14dcjs97vh",
+      "virtual_router_ip": "10.0.0.17",
+      "virtual_router_mac": "00:13:97:b1:65:f9"
+    }
+  ],
+  "title": "Prometheus Node Exporter",
+  "user_defined": {
+    "terraform": ""
+  },
+  "variables_schema": {
+    "groups": [
+      {
+        "default": "",
+        "description": "",
+        "name": "Undefined"
+      }
+    ],
+    "variables": [
+      {
+        "default": "",
+        "description": "Instance Public SSH Key",
+        "group": "Undefined",
+        "name": "public_key"
+      }
+    ]
+  },
+  "virtual_cloud_networks": [
+    {
+      "cidr_blocks": [
+        "10.0.0.0/16"
+      ],
+      "compartment_id": "ocid1.compartment.AK00905695.x9pca1.zaplqn5j0om4epo236cm709jdp1mvz1gr0w04ms73hglew0slpy0iqmh90xk",
+      "defined_tags": {},
+      "display_name": "prometheusvcn",
+      "dns_label": "prometheusvcn",
+      "documentation": "",
+      "freeform_tags": {},
+      "id": "ocid1.vcn.AK00905695.x9pca1.ft0babqq0v4qao5aga0xbzd9nr4b7dvsa5gc40e86hkmo98o9e14dcjs97vh",
+      "ipv6cidr_blocks": [],
+      "is_ipv6enabled": false,
+      "lifecycle_state": "AVAILABLE",
+      "okit_reference": "okit-2a636c2b-619d-404c-aaea-0c9a66b2dfd2",
+      "read_only": false,
+      "resource_name": "Prometheusvcn",
+      "show_connections": false,
+      "time_created": "2023-03-02T10:21:48.900731+00:00",
+      "vcn_domain_name": "prometheusvcn.oraclevcn.com"
+    }
+  ]
+}
