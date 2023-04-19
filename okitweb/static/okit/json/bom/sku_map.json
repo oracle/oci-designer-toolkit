@@ -538,7 +538,7 @@
     "oke_cluster": {
         "type": {
             "BASIC_CLUSTER": "N/A",
-            "ENHANCE_CLUSTER": "B96545"
+            "ENHANCED_CLUSTER": "B96545"
         },
         "virtual_node": "B96109"
     },
