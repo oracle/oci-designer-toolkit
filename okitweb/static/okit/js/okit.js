@@ -435,6 +435,8 @@ class OkitOCIData {
     //     }
     // }
 
+    getPodShapes = (filter=() => true) => this.dropdown_data.pod_shapes.filter(filter)
+
     getVolumeBackupPolicies() {
         return this.dropdown_data.volume_backup_policy ? this.dropdown_data.volume_backup_policy : []
     } 

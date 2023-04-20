@@ -143,7 +143,16 @@ class OkitJson {
         });
         // Check for root compartment
         this.checkCompartmentIds();
-        if (okitOciProductPricing) okitOciProductPricing.generateBoM(this)
+        // if (okitOciProductPricing) okitOciProductPricing.generateBoM(this)
+        this.generateBoM()
+    }
+    generateBoM() {
+        if (this.metadata.platform === 'oci') {
+            console.info('OCI Platform Generating BoM')
+            if (okitOciProductPricing) okitOciProductPricing.generateBoM(this)
+        } else {
+            console.info(`${this.metadata.platform.toLocaleUpperCase()} Platform not supported for BoM`)
+        }
     }
     checkCompartmentIds() {
         const compartment_ids = this.compartments ? this.compartments.map((c) => c.id) : []
@@ -494,7 +503,7 @@ class OkitArtifact {
     generateResourceNameFromDisplayName = (name) => titleCase(name.split('_').join('-')).split(' ').join('').replaceAll('-','_')
 
     estimateCost = () => {
-        if (this.getOkitJson().metadata.platform == 'pca') return ''
+        if (this.getOkitJson().metadata.platform === 'pca') return ''
         const get_price_function = OkitOciProductPricing.getPriceFunctionName(this.constructor.name)
         const pricing = okitOciProductPricing ? okitOciProductPricing : new OkitOciProductPricing()
         console.info(`>>>>>> Estimating Resource Cost: ${get_price_function}`)

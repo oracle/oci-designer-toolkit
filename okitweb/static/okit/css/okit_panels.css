@@ -105,6 +105,12 @@
     padding-left: 5px;
 }
 
+.okit-template-info {
+    padding: 5px;
+    /* font-weight: bolder; */
+    font-style: italic;
+}
+
 .okit-validation-results {
     margin-right: 1em;
 }

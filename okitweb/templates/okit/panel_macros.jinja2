@@ -16,6 +16,7 @@
 
 {%- macro add_templates_side_panel(categories) -%}
     <div id="templates_panel" class="okit-left-side-panel okit-template-panel hidden">
+        <div class="okit-template-info">Check template documentation for specific usage information.</div>
         {% for category in categories %}
             {{ add_template_panel_category(category) }}
         {% endfor %}

@@ -23,6 +23,18 @@ class OkeClusterProperties extends OkitResourceProperties {
         const kubernetes_version = this.createInput('select', 'Kubernetes Version', `${this.id}_kubernetes_version`, '', (d, i, n) => this.resource.kubernetes_version = n[i].value)
         this.kubernetes_version = kubernetes_version.input
         this.append(this.core_tbody, kubernetes_version.row)
+        // Cluster Type
+        // const type_data = {options: {BASIC_CLUSTER: 'Basic', ENHANCED_CLUSTER: 'Enhanced'}}
+        const type_data = {options: {BASIC_CLUSTER: 'Basic'}}
+        const type = this.createInput('select', 'Cluster Type', `${this.id}_type`, '', (d, i, n) => {this.resource.type = n[i].value; this.handleTypeChange(n[i].value)}, type_data)
+        this.type = type.input
+        this.append(this.core_tbody, type.row)
+        // Node Pool Type
+        const node_pool_type_data = {options: {Virtual: 'Virtual Nodes', Managed: 'Managed Nodes'}}
+        const node_pool_type = this.createInput('select', 'Node Pool Type', `${this.id}_node_pool_type`, '', (d, i, n) => this.resource.node_pool_type = n[i].value, node_pool_type_data)
+        this.node_pool_type = node_pool_type.input
+        this.node_pool_type_row = node_pool_type.row
+        this.append(this.core_tbody, node_pool_type.row)
 
         // Kubernetes Options
         const options_details = this.createDetailsSection('Kubernetes Options', `${this.id}_options_details`)
@@ -96,6 +108,8 @@ class OkeClusterProperties extends OkitResourceProperties {
         // Assign Values
         this.vcn_id.property('value', this.resource.vcn_id)
         this.kubernetes_version.property('value', this.resource.kubernetes_version)
+        this.type.property('value', this.resource.type)
+        this.node_pool_type.property('value', this.resource.node_pool_type)
         // Options
         this.is_kubernetes_dashboard_enabled.property('checked', this.resource.options.add_ons.is_kubernetes_dashboard_enabled)
         this.is_tiller_enabled.property('checked', this.resource.options.add_ons.is_tiller_enabled)
@@ -108,5 +122,18 @@ class OkeClusterProperties extends OkitResourceProperties {
         this.subnet_id.property('value', this.resource.endpoint_config.subnet_id)
         this.is_public_ip_enabled.property('checked', this.resource.endpoint_config.is_public_ip_enabled)
         this.setMultiSelect(this.nsg_ids, this.resource.endpoint_config.nsg_ids)
+        // Hide Rows
+        this.handleTypeChange(this.resource.type)
+    }
+
+    // Handlers
+    handleTypeChange(type) {
+        type = type ? type : this.resource.type
+        if (type === 'BASIC_CLUSTER') {
+            this.resource.node_pool_type = 'Managed'
+            this.node_pool_type.property('value', this.resource.node_pool_type)
+        }
+        this.node_pool_type_row.classed('collapsed', (type === 'BASIC_CLUSTER'))
+
     }
 }
