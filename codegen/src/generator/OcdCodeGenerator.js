@@ -87,6 +87,9 @@ ${resources.sort().map((r) => `export { ${this.resourceName(r)} } from './${this
     resourcePropertiesName = (resource) => `${this.resourceCommonName(resource)}Properties`
     resourcePropertiesFilename = (resource) => `${this.resourcePropertiesName(resource)}`
 
+    // Terraform
+    resourceTerraformName = (resource) => `${this.resourceCommonName(resource)}Properties`
+
     toTitleCase = (str) => str.replace(/\b\w+/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase();}).replaceAll('-', '_').replace(/\W+/g, ' ')
     toCamelCase = (str) => `${this.toTitleCase(str.split('_').join(' ')).split(' ').map((e, i) => i === 0 ? e.toLowerCase() : e).join('')}`
 

@@ -48,6 +48,7 @@ export interface ResourceProperties {
 
 export interface GeneratedResourceProperties extends ResourceProperties {
     configs: ResourceElementConfig[]
+    onDelete?(child: any): void
 }
 
 export interface ResourceProperty extends ResourceProperties {
@@ -124,7 +125,7 @@ export const OcdLookupProperty = ({ ocdDocument, setOcdDocument, resource, confi
     const properties = config && config.properties ? config.properties : {}
     const resources = attribute.provider === 'oci' ? ocdDocument.getOciResourceList(attribute.lookupResource ? attribute.lookupResource : '') : []
     const resourceType = OcdUtils.toResourceType(attribute.lookupResource)
-    console.info('Resources', resources)
+    // console.info('Resources', resources)
     const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         resource[attribute.key] = e.target.value
         setOcdDocument(OcdDocument.clone(ocdDocument))
@@ -134,7 +135,8 @@ export const OcdLookupProperty = ({ ocdDocument, setOcdDocument, resource, confi
             <div><label>{attribute.label}</label></div>
             <div>
                 <select value={resource[attribute.key]} {...properties} onChange={onChange}>
-                    {!attribute.required && <option defaultValue='' key={`${attribute.lookupResource}-empty-option`}></option> }
+                    {/* {!attribute.required && <option defaultValue='' key={`${attribute.lookupResource}-empty-option`}></option> } */}
+                    <option defaultValue='' key={`${attribute.lookupResource}-empty-option`}></option>
                     {resources.filter((r) => r.resourceType !== resourceType || r.id !== resource.id).map((r: OcdResource) => {
                         return <option value={r.id} key={r.id}>{r.displayName}</option>
                     })}
