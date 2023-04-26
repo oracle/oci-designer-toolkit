@@ -51,8 +51,10 @@ export class OcdDocument {
     addResource(paletteResource: PaletteResource, compartmentId: string) {
         const resourceList = paletteResource.class.split('-').slice(1).join('_')
         const resourceClass = paletteResource.class.toLowerCase().split('-').map((w) => `${w.charAt(0).toUpperCase()}${w.slice(1)}`).join('')
-        const resourceNamespace: string = `${resourceClass}Model`
-        const resourceClient: string = `${resourceClass}Client`
+        // const resourceNamespace: string = `${resourceClass}Model`
+        // const resourceClient: string = `${resourceClass}Client`
+        const resourceNamespace: string = `${resourceClass}`
+        const resourceClient: string = `${resourceClass}`
         console.info('List:', resourceList, 'Class:', resourceClass, 'Client:', resourceClient)
         console.info(`ociResource`, ociResources)
         let modelResource = undefined

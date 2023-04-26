@@ -117,7 +117,7 @@ export namespace OcdDesign {
         const today = new Date();
         const date = `${today.getFullYear()}-${(today.getMonth() + 1)}-${today.getDate()}`;
         const time = `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
-        const compartment = ociResources.OciCompartmentModel.newResource()
+        const compartment = ociResources.OciCompartment.newResource()
         const layer: OcdViewLayer = {
             id: compartment.id,
             class: 'oci-compartment',

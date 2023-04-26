@@ -1,5 +1,6 @@
 {
   "analytics_instance": {
+    "tf_resource": "oci_analytics_analytics_instance",
     "type": "object",
     "subtype": "",
     "attributes": {
@@ -282,6 +283,7 @@
     }
   },
   "dhcp_options": {
+    "tf_resource": "oci_core_dhcp_options",
     "type": "object",
     "subtype": "",
     "attributes": {
@@ -408,6 +410,7 @@
     }
   },
   "drg": {
+    "tf_resource": "oci_core_drg",
     "type": "object",
     "subtype": "",
     "attributes": {
@@ -474,6 +477,7 @@
     }
   },
   "drg_attachment": {
+    "tf_resource": "oci_core_drg_attachment",
     "type": "object",
     "subtype": "",
     "attributes": {
@@ -648,6 +652,7 @@
     }
   },
   "drg_route_distribution": {
+    "tf_resource": "oci_core_drg_route_distribution",
     "type": "object",
     "subtype": "",
     "attributes": {
@@ -726,6 +731,7 @@
     }
   },
   "drg_route_distribution_statement": {
+    "tf_resource": "oci_core_drg_route_distribution_statement",
     "type": "object",
     "subtype": "",
     "attributes": {
@@ -816,6 +822,7 @@
     }
   },
   "drg_route_table": {
+    "tf_resource": "oci_core_drg_route_table",
     "type": "object",
     "subtype": "",
     "attributes": {
@@ -918,6 +925,7 @@
     }
   },
   "drg_route_table_route_rule": {
+    "tf_resource": "oci_core_drg_route_table_route_rule",
     "type": "object",
     "subtype": "",
     "attributes": {
@@ -1020,6 +1028,7 @@
     }
   },
   "instance": {
+    "tf_resource": "oci_core_instance",
     "type": "object",
     "subtype": "",
     "attributes": {
@@ -1878,6 +1887,7 @@
     }
   },
   "internet_gateway": {
+    "tf_resource": "oci_core_internet_gateway",
     "type": "object",
     "subtype": "",
     "attributes": {
@@ -1956,6 +1966,7 @@
     }
   },
   "local_peering_gateway": {
+    "tf_resource": "oci_core_local_peering_gateway",
     "type": "object",
     "subtype": "",
     "attributes": {
@@ -2106,6 +2117,7 @@
     }
   },
   "nat_gateway": {
+    "tf_resource": "oci_core_nat_gateway",
     "type": "object",
     "subtype": "",
     "attributes": {
@@ -2208,6 +2220,7 @@
     }
   },
   "network_security_group": {
+    "tf_resource": "oci_core_network_security_group",
     "type": "object",
     "subtype": "",
     "attributes": {
@@ -2274,6 +2287,7 @@
     }
   },
   "remote_peering_connection": {
+    "tf_resource": "oci_core_remote_peering_connection",
     "type": "object",
     "subtype": "",
     "attributes": {
@@ -2400,6 +2414,7 @@
     }
   },
   "route_table": {
+    "tf_resource": "oci_core_route_table",
     "type": "object",
     "subtype": "",
     "attributes": {
@@ -2538,6 +2553,7 @@
     }
   },
   "security_list": {
+    "tf_resource": "oci_core_security_list",
     "type": "object",
     "subtype": "",
     "attributes": {
@@ -3108,6 +3124,7 @@
     }
   },
   "service_gateway": {
+    "tf_resource": "oci_core_service_gateway",
     "type": "object",
     "subtype": "",
     "attributes": {
@@ -3234,6 +3251,7 @@
     }
   },
   "subnet": {
+    "tf_resource": "oci_core_subnet",
     "type": "object",
     "subtype": "",
     "attributes": {
@@ -3432,6 +3450,7 @@
     }
   },
   "vcn": {
+    "tf_resource": "oci_core_vcn",
     "type": "object",
     "subtype": "",
     "attributes": {
@@ -3534,6 +3553,7 @@
     }
   },
   "volume": {
+    "tf_resource": "oci_core_volume",
     "type": "object",
     "subtype": "",
     "attributes": {
@@ -3804,6 +3824,7 @@
     }
   },
   "compartment": {
+    "tf_resource": "oci_identity_compartment",
     "type": "object",
     "subtype": "",
     "attributes": {
@@ -3882,6 +3903,7 @@
     }
   },
   "bucket": {
+    "tf_resource": "oci_objectstorage_bucket",
     "type": "object",
     "subtype": "",
     "attributes": {

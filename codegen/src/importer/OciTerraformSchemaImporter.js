@@ -15,6 +15,7 @@ class OciTerraformSchemaImporter extends OcdSchemaImporter {
         Object.entries(source_schema.provider_schemas["registry.terraform.io/hashicorp/oci"].resource_schemas).filter(([k, v]) => Object.keys(resourceMap).indexOf(k) >= 0).forEach(([key,value]) => {
             console.info('Processing', key)
             this.ocd_schema[resourceMap[key]] = {
+                'tf_resource': key,
                 'type': 'object',
                 'subtype': '',
                 'attributes': this.getAttributes(key, value.block)
