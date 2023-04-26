@@ -9,6 +9,7 @@ import OcdExporter from "../OcdExporter";
 import * as Model  from '../../model/provider/oci/resources'
 import * as Terraform  from './provider/oci/resources'
 
+
 export class OcdTerraformExporter extends OcdExporter {
     terraform: string = ''
     export = (design: OcdDesign): string => {
