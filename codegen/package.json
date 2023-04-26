@@ -30,10 +30,10 @@
         "import": "npm run import-oci-terraform-schema",
 
         "generate-oci-model":      "node src/ocd-codegen.js generate oci-model-js      ./src/schema/oci-schema.json ../ocd/src/model/provider/oci",
-        "generate-oci-properties": "node src/ocd-codegen.js generate oci-properties-js ./src/schema/oci-schema.json ../ocd/src/components/properties/providers/oci",
-        "generate-oci-ansible":    "node src/ocd-codegen.js generate oci-ansible-js    ./src/schema/oci-schema.json ../test/ocd/src/export/ansible/providers/oci",
-        "generate-oci-terraform":  "node src/ocd-codegen.js generate oci-terraform-js  ./src/schema/oci-schema.json ../ocd/src/export/terraform/providers/oci",
-        "generate-oci-markdown":   "node src/ocd-codegen.js generate oci-markdown-js   ./src/schema/oci-schema.json ../test/ocd/src/export/markdown/providers/oci",
+        "generate-oci-properties": "node src/ocd-codegen.js generate oci-properties-js ./src/schema/oci-schema.json ../ocd/src/components/properties/provider/oci",
+        "generate-oci-ansible":    "node src/ocd-codegen.js generate oci-ansible-js    ./src/schema/oci-schema.json ../test/ocd/src/export/ansible/provider/oci",
+        "generate-oci-terraform":  "node src/ocd-codegen.js generate oci-terraform-js  ./src/schema/oci-schema.json ../ocd/src/export/terraform/provider/oci",
+        "generate-oci-markdown":   "node src/ocd-codegen.js generate oci-markdown-js   ./src/schema/oci-schema.json ../test/ocd/src/export/markdown/provider/oci",
         "generate-oci":   "npm run generate-oci-model && npm run generate-oci-properties && npm run generate-oci-terraform",
         "generate": "npm run generate-oci",
 

@@ -10,7 +10,7 @@ import { DesignerResourceProperties } from '../types/DesignerResourceProperties'
 import { OcdUtils } from '../utils/OcdUtils'
 import OcdDocument from './OcdDocument'
 import { OcdLookupProperty, OcdTextProperty, ResourceElementConfig, ResourceProperties } from './properties/OcdPropertyTypes'
-import * as ociResources from './properties/providers/oci/resources'
+import * as ociResources from './properties/provider/oci/resources'
 
 const OcdResourcePropertiesHeader = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
     const selectedResource = ocdDocument.getSelectedResource()
