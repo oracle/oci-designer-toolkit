@@ -1,6 +1,13 @@
 # Release Notes
 
 
+## Version 0.50.0
+**Release Date**: 10th May 2023
+### Features
+1. Remove Terraform version restriction associated with PCA deployments
+### Bug Fixes
+
+
 ## Version 0.49.0
 **Release Date**: 19th April 2023
 ### Features
