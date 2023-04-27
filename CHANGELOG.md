@@ -4,7 +4,8 @@
 ## Version 0.50.0
 **Release Date**: 10th May 2023
 ### Features
-1. Remove Terraform version restriction associated with PCA deployments
+1. Remove Terraform version restriction associated with PCA deployments.
+2. Automatically display documentation when opening a template.
 ### Bug Fixes
 
 
