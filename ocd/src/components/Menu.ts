@@ -7,6 +7,7 @@ import OcdOKITImporter from '../import/okit/OcdOKITImporter'
 import OcdOKITExporter from '../export/okit/OcdOKITExporter'
 import OcdConsoleConfig from './OcdConsoleConfiguration'
 import OcdDocument from './OcdDocument'
+import OcdTerraformExporter from '../export/terraform/OcdTerraformExporter'
 
 export interface MenuItem {
     label: string,
@@ -181,7 +182,34 @@ export const menuItems = [
                     },
                     {
                         label: 'Terraform',
-                        click: undefined
+                        click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
+                            const saveFile = async (ocdDocument: OcdDocument) => {
+                                try {
+                                    const options = {
+                                        types: [
+                                            {
+                                                description: 'Terraform Files',
+                                                accept: {
+                                                    'application/json': ['.json'],
+                                                },
+                                            },
+                                        ],
+                                    }
+                                    // @ts-ignore 
+                                    const handle = await window.showSaveFilePicker(options)
+                                    // const writable = await handle.createWritable()
+                                    const exporter = new OcdTerraformExporter()
+                                    const terraform = exporter.export(ocdDocument.design)
+                                    // console.info('Writing', okitJson, ocdDocument)
+                                    // await writable.write(terraform)
+                                    // await writable.close()
+                                    return handle
+                                } catch (err: any) {
+                                    console.error(err.name, err.message);
+                                }
+                            }
+                            saveFile(ocdDocument).then((resp) => console.info('Saved', resp))             
+                        }
                     },
                     {
                         label: 'Markdown',

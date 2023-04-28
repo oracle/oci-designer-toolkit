@@ -28,4 +28,7 @@ export namespace OcdUtils {
     export function toResourceType(type?: string): string {
         return `${OcdUtils.toTitleCase(type ? type.split('_').join(' ') : 'Unknown').replace(/\W+/g, '')}`
     }
+    export function toClassName(prefix: string = 'Oci', str: string): string {
+        return `${prefix}${OcdUtils.toTitleCase(str ? str.split('_').join(' ') : 'Unknown').replace(/\W+/g, '')}`
+    }
 }
