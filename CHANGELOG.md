@@ -6,6 +6,7 @@
 ### Features
 1. Remove Terraform version restriction associated with PCA deployments.
 2. Automatically display documentation when opening a template.
+3. Update CNE Template to add Proxy information.
 ### Bug Fixes
 
 
