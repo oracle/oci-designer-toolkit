@@ -185,24 +185,16 @@ export const menuItems = [
                         click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
                             const saveFile = async (ocdDocument: OcdDocument) => {
                                 try {
-                                    const options = {
-                                        types: [
-                                            {
-                                                description: 'Terraform Files',
-                                                accept: {
-                                                    'application/json': ['.json'],
-                                                },
-                                            },
-                                        ],
-                                    }
                                     // @ts-ignore 
-                                    const handle = await window.showSaveFilePicker(options)
+                                    const handle = await showDirectoryPicker()
                                     // const writable = await handle.createWritable()
                                     const exporter = new OcdTerraformExporter()
                                     const terraform = exporter.export(ocdDocument.design)
+                                    const fileWriters = Object.keys(terraform).map(k => handle.getFileHandle(k, {create: true}))
                                     // console.info('Writing', okitJson, ocdDocument)
                                     // await writable.write(terraform)
                                     // await writable.close()
+                                    Promise.allSettled(fileWriters).then((results) => {})
                                     return handle
                                 } catch (err: any) {
                                     console.error(err.name, err.message);

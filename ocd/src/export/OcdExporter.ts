@@ -6,13 +6,15 @@
 import { OcdDesign } from "../model/OcdDesign";
 import { OcdUtils } from "../utils/OcdUtils";
 
+export interface OutputData extends Record<string, string[]> {}
+
 class OcdExporter {
     design: OcdDesign
     constructor() {
         this.design = OcdDesign.newDesign()
     }
 
-    export = (design: OcdDesign): string => ''
+    export = (design: OcdDesign): string | OutputData => ''
 
     toTitleCase = (str: string) => OcdUtils.toTitleCase(str)
     toCamelCase = (str: string) => OcdUtils.toCamelCase(str)
