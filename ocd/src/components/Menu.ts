@@ -183,6 +183,13 @@ export const menuItems = [
                     {
                         label: 'Terraform',
                         click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
+                            const writeTerraformFile = async (dirHandle: FileSystemDirectoryHandle, filename: string, contents: string[]) => {
+                                const fileHandle: FileSystemFileHandle = await dirHandle.getFileHandle(filename, {create: true})
+                                // @ts-ignore 
+                                const writable = await fileHandle.createWritable()
+                                await writable.write(contents.join('\n'))
+                                await writable.close()
+                            }
                             const saveFile = async (ocdDocument: OcdDocument) => {
                                 try {
                                     // @ts-ignore 
@@ -190,11 +197,8 @@ export const menuItems = [
                                     // const writable = await handle.createWritable()
                                     const exporter = new OcdTerraformExporter()
                                     const terraform = exporter.export(ocdDocument.design)
-                                    const fileWriters = Object.keys(terraform).map(k => handle.getFileHandle(k, {create: true}))
-                                    // console.info('Writing', okitJson, ocdDocument)
-                                    // await writable.write(terraform)
-                                    // await writable.close()
-                                    Promise.allSettled(fileWriters).then((results) => {})
+                                    const fileWriters = Object.entries(terraform).map(([k, v]) => writeTerraformFile(handle, k, v))
+                                    Promise.all(fileWriters).then((results) => {console.info('All files written', results)})
                                     return handle
                                 } catch (err: any) {
                                     console.error(err.name, err.message);

@@ -25,16 +25,19 @@ export class OcdTerraformExporter extends OcdExporter {
             "oci_provider.tf": [this.ociProvider()],
             "oci_metadata.tf": [this.ociMetadata()]
         }
-        Object.entries(this.resourceFileMap).forEach(([k, v]) => outputData[k] = [])
+        // Pre-Create Output file Entries
+        Object.entries(this.resourceFileMap).forEach(([k, v]) => outputData[this.resourceFileMap.hasOwnProperty(k) ? this.resourceFileMap[k] : this.resourceFileMap['unknown']] = [])
         // Generate OCI Terraform
         Object.entries(design.model.oci.resources).forEach(([k, v]) => {
             const className = OcdUtils.toClassName('Oci', k)
+            const filename = this.resourceFileMap.hasOwnProperty(k) ? this.resourceFileMap[k] : this.resourceFileMap['unknown']
             console.info('Class Name', className)
+            console.info('File Name', filename)
             v.forEach((r: OciResource) => {
                 // @ts-ignore 
                 const tfResource = new Terraform[className](r)
                 console.info('Generator Resource', tfResource)
-                const output = outputData.hasOwnProperty(k) ? outputData[k] : outputData.unknown
+                const output = outputData.hasOwnProperty(filename) ? outputData[filename] : outputData[filename] = []
                 output.push(tfResource.generate(r))
                 console.info('Output', output)
             })
