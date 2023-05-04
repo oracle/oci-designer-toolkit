@@ -56,6 +56,7 @@ const OcdContainerRect = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
         // setViewPage(structuredClone(ocdDocument.getPage(viewPage.id)))
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
+    console.info('Selected Resource', ocdDocument.selectedResource, 'Resource Id', resource.id)
     return (
         <g>
             <rect className='ocd-svg-container' 
@@ -71,9 +72,9 @@ const OcdContainerRect = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
                 >
             </rect>
             {/* <OcdResizePoint resource={resource} cx={width / 2} cy={0} position={'north'} setDimensions={setDimensions} onResizeEnd={onResizeEnd}/> */}
-            <OcdResizePoint resource={resource} cx={width / 2} cy={height} position={'south'} setDimensions={setDimensions} onResizeEnd={onResizeEnd}/>
+            {ocdDocument.selectedResource.coordsId === resource.id && <OcdResizePoint resource={resource} cx={width / 2} cy={height} position={'south'} setDimensions={setDimensions} onResizeEnd={onResizeEnd}/>}
             {/* <OcdResizePoint resource={resource} cx={0} cy={height / 2} position={'east'} setDimensions={setDimensions} onResizeEnd={onResizeEnd}/> */}
-            <OcdResizePoint resource={resource} cx={width} cy={height / 2} position={'west'}  setDimensions={setDimensions} onResizeEnd={onResizeEnd}/>
+            {ocdDocument.selectedResource.coordsId === resource.id && <OcdResizePoint resource={resource} cx={width} cy={height / 2} position={'west'}  setDimensions={setDimensions} onResizeEnd={onResizeEnd}/>}
         </g>
     )
 }
@@ -82,7 +83,7 @@ const OcdResizePoint = ({resource, cx, cy, position, setDimensions, onResizeEnd}
     const [mouseOver, setMouseOver] = useState(false)
     const [dragging, setDragging] = useState(false)
     const [origin, setOrigin] = useState({ x: 0, y: 0 });
-    const radius = mouseOver ? 6 : 3
+    const radius = mouseOver ? 50 : 3
     const onResizeDragStart = (e: any) => {
         e.stopPropagation()
         // Record Starting Point
@@ -117,17 +118,24 @@ const OcdResizePoint = ({resource, cx, cy, position, setDimensions, onResizeEnd}
         setMouseOver(false)
     }
     return (
-        <circle className='ocd-svg-resize'
-            cx={cx}
-            cy={cy}
-            r={radius}
-            onMouseDown={onResizeDragStart}
-            onMouseMove={onResizeDrag}
-            onMouseUp={onResizeDragEnd}
-            onMouseLeave={onResizeDragEnd}
-            onMouseOver={onMouseOver}
-            onMouseOut={onMouseOut}
-        />
+        <g>
+            <circle className='ocd-svg-resize-point'
+                cx={cx}
+                cy={cy}
+                r={3}
+            />
+            <circle className='ocd-svg-resize'
+                cx={cx}
+                cy={cy}
+                r={radius}
+                onMouseDown={onResizeDragStart}
+                onMouseMove={onResizeDrag}
+                onMouseUp={onResizeDragEnd}
+                onMouseLeave={onResizeDragEnd}
+                onMouseOver={onMouseOver}
+                onMouseOut={onMouseOut}
+            />
+        </g>
     )
 }
 

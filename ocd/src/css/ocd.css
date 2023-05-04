@@ -984,6 +984,10 @@ summary {
 }
 
 .ocd-svg-resize {
+    opacity: 0.1;
+}
+
+.ocd-svg-resize-point {
     fill: purple;
 }
 
