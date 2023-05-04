@@ -35,7 +35,7 @@
         {
           "custom_dns_servers": [],
           "search_domain_names": [
-            "olcne.oraclevcn.com"
+            "ocnevcn.oraclevcn.com"
           ],
           "server_type": "",
           "type": "SearchDomain"
@@ -278,7 +278,7 @@
     "okit_model_id": "okit-model-e35d4184-4cbd-4989-9002-f611c67b9686",
     "okit_version": "0.40.0 - nightly -",
     "platform": "pca",
-    "resource_count": 741,
+    "resource_count": 781,
     "updated": "2022-9-2 14:26:40"
   },
   "route_tables": [
