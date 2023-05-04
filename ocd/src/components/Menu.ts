@@ -189,6 +189,7 @@ export const menuItems = [
                                 const writable = await fileHandle.createWritable()
                                 await writable.write(contents.join('\n'))
                                 await writable.close()
+                                return writable
                             }
                             const saveFile = async (ocdDocument: OcdDocument) => {
                                 try {
@@ -198,8 +199,9 @@ export const menuItems = [
                                     const exporter = new OcdTerraformExporter()
                                     const terraform = exporter.export(ocdDocument.design)
                                     const fileWriters = Object.entries(terraform).map(([k, v]) => writeTerraformFile(handle, k, v))
-                                    Promise.all(fileWriters).then((results) => {console.info('All files written', results)})
-                                    return handle
+                                    return Promise.all(fileWriters)
+                                    // Promise.all(fileWriters).then((results) => {console.info('All files written', results)})
+                                    // return handle
                                 } catch (err: any) {
                                     console.error(err.name, err.message);
                                 }
