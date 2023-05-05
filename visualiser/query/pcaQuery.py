@@ -52,6 +52,7 @@ class PCAQuery(OCIConnection):
         "CustomerDnsZone",
         "DHCPOptions", 
         "Drg", 
+        "DrgAttachment", 
         "FileSystem", 
         "Group", 
         "Instance", 
@@ -124,6 +125,11 @@ class PCAQuery(OCIConnection):
                 "method": self.dynamic_routing_gateways, 
                 "client": "network", 
                 "array": "dynamic_routing_gateways"
+                }, 
+            "DrgAttachment": {
+                "method": self.dynamic_routing_gateway_attachments, 
+                "client": "network", 
+                "array": "dynamic_routing_gateway_attachments"
                 }, 
             "Export": {
                 "method": self.exports, 
@@ -514,6 +520,19 @@ class PCAQuery(OCIConnection):
         self.dropdown_json[array] = []
         for compartment_id in self.query_compartments:
             results = oci.pagination.list_call_get_all_results(client.list_drgs, compartment_id=compartment_id).data
+            # Convert to Json object
+            resources = self.toJson(results)
+            self.dropdown_json[array].extend(resources)
+        return self.dropdown_json[array]
+
+    def dynamic_routing_gateway_attachments(self):
+        resource_map = self.resource_map["DrgAttachment"]
+        client = self.clients[resource_map["client"]]
+        array = resource_map["array"]
+        resources = []
+        self.dropdown_json[array] = []
+        for compartment_id in self.query_compartments:
+            results = oci.pagination.list_call_get_all_results(client.list_drg_attachments, compartment_id=compartment_id).data
             # Convert to Json object
             resources = self.toJson(results)
             self.dropdown_json[array].extend(resources)

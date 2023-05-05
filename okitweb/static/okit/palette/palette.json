@@ -198,6 +198,11 @@
                     "svg": "DRGAttachment.svg"
                 },
                 {
+                    "title": "Dynamic Routing Gateway Attachment",
+                    "targets": ["pca", "hidden"],
+                    "svg": "DRGAttachment.svg"
+                },
+                {
                     "title": "Customer Premise Equipment",
                     "targets": ["oci", "freetier"],
                     "svg": "CustomerPremises.svg"
