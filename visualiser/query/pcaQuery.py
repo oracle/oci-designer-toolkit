@@ -33,6 +33,7 @@ logger = getLogger()
 class PCAQuery(OCIConnection):
     LIFECYCLE_STATES = [
         "ACTIVE", 
+        "ATTACHED", 
         "AVAILABLE", 
         "RUNNING", 
         "STARTING", 
