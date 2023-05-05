@@ -302,6 +302,7 @@ class PCAQuery(OCIConnection):
                 logger.warn(e)
         # Remove Availability Domains
         self.dropdown_json.pop('availability_domains', None)
+        logger.info(jsonToFormattedString(self.dropdown_json))
         # Filter
         filtered_resources = {}
         for k, v in self.dropdown_json.items():
