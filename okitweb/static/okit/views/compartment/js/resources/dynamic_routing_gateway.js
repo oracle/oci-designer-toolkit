@@ -12,10 +12,10 @@ class DynamicRoutingGatewayView extends OkitCompartmentArtefactView {
         super(artefact, json_view);
     }
 
-    // get parent_id() {return this.artefact.compartment_id;}
-    // get parent() {return this.getJsonView().getCompartment(this.parent_id);}
-    get parent_id() {return this.artefact.vcn_id && this.artefact.vcn_id !== '' ? this.artefact.vcn_id : this.artefact.compartment_id;}
-    get parent() {return this.artefact.vcn_id && this.artefact.vcn_id !== '' ? this.getJsonView().getVirtualCloudNetwork(this.parent_id) : this.getJsonView().getCompartment(this.parent_id);}
+    get parent_id() {return this.artefact.compartment_id;}
+    get parent() {return this.getJsonView().getCompartment(this.parent_id);}
+    // get parent_id() {return this.artefact.vcn_id && this.artefact.vcn_id !== '' ? this.artefact.vcn_id : this.artefact.compartment_id;}
+    // get parent() {return this.artefact.vcn_id && this.artefact.vcn_id !== '' ? this.getJsonView().getVirtualCloudNetwork(this.parent_id) : this.getJsonView().getCompartment(this.parent_id);}
 
     /*
      ** SVG Processing
@@ -45,8 +45,8 @@ class DynamicRoutingGatewayView extends OkitCompartmentArtefactView {
     }
 
     static getDropTargets() {
-        return [VirtualCloudNetwork.getArtifactReference()];
-        // return [Compartment.getArtifactReference()];
+        // return [VirtualCloudNetwork.getArtifactReference()];
+        return [Compartment.getArtifactReference()];
     }
 
 
@@ -57,8 +57,8 @@ class DynamicRoutingGatewayView extends OkitCompartmentArtefactView {
 OkitJsonView.prototype.dropDynamicRoutingGatewayView = function(target) {
     let view_artefact = this.newDynamicRoutingGateway();
     view_artefact.getArtefact().compartment_id = target.id;
-    view_artefact.getArtefact().vcn_id = target.id;
-    view_artefact.getArtefact().compartment_id = target.compartment_id;
+    // view_artefact.getArtefact().vcn_id = target.id;
+    // view_artefact.getArtefact().compartment_id = target.compartment_id;
     view_artefact.recalculate_dimensions = true;
     return view_artefact;
 }

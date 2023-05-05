@@ -19,13 +19,13 @@ class CompartmentView extends OkitContainerCompartmentArtefactView {
     }
     get parent() {return this.getJsonView().getCompartment(this.parent_id);}
     // get parent() {return this.getJsonView().getCompartment(this.parent_id) ? this.getJsonView().getCompartment(this.parent_id) : this.getJsonView().canvas;}
-    get children1() {return [...this.json_view.getCompartments(), ...this.json_view.getVirtualCloudNetworks(),
-        // ...this.json_view.getSubnets(), ...this.json_view.getExadataInfrastructures(),
-        ...this.json_view.getBlockStorageVolumes(), ...this.json_view.getDynamicRoutingGateways(),
-        ...this.json_view.getAutonomousDatabases(), ...this.json_view.getCustomerPremiseEquipments(),
-        ...this.json_view.getObjectStorageBuckets(), ...this.json_view.getFastConnects(),
-        ...this.json_view.getIpsecConnections(), ...this.json_view.getRemotePeeringConnections(),
-        ...this.json_view.getInstances()].filter(child => child.parent_id === this.artefact.id);}
+    // get children1() {return [...this.json_view.getCompartments(), ...this.json_view.getVirtualCloudNetworks(),
+    //     // ...this.json_view.getSubnets(), ...this.json_view.getExadataInfrastructures(),
+    //     ...this.json_view.getBlockStorageVolumes(), ...this.json_view.getDynamicRoutingGateways(),
+    //     ...this.json_view.getAutonomousDatabases(), ...this.json_view.getCustomerPremiseEquipments(),
+    //     ...this.json_view.getObjectStorageBuckets(), ...this.json_view.getFastConnects(),
+    //     ...this.json_view.getIpsecConnections(), ...this.json_view.getRemotePeeringConnections(),
+    //     ...this.json_view.getInstances()].filter(child => child.parent_id === this.artefact.id);}
     get minimum_dimensions() {
         if (this.isTopLevel()) {
             return {width: $(`#${this.json_view.parent_id}`).width(), height: $(`#${this.json_view.parent_id}`).height()};
