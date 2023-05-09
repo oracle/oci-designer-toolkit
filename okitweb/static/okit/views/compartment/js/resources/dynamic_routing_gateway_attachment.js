@@ -12,8 +12,6 @@ class DynamicRoutingGatewayAttachmentView extends OkitCompartmentArtefactView {
         if (!json_view.dynamic_routing_gateway_attachments) json_view.dynamic_routing_gateway_attachments = [];
         super(artefact, json_view);
     }
-    // TODO: Change as appropriate
-    // get parent_id() {return this.artefact.compartment_id;}
     get parent_id() {return this.artefact.vcn_id && this.artefact.vcn_id !== '' ? this.artefact.vcn_id : this.artefact.compartment_id;}
     get parent() {return this.artefact.vcn_id && this.artefact.vcn_id !== '' ? this.getJsonView().getVirtualCloudNetwork(this.parent_id) : this.getJsonView().getCompartment(this.parent_id);}
     /*

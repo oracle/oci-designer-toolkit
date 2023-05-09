@@ -15,17 +15,24 @@ class DynamicRoutingGatewayAttachmentProperties extends OkitResourceProperties {
 
     // Build Additional Resource Specific Properties
     buildResource() {
-        // Description
-        const description = this.createInput('text', 'Description', `${this.id}_description`, '', (d, i, n) => this.resource.description = n[i].value)
-        this.description = description.input
-        this.append(this.core_tbody, description.row)
+        // VCN
+        const vcn_id = this.createInput('select', 'Virtual Cloud Network', `${this.id}_vcn_id`, '', (d, i, n) => {this.resource.vcn_id = n[i].value;})
+        this.vcn_id = vcn_id.input
+        this.append(this.core_tbody, vcn_id.row)
+        // DRG
+        const drg_id = this.createInput('select', 'Dynamic Routing Gateway', `${this.id}_drg_id`, '', (d, i, n) => {this.resource.drg_id = n[i].value})
+        this.drg_id = drg_id.input
+        this.append(this.core_tbody, drg_id.row)
     }
 
     // Load Additional Resource Specific Properties
     loadResource() {
         // Load Selects
+        this.loadSelect(this.vcn_id, 'virtual_cloud_network', false)
+        this.loadSelect(this.drg_id, 'dynamic_routing_gateways', true)
         // Assign Values
-        this.description.property('value', this.resource.description)
+        this.vcn_id.property('value', this.resource.vcn_id)
+        this.drg_id.property('value', this.resource.drg_id)
     }
 
 }
