@@ -14,6 +14,8 @@ class DynamicRoutingGatewayAttachmentView extends OkitCompartmentArtefactView {
     }
     get parent_id() {return this.artefact.vcn_id && this.artefact.vcn_id !== '' ? this.artefact.vcn_id : this.artefact.compartment_id;}
     get parent() {return this.artefact.vcn_id && this.artefact.vcn_id !== '' ? this.getJsonView().getVirtualCloudNetwork(this.parent_id) : this.getJsonView().getCompartment(this.parent_id);}
+    // ---- Connectors
+    get top_bottom_connectors_preferred() {return false;}
     /*
     ** SVG Processing
     */

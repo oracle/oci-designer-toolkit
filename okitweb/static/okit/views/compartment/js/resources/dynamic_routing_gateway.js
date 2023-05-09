@@ -27,11 +27,6 @@ class DynamicRoutingGatewayView extends OkitCompartmentArtefactView {
     newPropertiesSheet() {
         this.properties_sheet = new DynamicRoutingGatewayProperties(this.artefact)
     }
-    loadProperties1() {
-        let okitJson = this.getOkitJson();
-        let me = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/dynamic_routing_gateway.html", () => {loadPropertiesSheet(me.artefact);});
-    }
 
     /*
     ** Load and display Value Proposition

@@ -19,6 +19,12 @@ resource "oci_core_drg_attachment" "{{ resource_name }}" {
     drg_id        = {{ drg_id }}
     vcn_id        = {{ vcn_id }}
     display_name  = {{ display_name | safe }}
+{% if defined_tags is defined %}
+    defined_tags   = {{ defined_tags | safe }}
+{% endif %}
+{% if freeform_tags is defined %}
+    freeform_tags  = {{ freeform_tags | safe }}
+{% endif %}
 }
 
 locals {
