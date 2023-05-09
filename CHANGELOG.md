@@ -7,6 +7,7 @@
 1. Remove Terraform version restriction associated with PCA deployments.
 2. Automatically display documentation when opening a template.
 3. Update CNE Template to add Proxy information.
+4. Support DGR attachment for PCA (Issue #581)
 ### Bug Fixes
 
 
