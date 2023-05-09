@@ -28,6 +28,6 @@ resource "oci_core_drg_attachment" "{{ resource_name }}" {
 }
 
 locals {
-    {{ resource_name }}_id = oci_core_drg.{{ resource_name }}.id
+    {{ resource_name }}_id = oci_core_drg_attachment.{{ resource_name }}.id
 }
 {% endif %}
