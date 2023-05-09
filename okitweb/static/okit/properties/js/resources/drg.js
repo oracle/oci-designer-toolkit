@@ -9,67 +9,31 @@ console.debug('Loaded Drg Properties Javascript');
 */
 class DrgProperties extends OkitResourceProperties {
     constructor (resource) {
-        const resource_tabs = []
+        const resource_tabs = ['Route Distributions', 'Route Tables']
         super(resource, resource_tabs)
     }
 
     // Build Additional Resource Specific Properties
     buildResource() {
-        // VCN
-        const vcn_id = this.createInput('select', 'Virtual Cloud Network', `${this.id}_vcn_id`, '', (d, i, n) => {this.resource.vcn_id = n[i].value; this.vcnChanged()})
-        this.vcn_id = vcn_id.input
-        this.append(this.core_tbody, vcn_id.row)
-        // DRG
-        const drg_id = this.createInput('select', 'Dynamic Routing Gateway', `${this.id}_drg_id`, '', (d, i, n) => {this.resource.drg_id = n[i].value; this.drgChanged()})
-        this.drg_id = drg_id.input
-        this.append(this.core_tbody, drg_id.row)
-        // Advanced
-        const advanced = this.createDetailsSection('Advanced', `${this.id}_advanced_details`)
-        this.append(this.properties_contents, advanced.details)
-        this.advanced_div = advanced.div
-        const advanced_table = this.createTable('', `${this.id}_advanced`)
-        this.advanced_tbody = advanced_table.tbody
-        this.append(this.advanced_div, advanced_table.table)
-        // VCN Route Table
-        const route_table_id = this.createInput('select', 'VCN Route Table', `${this.id}_route_table_id`, '', (d, i, n) => {this.resource.route_table_id = n[i].value; this.redraw()})
-        this.route_table_id = route_table_id.input
-        this.append(this.advanced_tbody, route_table_id.row)
-        // DRG Route Table
-        const drg_route_table_id = this.createInput('select', 'DRG Route Table', `${this.id}_drg_route_table_id`, '', (d, i, n) => {this.resource.drg_route_table_id = n[i].value; this.redraw()})
-        this.drg_route_table_id = drg_route_table_id.input
-        this.append(this.advanced_tbody, drg_route_table_id.row)
+        // Route Distributions
+        const route_distributions_details = this.createDetailsSection('Route Distributions', `${this.id}_route_distributions_details`)
+        this.append(this.route_distributions_contents, route_distributions_details.details)
+        this.route_distributions_div = route_distributions_details.div
+        const route_distributions_table = this.createArrayTable('Route Distributions', `${this.id}_route_distributions_table`, '', () => this.addRouteDistribution())
+        this.route_distributions_tbody = route_distributions_table.tbody
+        this.append(route_distributions_details.div, route_distributions_table.table)
+        // Route Tables
+        const route_tables_details = this.createDetailsSection('Route Tables', `${this.id}_route_tables_details`)
+        this.append(this.route_tables_contents, route_tables_details.details)
+        this.route_tables_div = route_tables_details.div
+        const route_tables_table = this.createArrayTable('Route Tables', `${this.id}_route_tables_table`, '', () => this.addRouteDistribution())
+        this.route_tables_tbody = route_tables_table.tbody
+        this.append(route_tables_details.div, route_tables_table.table)
     }
 
     // Load Additional Resource Specific Properties
     loadResource() {
-        // Load Reference Selects
-        this.loadSelect(this.vcn_id, 'virtual_cloud_network', false)
-        this.loadSelect(this.drg_id, 'drg', true)
-        this.loadSelect(this.route_table_id, 'route_table', true, this.vcn_filter)
-        this.loadDrgRouteRulesSelect()
-        // Assign Values
-        this.vcn_id.property('value', this.resource.vcn_id)
-        this.drg_id.property('value', this.resource.drg_id)
-        this.route_table_id.property('value', this.resource.route_table_id)
-        this.drg_route_table_id.property('value', this.resource.drg_route_table_id)
     }
 
-    vcnChanged() {
-        this.loadSelect(this.route_table_id, 'route_table', true, this.vcn_filter)
-        this.resource.route_table_id = ''
-        this.route_table_id.property('value', this.resource.route_table_id)
-        this.redraw()
-    }
-
-    drgChanged() {
-        this.loadDrgRouteRulesSelect()
-        this.resource.drg_route_table_id = ''
-        this.drg_route_table_id.property('value', this.resource.drg_route_table_id)
-        this.redraw()
-    }
-
-    loadDrgRouteRulesSelect() {
-       this.loadSelectFromList(this.drg_route_table_id, this.resource.drg_id !== '' ? this.resource.getOkitJson().getDrg(this.resource.drg_id).route_tables : [], true)
-    }
 
 }
