@@ -35,5 +35,29 @@ class DrgProperties extends OkitResourceProperties {
     loadResource() {
     }
 
+    loadRouteDistributions() {
+        this.route_distributions_tbody.selectAll('*').remove()
+        this.resource.route_distributions.forEach((e, i) => this.addRouteDistributionHtml(e, i+1))
+        this.route_distribution_idx = this.resource.route_distributions.length;
+    }
+    addRouteDistributionHtml(route_distribution, idx) {
+        const id = `${this.id}_route_distribution`
+        const delete_row = this.createDeleteRow(id, idx, () => this.deleteRouteDistribution(id, idx, route_distribution))
+        this.append(this.route_distributions_tbody, delete_row.row)
+        const route_distribution_details = this.createDetailsSection('Distribution', `${id}_distribution_details`, idx)
+        this.append(delete_row.div, route_distribution_details.details)
+        const route_distribution_table = this.createTable('', `${id}_distribution_table`, '')
+        this.append(route_distribution_details.div, route_distribution_table.table)
+    }
+    addRouteDistribution() {
+        const route_distribution = this.resource.newRouteDistribution
+        this.resource.route_distributions.push(route_distribution)
+        this.route_distribution_idx += 1
+        this.addRouteDistributionHtml(route_distribution, this.route_distribution_idx)
+    }
+    deleteRouteDistribution(id, idx, route_distribution) {
+        this.resource.route_distributions = this.resource.route_distributions.filter((e) => e !== route_distribution)
+        $(`#${id}${idx}_row`).remove()
+    }
 
 }
