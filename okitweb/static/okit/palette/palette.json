@@ -193,11 +193,6 @@
                     "svg": "RemotePeeringGatewayRPG.svg"
                 },
                 {
-                    "title": "DRG Attachment",
-                    "targets": ["oci", "freetier"],
-                    "svg": "DRGAttachment.svg"
-                },
-                {
                     "title": "Customer Premise Equipment",
                     "targets": ["oci", "freetier"],
                     "svg": "CustomerPremises.svg"
@@ -223,6 +218,16 @@
                     "title": "Local Peering Gateway",
                     "targets": ["oci", "pca"],
                     "svg": "LocalPeeringGatewayLPG.svg"
+                },
+                {
+                    "title": "DRG Attachment",
+                    "targets": ["oci", "freetier"],
+                    "svg": "DRGAttachment.svg"
+                },
+                {
+                    "title": "Dynamic Routing Gateway Attachment",
+                    "targets": ["pca", "hidden"],
+                    "svg": "DRGAttachment.svg"
                 },
                 {
                     "title": "Dynamic Routing Gateway",

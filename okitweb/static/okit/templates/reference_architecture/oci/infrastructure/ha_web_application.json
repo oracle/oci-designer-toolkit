@@ -26,7 +26,7 @@
       "database_edition": "STANDARD_EDITION",
       "db_home": {
         "database": {
-          "admin_password": "DevOps_123#",
+          "admin_password": "",
           "db_name": "aTFdb",
           "db_workload": "OLTP"
         },

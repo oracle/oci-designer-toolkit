@@ -24,6 +24,9 @@ class DrgView extends OkitCompartmentArtefactView {
     /*
     ** Property Sheet Load function
     */
+    newPropertiesSheet() {
+        this.properties_sheet = new DrgProperties(this.artefact)
+    }
     loadProperties() {
         const self = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/drg.html", () => {

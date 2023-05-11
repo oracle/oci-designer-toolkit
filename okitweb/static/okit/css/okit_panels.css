@@ -107,8 +107,9 @@
 
 .okit-template-info {
     padding: 5px;
-    /* font-weight: bolder; */
+    font-weight: bolder;
     font-style: italic;
+    color: #336600;
 }
 
 .okit-validation-results {

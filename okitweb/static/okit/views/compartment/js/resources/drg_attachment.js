@@ -23,7 +23,7 @@ class DrgAttachmentView extends OkitCompartmentArtefactView {
     drawConnections() {
         this.drawConnection(this.id, this.drg_id);
     }
-        /*
+    /*
     ** Property Sheet Load function
     */
     newPropertiesSheet() {
