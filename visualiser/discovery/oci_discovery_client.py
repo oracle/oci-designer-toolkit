@@ -286,8 +286,8 @@ class OciResourceDiscoveryClient(object):
         "DataSafeTargetDatabase": (oci.data_safe.DataSafeClient, "list_target_databases"),
         "DataSafeUserAssessment": (oci.data_safe.DataSafeClient, "list_user_assessments"),
         # oci.data_connectivity.DataConnectivityManagementClient
-        "DCMSEndpoint": (oci.data_connectivity.DataConnectivityManagementClient, "list_endpoints"),
-        "DCMSRegistry": (oci.data_connectivity.DataConnectivityManagementClient, "list_registries"),
+        # "DCMSEndpoint": (oci.data_connectivity.DataConnectivityManagementClient, "list_endpoints"),
+        # "DCMSRegistry": (oci.data_connectivity.DataConnectivityManagementClient, "list_registries"),
         # oci.data_science.DataScienceClient
         "DataScienceJob": (oci.data_science.DataScienceClient, "list_jobs"),
         "DataScienceJobRun": (oci.data_science.DataScienceClient, "list_job_runs"),
