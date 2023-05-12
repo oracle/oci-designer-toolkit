@@ -1,6 +1,13 @@
 # Release Notes
 
 
+## Version 0.50.1
+**Release Date**: 12th May 2023
+### Features
+### Bug Fixes
+1. Remove reference to oci.data_connectivity which is no longer part of the OCI API.
+
+
 ## Version 0.50.0
 **Release Date**: 10th May 2023
 ### Features
