@@ -1,6 +1,13 @@
 # Release Notes
 
 
+## Version 0.51.0
+**Release Date**: 12th May 2023
+### Features
+1. Modify PCA Query Region Select to single region
+### Bug Fixes
+
+
 ## Version 0.50.1
 **Release Date**: 12th May 2023
 ### Features
