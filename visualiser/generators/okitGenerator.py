@@ -182,6 +182,7 @@ class OCIGenerator(object):
 
         "dhcp_options": "networking",
         "drg_attachments": "networking",
+        "dynamic_routing_gateway_attachments": "networking",
         "internet_gateways": "networking",
         "load_balancers": "networking",
         "local_peering_gateways": "networking",
@@ -215,6 +216,7 @@ class OCIGenerator(object):
 
         "customer_premise_equipments": "customer_connectivity",
         "drgs": "customer_connectivity",
+        "dynamic_routing_gateways": "customer_connectivity",
         "ipsec_connections": "customer_connectivity",
 
         "oke_clusters": "containers",
