@@ -44,7 +44,7 @@ class OciTerraformSchemaImporter extends OcdSchemaImporter {
         }, {}) : {}
         // Block / Object Attributes
         if (block.block_types) {
-            attributes = Object.entries(block.block_types).filter(([k, v]) => !ignore_block_types.includes(k)).reduce((r, [k, v]) => {
+            attributes = Object.entries(block.block_types).filter(([k, v]) => !ignore_attributes.includes(k)).reduce((r, [k, v]) => {
                 r[k] = {
                     provider: 'oci',
                     key: this.toCamelCase(k),

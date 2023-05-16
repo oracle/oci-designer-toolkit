@@ -1164,18 +1164,6 @@
         "lookup": false,
         "lookupResource": ""
       },
-      "private_ip": {
-        "provider": "oci",
-        "key": "privateIp",
-        "name": "private_ip",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Private Ip",
-        "id": "private_ip",
-        "lookup": false,
-        "lookupResource": ""
-      },
       "public_ip": {
         "provider": "oci",
         "key": "publicIp",
@@ -1223,18 +1211,6 @@
         "id": "subnet_id",
         "lookup": true,
         "lookupResource": "subnet"
-      },
-      "time_maintenance_reboot_due": {
-        "provider": "oci",
-        "key": "timeMaintenanceRebootDue",
-        "name": "time_maintenance_reboot_due",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Time Maintenance Reboot Due",
-        "id": "time_maintenance_reboot_due",
-        "lookup": false,
-        "lookupResource": ""
       },
       "agent_config": {
         "provider": "oci",
@@ -1317,42 +1293,6 @@
                 "lookupResource": ""
               }
             }
-          }
-        }
-      },
-      "availability_config": {
-        "provider": "oci",
-        "key": "availabilityConfig",
-        "name": "availability_config",
-        "type": "object",
-        "subtype": "",
-        "required": false,
-        "label": "Availability Config",
-        "id": "availability_config",
-        "attributes": {
-          "is_live_migration_preferred": {
-            "provider": "oci",
-            "key": "isLiveMigrationPreferred",
-            "name": "is_live_migration_preferred",
-            "type": "bool",
-            "subtype": "",
-            "required": false,
-            "label": "Is Live Migration Preferred",
-            "id": "availability_config.is_live_migration_preferred",
-            "lookup": false,
-            "lookupResource": ""
-          },
-          "recovery_action": {
-            "provider": "oci",
-            "key": "recoveryAction",
-            "name": "recovery_action",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Recovery Action",
-            "id": "availability_config.recovery_action",
-            "lookup": false,
-            "lookupResource": ""
           }
         }
       },
@@ -1450,18 +1390,6 @@
             "lookup": true,
             "lookupResource": "nsg"
           },
-          "private_ip": {
-            "provider": "oci",
-            "key": "privateIp",
-            "name": "private_ip",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Private Ip",
-            "id": "create_vnic_details.private_ip",
-            "lookup": false,
-            "lookupResource": ""
-          },
           "skip_source_dest_check": {
             "provider": "oci",
             "key": "skipSourceDestCheck",
@@ -1500,186 +1428,6 @@
           }
         }
       },
-      "instance_options": {
-        "provider": "oci",
-        "key": "instanceOptions",
-        "name": "instance_options",
-        "type": "object",
-        "subtype": "",
-        "required": false,
-        "label": "Instance Options",
-        "id": "instance_options",
-        "attributes": {
-          "are_legacy_imds_endpoints_disabled": {
-            "provider": "oci",
-            "key": "areLegacyImdsEndpointsDisabled",
-            "name": "are_legacy_imds_endpoints_disabled",
-            "type": "bool",
-            "subtype": "",
-            "required": false,
-            "label": "Are Legacy Imds Endpoints Disabled",
-            "id": "instance_options.are_legacy_imds_endpoints_disabled",
-            "lookup": false,
-            "lookupResource": ""
-          }
-        }
-      },
-      "launch_options": {
-        "provider": "oci",
-        "key": "launchOptions",
-        "name": "launch_options",
-        "type": "object",
-        "subtype": "",
-        "required": false,
-        "label": "Launch Options",
-        "id": "launch_options",
-        "attributes": {
-          "boot_volume_type": {
-            "provider": "oci",
-            "key": "bootVolumeType",
-            "name": "boot_volume_type",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Boot Volume Type",
-            "id": "launch_options.boot_volume_type",
-            "lookup": false,
-            "lookupResource": ""
-          },
-          "firmware": {
-            "provider": "oci",
-            "key": "firmware",
-            "name": "firmware",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Firmware",
-            "id": "launch_options.firmware",
-            "lookup": false,
-            "lookupResource": ""
-          },
-          "is_consistent_volume_naming_enabled": {
-            "provider": "oci",
-            "key": "isConsistentVolumeNamingEnabled",
-            "name": "is_consistent_volume_naming_enabled",
-            "type": "bool",
-            "subtype": "",
-            "required": false,
-            "label": "Is Consistent Volume Naming Enabled",
-            "id": "launch_options.is_consistent_volume_naming_enabled",
-            "lookup": false,
-            "lookupResource": ""
-          },
-          "is_pv_encryption_in_transit_enabled": {
-            "provider": "oci",
-            "key": "isPvEncryptionInTransitEnabled",
-            "name": "is_pv_encryption_in_transit_enabled",
-            "type": "bool",
-            "subtype": "",
-            "required": false,
-            "label": "Is Pv Encryption In Transit Enabled",
-            "id": "launch_options.is_pv_encryption_in_transit_enabled",
-            "lookup": false,
-            "lookupResource": ""
-          },
-          "network_type": {
-            "provider": "oci",
-            "key": "networkType",
-            "name": "network_type",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Network Type",
-            "id": "launch_options.network_type",
-            "lookup": false,
-            "lookupResource": ""
-          },
-          "remote_data_volume_type": {
-            "provider": "oci",
-            "key": "remoteDataVolumeType",
-            "name": "remote_data_volume_type",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Remote Data Volume Type",
-            "id": "launch_options.remote_data_volume_type",
-            "lookup": false,
-            "lookupResource": ""
-          }
-        }
-      },
-      "platform_config": {
-        "provider": "oci",
-        "key": "platformConfig",
-        "name": "platform_config",
-        "type": "object",
-        "subtype": "",
-        "required": false,
-        "label": "Platform Config",
-        "id": "platform_config",
-        "attributes": {
-          "numa_nodes_per_socket": {
-            "provider": "oci",
-            "key": "numaNodesPerSocket",
-            "name": "numa_nodes_per_socket",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Numa Nodes Per Socket",
-            "id": "platform_config.numa_nodes_per_socket",
-            "lookup": false,
-            "lookupResource": ""
-          },
-          "type": {
-            "provider": "oci",
-            "key": "type",
-            "name": "type",
-            "type": "string",
-            "subtype": "",
-            "required": true,
-            "label": "Type",
-            "id": "platform_config.type",
-            "lookup": false,
-            "lookupResource": ""
-          }
-        }
-      },
-      "preemptible_instance_config": {
-        "provider": "oci",
-        "key": "preemptibleInstanceConfig",
-        "name": "preemptible_instance_config",
-        "type": "object",
-        "subtype": "",
-        "required": false,
-        "label": "Preemptible Instance Config",
-        "id": "preemptible_instance_config",
-        "attributes": {
-          "preemption_action": {
-            "provider": "oci",
-            "key": "preemptionAction",
-            "name": "preemption_action",
-            "type": "object",
-            "subtype": "",
-            "required": false,
-            "label": "Preemption Action",
-            "id": "preemptible_instance_config.preemption_action",
-            "attributes": {
-              "type": {
-                "provider": "oci",
-                "key": "type",
-                "name": "type",
-                "type": "string",
-                "subtype": "",
-                "required": true,
-                "label": "Type",
-                "id": "preemptible_instance_config.preemption_action.type",
-                "lookup": false,
-                "lookupResource": ""
-              }
-            }
-          }
-        }
-      },
       "shape_config": {
         "provider": "oci",
         "key": "shapeConfig",
@@ -1690,90 +1438,6 @@
         "label": "Shape Config",
         "id": "shape_config",
         "attributes": {
-          "baseline_ocpu_utilization": {
-            "provider": "oci",
-            "key": "baselineOcpuUtilization",
-            "name": "baseline_ocpu_utilization",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Baseline Ocpu Utilization",
-            "id": "shape_config.baseline_ocpu_utilization",
-            "lookup": false,
-            "lookupResource": ""
-          },
-          "gpu_description": {
-            "provider": "oci",
-            "key": "gpuDescription",
-            "name": "gpu_description",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Gpu Description",
-            "id": "shape_config.gpu_description",
-            "lookup": false,
-            "lookupResource": ""
-          },
-          "gpus": {
-            "provider": "oci",
-            "key": "gpus",
-            "name": "gpus",
-            "type": "number",
-            "subtype": "",
-            "required": false,
-            "label": "Gpus",
-            "id": "shape_config.gpus",
-            "lookup": false,
-            "lookupResource": ""
-          },
-          "local_disk_description": {
-            "provider": "oci",
-            "key": "localDiskDescription",
-            "name": "local_disk_description",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Local Disk Description",
-            "id": "shape_config.local_disk_description",
-            "lookup": false,
-            "lookupResource": ""
-          },
-          "local_disks": {
-            "provider": "oci",
-            "key": "localDisks",
-            "name": "local_disks",
-            "type": "number",
-            "subtype": "",
-            "required": false,
-            "label": "Local Disks",
-            "id": "shape_config.local_disks",
-            "lookup": false,
-            "lookupResource": ""
-          },
-          "local_disks_total_size_in_gbs": {
-            "provider": "oci",
-            "key": "localDisksTotalSizeInGbs",
-            "name": "local_disks_total_size_in_gbs",
-            "type": "number",
-            "subtype": "",
-            "required": false,
-            "label": "Local Disks Total Size In Gbs",
-            "id": "shape_config.local_disks_total_size_in_gbs",
-            "lookup": false,
-            "lookupResource": ""
-          },
-          "max_vnic_attachments": {
-            "provider": "oci",
-            "key": "maxVnicAttachments",
-            "name": "max_vnic_attachments",
-            "type": "number",
-            "subtype": "",
-            "required": false,
-            "label": "Max Vnic Attachments",
-            "id": "shape_config.max_vnic_attachments",
-            "lookup": false,
-            "lookupResource": ""
-          },
           "memory_in_gbs": {
             "provider": "oci",
             "key": "memoryInGbs",
@@ -1786,18 +1450,6 @@
             "lookup": false,
             "lookupResource": ""
           },
-          "networking_bandwidth_in_gbps": {
-            "provider": "oci",
-            "key": "networkingBandwidthInGbps",
-            "name": "networking_bandwidth_in_gbps",
-            "type": "number",
-            "subtype": "",
-            "required": false,
-            "label": "Networking Bandwidth In Gbps",
-            "id": "shape_config.networking_bandwidth_in_gbps",
-            "lookup": false,
-            "lookupResource": ""
-          },
           "ocpus": {
             "provider": "oci",
             "key": "ocpus",
@@ -1807,18 +1459,6 @@
             "required": false,
             "label": "Ocpus",
             "id": "shape_config.ocpus",
-            "lookup": false,
-            "lookupResource": ""
-          },
-          "processor_description": {
-            "provider": "oci",
-            "key": "processorDescription",
-            "name": "processor_description",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Processor Description",
-            "id": "shape_config.processor_description",
             "lookup": false,
             "lookupResource": ""
           }
