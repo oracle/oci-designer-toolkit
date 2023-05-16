@@ -1140,18 +1140,6 @@
         "lookup": false,
         "lookupResource": ""
       },
-      "launch_mode": {
-        "provider": "oci",
-        "key": "launchMode",
-        "name": "launch_mode",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Launch Mode",
-        "id": "launch_mode",
-        "lookup": false,
-        "lookupResource": ""
-      },
       "metadata": {
         "provider": "oci",
         "key": "metadata",
@@ -1161,18 +1149,6 @@
         "required": false,
         "label": "Metadata",
         "id": "metadata",
-        "lookup": false,
-        "lookupResource": ""
-      },
-      "public_ip": {
-        "provider": "oci",
-        "key": "publicIp",
-        "name": "public_ip",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Public Ip",
-        "id": "public_ip",
         "lookup": false,
         "lookupResource": ""
       },
