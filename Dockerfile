@@ -2,7 +2,7 @@
 # Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
-FROM oraclelinux:7-slim
+FROM oraclelinux:8-slim
 ARG BRANCH=master
 LABEL "provider"="Oracle" \
       "issues"="https://github.com/oracle/oci-designer-toolkit/issues" \
@@ -25,11 +25,12 @@ EXPOSE 443
 # COPY containers/oci/* /root/.oci/
 # COPY containers/docker/run-server.sh /root/bin/
 # Install new yum repos
-RUN yum install -y \
-    oracle-softwarecollection-release-el7 \
-    oraclelinux-developer-release-el7 \
+RUN microdnf install -y \
+    # oracle-softwarecollection-release-el7 \
+    oraclelinux-developer-release-el8 \
+    yum \
 # Disable oci config repo
- && yum-config-manager --disable ol7_ociyum_config \
+#  && yum-config-manager --disable ol7_ociyum_config \
 # Update base image
  && yum update -y \
 # Install additional packages

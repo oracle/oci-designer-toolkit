@@ -18,8 +18,11 @@ echo "**  Run WebServer                                                **"
 echo "**                                                               **"
 echo "*******************************************************************"
 
+export PYTHONIOENCODING=utf8
 export PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin
 export PYTHONPATH=:/okit/visualiser:/okit/okitweb:/okit
+
+python --version
 
 #/usr/local/bin/gunicorn --workers=4 --limit-request-line 0 --timeout 120 --bind=0.0.0.0:80 okitweb.wsgi:app
 /usr/local/bin/gunicorn okitweb.wsgi:app --config /okit/config/gunicorn_http.py
