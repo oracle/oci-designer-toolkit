@@ -1,0 +1,21 @@
+{
+  "name": "ocd-core",
+  "version": "0.1.0",
+  "description": "Core OKIT OCD functionality ",
+  "author": {
+    "name": "Andrew Hopkinson",
+    "email": "andrew.hopkinson@oracle.com",
+    "url": "https://github.com/oracle/oci-designer-toolkit"
+  },
+  "bugs": "https://github.com/oracle/oci-designer-toolkit/issues",
+  "homepage": "https://github.com/oracle/oci-designer-toolkit",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ocd",
+    "okit"
+  ],
+  "license": "UPL-1.0"
+}
