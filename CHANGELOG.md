@@ -1,6 +1,23 @@
 # Release Notes
 
 
+## Version 0.50.1
+**Release Date**: 12th May 2023
+### Features
+### Bug Fixes
+1. Remove reference to oci.data_connectivity which is no longer part of the OCI API.
+
+
+## Version 0.50.0
+**Release Date**: 10th May 2023
+### Features
+1. Remove Terraform version restriction associated with PCA deployments.
+2. Automatically display documentation when opening a template.
+3. Update CNE Template to add Proxy information.
+4. Support DGR attachment for PCA (Issue #581)
+### Bug Fixes
+
+
 ## Version 0.49.0
 **Release Date**: 19th April 2023
 ### Features

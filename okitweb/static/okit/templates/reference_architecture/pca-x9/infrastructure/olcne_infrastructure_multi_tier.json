@@ -35,7 +35,7 @@
         {
           "custom_dns_servers": [],
           "search_domain_names": [
-            "olcne.oraclevcn.com"
+            "olcnevcn.oraclevcn.com"
           ],
           "server_type": "",
           "type": "SearchDomain"
@@ -540,13 +540,13 @@
     "created": "2022-9-2 14:26:40",
     "file": {
       "generate_terraform": true,
-      "name": "/okitdemo/olcne_infrastructure_multi_tier.json",
-      "terraform_dir": "/okitdemo/olcne_infrastructure"
+      "name": "/pcd-x9/olcne_infrastructure_multi_tier.json",
+      "terraform_dir": "/pcd-x9/olcne_infrastructure_multi_tier"
     },
     "okit_model_id": "okit-model-e35d4184-4cbd-4989-9002-f611c67b9686",
     "okit_version": "0.40.0 - nightly -",
     "platform": "pca",
-    "resource_count": 570,
+    "resource_count": 606,
     "updated": "2022-9-2 14:26:40"
   },
   "nat_gateways": [
@@ -738,7 +738,7 @@
       "defined_tags": {},
       "dhcp_options_id": "okit.dhcpoption.98849ead-91b9-4004-9e96-005bef915ae0",
       "display_name": "olcneop-sn",
-      "dns_label": "olcneop-sn",
+      "dns_label": "olcneopsn",
       "documentation": "",
       "freeform_tags": {},
       "id": "okit.subnet.e8c9f1e0-83dd-46b9-932f-2a7ee3d48c3b",
@@ -763,7 +763,7 @@
       "defined_tags": {},
       "dhcp_options_id": "okit.dhcpoption.98849ead-91b9-4004-9e96-005bef915ae0",
       "display_name": "olcne-sn",
-      "dns_label": "olcne-sn",
+      "dns_label": "olcnesn",
       "documentation": "",
       "freeform_tags": {},
       "id": "okit.subnet.ccd6a17b-1f43-4a30-8793-2cfd11e7ac2f",
@@ -847,7 +847,7 @@
       "compartment_id": "okit.compartment.200e584b-c0b6-4e98-962f-e675e83476fe",
       "defined_tags": {},
       "display_name": "olcne-vcn",
-      "dns_label": "olcne-vcn",
+      "dns_label": "olcnevcn",
       "documentation": "",
       "freeform_tags": {},
       "id": "okit.virtualcloudnetwork.9e7f064e-b486-4db9-88fa-dc10e0395470",

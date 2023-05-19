@@ -3,6 +3,8 @@
 locals {
     cne_operator_public_ips = [local.Okit_I_1662125763009_public_ip]
 
+    cne_operator_private_ips = [local.Okit_I_1662125763009_private_ip]
+
     cne_master_private_ips = [local.Okit_I_1662125754075_private_ip]
 
     cne_worker_private_ips = [local.Okit_I_1662125758459_private_ip]
@@ -12,6 +14,10 @@ locals {
     cne_master_nodes = "k8smstr1.ocneopsn.ocnevcn.oraclevcn.com"
 
     cne_worker_nodes = "k8swkr1.ocneopsn.ocnevcn.oraclevcn.com"
+}
+
+locals {
+  no_proxy = join(",", concat(local.cne_operator_private_ips, local.cne_master_private_ips, local.cne_worker_private_ips))
 }
 
 # Install Operator Pre-Reqs
@@ -42,6 +48,9 @@ resource "null_resource" "cne-operator-pre-reqs" {
         "sudo dnf install -y oracle-olcne-release-el8",
         "sudo dnf config-manager --enable ol8_olcne15 ol8_addons ol8_baseos_latest ol8_appstream ol8_UEKR6",
         "sudo dnf config-manager --disable ol8_olcne14 ol8_olcne13 ol8_olcne12 ol8_developer",
+        "sudo bash -c 'echo \"export http_proxy=${var.http_proxy}\" >> /etc/bashrc'",
+        "sudo bash -c 'echo \"export https_proxy=${var.https_proxy}\" >> /etc/bashrc'",
+        "sudo bash -c 'echo \"export no_proxy=${local.no_proxy}\" >> /etc/bashrc'",
 
         "sudo chmod 600 /home/opc/.ssh/id_rsa"
       ]
@@ -76,6 +85,9 @@ resource "null_resource" "cne-master-pre-reqs" {
         "sudo bash -c 'echo \"timeout=3000\" >> /etc/dnf/dnf.conf'",
         "sudo bash -c 'echo \"retries=100\" >> /etc/dnf/dnf.conf'",
         "sudo dnf --refresh check-update",
+        "sudo bash -c 'echo \"export http_proxy=${var.http_proxy}\" >> /etc/bashrc'",
+        "sudo bash -c 'echo \"export https_proxy=${var.https_proxy}\" >> /etc/bashrc'",
+        "sudo bash -c 'echo \"export no_proxy=${local.no_proxy}\" >> /etc/bashrc'",
 
         "sudo chmod 600 /home/opc/.ssh/id_rsa"
       ]
@@ -114,6 +126,10 @@ resource "null_resource" "cne-worker-pre-reqs" {
         "sudo bash -c 'echo \"timeout=3000\" >> /etc/dnf/dnf.conf'",
         "sudo bash -c 'echo \"retries=100\" >> /etc/dnf/dnf.conf'",
         "sudo dnf --refresh check-update",
+        "sudo bash -c 'echo \"export http_proxy=${var.http_proxy}\" >> /etc/bashrc'",
+        "sudo bash -c 'echo \"export https_proxy=${var.https_proxy}\" >> /etc/bashrc'",
+        "sudo bash -c 'echo \"export no_proxy=${local.no_proxy}\" >> /etc/bashrc'",
+
         "sudo chmod 600 /home/opc/.ssh/id_rsa"
       ]
     }
