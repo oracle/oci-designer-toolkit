@@ -1,5 +1,6 @@
 {
   "name": "ocd-react",
+  "productName": "ocd",
   "version": "0.1.0",
   "description": "OKIT Open Cloud Designer",
   "author": {
@@ -30,7 +31,6 @@
     ]
   },
   "build": {
-    "productName": "ocd",
     "appId": "com.oracle.okit-ocd",
     "files": [
       "build/**/*",
