@@ -14,8 +14,10 @@
     "scripts": {
         "build": "npm run build --workspaces --if-present",
         "import": "npm run import --workspace=ocd-codegen",
-        "generate": "npm run import --workspace=ocd-codegen",
+        "generate": "npm run generate --workspace=ocd-codegen",
+        "import-and-generate": "npm run import-and-generate --workspace=ocd-codegen",
         "web": "npm run start --workspace=ocd-react",
-        "desktop": "npm run electron-pack --workspace=ocd-reat"
+        "desktop": "npm run electron-release-pack --workspace=ocd-react",
+        "dev-desktop": "npm run electron-pack --workspace=ocd-react"
     }
 }
