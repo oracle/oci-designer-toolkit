@@ -30,6 +30,7 @@
     ]
   },
   "build": {
+    "productName": "ocd",
     "appId": "com.oracle.okit-ocd",
     "files": [
       "build/**/*",
