@@ -349,6 +349,7 @@ class OkitArtifact {
     }
 
     getOkitJson() {return this.okit_json}
+    isPca() {return this.getOkitJson() && this.getOkitJson().metadata.platform === 'pca'}
 
     get name() {return this.display_name;}
     set name(name) {this.display_name = name;}
