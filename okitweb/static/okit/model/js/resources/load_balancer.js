@@ -18,7 +18,7 @@ class LoadBalancer extends OkitArtifact {
         this.compartment_id = '';
         this.subnet_ids = [];
         this.is_private = false;
-        this.shape = 'flexible';
+        this.shape =  this.isPca() ? '400Mbps' : 'flexible';
         this.ip_mode = '';
         this.network_security_group_ids = [];
         this.shape_details = {
