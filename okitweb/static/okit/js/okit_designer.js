@@ -447,6 +447,7 @@ const loadTemplatePanel = () => {
         url: `panel/templates`,
         dataType: 'text', // Response Type
         contentType: 'application/json', // Sent Message Type
+        data: {target: pca_mode ? 'pca-x9' : oci_mode ? 'oci' : ''},
         success: function(resp) {
             const parser = new DOMParser();
             const doc = parser.parseFromString(resp, "text/html");
