@@ -2,11 +2,12 @@
 
 
 ## Version 0.51.0
-**Release Date**: 12th May 2023
+**Release Date**: 31st May 2023
 ### Features
 1. Modify PCA Query Region Select to single region
-2. Update top Level Dockerfile to use OL8 and Python 3.8
+2. Update top Level Dockerfile to use OL8 and Python 3.8 and change python3 alternative.
 3. Remove 8-slim container directory because default is now OL8
+4. For PCA force is_live_migration_preferred to True.
 ### Bug Fixes
 
 

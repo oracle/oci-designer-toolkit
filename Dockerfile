@@ -36,6 +36,7 @@ RUN yum install -y \
         python38 \
         python3-pip \
  && rm -rf /var/cache/yum \
+ && alternatives --set python3 /usr/bin/python3.8 \
 # Configure ssh
  && echo 'Host *' > /etc/ssh/ssh_config \
  && echo '  StrictHostKeyChecking no' >> /etc/ssh/ssh_config \
