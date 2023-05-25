@@ -256,8 +256,8 @@ def okit():
 def designer_redirect():
  return render_template('okit/designer.html')
 
-# @bp.route('/designer1', methods=(['GET']))
-def designer1():
+@bp.route('/console', methods=(['GET']))
+def console():
     local = current_app.config.get('LOCAL', False)
     if not local and session.get('username', None) is None:
         logger.info('<<<<<<<<<<<<<<<<<<<<<<<<< Redirect to Login >>>>>>>>>>>>>>>>>>>>>>>>>')
