@@ -1,13 +1,13 @@
 
 terraform {
-{% if deployment_platform is defined and deployment_platform == "pca" %}
+{# {% if deployment_platform is defined and deployment_platform == "pca" %}
     required_providers {
         oci = {
             source = "hashicorp/oci"
             version = "= 4.50.0"
         }
     }
-{% endif %} {# End PCA Check #}
+{% endif %} End PCA Check #}
     required_version = ">= 0.12.0"
 }
 
