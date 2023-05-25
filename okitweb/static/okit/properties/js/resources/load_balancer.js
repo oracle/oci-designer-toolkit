@@ -75,7 +75,7 @@ class LoadBalancerProperties extends OkitResourceProperties {
         this.loadBackendSets()
         this.loadListeners()
         this.showHideBandwidthRows()
-        this.shape_row.classed('collapsed', this.resource.isPca())
+        this.shape_row.classed('collapsed', this.resource.isPCA())
     }
 
     showHideBandwidthRows() {

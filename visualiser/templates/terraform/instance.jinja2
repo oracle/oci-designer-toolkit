@@ -50,6 +50,12 @@ resource "oci_core_instance" "{{ resource_name }}" {
 {% endif %}
     }
 {% endif %}
+{% if availability_config is defined %}
+    availability_config {
+        is_live_migration_preferred = {{ availability_config.is_live_migration_preferred | safe | lower }}
+        {# recovery_action = var.instance_availability_config_recovery_action #}
+    }
+{% endif %}
     create_vnic_details {
         # Required
         subnet_id        = {{ vnic_attachments[0].subnet_id }}

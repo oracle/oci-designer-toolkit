@@ -26,6 +26,11 @@ class Instance extends OkitArtifact {
             is_monitoring_disabled: false, 
             is_management_disabled: false
         };
+        if (this.isPCA()) {
+            this.availability_config = {
+                is_live_migration_preferred: true
+            }
+        }
         this.source_details = {
             os: 'Oracle Linux', 
             version: '8', 
