@@ -2,11 +2,11 @@
 # Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
-FROM oraclelinux:7-slim
+FROM oraclelinux:8
 ARG BRANCH=master
 LABEL "provider"="Oracle" \
       "issues"="https://github.com/oracle/oci-designer-toolkit/issues" \
-      "version"="0.50.1" \
+      "version"="0.51.0" \
       "description"="OKIT Web Server Container." \
       "copyright"="Copyright (c) 2020, 2022, Oracle and/or its affiliates."
 # SHELL ["/bin/bash", "-c"]
@@ -26,19 +26,17 @@ EXPOSE 443
 # COPY containers/docker/run-server.sh /root/bin/
 # Install new yum repos
 RUN yum install -y \
-    oracle-softwarecollection-release-el7 \
-    oraclelinux-developer-release-el7 \
-# Disable oci config repo
- && yum-config-manager --disable ol7_ociyum_config \
+    oraclelinux-developer-release-el8 \
 # Update base image
  && yum update -y \
 # Install additional packages
  && yum install -y \
         git \
         openssl \
-        python36 \
+        python38 \
         python3-pip \
  && rm -rf /var/cache/yum \
+ && alternatives --set python3 /usr/bin/python3.8 \
 # Configure ssh
  && echo 'Host *' > /etc/ssh/ssh_config \
  && echo '  StrictHostKeyChecking no' >> /etc/ssh/ssh_config \
@@ -59,8 +57,6 @@ RUN yum install -y \
  && ln -sv /github/oci-designer-toolkit/visualiser /okit/visualiser \
  && ln -sv /github/oci-designer-toolkit/containers/docker/run-server.sh /root/bin/run-server.sh \
  && ln -sv /github/oci-designer-toolkit/okitweb/static/okit/templates/reference_architecture /okit/instance/templates/reference_architecture \
- #&& mkdir -p /okit/okitweb/static/okit/templates \
- #&& ln -sv /okit/templates /okit/okitweb/static/okit/templates/user \
  && chmod a+x /root/bin/run-server.sh \
 # Install required python modules
  && python3 -m pip install --no-cache-dir -r /github/oci-designer-toolkit/requirements.txt

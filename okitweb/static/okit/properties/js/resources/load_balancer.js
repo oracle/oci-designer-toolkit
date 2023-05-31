@@ -32,6 +32,7 @@ class LoadBalancerProperties extends OkitResourceProperties {
         // Shape
         const shape = this.createInput('select', 'Shape', `${this.id}_shape`, '', (d, i, n) => {this.resource.shape = n[i].value; this.showHideBandwidthRows()})
         this.shape = shape.input
+        this.shape_row = shape.row
         this.append(this.core_tbody, shape.row)
         // Minimum Bandwidth
         const bandwidth_data = {min: 10, max: 8000}
@@ -74,6 +75,7 @@ class LoadBalancerProperties extends OkitResourceProperties {
         this.loadBackendSets()
         this.loadListeners()
         this.showHideBandwidthRows()
+        this.shape_row.classed('collapsed', this.resource.isPCA())
     }
 
     showHideBandwidthRows() {
