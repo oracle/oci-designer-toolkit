@@ -58,6 +58,7 @@ class PCAQuery(OCIConnection):
         "Group", 
         "Instance", 
         "InternetGateway",
+        "LoadBalancer",
         "LocalPeeringGateway",
         "MountTarget",
         "NatGateway", 
@@ -162,6 +163,11 @@ class PCAQuery(OCIConnection):
                 "client": "network", 
                 "array": "internet_gateways"
                 }, 
+            "LoadBalancer": {
+                "method": self.load_balancers, 
+                "client": "loadbalancer", 
+                "array": "load_balancers"
+                },
             "LocalPeeringGateway": {
                 "method": self.local_peering_gateways, 
                 "client": "network", 
@@ -186,6 +192,11 @@ class PCAQuery(OCIConnection):
                 "method": self.policies, 
                 "client": "identity", 
                 "array": "policys"
+                }, 
+            "PrivateIPs": {
+                "method": self.private_ips, 
+                "client": "network", 
+                "array": "private_ips"
                 }, 
             "RouteTable": {
                 "method": self.route_tables, 
@@ -255,7 +266,7 @@ class PCAQuery(OCIConnection):
             # "container": oci.container_engine.ContainerEngineClient(config=self.config, signer=self.signer),
             # "database": oci.database.DatabaseClient(config=self.config, signer=self.signer),
             # "limits":  oci.limits.LimitsClient(config=self.config, signer=self.signer),
-            # "loadbalancer": oci.load_balancer.LoadBalancerClient(config=self.config, signer=self.signer),
+            "loadbalancer": oci.load_balancer.LoadBalancerClient(config=self.config, signer=self.signer),
             # "mysqlaas": oci.mysql.MysqlaasClient(config=self.config, signer=self.signer),
             # "mysqldb": oci.mysql.DbSystemClient(config=self.config, signer=self.signer),
             "network": oci.core.VirtualNetworkClient(config=self.config, signer=self.signer)
@@ -372,6 +383,17 @@ class PCAQuery(OCIConnection):
         resources = []
         # Images
         results = oci.pagination.list_call_get_all_results(client.list_images, compartment_id=self.tenancy_ocid).data
+        # Convert to Json object
+        resources = self.toJson(results)
+        self.ancillary_resources[array] = resources
+        return self.ancillary_resources[array]
+
+    def private_ips(self, subnet_id):
+        resource_map = self.resource_map["PrivateIPs"]
+        client = self.clients[resource_map["client"]]
+        array = resource_map["array"]
+        resources = []
+        results = oci.pagination.list_call_get_all_results(client.list_private_ips, subnet_id=subnet_id).data
         # Convert to Json object
         resources = self.toJson(results)
         self.ancillary_resources[array] = resources
@@ -631,6 +653,26 @@ class PCAQuery(OCIConnection):
             # Convert to Json object
             resources = self.toJson(results)
             self.dropdown_json[array].extend(resources)
+        return self.dropdown_json[array]
+
+    def load_balancers(self):
+        resource_map = self.resource_map["LoadBalancer"]
+        client = self.clients[resource_map["client"]]
+        array = resource_map["array"]
+        resources = []
+        self.dropdown_json[array] = []
+        for compartment_id in self.query_compartments:
+            results = oci.pagination.list_call_get_all_results(client.list_load_balancers, compartment_id=compartment_id).data
+            # Convert to Json object
+            resources = self.toJson(results)
+            self.dropdown_json[array].extend(resources)
+        for load_balancer in self.dropdown_json[array]:
+            private_ips = self.private_ips(load_balancer['subnet_ids'][0])
+            for backend_set in load_balancer['backend_sets']:
+                for backend in backend_set['backends']:
+                    for ip_address in [ip for ip in private_ips if ip['ip_address'] == backend['ip_address']]:
+                        for vnic_attachment in [va for va in self.ancillary_resources['vnic_attachments'] if va['id'] == ip_address['vnic_id']]:
+                            backend['target_id'] = vnic_attachment['instance_id']
         return self.dropdown_json[array]
 
     def local_peering_gateways(self):

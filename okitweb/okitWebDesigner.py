@@ -200,7 +200,6 @@ def handle_exception(error):
 # Define Endpoints
 #
 
-@bp.route('/okit', methods=(['GET']))
 def okit():
     local = current_app.config.get('LOCAL', False)
     if not local and session.get('username', None) is None:
@@ -251,8 +250,14 @@ def okit():
                            local_okit=local,
                            developer_mode=developer_mode, experimental_mode=experimental_mode, cd3_mode=cd3_mode, a2c_mode=a2c_mode, pca_mode=pca_mode, ansible_mode=ansible_mode)
 
+@bp.route('/', methods=(['GET']))
+@bp.route('/okit', methods=(['GET']))
 @bp.route('/designer', methods=(['GET']))
-def designer():
+def designer_redirect():
+ return render_template('okit/designer.html')
+
+@bp.route('/console', methods=(['GET']))
+def console():
     local = current_app.config.get('LOCAL', False)
     if not local and session.get('username', None) is None:
         logger.info('<<<<<<<<<<<<<<<<<<<<<<<<< Redirect to Login >>>>>>>>>>>>>>>>>>>>>>>>>')
@@ -323,12 +328,80 @@ def designer():
                            pca_mode=pca_mode, 
                            ansible_mode=ansible_mode)
 
+@bp.route('oci', defaults={'target': 'oci'}, methods=(['GET']))
+@bp.route('pca', defaults={'target': 'pca'}, methods=(['GET']))
+def designer(target):
+    local = current_app.config.get('LOCAL', False)
+    if not local and session.get('username', None) is None:
+        logger.info('<<<<<<<<<<<<<<<<<<<<<<<<< Redirect to Login >>>>>>>>>>>>>>>>>>>>>>>>>')
+        return redirect(url_for('okit.login'), code=302)
+    pca_mode = (target == 'pca')
+    oci_mode = (target == 'oci')
+    developer_mode = 'false'
+    experimental_mode = 'false'
+    cd3_mode = 'false'
+    ansible_mode = 'false'
+    a2c_mode = 'false'
+    # # Test if developer mode
+    # developer_mode = (request.args.get('developer', default='false') == 'true')
+    # if developer_mode:
+    #     logger.info("<<<<<<<<<<<<<<<<<<<<<<<<<< Developer Mode >>>>>>>>>>>>>>>>>>>>>>>>>>")
+    # # Test if experimental mode
+    # experimental_mode = (request.args.get('experimental', default='false') == 'true')
+    # if experimental_mode:
+    #     logger.info("<<<<<<<<<<<<<<<<<<<<<<<<<< Experimental Mode >>>>>>>>>>>>>>>>>>>>>>>>>>")
+    # # Test if cd3 mode
+    # cd3_mode = (request.args.get('cd3', default='false') == 'true')
+    # if cd3_mode:
+    #     logger.info("<<<<<<<<<<<<<<<<<<<<<<<<<< CD3 Mode >>>>>>>>>>>>>>>>>>>>>>>>>>")
+    # Test if PCA mode
+    # # Test if Ansible mode
+    # ansible_mode = (request.args.get('ansible', default='false') == 'true')
+    # if ansible_mode:
+    #     logger.info("<<<<<<<<<<<<<<<<<<<<<<<< Ansible Mode >>>>>>>>>>>>>>>>>>>>>>>>")
+    # Define Resource directories
+    # Process Javascript & css files
+    resource_dirs = ['model', 'view', 'properties', 'file', 'panels', 'pricing', 'spreadsheet', 'views']
+    resource_files = {'js': [], 'css': []}
+    for dir in resource_dirs:
+        sorted_files = readStaticFiles(dir)
+        resource_files['js'].extend([os.path.relpath(path, bp.static_folder) for path in sorted_files if os.path.splitext(path)[1] == '.js'])
+        resource_files['css'].extend([os.path.relpath(path, bp.static_folder) for path in sorted_files if os.path.splitext(path)[1] == '.css'])
+    logger.debug(jsonToFormattedString(resource_files))
+
+    # Read Palette Json
+    palette_json = readJsonFile(os.path.join(bp.static_folder, 'palette', 'palette.json'))
+    # Read SVG File
+    palette_json['svg'] = {}
+    palette_json['files'] = {}
+    for group in palette_json.get('groups', []):
+        for resource in group.get('resources', []):
+            palette_json['files'][resource['title'].lower()] = os.path.join('/', 'static', 'okit', 'palette', 'svg', resource['svg'])
+            with open(os.path.join(bp.static_folder, 'palette', 'svg', resource['svg']), 'r') as svgFile:
+                palette_json['svg'][resource['title'].lower()] = ''.join(svgFile.read().splitlines())
+
+    #Render The Template
+    return render_template('okit/okit_designer.html',
+                           resource_files=resource_files,
+                           palette_json=palette_json,
+                           local_okit=local,
+                           oci_mode=oci_mode, 
+                           pca_mode=pca_mode, 
+                           target=target,
+                           developer_mode=developer_mode, 
+                           experimental_mode=experimental_mode, 
+                           cd3_mode=cd3_mode, 
+                           a2c_mode=a2c_mode, 
+                           ansible_mode=ansible_mode)
+
 
 # Template Processing
 @bp.route('/panel/templates', methods=(['GET']))
 def templates_panel():
+    target = request.args.get('target', default='')
+    logger.info(f'Template target {target}')
     # ref_arch_root = os.path.join(bp.static_folder, 'templates', 'reference_architecture')
-    ref_arch_root = os.path.join(current_app.instance_path, 'templates', 'reference_architecture')
+    ref_arch_root = os.path.join(current_app.instance_path, 'templates', 'reference_architecture', target)
     ref_arch_templates = dir_to_json(ref_arch_root, current_app.instance_path, 'children', 'templates')
     # ref_arch_templates = dir_to_json(ref_arch_root, ref_arch_root, 'children', 'templates')
     ref_arch_category = {'name': 'Reference Architectures', 'path': 'reference_architecture', 'children': [], 'templates': []}

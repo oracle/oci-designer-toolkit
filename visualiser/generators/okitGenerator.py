@@ -27,7 +27,7 @@ from model.okitValidation import OCIJsonValidator
 logger = getLogger()
 
 class OCIGenerator(object):
-    OKIT_VERSION = "0.50.1"
+    OKIT_VERSION = "0.51.0"
     def __init__(self, template_dir, output_dir, visualiser_json, use_vars=False, add_provider=True):
         # Initialise generator output data variables
         self.rendered_resources = {}
@@ -182,6 +182,7 @@ class OCIGenerator(object):
 
         "dhcp_options": "networking",
         "drg_attachments": "networking",
+        "dynamic_routing_gateway_attachments": "networking",
         "internet_gateways": "networking",
         "load_balancers": "networking",
         "local_peering_gateways": "networking",
@@ -215,6 +216,7 @@ class OCIGenerator(object):
 
         "customer_premise_equipments": "customer_connectivity",
         "drgs": "customer_connectivity",
+        "dynamic_routing_gateways": "customer_connectivity",
         "ipsec_connections": "customer_connectivity",
 
         "oke_clusters": "containers",

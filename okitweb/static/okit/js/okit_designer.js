@@ -447,6 +447,7 @@ const loadTemplatePanel = () => {
         url: `panel/templates`,
         dataType: 'text', // Response Type
         contentType: 'application/json', // Sent Message Type
+        data: {target: pca_mode ? 'pca-x9' : oci_mode ? 'oci' : ''},
         success: function(resp) {
             const parser = new DOMParser();
             const doc = parser.parseFromString(resp, "text/html");
@@ -933,7 +934,7 @@ function importTemplate(template_url, event) {
 /*
 ** Query OCI
  */
-function displayQueryDialog(title='Query OCI', btn_text='Query', callback=undefined, loadCompartments=loadOCICompartments) {
+function displayQueryDialog(title='Query OCI', btn_text='Query', callback=undefined, loadCompartments=loadOCICompartments, oci=true) {
     $(jqId('modal_dialog_title')).text(title);
     // if (okitSettings.fast_discovery) {
     //     $(jqId('modal_dialog_title')).text('OCI Introspection (Fast Discovery)');
@@ -979,7 +980,7 @@ function displayQueryDialog(title='Query OCI', btn_text='Query', callback=undefi
     // Region Ids
     tr = tbody.append('div')
         .attr('class', 'tr');
-    if (btn_text === 'Query') {
+    if (btn_text === 'Query' && oci) {
         tr.append('div')
             .attr('class', 'td')
             .text('Region(s)');
@@ -1394,7 +1395,7 @@ function handleQueryPCA(e) {
     $("#toolbar_view_select").val('designer');
     handleSwitchToCompartmentView();
     // Display Dialog
-    displayQueryDialog('Query PCA-X9', 'Query', () => {queryPCA(showQueryPCAResults)}, loadPCACompartments);
+    displayQueryDialog('Query PCA-X9', 'Query', () => {queryPCA(showQueryPCAResults)}, loadPCACompartments, false);
     // Set Query Config Profile
     okitSettings.home_region_key = '';
     okitSettings.home_region = '';
@@ -1411,7 +1412,7 @@ function handleImportFromPCA(e) {
     $("#toolbar_view_select").val('designer');
     handleSwitchToCompartmentView();
     // Display Dialog
-    displayQueryDialog('Import From PCA', 'Introspect', () => {queryPCA(showImportResults)}, loadPCACompartments);
+    displayQueryDialog('Import From PCA', 'Introspect', () => {queryPCA(showImportResults)}, loadPCACompartments, false);
     // Set Query Config Profile
     okitSettings.home_region_key = '';
     okitSettings.home_region = '';
