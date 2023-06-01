@@ -1,7 +1,7 @@
 {
     "name": "ocd",
     "description": "OKIT Open Cloud Designer",
-    "workspaces": [
+    "not-workspaces": [
         "ocd-codegen",
         "ocd-core",
         "ocd-export",
@@ -13,11 +13,11 @@
     ],
     "scripts": {
         "build": "npm run build --workspaces --if-present",
-        "import": "npm run import --workspace=ocd-codegen",
-        "generate": "npm run generate --workspace=ocd-codegen",
-        "import-and-generate": "npm run import-and-generate --workspace=ocd-codegen",
-        "web": "npm run start --workspace=ocd-react",
-        "desktop": "npm run electron-release-pack --workspace=ocd-react",
-        "dev-desktop": "npm run electron-pack --workspace=ocd-react"
+        "import": "cd ocd-codegen && npm run import",
+        "generate": "cd ocd-codegen && npm run generate",
+        "import-and-generate": "cd ocd-codegen && npm run import-and-generate",
+        "web": "cd ocd-react && npm run start",
+        "desktop": "cd ocd-react && npm run electron-release-pack",
+        "dev-desktop": "cd ocd-react && npm run electron-pack"
     }
 }

@@ -36,7 +36,11 @@ Executes the build process and generates installation files in the ./packages/oc
 
 1. Install required moduels
 ```bash
-npm install -w ocd-codegen -w ocd-react 
+cd ocd-react
+npm install
+cd ..
+cd ocd-codegen
+npm install 
 ```
 2. Generate TypeScript and React code from Schema
 ```bash
@@ -52,7 +56,11 @@ npm run desktop
 
 1. Install required moduels
 ```bash
-npm install -w ocd-codegen -w ocd-react 
+cd ocd-react
+npm install
+cd ..
+cd ocd-codegen
+npm install 
 ```
 2. Generate TypeScript and React code from Schema
 ```bash
