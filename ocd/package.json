@@ -2,14 +2,14 @@
     "name": "ocd",
     "description": "OKIT Open Cloud Designer",
     "workspaces": [
-        "packages/ocd-codegen",
-        "packages/ocd-core",
-        "packages/ocd-export",
-        "packages/ocd-import",
-        "packages/ocd-query",
-        "packages/ocd-react",
-        "packages/ocd-desktop",
-        "packages/ocd-vscode"
+        "ocd-codegen",
+        "ocd-core",
+        "ocd-export",
+        "ocd-import",
+        "ocd-query",
+        "ocd-react",
+        "ocd-desktop",
+        "ocd-vscode"
     ],
     "scripts": {
         "build": "npm run build --workspaces --if-present",

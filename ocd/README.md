@@ -1,7 +1,7 @@
 # Getting Started OKIT Open Cloud Designer
 
 The OCD project is a refactoring of the original OKIT implementation and TypeScript / JavaScript 
-based impleentation using React to build the interface and provide the WebServer. In addition
+based implementation using React to build the interface and provide the WebServer. In addition
 Electron is used to generate native installers for simplicity of installation and use.
 
 # Scripts
@@ -21,7 +21,7 @@ Reads the OCD Schema file and generates Model, Properties and Terraform TypeScri
 
 ## import-and-generate
 
-Executes "imaport" and then "generate" scripts
+Executes "import" and then "generate" scripts
 
 ## web
 
