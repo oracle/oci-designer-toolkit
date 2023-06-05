@@ -6,6 +6,10 @@ Electron is used to generate native installers for simplicity of installation an
 
 # Scripts
 
+## install
+
+Installs all required modules for the sub packages
+
 ## build 
 
 Script will build all packages within the ocd workspace
@@ -32,42 +36,35 @@ Runs the development React web application and presents the Web BUI on [http://l
 Executes the build process and generates installation files in the ./packages/ocd-react/dist directory.
 
 
+# Installing
+Before the application can be either built as a desktop or run as a web server all appropriate node modules must be 
+installed. This can be achieve by executing the to level __install__ script; as follows:
+
+``` bash
+npm run install
+```
+
 # Building Desktop Application
 
-1. Install required moduels
-```bash
-cd ocd-react
-npm install
-cd ..
-cd ocd-codegen
-npm install 
-```
-2. Generate TypeScript and React code from Schema
+1. Generate TypeScript and React code from Schema
 ```bash
 npm run generate
 ```
-3. Build Desktop Application
+2. Build Desktop Application
 ```bash
 npm run desktop
 ```
-4. Install Application from packages/ocd-react/dist
+3. Install Application from packages/ocd-react/dist
+
 
 # Running Development Web Application
 
-1. Install required moduels
-```bash
-cd ocd-react
-npm install
-cd ..
-cd ocd-codegen
-npm install 
-```
-2. Generate TypeScript and React code from Schema
+1. Generate TypeScript and React code from Schema
 ```bash
 npm run generate
 ```
-3. Run Web Server
+2. Run Web Server
 ```bash
 npm run web
 ```
-4. Access BUI on [http://localhost:3000/](http://localhost:3000/)
+3. Access BUI on [http://localhost:3000/](http://localhost:3000/)

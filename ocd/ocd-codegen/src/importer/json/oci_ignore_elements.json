@@ -9,6 +9,14 @@
         "time_created",
         "timeouts"
     ],
+    "oci_containerengine_cluster": [
+        "endpoints",
+        "metadata"
+    ],
+    "oci_containerengine_node_pool": [
+        "node_source",
+        "nodes"
+    ],
     "oci_core_drg": [
         "default_drg_route_tables",
         "default_export_drg_route_distribution_id"
@@ -51,6 +59,11 @@
         "vcn_domain_name"
     ],
     "oci_database_autonomous_database": [
+        "apex_details",
+        "backup_config",
+        "connection_strings",
+        "connection_urls",
+        "standby_db",
         "time_deletion_of_free_autonomous_database",
         "time_maintenance_begin",
         "time_maintenance_end",
@@ -60,6 +73,30 @@
         "time_of_last_switchover",
         "time_of_next_refresh",
         "time_reclamation_of_free_autonomous_database"
+    ],
+    "oci_database_db_system": [
+        "connection_strings",
+        "iorm_config_cache",
+        "maintenance_window"
+    ],
+    "oci_file_storage_file_system": [
+        "source_details"
+    ],
+    "oci_load_balancer_load_balancer": [
+        "ip_address_details"
+    ],
+    "oci_mysql_mysql_db_system": [
+        "analytics_cluster",
+        "channels",
+        "current_placement",
+        "endpoints",
+        "heat_wave_cluster"
+    ],
+    "oci_network_load_balancer_network_load_balancer": [
+        "ip_addresses"
+    ],
+    "oci_nosql_table": [
+        "schema"
     ],
     "oci_objectstorage_bucket": [
         "etag",

@@ -12,6 +12,9 @@
         "ocd-vscode"
     ],
     "scripts": {
+        "install-ocd-codegen": "cd ocd-codegen && npm install",
+        "install-ocd-react": "cd ocd-codegen && npm install",
+        "install": "npm run install-ocd-codegen && npm run install-ocd-react",
         "build": "npm run build --workspaces --if-present",
         "import": "cd ocd-codegen && npm run import",
         "generate": "cd ocd-codegen && npm run generate",

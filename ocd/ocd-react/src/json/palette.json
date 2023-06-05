@@ -13,6 +13,11 @@
                             "container": true,
                             "title": "OKE Cluster",
                             "class": "oci-oke-cluster"
+                        },
+                        {
+                            "container": true,
+                            "title": "OKE Node Pool",
+                            "class": "oci-oke-node-pool"
                         }
                     ]
                 },
@@ -50,6 +55,11 @@
                             "container": false,
                             "title": "MySQL Database System",
                             "class": "oci-mysql-database-system"
+                        },
+                        {
+                            "container": false,
+                            "title": "NoSQL Database",
+                            "class": "oci-nosql-database"
                         }
                     ]
                 },
@@ -105,7 +115,7 @@
                         {
                             "container": false,
                             "title": "Remote Peering Connection",
-                            "class": "oci-remote-peering-gateway"
+                            "class": "oci-remote-peering-connection"
                         },
                         {
                             "container": false,
