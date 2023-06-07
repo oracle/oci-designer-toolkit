@@ -57,6 +57,8 @@ if (command.toLocaleLowerCase() === 'generate') {
         else if (subcommand.toLocaleLowerCase() === 'oci-terraform-js') generator = new OciTerraformGenerator()
         Object.entries(schema).forEach(([key, value]) => {
             generator.generate(key, value)
+            generator.writeFiles(outputDirectory, key, force_resource_file)
+            /*
             const outputFilename = generator.outputFilename(key)
             const resourceDirectory = path.join(outputDirectory, generator.resourcesDirectory(key))
             const resourceFilename = path.join(resourceDirectory, outputFilename)
@@ -75,6 +77,7 @@ if (command.toLocaleLowerCase() === 'generate') {
             } else {
                 console.info(`Resource File already exists : ${resourceFilename}`)
             }
+            */
         })
         if (generator.resources.length > 0) {
             // console.info(generator.resourceFile)
