@@ -85,7 +85,7 @@ export const OcdTextProperty = ({ ocdDocument, setOcdDocument, resource, config,
     return (
         <div className='ocd-property-row ocd-simple-property-row'>
             <div><label>{attribute.label}</label></div>
-            <div><input type='text' defaultValue={resource[attribute.key]} {...properties} onChange={onChange} onBlur={onBlur}></input></div>
+            <div><input type='text' value={resource[attribute.key]} {...properties} onChange={onChange} onBlur={onBlur}></input></div>
         </div>
     )
 }
@@ -102,7 +102,7 @@ export const OcdNumberProperty = ({ ocdDocument, setOcdDocument, resource, confi
     return (
         <div className='ocd-property-row ocd-simple-property-row'>
             <div><label>{attribute.label}</label></div>
-            <div><input type='number' defaultValue={resource[attribute.key]} {...properties} onChange={onChange} onBlur={onBlur}></input></div>
+            <div><input type='number' value={resource[attribute.key]} {...properties} onChange={onChange} onBlur={onBlur}></input></div>
         </div>
     )
 }
@@ -116,7 +116,7 @@ export const OcdBooleanProperty = ({ ocdDocument, setOcdDocument, resource, conf
     return (
         <div className='ocd-property-row ocd-simple-property-row'>
             <div></div>
-            <div><input type='checkbox' defaultChecked={resource[attribute.key]} {...properties} onChange={onChange}></input><label>{attribute.label}</label></div>
+            <div><input type='checkbox' checked={resource[attribute.key]} {...properties} onChange={onChange}></input><label>{attribute.label}</label></div>
         </div>
     )
 }
@@ -136,7 +136,7 @@ export const OcdLookupProperty = ({ ocdDocument, setOcdDocument, resource, confi
             <div>
                 <select value={resource[attribute.key]} {...properties} onChange={onChange}>
                     {/* {!attribute.required && <option defaultValue='' key={`${attribute.lookupResource}-empty-option`}></option> } */}
-                    <option defaultValue='' key={`${attribute.lookupResource}-empty-option`}></option>
+                    <option value='' key={`${attribute.lookupResource}-empty-option`}></option>
                     {resources.filter((r) => r.resourceType !== resourceType || r.id !== resource.id).map((r: OcdResource) => {
                         return <option value={r.id} key={r.id}>{r.displayName}</option>
                     })}
