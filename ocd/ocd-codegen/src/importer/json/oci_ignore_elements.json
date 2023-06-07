@@ -82,6 +82,12 @@
     "oci_file_storage_file_system": [
         "source_details"
     ],
+    "oci_kms_key": [
+        "replica_details"
+    ],
+    "oci_kms_vault": [
+        "replica_details"
+    ],
     "oci_load_balancer_load_balancer": [
         "ip_address_details"
     ],

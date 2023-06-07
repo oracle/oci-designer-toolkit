@@ -33,7 +33,19 @@ Runs the development React web application and presents the Web BUI on [http://l
 
 ## desktop
 
-Executes the build process and generates installation files in the ./packages/ocd-react/dist directory.
+Executes the build process and generates installation files in the ./dist directory.
+
+### linux-desktop
+
+Build just linux desktop
+
+### macos-desktop
+
+Build just MacOS desktop
+
+### win-desktop
+
+Build just Windows desktop
 
 
 # Installing
@@ -54,7 +66,10 @@ npm run generate
 ```bash
 npm run desktop
 ```
-3. Install Application from packages/ocd-react/dist
+3. Install Application from 
+    1. ./dist/linux/
+    2. ./dist/mac/ocd-0.1.0.dmg
+    3. ./dist/win/ocd Setup 0.1.0.exe
 
 
 # Running Development Web Application

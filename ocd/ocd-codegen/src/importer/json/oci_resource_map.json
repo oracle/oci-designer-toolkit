@@ -1,5 +1,6 @@
 {
     "oci_analytics_analytics_instance": "analytics_instance",
+    "oci_bastion_bastion": "bastion",
     "oci_containerengine_cluster": "oke_cluster",
     "oci_containerengine_node_pool": "oke_node_pool",
     "oci_core_cpe": "cpe",
@@ -28,10 +29,14 @@
     "oci_file_storage_file_system": "file_system",
     "oci_file_storage_mount_target": "mount_target",
     "oci_identity_compartment": "compartment",
+    "oci_identity_policy": "policy",
+    "oci_kms_key": "key",
+    "oci_kms_vault": "vault",
     "oci_load_balancer_load_balancer": "load_balancer",
     "oci_mysql_mysql_db_system": "mysql_db_system",
     "oci_network_load_balancer_network_load_balancer": "network_load_balancer",
     "oci_nosql_index": "nosql_index",
     "oci_nosql_table": "nosql_table",
-    "oci_objectstorage_bucket": "bucket"
+    "oci_objectstorage_bucket": "bucket",
+    "oci_vault_secret": "secret"
 }

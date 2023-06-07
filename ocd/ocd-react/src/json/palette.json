@@ -150,6 +150,11 @@
                         },
                         {
                             "container": false,
+                            "title": "Dynamic Routing Gateway Attachment",
+                            "class": "oci-drg-attachment"
+                        },
+                        {
+                            "container": false,
                             "title": "Service Gateway",
                             "class": "oci-service-gateway"
                         }
@@ -173,6 +178,32 @@
                             "container": false,
                             "title": "File Storage System",
                             "class": "oci-file-storage-system"
+                        }
+                    ]
+                },
+                {
+                    "title": "Identity",
+                    "class": "oci-identity",
+                    "resources": [
+                        {
+                            "container": true,
+                            "title": "Bastion",
+                            "class": "oci-bastion"
+                        },
+                        {
+                            "container": true,
+                            "title": "Vault",
+                            "class": "oci-vault"
+                        },
+                        {
+                            "container": false,
+                            "title": "Secret",
+                            "class": "oci-secret"
+                        },
+                        {
+                            "container": false,
+                            "title": "Key",
+                            "class": "oci-key"
                         }
                     ]
                 }
