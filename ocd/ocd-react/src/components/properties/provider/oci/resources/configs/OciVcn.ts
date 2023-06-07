@@ -6,5 +6,17 @@
 import { ResourceElementConfig } from "../../../../OcdPropertyTypes";
 
 export namespace OciVcnConfigs {
-    export function configs(): ResourceElementConfig[] {return []}
+    export function configs(): ResourceElementConfig[] {
+        return [
+            {
+                id: 'dns_label',
+                properties: {
+                    maxLength: 15,
+                    pattern: '^[a-zA-Z][a-zA-Z0-9]{0,15}$',
+                    title: 'Only letters and numbers, starting with a letter. 15 characters max.'
+                },
+                configs: []
+            }
+        ]
+    }
 }
