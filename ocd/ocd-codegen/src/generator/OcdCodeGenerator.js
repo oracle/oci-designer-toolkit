@@ -137,6 +137,8 @@ ${resources.sort().map((r) => `export { ${this.resourceName(r)} } from './${this
     toCamelCase = (str) => `${this.toTitleCase(str.split('_').join(' ')).split(' ').map((e, i) => i === 0 ? e.toLowerCase() : e).join('')}`
 
     getSchemaObjects = (schema) => Object.values(schema.attributes).filter(f => f.attributes).reduce((a, c) => [...a, c, ...this.getSchemaObjects(c)], []).reduce((a, c) => [...a, ...a.find((o) => o.name === c.name) ? [] : [c]], [])
+    getSchemaAttributes = (schema) => Object.values(schema.attributes).reduce((a, c) => [...a, c, ...c.attributes ? this.getSchemaAttributes(c) : []], []).reduce((a, c) => [...a, ...a.find((o) => o.name === c.name) ? [] : [c]], [])
+    // getSchemaAttributes = (schema) => Object.values(schema.attributes).filter(f => !f.attributes).reduce((a, c) => [...a, c], []).reduce((a, c) => [...a, ...a.find((o) => o.name === c.name) ? [] : [c]], [])
     // getSchemaObjects = (schema) => Object.values(schema.attributes).filter(f => f.type === 'object').reduce((a, c) => [...a, c, ...this.getSchemaObjects(c)], [])
     // .filter(f => f.type === 'object').reduce((a, c) => [...a, c, ...this.getSchemaObjects(c)], [])
     // ...c.attributes.filter(f => f.type === 'object')
