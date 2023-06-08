@@ -337,11 +337,11 @@ def designer(target):
         return redirect(url_for('okit.login'), code=302)
     pca_mode = (target == 'pca')
     oci_mode = (target == 'oci')
-    developer_mode = 'false'
-    experimental_mode = 'false'
-    cd3_mode = 'false'
-    ansible_mode = 'false'
-    a2c_mode = 'false'
+    developer_mode = False
+    experimental_mode = False
+    cd3_mode = False
+    ansible_mode = False
+    a2c_mode = False
     # # Test if developer mode
     # developer_mode = (request.args.get('developer', default='false') == 'true')
     # if developer_mode:
