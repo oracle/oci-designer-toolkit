@@ -1,6 +1,13 @@
 # Release Notes
 
 
+## Version 0.52.0
+**Release Date**: 21st June 2023
+### Features
+1. Add Integration Instance
+### Bug Fixes
+
+
 ## Version 0.51.0
 **Release Date**: 31st May 2023
 ### Features

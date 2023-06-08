@@ -13,22 +13,14 @@ class IntegrationInstanceView extends OkitCompartmentArtefactView {
         super(artefact, json_view);
     }
     get parent_id() {return this.artefact.compartment_id;}
-    get parent() {return this.getJsonView().getCompartment(this.parent_id);}
     /*
     ** SVG Processing
     */
     /*
     ** Property Sheet Load function
     */
-    loadProperties() {
-        const self = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/integration_instance.html", () => {loadPropertiesSheet(self.artefact);});
-    }
-    /*
-    ** Load and display Value Proposition
-    */
-    loadValueProposition() {
-        $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/integration_instance.html");
+    newPropertiesSheet() {
+        this.properties_sheet = new IntegrationInstanceProperties(this.artefact)
     }
     /*
     ** Static Functionality
@@ -58,18 +50,11 @@ OkitJsonView.prototype.newIntegrationInstance = function(obj) {
     return this.getIntegrationInstances()[this.getIntegrationInstances().length - 1];
 }
 OkitJsonView.prototype.getIntegrationInstances = function() {
-    if (!this.integration_instances) {
-        this.integration_instances = [];
-    }
+    if (!this.integration_instances) this.integration_instances = [];
     return this.integration_instances;
 }
 OkitJsonView.prototype.getIntegrationInstance = function(id='') {
-    for (let artefact of this.getIntegrationInstances()) {
-        if (artefact.id === id) {
-            return artefact;
-        }
-    }
-    return undefined;
+    return this.getIntegrationInstances().find(r => r.id === id)
 }
 OkitJsonView.prototype.loadIntegrationInstances = function(integration_instances) {
     for (const artefact of integration_instances) {
