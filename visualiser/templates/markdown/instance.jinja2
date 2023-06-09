@@ -5,7 +5,9 @@
 {{ common.subnet_property(resource.vnic_attachments[0].subnet_id) }}
 {{ common.document_property("Fault Domain", resource.fault_domain) }}
 {{ common.document_property("Shape", resource.shape) }}
-{{ common.document_property("Operating System", resource.source_details.os ~ " " ~ resource.source_details.version) }}
+{{ common.document_property("Operating System", resource.source_details.os) }}
+{{ common.document_property("Operating System Version", resource.source_details.version) }}
+{% if resource.source_details.image_name is defined -%}{{ common.document_property("Image Name", resource.source_details.image_name) }}{%- endif %}
     {% if resource.metadata.user_data != "" %}
 ##### Cloud Init
 ```bash

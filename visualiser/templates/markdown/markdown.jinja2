@@ -82,6 +82,7 @@
     {% include "remote_peering_connection.jinja2" ignore missing with context %}
 {%- endif %}
 
+{% if (autonomous_databases is defined and autonomous_databases|length > 0) or (database_systems is defined and database_systems|length > 0) or (mysql_database_systems is defined and mysql_database_systems|length) -%}
 ## Databases
 
 {% if autonomous_databases is defined and autonomous_databases|length > 0 -%}
@@ -97,6 +98,8 @@
 {% if mysql_database_systems is defined and mysql_database_systems|length > 0 -%}
     ### MySQL Database Systems
     {% include "mysql_database_system.jinja2" ignore missing with context %}
+{%- endif %}
+
 {%- endif %}
 
 ## Infrastructure
@@ -143,6 +146,7 @@
     {% include "mount_target.jinja2" ignore missing with context %}
 {%- endif %}
 
+{% if (customer_premise_equipments is defined and customer_premise_equipments|length > 0) or (ipsec_connections is defined and ipsec_connections|length > 0) -%}
 ## External
 
 {% if customer_premise_equipments is defined and customer_premise_equipments|length > 0 -%}
@@ -153,6 +157,8 @@
 {% if ipsec_connections is defined and ipsec_connections|length > 0 -%}
     ### IPSec Connections
     {% include "ipsec_connection.jinja2" ignore missing with context %}
+{%- endif %}
+
 {%- endif %}
 
 {% if exadata_infrastructures is defined and exadata_infrastructures|length > 0 -%}
