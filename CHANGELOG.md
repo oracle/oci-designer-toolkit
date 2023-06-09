@@ -6,6 +6,7 @@
 ### Features
 1. Add Integration Instance
 ### Bug Fixes
+1. Fix incorrect Markdown generation when markdown view displayed
 
 
 ## Version 0.51.0

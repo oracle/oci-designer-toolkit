@@ -67,6 +67,21 @@
                     "title": "Integration Instance",
                     "targets": ["oci"],
                     "svg": "DataIntegrator.svg"
+                },
+                {
+                    "title": "Instance Configuration",
+                    "targets": ["oci"],
+                    "svg": "VirtualMachineApplication.svg"
+                },
+                {
+                    "title": "Instance Pool",
+                    "targets": ["oci"],
+                    "svg": "InstancePools.svg"
+                },
+                {
+                    "title": "Autoscaling Configuration",
+                    "targets": ["oci"],
+                    "svg": "Autoscaling.svg"
                 }
             ]
         },

@@ -2,12 +2,12 @@
 ** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
-console.debug('Loaded Instance Pool Javascript');
+console.debug('Loaded Autoscaling Configuration Javascript');
 
 /*
-** Define Instance Pool Class
+** Define Autoscaling Configuration Class
 */
-class InstancePool extends OkitArtifact {
+class AutoscalingConfiguration extends OkitArtifact {
     /*
     ** Create
     */
@@ -29,30 +29,30 @@ class InstancePool extends OkitArtifact {
     ** Name Generation
     */
     getNamePrefix() {
-        return super.getNamePrefix() + 'ip';
+        return super.getNamePrefix() + 'ac';
     }
     /*
     ** Static Functionality
     */
     static getArtifactReference() {
-        return 'Instance Pool';
+        return 'Autoscaling Configuration';
     }
 }
 /*
 ** Dynamically Add Model Functions
 */
-OkitJson.prototype.newInstancePool = function(data) {
-    this.getInstancePools().push(new InstancePool(data, this));
-    return this.getInstancePools()[this.getInstancePools().length - 1];
+OkitJson.prototype.newAutoscalingConfiguration = function(data) {
+    this.getAutoscalingConfigurations().push(new AutoscalingConfiguration(data, this));
+    return this.getAutoscalingConfigurations()[this.getAutoscalingConfigurations().length - 1];
 }
-OkitJson.prototype.getInstancePools = function() {
-    if (!this.instance_pools) this.instance_pools = []
-    return this.instance_pools;
+OkitJson.prototype.getAutoscalingConfigurations = function() {
+    if (!this.autoscaling_configurations) this.autoscaling_configurations = []
+    return this.autoscaling_configurations;
 }
-OkitJson.prototype.getInstancePool = function(id='') {
-    return this.getInstancePools().find(r => r.id === id)
+OkitJson.prototype.getAutoscalingConfiguration = function(id='') {
+    return this.getAutoscalingConfigurations().find(r => r.id === id)
 }
-OkitJson.prototype.deleteInstancePool = function(id) {
-    this.instance_pools = this.instance_pools ? this.instance_pools.filter((r) => r.id !== id) : []
+OkitJson.prototype.deleteAutoscalingConfiguration = function(id) {
+    this.autoscaling_configurations = this.autoscaling_configurations ? this.autoscaling_configurations.filter((r) => r.id !== id) : []
 }
 
