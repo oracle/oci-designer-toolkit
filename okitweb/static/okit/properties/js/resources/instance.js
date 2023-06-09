@@ -53,7 +53,7 @@ class InstanceProperties extends OkitResourceProperties {
         this.image_version = image_version.input
         this.append(this.image_tbody, image_version.row)
         // Image Id (Custom Image)
-        const image_id = this.createInput('select', 'Custom Image', `${this.id}_image_id`, '', (d, i, n) => {this.resource.source_details.image_id = n[i].value})
+        const image_id = this.createInput('select', 'Custom Image', `${this.id}_image_id`, '', (d, i, n) => {this.resource.source_details.image_id = n[i].value; this.resource.source_details.image_name = n[i].selectedOptions[0].label})
         this.image_id = image_id.input
         this.image_id_row = image_id.row
         this.append(this.image_tbody, image_id.row)
@@ -354,6 +354,8 @@ class InstanceProperties extends OkitResourceProperties {
         const options = Array.from(this.image_id.node().options).map((opt) => opt.value)
         this.resource.source_details.image_id =  options.includes(this.resource.source_details.image_id) ? this.resource.source_details.image_id : options.length > 0 ? options[0] : ''
         this.image_id.property('value', this.resource.source_details.image_id)
+        if (this.resource.source_details.image_source === 'custom') this.resource.source_details.image_name =  this.image_id.node().selectedOptions[0].label
+        else delete this.resource.source_details.image_name
     }
 
     // Load Custom Data
