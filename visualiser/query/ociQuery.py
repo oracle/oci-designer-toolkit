@@ -36,6 +36,8 @@ class OCIQuery(OCIConnection):
     SUPPORTED_RESOURCES = [
         "AnalyticsInstance",
         "AutonomousDatabase",
+        "AutoScalingConfiguration",
+        "AutoScalingPolicy",
         "Backend",
         "BackendSet",
         "Bastion",
@@ -69,6 +71,7 @@ class OCIQuery(OCIConnection):
         "Group",
         "Image",
         "Instance",
+        "InstanceConfiguration",
         # "InstancePool",
         "IntegrationInstance",
         "InternetGateway",
@@ -115,6 +118,7 @@ class OCIQuery(OCIConnection):
     DISCOVERY_OKIT_MAP = {
         "AnalyticsInstance": "analytics_instances",
         "AutonomousDatabase": "autonomous_databases",
+        "AutoScalingConfiguration": "autoscaling_configurations",
         "Bastion": "bastions",
         #"BootVolume": "block_storage_volumes",
         "Bucket": "object_storage_buckets",
@@ -136,6 +140,7 @@ class OCIQuery(OCIConnection):
         "FileSystem": "file_systems",
         "Group": "groups",
         "Instance": "instances",
+        "InstanceConfiguration": "instance_configurations",
         "InstancePool": "instance_pools",
         "IntegrationInstance": "integration_instances",
         "InternetGateway": "internet_gateways",
