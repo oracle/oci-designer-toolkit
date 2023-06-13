@@ -58,7 +58,6 @@ class PCAQuery(OCIConnection):
         "Group", 
         "Instance", 
         "InternetGateway",
-        "LoadBalancer",
         "LocalPeeringGateway",
         "MountTarget",
         "NatGateway", 
@@ -67,6 +66,7 @@ class PCAQuery(OCIConnection):
         "RouteTable", 
         "SecurityList", 
         "Subnet", 
+        "LoadBalancer", # Must be done after Subnet because it will need to query the results of Subnet
         "User", 
         "Vcn",
         "Volume"
@@ -667,11 +667,15 @@ class PCAQuery(OCIConnection):
             resources = self.toJson(results)
             self.dropdown_json[array].extend(resources)
         for load_balancer in self.dropdown_json[array]:
-            private_ips = self.private_ips(load_balancer['subnet_ids'][0])
+            private_ips = []
+            for subnet_id in load_balancer['subnet_ids']:
+                private_ips.extend(self.private_ips(subnet_id))
+            for subnet in self.dropdown_json['subnets']:
+                private_ips.extend(self.private_ips(subnet['id']))
             for backend_set in load_balancer['backend_sets']:
-                for backend in backend_set['backends']:
+                for backend in load_balancer['backend_sets'][backend_set]['backends']:
                     for ip_address in [ip for ip in private_ips if ip['ip_address'] == backend['ip_address']]:
-                        for vnic_attachment in [va for va in self.ancillary_resources['vnic_attachments'] if va['id'] == ip_address['vnic_id']]:
+                        for vnic_attachment in [va for va in self.ancillary_resources['vnic_attachments'] if va['vnic_id'] == ip_address['vnic_id']]:
                             backend['target_id'] = vnic_attachment['instance_id']
         return self.dropdown_json[array]
 
