@@ -49,6 +49,8 @@ class PCAQuery(OCIConnection):
         ]
     SUPPORTED_RESOURCES = [
         "Compartment", # Must be first because we will use the resulting list to query other resources in the selected and potentially child compartments
+        "Vcn",
+        "Subnet", 
         "Bucket", 
         "CustomerDnsZone",
         "DHCPOptions", 
@@ -58,6 +60,7 @@ class PCAQuery(OCIConnection):
         "Group", 
         "Instance", 
         "InternetGateway",
+        "LoadBalancer", # Must be done after Subnet because it will need to query the results of Subnet
         "LocalPeeringGateway",
         "MountTarget",
         "NatGateway", 
@@ -65,10 +68,7 @@ class PCAQuery(OCIConnection):
         "Policy", 
         "RouteTable", 
         "SecurityList", 
-        "Subnet", 
-        "LoadBalancer", # Must be done after Subnet because it will need to query the results of Subnet
         "User", 
-        "Vcn",
         "Volume"
     ]
     ANCILLARY_RESOURCES = [
@@ -666,6 +666,7 @@ class PCAQuery(OCIConnection):
             # Convert to Json object
             resources = self.toJson(results)
             self.dropdown_json[array].extend(resources)
+        known_instances = [instance['id'] for instance in self.dropdown_json['instances']]
         for load_balancer in self.dropdown_json[array]:
             private_ips = []
             for subnet_id in load_balancer['subnet_ids']:
@@ -676,7 +677,8 @@ class PCAQuery(OCIConnection):
                 for backend in load_balancer['backend_sets'][backend_set]['backends']:
                     for ip_address in [ip for ip in private_ips if ip['ip_address'] == backend['ip_address']]:
                         for vnic_attachment in [va for va in self.ancillary_resources['vnic_attachments'] if va['vnic_id'] == ip_address['vnic_id']]:
-                            backend['target_id'] = vnic_attachment['instance_id']
+                            if vnic_attachment['instance_id'] in known_instances:
+                                backend['target_id'] = vnic_attachment['instance_id']
         return self.dropdown_json[array]
 
     def local_peering_gateways(self):
