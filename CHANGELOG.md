@@ -7,6 +7,7 @@
 1. Add Integration Instance
 ### Bug Fixes
 1. Fix incorrect Markdown generation when markdown view displayed
+2. Resolve issue where PCA Loadbalancers were not linking all backend instances.
 
 
 ## Version 0.51.0
