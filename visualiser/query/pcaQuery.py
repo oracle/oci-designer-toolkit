@@ -615,12 +615,15 @@ class PCAQuery(OCIConnection):
             image_id = resource.get('source_details', {}).get('image_id', '')
             resource['source_details']['os'] = ''
             resource['source_details']['version'] = ''
+            resource['source_details']['image_source'] = 'platform'
             if image_id != '':
                 images = [r for r in self.ancillary_resources['images'] if r['id'] == image_id]
                 if len(images) > 0:
                     image = images[0]
                     resource['source_details']['os'] = image['operating_system']
                     resource['source_details']['version'] = image['operating_system_version']
+                    if image['compartment_id'] is not None and image['compartment_id'] != '':
+                        resource['source_details']['image_source'] = 'custom'
             # Decode Cloud Init Yaml
             if resource.get('metadata', None) is None:
                 resource['metadata'] = {}
