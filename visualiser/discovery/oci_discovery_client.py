@@ -49,6 +49,7 @@ class OciResourceDiscoveryClient(object):
         "Image": (oci.core.ComputeClient, "get_image"),  # used to get details of removed (hidden) images that the not returned from list_images
         # oci.core.ComputeManagementClient
         "InstanceConfigurationDetails": (oci.core.ComputeManagementClient, "get_instance_configuration"), # used to get full details
+        "InstancePoolDetails": (oci.core.ComputeManagementClient, "get_instance_pool"), # used to get full details
         # oci.core.VirtualNetworkClient
         "Vnic": (oci.core.VirtualNetworkClient, "get_vnic"), # special case as there is no list_vnics method
         # oci.data_flow.DataFlowClient
@@ -993,6 +994,10 @@ class OciResourceDiscoveryClient(object):
                         instance_configuration_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, instance_configuration_id=instance_configuration_id)
                         futures_list.update({(region, resource_type, None, instance_configuration_id):future})
+                    elif resource_type == "InstancePoolDetails" and method_name == "get_instance_pool":
+                        instance_pool_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, instance_pool_id=instance_pool_id)
+                        futures_list.update({(region, resource_type, None, instance_pool_id):future})
                     elif resource_type == "MySQLConfiguration" and method_name == "get_configuration":
                         configuration_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, configuration_id=configuration_id)
@@ -1533,7 +1538,7 @@ class OciResourceDiscoveryClient(object):
                         "DataFlowApplicationDetails", "DataFlowRunDetails",
                         "ExportSetDetails",
                         "Image",
-                        "InstanceConfigurationDetails",
+                        "InstanceConfigurationDetails", "InstancePoolDetails",
                         "MySQLConfiguration", "MySQLDbSystemDetails", "MySQLHeatwaveCluster",
                         "NetworkFirewallDetails", "NetworkFirewallPolicyDetails",
                         "NodePoolDetails", "NodePoolOptions",
@@ -1934,6 +1939,10 @@ class OciResourceDiscoveryClient(object):
             if "InstanceConfiguration" in resources_by_region[region]:
                 for resource in resources_by_region[region]["InstanceConfiguration"]:
                     regional_resource_requests.add(("InstanceConfigurationDetails", resource.compartment_id, resource.id))
+            # get extra details for InstancePool
+            if "InstancePool" in resources_by_region[region]:
+                for resource in resources_by_region[region]["InstancePool"]:
+                    regional_resource_requests.add(("InstancePoolDetails", resource.compartment_id, resource.id))
             # get extra details for MySQLDbSystems
             if "MySQLDbSystem" in resources_by_region[region]:
                 for mysql_db_system in resources_by_region[region]["MySQLDbSystem"]:
@@ -2018,6 +2027,7 @@ class OciResourceDiscoveryClient(object):
             self.replace_resource_details(resources_by_region, region, "DataFlowRun", "DataFlowRunDetails")
             self.replace_resource_details(resources_by_region, region, "ExportSet", "ExportSetDetails")
             self.replace_resource_details(resources_by_region, region, "InstanceConfiguration", "InstanceConfigurationDetails")
+            self.replace_resource_details(resources_by_region, region, "InstancePool", "InstancePoolDetails")
             self.replace_resource_details(resources_by_region, region, "MySQLDbSystem", "MySQLDbSystemDetails")
             self.replace_resource_details(resources_by_region, region, "NodePool", "NodePoolDetails")
             self.replace_resource_details(resources_by_region, region, "NoSQLIndex", "NoSQLIndexDetails")
