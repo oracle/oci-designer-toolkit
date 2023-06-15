@@ -183,6 +183,18 @@ class InstanceConfigurationProperties extends OkitResourceProperties {
 
     // Load Additional Resource Specific Properties
     loadResource() {
+        console.info('*************************')
+        console.info('primary_vnic:', this.resource.primary_vnic)
+        console.info('subnet_id:', this.resource.subnet_id)
+        console.info('shape:', this.resource.shape)
+        console.info('instance_type:', this.resource.instance_type)
+        console.info('chipset:', this.resource.chipset)
+        console.info('shape_series:', this.resource.shape_series)
+        console.info('flex_shape:', this.resource.flex_shape)
+        console.info('block_storage_volume_ids:', this.resource.block_storage_volume_ids)
+        console.info('vnics:', this.resource.vnics)
+        console.info('assign_public_ip:', this.resource.assign_public_ip)
+        console.info('*************************')
         // Load Select Inputs
         this.loadSelect(this.subnet_id, 'subnet', true)
         this.loadMultiSelect(this.nsg_ids, 'network_security_group', (r) => r.vcn_id === this.getOkitJson().getSubnet(this.resource.instance_details.subnet_id) ? this.getOkitJson().getSubnet(this.resource.instance_details.subnet_id).vcn_id : '')
@@ -338,7 +350,7 @@ class InstanceConfigurationProperties extends OkitResourceProperties {
 
     loadImageShapes(instance_type=undefined, chipset=undefined) {
         instance_type = instance_type ? instance_type : this.resource.instance_type
-        chipset = chipset ? chipset : this.resource.instance_details.chipset
+        chipset = chipset ? chipset : this.resource.chipset
         this.loadReferenceSelect(this.shape, instance_type === 'bm' ? 'getBareMetalInstanceShapes' : chipset === 'amd' ? 'getAMDInstanceShapes' : chipset === 'arm' ? 'getARMInstanceShapes' : 'getIntelInstanceShapes')
         const options = Array.from(this.shape.node().options).map((opt) => opt.value)
         this.resource.instance_details.launch_details.shape = options.includes(this.resource.instance_details.launch_details.shape) ? this.resource.instance_details.launch_details.shape : options.length > 0 ? options[0] : ''

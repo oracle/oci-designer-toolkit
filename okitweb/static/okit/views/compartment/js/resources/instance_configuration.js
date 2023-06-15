@@ -30,7 +30,7 @@ class InstanceConfigurationView extends OkitCompartmentArtefactView {
         return InstanceConfiguration.getArtifactReference();
     }
     static getDropTargets() {
-        return [Compartment.getArtifactReference()];
+        return [Subnet.getArtifactReference(), Compartment.getArtifactReference()];
     }
 }
 /*
@@ -38,10 +38,12 @@ class InstanceConfigurationView extends OkitCompartmentArtefactView {
 */
 OkitJsonView.prototype.dropInstanceConfigurationView = function(target) {
     let view_artefact = this.newInstanceConfiguration();
-    if (target.type === Compartment.getArtifactReference()) {
-        view_artefact.artefact.compartment_id = target.id;
-    } else {
-        view_artefact.artefact.compartment_id = target.compartment_id;
+    if (target.type === Subnet.getArtifactReference()) {
+        view_artefact.getArtefact().primary_vnic.subnet_id = target.id;
+        view_artefact.artefact.primary_vnic.assign_public_ip = !this.getSubnet(target.id).prohibit_public_ip_on_vnic;
+        view_artefact.getArtefact().compartment_id = target.compartment_id;
+    } else if (target.type === Compartment.getArtifactReference()) {
+        view_artefact.getArtefact().compartment_id = target.id;
     }
     view_artefact.recalculate_dimensions = true;
     return view_artefact;

@@ -27,8 +27,8 @@ class InstanceConfiguration extends OkitArtifact {
         Object.defineProperty(this, 'chipset', {get: function() {return !this.shape ? 'intel' : this.shape.startsWith('VM.') && this.shape.includes('.E') ? 'amd' : this.shape.startsWith('VM.') && this.shape.includes('.A') ? 'arm' : 'intel'}, set: function(chipset) {}, enumerable: true });
         Object.defineProperty(this, 'shape_series', {get: function() {return !this.shape ? 'intel' : this.shape.startsWith('VM.') && this.shape.includes('.E') ? 'amd' : this.shape.startsWith('VM.') && this.shape.includes('.A') ? 'arm' : 'intel'}, set: function(chipset) {}, enumerable: true });
         Object.defineProperty(this, 'flex_shape', {get: function() {return !this.shape ? false : this.shape.endsWith('.Flex')}, set: function(flex_shape) {}, enumerable: true });
-        Object.defineProperty(this, 'block_storage_volume_ids', {get: () => {return this.volume_attachments.map((va) => va.volume_id)}})
-        Object.defineProperty(this, 'vnics', {get: () => {return this.vnic_attachments}})
+        Object.defineProperty(this, 'block_storage_volume_ids', {get: () => {return this.instance_details.block_volumes.map((va) => va.volume_id)}})
+        Object.defineProperty(this, 'vnics', {get: () => {return this.instance_details.secondary_vnics}})
         // Object.defineProperty(this, 'memory_in_gbs', {get: () => {return this.flex_shape ? this.shape_config.memory_in_gbs : okitOciData.getInstanceShape(this.shape) ? okitOciData.getInstanceShape(this.shape).memory_in_gbs : 0}})
         // Object.defineProperty(this, 'ocpus', {get: () => {return this.flex_shape ? this.shape_config.ocpus : okitOciData.getInstanceShape(this.shape) ? okitOciData.getInstanceShape(this.shape).ocpus : 0}})
         Object.defineProperty(this, 'assign_public_ip', {get: () => {return this.primary_vnic.assign_public_ip}})
