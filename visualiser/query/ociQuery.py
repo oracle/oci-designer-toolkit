@@ -72,7 +72,7 @@ class OCIQuery(OCIConnection):
         "Image",
         "Instance",
         "InstanceConfiguration",
-        # "InstancePool",
+        "InstancePool",
         "IntegrationInstance",
         "InternetGateway",
         "IPSecConnection",
@@ -248,7 +248,9 @@ class OCIQuery(OCIConnection):
                 logger.info(f"Processing Resource : {resource_type} {len(resource_list)}")
                 # logger.info(jsonToFormattedString(resource_list))
                 if resource_type in map_keys:
-                    if resource_type == "Bucket":
+                    if resource_type == "AutoScalingConfiguration":
+                        resource_list = self.autoscaling_configurations(resource_list, resources)
+                    elif resource_type == "Bucket":
                         resource_list = self.object_storage_buckets(resource_list, resources)
                     elif resource_type == "CloudExadataInfrastructure":
                         resource_list = self.exadata_cloud_infrastructures(resource_list, resources)
@@ -312,6 +314,10 @@ class OCIQuery(OCIConnection):
         for ai in analytics_instances:
             logger.info(jsonToFormattedString(ai))
         return analytics_instances
+
+    def autoscaling_configurations(self, autoscaling_configurations, resources):
+        for autoscaling_configuration in autoscaling_configurations:
+            autoscaling_configuration['policies'] = [r for r in resources.get("AutoScalingPolicy", []) if r["auto_scaling_policy_id"] == autoscaling_configuration["id"]]
 
     def data_science_projects(self, data_science_projects, resources):
         for project in data_science_projects:

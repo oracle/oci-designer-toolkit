@@ -25,6 +25,10 @@ class InstanceConfigurationProperties extends OkitResourceProperties {
         const fd = this.createInput('select', 'Fault Domain', `${this.id}_fault_domain`, '', (d, i, n) => this.resource.instance_details.launch_details.fault_domain = n[i].value, fd_data)
         this.fault_domain = fd.input
         this.append(this.core_tbody, fd.row)
+        // Instance Compartment
+        const instance_compartment_id = this.createInput('select', 'Compartment For Instances', `${this.id}_instance_compartment_id`, '', (d, i, n) => this.resource.instance_details.launch_details.compartment_id = n[i].value)
+        this.instance_compartment_id = instance_compartment_id.input
+        this.append(this.core_tbody, instance_compartment_id.row)
         // Image & Shape
         const image_and_shape = this.createDetailsSection('Image and Shape', `${this.id}_image_and_shape_details`)
         this.append(this.properties_contents, image_and_shape.details)
@@ -183,24 +187,14 @@ class InstanceConfigurationProperties extends OkitResourceProperties {
 
     // Load Additional Resource Specific Properties
     loadResource() {
-        console.info('*************************')
-        console.info('primary_vnic:', this.resource.primary_vnic)
-        console.info('subnet_id:', this.resource.subnet_id)
-        console.info('shape:', this.resource.shape)
-        console.info('instance_type:', this.resource.instance_type)
-        console.info('chipset:', this.resource.chipset)
-        console.info('shape_series:', this.resource.shape_series)
-        console.info('flex_shape:', this.resource.flex_shape)
-        console.info('block_storage_volume_ids:', this.resource.block_storage_volume_ids)
-        console.info('vnics:', this.resource.vnics)
-        console.info('assign_public_ip:', this.resource.assign_public_ip)
-        console.info('*************************')
         // Load Select Inputs
         this.loadSelect(this.subnet_id, 'subnet', true)
+        this.loadSelect(this.instance_compartment_id, 'compartment', true)
         this.loadMultiSelect(this.nsg_ids, 'network_security_group', (r) => r.vcn_id === this.getOkitJson().getSubnet(this.resource.instance_details.subnet_id) ? this.getOkitJson().getSubnet(this.resource.instance_details.subnet_id).vcn_id : '')
         // Assign Values
         this.availability_domain.property('value', this.resource.instance_details.availability_domain)
         this.fault_domain.property('value', this.resource.instance_details.fault_domain)
+        this.instance_compartment_id.property('value', this.resource.instance_details.launch_details.compartment_id)
         // Image
         this.image_source.property('value', this.resource.instance_details.launch_details.source_details.image_source)
         this.loadImageOSs(this.resource.instance_details.launch_details.source_details.image_source)

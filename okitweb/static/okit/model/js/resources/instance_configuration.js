@@ -53,6 +53,7 @@ class InstanceConfiguration extends OkitArtifact {
         return {
             instance_type: 'compute',
             launch_details: {
+                compartment_id: this.compartment_id,
                 agent_config: {
                     is_monitoring_disabled: false, 
                     is_management_disabled: false
