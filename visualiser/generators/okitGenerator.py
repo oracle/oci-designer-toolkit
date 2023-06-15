@@ -205,6 +205,7 @@ class OCIGenerator(object):
         "analytics_instances": "compute",
         "data_science_projects": "compute",
         "instances": "compute",
+        "instance_configurations": "compute",
         "oracle_digital_assistants": "compute",
         "visual_builder_instances": "compute",
 
