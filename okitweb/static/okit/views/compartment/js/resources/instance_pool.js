@@ -30,7 +30,6 @@ class InstancePoolView extends OkitCompartmentArtefactView {
         return InstancePool.getArtifactReference();
     }
     static getDropTargets() {
-        // TODO: Return List of Artefact Drop Targets Parent Object Reference Names e.g. VirtualCloudNetwork for a Internet Gateway
         return [Compartment.getArtifactReference()];
     }
 }
