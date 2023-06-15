@@ -42,11 +42,11 @@ resource "oci_core_instance" "{{ resource_name }}" {
 {% if agent_config is defined and (is_management_disabled is defined or is_monitoring_disabled is defined) %}
     agent_config {
         # Optional
-{% if is_management_disabled is defined %}
-        agent_config.is_management_disabled = {{ agent_config.is_management_disabled | safe }}
+{% if agent_config.is_management_disabled is defined %}
+        is_management_disabled = {{ agent_config.is_management_disabled | safe }}
 {% endif %}
-{% if is_monitoring_disabled is defined %}
-        agent_config.is_monitoring_disabled = {{ agent_config.is_monitoring_disabled | safe }}
+{% if agent_config.is_monitoring_disabled is defined %}
+        is_monitoring_disabled = {{ agent_config.is_monitoring_disabled | safe }}
 {% endif %}
     }
 {% endif %}
