@@ -37,6 +37,8 @@ class OciResourceDiscoveryClient(object):
     get_resource_client_methods = {
         # oci.apigateway.UsagePlansClient
         "ApiGatewayUsagePlanDetails": (oci.apigateway.UsagePlansClient, "get_usage_plan"), # used to get full details 
+        # oci.autoscaling.AutoScalingClient
+        "AutoScalingConfigurationDetails": (oci.autoscaling.AutoScalingClient, "get_auto_scaling_configuration"),
         # oci.bastion.BastionClient
         "BastionDetails": (oci.bastion.BastionClient, "get_bastion"), # used to get full details
         # oci.container_engine.ContainerEngineClient
@@ -961,6 +963,10 @@ class OciResourceDiscoveryClient(object):
                         usage_plan_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, usage_plan_id=usage_plan_id)
                         futures_list.update({(region, resource_type, compartment_id, usage_plan_id):future})                    
+                    elif resource_type == "AutoScalingConfigurationDetails" and method_name == "get_auto_scaling_configuration":
+                        auto_scaling_configuration_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, auto_scaling_configuration_id=auto_scaling_configuration_id)
+                        futures_list.update({(region, resource_type, None, auto_scaling_configuration_id):future})
                     elif resource_type == "BastionDetails" and method_name == "get_bastion":
                         bastion_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, bastion_id=bastion_id)
@@ -1532,6 +1538,7 @@ class OciResourceDiscoveryClient(object):
                         result = new_result
                     elif resource_type in [
                         "ApiGatewayUsagePlanDetails",
+                        "AutoScalingConfigurationDetails",
                         "BastionDetails",
                         "ClusterDetails",
                         "ClusterOptions",
@@ -1915,6 +1922,10 @@ class OciResourceDiscoveryClient(object):
             if "ApiGatewayUsagePlan" in resources_by_region[region]:
                 for resource in resources_by_region[region]["ApiGatewayUsagePlan"]:
                     regional_resource_requests.add(("ApiGatewayUsagePlanDetails", None, resource.id))
+            # get extra details for AutoScalingConfiguration
+            if "AutoScalingConfiguration" in resources_by_region[region]:
+                for resource in resources_by_region[region]["AutoScalingConfiguration"]:
+                    regional_resource_requests.add(("AutoScalingConfigurationDetails", resource.compartment_id, resource.id))
             # get extra details for Bastion
             if "Bastion" in resources_by_region[region]:
                 for resource in resources_by_region[region]["Bastion"]:
@@ -2021,6 +2032,7 @@ class OciResourceDiscoveryClient(object):
         for region in resources_by_region:
             # replace summary result with resource details
             self.replace_resource_details(resources_by_region, region, "ApiGatewayUsagePlan", "ApiGatewayUsagePlanDetails")
+            self.replace_resource_details(resources_by_region, region, "AutoScalingConfiguration", "AutoScalingConfigurationDetails")
             self.replace_resource_details(resources_by_region, region, "Bastion", "BastionDetails")
             self.replace_resource_details(resources_by_region, region, "Cluster", "ClusterDetails")
             self.replace_resource_details(resources_by_region, region, "DataFlowApplication", "DataFlowApplicationDetails")
