@@ -316,8 +316,9 @@ class OCIQuery(OCIConnection):
         return analytics_instances
 
     def autoscaling_configurations(self, autoscaling_configurations, resources):
-        for autoscaling_configuration in autoscaling_configurations:
-            autoscaling_configuration['policies'] = [r for r in resources.get("AutoScalingPolicy", []) if r["auto_scaling_policy_id"] == autoscaling_configuration["id"]]
+        # for autoscaling_configuration in autoscaling_configurations:
+        #     autoscaling_configuration['policies'] = [r for r in resources.get("AutoScalingPolicy", []) if r["auto_scaling_policy_id"] == autoscaling_configuration["id"]]
+        return autoscaling_configurations
 
     def data_science_projects(self, data_science_projects, resources):
         for project in data_science_projects:

@@ -1,0 +1,89 @@
+
+{% if read_only %} {# Read Only #}
+# ------ Read Auto Scaling Configuration
+data "oci_autoscaling_auto_scaling_configurations" "{{ resource_name }}" {
+    # Required
+    compartment_id = {{ compartment_id }}
+    filter {
+        name = "id"
+        values = [{{ ocid | safe }}]
+    }
+}
+
+locals {
+    {{ resource_name }}_id = {{ ocid | safe }}
+    {{ resource_name }}_ocid = {{ ocid | safe }}
+}
+{% else %} {# Read Only #}
+# ------- Create Auto Scaling Configuration
+resource "oci_autoscaling_auto_scaling_configuration" "{{ resource_name }}AutoScaling" {
+    # Required
+    compartment_id      = {{ compartment_id }}
+    auto_scaling_resources {
+        #Required
+        id = local.{{ resource_name }}_id
+        type = "instancePool"
+    }
+    policies {
+        # Required
+        capacity {
+            #Optional
+{% if policies.capacity.initial is defined %}
+            initial = {{ policies.capacity.initial | safe }}
+{% endif %}
+{% if policies.capacity.max is defined %}
+            max = {{ policies.capacity.max | safe }}
+{% endif %}
+{% if policies.capacity.min is defined %}
+            min = {{ policies.capacity.min | safe }}
+{% endif %}
+        }
+        policy_type = {{ policies.policy_type | safe }}
+
+        #Optional
+        display_name = {{ display_name | safe }}
+{% if policies.execution_schedule is defined %}
+        execution_schedule {
+            #Required
+            expression = {{ policies.execution_schedule.expression | safe }}
+            timezone = {{ policies.execution_schedule.timezone | safe }}
+            type = {{ policies.execution_schedule.type | safe }}
+        }
+{% endif %}
+{% if policies.is_enabled is defined %}
+        is_enabled = {{ policies.is_enabled | safe }}
+{% endif %}
+{% if policies.rules is defined %}
+    {% for rule in policies.rules %}
+        rules {
+            #Optional
+            action {
+                #Optional
+                type = {{ rule.type | safe }}
+                value = {{ rule.value | safe }}
+            }
+            display_name = {{ display_name | safe }}
+            metric {
+                #Optional
+                metric_type = {{ rule.metric.metric_type }}
+                threshold {
+                    #Optional
+                    operator = {{ rule.metric.threshold.operator }}
+                    value = {{ rule.metric.threshold.operator }}
+                }
+            }
+        }
+    {% endfor %}
+{% endif %}
+    }
+    # Optional
+    display_name        = {{ display_name | safe }}
+
+{% if defined_tags is defined %}
+    defined_tags               = {{ defined_tags | safe }}
+{% endif %}
+{% if freeform_tags is defined %}
+    freeform_tags              = {{ freeform_tags | safe }}
+{% endif %}
+}
+{% endif %} {# Read Only #}
