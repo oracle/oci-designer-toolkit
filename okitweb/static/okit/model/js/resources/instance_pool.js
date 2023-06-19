@@ -17,6 +17,8 @@ class InstancePool extends OkitArtifact {
         this.compartment_id = data.parent_id;
         this.instance_configuration_id = ''
         this.size = 1
+        this.placement_configurations = [this.newPlacementConfiguration()]
+        this.load_balancers = []
         // Update with any passed data
         this.merge(data);
         this.convert();
@@ -33,6 +35,24 @@ class InstancePool extends OkitArtifact {
     static getArtifactReference() {
         return 'Instance Pool';
     }
+    /*
+    ** New Objects
+    */
+   newPlacementConfiguration = () => {
+    return {
+        availability_domain: '1',
+        fault_domains: [],
+        primary_subnet_id: ''
+    }
+   }
+   newLoadBalancer = () => {
+    return {
+        load_balancer_id: '',
+        backend_set_name: '',
+        port: '',
+        vnic_selection: 'PrimaryVnic'
+    }
+   }
 }
 /*
 ** Dynamically Add Model Functions

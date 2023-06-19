@@ -6,6 +6,7 @@
 ### Features
 1. Add Integration Instance Resource
 2. Add Instance Configuration Resource for OCI
+3. Add Instance Pools Resource for OCI
 ### Bug Fixes
 1. Fix incorrect Markdown generation when markdown view displayed
 2. Resolve issue where PCA Loadbalancers were not linking all backend instances.
