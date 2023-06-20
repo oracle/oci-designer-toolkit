@@ -161,7 +161,9 @@ class InstanceOciPricing extends OkitOciPricingResource {
     /*
     ** Shape information
     */
-    getShapeDetails = (shape) => okitOciData.getInstanceShape(shape)
+    getShapeDetails = (shape) => okitOciData.getInstanceShape(shape) ? okitOciData.getInstanceShape(shape) : this.getEmptyShape()
+
+    getEmptyShape = () => {return {is_flexible: false, ocpus: 0, memory_in_gbs: 0, local_disks_total_size_in_gbs: 0}}
 }
 
 OkitOciProductPricing.prototype.getInstancePrice = function(resource, pricing) {
