@@ -28,7 +28,7 @@ class AutoscalingConfigurationProperties extends OkitResourceProperties {
         const policy_type_data = {
             options: {
                 threshold: 'Metric-based Autoscaling', 
-                scheduled: 'Schedule-based Autoscaling'
+                // scheduled: 'Schedule-based Autoscaling'
             }
         }
         const policy_type = this.createInput('select', 'Metric type', `${this.id}_policy_type`, '', (d, i, n) => {this.resource.policy_type = n[i].value; this.handlePolicyTypeChange(n[i].value)}, policy_type_data)
@@ -57,9 +57,9 @@ class AutoscalingConfigurationProperties extends OkitResourceProperties {
                 MEMORY_UTILIZATION: 'Memory Utilisation'
             }
         }
-        const threshold_performance_metric = this.createInput('select', 'Performance Metric', `${this.id}_threshold_performance_metric`, '', (d, i, n) => {this.resource.threshold_performance_metric = n[i].value; this.handlePolicyTypeChange(n[i].value)}, threshold_performance_metric_data)
+        const threshold_performance_metric = this.createInput('select', 'Performance Metric', `${this.id}_threshold_performance_metric`, '', (d, i, n) => {this.resource.threshold_performance_metric = n[i].value; this.handleThresholdMetricChange(n[i].value)}, threshold_performance_metric_data)
         this.threshold_performance_metric = threshold_performance_metric.input
-        this.append(this.core_tbody, threshold_performance_metric.row)
+        this.append(this.threshold_tbody, threshold_performance_metric.row)
         // Scale Out Rule
         const scale_out_rule = this.createDetailsSection('Scale-out Rule', `${this.id}_scale_out_rule_details`)
         this.append(this.threshold_div, scale_out_rule.details)
@@ -67,6 +67,27 @@ class AutoscalingConfigurationProperties extends OkitResourceProperties {
         const scale_out_rule_table = this.createTable('', `${this.id}_scale_out_rule`)
         this.scale_out_rule_tbody = scale_out_rule_table.tbody
         this.append(this.scale_out_rule_div, scale_out_rule_table.table)
+        // Operator
+        const threshold_scale_out_operator_data = {
+            options: {
+                GT: 'Greater than (>)', 
+                GTE: 'Greater than or equal to (>=)'
+            }
+        }
+        const threshold_scale_out_operator = this.createInput('select', 'Performance Metric', `${this.id}_threshold_scale_out_operator`, '', (d, i, n) => {this.resource.getThresholdScaleOutRule().metric.threshold.operator = n[i].value}, threshold_scale_out_operator_data)
+        this.threshold_scale_out_operator = threshold_scale_out_operator.input
+        this.append(this.scale_out_rule_tbody, threshold_scale_out_operator.row)
+        // Threshold Value
+        const threshold_scale_out_value_data = {min: 1, max: 100}
+        const threshold_scale_out_value = this.createInput('number', 'Threshold Percentage', `${this.id}_threshold_scale_out_value`, '', (d, i, n) => this.resource.getThresholdScaleOutRule().metric.threshold.value = n[i].value, threshold_scale_out_value_data)
+        this.threshold_scale_out_value = threshold_scale_out_value.input
+        this.append(this.scale_out_rule_tbody, threshold_scale_out_value.row)
+        // Additional Instances
+        const threshold_scale_out_instances_data = {min: 1}
+        const threshold_scale_out_instances = this.createInput('number', 'Instances', `${this.id}_threshold_scale_out_instances`, '', (d, i, n) => this.resource.getThresholdScaleOutRule().action.value = n[i].value, threshold_scale_out_instances_data)
+        this.threshold_scale_out_instances = threshold_scale_out_instances.input
+        this.append(this.scale_out_rule_tbody, threshold_scale_out_instances.row)
+
         // Scale In Rule
         const scale_in_rule = this.createDetailsSection('Scale-in Rule', `${this.id}_scale_in_rule_details`)
         this.append(this.threshold_div, scale_in_rule.details)
@@ -74,6 +95,27 @@ class AutoscalingConfigurationProperties extends OkitResourceProperties {
         const scale_in_rule_table = this.createTable('', `${this.id}_scale_in_rule`)
         this.scale_in_rule_tbody = scale_in_rule_table.tbody
         this.append(this.scale_in_rule_div, scale_in_rule_table.table)
+        // Operator
+        const threshold_scale_in_operator_data = {
+            options: {
+                LT: 'Less than (<)', 
+                LTE: 'Less than or equal to (<=)'
+            }
+        }
+        const threshold_scale_in_operator = this.createInput('select', 'Performance Metric', `${this.id}_threshold_scale_in_operator`, '', (d, i, n) => {this.resource.getThresholdScaleOutRule().metric.threshold.operator = n[i].value}, threshold_scale_in_operator_data)
+        this.threshold_scale_in_operator = threshold_scale_in_operator.input
+        this.append(this.scale_in_rule_tbody, threshold_scale_in_operator.row)
+        // Threshold Value
+        const threshold_scale_in_value_data = {min: 1, max: 100}
+        const threshold_scale_in_value = this.createInput('number', 'Threshold Percentage', `${this.id}_threshold_scale_in_value`, '', (d, i, n) => this.resource.getThresholdScaleOutRule().metric.threshold.value = n[i].value, threshold_scale_in_value_data)
+        this.threshold_scale_in_value = threshold_scale_in_value.input
+        this.append(this.scale_in_rule_tbody, threshold_scale_in_value.row)
+        // Additional Instances
+        const threshold_scale_in_instances_data = {max: -1}
+        const threshold_scale_in_instances = this.createInput('number', 'Instances', `${this.id}_threshold_scale_in_instances`, '', (d, i, n) => this.resource.getThresholdScaleOutRule().action.value = n[i].value, threshold_scale_in_instances_data)
+        this.threshold_scale_in_instances = threshold_scale_in_instances.input
+        this.append(this.scale_in_rule_tbody, threshold_scale_in_instances.row)
+
         // Scaling Limits
         const scaling_limits = this.createDetailsSection('Scaling Limits', `${this.id}_scaling_limits_details`)
         this.append(this.threshold_div, scaling_limits.details)
@@ -81,6 +123,21 @@ class AutoscalingConfigurationProperties extends OkitResourceProperties {
         const scaling_limits_table = this.createTable('', `${this.id}_scaling_limits`)
         this.scaling_limits_tbody = scaling_limits_table.tbody
         this.append(this.scaling_limits_div, scaling_limits_table.table)
+        // Minimum Instances
+        const scaling_limits_min_instances_data = {min: 1}
+        const scaling_limits_min_instances = this.createInput('number', 'Minimum Instances', `${this.id}_scaling_limits_min_instances`, '', (d, i, n) => this.resource.getThresholdCapacity().min = n[i].value, scaling_limits_min_instances_data)
+        this.scaling_limits_min_instances = scaling_limits_min_instances.input
+        this.append(this.scaling_limits_tbody, scaling_limits_min_instances.row)
+        // Maximum Instances
+        const scaling_limits_max_instances_data = {min: 1}
+        const scaling_limits_max_instances = this.createInput('number', 'Maximum Instances', `${this.id}_scaling_limits_max_instances`, '', (d, i, n) => this.resource.getThresholdCapacity().max = n[i].value, scaling_limits_max_instances_data)
+        this.scaling_limits_max_instances = scaling_limits_max_instances.input
+        this.append(this.scaling_limits_tbody, scaling_limits_max_instances.row)
+        // Initial Instances
+        const scaling_limits_initial_instances_data = {min: 1}
+        const scaling_limits_initial_instances = this.createInput('number', 'Initial Instances', `${this.id}_scaling_limits_initial_instances`, '', (d, i, n) => this.resource.getThresholdCapacity().initial = n[i].value, scaling_limits_initial_instances_data)
+        this.scaling_limits_initial_instances = scaling_limits_initial_instances.input
+        this.append(this.scaling_limits_tbody, scaling_limits_initial_instances.row)
     }
 
     buildScheduledResources() {
@@ -105,12 +162,44 @@ class AutoscalingConfigurationProperties extends OkitResourceProperties {
         this.cool_down_in_seconds.property('value', this.resource.cool_down_in_seconds)
         this.policy_type.property('value', this.resource.policy_type)
         this.showHidePolicyTypeRows(this.resource.policy_type)
+        if (this.resource.policy_type === 'threshold') this.loadThresholdResources()
+        else this.loadScheduledResources()
+    }
+
+    loadThresholdResources() {
+        // Performance Metric
+        this.threshold_performance_metric.property('value', this.resource.getThresholdPerformanceMetric())
+        // Scale Out
+        const scale_out_rule = this.resource.getThresholdScaleOutRule()
+        this.threshold_scale_out_operator.property('value', scale_out_rule.metric.threshold.operator)
+        this.threshold_scale_out_value.property('value', scale_out_rule.metric.threshold.value)
+        this.threshold_scale_out_instances.property('value', scale_out_rule.action.value)
+        // Scale In
+        const scale_in_rule = this.resource.getThresholdScaleInRule()
+        this.threshold_scale_in_operator.property('value', scale_in_rule.metric.threshold.operator)
+        this.threshold_scale_in_value.property('value', scale_in_rule.metric.threshold.value)
+        this.threshold_scale_in_instances.property('value', scale_in_rule.action.value)
+        // Scaling Limits
+        const capacity = this.resource.getThresholdCapacity()
+        this.scaling_limits_min_instances.property('value', capacity.min)
+        this.scaling_limits_max_instances.property('value', capacity.max)
+        this.scaling_limits_initial_instances.property('value', capacity.initial)
+    }
+
+    loadScheduledResources() {
+
     }
 
     handlePolicyTypeChange(policy_type) {
         policy_type = policy_type ? policy_type : this.resource.policy_type
-        this.resource.policies = [policy_type === 'threshold' ? this.resource.newThesholdPolicy() : this.resource.newScheduledPolicy()]
+        this.resource.policies = [policy_type === 'threshold' ? this.resource.newThresholdPolicy() : this.resource.newScheduledPolicy()]
         this.showHidePolicyTypeRows(policy_type)
+        if (policy_type === 'threshold') this.loadThresholdResources()
+        else this.loadScheduledResources()
+    }
+
+    handleThresholdMetricChange(metric_type) {
+        this.resource.policies[0].rules.forEach(r => r.metric.metric_type = metric_type)
     }
 
     showHidePolicyTypeRows(policy_type) {

@@ -43,6 +43,13 @@ class AutoscalingConfiguration extends OkitArtifact {
         return 'Autoscaling Configuration';
     }
     /*
+    ** Threshold Get Functions
+    */
+   getThresholdScaleOutRule = () => this.policy_type === 'threshold' ? this.policies[0].rules.find(r => ['GT', 'GTE'].includes(r.metric.threshold.operator)) : this.newThreasholdScaleOutRule()
+   getThresholdScaleInRule = () => this.policy_type === 'threshold' ? this.policies[0].rules.find(r => ['LT', 'LTE'].includes(r.metric.threshold.operator)) : this.newThreasholdScaleInRule()
+   getThresholdPerformanceMetric = () => this.policy_type === 'threshold' ? this.policies[0].rules[0].metric.metric_type : 'CPU_UTILIZATION'
+   getThresholdCapacity = () => this.policy_type === 'threshold' ? this.policies[0].capacity : this.newThreasholdCapacity()
+    /*
     ** New Elements
     */
    newThresholdPolicy = () => {
@@ -87,7 +94,7 @@ class AutoscalingConfiguration extends OkitArtifact {
             },
             metric: {
                 metric_type: metric_type,
-                threashold: {
+                threshold: {
                     operator: 'GTE',
                     value: 50
                 }
@@ -98,11 +105,11 @@ class AutoscalingConfiguration extends OkitArtifact {
         return {
             action: {
                 type: 'CHANGE_BY_COUNT',
-                value: 1
+                value: -1
             },
             metric: {
                 metric_type: metric_type,
-                threashold: {
+                threshold: {
                     operator: 'LT',
                     value: 40
                 }
