@@ -70,17 +70,17 @@
                 },
                 {
                     "title": "Instance Configuration",
-                    "targets": ["oci", "pca"],
+                    "targets": ["oci"],
                     "svg": "VirtualMachineApplication.svg"
                 },
                 {
                     "title": "Instance Pool",
-                    "targets": ["oci", "pca"],
+                    "targets": ["oci"],
                     "svg": "InstancePools.svg"
                 },
                 {
                     "title": "Autoscaling Configuration",
-                    "targets": ["oci", "pca"],
+                    "targets": ["oci"],
                     "svg": "Autoscaling.svg"
                 }
             ]
