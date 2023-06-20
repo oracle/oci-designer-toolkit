@@ -80,7 +80,7 @@
                 },
                 {
                     "title": "Autoscaling Configuration",
-                    "targets": ["oci"],
+                    "targets": ["oci", "pca"],
                     "svg": "Autoscaling.svg"
                 }
             ]

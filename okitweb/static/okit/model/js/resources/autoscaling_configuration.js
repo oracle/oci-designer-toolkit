@@ -15,15 +15,20 @@ class AutoscalingConfiguration extends OkitArtifact {
         super(okitjson);
         // Configure default values
         this.compartment_id = data.parent_id;
-        /*
-        ** TODO: Add Resource / Artefact specific parameters and default
-        */
+        this.resource = {
+            id: '',
+            type: 'instancePool'
+        }
+        this.policies = [this.newThresholdPolicy()]
+        this.is_enabled = true
+        this.cool_down_in_seconds = 300
         // Update with any passed data
         this.merge(data);
         this.convert();
-        // TODO: If the Resource is within a Subnet but the subnet_iss is not at the top level then raise it with the following functions if not required delete them.
-        // Expose subnet_id at the top level
-        Object.defineProperty(this, 'subnet_id', {get: function() {return this.primary_mount_target.subnet_id;}, set: function(id) {this.primary_mount_target.subnet_id = id;}, enumerable: false });
+        // Export resource as autoscaling_resource
+        Object.defineProperty(this, 'auto_scaling_resources', {get: function() {return this.resource}, set: function(resource) {this.resource = resource}, enumerable: true });
+        Object.defineProperty(this, 'instance_pool_id', {get: function() {return this.resource.id}, set: function(id) {this.resource.id = id}, enumerable: true });
+        Object.defineProperty(this, 'policy_type', {get: function() {return this.policies[0].policy_type}, set: function(policy_type) {this.policies[0].policy_type = policy_type}, enumerable: true });
     }
     /*
     ** Name Generation
@@ -37,6 +42,73 @@ class AutoscalingConfiguration extends OkitArtifact {
     static getArtifactReference() {
         return 'Autoscaling Configuration';
     }
+    /*
+    ** New Elements
+    */
+   newThresholdPolicy = () => {
+        return {
+            policy_type: 'threshold',
+            display_name: `${this.display_name} Policy`,
+            is_enabled: true,
+            capacity: this.newThreasholdCapacity(),
+            rules: [this.newThreasholdScaleOutRule(), this.newThreasholdScaleInRule()]
+        }
+   }
+   newScheduledPolicy = () => {
+        return {
+            policy_type: 'scheduled',
+            display_name: `${this.display_name} Policy`,
+            is_enabled: true,
+            capacity: this.newScheduledCapacity(),
+            execution_schedule: {
+                expresion: '0 0 0 0 0 0',
+                timezone: 'UTC',
+                type: 'cron'
+            }
+        }
+   }
+   newThreasholdCapacity = () => {
+        return {
+            initial: 1,
+            min: 1,
+            max: 1
+        }
+   }
+   newScheduledCapacity = () => {
+        return {
+            initial: 1
+        }
+   }
+   newThreasholdScaleOutRule = (metric_type='CPU_UTILIZATION') => {
+        return {
+            action: {
+                type: 'CHANGE_BY_COUNT',
+                value: 1
+            },
+            metric: {
+                metric_type: metric_type,
+                threashold: {
+                    operator: 'GTE',
+                    value: 50
+                }
+            }
+        }
+   }
+   newThreasholdScaleInRule = (metric_type='CPU_UTILIZATION') => {
+        return {
+            action: {
+                type: 'CHANGE_BY_COUNT',
+                value: 1
+            },
+            metric: {
+                metric_type: metric_type,
+                threashold: {
+                    operator: 'LT',
+                    value: 40
+                }
+            }
+        }
+   }
 }
 /*
 ** Dynamically Add Model Functions
