@@ -19,7 +19,7 @@ class InstancePoolProperties extends OkitResourceProperties {
         const instance_configuration_id = this.createInput('select', 'Instance Configuration', `${this.id}_instance_configuration_id`, '', (d, i, n) => this.resource.instance_configuration_id = n[i].value)
         this.instance_configuration_id = instance_configuration_id.input
         this.append(this.core_tbody, instance_configuration_id.row)
-        // Boot Volume Size
+        // Size
         const size_data = {min: 0}
         const size = this.createInput('number', 'Pool Size', `${this.id}_size`, '', (d, i, n) => this.resource.size = n[i].value, size_data)
         this.size = size.input
