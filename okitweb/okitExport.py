@@ -107,7 +107,8 @@ def markdown():
         generator = OkitMarkdownGenerator(template_root, destination_dir, design)
         generator.generate()
         markdown = generator.toText()
-        return markdown
+        response = {"markdown": markdown}
+        return json.dumps(response, sort_keys=False, indent=2, separators=(',', ': '))
     else:
         return '404'
 
