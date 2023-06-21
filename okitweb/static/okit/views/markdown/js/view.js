@@ -107,11 +107,9 @@ class OkitMarkdownView extends OkitJsonView {
         $.ajax({
             cache: false,
             type: 'get',
-            // type: 'post',
             url: 'export/markdown',
             dataType: 'text',
             contentType: 'application/json',
-            // data: JSON.stringify(requestJson)
             data: {
                 design: JSON.stringify(requestJson)
             }

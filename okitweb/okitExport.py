@@ -103,13 +103,6 @@ def terraform():
 @bp.route('markdown', methods=(['GET', 'POST']))
 def markdown():
     if request.method == 'GET':
-        # design = request.args.get('design')
-        # # logger.info(f'Base64: {design}')
-        # design = base64.b64decode(design)
-        # # logger.info(f'Base64 Decode: {design}')
-        # design = design.decode('utf-8')
-        # # logger.info(f'Decode UTF-8: {design}')
-        # design = json.loads(design)
         design = json.loads(request.args.get('design', default='{}'))
         destination_dir = tempfile.mkdtemp()
         generator = OkitMarkdownGenerator(template_root, destination_dir, design)
