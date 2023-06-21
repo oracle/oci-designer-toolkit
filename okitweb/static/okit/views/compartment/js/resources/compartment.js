@@ -77,7 +77,7 @@ class CompartmentView extends OkitContainerCompartmentArtefactView {
     }
 
     getTopArtifacts() {
-        return [Instance.getArtifactReference(), AnalyticsInstance.getArtifactReference(), LoadBalancer.getArtifactReference(), NetworkLoadBalancer.getArtifactReference(),
+        return [Instance.getArtifactReference(), InstancePool.getArtifactReference(), AnalyticsInstance.getArtifactReference(), LoadBalancer.getArtifactReference(), NetworkLoadBalancer.getArtifactReference(),
             IntegrationInstance.getArtifactReference(), OracleDigitalAssistant.getArtifactReference(), 
             DataIntegrationWorkspace.getArtifactReference(), VisualBuilderInstance.getArtifactReference(), 
             MysqlDatabaseSystem.getArtifactReference(), DatabaseSystem.getArtifactReference(), NetworkFirewall.getArtifactReference()];
@@ -90,7 +90,8 @@ class CompartmentView extends OkitContainerCompartmentArtefactView {
     getLeftArtifacts() {
         return [Policy.getArtifactReference(), Vault.getArtifactReference(), Bastion.getArtifactReference(), 
             BlockStorageVolume.getArtifactReference(), FileSystem.getArtifactReference(), DnsZone.getArtifactReference(), 
-            OkeCluster.getArtifactReference(), DataScienceProject.getArtifactReference()];
+            OkeCluster.getArtifactReference(), DataScienceProject.getArtifactReference(),
+            InstanceConfiguration.getArtifactReference(), AutoscalingConfiguration.getArtifactReference()];
     }
 
     getRightArtifacts() {

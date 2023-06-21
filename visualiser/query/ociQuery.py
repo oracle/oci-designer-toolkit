@@ -36,6 +36,8 @@ class OCIQuery(OCIConnection):
     SUPPORTED_RESOURCES = [
         "AnalyticsInstance",
         "AutonomousDatabase",
+        "AutoScalingConfiguration",
+        "AutoScalingPolicy",
         "Backend",
         "BackendSet",
         "Bastion",
@@ -69,7 +71,9 @@ class OCIQuery(OCIConnection):
         "Group",
         "Image",
         "Instance",
-        # "InstancePool",
+        "InstanceConfiguration",
+        "InstancePool",
+        "IntegrationInstance",
         "InternetGateway",
         "IPSecConnection",
         "IpSecConnectionTunnel",
@@ -114,6 +118,7 @@ class OCIQuery(OCIConnection):
     DISCOVERY_OKIT_MAP = {
         "AnalyticsInstance": "analytics_instances",
         "AutonomousDatabase": "autonomous_databases",
+        "AutoScalingConfiguration": "autoscaling_configurations",
         "Bastion": "bastions",
         #"BootVolume": "block_storage_volumes",
         "Bucket": "object_storage_buckets",
@@ -135,7 +140,9 @@ class OCIQuery(OCIConnection):
         "FileSystem": "file_systems",
         "Group": "groups",
         "Instance": "instances",
+        "InstanceConfiguration": "instance_configurations",
         "InstancePool": "instance_pools",
+        "IntegrationInstance": "integration_instances",
         "InternetGateway": "internet_gateways",
         "IPSecConnection": "ipsec_connections",
         "Key": "keys",
@@ -241,7 +248,9 @@ class OCIQuery(OCIConnection):
                 logger.info(f"Processing Resource : {resource_type} {len(resource_list)}")
                 # logger.info(jsonToFormattedString(resource_list))
                 if resource_type in map_keys:
-                    if resource_type == "Bucket":
+                    if resource_type == "AutoScalingConfiguration":
+                        resource_list = self.autoscaling_configurations(resource_list, resources)
+                    elif resource_type == "Bucket":
                         resource_list = self.object_storage_buckets(resource_list, resources)
                     elif resource_type == "CloudExadataInfrastructure":
                         resource_list = self.exadata_cloud_infrastructures(resource_list, resources)
@@ -305,6 +314,11 @@ class OCIQuery(OCIConnection):
         for ai in analytics_instances:
             logger.info(jsonToFormattedString(ai))
         return analytics_instances
+
+    def autoscaling_configurations(self, autoscaling_configurations, resources):
+        # for autoscaling_configuration in autoscaling_configurations:
+        #     autoscaling_configuration['policies'] = [r for r in resources.get("AutoScalingPolicy", []) if r["auto_scaling_policy_id"] == autoscaling_configuration["id"]]
+        return autoscaling_configurations
 
     def data_science_projects(self, data_science_projects, resources):
         for project in data_science_projects:

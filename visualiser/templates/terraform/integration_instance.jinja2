@@ -1,0 +1,75 @@
+{% if read_only %}
+# ------ Read Integration Instance
+data "oci_integration_integration_instances" "{{ resource_name }}" {
+    # Required
+    compartment_id = {{ compartment_id }}
+    filter {
+        name = "id"
+        values = [{{ ocid | safe }}]
+    }
+}
+
+locals {
+    {{ resource_name }}_id = {{ ocid | safe }}
+    {{ resource_name }}_ocid = {{ ocid | safe }}
+}
+{% else %}
+# ------ Create Integration Instance
+resource "oci_integration_integration_instance" "{{ resource_name }}" {
+    #Required
+    compartment_id = {{ compartment_id }}
+    display_name   = {{ display_name | safe }}
+    integration_instance_type = {{ integration_instance_type | safe }}
+    is_byol = {{ is_byol | safe | lower }}
+    message_packs = {{ message_packs | safe }}
+
+    #Optional
+    is_file_server_enabled = {{ is_file_server_enabled | safe | lower }}
+    is_visual_builder_enabled = {{ is_visual_builder_enabled | safe | lower }}
+    shape = {{ shape | safe }}
+{% if idcs_at is defined %}
+    idcs_at = {{ idcs_at | safe }}
+{% endif %}
+    {# alternate_custom_endpoints {
+        #Required
+        hostname = var.integration_instance_alternate_custom_endpoints_hostname
+
+        #Optional
+        certificate_secret_id = oci_vault_secret.test_secret.id
+    }
+    consumption_model = var.integration_instance_consumption_model
+    custom_endpoint {
+        #Required
+        hostname = var.integration_instance_custom_endpoint_hostname
+
+        #Optional
+        certificate_secret_id = oci_vault_secret.test_secret.id
+    }
+    network_endpoint_details {
+        #Required
+        network_endpoint_type = var.integration_instance_network_endpoint_details_network_endpoint_type
+
+        #Optional
+        allowlisted_http_ips = var.integration_instance_network_endpoint_details_allowlisted_http_ips
+        allowlisted_http_vcns {
+            #Required
+            id = var.integration_instance_network_endpoint_details_allowlisted_http_vcns_id
+
+            #Optional
+            allowlisted_ips = var.integration_instance_network_endpoint_details_allowlisted_http_vcns_allowlisted_ips
+        }
+        is_integration_vcn_allowlisted = var.integration_instance_network_endpoint_details_is_integration_vcn_allowlisted
+    }
+    state = var.integration_instance_target_state #}
+{% if defined_tags is defined %}
+    defined_tags   = {{ defined_tags | safe }}
+{% endif %}
+{% if freeform_tags is defined %}
+    freeform_tags  = {{ freeform_tags | safe }}
+{% endif %}
+}
+
+locals {
+    {{ resource_name }}_id = oci_integration_integration_instance.{{ resource_name }}.id
+}
+{% endif %}

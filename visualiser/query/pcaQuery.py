@@ -49,6 +49,8 @@ class PCAQuery(OCIConnection):
         ]
     SUPPORTED_RESOURCES = [
         "Compartment", # Must be first because we will use the resulting list to query other resources in the selected and potentially child compartments
+        "Vcn",
+        "Subnet", 
         "Bucket", 
         "CustomerDnsZone",
         "DHCPOptions", 
@@ -58,7 +60,7 @@ class PCAQuery(OCIConnection):
         "Group", 
         "Instance", 
         "InternetGateway",
-        "LoadBalancer",
+        "LoadBalancer", # Must be done after Subnet because it will need to query the results of Subnet
         "LocalPeeringGateway",
         "MountTarget",
         "NatGateway", 
@@ -66,9 +68,7 @@ class PCAQuery(OCIConnection):
         "Policy", 
         "RouteTable", 
         "SecurityList", 
-        "Subnet", 
         "User", 
-        "Vcn",
         "Volume"
     ]
     ANCILLARY_RESOURCES = [
@@ -615,12 +615,15 @@ class PCAQuery(OCIConnection):
             image_id = resource.get('source_details', {}).get('image_id', '')
             resource['source_details']['os'] = ''
             resource['source_details']['version'] = ''
+            resource['source_details']['image_source'] = 'platform'
             if image_id != '':
                 images = [r for r in self.ancillary_resources['images'] if r['id'] == image_id]
                 if len(images) > 0:
                     image = images[0]
                     resource['source_details']['os'] = image['operating_system']
                     resource['source_details']['version'] = image['operating_system_version']
+                    if image['compartment_id'] is not None and image['compartment_id'] != '':
+                        resource['source_details']['image_source'] = 'custom'
             # Decode Cloud Init Yaml
             if resource.get('metadata', None) is None:
                 resource['metadata'] = {}
@@ -666,13 +669,19 @@ class PCAQuery(OCIConnection):
             # Convert to Json object
             resources = self.toJson(results)
             self.dropdown_json[array].extend(resources)
+        known_instances = [instance['id'] for instance in self.dropdown_json['instances']]
         for load_balancer in self.dropdown_json[array]:
-            private_ips = self.private_ips(load_balancer['subnet_ids'][0])
+            private_ips = []
+            for subnet_id in load_balancer['subnet_ids']:
+                private_ips.extend(self.private_ips(subnet_id))
+            for subnet in self.dropdown_json['subnets']:
+                private_ips.extend(self.private_ips(subnet['id']))
             for backend_set in load_balancer['backend_sets']:
-                for backend in backend_set['backends']:
+                for backend in load_balancer['backend_sets'][backend_set]['backends']:
                     for ip_address in [ip for ip in private_ips if ip['ip_address'] == backend['ip_address']]:
-                        for vnic_attachment in [va for va in self.ancillary_resources['vnic_attachments'] if va['id'] == ip_address['vnic_id']]:
-                            backend['target_id'] = vnic_attachment['instance_id']
+                        for vnic_attachment in [va for va in self.ancillary_resources['vnic_attachments'] if va['vnic_id'] == ip_address['vnic_id']]:
+                            if vnic_attachment['instance_id'] in known_instances:
+                                backend['target_id'] = vnic_attachment['instance_id']
         return self.dropdown_json[array]
 
     def local_peering_gateways(self):

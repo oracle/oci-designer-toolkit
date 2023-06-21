@@ -2,32 +2,33 @@
 ** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
-console.debug('Loaded Instance Properties Javascript');
+console.debug('Loaded Instance Configuration Properties Javascript');
 
 /*
-** Define Instance Properties Class
+** Define Instance Configuration Properties Class
 */
-class InstanceProperties extends OkitResourceProperties {
+class InstanceConfigurationProperties extends OkitResourceProperties {
     constructor (resource) {
         const resource_tabs = ['Volumes', 'Secondary Networks', 'Cloud Init', 'Agent']
         super(resource, resource_tabs)
-        this.secondary_vnics_idx = 0;
-        this.volumes_idx = 0;
     }
 
     // Build Additional Resource Specific Properties
     buildResource() {
-        const self = this
         // Availability Domain
         const ad_data = this.ad_data
-        const ad = this.createInput('select', 'Availability Domain', `${this.id}_availability_domain`, '', (d, i, n) => this.resource.availability_domain = n[i].value, ad_data)
+        const ad = this.createInput('select', 'Availability Domain', `${this.id}_availability_domain`, '', (d, i, n) => this.resource.instance_details.launch_details.availability_domain = n[i].value, ad_data)
         this.availability_domain = ad.input
         this.append(this.core_tbody, ad.row)
         // Fault Domain
         const fd_data = this.fd_data
-        const fd = this.createInput('select', 'Fault Domain', `${this.id}_fault_domain`, '', (d, i, n) => this.resource.fault_domain = n[i].value, fd_data)
+        const fd = this.createInput('select', 'Fault Domain', `${this.id}_fault_domain`, '', (d, i, n) => this.resource.instance_details.launch_details.fault_domain = n[i].value, fd_data)
         this.fault_domain = fd.input
         this.append(this.core_tbody, fd.row)
+        // Instance Compartment
+        const instance_compartment_id = this.createInput('select', 'Compartment For Instances', `${this.id}_instance_compartment_id`, '', (d, i, n) => this.resource.instance_details.launch_details.compartment_id = n[i].value)
+        this.instance_compartment_id = instance_compartment_id.input
+        this.append(this.core_tbody, instance_compartment_id.row)
         // Image & Shape
         const image_and_shape = this.createDetailsSection('Image and Shape', `${this.id}_image_and_shape_details`)
         this.append(this.properties_contents, image_and_shape.details)
@@ -41,19 +42,19 @@ class InstanceProperties extends OkitResourceProperties {
         this.append(this.image_div, image_table.table)
         // Image Source
         const is_data = {options: {platform: 'Platform Images', custom: 'Custom Images'}}
-        const image_source = this.createInput('select', 'Image source', `${this.id}_image_source`, '', (d, i, n) => {this.resource.source_details.image_source = n[i].value; this.handleImageSourceChange(n[i].value)}, is_data)
+        const image_source = this.createInput('select', 'Image source', `${this.id}_image_source`, '', (d, i, n) => {this.resource.instance_details.launch_details.source_details.image_source = n[i].value; this.handleImageSourceChange(n[i].value)}, is_data)
         this.image_source = image_source.input
         this.append(this.image_tbody, image_source.row)
         // Image OS
-        const image_os = this.createInput('select', 'Image OS', `${this.id}_image_os`, '', (d, i, n) => {this.resource.source_details.os = n[i].value; this.handleImageOSChange(n[i].value)})
+        const image_os = this.createInput('select', 'Image OS', `${this.id}_image_os`, '', (d, i, n) => {this.resource.instance_details.launch_details.source_details.os = n[i].value; this.handleImageOSChange(n[i].value)})
         this.image_os = image_os.input
         this.append(this.image_tbody, image_os.row)
         // Image Version
-        const image_version = this.createInput('select', 'Image Version', `${this.id}_image_version`, '', (d, i, n) => {this.resource.source_details.version = n[i].value; this.handleImageOSVersionChange()})
+        const image_version = this.createInput('select', 'Image Version', `${this.id}_image_version`, '', (d, i, n) => {this.resource.instance_details.launch_details.source_details.version = n[i].value; this.handleImageOSVersionChange()})
         this.image_version = image_version.input
         this.append(this.image_tbody, image_version.row)
         // Image Id (Custom Image)
-        const image_id = this.createInput('select', 'Custom Image', `${this.id}_image_id`, '', (d, i, n) => {this.resource.source_details.image_id = n[i].value; this.resource.source_details.image_name = n[i].selectedOptions[0].label})
+        const image_id = this.createInput('select', 'Custom Image', `${this.id}_image_id`, '', (d, i, n) => {this.resource.instance_details.launch_details.source_details.image_id = n[i].value; this.resource.instance_details.launch_details.source_details.image_name = n[i].selectedOptions[0].label})
         this.image_id = image_id.input
         this.image_id_row = image_id.row
         this.append(this.image_tbody, image_id.row)
@@ -66,28 +67,28 @@ class InstanceProperties extends OkitResourceProperties {
         this.append(this.shape_div, shape_table.table)
         // Instance Type
         const it_data = {options: {vm: 'Virtual Machine', bm: 'Bare Metal'}}
-        const instance_type = this.createInput('select', 'Instance Type', `${this.id}_instance_type`, '', (d, i, n) => {this.resource.source_details.instance_type = n[i].value; this.handleInstanceTypeChange(n[i].value)}, it_data)
+        const instance_type = this.createInput('select', 'Instance Type', `${this.id}_instance_type`, '', (d, i, n) => {this.resource.instance_type = n[i].value; this.handleInstanceTypeChange(n[i].value)}, it_data)
         this.instance_type = instance_type.input
         this.append(this.shape_tbody, instance_type.row)
         // Shape Series
         const ss_data = {options: {amd: 'AMD', intel: 'Intel', arm: 'Ampere'}}
-        const shape_series = this.createInput('select', 'Shape Series', `${this.id}_shape_series`, '', (d, i, n) => {this.resource.source_details.shape_series = n[i].value; this.handleShapeSeriesChange(n[i].value)}, ss_data)
+        const shape_series = this.createInput('select', 'Shape Series', `${this.id}_shape_series`, '', (d, i, n) => {this.resource.shape_series = n[i].value; this.handleShapeSeriesChange(n[i].value)}, ss_data)
         this.shape_series = shape_series.input
         this.shape_series_row = shape_series.row
         this.append(this.shape_tbody, shape_series.row)
         // Shape
-        const shape = this.createInput('select', 'Shape', `${this.id}_shape`, '', (d, i, n) => {this.resource.shape = n[i].value; this.handleShapeChange(n[i].value)})
+        const shape = this.createInput('select', 'Shape', `${this.id}_shape`, '', (d, i, n) => {this.resource.instance_details.launch_details.shape = n[i].value; this.handleShapeChange(n[i].value)})
         this.shape = shape.input
         this.append(this.shape_tbody, shape.row)
         // OCPUS
         const ocpus_data = {min: 1, max: 64}
-        const ocpus = this.createInput('number', 'OCPUs', `${this.id}_ocpus`, '', (d, i, n) => {this.resource.shape_config.ocpus = n[i].value; this.handleOcpusChanged(n[i].value)}, ocpus_data)
+        const ocpus = this.createInput('number', 'OCPUs', `${this.id}_ocpus`, '', (d, i, n) => {this.resource.instance_details.launch_details.shape_config.ocpus = n[i].value; this.handleOcpusChanged(n[i].value)}, ocpus_data)
         this.ocpus = ocpus.input
         this.ocpus_row = ocpus.row
         this.append(this.shape_tbody, ocpus.row)
         // Memory
         const memory_data = {min: 1, max: 16}
-        const memory_in_gbs = this.createInput('number', 'Memory (in GB)', `${this.id}_memory_in_gbs`, '', (d, i, n) => this.resource.shape_config.memory_in_gbs = n[i].value, memory_data)
+        const memory_in_gbs = this.createInput('number', 'Memory (in GB)', `${this.id}_memory_in_gbs`, '', (d, i, n) => this.resource.instance_details.launch_details.shape_config.memory_in_gbs = n[i].value, memory_data)
         this.memory_in_gbs = memory_in_gbs.input
         this.memory_in_gbs_row = memory_in_gbs.row
         this.append(this.shape_tbody, memory_in_gbs.row)
@@ -107,15 +108,15 @@ class InstanceProperties extends OkitResourceProperties {
         this.append(advanced_details.div, advanced_table.table)
         // Boot Volume Size
         const bv_data = {min: 50, max: 32768}
-        const boot_volume_size_in_gbs = this.createInput('number', 'Boot Disk Size (in GB)', `${this.id}_boot_volume_size_in_gbs`, '', (d, i, n) => this.resource.source_details.boot_volume_size_in_gbs = n[i].value, bv_data)
+        const boot_volume_size_in_gbs = this.createInput('number', 'Boot Disk Size (in GB)', `${this.id}_boot_volume_size_in_gbs`, '', (d, i, n) => this.resource.instance_details.launch_details.source_details.boot_volume_size_in_gbs = n[i].value, bv_data)
         this.boot_volume_size_in_gbs = boot_volume_size_in_gbs.input
         this.append(this.advanced_tbody, boot_volume_size_in_gbs.row)
         // Preserve Boot Volume
-        const preserve_boot_volume = this.createInput('checkbox', 'Preserve Boot Volume', `${this.id}_preserve_boot_volume`, '', (d, i, n) => this.resource.preserve_boot_volume = n[i].checked)
+        const preserve_boot_volume = this.createInput('checkbox', 'Preserve Boot Volume', `${this.id}_preserve_boot_volume`, '', (d, i, n) => this.resource.instance_details.preserve_boot_volume = n[i].checked)
         this.preserve_boot_volume = preserve_boot_volume.input
         this.append(this.advanced_tbody, preserve_boot_volume.row)
         // In Transit Encryption
-        const is_pv_encryption_in_transit_enabled = this.createInput('checkbox', 'Use In-Transit Encryption', `${this.id}_is_pv_encryption_in_transit_enabled`, '', (d, i, n) => this.resource.is_pv_encryption_in_transit_enabled = n[i].checked)
+        const is_pv_encryption_in_transit_enabled = this.createInput('checkbox', 'Use In-Transit Encryption', `${this.id}_is_pv_encryption_in_transit_enabled`, '', (d, i, n) => this.resource.instance_details.is_pv_encryption_in_transit_enabled = n[i].checked)
         this.is_pv_encryption_in_transit_enabled = is_pv_encryption_in_transit_enabled.input
         this.append(this.advanced_tbody, is_pv_encryption_in_transit_enabled.row)
         // SSH Keys
@@ -133,8 +134,8 @@ class InstanceProperties extends OkitResourceProperties {
                 const files = e.target.files
                 let reader = new FileReader()
                 reader.onload = (evt) => {
-                    this.resource.metadata.ssh_authorized_keys = evt.target.result
-                    this.ssh_authorized_keys.property('value', this.resource.metadata.ssh_authorized_keys)
+                    this.resource.instance_details.launch_details.metadata.ssh_authorized_keys = evt.target.result
+                    this.ssh_authorized_keys.property('value', this.resource.instance_details.launch_details.metadata.ssh_authorized_keys)
                 }
                 reader.onerror = (evt) => {console.info('Error: ' + evt.target.error.name)}
                 reader.readAsText(files[0])
@@ -145,12 +146,12 @@ class InstanceProperties extends OkitResourceProperties {
             fileinput.click()
         }
         const ssh_authorized_keys_data = {}
-        const ssh_authorized_keys = this.createInput('text', 'Authorised Keys', `${this.id}_ssh_authorized_keys`, '', (d, i, n) => this.resource.metadata.ssh_authorized_keys = n[i].value, ssh_authorized_keys_data, 'add-property', add_click)
+        const ssh_authorized_keys = this.createInput('text', 'Authorised Keys', `${this.id}_ssh_authorized_keys`, '', (d, i, n) => this.resource.instance_details.launch_details.metadata.ssh_authorized_keys = n[i].value, ssh_authorized_keys_data, 'add-property', add_click)
         this.ssh_authorized_keys = ssh_authorized_keys.input
         this.append(this.ssh_key_tbody, ssh_authorized_keys.row)
         // Cloud Init Tab
         const ci_data = {placeholder: 'Enter Standard Cloud Init YAML'}
-        const cloud_init = this.createTextArea(`${this.id}_cloud_init`, '', (d, i, n) => this.resource.metadata.user_data = n[i].value, ci_data)
+        const cloud_init = this.createTextArea(`${this.id}_cloud_init`, '', (d, i, n) => this.resource.instance_details.launch_details.metadata.user_data = n[i].value, ci_data)
         this.cloud_init = cloud_init.input
         this.append(this.cloud_init_contents, this.cloud_init)
         // Secondary Networks Tab
@@ -175,11 +176,11 @@ class InstanceProperties extends OkitResourceProperties {
         this.agent_tbody = agent_props.tbody
         this.append(this.agent_div, agent_props.table)    
         // Management Disabled
-        const is_management_disabled = this.createInput('checkbox', 'Management Disabled', `${this.id}_is_management_disabled`, '', (d, i, n) => this.resource.agent_config.is_management_disabled = n[i].checked)
+        const is_management_disabled = this.createInput('checkbox', 'Management Disabled', `${this.id}_is_management_disabled`, '', (d, i, n) => this.resource.instance_details.launch_details.agent_config.is_management_disabled = n[i].checked)
         this.is_management_disabled = is_management_disabled.input
         this.append(this.agent_tbody, is_management_disabled.row)
         // Monitoring Disabled
-        const is_monitoring_disabled = this.createInput('checkbox', 'Monitoring Disabled', `${this.id}_is_monitoring_disabled`, '', (d, i, n) => this.resource.agent_config.is_monitoring_disabled = n[i].checked)
+        const is_monitoring_disabled = this.createInput('checkbox', 'Monitoring Disabled', `${this.id}_is_monitoring_disabled`, '', (d, i, n) => this.resource.instance_details.launch_details.agent_config.is_monitoring_disabled = n[i].checked)
         this.is_monitoring_disabled = is_monitoring_disabled.input
         this.append(this.agent_tbody, is_monitoring_disabled.row)
     }
@@ -188,26 +189,28 @@ class InstanceProperties extends OkitResourceProperties {
     loadResource() {
         // Load Select Inputs
         this.loadSelect(this.subnet_id, 'subnet', true)
-        this.loadMultiSelect(this.nsg_ids, 'network_security_group', (r) => r.vcn_id === this.getOkitJson().getSubnet(this.resource.subnet_id) ? this.getOkitJson().getSubnet(this.resource.subnet_id).vcn_id : '')
+        this.loadSelect(this.instance_compartment_id, 'compartment', true)
+        this.loadMultiSelect(this.nsg_ids, 'network_security_group', (r) => r.vcn_id === this.getOkitJson().getSubnet(this.resource.instance_details.subnet_id) ? this.getOkitJson().getSubnet(this.resource.instance_details.subnet_id).vcn_id : '')
         // Assign Values
-        this.availability_domain.property('value', this.resource.availability_domain)
-        this.fault_domain.property('value', this.resource.fault_domain)
+        this.availability_domain.property('value', this.resource.instance_details.availability_domain)
+        this.fault_domain.property('value', this.resource.instance_details.fault_domain)
+        this.instance_compartment_id.property('value', this.resource.instance_details.launch_details.compartment_id)
         // Image
-        this.image_source.property('value', this.resource.source_details.image_source)
-        this.loadImageOSs(this.resource.source_details.image_source)
-        this.image_os.property('value', this.resource.source_details.os)
-        this.loadImageOSVersions(this.resource.source_details.os)
-        this.image_version.property('value', this.resource.source_details.version)
+        this.image_source.property('value', this.resource.instance_details.launch_details.source_details.image_source)
+        this.loadImageOSs(this.resource.instance_details.launch_details.source_details.image_source)
+        this.image_os.property('value', this.resource.instance_details.launch_details.source_details.os)
+        this.loadImageOSVersions(this.resource.instance_details.launch_details.source_details.os)
+        this.image_version.property('value', this.resource.instance_details.launch_details.source_details.version)
         this.loadImageShapes()
         this.loadCustomImages()
-        this.image_id.property('value', this.resource.source_details.image_id)
+        this.image_id.property('value', this.resource.instance_details.launch_details.source_details.image_id)
         // Shape
         this.instance_type.property('value', this.resource.instance_type)
         this.shape_series.property('value', this.resource.chipset)
         this.loadImageShapes()
-        this.shape.property('value', this.resource.shape)
-        this.memory_in_gbs.property('value', this.resource.shape_config.memory_in_gbs)
-        this.ocpus.property('value', this.resource.shape_config.ocpus)
+        this.shape.property('value', this.resource.instance_details.launch_details.shape)
+        this.memory_in_gbs.property('value', this.resource.instance_details.launch_details.shape_config.memory_in_gbs)
+        this.ocpus.property('value', this.resource.instance_details.launch_details.shape_config.ocpus)
         // Primary Network
         this.primary_network_display_name.property('value', this.resource.primary_vnic.display_name)
         this.subnet_id.property('value', this.resource.primary_vnic.subnet_id)
@@ -218,25 +221,26 @@ class InstanceProperties extends OkitResourceProperties {
         // cbs.forEach((c) => c.checked = this.resource.primary_vnic.nsg_ids.includes(c.value) )
         this.setMultiSelect(this.nsg_ids, this.resource.primary_vnic.nsg_ids)
         // Advanced
-        this.boot_volume_size_in_gbs.property('value', this.resource.source_details.boot_volume_size_in_gbs)
-        this.preserve_boot_volume.property('checked', this.resource.preserve_boot_volume)
-        this.is_pv_encryption_in_transit_enabled.property('checked', this.resource.is_pv_encryption_in_transit_enabled)
+        this.boot_volume_size_in_gbs.property('value', this.resource.instance_details.launch_details.source_details.boot_volume_size_in_gbs)
+        this.preserve_boot_volume.property('checked', this.resource.instance_details.preserve_boot_volume)
+        this.is_pv_encryption_in_transit_enabled.property('checked', this.resource.instance_details.is_pv_encryption_in_transit_enabled)
         // Meta Data
-        this.ssh_authorized_keys.property('value', this.resource.metadata.ssh_authorized_keys)
-        this.cloud_init.property('value', this.resource.metadata.user_data)
+        this.ssh_authorized_keys.property('value', this.resource.instance_details.launch_details.metadata.ssh_authorized_keys)
+        this.cloud_init.property('value', this.resource.instance_details.launch_details.metadata.user_data)
         // Agent
-        this.is_management_disabled.property('checked', this.resource.agent_config.is_management_disabled)
-        this.is_monitoring_disabled.property('checked', this.resource.agent_config.is_monitoring_disabled)
+        this.is_management_disabled.property('checked', this.resource.instance_details.launch_details.agent_config.is_management_disabled)
+        this.is_monitoring_disabled.property('checked', this.resource.instance_details.launch_details.agent_config.is_monitoring_disabled)
         // Secondary Networks
         this.loadSecondaryNetworks()
         // Volume Attachments
         this.loadVolumeAttachments()
         // Collapse where appropriate
-        this.image_id_row.classed('collapsed', this.resource.source_details.image_source !== 'custom')
+        this.image_id_row.classed('collapsed', this.resource.instance_details.launch_details.source_details.image_source !== 'custom')
         this.shape_series_row.classed('collapsed', this.resource.instance_type === 'bm')
         this.memory_in_gbs_row.classed('collapsed', !this.resource.flex_shape)
         this.ocpus_row.classed('collapsed', !this.resource.flex_shape)
     }
+
 
     // Add Network HTML
     addNetworkHtml(parent, vnic, id=this.id, idx='') {
@@ -278,15 +282,15 @@ class InstanceProperties extends OkitResourceProperties {
 
     // Handlers
     handleImageSourceChange(source=undefined) {
-        source = source ? source : this.resource.source_details.image_source
+        source = source ? source : this.resource.instance_details.launch_details.source_details.image_source
         this.image_id_row.classed('collapsed', source !== 'custom')
         this.loadImageOSs(source)
         this.handleImageOSChange(undefined, source)
     }
 
     handleImageOSChange(os=undefined, source=undefined) {
-        os = os ? os : this.resource.source_details.os
-        source = source ? source : this.resource.source_details.image_source
+        os = os ? os : this.resource.instance_details.launch_details.source_details.os
+        source = source ? source : this.resource.instance_details.launch_details.source_details.image_source
         this.loadImageOSVersions(os, source)
         this.handleImageOSVersionChange()
     }
@@ -308,7 +312,7 @@ class InstanceProperties extends OkitResourceProperties {
     }
 
     handleShapeChange(shape=undefined) {
-        shape = shape ? shape : this.resource.shape
+        shape = shape ? shape : this.resource.instance_details.launch_details.shape
         this.memory_in_gbs_row.classed('collapsed', !this.resource.flex_shape)
         this.ocpus_row.classed('collapsed', !this.resource.flex_shape)
         this.loadOCPUs(shape)
@@ -321,21 +325,21 @@ class InstanceProperties extends OkitResourceProperties {
 
     // Load Selects
     loadImageOSs(source=undefined) {
-        source = source ? source : this.resource.source_details.image_source
+        source = source ? source : this.resource.instance_details.launch_details.source_details.image_source
         this.loadReferenceSelect(this.image_os, source === 'custom' ? 'getCustomImageOSs' : 'getPlatformImageOSs')
         const options = Array.from(this.image_os.node().options).map((opt) => opt.value)
-        this.resource.source_details.os = options.includes(this.resource.source_details.os) ? this.resource.source_details.os : options.length > 0 ? options[0] : ''
-        this.image_os.property('value', this.resource.source_details.os)
-        // this.loadImageOSVersions(this.resource.source_details.os, source)
+        this.resource.instance_details.launch_details.source_details.os = options.includes(this.resource.instance_details.launch_details.source_details.os) ? this.resource.instance_details.launch_details.source_details.os : options.length > 0 ? options[0] : ''
+        this.image_os.property('value', this.resource.instance_details.launch_details.source_details.os)
+        // this.loadImageOSVersions(this.resource.instance_details.launch_details.source_details.os, source)
     }
 
     loadImageOSVersions(os=undefined, source=undefined) {
-        os = os ? os : this.resource.source_details.os
-        source = source ? source : this.resource.source_details.image_source
+        os = os ? os : this.resource.instance_details.launch_details.source_details.os
+        source = source ? source : this.resource.instance_details.launch_details.source_details.image_source
         this.loadReferenceSelect(this.image_version, source === 'custom' ? 'getCustomImageOSVersions' : 'getPlatformImageOSVersions', false, (i) => i.operating_system === os)
         const options = Array.from(this.image_version.node().options).map((opt) => opt.value)
-        this.resource.source_details.version = options.includes(this.resource.source_details.version) ? this.resource.source_details.version : options.length > 0 ? options[0] : ''
-        this.image_version.property('value', this.resource.source_details.version)
+        this.resource.instance_details.launch_details.source_details.version = options.includes(this.resource.instance_details.launch_details.source_details.version) ? this.resource.instance_details.launch_details.source_details.version : options.length > 0 ? options[0] : ''
+        this.image_version.property('value', this.resource.instance_details.launch_details.source_details.version)
     }
 
     loadImageShapes(instance_type=undefined, chipset=undefined) {
@@ -343,71 +347,75 @@ class InstanceProperties extends OkitResourceProperties {
         chipset = chipset ? chipset : this.resource.chipset
         this.loadReferenceSelect(this.shape, instance_type === 'bm' ? 'getBareMetalInstanceShapes' : chipset === 'amd' ? 'getAMDInstanceShapes' : chipset === 'arm' ? 'getARMInstanceShapes' : 'getIntelInstanceShapes')
         const options = Array.from(this.shape.node().options).map((opt) => opt.value)
-        this.resource.shape = options.includes(this.resource.shape) ? this.resource.shape : options.length > 0 ? options[0] : ''
-        this.shape.property('value', this.resource.shape)
+        this.resource.instance_details.launch_details.shape = options.includes(this.resource.instance_details.launch_details.shape) ? this.resource.instance_details.launch_details.shape : options.length > 0 ? options[0] : ''
+        this.shape.property('value', this.resource.instance_details.launch_details.shape)
     }
 
     loadCustomImages(os=undefined, version=undefined) {
-        os = os ? os : this.resource.source_details.os
-        version = version ? version : this.resource.source_details.version
+        os = os ? os : this.resource.instance_details.launch_details.source_details.os
+        version = version ? version : this.resource.instance_details.launch_details.source_details.version
         this.loadReferenceSelect(this.image_id, 'getCustomImages', false, (i) => i.operating_system === os && i.operating_system_version === version)
         const options = Array.from(this.image_id.node().options).map((opt) => opt.value)
-        this.resource.source_details.image_id =  options.includes(this.resource.source_details.image_id) ? this.resource.source_details.image_id : options.length > 0 ? options[0] : ''
-        this.image_id.property('value', this.resource.source_details.image_id)
-        if (this.resource.source_details.image_source === 'custom') this.resource.source_details.image_name =  this.image_id.node().selectedOptions[0].label
-        else delete this.resource.source_details.image_name
+        this.resource.instance_details.launch_details.source_details.image_id =  options.includes(this.resource.instance_details.launch_details.source_details.image_id) ? this.resource.instance_details.launch_details.source_details.image_id : options.length > 0 ? options[0] : ''
+        this.image_id.property('value', this.resource.instance_details.launch_details.source_details.image_id)
+        if (this.resource.instance_details.launch_details.source_details.image_source === 'custom') this.resource.instance_details.launch_details.source_details.image_name =  this.image_id.node().selectedOptions[0].label
+        else delete this.resource.instance_details.launch_details.source_details.image_name
     }
 
     // Load Custom Data
 
     loadOCPUs(shape=undefined) {
-        shape = shape ? shape : this.resource.shape
+        shape = shape ? shape : this.resource.instance_details.launch_details.shape
         if (this.resource.flex_shape) {
             const instance_shape = okitOciData.getInstanceShape(shape)
             if (instance_shape && instance_shape.memory_options && instance_shape.ocpu_options) {
                 this.ocpus.attr('min', instance_shape.ocpu_options.min)
                 this.ocpus.attr('max', instance_shape.ocpu_options.max)
-                this.resource.shape_config.ocpus = this.resource.shape_config.ocpus > instance_shape.ocpu_options.min ? this.resource.shape_config.ocpus : instance_shape.ocpus
+                this.resource.instance_details.launch_details.shape_config.ocpus = this.resource.instance_details.launch_details.shape_config.ocpus > instance_shape.ocpu_options.min ? this.resource.instance_details.launch_details.shape_config.ocpus : instance_shape.ocpus
             } else {
-                this.resource.shape_config.ocpus = 0
+                this.resource.instance_details.launch_details.shape_config.ocpus = 0
             }
         } else {
-            this.resource.shape_config.ocpus = ''
+            this.resource.instance_details.launch_details.shape_config.ocpus = ''
         }
-        this.ocpus.property('value', this.resource.shape_config.ocpus)
+        this.ocpus.property('value', this.resource.instance_details.launch_details.shape_config.ocpus)
     }
 
     loadMemoryInGbp(shape=undefined) {
-        shape = shape ? shape : this.resource.shape
+        shape = shape ? shape : this.resource.instance_details.launch_details.shape
         if (this.resource.flex_shape) {
             const instance_shape = okitOciData.getInstanceShape(shape)
             if (instance_shape && instance_shape.memory_options && instance_shape.ocpu_options) {
-                const min = Math.max(instance_shape.memory_options.min_in_g_bs, (instance_shape.memory_options.min_per_ocpu_in_gbs * this.resource.shape_config.ocpus));
-                const max = Math.min(instance_shape.memory_options.max_in_g_bs, (instance_shape.memory_options.max_per_ocpu_in_gbs * this.resource.shape_config.ocpus));
+                const min = Math.max(instance_shape.memory_options.min_in_g_bs, (instance_shape.memory_options.min_per_ocpu_in_gbs * this.resource.instance_details.launch_details.shape_config.ocpus));
+                const max = Math.min(instance_shape.memory_options.max_in_g_bs, (instance_shape.memory_options.max_per_ocpu_in_gbs * this.resource.instance_details.launch_details.shape_config.ocpus));
                 this.memory_in_gbs.attr('min', min)
                 this.memory_in_gbs.attr('max', max)
-                this.resource.shape_config.memory_in_gbs = this.resource.shape_config.memory_in_gbs > min ? this.resource.shape_config.memory_in_gbs : min
+                this.resource.instance_details.launch_details.shape_config.memory_in_gbs = this.resource.instance_details.launch_details.shape_config.memory_in_gbs > min ? this.resource.instance_details.launch_details.shape_config.memory_in_gbs : min
             } else {
-                this.resource.shape_config.memory_in_gbs = 0
+                this.resource.instance_details.launch_details.shape_config.memory_in_gbs = 0
             }
         } else {
-            this.resource.shape_config.memory_in_gbs = ''
+            this.resource.instance_details.launch_details.shape_config.memory_in_gbs = ''
         }
-        this.memory_in_gbs.property('value', this.resource.shape_config.memory_in_gbs)
+        this.memory_in_gbs.property('value', this.resource.instance_details.launch_details.shape_config.memory_in_gbs)
     }
 
     // Secondary Networks
 
     loadSecondaryNetworks() {
         this.secondary_networks_tbody.selectAll('*').remove()
-        this.resource.vnic_attachments.forEach((e, i) => {if (i > 0) this.addSecondaryNetworkHtml(e, i+1)})
-        this.secondary_vnics_idx = this.resource.vnics.length
+        this.resource.instance_details.secondary_vnics.forEach((e, i) => {if (i > 0) this.addSecondaryNetworkHtml(e, i+1)})
+        this.secondary_vnics_idx = this.resource.instance_details.secondary_vnics.length
     }
     addSecondaryNetwork() {
-        const vnic = this.resource.newVnicAttachment();
-        this.resource.vnic_attachments.push(vnic);
-        this.secondary_vnics_idx += 1
-        this.addSecondaryNetworkHtml(vnic, this.secondary_vnics_idx)
+        if (this.resource.instance_details.secondary_vnics.length === 0) {
+            const vnic = this.resource.newSecondayVnicAttachment();
+            this.resource.instance_details.secondary_vnics.push(vnic);
+            this.secondary_vnics_idx += 1
+            this.addSecondaryNetworkHtml(vnic, this.secondary_vnics_idx)
+        } else {
+            alert('Only a single secondary vnic is allowed.')
+        }
     }
     addSecondaryNetworkHtml(vnic, idx) {
         const id = 'vnic';
@@ -426,7 +434,7 @@ class InstanceProperties extends OkitResourceProperties {
         return secondary_network
     }
     deleteSecondaryNetwork(id, idx, vnic) {
-        this.resource.vnic_attachments = this.resource.vnic_attachments.filter((e) => e !== vnic)
+        this.resource.instance_details.secondary_vnics = this.resource.instance_details.secondary_vnics.filter((e) => e !== vnic)
         $(`#${this.trId(id, idx)}`).remove()
     }
 
@@ -434,12 +442,12 @@ class InstanceProperties extends OkitResourceProperties {
 
     loadVolumeAttachments() {
         this.volumes_tbody.selectAll('*').remove()
-        this.resource.volume_attachments.forEach((e, i) => {this.addVolumeAttachmentHtml(e, i+1)})
-        this.volumes_idx = this.resource.volume_attachments.length
+        this.resource.instance_details.block_volumes.forEach((e, i) => {this.addVolumeAttachmentHtml(e, i+1)})
+        this.volumes_idx = this.resource.instance_details.block_volumes.length
     }
     addVolumeAttachment() {
         const attachment = this.resource.newVolumeAttachment()
-        this.resource.volume_attachments.push(attachment)
+        this.resource.instance_details.block_volumes.push(attachment)
         this.volumes_idx += 1
         this.addVolumeAttachmentHtml(attachment, this.volumes_idx)
     }
@@ -452,30 +460,30 @@ class InstanceProperties extends OkitResourceProperties {
         const attachment_table = this.createTable('', `${id}_table`, '')
         this.append(attachment_details.div, attachment_table.table)
         // Name
-        const display_name = this.createInput('text', 'Name', `${this.id}_display_name`, '', (d, i, n) => attachment.display_name = n[i].value)
+        const display_name = this.createInput('text', 'Name', `${this.id}_display_name`, '', (d, i, n) => attachment.attach_details.display_name = n[i].value)
         this.append(attachment_table.tbody, display_name.row)
-        display_name.input.property('value', attachment.display_name)
+        display_name.input.property('value', attachment.attach_details.display_name)
         // Volume Id
         const volume = this.createInput('select', 'Volume', `${id}_volume_id`, idx, (d, i, n) => {attachment.volume_id = n[i].value})
         this.append(attachment_table.tbody, volume.row)
         this.loadSelect(volume.input, 'block_storage_volume', true)
         volume.input.property('value', attachment.volume_id)
         // Attachment Type
-        const attachment_type = this.createInput('select', 'Attachment Type', `${id}_attachment_type`, idx, (d, i, n) => {attachment.attachment_type = n[i].value})
-        this.append(attachment_table.tbody, attachment_type.row)
-        this.loadAttachmentTypeSelect(attachment_type.input)
-        attachment_type.input.property('value', attachment.attachment_type)
+        const type = this.createInput('select', 'Attachment Type', `${id}_type`, idx, (d, i, n) => {attachment.attach_details.type = n[i].value})
+        this.append(attachment_table.tbody, type.row)
+        this.loadAttachmentTypeSelect(type.input)
+        type.input.property('value', attachment.attach_details.type)
         // Read Only
-        const read_only = this.createInput('checkbox', 'Read Only', `${id}_is_read_only`, idx, (d, i, n) => attachment.is_read_only = n[i].checked)
+        const read_only = this.createInput('checkbox', 'Read Only', `${id}_is_read_only`, idx, (d, i, n) => attachment.attach_details.is_read_only = n[i].checked)
         this.append(attachment_table.tbody, read_only.row)
-        read_only.input.property('checked', attachment.is_read_only)
+        read_only.input.property('checked', attachment.attach_details.is_read_only)
         // Shareable
-        const shareable = this.createInput('checkbox', 'Shareable', `${id}_is_shareable`, idx, (d, i, n) => attachment.is_shareable = n[i].checked)
+        const shareable = this.createInput('checkbox', 'Shareable', `${id}_is_shareable`, idx, (d, i, n) => attachment.attach_details.is_shareable = n[i].checked)
         this.append(attachment_table.tbody, shareable.row)
-        shareable.input.property('checked', attachment.is_shareable)
+        shareable.input.property('checked', attachment.attach_details.is_shareable)
     }
     deleteVolumeAttachment(id, idx, attachment) {
-        this.resource.volume_attachments = this.resource.volume_attachments.filter((e) => e !== attachment)
+        this.resource.instance_details.block_volumes = this.resource.instance_details.block_volumes.filter((e) => e !== attachment)
         $(`#${this.trId(id, idx)}`).remove()
     }
     loadAttachmentTypeSelect(select) {

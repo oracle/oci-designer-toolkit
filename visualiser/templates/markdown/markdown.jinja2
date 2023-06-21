@@ -82,6 +82,7 @@
     {% include "remote_peering_connection.jinja2" ignore missing with context %}
 {%- endif %}
 
+{% if (autonomous_databases is defined and autonomous_databases|length > 0) or (database_systems is defined and database_systems|length > 0) or (mysql_database_systems is defined and mysql_database_systems|length) -%}
 ## Databases
 
 {% if autonomous_databases is defined and autonomous_databases|length > 0 -%}
@@ -97,6 +98,8 @@
 {% if mysql_database_systems is defined and mysql_database_systems|length > 0 -%}
     ### MySQL Database Systems
     {% include "mysql_database_system.jinja2" ignore missing with context %}
+{%- endif %}
+
 {%- endif %}
 
 ## Infrastructure
@@ -143,6 +146,7 @@
     {% include "mount_target.jinja2" ignore missing with context %}
 {%- endif %}
 
+{% if (customer_premise_equipments is defined and customer_premise_equipments|length > 0) or (ipsec_connections is defined and ipsec_connections|length > 0) -%}
 ## External
 
 {% if customer_premise_equipments is defined and customer_premise_equipments|length > 0 -%}
@@ -155,11 +159,46 @@
     {% include "ipsec_connection.jinja2" ignore missing with context %}
 {%- endif %}
 
+{%- endif %}
+
 {% if exadata_infrastructures is defined and exadata_infrastructures|length > 0 -%}
     ## ExaCC
 
-### Exadata Infrstructures
+### Exadata Infrastructures
     {% include "exadata_infrastructure.jinja2" ignore missing with context %}
+
+{% if vm_clusters is defined and vm_clusters|length > 0 -%}
+    ### Vm Clusters
+    {% include "vm_cluster.jinja2" ignore missing with context %}
+{%- endif %}
+
+{% if vm_cluster_networks is defined and vm_cluster_networks|length > 0 -%}
+    ### Vm Cluster Networks
+    {% include "vm_cluster_network.jinja2" ignore missing with context %}
+{%- endif %}
+
+{% if db_homes is defined and db_homes|length > 0 -%}
+    ### DB Homes
+    {% include "db_home.jinja2" ignore missing with context %}
+{%- endif %}
+
+{% if db_nodes is defined and db_nodes|length > 0 -%}
+    ### DB Nodes
+    {% include "db_node.jinja2" ignore missing with context %}
+{%- endif %}
+
+{% if databases is defined and databases|length > 0 -%}
+    ### Databases
+    {% include "database.jinja2" ignore missing with context %}
+{%- endif %}
+
+{%- endif %}
+
+{% if exadata_cloud_infrastructures is defined and exadata_cloud_infrastructures|length > 0 -%}
+    ## ExaCS
+
+### Exadata Cloud Infrastructures
+    {% include "exadata_cloud_infrastructures.jinja2" ignore missing with context %}
 
 {% if vm_clusters is defined and vm_clusters|length > 0 -%}
     ### Vm Clusters
