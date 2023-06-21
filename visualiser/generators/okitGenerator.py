@@ -27,7 +27,7 @@ from model.okitValidation import OCIJsonValidator
 logger = getLogger()
 
 class OCIGenerator(object):
-    OKIT_VERSION = "0.51.0"
+    OKIT_VERSION = "0.52.0"
     def __init__(self, template_dir, output_dir, visualiser_json, use_vars=False, add_provider=True):
         # Initialise generator output data variables
         self.rendered_resources = {}
@@ -166,6 +166,7 @@ class OCIGenerator(object):
     def formatOcid(self, id):
         return id
 
+    output_files = ["main", "provider", "metadata", "user_defined", "identity", "networking", "storage", "compute", "database", "customer_connectivity", "containers"]
     file_map = {
         "default": "main",
         "provider": "provider",
@@ -203,9 +204,11 @@ class OCIGenerator(object):
         "object_storage_buckets": "storage",
 
         "analytics_instances": "compute",
+        "autoscaling_configurations": "compute",
         "data_science_projects": "compute",
         "instances": "compute",
         "instance_configurations": "compute",
+        "instance_pools": "compute",
         "oracle_digital_assistants": "compute",
         "visual_builder_instances": "compute",
 
