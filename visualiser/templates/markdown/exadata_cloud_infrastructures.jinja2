@@ -16,6 +16,6 @@
 {{ common.document_property("Netmask", resource.netmask) }}
 {{ common.document_tags(resource) }}
 {%- endmacro %}
-{% for exadata_infrastructure in exadata_infrastructures -%}
+{% for exadata_infrastructure in exadata_cloud_infrastructures -%}
     {{ document_exadata_infrastructure(exadata_infrastructure) }}
 {%- endfor %}
