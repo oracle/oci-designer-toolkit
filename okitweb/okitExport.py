@@ -13,6 +13,7 @@ __module__ = "okitExport"
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
+import base64
 import os
 import urllib
 from flask import Blueprint
@@ -99,10 +100,18 @@ def terraform():
     else:
         return '404'
 
-@bp.route('markdown', methods=(['GET']))
+@bp.route('markdown', methods=(['GET', 'POST']))
 def markdown():
     if request.method == 'GET':
         design = json.loads(request.args.get('design', default='{}'))
+        destination_dir = tempfile.mkdtemp()
+        generator = OkitMarkdownGenerator(template_root, destination_dir, design)
+        generator.generate()
+        markdown = generator.toText()
+        response = {"markdown": markdown}
+        return json.dumps(response, sort_keys=False, indent=2, separators=(',', ': '))
+    elif request.method == 'POST':
+        design = request.json
         destination_dir = tempfile.mkdtemp()
         generator = OkitMarkdownGenerator(template_root, destination_dir, design)
         generator.generate()
