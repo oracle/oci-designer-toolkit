@@ -1,5 +1,5 @@
 
-{% if read_only %} {# Read Only #}
+{% if read_only -%} {# Read Only #}
 # ------ Read Auto Scaling Configuration
 data "oci_autoscaling_auto_scaling_configurations" "{{ resource_name }}" {
     # Required
@@ -18,66 +18,67 @@ locals {
 # ------- Create Auto Scaling Configuration
 resource "oci_autoscaling_auto_scaling_configuration" "{{ resource_name }}AutoScaling" {
     # Required
-    compartment_id      = {{ compartment_id }}
+    compartment_id = {{ compartment_id }}
+    cool_down_in_seconds = {{ cool_down_in_seconds | safe}}
+    display_name = {{ display_name | safe }}
     auto_scaling_resources {
         #Required
-        id = local.{{ resource_name }}_id
-        type = "instancePool"
+        id = {{ resource.id }}
+        type = {{ resource.type | safe }}
     }
+{% for policy in policies %} {# Policies #}
     policies {
         # Required
+        policy_type = {{ policy.policy_type | safe }}
+        display_name = {{ display_name | safe }}
+        #Optional
         capacity {
             #Optional
-{% if policies.capacity.initial is defined %}
-            initial = {{ policies.capacity.initial | safe }}
+{% if policy.capacity.initial is defined %}
+            initial = {{ policy.capacity.initial | safe }}
 {% endif %}
-{% if policies.capacity.max is defined %}
-            max = {{ policies.capacity.max | safe }}
+{% if policy.capacity.max is defined %}
+            max = {{ policy.capacity.max | safe }}
 {% endif %}
-{% if policies.capacity.min is defined %}
-            min = {{ policies.capacity.min | safe }}
+{% if policy.capacity.min is defined %}
+            min = {{ policy.capacity.min | safe }}
 {% endif %}
         }
-        policy_type = {{ policies.policy_type | safe }}
-
-        #Optional
-        display_name = {{ display_name | safe }}
-{% if policies.execution_schedule is defined %}
+{% if policy.execution_schedule is defined %}
         execution_schedule {
             #Required
-            expression = {{ policies.execution_schedule.expression | safe }}
-            timezone = {{ policies.execution_schedule.timezone | safe }}
-            type = {{ policies.execution_schedule.type | safe }}
+            expression = {{ policy.execution_schedule.expression | safe }}
+            timezone = {{ policy.execution_schedule.timezone | safe }}
+            type = {{ policy.execution_schedule.type | safe }}
         }
 {% endif %}
-{% if policies.is_enabled is defined %}
-        is_enabled = {{ policies.is_enabled | safe }}
+{% if policy.is_enabled is defined %}
+        is_enabled = {{ policy.is_enabled | safe | lower }}
 {% endif %}
-{% if policies.rules is defined %}
-    {% for rule in policies.rules %}
+{% if policy.rules is defined %}
+    {% for rule in policy.rules %}
         rules {
             #Optional
             action {
                 #Optional
-                type = {{ rule.type | safe }}
-                value = {{ rule.value | safe }}
+                type = {{ rule.action.type | safe }}
+                value = {{ rule.action.value | safe }}
             }
             display_name = {{ display_name | safe }}
             metric {
                 #Optional
-                metric_type = {{ rule.metric.metric_type }}
+                metric_type = {{ rule.metric.metric_type | safe }}
                 threshold {
                     #Optional
-                    operator = {{ rule.metric.threshold.operator }}
-                    value = {{ rule.metric.threshold.operator }}
+                    operator = {{ rule.metric.threshold.operator | safe }}
+                    value = {{ rule.metric.threshold.value | safe }}
                 }
             }
         }
     {% endfor %}
 {% endif %}
     }
-    # Optional
-    display_name        = {{ display_name | safe }}
+{% endfor %} {# Policies #}
 
 {% if defined_tags is defined %}
     defined_tags               = {{ defined_tags | safe }}
