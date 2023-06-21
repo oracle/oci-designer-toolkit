@@ -109,14 +109,15 @@ class OkitMarkdownView extends OkitJsonView {
             type: 'get',
             url: 'export/markdown',
             dataType: 'text',
-            contentType: 'text',
+            contentType: 'application/json',
             data: {
                 design: JSON.stringify(requestJson)
             }
         }).done((resp) => {
             const canvas_div = d3.select(d3Id(this.parent_id));
             const md_converter = new remarkable.Remarkable({html: true})
-            this.markdown = resp
+            const response = JSON.parse(resp)
+            this.markdown = response.markdown
             canvas_div.html(md_converter.render(this.markdown))    
         })
     }
