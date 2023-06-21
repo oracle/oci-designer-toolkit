@@ -107,9 +107,11 @@ class OkitMarkdownView extends OkitJsonView {
         $.ajax({
             cache: false,
             type: 'get',
+            // type: 'post',
             url: 'export/markdown',
             dataType: 'text',
             contentType: 'application/json',
+            // data: JSON.stringify(requestJson)
             data: {
                 design: JSON.stringify(requestJson)
             }
@@ -119,6 +121,21 @@ class OkitMarkdownView extends OkitJsonView {
             const response = JSON.parse(resp)
             this.markdown = response.markdown
             canvas_div.html(md_converter.render(this.markdown))    
+        }).fail(() => {
+            $.ajax({
+                cache: false,
+                type: 'post',
+                url: 'export/markdown',
+                dataType: 'text',
+                contentType: 'application/json',
+                data: JSON.stringify(requestJson)
+            }).done((resp) => {
+                const canvas_div = d3.select(d3Id(this.parent_id));
+                const md_converter = new remarkable.Remarkable({html: true})
+                const response = JSON.parse(resp)
+                this.markdown = response.markdown
+                canvas_div.html(md_converter.render(this.markdown))    
+            })            
         })
     }
     
