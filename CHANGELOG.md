@@ -1,6 +1,18 @@
 # Release Notes
 
 
+## Version 0.52.0
+**Release Date**: 21st June 2023
+### Features
+1. Add Integration Instance Resource
+2. Add Instance Configuration Resource for OCI
+3. Add Instance Pools Resource for OCI
+### Bug Fixes
+1. Fix incorrect Markdown generation when markdown view displayed
+2. Resolve issue where PCA Loadbalancers were not linking all backend instances.
+3. Resolve miss identified image source type during PCA query.
+
+
 ## Version 0.51.0
 **Release Date**: 31st May 2023
 ### Features

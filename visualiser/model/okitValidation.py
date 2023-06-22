@@ -21,7 +21,7 @@ from visualiser.common.okitCommon import jsonToFormattedString
 logger = getLogger()
 
 class OCIJsonValidator(object):
-    pca_resources      = ['block_storage_volume', 'compartment', 'dhcp_option', 'dynamic_routing_gateway', 'dynamic_routing_gateway_attachment', 'file_system', 'group', 'instance', 'internet_gateway', 'load_balancer', 'local_peering_gateway', 'mount_target', 'nat_gateway', 'network_security_group', 'object_storage_bucket', 'policy', 'route_table', 'security_list', 'subnet', 'user', 'virtual_cloud_network']
+    pca_resources      = ['autoscaling_configuration', 'block_storage_volume', 'compartment', 'dhcp_option', 'dynamic_routing_gateway', 'dynamic_routing_gateway_attachment', 'file_system', 'group', 'instance', 'instance_configuration', 'instance_pool', 'internet_gateway', 'load_balancer', 'local_peering_gateway', 'mount_target', 'nat_gateway', 'network_security_group', 'object_storage_bucket', 'policy', 'route_table', 'security_list', 'subnet', 'user', 'virtual_cloud_network']
     freetier_resources = ['block_storage_volume', 'compartment', 'dhcp_option', 'dynamic_routing_gateway', 'file_system', 'instance', 'internet_gateway', 'local_peering_gateway', 'mount_target', 'nat_gateway', 'network_security_group', 'object_storage_bucket', 'policy', 'route_table', 'security_list', 'subnet', 'virtual_cloud_network']
     def __init__(self, okit_json={}):
         self.okit_json = okit_json

@@ -37,6 +37,8 @@ class OciResourceDiscoveryClient(object):
     get_resource_client_methods = {
         # oci.apigateway.UsagePlansClient
         "ApiGatewayUsagePlanDetails": (oci.apigateway.UsagePlansClient, "get_usage_plan"), # used to get full details 
+        # oci.autoscaling.AutoScalingClient
+        "AutoScalingConfigurationDetails": (oci.autoscaling.AutoScalingClient, "get_auto_scaling_configuration"),
         # oci.bastion.BastionClient
         "BastionDetails": (oci.bastion.BastionClient, "get_bastion"), # used to get full details
         # oci.container_engine.ContainerEngineClient
@@ -47,6 +49,9 @@ class OciResourceDiscoveryClient(object):
         "VolumeBackupPolicyAssignment": (oci.core.BlockstorageClient, "get_volume_backup_policy_asset_assignment"),
         # oci.core.ComputeClient
         "Image": (oci.core.ComputeClient, "get_image"),  # used to get details of removed (hidden) images that the not returned from list_images
+        # oci.core.ComputeManagementClient
+        "InstanceConfigurationDetails": (oci.core.ComputeManagementClient, "get_instance_configuration"), # used to get full details
+        "InstancePoolDetails": (oci.core.ComputeManagementClient, "get_instance_pool"), # used to get full details
         # oci.core.VirtualNetworkClient
         "Vnic": (oci.core.VirtualNetworkClient, "get_vnic"), # special case as there is no list_vnics method
         # oci.data_flow.DataFlowClient
@@ -958,6 +963,10 @@ class OciResourceDiscoveryClient(object):
                         usage_plan_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, usage_plan_id=usage_plan_id)
                         futures_list.update({(region, resource_type, compartment_id, usage_plan_id):future})                    
+                    elif resource_type == "AutoScalingConfigurationDetails" and method_name == "get_auto_scaling_configuration":
+                        auto_scaling_configuration_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, auto_scaling_configuration_id=auto_scaling_configuration_id)
+                        futures_list.update({(region, resource_type, None, auto_scaling_configuration_id):future})
                     elif resource_type == "BastionDetails" and method_name == "get_bastion":
                         bastion_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, bastion_id=bastion_id)
@@ -987,6 +996,14 @@ class OciResourceDiscoveryClient(object):
                             image_id = item[2]
                             future = executor.submit(self.list_resources, klass, method_name, region, image_id=image_id)
                             futures_list.update({(region, resource_type, None, image_id):future})
+                    elif resource_type == "InstanceConfigurationDetails" and method_name == "get_instance_configuration":
+                        instance_configuration_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, instance_configuration_id=instance_configuration_id)
+                        futures_list.update({(region, resource_type, None, instance_configuration_id):future})
+                    elif resource_type == "InstancePoolDetails" and method_name == "get_instance_pool":
+                        instance_pool_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, instance_pool_id=instance_pool_id)
+                        futures_list.update({(region, resource_type, None, instance_pool_id):future})
                     elif resource_type == "MySQLConfiguration" and method_name == "get_configuration":
                         configuration_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, configuration_id=configuration_id)
@@ -1521,12 +1538,14 @@ class OciResourceDiscoveryClient(object):
                         result = new_result
                     elif resource_type in [
                         "ApiGatewayUsagePlanDetails",
+                        "AutoScalingConfigurationDetails",
                         "BastionDetails",
                         "ClusterDetails",
                         "ClusterOptions",
                         "DataFlowApplicationDetails", "DataFlowRunDetails",
                         "ExportSetDetails",
                         "Image",
+                        "InstanceConfigurationDetails", "InstancePoolDetails",
                         "MySQLConfiguration", "MySQLDbSystemDetails", "MySQLHeatwaveCluster",
                         "NetworkFirewallDetails", "NetworkFirewallPolicyDetails",
                         "NodePoolDetails", "NodePoolOptions",
@@ -1903,6 +1922,10 @@ class OciResourceDiscoveryClient(object):
             if "ApiGatewayUsagePlan" in resources_by_region[region]:
                 for resource in resources_by_region[region]["ApiGatewayUsagePlan"]:
                     regional_resource_requests.add(("ApiGatewayUsagePlanDetails", None, resource.id))
+            # get extra details for AutoScalingConfiguration
+            if "AutoScalingConfiguration" in resources_by_region[region]:
+                for resource in resources_by_region[region]["AutoScalingConfiguration"]:
+                    regional_resource_requests.add(("AutoScalingConfigurationDetails", resource.compartment_id, resource.id))
             # get extra details for Bastion
             if "Bastion" in resources_by_region[region]:
                 for resource in resources_by_region[region]["Bastion"]:
@@ -1923,6 +1946,14 @@ class OciResourceDiscoveryClient(object):
             if "ExportSet" in resources_by_region[region]:
                 for resource in resources_by_region[region]["ExportSet"]:
                     regional_resource_requests.add(("ExportSetDetails", resource.compartment_id, resource.id))
+            # get extra details for InstanceConfiguration
+            if "InstanceConfiguration" in resources_by_region[region]:
+                for resource in resources_by_region[region]["InstanceConfiguration"]:
+                    regional_resource_requests.add(("InstanceConfigurationDetails", resource.compartment_id, resource.id))
+            # get extra details for InstancePool
+            if "InstancePool" in resources_by_region[region]:
+                for resource in resources_by_region[region]["InstancePool"]:
+                    regional_resource_requests.add(("InstancePoolDetails", resource.compartment_id, resource.id))
             # get extra details for MySQLDbSystems
             if "MySQLDbSystem" in resources_by_region[region]:
                 for mysql_db_system in resources_by_region[region]["MySQLDbSystem"]:
@@ -2001,11 +2032,14 @@ class OciResourceDiscoveryClient(object):
         for region in resources_by_region:
             # replace summary result with resource details
             self.replace_resource_details(resources_by_region, region, "ApiGatewayUsagePlan", "ApiGatewayUsagePlanDetails")
+            self.replace_resource_details(resources_by_region, region, "AutoScalingConfiguration", "AutoScalingConfigurationDetails")
             self.replace_resource_details(resources_by_region, region, "Bastion", "BastionDetails")
             self.replace_resource_details(resources_by_region, region, "Cluster", "ClusterDetails")
             self.replace_resource_details(resources_by_region, region, "DataFlowApplication", "DataFlowApplicationDetails")
             self.replace_resource_details(resources_by_region, region, "DataFlowRun", "DataFlowRunDetails")
             self.replace_resource_details(resources_by_region, region, "ExportSet", "ExportSetDetails")
+            self.replace_resource_details(resources_by_region, region, "InstanceConfiguration", "InstanceConfigurationDetails")
+            self.replace_resource_details(resources_by_region, region, "InstancePool", "InstancePoolDetails")
             self.replace_resource_details(resources_by_region, region, "MySQLDbSystem", "MySQLDbSystemDetails")
             self.replace_resource_details(resources_by_region, region, "NodePool", "NodePoolDetails")
             self.replace_resource_details(resources_by_region, region, "NoSQLIndex", "NoSQLIndexDetails")

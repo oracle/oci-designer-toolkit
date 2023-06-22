@@ -619,6 +619,8 @@ function generateMarkdown(results) {
         requestJson.use_variables = okitSettings.is_variables;
         const dimensions = setExportDisplay();
         console.info('Canvas Dimensions', dimensions)
+        // Refresh
+        handleSwitchToCompartmentView()
         const okitcanvas = document.getElementById("canvas-svg");
         okitcanvas.setAttribute('width', dimensions.width)
         okitcanvas.setAttribute('height', dimensions.height)
@@ -665,6 +667,8 @@ function generateMarkdown(results) {
             }
         }
         okitJsonView.draw();
+        // Switch back to previous view
+        handleViewSelect()
         $.ajax({
             type: 'post',
             url: 'generate/markdown/local',

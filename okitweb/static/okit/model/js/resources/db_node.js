@@ -17,15 +17,9 @@ class DbNode extends OkitArtifact {
         // this.display_name = this.generateDefaultName(okitjson.db_nodes.length + 1);
         this.compartment_id = data.parent_id;
         this.read_only = true;
-        /*
-        ** TODO: Add Resource / Artefact specific parameters and default
-        */
         // Update with any passed data
         this.merge(data);
         this.convert();
-        // TODO: If the Resource is within a Subnet but the subnet_iss is not at the top level then raise it with the following functions if not required delete them.
-        // Expose subnet_id at the top level
-        Object.defineProperty(this, 'subnet_id', {get: function() {return this.primary_mount_target.subnet_id;}, set: function(id) {this.primary_mount_target.subnet_id = id;}, enumerable: false });
         if (this.hostname) this.display_name = this.hostname
     }
     /*

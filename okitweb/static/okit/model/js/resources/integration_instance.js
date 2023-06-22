@@ -14,17 +14,21 @@ class IntegrationInstance extends OkitArtifact {
     constructor (data={}, okitjson={}) {
         super(okitjson);
         // Configure default values
-        // this.display_name = this.generateDefaultName(okitjson.integration_instances.length + 1);
-        this.compartment_id = data.parent_id;
-        /*
-        ** TODO: Add Resource / Artefact specific parameters and default
-        */
+        this.compartment_id = data.compartment_id;
+        this.integration_instance_type = 'ENTERPRISEX'
+        this.is_byol = false
+        this.message_packs = 1
+        // this.consumption_model = ''
+        this.is_file_server_enabled = false
+        this.is_visual_builder_enabled = false
+        this.shape = 'PRODUCTION'
+        this.idcs_at = ''
         // Update with any passed data
         this.merge(data);
         this.convert();
         // TODO: If the Resource is within a Subnet but the subnet_iss is not at the top level then raise it with the following functions if not required delete them.
         // Expose subnet_id at the top level
-        Object.defineProperty(this, 'subnet_id', {get: function() {return this.primary_mount_target.subnet_id;}, set: function(id) {this.primary_mount_target.subnet_id = id;}, enumerable: false });
+        // Object.defineProperty(this, 'subnet_id', {get: function() {return this.primary_mount_target.subnet_id;}, set: function(id) {this.primary_mount_target.subnet_id = id;}, enumerable: false });
     }
     /*
     ** Name Generation
@@ -47,18 +51,11 @@ OkitJson.prototype.newIntegrationInstance = function(data) {
     return this.getIntegrationInstances()[this.getIntegrationInstances().length - 1];
 }
 OkitJson.prototype.getIntegrationInstances = function() {
-    if (!this.integration_instances) {
-        this.integration_instances = [];
-    }
+    if (!this.integration_instances) this.integration_instances = []
     return this.integration_instances;
 }
 OkitJson.prototype.getIntegrationInstance = function(id='') {
-    for (let artefact of this.getIntegrationInstances()) {
-        if (artefact.id === id) {
-            return artefact;
-        }
-    }
-return undefined;
+    return this.getIntegrationInstances().find(r => r.id === id)
 }
 OkitJson.prototype.deleteIntegrationInstance = function(id) {
     this.integration_instances = this.integration_instances ? this.integration_instances.filter((r) => r.id !== id) : []
