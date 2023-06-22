@@ -315,6 +315,13 @@
 {%- endmacro %}
 
 
+{%- macro nsg_list_property(ids, title="Network Security Group") -%}
+    {%- for id in ids -%}
+        {{ nsg_property(id, title) }}
+    {%- endfor -%}
+{%- endmacro -%}
+
+
 {%- macro nsg_property(id, title="Network Security Group") -%}
     {{ document_property(title, nsg_link(id)) }}
 {%- endmacro -%}
