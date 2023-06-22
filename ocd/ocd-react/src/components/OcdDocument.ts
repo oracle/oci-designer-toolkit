@@ -17,19 +17,30 @@ export interface OcdSelectedResource {
     class: string
 }
 
+export interface OcdDragResource {
+    dragging: boolean
+    modelId: string
+    pageId: string
+    coordsId: string
+    class: string
+    resource: OcdViewCoords
+}
+
 export class OcdDocument {
     design: OcdDesign
     selectedResource: OcdSelectedResource
-    constructor(design?: string | OcdDesign, resource?: OcdSelectedResource) {
+    dragResource: OcdDragResource
+    constructor(design?: string | OcdDesign, resource?: OcdSelectedResource, dragResource?: OcdDragResource) {
         if (typeof design === 'string' && design.length > 0) this.design = JSON.parse(design)
         else if (design instanceof Object) this.design = design
         else this.design = this.newDesign()
         this.selectedResource = resource ? resource : this.newSelectedResource()
+        this.dragResource = dragResource ? dragResource : this.newDragResource()
     }
 
     static new = () => new OcdDocument()
 
-    static clone = (ocdDocument:OcdDocument) => new OcdDocument(ocdDocument.design, ocdDocument.selectedResource)
+    static clone = (ocdDocument:OcdDocument) => new OcdDocument(ocdDocument.design, ocdDocument.selectedResource, ocdDocument.dragResource)
 
     newDesign = (): OcdDesign => OcdDesign.newDesign()
 
@@ -41,8 +52,21 @@ export class OcdDocument {
             class: 'ocd-image'
         }
     }
+    newDragResource(dragging:boolean=false): OcdDragResource {
+        return {
+            dragging: dragging,
+            modelId: '',
+            pageId: '',
+            coordsId: '',
+            class: 'ocd-image',
+            resource: this.newCoords()
+        }
+    }
     getSelectedResource = () => this.getResource(this.selectedResource.modelId)
     getSelectedResourceCoords = () => this.getCoords(this.selectedResource.coordsId)
+
+    getParentResource = () => this.getResource(this.dragResource.modelId)
+    getParentResourceCoords = () => this.getCoords(this.dragResource.coordsId)
 
     getOciResourceList(key: string) {return this.design.model.oci.resources[key] ? this.design.model.oci.resources[key] : []}
     getOciResources() {return Object.values(this.design.model.oci.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], [])}
@@ -139,6 +163,20 @@ export class OcdDocument {
         this.design.view.pages.forEach((p: OcdViewPage) => p.layers = p.layers.filter((l) => l.id !== id))
     }
 
+    newCoords = (): OcdViewCoords => {
+        return {
+            id: '',
+            pgid: '',
+            ocid: '',
+            pocid: '',
+            x: 0,
+            y: 0,
+            w: 0,
+            h: 0,
+            title: '',
+            class: ''
+        }
+    }
     getCoords = (id: string) => {return this.design.view.pages.map(p => p.coords).reduce((a, c) => [...a, ...c], []).find(c => c.id === id)}
     addCoords(coords: OcdViewCoords, viewId: string, pgid: string = '') {
         const view: OcdViewPage = this.getPage(viewId)
@@ -149,6 +187,7 @@ export class OcdDocument {
         view.coords = view.coords.filter(c => c !== coords)
     }
     updateCoords(coords: OcdViewCoords, viewId: string) {
+        console.info('Drop Parent Info', this.dragResource)
         const view: OcdViewPage = this.getPage(viewId)
         let oldCoords: OcdViewCoords | undefined = view.coords.find(c => c.id === coords.id)
         if (oldCoords) {

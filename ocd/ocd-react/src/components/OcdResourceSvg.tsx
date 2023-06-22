@@ -5,7 +5,7 @@
 */
 
 import { useState } from 'react'
-import OcdDocument, { OcdSelectedResource } from './OcdDocument'
+import OcdDocument, { OcdDragResource, OcdSelectedResource } from './OcdDocument'
 import { OcdViewCoords } from '../model/OcdDesign'
 import { ResourceRectProps, ResourceForeignObjectProps, ResourceSvgProps } from '../types/ReactComponentProperties'
 import { OcdViewPage } from '../model/OcdDesign'
@@ -56,7 +56,7 @@ const OcdContainerRect = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
         // setViewPage(structuredClone(ocdDocument.getPage(viewPage.id)))
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
-    console.info('Selected Resource', ocdDocument.selectedResource, 'Resource Id', resource.id)
+    // console.info('Selected Resource', ocdDocument.selectedResource, 'Resource Id', resource.id)
     return (
         <g>
             <rect className='ocd-svg-container' 
@@ -169,16 +169,26 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
     const [coordinates, setCoordinates] = useState({ x: 0, y: 0 });
     const [origin, setOrigin] = useState({ x: 0, y: 0 });
     const SvgRect = resource.container ? OcdContainerRect : OcdSimpleRect
-    const gX = resource.x + coordinates.x
-    const gY = resource.y + coordinates.y
-    const onResourceDragStart = (e: any) => {
-        e.stopPropagation()
+    // const gX = resource.x + coordinates.x
+    // const gY = resource.y + coordinates.y
+    const gX = resource.x
+    const gY = resource.y
+    const onResourceDragStart = (e: React.MouseEvent<SVGElement>) => {
+        console.info('Resource Drag Start', resource.ocid)
+        // e.stopPropagation()
         // Record Starting Point
         setOrigin({ x: e.clientX, y: e.clientY })
         setDragging(true)
-    }
-    const onResourceDrag = (e: any) => {
-        e.stopPropagation()
+        const dragResource: OcdDragResource = ocdDocument.newDragResource(true)
+        dragResource.modelId = resource.ocid
+        dragResource.pageId = ocdDocument.getActivePage().id
+        dragResource.coordsId = resource.id
+        dragResource.class = resource.class
+        dragResource.resource = resource
+        ocdDocument.dragResource = dragResource
+}
+    const onResourceDrag = (e: React.MouseEvent<SVGElement>) => {
+        // e.stopPropagation()
         if (dragging) {
             // Set state for the change in coordinates.
             setCoordinates({
@@ -187,30 +197,34 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
             })
         }
     }
-    const onResourceDragEnd = (e: any) => {
-        e.stopPropagation()
-        setDragging(false)
-        const page: OcdViewPage = ocdDocument.getActivePage()
-        const coords: OcdViewCoords = {
-            id: resource.id,
-            pgid: '',
-            ocid: '',
-            pocid: '',
-            x: resource.x + coordinates.x,
-            y: resource.y + coordinates.y,
-            w: resource.w,
-            h: resource.h,
-            title: '',
-            class: ''
+    const onResourceDragEnd = (e: React.MouseEvent<SVGElement>) => {
+        // e.stopPropagation()
+        if (dragging) {
+            setDragging(false)
+            const page: OcdViewPage = ocdDocument.getActivePage()
+            const coords: OcdViewCoords = {
+                id: resource.id,
+                pgid: '',
+                ocid: '',
+                pocid: '',
+                x: resource.x + coordinates.x,
+                y: resource.y + coordinates.y,
+                w: resource.w,
+                h: resource.h,
+                title: '',
+                class: ''
+            }
+            setCoordinates({ x: 0, y: 0 })
+            ocdDocument.updateCoords(coords, page.id)
+            // Remove Drag Resource
+            ocdDocument.dragResource = ocdDocument.newDragResource()
+        // Redraw
+            console.info('Design:', ocdDocument)
+            // setViewPage(structuredClone(ocdDocument.getPage(viewPage.id)))
+            setOcdDocument(OcdDocument.clone(ocdDocument))
         }
-        setCoordinates({ x: 0, y: 0 })
-        ocdDocument.updateCoords(coords, page.id)
-        // // Redraw
-        console.info('Design:', ocdDocument)
-        // setViewPage(structuredClone(ocdDocument.getPage(viewPage.id)))
-        setOcdDocument(OcdDocument.clone(ocdDocument))
     }
-    const onResourceClick = (e: any) => {
+    const onResourceClick = (e: React.MouseEvent<SVGElement>) => {
         console.info('Clicked', resource.id)
         const clone = OcdDocument.clone(ocdDocument)
         const selectedResource: OcdSelectedResource = {
@@ -221,6 +235,9 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
         }
         clone.selectedResource = selectedResource
         setOcdDocument(clone)
+    }
+    const onResourceRightClick = (e: React.MouseEvent<SVGElement>) => {
+        e.stopPropagation()
     }
     return (
         <g className='ocd-designer-resource' 
@@ -233,10 +250,11 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
             data-pocid={resource.pocid}
             transform={`translate(${gX}, ${gY})`}
             onMouseDown={onResourceDragStart}
-            onMouseMove={onResourceDrag}
-            onMouseUp={onResourceDragEnd}
-            onMouseLeave={onResourceDragEnd}
+            // onMouseMove={onResourceDrag}
+            // onMouseUp={onResourceDragEnd}
+            // onMouseLeave={onResourceDragEnd}
             onClick={onResourceClick}
+            onContextMenu={onResourceRightClick}
             >
                 <SvgRect 
                     ocdConsoleConfig={ocdConsoleConfig}
@@ -259,6 +277,102 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
                                 key={`${r.pgid}-${r.id}`}
                     />
                 })}
+        </g>
+    )
+}
+
+export const OcdDragResourceGhostSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resource }: ResourceSvgProps): JSX.Element => {
+    const SvgRect = resource.container ? OcdContainerRect : OcdSimpleRect
+    return (
+        <g className='ocd-drag-drag-ghost'
+            transform={`translate(0, 0)`}
+        >
+            <SvgRect 
+                ocdConsoleConfig={ocdConsoleConfig}
+                ocdDocument={ocdDocument}
+                setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)}
+                resource={resource}
+                />
+            <OcdForeignObject 
+                ocdConsoleConfig={ocdConsoleConfig}
+                ocdDocument={ocdDocument}
+                setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)}
+                resource={resource}
+                />
+            {resource.coords && resource.coords.map((r:any) => {
+                return <OcdResourceSvg
+                            ocdConsoleConfig={ocdConsoleConfig}
+                            ocdDocument={ocdDocument}
+                            setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)}
+                            resource={r}
+                            key={`${r.pgid}-${r.id}-ghost`}
+                />
+            })}
+        </g>
+    )
+}
+
+const OcdDragResourceGhostSvgOld = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resource }: ResourceSvgProps): JSX.Element => {
+    const [dragging, setDragging] = useState(false)
+    const [coordinates, setCoordinates] = useState({ x: 0, y: 0 });
+    const [origin, setOrigin] = useState({ x: 0, y: 0 });
+    const gX = resource.x + coordinates.x
+    const gY = resource.y + coordinates.y
+    const onResourceDragStart = (e: React.MouseEvent<SVGElement>) => {
+        e.stopPropagation()
+        // Record Starting Point
+        setOrigin({ x: e.clientX, y: e.clientY })
+        setDragging(true)
+    }
+    const onResourceDrag = (e: React.MouseEvent<SVGElement>) => {
+        e.stopPropagation()
+        if (dragging) {
+            // Set state for the change in coordinates.
+            setCoordinates({
+              x: e.clientX - origin.x,
+              y: e.clientY - origin.y,
+            })
+        }
+    }
+    const onResourceDragEnd = (e: React.MouseEvent<SVGElement>) => {
+        e.stopPropagation()
+        if (dragging) {
+            setDragging(false)
+            const page: OcdViewPage = ocdDocument.getActivePage()
+            const coords: OcdViewCoords = {
+                id: resource.id,
+                pgid: '',
+                ocid: '',
+                pocid: '',
+                x: resource.x + coordinates.x,
+                y: resource.y + coordinates.y,
+                w: resource.w,
+                h: resource.h,
+                title: '',
+                class: ''
+            }
+            setCoordinates({ x: 0, y: 0 })
+            ocdDocument.updateCoords(coords, page.id)
+            // // Redraw
+            console.info('Design:', ocdDocument)
+            // setViewPage(structuredClone(ocdDocument.getPage(viewPage.id)))
+            setOcdDocument(OcdDocument.clone(ocdDocument))
+        }
+    }
+    return (
+        <g className='ocd-drag-drag-ghost'
+            transform={`translate(${gX}, ${gY})`}
+            onMouseDown={onResourceDragStart}
+            onMouseMove={onResourceDrag}
+            onMouseUp={onResourceDragEnd}
+        >
+            <OcdResourceSvg
+                        ocdConsoleConfig={ocdConsoleConfig}
+                        ocdDocument={ocdDocument}
+                        setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)}
+                        resource={resource}
+                        key={`${resource.pgid}-${resource.id}-ghost`}
+            />
         </g>
     )
 }

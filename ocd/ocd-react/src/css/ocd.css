@@ -1059,6 +1059,12 @@ summary {
     background: transparent;
 }
 
+.ocd-drag-drag-ghost {
+    opacity: 0.5;
+    pointer-events: none;
+    fill: red;
+}
+
 
 
 
