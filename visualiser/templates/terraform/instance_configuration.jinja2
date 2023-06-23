@@ -53,7 +53,7 @@ resource "oci_core_instance_configuration" "{{ resource_name }}" {
 {% else %} {# Instance Compartment #}
             compartment_id = {{ compartment_id }}
 {% endif %} {# Instance Compartment #}
-{% if instance_details.launch_details.agent_config is defined and (instance_details.launch_details.agent_config.is_management_disabled is defined or instance_details.launch_details.agent_config.is_monitoring_disabled is defined) %} {# Agent Config #}
+{% if instance_details.launch_details.agent_config is defined and (instance_details.launch_details.agent_config.is_management_disabled is defined or instance_details.launch_details.agent_config.is_monitoring_disabled is defined) and deployment_platform != "pca" %} {# Agent Config #}
             agent_config {
                 # Optional
 {% if instance_details.launch_details.agent_config.is_management_disabled is defined %}

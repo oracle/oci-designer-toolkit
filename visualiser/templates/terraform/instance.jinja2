@@ -39,7 +39,7 @@ resource "oci_core_instance" "{{ resource_name }}" {
     # Optional
     display_name        = {{ display_name | safe }}
     availability_domain = data.oci_identity_availability_domains.AvailabilityDomains.availability_domains[{{ availability_domain | safe }} - 1]["name"]
-{% if agent_config is defined and (agent_config.is_management_disabled is defined or agent_config.is_monitoring_disabled is defined) %}
+{% if agent_config is defined and (agent_config.is_management_disabled is defined or agent_config.is_monitoring_disabled is defined) and deployment_platform != "pca" %}
     agent_config {
         # Optional
 {% if agent_config.is_management_disabled is defined %}
