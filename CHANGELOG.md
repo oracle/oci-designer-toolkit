@@ -1,6 +1,13 @@
 # Release Notes
 
 
+## Version 0.53.0
+**Release Date**: 12th July 2023
+### Features
+### Bug Fixes
+1. Remove agent_config from TF generated for PCA-X9 which does not support this.
+
+
 ## Version 0.52.0
 **Release Date**: 21st June 2023
 ### Features
