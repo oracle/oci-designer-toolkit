@@ -12,7 +12,7 @@ import { CanvasProps } from '../types/ReactComponentProperties'
 import { useState } from 'react'
 
 export const OcdCanvas = ({ dragData, ocdConsoleConfig, ocdDocument, setOcdDocument }: CanvasProps): JSX.Element => {
-    console.info('OcdCanvas: OCD Document:', ocdDocument)
+    // console.info('OcdCanvas: OCD Document:', ocdDocument)
     const [dragging, setDragging] = useState(false)
     const [coordinates, setCoordinates] = useState({ x: 0, y: 0 });
     const [ghostTranslate, setGhostTranslate] = useState({ x: 0, y: 0 });
@@ -30,27 +30,28 @@ export const OcdCanvas = ({ dragData, ocdConsoleConfig, ocdDocument, setOcdDocum
 
     const onDrop = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault()
-        const dropTarget = e.currentTarget as HTMLElement
-        console.info('Event:', e)
-        console.info('Target:', e.target)
-        console.info('Target:', e.currentTarget)
-        console.info('Target Attributes:', dropTarget.getAttributeNames())
+        // const dropTarget = e.currentTarget as HTMLElement
+        const dropTarget = e.target as HTMLElement
+        console.info('OcdCanvas: Event:', e)
+        console.info('OcdCanvas: Target:', e.target)
+        console.info('OcdCanvas: Current Target:', e.currentTarget)
+        console.info('OcdCanvas: Target Attributes:', dropTarget.getAttributeNames())
         // console.info('Target Attributes:', e.target.attributes)
         // Get Page
         const page: OcdViewPage = ocdDocument.getActivePage()
         const layer: OcdViewLayer = ocdDocument.getActiveLayer(page.id)
         const compartmentId: string = layer.id
-
-        // const pocid = e.target.attributes.ocid ? e.target.attributes.ocid.value : ''
-        // const pgid = e.target.attributes.gid ? e.target.attributes.gid.value : ''
-        const pocid: string = dropTarget.getAttribute('ocid') ? String(dropTarget.getAttribute('ocid')) : ''
-        const pgid: string = dropTarget.getAttribute('gid') ? String(dropTarget.getAttribute('gid')) : ''
+        const pocid = dropTarget.dataset.ocid ? dropTarget.dataset.ocid : ''
+        const pgid = dropTarget.dataset.gid ? dropTarget.dataset.gid : ''
+        console.info('OcdCanvas: Dataset', dropTarget.dataset)
+        console.info('OcdCanvas: pocid', dropTarget.dataset.ocid)
+        console.info('OcdCanvas: pgid', dropTarget.dataset.gid)
         const container = dragData.dragObject.container
         // Get drop Coordinates
         const svg = document.getElementById('canvas_root_svg')
         // @ts-ignore 
         const point = new DOMPoint(e.clientX - dragData.offset.x, e.clientY - dragData.offset.y)
-        console.info('Drop Point', point)
+        console.info('OcdCanvas: Drop Point', point)
         // @ts-ignore 
         const { x, y } =  point.matrixTransform(svg.getScreenCTM().inverse())
         console.info('x:', x, 'y:', y)
@@ -63,8 +64,8 @@ export const OcdCanvas = ({ dragData, ocdConsoleConfig, ocdDocument, setOcdDocum
             pocid: pocid,
             x: x,
             y: y,
-            w: dragData.dragObject.container ? 200 : 32,
-            h: dragData.dragObject.container ? 200 : 32,
+            w: container ? 200 : 32,
+            h: container ? 200 : 32,
             title: dragData.dragObject.title,
             class: dragData.dragObject.class,
             container: container
@@ -78,7 +79,7 @@ export const OcdCanvas = ({ dragData, ocdConsoleConfig, ocdDocument, setOcdDocum
             class: dragData.dragObject.class
         }
         // Redraw
-        console.info('Design:', ocdDocument)
+        console.info('OcdCanvas: Design:', ocdDocument)
         // const page: OcdViewPage = ocdDocument.getPage(viewPage.id)
         // setViewPage(structuredClone(page))
         setOcdDocument(OcdDocument.clone(ocdDocument))
@@ -87,7 +88,7 @@ export const OcdCanvas = ({ dragData, ocdConsoleConfig, ocdDocument, setOcdDocum
 
     const onSVGDragStart = (e: React.MouseEvent<SVGElement>) => {
         e.stopPropagation()
-        console.info('SVG Drag Start', ocdDocument.dragResource)
+        console.info('OcdCanvas: SVG Drag Start', ocdDocument.dragResource)
         if (ocdDocument.dragResource.dragging) {
             console.info('SVG Drag Start - Dragging')
             // Record Starting Point
@@ -99,7 +100,7 @@ export const OcdCanvas = ({ dragData, ocdConsoleConfig, ocdDocument, setOcdDocum
     const onSVGDrag = (e: React.MouseEvent<SVGElement>) => {
         e.stopPropagation()
         if (dragging) {
-            console.info('SVG Drag')
+            console.info('OcdCanvas: SVG Drag')
             // Set state for the change in coordinates.
             setCoordinates({
               x: e.clientX - origin.x,
@@ -109,17 +110,17 @@ export const OcdCanvas = ({ dragData, ocdConsoleConfig, ocdDocument, setOcdDocum
               x: ocdDocument.dragResource.resource.x + coordinates.x,
               y: ocdDocument.dragResource.resource.y + coordinates.y,
             })
-            // setGhostTranslate({
-            //   x: e.clientX - origin.x,
-            //   y: e.clientY - origin.y,
-            // })
         }
     }
     const onSVGDragEnd = (e: React.MouseEvent<SVGElement>) => {
         e.stopPropagation()
         if (dragging) {
-            console.info('SVG Drag End')
+            console.info('OcdCanvas: SVG Drag End', ocdDocument.dragResource)
             setDragging(false)
+            // Test if container dropped on self
+            if (ocdDocument.dragResource.parent && ocdDocument.dragResource.resource.id === ocdDocument.dragResource.parent.id) {
+                delete ocdDocument.dragResource.parent
+            }
             const page: OcdViewPage = ocdDocument.getActivePage()
             const coords: OcdViewCoords = {
                 id: resource.id,
@@ -136,8 +137,9 @@ export const OcdCanvas = ({ dragData, ocdConsoleConfig, ocdDocument, setOcdDocum
             setCoordinates({ x: 0, y: 0 })
             setGhostTranslate({ x: 0, y: 0 })
             ocdDocument.updateCoords(coords, page.id)
+            ocdDocument.dragResource = ocdDocument.newDragResource()
             // Redraw
-            console.info('Design:', ocdDocument)
+            // console.info('OcdCanvas: Design:', ocdDocument)
             // setViewPage(structuredClone(ocdDocument.getPage(viewPage.id)))
             setOcdDocument(OcdDocument.clone(ocdDocument))
         }

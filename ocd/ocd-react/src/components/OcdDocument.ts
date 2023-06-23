@@ -24,6 +24,7 @@ export interface OcdDragResource {
     coordsId: string
     class: string
     resource: OcdViewCoords
+    parent?: OcdViewCoords
 }
 
 export class OcdDocument {
@@ -187,7 +188,7 @@ export class OcdDocument {
         view.coords = view.coords.filter(c => c !== coords)
     }
     updateCoords(coords: OcdViewCoords, viewId: string) {
-        console.info('Drop Parent Info', this.dragResource)
+        console.info('Ocd Document: Drag Resource', this.dragResource)
         const view: OcdViewPage = this.getPage(viewId)
         let oldCoords: OcdViewCoords | undefined = view.coords.find(c => c.id === coords.id)
         if (oldCoords) {

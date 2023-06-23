@@ -239,6 +239,12 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
     const onResourceRightClick = (e: React.MouseEvent<SVGElement>) => {
         e.stopPropagation()
     }
+    const onResourceMouseUp = (e: React.MouseEvent<SVGElement>) => {
+        if (resource.container) {
+            console.info('>>>OcdResourceSvg: Mouse Up -> Container', resource.id)
+            ocdDocument.dragResource.parent = resource
+        }
+    }
     return (
         <g className='ocd-designer-resource' 
             id={resource.id} 
@@ -252,6 +258,7 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
             onMouseDown={onResourceDragStart}
             // onMouseMove={onResourceDrag}
             // onMouseUp={onResourceDragEnd}
+            onMouseUp={onResourceMouseUp}
             // onMouseLeave={onResourceDragEnd}
             onClick={onResourceClick}
             onContextMenu={onResourceRightClick}
