@@ -47,6 +47,11 @@ export interface OcdViewCoords {
     coords?: OcdViewCoords[]
 }
 
+export interface OcdViewPoint {
+    x: number,
+    y: number
+}
+
 export interface OcdViewLayer {
     id: string,
     class: string,

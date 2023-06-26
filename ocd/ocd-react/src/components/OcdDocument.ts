@@ -5,7 +5,7 @@
 
 import { v4 as uuidv4 } from 'uuid'
 import * as ociResources from '../model/provider/oci/resources'
-import { OcdDesign, OcdViewPage, OcdViewCoords, OcdViewLayer, OcdBaseModel } from '../model/OcdDesign'
+import { OcdDesign, OcdViewPage, OcdViewCoords, OcdViewLayer, OcdBaseModel, OcdViewPoint } from '../model/OcdDesign'
 import { PaletteResource } from '../model/OcdPalette'
 import { OcdResource } from '../model/OcdResource'
 import { OcdAutoLayout } from './OcdAutoLayout'
@@ -178,25 +178,88 @@ export class OcdDocument {
             class: ''
         }
     }
-    getCoords = (id: string) => {return this.design.view.pages.map(p => p.coords).reduce((a, c) => [...a, ...c], []).find(c => c.id === id)}
+    getCoords = (id: string) => {return this.design.view.pages.map(p => [...p.coords, ...this.getChildCoords(p.coords)]).reduce((a, c) => [...a, ...c], []).find(c => c.id === id)}
+    getChildCoords = (coords?: OcdViewCoords[]): OcdViewCoords[] => coords ? coords.reduce((a, c) => [...a, ...this.getChildCoords(c.coords)], coords) : []
+    getRelativeXY = (coords: OcdViewCoords): OcdViewPoint => {
+        console.info('OcdDocument: Get Relative XY for', coords.id, 'Parent', coords.pgid)
+        const parentCoords: OcdViewCoords | undefined = this.getCoords(coords.pgid)
+        let relativeXY: OcdViewPoint = {x: coords.x, y: coords.y}
+        if (parentCoords) {
+            console.info('OcdDocument: Parent', parentCoords)
+            const parentXY = this.getRelativeXY(parentCoords)
+            relativeXY.x += parentXY.x
+            relativeXY.y += parentXY.y
+        }
+        console.info('OcdDocument: Relative XY', relativeXY)
+        return relativeXY
+    }
     addCoords(coords: OcdViewCoords, viewId: string, pgid: string = '') {
         const view: OcdViewPage = this.getPage(viewId)
-        if (view) view.coords.push(coords)
+        console.info('OcdDocument: Check Relative Position', coords.id, this.getRelativeXY(coords))
+        if (view) {
+            if (pgid === '') view.coords.push(coords)
+            else {
+                const parent = this.getCoords(pgid)
+                // const relativeXY = this.getRelativeXY(parent ? parent : this.newCoords())
+                // coords.x -= relativeXY.x
+                // coords.y -= relativeXY.y
+                this.setCoordsRelativeToParent(coords)
+                if (parent && parent.coords) parent.coords.push(coords)
+                else if (parent) parent.coords = [coords]
+            }
+        }
     }
     removeCoords(coords: OcdViewCoords, viewId: string, pgid: string = '') {
         const view: OcdViewPage = this.getPage(viewId)
-        view.coords = view.coords.filter(c => c !== coords)
+        if (view) {
+            if (pgid === '') view.coords = view.coords.filter(c => c !== coords)
+            else {
+                const parent = this.getCoords(pgid)
+                if (parent && parent.coords) parent.coords = parent.coords.filter(c => c !== coords)
+            }
+        }
     }
     updateCoords(coords: OcdViewCoords, viewId: string) {
-        console.info('Ocd Document: Drag Resource', this.dragResource)
-        const view: OcdViewPage = this.getPage(viewId)
-        let oldCoords: OcdViewCoords | undefined = view.coords.find(c => c.id === coords.id)
-        if (oldCoords) {
-            oldCoords.x = coords.x
-            oldCoords.y = coords.y
-            oldCoords.w = coords.w
-            oldCoords.h = coords.h
+        console.info('Ocd Document: Update Coords', coords)
+        console.info('Ocd Document: Update Coords', this.dragResource)
+        // const view: OcdViewPage = this.getPage(viewId)
+        // let currentCoords: OcdViewCoords | undefined = view.coords.find(c => c.id === coords.id)
+        let currentCoords: OcdViewCoords | undefined = this.getCoords(coords.id)
+        console.info('Ocd Document: Update Coords Current', currentCoords)
+        if (currentCoords) {
+            currentCoords.w = coords.w
+            currentCoords.h = coords.h
+            if (currentCoords.pgid === coords.pgid) {
+                currentCoords.x = coords.x
+                currentCoords.y = coords.y
+            } else {
+                const parent = this.getCoords(currentCoords.pgid)
+                // const relativeXY = this.getRelativeXY(parent ? parent : this.newCoords())
+                this.removeCoords(currentCoords, viewId, currentCoords.pgid)
+                // Reset relative to SVG Canvas
+                currentCoords.x = coords.x
+                currentCoords.y = coords.y
+                // currentCoords.x = coords.x + relativeXY.x
+                // currentCoords.y = coords.y + relativeXY.y
+                this.setCoordsRelativeToCanvas(currentCoords)
+                // Update Parent
+                currentCoords.pgid = coords.pgid
+                currentCoords.pocid = coords.pocid
+                this.addCoords(currentCoords, viewId, coords.pgid)
+            }
         }
+    }
+    setCoordsRelativeToCanvas = (coords: OcdViewCoords) => {
+        const parent = this.getCoords(coords.pgid)
+        const relativeXY = this.getRelativeXY(parent ? parent : this.newCoords())
+        coords.x += relativeXY.x
+        coords.y += relativeXY.y
+    }
+    setCoordsRelativeToParent = (coords: OcdViewCoords) => {
+        const parent = this.getCoords(coords.pgid)
+        const relativeXY = this.getRelativeXY(parent ? parent : this.newCoords())
+        coords.x -= relativeXY.x
+        coords.y -= relativeXY.y
     }
     switchCoords = (coords: OcdViewCoords[], idx1: number, idx2: number) => [coords[idx1], coords[idx2]] = [coords[idx2], coords[idx1]]
     bringForward = (viewId: string, coordsId: string) => {

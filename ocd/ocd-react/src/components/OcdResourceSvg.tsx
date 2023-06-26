@@ -174,19 +174,22 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
     const gX = resource.x
     const gY = resource.y
     const onResourceDragStart = (e: React.MouseEvent<SVGElement>) => {
-        console.info('Resource Drag Start', resource.ocid)
-        // e.stopPropagation()
-        // Record Starting Point
-        setOrigin({ x: e.clientX, y: e.clientY })
-        setDragging(true)
-        const dragResource: OcdDragResource = ocdDocument.newDragResource(true)
-        dragResource.modelId = resource.ocid
-        dragResource.pageId = ocdDocument.getActivePage().id
-        dragResource.coordsId = resource.id
-        dragResource.class = resource.class
-        dragResource.resource = resource
-        ocdDocument.dragResource = dragResource
-}
+        if (!ocdDocument.dragResource.dragging) {
+            console.info('OcdResourceSvg: Resource Drag Start', resource.ocid)
+            // e.stopPropagation()
+            // Record Starting Point
+            setOrigin({ x: e.clientX, y: e.clientY })
+            setDragging(true)
+            const dragResource: OcdDragResource = ocdDocument.newDragResource(true)
+            dragResource.modelId = resource.ocid
+            dragResource.pageId = ocdDocument.getActivePage().id
+            dragResource.coordsId = resource.id
+            dragResource.class = resource.class
+            dragResource.resource = resource
+            ocdDocument.dragResource = dragResource
+        } else console.info('OcdResourceSvg: Resource Drag Start - Currently Dragging Child', resource.ocid)
+        e.preventDefault()
+    }
     const onResourceDrag = (e: React.MouseEvent<SVGElement>) => {
         // e.stopPropagation()
         if (dragging) {
@@ -226,6 +229,7 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
     }
     const onResourceClick = (e: React.MouseEvent<SVGElement>) => {
         console.info('Clicked', resource.id)
+        e.stopPropagation()
         const clone = OcdDocument.clone(ocdDocument)
         const selectedResource: OcdSelectedResource = {
             modelId: resource.ocid,
@@ -244,6 +248,13 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
             console.info('>>>OcdResourceSvg: Mouse Up -> Container', resource.id)
             ocdDocument.dragResource.parent = resource
         }
+        e.preventDefault()
+    }
+    const onResourceMouseMoveEnterLeave = (e: React.MouseEvent<SVGElement>) => {
+        if (resource.container) {
+            console.info('>>>OcdResourceSvg: Mouse Move/Enter/Leave -> Container', resource.id)
+            e.preventDefault()
+        }
     }
     return (
         <g className='ocd-designer-resource' 
@@ -256,9 +267,12 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
             data-pocid={resource.pocid}
             transform={`translate(${gX}, ${gY})`}
             onMouseDown={onResourceDragStart}
+            onMouseMove={onResourceMouseMoveEnterLeave}
             // onMouseMove={onResourceDrag}
             // onMouseUp={onResourceDragEnd}
             onMouseUp={onResourceMouseUp}
+            onMouseEnter={onResourceMouseMoveEnterLeave}
+            onMouseLeave={onResourceMouseMoveEnterLeave}
             // onMouseLeave={onResourceDragEnd}
             onClick={onResourceClick}
             onContextMenu={onResourceRightClick}
@@ -315,71 +329,6 @@ export const OcdDragResourceGhostSvg = ({ ocdConsoleConfig, ocdDocument, setOcdD
                             key={`${r.pgid}-${r.id}-ghost`}
                 />
             })}
-        </g>
-    )
-}
-
-const OcdDragResourceGhostSvgOld = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resource }: ResourceSvgProps): JSX.Element => {
-    const [dragging, setDragging] = useState(false)
-    const [coordinates, setCoordinates] = useState({ x: 0, y: 0 });
-    const [origin, setOrigin] = useState({ x: 0, y: 0 });
-    const gX = resource.x + coordinates.x
-    const gY = resource.y + coordinates.y
-    const onResourceDragStart = (e: React.MouseEvent<SVGElement>) => {
-        e.stopPropagation()
-        // Record Starting Point
-        setOrigin({ x: e.clientX, y: e.clientY })
-        setDragging(true)
-    }
-    const onResourceDrag = (e: React.MouseEvent<SVGElement>) => {
-        e.stopPropagation()
-        if (dragging) {
-            // Set state for the change in coordinates.
-            setCoordinates({
-              x: e.clientX - origin.x,
-              y: e.clientY - origin.y,
-            })
-        }
-    }
-    const onResourceDragEnd = (e: React.MouseEvent<SVGElement>) => {
-        e.stopPropagation()
-        if (dragging) {
-            setDragging(false)
-            const page: OcdViewPage = ocdDocument.getActivePage()
-            const coords: OcdViewCoords = {
-                id: resource.id,
-                pgid: '',
-                ocid: '',
-                pocid: '',
-                x: resource.x + coordinates.x,
-                y: resource.y + coordinates.y,
-                w: resource.w,
-                h: resource.h,
-                title: '',
-                class: ''
-            }
-            setCoordinates({ x: 0, y: 0 })
-            ocdDocument.updateCoords(coords, page.id)
-            // // Redraw
-            console.info('Design:', ocdDocument)
-            // setViewPage(structuredClone(ocdDocument.getPage(viewPage.id)))
-            setOcdDocument(OcdDocument.clone(ocdDocument))
-        }
-    }
-    return (
-        <g className='ocd-drag-drag-ghost'
-            transform={`translate(${gX}, ${gY})`}
-            onMouseDown={onResourceDragStart}
-            onMouseMove={onResourceDrag}
-            onMouseUp={onResourceDragEnd}
-        >
-            <OcdResourceSvg
-                        ocdConsoleConfig={ocdConsoleConfig}
-                        ocdDocument={ocdDocument}
-                        setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)}
-                        resource={resource}
-                        key={`${resource.pgid}-${resource.id}-ghost`}
-            />
         </g>
     )
 }

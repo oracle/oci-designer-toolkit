@@ -57,20 +57,19 @@ export const OcdCanvas = ({ dragData, ocdConsoleConfig, ocdDocument, setOcdDocum
         console.info('x:', x, 'y:', y)
         // Add to OCD Model/View
         const modelResource: OcdResource = dragData.existingResource ? dragData.resource : ocdDocument.addResource(dragData.dragObject, compartmentId)
-        const coords: OcdViewCoords = {
-            id: uuid(),
-            pgid: pgid,
-            ocid: modelResource.id,
-            pocid: pocid,
-            x: x,
-            y: y,
-            w: container ? 200 : 32,
-            h: container ? 200 : 32,
-            title: dragData.dragObject.title,
-            class: dragData.dragObject.class,
-            container: container
-        }
-        ocdDocument.addCoords(coords, page.id)
+        const coords: OcdViewCoords = ocdDocument.newCoords()
+        coords.id = uuid()
+        coords.pgid = pgid
+        coords.ocid = modelResource.id
+        coords.pocid = pocid
+        coords.x = x
+        coords.y = y
+        coords.w = container ? 200 : 32
+        coords.h = container ? 200 : 32
+        coords.title = dragData.dragObject.title
+        coords.class = dragData.dragObject.class
+        coords.container = container
+        ocdDocument.addCoords(coords, page.id, pgid)
         // Set as selected
         ocdDocument.selectedResource = {
             modelId: modelResource.id,
@@ -91,9 +90,11 @@ export const OcdCanvas = ({ dragData, ocdConsoleConfig, ocdDocument, setOcdDocum
         console.info('OcdCanvas: SVG Drag Start', ocdDocument.dragResource)
         if (ocdDocument.dragResource.dragging) {
             console.info('SVG Drag Start - Dragging')
+            const ghostXY = ocdDocument.getRelativeXY(ocdDocument.dragResource.resource)
             // Record Starting Point
             setOrigin({ x: e.clientX, y: e.clientY })
-            setGhostTranslate({x: ocdDocument.dragResource.resource.x, y: ocdDocument.dragResource.resource.y})
+            // setGhostTranslate({x: ocdDocument.dragResource.resource.x, y: ocdDocument.dragResource.resource.y})
+            setGhostTranslate({x: ghostXY.x, y: ghostXY.y})
             setDragging(true)
         }
     }
@@ -101,15 +102,20 @@ export const OcdCanvas = ({ dragData, ocdConsoleConfig, ocdDocument, setOcdDocum
         e.stopPropagation()
         if (dragging) {
             console.info('OcdCanvas: SVG Drag')
+            const ghostXY = ocdDocument.getRelativeXY(ocdDocument.dragResource.resource)
             // Set state for the change in coordinates.
             setCoordinates({
               x: e.clientX - origin.x,
               y: e.clientY - origin.y,
             })
             setGhostTranslate({
-              x: ocdDocument.dragResource.resource.x + coordinates.x,
-              y: ocdDocument.dragResource.resource.y + coordinates.y,
+              x: ghostXY.x + coordinates.x,
+              y: ghostXY.y + coordinates.y,
             })
+            // setGhostTranslate({
+            //   x: ocdDocument.dragResource.resource.x + coordinates.x,
+            //   y: ocdDocument.dragResource.resource.y + coordinates.y,
+            // })
         }
     }
     const onSVGDragEnd = (e: React.MouseEvent<SVGElement>) => {
@@ -122,17 +128,15 @@ export const OcdCanvas = ({ dragData, ocdConsoleConfig, ocdDocument, setOcdDocum
                 delete ocdDocument.dragResource.parent
             }
             const page: OcdViewPage = ocdDocument.getActivePage()
-            const coords: OcdViewCoords = {
-                id: resource.id,
-                pgid: '',
-                ocid: '',
-                pocid: '',
-                x: resource.x + coordinates.x,
-                y: resource.y + coordinates.y,
-                w: resource.w,
-                h: resource.h,
-                title: '',
-                class: ''
+            const coords: OcdViewCoords = ocdDocument.newCoords()
+            coords.id = resource.id
+            coords.x = resource.x + coordinates.x
+            coords.y = resource.y + coordinates.y
+            coords.w = resource.w
+            coords.h = resource.h
+            if (ocdDocument.dragResource.parent) {
+                coords.pgid = ocdDocument.dragResource.parent.id
+                coords.pocid = ocdDocument.dragResource.parent.ocid    
             }
             setCoordinates({ x: 0, y: 0 })
             setGhostTranslate({ x: 0, y: 0 })
