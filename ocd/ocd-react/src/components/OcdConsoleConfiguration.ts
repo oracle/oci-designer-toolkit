@@ -4,7 +4,8 @@
 */
 
 export interface OcdConsoleConfiguration {
-    // showModelPalette: boolean,
+    showPalette: boolean,
+    showModelPalette: boolean,
     showProvidersPalette: string[],
     verboseProviderPalette: boolean,
     displayPage: 'bom' | 'designer' | 'markdown' | 'tabular' | 'terraform' | 'variables',
@@ -25,7 +26,8 @@ export class OcdConsoleConfig {
 
     newConsoleConfiguration = (): OcdConsoleConfiguration => {
         return {
-            // showModelPalette: true,
+            showPalette: true,
+            showModelPalette: true,
             showProvidersPalette: ['oci'],
             verboseProviderPalette: false,
             displayPage: 'designer',

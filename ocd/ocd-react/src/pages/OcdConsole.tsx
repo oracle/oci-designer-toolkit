@@ -73,6 +73,14 @@ const OcdConsoleConfigEditor = ({ ocdConsoleConfig, setOcdConsoleConfig }: any):
     //     ocdConsoleConfig.config.showModelPalette = !ocdConsoleConfig.config.showModelPalette
     //     setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
     // }
+    const showPaletteOnChange = () => {
+        ocdConsoleConfig.config.showPalette = !ocdConsoleConfig.config.showPalette
+        setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+    }
+    const showPropertiesOnChange = () => {
+        ocdConsoleConfig.config.showProperties = !ocdConsoleConfig.config.showProperties
+        setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+    }
     return (
         <div className='ocd-console-toolbar-dropdown'>
             <ul>
@@ -80,8 +88,9 @@ const OcdConsoleConfigEditor = ({ ocdConsoleConfig, setOcdConsoleConfig }: any):
                     <div className='left-palette ocd-console-toolbar-icon'></div>
                     <ul className={`${dropdown ? 'show' : 'hidden'}`}>
                         <li className='ocd-dropdown-menu-item'><div><input id='detailedResource' type='checkbox' onChange={detailedResourceOnChange} ref={cbRef} checked={ocdConsoleConfig.config.detailedResource}/>Resource Details</div></li>
+                        <li className='ocd-dropdown-menu-item'><div><input id='showMPalette' type='checkbox' onChange={showPaletteOnChange} ref={cbRef} checked={ocdConsoleConfig.config.showPalette}/>Display Palette</div></li>
                         <li className='ocd-dropdown-menu-item'><div><input id='verboseProviderPalette' type='checkbox' onChange={verboseProviderPaletteOnChange} ref={cbRef} checked={ocdConsoleConfig.config.verboseProviderPalette}/>Verbose Palette</div></li>
-                        {/* <li className='ocd-dropdown-menu-item'><div><input id='showModelPalette' type='checkbox' onChange={showModelPaletteOnChange} ref={cbRef} checked={ocdConsoleConfig.config.showModelPalette}/>Model Palette</div></li> */}
+                        <li className='ocd-dropdown-menu-item'><div><input id='showProperties' type='checkbox' onChange={showPropertiesOnChange} ref={cbRef} checked={ocdConsoleConfig.config.showProperties}/>Display Properties</div></li>
                     </ul>
                 </li>
             </ul>

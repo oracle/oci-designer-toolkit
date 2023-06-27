@@ -200,9 +200,6 @@ export class OcdDocument {
             if (pgid === '') view.coords.push(coords)
             else {
                 const parent = this.getCoords(pgid)
-                // const relativeXY = this.getRelativeXY(parent ? parent : this.newCoords())
-                // coords.x -= relativeXY.x
-                // coords.y -= relativeXY.y
                 this.setCoordsRelativeToParent(coords)
                 if (parent && parent.coords) parent.coords.push(coords)
                 else if (parent) parent.coords = [coords]
@@ -222,8 +219,6 @@ export class OcdDocument {
     updateCoords(coords: OcdViewCoords, viewId: string) {
         console.info('Ocd Document: Update Coords', coords)
         console.info('Ocd Document: Update Coords', this.dragResource)
-        // const view: OcdViewPage = this.getPage(viewId)
-        // let currentCoords: OcdViewCoords | undefined = view.coords.find(c => c.id === coords.id)
         let currentCoords: OcdViewCoords | undefined = this.getCoords(coords.id)
         console.info('Ocd Document: Update Coords Current', currentCoords)
         if (currentCoords) {
@@ -233,14 +228,10 @@ export class OcdDocument {
                 currentCoords.x = coords.x
                 currentCoords.y = coords.y
             } else {
-                const parent = this.getCoords(currentCoords.pgid)
-                // const relativeXY = this.getRelativeXY(parent ? parent : this.newCoords())
                 this.removeCoords(currentCoords, viewId, currentCoords.pgid)
                 // Reset relative to SVG Canvas
                 currentCoords.x = coords.x
                 currentCoords.y = coords.y
-                // currentCoords.x = coords.x + relativeXY.x
-                // currentCoords.y = coords.y + relativeXY.y
                 this.setCoordsRelativeToCanvas(currentCoords)
                 // Update Parent
                 currentCoords.pgid = coords.pgid
@@ -262,31 +253,47 @@ export class OcdDocument {
         coords.y -= relativeXY.y
     }
     switchCoords = (coords: OcdViewCoords[], idx1: number, idx2: number) => [coords[idx1], coords[idx2]] = [coords[idx2], coords[idx1]]
-    bringForward = (viewId: string, coordsId: string) => {
+    bringForward = (coords: OcdViewCoords, viewId: string) => {
         const page = this.getPage(viewId)
-        if (page && coordsId !== '') {
-            const idx = page.coords.findIndex(c => c.id === coordsId)
+        const parent = this.getCoords(coords.pgid)
+        if (parent && parent.coords) {
+            const idx = parent.coords.findIndex(c => c.id === coords.id)
+            if (idx < parent.coords.length - 1) this.switchCoords(parent.coords, idx, idx + 1)
+        } else if (page) {
+            const idx = page.coords.findIndex(c => c.id === coords.id)
             if (idx < page.coords.length - 1) this.switchCoords(page.coords, idx, idx + 1)
         }
     }
-    sendBackward = (viewId: string, coordsId: string) => {
+    sendBackward = (coords: OcdViewCoords, viewId: string) => {
         const page = this.getPage(viewId)
-        if (page && coordsId !== '') {
-            const idx = page.coords.findIndex(c => c.id === coordsId)
+        const parent = this.getCoords(coords.pgid)
+        if (parent && parent.coords) {
+            const idx = parent.coords.findIndex(c => c.id === coords.id)
+            if (idx > 0) this.switchCoords(parent.coords, idx, idx - 1)
+        } else if (page) {
+            const idx = page.coords.findIndex(c => c.id === coords.id)
             if (idx > 0) this.switchCoords(page.coords, idx, idx - 1)
         }
     }
-    toFront = (viewId: string, coordsId: string) => {
+    toFront = (coords: OcdViewCoords, viewId: string) => {
         const page = this.getPage(viewId)
-        if (page && coordsId !== '') {
-            const idx = page.coords.findIndex(c => c.id === coordsId)
+        const parent = this.getCoords(coords.pgid)
+        if (parent && parent.coords) {
+            const idx = parent.coords.findIndex(c => c.id === coords.id)
+            parent.coords = [...parent.coords.slice(0, idx), ...parent.coords.slice(idx + 1), parent.coords[idx]]
+        } else if (page) {
+            const idx = page.coords.findIndex(c => c.id === coords.id)
             page.coords = [...page.coords.slice(0, idx), ...page.coords.slice(idx + 1), page.coords[idx]]
         }
     }
-    toBack = (viewId: string, coordsId: string) => {
+    toBack = (coords: OcdViewCoords, viewId: string) => {
         const page = this.getPage(viewId)
-        if (page && coordsId !== '') {
-            const idx = page.coords.findIndex(c => c.id === coordsId)
+        const parent = this.getCoords(coords.pgid)
+        if (parent && parent.coords) {
+            const idx = parent.coords.findIndex(c => c.id === coords.id)
+            parent.coords = [parent.coords[idx], ...parent.coords.slice(0, idx), ...parent.coords.slice(idx + 1)]
+        } else if (page) {
+            const idx = page.coords.findIndex(c => c.id === coords.id)
             page.coords = [page.coords[idx], ...page.coords.slice(0, idx), ...page.coords.slice(idx + 1)]
         }
     }

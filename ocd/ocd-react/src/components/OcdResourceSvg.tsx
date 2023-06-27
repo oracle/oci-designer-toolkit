@@ -11,6 +11,14 @@ import { ResourceRectProps, ResourceForeignObjectProps, ResourceSvgProps } from 
 import { OcdViewPage } from '../model/OcdDesign'
 import { OcdUtils } from '../utils/OcdUtils'
 
+const OcdSvgContextMenu = (): JSX.Element => {
+    return (
+        <div>
+
+        </div>
+    )
+}
+
 const OcdSimpleRect = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resource }: ResourceRectProps): JSX.Element => {
     const id = `${resource.id}-rect`
     const rectClass = `ocd-svg-simple ${ocdConsoleConfig.config.detailedResource ? 'ocd-svg-resource-detailed' : 'ocd-svg-resource-simple'}`
@@ -165,6 +173,7 @@ const OcdForeignObject = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
 }
 
 export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resource }: ResourceSvgProps): JSX.Element => {
+    const [showContextMenu, setShowContextMenu] = useState({show: false, x: 0, y: 0})
     const [dragging, setDragging] = useState(false)
     const [coordinates, setCoordinates] = useState({ x: 0, y: 0 });
     const [origin, setOrigin] = useState({ x: 0, y: 0 });
@@ -242,6 +251,7 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
     }
     const onResourceRightClick = (e: React.MouseEvent<SVGElement>) => {
         e.stopPropagation()
+        setShowContextMenu({show: true, x: e.clientX, y: e.clientY })
     }
     const onResourceMouseUp = (e: React.MouseEvent<SVGElement>) => {
         if (resource.container) {

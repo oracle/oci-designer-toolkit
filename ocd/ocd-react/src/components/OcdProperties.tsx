@@ -86,7 +86,8 @@ const OcdResourceArrangement = ({ocdDocument, setOcdDocument}: DesignerResourceP
     const page: OcdViewPage = ocdDocument.getActivePage()
     // console.info('Selected Resource', selectedResource)
     // @ts-ignore
-    const coords = ocdDocument.design.view.pages.find((p => p.selected)).coords.find(c => c.id === selectedResource.coordsId)
+    // const coords = ocdDocument.design.view.pages.find((p => p.selected)).coords.find(c => c.id === selectedResource.coordsId)
+    const coords = ocdDocument.getCoords(selectedResource.coordsId)
     const coordsId = coords ? coords.id : ''
     const width = coords ? coords.w : 0
     const height = coords ? coords.h : 0
@@ -115,19 +116,19 @@ const OcdResourceArrangement = ({ocdDocument, setOcdDocument}: DesignerResourceP
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
     const toFrontClick = () => {
-        ocdDocument.toFront(page.id, coordsId)
+        if (coords) {ocdDocument.toFront(coords, page.id)}
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
     const toBackClick = () => {
-        ocdDocument.toBack(page.id, coordsId)
+        if (coords) {ocdDocument.toBack(coords, page.id)}
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
     const bringForwardClick = () => {
-        ocdDocument.bringForward(page.id, coordsId)
+        if (coords) {ocdDocument.bringForward(coords, page.id)}
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
     const sendBackwardClick = () => {
-        ocdDocument.sendBackward(page.id, coordsId)
+        if (coords) {ocdDocument.sendBackward(coords, page.id)}
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
     return (

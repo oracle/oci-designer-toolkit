@@ -39,21 +39,21 @@ const OcdDesigner = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOc
     const [dragData, setDragData] = useState(newDragData())
     return (
         <div className='ocd-designer'>
-            <OcdPalette 
+            {ocdConsoleConfig.config.showPalette && <OcdPalette 
                 ocdConsoleConfig={ocdConsoleConfig}
                 setDragData={(dragData: any) => setDragData(dragData)} 
                 ocdDocument={ocdDocument} 
-                />
+                />}
             <OcdCanvasView 
                 dragData={dragData} 
                 ocdConsoleConfig={ocdConsoleConfig}
                 ocdDocument={ocdDocument} 
                 setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} 
                 />
-            <OcdProperties 
+            {ocdConsoleConfig.config.showProperties && <OcdProperties 
                 ocdDocument={ocdDocument} 
                 setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} 
-            />
+                />}
         </div>
     )
 }
