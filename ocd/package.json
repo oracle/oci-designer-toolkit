@@ -22,7 +22,7 @@
         "web": "cd ocd-react && npm run start",
         "desktop": "cd ocd-react && npm run electron-release-pack",
         "linux-desktop": "cd ocd-react && npm run electron-linux-pack",
-        "macos-desktop": "cd ocd-react && npm run electron-linux-pack",
-        "win-desktop": "cd ocd-react && npm run electron-linux-pack"
+        "macos-desktop": "cd ocd-react && npm run electron-macos-pack",
+        "win-desktop": "cd ocd-react && npm run electron-win-pack"
     }
 }
