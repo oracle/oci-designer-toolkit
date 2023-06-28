@@ -325,28 +325,40 @@ export const menuItems = [
             {
                 label: 'To Front',
                 click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
-                    ocdDocument.toFront(ocdDocument.selectedResource.pageId, ocdDocument.selectedResource.coordsId)
+                    const coords = ocdDocument.getCoords(ocdDocument.selectedResource.coordsId)
+                    const page = ocdDocument.getPage(ocdDocument.selectedResource.pageId)
+                    if (coords) {ocdDocument.toFront(coords, page.id)}
+                    // ocdDocument.toFront(ocdDocument.selectedResource.pageId, ocdDocument.selectedResource.coordsId)
                     setOcdDocument(OcdDocument.clone(ocdDocument))            
                 }
             },
             {
                 label: 'To Back',
                 click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
-                    ocdDocument.toBack(ocdDocument.selectedResource.pageId, ocdDocument.selectedResource.coordsId)
+                    const coords = ocdDocument.getCoords(ocdDocument.selectedResource.coordsId)
+                    const page = ocdDocument.getPage(ocdDocument.selectedResource.pageId)
+                    if (coords) {ocdDocument.toBack(coords, page.id)}
+                    // ocdDocument.toBack(ocdDocument.selectedResource.pageId, ocdDocument.selectedResource.coordsId)
                     setOcdDocument(OcdDocument.clone(ocdDocument))            
                 }
             },
             {
                 label: 'Bring Forward',
                 click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
-                    ocdDocument.bringForward(ocdDocument.selectedResource.pageId, ocdDocument.selectedResource.coordsId)
+                    const coords = ocdDocument.getCoords(ocdDocument.selectedResource.coordsId)
+                    const page = ocdDocument.getPage(ocdDocument.selectedResource.pageId)
+                    if (coords) {ocdDocument.bringForward(coords, page.id)}
+                    // ocdDocument.bringForward(ocdDocument.selectedResource.pageId, ocdDocument.selectedResource.coordsId)
                     setOcdDocument(OcdDocument.clone(ocdDocument))            
                 }
             },
             {
                 label: 'Send Backward',
                 click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
-                    ocdDocument.sendBackward(ocdDocument.selectedResource.pageId, ocdDocument.selectedResource.coordsId)
+                    const coords = ocdDocument.getCoords(ocdDocument.selectedResource.coordsId)
+                    const page = ocdDocument.getPage(ocdDocument.selectedResource.pageId)
+                    if (coords) {ocdDocument.sendBackward(coords, page.id)}
+                    // ocdDocument.sendBackward(ocdDocument.selectedResource.pageId, ocdDocument.selectedResource.coordsId)
                     setOcdDocument(OcdDocument.clone(ocdDocument))            
                 }
             },

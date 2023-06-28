@@ -13,20 +13,41 @@ import { OcdUtils } from '../utils/OcdUtils'
 
 const OcdSvgContextMenu = ({ contextMenu, setContextMenu }: any): JSX.Element => {
     console.info('OcdResourceSvg: OcdSvgContextMenu')
+    const onMouseLeave = (e: React.MouseEvent<SVGElement>) => {
+        console.info('OcdResourceSvg: Context OnMouseLeave')
+        setContextMenu({show: false, x: 0, y: 0})
+    }
+    const onClick = (e: React.MouseEvent<SVGElement>) => {
+        e.stopPropagation()
+    }
+    const onRemoveClick = (e: React.MouseEvent<HTMLElement>) => {}
+    const onDeleteClick = (e: React.MouseEvent<HTMLElement>) => {}
+    const onCloneClick = (e: React.MouseEvent<HTMLElement>) => {}
+    const onToFrontClick = (e: React.MouseEvent<HTMLElement>) => {}
+    const onToBackClick = (e: React.MouseEvent<HTMLElement>) => {}
+    const onBringForwardClick = (e: React.MouseEvent<HTMLElement>) => {}
+    const onSendBackwardClick = (e: React.MouseEvent<HTMLElement>) => {}
     return (
         <g 
         transform={`translate(${contextMenu.x}, ${contextMenu.y})`}
+        onMouseLeave={onMouseLeave}
+        onClick={onClick}
         >
-            <foreignObject className='ocd-svg-context-menu'
-                id='svg_context_menu' 
-                width='200'
-                height='100'
-                >
-                <div className='ocd-context-menu'
+            <foreignObject className='ocd-svg-context-menu' id='svg_context_menu'>
+                <div
                 // @ts-ignore 
                 xmlns='http://www.w3.org/1999/xhtml'>
-                    <div className='ocd-svg-context-menu-item'>Remove From Page</div>
-                    <div className='ocd-svg-context-menu-item'>Delete</div>
+                    <ul className='ocd-context-menu'>
+                        <li className='ocd-svg-context-menu-item'><a href='#' onClick={onRemoveClick}>Remove From Page</a></li>
+                        <li className='ocd-svg-context-menu-item'><a href='#' onClick={onDeleteClick}>Delete</a></li>
+                        <li><hr/></li>
+                        <li className='ocd-svg-context-menu-item'><a href='#' onClick={onCloneClick}>Clone</a></li>
+                        <li><hr/></li>
+                        <li className='ocd-svg-context-menu-item'><a href='#' onClick={onToFrontClick}>To Front</a></li>
+                        <li className='ocd-svg-context-menu-item'><a href='#' onClick={onToBackClick}>To Back</a></li>
+                        <li className='ocd-svg-context-menu-item'><a href='#' onClick={onBringForwardClick}>Bring Forward</a></li>
+                        <li className='ocd-svg-context-menu-item'><a href='#' onClick={onSendBackwardClick}>Send Backward</a></li>
+                    </ul>
                 </div>
             </foreignObject>
         </g>
