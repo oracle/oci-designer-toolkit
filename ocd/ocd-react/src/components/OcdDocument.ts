@@ -200,7 +200,7 @@ export class OcdDocument {
             if (pgid === '') view.coords.push(coords)
             else {
                 const parent = this.getCoords(pgid)
-                this.setCoordsRelativeToParent(coords)
+                this.setCoordsRelativeToResource(coords)
                 if (parent && parent.coords) parent.coords.push(coords)
                 else if (parent) parent.coords = [coords]
             }
@@ -246,11 +246,13 @@ export class OcdDocument {
         coords.x += relativeXY.x
         coords.y += relativeXY.y
     }
-    setCoordsRelativeToParent = (coords: OcdViewCoords) => {
+    setCoordsRelativeToResource = (coords: OcdViewCoords) => {
+        console.info('OcdDocument setCoordsRelativeToResource', coords)
         const parent = this.getCoords(coords.pgid)
         const relativeXY = this.getRelativeXY(parent ? parent : this.newCoords())
         coords.x -= relativeXY.x
         coords.y -= relativeXY.y
+        console.info('OcdDocument setCoordsRelativeToResource', parent, relativeXY, coords)
     }
     switchCoords = (coords: OcdViewCoords[], idx1: number, idx2: number) => [coords[idx1], coords[idx2]] = [coords[idx2], coords[idx1]]
     bringForward = (coords: OcdViewCoords, viewId: string) => {

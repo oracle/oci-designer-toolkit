@@ -112,10 +112,6 @@ export const OcdCanvas = ({ dragData, ocdConsoleConfig, ocdDocument, setOcdDocum
               x: ghostXY.x + coordinates.x,
               y: ghostXY.y + coordinates.y,
             })
-            // setGhostTranslate({
-            //   x: ocdDocument.dragResource.resource.x + coordinates.x,
-            //   y: ocdDocument.dragResource.resource.y + coordinates.y,
-            // })
         }
     }
     const onSVGDragEnd = (e: React.MouseEvent<SVGElement>) => {
