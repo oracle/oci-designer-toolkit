@@ -5,14 +5,18 @@
 */
 
 import { useState } from 'react'
+import { v4 as uuidv4 } from 'uuid'
 import OcdDocument, { OcdDragResource, OcdSelectedResource } from './OcdDocument'
 import { OcdViewCoords } from '../model/OcdDesign'
-import { ResourceRectProps, ResourceForeignObjectProps, ResourceSvgProps } from '../types/ReactComponentProperties'
+import { ResourceRectProps, ResourceForeignObjectProps, ResourceSvgProps, ResourceSvgContextMenuProps } from '../types/ReactComponentProperties'
 import { OcdViewPage } from '../model/OcdDesign'
 import { OcdUtils } from '../utils/OcdUtils'
 
-const OcdSvgContextMenu = ({ contextMenu, setContextMenu }: any): JSX.Element => {
+const OcdSvgContextMenu = ({ contextMenu, setContextMenu, ocdDocument, setOcdDocument, resource }: ResourceSvgContextMenuProps): JSX.Element => {
     console.info('OcdResourceSvg: OcdSvgContextMenu')
+
+    const uuid = () => `gid-${uuidv4()}`
+
     const onMouseLeave = (e: React.MouseEvent<SVGElement>) => {
         console.info('OcdResourceSvg: Context OnMouseLeave')
         setContextMenu({show: false, x: 0, y: 0})
@@ -20,9 +24,35 @@ const OcdSvgContextMenu = ({ contextMenu, setContextMenu }: any): JSX.Element =>
     const onClick = (e: React.MouseEvent<SVGElement>) => {
         e.stopPropagation()
     }
-    const onRemoveClick = (e: React.MouseEvent<HTMLElement>) => {}
-    const onDeleteClick = (e: React.MouseEvent<HTMLElement>) => {}
-    const onCloneClick = (e: React.MouseEvent<HTMLElement>) => {}
+    const onRemoveClick = (e: React.MouseEvent<HTMLElement>) => {
+        e.stopPropagation()
+        const page = ocdDocument.getActivePage()
+        ocdDocument.removeCoords(resource, page.id, resource.pgid)
+        setContextMenu({show: false, x: 0, y: 0})
+        const clone = OcdDocument.clone(ocdDocument)
+        setOcdDocument(clone)
+    }
+    const onDeleteClick = (e: React.MouseEvent<HTMLElement>) => {
+        e.stopPropagation()
+        ocdDocument.removeResource(resource.ocid)
+        setContextMenu({show: false, x: 0, y: 0})
+        const clone = OcdDocument.clone(ocdDocument)
+        setOcdDocument(clone)
+    }
+    const onCloneClick = (e: React.MouseEvent<HTMLElement>) => {
+        e.stopPropagation()
+        const page = ocdDocument.getActivePage()
+        const cloneResource = ocdDocument.cloneResource(resource.ocid)
+        if (cloneResource) {
+            // Coords
+            const cloneCoords = ocdDocument.cloneCoords(resource)
+            cloneCoords.ocid = cloneResource.id
+            ocdDocument.addCoords(cloneCoords, page.id, cloneCoords.pgid)
+        }
+        setContextMenu({show: false, x: 0, y: 0})
+        const clone = OcdDocument.clone(ocdDocument)
+        setOcdDocument(clone)
+    }
     const onToFrontClick = (e: React.MouseEvent<HTMLElement>) => {}
     const onToBackClick = (e: React.MouseEvent<HTMLElement>) => {}
     const onBringForwardClick = (e: React.MouseEvent<HTMLElement>) => {}
@@ -362,9 +392,16 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
                                 setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)}
                                 resource={r}
                                 key={`${r.pgid}-${r.id}`}
-                    />
-                })}
-                {contextMenu.show && <OcdSvgContextMenu contextMenu={contextMenu} setContextMenu={setContextMenu}/>}
+                                />
+                                })}
+                {contextMenu.show && <OcdSvgContextMenu 
+                                        contextMenu={contextMenu} 
+                                        setContextMenu={setContextMenu}
+                                        ocdDocument={ocdDocument}
+                                        setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)}
+                                        resource={resource}
+                                        />
+                                        }
         </g>
     )
 }

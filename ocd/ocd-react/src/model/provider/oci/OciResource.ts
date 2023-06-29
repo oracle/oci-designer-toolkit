@@ -28,4 +28,12 @@ export namespace OciResource {
             documentation: ''
         }
     }
+    export function cloneResource(resource: OciResource, type: string): OciResource {
+        const displayName = `${resource.displayName} Clone`
+        const id = OciResource.uuid(type)
+        let clone = OcdResource.cloneResource(resource, type)
+        clone.displayName = displayName
+        clone.id = id
+        return clone
+    }
 }

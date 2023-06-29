@@ -9,6 +9,7 @@ import { OcdDesign, OcdViewPage, OcdViewCoords, OcdViewLayer, OcdBaseModel, OcdV
 import { PaletteResource } from '../model/OcdPalette'
 import { OcdResource } from '../model/OcdResource'
 import { OcdAutoLayout } from './OcdAutoLayout'
+import { OcdUtils } from '../utils/OcdUtils'
 
 export interface OcdSelectedResource {
     modelId: string
@@ -72,7 +73,7 @@ export class OcdDocument {
     getOciResourceList(key: string) {return this.design.model.oci.resources[key] ? this.design.model.oci.resources[key] : []}
     getOciResources() {return Object.values(this.design.model.oci.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], [])}
     getResources() {return this.getOciResources()}
-    getResource(id='') {return this.getResources().find((r: any) => r.id === id)}
+    getResource(id='') {return this.getResources().find((r: OcdResource) => r.id === id)}
     addResource(paletteResource: PaletteResource, compartmentId: string) {
         const resourceList = paletteResource.class.split('-').slice(1).join('_')
         const resourceClass = paletteResource.class.toLowerCase().split('-').map((w) => `${w.charAt(0).toUpperCase()}${w.slice(1)}`).join('')
@@ -80,8 +81,8 @@ export class OcdDocument {
         // const resourceClient: string = `${resourceClass}Client`
         const resourceNamespace: string = `${resourceClass}`
         const resourceClient: string = `${resourceClass}`
-        console.info('List:', resourceList, 'Class:', resourceClass, 'Client:', resourceClient)
-        console.info(`ociResource`, ociResources)
+        console.info('OcdDocument: List:', resourceList, 'Class:', resourceClass, 'Client:', resourceClient)
+        console.info(`OcdDocument: ociResource`, ociResources)
         let modelResource = undefined
         if (paletteResource.provider === 'oci') {
             modelResource = {id: `ocd-${paletteResource.class}-${uuidv4()}`}
@@ -95,18 +96,45 @@ export class OcdDocument {
             } else {
                 alert(`Resource ${resourceClass} has not yet been implemented.`)
             }
+        } else {
+            alert(`Provider ${paletteResource.provider} has not yet been implemented.`)
         }
-        console.info('Added Resource:', modelResource)
+        console.info('OcdDocument: Added Resource:', modelResource)
         return modelResource
     }
     removeResource(id: string) {
         // Delete from Model
         Object.values(this.design.model).forEach((provider: OcdBaseModel) => Object.entries(provider.resources).forEach(([k, v]) => provider.resources[k] = v.filter((r: OcdResource) => r.id !== id)))
-        // Remove from Views
+        // Remove from Page Level
         this.design.view.pages.forEach((page: OcdViewPage) => {
             const pageResources = page.coords.filter((coords: OcdViewCoords) => coords.ocid === id)
-            pageResources.forEach((coords: OcdViewCoords) => this.removeCoords(coords, page.id))
+            pageResources.forEach((coords: OcdViewCoords) => this.removeCoords(coords, page.id, coords.pgid))
         })
+        // Remove Nested
+        const allCoords = this.getAllCoords()
+        allCoords.filter(c => c.ocid === id).forEach((c) => {
+            const parent = this.getCoords(c.pgid)
+            if (parent && parent.coords) parent.coords = parent.coords.filter(c => c.ocid !== id)
+        })
+    }
+    cloneResource(id: string) {
+        const resource: OcdResource = this.getResource(id)
+        const provider: string = resource.provider
+        const resourceList: string = resource.resourceTypeName.toLowerCase().split(' ').join('_')
+        const resourceNamespace: string = `${OcdUtils.toTitleCase(provider)}${resource.resourceType}`
+        let cloneResource = undefined
+        if (provider === 'oci') {
+            // @ts-ignore 
+            const client = ociResources[resourceNamespace]
+            if (client) {
+                cloneResource = client.cloneResource(resource)
+                console.info(cloneResource)
+                this.design.model.oci.resources[resourceList] ? this.design.model.oci.resources[resourceList].push(cloneResource) : this.design.model.oci.resources[resourceList] = [cloneResource]
+            }
+        } else {
+            alert(`Provider ${provider} has not yet been implemented.`)
+        }
+        return cloneResource
     }
     getDisplayName(id: string): string {
         const resource = this.getResource(id)
@@ -166,7 +194,7 @@ export class OcdDocument {
 
     newCoords = (): OcdViewCoords => {
         return {
-            id: '',
+            id: `gid-${uuidv4()}`,
             pgid: '',
             ocid: '',
             pocid: '',
@@ -178,6 +206,7 @@ export class OcdDocument {
             class: ''
         }
     }
+    getAllCoords = () => {return this.design.view.pages.map(p => [...p.coords, ...this.getChildCoords(p.coords)]).reduce((a, c) => [...a, ...c], [])}
     getCoords = (id: string) => {return this.design.view.pages.map(p => [...p.coords, ...this.getChildCoords(p.coords)]).reduce((a, c) => [...a, ...c], []).find(c => c.id === id)}
     getChildCoords = (coords?: OcdViewCoords[]): OcdViewCoords[] => coords ? coords.reduce((a, c) => [...a, ...this.getChildCoords(c.coords)], coords) : []
     getRelativeXY = (coords: OcdViewCoords): OcdViewPoint => {
@@ -239,6 +268,19 @@ export class OcdDocument {
                 this.addCoords(currentCoords, viewId, coords.pgid)
             }
         }
+    }
+    cloneCoords(coords: OcdViewCoords): OcdViewCoords {
+        let cloneCoords = this.newCoords()
+        cloneCoords.pgid = coords.pgid
+        cloneCoords.ocid = coords.ocid
+        cloneCoords.pocid = coords.pocid
+        cloneCoords.x = coords.x + coords.w / 2
+        cloneCoords.y = coords.y + coords.h / 2
+        cloneCoords.w = coords.w
+        cloneCoords.h = coords.h
+        cloneCoords.title = coords.title
+        cloneCoords.class = coords.class
+        return cloneCoords
     }
     setCoordsRelativeToCanvas = (coords: OcdViewCoords) => {
         const parent = this.getCoords(coords.pgid)

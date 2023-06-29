@@ -37,6 +37,14 @@ export interface ResourceSvgProps {
     resource: OcdViewCoords
 }
 
+export interface ResourceSvgContextMenuProps {
+    contextMenu: {show: boolean, x: number, y: number}
+    setContextMenu: React.Dispatch<any>
+    ocdDocument: OcdDocument
+    setOcdDocument: React.Dispatch<any>
+    resource: OcdViewCoords
+}
+
 export interface PaletteProps {
     ocdConsoleConfig: OcdConsoleConfig,
     setDragData: React.Dispatch<any>
