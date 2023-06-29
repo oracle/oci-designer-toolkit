@@ -140,13 +140,26 @@ export class OcdAutoLayout {
             childY += (this.spacing + child.h)
         })
         // Adjust Children based on position of Parents
+        // this.coords.filter((c) => c.container).forEach((parent) => {
+        //     const children = this.getChildren(parent.ocid)
+        //     children.forEach((child) => {
+        //         child.x += parent.x
+        //         child.y += parent.y
+        //     })
+        // })
+        // Add Children to Parent Coords
+        // console.info('AutoLayout: Coords', this.coords)
         this.coords.filter((c) => c.container).forEach((parent) => {
             const children = this.getChildren(parent.ocid)
             children.forEach((child) => {
-                child.x += parent.x
-                child.y += parent.y
+                child.pgid = parent.id
+                parent.coords ? parent.coords.push(child) : parent.coords = [child]
             })
         })
+        // console.info('AutoLayout: Coords - Post Child Shuffle', this.coords)
+        this.coords = this.coords.filter(c => c.pgid === '')
+        // console.info('AutoLayout: Coords - Post Filter', this.coords)
+
         return this.coords
     }
 }
