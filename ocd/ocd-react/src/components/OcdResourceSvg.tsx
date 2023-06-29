@@ -331,17 +331,14 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
         const { x, y } =  point.matrixTransform(svg.getScreenCTM().inverse())
         console.info('x:', x, 'y:', y)
 
-        // const contextPosition = {show: true, x: e.clientX - relativeXY.x, y: e.clientY - relativeXY.y }
         const contextPosition = {show: true, x: x, y: y }
         console.info('OcdResourceSvg: Right Click', contextPosition)
         // // @ts-ignore 
-        // setContextMenu({show: true, x: e.offsetX, y: e.offsetY })
         setContextMenu(contextPosition)
-        // setContextMenu({show: true, x: contextCoords.x, y: contextCoords.y })
     }
     const onResourceMouseUp = (e: React.MouseEvent<SVGElement>) => {
-        if (resource.container) {
-            // console.info('>>>OcdResourceSvg: Mouse Up -> Container', resource.id)
+        if (resource.container && !ocdDocument.dragResource.parent) {
+            // console.info('>>>OcdResourceSvg: Mouse Up -> Container', resource.id, ocdDocument.dragResource.parent)
             ocdDocument.dragResource.parent = resource
         }
         e.preventDefault()
