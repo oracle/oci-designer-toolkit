@@ -12,7 +12,7 @@ export interface Point {
 }
 
 export interface DragData {
-    dragObject: PaletteResource,
+    dragObject?: PaletteResource,
     offset: Point,
     existingResource: boolean,
     resourceType?: string,
@@ -21,8 +21,8 @@ export interface DragData {
 
 export function newDragData(): DragData {
     return {
-        dragObject: {container: false, title: '', class: ''},
-        offset: {x: 0, y:0},
+        // dragObject: {container: false, title: '', class: ''},
+        offset: {x: 0, y: 0},
         existingResource: false
     }
 }

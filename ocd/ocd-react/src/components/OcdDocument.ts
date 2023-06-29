@@ -77,12 +77,10 @@ export class OcdDocument {
     addResource(paletteResource: PaletteResource, compartmentId: string) {
         const resourceList = paletteResource.class.split('-').slice(1).join('_')
         const resourceClass = paletteResource.class.toLowerCase().split('-').map((w) => `${w.charAt(0).toUpperCase()}${w.slice(1)}`).join('')
-        // const resourceNamespace: string = `${resourceClass}Model`
-        // const resourceClient: string = `${resourceClass}Client`
         const resourceNamespace: string = `${resourceClass}`
         const resourceClient: string = `${resourceClass}`
-        console.info('OcdDocument: List:', resourceList, 'Class:', resourceClass, 'Client:', resourceClient)
-        console.info(`OcdDocument: ociResource`, ociResources)
+        // console.info('OcdDocument: List:', resourceList, 'Class:', resourceClass, 'Client:', resourceClient)
+        // console.info(`OcdDocument: ociResource`, ociResources)
         let modelResource = undefined
         if (paletteResource.provider === 'oci') {
             modelResource = {id: `ocd-${paletteResource.class}-${uuidv4()}`}
@@ -99,7 +97,7 @@ export class OcdDocument {
         } else {
             alert(`Provider ${paletteResource.provider} has not yet been implemented.`)
         }
-        console.info('OcdDocument: Added Resource:', modelResource)
+        // console.info('OcdDocument: Added Resource:', modelResource)
         return modelResource
     }
     removeResource(id: string) {
@@ -210,7 +208,7 @@ export class OcdDocument {
     getCoords = (id: string) => {return this.design.view.pages.map(p => [...p.coords, ...this.getChildCoords(p.coords)]).reduce((a, c) => [...a, ...c], []).find(c => c.id === id)}
     getChildCoords = (coords?: OcdViewCoords[]): OcdViewCoords[] => coords ? coords.reduce((a, c) => [...a, ...this.getChildCoords(c.coords)], coords) : []
     getRelativeXY = (coords: OcdViewCoords): OcdViewPoint => {
-        console.info('OcdDocument: Get Relative XY for', coords.id, 'Parent', coords.pgid)
+        // console.info('OcdDocument: Get Relative XY for', coords.id, 'Parent', coords.pgid)
         const parentCoords: OcdViewCoords | undefined = this.getCoords(coords.pgid)
         let relativeXY: OcdViewPoint = {x: coords.x, y: coords.y}
         if (parentCoords) {
@@ -219,12 +217,12 @@ export class OcdDocument {
             relativeXY.x += parentXY.x
             relativeXY.y += parentXY.y
         }
-        console.info('OcdDocument: Relative XY', relativeXY)
+        // console.info('OcdDocument: Relative XY', relativeXY)
         return relativeXY
     }
     addCoords(coords: OcdViewCoords, viewId: string, pgid: string = '') {
         const view: OcdViewPage = this.getPage(viewId)
-        console.info('OcdDocument: Check Relative Position', coords.id, this.getRelativeXY(coords))
+        // console.info('OcdDocument: Check Relative Position', coords.id, this.getRelativeXY(coords))
         if (view) {
             if (pgid === '') view.coords.push(coords)
             else {
@@ -246,10 +244,10 @@ export class OcdDocument {
         }
     }
     updateCoords(coords: OcdViewCoords, viewId: string) {
-        console.info('Ocd Document: Update Coords', coords)
-        console.info('Ocd Document: Update Coords', this.dragResource)
+        // console.info('OcdDocument: Update Coords', coords)
+        // console.info('OcdDocument: Update Coords', this.dragResource)
         let currentCoords: OcdViewCoords | undefined = this.getCoords(coords.id)
-        console.info('Ocd Document: Update Coords Current', currentCoords)
+        // console.info('OcdDocument: Update Coords Current', currentCoords)
         if (currentCoords) {
             currentCoords.w = coords.w
             currentCoords.h = coords.h
@@ -289,12 +287,12 @@ export class OcdDocument {
         coords.y += relativeXY.y
     }
     setCoordsRelativeToResource = (coords: OcdViewCoords) => {
-        console.info('OcdDocument setCoordsRelativeToResource', coords)
+        // console.info('OcdDocument setCoordsRelativeToResource', coords)
         const parent = this.getCoords(coords.pgid)
         const relativeXY = this.getRelativeXY(parent ? parent : this.newCoords())
         coords.x -= relativeXY.x
         coords.y -= relativeXY.y
-        console.info('OcdDocument setCoordsRelativeToResource', parent, relativeXY, coords)
+        // console.info('OcdDocument setCoordsRelativeToResource', parent, relativeXY, coords)
     }
     switchCoords = (coords: OcdViewCoords[], idx1: number, idx2: number) => [coords[idx1], coords[idx2]] = [coords[idx2], coords[idx1]]
     bringForward = (coords: OcdViewCoords, viewId: string) => {

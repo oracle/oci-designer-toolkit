@@ -220,6 +220,10 @@ const OcdForeignObject = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
         ocdDocument.setDisplayName(resource.ocid, e.target.value.trim())
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
+    const onMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+        // Stop Bubbling when name input click to disable SVG Drag functionality
+        e.stopPropagation()
+    }
     return (
         <foreignObject id={id} className={foreignObjectClass}>
             <div 
@@ -230,7 +234,12 @@ const OcdForeignObject = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
                 </div>
                 <div className='ocd-svg-foreign-object-display-name'>
                     <span>{resource.title}</span>
-                    <input type='text' value={ocdDocument.getDisplayName(resource.ocid)} onChange={onChange} tabIndex={-1}></input>
+                    <input type='text' value={ocdDocument.getDisplayName(resource.ocid)} 
+                        onChange={onChange} 
+                        onMouseMove={onMouseMove} 
+                        onMouseDown={onMouseMove} 
+                        onMouseUp={onMouseMove} 
+                        tabIndex={-1}></input>
                 </div>
             </div>
         </foreignObject>
@@ -344,10 +353,11 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
         e.preventDefault()
     }
     const onResourceMouseMoveEnterLeave = (e: React.MouseEvent<SVGElement>) => {
-        if (resource.container) {
-            // console.info('>>>OcdResourceSvg: Mouse Move/Enter/Leave -> Container', resource.id)
-            e.preventDefault()
-        }
+        // e.preventDefault()
+        // if (resource.container) {
+        //     // console.info('>>>OcdResourceSvg: Mouse Move/Enter/Leave -> Container', resource.id)
+        //     e.preventDefault()
+        // }
     }
     return (
         <g className='ocd-designer-resource' 

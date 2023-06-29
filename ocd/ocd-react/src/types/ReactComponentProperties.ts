@@ -11,6 +11,7 @@ import { DragData } from './DragData'
 
 export interface CanvasProps {
     dragData: DragData
+    setDragData: React.Dispatch<any>
     ocdConsoleConfig: OcdConsoleConfig
     ocdDocument: OcdDocument
     setOcdDocument: React.Dispatch<any>
