@@ -51,3 +51,8 @@ export interface PaletteProps {
     setDragData: React.Dispatch<any>
     ocdDocument: OcdDocument
 }
+
+export interface OcdMouseEvents extends Record<string, Function> {}
+// export interface OcdMouseEvents {
+//     [key: string]: Function   
+// }

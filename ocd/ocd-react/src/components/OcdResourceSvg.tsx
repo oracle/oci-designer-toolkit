@@ -63,7 +63,7 @@ const OcdSvgContextMenu = ({ contextMenu, setContextMenu, ocdDocument, setOcdDoc
         onMouseLeave={onMouseLeave}
         onClick={onClick}
         >
-            <foreignObject className='ocd-svg-context-menu' id='svg_context_menu'>
+            <foreignObject className='ocd-svg-context-menu' id='svg-context-menu'>
                 <div
                 // @ts-ignore 
                 xmlns='http://www.w3.org/1999/xhtml'>
@@ -270,7 +270,8 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
             dragResource.class = resource.class
             dragResource.resource = resource
             ocdDocument.dragResource = dragResource
-        } else // console.info('OcdResourceSvg: Resource Drag Start - Currently Dragging Child', resource.ocid)
+        } 
+        // else console.info('OcdResourceSvg: Resource Drag Start - Currently Dragging Child', resource.ocid)
         e.preventDefault()
     }
     const onResourceDrag = (e: React.MouseEvent<SVGElement>) => {

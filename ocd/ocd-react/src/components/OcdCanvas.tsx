@@ -8,19 +8,18 @@ import OcdDocument from './OcdDocument'
 import OcdResourceSvg, { OcdDragResourceGhostSvg } from './OcdResourceSvg'
 import { OcdViewCoords, OcdViewLayer, OcdViewPage } from '../model/OcdDesign'
 import { OcdResource } from '../model/OcdResource'
-import { CanvasProps } from '../types/ReactComponentProperties'
+import { CanvasProps, OcdMouseEvents } from '../types/ReactComponentProperties'
 import { useState } from 'react'
 import { newDragData } from '../types/DragData'
 
 export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument, setOcdDocument }: CanvasProps): JSX.Element => {
     // console.info('OcdCanvas: OCD Document:', ocdDocument)
+    const [contextMenu, setContextMenu] = useState({show: false, x: 0, y: 0, resource: undefined})
     const [dragging, setDragging] = useState(false)
     const [coordinates, setCoordinates] = useState({ x: 0, y: 0 });
     const [ghostTranslate, setGhostTranslate] = useState({ x: 0, y: 0 });
     const [origin, setOrigin] = useState({ x: 0, y: 0 });
     const resource = ocdDocument.dragResource.resource
-    // const gX = ocdDocument.dragResource.resource.x + coordinates.x
-    // const gY = ocdDocument.dragResource.resource.y + coordinates.y
 
     const onDragOver = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault()
@@ -146,11 +145,18 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
         }
     }
 
+    const onContextClick = (e: React.MouseEvent<HTMLElement>) => {}
+
     const uuid = () => `gid-${uuidv4()}`
 
     const page: OcdViewPage = ocdDocument.getActivePage()
     const layers = page.layers.filter((l: OcdViewLayer) => l.visible).map((l: OcdViewLayer) => l.id)
     const visibleResourceIds = ocdDocument.getResources().filter((r: any) => layers.includes(r.compartmentId)).map((r: any) => r.id)
+    const mouseEvents: OcdMouseEvents = {
+        'onSVGDragStart': onSVGDragStart,
+        'onSVGDrag': onSVGDrag,
+        'onSVGDragEnd': onSVGDrag,
+    }
 
     return (
         <div className='ocd-designer-canvas ocd-background' 
@@ -193,6 +199,21 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
                                     />}
                     </g>
             </svg>
+            {contextMenu.show && 
+            <div className='ocd-context-menu-div hidden'>
+                <ul className='ocd-context-menu'>
+                    <li className='ocd-svg-context-menu-item'><a href='#' onClick={onContextClick}>Remove From Page</a></li>
+                    <li className='ocd-svg-context-menu-item'><a href='#' onClick={onContextClick}>Delete</a></li>
+                    <li><hr/></li>
+                    <li className='ocd-svg-context-menu-item'><a href='#' onClick={onContextClick}>Clone</a></li>
+                    <li><hr/></li>
+                    <li className='ocd-svg-context-menu-item'><a href='#' onClick={onContextClick}>To Front</a></li>
+                    <li className='ocd-svg-context-menu-item'><a href='#' onClick={onContextClick}>To Back</a></li>
+                    <li className='ocd-svg-context-menu-item'><a href='#' onClick={onContextClick}>Bring Forward</a></li>
+                    <li className='ocd-svg-context-menu-item'><a href='#' onClick={onContextClick}>Send Backward</a></li>
+                </ul>
+            </div>
+            }
         </div>
     )
 }
