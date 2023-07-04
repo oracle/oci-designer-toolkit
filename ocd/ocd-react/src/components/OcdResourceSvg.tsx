@@ -8,11 +8,12 @@ import { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import OcdDocument, { OcdDragResource, OcdSelectedResource } from './OcdDocument'
 import { OcdViewCoords } from '../model/OcdDesign'
-import { ResourceRectProps, ResourceForeignObjectProps, ResourceSvgProps, ResourceSvgContextMenuProps } from '../types/ReactComponentProperties'
+import { ResourceRectProps, ResourceForeignObjectProps, ResourceSvgProps, ResourceSvgContextMenuProps, ResourceSvgGhostProps } from '../types/ReactComponentProperties'
 import { OcdViewPage } from '../model/OcdDesign'
 import { OcdUtils } from '../utils/OcdUtils'
+import { OcdContextMenu } from './OcdCanvas'
 
-const OcdSvgContextMenu = ({ contextMenu, setContextMenu, ocdDocument, setOcdDocument, resource }: ResourceSvgContextMenuProps): JSX.Element => {
+export const OcdSvgContextMenu = ({ contextMenu, setContextMenu, ocdDocument, setOcdDocument, resource }: ResourceSvgContextMenuProps): JSX.Element => {
     console.info('OcdResourceSvg: OcdSvgContextMenu')
 
     const uuid = () => `gid-${uuidv4()}`
@@ -246,8 +247,8 @@ const OcdForeignObject = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
     )
 }
 
-export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resource }: ResourceSvgProps): JSX.Element => {
-    const [contextMenu, setContextMenu] = useState({show: false, x: 0, y: 0})
+export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, setContextMenu, resource }: ResourceSvgProps): JSX.Element => {
+    // const [contextMenu, setContextMenu] = useState({show: false, x: 0, y: 0})
     const [dragging, setDragging] = useState(false)
     const [coordinates, setCoordinates] = useState({ x: 0, y: 0 });
     const [origin, setOrigin] = useState({ x: 0, y: 0 });
@@ -335,13 +336,16 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
         // Get Canvas
         const svg = document.getElementById('canvas_root_svg')
         // @ts-ignore 
-        const point = new DOMPoint(e.clientX - relativeXY.x, e.clientY - relativeXY.y)
+        // const point = new DOMPoint(e.clientX - relativeXY.x, e.clientY - relativeXY.y)
+        const point = new DOMPoint(e.clientX, e.clientY)
         console.info('OcdResourceSvg: Right Click Point', point)
         // @ts-ignore 
         const { x, y } =  point.matrixTransform(svg.getScreenCTM().inverse())
         console.info('x:', x, 'y:', y)
 
-        const contextPosition = {show: true, x: x, y: y }
+        const contextPosition = {show: true, x: x, y: y, resource: resource}
+        // const contextPosition = {show: true, x: relativeXY.x, y: relativeXY.y, resource: resource}
+        // const contextPosition = {show: true, x: e.clientX, y: e.clientY, resource: resource }
         console.info('OcdResourceSvg: Right Click', contextPosition)
         // // @ts-ignore 
         setContextMenu(contextPosition)
@@ -398,24 +402,26 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
                                 ocdConsoleConfig={ocdConsoleConfig}
                                 ocdDocument={ocdDocument}
                                 setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)}
+                                setContextMenu={(contextMenu: OcdContextMenu) => setContextMenu(contextMenu)}
                                 resource={r}
                                 key={`${r.pgid}-${r.id}`}
                                 />
                                 })}
-                {contextMenu.show && <OcdSvgContextMenu 
+                {/* {contextMenu.show && <OcdSvgContextMenu 
                                         contextMenu={contextMenu} 
                                         setContextMenu={setContextMenu}
                                         ocdDocument={ocdDocument}
                                         setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)}
                                         resource={resource}
                                         />
-                                        }
+                                        } */}
         </g>
     )
 }
 
-export const OcdDragResourceGhostSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resource }: ResourceSvgProps): JSX.Element => {
+export const OcdDragResourceGhostSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resource }: ResourceSvgGhostProps): JSX.Element => {
     const SvgRect = resource.container ? OcdContainerRect : OcdSimpleRect
+    const [contextMenu, setContextMenu] = useState<OcdContextMenu>({show: false, x: 0, y: 0})
     return (
         <g className='ocd-drag-drag-ghost'
             transform={`translate(0, 0)`}
@@ -437,6 +443,7 @@ export const OcdDragResourceGhostSvg = ({ ocdConsoleConfig, ocdDocument, setOcdD
                             ocdConsoleConfig={ocdConsoleConfig}
                             ocdDocument={ocdDocument}
                             setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)}
+                            setContextMenu={(contextMenu: OcdContextMenu) => setContextMenu(contextMenu)}
                             resource={r}
                             key={`${r.pgid}-${r.id}-ghost`}
                 />

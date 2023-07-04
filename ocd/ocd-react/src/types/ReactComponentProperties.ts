@@ -31,10 +31,18 @@ export interface ResourceForeignObjectProps {
     resource: OcdViewCoords
 }
 
+export interface ResourceSvgGhostProps {
+    ocdConsoleConfig: OcdConsoleConfig
+    ocdDocument: OcdDocument
+    setOcdDocument: React.Dispatch<any>
+    resource: OcdViewCoords
+}
+
 export interface ResourceSvgProps {
     ocdConsoleConfig: OcdConsoleConfig
     ocdDocument: OcdDocument
     setOcdDocument: React.Dispatch<any>
+    setContextMenu: React.Dispatch<any>
     resource: OcdViewCoords
 }
 

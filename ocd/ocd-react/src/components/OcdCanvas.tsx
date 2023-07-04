@@ -5,29 +5,40 @@
 
 import { v4 as uuidv4 } from 'uuid'
 import OcdDocument from './OcdDocument'
-import OcdResourceSvg, { OcdDragResourceGhostSvg } from './OcdResourceSvg'
+import OcdResourceSvg, { OcdDragResourceGhostSvg, OcdSvgContextMenu } from './OcdResourceSvg'
 import { OcdViewCoords, OcdViewLayer, OcdViewPage } from '../model/OcdDesign'
 import { OcdResource } from '../model/OcdResource'
 import { CanvasProps, OcdMouseEvents } from '../types/ReactComponentProperties'
 import { useState } from 'react'
 import { newDragData } from '../types/DragData'
 
+export interface OcdContextMenu {
+    show: boolean
+    x: number
+    y: number
+    resource?: OcdViewCoords
+}
+
+export interface Point {
+    x: number
+    y: number
+}
+
 export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument, setOcdDocument }: CanvasProps): JSX.Element => {
     // console.info('OcdCanvas: OCD Document:', ocdDocument)
-    const [contextMenu, setContextMenu] = useState({show: false, x: 0, y: 0, resource: undefined})
+    const [contextMenu, setContextMenu] = useState<OcdContextMenu>({show: false, x: 0, y: 0})
     const [dragging, setDragging] = useState(false)
-    const [coordinates, setCoordinates] = useState({ x: 0, y: 0 });
-    const [ghostTranslate, setGhostTranslate] = useState({ x: 0, y: 0 });
-    const [origin, setOrigin] = useState({ x: 0, y: 0 });
+    const [coordinates, setCoordinates] = useState<Point>({ x: 0, y: 0 });
+    const [ghostTranslate, setGhostTranslate] = useState<Point>({ x: 0, y: 0 });
+    const [origin, setOrigin] = useState<Point>({ x: 0, y: 0 });
     const resource = ocdDocument.dragResource.resource
 
+    // HTML Drag & Drop Events
     const onDragOver = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault()
     }
-
     const onDragLeave = () => {
     }
-
     const onDrop = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault()
         if (dragData.dragObject) {
@@ -87,6 +98,7 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
         return false
     }
 
+    // SVG Drag & Drop Events
     const onSVGDragStart = (e: React.MouseEvent<SVGElement>) => {
         e.stopPropagation()
         console.info('OcdCanvas: SVG Drag Start', ocdDocument.dragResource)
@@ -145,7 +157,55 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
         }
     }
 
+    // Context Menu Events
     const onContextClick = (e: React.MouseEvent<HTMLElement>) => {}
+    const onContextMenuMouseLeave = (e: React.MouseEvent<HTMLElement>) => {
+        console.info('OcdCanvas: Context OnMouseLeave')
+        setContextMenu({show: false, x: 0, y: 0})
+    }
+    const onRemoveClick = (e: React.MouseEvent<HTMLElement>) => {
+        e.stopPropagation()
+        const resource = contextMenu.resource
+        if (resource) {
+            const page = ocdDocument.getActivePage()
+            ocdDocument.removeCoords(resource, page.id, resource.pgid)
+            setContextMenu({show: false, x: 0, y: 0, resource: undefined})
+            const clone = OcdDocument.clone(ocdDocument)
+            setOcdDocument(clone)
+        }
+    }
+    const onDeleteClick = (e: React.MouseEvent<HTMLElement>) => {
+        e.stopPropagation()
+        const resource = contextMenu.resource
+        if (resource) {
+            ocdDocument.removeResource(resource.ocid)
+            setContextMenu({show: false, x: 0, y: 0, resource: undefined})
+            const clone = OcdDocument.clone(ocdDocument)
+            setOcdDocument(clone)
+        }
+    }
+    const onCloneClick = (e: React.MouseEvent<HTMLElement>) => {
+        e.stopPropagation()
+        const resource = contextMenu.resource
+        if (resource) {
+            const page = ocdDocument.getActivePage()
+            const cloneResource = ocdDocument.cloneResource(resource.ocid)
+            if (cloneResource) {
+                // Coords
+                const cloneCoords = ocdDocument.cloneCoords(resource)
+                cloneCoords.ocid = cloneResource.id
+                ocdDocument.addCoords(cloneCoords, page.id, cloneCoords.pgid)
+            }
+            setContextMenu({show: false, x: 0, y: 0, resource: undefined})
+            const clone = OcdDocument.clone(ocdDocument)
+            setOcdDocument(clone)
+        }
+    }
+    const onToFrontClick = (e: React.MouseEvent<HTMLElement>) => {}
+    const onToBackClick = (e: React.MouseEvent<HTMLElement>) => {}
+    const onBringForwardClick = (e: React.MouseEvent<HTMLElement>) => {}
+    const onSendBackwardClick = (e: React.MouseEvent<HTMLElement>) => {}
+
 
     const uuid = () => `gid-${uuidv4()}`
 
@@ -157,6 +217,16 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
         'onSVGDrag': onSVGDrag,
         'onSVGDragEnd': onSVGDrag,
     }
+    console.info('OcdCanvas: ContextMenu', contextMenu)
+    const styles = {
+        contextMenu: {
+            position: 'absolute', 
+            left: `'${contextMenu.x}px'`, 
+            top: `'${contextMenu.y}px'`,
+            zIndex: 1000,
+        } as React.CSSProperties
+    }
+    const contextMenuStyle = `{position: 'absolute'; left: '${contextMenu.x}px'; top: '${contextMenu.y}px'; z-index: 1000;}`
 
     return (
         <div className='ocd-designer-canvas ocd-background' 
@@ -182,6 +252,7 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
                                         ocdConsoleConfig={ocdConsoleConfig}
                                         ocdDocument={ocdDocument}
                                         setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)}
+                                        setContextMenu={(contextMenu: OcdContextMenu) => setContextMenu(contextMenu)} 
                                         resource={r}
                                         key={`${r.pgid}-${r.id}`}
                             />
@@ -198,22 +269,35 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
                                         key={`${ocdDocument.dragResource.resource.pgid}-${ocdDocument.dragResource.resource.id}`}
                                     />}
                     </g>
+                {contextMenu.show &&contextMenu.resource && <OcdSvgContextMenu 
+                                        contextMenu={contextMenu} 
+                                        setContextMenu={setContextMenu}
+                                        ocdDocument={ocdDocument}
+                                        setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)}
+                                        resource={contextMenu.resource}
+                                        />
+                                        }
             </svg>
-            {contextMenu.show && 
-            <div className='ocd-context-menu-div hidden'>
+            {/* {contextMenu.show && 
+            // <div className='ocd-context-menu-div'>
+            // @ts-ignore 
+            <div style={styles.contextMenu}
+                onMouseLeave={onContextMenuMouseLeave}
+            >
                 <ul className='ocd-context-menu'>
-                    <li className='ocd-svg-context-menu-item'><a href='#' onClick={onContextClick}>Remove From Page</a></li>
-                    <li className='ocd-svg-context-menu-item'><a href='#' onClick={onContextClick}>Delete</a></li>
+                    <li className='ocd-svg-context-menu-item'><a href='#' onClick={onRemoveClick}>Remove From Page</a></li>
+                    <li className='ocd-svg-context-menu-item'><a href='#' onClick={onDeleteClick}>Delete</a></li>
                     <li><hr/></li>
-                    <li className='ocd-svg-context-menu-item'><a href='#' onClick={onContextClick}>Clone</a></li>
+                    <li className='ocd-svg-context-menu-item'><a href='#' onClick={onCloneClick}>Clone</a></li>
                     <li><hr/></li>
-                    <li className='ocd-svg-context-menu-item'><a href='#' onClick={onContextClick}>To Front</a></li>
-                    <li className='ocd-svg-context-menu-item'><a href='#' onClick={onContextClick}>To Back</a></li>
-                    <li className='ocd-svg-context-menu-item'><a href='#' onClick={onContextClick}>Bring Forward</a></li>
-                    <li className='ocd-svg-context-menu-item'><a href='#' onClick={onContextClick}>Send Backward</a></li>
+                    <li className='ocd-svg-context-menu-item'><a href='#' onClick={onToFrontClick}>To Front</a></li>
+                    <li className='ocd-svg-context-menu-item'><a href='#' onClick={onToBackClick}>To Back</a></li>
+                    <li className='ocd-svg-context-menu-item'><a href='#' onClick={onBringForwardClick}>Bring Forward</a></li>
+                    <li className='ocd-svg-context-menu-item'><a href='#' onClick={onSendBackwardClick}>Send Backward</a></li>
                 </ul>
             </div>
-            }
+            // </div>
+            } */}
         </div>
     )
 }
