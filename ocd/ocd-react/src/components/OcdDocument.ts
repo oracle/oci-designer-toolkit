@@ -278,6 +278,8 @@ export class OcdDocument {
         cloneCoords.h = coords.h
         cloneCoords.title = coords.title
         cloneCoords.class = coords.class
+        cloneCoords.container = coords.container
+        console.info('OcdDocument: Coords', coords, 'Clone', cloneCoords)
         return cloneCoords
     }
     setCoordsRelativeToCanvas = (coords: OcdViewCoords) => {

@@ -25,7 +25,7 @@ export interface Point {
 }
 
 export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument, setOcdDocument }: CanvasProps): JSX.Element => {
-    // console.info('OcdCanvas: OCD Document:', ocdDocument)
+    console.info('OcdCanvas: OCD Document:', ocdDocument)
     const [contextMenu, setContextMenu] = useState<OcdContextMenu>({show: false, x: 0, y: 0})
     const [dragging, setDragging] = useState(false)
     const [coordinates, setCoordinates] = useState<Point>({ x: 0, y: 0 });
@@ -76,7 +76,7 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
             coords.pocid = pocid
             coords.x = x
             coords.y = y
-            coords.w = container ? 200 : 32
+            coords.w = container ? 300 : 32
             coords.h = container ? 200 : 32
             coords.title = dragData.dragObject.title
             coords.class = dragData.dragObject.class
@@ -101,7 +101,7 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
     // SVG Drag & Drop Events
     const onSVGDragStart = (e: React.MouseEvent<SVGElement>) => {
         e.stopPropagation()
-        console.info('OcdCanvas: SVG Drag Start', ocdDocument.dragResource)
+        // console.info('OcdCanvas: SVG Drag Start', ocdDocument.dragResource)
         if (ocdDocument.dragResource.dragging) {
             console.info('SVG Drag Start - Dragging')
             const ghostXY = ocdDocument.getRelativeXY(ocdDocument.dragResource.resource)
@@ -144,9 +144,14 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
             coords.y = resource.y + coordinates.y
             coords.w = resource.w
             coords.h = resource.h
+            coords.pgid = resource.pgid
+            coords.pocid = resource.pocid
             if (ocdDocument.dragResource.parent) {
                 coords.pgid = ocdDocument.dragResource.parent.id
                 coords.pocid = ocdDocument.dragResource.parent.ocid    
+            } else {
+                coords.pgid = resource.pgid
+                coords.pocid = resource.pocid
             }
             setCoordinates({ x: 0, y: 0 })
             setGhostTranslate({ x: 0, y: 0 })
@@ -158,53 +163,63 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
     }
 
     // Context Menu Events
-    const onContextClick = (e: React.MouseEvent<HTMLElement>) => {}
-    const onContextMenuMouseLeave = (e: React.MouseEvent<HTMLElement>) => {
-        console.info('OcdCanvas: Context OnMouseLeave')
-        setContextMenu({show: false, x: 0, y: 0})
-    }
-    const onRemoveClick = (e: React.MouseEvent<HTMLElement>) => {
-        e.stopPropagation()
-        const resource = contextMenu.resource
-        if (resource) {
-            const page = ocdDocument.getActivePage()
-            ocdDocument.removeCoords(resource, page.id, resource.pgid)
-            setContextMenu({show: false, x: 0, y: 0, resource: undefined})
-            const clone = OcdDocument.clone(ocdDocument)
-            setOcdDocument(clone)
-        }
-    }
-    const onDeleteClick = (e: React.MouseEvent<HTMLElement>) => {
-        e.stopPropagation()
-        const resource = contextMenu.resource
-        if (resource) {
-            ocdDocument.removeResource(resource.ocid)
-            setContextMenu({show: false, x: 0, y: 0, resource: undefined})
-            const clone = OcdDocument.clone(ocdDocument)
-            setOcdDocument(clone)
-        }
-    }
-    const onCloneClick = (e: React.MouseEvent<HTMLElement>) => {
-        e.stopPropagation()
-        const resource = contextMenu.resource
-        if (resource) {
-            const page = ocdDocument.getActivePage()
-            const cloneResource = ocdDocument.cloneResource(resource.ocid)
-            if (cloneResource) {
-                // Coords
-                const cloneCoords = ocdDocument.cloneCoords(resource)
-                cloneCoords.ocid = cloneResource.id
-                ocdDocument.addCoords(cloneCoords, page.id, cloneCoords.pgid)
-            }
-            setContextMenu({show: false, x: 0, y: 0, resource: undefined})
-            const clone = OcdDocument.clone(ocdDocument)
-            setOcdDocument(clone)
-        }
-    }
-    const onToFrontClick = (e: React.MouseEvent<HTMLElement>) => {}
-    const onToBackClick = (e: React.MouseEvent<HTMLElement>) => {}
-    const onBringForwardClick = (e: React.MouseEvent<HTMLElement>) => {}
-    const onSendBackwardClick = (e: React.MouseEvent<HTMLElement>) => {}
+    // const onContextClick = (e: React.MouseEvent<HTMLElement>) => {}
+    // const onContextMenuMouseLeave = (e: React.MouseEvent<HTMLElement>) => {
+    //     console.info('OcdCanvas: Context OnMouseLeave')
+    //     setContextMenu({show: false, x: 0, y: 0})
+    // }
+    // const onRemoveClick = (e: React.MouseEvent<HTMLElement>) => {
+    //     e.stopPropagation()
+    //     const resource = contextMenu.resource
+    //     if (resource) {
+    //         const page = ocdDocument.getActivePage()
+    //         ocdDocument.removeCoords(resource, page.id, resource.pgid)
+    //         setContextMenu({show: false, x: 0, y: 0, resource: undefined})
+    //         const clone = OcdDocument.clone(ocdDocument)
+    //         setOcdDocument(clone)
+    //     }
+    // }
+    // const onDeleteClick = (e: React.MouseEvent<HTMLElement>) => {
+    //     e.stopPropagation()
+    //     const resource = contextMenu.resource
+    //     if (resource) {
+    //         ocdDocument.removeResource(resource.ocid)
+    //         setContextMenu({show: false, x: 0, y: 0, resource: undefined})
+    //         const clone = OcdDocument.clone(ocdDocument)
+    //         setOcdDocument(clone)
+    //     }
+    // }
+    // const onCloneClick = (e: React.MouseEvent<HTMLElement>) => {
+    //     e.stopPropagation()
+    //     const resource = contextMenu.resource
+    //     if (resource) {
+    //         const page = ocdDocument.getActivePage()
+    //         const cloneResource = ocdDocument.cloneResource(resource.ocid)
+    //         if (cloneResource) {
+    //             // Coords
+    //             const cloneCoords = ocdDocument.cloneCoords(resource)
+    //             cloneCoords.ocid = cloneResource.id
+    //             ocdDocument.addCoords(cloneCoords, page.id, cloneCoords.pgid)
+    //         }
+    //         setContextMenu({show: false, x: 0, y: 0, resource: undefined})
+    //         const clone = OcdDocument.clone(ocdDocument)
+    //         setOcdDocument(clone)
+    //     }
+    // }
+    // const onToFrontClick = (e: React.MouseEvent<HTMLElement>) => {}
+    // const onToBackClick = (e: React.MouseEvent<HTMLElement>) => {}
+    // const onBringForwardClick = (e: React.MouseEvent<HTMLElement>) => {}
+    // const onSendBackwardClick = (e: React.MouseEvent<HTMLElement>) => {}
+    // console.info('OcdCanvas: ContextMenu', contextMenu)
+    // const styles = {
+    //     contextMenu: {
+    //         position: 'absolute', 
+    //         left: `'${contextMenu.x}px'`, 
+    //         top: `'${contextMenu.y}px'`,
+    //         zIndex: 1000,
+    //     } as React.CSSProperties
+    // }
+    // const contextMenuStyle = `{position: 'absolute'; left: '${contextMenu.x}px'; top: '${contextMenu.y}px'; z-index: 1000;}`
 
 
     const uuid = () => `gid-${uuidv4()}`
@@ -217,16 +232,6 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
         'onSVGDrag': onSVGDrag,
         'onSVGDragEnd': onSVGDrag,
     }
-    console.info('OcdCanvas: ContextMenu', contextMenu)
-    const styles = {
-        contextMenu: {
-            position: 'absolute', 
-            left: `'${contextMenu.x}px'`, 
-            top: `'${contextMenu.y}px'`,
-            zIndex: 1000,
-        } as React.CSSProperties
-    }
-    const contextMenuStyle = `{position: 'absolute'; left: '${contextMenu.x}px'; top: '${contextMenu.y}px'; z-index: 1000;}`
 
     return (
         <div className='ocd-designer-canvas ocd-background' 
@@ -252,6 +257,7 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
                                         ocdConsoleConfig={ocdConsoleConfig}
                                         ocdDocument={ocdDocument}
                                         setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)}
+                                        contextMenu={contextMenu}
                                         setContextMenu={(contextMenu: OcdContextMenu) => setContextMenu(contextMenu)} 
                                         resource={r}
                                         key={`${r.pgid}-${r.id}`}
@@ -269,11 +275,11 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
                                         key={`${ocdDocument.dragResource.resource.pgid}-${ocdDocument.dragResource.resource.id}`}
                                     />}
                     </g>
-                {contextMenu.show &&contextMenu.resource && <OcdSvgContextMenu 
+                    {contextMenu.show && contextMenu.resource && <OcdSvgContextMenu 
                                         contextMenu={contextMenu} 
-                                        setContextMenu={setContextMenu}
                                         ocdDocument={ocdDocument}
                                         setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)}
+                                        setContextMenu={setContextMenu}
                                         resource={contextMenu.resource}
                                         />
                                         }

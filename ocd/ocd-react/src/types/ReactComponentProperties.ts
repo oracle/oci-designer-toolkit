@@ -8,6 +8,7 @@ import { OcdConsoleConfig } from '../components/OcdConsoleConfiguration'
 import OcdDocument from '../components/OcdDocument'
 import { OcdViewCoords } from '../model/OcdDesign'
 import { DragData } from './DragData'
+import { OcdContextMenu } from '../components/OcdCanvas'
 
 export interface CanvasProps {
     dragData: DragData
@@ -42,6 +43,7 @@ export interface ResourceSvgProps {
     ocdConsoleConfig: OcdConsoleConfig
     ocdDocument: OcdDocument
     setOcdDocument: React.Dispatch<any>
+    contextMenu: OcdContextMenu
     setContextMenu: React.Dispatch<any>
     resource: OcdViewCoords
 }

@@ -938,6 +938,7 @@ summary {
     box-sizing: border-box;
     /* min-height: 100%; */
     flex-grow: 1;
+    position: relative;
 }
 
 .ocd-designer-canvas-svg {
@@ -1070,7 +1071,7 @@ summary {
 }
 
 .ocd-svg-context-menu > div {
-    border: 1px solid black;
+    /* border: 1px solid black; */
     border-radius: 5px;
     padding: 0;
     margin: 0;
