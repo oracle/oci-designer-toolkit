@@ -48,6 +48,7 @@ export const OcdSvgContextMenu = ({ contextMenu, setContextMenu, ocdDocument, se
             // Coords
             const cloneCoords = ocdDocument.cloneCoords(resource)
             cloneCoords.ocid = cloneResource.id
+            ocdDocument.setCoordsRelativeToCanvas(cloneCoords)
             ocdDocument.addCoords(cloneCoords, page.id, cloneCoords.pgid)
         }
         setContextMenu({show: false, x: 0, y: 0})

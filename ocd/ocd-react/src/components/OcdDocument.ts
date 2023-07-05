@@ -272,8 +272,8 @@ export class OcdDocument {
         cloneCoords.pgid = coords.pgid
         cloneCoords.ocid = coords.ocid
         cloneCoords.pocid = coords.pocid
-        cloneCoords.x = coords.x + coords.w / 2
-        cloneCoords.y = coords.y + coords.h / 2
+        cloneCoords.x = coords.x
+        cloneCoords.y = coords.y + coords.h + 20
         cloneCoords.w = coords.w
         cloneCoords.h = coords.h
         cloneCoords.title = coords.title
