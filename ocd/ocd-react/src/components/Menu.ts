@@ -68,13 +68,13 @@ export const menuItems = [
             {
                 label: 'Open Recent',
                 click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
-
+                    alert('Currently not implemented.')
                 }
             },
             {
                 label: 'Save',
                 click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
-
+                    alert('Currently not implemented.')
                 }
             },
             {
@@ -150,11 +150,15 @@ export const menuItems = [
                     },
                     {
                         label: 'OCI Resources',
-                        click: undefined
+                        click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
+                            alert('Currently not implemented.')
+                        }
                     },
                     {
                         label: 'Terraform State File',
-                        click: undefined
+                        click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
+                            alert('Currently not implemented.')
+                        }
                     }
                 ]
             },
@@ -168,15 +172,21 @@ export const menuItems = [
                         submenu: [
                             {
                                 label: 'PNG',
-                                click: undefined
+                                click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
+                                    alert('Currently not implemented.')
+                                }
                             },
                             {
                                 label: 'JPEG',
-                                click: undefined
+                                click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
+                                    alert('Currently not implemented.')
+                                }
                             },
                             {
                                 label: 'SVG',
-                                click: undefined
+                                click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
+                                    alert('Currently not implemented.')
+                                }
                             }
                         ]
                     },
@@ -211,7 +221,9 @@ export const menuItems = [
                     },
                     {
                         label: 'Markdown',
-                        click: undefined
+                        click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
+                            alert('Currently not implemented.')
+                        }
                     },
                     {
                         label: 'OKIT Json',
@@ -302,19 +314,27 @@ export const menuItems = [
         submenu: [
             {
                 label: 'Layers',
-                click: undefined
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
+                    alert('Currently not implemented.')
+                }
             },
             {
                 label: 'Reset View',
-                click: undefined
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
+                    alert('Currently not implemented.')
+                }
             },
             {
                 label: 'Zoom In',
-                click: undefined
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
+                    alert('Currently not implemented.')
+                }
             },
             {
                 label: 'Zoom Out',
-                click: undefined
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
+                    alert('Currently not implemented.')
+                }
             }
         ]
     },
