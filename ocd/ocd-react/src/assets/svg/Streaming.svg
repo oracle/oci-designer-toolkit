@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 24.0.2, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 42 42" style="enable-background:new 0 0 42 42;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#FFFFFF;}
+	.st1{fill:#2C5967;}
+</style>
+<g>
+	<g>
+		<g>
+			<path class="st0" d="M2.67,41.5c-1.19,0-2.17-0.97-2.17-2.17V2.67c0-1.2,0.97-2.17,2.17-2.17h36.67c1.19,0,2.17,0.97,2.17,2.17
+				v36.67c0,1.2-0.97,2.17-2.17,2.17H2.67z"/>
+			<path class="st0" d="M39.33,1C40.25,1,41,1.75,41,2.67v36.67c0,0.92-0.75,1.67-1.67,1.67H2.67C1.75,41,1,40.25,1,39.33V2.67
+				C1,1.75,1.75,1,2.67,1H39.33 M39.33,0H2.67C1.2,0,0,1.2,0,2.67v36.67C0,40.8,1.2,42,2.67,42h36.67C40.8,42,42,40.8,42,39.33V2.67
+				C42,1.2,40.8,0,39.33,0L39.33,0z"/>
+		</g>
+		<g>
+			<rect x="17.11" y="7.48" class="st1" width="6.67" height="1.48"/>
+			<rect x="11.93" y="20.44" class="st1" width="6.67" height="1.48"/>
+			<rect x="4.15" y="20.44" class="st1" width="1.48" height="1.48"/>
+			<rect x="4.15" y="7.48" class="st1" width="4.07" height="1.48"/>
+			<rect x="24.89" y="7.48" class="st1" width="1.48" height="1.48"/>
+			<rect x="11.93" y="7.48" class="st1" width="1.48" height="1.48"/>
+			<rect x="9.33" y="7.48" class="st1" width="1.48" height="1.48"/>
+			<rect x="27.48" y="7.48" class="st1" width="1.48" height="1.48"/>
+			<circle class="st1" cx="15.26" cy="8.22" r="0.74"/>
+			<circle class="st1" cx="30.81" cy="8.22" r="0.74"/>
+			<circle class="st1" cx="23.04" cy="21.19" r="0.74"/>
+			<circle class="st1" cx="30.81" cy="34.15" r="0.74"/>
+			<rect x="19.7" y="20.44" class="st1" width="1.48" height="1.48"/>
+			<circle class="st1" cx="10.07" cy="21.19" r="0.74"/>
+			<rect x="6.74" y="20.44" class="st1" width="1.48" height="1.48"/>
+			<rect x="24.89" y="20.44" class="st1" width="6.67" height="1.48"/>
+			<rect x="19.7" y="33.41" class="st1" width="6.67" height="1.48"/>
+			<rect x="27.48" y="33.41" class="st1" width="1.48" height="1.48"/>
+			<circle class="st1" cx="17.85" cy="34.15" r="0.74"/>
+			<circle class="st1" cx="4.89" cy="34.15" r="0.74"/>
+			<rect x="6.74" y="33.41" class="st1" width="6.67" height="1.48"/>
+			<rect x="14.52" y="33.41" class="st1" width="1.48" height="1.48"/>
+			<path class="st1" d="M39.33,1H2.67C1.75,1,1,1.75,1,2.67v36.67C1,40.25,1.75,41,2.67,41h36.67c0.92,0,1.67-0.75,1.67-1.67V2.67
+				C41,1.75,40.25,1,39.33,1z M39.52,39.33c0,0.1-0.08,0.19-0.19,0.19H2.67c-0.1,0-0.19-0.08-0.19-0.19V2.67
+				c0-0.1,0.08-0.19,0.19-0.19h36.67c0.1,0,0.19,0.08,0.19,0.19V39.33z"/>
+			<polygon class="st1" points="32.69,18.05 35.08,20.44 32.67,20.44 32.67,21.93 35.17,21.93 32.69,24.41 33.74,25.46 37.96,21.23 
+				33.74,17 			"/>
+			<polygon class="st1" points="32.69,5.06 35.11,7.48 32.67,7.48 32.67,8.96 35.14,8.96 32.69,11.42 33.74,12.46 37.96,8.24 
+				33.74,4.01 			"/>
+			<polygon class="st1" points="32.69,30.98 35.11,33.41 32.67,33.41 32.67,34.89 35.14,34.89 32.69,37.34 33.74,38.39 37.96,34.16 
+				33.74,29.94 			"/>
+		</g>
+	</g>
+</g>
+</svg>
