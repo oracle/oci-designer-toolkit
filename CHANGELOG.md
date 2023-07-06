@@ -4,6 +4,7 @@
 ## Version 0.53.0
 **Release Date**: 12th July 2023
 ### Features
+1. Add platform to okit_query.py
 ### Bug Fixes
 1. Remove agent_config from TF generated for PCA-X9 which does not support this.
 
