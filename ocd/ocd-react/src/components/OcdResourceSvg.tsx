@@ -19,7 +19,7 @@ export const OcdSvgContextMenu = ({ contextMenu, setContextMenu, ocdDocument, se
     const uuid = () => `gid-${uuidv4()}`
 
     const onMouseLeave = (e: React.MouseEvent<SVGElement>) => {
-        console.info('OcdResourceSvg: Context OnMouseLeave')
+        console.debug('OcdResourceSvg: Context OnMouseLeave')
         setContextMenu({show: false, x: 0, y: 0})
     }
     const onClick = (e: React.MouseEvent<SVGElement>) => {
@@ -55,10 +55,30 @@ export const OcdSvgContextMenu = ({ contextMenu, setContextMenu, ocdDocument, se
         const clone = OcdDocument.clone(ocdDocument)
         setOcdDocument(clone)
     }
-    const onToFrontClick = (e: React.MouseEvent<HTMLElement>) => {}
-    const onToBackClick = (e: React.MouseEvent<HTMLElement>) => {}
-    const onBringForwardClick = (e: React.MouseEvent<HTMLElement>) => {}
-    const onSendBackwardClick = (e: React.MouseEvent<HTMLElement>) => {}
+    const onToFrontClick = (e: React.MouseEvent<HTMLElement>) => {
+        e.stopPropagation()
+        const page = ocdDocument.getActivePage()
+        ocdDocument.toFront(resource, page.id)
+        setOcdDocument(OcdDocument.clone(ocdDocument))            
+    }
+    const onToBackClick = (e: React.MouseEvent<HTMLElement>) => {
+        e.stopPropagation()
+        const page = ocdDocument.getActivePage()
+        ocdDocument.toBack(resource, page.id)
+        setOcdDocument(OcdDocument.clone(ocdDocument))            
+    }
+    const onBringForwardClick = (e: React.MouseEvent<HTMLElement>) => {
+        e.stopPropagation()
+        const page = ocdDocument.getActivePage()
+        ocdDocument.bringForward(resource, page.id)
+        setOcdDocument(OcdDocument.clone(ocdDocument))            
+    }
+    const onSendBackwardClick = (e: React.MouseEvent<HTMLElement>) => {
+        e.stopPropagation()
+        const page = ocdDocument.getActivePage()
+        ocdDocument.sendBackward(resource, page.id)
+        setOcdDocument(OcdDocument.clone(ocdDocument))            
+    }
     return (
         <g 
         transform={`translate(${contextMenu.x}, ${contextMenu.y})`}

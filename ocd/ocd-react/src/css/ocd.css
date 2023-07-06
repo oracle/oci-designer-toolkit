@@ -1109,6 +1109,11 @@ summary {
     text-align: left;
 }
 
+.ocd-svg-context-menu-item a:hover {
+    background-color: #f2f2f2;
+    box-shadow: 0 0 5px #1d2733;
+}
+
 
 
 
