@@ -4,7 +4,7 @@
 */
 
 import { v4 as uuidv4 } from 'uuid'
-import OcdDocument from './OcdDocument'
+import OcdDocument, { OcdSelectedResource } from './OcdDocument'
 import OcdResourceSvg, { OcdDragResourceGhostSvg, OcdSvgContextMenu } from './OcdResourceSvg'
 import { OcdViewCoords, OcdViewLayer, OcdViewPage } from '../model/OcdDesign'
 import { OcdResource } from '../model/OcdResource'
@@ -32,6 +32,20 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
     const [ghostTranslate, setGhostTranslate] = useState<Point>({ x: 0, y: 0 });
     const [origin, setOrigin] = useState<Point>({ x: 0, y: 0 });
     const resource = ocdDocument.dragResource.resource
+
+    // Click Event to Reset Selected
+    const onClick = (e: React.MouseEvent<SVGElement>) => {
+        e.stopPropagation()
+        const clone = OcdDocument.clone(ocdDocument)
+        const selectedResource: OcdSelectedResource = {
+            modelId: '',
+            pageId: ocdDocument.getActivePage().id,
+            coordsId: '',
+            class: ''
+        }
+        clone.selectedResource = selectedResource
+        setOcdDocument(clone)
+    }
 
     // HTML Drag & Drop Events
     const onDragOver = (e: React.MouseEvent<HTMLElement>) => {
@@ -144,12 +158,10 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
             coords.y = resource.y + coordinates.y
             coords.w = resource.w
             coords.h = resource.h
-            coords.pgid = resource.pgid
-            coords.pocid = resource.pocid
             if (ocdDocument.dragResource.parent) {
                 coords.pgid = ocdDocument.dragResource.parent.id
                 coords.pocid = ocdDocument.dragResource.parent.ocid    
-            } else {
+            } else if (contextMenu.show) {
                 coords.pgid = resource.pgid
                 coords.pocid = resource.pocid
             }
@@ -227,11 +239,12 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
     const page: OcdViewPage = ocdDocument.getActivePage()
     const layers = page.layers.filter((l: OcdViewLayer) => l.visible).map((l: OcdViewLayer) => l.id)
     const visibleResourceIds = ocdDocument.getResources().filter((r: any) => layers.includes(r.compartmentId)).map((r: any) => r.id)
-    const mouseEvents: OcdMouseEvents = {
-        'onSVGDragStart': onSVGDragStart,
-        'onSVGDrag': onSVGDrag,
-        'onSVGDragEnd': onSVGDrag,
-    }
+    console.debug('OcdCanvas: Visible Resource Ids', visibleResourceIds)
+    // const mouseEvents: OcdMouseEvents = {
+    //     'onSVGDragStart': onSVGDragStart,
+    //     'onSVGDrag': onSVGDrag,
+    //     'onSVGDragEnd': onSVGDrag,
+    // }
 
     return (
         <div className='ocd-designer-canvas ocd-background' 
@@ -250,6 +263,7 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
                 onMouseMove={onSVGDrag}
                 onMouseUp={onSVGDragEnd}
                 onMouseLeave={onSVGDragEnd}
+                onClick={onClick}
                     >
                     <g>
                         {page.coords && page.coords.filter((r: OcdViewCoords) => visibleResourceIds.includes(r.ocid)).map((r: OcdViewCoords) => {

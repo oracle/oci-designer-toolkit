@@ -166,12 +166,12 @@
                     "resources": [
                         {
                             "container": false,
-                            "title": "Block Storage Volume",
+                            "title": "Volume",
                             "class": "oci-volume"
                         },
                         {
                             "container": false,
-                            "title": "Object Storage Bucket",
+                            "title": "Bucket",
                             "class": "oci-bucket"
                         },
                         {

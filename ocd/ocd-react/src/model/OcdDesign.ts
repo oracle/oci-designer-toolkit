@@ -45,6 +45,15 @@ export interface OcdViewCoords {
     class: string,
     container?: boolean,
     coords?: OcdViewCoords[]
+    style?: OcdViewCoordsStyle
+}
+
+export interface OcdViewCoordsStyle {
+    fill?: string,
+    stroke?: string,
+    strokeDasharray?: string
+    strokeWidth?: string
+    opacity?: string
 }
 
 export interface OcdViewPoint {
@@ -56,7 +65,8 @@ export interface OcdViewLayer {
     id: string,
     class: string,
     visible: boolean,
-    selected: boolean
+    selected: boolean,
+    style?: OcdViewCoordsStyle
 }
 
 export interface OcdPageLayer {

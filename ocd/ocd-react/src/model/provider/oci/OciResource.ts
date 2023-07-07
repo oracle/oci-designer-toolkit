@@ -17,7 +17,7 @@ export interface OciResource extends OcdResource {
 export namespace OciResource {
     export function uuid(prefix: string) {return `okit.${prefix}.${uuidv4()}`}
     export function newResource(type: string): OciResource {
-        const displayName = `${OcdUtils.toTitleCase(type ? type.split('_').join(' ') : 'Unknown')}`
+        const displayName = `${OcdUtils.toTitleCase(type ? type.split('_').join(' ') : 'Unknown')} ${uuidv4().slice(-4)}`
         return {
             ...OcdResource.newResource(type),
             provider: 'oci',

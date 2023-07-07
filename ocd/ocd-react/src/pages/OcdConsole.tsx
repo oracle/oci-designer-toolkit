@@ -81,6 +81,10 @@ const OcdConsoleConfigEditor = ({ ocdConsoleConfig, setOcdConsoleConfig }: any):
         ocdConsoleConfig.config.showProperties = !ocdConsoleConfig.config.showProperties
         setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
     }
+    const highlightCompartmentResourcesOnChange = () => {
+        ocdConsoleConfig.config.highlightCompartmentResources = !ocdConsoleConfig.config.highlightCompartmentResources
+        setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+    }
     return (
         <div className='ocd-console-toolbar-dropdown'>
             <ul>
@@ -91,6 +95,7 @@ const OcdConsoleConfigEditor = ({ ocdConsoleConfig, setOcdConsoleConfig }: any):
                         <li className='ocd-dropdown-menu-item'><div><input id='showMPalette' type='checkbox' onChange={showPaletteOnChange} ref={cbRef} checked={ocdConsoleConfig.config.showPalette}/>Display Palette</div></li>
                         <li className='ocd-dropdown-menu-item'><div><input id='verboseProviderPalette' type='checkbox' onChange={verboseProviderPaletteOnChange} ref={cbRef} checked={ocdConsoleConfig.config.verboseProviderPalette}/>Verbose Palette</div></li>
                         <li className='ocd-dropdown-menu-item'><div><input id='showProperties' type='checkbox' onChange={showPropertiesOnChange} ref={cbRef} checked={ocdConsoleConfig.config.showProperties}/>Display Properties</div></li>
+                        <li className='ocd-dropdown-menu-item'><div><input id='highlightCompartmentResources' type='checkbox' onChange={highlightCompartmentResourcesOnChange} ref={cbRef} checked={ocdConsoleConfig.config.highlightCompartmentResources}/>Highlight Compartment Resources</div></li>
                     </ul>
                 </li>
             </ul>

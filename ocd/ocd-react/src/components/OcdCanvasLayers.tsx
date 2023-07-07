@@ -28,13 +28,31 @@ const OcdCanvasLayer = ({ ocdDocument, setOcdDocument, layer } : any): JSX.Eleme
         }
         clone.selectedResource = selectedResource
         setOcdDocument(clone)
-        // setOcdDocument(OcdDocument.clone(ocdDocument))
+    }
+    const onDeleteClick = (e: React.MouseEvent<HTMLElement>) => {
+        console.debug('OcdCanvasLayers: Delete Layer', layer)
+        const page: OcdViewPage = ocdDocument.getActivePage()
+        const clone = OcdDocument.clone(ocdDocument)
+        clone.removeLayer(layer.id)
+        if (ocdDocument.selectedResource.modelId === layer.id) {
+            console.debug('OcdCanvasLayers: Delete Layer Changed Selected', page.layers[0].id)
+            const selectedResource: OcdSelectedResource = {
+                modelId: page.layers[0].id,
+                pageId: page.id,
+                coordsId: '',
+                class: layer.class
+            }
+            clone.selectedResource = selectedResource
+            page.layers[0].selected = true
+        }
+        setOcdDocument(clone)
     }
     const onChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         ocdDocument.setDisplayName(layer.id, e.target.value)
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
     const title = ocdDocument.getLayerName(layer.id)
+    const page: OcdViewPage = ocdDocument.getActivePage()
     return (
         <div className={`ocd-designer-canvas-layer ${layer.selected ? 'ocd-layer-selected' : ''}`}>
             <div className={`ocd-layer-visiblity-icon ${layer.visible ? 'eye-show' : 'eye-hide'}`}
@@ -43,21 +61,29 @@ const OcdCanvasLayer = ({ ocdDocument, setOcdDocument, layer } : any): JSX.Eleme
             <div className={`ocd-canvas-layer-name ${layer.class}`} onClick={() => onLayerSelectedClick()}>
                 <input type='text' value={title} onChange={onChange} tabIndex={-1}></input>
             </div>
+            {page.layers.length > 1 && <div className={`ocd-layer-visiblity-icon delete-layer`}
+                onClick={onDeleteClick}
+            ></div>}
         </div>
     )
 }
 
 const OcdCanvasLayers = ({ ocdDocument, setOcdDocument }: any): JSX.Element => {
     const onClickAddLayer = () => {
-        console.info('Adding Layer')
+        console.debug('OcdCanvasLayers: Adding Layer')
         const compartment = ociResources.OciCompartment.newResource()
         ocdDocument.design.model.oci.resources.compartment.push(compartment)
         // Add Layer
         ocdDocument.addLayer(compartment.id)
         const page: OcdViewPage = ocdDocument.getActivePage()
-        // const page: OcdViewPage = ocdDocument.getPage(viewPage.id)
         page.layers.forEach((l: OcdViewLayer) => l.selected = l.id === compartment.id)
-        // setViewPage(structuredClone(page))
+        const selectedResource: OcdSelectedResource = {
+            modelId: compartment.id,
+            pageId: ocdDocument.getActivePage().id,
+            coordsId: '',
+            class: page.layers[0].class
+        }
+        ocdDocument.selectedResource = selectedResource
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
 
