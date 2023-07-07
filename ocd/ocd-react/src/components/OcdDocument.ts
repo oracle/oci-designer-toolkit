@@ -188,6 +188,14 @@ export class OcdDocument {
     }
     removeLayer(id: string) {
         this.design.view.pages.forEach((p: OcdViewPage) => p.layers = p.layers.filter((l) => l.id !== id))
+        this.deleteCompartmentChildren(id)
+    }
+    deleteCompartmentChildren(id: string) {
+        this.design.model.oci.resources.compartment.filter(r => r.compartmentId === id).forEach(r => this.deleteCompartmentChildren(r.id))
+        this.design.model.oci.resources.compartment =  this.design.model.oci.resources.compartment.filter(r => r.compartmentId !== id)
+        const childIds: string[] = Object.entries(this.design.model.oci.resources).filter(([k, v]) => k !== 'compartment').reduce((a, [k, v]) => [...a, ...v.filter(r => r.compartmentId === id).map(r => r.id)], [] as string[])
+        console.debug('OcdDocument: Child Ids', childIds)
+        childIds.forEach(id => this.removeResource(id))
     }
 
     newCoords = (): OcdViewCoords => {
@@ -265,6 +273,7 @@ export class OcdDocument {
                 currentCoords.pocid = coords.pocid
                 this.addCoords(currentCoords, viewId, coords.pgid)
             }
+            if (coords.style) currentCoords.style = coords.style
         }
     }
     cloneCoords(coords: OcdViewCoords): OcdViewCoords {

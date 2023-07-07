@@ -91,7 +91,7 @@ export const OcdSvgContextMenu = ({ contextMenu, setContextMenu, ocdDocument, se
                 xmlns='http://www.w3.org/1999/xhtml'>
                     <ul className='ocd-context-menu'>
                         <li className='ocd-svg-context-menu-item'><a href='#' onClick={onRemoveClick}>Remove From Page</a></li>
-                        <li className='ocd-svg-context-menu-item'><a href='#' onClick={onDeleteClick}>Delete</a></li>
+                        <li className='ocd-svg-context-menu-item'><a href='#' onClick={onDeleteClick}>Delete From Model</a></li>
                         <li><hr/></li>
                         <li className='ocd-svg-context-menu-item'><a href='#' onClick={onCloneClick}>Clone</a></li>
                         <li><hr/></li>
@@ -108,9 +108,11 @@ export const OcdSvgContextMenu = ({ contextMenu, setContextMenu, ocdDocument, se
 
 const OcdSimpleRect = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resource }: ResourceRectProps): JSX.Element => {
     const id = `${resource.id}-rect`
-    const rectClass = `ocd-svg-simple ${ocdConsoleConfig.config.detailedResource ? 'ocd-svg-resource-detailed' : 'ocd-svg-resource-simple'}`
+    const rectClass = `ocd-svg-simple ${ocdConsoleConfig.config.detailedResource ? 'ocd-svg-resource-detailed' : 'ocd-svg-resource-simple'} ${ocdDocument.selectedResource.coordsId === resource.id ? 'ocd-svg-resource-selected' : ''}`
+    const style = resource.style ? resource.style : {} as React.CSSProperties
+    // const style = {stroke: 'green'} as React.CSSProperties
     return (
-        <rect className={rectClass} 
+        <rect className={rectClass} style={style}
             id={id} 
             x='0' 
             y='0' 
@@ -152,9 +154,11 @@ const OcdContainerRect = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
     // console.info('Selected Resource', ocdDocument.selectedResource, 'Resource Id', resource.id)
+    const rectClass = `ocd-svg-container ${ocdDocument.selectedResource.coordsId === resource.id ? 'ocd-svg-resource-selected' : ''}`
+    const style = resource.style ? resource.style : {} as React.CSSProperties
     return (
         <g>
-            <rect className='ocd-svg-container' 
+            <rect className={rectClass} style={style}
                 id={id} 
                 x={container_rect_offset} 
                 y={container_rect_offset} 
@@ -380,11 +384,11 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
                 console.info('>>>OcdResourceSvg: Mouse Up -> Container', resource.id, ocdDocument.dragResource.parent)
                 ocdDocument.dragResource.parent = resource
             }
-        // } else {
-        //     e.stopPropagation()
         }
     }
-    const onResourceMouseMoveEnterLeave = (e: React.MouseEvent<SVGElement>) => {}
+    const onResourceMouseEnter = (e: React.MouseEvent<SVGElement>) => {}
+    const onResourceMouseMove = (e: React.MouseEvent<SVGElement>) => {}
+    const onResourceMouseLeave = (e: React.MouseEvent<SVGElement>) => {}
     return (
         <g className='ocd-designer-resource' 
             id={resource.id} 
@@ -396,12 +400,12 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
             data-pocid={resource.pocid}
             transform={`translate(${gX}, ${gY})`}
             onMouseDown={onResourceDragStart}
-            onMouseMove={onResourceMouseMoveEnterLeave}
+            onMouseMove={onResourceMouseMove}
             // onMouseMove={onResourceDrag}
             // onMouseUp={onResourceDragEnd}
             onMouseUp={onResourceMouseUp}
-            onMouseEnter={onResourceMouseMoveEnterLeave}
-            onMouseLeave={onResourceMouseMoveEnterLeave}
+            onMouseEnter={onResourceMouseEnter}
+            onMouseLeave={onResourceMouseLeave}
             // onMouseLeave={onResourceDragEnd}
             onClick={onResourceClick}
             onContextMenu={onResourceRightClick}
@@ -445,7 +449,7 @@ export const OcdDragResourceGhostSvg = ({ ocdConsoleConfig, ocdDocument, setOcdD
     const SvgRect = resource.container ? OcdContainerRect : OcdSimpleRect
     const [contextMenu, setContextMenu] = useState<OcdContextMenu>({show: false, x: 0, y: 0})
     return (
-        <g className='ocd-drag-drag-ghost'
+        <g className='ocd-svg-drag-ghost'
             transform={`translate(0, 0)`}
         >
             <SvgRect 

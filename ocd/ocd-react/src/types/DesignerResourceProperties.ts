@@ -9,3 +9,8 @@ export interface DesignerResourceProperties {
     ocdDocument: OcdDocument
     setOcdDocument: React.Dispatch<any>
 }
+
+export interface DesignerColourPicker {
+    colour: string
+    setColour: Function
+}

@@ -10,7 +10,8 @@ export interface OcdConsoleConfiguration {
     verboseProviderPalette: boolean,
     displayPage: 'bom' | 'designer' | 'markdown' | 'tabular' | 'terraform' | 'variables',
     detailedResource: boolean,
-    showProperties: boolean
+    showProperties: boolean,
+    highlightCompartmentResources: boolean
 }
 
 export class OcdConsoleConfig {
@@ -32,7 +33,8 @@ export class OcdConsoleConfig {
             verboseProviderPalette: false,
             displayPage: 'designer',
             detailedResource: true,
-            showProperties: true
+            showProperties: true,
+            highlightCompartmentResources: false
         }
     }
 }

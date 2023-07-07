@@ -352,6 +352,7 @@ summary {
 
 .ocd-dropdown-menu-item > div {
     margin: 2px 0 2px 0;
+    white-space: nowrap;
 }
 
 .ocd-console-body {
@@ -971,6 +972,12 @@ summary {
     rx: 5;
 }
 
+.ocd-svg-resource-selected {
+    stroke-width: 1.5px;
+    stroke-opacity: 1;
+    stroke-dasharray: none;
+}
+
 .ocd-svg-resource-simple {
     width: var(--canvas-resource-simple-width);
     stroke-opacity: 0;
@@ -1060,7 +1067,7 @@ summary {
     background: transparent;
 }
 
-.ocd-drag-drag-ghost {
+.ocd-svg-drag-ghost {
     opacity: 0.4;
     pointer-events: none;
 }
@@ -1191,6 +1198,7 @@ summary {
     resize: none;
 }
 
+/* Properties Arragement Panel */
 .ocd-properties-arrangement-panel {
     display: flex;
     flex-direction: column;
@@ -1257,6 +1265,47 @@ summary {
 
 .ocd-arrangement-xy-positioning > div > span {
     opacity: 0.5;
+}
+
+/* Properties Style Panel */
+.ocd-properties-style-panel {
+    display: flex;
+    flex-direction: column;
+    font-size: smaller;
+}
+
+.ocd-style-fill {
+    display: grid;
+    grid-template-columns: auto auto;
+    border-bottom: 1px solid #d1d1d4;
+    margin: 5px 0 5px 0;
+    padding: 5px;
+}
+
+.ocd-style-fill > div {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.ocd-colour-picker {
+    position: relative;
+}
+
+.ocd-colour-picker-swatch {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    border: 3px solid #fff;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+    cursor: pointer;  
+}
+
+.ocd-colour-picker-popup {
+    position: absolute;
+    top: calc(100% + 2px);
+    left: 0;
+    border-radius: 9px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);    
 }
 
 .ocd-property-row {

@@ -3,14 +3,15 @@
 ** Licensed under the GNU GENERAL PUBLIC LICENSE v 3.0 as shown at https://www.gnu.org/licenses/.
 */
 
-import { useState } from 'react'
-import { OcdViewPage } from '../model/OcdDesign'
+import { useRef, useState } from 'react'
+import { OcdViewCoordsStyle, OcdViewPage } from '../model/OcdDesign'
 import { OcdResource } from '../model/OcdResource'
-import { DesignerResourceProperties } from '../types/DesignerResourceProperties'
+import { DesignerColourPicker, DesignerResourceProperties } from '../types/DesignerResourceProperties'
 import { OcdUtils } from '../utils/OcdUtils'
 import OcdDocument from './OcdDocument'
 import { OcdLookupProperty, OcdTextProperty, ResourceElementConfig, ResourceProperties } from './properties/OcdPropertyTypes'
 import * as ociResources from './properties/provider/oci/resources'
+import { HexColorPicker, HexColorInput } from 'react-colorful'
 
 const OcdResourcePropertiesHeader = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
     const selectedResource = ocdDocument.getSelectedResource()
@@ -88,7 +89,6 @@ const OcdResourceArrangement = ({ocdDocument, setOcdDocument}: DesignerResourceP
     // @ts-ignore
     // const coords = ocdDocument.design.view.pages.find((p => p.selected)).coords.find(c => c.id === selectedResource.coordsId)
     const coords = ocdDocument.getCoords(selectedResource.coordsId)
-    const coordsId = coords ? coords.id : ''
     const width = coords ? coords.w : 0
     const height = coords ? coords.h : 0
     const left = coords ? coords.x : 0
@@ -158,6 +158,75 @@ const OcdResourceArrangement = ({ocdDocument, setOcdDocument}: DesignerResourceP
         </div>
     )
 }
+const OcdResourceStyle = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
+    const cbRef = useRef<HTMLInputElement>(null)
+    const selectedResource = ocdDocument.selectedResource
+    const page: OcdViewPage = ocdDocument.getActivePage()
+    const coords = ocdDocument.getCoords(selectedResource.coordsId)
+    // const [fillChecked, setFillChecked] = useState((coords !== undefined && coords.style !== undefined && coords.style.fill !== undefined && coords.style.fill) as boolean)
+    const fillChecked = (coords !== undefined && coords.style !== undefined && coords.style.fill !== undefined && coords.style.fill) as boolean
+    const fill =(coords !== undefined && coords.style !== undefined && coords.style.fill !== undefined) ? coords.style.fill : '#aabbcc'
+    // const [fill, setFill] = useState((coords !== undefined && coords.style !== undefined && coords.style.fill !== undefined) ? coords.style.fill : '#aabbcc')
+    // const fillChecked = (coords !== undefined && coords.style !== undefined && coords.style.fill !== undefined && coords.style.fill) as boolean
+
+    const fillChanged = () => {
+        console.debug('OcdProperties: Fill', fillChecked)
+        // setFillChecked(!fillChecked)
+        console.debug('OcdProperties: Fill', fillChecked)
+        const style = coords !== undefined && coords.style !== undefined ? JSON.parse(JSON.stringify(coords.style)) : {} as OcdViewCoordsStyle
+        // Need to not fill because it is currently the previous state
+        if (!fillChecked) {
+            // Fill Specified
+            style.fill = fill
+        } else {
+            delete style.fill
+        }
+        if (coords) {ocdDocument.updateCoords({...coords, style: style}, page.id)}
+        const clone = OcdDocument.clone(ocdDocument)
+        setOcdDocument(clone)
+    }
+    const setFillColour = (colour: string) => {
+        const style = coords !== undefined && coords.style !== undefined ? JSON.parse(JSON.stringify(coords.style)) : {} as OcdViewCoordsStyle
+        style.fill = colour
+        console.debug('OcdProperties: Set Fill Colour', coords)
+        if (coords) {ocdDocument.updateCoords({...coords, style: style}, page.id)}
+        const clone = OcdDocument.clone(ocdDocument)
+        setOcdDocument(clone)
+        // setFill(colour)
+    }
+    return (
+        <div className={`ocd-properties-panel ocd-properties-panel-theme ocd-properties-style-panel`}>
+            <div className={`ocd-style-fill`}>
+                <div><input id='resourceStyleFill' type='checkbox' onChange={fillChanged} checked={fillChecked}/><span>Fill</span></div>
+                {fillChecked && <div><OcdColourPicker colour={fill} setColour={setFillColour} /></div>}
+            </div>
+            <div className={`ocd-style-stroke`}></div>
+            <div className={`ocd-style-opacity`}></div>
+        </div>
+    )
+}
+
+const OcdColourPicker = ({colour, setColour}: DesignerColourPicker): JSX.Element => {
+    const [pickerOpen, setPickerOpen] = useState(false)
+    const [color, setColor] = useState(colour)
+    const colourChanged = (colour: string) => {
+        console.debug('OcdProperties: Colour Changed', colour)
+        setColor(colour)
+        setColour(colour)
+    }
+    return (
+        <div className='ocd-colour-picker'>
+            <div className='ocd-colour-picker-swatch'
+                style={{ backgroundColor: color }}
+                onClick={() => setPickerOpen(!pickerOpen)}
+            ></div>
+            {pickerOpen && <div className='ocd-colour-picker-popup'>
+                <div><HexColorPicker color={color} onChange={colourChanged} /></div>
+                <div><HexColorInput color={color} onChange={colourChanged} /></div>
+            </div>}
+        </div>
+    )
+}
 
 const OcdProperties = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
     const [activeTab, setActivieTab] = useState('properties')
@@ -167,12 +236,14 @@ const OcdProperties = ({ocdDocument, setOcdDocument}: DesignerResourceProperties
     const ActiveTab = activeTab === 'properties' ? OcdResourceProperties :
                       activeTab === 'documentation' ? OcdResourceDocumentation :
                       activeTab === 'arrange' ? OcdResourceArrangement :
+                      activeTab === 'style' ? OcdResourceStyle :
                       OcdResourceProperties
     return (
         <div className='ocd-designer-properties'>
             <div className={`ocd-designer-tab-bar ocd-designer-tab-bar-theme`}>
                 <div className={`ocd-designer-tab ocd-designer-tab-theme ${activeTab === 'properties' ? 'ocd-designer-active-tab-theme' : ''}`} onClick={() => onPropertiesTabClick('Properties')}><span>Properties</span></div>
                 <div className={`ocd-designer-tab ocd-designer-tab-theme ${activeTab === 'documentation' ? 'ocd-designer-active-tab-theme' : ''}`} onClick={() => onPropertiesTabClick('Documentation')}><span>Documentation</span></div>
+                <div className={`ocd-designer-tab ocd-designer-tab-theme ${activeTab === 'style' ? 'ocd-designer-active-tab-theme' : ''}`} onClick={() => onPropertiesTabClick('Style')}><span>Style</span></div>
                 <div className={`ocd-designer-tab ocd-designer-tab-theme ${activeTab === 'arrange' ? 'ocd-designer-active-tab-theme' : ''} ${ocdDocument.selectedResource.coordsId === '' ? 'hidden' : ''}`} onClick={() => onPropertiesTabClick('Arrange')}><span>Arrange</span></div>
             </div>
             <OcdResourcePropertiesHeader
