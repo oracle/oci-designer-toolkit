@@ -5,7 +5,7 @@
 
 import { v4 as uuidv4 } from 'uuid'
 import * as ociResources from '../model/provider/oci/resources'
-import { OcdDesign, OcdViewPage, OcdViewCoords, OcdViewLayer, OcdBaseModel, OcdViewPoint } from '../model/OcdDesign'
+import { OcdDesign, OcdViewPage, OcdViewCoords, OcdViewLayer, OcdBaseModel, OcdViewPoint, OcdViewCoordsStyle } from '../model/OcdDesign'
 import { PaletteResource } from '../model/OcdPalette'
 import { OcdResource } from '../model/OcdResource'
 import { OcdAutoLayout } from './OcdAutoLayout'
@@ -172,9 +172,12 @@ export class OcdDocument {
     }
 
     // @ts-ignore 
+    // getLayer = (id: string): OcdViewLayer => this.design.model.oci.resources.compartment.find((c) => c.id === id)
     getLayerName = (id: string): string => this.design.model.oci.resources.compartment.find((c) => c.id === id).displayName
     // @ts-ignore 
     getActiveLayer = (pageId: string): OcdViewLayer => this.getActivePage(pageId).layers.find((l: OcdViewLayer) => l.selected)
+    // @ts-ignore 
+    getResourcesLayer = (id: string): OcdViewLayer => this.getActivePage().layers.find((l: OcdViewLayer) => l.id === this.getResource(id).compartmentId)
     addLayer(id: string, layerClass: string = 'oci-compartment') {
         this.design.view.pages.forEach((p: OcdViewPage) => {
             const layer: OcdViewLayer = {
@@ -186,6 +189,13 @@ export class OcdDocument {
             p.layers.push(layer)
         })
     }
+    updateLayerStyle(id: string, style: OcdViewCoordsStyle) {
+        this.design.view.pages.forEach((p: OcdViewPage) => {
+            const layer = p.layers.find(l => l.id === id)
+            if (layer) layer.style = style
+        })
+    }
+
     removeLayer(id: string) {
         this.design.view.pages.forEach((p: OcdViewPage) => p.layers = p.layers.filter((l) => l.id !== id))
         this.deleteCompartmentChildren(id)

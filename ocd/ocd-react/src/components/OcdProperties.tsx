@@ -159,21 +159,19 @@ const OcdResourceArrangement = ({ocdDocument, setOcdDocument}: DesignerResourceP
     )
 }
 const OcdResourceStyle = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
-    const cbRef = useRef<HTMLInputElement>(null)
     const selectedResource = ocdDocument.selectedResource
+    console.debug('OcdProperties: Selected Resource', selectedResource)
     const page: OcdViewPage = ocdDocument.getActivePage()
     const coords = ocdDocument.getCoords(selectedResource.coordsId)
-    // const [fillChecked, setFillChecked] = useState((coords !== undefined && coords.style !== undefined && coords.style.fill !== undefined && coords.style.fill) as boolean)
-    const fillChecked = (coords !== undefined && coords.style !== undefined && coords.style.fill !== undefined && coords.style.fill) as boolean
-    const fill =(coords !== undefined && coords.style !== undefined && coords.style.fill !== undefined) ? coords.style.fill : '#aabbcc'
-    // const [fill, setFill] = useState((coords !== undefined && coords.style !== undefined && coords.style.fill !== undefined) ? coords.style.fill : '#aabbcc')
-    // const fillChecked = (coords !== undefined && coords.style !== undefined && coords.style.fill !== undefined && coords.style.fill) as boolean
+    const coordsStyle = (coords !== undefined && coords.style !== undefined ) ? coords.style : undefined
+    const coordsFill = (coordsStyle !== undefined && coordsStyle.fill !== undefined) ? coordsStyle.fill : undefined
+    // const fillChecked = (coords !== undefined && coords.style !== undefined && coords.style.fill !== undefined && coords.style.fill !== undefined) as boolean
+    const fillChecked = (coordsFill !== undefined) as boolean
+    const fill = coordsFill !== undefined ? coordsFill : '#aabbcc'
 
-    const fillChanged = () => {
-        console.debug('OcdProperties: Fill', fillChecked)
-        // setFillChecked(!fillChecked)
-        console.debug('OcdProperties: Fill', fillChecked)
-        const style = coords !== undefined && coords.style !== undefined ? JSON.parse(JSON.stringify(coords.style)) : {} as OcdViewCoordsStyle
+    const fillCheckedChanged = () => {
+        console.debug('OcdProperties: fillCheckedChanged', fillChecked, coords)
+        const style = coordsStyle !== undefined ? JSON.parse(JSON.stringify(coordsStyle)) : {} as OcdViewCoordsStyle
         // Need to not fill because it is currently the previous state
         if (!fillChecked) {
             // Fill Specified
@@ -186,18 +184,18 @@ const OcdResourceStyle = ({ocdDocument, setOcdDocument}: DesignerResourcePropert
         setOcdDocument(clone)
     }
     const setFillColour = (colour: string) => {
-        const style = coords !== undefined && coords.style !== undefined ? JSON.parse(JSON.stringify(coords.style)) : {} as OcdViewCoordsStyle
+        // const style = coords !== undefined && coords.style !== undefined ? JSON.parse(JSON.stringify(coords.style)) : {} as OcdViewCoordsStyle
+        const style = coordsStyle !== undefined ? JSON.parse(JSON.stringify(coordsStyle)) : {} as OcdViewCoordsStyle
         style.fill = colour
         console.debug('OcdProperties: Set Fill Colour', coords)
         if (coords) {ocdDocument.updateCoords({...coords, style: style}, page.id)}
         const clone = OcdDocument.clone(ocdDocument)
         setOcdDocument(clone)
-        // setFill(colour)
     }
     return (
         <div className={`ocd-properties-panel ocd-properties-panel-theme ocd-properties-style-panel`}>
             <div className={`ocd-style-fill`}>
-                <div><input id='resourceStyleFill' type='checkbox' onChange={fillChanged} checked={fillChecked}/><span>Fill</span></div>
+                <div><input id='resourceStyleFill' type='checkbox' onChange={fillCheckedChanged} checked={fillChecked}/><span>Fill</span></div>
                 {fillChecked && <div><OcdColourPicker colour={fill} setColour={setFillColour} /></div>}
             </div>
             <div className={`ocd-style-stroke`}></div>
@@ -205,30 +203,71 @@ const OcdResourceStyle = ({ocdDocument, setOcdDocument}: DesignerResourcePropert
         </div>
     )
 }
+const OcdLayerStyle = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
+    const page: OcdViewPage = ocdDocument.getActivePage()
+    const layer = ocdDocument.getActiveLayer(page.id)
+    const layerStyle = (layer !== undefined && layer.style !== undefined) ? layer.style : undefined
+    const layerFill = (layerStyle !== undefined && layerStyle.fill !== undefined) ? layerStyle.fill : undefined
+    const fillChecked = (layerFill !== undefined) as boolean
+    const fill = layerFill !== undefined ? layerFill : '#aabbcc'
 
+    const fillCheckedChanged = () => {
+        console.debug('OcdProperties: fillCheckedChanged', fillChecked, layer)
+        const style = layerStyle !== undefined ? JSON.parse(JSON.stringify(layerStyle)) : {} as OcdViewCoordsStyle
+        // Need to not fill because it is currently the previous state
+        if (!fillChecked) {
+            // Fill Specified
+            style.fill = fill
+        } else {
+            delete style.fill
+        }
+        ocdDocument.updateLayerStyle(layer.id, style)
+        const clone = OcdDocument.clone(ocdDocument)
+        setOcdDocument(clone)
+    }
+    const setFillColour = (colour: string) => {
+        const style = layerStyle !== undefined ? JSON.parse(JSON.stringify(layerStyle)) : {} as OcdViewCoordsStyle
+        style.fill = colour
+        console.debug('OcdProperties: Set Fill Colour', layer)
+        ocdDocument.updateLayerStyle(layer.id, style)
+        const clone = OcdDocument.clone(ocdDocument)
+        setOcdDocument(clone)
+    }
+    return (
+        <div className={`ocd-properties-panel ocd-properties-panel-theme ocd-properties-style-panel`}>
+            <div className={`ocd-style-fill`}>
+                <div><input id='resourceStyleFill' type='checkbox' onChange={fillCheckedChanged} checked={fillChecked}/><span>Fill</span></div>
+                {fillChecked && <div><OcdColourPicker colour={fill} setColour={setFillColour} /></div>}
+            </div>
+            <div className={`ocd-style-stroke`}></div>
+            <div className={`ocd-style-opacity`}></div>
+        </div>
+    )
+}
 const OcdColourPicker = ({colour, setColour}: DesignerColourPicker): JSX.Element => {
+    console.debug('OcdProperties: Colour', colour)
     const [pickerOpen, setPickerOpen] = useState(false)
-    const [color, setColor] = useState(colour)
     const colourChanged = (colour: string) => {
         console.debug('OcdProperties: Colour Changed', colour)
-        setColor(colour)
         setColour(colour)
     }
     return (
-        <div className='ocd-colour-picker'>
+        <div className='ocd-colour-picker'
+            onMouseLeave={() => setPickerOpen(false)}>
             <div className='ocd-colour-picker-swatch'
-                style={{ backgroundColor: color }}
+                style={{ backgroundColor: colour }}
                 onClick={() => setPickerOpen(!pickerOpen)}
             ></div>
             {pickerOpen && <div className='ocd-colour-picker-popup'>
-                <div><HexColorPicker color={color} onChange={colourChanged} /></div>
-                <div><HexColorInput color={color} onChange={colourChanged} /></div>
+                <div><HexColorPicker color={colour} onChange={colourChanged} /></div>
+                <div><HexColorInput color={colour} onChange={colourChanged} /></div>
             </div>}
         </div>
     )
 }
 
 const OcdProperties = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
+    const selectedResource = ocdDocument.selectedResource
     const [activeTab, setActivieTab] = useState('properties')
     const onPropertiesTabClick = (tab: string) => {
         setActivieTab(tab.toLowerCase())
@@ -236,7 +275,8 @@ const OcdProperties = ({ocdDocument, setOcdDocument}: DesignerResourceProperties
     const ActiveTab = activeTab === 'properties' ? OcdResourceProperties :
                       activeTab === 'documentation' ? OcdResourceDocumentation :
                       activeTab === 'arrange' ? OcdResourceArrangement :
-                      activeTab === 'style' ? OcdResourceStyle :
+                      activeTab === 'style' && selectedResource.coordsId !== '' ? OcdResourceStyle :
+                      activeTab === 'style' ? OcdLayerStyle :
                       OcdResourceProperties
     return (
         <div className='ocd-designer-properties'>

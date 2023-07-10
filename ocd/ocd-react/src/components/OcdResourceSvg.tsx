@@ -110,6 +110,11 @@ const OcdSimpleRect = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resource
     const id = `${resource.id}-rect`
     const rectClass = `ocd-svg-simple ${ocdConsoleConfig.config.detailedResource ? 'ocd-svg-resource-detailed' : 'ocd-svg-resource-simple'} ${ocdDocument.selectedResource.coordsId === resource.id ? 'ocd-svg-resource-selected' : ''}`
     const style = resource.style ? resource.style : {} as React.CSSProperties
+    const layer = ocdDocument.getResourcesLayer(resource.ocid)
+    if (layer && layer.style && layer.style.fill && ocdConsoleConfig.config.highlightCompartmentResources) {
+        style.stroke = layer.style.fill
+        if (ocdDocument.selectedResource.coordsId !== resource.id) style.strokeOpacity = 0.9
+    }
     // const style = {stroke: 'green'} as React.CSSProperties
     return (
         <rect className={rectClass} style={style}
@@ -156,6 +161,11 @@ const OcdContainerRect = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
     // console.info('Selected Resource', ocdDocument.selectedResource, 'Resource Id', resource.id)
     const rectClass = `ocd-svg-container ${ocdDocument.selectedResource.coordsId === resource.id ? 'ocd-svg-resource-selected' : ''}`
     const style = resource.style ? resource.style : {} as React.CSSProperties
+    const layer = ocdDocument.getResourcesLayer(resource.ocid)
+    if (layer && layer.style && layer.style.fill && ocdConsoleConfig.config.highlightCompartmentResources) {
+        style.stroke = layer.style.fill
+        if (ocdDocument.selectedResource.coordsId !== resource.id) style.strokeOpacity = 0.9
+    }
     return (
         <g>
             <rect className={rectClass} style={style}

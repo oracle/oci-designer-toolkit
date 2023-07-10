@@ -8,6 +8,8 @@ import { OcdViewLayer, OcdViewPage } from '../model/OcdDesign'
 import * as ociResources from '../model/provider/oci/resources'
 
 const OcdCanvasLayer = ({ ocdDocument, setOcdDocument, layer } : any): JSX.Element => {
+    const style: React.CSSProperties = {}
+    if (layer.style !== undefined && layer.style.fill !== undefined) style.backgroundColor = `${layer.style.fill}${style.opacity = layer.selected ? 'ff' : '33'}`
     const onVisibilityClick = () => {
         const page: OcdViewPage = ocdDocument.getActivePage()
         // @ts-ignore 
@@ -54,7 +56,7 @@ const OcdCanvasLayer = ({ ocdDocument, setOcdDocument, layer } : any): JSX.Eleme
     const title = ocdDocument.getLayerName(layer.id)
     const page: OcdViewPage = ocdDocument.getActivePage()
     return (
-        <div className={`ocd-designer-canvas-layer ${layer.selected ? 'ocd-layer-selected' : ''}`}>
+        <div className={`ocd-designer-canvas-layer ${layer.selected ? 'ocd-layer-selected' : ''}`} style={style}>
             <div className={`ocd-layer-visiblity-icon ${layer.visible ? 'eye-show' : 'eye-hide'}`}
                 onClick={() => onVisibilityClick()}
             ></div>
