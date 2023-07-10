@@ -53,6 +53,7 @@ export interface OcdViewCoordsStyle {
     stroke?: string,
     strokeDasharray?: string
     strokeWidth?: string
+    strokeOpacity?: string
     opacity?: string
 }
 

@@ -1289,6 +1289,7 @@ summary {
 
 .ocd-colour-picker {
     position: relative;
+    height: 100%
 }
 
 .ocd-colour-picker-swatch {
