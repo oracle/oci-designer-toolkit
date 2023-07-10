@@ -3,7 +3,7 @@
 ** Licensed under the GNU GENERAL PUBLIC LICENSE v 3.0 as shown at https://www.gnu.org/licenses/.
 */
 
-import React from 'react'
+import React, { MouseEventHandler } from 'react'
 import { OcdConsoleConfig } from '../components/OcdConsoleConfiguration'
 import OcdDocument from '../components/OcdDocument'
 import { OcdViewCoords } from '../model/OcdDesign'
@@ -45,6 +45,7 @@ export interface ResourceSvgProps {
     setOcdDocument: React.Dispatch<any>
     contextMenu: OcdContextMenu
     setContextMenu: React.Dispatch<any>
+    svgDragDropEvents: OcdMouseEvents
     resource: OcdViewCoords
 }
 
@@ -62,7 +63,7 @@ export interface PaletteProps {
     ocdDocument: OcdDocument
 }
 
-export interface OcdMouseEvents extends Record<string, Function> {}
+export interface OcdMouseEvents extends Record<string, MouseEventHandler<SVGGElement>> {}
 // export interface OcdMouseEvents {
 //     [key: string]: Function   
 // }
