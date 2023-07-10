@@ -413,9 +413,9 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
             // onMouseMove={svgDragDropEvents.onSVGDrag}
             // onMouseUp={svgDragDropEvents.onSVGDragEnd}
             onMouseDown={onResourceDragStart}
-            onMouseMove={onResourceMouseMove}
             onMouseUp={onResourceMouseUp}
 
+            // onMouseMove={onResourceMouseMove}
             // onMouseMove={onResourceDrag}
             // onMouseUp={onResourceDragEnd}
             // onMouseEnter={onResourceMouseEnter}
