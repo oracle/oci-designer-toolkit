@@ -4,7 +4,7 @@
 */
 
 import { v4 as uuidv4 } from 'uuid'
-import OcdDocument, { OcdSelectedResource } from './OcdDocument'
+import OcdDocument, { OcdDragResource, OcdSelectedResource } from './OcdDocument'
 import OcdResourceSvg, { OcdDragResourceGhostSvg, OcdSvgContextMenu } from './OcdResourceSvg'
 import { OcdViewCoords, OcdViewLayer, OcdViewPage } from '../model/OcdDesign'
 import { OcdResource } from '../model/OcdResource'
@@ -26,12 +26,13 @@ export interface Point {
 
 export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument, setOcdDocument }: CanvasProps): JSX.Element => {
     console.info('OcdCanvas: OCD Document:', ocdDocument)
+    const [dragResource, setDragResource] = useState(ocdDocument.newDragResource(false))
     const [contextMenu, setContextMenu] = useState<OcdContextMenu>({show: false, x: 0, y: 0})
     const [dragging, setDragging] = useState(false)
     const [coordinates, setCoordinates] = useState<Point>({ x: 0, y: 0 });
     const [ghostTranslate, setGhostTranslate] = useState<Point>({ x: 0, y: 0 });
     const [origin, setOrigin] = useState<Point>({ x: 0, y: 0 });
-    const resource = ocdDocument.dragResource.resource
+    // const resource = ocdDocument.dragResource.resource
 
     // Click Event to Reset Selected
     const onClick = (e: React.MouseEvent<SVGElement>) => {
@@ -153,6 +154,7 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
             }
             const page: OcdViewPage = ocdDocument.getActivePage()
             const coords: OcdViewCoords = ocdDocument.newCoords()
+            const resource = ocdDocument.dragResource.resource
             coords.id = resource.id
             coords.x = resource.x + coordinates.x
             coords.y = resource.y + coordinates.y
@@ -172,6 +174,90 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
             // Redraw
             setOcdDocument(OcdDocument.clone(ocdDocument))
         }
+    }
+
+    /*
+    ** Top Level Events
+    */
+    const svgDragStart = (e: React.MouseEvent<SVGElement>) => {
+        console.debug('OcdCanvas: SVG Drag Start', e.currentTarget)
+        e.preventDefault()
+        e.stopPropagation()
+        const coordsId = e.currentTarget.id
+        const resource = ocdDocument.getCoords(coordsId)
+        if (resource) {
+            const dragResource: OcdDragResource = ocdDocument.newDragResource(true)
+            dragResource.modelId = resource.ocid
+            dragResource.pageId = ocdDocument.getActivePage().id
+            dragResource.coordsId = resource.id
+            dragResource.class = resource.class
+            dragResource.resource = resource
+            setDragResource(dragResource)
+            const ghostXY = ocdDocument.getRelativeXY(dragResource.resource)
+            // Record Starting Point
+            setOrigin({ x: e.clientX, y: e.clientY })
+            setGhostTranslate({x: ghostXY.x, y: ghostXY.y})
+            setDragging(true)
+        }
+}
+    const svgDrag = (e: React.MouseEvent<SVGElement>) => {
+        e.preventDefault()
+        e.stopPropagation()
+        if (dragging) {
+            console.info('OcdCanvas: SVG Drag')
+            const ghostXY = ocdDocument.getRelativeXY(dragResource.resource)
+            // Set state for the change in coordinates.
+            setCoordinates({
+              x: e.clientX - origin.x,
+              y: e.clientY - origin.y,
+            })
+            setGhostTranslate({
+              x: ghostXY.x + coordinates.x,
+              y: ghostXY.y + coordinates.y,
+            })
+        }
+    }
+    const svgDrop = (e: React.MouseEvent<SVGElement>) => {
+        console.debug('OcdCanvas: SVG Drop', e.currentTarget)
+        e.preventDefault()
+        e.stopPropagation()
+        const dropTargetCoordsId = e.currentTarget.id
+        const dropTargetResource = ocdDocument.getCoords(dropTargetCoordsId)
+        if (dragging) {
+            dragResource.parent = dropTargetResource && dropTargetResource.container ? dropTargetResource : undefined 
+            console.info('OcdCanvas: SVG Drag End', ocdDocument.dragResource)
+            setDragging(false)
+            // Test if container dropped on self
+            if (dragResource.parent && dragResource.resource.id === dragResource.parent.id) {
+                delete dragResource.parent
+            }
+            const page: OcdViewPage = ocdDocument.getActivePage()
+            const coords: OcdViewCoords = ocdDocument.newCoords()
+            const resource = dragResource.resource
+            coords.id = resource.id
+            coords.x = resource.x + coordinates.x
+            coords.y = resource.y + coordinates.y
+            coords.w = resource.w
+            coords.h = resource.h
+            if (dragResource.parent) {
+                coords.pgid = dragResource.parent.id
+                coords.pocid = dragResource.parent.ocid    
+            } else if (contextMenu.show) {
+                coords.pgid = resource.pgid
+                coords.pocid = resource.pocid
+            }
+            setCoordinates({ x: 0, y: 0 })
+            setGhostTranslate({ x: 0, y: 0 })
+            ocdDocument.updateCoords(coords, page.id)
+            setDragResource(ocdDocument.newDragResource())
+            // Redraw
+            setOcdDocument(OcdDocument.clone(ocdDocument))
+        }
+    }
+    const svgDragDropEvents: OcdMouseEvents = {
+        'onSVGDragStart': svgDragStart,
+        'onSVGDrag': svgDrag,
+        'onSVGDragEnd': svgDrop,
     }
 
     // Context Menu Events
@@ -240,11 +326,6 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
     const layers = page.layers.filter((l: OcdViewLayer) => l.visible).map((l: OcdViewLayer) => l.id)
     const visibleResourceIds = ocdDocument.getResources().filter((r: any) => layers.includes(r.compartmentId)).map((r: any) => r.id)
     console.debug('OcdCanvas: Visible Resource Ids', visibleResourceIds)
-    // const mouseEvents: OcdMouseEvents = {
-    //     'onSVGDragStart': onSVGDragStart,
-    //     'onSVGDrag': onSVGDrag,
-    //     'onSVGDragEnd': onSVGDrag,
-    // }
 
     return (
         <div className='ocd-designer-canvas ocd-background' 
@@ -273,6 +354,7 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
                                         setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)}
                                         contextMenu={contextMenu}
                                         setContextMenu={(contextMenu: OcdContextMenu) => setContextMenu(contextMenu)} 
+                                        svgDragDropEvents={svgDragDropEvents}
                                         resource={r}
                                         key={`${r.pgid}-${r.id}`}
                             />

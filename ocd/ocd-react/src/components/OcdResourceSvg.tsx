@@ -8,7 +8,7 @@ import { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import OcdDocument, { OcdDragResource, OcdSelectedResource } from './OcdDocument'
 import { OcdViewCoords } from '../model/OcdDesign'
-import { ResourceRectProps, ResourceForeignObjectProps, ResourceSvgProps, ResourceSvgContextMenuProps, ResourceSvgGhostProps } from '../types/ReactComponentProperties'
+import { ResourceRectProps, ResourceForeignObjectProps, ResourceSvgProps, ResourceSvgContextMenuProps, ResourceSvgGhostProps, OcdMouseEvents } from '../types/ReactComponentProperties'
 import { OcdViewPage } from '../model/OcdDesign'
 import { OcdUtils } from '../utils/OcdUtils'
 import { OcdContextMenu } from './OcdCanvas'
@@ -282,7 +282,7 @@ const OcdForeignObject = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
     )
 }
 
-export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, contextMenu, setContextMenu, resource }: ResourceSvgProps): JSX.Element => {
+export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, contextMenu, setContextMenu, svgDragDropEvents, resource }: ResourceSvgProps): JSX.Element => {
     // const [contextMenu, setContextMenu] = useState({show: false, x: 0, y: 0})
     // console.info('OcdResourceSvg: Resource', resource)
     const [dragging, setDragging] = useState(false)
@@ -311,45 +311,45 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
         // else console.info('OcdResourceSvg: Resource Drag Start - Currently Dragging Child', resource.ocid)
         e.preventDefault()
     }
-    const onResourceDrag = (e: React.MouseEvent<SVGElement>) => {
-        // e.stopPropagation()
-        if (dragging) {
-            // Set state for the change in coordinates.
-            setCoordinates({
-              x: e.clientX - origin.x,
-              y: e.clientY - origin.y,
-            })
-        }
-    }
-    const onResourceDragEnd = (e: React.MouseEvent<SVGElement>) => {
-        // e.stopPropagation()
-        if (dragging) {
-            setDragging(false)
-            const page: OcdViewPage = ocdDocument.getActivePage()
-            const coords: OcdViewCoords = {
-                id: resource.id,
-                pgid: '',
-                ocid: '',
-                pocid: '',
-                x: resource.x + coordinates.x,
-                y: resource.y + coordinates.y,
-                w: resource.w,
-                h: resource.h,
-                title: '',
-                class: ''
-            }
-            setCoordinates({ x: 0, y: 0 })
-            ocdDocument.updateCoords(coords, page.id)
-            // Remove Drag Resource
-            ocdDocument.dragResource = ocdDocument.newDragResource()
-        // Redraw
-            console.info('Design:', ocdDocument)
-            // setViewPage(structuredClone(ocdDocument.getPage(viewPage.id)))
-            setOcdDocument(OcdDocument.clone(ocdDocument))
-        }
-    }
+    // const onResourceDrag = (e: React.MouseEvent<SVGElement>) => {
+    //     // e.stopPropagation()
+    //     if (dragging) {
+    //         // Set state for the change in coordinates.
+    //         setCoordinates({
+    //           x: e.clientX - origin.x,
+    //           y: e.clientY - origin.y,
+    //         })
+    //     }
+    // }
+    // const onResourceDragEnd = (e: React.MouseEvent<SVGElement>) => {
+    //     // e.stopPropagation()
+    //     if (dragging) {
+    //         setDragging(false)
+    //         const page: OcdViewPage = ocdDocument.getActivePage()
+    //         const coords: OcdViewCoords = {
+    //             id: resource.id,
+    //             pgid: '',
+    //             ocid: '',
+    //             pocid: '',
+    //             x: resource.x + coordinates.x,
+    //             y: resource.y + coordinates.y,
+    //             w: resource.w,
+    //             h: resource.h,
+    //             title: '',
+    //             class: ''
+    //         }
+    //         setCoordinates({ x: 0, y: 0 })
+    //         ocdDocument.updateCoords(coords, page.id)
+    //         // Remove Drag Resource
+    //         ocdDocument.dragResource = ocdDocument.newDragResource()
+    //     // Redraw
+    //         console.info('Design:', ocdDocument)
+    //         // setViewPage(structuredClone(ocdDocument.getPage(viewPage.id)))
+    //         setOcdDocument(OcdDocument.clone(ocdDocument))
+    //     }
+    // }
     const onResourceClick = (e: React.MouseEvent<SVGElement>) => {
-        console.info('OcdResourceSvg: Resource Clicked', resource.ocid, e.clientX, e.clientY)
+        console.info('OcdResourceSvg: Resource Clicked', resource.ocid, e.clientX, e.clientY, e.currentTarget.id, ocdDocument.getCoords(e.currentTarget.id))
         e.stopPropagation()
         const clone = OcdDocument.clone(ocdDocument)
         const selectedResource: OcdSelectedResource = {
@@ -390,7 +390,7 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
         e.preventDefault()
         console.info('OcdResourceSvg: Resource Mouse Up', resource.ocid, e.clientX, e.clientY)
         if (!contextMenu.show) {
-            if (resource.container && !ocdDocument.dragResource.parent) {
+            if (resource.container && resource.id !== ocdDocument.dragResource.resource.id && !ocdDocument.dragResource.parent) {
                 console.info('>>>OcdResourceSvg: Mouse Up -> Container', resource.id, ocdDocument.dragResource.parent)
                 ocdDocument.dragResource.parent = resource
             }
@@ -409,14 +409,19 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
             data-ocid={resource.ocid} 
             data-pocid={resource.pocid}
             transform={`translate(${gX}, ${gY})`}
+            // onMouseDown={svgDragDropEvents.onSVGDragStart}
+            // onMouseMove={svgDragDropEvents.onSVGDrag}
+            // onMouseUp={svgDragDropEvents.onSVGDragEnd}
             onMouseDown={onResourceDragStart}
             onMouseMove={onResourceMouseMove}
+            onMouseUp={onResourceMouseUp}
+
             // onMouseMove={onResourceDrag}
             // onMouseUp={onResourceDragEnd}
-            onMouseUp={onResourceMouseUp}
-            onMouseEnter={onResourceMouseEnter}
-            onMouseLeave={onResourceMouseLeave}
+            // onMouseEnter={onResourceMouseEnter}
+            // onMouseLeave={onResourceMouseLeave}
             // onMouseLeave={onResourceDragEnd}
+
             onClick={onResourceClick}
             onContextMenu={onResourceRightClick}
             >
@@ -439,6 +444,7 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
                                 setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)}
                                 contextMenu={contextMenu}
                                 setContextMenu={(contextMenu: OcdContextMenu) => setContextMenu(contextMenu)}
+                                svgDragDropEvents={svgDragDropEvents}
                                 resource={r}
                                 key={`${r.pgid}-${r.id}`}
                                 />
@@ -458,6 +464,11 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
 export const OcdDragResourceGhostSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resource }: ResourceSvgGhostProps): JSX.Element => {
     const SvgRect = resource.container ? OcdContainerRect : OcdSimpleRect
     const [contextMenu, setContextMenu] = useState<OcdContextMenu>({show: false, x: 0, y: 0})
+    const svgDragDropEvents: OcdMouseEvents = {
+        'onSVGDragStart': () => {},
+        'onSVGDrag': () => {},
+        'onSVGDragEnd': () => {},
+    }
     return (
         <g className='ocd-svg-drag-ghost'
             transform={`translate(0, 0)`}
@@ -481,6 +492,7 @@ export const OcdDragResourceGhostSvg = ({ ocdConsoleConfig, ocdDocument, setOcdD
                             setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)}
                             contextMenu={contextMenu}
                             setContextMenu={(contextMenu: OcdContextMenu) => setContextMenu(contextMenu)}
+                            svgDragDropEvents={svgDragDropEvents}
                             resource={r}
                             key={`${r.pgid}-${r.id}-ghost`}
                 />
