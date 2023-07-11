@@ -90,7 +90,7 @@ def readargs(opts, args):
 
 def usage():
     print()
-    print('python3 okit_query.py -p <profile> -r <region> -j <Output JSON> -c <compartment id> -s')
+    print('python3 okit_query.py -p <profile> -P <platform> -r <region> -j <Output JSON> -c <compartment id> -s')
     print('               -r | --region           : Region to query.')
     print('               -c | --compartment_id   : OCID of Compartment to be queried.')
     print('               -p | --profile          : (Optional) Profile to be used within the config file.')

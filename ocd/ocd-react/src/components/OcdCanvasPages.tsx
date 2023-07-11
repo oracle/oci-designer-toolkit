@@ -20,12 +20,22 @@ const OcdCanvasPage = ({ ocdDocument, setOcdDocument, page } : any): JSX.Element
         ocdDocument.setPageTitle(page.id, e.target.textContent)
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
+    const onDeleteClick = (e: React.MouseEvent<HTMLElement>) => {
+        console.debug('OcdCanvasLayers: Delete Page', page)
+        const clone = OcdDocument.clone(ocdDocument)
+        clone.removePage(page.id)
+        if (clone.design.view.pages.find(p => p.selected) === undefined) clone.design.view.pages[0].selected = true
+        setOcdDocument(clone)
+    }
     return (
         <div className={`ocd-designer-canvas-page ${page.selected ? 'ocd-page-selected' : ''}`}>
             <div className={`ocd-canvas-page-name`} onClick={() => onPageSelectedClick()}>
                 <span contentEditable={true} onBlur={onBlur} suppressContentEditableWarning={true}>{page.title}</span>
                 {/* <input type='text' value={page.title} onChange={onChange} tabIndex={-1}></input> */}
             </div>
+            {ocdDocument.design.view.pages.length > 1 && <div className={`ocd-layer-visiblity-icon delete-layer`}
+                onClick={onDeleteClick}
+            ></div>}
         </div>
     )
 }
