@@ -48,7 +48,8 @@
         "private_ip",
         "processor_description",
         "public_ip",
-        "time_maintenance_reboot_due"
+        "time_maintenance_reboot_due",
+        "vlan_id"
     ],
     "oci_core_vcn": [
         "cidr_block",
