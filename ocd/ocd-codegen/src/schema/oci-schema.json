@@ -2094,18 +2094,6 @@
             "id": "create_vnic_details.subnet_id",
             "lookup": true,
             "lookupResource": "subnet"
-          },
-          "vlan_id": {
-            "provider": "oci",
-            "key": "vlanId",
-            "name": "vlan_id",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Vlan",
-            "id": "create_vnic_details.vlan_id",
-            "lookup": true,
-            "lookupResource": "vlan"
           }
         }
       },
