@@ -84,6 +84,7 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
             console.info('x:', x, 'y:', y)
             // Add to OCD Model/View
             const modelResource: OcdResource = dragData.existingResource ? dragData.resource : ocdDocument.addResource(dragData.dragObject, compartmentId)
+            ocdDocument.setResourceParent(modelResource.id, pocid)
             const coords: OcdViewCoords = ocdDocument.newCoords()
             coords.id = uuid()
             coords.pgid = pgid

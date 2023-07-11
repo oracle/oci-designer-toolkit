@@ -10,6 +10,7 @@ import { PaletteResource } from '../model/OcdPalette'
 import { OcdResource } from '../model/OcdResource'
 import { OcdAutoLayout } from './OcdAutoLayout'
 import { OcdUtils } from '../utils/OcdUtils'
+import { OciResource } from '../model/provider/oci/OciResource'
 
 export interface OcdSelectedResource {
     modelId: string
@@ -143,6 +144,13 @@ export class OcdDocument {
         if (resource) {
             resource.name = displayName
             resource.displayName = displayName
+        }
+    }
+    setResourceParent(id: string, parentId: string) {
+        const resource = this.getResource(id)
+        const parentResource = this.getResource(parentId)
+        if (resource && parentResource) {
+            if (resource.provider === 'oci') OciResource.assignParentId(resource, parentResource)
         }
     }
 

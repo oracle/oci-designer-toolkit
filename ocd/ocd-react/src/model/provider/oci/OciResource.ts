@@ -6,6 +6,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import { OcdUtils } from '../../../utils/OcdUtils'
 import { OcdResource } from "../../OcdResource"
+import * as Resources from './resources'
 
 export interface OciResource extends OcdResource {
     region: string
@@ -35,5 +36,16 @@ export namespace OciResource {
         clone.displayName = displayName
         clone.id = id
         return clone
+    }
+    export function assignParentId(child: OciResource, parent: OciResource) {
+        const childTypes: Record<string, string[]> = {
+            Vcn: ['Subnet'],
+            Subnet: ['Instance']
+        }
+        if (Object.hasOwn(childTypes, parent.resourceType) && childTypes[parent.resourceType].includes(child.resourceType)) {
+            const namespace = `Oci${child.resourceType}`
+            // @ts-ignore 
+            Resources[namespace].setParentId(child, parent.id)
+        }
     }
 }
