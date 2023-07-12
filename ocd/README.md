@@ -1,8 +1,6 @@
-<span style="color:red;font-weight:700;font-size:24px"> 
-ALPHA Code: This is experimental and work in progress. Therefore does not provive all the functionality in OKIT.
-</span>
-<br/>
-<br/>
+```diff
+- ALPHA Code: This is experimental and work in progress. Therefore does not provide all the functionality in OKIT.**
+```
 
 # Getting Started OKIT Open Cloud Designer
 
@@ -10,10 +8,13 @@ The OCD project is a refactoring of the original OKIT implementation and TypeScr
 based implementation using React to build the interface and provide the WebServer. In addition
 Electron is used to generate native installers for simplicity of installation and use.
 
+# Prerequisites
+
+- node / npm
 
 # Installing
 Before the application can be either built as a desktop or run as a web server all appropriate node modules must be 
-installed. This can be achieve by executing the to level __install__ script; as follows:
+installed. This can be achieve by executing the __install__ script, from this directory, as follows:
 
 ``` bash
 npm run install
