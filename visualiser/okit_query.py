@@ -19,6 +19,7 @@ from common.okitCommon import logJson
 from common.okitCommon import jsonToFormattedString
 from common.okitLogging import getLogger
 from query.ociQuery import OCIQuery
+from query.pcaQuery import PCAQuery
 
 # Configure logging
 logger = getLogger()
@@ -35,7 +36,11 @@ def processWorkflow(args):
             sub_compartments = args['sub_compartments']
             logger.info('Using Profile : {0!s:s}'.format(config_profile))
             config = {'region': region}
-            query = OCIQuery(config=config, profile=config_profile)
+            query = None
+            if args['platform'].lower() == 'pca':
+                query = PCAQuery(config=config, profile=config_profile)
+            else:
+                query = OCIQuery(config=config, profile=config_profile)
             response = query.executeQuery(regions=[regions] if regions else None, compartments=[compartments] if compartments else None, include_sub_compartments=sub_compartments)
             logJson(response)
             writeJsonFile(response, output_json)
@@ -54,6 +59,7 @@ def defaultArgs():
     args['json'] = "./okit.json"
     args['compartment_id'] = ""
     args['region'] = ""
+    args['platform'] = ""
     args['sub_compartments'] = False
     args['help'] = False
     return args
@@ -73,6 +79,8 @@ def readargs(opts, args):
             moduleargs['compartment_id'] = arg
         elif opt in ("-r", "--region"):
             moduleargs['region'] = arg
+        elif opt in ("-P", "--platform"):
+            moduleargs['platform'] = arg
         elif opt in ("-s", "--sub_compartments"):
             moduleargs['sub_compartments'] = True
         elif opt in ("-h", "-?", "--help"):
@@ -82,18 +90,19 @@ def readargs(opts, args):
 
 def usage():
     print()
-    print('python3 okit_query.py -p <profile> -r <region> -j <Output JSON> -c <compartment id> -s')
+    print('python3 okit_query.py -p <profile> -P <platform> -r <region> -j <Output JSON> -c <compartment id> -s')
     print('               -r | --region           : Region to query.')
     print('               -c | --compartment_id   : OCID of Compartment to be queried.')
     print('               -p | --profile          : (Optional) Profile to be used within the config file.')
+    print('               -P | --platform         : (Optional) Platform this will be either pca or oci.')
     print('               -j | --json             : (Optional) Json Output file.')
     print('               -s | --sub_compartments : (Optional) Flag indicating if Sub Compartments should be queried.')
 
 # Main processing function
 def main(argv):
     # Configure Parameters and Options
-    options = 'j:p:c:r:sh?'
-    longOptions = ['json=', 'profile=', 'compartment_id=', 'region=', 'sub_compartments', 'help']
+    options = 'j:p:c:P:r:sh?'
+    longOptions = ['json=', 'profile=', 'compartment_id=', 'region=', 'platform=', 'sub_compartments', 'help']
     # Get Options & Arguments
     try:
         opts, args = getopt.getopt(argv, options, longOptions)

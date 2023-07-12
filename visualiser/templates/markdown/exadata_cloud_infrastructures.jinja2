@@ -2,18 +2,30 @@
 {% macro document_exadata_infrastructure(resource) -%}
 {{ common.document_common_details(resource) }}
 {{ common.document_common_properties(resource) }}
-{{ common.document_property("Admin Networ Cidr", resource.admin_network_cidr) }}
-{{ common.document_property("Control Plane Server 1", resource.cloud_control_plane_server1) }}
-{{ common.document_property("Control Plane Server 2", resource.cloud_control_plane_server2) }}
-{{ common.document_property("Corporate Proxy", resource.corporate_proxy) }}
 {{ common.document_property("Shape", resource.shape) }}
-{{ common.document_property("Cpus Enabled", resource.cpus_enabled) }}
-{{ common.document_property("Data Storage Tbs", resource.data_storage_size_in_tbs) }}
-{{ common.document_property("Node Storage Gbs", resource.db_node_storage_size_in_gbs) }}
-{{ common.document_property("Dns Server", resource.dns_server) }}
-{{ common.document_property("Ntp Server", resource.ntp_server) }}
-{{ common.document_property("Gateway", resource.gateway) }}
-{{ common.document_property("Netmask", resource.netmask) }}
+{{ common.document_property("Compute Count", resource.compute_count) }}
+{{ common.document_property("Storage Count", resource.storage_count) }}
+{{ common.document_property("Customer Contacts", resource.customer_contacts) }}
+{{ common.document_property("Cluster", resource.create_cluster) }}
+{% if resource.create_cluster -%}
+{{ common.document_property("Cluster Name", resource.cluster.cluster_name) }}
+{{ common.document_property("Name", resource.cluster.display_name) }}
+{{ common.document_property("Hostname", resource.cluster.hostname) }}
+{{ common.document_property("License Model", resource.cluster.license_model) }}
+{{ common.subnet_property(resource.cluster.subnet_id) }}
+{% if resource.cluster.nsg_ids | length > 0 -%}
+{{ common.nsg_list_property(resource.cluster.nsg_ids) }}
+{% endif -%}
+{{ common.subnet_property(resource.cluster.backup_subnet_id, "Backup Subnet") }}
+{% if resource.cluster.backup_network_nsg_ids | length > 0 -%}
+{{ common.nsg_list_property(resource.cluster.backup_network_nsg_ids, "Backup NSG") }}
+{% endif -%}
+{{ common.document_property("Version", resource.cluster.gi_version) }}
+{{ common.document_property("CPU Count", resource.cluster.cpu_core_count) }}
+{{ common.document_property("Data Storage %", resource.cluster.data_storage_percentage) }}
+{{ common.document_property("Scan Listener Port", resource.cluster.scan_listener_port_tcp) }}
+{{ common.document_property("Scan Listener Port SSL", resource.cluster.scan_listener_port_tcp_ssl) }}
+{%- endif -%}
 {{ common.document_tags(resource) }}
 {%- endmacro %}
 {% for exadata_infrastructure in exadata_cloud_infrastructures -%}

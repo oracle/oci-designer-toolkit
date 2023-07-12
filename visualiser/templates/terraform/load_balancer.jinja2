@@ -53,6 +53,12 @@ resource "oci_load_balancer_load_balancer" "{{ resource_name }}" {
 
 locals {
     {{ resource_name }}_id            = oci_load_balancer_load_balancer.{{ resource_name }}.id
+    {{ resource_name }}_ip_addresses  = oci_load_balancer_load_balancer.{{ resource_name }}.ip_address_details
+    {{ resource_name }}_display_name  = oci_load_balancer_load_balancer.{{ resource_name }}.display_name
+}
+
+output "{{ resource_name }}IPAddresses" {
+    value = [local.{{ resource_name }}_display_name, local.{{ resource_name }}_ip_addresses]
 }
 
 {% if backend_sets is defined %}

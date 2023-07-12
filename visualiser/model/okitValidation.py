@@ -352,7 +352,7 @@ class OCIJsonValidator(object):
                                 'id': resource['id'],
                                 'type': 'DRG',
                                 'artefact': route_distribution['display_name'],
-                                'message': f'Match Criteria for Distribution Statement must be specified.',
+                                'message': f'Match Criteria Type for Distribution Statement must be specified.',
                                 'element': 'match_type'
                             }
                             self.results['errors'].append(error)

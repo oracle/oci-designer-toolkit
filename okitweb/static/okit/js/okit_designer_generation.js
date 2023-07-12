@@ -676,7 +676,7 @@ function generateMarkdown(results) {
             contentType: 'application/json',
             data: JSON.stringify(requestJson),
             success: function(resp) {
-                console.info('Response : ' + resp);
+                console.info('Export Markdown Response : ' + resp);
                 saveZip('generate/markdown/local');
             },
             error: function(xhr, status, error) {

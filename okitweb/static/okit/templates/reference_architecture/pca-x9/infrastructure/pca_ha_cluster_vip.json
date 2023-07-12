@@ -10,7 +10,8 @@
       "id": "okit.compartment.0ee68d82-c52b-4227-8a18-73066660644e",
       "okit_reference": "okit-4b7a5eb3-56b4-480a-8233-efdfadf84c68",
       "read_only": true,
-      "resource_name": "DeploymentCompartment"
+      "resource_name": "DeploymentCompartment",
+      "show_connections": false
     }
   ],
   "defined_tags": {},
@@ -42,6 +43,7 @@
       ],
       "read_only": false,
       "resource_name": "Okit_DO_1664281595537",
+      "show_connections": false,
       "vcn_id": "okit.virtualcloudnetwork.929097e2-ec13-4a2f-95b7-83875ca072d1"
     }
   ],
@@ -66,6 +68,7 @@
       "id": "okit.instance.3a3b26de-f458-4c02-8232-cedf81e8ede9",
       "instance_type": "vm",
       "is_pv_encryption_in_transit_enabled": false,
+      "lifecycle_state": "",
       "metadata": {
         "ssh_authorized_keys": "var.public_key",
         "user_data": ""
@@ -89,10 +92,11 @@
         "ocpus": ""
       },
       "shape_series": "intel",
+      "show_connections": false,
       "source_details": {
         "boot_volume_size_in_gbs": "50",
         "image_id": "ocid1.image.AK00905695.x9pca1.ye9e8d6csmggarq48dr9268w8pqj0o20klp42v70hrzds21xcgx2oxwo4o3w",
-        "image_source": "custom",
+        "image_source": "platform",
         "os": "OracleLinux",
         "source_type": "image",
         "version": "8"
@@ -129,6 +133,7 @@
       "id": "okit.instance.a39e855b-88fc-421a-891f-beaaba21a306",
       "instance_type": "vm",
       "is_pv_encryption_in_transit_enabled": false,
+      "lifecycle_state": "",
       "metadata": {
         "ssh_authorized_keys": "var.public_key",
         "user_data": ""
@@ -152,10 +157,11 @@
         "ocpus": ""
       },
       "shape_series": "intel",
+      "show_connections": false,
       "source_details": {
         "boot_volume_size_in_gbs": "50",
         "image_id": "ocid1.image.AK00905695.x9pca1.ye9e8d6csmggarq48dr9268w8pqj0o20klp42v70hrzds21xcgx2oxwo4o3w",
-        "image_source": "custom",
+        "image_source": "platform",
         "os": "OracleLinux",
         "source_type": "image",
         "version": "8"
@@ -187,6 +193,7 @@
       "okit_reference": "okit-6617763c-d16d-4ef0-bfd1-3ac5b81cb4af",
       "read_only": false,
       "resource_name": "Okit_IG_1664286673217",
+      "show_connections": false,
       "vcn_id": "okit.virtualcloudnetwork.929097e2-ec13-4a2f-95b7-83875ca072d1"
     }
   ],
@@ -194,13 +201,13 @@
     "created": "2022-9-27 12:58:33",
     "file": {
       "generate_terraform": true,
-      "name": "/okitdemo/automatic_virtual_ip_failover_in_cluster_deployment.json",
-      "terraform_dir": "/okitdemo/automatic_virtual_ip_failover_in_cluster_deployment"
+      "name": "/pca-x9/automatic_virtual_ip_failover_in_cluster_deployment.json",
+      "terraform_dir": "/pca-x9/automatic_virtual_ip_failover_in_cluster_deployment"
     },
     "okit_model_id": "okit-model-bbdf2fee-0544-45ae-b2b1-249676c90c8d",
     "okit_version": "0.41.0 - nightly -",
     "platform": "pca",
-    "resource_count": 244,
+    "resource_count": 262,
     "updated": "2022-9-27 12:58:33"
   },
   "route_tables": [
@@ -224,6 +231,7 @@
           "target_type": "internet_gateway"
         }
       ],
+      "show_connections": false,
       "vcn_id": "okit.virtualcloudnetwork.929097e2-ec13-4a2f-95b7-83875ca072d1"
     }
   ],
@@ -295,6 +303,7 @@
       "okit_reference": "okit-0ce140a8-f83f-4ad1-be8f-e66fccafb14f",
       "read_only": false,
       "resource_name": "Okit_SL_1664281595534",
+      "show_connections": false,
       "vcn_id": "okit.virtualcloudnetwork.929097e2-ec13-4a2f-95b7-83875ca072d1"
     }
   ],
@@ -321,6 +330,7 @@
       "security_list_ids": [
         "okit.securitylist.7d871ada-0098-428e-9001-885d7e6f9841"
       ],
+      "show_connections": false,
       "vcn_id": "okit.virtualcloudnetwork.929097e2-ec13-4a2f-95b7-83875ca072d1"
     }
   ],
@@ -445,7 +455,8 @@
       "is_ipv6enabled": false,
       "okit_reference": "okit-504876fe-abf7-4877-8f3d-85df9e771f74",
       "read_only": false,
-      "resource_name": "Okit_VCN_1664281595520"
+      "resource_name": "Okit_VCN_1664281595520",
+      "show_connections": false
     }
   ]
 }
