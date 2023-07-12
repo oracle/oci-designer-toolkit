@@ -106,7 +106,7 @@ def pcaQuery():
         config = {'region': region}
         query = PCAQuery(config=config, profile=config_profile)
         response = query.executeQuery(regions=[regions] if regions else [], compartments=[compartments] if compartments else [], include_sub_compartments=sub_compartments)
-        logJson(response)
+        # logJson(response)
         # logger.info(jsonToFormattedString(response))
         return response
     else:
@@ -119,21 +119,25 @@ def pcaRegions():
     if request.method == 'GET':
         config_profile = request.args.get('profile', default='DEFAULT')
         logger.info('Using Profile : {0!s:s}'.format(config_profile))
-        regions_query = PCARegionQuery(config={}, profile=config_profile)
-        regions = regions_query.executeQuery()
+        query = PCARegionQuery(config={}, profile=config_profile)
+        regions = query.executeQuery()
         response = jsonToFormattedString(regions)
-        logJson(response)
+        # logJson(response)
         return response
     else:
         return 404
 
 
 @bp.route('/compartments/<string:profile>', methods=(['GET']))
-def ociCompartments(profile):
-    oci_compartment_query = PCACompartmentQuery(profile=profile)
-    compartments = oci_compartment_query.executeQuery()
-    response = jsonToFormattedString(compartments)
-    logger.debug(">>>>>>>>> Compartments: {0!s:s}".format(response))
-    return response
+def pcaCompartments(profile):
+    logger.debug(">>>>>>>>> Compartments: {0!s:s}".format(profile))
+    if request.method == 'GET':
+        query = PCACompartmentQuery(profile=profile)
+        compartments = query.executeQuery()
+        response = jsonToFormattedString(compartments)
+        # logJson(response)
+        return response
+    else:
+        return 404
 
 

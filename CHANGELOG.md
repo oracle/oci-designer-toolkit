@@ -9,6 +9,7 @@
 3. Add Instance Pool & Instance Configuration to PCA
 ### Bug Fixes
 1. Remove agent_config from TF generated for PCA-X9 which does not support this.
+2. Fix validation error message text associated with DRG Distribution Statements.
 
 
 ## Version 0.52.0
