@@ -119,8 +119,9 @@ def pcaRegions():
     if request.method == 'GET':
         config_profile = request.args.get('profile', default='DEFAULT')
         logger.info('Using Profile : {0!s:s}'.format(config_profile))
-        query = PCARegionQuery(config={}, profile=config_profile)
-        response = query.executeQuery()
+        regions_query = PCARegionQuery(config={}, profile=config_profile)
+        regions = regions_query.executeQuery()
+        response = jsonToFormattedString(regions)
         logJson(response)
         return response
     else:
