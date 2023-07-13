@@ -46,6 +46,12 @@ export interface OcdViewCoords {
     container?: boolean,
     coords?: OcdViewCoords[]
     style?: OcdViewCoordsStyle
+    detailsStyle?: 'default' | 'simple' | 'detailed'
+}
+
+export interface OcdViewConnector {
+    startCoordsId: string
+    endCoordsId: string
 }
 
 export interface OcdViewCoordsStyle {
@@ -84,6 +90,7 @@ export interface OcdViewPage {
     title: string,
     layers: OcdViewLayer[],
     coords: OcdViewCoords[],
+    connectors: OcdViewConnector[],
     selected: boolean,
     transform: number[]
 }
@@ -169,6 +176,7 @@ export namespace OcdDesign {
                         title: 'Open Cloud Design',
                         layers: [layer],
                         coords: [],
+                        connectors: [],
                         selected: true,
                         transform: OcdDesign.resetPanZoom()
                     }
