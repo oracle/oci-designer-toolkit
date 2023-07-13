@@ -26,6 +26,11 @@ export interface Point {
 
 export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument, setOcdDocument }: CanvasProps): JSX.Element => {
     console.info('OcdCanvas: OCD Document:', ocdDocument)
+    const uuid = () => `gid-${uuidv4()}`
+    const page: OcdViewPage = ocdDocument.getActivePage()
+    const layers = page.layers.filter((l: OcdViewLayer) => l.visible).map((l: OcdViewLayer) => l.id)
+    const visibleResourceIds = ocdDocument.getResources().filter((r: any) => layers.includes(r.compartmentId)).map((r: any) => r.id)
+    console.debug('OcdCanvas: Visible Resource Ids', visibleResourceIds)
     const [dragResource, setDragResource] = useState(ocdDocument.newDragResource(false))
     const [contextMenu, setContextMenu] = useState<OcdContextMenu>({show: false, x: 0, y: 0})
     const [dragging, setDragging] = useState(false)
@@ -33,7 +38,8 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
     const [ghostTranslate, setGhostTranslate] = useState<Point>({ x: 0, y: 0 });
     const [origin, setOrigin] = useState<Point>({ x: 0, y: 0 });
     const [panOrigin, setPanOrigin] = useState<Point>({ x: 0, y: 0 });
-    const [transformMatrix, setTransformMatrix] = useState([1, 0, 0, 1, 0, 0])
+    // const [transformMatrix, setTransformMatrix] = useState(page.transform)
+    const transformMatrix = page.transform
     const [panning, setPanning] = useState(false)
     // const resource = ocdDocument.dragResource.resource
 
@@ -83,6 +89,7 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
             const point = new DOMPoint(e.clientX - dragData.offset.x, e.clientY - dragData.offset.y)
             console.info('OcdCanvas: Drop Point', point)
             // @ts-ignore 
+            // const { x, y } =  point.matrixTransform(svg.getCTM().inverse())
             const { x, y } =  point.matrixTransform(svg.getScreenCTM().inverse())
             console.info('x:', x, 'y:', y)
             // Add to OCD Model/View
@@ -93,8 +100,8 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
             coords.pgid = pgid
             coords.ocid = modelResource.id
             coords.pocid = pocid
-            coords.x = x
-            coords.y = y
+            coords.x = x / transformMatrix[0]
+            coords.y = y / transformMatrix[3]
             coords.w = container ? 300 : 32
             coords.h = container ? 200 : 32
             coords.title = dragData.dragObject.title
@@ -117,7 +124,7 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
         return false
     }
 
-    // SVG Drag & Drop Events
+    // SVG Drag & Drop / Pan Events
     const onSVGDragStart = (e: React.MouseEvent<SVGElement>) => {
         e.stopPropagation()
         // console.info('OcdCanvas: SVG Drag Start', ocdDocument.dragResource)
@@ -125,7 +132,7 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
             console.info('SVG Drag Start - Dragging')
             const ghostXY = ocdDocument.getRelativeXY(ocdDocument.dragResource.resource)
             // Record Starting Point
-            setOrigin({ x: e.clientX, y: e.clientY })
+            setOrigin({ x: e.clientX / transformMatrix[0], y: e.clientY / transformMatrix[3] })
             setGhostTranslate({x: ghostXY.x, y: ghostXY.y})
             setDragging(true)
         } else {
@@ -142,8 +149,8 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
             const ghostXY = ocdDocument.getRelativeXY(ocdDocument.dragResource.resource)
             // Set state for the change in coordinates.
             setCoordinates({
-              x: e.clientX - origin.x,
-              y: e.clientY - origin.y,
+              x: e.clientX / transformMatrix[0] - origin.x,
+              y: e.clientY / transformMatrix[3] - origin.y,
             })
             setGhostTranslate({
               x: ghostXY.x + coordinates.x,
@@ -153,9 +160,11 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
             setCoordinates({
                 x: e.clientX - origin.x,
                 y: e.clientY - origin.y,
-              })
-            const newMatrix = [...transformMatrix.slice(0,4), coordinates.x + panOrigin.x, coordinates.y + panOrigin.y]
-            setTransformMatrix(newMatrix)
+            })
+            page.transform = [...transformMatrix.slice(0,4), coordinates.x + panOrigin.x, coordinates.y + panOrigin.y]
+            setOcdDocument(OcdDocument.clone(ocdDocument))
+              // const newMatrix = [...transformMatrix.slice(0,4), coordinates.x + panOrigin.x, coordinates.y + panOrigin.y]
+            // setTransformMatrix(newMatrix)
         }
     }
     const onSVGDragEnd = (e: React.MouseEvent<SVGElement>) => {
@@ -191,17 +200,23 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
         } else if (panning) {
             setPanning(false)
             setCoordinates({ x: 0, y: 0 })
+            // page.transform = transformMatrix
+            // setOcdDocument(OcdDocument.clone(ocdDocument))
         }
     }
     const onWheel = (e: React.WheelEvent<SVGElement>) => {
         const scrollSensitivity = 0.01
         const scale = e.deltaY
-        console.debug('OcdCanvas: On Wheel', e.deltaY)
-        // const newMatrix = [transformMatrix[0] + (scale * scrollSensitivity), 0, 0, transformMatrix[3] + (scale * scrollSensitivity), 0, 0]
         const newMatrix = transformMatrix.slice()
         newMatrix[0] += (scale * scrollSensitivity)
         newMatrix[3] += (scale * scrollSensitivity)
-        setTransformMatrix(newMatrix)
+        console.debug('OcdCanvas: Mew Matrix', newMatrix)
+        // Set limits
+        // if (newMatrix[0] >= 0.3 && newMatrix[0] <= 3) setTransformMatrix(newMatrix)
+        if (newMatrix[0] >= 0.3 && newMatrix[0] <= 3) {
+            page.transform = newMatrix
+            setOcdDocument(OcdDocument.clone(ocdDocument))
+        }
     }
 
     /*
@@ -243,6 +258,7 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
               x: ghostXY.x + coordinates.x,
               y: ghostXY.y + coordinates.y,
             })
+            console.info('OcdCanvas: SVG Drag', ghostTranslate)
         }
     }
     const svgDrop = (e: React.MouseEvent<SVGElement>) => {
@@ -288,12 +304,6 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
         'onSVGDragEnd': svgDrop,
     }
 
-    const uuid = () => `gid-${uuidv4()}`
-
-    const page: OcdViewPage = ocdDocument.getActivePage()
-    const layers = page.layers.filter((l: OcdViewLayer) => l.visible).map((l: OcdViewLayer) => l.id)
-    const visibleResourceIds = ocdDocument.getResources().filter((r: any) => layers.includes(r.compartmentId)).map((r: any) => r.id)
-    console.debug('OcdCanvas: Visible Resource Ids', visibleResourceIds)
 
     return (
         <div className='ocd-designer-canvas ocd-background' 

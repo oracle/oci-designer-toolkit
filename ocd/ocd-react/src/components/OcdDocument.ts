@@ -168,7 +168,8 @@ export class OcdDocument {
             title: `Page ${this.design.view.pages.length + 1}`,
             layers: layers,
             coords: [],
-            selected: true
+            selected: true,
+            transform: [1, 0, 0, 1, 0, 0]
         }
         this.design.view.pages.forEach((p) => p.selected = false)
         this.design.view.pages.push(viewPage)
