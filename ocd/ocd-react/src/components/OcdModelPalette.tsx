@@ -79,6 +79,7 @@ const OcdModelPaletteResource = ({ provider, type, resource, onDragStart, onDrag
     const containerResources = ['vcn', 'subnet']
     console.info('Classname:', classname)
     const onPaletteDragStart = (e: React.MouseEvent<HTMLElement>) => {
+        console.debug('OcdModelPalette: Resource', resource)
         // Get current Target Coordinates
         const currentTargetRect = e.currentTarget.getBoundingClientRect()
         // Now get Offset
@@ -86,7 +87,7 @@ const OcdModelPaletteResource = ({ provider, type, resource, onDragStart, onDrag
         // Start Drag
         const dragResource: PaletteResource = {
                 container: containerResources.includes(type),
-                title: resource.displayName ? resource.displayName : resource.name,
+                title: resource.resourceTypeName,
                 class: classname,
                 provider: provider
         }
