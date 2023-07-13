@@ -46,6 +46,7 @@ export interface OcdViewCoords {
     container?: boolean,
     coords?: OcdViewCoords[]
     style?: OcdViewCoordsStyle
+    detailsStyle?: 'default' | 'simple' | 'detailed'
 }
 
 export interface OcdViewCoordsStyle {
