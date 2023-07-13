@@ -108,14 +108,14 @@ export const OcdSvgContextMenu = ({ contextMenu, setContextMenu, ocdDocument, se
 
 const OcdSimpleRect = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resource }: ResourceRectProps): JSX.Element => {
     const id = `${resource.id}-rect`
-    const rectClass = `ocd-svg-simple ${ocdConsoleConfig.config.detailedResource ? 'ocd-svg-resource-detailed' : 'ocd-svg-resource-simple'} ${ocdDocument.selectedResource.coordsId === resource.id ? 'ocd-svg-resource-selected' : ''}`
+    const rectClass = `ocd-svg-simple ${ocdConsoleConfig.config.detailedResource ? 'ocd-svg-resource-detailed' : 'ocd-svg-resource-simple'} ${ocdDocument.selectedResource.modelId === resource.ocid ? 'ocd-svg-resource-selected' : ''}`
+    // const rectClass = `ocd-svg-simple ${ocdConsoleConfig.config.detailedResource ? 'ocd-svg-resource-detailed' : 'ocd-svg-resource-simple'} ${ocdDocument.selectedResource.coordsId === resource.id ? 'ocd-svg-resource-selected' : ''}`
     const style = resource.style ? resource.style : {} as React.CSSProperties
     const layer = ocdDocument.getResourcesLayer(resource.ocid)
     if (layer && layer.style && layer.style.fill && ocdConsoleConfig.config.highlightCompartmentResources) {
         style.stroke = layer.style.fill
         if (ocdDocument.selectedResource.coordsId !== resource.id) style.strokeOpacity = 0.9
     }
-    // const style = {stroke: 'green'} as React.CSSProperties
     return (
         <rect className={rectClass} style={style}
             id={id} 
@@ -202,8 +202,8 @@ const OcdContainerRect = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
                 >
             </rect>
             {/* {ocdDocument.selectedResource.coordsId === resource.id && <OcdResizePoint resource={resource} cx={width / 2} cy={0} position={'north'} setDimensions={setDimensions} onResize={onResize} onResizeEnd={onResizeEnd}/>} */}
-            {ocdDocument.selectedResource.coordsId === resource.id && <OcdResizePoint resource={resource} cx={width / 2} cy={height} position={'south'} setDimensions={setDimensions} onResize={onResize} onResizeEnd={onResizeEnd}/>}
             {ocdDocument.selectedResource.coordsId === resource.id && <OcdResizePoint resource={resource} cx={width} cy={height / 2} position={'east'} setDimensions={setDimensions} onResize={onResize} onResizeEnd={onResizeEnd}/> }
+            {ocdDocument.selectedResource.coordsId === resource.id && <OcdResizePoint resource={resource} cx={width / 2} cy={height} position={'south'} setDimensions={setDimensions} onResize={onResize} onResizeEnd={onResizeEnd}/>}
             {/* {ocdDocument.selectedResource.coordsId === resource.id && <OcdResizePoint resource={resource} cx={0} cy={height / 2} position={'west'}  setDimensions={setDimensions} onResize={onResize} onResizeEnd={onResizeEnd}/>} */}
         </g>
     )
