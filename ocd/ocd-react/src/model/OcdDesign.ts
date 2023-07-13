@@ -170,12 +170,15 @@ export namespace OcdDesign {
                         layers: [layer],
                         coords: [],
                         selected: true,
-                        transform: [1, 0, 0, 1, 0, 0]
+                        transform: OcdDesign.resetPanZoom()
                     }
                 ]
             },
             userDefined: {}
         }
+    }
+    export function resetPanZoom(): number[] {
+        return [1, 0, 0, 1, 0, 0]
     }
 }
 

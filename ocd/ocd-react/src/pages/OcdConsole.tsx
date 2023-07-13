@@ -114,6 +114,30 @@ const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument,
     const onEstimateClick = () => {
         console.info('Estimate Clicked')
     }
+    const onZoomOutClick = () => {
+        const clone = OcdDocument.clone(ocdDocument)
+        const page = clone.getActivePage()
+        const newMatrix = page.transform.slice()
+        newMatrix[0] *= 0.9
+        newMatrix[3] *= 0.9
+        if (newMatrix[0] >= 0.3 && newMatrix[0] <= 3) page.transform = newMatrix
+        setOcdDocument(clone)
+    }
+    const onZoom121Click = () => {
+        const clone = OcdDocument.clone(ocdDocument)
+        const page = clone.getActivePage()
+        page.transform = ocdDocument.resetPanZoom()
+        setOcdDocument(clone)
+    }
+    const onZoomInClick = () => {
+        const clone = OcdDocument.clone(ocdDocument)
+        const page = clone.getActivePage()
+        const newMatrix = page.transform.slice()
+        newMatrix[0] *= 1.15
+        newMatrix[3] *= 1.15
+        if (newMatrix[0] >= 0.3 && newMatrix[0] <= 3) page.transform = newMatrix
+        setOcdDocument(clone)
+    }
     return (
         <div className='ocd-console-toolbar ocd-console-toolbar-theme'>
             <div className='ocd-toolbar-left'>
@@ -123,6 +147,13 @@ const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument,
                         ocdConsoleConfig={ocdConsoleConfig} 
                         setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} 
                         />
+                </div>
+            </div>
+            <div className='ocd-toolbar-centre'>
+                <div>
+                    <div className='zoom-out ocd-console-toolbar-icon' onClick={onZoomOutClick}></div>
+                    <div className='zoom-121 ocd-console-toolbar-icon' onClick={onZoom121Click}></div>
+                    <div className='zoom-in ocd-console-toolbar-icon' onClick={onZoomInClick}></div>
                 </div>
             </div>
             <div className='ocd-toolbar-right'>

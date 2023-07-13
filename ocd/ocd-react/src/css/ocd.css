@@ -274,6 +274,18 @@ summary {
     grid-auto-flow: column;
 }
 
+.ocd-toolbar-centre {
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+    align-items: center;
+}
+
+.ocd-toolbar-centre > div {
+    display: grid;
+    grid-auto-flow: column;
+}
+
 .ocd-toolbar-right {
     display: inline-block;
     margin-left: auto;

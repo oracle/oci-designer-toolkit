@@ -169,7 +169,7 @@ export class OcdDocument {
             layers: layers,
             coords: [],
             selected: true,
-            transform: [1, 0, 0, 1, 0, 0]
+            transform: this.resetPanZoom()
         }
         this.design.view.pages.forEach((p) => p.selected = false)
         this.design.view.pages.push(viewPage)
@@ -179,6 +179,7 @@ export class OcdDocument {
     removePage(id: string) {
         this.design.view.pages = this.design.view.pages.filter((p) => p.id !== id)
     }
+    resetPanZoom = () => OcdDesign.resetPanZoom()
 
     // @ts-ignore 
     // getLayer = (id: string): OcdViewLayer => this.design.model.oci.resources.compartment.find((c) => c.id === id)
