@@ -84,7 +84,8 @@ export interface OcdViewPage {
     title: string,
     layers: OcdViewLayer[],
     coords: OcdViewCoords[],
-    selected: boolean
+    selected: boolean,
+    transform: number[]
 }
 
 export interface OcdUserDefined extends Record<string, any> {
@@ -168,12 +169,16 @@ export namespace OcdDesign {
                         title: 'Open Cloud Design',
                         layers: [layer],
                         coords: [],
-                        selected: true
+                        selected: true,
+                        transform: OcdDesign.resetPanZoom()
                     }
                 ]
             },
             userDefined: {}
         }
+    }
+    export function resetPanZoom(): number[] {
+        return [1, 0, 0, 1, 0, 0]
     }
 }
 
