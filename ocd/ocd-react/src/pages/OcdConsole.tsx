@@ -86,7 +86,7 @@ const OcdConsoleConfigEditor = ({ ocdConsoleConfig, setOcdConsoleConfig }: any):
         setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
     }
     return (
-        <div className='ocd-console-toolbar-dropdown'>
+        <div className='ocd-console-toolbar-dropdown ocd-console-toolbar-dropdown-theme'>
             <ul>
                 <li className='ocd-console-toolbar-dropdown-item' onClick={toggleDropdown}>
                     <div className='left-palette ocd-console-toolbar-icon'></div>
