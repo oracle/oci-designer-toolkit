@@ -13,9 +13,9 @@
     ],
     "scripts": {
         "install-ocd-codegen": "cd ocd-codegen && npm install",
-        "install-ocd-react": "cd ocd-codegen && npm install",
+        "install-ocd-react": "cd ocd-react && npm install",
         "install": "npm run install-ocd-codegen && npm run install-ocd-react && npm run import-and-generate",
-        "build-ocd-react": "cd ocd-codegen && npm run build",
+        "build-ocd-react": "cd ocd-react && npm run build",
         "build": "npm run build-ocd-react",
         "import": "cd ocd-codegen && npm run import",
         "generate": "cd ocd-codegen && npm run generate",
