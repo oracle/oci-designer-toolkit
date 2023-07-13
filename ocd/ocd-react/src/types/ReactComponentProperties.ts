@@ -6,7 +6,7 @@
 import React, { MouseEventHandler } from 'react'
 import { OcdConsoleConfig } from '../components/OcdConsoleConfiguration'
 import OcdDocument from '../components/OcdDocument'
-import { OcdViewCoords } from '../model/OcdDesign'
+import { OcdViewConnector, OcdViewCoords } from '../model/OcdDesign'
 import { DragData } from './DragData'
 import { OcdContextMenu } from '../components/OcdCanvas'
 
@@ -61,6 +61,11 @@ export interface PaletteProps {
     ocdConsoleConfig: OcdConsoleConfig,
     setDragData: React.Dispatch<any>
     ocdDocument: OcdDocument
+}
+
+export interface ConnectorSvgProps {
+    ocdDocument: OcdDocument
+    connector: OcdViewConnector
 }
 
 export interface OcdMouseEvents extends Record<string, MouseEventHandler<SVGGElement>> {}

@@ -7,8 +7,8 @@
 import { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import OcdDocument, { OcdDragResource, OcdSelectedResource } from './OcdDocument'
-import { OcdViewCoords } from '../model/OcdDesign'
-import { ResourceRectProps, ResourceForeignObjectProps, ResourceSvgProps, ResourceSvgContextMenuProps, ResourceSvgGhostProps, OcdMouseEvents } from '../types/ReactComponentProperties'
+import { OcdViewConnector, OcdViewCoords } from '../model/OcdDesign'
+import { ResourceRectProps, ResourceForeignObjectProps, ResourceSvgProps, ResourceSvgContextMenuProps, ResourceSvgGhostProps, OcdMouseEvents, ConnectorSvgProps } from '../types/ReactComponentProperties'
 import { OcdViewPage } from '../model/OcdDesign'
 import { OcdUtils } from '../utils/OcdUtils'
 import { OcdContextMenu } from './OcdCanvas'
@@ -83,7 +83,6 @@ export const OcdSvgContextMenu = ({ contextMenu, setContextMenu, ocdDocument, se
         e.stopPropagation()
         const newLayout = e.target.value === 'default' || e.target.value === 'simple' || e.target.value === 'detailed' ? e.target.value : 'default'
         setResourceLayout(newLayout)
-        console.debug('OcdResourceSvg: Details Style', e.target.value)
         resource.detailsStyle = newLayout
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
@@ -127,7 +126,6 @@ const OcdSimpleRect = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resource
     const id = `${resource.id}-rect`
     const detailedLayout = ((resource.detailsStyle && resource.detailsStyle === 'detailed') || ((!resource.detailsStyle || resource.detailsStyle === 'default') && ocdConsoleConfig.config.detailedResource))
     const rectClass = `ocd-svg-simple ${detailedLayout ? 'ocd-svg-resource-detailed' : 'ocd-svg-resource-simple'} ${ocdDocument.selectedResource.modelId === resource.ocid ? 'ocd-svg-resource-selected' : ''}`
-    // const rectClass = `ocd-svg-simple ${ocdConsoleConfig.config.detailedResource ? 'ocd-svg-resource-detailed' : 'ocd-svg-resource-simple'} ${ocdDocument.selectedResource.coordsId === resource.id ? 'ocd-svg-resource-selected' : ''}`
     const style = resource.style ? resource.style : {} as React.CSSProperties
     const layer = ocdDocument.getResourcesLayer(resource.ocid)
     if (layer && layer.style && layer.style.fill && ocdConsoleConfig.config.highlightCompartmentResources) {
@@ -562,6 +560,35 @@ export const OcdDragResourceGhostSvg = ({ ocdConsoleConfig, ocdDocument, setOcdD
                 />
             })}
         </g>
+    )
+}
+
+export const OcdConnector = ({ocdDocument, connector}: ConnectorSvgProps): JSX.Element => {
+    const startCoords = ocdDocument.getCoords(connector.startCoordsId)
+    const endCoords = ocdDocument.getCoords(connector.endCoordsId)
+    const startRelativeXY = startCoords ? ocdDocument.getRelativeXY(startCoords) : ocdDocument.newCoords()
+    const endRelativeXY = endCoords ? ocdDocument.getRelativeXY(endCoords) : ocdDocument.newCoords()
+    const startDimensions = {x: startRelativeXY.x, y: startRelativeXY.y, w: startCoords ? startCoords.w : 0, h: startCoords ? startCoords.h : 0}
+    const endDimensions = {x: endRelativeXY.x, y: endRelativeXY.y, w: endCoords ? endCoords.w : 0, h: endCoords ? endCoords.h : 0}
+    const path: string[] = ['M']
+    // Identify if we are goin left to right or right to left
+    if (startDimensions.x < endDimensions.x) {
+        // We will start middle right of the Start Coord
+        path.push(`${startDimensions.x + startDimensions.w}`)
+        path.push(`${startDimensions.y + startDimensions.h / 2}`)
+        // Start Control Point
+        path.push('C')
+        path.push(`${startDimensions.x + startDimensions.w + 70}`)
+        path.push(`${startDimensions.y + startDimensions.h / 2},`)
+        // Add End Control Point
+        path.push(`${endDimensions.x - 70}`)
+        path.push(`${endDimensions.y + endDimensions.h / 2},`)
+        // We will end at the middle left of the End Coord
+        path.push(`${endDimensions.x}`)
+        path.push(`${endDimensions.y + endDimensions.h / 2}`)
+    }
+    return (
+        <path className='ocd-svg-connector' d={path.join(' ')}></path>
     )
 }
 

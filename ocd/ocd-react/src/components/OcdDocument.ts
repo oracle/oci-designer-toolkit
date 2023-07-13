@@ -168,6 +168,7 @@ export class OcdDocument {
             title: `Page ${this.design.view.pages.length + 1}`,
             layers: layers,
             coords: [],
+            connectors: [],
             selected: true,
             transform: this.resetPanZoom()
         }
