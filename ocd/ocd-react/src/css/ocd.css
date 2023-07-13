@@ -966,7 +966,7 @@ summary {
     background-position-y: center;
     background-size: 30px 30px;
 }
-
+/* 
 .ocd-svg-container {
     stroke: #312D2A;
     stroke-width: 1;
@@ -989,10 +989,33 @@ summary {
     stroke-opacity: 1;
     stroke-dasharray: none;
 }
+ */
+.ocd-svg-container {
+    stroke: var(--svg-container-resource-stroke);
+    stroke-width: var(--svg-container-resource-stroke-width);
+    stroke-dasharray: var(--svg-container-resource-stroke-dasharray);
+    stroke-opacity: var(--svg-container-resource-stroke-opacitiy);
+    rx: var(--svg-container-resource-stroke-corner-rx);
+}
+
+.ocd-svg-simple {
+    width: var(--canvas-icon-width);
+    height: var(--canvas-icon-height);
+    stroke: var(--svg-simple-resource-stroke);
+    stroke-width: var(--svg-simple-resource-stroke-width);
+    stroke-dasharray: var(--svg-simple-resource-stroke-dasharray);
+    stroke-opacity: var(--svg-simple-resource-stroke-opacitiy);
+    rx: var(--svg-simple-resource-stroke-corner-rx);
+}
+
+.ocd-svg-resource-selected {
+    stroke-width: var(--svg-selected-resource-stroke-width);
+    stroke-dasharray: var(--svg-selected-resource-stroke-dasharray);
+    stroke-opacity: var(--svg-selected-resource-stroke-opacitiy);
+}
 
 .ocd-svg-resource-simple {
     width: var(--canvas-resource-simple-width);
-    stroke-opacity: 0;
 }
 
 .ocd-svg-resource-detailed {
