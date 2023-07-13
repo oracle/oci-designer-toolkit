@@ -966,30 +966,7 @@ summary {
     background-position-y: center;
     background-size: 30px 30px;
 }
-/* 
-.ocd-svg-container {
-    stroke: #312D2A;
-    stroke-width: 1;
-    stroke-dasharray: 3, 2;
-    stroke-opacity: 1;
-    rx: 5;
-}
 
-.ocd-svg-simple {
-    width: var(--canvas-icon-width);
-    height: var(--canvas-icon-height);
-    stroke: #161513;
-    stroke-width: 0.5px;
-    stroke-opacity: 0.5;
-    rx: 5;
-}
-
-.ocd-svg-resource-selected {
-    stroke-width: 1.5px;
-    stroke-opacity: 1;
-    stroke-dasharray: none;
-}
- */
 .ocd-svg-container {
     stroke: var(--svg-container-resource-stroke);
     stroke-width: var(--svg-container-resource-stroke-width);
