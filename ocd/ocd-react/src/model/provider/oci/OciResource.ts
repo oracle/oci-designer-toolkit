@@ -38,6 +38,15 @@ export namespace OciResource {
         return clone
     }
     export function assignParentId(child: OciResource, parent: OciResource) {
+        const namespace = `Oci${child.resourceType}`
+        // @ts-ignore 
+        const allowedParentTypes = Resources[namespace].allowedParentTypes()
+        if (allowedParentTypes.includes(parent.resourceType)) {
+            // @ts-ignore 
+            Resources[namespace].setParentId(child, parent.id)
+        }
+    }
+    export function assignParentIdOrig(child: OciResource, parent: OciResource) {
         const childTypes: Record<string, string[]> = {
             Vcn: ['Subnet'],
             Subnet: ['Instance']
