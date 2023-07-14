@@ -38,6 +38,11 @@ export namespace OciOkeCluster {
         console.debug('OciOkeCluster: Setting Parent Id to', parentId, 'for', resource.displayName, resource.id)
         return resource
     }
+    export function getConnectionIds(resource: OciOkeCluster): string[] {
+        // This List of Ids does not include the Parent Id or Compartment Id
+        console.debug('OciOkeCluster: Getting Connection Ids to for', resource.displayName, resource.id)
+        return []
+    }
     
     export function newOciEndpointConfig(): OciEndpointConfig {
         return {

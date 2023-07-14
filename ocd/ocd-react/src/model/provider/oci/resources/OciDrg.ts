@@ -24,6 +24,11 @@ export namespace OciDrg {
         console.debug('OciDrg: Setting Parent Id to', parentId, 'for', resource.displayName, resource.id)
         return resource
     }
+    export function getConnectionIds(resource: OciDrg): string[] {
+        // This List of Ids does not include the Parent Id or Compartment Id
+        console.debug('OciDrg: Getting Connection Ids to for', resource.displayName, resource.id)
+        return []
+    }
     
 }
 

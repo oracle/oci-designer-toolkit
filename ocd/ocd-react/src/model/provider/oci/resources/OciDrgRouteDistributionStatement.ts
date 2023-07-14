@@ -26,6 +26,11 @@ export namespace OciDrgRouteDistributionStatement {
         console.debug('OciDrgRouteDistributionStatement: Setting Parent Id to', parentId, 'for', resource.displayName, resource.id)
         return resource
     }
+    export function getConnectionIds(resource: OciDrgRouteDistributionStatement): string[] {
+        // This List of Ids does not include the Parent Id or Compartment Id
+        console.debug('OciDrgRouteDistributionStatement: Getting Connection Ids to for', resource.displayName, resource.id)
+        return []
+    }
     
     export function newOciMatchCriteria(): OciMatchCriteria {
         return {

@@ -26,6 +26,11 @@ export namespace OciNetworkLoadBalancer {
         console.debug('OciNetworkLoadBalancer: Setting Parent Id to', parentId, 'for', resource.displayName, resource.id)
         return resource
     }
+    export function getConnectionIds(resource: OciNetworkLoadBalancer): string[] {
+        // This List of Ids does not include the Parent Id or Compartment Id
+        console.debug('OciNetworkLoadBalancer: Getting Connection Ids to for', resource.displayName, resource.id)
+        return []
+    }
     
     export function newOciReservedIps(): OciReservedIps {
         return {

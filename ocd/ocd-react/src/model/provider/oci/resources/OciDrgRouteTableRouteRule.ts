@@ -24,6 +24,11 @@ export namespace OciDrgRouteTableRouteRule {
         console.debug('OciDrgRouteTableRouteRule: Setting Parent Id to', parentId, 'for', resource.displayName, resource.id)
         return resource
     }
+    export function getConnectionIds(resource: OciDrgRouteTableRouteRule): string[] {
+        // This List of Ids does not include the Parent Id or Compartment Id
+        console.debug('OciDrgRouteTableRouteRule: Getting Connection Ids to for', resource.displayName, resource.id)
+        return []
+    }
     
 }
 

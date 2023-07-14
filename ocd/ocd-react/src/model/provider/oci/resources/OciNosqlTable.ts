@@ -26,6 +26,11 @@ export namespace OciNosqlTable {
         console.debug('OciNosqlTable: Setting Parent Id to', parentId, 'for', resource.displayName, resource.id)
         return resource
     }
+    export function getConnectionIds(resource: OciNosqlTable): string[] {
+        // This List of Ids does not include the Parent Id or Compartment Id
+        console.debug('OciNosqlTable: Getting Connection Ids to for', resource.displayName, resource.id)
+        return []
+    }
     
     export function newOciTableLimits(): OciTableLimits {
         return {

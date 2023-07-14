@@ -30,6 +30,11 @@ export namespace OciAnalyticsInstance {
         console.debug('OciAnalyticsInstance: Setting Parent Id to', parentId, 'for', resource.displayName, resource.id)
         return resource
     }
+    export function getConnectionIds(resource: OciAnalyticsInstance): string[] {
+        // This List of Ids does not include the Parent Id or Compartment Id
+        console.debug('OciAnalyticsInstance: Getting Connection Ids to for', resource.displayName, resource.id)
+        return []
+    }
     
     export function newOciCapacity(): OciCapacity {
         return {

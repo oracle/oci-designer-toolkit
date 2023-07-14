@@ -30,6 +30,11 @@ export namespace OciMysqlDbSystem {
         console.debug('OciMysqlDbSystem: Setting Parent Id to', parentId, 'for', resource.displayName, resource.id)
         return resource
     }
+    export function getConnectionIds(resource: OciMysqlDbSystem): string[] {
+        // This List of Ids does not include the Parent Id or Compartment Id
+        console.debug('OciMysqlDbSystem: Getting Connection Ids to for', resource.displayName, resource.id)
+        return []
+    }
     
     export function newOciBackupPolicy(): OciBackupPolicy {
         return {

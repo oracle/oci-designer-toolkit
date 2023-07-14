@@ -20,11 +20,17 @@ export namespace OciRouteTable {
     }
     export function getParentId(resource: OciRouteTable): string {
         console.debug('OciRouteTable: Getting Parent Id to for', resource.displayName, resource.id)
-        return resource.compartmentId
+        return resource.vcnId !== '' ? resource.vcnId : resource.compartmentId
     }
     export function setParentId(resource: OciRouteTable, parentId: string): OciRouteTable {
         console.debug('OciRouteTable: Setting Parent Id to', parentId, 'for', resource.displayName, resource.id)
+        resource.vcnId = parentId
         return resource
+    }
+    export function getConnectionIds(resource: OciRouteTable): string[] {
+        // This List of Ids does not include the Parent Id or Compartment Id
+        console.debug('OciRouteTable: Getting Connection Ids to for', resource.displayName, resource.id)
+        return []
     }
     
     export function newOciRouteRules(): OciRouteRules {

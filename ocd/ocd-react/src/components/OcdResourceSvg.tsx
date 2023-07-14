@@ -159,36 +159,46 @@ const OcdContainerRect = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
     const height = resource.h + dimensions.h
     const onResize = (dimensions: {x: number, y:number, w: number, h: number}) => {
         const page: OcdViewPage = ocdDocument.getActivePage()
-        const coords: OcdViewCoords = {
-            id: resource.id,
-            pgid: '',
-            ocid: '',
-            pocid: '',
-            x: resource.x + dimensions.x,
-            y: resource.y + dimensions.y,
-            w: resource.w + dimensions.w,
-            h: resource.h + dimensions.h,
-            title: '',
-            class: ''
-        }
+        const coords: OcdViewCoords = JSON.parse(JSON.stringify(resource)) as OcdViewCoords
+        coords.x += dimensions.x
+        coords.y += dimensions.y
+        coords.w += dimensions.w
+        coords.h += dimensions.h
+        // const coords: OcdViewCoords = {
+        //     id: resource.id,
+        //     pgid: '',
+        //     ocid: '',
+        //     pocid: '',
+        //     x: resource.x + dimensions.x,
+        //     y: resource.y + dimensions.y,
+        //     w: resource.w + dimensions.w,
+        //     h: resource.h + dimensions.h,
+        //     title: '',
+        //     class: ''
+        // }
         ocdDocument.updateCoords(coords, page.id)
         // Redraw
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
     const onResizeEnd = () => {
         const page: OcdViewPage = ocdDocument.getActivePage()
-        const coords: OcdViewCoords = {
-            id: resource.id,
-            pgid: '',
-            ocid: '',
-            pocid: '',
-            x: resource.x + dimensions.x,
-            y: resource.y + dimensions.y,
-            w: resource.w + dimensions.w,
-            h: resource.h + dimensions.h,
-            title: '',
-            class: ''
-        }
+        const coords: OcdViewCoords = JSON.parse(JSON.stringify(resource)) as OcdViewCoords
+        coords.x += dimensions.x
+        coords.y += dimensions.y
+        coords.w += dimensions.w
+        coords.h += dimensions.h
+        // const coords: OcdViewCoords = {
+        //     id: resource.id,
+        //     pgid: '',
+        //     ocid: '',
+        //     pocid: '',
+        //     x: resource.x + dimensions.x,
+        //     y: resource.y + dimensions.y,
+        //     w: resource.w + dimensions.w,
+        //     h: resource.h + dimensions.h,
+        //     title: '',
+        //     class: ''
+        // }
         setDimensions({x: 0, y: 0, w: 0, h: 0})
         ocdDocument.updateCoords(coords, page.id)
         // Redraw

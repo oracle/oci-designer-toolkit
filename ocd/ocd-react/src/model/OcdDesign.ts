@@ -43,6 +43,8 @@ export interface OcdViewCoords {
     h: number,
     title: string,
     class: string,
+    showParentConnection: boolean
+    showConnections: boolean
     container?: boolean,
     coords?: OcdViewCoords[]
     style?: OcdViewCoordsStyle
@@ -187,6 +189,22 @@ export namespace OcdDesign {
     }
     export function resetPanZoom(): number[] {
         return [1, 0, 0, 1, 0, 0]
+    }
+    export function newCoords(): OcdViewCoords {
+        return {
+            id: `gid-${uuidv4()}`,
+            pgid: '',
+            ocid: '',
+            pocid: '',
+            x: 0,
+            y: 0,
+            w: 0,
+            h: 0,
+            title: '',
+            class: '',
+            showParentConnection: true,
+            showConnections: true
+        }
     }
 }
 

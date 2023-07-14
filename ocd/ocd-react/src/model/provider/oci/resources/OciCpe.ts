@@ -24,6 +24,11 @@ export namespace OciCpe {
         console.debug('OciCpe: Setting Parent Id to', parentId, 'for', resource.displayName, resource.id)
         return resource
     }
+    export function getConnectionIds(resource: OciCpe): string[] {
+        // This List of Ids does not include the Parent Id or Compartment Id
+        console.debug('OciCpe: Getting Connection Ids to for', resource.displayName, resource.id)
+        return []
+    }
     
 }
 
