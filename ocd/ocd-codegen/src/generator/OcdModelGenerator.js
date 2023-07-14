@@ -41,6 +41,11 @@ export namespace ${this.namespaceName(resource)} {
         console.debug('${this.namespaceName(resource)}: Setting Parent Id to', parentId, 'for', resource.displayName, resource.id)
         return resource
     }
+    export function getConnectionIds(resource: ${this.interfaceName(resource)}): string[] {
+        // This List of Ids does not include the Parent Id or Compartment Id
+        console.debug('${this.namespaceName(resource)}: Getting Connection Ids to for', resource.displayName, resource.id)
+        return []
+    }
     ${schemaObjects.map(i => this.namespaceFunction(resource, i)).filter(i => i.trim() !== '').join('')}
 }
 

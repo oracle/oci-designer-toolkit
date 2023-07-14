@@ -20,11 +20,17 @@ export namespace OciDrgAttachment {
     }
     export function getParentId(resource: OciDrgAttachment): string {
         console.debug('OciDrgAttachment: Getting Parent Id to for', resource.displayName, resource.id)
-        return resource.compartmentId
+        return resource.vcnId && resource.vcnId !== '' ? resource.vcnId : resource.compartmentId
     }
     export function setParentId(resource: OciDrgAttachment, parentId: string): OciDrgAttachment {
         console.debug('OciDrgAttachment: Setting Parent Id to', parentId, 'for', resource.displayName, resource.id)
+        resource.vcnId = parentId
         return resource
+    }
+    export function getConnectionIds(resource: OciDrgAttachment): string[] {
+        // This List of Ids does not include the Parent Id or Compartment Id
+        console.debug('OciDrgAttachment: Getting Connection Ids to for', resource.displayName, resource.id)
+        return []
     }
     
     export function newOciNetworkDetails(): OciNetworkDetails {

@@ -18,11 +18,17 @@ export namespace OciNetworkSecurityGroup {
     }
     export function getParentId(resource: OciNetworkSecurityGroup): string {
         console.debug('OciNetworkSecurityGroup: Getting Parent Id to for', resource.displayName, resource.id)
-        return resource.compartmentId
+        return resource.vcnId !== '' ? resource.vcnId : resource.compartmentId
     }
     export function setParentId(resource: OciNetworkSecurityGroup, parentId: string): OciNetworkSecurityGroup {
         console.debug('OciNetworkSecurityGroup: Setting Parent Id to', parentId, 'for', resource.displayName, resource.id)
+        resource.vcnId = parentId
         return resource
+    }
+    export function getConnectionIds(resource: OciNetworkSecurityGroup): string[] {
+        // This List of Ids does not include the Parent Id or Compartment Id
+        console.debug('OciNetworkSecurityGroup: Getting Connection Ids to for', resource.displayName, resource.id)
+        return []
     }
     
 }

@@ -24,6 +24,11 @@ export namespace OciRemotePeeringConnection {
         console.debug('OciRemotePeeringConnection: Setting Parent Id to', parentId, 'for', resource.displayName, resource.id)
         return resource
     }
+    export function getConnectionIds(resource: OciRemotePeeringConnection): string[] {
+        // This List of Ids does not include the Parent Id or Compartment Id
+        console.debug('OciRemotePeeringConnection: Getting Connection Ids to for', resource.displayName, resource.id)
+        return []
+    }
     
 }
 

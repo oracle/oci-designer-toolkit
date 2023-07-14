@@ -26,6 +26,11 @@ export namespace OciNosqlIndex {
         console.debug('OciNosqlIndex: Setting Parent Id to', parentId, 'for', resource.displayName, resource.id)
         return resource
     }
+    export function getConnectionIds(resource: OciNosqlIndex): string[] {
+        // This List of Ids does not include the Parent Id or Compartment Id
+        console.debug('OciNosqlIndex: Getting Connection Ids to for', resource.displayName, resource.id)
+        return []
+    }
     
     export function newOciKeys(): OciKeys {
         return {

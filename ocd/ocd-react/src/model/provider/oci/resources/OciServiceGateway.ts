@@ -26,6 +26,11 @@ export namespace OciServiceGateway {
         console.debug('OciServiceGateway: Setting Parent Id to', parentId, 'for', resource.displayName, resource.id)
         return resource
     }
+    export function getConnectionIds(resource: OciServiceGateway): string[] {
+        // This List of Ids does not include the Parent Id or Compartment Id
+        console.debug('OciServiceGateway: Getting Connection Ids to for', resource.displayName, resource.id)
+        return []
+    }
     
     export function newOciServices(): OciServices {
         return {

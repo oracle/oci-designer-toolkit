@@ -35,6 +35,11 @@ export namespace OciInstance {
         if (resource.createVnicDetails) resource.createVnicDetails.subnetId = parentId
         return resource
     }
+    export function getConnectionIds(resource: OciInstance): string[] {
+        // This List of Ids does not include the Parent Id or Compartment Id
+        console.debug('OciInstance: Getting Connection Ids to for', resource.displayName, resource.id)
+        return []
+    }
     
     export function newOciAgentConfig(): OciAgentConfig {
         return {
