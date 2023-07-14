@@ -48,19 +48,27 @@ export class OcdAutoLayout {
     addContainerCoords() {
         this.containers.forEach((c) => {
             this.coords = [...this.coords, ...this.containerResources[c].map((r: OcdResource) => {
-                const coords: OcdViewCoords = {
-                    id: this.uuid(),
-                    pgid: '',
-                    ocid: r.id,
-                    pocid: this.getParentId(r.id),
-                    x: 0,
-                    y: 0,
-                    w: this.containerWidth,
-                    h: this.containerHeight,
-                    title: OcdUtils.toTitle(c),
-                    class: OcdUtils.toCssClassName(r.provider, c),
-                    container: true
-                }
+                const coords: OcdViewCoords = OcdDesign.newCoords()
+                coords.ocid = r.id
+                coords.pocid = this.getParentId(r.id)
+                coords.w = this.containerWidth
+                coords.h = this.containerHeight
+                coords.title = OcdUtils.toTitle(c)
+                coords.class = OcdUtils.toCssClassName(r.provider, c)
+                coords.container = true
+                // const coords: OcdViewCoords = {
+                //     id: this.uuid(),
+                //     pgid: '',
+                //     ocid: r.id,
+                //     pocid: this.getParentId(r.id),
+                //     x: 0,
+                //     y: 0,
+                //     w: this.containerWidth,
+                //     h: this.containerHeight,
+                //     title: OcdUtils.toTitle(c),
+                //     class: OcdUtils.toCssClassName(r.provider, c),
+                //     container: true
+                // }
                 return coords
             })]
         })
@@ -69,20 +77,28 @@ export class OcdAutoLayout {
     addSimpleCoords() {
         this.coords = [...this.coords, ...Object.entries(this.simpleResources).reduce((a, [c, v]) => {
             return [...a, ...v.map((r) => {
-                    const coords: OcdViewCoords = {
-                        id: this.uuid(),
-                        pgid: '',
-                        ocid: r.id,
-                        pocid: this.getParentId(r.id),
-                        x: 0,
-                        y: 0,
-                        w: 32,
-                        h: 32,
-                        title: OcdUtils.toTitle(c),
-                        class: OcdUtils.toCssClassName(r.provider, c),
-                        container: false
-                    }
-                    return coords
+                const coords: OcdViewCoords = OcdDesign.newCoords()
+                coords.ocid = r.id
+                coords.pocid = this.getParentId(r.id)
+                coords.w = this.simpleWidth
+                coords.h = this.simpleHeight
+                coords.title = OcdUtils.toTitle(c)
+                coords.class = OcdUtils.toCssClassName(r.provider, c)
+                coords.container = false
+                // const coords: OcdViewCoords = {
+                //     id: this.uuid(),
+                //     pgid: '',
+                //     ocid: r.id,
+                //     pocid: this.getParentId(r.id),
+                //     x: 0,
+                //     y: 0,
+                //     w: 32,
+                //     h: 32,
+                //     title: OcdUtils.toTitle(c),
+                //     class: OcdUtils.toCssClassName(r.provider, c),
+                //     container: false
+                // }
+                return coords
             })]
         }, [] as OcdViewCoords[])]
     }

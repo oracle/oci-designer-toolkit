@@ -220,18 +220,21 @@ export class OcdDocument {
     }
 
     newCoords = (): OcdViewCoords => {
-        return {
-            id: `gid-${uuidv4()}`,
-            pgid: '',
-            ocid: '',
-            pocid: '',
-            x: 0,
-            y: 0,
-            w: 0,
-            h: 0,
-            title: '',
-            class: ''
-        }
+        return OcdDesign.newCoords()
+        // return {
+        //     id: `gid-${uuidv4()}`,
+        //     pgid: '',
+        //     ocid: '',
+        //     pocid: '',
+        //     x: 0,
+        //     y: 0,
+        //     w: 0,
+        //     h: 0,
+        //     title: '',
+        //     class: '',
+        //     showParentConnection: true,
+        //     showConnections: true
+        // }
     }
     getAllCoords = () => {return this.design.view.pages.map(p => [...p.coords, ...this.getChildCoords(p.coords)]).reduce((a, c) => [...a, ...c], [])}
     getCoords = (id: string) => {return this.design.view.pages.map(p => [...p.coords, ...this.getChildCoords(p.coords)]).reduce((a, c) => [...a, ...c], []).find(c => c.id === id)}
