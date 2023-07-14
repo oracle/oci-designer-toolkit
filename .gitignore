@@ -60,6 +60,7 @@ log/
 test
 **/test/model
 **/test/properties
+workspace
 
 # Others
 .coverage
