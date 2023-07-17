@@ -534,7 +534,9 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
 }
 
 export const OcdDragResourceGhostSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resource }: ResourceSvgGhostProps): JSX.Element => {
-    const SvgRect = resource.container ? OcdContainerRect : OcdSimpleRect
+    const containerLayout = (resource.container && (!resource.detailsStyle || resource.detailsStyle === 'default'))
+    const SvgRect = containerLayout ? OcdContainerRect : OcdSimpleRect
+    // const SvgRect = resource.container ? OcdContainerRect : OcdSimpleRect
     const [contextMenu, setContextMenu] = useState<OcdContextMenu>({show: false, x: 0, y: 0})
     const svgDragDropEvents: OcdMouseEvents = {
         'onSVGDragStart': () => {},
@@ -609,6 +611,20 @@ export const OcdConnector = ({ocdConsoleConfig, ocdDocument, connector}: Connect
         path.push(`${endDimensions.y + endDimensions.h / 2},`)
         // We will end at the middle left of the End Coord
         path.push(`${endDimensions.x}`)
+        path.push(`${endDimensions.y + endDimensions.h / 2}`)
+    } else {
+        // We will start middle right of the Start Coord
+        path.push(`${startDimensions.x }`)
+        path.push(`${startDimensions.y + startDimensions.h / 2}`)
+        // Start Control Point
+        path.push('C')
+        path.push(`${startDimensions.x - controlPoint}`)
+        path.push(`${startDimensions.y + startDimensions.h / 2},`)
+        // Add End Control Point
+        path.push(`${endDimensions.x + endDimensions.w + controlPoint}`)
+        path.push(`${endDimensions.y + endDimensions.h / 2},`)
+        // We will end at the middle left of the End Coord
+        path.push(`${endDimensions.x + endDimensions.w}`)
         path.push(`${endDimensions.y + endDimensions.h / 2}`)
     }
     console.debug('OcdResourceSvg: Connector Path', path)

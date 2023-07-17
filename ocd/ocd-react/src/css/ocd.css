@@ -972,6 +972,7 @@ summary {
     stroke-width: var(--svg-resource-connector-stroke-width);
     stroke-dasharray: var(--svg-resource-connector-stroke-dasharray);
     stroke-opacity: var(--svg-resource-connector-stroke-opacitiy);
+    fill-opacity: 0;
 }
 
 .ocd-svg-container {
