@@ -64,6 +64,7 @@ export interface PaletteProps {
 }
 
 export interface ConnectorSvgProps {
+    ocdConsoleConfig: OcdConsoleConfig
     ocdDocument: OcdDocument
     connector: OcdViewConnector
 }

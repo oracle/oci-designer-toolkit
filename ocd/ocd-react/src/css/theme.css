@@ -19,6 +19,11 @@
     --svg-selected-resource-stroke-dasharray: none;
     --svg-selected-resource-stroke-opacitiy: 1;
     --svg-selected-resource-stroke-corner-rx: 5;
+
+    --svg-resource-connector-stroke: #161513;
+    --svg-resource-connector-stroke-width: 1.5;
+    --svg-resource-connector-stroke-dasharray: none;
+    --svg-resource-connector-stroke-opacitiy: 1;
 }
 
 

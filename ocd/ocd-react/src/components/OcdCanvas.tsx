@@ -5,8 +5,8 @@
 
 import { v4 as uuidv4 } from 'uuid'
 import OcdDocument, { OcdDragResource, OcdSelectedResource } from './OcdDocument'
-import OcdResourceSvg, { OcdDragResourceGhostSvg, OcdSvgContextMenu } from './OcdResourceSvg'
-import { OcdViewCoords, OcdViewLayer, OcdViewPage } from '../model/OcdDesign'
+import OcdResourceSvg, { OcdConnector, OcdDragResourceGhostSvg, OcdSvgContextMenu } from './OcdResourceSvg'
+import { OcdViewConnector, OcdViewCoords, OcdViewLayer, OcdViewPage } from '../model/OcdDesign'
 import { OcdResource } from '../model/OcdResource'
 import { CanvasProps, OcdMouseEvents } from '../types/ReactComponentProperties'
 import { useState } from 'react'
@@ -304,6 +304,17 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
         'onSVGDragEnd': svgDrop,
     }
 
+    // @ts-ignore 
+    const allPageCoords = ocdDocument.getAllPageCoords(page)
+    const allVisibleCoords = allPageCoords.filter((r: OcdViewCoords) => visibleResourceIds.includes(r.ocid))
+    const visibleCoords = page.coords.filter((r: OcdViewCoords) => visibleResourceIds.includes(r.ocid))
+    // page.coords && page.coords.filter((r: OcdViewCoords) => visibleResourceIds.includes(r.ocid))
+    const parentMap = allVisibleCoords.map((r: OcdViewCoords) => {return {parentId: ocdDocument.getResourceParentId(r.ocid), childId: r.ocid, childCoordsId: r.id, pgid: r.pgid}})
+    const parentConnectors = parentMap.reduce((a, c) => {return [...a, ...allVisibleCoords.filter(coords => coords.ocid === c.parentId).filter(p => p.id !== c.pgid).map(p => {return {startCoordsId: p.id, endCoordsId: c.childCoordsId}})]}, [] as OcdViewConnector[])
+    console.debug('OcdCanvas: Page Coords', page.coords)
+    console.debug('OcdCanvas: All Page Coords', allPageCoords)
+    console.debug('OcdCanvas: Parent Map', parentMap)
+    console.debug('OcdCanvas: Parent Connectors', parentConnectors)
 
     return (
         <div className='ocd-designer-canvas ocd-background' 
@@ -327,7 +338,7 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
                     >
                     <g id='matrix-group' transform={`matrix(${transformMatrix.join(' ')})`}>
                         <g>
-                            {page.coords && page.coords.filter((r: OcdViewCoords) => visibleResourceIds.includes(r.ocid)).map((r: OcdViewCoords) => {
+                            {visibleCoords.map((r: OcdViewCoords) => {
                                 return <OcdResourceSvg
                                             ocdConsoleConfig={ocdConsoleConfig}
                                             ocdDocument={ocdDocument}
@@ -339,6 +350,16 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
                                             key={`${r.pgid}-${r.id}`}
                                 />
                             })}
+                        </g>
+                        <g>
+                        {parentConnectors.map((connector: OcdViewConnector) => {
+                                return <OcdConnector
+                                            ocdConsoleConfig={ocdConsoleConfig}
+                                            ocdDocument={ocdDocument}
+                                            connector={connector}
+                                            key={`connector-${connector.startCoordsId}-${connector.endCoordsId}`}
+                                />
+                        })}
                         </g>
                         <g className='ocd-ghost-group'
                             transform={`translate(${ghostTranslate.x}, ${ghostTranslate.y})`}

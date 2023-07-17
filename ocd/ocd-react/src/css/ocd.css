@@ -967,6 +967,13 @@ summary {
     background-size: 30px 30px;
 }
 
+.ocd-svg-connector {
+    stroke: var(--svg-resource-connector-stroke);
+    stroke-width: var(--svg-resource-connector-stroke-width);
+    stroke-dasharray: var(--svg-resource-connector-stroke-dasharray);
+    stroke-opacity: var(--svg-resource-connector-stroke-opacitiy);
+}
+
 .ocd-svg-container {
     stroke: var(--svg-container-resource-stroke);
     stroke-width: var(--svg-container-resource-stroke-width);

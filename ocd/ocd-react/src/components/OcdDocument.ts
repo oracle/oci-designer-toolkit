@@ -153,6 +153,10 @@ export class OcdDocument {
             if (resource.provider === 'oci') OciResource.assignParentId(resource, parentResource)
         }
     }
+    getResourceParentId(id: string): string {
+        const resource = this.getResource(id)
+        return OciResource.getParentId(resource)
+    }
 
     // @ts-ignore 
     getPage = (id: string): OcdViewPage => this.design.view.pages.find((v) => v.id === id)
@@ -237,7 +241,9 @@ export class OcdDocument {
         // }
     }
     getAllCoords = () => {return this.design.view.pages.map(p => [...p.coords, ...this.getChildCoords(p.coords)]).reduce((a, c) => [...a, ...c], [])}
+    getAllPageCoords = (page: OcdViewPage) => {return this.getChildCoords(page.coords)}
     getCoords = (id: string) => {return this.design.view.pages.map(p => [...p.coords, ...this.getChildCoords(p.coords)]).reduce((a, c) => [...a, ...c], []).find(c => c.id === id)}
+    // getChildCoords = (coords?: OcdViewCoords[]): OcdViewCoords[] => coords ? coords.reduce((a, c) => [...a, ...this.getChildCoords(c.coords)], [] as OcdViewCoords[]) : []
     getChildCoords = (coords?: OcdViewCoords[]): OcdViewCoords[] => coords ? coords.reduce((a, c) => [...a, ...this.getChildCoords(c.coords)], coords) : []
     getRelativeXY = (coords: OcdViewCoords): OcdViewPoint => {
         // console.info('OcdDocument: Get Relative XY for', coords.id, 'Parent', coords.pgid)
