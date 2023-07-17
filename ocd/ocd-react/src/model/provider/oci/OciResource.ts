@@ -46,6 +46,12 @@ export namespace OciResource {
             Resources[namespace].setParentId(child, parent.id)
         }
     }
+    export function getParentId(resource: OciResource): string {
+        const namespace = `Oci${resource.resourceType}`
+        // @ts-ignore 
+        const parentId = Resources[namespace].getParentId(resource)
+        return parentId
+    }
     export function assignParentIdOrig(child: OciResource, parent: OciResource) {
         const childTypes: Record<string, string[]> = {
             Vcn: ['Subnet'],

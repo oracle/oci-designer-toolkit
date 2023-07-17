@@ -573,13 +573,27 @@ export const OcdDragResourceGhostSvg = ({ ocdConsoleConfig, ocdDocument, setOcdD
     )
 }
 
-export const OcdConnector = ({ocdDocument, connector}: ConnectorSvgProps): JSX.Element => {
+export const OcdConnector = ({ocdConsoleConfig, ocdDocument, connector}: ConnectorSvgProps): JSX.Element => {
+    const simpleWidth = 40
+    const detailedWidth = 150
+    const simpleHeight = 40
+    const controlPoint = 100
+    // Start Coords Dimensions
     const startCoords = ocdDocument.getCoords(connector.startCoordsId)
-    const endCoords = ocdDocument.getCoords(connector.endCoordsId)
+    console.debug('OcdResourceSvg: Start Coords', startCoords)
     const startRelativeXY = startCoords ? ocdDocument.getRelativeXY(startCoords) : ocdDocument.newCoords()
+    const startWidth = startCoords ? startCoords.detailsStyle ? startCoords.detailsStyle === 'simple' ? simpleHeight : startCoords.detailsStyle === 'detailed' ? detailedWidth : startCoords.container ? startCoords.w : ocdConsoleConfig.config.detailedResource ? detailedWidth : simpleWidth : startCoords.container ? startCoords.w : ocdConsoleConfig.config.detailedResource ? detailedWidth : simpleWidth : 0
+    const startHeight = startCoords ? startCoords.container && (!startCoords.detailsStyle || startCoords.detailsStyle === 'default') ? startCoords.h : simpleHeight : 0
+    const startDimensions = {x: startRelativeXY.x, y: startRelativeXY.y, w: startWidth, h: startHeight}
+    console.debug('OcdResourceSvg: Start Dimensions', startDimensions)
+    // End Coords Dimensions
+    const endCoords = ocdDocument.getCoords(connector.endCoordsId)
     const endRelativeXY = endCoords ? ocdDocument.getRelativeXY(endCoords) : ocdDocument.newCoords()
-    const startDimensions = {x: startRelativeXY.x, y: startRelativeXY.y, w: startCoords ? startCoords.w : 0, h: startCoords ? startCoords.h : 0}
-    const endDimensions = {x: endRelativeXY.x, y: endRelativeXY.y, w: endCoords ? endCoords.w : 0, h: endCoords ? endCoords.h : 0}
+    const endWidth = endCoords ? endCoords.detailsStyle ? endCoords.detailsStyle === 'simple' ? simpleHeight : endCoords.detailsStyle === 'detailed' ? detailedWidth : endCoords.container ? endCoords.w : ocdConsoleConfig.config.detailedResource ? detailedWidth : simpleWidth : endCoords.container ? endCoords.w : ocdConsoleConfig.config.detailedResource ? detailedWidth : simpleWidth : 0
+    const endHeight = endCoords ? endCoords.container && (!endCoords.detailsStyle || endCoords.detailsStyle === 'default') ? endCoords.h : simpleHeight : 0
+    const endDimensions = {x: endRelativeXY.x, y: endRelativeXY.y, w: endWidth, h: endHeight}
+    console.debug('OcdResourceSvg: End Dimensions', endDimensions)
+    // Build Path
     const path: string[] = ['M']
     // Identify if we are goin left to right or right to left
     if (startDimensions.x < endDimensions.x) {
@@ -588,15 +602,17 @@ export const OcdConnector = ({ocdDocument, connector}: ConnectorSvgProps): JSX.E
         path.push(`${startDimensions.y + startDimensions.h / 2}`)
         // Start Control Point
         path.push('C')
-        path.push(`${startDimensions.x + startDimensions.w + 70}`)
+        path.push(`${startDimensions.x + startDimensions.w + controlPoint}`)
         path.push(`${startDimensions.y + startDimensions.h / 2},`)
         // Add End Control Point
-        path.push(`${endDimensions.x - 70}`)
+        path.push(`${endDimensions.x - controlPoint}`)
         path.push(`${endDimensions.y + endDimensions.h / 2},`)
         // We will end at the middle left of the End Coord
         path.push(`${endDimensions.x}`)
         path.push(`${endDimensions.y + endDimensions.h / 2}`)
     }
+    console.debug('OcdResourceSvg: Connector Path', path)
+    console.debug('OcdResourceSvg: Connector Path as String', path.join(' '))
     return (
         <path className='ocd-svg-connector' d={path.join(' ')}></path>
     )
