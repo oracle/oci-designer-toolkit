@@ -86,6 +86,16 @@ export const OcdSvgContextMenu = ({ contextMenu, setContextMenu, ocdDocument, se
         resource.detailsStyle = newLayout
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
+    const onShowParentConnectionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.stopPropagation()
+        resource.showParentConnection = e.currentTarget.checked
+        setOcdDocument(OcdDocument.clone(ocdDocument))
+    }
+    const onShowAssociationsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.stopPropagation()
+        resource.showConnections = e.currentTarget.checked
+        setOcdDocument(OcdDocument.clone(ocdDocument))
+    }
     return (
         <g 
         transform={`translate(${contextMenu.x}, ${contextMenu.y})`}
@@ -114,6 +124,9 @@ export const OcdSvgContextMenu = ({ contextMenu, setContextMenu, ocdDocument, se
                                 <label><input type='radio' name='resource-details' value='detailed' checked={resourceLayout === 'detailed'} onChange={onDetailsStyleChange}></input>Detailed Resource Layout</label>
                             </div>
                         </li>
+                        <li><hr/></li>
+                        <li className='ocd-svg-context-menu-item'><label><input type='checkbox' checked={resource.showParentConnection} onChange={onShowParentConnectionChange}></input>Show Parent Connection</label></li>
+                        <li className='ocd-svg-context-menu-item'><label><input type='checkbox' checked={resource.showConnections} onChange={onShowAssociationsChange}></input>Show Associations</label></li>
                     </ul>
                 </div>
             </foreignObject>
@@ -122,7 +135,7 @@ export const OcdSvgContextMenu = ({ contextMenu, setContextMenu, ocdDocument, se
 }
 
 const OcdSimpleRect = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resource }: ResourceRectProps): JSX.Element => {
-    console.debug('OcdResourceSvg: Simple Rect', resource, 'Layout Style', resource.detailsStyle)
+    // console.debug('OcdResourceSvg: Simple Rect', resource, 'Layout Style', resource.detailsStyle)
     const id = `${resource.id}-rect`
     const detailedLayout = ((resource.detailsStyle && resource.detailsStyle === 'detailed') || ((!resource.detailsStyle || resource.detailsStyle === 'default') && ocdConsoleConfig.config.detailedResource))
     const rectClass = `ocd-svg-simple ${detailedLayout ? 'ocd-svg-resource-detailed' : 'ocd-svg-resource-simple'} ${ocdDocument.selectedResource.modelId === resource.ocid ? 'ocd-svg-resource-selected' : ''}`
@@ -575,26 +588,25 @@ export const OcdDragResourceGhostSvg = ({ ocdConsoleConfig, ocdDocument, setOcdD
     )
 }
 
-export const OcdConnector = ({ocdConsoleConfig, ocdDocument, connector}: ConnectorSvgProps): JSX.Element => {
+export const OcdConnector = ({ocdConsoleConfig, ocdDocument, connector, parentConnector}: ConnectorSvgProps): JSX.Element => {
     const simpleWidth = 40
     const detailedWidth = 150
     const simpleHeight = 40
     const controlPoint = 100
     // Start Coords Dimensions
     const startCoords = ocdDocument.getCoords(connector.startCoordsId)
-    console.debug('OcdResourceSvg: Start Coords', startCoords)
     const startRelativeXY = startCoords ? ocdDocument.getRelativeXY(startCoords) : ocdDocument.newCoords()
     const startWidth = startCoords ? startCoords.detailsStyle ? startCoords.detailsStyle === 'simple' ? simpleHeight : startCoords.detailsStyle === 'detailed' ? detailedWidth : startCoords.container ? startCoords.w : ocdConsoleConfig.config.detailedResource ? detailedWidth : simpleWidth : startCoords.container ? startCoords.w : ocdConsoleConfig.config.detailedResource ? detailedWidth : simpleWidth : 0
     const startHeight = startCoords ? startCoords.container && (!startCoords.detailsStyle || startCoords.detailsStyle === 'default') ? startCoords.h : simpleHeight : 0
     const startDimensions = {x: startRelativeXY.x, y: startRelativeXY.y, w: startWidth, h: startHeight}
-    console.debug('OcdResourceSvg: Start Dimensions', startDimensions)
     // End Coords Dimensions
     const endCoords = ocdDocument.getCoords(connector.endCoordsId)
     const endRelativeXY = endCoords ? ocdDocument.getRelativeXY(endCoords) : ocdDocument.newCoords()
     const endWidth = endCoords ? endCoords.detailsStyle ? endCoords.detailsStyle === 'simple' ? simpleHeight : endCoords.detailsStyle === 'detailed' ? detailedWidth : endCoords.container ? endCoords.w : ocdConsoleConfig.config.detailedResource ? detailedWidth : simpleWidth : endCoords.container ? endCoords.w : ocdConsoleConfig.config.detailedResource ? detailedWidth : simpleWidth : 0
     const endHeight = endCoords ? endCoords.container && (!endCoords.detailsStyle || endCoords.detailsStyle === 'default') ? endCoords.h : simpleHeight : 0
     const endDimensions = {x: endRelativeXY.x, y: endRelativeXY.y, w: endWidth, h: endHeight}
-    console.debug('OcdResourceSvg: End Dimensions', endDimensions)
+    // console.debug('OcdResourceSvg: Start Dimensions', startDimensions)
+    // console.debug('OcdResourceSvg: End Dimensions', endDimensions)
     // Build Path
     const path: string[] = ['M']
     // Identify if we are goin left to right or right to left
@@ -627,10 +639,11 @@ export const OcdConnector = ({ocdConsoleConfig, ocdDocument, connector}: Connect
         path.push(`${endDimensions.x + endDimensions.w}`)
         path.push(`${endDimensions.y + endDimensions.h / 2}`)
     }
-    console.debug('OcdResourceSvg: Connector Path', path)
-    console.debug('OcdResourceSvg: Connector Path as String', path.join(' '))
+    // console.debug('OcdResourceSvg: Connector Path', path)
+    // console.debug('OcdResourceSvg: Connector Path as String', path.join(' '))
+    const className = parentConnector ? 'ocd-svg-parent-connector' : 'ocd-svg-association-connector'
     return (
-        <path className='ocd-svg-connector' d={path.join(' ')}></path>
+        <path className={className} d={path.join(' ')}></path>
     )
 }
 

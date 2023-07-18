@@ -309,12 +309,16 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
     const allVisibleCoords = allPageCoords.filter((r: OcdViewCoords) => visibleResourceIds.includes(r.ocid))
     const visibleCoords = page.coords.filter((r: OcdViewCoords) => visibleResourceIds.includes(r.ocid))
     // page.coords && page.coords.filter((r: OcdViewCoords) => visibleResourceIds.includes(r.ocid))
-    const parentMap = allVisibleCoords.map((r: OcdViewCoords) => {return {parentId: ocdDocument.getResourceParentId(r.ocid), childId: r.ocid, childCoordsId: r.id, pgid: r.pgid}})
+    const parentMap = allVisibleCoords.filter(c => c.showParentConnection).map((r: OcdViewCoords) => {return {parentId: ocdDocument.getResourceParentId(r.ocid), childId: r.ocid, childCoordsId: r.id, pgid: r.pgid}})
     const parentConnectors = parentMap.reduce((a, c) => {return [...a, ...allVisibleCoords.filter(coords => coords.ocid === c.parentId).filter(p => p.id !== c.pgid).map(p => {return {startCoordsId: p.id, endCoordsId: c.childCoordsId}})]}, [] as OcdViewConnector[])
-    console.debug('OcdCanvas: Page Coords', page.coords)
-    console.debug('OcdCanvas: All Page Coords', allPageCoords)
-    console.debug('OcdCanvas: Parent Map', parentMap)
-    console.debug('OcdCanvas: Parent Connectors', parentConnectors)
+    const associationMap = allVisibleCoords.filter(c => c.showConnections).map((r: OcdViewCoords) => {return ocdDocument.getResourceAssociationIds(r.ocid).map(aId => {return {startCoordsId: r.id, associationId: aId}})}).reduce((a, c) => [...a, ...c], [])
+    const associationConnectors = associationMap.reduce((a, c) => {return [...a, ...allVisibleCoords.filter(coords => coords.ocid === c.associationId).filter(p => p.pgid !== c.startCoordsId).map(p => {return {startCoordsId: c.startCoordsId, endCoordsId: p.id}})]}, [] as OcdViewConnector[])
+    // console.debug('OcdCanvas: Page Coords', page.coords)
+    // console.debug('OcdCanvas: All Page Coords', allPageCoords)
+    // console.debug('OcdCanvas: Parent Map', parentMap)
+    // console.debug('OcdCanvas: Parent Connectors', parentConnectors)
+    // console.debug('OcdCanvas: Association Map', associationMap)
+    // console.debug('OcdCanvas: Association Connectors', associationConnectors)
 
     return (
         <div className='ocd-designer-canvas ocd-background' 
@@ -357,6 +361,18 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
                                             ocdConsoleConfig={ocdConsoleConfig}
                                             ocdDocument={ocdDocument}
                                             connector={connector}
+                                            parentConnector={true}
+                                            key={`connector-${connector.startCoordsId}-${connector.endCoordsId}`}
+                                />
+                        })}
+                        </g>
+                        <g>
+                        {associationConnectors.map((connector: OcdViewConnector) => {
+                                return <OcdConnector
+                                            ocdConsoleConfig={ocdConsoleConfig}
+                                            ocdDocument={ocdDocument}
+                                            connector={connector}
+                                            parentConnector={false}
                                             key={`connector-${connector.startCoordsId}-${connector.endCoordsId}`}
                                 />
                         })}
