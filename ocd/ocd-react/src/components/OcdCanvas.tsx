@@ -86,7 +86,7 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
             // Get drop Coordinates
             const svg = document.getElementById('canvas_root_svg')
             // @ts-ignore 
-            const point = new DOMPoint(e.clientX - dragData.offset.x, e.clientY - dragData.offset.y)
+            const point = new DOMPoint(e.clientX - dragData.offset.x - transformMatrix[4], e.clientY - dragData.offset.y - transformMatrix[5])
             console.info('OcdCanvas: Drop Point', point)
             // @ts-ignore 
             // const { x, y } =  point.matrixTransform(svg.getCTM().inverse())
