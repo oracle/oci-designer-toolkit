@@ -20,10 +20,15 @@
     --svg-selected-resource-stroke-opacitiy: 1;
     --svg-selected-resource-stroke-corner-rx: 5;
 
-    --svg-resource-connector-stroke: #161513;
-    --svg-resource-connector-stroke-width: 1.5;
-    --svg-resource-connector-stroke-dasharray: none;
-    --svg-resource-connector-stroke-opacitiy: 1;
+    --svg-resource-parent-connector-stroke: #161513;
+    --svg-resource-parent-connector-stroke-width: 1.5;
+    --svg-resource-parent-connector-stroke-dasharray: none;
+    --svg-resource-parent-connector-stroke-opacitiy: 1;
+
+    --svg-resource-association-connector-stroke: #161513;
+    --svg-resource-association-connector-stroke-width: 1.5;
+    --svg-resource-association-connector-stroke-dasharray: 3, 2;
+    --svg-resource-association-connector-stroke-opacitiy: 1;
 }
 
 

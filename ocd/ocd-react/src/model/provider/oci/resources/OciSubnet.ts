@@ -32,7 +32,9 @@ export namespace OciSubnet {
     export function getConnectionIds(resource: OciSubnet): string[] {
         // This List of Ids does not include the Parent Id or Compartment Id
         console.debug('OciSubnet: Getting Connection Ids to for', resource.displayName, resource.id)
-        return []
+        let associationIds = []
+        if (resource.routeTableId) associationIds.push(resource.routeTableId)
+        return associationIds
     }
     
 }

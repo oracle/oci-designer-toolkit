@@ -967,11 +967,19 @@ summary {
     background-size: 30px 30px;
 }
 
-.ocd-svg-connector {
-    stroke: var(--svg-resource-connector-stroke);
-    stroke-width: var(--svg-resource-connector-stroke-width);
-    stroke-dasharray: var(--svg-resource-connector-stroke-dasharray);
-    stroke-opacity: var(--svg-resource-connector-stroke-opacitiy);
+.ocd-svg-parent-connector {
+    stroke: var(--svg-resource-parent-connector-stroke);
+    stroke-width: var(--svg-resource-parent-connector-stroke-width);
+    stroke-dasharray: var(--svg-resource-parent-connector-stroke-dasharray);
+    stroke-opacity: var(--svg-resource-parent-connector-stroke-opacitiy);
+    fill-opacity: 0;
+}
+
+.ocd-svg-association-connector {
+    stroke: var(--svg-resource-association-connector-stroke);
+    stroke-width: var(--svg-resource-association-connector-stroke-width);
+    stroke-dasharray: var(--svg-resource-association-connector-stroke-dasharray);
+    stroke-opacity: var(--svg-resource-association-connector-stroke-opacitiy);
     fill-opacity: 0;
 }
 
@@ -1093,7 +1101,7 @@ summary {
 }
 
 .ocd-svg-context-menu {
-    height: 15em;
+    height: 18em;
     width: 12em;
 }
 

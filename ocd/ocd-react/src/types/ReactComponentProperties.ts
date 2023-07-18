@@ -67,6 +67,7 @@ export interface ConnectorSvgProps {
     ocdConsoleConfig: OcdConsoleConfig
     ocdDocument: OcdDocument
     connector: OcdViewConnector
+    parentConnector: boolean
 }
 
 export interface OcdMouseEvents extends Record<string, MouseEventHandler<SVGGElement>> {}
