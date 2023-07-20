@@ -16,6 +16,7 @@ jobs:
         with:
           node-version: 20
       - run: npm run install
+      - run: cd ocd/ocd-react && npm install --save-dev autoprefixer postcss
       - run: ls ./ocd/ocd-react
       - run: npm run build
       - run: ls ./ocd/ocd-react
