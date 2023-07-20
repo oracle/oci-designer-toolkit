@@ -11,6 +11,7 @@
     "bugs": "https://github.com/oracle/oci-designer-toolkit/issues",
     "scripts": {
         "install": "cd ocd && npm install",
-        "build": "cd ocd && npm build"
+        "build": "cd ocd && npm build",
+        "desktop": "cd ocd && npm desktop"
     }
 }
