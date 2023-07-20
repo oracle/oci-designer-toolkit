@@ -48,11 +48,6 @@ const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourcePr
     const resourceJSXMethod = selectedResource ? `${OcdUtils.toTitleCase(selectedResource.provider)}${selectedResource.resourceType}` : ''
     // @ts-ignore 
     const ResourceProperties = ociResources[resourceJSXMethod]
-    // if (!ResourceProperties && selectedResource) {
-    //     console.warn('Selected Resource', selectedResource)
-    //     console.warn('Resource JMX Method', resourceJSXMethod)
-    //     console.warn('Properties Resource', ResourceProperties)
-    // }
     return (
         <div className={`ocd-properties-panel ocd-properties-panel-theme`}>
             {selectedResource && selectedResource.provider === 'oci' && <OciCommonResourceProperties 
@@ -164,10 +159,20 @@ const OcdResourceStyle = ({ocdDocument, setOcdDocument}: DesignerResourcePropert
     const page: OcdViewPage = ocdDocument.getActivePage()
     const coords = ocdDocument.getCoords(selectedResource.coordsId)
     const coordsStyle = (coords !== undefined && coords.style !== undefined ) ? coords.style : undefined
+    // style.fill
     const coordsFill = (coordsStyle !== undefined && coordsStyle.fill !== undefined) ? coordsStyle.fill : undefined
-    // const fillChecked = (coords !== undefined && coords.style !== undefined && coords.style.fill !== undefined && coords.style.fill !== undefined) as boolean
     const fillChecked = (coordsFill !== undefined) as boolean
     const fill = coordsFill !== undefined ? coordsFill : '#aabbcc'
+    // style.stroke
+    const coordsStroke = (coordsStyle !== undefined && coordsStyle.stroke !== undefined) ? coordsStyle.stroke : undefined
+    const strokeChecked = (coordsStroke !== undefined) as boolean
+    const stroke = coordsStroke !== undefined ? coordsStroke : '#aabbcc'
+    // style.strokeDasharray
+    const coordsStrokeDasharray = (coordsStyle !== undefined && coordsStyle.strokeDasharray !== undefined) ? coordsStyle.strokeDasharray : undefined
+    const strokeDasharray = coordsStrokeDasharray !== undefined ? coordsStrokeDasharray : 'default'
+    // style.strokeWidth
+    const coordsStrokeWidth = (coordsStyle !== undefined && coordsStyle.strokeWidth !== undefined) ? coordsStyle.strokeWidth : undefined
+    const strokeWidth = coordsStrokeWidth !== undefined ? coordsStrokeWidth : 'default'
 
     const fillCheckedChanged = () => {
         console.debug('OcdProperties: fillCheckedChanged', fillChecked, coords)
@@ -192,13 +197,88 @@ const OcdResourceStyle = ({ocdDocument, setOcdDocument}: DesignerResourcePropert
         const clone = OcdDocument.clone(ocdDocument)
         setOcdDocument(clone)
     }
+    const strokeCheckedChanged = () => {
+        console.debug('OcdProperties: strokeCheckedChanged', strokeChecked, coords)
+        const style = coordsStyle !== undefined ? JSON.parse(JSON.stringify(coordsStyle)) : {} as OcdViewCoordsStyle
+        // Need to not stroke because it is currently the previous state
+        if (!strokeChecked) {
+            // Fill Specified
+            style.stroke = stroke
+        } else {
+            delete style.stroke
+        }
+        if (coords) {ocdDocument.updateCoords({...coords, style: style}, page.id)}
+        const clone = OcdDocument.clone(ocdDocument)
+        setOcdDocument(clone)
+    }
+    const setStrokeColour = (colour: string) => {
+        // const style = coords !== undefined && coords.style !== undefined ? JSON.parse(JSON.stringify(coords.style)) : {} as OcdViewCoordsStyle
+        const style = coordsStyle !== undefined ? JSON.parse(JSON.stringify(coordsStyle)) : {} as OcdViewCoordsStyle
+        style.stroke = colour
+        console.debug('OcdProperties: Set Stroke Colour', coords)
+        if (coords) {ocdDocument.updateCoords({...coords, style: style}, page.id)}
+        const clone = OcdDocument.clone(ocdDocument)
+        setOcdDocument(clone)
+    }
+    const onStrokeDashArrayChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const style = coordsStyle !== undefined ? JSON.parse(JSON.stringify(coordsStyle)) : {} as OcdViewCoordsStyle
+        if (e.currentTarget.value === 'default') {
+            delete style.strokeDasharray
+        } else {
+            style.strokeDasharray = e.currentTarget.value
+        }
+        if (coords) {ocdDocument.updateCoords({...coords, style: style}, page.id)}
+        const clone = OcdDocument.clone(ocdDocument)
+        setOcdDocument(clone)
+    }
+    const onStrokeWidthChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const style = coordsStyle !== undefined ? JSON.parse(JSON.stringify(coordsStyle)) : {} as OcdViewCoordsStyle
+        if (e.currentTarget.value === 'default') {
+            delete style.strokeWidth
+        } else {
+            style.strokeWidth = e.currentTarget.value
+        }
+        if (coords) {ocdDocument.updateCoords({...coords, style: style}, page.id)}
+        const clone = OcdDocument.clone(ocdDocument)
+        setOcdDocument(clone)
+    }
     return (
         <div className={`ocd-properties-panel ocd-properties-panel-theme ocd-properties-style-panel`}>
             <div className={`ocd-style-fill`}>
                 <div><input id='resourceStyleFill' type='checkbox' onChange={fillCheckedChanged} checked={fillChecked}/><span>Fill</span></div>
                 {fillChecked && <div><OcdColourPicker colour={fill} setColour={setFillColour} /></div>}
+                {!fillChecked && <div></div>}
             </div>
-            <div className={`ocd-style-stroke`}></div>
+            <div className={`ocd-style-stroke`}>
+                <div>
+                    <input id='resourceStyleStroke' type='checkbox' onChange={strokeCheckedChanged} checked={strokeChecked}/><span>Line</span>
+                </div>
+                {strokeChecked && <div><OcdColourPicker colour={stroke} setColour={setStrokeColour} /></div>}
+                {!strokeChecked && <div></div>}
+                {strokeChecked && <div>
+                    <div className='ocd-radio-buttons-vertical ocd-stroke-dasharray-radio'>
+                        <label className='ocd-style-stroke-dasharray'><input type='radio' name='stroke-dasharray' value='default' checked={strokeDasharray === 'default'} onChange={onStrokeDashArrayChange}></input>Default Line</label>
+                        <label className='ocd-style-stroke-dasharray ocd-style-stroke-dasharray-none'><input type='radio' name='stroke-dasharray' value='none' checked={strokeDasharray === 'none'} onChange={onStrokeDashArrayChange}></input></label>
+                        <label className='ocd-style-stroke-dasharray ocd-style-stroke-dasharray-3-2'><input type='radio' name='stroke-dasharray' value='3,2' checked={strokeDasharray === '3,2'} onChange={onStrokeDashArrayChange}></input></label>
+                        <label className='ocd-style-stroke-dasharray ocd-style-stroke-dasharray-3-2-1'><input type='radio' name='stroke-dasharray' value='3,2,1' checked={strokeDasharray === '3,2,1'} onChange={onStrokeDashArrayChange}></input></label>
+                        <label className='ocd-style-stroke-dasharray ocd-style-stroke-dasharray-3-1-2-1'><input type='radio' name='stroke-dasharray' value='3,1,2,1' checked={strokeDasharray === '3,1,2,1'} onChange={onStrokeDashArrayChange}></input></label>
+                        <label className='ocd-style-stroke-dasharray ocd-style-stroke-dasharray-3-3'><input type='radio' name='stroke-dasharray' value='3,3' checked={strokeDasharray === '3,3'} onChange={onStrokeDashArrayChange}></input></label>
+                        <label className='ocd-style-stroke-dasharray ocd-style-stroke-dasharray-2-2'><input type='radio' name='stroke-dasharray' value='2,2' checked={strokeDasharray === '2,2'} onChange={onStrokeDashArrayChange}></input></label>
+                        <label className='ocd-style-stroke-dasharray ocd-style-stroke-dasharray-1-1'><input type='radio' name='stroke-dasharray' value='1,1' checked={strokeDasharray === '1,1'} onChange={onStrokeDashArrayChange}></input></label>
+                    </div>
+                </div>}
+                {strokeChecked && <div className='ocd-style-stroke-width'>
+                    <select value={strokeWidth} onChange={onStrokeWidthChange}>
+                        <option value={'default'}>Default Width</option>
+                        <option value={'1'}>1pt</option>
+                        <option value={'2'}>2pt</option>
+                        <option value={'3'}>3pt</option>
+                        <option value={'4'}>4pt</option>
+                        <option value={'5'}>5pt</option>
+                        <option value={'6'}>6pt</option>
+                    </select>
+                </div>}
+            </div>
             <div className={`ocd-style-opacity`}></div>
         </div>
     )

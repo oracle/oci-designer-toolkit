@@ -210,7 +210,7 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
         const newMatrix = transformMatrix.slice()
         newMatrix[0] += (scale * scrollSensitivity)
         newMatrix[3] += (scale * scrollSensitivity)
-        console.debug('OcdCanvas: Mew Matrix', newMatrix)
+        // console.debug('OcdCanvas: Mew Matrix', newMatrix)
         // Set limits
         // if (newMatrix[0] >= 0.3 && newMatrix[0] <= 3) setTransformMatrix(newMatrix)
         if (newMatrix[0] >= 0.3 && newMatrix[0] <= 3) {
