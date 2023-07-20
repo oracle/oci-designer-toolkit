@@ -79,7 +79,7 @@
                         },
                         {
                             "container": true,
-                            "title": "Virtual Cloud Network",
+                            "title": "Vcn",
                             "class": "oci-vcn"
                         },
                         {
