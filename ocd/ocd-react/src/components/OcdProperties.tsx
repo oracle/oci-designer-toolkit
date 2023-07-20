@@ -206,6 +206,9 @@ const OcdResourceStyle = ({ocdDocument, setOcdDocument}: DesignerResourcePropert
             style.stroke = stroke
         } else {
             delete style.stroke
+            delete style.strokeDasharray
+            delete style.strokeWidth
+            delete style.strokeOpacity
         }
         if (coords) {ocdDocument.updateCoords({...coords, style: style}, page.id)}
         const clone = OcdDocument.clone(ocdDocument)

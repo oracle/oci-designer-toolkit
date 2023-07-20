@@ -12,6 +12,6 @@
     "scripts": {
         "install": "cd ocd && npm run install",
         "build": "cd ocd && npm run build",
-        "desktop": "cd ocd && npm run desktop"
+        "desktop": "cd ocd && npm run electron"
     }
 }
