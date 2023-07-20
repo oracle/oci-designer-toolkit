@@ -18,14 +18,15 @@ export namespace OciLocalPeeringGateway {
     }
     export function allowedParentTypes(): string[] {
         console.debug('OciLocalPeeringGateway: Allowed Parent Types')
-        return []
+        return ['Vcn']
     }
     export function getParentId(resource: OciLocalPeeringGateway): string {
         console.debug('OciLocalPeeringGateway: Getting Parent Id to for', resource.displayName, resource.id)
-        return resource.compartmentId
+        return resource.vcnId
     }
     export function setParentId(resource: OciLocalPeeringGateway, parentId: string): OciLocalPeeringGateway {
         console.debug('OciLocalPeeringGateway: Setting Parent Id to', parentId, 'for', resource.displayName, resource.id)
+        resource.vcnId = parentId
         return resource
     }
     export function getConnectionIds(resource: OciLocalPeeringGateway): string[] {

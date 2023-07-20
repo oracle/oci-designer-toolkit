@@ -20,14 +20,15 @@ export namespace OciServiceGateway {
     }
     export function allowedParentTypes(): string[] {
         console.debug('OciServiceGateway: Allowed Parent Types')
-        return []
+        return ['Vcn']
     }
     export function getParentId(resource: OciServiceGateway): string {
         console.debug('OciServiceGateway: Getting Parent Id to for', resource.displayName, resource.id)
-        return resource.compartmentId
+        return resource.vcnId
     }
     export function setParentId(resource: OciServiceGateway, parentId: string): OciServiceGateway {
         console.debug('OciServiceGateway: Setting Parent Id to', parentId, 'for', resource.displayName, resource.id)
+        resource.vcnId = parentId
         return resource
     }
     export function getConnectionIds(resource: OciServiceGateway): string[] {

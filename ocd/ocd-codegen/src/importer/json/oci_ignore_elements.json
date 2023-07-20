@@ -59,6 +59,10 @@
         "ipv6public_cidr_block",
         "vcn_domain_name"
     ],
+    "oci_core_nat_gateway": [
+        "nat_ip",
+        "public_ip_id"
+    ],
     "oci_database_autonomous_database": [
         "apex_details",
         "backup_config",
