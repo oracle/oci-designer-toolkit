@@ -28,6 +28,6 @@ jobs:
         if: always()
       - run: npm run desktop
         if: always()
-      - run: ls ./ocd/dist/*
+      - run: ls ./ocd/dist
         if: always()
 
