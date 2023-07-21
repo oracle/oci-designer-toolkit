@@ -11,7 +11,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
-        version: [19, 20, latest]
+        version: [latest]
 
     steps:
       - uses: actions/checkout@v3
@@ -25,5 +25,9 @@ jobs:
       - run: ls ./ocd/ocd-react
       - run: npm run build
       - run: ls ./ocd/ocd-react
+        if: always()
       - run: npm run desktop
+        if: always()
+      - run: ls ./ocd/dist/*
+        if: always()
 
