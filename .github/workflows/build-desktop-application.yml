@@ -27,4 +27,7 @@ jobs:
       - run: ls ./ocd/ocd-react
         if: always()
       - run: npm run desktop
+        if: always()
+      - run: ls ./ocd/dist/*
+        if: always()
 
