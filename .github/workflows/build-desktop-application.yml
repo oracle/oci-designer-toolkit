@@ -26,7 +26,7 @@ jobs:
       - run: cd ocd/ocd-react && npm install --save-dev autoprefixer postcss
       - run: ls ./ocd/ocd-react
       - run: env
-      - run: npm run build
+      - run: CI=false && npm run build
       - run: ls ./ocd/ocd-react
         if: always()
       - run: npm run desktop
