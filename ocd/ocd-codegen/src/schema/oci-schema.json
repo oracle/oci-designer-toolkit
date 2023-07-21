@@ -2605,30 +2605,6 @@
         "lookup": false,
         "lookupResource": ""
       },
-      "nat_ip": {
-        "provider": "oci",
-        "key": "natIp",
-        "name": "nat_ip",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Nat Ip",
-        "id": "nat_ip",
-        "lookup": false,
-        "lookupResource": ""
-      },
-      "public_ip_id": {
-        "provider": "oci",
-        "key": "publicIpId",
-        "name": "public_ip_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Public Ip",
-        "id": "public_ip_id",
-        "lookup": true,
-        "lookupResource": "public_ip"
-      },
       "vcn_id": {
         "provider": "oci",
         "key": "vcnId",
