@@ -1,11 +1,13 @@
 name: Build/Release
 
-on: push
+on: 
+  push:
+    branches:
+      - 'toxophilist/sprint-dev'
 
 jobs:
   release:
     runs-on: ${{ matrix.os }}
-    continue-on-error: true
 
     strategy:
       fail-fast: false
