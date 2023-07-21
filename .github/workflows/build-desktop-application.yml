@@ -5,6 +5,9 @@ on:
     branches:
       - 'toxophilist/sprint-dev'
 
+env:
+  CI: false
+
 jobs:
   release:
     runs-on: ${{ matrix.os }}
