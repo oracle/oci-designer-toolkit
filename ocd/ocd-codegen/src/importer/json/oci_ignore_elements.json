@@ -51,6 +51,14 @@
         "time_maintenance_reboot_due",
         "vlan_id"
     ],
+    "oci_core_nat_gateway": [
+        "nat_ip",
+        "public_ip_id"
+    ],
+    "oci_core_volume": [
+        "is_auto_tune_enabled",
+        "size_in_mbs"
+    ],
     "oci_core_vcn": [
         "cidr_block",
         "default_dhcp_options_id",
@@ -58,10 +66,6 @@
         "default_security_list_id",
         "ipv6public_cidr_block",
         "vcn_domain_name"
-    ],
-    "oci_core_nat_gateway": [
-        "nat_ip",
-        "public_ip_id"
     ],
     "oci_database_autonomous_database": [
         "apex_details",

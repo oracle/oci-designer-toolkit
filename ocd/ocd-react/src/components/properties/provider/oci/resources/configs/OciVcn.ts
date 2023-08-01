@@ -4,10 +4,12 @@
 */
 
 import { ResourceElementConfig } from "../../../../OcdPropertyTypes";
+import { OciCommonConfigs } from "../../OciCommonConfigs"
 
 export namespace OciVcnConfigs {
     export function configs(): ResourceElementConfig[] {
         return [
+            ...OciCommonConfigs.configs(),
             {
                 id: 'dns_label',
                 properties: {

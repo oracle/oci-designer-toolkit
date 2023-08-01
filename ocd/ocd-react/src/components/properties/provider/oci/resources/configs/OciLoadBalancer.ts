@@ -3,8 +3,9 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import { ResourceElementConfig } from "../../../../OcdPropertyTypes";
+import { ResourceElementConfig } from "../../../../OcdPropertyTypes"
+import { OciCommonConfigs } from "../../OciCommonConfigs"
 
 export namespace OciLoadBalancerConfigs {
-    export function configs(): ResourceElementConfig[] {return []}
+    export function configs(): ResourceElementConfig[] {return [...OciCommonConfigs.configs()]}
 }
