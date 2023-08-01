@@ -803,7 +803,7 @@
                 "required": true,
                 "label": "Availability Domain",
                 "id": "node_config_details.placement_configs.availability_domain",
-                "lookup": false,
+                "lookup": true,
                 "lookupResource": ""
               },
               "subnet_id": {
@@ -1746,7 +1746,7 @@
         "required": true,
         "label": "Availability Domain",
         "id": "availability_domain",
-        "lookup": false,
+        "lookup": true,
         "lookupResource": ""
       },
       "compartment_id": {
@@ -1794,7 +1794,7 @@
         "required": false,
         "label": "Fault Domain",
         "id": "fault_domain",
-        "lookup": false,
+        "lookup": true,
         "lookupResource": ""
       },
       "freeform_tags": {
@@ -3664,7 +3664,7 @@
         "required": false,
         "label": "Availability Domain",
         "id": "availability_domain",
-        "lookup": false,
+        "lookup": true,
         "lookupResource": ""
       },
       "cidr_block": {
@@ -3978,7 +3978,7 @@
         "required": true,
         "label": "Availability Domain",
         "id": "availability_domain",
-        "lookup": false,
+        "lookup": true,
         "lookupResource": ""
       },
       "backup_policy_id": {
@@ -4053,18 +4053,6 @@
         "lookup": false,
         "lookupResource": ""
       },
-      "is_auto_tune_enabled": {
-        "provider": "oci",
-        "key": "isAutoTuneEnabled",
-        "name": "is_auto_tune_enabled",
-        "type": "bool",
-        "subtype": "",
-        "required": false,
-        "label": "Is Auto Tune Enabled",
-        "id": "is_auto_tune_enabled",
-        "lookup": false,
-        "lookupResource": ""
-      },
       "is_hydrated": {
         "provider": "oci",
         "key": "isHydrated",
@@ -4098,18 +4086,6 @@
         "required": false,
         "label": "Size In Gbs",
         "id": "size_in_gbs",
-        "lookup": false,
-        "lookupResource": ""
-      },
-      "size_in_mbs": {
-        "provider": "oci",
-        "key": "sizeInMbs",
-        "name": "size_in_mbs",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Size In Mbs",
-        "id": "size_in_mbs",
         "lookup": false,
         "lookupResource": ""
       },
@@ -4168,7 +4144,7 @@
             "required": true,
             "label": "Availability Domain",
             "id": "block_volume_replicas.availability_domain",
-            "lookup": false,
+            "lookup": true,
             "lookupResource": ""
           },
           "block_volume_replica_id": {
@@ -4892,7 +4868,7 @@
         "required": true,
         "label": "Availability Domain",
         "id": "availability_domain",
-        "lookup": false,
+        "lookup": true,
         "lookupResource": ""
       },
       "backup_network_nsg_ids": {
@@ -5943,7 +5919,7 @@
         "required": true,
         "label": "Availability Domain",
         "id": "availability_domain",
-        "lookup": false,
+        "lookup": true,
         "lookupResource": ""
       },
       "compartment_id": {
@@ -6082,7 +6058,7 @@
         "required": true,
         "label": "Availability Domain",
         "id": "availability_domain",
-        "lookup": false,
+        "lookup": true,
         "lookupResource": ""
       },
       "compartment_id": {
@@ -7227,7 +7203,7 @@
         "required": true,
         "label": "Availability Domain",
         "id": "availability_domain",
-        "lookup": false,
+        "lookup": true,
         "lookupResource": ""
       },
       "compartment_id": {
@@ -7311,7 +7287,7 @@
         "required": false,
         "label": "Fault Domain",
         "id": "fault_domain",
-        "lookup": false,
+        "lookup": true,
         "lookupResource": ""
       },
       "freeform_tags": {

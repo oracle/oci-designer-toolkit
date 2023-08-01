@@ -6,6 +6,7 @@
 import { OcdSchemaImporter } from './OcdSchemaImporter.js'
 import ignoreElements from './json/oci_ignore_elements.json' assert { type: "json" }
 import resourceMap from './json/oci_resource_map.json' assert { type: "json" }
+import lookupOverrides from './json/oci_lookup_override.json' assert { type: "json" }
 
 class OciTerraformSchemaImporter extends OcdSchemaImporter {
 
@@ -37,7 +38,7 @@ class OciTerraformSchemaImporter extends OcdSchemaImporter {
                 required: v.required ? v.required : false,
                 label: k.endsWith('_id') || k.endsWith('_ids') ? this.titleCase(k.split('_').slice(0, -1).join(' ')) : this.titleCase(k.split('_').join(' ')),
                 id: [...hierarchy, k].join('.'),
-                lookup: this.isReference(k) || this.isMultiReference(k),
+                lookup: this.isReference(k) || this.isMultiReference(k) || this.isLookupOverride(k),
                 lookupResource: this.isReference(k) || this.isMultiReference(k) ? this.lookupResource(k) : ''
             }
             return r
@@ -66,6 +67,7 @@ class OciTerraformSchemaImporter extends OcdSchemaImporter {
 
     isReference = (key) => key && key.endsWith('_id')
     isMultiReference = (key) => key && key.endsWith('_ids')
+    isLookupOverride = (key) => lookupOverrides.lookups.includes(key)
     lookupResource = (key) => key.split('_').slice(0, -1).join('_').toLowerCase()
 }
 
