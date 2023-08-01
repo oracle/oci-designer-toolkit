@@ -99,10 +99,11 @@ ${schemaAttributes.filter(a => !this.ignoreAttributes.includes(a.name)).map(i =>
         const schemaObjects = this.getSchemaObjects(schema)
         const content = `${this.copyright()}
 
-import { ResourceElementConfig } from "../../../../OcdPropertyTypes";
+import { ResourceElementConfig } from "../../../../OcdPropertyTypes"
+import { OciCommonConfigs } from "../../OciCommonConfigs"
 
 export namespace ${this.configNamespace(resource)} {
-    export function configs(): ResourceElementConfig[] {return []}
+    export function configs(): ResourceElementConfig[] {return [...OciCommonConfigs.configs()]}
 }
 `
         return content

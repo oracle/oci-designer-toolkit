@@ -2003,7 +2003,7 @@
             "provider": "oci",
             "key": "assignPublicIp",
             "name": "assign_public_ip",
-            "type": "string",
+            "type": "bool",
             "subtype": "",
             "required": false,
             "label": "Assign Public Ip",
