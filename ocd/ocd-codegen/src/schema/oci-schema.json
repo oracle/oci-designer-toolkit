@@ -684,32 +684,6 @@
         "lookup": false,
         "lookupResource": ""
       },
-      "node_image_id": {
-        "provider": "oci",
-        "key": "nodeImageId",
-        "name": "node_image_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Node Image",
-        "id": "node_image_id",
-        "staticLookup": false,
-        "lookup": true,
-        "lookupResource": "node_image"
-      },
-      "node_image_name": {
-        "provider": "oci",
-        "key": "nodeImageName",
-        "name": "node_image_name",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Node Image Name",
-        "id": "node_image_name",
-        "staticLookup": false,
-        "lookup": false,
-        "lookupResource": ""
-      },
       "node_metadata": {
         "provider": "oci",
         "key": "nodeMetadata",
@@ -1935,32 +1909,6 @@
         "lookup": false,
         "lookupResource": ""
       },
-      "hostname_label": {
-        "provider": "oci",
-        "key": "hostnameLabel",
-        "name": "hostname_label",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Hostname Label",
-        "id": "hostname_label",
-        "staticLookup": false,
-        "lookup": false,
-        "lookupResource": ""
-      },
-      "image": {
-        "provider": "oci",
-        "key": "image",
-        "name": "image",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Image",
-        "id": "image",
-        "staticLookup": false,
-        "lookup": false,
-        "lookupResource": ""
-      },
       "is_pv_encryption_in_transit_enabled": {
         "provider": "oci",
         "key": "isPvEncryptionInTransitEnabled",
@@ -2012,19 +1960,6 @@
         "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
-      },
-      "subnet_id": {
-        "provider": "oci",
-        "key": "subnetId",
-        "name": "subnet_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Subnet",
-        "id": "subnet_id",
-        "staticLookup": false,
-        "lookup": true,
-        "lookupResource": "subnet"
       },
       "agent_config": {
         "provider": "oci",
@@ -3094,19 +3029,6 @@
         "label": "Route Rules",
         "id": "route_rules",
         "attributes": {
-          "cidr_block": {
-            "provider": "oci",
-            "key": "cidrBlock",
-            "name": "cidr_block",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Cidr Block",
-            "id": "route_rules.cidr_block",
-            "staticLookup": false,
-            "lookup": false,
-            "lookupResource": ""
-          },
           "description": {
             "provider": "oci",
             "key": "description",
@@ -4261,19 +4183,6 @@
         "staticLookup": true,
         "lookup": true,
         "lookupResource": ""
-      },
-      "backup_policy_id": {
-        "provider": "oci",
-        "key": "backupPolicyId",
-        "name": "backup_policy_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Backup Policy",
-        "id": "backup_policy_id",
-        "staticLookup": false,
-        "lookup": true,
-        "lookupResource": "backup_policy"
       },
       "block_volume_replicas_deletion": {
         "provider": "oci",
@@ -6737,19 +6646,6 @@
     "type": "object",
     "subtype": "",
     "attributes": {
-      "ETag": {
-        "provider": "oci",
-        "key": "etag",
-        "name": "ETag",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Etag",
-        "id": "ETag",
-        "staticLookup": false,
-        "lookup": false,
-        "lookupResource": ""
-      },
       "compartment_id": {
         "provider": "oci",
         "key": "compartmentId",
@@ -6802,19 +6698,6 @@
         "lookup": false,
         "lookupResource": ""
       },
-      "lastUpdateETag": {
-        "provider": "oci",
-        "key": "lastupdateetag",
-        "name": "lastUpdateETag",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Lastupdateetag",
-        "id": "lastUpdateETag",
-        "staticLookup": false,
-        "lookup": false,
-        "lookupResource": ""
-      },
       "name": {
         "provider": "oci",
         "key": "name",
@@ -6824,19 +6707,6 @@
         "required": true,
         "label": "Name",
         "id": "name",
-        "staticLookup": false,
-        "lookup": false,
-        "lookupResource": ""
-      },
-      "policyHash": {
-        "provider": "oci",
-        "key": "policyhash",
-        "name": "policyHash",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Policyhash",
-        "id": "policyHash",
         "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
@@ -7559,19 +7429,6 @@
         "lookup": false,
         "lookupResource": ""
       },
-      "ip_addresses": {
-        "provider": "oci",
-        "key": "ipAddresses",
-        "name": "ip_addresses",
-        "type": "list",
-        "subtype": "string",
-        "required": false,
-        "label": "Ip Addresses",
-        "id": "ip_addresses",
-        "staticLookup": false,
-        "lookup": false,
-        "lookupResource": ""
-      },
       "ip_mode": {
         "provider": "oci",
         "key": "ipMode",
@@ -7910,19 +7767,6 @@
         "required": false,
         "label": "Lifecycle Details",
         "id": "lifecycle_details",
-        "staticLookup": false,
-        "lookup": false,
-        "lookupResource": ""
-      },
-      "mysql_version": {
-        "provider": "oci",
-        "key": "mysqlVersion",
-        "name": "mysql_version",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Mysql Version",
-        "id": "mysql_version",
         "staticLookup": false,
         "lookup": false,
         "lookupResource": ""

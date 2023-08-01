@@ -29,7 +29,7 @@ class OciTerraformSchemaImporter extends OcdSchemaImporter {
         const ignore_attributes = ignoreElements[key] ? [...ignoreElements.common, ...ignoreElements[key]] : ignoreElements.common
         const type_overrides = elementOverrides.types[key] ? {...elementOverrides.types.common, ...elementOverrides.types[key]} : elementOverrides.types.common
         // Simple attributes
-        let attributes = block.attributes ? Object.entries(block.attributes).filter(([k, v]) => !ignore_attributes.includes(k)).reduce((r, [k, v]) => {
+        let attributes = block.attributes ? Object.entries(block.attributes).filter(([k, v]) => !ignore_attributes.includes(k) && !v.deprecated).reduce((r, [k, v]) => {
             r[k] = {
                 provider: 'oci',
                 key: this.toCamelCase(k),
