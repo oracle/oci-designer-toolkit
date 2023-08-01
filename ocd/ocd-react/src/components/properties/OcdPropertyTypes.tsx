@@ -17,6 +17,7 @@ export interface ResourcePropertyAttributes {
     label: string
     id: string
     attributes?: {[key: string]: ResourcePropertyAttributes}
+    staticLookup?: boolean
     lookup?: boolean
     lookupResource?: string
 }
@@ -38,6 +39,11 @@ export interface ResourceElementConfig extends Record<string, any> {
     filter?: filterType                  // Filter function for Reference Selects
     displayCondition?(): boolean         // Function to identify if conditional elements should be displayed
     configs: ResourceElementConfig[]
+    options?: ResourceElementConfigOption[]
+}
+export interface ResourceElementConfigOption {
+    id: string
+    displayName: string
 }
 
 export interface ResourceProperties {
@@ -138,6 +144,28 @@ export const OcdLookupProperty = ({ ocdDocument, setOcdDocument, resource, confi
                     {/* {!attribute.required && <option defaultValue='' key={`${attribute.lookupResource}-empty-option`}></option> } */}
                     <option value='' key={`${attribute.lookupResource}-empty-option`}></option>
                     {resources.filter((r) => r.resourceType !== resourceType || r.id !== resource.id).map((r: OcdResource) => {
+                        return <option value={r.id} key={r.id}>{r.displayName}</option>
+                    })}
+                </select>
+            </div>
+        </div>
+    )
+}
+
+export const OcdStaticLookupProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
+    const properties = config && config.properties ? config.properties : {}
+    const resources = config && config.options ? config.options : []
+    // console.info('Resources', resources)
+    const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        resource[attribute.key] = e.target.value
+        setOcdDocument(OcdDocument.clone(ocdDocument))
+    }
+    return (
+        <div className='ocd-property-row ocd-simple-property-row'>
+            <div><label>{attribute.label}</label></div>
+            <div>
+                <select value={resource[attribute.key]} {...properties} onChange={onChange}>
+                    {resources.map((r: ResourceElementConfigOption) => {
                         return <option value={r.id} key={r.id}>{r.displayName}</option>
                     })}
                 </select>

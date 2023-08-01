@@ -68,7 +68,7 @@ export const ${this.reactResourceName(resource)} = ({ ocdDocument, setOcdDocumen
 
 import { v4 as uuidv4 } from 'uuid'
 import OcdDocument from '../../../../../OcdDocument'
-import { GeneratedResourceProperties, OcdBooleanProperty, OcdListProperty, OcdLookupProperty, OcdMapProperty, OcdNumberProperty, OcdSetLookupProperty, OcdSetProperty, OcdTextProperty, ResourceProperty} from '../../../../OcdPropertyTypes'
+import { GeneratedResourceProperties, OcdBooleanProperty, OcdListProperty, OcdLookupProperty, OcdMapProperty, OcdNumberProperty, OcdSetLookupProperty, OcdSetProperty, OcdStaticLookupProperty, OcdTextProperty, ResourceProperty} from '../../../../OcdPropertyTypes'
 import * as Model  from '../../../../../../model/provider/oci/resources/${this.modelFilename(resource)}'
 
 export const ${this.reactResourceGeneratedName(resource)} = ({ ocdDocument, setOcdDocument, resource, configs }: GeneratedResourceProperties): JSX.Element => {
@@ -158,10 +158,11 @@ export namespace ${this.configNamespace(resource)} {
 
     reactSimpleElementType = (resource, name, attribute) => {
         const configFind = `configs.find((c) => c.id === '${attribute.id}')`
-        if (attribute.type === 'string' && attribute.lookup)                  return `<OcdLookupProperty     ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} />`
-        else if (attribute.type === 'string')                                 return `<OcdTextProperty       ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} />`
-        else if (attribute.type === 'bool')                                   return `<OcdBooleanProperty    ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} />`
-        else if (attribute.type === 'number')                                 return `<OcdNumberProperty     ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} />`
+        if (attribute.type === 'string' && attribute.staticLookup)            return `<OcdStaticLookupProperty ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} />`
+        else if (attribute.type === 'string' && attribute.lookup)             return `<OcdLookupProperty       ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} />`
+        else if (attribute.type === 'string')                                 return `<OcdTextProperty         ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} />`
+        else if (attribute.type === 'bool')                                   return `<OcdBooleanProperty      ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} />`
+        else if (attribute.type === 'number')                                 return `<OcdNumberProperty       ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} />`
     }
 
     reactSimpleElement = (resource, attribute) => {

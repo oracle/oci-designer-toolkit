@@ -8,6 +8,29 @@ import { OcdCommonConfigs } from "../../OcdCommonConfigs";
 
 export namespace OciCommonConfigs {
     export function configs(): ResourceElementConfig[] {
-        return [...OcdCommonConfigs.configs()]
+        return [
+            ...OcdCommonConfigs.configs(),
+            {
+                id: 'availability_domain',
+                properties: {},
+                configs: [],
+                options: [
+                    {id: '1', displayName: 'Availability Domain 1'},
+                    {id: '2', displayName: 'Availability Domain 2'},
+                    {id: '3', displayName: 'Availability Domain 3'}
+                ]
+            },
+            {
+                id: 'fault_domain',
+                properties: {},
+                configs: [],
+                options: [
+                    {id: '', displayName: 'Let Oracle Choose'},
+                    {id: 'FAULT-DOMAIN-1', displayName: 'Fault Domain 1'},
+                    {id: 'FAULT-DOMAIN-2', displayName: 'Fault Domain 2'},
+                    {id: 'FAULT-DOMAIN-3', displayName: 'Fault Domain 3'}
+                ]
+            }
+        ]
     }
 }

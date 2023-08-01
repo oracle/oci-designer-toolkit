@@ -39,6 +39,7 @@ class OciTerraformSchemaImporter extends OcdSchemaImporter {
                 required: v.required ? v.required : false,
                 label: k.endsWith('_id') || k.endsWith('_ids') ? this.titleCase(k.split('_').slice(0, -1).join(' ')) : this.titleCase(k.split('_').join(' ')),
                 id: [...hierarchy, k].join('.'),
+                staticLookup: this.isStaticLookup(k),
                 lookup: this.isReference(k) || this.isMultiReference(k) || this.isLookupOverride(k),
                 lookupResource: this.isReference(k) || this.isMultiReference(k) ? this.lookupResource(k) : ''
             }
@@ -68,7 +69,8 @@ class OciTerraformSchemaImporter extends OcdSchemaImporter {
 
     isReference = (key) => key && key.endsWith('_id')
     isMultiReference = (key) => key && key.endsWith('_ids')
-    isLookupOverride = (key) => elementOverrides.lookups.includes(key)
+    isLookupOverride = (key) => elementOverrides.lookups.includes(key) || elementOverrides.staticLookups.includes(key)
+    isStaticLookup = (key) => elementOverrides.staticLookups.includes(key)
     lookupResource = (key) => key.split('_').slice(0, -1).join('_').toLowerCase()
 }
 

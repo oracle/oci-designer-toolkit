@@ -1,5 +1,6 @@
 {
-    "lookups": [
+    "lookups": [],
+    "staticLookups": [
         "availability_domain",
         "fault_domain"
     ],

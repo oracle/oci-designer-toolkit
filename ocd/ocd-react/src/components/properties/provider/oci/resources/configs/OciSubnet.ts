@@ -7,5 +7,20 @@ import { ResourceElementConfig } from "../../../../OcdPropertyTypes"
 import { OciCommonConfigs } from "../../OciCommonConfigs"
 
 export namespace OciSubnetConfigs {
-    export function configs(): ResourceElementConfig[] {return [...OciCommonConfigs.configs()]}
+    export function configs(): ResourceElementConfig[] {
+        return [
+            ...OciCommonConfigs.configs().filter(c => c.id !== 'availability_domain'), // Override 'availability_domain'
+            {
+                id: 'availability_domain',
+                properties: {},
+                configs: [],
+                options: [
+                    {id: '', displayName: 'Regional'},
+                    {id: '1', displayName: 'Availability Domain 1'},
+                    {id: '2', displayName: 'Availability Domain 2'},
+                    {id: '3', displayName: 'Availability Domain 3'}
+                ]
+            }
+        ]
+    }
 }
