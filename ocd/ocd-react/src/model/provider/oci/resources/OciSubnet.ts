@@ -22,7 +22,8 @@ export namespace OciSubnet {
     }
     export function getParentId(resource: OciSubnet): string {
         console.debug('OciSubnet: Getting Parent Id to for', resource.displayName, resource.id)
-        return resource.vcnId
+        const parentId = resource.vcnId !== '' ? resource.vcnId : resource.compartmentId
+        return parentId
     }
     export function setParentId(resource: OciSubnet, parentId: string): OciSubnet {
         console.debug('OciSubnet: Setting Parent Id to', parentId, 'for', resource.displayName, resource.id)
