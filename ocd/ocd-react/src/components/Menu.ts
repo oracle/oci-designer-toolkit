@@ -385,7 +385,7 @@ export const menuItems = [
             {
                 label: 'Auto Arrange',
                 click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
-                    ocdDocument.autoLayout(ocdDocument.selectedResource.pageId)
+                    ocdDocument.autoLayout(ocdDocument.getActivePage().id)
                     setOcdDocument(OcdDocument.clone(ocdDocument))            
                 }
             }

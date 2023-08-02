@@ -30,7 +30,7 @@ export class OcdAutoLayout {
         this.design = design
         this.coords = []
         this.containerResources = this.getContainerResources()
-        console.debug('OcdAutoLayout: Container Resources',this.containerResources)
+        // console.debug('OcdAutoLayout: Container Resources',this.containerResources)
         this.simpleResources = this.getSimpleResources()
         this.addContainerCoords()
         console.debug('OcdAutoLayout: Container Coords',this.coords)
@@ -134,7 +134,7 @@ export class OcdAutoLayout {
         })
         // console.debug('OcdAutoLayout: Coords - Post Child Shuffle', this.coords)
         this.coords = this.coords.filter(c => c.pgid === '')
-        console.debug('OcdAutoLayout: Coords - Post Filter', this.coords)
+        // console.debug('OcdAutoLayout: Coords - Post Filter', this.coords)
         // Position Root Containers
         let childX = this.spacing
         let childY = this.spacing
@@ -144,7 +144,7 @@ export class OcdAutoLayout {
             // Add Spacing
             childY += (this.spacing + child.h)
         })
-        console.debug('OcdAutoLayout: Coords - Post Filter', this.coords)
+        // console.debug('OcdAutoLayout: Coords - Post Filter', this.coords)
 
         return this.coords
     }
