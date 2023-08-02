@@ -192,9 +192,29 @@ export const OcdStaticLookupProperty = ({ ocdDocument, setOcdDocument, resource,
 //     )
 // }
 
+export const OcdStringListProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
+    const properties = config && config.properties ? config.properties : {}
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        resource[attribute.key] = e.target.value.split(',')
+        setOcdDocument(OcdDocument.clone(ocdDocument))
+    }
+    const onBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.target.reportValidity()
+    }
+    return (
+        <div className='ocd-property-row ocd-simple-property-row'>
+            <div><label>{attribute.label}</label></div>
+            <div><input type='text' value={resource[attribute.key].join(',')} {...properties} onChange={onChange} onBlur={onBlur}></input></div>
+        </div>
+    )
+}
+
 export const OcdListProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
     return (
-        <div></div>
+        <div className='ocd-property-row ocd-simple-property-row'>
+            <div><label>{attribute.label}</label></div>
+            <div><label>List Property</label></div>
+        </div>
     )
 }
 
@@ -212,6 +232,9 @@ export const OcdSetLookupProperty = ({ ocdDocument, setOcdDocument, resource, co
 
 export const OcdMapProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
     return (
-        <div></div>
+        <div className='ocd-property-row ocd-simple-property-row'>
+            <div><label>{attribute.label}</label></div>
+            <div><label>Map Property</label></div>
+        </div>
     )
 }
