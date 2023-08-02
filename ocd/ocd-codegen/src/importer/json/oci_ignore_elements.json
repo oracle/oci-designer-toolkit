@@ -55,6 +55,11 @@
         "nat_ip",
         "public_ip_id"
     ],
+    "oci_core_subnet": [
+        "ipv6virtual_router_ip",
+        "virtual_router_ip",
+        "virtual_router_mac"
+    ],
     "oci_core_volume": [
         "is_auto_tune_enabled",
         "size_in_mbs"
@@ -116,9 +121,5 @@
     "oci_objectstorage_bucket": [
         "etag",
         "object_lifecycle_policy_etag"
-    ],
-    "oci_core_subnet": [
-        "virtual_router_ip",
-        "virtual_router_mac"
     ]
 }

@@ -3949,19 +3949,6 @@
         "lookup": false,
         "lookupResource": ""
       },
-      "ipv6virtual_router_ip": {
-        "provider": "oci",
-        "key": "ipv6virtualRouterIp",
-        "name": "ipv6virtual_router_ip",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Ipv6virtual Router Ip",
-        "id": "ipv6virtual_router_ip",
-        "staticLookup": false,
-        "lookup": false,
-        "lookupResource": ""
-      },
       "prohibit_internet_ingress": {
         "provider": "oci",
         "key": "prohibitInternetIngress",

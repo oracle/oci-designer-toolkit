@@ -25,7 +25,24 @@ export namespace OcdCommonConfigs {
                     title: 'Comma separated IPv6 CIDR blocks'
                 },
                 configs: []
-            }
+            },
+            {
+                id: 'dns_label',
+                properties: {
+                    pattern: "^[\w\._-]+$|^var\.+$|^var\.+$",
+                    title: 'Valid DNS Label'
+                },
+                configs: []
+            },
+            {
+                id: 'hostname_label',
+                properties: {
+                    maxlength: '64',
+                    pattern: '^[a-zA-Z][a-zA-Z0-9]{0,64}$',
+                    title: 'Hostname can only be letters and numbers, starting with a letter. 64 characters max.'
+                },
+                configs: []
+             }
         ]
     }
 }
