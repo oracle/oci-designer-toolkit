@@ -32,7 +32,9 @@ export namespace OciInstance {
     }
     export function getParentId(resource: OciInstance): string {
         console.debug('OciInstance: Getting Parent Id to for', resource.displayName, resource.id)
-        return resource.createVnicDetails && resource.createVnicDetails.subnetId !== '' ? resource.createVnicDetails.subnetId as string : '' as string
+        // return resource.createVnicDetails && resource.createVnicDetails.subnetId !== '' ? resource.createVnicDetails.subnetId as string : '' as string
+        const parentId = resource.createVnicDetails && resource.createVnicDetails.subnetId !== '' ? resource.createVnicDetails.subnetId as string  : resource.compartmentId as string
+        return parentId
     }
     export function setParentId(resource: OciInstance, parentId: string): OciInstance {
         console.debug('OciInstance: Setting Parent Id to', parentId, 'for', resource.displayName, resource.id)

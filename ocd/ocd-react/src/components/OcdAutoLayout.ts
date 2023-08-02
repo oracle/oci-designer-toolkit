@@ -30,14 +30,17 @@ export class OcdAutoLayout {
         this.design = design
         this.coords = []
         this.containerResources = this.getContainerResources()
+        console.debug('OcdAutoLayout: Container Resources',this.containerResources)
         this.simpleResources = this.getSimpleResources()
         this.addContainerCoords()
-        console.info('Container Coords',this.coords)
+        console.debug('OcdAutoLayout: Container Coords',this.coords)
         this.addSimpleCoords()
-        console.info('Added Simple Coords', this.coords)
+        console.debug('OcdAutoLayout: Added Simple Coords', this.coords)
     }
 
-    getResources(): OcdResource[] {return [...this.getOciResources()]}
+    // getResources(): OcdResource[] {return [...this.getOciResources()]}
+    getResources() {return [...this.getOciResources()]}
+    getResource(id='') {return this.getResources().find((r: OcdResource) => r.id === id)}
     getContainerResources(): OcdResources {return {...this.getOciContainerResources(this.design.model.oci.resources)}}
     getSimpleResources(): OcdResources {return {...this.getOciSimpleResources(this.design.model.oci.resources)}}
 
@@ -47,7 +50,8 @@ export class OcdAutoLayout {
 
     addContainerCoords() {
         this.containers.forEach((c) => {
-            this.coords = [...this.coords, ...this.containerResources[c].map((r: OcdResource) => {
+            const resources = this.containerResources[c]
+            this.coords = resources ? [...this.coords, ...resources.map((r: OcdResource) => {
                 const coords: OcdViewCoords = OcdDesign.newCoords()
                 coords.ocid = r.id
                 coords.pocid = this.getParentId(r.id)
@@ -56,21 +60,8 @@ export class OcdAutoLayout {
                 coords.title = OcdUtils.toTitle(c)
                 coords.class = OcdUtils.toCssClassName(r.provider, c)
                 coords.container = true
-                // const coords: OcdViewCoords = {
-                //     id: this.uuid(),
-                //     pgid: '',
-                //     ocid: r.id,
-                //     pocid: this.getParentId(r.id),
-                //     x: 0,
-                //     y: 0,
-                //     w: this.containerWidth,
-                //     h: this.containerHeight,
-                //     title: OcdUtils.toTitle(c),
-                //     class: OcdUtils.toCssClassName(r.provider, c),
-                //     container: true
-                // }
                 return coords
-            })]
+            })] : this.coords
         })
     }
 
@@ -85,28 +76,15 @@ export class OcdAutoLayout {
                 coords.title = OcdUtils.toTitle(c)
                 coords.class = OcdUtils.toCssClassName(r.provider, c)
                 coords.container = false
-                // const coords: OcdViewCoords = {
-                //     id: this.uuid(),
-                //     pgid: '',
-                //     ocid: r.id,
-                //     pocid: this.getParentId(r.id),
-                //     x: 0,
-                //     y: 0,
-                //     w: 32,
-                //     h: 32,
-                //     title: OcdUtils.toTitle(c),
-                //     class: OcdUtils.toCssClassName(r.provider, c),
-                //     container: false
-                // }
                 return coords
             })]
         }, [] as OcdViewCoords[])]
     }
 
     getParentId(ocid: string): string {
-        const resource = this.getResources().find(r => r.id === ocid)
-        const id = !resource ? 'Undefined' : this.containers.reduce((a, c) => {return Object.hasOwn(resource, `${c}Id`) ? resource[`${c}Id`] : a}, '')
-        return id
+        const resource = this.getResource(ocid)
+        const parentId: string = !resource ? 'Undefined' : (resource.provider === 'oci') ? OciResource.getParentId(resource) : ''
+        return parentId
     }
 
     getChildren = (pocid: string) => this.coords.filter((c) => c.pocid === pocid)
@@ -145,26 +123,8 @@ export class OcdAutoLayout {
                 coords.h += (this.spacing + child.h)
             })
         })
-        // Position Root Containers
-        const rootChildren = this.getChildren('')
-        let childX = this.spacing
-        let childY = this.spacing
-        rootChildren.forEach((child) => {
-            child.x = childX
-            child.y = childY
-            // Add Spacing
-            childY += (this.spacing + child.h)
-        })
-        // Adjust Children based on position of Parents
-        // this.coords.filter((c) => c.container).forEach((parent) => {
-        //     const children = this.getChildren(parent.ocid)
-        //     children.forEach((child) => {
-        //         child.x += parent.x
-        //         child.y += parent.y
-        //     })
-        // })
         // Add Children to Parent Coords
-        // console.info('AutoLayout: Coords', this.coords)
+        // console.debug('OcdAutoLayout: Coords', this.coords)
         this.coords.filter((c) => c.container).forEach((parent) => {
             const children = this.getChildren(parent.ocid)
             children.forEach((child) => {
@@ -172,9 +132,19 @@ export class OcdAutoLayout {
                 parent.coords ? parent.coords.push(child) : parent.coords = [child]
             })
         })
-        // console.info('AutoLayout: Coords - Post Child Shuffle', this.coords)
+        // console.debug('OcdAutoLayout: Coords - Post Child Shuffle', this.coords)
         this.coords = this.coords.filter(c => c.pgid === '')
-        // console.info('AutoLayout: Coords - Post Filter', this.coords)
+        console.debug('OcdAutoLayout: Coords - Post Filter', this.coords)
+        // Position Root Containers
+        let childX = this.spacing
+        let childY = this.spacing
+        this.coords.reverse().forEach((child) => {
+            child.x = childX
+            child.y = childY
+            // Add Spacing
+            childY += (this.spacing + child.h)
+        })
+        console.debug('OcdAutoLayout: Coords - Post Filter', this.coords)
 
         return this.coords
     }
