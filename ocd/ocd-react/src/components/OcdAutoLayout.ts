@@ -30,14 +30,17 @@ export class OcdAutoLayout {
         this.design = design
         this.coords = []
         this.containerResources = this.getContainerResources()
+        console.debug('OcdAutoLayout: Container Resources',this.containerResources)
         this.simpleResources = this.getSimpleResources()
         this.addContainerCoords()
-        console.info('Container Coords',this.coords)
+        console.debug('OcdAutoLayout: Container Coords',this.coords)
         this.addSimpleCoords()
-        console.info('Added Simple Coords', this.coords)
+        console.debug('OcdAutoLayout: Added Simple Coords', this.coords)
     }
 
-    getResources(): OcdResource[] {return [...this.getOciResources()]}
+    // getResources(): OcdResource[] {return [...this.getOciResources()]}
+    getResources() {return [...this.getOciResources()]}
+    getResource(id='') {return this.getResources().find((r: OcdResource) => r.id === id)}
     getContainerResources(): OcdResources {return {...this.getOciContainerResources(this.design.model.oci.resources)}}
     getSimpleResources(): OcdResources {return {...this.getOciSimpleResources(this.design.model.oci.resources)}}
 
@@ -47,7 +50,8 @@ export class OcdAutoLayout {
 
     addContainerCoords() {
         this.containers.forEach((c) => {
-            this.coords = [...this.coords, ...this.containerResources[c].map((r: OcdResource) => {
+            const resources = this.containerResources[c]
+            this.coords = resources ? [...this.coords, ...resources.map((r: OcdResource) => {
                 const coords: OcdViewCoords = OcdDesign.newCoords()
                 coords.ocid = r.id
                 coords.pocid = this.getParentId(r.id)
@@ -70,7 +74,7 @@ export class OcdAutoLayout {
                 //     container: true
                 // }
                 return coords
-            })]
+            })] : this.coords
         })
     }
 
@@ -104,9 +108,12 @@ export class OcdAutoLayout {
     }
 
     getParentId(ocid: string): string {
-        const resource = this.getResources().find(r => r.id === ocid)
-        const id = !resource ? 'Undefined' : this.containers.reduce((a, c) => {return Object.hasOwn(resource, `${c}Id`) ? resource[`${c}Id`] : a}, '')
-        return id
+        // const resource = this.getResources().find(r => r.id === ocid)
+        // const id = !resource ? 'Undefined' : this.containers.reduce((a, c) => {return Object.hasOwn(resource, `${c}Id`) ? resource[`${c}Id`] : a}, '')
+        // return id
+        const resource = this.getResource(ocid)
+        const parentId: string = !resource ? 'Undefined' : (resource.provider === 'oci') ? OciResource.getParentId(resource) : ''
+        return parentId
     }
 
     getChildren = (pocid: string) => this.coords.filter((c) => c.pocid === pocid)
