@@ -123,24 +123,6 @@ export class OcdAutoLayout {
                 coords.h += (this.spacing + child.h)
             })
         })
-        // // Position Root Containers
-        // const rootChildren = this.getChildren('')
-        // let childX = this.spacing
-        // let childY = this.spacing
-        // rootChildren.forEach((child) => {
-        //     child.x = childX
-        //     child.y = childY
-        //     // Add Spacing
-        //     childY += (this.spacing + child.h)
-        // })
-        // Adjust Children based on position of Parents
-        // this.coords.filter((c) => c.container).forEach((parent) => {
-        //     const children = this.getChildren(parent.ocid)
-        //     children.forEach((child) => {
-        //         child.x += parent.x
-        //         child.y += parent.y
-        //     })
-        // })
         // Add Children to Parent Coords
         // console.debug('OcdAutoLayout: Coords', this.coords)
         this.coords.filter((c) => c.container).forEach((parent) => {
