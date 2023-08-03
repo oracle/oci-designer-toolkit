@@ -395,8 +395,7 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
                                             setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)}
                                             setContextMenu={setContextMenu}
                                             resource={contextMenu.resource}
-                                            />
-                                            }
+                                            />}
             </svg>
         </div>
     )

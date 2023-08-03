@@ -29,6 +29,9 @@
     --svg-resource-association-connector-stroke-width: 1.5;
     --svg-resource-association-connector-stroke-dasharray: 3, 2;
     --svg-resource-association-connector-stroke-opacitiy: 1;
+
+    --dialog-background-colour: #ffffff;
+    --dialog-border-colour: #161513;
 }
 
 
