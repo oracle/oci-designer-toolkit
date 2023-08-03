@@ -4001,19 +4001,6 @@
         "lookup": true,
         "lookupResource": "security_list"
       },
-      "subnet_domain_name": {
-        "provider": "oci",
-        "key": "subnetDomainName",
-        "name": "subnet_domain_name",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Subnet Domain Name",
-        "id": "subnet_domain_name",
-        "staticLookup": false,
-        "lookup": false,
-        "lookupResource": ""
-      },
       "vcn_id": {
         "provider": "oci",
         "key": "vcnId",

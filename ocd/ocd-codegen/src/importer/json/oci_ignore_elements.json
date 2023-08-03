@@ -57,6 +57,7 @@
     ],
     "oci_core_subnet": [
         "ipv6virtual_router_ip",
+        "subnet_domain_name",
         "virtual_router_ip",
         "virtual_router_mac"
     ],

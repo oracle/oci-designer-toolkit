@@ -209,6 +209,23 @@ export const OcdStringListProperty = ({ ocdDocument, setOcdDocument, resource, c
     )
 }
 
+export const OcdNumberListProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
+    const properties = config && config.properties ? config.properties : {}
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        resource[attribute.key] = e.target.value.split(',')
+        setOcdDocument(OcdDocument.clone(ocdDocument))
+    }
+    const onBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.target.reportValidity()
+    }
+    return (
+        <div className='ocd-property-row ocd-simple-property-row'>
+            <div><label>{attribute.label}</label></div>
+            <div><input type='text' value={resource[attribute.key].join(',')} {...properties} onChange={onChange} onBlur={onBlur}></input></div>
+        </div>
+    )
+}
+
 export const OcdListProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
     return (
         <div className='ocd-property-row ocd-simple-property-row'>
@@ -220,7 +237,10 @@ export const OcdListProperty = ({ ocdDocument, setOcdDocument, resource, config,
 
 export const OcdSetProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
     return (
-        <div></div>
+        <div className='ocd-property-row ocd-simple-property-row'>
+            <div><label>{attribute.label}</label></div>
+            <div><label>Set Property</label></div>
+        </div>
     )
 }
 
