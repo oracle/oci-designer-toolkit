@@ -368,6 +368,7 @@ summary {
 }
 
 .ocd-console-body {
+    position: relative;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -1472,6 +1473,54 @@ summary {
 
 .ocd-property-row > div:first-child > label {
     font-weight: bolder;
+}
+
+
+
+
+/*
+** Dialogs
+*/
+
+.ocd-query-dialog {
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    opacity: 0.6;
+    background-color: white;
+}
+
+.ocd-query-dialog > div {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    opacity: 1;
+    box-sizing: border-box;
+    border: solid 2px var(--dialog-border-colour);
+    border-radius: 5px;
+    background-color: var(--dialog_background-colour);
+    height: 400px;
+    width: 400px;
+}
+
+.ocd-dialog-title {
+}
+
+.ocd-dialog-body {
+    flex-grow: 1;
+}
+
+.ocd-dialog-footer {
+
 }
 
 

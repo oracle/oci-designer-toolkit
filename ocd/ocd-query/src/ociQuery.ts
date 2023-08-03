@@ -25,6 +25,7 @@ export class OcdOCIQuery {
     const getCompartmentReq: identity.requests.GetCompartmentRequest = {compartmentId: request.compartmentId}
     const listCompartmentsReq: identity.requests.ListCompartmentsRequest = {compartmentId: request.compartmentId}
     const listInstancesReq: core.requests.ListInstancesRequest = {compartmentId: request.compartmentId}
+    const listVnicAttachmentsReq: core.requests.ListVnicAttachmentsRequest = {compartmentId: request.compartmentId}
     const listVcnsReq: core.requests.ListVcnsRequest = {compartmentId: request.compartmentId}
     const listSubnetsReq: core.requests.ListSubnetsRequest = {compartmentId: request.compartmentId}
     const listNoSQLTablesReq: nosql.requests.ListTablesRequest = {compartmentId: request.compartmentId}
@@ -37,13 +38,14 @@ export class OcdOCIQuery {
 
     // const compartmentQuery = paginatedRecordsWithLimit(listCompartmentsReq, req => identityClient.listCompartments(listCompartmentsReq))
     const instanceQuery = paginatedRecordsWithLimit(listInstancesReq, req => computeClient.listInstances(listInstancesReq))
+    const vnicAttachmentsQuery = paginatedRecordsWithLimit(listVnicAttachmentsReq, req => computeClient.listVnicAttachments(listVnicAttachmentsReq))
     const vcnQuery = paginatedRecordsWithLimit(listVcnsReq, req => virtualNetworkClient.listVcns(listVcnsReq))
     // const subnetQuery = paginatedRecordsWithLimit(listSubnetsReq, req => virtualNetworkClient.listSubnets(listSubnetsReq))
     // const nosqlTablesQuery = nosqlClient.listTables(listNoSQLTablesReq)
     // const nosqlTablesQuery = paginatedRecordsWithLimit(listNoSQLTablesReq, req => nosqlClient.listTables(listNoSQLTablesReq))
     // const nosqlIndexesQuery = paginatedRecordsWithLimit(listNoSQLIndexesReq, req => nosqlClient.listIndexes(listNoSQLIndexesReq))
     // Promise.allSettled([compartmentQuery, vcnQuery, instanceQuery, subnetQuery, nosqlTablesQuery]).then((results) => {
-    Promise.allSettled([instanceQuery, vcnQuery]).then((results) => {
+    Promise.allSettled([instanceQuery, vnicAttachmentsQuery, vcnQuery]).then((results) => {
       console.info('Results:', results)
       if (results[0].status === 'fulfilled') console.info('Results 0:', JSON.stringify(results[0].value, null, 4))
       if (results[1].status === 'fulfilled') console.info('Results 0:', JSON.stringify(results[1].value, null, 4))
