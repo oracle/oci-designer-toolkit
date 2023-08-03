@@ -25,6 +25,7 @@
         "remove_export_drg_route_distribution_trigger"
     ],
     "oci_core_instance": [
+        "assign_private_dns_record",
         "availability_config",
         "baseline_ocpu_utilization",
         "boot_volume_id",

@@ -35,20 +35,23 @@ export class OcdOCIQuery {
     //   console.info('Response', resp)
     // })
 
-    const compartmentQuery = paginatedRecordsWithLimit(listCompartmentsReq, req => identityClient.listCompartments(listCompartmentsReq))
+    // const compartmentQuery = paginatedRecordsWithLimit(listCompartmentsReq, req => identityClient.listCompartments(listCompartmentsReq))
     const instanceQuery = paginatedRecordsWithLimit(listInstancesReq, req => computeClient.listInstances(listInstancesReq))
     const vcnQuery = paginatedRecordsWithLimit(listVcnsReq, req => virtualNetworkClient.listVcns(listVcnsReq))
-    const subnetQuery = paginatedRecordsWithLimit(listSubnetsReq, req => virtualNetworkClient.listSubnets(listSubnetsReq))
+    // const subnetQuery = paginatedRecordsWithLimit(listSubnetsReq, req => virtualNetworkClient.listSubnets(listSubnetsReq))
     // const nosqlTablesQuery = nosqlClient.listTables(listNoSQLTablesReq)
-    const nosqlTablesQuery = paginatedRecordsWithLimit(listNoSQLTablesReq, req => nosqlClient.listTables(listNoSQLTablesReq))
+    // const nosqlTablesQuery = paginatedRecordsWithLimit(listNoSQLTablesReq, req => nosqlClient.listTables(listNoSQLTablesReq))
     // const nosqlIndexesQuery = paginatedRecordsWithLimit(listNoSQLIndexesReq, req => nosqlClient.listIndexes(listNoSQLIndexesReq))
-    Promise.allSettled([compartmentQuery, vcnQuery, instanceQuery, subnetQuery, nosqlTablesQuery]).then((results) => {
+    // Promise.allSettled([compartmentQuery, vcnQuery, instanceQuery, subnetQuery, nosqlTablesQuery]).then((results) => {
+    Promise.allSettled([instanceQuery, vcnQuery]).then((results) => {
       console.info('Results:', results)
-      if (results[0].status === 'fulfilled') console.info('Results 0:', results[0].value)
-      if (results[1].status === 'fulfilled') console.info('Results 1:', results[1].value)
-      if (results[2].status === 'fulfilled') console.info('Results 2:', results[2].value)
-      if (results[3].status === 'fulfilled') console.info('Results 3:', results[3].value)
-      if (results[3].status === 'fulfilled') results[3].value.forEach((v) => console.info('Json:', typeof v.value))
+      if (results[0].status === 'fulfilled') console.info('Results 0:', JSON.stringify(results[0].value, null, 4))
+      if (results[1].status === 'fulfilled') console.info('Results 0:', JSON.stringify(results[1].value, null, 4))
+      // if (results[1].status === 'fulfilled') console.info('Results 1:', results[1].value)
+      // if (results[2].status === 'fulfilled') console.info('Results 2:', results[2].value)
+      // if (results[3].status === 'fulfilled') console.info('Results 3:', results[3].value)
+      // if (results[3].status === 'fulfilled') results[3].value.forEach((v) => console.info('Json:', typeof v.value))
+      // if (results[0].status === 'fulfilled') results[0].value.forEach((v) => console.info('Json:', typeof v.value))
     })
   }
 }

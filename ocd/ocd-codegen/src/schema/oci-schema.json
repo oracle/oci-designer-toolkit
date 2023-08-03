@@ -2060,19 +2060,6 @@
         "label": "Create Vnic Details",
         "id": "create_vnic_details",
         "attributes": {
-          "assign_private_dns_record": {
-            "provider": "oci",
-            "key": "assignPrivateDnsRecord",
-            "name": "assign_private_dns_record",
-            "type": "bool",
-            "subtype": "",
-            "required": false,
-            "label": "Assign Private Dns Record",
-            "id": "create_vnic_details.assign_private_dns_record",
-            "staticLookup": false,
-            "lookup": false,
-            "lookupResource": ""
-          },
           "assign_public_ip": {
             "provider": "oci",
             "key": "assignPublicIp",
