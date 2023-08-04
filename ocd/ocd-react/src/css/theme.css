@@ -30,8 +30,14 @@
     --svg-resource-association-connector-stroke-dasharray: 3, 2;
     --svg-resource-association-connector-stroke-opacitiy: 1;
 
-    --dialog-background-colour: #ffffff;
-    --dialog-border-colour: #161513;
+    --dialog-background-colour: #131243;
+    --dialog-border-colour: #ffffff;
+    --dialog-title-background-colour: #ffffff;
+    --dialog-title-colour: #161513;
+    --dialog-body-background-colour: #ffffff;
+    --dialog-body-colour: #161513;
+    --dialog-footer-background-colour: #ffffff;
+    --dialog-footer-colour: #161513;
 }
 
 
