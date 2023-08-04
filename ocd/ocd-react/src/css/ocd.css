@@ -1513,14 +1513,24 @@ summary {
 }
 
 .ocd-dialog-title {
+    background-color: var(--dialog-title-background-colour);
+    color: var(--dialog-title-colour);
+    border-bottom: 1px solid #161513;
+    height: var(--console-titlebar-height);
+    text-align: center;
 }
 
 .ocd-dialog-body {
     flex-grow: 1;
+    background-color: var(--dialog-body-background-colour);
+    color: var(--dialog-body-colour);
 }
 
 .ocd-dialog-footer {
-
+    background-color: var(--dialog-footer-background-colour);
+    color: var(--dialog-footer-colour);
+    border-top: 1px solid #161513;
+    height: var(--console-titlebar-height);
 }
 
 
