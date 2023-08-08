@@ -9,3 +9,5 @@ function createWindow () {
 app.on('ready', createWindow)
 // TODO: Remove Temp solution to work around permission issues with FileSystemFileHandle.createWritable() in Menu.ts Save As
 app.commandLine.appendSwitch("enable-experimental-web-platform-features")
+console.debug(app.getPath('home'))
+console.debug(app.getPath('userData'))
