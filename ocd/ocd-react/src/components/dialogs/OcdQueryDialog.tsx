@@ -10,9 +10,20 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
     return (
         <div className={className}>
             <div>
-                <div className='ocd-dialog-title'>Query Header</div>
-                <div className='ocd-dialog-body'>Query</div>
-                <div className='ocd-dialog-footer'>Query Footer</div>
+                <div className='ocd-dialog-title'>Query</div>
+                <div className='ocd-dialog-body'>
+                    <div>
+                        <div>Profile</div><div></div>
+                        <div>Region</div><div></div>
+                        <div>Compartments</div><div></div>
+                    </div>
+                </div>
+                <div className='ocd-dialog-footer'>
+                    <div>
+                        <div><button>Cancel</button></div>
+                        <div><button>Query</button></div>
+                    </div>
+                </div>
             </div>
         </div>
     )

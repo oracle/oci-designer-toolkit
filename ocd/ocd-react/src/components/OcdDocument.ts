@@ -30,6 +30,7 @@ export interface OcdDragResource {
 }
 
 export class OcdDocument {
+    query: boolean
     design: OcdDesign
     selectedResource: OcdSelectedResource
     dragResource: OcdDragResource
@@ -39,6 +40,7 @@ export class OcdDocument {
         else this.design = this.newDesign()
         this.selectedResource = resource ? resource : this.newSelectedResource()
         this.dragResource = dragResource ? dragResource : this.newDragResource()
+        this.query = false
     }
 
     static new = () => new OcdDocument()

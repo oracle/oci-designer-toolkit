@@ -17,6 +17,10 @@ export class OcdOCIQuery {
 
   query(request: OciQueryRequest) {
     console.info('Querying', request)
+    const parsed = common.ConfigFileReader.parseFileFromPath(request.configFilePath, null)
+    console.info(parsed)
+    console.info(parsed.accumulator.configurationsByProfile)
+    console.info(Array.from(parsed.accumulator.configurationsByProfile.keys()))
     const provider: common.ConfigFileAuthenticationDetailsProvider = new common.ConfigFileAuthenticationDetailsProvider(request.configFilePath, request.profile)
     const identityClient = new identity.IdentityClient({ authenticationDetailsProvider: provider });
     const computeClient = new core.ComputeClient({ authenticationDetailsProvider: provider });
@@ -46,9 +50,9 @@ export class OcdOCIQuery {
     // const nosqlIndexesQuery = paginatedRecordsWithLimit(listNoSQLIndexesReq, req => nosqlClient.listIndexes(listNoSQLIndexesReq))
     // Promise.allSettled([compartmentQuery, vcnQuery, instanceQuery, subnetQuery, nosqlTablesQuery]).then((results) => {
     Promise.allSettled([instanceQuery, vnicAttachmentsQuery, vcnQuery]).then((results) => {
-      console.info('Results:', results)
-      if (results[0].status === 'fulfilled') console.info('Results 0:', JSON.stringify(results[0].value, null, 4))
-      if (results[1].status === 'fulfilled') console.info('Results 0:', JSON.stringify(results[1].value, null, 4))
+      // console.info('Results:', results)
+      // if (results[0].status === 'fulfilled') console.info('Results 0:', JSON.stringify(results[0].value, null, 4))
+      // if (results[1].status === 'fulfilled') console.info('Results 0:', JSON.stringify(results[1].value, null, 4))
       // if (results[1].status === 'fulfilled') console.info('Results 1:', results[1].value)
       // if (results[2].status === 'fulfilled') console.info('Results 2:', results[2].value)
       // if (results[3].status === 'fulfilled') console.info('Results 3:', results[3].value)

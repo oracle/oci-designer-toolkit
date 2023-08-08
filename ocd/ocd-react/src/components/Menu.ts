@@ -23,10 +23,7 @@ export const menuItems = [
             {
                 label: 'New',
                 click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
-                    console.info(`menuItems ocdDocument: ${ocdDocument}`)
-                    console.info(`menuItems setOcdDocument: ${setOcdDocument}`)
                     const document: OcdDocument = OcdDocument.new()
-                    console.info('New Document:', document)
                     setOcdDocument(document)
                 }
             },
@@ -96,7 +93,6 @@ export const menuItems = [
                             const handle = await window.showSaveFilePicker(options)
                             const writable = await handle.createWritable()
                             const okitJson = JSON.stringify(ocdDocument.design, null, 2)
-                            // console.info('Writing', okitJson, ocdDocument)
                             await writable.write(okitJson)
                             await writable.close()
                             return handle
@@ -105,6 +101,15 @@ export const menuItems = [
                         }
                     }
                     saveFile(ocdDocument).then((resp) => console.info('Saved', resp))             
+                }
+            },
+            {
+                label: 'Query',
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
+                    const clone = OcdDocument.clone(ocdDocument)
+                    clone.query = !ocdDocument.query
+                    console.debug('Menu: Setting Query', ocdDocument, clone)
+                    setOcdDocument(clone)
                 }
             },
             {
@@ -210,8 +215,6 @@ export const menuItems = [
                                     const terraform = exporter.export(ocdDocument.design)
                                     const fileWriters = Object.entries(terraform).map(([k, v]) => writeTerraformFile(handle, k, v))
                                     return Promise.all(fileWriters)
-                                    // Promise.all(fileWriters).then((results) => {console.info('All files written', results)})
-                                    // return handle
                                 } catch (err: any) {
                                     console.error(err.name, err.message);
                                 }
@@ -245,7 +248,6 @@ export const menuItems = [
                                     const writable = await handle.createWritable()
                                     const okitExporter = new OcdOKITExporter()
                                     const okitJson = okitExporter.export(ocdDocument.design)
-                                    // console.info('Writing', okitJson, ocdDocument)
                                     await writable.write(okitJson)
                                     await writable.close()
                                     return handle
@@ -257,8 +259,45 @@ export const menuItems = [
                         }
                     }
                 ]
+            },
+            {
+                label: 'Import OCI Config',
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
+                    const openFile = async () => {
+                        try {
+                            const options = {
+                                multiple: false,
+                                types: [
+                                    {
+                                        description: 'OCI Config',
+                                        // accept: {
+                                        //     // 'application/json': ['.okit'],
+                                        //     'text/plain': ['*']
+                                        // },
+                                        startIn: '~/.oci'
+                                    },
+                                ],
+                            }
+                            // Always returns an array.
+                            // @ts-ignore 
+                            const [handle] = await window.showOpenFilePicker(options)
+                            const file = await handle.getFile()
+                            const contents = await file.text()
+                            return contents
+                        } catch (err: any) {
+                            console.error(err.name, err.message)
+                            throw err
+                        }
+                    }
+                    openFile().then((resp) => {
+                        console.debug('Menu:', resp)
+                        // const ocdDocument = OcdDocument.new()
+                        // ocdDocument.design = JSON.parse(resp)
+                        // setOcdDocument(ocdDocument)
+                    })
+                }
             }
-                ]
+        ]
     },
     {
         label: 'View',

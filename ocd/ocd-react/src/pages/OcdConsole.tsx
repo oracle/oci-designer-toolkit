@@ -169,7 +169,7 @@ const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument,
 }
 
 const OcdConsoleBody = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument }: ConsolePageProps): JSX.Element => {
-    const showQueryDialog = false
+    const showQueryDialog = ocdDocument.query
     const DisplayPage = ocdConsoleConfig.config.displayPage === 'bom' ? OcdBom : 
                         ocdConsoleConfig.config.displayPage === 'designer' ? OcdDesigner : 
                         ocdConsoleConfig.config.displayPage === 'markdown' ? OcdMarkdown : 
@@ -177,6 +177,7 @@ const OcdConsoleBody = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, se
                         ocdConsoleConfig.config.displayPage === 'terraform' ? OcdTerraform : 
                         ocdConsoleConfig.config.displayPage === 'variables' ? OcdVariables : 
                         OcdDesigner
+    console.debug('OcdConsole: Show Query Dialog', showQueryDialog)
     return (
         <div className='ocd-console-body ocd-console-body-theme'>
             {/* <OcdDesigner ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig:any) => setOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} /> */}

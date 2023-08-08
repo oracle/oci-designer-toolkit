@@ -1492,8 +1492,9 @@ summary {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    opacity: 0.6;
-    background-color: white;
+    /* opacity: 0.6;
+    background-color: white; */
+    background: rgba(0, 0, 0, 0.05);
 }
 
 .ocd-query-dialog > div {
@@ -1503,11 +1504,11 @@ summary {
     transform: translate(-50%, -50%);
     display: flex;
     flex-direction: column;
-    opacity: 1;
     box-sizing: border-box;
     border: solid 2px var(--dialog-border-colour);
-    border-radius: 5px;
-    background-color: var(--dialog_background-colour);
+    border-radius: 10px;
+    background-color: var(--dialog-background-colour);
+    padding: 5px;
     height: 400px;
     width: 400px;
 }
@@ -1524,6 +1525,14 @@ summary {
     flex-grow: 1;
     background-color: var(--dialog-body-background-colour);
     color: var(--dialog-body-colour);
+    padding: 10px;
+}
+
+.ocd-dialog-body > div {
+    display: grid;
+    grid-template-columns: 150px auto;
+    column-gap: 15px;
+    row-gap: 5px;
 }
 
 .ocd-dialog-footer {
@@ -1531,6 +1540,14 @@ summary {
     color: var(--dialog-footer-colour);
     border-top: 1px solid #161513;
     height: var(--console-titlebar-height);
+    padding: 2px;
+}
+
+.ocd-dialog-footer > div {
+    display: grid;
+    grid-template-columns: auto auto;
+    column-gap: 15px;
+    row-gap: 5px;
 }
 
 
