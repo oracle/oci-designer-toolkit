@@ -262,7 +262,7 @@ export const menuItems = [
             },
             {
                 label: 'Import OCI Config',
-                click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, setOciConfig: Function) => {
                     const openFile = async () => {
                         try {
                             const options = {
@@ -291,6 +291,7 @@ export const menuItems = [
                     }
                     openFile().then((resp) => {
                         console.debug('Menu:', resp)
+                        setOciConfig(resp)
                         // const ocdDocument = OcdDocument.new()
                         // ocdDocument.design = JSON.parse(resp)
                         // setOcdDocument(ocdDocument)

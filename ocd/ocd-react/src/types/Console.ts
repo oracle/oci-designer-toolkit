@@ -13,3 +13,11 @@ export interface ConsolePageProps {
     setOcdConsoleConfig: React.Dispatch<any>
 }
 
+export interface ConsoleMenuProps extends ConsolePageProps {
+    setOciConfig: React.Dispatch<any>
+}
+
+export interface ConsoleMHeaderProps extends ConsolePageProps {
+    setOciConfig: React.Dispatch<any>
+}
+
