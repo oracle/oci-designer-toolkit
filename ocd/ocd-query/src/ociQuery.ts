@@ -33,6 +33,7 @@ export class OcdOCIQuery {
     const listVcnsReq: core.requests.ListVcnsRequest = {compartmentId: request.compartmentId}
     const listSubnetsReq: core.requests.ListSubnetsRequest = {compartmentId: request.compartmentId}
     const listNoSQLTablesReq: nosql.requests.ListTablesRequest = {compartmentId: request.compartmentId}
+    const listRegionsRequest: identity.requests.ListRegionsRequest = {}
     // const listNoSQLIndexesReq: nosql.requests.ListIndexesRequest = {compartmentId: request.compartmentId, tableNameOrId: 'ocid1.nosqltable.oc1.uk-london-1.amaaaaaaxoesbjia3jg3dqenn3qigkbjy7evusejssavsq3nik6fmjpyy7ra'}
     // let compartmentEagerLoad = await paginatedRecordsWithLimit(listCompartmentsReq, req => identityClient.listCompartments(listCompartmentsReq))
     // compartmentEagerLoad.forEach(r => console.info('Compartment :', r.value.name, typeof r.value, r.value))
@@ -40,18 +41,20 @@ export class OcdOCIQuery {
     //   console.info('Response', resp)
     // })
 
-    // const compartmentQuery = paginatedRecordsWithLimit(listCompartmentsReq, req => identityClient.listCompartments(listCompartmentsReq))
+    const compartmentQuery = paginatedRecordsWithLimit(listCompartmentsReq, req => identityClient.listCompartments(listCompartmentsReq))
     const instanceQuery = paginatedRecordsWithLimit(listInstancesReq, req => computeClient.listInstances(listInstancesReq))
     const vnicAttachmentsQuery = paginatedRecordsWithLimit(listVnicAttachmentsReq, req => computeClient.listVnicAttachments(listVnicAttachmentsReq))
     const vcnQuery = paginatedRecordsWithLimit(listVcnsReq, req => virtualNetworkClient.listVcns(listVcnsReq))
+    // const regionsQuery = paginatedRecordsWithLimit(listRegionsRequest, req => identityClient.listRegions(listRegionsRequest))
+    const regionsQuery = identityClient.listRegions(listRegionsRequest)
     // const subnetQuery = paginatedRecordsWithLimit(listSubnetsReq, req => virtualNetworkClient.listSubnets(listSubnetsReq))
     // const nosqlTablesQuery = nosqlClient.listTables(listNoSQLTablesReq)
     // const nosqlTablesQuery = paginatedRecordsWithLimit(listNoSQLTablesReq, req => nosqlClient.listTables(listNoSQLTablesReq))
     // const nosqlIndexesQuery = paginatedRecordsWithLimit(listNoSQLIndexesReq, req => nosqlClient.listIndexes(listNoSQLIndexesReq))
     // Promise.allSettled([compartmentQuery, vcnQuery, instanceQuery, subnetQuery, nosqlTablesQuery]).then((results) => {
-    Promise.allSettled([instanceQuery, vnicAttachmentsQuery, vcnQuery]).then((results) => {
+    Promise.allSettled([regionsQuery, compartmentQuery, instanceQuery, vnicAttachmentsQuery, vcnQuery]).then((results) => {
       // console.info('Results:', results)
-      // if (results[0].status === 'fulfilled') console.info('Results 0:', JSON.stringify(results[0].value, null, 4))
+      if (results[0].status === 'fulfilled') console.info('Results 0:', JSON.stringify(results[0].value, null, 4))
       // if (results[1].status === 'fulfilled') console.info('Results 0:', JSON.stringify(results[1].value, null, 4))
       // if (results[1].status === 'fulfilled') console.info('Results 1:', results[1].value)
       // if (results[2].status === 'fulfilled') console.info('Results 2:', results[2].value)

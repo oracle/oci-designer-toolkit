@@ -4,40 +4,32 @@
 */
 
 import * as common from 'oci-common'
+import * as identity from "oci-identity"
 
 export namespace OcdQuery {
-    export function getOciConfigProfiles(): Promise<any> {
-        // const profiles: string[] = []
-        // return profiles
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader()
-            const configFile = '~/.oci/config'
-            reader.onload = config => {
-                let profiles: string[] = []
-                if (config.target && config.target.result) {
-                    const contents = config.target.result
-                    console.info('OcdQuery: Config File', contents)
-                    const parsed = common.ConfigFileReader.parse(contents as string, null)
-                    console.info(parsed)
-                    console.info(parsed.accumulator.configurationsByProfile)
-                    console.info(Array.from(parsed.accumulator.configurationsByProfile.keys()))
-                }
-                resolve(profiles)
-            }
-            reader.onerror = error => reject(error)
-            // reader.readAsText(configFile, 'utf-8')
-        })
+    export function getOciProvider(configFile: any, profile: string = 'DEFAULT'): common.SimpleAuthenticationDetailsProvider {
+        console.debug('OcdQuery:', configFile)
+        console.debug('OcdQuery:', configFile.accumulator.configurationsByProfile)
+        console.debug('OcdQuery:', Array.from(configFile.accumulator.configurationsByProfile.keys()))    
+        console.debug('OcdQuery:', configFile.accumulator.configurationsByProfile.get('DEFAULT'))    
+        const config = configFile.accumulator.configurationsByProfile.get(profile)
+        console.debug('OcdQuery:', config)    
+        const privateKey = ``
+        return new common.SimpleAuthenticationDetailsProvider(
+            config.get('tenancy', ''),
+            config.get('user', ''),
+            config.get('fingerprint', ''),
+            // config.get('key_file', ''),
+            privateKey,
+            config.get('passphrase', null),
+            config.get('region', '')
+          )
+    }
+    export function getRegions(provider: common.SimpleAuthenticationDetailsProvider): Promise<any> {
+        const identityClient = new identity.IdentityClient({ authenticationDetailsProvider: provider });
+        const listRegionsRequest: identity.requests.ListRegionsRequest = {}
+        return identityClient.listRegions(listRegionsRequest)
+        // return new Promise((resolve, reject) => {})
     }
 }
-// function readFile(file) {
-//     return new Promise((resolve, reject) => {
-//       const reader = new FileReader();
-  
-//       reader.onload = res => {
-//         resolve(res.target.result);
-//       };
-//       reader.onerror = err => reject(err);
-  
-//       reader.readAsText(file);
-//     });
-//   }
+

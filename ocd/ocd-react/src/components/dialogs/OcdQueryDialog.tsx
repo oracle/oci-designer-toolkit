@@ -6,20 +6,34 @@
 import { useContext } from "react"
 import { QueryDialogProps } from "../../types/Dialogs"
 import { OciConfigContext } from "../../pages/OcdConsole"
-// import { ConfigFileReader } from 'oci-common'
+import { ConfigFileReader } from 'oci-common'
+import { OcdQuery } from "../../query/OcdQuery"
 
 export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps): JSX.Element => {
     const ociConfig = useContext(OciConfigContext)
     const className = `ocd-query-dialog`
+    let configFile: any = null
     console.debug('OcdQueryDialog: Config', ociConfig)
-    let profiles: string[] = ['DEFAULT', 'OCI Config Import Required']
-    // if (ociConfig && ociConfig.trim() !== '') {
-    //     const parsed = ConfigFileReader.parse(ociConfig, null)
-    //     console.info(parsed)
-    //     console.info(parsed.accumulator.configurationsByProfile)
-    //     console.info(Array.from(parsed.accumulator.configurationsByProfile.keys()))    
-    //     profiles = Array.from(parsed.accumulator.configurationsByProfile.keys())
-    // }
+    let profiles: string[] = ['OCI Config Import Required']
+    if (ociConfig && ociConfig.trim() !== '') {
+        const parsed = ConfigFileReader.parse(ociConfig, null)
+        console.debug('OcdQueryDialog:', parsed)
+        console.debug('OcdQueryDialog:', parsed.accumulator.configurationsByProfile)
+        console.debug('OcdQueryDialog:', Array.from(parsed.accumulator.configurationsByProfile.keys()))    
+        console.debug('OcdQueryDialog:', parsed.accumulator.configurationsByProfile.get('DEFAULT'))    
+        profiles = Array.from(parsed.accumulator.configurationsByProfile.keys())
+        configFile = parsed
+    }
+    const onProfileChanged = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const profile = e.target.value
+        console.debug('OcdQueryDialog: Selected Profile', profile)
+        const provider = OcdQuery.getOciProvider(configFile, profile)
+        console.debug('OcdQueryDialog: Provider', provider)
+        const regionsQuery = OcdQuery.getRegions(provider)
+        Promise.allSettled([regionsQuery]).then((results) => {
+            console.info('OcdQueryDialog:', results)
+        })
+    }
     return (
         <div className={className}>
             <div>
@@ -27,8 +41,8 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
                 <div className='ocd-dialog-body'>
                     <div>
                         <div>Profile</div><div>
-                            <select>
-                                {profiles.map((p) => {return <option>{p}</option>})}
+                            <select onChange={onProfileChanged}>
+                                {profiles.map((p) => {return <option key={p} value={p}>{p}</option>})}
                             </select>
                         </div>
                         <div>Region</div><div></div>
