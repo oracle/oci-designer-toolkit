@@ -3,6 +3,7 @@
   "productName": "ocd",
   "version": "0.1.0",
   "description": "OKIT Open Cloud Designer Desktop",
+  "title": "OKIT Open Cloud Designer Desktop",
   "author": {
     "name": "Andrew Hopkinson",
     "email": "andrew.hopkinson@oracle.com",
@@ -28,7 +29,8 @@
           "name": "@electron-forge/maker-dmg",
           "config": {
             "icon": "./public/assets/icon.icns",
-            "format": "ULFO"
+            "format": "ULFO",
+            "overwrite": true
           }
         },
         {
