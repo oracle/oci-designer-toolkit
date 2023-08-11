@@ -25,6 +25,13 @@
       "rebuildConfig": {},
       "makers": [
         {
+          "name": "@electron-forge/maker-dmg",
+          "config": {
+            "icon": "./public/assets/icon.icns",
+            "format": "ULFO"
+          }
+        },
+        {
           "name": "@electron-forge/maker-squirrel",
           "config": {
             "name": "electron_quick_start"
@@ -62,10 +69,13 @@
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
     "electron-squirrel-startup": "^1.0.0",
+    "oci-sdk": "^2.68.0",
     "react": "^18.2.0",
+    "react-colorful": "^5.6.1",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
     "typescript": "^4.9.5",
+    "uuid": "^9.0.0",
     "web-vitals": "^2.1.4"
   },
   "scripts-old": {
@@ -113,10 +123,12 @@
   "devDependencies": {
     "@electron-forge/cli": "^6.3.0",
     "@electron-forge/maker-deb": "^6.3.0",
+    "@electron-forge/maker-dmg": "^6.3.0",
     "@electron-forge/maker-rpm": "^6.3.0",
     "@electron-forge/maker-squirrel": "^6.3.0",
     "@electron-forge/maker-zip": "^6.3.0",
     "@electron-forge/plugin-auto-unpack-natives": "^6.3.0",
+    "@types/uuid": "^9.0.2",
     "electron": "^25.5.0"
   }
 }
