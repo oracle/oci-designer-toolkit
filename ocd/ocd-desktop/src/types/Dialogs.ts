@@ -4,8 +4,17 @@
 */
 
 import OcdDocument from "../components/OcdDocument"
+import { OciCompartment } from "../model/provider/oci/resources"
 
 export interface QueryDialogProps {
     ocdDocument: OcdDocument
     setOcdDocument: React.Dispatch<any>
+}
+
+export interface CompartmentPickerProps {
+    compartments: OciCompartment[]
+    selectedCompartmentIds: string[]
+    setSelectedCompartmentIds: React.Dispatch<any>
+    root: boolean
+    parentId: string
 }

@@ -14,10 +14,11 @@ export interface ConsolePageProps {
 }
 
 export interface ConsoleMenuProps extends ConsolePageProps {
-    setOciConfig: React.Dispatch<any>
 }
 
-export interface ConsoleMHeaderProps extends ConsolePageProps {
-    setOciConfig: React.Dispatch<any>
+export interface ConsoleHeaderProps extends ConsolePageProps {
+}
+
+export interface ConsoleToolbarProps extends ConsolePageProps {
 }
 

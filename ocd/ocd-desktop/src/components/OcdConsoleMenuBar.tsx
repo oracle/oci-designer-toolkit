@@ -9,12 +9,12 @@ import OcdDocument from './OcdDocument'
 import { ConsoleMenuProps, ConsolePageProps } from '../types/Console'
 import OcdConsoleConfig from './OcdConsoleConfiguration'
 
-const OcdConsoleMenuItem = ({ menuItem, depth, ocdDocument, setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig, setOciConfig }: any): JSX.Element => {
+const OcdConsoleMenuItem = ({ menuItem, depth, ocdDocument, setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig }: any): JSX.Element => {
     const [dropdown, setDropdown] = useState(false)
     const onMouseEnter = () => {setDropdown(true)}
     const onMouseLeave = () => {setDropdown(false)}
     const closeDropdown = () => {setDropdown(!dropdown)}
-    const onClick = () => {menuItem.click(ocdDocument, (ocdDocument: OcdDocument) => setOcdDocument(ocdDocument), ocdConsoleConfig, (ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig), (ociConfig: string) => setOciConfig(ociConfig))}
+    const onClick = () => {menuItem.click(ocdDocument, (ocdDocument: OcdDocument) => setOcdDocument(ocdDocument), ocdConsoleConfig, (ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig))}
     return (
         <li
         className={`${depth > 0 ? 'ocd-submenu-item' : 'ocd-menu-item'}`}
@@ -33,7 +33,6 @@ const OcdConsoleMenuItem = ({ menuItem, depth, ocdDocument, setOcdDocument, ocdC
                     setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} 
                     ocdDocument={ocdDocument} 
                     setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)}
-                    setOciConfig={(ociConfig: string) => setOciConfig(ociConfig)}
                 />
                 </>
             ) : menuItem.click ? (
@@ -45,7 +44,7 @@ const OcdConsoleMenuItem = ({ menuItem, depth, ocdDocument, setOcdDocument, ocdC
     )
 }
 
-const OcdConsoleSubMenu = ({ submenus, dropdown, depth, ocdDocument, setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig, setOciConfig }: any): JSX.Element => {
+const OcdConsoleSubMenu = ({ submenus, dropdown, depth, ocdDocument, setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig }: any): JSX.Element => {
     depth += 1
     return (
         <ul 
@@ -59,7 +58,6 @@ const OcdConsoleSubMenu = ({ submenus, dropdown, depth, ocdDocument, setOcdDocum
                             setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} 
                             ocdDocument={ocdDocument} 
                             setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)}
-                            setOciConfig={(ociConfig: string) => setOciConfig(ociConfig)}
                             key={idx}
                         />)
             })}
@@ -67,7 +65,7 @@ const OcdConsoleSubMenu = ({ submenus, dropdown, depth, ocdDocument, setOcdDocum
     )
 }
 
-const OcdConsoleMenu = ({ ocdDocument, setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig, setOciConfig }: ConsoleMenuProps): JSX.Element => {
+const OcdConsoleMenu = ({ ocdDocument, setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig }: ConsoleMenuProps): JSX.Element => {
     return (
         <ul className='ocd-console-main-menu'>
             {menuItems.map((menuItem: MenuItem, idx: number): any => {
@@ -80,7 +78,6 @@ const OcdConsoleMenu = ({ ocdDocument, setOcdDocument, ocdConsoleConfig, setOcdC
                         setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} 
                         ocdDocument={ocdDocument} 
                         setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)}
-                        setOciConfig={(ociConfig: string) => setOciConfig(ociConfig)}
                         key={idx} 
                     />
                 )
@@ -89,7 +86,7 @@ const OcdConsoleMenu = ({ ocdDocument, setOcdDocument, ocdConsoleConfig, setOcdC
     )
 }
 
-const OcdConsoleMenuBar = ({ ocdDocument, setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig, setOciConfig }: ConsoleMenuProps): JSX.Element => {
+const OcdConsoleMenuBar = ({ ocdDocument, setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig }: ConsoleMenuProps): JSX.Element => {
     return (
         <div className='ocd-console-menu-bar ocd-console-menubar-colour'>
             <OcdConsoleMenu 
@@ -97,7 +94,6 @@ const OcdConsoleMenuBar = ({ ocdDocument, setOcdDocument, ocdConsoleConfig, setO
                 setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} 
                 ocdDocument={ocdDocument} 
                 setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)}
-                setOciConfig={(ociConfig: string) => setOciConfig(ociConfig)}
             />
         </div>
     )
