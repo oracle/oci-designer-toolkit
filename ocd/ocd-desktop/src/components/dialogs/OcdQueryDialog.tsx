@@ -3,37 +3,57 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import { useContext } from "react"
-import { QueryDialogProps } from "../../types/Dialogs"
-import { OciConfigContext } from "../../pages/OcdConsole"
-// import { ConfigFileReader } from 'oci-common'
-import { OcdQuery } from "../../query/OcdQuery"
+import { CompartmentPickerProps, QueryDialogProps } from "../../types/Dialogs"
+import { OciApiFacade } from "../../facade/OciApiFacade"
+import { useState } from "react"
+import { OciCompartment } from "../../model/provider/oci/resources"
 
 export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps): JSX.Element => {
-    const ociConfig = useContext(OciConfigContext)
+    const loadingState = '......Reading OCI Config'
+    const regionsLoading = {id: 'Select Valid Profile', displayName: 'Select Valid Profile'}
     const className = `ocd-query-dialog`
-    let configFile: any = null
-    console.debug('OcdQueryDialog: Config', ociConfig)
-    let profiles: string[] = ['OCI Config Import Required']
-    // if (ociConfig && ociConfig.trim() !== '') {
-    //     const parsed = ConfigFileReader.parse(ociConfig, null)
-    //     console.debug('OcdQueryDialog:', parsed)
-    //     console.debug('OcdQueryDialog:', parsed.accumulator.configurationsByProfile)
-    //     console.debug('OcdQueryDialog:', Array.from(parsed.accumulator.configurationsByProfile.keys()))    
-    //     console.debug('OcdQueryDialog:', parsed.accumulator.configurationsByProfile.get('DEFAULT'))    
-    //     profiles = Array.from(parsed.accumulator.configurationsByProfile.keys())
-    //     configFile = parsed
-    // }
+    const [profiles, setProfiles] = useState([loadingState])
+    const [profilesLoaded, setProfilesLoaded] = useState(false)
+    const [regions, setRegions] = useState([regionsLoading])
+    const [compartments, setCompartments] = useState([])
+    const [selectedRegion, setSelectedRegion] = useState('')
+    const [selectedCompartmentIds, setSelectedCompartmentIds] = useState([])
+    if (!profilesLoaded) OciApiFacade.loadOCIConfigProfiles().then((results) => {
+        setProfilesLoaded(true)
+        setProfiles(results)
+        loadRegions(results.length ? results[0] : [regionsLoading])
+        loadCompartments(results.length ? results[0] : [])
+    }).catch((reason) => {
+        setProfilesLoaded(true)
+        setProfiles(['Failed to Read Profiles Fron OCI Config'])
+    })
     const onProfileChanged = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const profile = e.target.value
         console.debug('OcdQueryDialog: Selected Profile', profile)
-        const provider = OcdQuery.getOciProvider(configFile, profile)
-        console.debug('OcdQueryDialog: Provider', provider)
-        const regionsQuery = OcdQuery.getRegions()
-        Promise.allSettled([regionsQuery]).then((results) => {
-            console.info('OcdQueryDialog:', results)
+        loadRegions(profile)
+        loadCompartments(profile)
+    }
+    const onRegionChanged = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setSelectedRegion(e.target.value)
+    }
+    const loadRegions = (profile: string) => {
+        console.debug('OciQueryDialog: loadRegions: Profile', profile)
+        OciApiFacade.listRegions(profile).then((results) => {
+            setRegions(results)
+        }).catch((reason) => {
+            setRegions([regionsLoading])
         })
     }
+    const loadCompartments = (profile: string) => {
+        console.debug('OciQueryDialog: loadCompartments: Profile', profile)
+        OciApiFacade.listTenancyCompartments(profile).then((results) => {
+            console.debug('OcdQueryDialog: Compartments', results)
+            setCompartments(results)
+        }).catch((reason) => {
+            setCompartments([])
+        })
+    }
+   
     return (
         <div className={className}>
             <div>
@@ -45,8 +65,20 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
                                 {profiles.map((p) => {return <option key={p} value={p}>{p}</option>})}
                             </select>
                         </div>
-                        <div>Region</div><div></div>
-                        <div>Compartments</div><div></div>
+                        <div>Region</div><div>
+                            <select onChange={onRegionChanged}>
+                                {regions.map((r) => {return <option key={r.id} value={r.displayName}>{r.displayName}</option>})}
+                            </select>
+                        </div>
+                        <div>Compartments</div><div>
+                            <CompartmentPicker 
+                                compartments={compartments} 
+                                selectedCompartmentIds={selectedCompartmentIds}
+                                setSelectedCompartmentIds={setSelectedCompartmentIds}
+                                root={true}
+                                parentId={''}
+                            />
+                        </div>
                     </div>
                 </div>
                 <div className='ocd-dialog-footer'>
@@ -57,5 +89,16 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
                 </div>
             </div>
         </div>
+    )
+}
+
+const CompartmentPicker = ({compartments, selectedCompartmentIds, setSelectedCompartmentIds, root, parentId}: CompartmentPickerProps): JSX.Element => {
+    const filter = root ? (c: OciCompartment) => c.root : (c: OciCompartment) => c.compartmentId = parentId
+    return (
+        <ul>
+            {compartments.filter(filter).map((c) => {
+                return <li>c.name</li>
+            })}
+        </ul>
     )
 }

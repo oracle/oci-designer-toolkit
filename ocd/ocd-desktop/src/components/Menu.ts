@@ -259,44 +259,6 @@ export const menuItems = [
                         }
                     }
                 ]
-            },
-            {
-                label: 'Import OCI Config',
-                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, setOciConfig: Function) => {
-                    const openFile = async () => {
-                        try {
-                            const options = {
-                                multiple: false,
-                                types: [
-                                    {
-                                        description: 'OCI Config',
-                                        // accept: {
-                                        //     // 'application/json': ['.okit'],
-                                        //     'text/plain': ['*']
-                                        // },
-                                        startIn: '~/.oci'
-                                    },
-                                ],
-                            }
-                            // Always returns an array.
-                            // @ts-ignore 
-                            const [handle] = await window.showOpenFilePicker(options)
-                            const file = await handle.getFile()
-                            const contents = await file.text()
-                            return contents
-                        } catch (err: any) {
-                            console.error(err.name, err.message)
-                            throw err
-                        }
-                    }
-                    openFile().then((resp) => {
-                        console.debug('Menu:', resp)
-                        setOciConfig(resp)
-                        // const ocdDocument = OcdDocument.new()
-                        // ocdDocument.design = JSON.parse(resp)
-                        // setOcdDocument(ocdDocument)
-                    })
-                }
             }
         ]
     },
