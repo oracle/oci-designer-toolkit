@@ -43,6 +43,7 @@ app.whenReady().then(() => {
 	ipcMain.handle('ociConfig:loadProfiles', handleLoadOciConfigProfiles)
 	ipcMain.handle('ociQuery:listRegions', handleListRegions)
 	ipcMain.handle('ociQuery:listTenancyCompartments', handleListTenancyCompartments)
+	ipcMain.handle('ociQuery:queryTenancy', handleQueryTenancy)
 	createWindow()
 	app.on('activate', function () {
 	  if (BrowserWindow.getAllWindows().length === 0) createWindow()
@@ -97,4 +98,10 @@ async function handleListTenancyCompartments(event, profile) {
 	console.debug('Electron Main: handleListTenancyCompartments')
 	const ociQuery = new OciQuery(profile)
 	return ociQuery.listTenancyCompartments()
+}
+
+async function handleQueryTenancy(event, profile, compartmentIds) {
+	console.debug('Electron Main: handleQueryTenancy')
+	const ociQuery = new OciQuery(profile)
+	return ociQuery.queryTenancy(compartmentIds)
 }
