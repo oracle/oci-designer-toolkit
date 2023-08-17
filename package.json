@@ -13,6 +13,6 @@
         "install": "cd ocd && npm run install",
         "import-and-generate": "cd ocd && npm run import-and-generate",
         "build": "cd ocd && npm run build",
-        "desktop": "cd ocd && npm run electron"
+        "desktop": "cd ocd && npm run desktop"
     }
 }
