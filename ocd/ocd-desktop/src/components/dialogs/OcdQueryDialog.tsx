@@ -17,6 +17,7 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
     const [profilesLoaded, setProfilesLoaded] = useState(false)
     const [regions, setRegions] = useState([regionsLoading])
     const [compartments, setCompartments] = useState([])
+    const [selectedProfile, setSelectedProfile] = useState('DEFAULT')
     const [selectedRegion, setSelectedRegion] = useState('')
     const [selectedCompartmentIds, setSelectedCompartmentIds] = useState([])
     if (!profilesLoaded) OciApiFacade.loadOCIConfigProfiles().then((results) => {
@@ -31,6 +32,7 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
     const onProfileChanged = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const profile = e.target.value
         console.debug('OcdQueryDialog: Selected Profile', profile)
+        setSelectedProfile(profile)
         loadRegions(profile)
         loadCompartments(profile)
         setSelectedCompartmentIds([])
@@ -62,9 +64,11 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
 }
     const onClickQuery = (e: React.MouseEvent<HTMLButtonElement>) => {
         console.debug('OcdQueryDialog: Selected Compartments', selectedCompartmentIds)
-        const clone = OcdDocument.clone(ocdDocument)
-        clone.query = !ocdDocument.query
-        setOcdDocument(clone)
+        OciApiFacade.queryTenancy(selectedProfile, selectedCompartmentIds).then((results) => {
+            const clone = OcdDocument.clone(ocdDocument)
+            clone.query = !ocdDocument.query
+            setOcdDocument(clone)
+        })
     }
    
     return (

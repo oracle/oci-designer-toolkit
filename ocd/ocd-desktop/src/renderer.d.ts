@@ -7,6 +7,7 @@ export interface OcdElectronAPI {
     loadOCIConfigProfiles: () => Promise<void>,
     listRegions: (profile: string) => Promise<void>,
     listTenancyCompartments: (profile: string) => Promise<void>,
+    queryTenancy: (profile: string, compartmentIds: string[]) => Promise<void>,
 }
   
 declare global {

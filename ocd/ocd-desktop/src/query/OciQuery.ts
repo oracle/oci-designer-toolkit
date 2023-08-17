@@ -52,7 +52,7 @@ class OciQuery {
             Promise.allSettled([compartmentQuery]).then((results) => {
                 if (results[0].status === 'fulfilled') {
                     const resources = results[0].value.items.map((c) => {return {...c, root: c.compartmentId.startsWith('ocid1.tenancy')}})
-                    console.debug('Main: Tenancy Compartments', resources)
+                    // console.debug('Main: Tenancy Compartments', resources)
                     resolve(resources)
                 } else {
                     reject('All Compartments Query Failed')
@@ -60,6 +60,42 @@ class OciQuery {
             })
         })
     }
+
+    queryTenancy(compartmentIds: string[]) {
+        console.debug('QciQuery: queryTenancy')
+        return new Promise((resolve, reject) => {
+            const design = {}
+            const getCompartments = this.getCompartments(compartmentIds)
+            Promise.allSettled([getCompartments]).then((results) => {
+                resolve(results)
+            }).catch((reason) => {
+                console.error(reason)
+                reject(reason)
+            })
+        })
+    }
+
+    getCompartments(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+        console.debug('QciQuery: getCompartments')
+        return new Promise((resolve, reject) => {
+            const requests: identity.requests.GetCompartmentRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
+            const queries = requests.map((r) => this.identityClient.getCompartment(r))
+            Promise.allSettled(queries).then((results) => {
+                //@ts-ignore
+                results.forEach((r) => console.debug(r.status, r.value))
+                resolve(results)
+            }).catch((reason) => {
+                console.error(reason)
+                reject(reason)
+            })
+        })
+    }
+
+    template(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+        return new Promise((resolve, reject) => {
+        })
+    }
+
 }
 
 export default OciQuery
