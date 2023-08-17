@@ -1559,6 +1559,7 @@ summary {
     width: 210px;
     overflow-y: scroll;
     overflow-x: hidden;
+    font: var(--dialog-input-font);
 }
 
 
