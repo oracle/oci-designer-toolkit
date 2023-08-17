@@ -22,8 +22,8 @@
         "generate": "cd ocd-codegen && npm run generate",
         "import-and-generate": "cd ocd-codegen && npm run import-and-generate",
         "web": "cd ocd-react && npm run start",
-        "electron": "cd ocd-desktop && npm run build-all",
-        "desktop": "cd ocd-react && npm run electron-release-pack",
+        "desktop": "cd ocd-desktop && npm run build-all",
+        "ocd-react-desktop": "cd ocd-react && npm run electron-release-pack",
         "linux-desktop": "cd ocd-react && npm run electron-linux-pack",
         "macos-desktop": "cd ocd-react && npm run electron-macos-pack",
         "win-desktop": "cd ocd-react && npm run electron-win-pack"

@@ -71,13 +71,15 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
                             </select>
                         </div>
                         <div>Compartments</div><div>
-                            <CompartmentPicker 
-                                compartments={compartments} 
-                                selectedCompartmentIds={selectedCompartmentIds}
-                                setSelectedCompartmentIds={setSelectedCompartmentIds}
-                                root={true}
-                                parentId={''}
-                            />
+                            <div className="ocd-compartment-picker">
+                                <CompartmentPicker 
+                                    compartments={compartments} 
+                                    selectedCompartmentIds={selectedCompartmentIds}
+                                    setSelectedCompartmentIds={setSelectedCompartmentIds}
+                                    root={true}
+                                    parentId={''}
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -97,7 +99,7 @@ const CompartmentPicker = ({compartments, selectedCompartmentIds, setSelectedCom
     return (
         <ul>
             {compartments.filter(filter).map((c) => {
-                return <li>c.name</li>
+                return <li key={c.id}><label><input type="checkbox"></input>{c.name}</label></li>
             })}
         </ul>
     )

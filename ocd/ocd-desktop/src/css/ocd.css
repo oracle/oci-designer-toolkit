@@ -1530,8 +1530,8 @@ summary {
 
 .ocd-dialog-body > div {
     display: grid;
-    grid-template-columns: 150px auto;
-    column-gap: 15px;
+    grid-template-columns: 150px 210px;
+    column-gap: 5px;
     row-gap: 5px;
 }
 
@@ -1548,6 +1548,17 @@ summary {
     grid-template-columns: auto auto;
     column-gap: 15px;
     row-gap: 5px;
+}
+
+.ocd-compartment-picker {
+    display: inline-block;
+    border: 1px solid var(--dialog-input-border-colour);
+    padding: 2px;
+    box-sizing: border-box;
+    height: 200px;
+    width: 210px;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 
