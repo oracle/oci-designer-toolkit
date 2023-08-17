@@ -29,23 +29,24 @@
         "import-oci-terraform-schema": "node src/ocd-codegen.js import terraform-schema -i ./src/schema/tf-schema.json -o ./src/schema/oci-schema.json",
         "import": "npm run import-oci-terraform-schema",
 
-        "generate-oci-model-desktop":      "node src/ocd-codegen.js generate oci-model-js      -s ./src/schema/oci-schema.json -d ../ocd-desktop/src/model/provider/oci",
-        "generate-oci-properties-desktop": "node src/ocd-codegen.js generate oci-properties-js -s ./src/schema/oci-schema.json -d ../ocd-desktop/src/components/properties/provider/oci",
-        "generate-oci-ansible-desktop":    "node src/ocd-codegen.js generate oci-ansible-js    -s ./src/schema/oci-schema.json -d ../test/ocd/src/export/ansible/provider/oci",
-        "generate-oci-terraform-desktop":  "node src/ocd-codegen.js generate oci-terraform-js  -s ./src/schema/oci-schema.json -d ../ocd-desktop/src/export/terraform/provider/oci",
-        "generate-oci-markdown-desktop":   "node src/ocd-codegen.js generate oci-markdown-js   -s ./src/schema/oci-schema.json -d ../test/ocd/src/export/markdown/provider/oci",
-        "generate-oci-desktop":   "npm run generate-oci-model-desktop && npm run generate-oci-properties-desktop && npm run generate-oci-terraform-desktop",
-
-        "generate-oci-model":      "node src/ocd-codegen.js generate oci-model-js      -s ./src/schema/oci-schema.json -d ../ocd-react/src/model/provider/oci",
-        "generate-oci-properties": "node src/ocd-codegen.js generate oci-properties-js -s ./src/schema/oci-schema.json -d ../ocd-react/src/components/properties/provider/oci",
+        "generate-oci-model":      "node src/ocd-codegen.js generate oci-model-js      -s ./src/schema/oci-schema.json -d ../ocd-desktop/src/model/provider/oci",
+        "generate-oci-properties": "node src/ocd-codegen.js generate oci-properties-js -s ./src/schema/oci-schema.json -d ../ocd-desktop/src/components/properties/provider/oci",
         "generate-oci-ansible":    "node src/ocd-codegen.js generate oci-ansible-js    -s ./src/schema/oci-schema.json -d ../test/ocd/src/export/ansible/provider/oci",
-        "generate-oci-terraform":  "node src/ocd-codegen.js generate oci-terraform-js  -s ./src/schema/oci-schema.json -d ../ocd-react/src/export/terraform/provider/oci",
+        "generate-oci-terraform":  "node src/ocd-codegen.js generate oci-terraform-js  -s ./src/schema/oci-schema.json -d ../ocd-desktop/src/export/terraform/provider/oci",
         "generate-oci-markdown":   "node src/ocd-codegen.js generate oci-markdown-js   -s ./src/schema/oci-schema.json -d ../test/ocd/src/export/markdown/provider/oci",
-        "generate-oci":   "npm run generate-oci-model && npm run generate-oci-properties && npm run generate-oci-terraform",
-        "generate": "npm run generate-oci && npm run generate-oci-desktop",
+        "generate-oci":            "npm run generate-oci-model && npm run generate-oci-properties && npm run generate-oci-terraform",
+
+        "generate": "npm run generate-oci",
 
         "import-and-generate-oci": "npm run import-oci-terraform-schema && npm run generate-oci",
-        "import-and-generate": "npm run import-and-generate-oci"
+        "import-and-generate": "npm run import-and-generate-oci",
+
+        "generate-oci-model-ocd-react":      "node src/ocd-codegen.js generate oci-model-js      -s ./src/schema/oci-schema.json -d ../ocd-react/src/model/provider/oci",
+        "generate-oci-properties-ocd-react": "node src/ocd-codegen.js generate oci-properties-js -s ./src/schema/oci-schema.json -d ../ocd-react/src/components/properties/provider/oci",
+        "generate-oci-ansible-ocd-react":    "node src/ocd-codegen.js generate oci-ansible-js    -s ./src/schema/oci-schema.json -d ../test/ocd/src/export/ansible/provider/oci",
+        "generate-oci-terraform-ocd-react":  "node src/ocd-codegen.js generate oci-terraform-js  -s ./src/schema/oci-schema.json -d ../ocd-react/src/export/terraform/provider/oci",
+        "generate-oci-markdown-ocd-react":   "node src/ocd-codegen.js generate oci-markdown-js   -s ./src/schema/oci-schema.json -d ../test/ocd/src/export/markdown/provider/oci",
+        "generate-oci-ocd-react":            "npm run generate-oci-model-ocd-react && npm run generate-oci-properties-ocd-react && npm run generate-oci-terraform-ocd-react"
     },
     "private": true,
     "type": "module",

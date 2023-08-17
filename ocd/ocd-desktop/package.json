@@ -103,7 +103,7 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "build-all": "npm run build; npm run electron-compile; npm run make"
+    "build-all": "npm run build && npm run electron-compile && npm run make"
   },
   "eslintConfig": {
     "extends": [

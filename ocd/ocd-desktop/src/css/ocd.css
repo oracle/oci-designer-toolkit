@@ -1509,8 +1509,8 @@ summary {
     border-radius: 10px;
     background-color: var(--dialog-background-colour);
     padding: 5px;
-    height: 400px;
-    width: 400px;
+    height: 600px;
+    width: 600px;
 }
 
 .ocd-dialog-title {
@@ -1530,7 +1530,7 @@ summary {
 
 .ocd-dialog-body > div {
     display: grid;
-    grid-template-columns: 150px 210px;
+    grid-template-columns: 150px 410px;
     column-gap: 5px;
     row-gap: 5px;
 }
@@ -1555,11 +1555,28 @@ summary {
     border: 1px solid var(--dialog-input-border-colour);
     padding: 2px;
     box-sizing: border-box;
-    height: 200px;
-    width: 210px;
+    height: 450px;
+    width: 410px;
     overflow-y: scroll;
     overflow-x: hidden;
-    font: var(--dialog-input-font);
+}
+
+.ocd-compartment-picker ul {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    align-items: center;
+    list-style: none;
+    text-decoration: none;    
+}
+
+.ocd-compartment-picker li > ul {
+    padding-left: 1em;
+}
+
+.ocd-compartment-picker li > label {
+    font-family: var(--dialog-input-font-family);
+    font-size: var(--dialog-input-font-size);
 }
 
 
