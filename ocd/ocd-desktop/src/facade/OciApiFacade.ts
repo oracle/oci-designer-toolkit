@@ -17,7 +17,7 @@ export namespace OciApiFacade {
     export const listTenancyCompartments = (profile: string = 'DEFAULT'): Promise<any> => {
         return window.ocdAPI ? window.ocdAPI.listTenancyCompartments(profile) : new Promise((resolve, reject) => {reject('Currently Not Implemented')})
     }
-    export const queryTenancy = (profile: string = 'DEFAULT', compartmentIds: string[] = []): Promise<any> => {
-        return window.ocdAPI ? window.ocdAPI.queryTenancy(profile, compartmentIds) : new Promise((resolve, reject) => {reject('Currently Not Implemented')})
+    export const queryTenancy = (profile: string = 'DEFAULT', compartmentIds: string[] = [], region: string): Promise<any> => {
+        return window.ocdAPI ? window.ocdAPI.queryTenancy(profile, compartmentIds, region) : new Promise((resolve, reject) => {reject('Currently Not Implemented')})
     }
 }

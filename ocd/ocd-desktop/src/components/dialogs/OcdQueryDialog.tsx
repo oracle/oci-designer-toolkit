@@ -7,7 +7,9 @@ import { CompartmentPickerProps, QueryDialogProps } from "../../types/Dialogs"
 import { OciApiFacade } from "../../facade/OciApiFacade"
 import { useState } from "react"
 import { OciCompartment } from "../../model/provider/oci/resources"
+import * as ociResources from '../../model/provider/oci/resources'
 import OcdDocument from "../OcdDocument"
+import { OcdUtils } from "../../utils/OcdUtils"
 
 export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps): JSX.Element => {
     const loadingState = '......Reading OCI Config'
@@ -38,12 +40,14 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
         setSelectedCompartmentIds([])
     }
     const onRegionChanged = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        console.debug('OcdQueryDialog: Selected Region', e.target.value)
         setSelectedRegion(e.target.value)
     }
     const loadRegions = (profile: string) => {
         console.debug('OciQueryDialog: loadRegions: Profile', profile)
         OciApiFacade.listRegions(profile).then((results) => {
             setRegions(results)
+            setSelectedRegion(results[0].id)
         }).catch((reason) => {
             setRegions([regionsLoading])
         })
@@ -64,9 +68,27 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
 }
     const onClickQuery = (e: React.MouseEvent<HTMLButtonElement>) => {
         console.debug('OcdQueryDialog: Selected Compartments', selectedCompartmentIds)
-        OciApiFacade.queryTenancy(selectedProfile, selectedCompartmentIds).then((results) => {
+        OciApiFacade.queryTenancy(selectedProfile, selectedCompartmentIds, selectedRegion).then((results) => {
+            console.debug('OcdQueryDialog: Query Tenancy', results)
             const clone = OcdDocument.clone(ocdDocument)
+            const design = clone.newDesign()
+            design.metadata.title = 'Queried Cloud Design'
+            design.view.pages[0].title = selectedRegion
+            // Copy Result information Across to design
+            const resultsOciResources = results.model.oci.resources
+            Object.entries(resultsOciResources).forEach(([key, value]) => {
+                const namespace = `Oci${OcdUtils.toResourceType(key)}`
+                console.debug('OcdQueryDialog: Namespace:', namespace)
+                // @ts-ignore
+                design.model.oci.resources[key] = value.map((v) => {return {...ociResources[namespace].newResource(), ...v}})
+            })
+            design.view.pages[0].layers = []
+            clone.design = design
+            // Add Layers
+            resultsOciResources.compartment.forEach((c: OciCompartment, i: number) => clone.addLayer(c.id, i === 0))
             clone.query = !ocdDocument.query
+            // Auto Arrange
+            clone.autoLayout(clone.getActivePage().id)
             setOcdDocument(clone)
         })
     }
@@ -84,7 +106,7 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
                         </div>
                         <div>Region</div><div>
                             <select onChange={onRegionChanged}>
-                                {regions.map((r) => {return <option key={r.id} value={r.displayName}>{r.displayName}</option>})}
+                                {regions.map((r) => {return <option key={r.id} value={r.id}>{r.displayName}</option>})}
                             </select>
                         </div>
                         <div>Compartments</div><div>

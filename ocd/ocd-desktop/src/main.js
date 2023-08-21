@@ -100,8 +100,8 @@ async function handleListTenancyCompartments(event, profile) {
 	return ociQuery.listTenancyCompartments()
 }
 
-async function handleQueryTenancy(event, profile, compartmentIds) {
+async function handleQueryTenancy(event, profile, compartmentIds, region) {
 	console.debug('Electron Main: handleQueryTenancy')
-	const ociQuery = new OciQuery(profile)
+	const ociQuery = new OciQuery(profile, region)
 	return ociQuery.queryTenancy(compartmentIds)
 }
