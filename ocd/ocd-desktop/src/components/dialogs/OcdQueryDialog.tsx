@@ -80,7 +80,7 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
                 const namespace = `Oci${OcdUtils.toResourceType(key)}`
                 console.debug('OcdQueryDialog: Namespace:', namespace)
                 // @ts-ignore
-                design.model.oci.resources[key] = value.map((v) => {return {...ociResources[namespace].newResource(), ...v}})
+                design.model.oci.resources[key] = value.map((v) => {return {...ociResources[namespace].newResource(), ...v, locked: true, readOnly: true}})
             })
             design.view.pages[0].layers = []
             clone.design = design
