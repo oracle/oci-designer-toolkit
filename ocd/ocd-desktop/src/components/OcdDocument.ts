@@ -201,13 +201,13 @@ export class OcdDocument {
     getActiveLayer = (pageId: string): OcdViewLayer => this.getActivePage(pageId).layers.find((l: OcdViewLayer) => l.selected)
     // @ts-ignore 
     getResourcesLayer = (id: string): OcdViewLayer => this.getActivePage().layers.find((l: OcdViewLayer) => l.id === this.getResource(id).compartmentId)
-    addLayer(id: string, layerClass: string = 'oci-compartment') {
+    addLayer(id: string, selected: boolean = false, layerClass: string = 'oci-compartment') {
         this.design.view.pages.forEach((p: OcdViewPage) => {
             const layer: OcdViewLayer = {
                 id: id,
                 class: layerClass,
                 visible: true,
-                selected: false
+                selected: selected
             } 
             p.layers.push(layer)
         })

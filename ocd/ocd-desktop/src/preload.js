@@ -9,7 +9,7 @@ contextBridge.exposeInMainWorld('ocdAPI', {
   loadOCIConfigProfiles: () => ipcRenderer.invoke('ociConfig:loadProfiles'),
   listRegions: (profile) => ipcRenderer.invoke('ociQuery:listRegions', profile),
   listTenancyCompartments: (profile) => ipcRenderer.invoke('ociQuery:listTenancyCompartments', profile),
-  queryTenancy: (profile) => ipcRenderer.invoke('ociQuery:queryTenancy', profile),
+  queryTenancy: (profile, compartmentIds, region) => ipcRenderer.invoke('ociQuery:queryTenancy', profile, compartmentIds, region),
 })
 
 console.debug('Preload script')
