@@ -188,6 +188,7 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
             if (ocdDocument.dragResource.parent) {
                 coords.pgid = ocdDocument.dragResource.parent.id
                 coords.pocid = ocdDocument.dragResource.parent.ocid    
+                ocdDocument.setResourceParent(ocdDocument.dragResource.modelId, coords.pocid)
             } else if (contextMenu.show) {
                 coords.pgid = resource.pgid
                 coords.pocid = resource.pocid
