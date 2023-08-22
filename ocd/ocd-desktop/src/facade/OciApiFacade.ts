@@ -20,4 +20,7 @@ export namespace OciApiFacade {
     export const queryTenancy = (profile: string = 'DEFAULT', compartmentIds: string[] = [], region: string): Promise<any> => {
         return window.ocdAPI ? window.ocdAPI.queryTenancy(profile, compartmentIds, region) : new Promise((resolve, reject) => {reject('Currently Not Implemented')})
     }
+    export const queryDropdown = (profile: string = 'DEFAULT', region: string): Promise<any> => {
+        return window.ocdAPI ? window.ocdAPI.queryDropdown(profile, region) : new Promise((resolve, reject) => {reject('Currently Not Implemented')})
+    }
 }

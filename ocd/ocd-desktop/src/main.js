@@ -44,6 +44,7 @@ app.whenReady().then(() => {
 	ipcMain.handle('ociQuery:listRegions', handleListRegions)
 	ipcMain.handle('ociQuery:listTenancyCompartments', handleListTenancyCompartments)
 	ipcMain.handle('ociQuery:queryTenancy', handleQueryTenancy)
+	ipcMain.handle('ociQuery:queryDropdown', handleQueryDropdown)
 	createWindow()
 	app.on('activate', function () {
 	  if (BrowserWindow.getAllWindows().length === 0) createWindow()
@@ -104,4 +105,10 @@ async function handleQueryTenancy(event, profile, compartmentIds, region) {
 	console.debug('Electron Main: handleQueryTenancy')
 	const ociQuery = new OciQuery(profile, region)
 	return ociQuery.queryTenancy(compartmentIds)
+}
+
+async function handleQueryDropdown(event, profile, region) {
+	console.debug('Electron Main: handleQueryDropdown')
+	const ociQuery = new OciQuery(profile, region)
+	return new Promise((resolve, reject) => {reject('Currently Not Implemented')})
 }
