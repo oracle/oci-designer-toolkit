@@ -13,7 +13,7 @@ export namespace OciInstanceConfigs {
             {
                 id: 'create_vnic_details.hostname_label',
                 properties: {
-                    maxlength: '64',
+                    maxLength: 64,
                     pattern: '^[a-zA-Z][a-zA-Z0-9]{0,64}$',
                     title: 'Hostname can only be letters and numbers, starting with a letter. 64 characters max.'
                 },

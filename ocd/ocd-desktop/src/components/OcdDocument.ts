@@ -151,6 +151,7 @@ export class OcdDocument {
     setResourceParent(id: string, parentId: string) {
         const resource = this.getResource(id)
         const parentResource = this.getResource(parentId)
+        console.debug('OcdDocument: Setting Parent Resource', resource, parentResource)
         if (resource && parentResource) {
             if (resource.provider === 'oci') OciResource.assignParentId(resource, parentResource)
         }

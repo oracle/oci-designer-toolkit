@@ -23,6 +23,7 @@ export interface ResourceRectProps {
     ocdDocument: OcdDocument
     setOcdDocument: React.Dispatch<any>
     resource: OcdViewCoords
+    hidden: boolean
 }
 
 export interface ResourceForeignObjectProps {
@@ -30,6 +31,7 @@ export interface ResourceForeignObjectProps {
     ocdDocument: OcdDocument
     setOcdDocument: React.Dispatch<any>
     resource: OcdViewCoords
+    hidden: boolean
 }
 
 export interface ResourceSvgGhostProps {

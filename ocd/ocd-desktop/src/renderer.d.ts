@@ -8,6 +8,7 @@ export interface OcdElectronAPI {
     listRegions: (profile: string) => Promise<void>,
     listTenancyCompartments: (profile: string) => Promise<void>,
     queryTenancy: (profile: string, compartmentIds: string[], region: string) => Promise<void>,
+    queryDropdown: (profile: string, region: string) => Promise<void>,
 }
   
 declare global {

@@ -41,7 +41,7 @@ export namespace OciResource {
         const namespace = `Oci${child.resourceType}`
         // @ts-ignore 
         const allowedParentTypes = Resources[namespace].allowedParentTypes()
-        if (allowedParentTypes.includes(parent.resourceType)) {
+        if (allowedParentTypes.includes(parent.resourceType) && getParentId(child) !== parent.id) {
             // @ts-ignore 
             Resources[namespace].setParentId(child, parent.id)
         }

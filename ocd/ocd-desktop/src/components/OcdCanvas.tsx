@@ -30,6 +30,7 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
     const page: OcdViewPage = ocdDocument.getActivePage()
     const layers = page.layers.filter((l: OcdViewLayer) => l.visible).map((l: OcdViewLayer) => l.id)
     const visibleResourceIds = ocdDocument.getResources().filter((r: any) => layers.includes(r.compartmentId)).map((r: any) => r.id)
+    // const visibleResourceIds = ocdDocument.getResources().map((r: any) => r.id)
     console.debug('OcdCanvas: Visible Resource Ids', visibleResourceIds)
     const [dragResource, setDragResource] = useState(ocdDocument.newDragResource(false))
     const [contextMenu, setContextMenu] = useState<OcdContextMenu>({show: false, x: 0, y: 0})
@@ -187,6 +188,7 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
             if (ocdDocument.dragResource.parent) {
                 coords.pgid = ocdDocument.dragResource.parent.id
                 coords.pocid = ocdDocument.dragResource.parent.ocid    
+                ocdDocument.setResourceParent(ocdDocument.dragResource.modelId, coords.pocid)
             } else if (contextMenu.show) {
                 coords.pgid = resource.pgid
                 coords.pocid = resource.pocid
@@ -307,7 +309,8 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
     // @ts-ignore 
     const allPageCoords = ocdDocument.getAllPageCoords(page)
     const allVisibleCoords = allPageCoords.filter((r: OcdViewCoords) => visibleResourceIds.includes(r.ocid))
-    const visibleCoords = page.coords.filter((r: OcdViewCoords) => visibleResourceIds.includes(r.ocid))
+    // const visibleCoords = page.coords.filter((r: OcdViewCoords) => visibleResourceIds.includes(r.ocid))
+    const visibleCoords = page.coords
     // page.coords && page.coords.filter((r: OcdViewCoords) => visibleResourceIds.includes(r.ocid))
     const parentMap = allVisibleCoords.filter(c => c.showParentConnection).map((r: OcdViewCoords) => {return {parentId: ocdDocument.getResourceParentId(r.ocid), childId: r.ocid, childCoordsId: r.id, pgid: r.pgid}})
     const parentConnectors = parentMap.reduce((a, c) => {return [...a, ...allVisibleCoords.filter(coords => coords.ocid === c.parentId).filter(p => p.id !== c.pgid).map(p => {return {startCoordsId: p.id, endCoordsId: c.childCoordsId}})]}, [] as OcdViewConnector[])

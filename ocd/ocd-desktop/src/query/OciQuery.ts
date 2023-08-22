@@ -102,10 +102,14 @@ class OciQuery {
             if (!this.identityClient) this.identityClient = new identity.IdentityClient({ authenticationDetailsProvider: this.provider })
             const listCompartmentsReq: identity.requests.ListCompartmentsRequest = {compartmentId: this.provider.getTenantId(), compartmentIdInSubtree: true}
             const compartmentQuery = this.identityClient.listCompartments(listCompartmentsReq)
-            Promise.allSettled([compartmentQuery]).then((results) => {
-                if (results[0].status === 'fulfilled') {
-                    const resources = results[0].value.items.map((c) => {return {...c, root: c.compartmentId.startsWith('ocid1.tenancy')}})
-                    // console.debug('Main: Tenancy Compartments', resources)
+            const getTenancy = this.getCompartments([this.provider.getTenantId()])
+            Promise.allSettled([compartmentQuery, getTenancy]).then((results) => {
+                if (results[0].status === 'fulfilled' && results[1].status === 'fulfilled') {
+                    results[1].value[0].compartmentId = ''
+                    const resources = [...results[1].value, ...results[0].value.items].map((c) => {return {...c, root: c.compartmentId === ''}})
+                    // const resources = results[0].value.items.map((c) => {return {...c, root: c.compartmentId.startsWith('ocid1.tenancy')}})
+                    console.debug('Main: Tenancy Compartment', results[1])
+                    console.debug('Main: Tenancy Compartments', JSON.stringify(resources, null, 4))
                     resolve(resources)
                 } else {
                     reject('All Compartments Query Failed')
