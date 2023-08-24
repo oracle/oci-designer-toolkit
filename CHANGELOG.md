@@ -1,6 +1,14 @@
 # Release Notes
 
 
+## Version 0.54.0
+**Release Date**: 23rd August 2023
+### Features
+1. Rebranding for PCA interface.
+2. Simple Session based config for OCI. Allow the user to specify in the browser the connection config information. This should only be used with HTTPS.
+### Bug Fixes
+
+
 ## Version 0.53.0
 **Release Date**: 12th July 2023
 ### Features
