@@ -1,1 +1,18 @@
-{}
+{
+    "name": "ocd",
+    "productName": "ocd",
+    "version": "0.1.0",
+    "description": "OKIT Open Cloud Designer",
+    "author": {
+      "name": "Andrew Hopkinson",
+      "email": "andrew.hopkinson@oracle.com",
+      "url": "https://github.com/oracle/oci-designer-toolkit"
+    },
+    "bugs": "https://github.com/oracle/oci-designer-toolkit/issues",
+    "scripts": {
+        "install": "cd ocd && npm run install",
+        "import-and-generate": "cd ocd && npm run import-and-generate",
+        "build": "cd ocd && npm run build",
+        "desktop": "cd ocd && npm run desktop"
+    }
+}

@@ -211,38 +211,52 @@ def ociResourceManger():
 
 @bp.route('/compartments/<string:profile>', methods=(['GET']))
 def ociCompartments(profile):
-    oci_compartment_query = OCICompartmentQuery(profile=profile)
-    compartments = oci_compartment_query.executeQuery()
-    response = jsonToFormattedString(compartments)
-    logger.debug(">>>>>>>>> Compartments: {0!s:s}".format(response))
-    return response
+    if request.method == 'GET':
+        config_profile = request.args.get('config_profile', 'DEFAULT')
+        config = json.loads(request.args.get('config', default='{}', type=str))
+        oci_compartment_query = OCICompartmentQuery(config=config, profile=profile)
+        compartments = oci_compartment_query.executeQuery()
+        response = jsonToFormattedString(compartments)
+        logger.debug(">>>>>>>>> Compartments: {0!s:s}".format(response))
+        return response
+    else:
+        return 404
 
 
 @bp.route('/compartment', methods=(['GET']))
 def ociCompartment():
-    # query_string = request.query_string
-    # parsed_query_string = urllib.parse.unquote(query_string.decode())
-    # query_json = standardiseIds(json.loads(parsed_query_string), from_char='-', to_char='.')
-    # logJson(query_json)
-    # config_profile = query_json.get('config_profile', 'DEFAULT')
-    config_profile = request.args.get('config_profile', 'DEFAULT')
-    logger.debug('Using Profile : {0!s:s}'.format(config_profile))
-    oci_tenancies = OCITenancies(profile=config_profile)
-    tenancy = oci_tenancies.listCompartments()
-    compartments = [{'display_name': c['display_name'], 'canonical_name': c['canonical_name'], 'id': c['id'], 'home_region_key': tenancy['home_region_key']} for c in tenancy['compartments']]
-    compartments.append({'display_name': '/', 'canonical_name': '/', 'id': tenancy['id'], 'home_region_key': tenancy['home_region_key']})
-    compartments.sort(key=lambda x: x['canonical_name'])
-    logger.debug("Compartments: {0!s:s}".format(compartments))
-    return json.dumps(compartments, sort_keys=False, indent=2, separators=(',', ': '))
+    if request.method == 'GET':
+        # query_string = request.query_string
+        # parsed_query_string = urllib.parse.unquote(query_string.decode())
+        # query_json = standardiseIds(json.loads(parsed_query_string), from_char='-', to_char='.')
+        # logJson(query_json)
+        # config_profile = query_json.get('config_profile', 'DEFAULT')
+        config_profile = request.args.get('config_profile', 'DEFAULT')
+        config = json.loads(request.args.get('config', default='{}', type=str))
+        logger.debug('Using Profile : {0!s:s}'.format(config_profile))
+        oci_tenancies = OCITenancies(config=config, profile=config_profile)
+        tenancy = oci_tenancies.listCompartments()
+        compartments = [{'display_name': c['display_name'], 'canonical_name': c['canonical_name'], 'id': c['id'], 'home_region_key': tenancy['home_region_key']} for c in tenancy['compartments']]
+        compartments.append({'display_name': '/', 'canonical_name': '/', 'id': tenancy['id'], 'home_region_key': tenancy['home_region_key']})
+        compartments.sort(key=lambda x: x['canonical_name'])
+        logger.debug("Compartments: {0!s:s}".format(compartments))
+        return json.dumps(compartments, sort_keys=False, indent=2, separators=(',', ': '))
+    else:
+        return 404
 
 
 @bp.route('/subscription', methods=(['GET']))
 def ociRegionSubscription():
     if request.method == 'GET':
         profile = request.args.get('profile', default='DEFAULT')
+        config = json.loads(request.args.get('config', default='{}', type=str))
+        # config = request.args.get('config', default={}, type=str)
+        # if type(config) == str:
+        #     config = json.loads(request.args.get('config', default={}, type=str))
         logger.info('Subscriptions Query Using Profile : {0!s:s}'.format(profile))
+        logger.info(f'ociRegionSubscription: Passed Config: {type(config)} {config}')
         # try:
-        oci_regions = OCIRegionSubscriptions(profile=profile)
+        oci_regions = OCIRegionSubscriptions(config=config, profile=profile)
         regions = oci_regions.list()
         logger.debug(">>>>>>>>> Region Subscriptions: {0!s:s}".format(regions))
         response = jsonToFormattedString(regions)
@@ -256,12 +270,17 @@ def ociRegionSubscription():
 
 @bp.route('/regions/<string:profile>', methods=(['GET']))
 def ociRegions(profile):
-    logger.info(f'>>>>>>>>> Getting Regions for {profile}')
-    oci_region_query = OCIRegionQuery(profile=profile)
-    regions = oci_region_query.executeQuery()
-    response = jsonToFormattedString(regions)
-    logger.info(">>>>>>>>> Regions: {0!s:s}".format(response))
-    return response
+    if request.method == 'GET':
+        logger.info(f'>>>>>>>>> Getting Regions for {profile}')
+        # profile = request.args.get('profile', default=profile)
+        config = json.loads(request.args.get('config', default='{}', type=str))
+        oci_region_query = OCIRegionQuery(config=config, profile=profile)
+        regions = oci_region_query.executeQuery()
+        response = jsonToFormattedString(regions)
+        logger.info(">>>>>>>>> Regions: {0!s:s}".format(response))
+        return response
+    else:
+        return 404
 
 
 @bp.route('/query', methods=(['GET']))
@@ -273,7 +292,9 @@ def ociQuery():
         region = request.args.get('region')
         sub_compartments = request.args.get('sub_compartments', default=False).lower() == 'true'
         logger.info('Using Profile : {0!s:s}'.format(config_profile))
-        config = {'region': region}
+        # config = request.args.get('config', {}, dict)
+        config = json.loads(request.args.get('config', default='{}', type=str))
+        config.update({'region': region})
         query = OCIQuery(config=config, profile=config_profile)
         response = query.executeQuery(regions=[regions] if regions else None, compartments=[compartments] if compartments else None, include_sub_compartments=sub_compartments)
         logJson(response)
@@ -306,12 +327,12 @@ def dropdownQuery():
     if request.method == 'GET':
         profile = request.args.get('profile', None)
         region = request.args.get('region', None)
+        config = json.loads(request.args.get('config', default='{}', type=str))
+        config.update({'region': region})
         try:
-            # profile = request.args.get('profile', None)
-            # region = request.args.get('region', None)
             logger.info(f'Dropdown Query Profile {profile}')
             logger.info(f'Dropdown Query Region {region}')
-            dropdown_query = OCIDropdownQuery(profile=profile)
+            dropdown_query = OCIDropdownQuery(config=config, profile=profile)
             dropdown_json = dropdown_query.executeQuery([region])
         except Exception as e:
             logger.exception(e)

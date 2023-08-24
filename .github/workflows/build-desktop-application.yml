@@ -1,0 +1,34 @@
+name: Build/Release
+
+on: 
+  push:
+    branches:
+      - 'toxophilist/sprint-dev'
+
+env:
+  CI: false
+
+jobs:
+  release:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+        version: [latest]
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.version }}
+      - run: node --version
+      - run: npm --version
+      - run: npm run install
+      - run: npm run build
+      - run: npm run desktop
+      # - run: npm run electron
+      # - run: ls ./ocd/dist
+      #   if: always()
+

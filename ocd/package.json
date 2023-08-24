@@ -13,17 +13,16 @@
     ],
     "scripts": {
         "install-ocd-codegen": "cd ocd-codegen && npm install",
-        "install-ocd-react": "cd ocd-codegen && npm install",
-        "install": "npm run install-ocd-codegen && npm run install-ocd-react && npm run import-and-generate",
-        "build-ocd-react": "cd ocd-codegen && npm run build",
-        "build": "npm run build-ocd-react",
+        "install-ocd-react": "cd ocd-react && npm install",
+        "install-ocd-desktop": "cd ocd-desktop && npm install",
+        "install": "npm run install-ocd-codegen && npm run install-ocd-desktop && npm run import-and-generate",
+        "build-ocd-react": "cd ocd-react && npm run build",
+        "build-ocd-desktop": "cd ocd-desktop && npm run build",
+        "build": "npm run build-ocd-desktop",
         "import": "cd ocd-codegen && npm run import",
         "generate": "cd ocd-codegen && npm run generate",
         "import-and-generate": "cd ocd-codegen && npm run import-and-generate",
-        "web": "cd ocd-react && npm run start",
-        "desktop": "cd ocd-react && npm run electron-release-pack",
-        "linux-desktop": "cd ocd-react && npm run electron-linux-pack",
-        "macos-desktop": "cd ocd-react && npm run electron-macos-pack",
-        "win-desktop": "cd ocd-react && npm run electron-win-pack"
+        "web": "cd ocd-desktop && npm run start",
+        "desktop": "cd ocd-desktop && npm run build-all"
     }
 }

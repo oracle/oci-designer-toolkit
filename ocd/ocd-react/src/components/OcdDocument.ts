@@ -30,6 +30,7 @@ export interface OcdDragResource {
 }
 
 export class OcdDocument {
+    query: boolean
     design: OcdDesign
     selectedResource: OcdSelectedResource
     dragResource: OcdDragResource
@@ -39,6 +40,7 @@ export class OcdDocument {
         else this.design = this.newDesign()
         this.selectedResource = resource ? resource : this.newSelectedResource()
         this.dragResource = dragResource ? dragResource : this.newDragResource()
+        this.query = false
     }
 
     static new = () => new OcdDocument()
@@ -153,6 +155,16 @@ export class OcdDocument {
             if (resource.provider === 'oci') OciResource.assignParentId(resource, parentResource)
         }
     }
+    getResourceParentId(id: string): string {
+        const resource = this.getResource(id)
+        const parentId: string = (resource.provider === 'oci') ? OciResource.getParentId(resource) : ''
+        return parentId
+    }
+    getResourceAssociationIds(id: string): string[] {
+        const resource = this.getResource(id)
+        const associationIds: string[] = (resource.provider === 'oci') ? OciResource.getAssociationIds(resource) : []
+        return associationIds
+    }
 
     // @ts-ignore 
     getPage = (id: string): OcdViewPage => this.design.view.pages.find((v) => v.id === id)
@@ -168,7 +180,9 @@ export class OcdDocument {
             title: `Page ${this.design.view.pages.length + 1}`,
             layers: layers,
             coords: [],
-            selected: true
+            connectors: [],
+            selected: true,
+            transform: this.resetPanZoom()
         }
         this.design.view.pages.forEach((p) => p.selected = false)
         this.design.view.pages.push(viewPage)
@@ -178,6 +192,7 @@ export class OcdDocument {
     removePage(id: string) {
         this.design.view.pages = this.design.view.pages.filter((p) => p.id !== id)
     }
+    resetPanZoom = () => OcdDesign.resetPanZoom()
 
     // @ts-ignore 
     // getLayer = (id: string): OcdViewLayer => this.design.model.oci.resources.compartment.find((c) => c.id === id)
@@ -217,21 +232,26 @@ export class OcdDocument {
     }
 
     newCoords = (): OcdViewCoords => {
-        return {
-            id: `gid-${uuidv4()}`,
-            pgid: '',
-            ocid: '',
-            pocid: '',
-            x: 0,
-            y: 0,
-            w: 0,
-            h: 0,
-            title: '',
-            class: ''
-        }
+        return OcdDesign.newCoords()
+        // return {
+        //     id: `gid-${uuidv4()}`,
+        //     pgid: '',
+        //     ocid: '',
+        //     pocid: '',
+        //     x: 0,
+        //     y: 0,
+        //     w: 0,
+        //     h: 0,
+        //     title: '',
+        //     class: '',
+        //     showParentConnection: true,
+        //     showConnections: true
+        // }
     }
     getAllCoords = () => {return this.design.view.pages.map(p => [...p.coords, ...this.getChildCoords(p.coords)]).reduce((a, c) => [...a, ...c], [])}
+    getAllPageCoords = (page: OcdViewPage) => {return this.getChildCoords(page.coords)}
     getCoords = (id: string) => {return this.design.view.pages.map(p => [...p.coords, ...this.getChildCoords(p.coords)]).reduce((a, c) => [...a, ...c], []).find(c => c.id === id)}
+    // getChildCoords = (coords?: OcdViewCoords[]): OcdViewCoords[] => coords ? coords.reduce((a, c) => [...a, ...this.getChildCoords(c.coords)], [] as OcdViewCoords[]) : []
     getChildCoords = (coords?: OcdViewCoords[]): OcdViewCoords[] => coords ? coords.reduce((a, c) => [...a, ...this.getChildCoords(c.coords)], coords) : []
     getRelativeXY = (coords: OcdViewCoords): OcdViewPoint => {
         // console.info('OcdDocument: Get Relative XY for', coords.id, 'Parent', coords.pgid)

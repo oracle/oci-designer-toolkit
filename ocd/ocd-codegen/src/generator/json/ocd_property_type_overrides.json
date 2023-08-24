@@ -1,0 +1,6 @@
+{
+    "common": {
+        "availability_domain": "list",
+        "fault_domain": "list"
+    }
+}

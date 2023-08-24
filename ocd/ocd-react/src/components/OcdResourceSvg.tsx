@@ -7,17 +7,17 @@
 import { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import OcdDocument, { OcdDragResource, OcdSelectedResource } from './OcdDocument'
-import { OcdViewCoords } from '../model/OcdDesign'
-import { ResourceRectProps, ResourceForeignObjectProps, ResourceSvgProps, ResourceSvgContextMenuProps, ResourceSvgGhostProps, OcdMouseEvents } from '../types/ReactComponentProperties'
+import { OcdViewConnector, OcdViewCoords } from '../model/OcdDesign'
+import { ResourceRectProps, ResourceForeignObjectProps, ResourceSvgProps, ResourceSvgContextMenuProps, ResourceSvgGhostProps, OcdMouseEvents, ConnectorSvgProps } from '../types/ReactComponentProperties'
 import { OcdViewPage } from '../model/OcdDesign'
 import { OcdUtils } from '../utils/OcdUtils'
 import { OcdContextMenu } from './OcdCanvas'
 
 export const OcdSvgContextMenu = ({ contextMenu, setContextMenu, ocdDocument, setOcdDocument, resource }: ResourceSvgContextMenuProps): JSX.Element => {
     console.info('OcdResourceSvg: OcdSvgContextMenu')
-
+    // const [resourceLayout, setResourceLayout] = useState('simple')
+    const [resourceLayout, setResourceLayout] = useState(!resource.detailsStyle ? 'default' : resource.detailsStyle)
     const uuid = () => `gid-${uuidv4()}`
-
     const onMouseLeave = (e: React.MouseEvent<SVGElement>) => {
         console.debug('OcdResourceSvg: Context OnMouseLeave')
         setContextMenu({show: false, x: 0, y: 0})
@@ -79,6 +79,23 @@ export const OcdSvgContextMenu = ({ contextMenu, setContextMenu, ocdDocument, se
         ocdDocument.sendBackward(resource, page.id)
         setOcdDocument(OcdDocument.clone(ocdDocument))            
     }
+    const onDetailsStyleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.stopPropagation()
+        const newLayout = e.target.value === 'default' || e.target.value === 'simple' || e.target.value === 'detailed' ? e.target.value : 'default'
+        setResourceLayout(newLayout)
+        resource.detailsStyle = newLayout
+        setOcdDocument(OcdDocument.clone(ocdDocument))
+    }
+    const onShowParentConnectionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.stopPropagation()
+        resource.showParentConnection = e.currentTarget.checked
+        setOcdDocument(OcdDocument.clone(ocdDocument))
+    }
+    const onShowAssociationsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.stopPropagation()
+        resource.showConnections = e.currentTarget.checked
+        setOcdDocument(OcdDocument.clone(ocdDocument))
+    }
     return (
         <g 
         transform={`translate(${contextMenu.x}, ${contextMenu.y})`}
@@ -99,6 +116,17 @@ export const OcdSvgContextMenu = ({ contextMenu, setContextMenu, ocdDocument, se
                         <li className='ocd-svg-context-menu-item'><a href='#' onClick={onToBackClick}>To Back</a></li>
                         <li className='ocd-svg-context-menu-item'><a href='#' onClick={onBringForwardClick}>Bring Forward</a></li>
                         <li className='ocd-svg-context-menu-item'><a href='#' onClick={onSendBackwardClick}>Send Backward</a></li>
+                        <li><hr/></li>
+                        <li className='ocd-svg-context-menu-item'>
+                            <div className='ocd-radio-buttons-vertical'>
+                                <label><input type='radio' name='resource-details' value='default' checked={resourceLayout === 'default'} onChange={onDetailsStyleChange}></input>Default Resource Layout</label>
+                                <label><input type='radio' name='resource-details' value='simple' checked={resourceLayout === 'simple'} onChange={onDetailsStyleChange}></input>Simple Resource Layout</label>
+                                <label><input type='radio' name='resource-details' value='detailed' checked={resourceLayout === 'detailed'} onChange={onDetailsStyleChange}></input>Detailed Resource Layout</label>
+                            </div>
+                        </li>
+                        <li><hr/></li>
+                        <li className='ocd-svg-context-menu-item'><label><input type='checkbox' checked={resource.showParentConnection} onChange={onShowParentConnectionChange}></input>Show Parent Connection</label></li>
+                        <li className='ocd-svg-context-menu-item'><label><input type='checkbox' checked={resource.showConnections} onChange={onShowAssociationsChange}></input>Show Associations</label></li>
                     </ul>
                 </div>
             </foreignObject>
@@ -107,15 +135,16 @@ export const OcdSvgContextMenu = ({ contextMenu, setContextMenu, ocdDocument, se
 }
 
 const OcdSimpleRect = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resource }: ResourceRectProps): JSX.Element => {
+    // console.debug('OcdResourceSvg: Simple Rect', resource, 'Layout Style', resource.detailsStyle)
     const id = `${resource.id}-rect`
-    const rectClass = `ocd-svg-simple ${ocdConsoleConfig.config.detailedResource ? 'ocd-svg-resource-detailed' : 'ocd-svg-resource-simple'} ${ocdDocument.selectedResource.coordsId === resource.id ? 'ocd-svg-resource-selected' : ''}`
+    const detailedLayout = ((resource.detailsStyle && resource.detailsStyle === 'detailed') || ((!resource.detailsStyle || resource.detailsStyle === 'default') && ocdConsoleConfig.config.detailedResource))
+    const rectClass = `ocd-svg-simple ${detailedLayout ? 'ocd-svg-resource-detailed' : 'ocd-svg-resource-simple'} ${ocdDocument.selectedResource.modelId === resource.ocid ? 'ocd-svg-resource-selected' : ''}`
     const style = resource.style ? resource.style : {} as React.CSSProperties
     const layer = ocdDocument.getResourcesLayer(resource.ocid)
     if (layer && layer.style && layer.style.fill && ocdConsoleConfig.config.highlightCompartmentResources) {
         style.stroke = layer.style.fill
         if (ocdDocument.selectedResource.coordsId !== resource.id) style.strokeOpacity = 0.9
     }
-    // const style = {stroke: 'green'} as React.CSSProperties
     return (
         <rect className={rectClass} style={style}
             id={id} 
@@ -132,30 +161,61 @@ const OcdSimpleRect = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resource
 }
 
 const OcdContainerRect = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resource }: ResourceRectProps): JSX.Element => {
-    const [dimensions, setDimensions] = useState({ w: 0, h: 0 });
+    const [dimensions, setDimensions] = useState({x: 0, y: 0, w: 0, h: 0 });
     const container_rect_offset = 0
     const id = `${resource.id}-rect`
+    // const width = resource.w
+    // const height = resource.h
+    const rX = container_rect_offset
+    const rY = container_rect_offset
     const width = resource.w + dimensions.w 
     const height = resource.h + dimensions.h
+    const onResize = (dimensions: {x: number, y:number, w: number, h: number}) => {
+        const page: OcdViewPage = ocdDocument.getActivePage()
+        const coords: OcdViewCoords = JSON.parse(JSON.stringify(resource)) as OcdViewCoords
+        coords.x += dimensions.x
+        coords.y += dimensions.y
+        coords.w += dimensions.w
+        coords.h += dimensions.h
+        // const coords: OcdViewCoords = {
+        //     id: resource.id,
+        //     pgid: '',
+        //     ocid: '',
+        //     pocid: '',
+        //     x: resource.x + dimensions.x,
+        //     y: resource.y + dimensions.y,
+        //     w: resource.w + dimensions.w,
+        //     h: resource.h + dimensions.h,
+        //     title: '',
+        //     class: ''
+        // }
+        ocdDocument.updateCoords(coords, page.id)
+        // Redraw
+        setOcdDocument(OcdDocument.clone(ocdDocument))
+    }
     const onResizeEnd = () => {
         const page: OcdViewPage = ocdDocument.getActivePage()
-        const coords: OcdViewCoords = {
-            id: resource.id,
-            pgid: '',
-            ocid: '',
-            pocid: '',
-            x: resource.x,
-            y: resource.y,
-            w: resource.w + dimensions.w,
-            h: resource.h + dimensions.h,
-            title: '',
-            class: ''
-        }
-        setDimensions({w: 0, h: 0})
+        const coords: OcdViewCoords = JSON.parse(JSON.stringify(resource)) as OcdViewCoords
+        coords.x += dimensions.x
+        coords.y += dimensions.y
+        coords.w += dimensions.w
+        coords.h += dimensions.h
+        // const coords: OcdViewCoords = {
+        //     id: resource.id,
+        //     pgid: '',
+        //     ocid: '',
+        //     pocid: '',
+        //     x: resource.x + dimensions.x,
+        //     y: resource.y + dimensions.y,
+        //     w: resource.w + dimensions.w,
+        //     h: resource.h + dimensions.h,
+        //     title: '',
+        //     class: ''
+        // }
+        setDimensions({x: 0, y: 0, w: 0, h: 0})
         ocdDocument.updateCoords(coords, page.id)
-        // // Redraw
-        console.info('Design:', ocdDocument)
-        // setViewPage(structuredClone(ocdDocument.getPage(viewPage.id)))
+        // Redraw
+        console.info('OcdResourceSvg: Design:', ocdDocument)
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
     // console.info('Selected Resource', ocdDocument.selectedResource, 'Resource Id', resource.id)
@@ -170,8 +230,8 @@ const OcdContainerRect = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
         <g>
             <rect className={rectClass} style={style}
                 id={id} 
-                x={container_rect_offset} 
-                y={container_rect_offset} 
+                x={rX} 
+                y={rY} 
                 width={width} 
                 height={height} 
                 data-gid={resource.id} 
@@ -180,51 +240,67 @@ const OcdContainerRect = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
                 data-pocid={resource.pocid}
                 >
             </rect>
-            {/* <OcdResizePoint resource={resource} cx={width / 2} cy={0} position={'north'} setDimensions={setDimensions} onResizeEnd={onResizeEnd}/> */}
-            {ocdDocument.selectedResource.coordsId === resource.id && <OcdResizePoint resource={resource} cx={width / 2} cy={height} position={'south'} setDimensions={setDimensions} onResizeEnd={onResizeEnd}/>}
-            {/* <OcdResizePoint resource={resource} cx={0} cy={height / 2} position={'east'} setDimensions={setDimensions} onResizeEnd={onResizeEnd}/> */}
-            {ocdDocument.selectedResource.coordsId === resource.id && <OcdResizePoint resource={resource} cx={width} cy={height / 2} position={'west'}  setDimensions={setDimensions} onResizeEnd={onResizeEnd}/>}
+            {/* {ocdDocument.selectedResource.coordsId === resource.id && <OcdResizePoint resource={resource} cx={width / 2} cy={0} position={'north'} setDimensions={setDimensions} onResize={onResize} onResizeEnd={onResizeEnd}/>} */}
+            {ocdDocument.selectedResource.coordsId === resource.id && <OcdResizePoint resource={resource} cx={width} cy={height / 2} position={'east'} setDimensions={setDimensions} onResize={onResize} onResizeEnd={onResizeEnd}/> }
+            {ocdDocument.selectedResource.coordsId === resource.id && <OcdResizePoint resource={resource} cx={width / 2} cy={height} position={'south'} setDimensions={setDimensions} onResize={onResize} onResizeEnd={onResizeEnd}/>}
+            {/* {ocdDocument.selectedResource.coordsId === resource.id && <OcdResizePoint resource={resource} cx={0} cy={height / 2} position={'west'}  setDimensions={setDimensions} onResize={onResize} onResizeEnd={onResizeEnd}/>} */}
         </g>
     )
 }
 
-const OcdResizePoint = ({resource, cx, cy, position, setDimensions, onResizeEnd}: any): JSX.Element => {
+const OcdResizePoint = ({resource, cx, cy, position, setDimensions, onResize, onResizeEnd}: any): JSX.Element => {
     const [mouseOver, setMouseOver] = useState(false)
     const [dragging, setDragging] = useState(false)
     const [origin, setOrigin] = useState({ x: 0, y: 0 });
     const radius = mouseOver ? 50 : 3
-    const onResizeDragStart = (e: any) => {
+    const onResizeDragStart = (e: React.MouseEvent<SVGElement>) => {
         e.stopPropagation()
+        e.preventDefault()
         // Record Starting Point
         setOrigin({ x: e.clientX, y: e.clientY })
         setDragging(true)
     }
-    const onResizeDrag = (e: any) => {
+    const onResizeDrag = (e: React.MouseEvent<SVGElement>) => {
         e.stopPropagation()
+        e.preventDefault()
         if (dragging) {
             // Set state for the change in dimensions.
             const dimensions = {
-                w: (position === 'east' || position === 'west') ? e.clientX - origin.x : 0,
-                h: (position === 'north' || position === 'south') ? e.clientY - origin.y : 0
+                x: position === 'west' ? e.clientX - origin.x : 0,
+                y: position === 'north' ? e.clientY - origin.y : 0,
+                w: position === 'east' ? e.clientX - origin.x : position === 'west' ? (e.clientX - origin.x) * -1 : 0,
+                h: position === 'south' ? e.clientY - origin.y : position === 'north' ? (e.clientY - origin.y) * -1 : 0
             }
             setDimensions(dimensions)
+            // onResize(dimensions)
         }
     }
-    const onResizeDragEnd = (e: any) => {
+    const onResizeDragEnd = (e: React.MouseEvent<SVGElement>) => {
         e.stopPropagation()
+        e.preventDefault()
         setDragging(false)
         const dimensions = {
+            x: position === 'west' ? e.clientX - origin.x : 0,
+            y: position === 'south' ? e.clientY - origin.y : 0,
             w: (position === 'east' || position === 'west') ? e.clientX - origin.x : 0,
             h: (position === 'north' || position === 'south') ? e.clientY - origin.y : 0
         }
-        setDimensions(dimensions)
-        onResizeEnd()
+        // setDimensions(dimensions)
+        onResizeEnd(dimensions)
     }
-    const onMouseOver = (e: any) => {
+    const onMouseOver = (e: React.MouseEvent<SVGElement>) => {
+        e.stopPropagation()
+        e.preventDefault()
         setMouseOver(true)
     }
-    const onMouseOut = (e: any) => {
+    const onMouseOut = (e: React.MouseEvent<SVGElement>) => {
+        e.stopPropagation()
+        e.preventDefault()
         setMouseOver(false)
+    }
+    const onMouseEnter = (e: React.MouseEvent<SVGElement>) => {
+        e.stopPropagation()
+        e.preventDefault()
     }
     return (
         <g>
@@ -243,6 +319,7 @@ const OcdResizePoint = ({resource, cx, cy, position, setDimensions, onResizeEnd}
                 onMouseLeave={onResizeDragEnd}
                 onMouseOver={onMouseOver}
                 onMouseOut={onMouseOut}
+                onMouseEnter={onMouseEnter}
             />
         </g>
     )
@@ -251,7 +328,12 @@ const OcdResizePoint = ({resource, cx, cy, position, setDimensions, onResizeEnd}
 const OcdForeignObject = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resource }: ResourceForeignObjectProps) => {
     const id = `${resource.id}-fo`
     const backgroundColourClass = `${resource.class}-background-colour`
-    const foreignObjectClass = `ocd-svg-foreign-object ${resource.container ? 'ocd-svg-resource-container' :ocdConsoleConfig.config.detailedResource ? 'ocd-svg-resource-detailed' : 'ocd-svg-resource-simple'}`
+    const containerLayout = (resource.container && (!resource.detailsStyle || resource.detailsStyle === 'default'))
+    const detailedLayout = ((resource.detailsStyle && resource.detailsStyle === 'detailed') || ((!resource.detailsStyle || resource.detailsStyle === 'default') && ocdConsoleConfig.config.detailedResource))
+    // const detailedLayout = (ocdConsoleConfig.config.detailedResource || (resource.detailsStyle && resource.detailsStyle === 'detailed'))
+    const foreignObjectClass = `ocd-svg-foreign-object ${containerLayout ? 'ocd-svg-resource-container' : detailedLayout ? 'ocd-svg-resource-detailed' : 'ocd-svg-resource-simple'}`
+    const gX = 0
+    const gY = 0
     const onChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         ocdDocument.setDisplayName(resource.ocid, e.target.value.trim())
         setOcdDocument(OcdDocument.clone(ocdDocument))
@@ -261,7 +343,9 @@ const OcdForeignObject = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
         e.stopPropagation()
     }
     return (
-        <foreignObject id={id} className={foreignObjectClass}>
+        <foreignObject id={id} className={foreignObjectClass}
+            transform={`translate(${gX}, ${gY})`}
+        >
             <div 
             // @ts-ignore 
             xmlns='http://www.w3.org/1999/xhtml'>
@@ -288,7 +372,8 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
     const [dragging, setDragging] = useState(false)
     const [coordinates, setCoordinates] = useState({ x: 0, y: 0 });
     const [origin, setOrigin] = useState({ x: 0, y: 0 });
-    const SvgRect = resource.container ? OcdContainerRect : OcdSimpleRect
+    const containerLayout = (resource.container && (!resource.detailsStyle || resource.detailsStyle === 'default'))
+    const SvgRect = containerLayout ? OcdContainerRect : OcdSimpleRect
     // const gX = resource.x + coordinates.x
     // const gY = resource.y + coordinates.y
     const gX = resource.x
@@ -462,7 +547,9 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
 }
 
 export const OcdDragResourceGhostSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resource }: ResourceSvgGhostProps): JSX.Element => {
-    const SvgRect = resource.container ? OcdContainerRect : OcdSimpleRect
+    const containerLayout = (resource.container && (!resource.detailsStyle || resource.detailsStyle === 'default'))
+    const SvgRect = containerLayout ? OcdContainerRect : OcdSimpleRect
+    // const SvgRect = resource.container ? OcdContainerRect : OcdSimpleRect
     const [contextMenu, setContextMenu] = useState<OcdContextMenu>({show: false, x: 0, y: 0})
     const svgDragDropEvents: OcdMouseEvents = {
         'onSVGDragStart': () => {},
@@ -498,6 +585,65 @@ export const OcdDragResourceGhostSvg = ({ ocdConsoleConfig, ocdDocument, setOcdD
                 />
             })}
         </g>
+    )
+}
+
+export const OcdConnector = ({ocdConsoleConfig, ocdDocument, connector, parentConnector}: ConnectorSvgProps): JSX.Element => {
+    const simpleWidth = 40
+    const detailedWidth = 150
+    const simpleHeight = 40
+    const controlPoint = 100
+    // Start Coords Dimensions
+    const startCoords = ocdDocument.getCoords(connector.startCoordsId)
+    const startRelativeXY = startCoords ? ocdDocument.getRelativeXY(startCoords) : ocdDocument.newCoords()
+    const startWidth = startCoords ? startCoords.detailsStyle ? startCoords.detailsStyle === 'simple' ? simpleHeight : startCoords.detailsStyle === 'detailed' ? detailedWidth : startCoords.container ? startCoords.w : ocdConsoleConfig.config.detailedResource ? detailedWidth : simpleWidth : startCoords.container ? startCoords.w : ocdConsoleConfig.config.detailedResource ? detailedWidth : simpleWidth : 0
+    const startHeight = startCoords ? startCoords.container && (!startCoords.detailsStyle || startCoords.detailsStyle === 'default') ? startCoords.h : simpleHeight : 0
+    const startDimensions = {x: startRelativeXY.x, y: startRelativeXY.y, w: startWidth, h: startHeight}
+    // End Coords Dimensions
+    const endCoords = ocdDocument.getCoords(connector.endCoordsId)
+    const endRelativeXY = endCoords ? ocdDocument.getRelativeXY(endCoords) : ocdDocument.newCoords()
+    const endWidth = endCoords ? endCoords.detailsStyle ? endCoords.detailsStyle === 'simple' ? simpleHeight : endCoords.detailsStyle === 'detailed' ? detailedWidth : endCoords.container ? endCoords.w : ocdConsoleConfig.config.detailedResource ? detailedWidth : simpleWidth : endCoords.container ? endCoords.w : ocdConsoleConfig.config.detailedResource ? detailedWidth : simpleWidth : 0
+    const endHeight = endCoords ? endCoords.container && (!endCoords.detailsStyle || endCoords.detailsStyle === 'default') ? endCoords.h : simpleHeight : 0
+    const endDimensions = {x: endRelativeXY.x, y: endRelativeXY.y, w: endWidth, h: endHeight}
+    // console.debug('OcdResourceSvg: Start Dimensions', startDimensions)
+    // console.debug('OcdResourceSvg: End Dimensions', endDimensions)
+    // Build Path
+    const path: string[] = ['M']
+    // Identify if we are goin left to right or right to left
+    if (startDimensions.x < endDimensions.x) {
+        // We will start middle right of the Start Coord
+        path.push(`${startDimensions.x + startDimensions.w}`)
+        path.push(`${startDimensions.y + startDimensions.h / 2}`)
+        // Start Control Point
+        path.push('C')
+        path.push(`${startDimensions.x + startDimensions.w + controlPoint}`)
+        path.push(`${startDimensions.y + startDimensions.h / 2},`)
+        // Add End Control Point
+        path.push(`${endDimensions.x - controlPoint}`)
+        path.push(`${endDimensions.y + endDimensions.h / 2},`)
+        // We will end at the middle left of the End Coord
+        path.push(`${endDimensions.x}`)
+        path.push(`${endDimensions.y + endDimensions.h / 2}`)
+    } else {
+        // We will start middle right of the Start Coord
+        path.push(`${startDimensions.x }`)
+        path.push(`${startDimensions.y + startDimensions.h / 2}`)
+        // Start Control Point
+        path.push('C')
+        path.push(`${startDimensions.x - controlPoint}`)
+        path.push(`${startDimensions.y + startDimensions.h / 2},`)
+        // Add End Control Point
+        path.push(`${endDimensions.x + endDimensions.w + controlPoint}`)
+        path.push(`${endDimensions.y + endDimensions.h / 2},`)
+        // We will end at the middle left of the End Coord
+        path.push(`${endDimensions.x + endDimensions.w}`)
+        path.push(`${endDimensions.y + endDimensions.h / 2}`)
+    }
+    // console.debug('OcdResourceSvg: Connector Path', path)
+    // console.debug('OcdResourceSvg: Connector Path as String', path.join(' '))
+    const className = parentConnector ? 'ocd-svg-parent-connector' : 'ocd-svg-association-connector'
+    return (
+        <path className={className} d={path.join(' ')}></path>
     )
 }
 

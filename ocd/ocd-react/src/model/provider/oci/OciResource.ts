@@ -38,6 +38,27 @@ export namespace OciResource {
         return clone
     }
     export function assignParentId(child: OciResource, parent: OciResource) {
+        const namespace = `Oci${child.resourceType}`
+        // @ts-ignore 
+        const allowedParentTypes = Resources[namespace].allowedParentTypes()
+        if (allowedParentTypes.includes(parent.resourceType)) {
+            // @ts-ignore 
+            Resources[namespace].setParentId(child, parent.id)
+        }
+    }
+    export function getParentId(resource: OciResource): string {
+        const namespace = `Oci${resource.resourceType}`
+        // @ts-ignore 
+        const parentId = Resources[namespace].getParentId(resource)
+        return parentId
+    }
+    export function getAssociationIds(resource: OciResource): string[] {
+        const namespace = `Oci${resource.resourceType}`
+        // @ts-ignore 
+        const associationIds = Resources[namespace].getConnectionIds(resource)
+        return associationIds
+    }
+    export function assignParentIdOrig(child: OciResource, parent: OciResource) {
         const childTypes: Record<string, string[]> = {
             Vcn: ['Subnet'],
             Subnet: ['Instance']
