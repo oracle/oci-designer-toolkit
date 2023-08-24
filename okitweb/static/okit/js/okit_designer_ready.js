@@ -8,6 +8,7 @@ console.debug('Loaded Compartment Ready Javascript');
 ** Define variables for Artefact classes
  */
 //let okitJsonModel = new OkitJson();
+let okitSessionOciConfigs = undefined;
 let okitOciConfig = undefined;
 let okitOciData = undefined;
 let okitSettings = undefined;
@@ -22,6 +23,7 @@ $(document).ready(function() {
     /*
     ** Initialise OKIT Variables
      */
+    okitSessionOciConfigs = new OkitSessionOCIConfigs();
     okitSettings = new OkitSettings();
     okitOciConfig = new OkitOCIConfig(loadHeaderConfigDropDown);
     okitRegions = new OkitRegions(loadHeaderRegionsDropDown);

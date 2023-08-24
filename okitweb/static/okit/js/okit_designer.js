@@ -971,7 +971,7 @@ function displayQueryDialog(title='Query OCI', btn_text='Query', callback=undefi
                 // loadOCICompartments();
                 loadRegions(selectQueryLastUsedRegion);
             });
-    for (let section of okitOciConfig.sections) {
+    for (let section of okitOciConfig.getSections()) {
         profile_select.append('option')
             .attr('value', section)
             .text(section);
@@ -1186,6 +1186,8 @@ function loadOCICompartments() {
         loadQueryCompartmentsSelect()
     } else {
         const profile = $(jqId('config_profile')).val()
+        const section = okitOciConfig.getSection(profile)
+        const config = section && section.session ? okitSessionOciConfigs.configs[profile] : {}
         $.ajax({
             cache: false,
             type: 'get',
@@ -1193,7 +1195,8 @@ function loadOCICompartments() {
             dataType: 'text',
             contentType: 'application/json',
             data: {
-                config_profile: $(jqId('config_profile')).val()
+                config_profile: profile,
+                config: JSON.stringify(config),
             } // Arguments
         }).done((resp) => {
             const compartments = JSON.parse(resp)

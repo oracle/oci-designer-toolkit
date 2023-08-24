@@ -33,6 +33,10 @@ let selectedArtefact = null;
 /*
 ** Define OKIT Artifact Classes
  */
+class OkitSessionOCIConfigs {
+    configs = {}
+}
+
 class OkitOCIConfig {
     constructor(loaded_callback) {
         this.results = {valid: true};
@@ -53,18 +57,35 @@ class OkitOCIConfig {
         const config_sections = $.getJSON('config/sections', {cache: false})
         const validate_config = $.getJSON('config/validate', {cache: false})
         const validated_config_sections = $.getJSON('config/validated_sections', {cache: false})
+        const session_profiles = Object.keys(okitSessionOciConfigs.configs).map((k) => {return {reason: '', section: k, valid: true, session: true}})
     
         Promise.all([config_sections, validate_config, validated_config_sections]).then(results => {
             this.sections = results[0].sections
             this.validation_results = results[1].results
             this.results = results[1].results
-            this.validated_sections = results[2].sections
+            this.validated_sections = [...session_profiles, ...results[2].sections]
+            console.debug('OkitOCIConfig: Sections', this.sections)
+            console.debug('OkitOCIConfig: Validated Sections', this.validated_sections)
             if (!this.validation_results.valid) {
                 $('#config_link').removeClass('hidden');
                 $('#config_link_div').removeClass('collapsed');
             }
             if (this.loaded_callback) this.loaded_callback();
         })
+    }
+
+    getSections() {
+        const session_profiles = Object.keys(okitSessionOciConfigs.configs)
+        return [...session_profiles, ...this.sections]
+    }
+
+    getValidatedSections() {
+        const session_profiles = Object.keys(okitSessionOciConfigs.configs).map((k) => {return {reason: '', section: k, valid: true, session: true}})
+        return [...session_profiles, ...this.sections]
+    }
+
+    getSection(section) {
+        return this.validated_sections.find((s) => s.section === section)
     }
 
     validate() {
@@ -215,14 +236,17 @@ class OkitOCIData {
         console.info('Querying Dropdown data for', profile, region);
         const self = this;
         const start = new Date().getTime()
+        const section = okitOciConfig.getSection(profile)
+        const config = section && section.session ? okitSessionOciConfigs.configs[profile] : {}
         // Get Shipped
         $.getJSON('dropdown', {cache: false}).done((resp) => {
             console.info('Retrieved Shipped Dropdown Data');
             self.dropdown_data = resp
             // Test Region Subscription
             $.getJSON('oci/subscription', {
-                cache: false,
-                profile: profile
+                profile: profile,
+                config: JSON.stringify(config),
+                cache: false
             }).done((resp) => {
                 console.info('Querying OCI Dropdown data for', profile, region);
                 const response = resp
@@ -231,9 +255,10 @@ class OkitOCIData {
                 // console.info('Region Subscriptions', typeof(response), response)
                 // We Know that this Profile is not a PCA-X9 so we can use the OCI Dropdowwn Query
                 $.getJSON('oci/dropdown', {
-                    cache: false,
                     profile: profile,
-                    region: region
+                    region: region,
+                    config: JSON.stringify(config),
+                    cache: false
                 }).done((resp) => {
                     self.dropdown_data = {...self.dropdown_data, ...resp};
                     delete self.dropdown_data.default
@@ -531,13 +556,17 @@ class OkitRegions {
     }
 
     load(profile) {
-        console.info('Loading Region data for', profile);
+        console.info('OkitRegions: Loading Region data for', profile);
         const self = this
+        const section = okitOciConfig.getSection(profile)
+        const config = section && section.session ? okitSessionOciConfigs.configs[profile] : {}
+        console.debug('OkitRegions: Config', config, 'Section', section)
         if (!this.loadLocal(profile)) {
             const start = new Date().getTime()
 
             $.getJSON('oci/subscription', {
                 profile: profile,
+                config: JSON.stringify(config),
                 cache: false
             }).done((resp) => {
                 const response = resp
@@ -546,6 +575,7 @@ class OkitRegions {
                 console.info('Region Subscriptions', typeof(response), response)
                 $.getJSON(`oci/regions/${profile}`, {
                     profile: profile,
+                    config: JSON.stringify(config),
                     cache: false
                 }).done((resp) => {
                     const end = new Date().getTime()
