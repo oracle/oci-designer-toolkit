@@ -25,6 +25,7 @@
         "remove_export_drg_route_distribution_trigger"
     ],
     "oci_core_instance": [
+        "assign_private_dns_record",
         "availability_config",
         "baseline_ocpu_utilization",
         "boot_volume_id",
@@ -50,6 +51,20 @@
         "public_ip",
         "time_maintenance_reboot_due",
         "vlan_id"
+    ],
+    "oci_core_nat_gateway": [
+        "nat_ip",
+        "public_ip_id"
+    ],
+    "oci_core_subnet": [
+        "ipv6virtual_router_ip",
+        "subnet_domain_name",
+        "virtual_router_ip",
+        "virtual_router_mac"
+    ],
+    "oci_core_volume": [
+        "is_auto_tune_enabled",
+        "size_in_mbs"
     ],
     "oci_core_vcn": [
         "cidr_block",
@@ -108,9 +123,5 @@
     "oci_objectstorage_bucket": [
         "etag",
         "object_lifecycle_policy_etag"
-    ],
-    "oci_core_subnet": [
-        "virtual_router_ip",
-        "virtual_router_mac"
     ]
 }

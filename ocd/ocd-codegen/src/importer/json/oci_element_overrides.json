@@ -1,0 +1,13 @@
+{
+    "lookups": [],
+    "staticLookups": [
+        "availability_domain",
+        "fault_domain"
+    ],
+    "types": {
+        "common": {},
+        "oci_core_instance": {
+            "assign_public_ip": "bool"
+        }
+    }
+}

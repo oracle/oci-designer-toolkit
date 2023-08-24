@@ -3,30 +3,38 @@
 ** Licensed under the GNU GENERAL PUBLIC LICENSE v 3.0 as shown at https://www.gnu.org/licenses/.
 */
 
-import React, { useEffect, useRef, useState } from 'react'
+import React, { createContext, useEffect, useRef, useState } from 'react'
 import OcdDesigner from './OcdDesigner'
 import OcdDocument from '../components/OcdDocument'
 import OcdConsoleMenuBar from '../components/OcdConsoleMenuBar'
 import OcdConsoleConfig from '../components/OcdConsoleConfiguration'
-import { ConsolePageProps } from '../types/Console'
+import { ConsoleMHeaderProps, ConsolePageProps } from '../types/Console'
 import OcdBom from './OcdBom'
 import OcdMarkdown from './OcdMarkdown'
 import OcdTabular from './OcdTabular'
 import OcdTerraform from './OcdTerraform'
 import OcdVariables from './OcdVariables'
+import { OcdQueryDialog } from '../components/dialogs/OcdQueryDialog'
 // import { OcdPropertiesPanel, OcdPropertiesToolbarButton } from '../properties/OcdPropertiesPanel'
+
+export const OciConfigContext = createContext('')
+const ThemeContext = createContext('')
+const ConsoleConfigContext = createContext(OcdConsoleConfig.new())
 
 const OcdConsole = (): JSX.Element => {
     const [ocdDocument, setOcdDocument] = useState(OcdDocument.new())
     const [ocdConsoleConfig, setOcdConsoleConfig] = useState(OcdConsoleConfig.new())
+    const [ociConfig, setOciConfig] = useState('')
     useEffect(() => {setOcdDocument(ocdDocument)}, [ocdDocument])
     return (
-        <div className='ocd-console'>
-            <OcdConsoleHeader ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)}/>
-            <OcdConsoleToolbar ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
-            <OcdConsoleBody ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
-            <OcdConsoleFooter ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
-        </div>
+        <OciConfigContext.Provider value={ociConfig}>
+            <div className='ocd-console'>
+                <OcdConsoleHeader ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} setOciConfig={(ociConfig: string) => setOciConfig(ociConfig)} />
+                <OcdConsoleToolbar ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
+                <OcdConsoleBody ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
+                <OcdConsoleFooter ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
+            </div>
+        </OciConfigContext.Provider>
     )
 }
 
@@ -42,13 +50,13 @@ const OcdConsoleTitleBar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument
     )
 }
 
-const OcdConsoleHeader = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument }: ConsolePageProps): JSX.Element => {
+const OcdConsoleHeader = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument, setOciConfig }: ConsoleMHeaderProps): JSX.Element => {
     return (
         <div className='ocd-console-header ocd-console-header-theme'>
             <div className='ocd-image ocd-logo'></div>
             <div className='ocd-title-and-menu'>
                 <OcdConsoleTitleBar ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig:any) => setOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)}/>
-                <OcdConsoleMenuBar ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig:any) => setOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)}/>
+                <OcdConsoleMenuBar ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig:any) => setOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} setOciConfig={(ociConfig: string) => setOciConfig(ociConfig)}/>
             </div>
         </div>
     )
@@ -86,7 +94,7 @@ const OcdConsoleConfigEditor = ({ ocdConsoleConfig, setOcdConsoleConfig }: any):
         setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
     }
     return (
-        <div className='ocd-console-toolbar-dropdown'>
+        <div className='ocd-console-toolbar-dropdown ocd-console-toolbar-dropdown-theme'>
             <ul>
                 <li className='ocd-console-toolbar-dropdown-item' onClick={toggleDropdown}>
                     <div className='left-palette ocd-console-toolbar-icon'></div>
@@ -114,6 +122,30 @@ const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument,
     const onEstimateClick = () => {
         console.info('Estimate Clicked')
     }
+    const onZoomOutClick = () => {
+        const clone = OcdDocument.clone(ocdDocument)
+        const page = clone.getActivePage()
+        const newMatrix = page.transform.slice()
+        newMatrix[0] *= 0.9
+        newMatrix[3] *= 0.9
+        if (newMatrix[0] >= 0.3 && newMatrix[0] <= 3) page.transform = newMatrix
+        setOcdDocument(clone)
+    }
+    const onZoom121Click = () => {
+        const clone = OcdDocument.clone(ocdDocument)
+        const page = clone.getActivePage()
+        page.transform = ocdDocument.resetPanZoom()
+        setOcdDocument(clone)
+    }
+    const onZoomInClick = () => {
+        const clone = OcdDocument.clone(ocdDocument)
+        const page = clone.getActivePage()
+        const newMatrix = page.transform.slice()
+        newMatrix[0] *= 1.15
+        newMatrix[3] *= 1.15
+        if (newMatrix[0] >= 0.3 && newMatrix[0] <= 3) page.transform = newMatrix
+        setOcdDocument(clone)
+    }
     return (
         <div className='ocd-console-toolbar ocd-console-toolbar-theme'>
             <div className='ocd-toolbar-left'>
@@ -123,6 +155,13 @@ const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument,
                         ocdConsoleConfig={ocdConsoleConfig} 
                         setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} 
                         />
+                </div>
+            </div>
+            <div className='ocd-toolbar-centre'>
+                <div>
+                    <div className='zoom-out ocd-console-toolbar-icon' onClick={onZoomOutClick}></div>
+                    <div className='zoom-121 ocd-console-toolbar-icon' onClick={onZoom121Click}></div>
+                    <div className='zoom-in ocd-console-toolbar-icon' onClick={onZoomInClick}></div>
                 </div>
             </div>
             <div className='ocd-toolbar-right'>
@@ -137,6 +176,7 @@ const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument,
 }
 
 const OcdConsoleBody = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument }: ConsolePageProps): JSX.Element => {
+    const showQueryDialog = ocdDocument.query
     const DisplayPage = ocdConsoleConfig.config.displayPage === 'bom' ? OcdBom : 
                         ocdConsoleConfig.config.displayPage === 'designer' ? OcdDesigner : 
                         ocdConsoleConfig.config.displayPage === 'markdown' ? OcdMarkdown : 
@@ -144,8 +184,9 @@ const OcdConsoleBody = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, se
                         ocdConsoleConfig.config.displayPage === 'terraform' ? OcdTerraform : 
                         ocdConsoleConfig.config.displayPage === 'variables' ? OcdVariables : 
                         OcdDesigner
+    console.debug('OcdConsole: Show Query Dialog', showQueryDialog)
     return (
-        <div className='ocd-console-body'>
+        <div className='ocd-console-body ocd-console-body-theme'>
             {/* <OcdDesigner ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig:any) => setOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} /> */}
             <DisplayPage 
                 ocdConsoleConfig={ocdConsoleConfig} 
@@ -155,6 +196,10 @@ const OcdConsoleBody = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, se
                 key={`${ocdConsoleConfig.config.displayPage}-page`}
                 />
             {/* <OcdPropertiesPanel ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument) => setOcdDocument(ocdDocument)} ocdResource={resource} /> */}
+            {showQueryDialog && <OcdQueryDialog 
+                ocdDocument={ocdDocument} 
+                setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} 
+            />}
         </div>
     )
 }

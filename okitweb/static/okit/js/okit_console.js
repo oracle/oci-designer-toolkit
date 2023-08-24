@@ -5,8 +5,8 @@
 console.debug('Loaded Console Javascript');
 
 
-const okitVersion = '0.53.0';
-const okitReleaseDate = '12th July 2023';
+const okitVersion = '0.54.0';
+const okitReleaseDate = '23rd August 2023';
 // const okitReleaseDate = 'Nightly';
 
 // Validation
@@ -36,6 +36,138 @@ function checkForUpdate() {
 function showConfigErrors() {
     let msg = okitOciConfig.results.errors.join('\n');
     alert(msg);
+}
+
+function showSessionConfigDialog() {
+    const session_config = {
+        session_config: true,
+        user: '',
+        fingerprint: '',
+        tenancy: '',
+        region: 'uk-london-1',
+        key_content: ''
+    }
+    let profile_name = 'Session'
+    $(jqId('modal_dialog_title')).text('Create Session Config');
+    $(jqId('modal_dialog_body')).empty();
+    $(jqId('modal_dialog_footer')).empty();
+    // const warning = d3.select(d3Id('modal_dialog_body')).append('div').append('label').attr('class', 'okit-warning').text('Only use with HTTPS connections')
+    const table = d3.select(d3Id('modal_dialog_body')).append('div').attr('class', 'table okit-table');
+    const tbody = table.append('div').attr('class', 'tbody');
+    // Name
+    let tr = tbody.append('div').attr('id', 'name_row').attr('class', 'tr');
+    const warning = tr.append('div').attr('class', 'okit-warning-div').append('label').attr('class', 'okit-warning-label').text('Only use with HTTPS connections')
+    tr = tbody.append('div').attr('id', 'name_row').attr('class', 'tr');
+    tr.append('div').attr('class', 'td').text('Name');
+    let td = tr.append('div').attr('class', 'td');
+    td.append('input')
+        .attr('class', 'okit-input')
+        .attr('id', 'session_profile_name')
+        .attr('name', 'session_profile_name')
+        .attr('type', 'text')
+        .attr('value', profile_name)
+        .on('blur', () => {
+            profile_name = $('#session_profile_name').val()
+        })
+    // Tenancy OCID
+    tr = tbody.append('div').attr('id', 'name_row').attr('class', 'tr');
+    tr.append('div').attr('class', 'td').text('Tenancy OCID');
+    td = tr.append('div').attr('class', 'td');
+    td.append('input')
+        .attr('class', 'okit-input')
+        .attr('id', 'session_profile_tenancy_ocid')
+        .attr('name', 'session_profile_tenancy_ocid')
+        .attr('value', session_config.tenancy)
+        .attr('type', 'text')
+        .on('blur', () => {
+            session_config.tenancy = $('#session_profile_tenancy_ocid').val()
+        })
+    // Home Region
+    tr = tbody.append('div').attr('id', 'name_row').attr('class', 'tr');
+    tr.append('div').attr('class', 'td').text('Home Region');
+    td = tr.append('div').attr('class', 'td');
+    td.append('input')
+        .attr('class', 'okit-input')
+        .attr('id', 'session_profile_home_region')
+        .attr('name', 'session_profile_home_region')
+        .attr('value', session_config.region)
+        .attr('type', 'text')
+        .on('blur', () => {
+            session_config.region = $('#session_profile_home_region').val()
+        })
+    // User OCID
+    tr = tbody.append('div').attr('id', 'name_row').attr('class', 'tr');
+    tr.append('div').attr('class', 'td').text('User OCID');
+    td = tr.append('div').attr('class', 'td');
+    td.append('input')
+        .attr('class', 'okit-input')
+        .attr('id', 'session_profile_user_ocid')
+        .attr('name', 'session_profile_user_ocid')
+        .attr('value', session_config.user)
+        .attr('type', 'text')
+        .on('blur', () => {
+            session_config.user = $('#session_profile_user_ocid').val()
+        })
+    // Fingerprint
+    tr = tbody.append('div').attr('id', 'name_row').attr('class', 'tr');
+    tr.append('div').attr('class', 'td').text('Fingerprint');
+    td = tr.append('div').attr('class', 'td');
+    td.append('input')
+        .attr('class', 'okit-input')
+        .attr('id', 'session_profile_fingerprint')
+        .attr('name', 'session_profile_fingerprint')
+        .attr('value', session_config.fingerprint)
+        .attr('type', 'text')
+        .on('blur', () => {
+            session_config.fingerprint = $('#session_profile_fingerprint').val()
+        })
+    // Private Key
+    tr = tbody.append('div').attr('id', 'name_row').attr('class', 'tr');
+    td = tr.append('div').attr('class', 'td');
+    td.append('button')
+        .attr('id', 'import_private_key')
+        .attr('type', 'button')
+        .text('Import Private Key')
+        .on('click', () => {
+            /*
+            ** Add Load File Handling
+            */
+            $('#files').off('change').on('change', (e) => {
+                const files = e.target.files; // FileList object
+                let reader = new FileReader();
+                reader.onload = (evt) => {
+                    session_config.key_content = evt.target.result
+                    $('#session_private_key').text(session_config.key_content)
+                    console.debug('Session Config', session_config)
+                };
+                reader.onerror = (evt) => {console.info('Error: ' + evt.target.error.name);};
+                reader.readAsText(files[0]);                            
+            });
+            $('#files').attr('accept', '.pem');
+            $('#files').prop('accept', '.pem');
+            // Click Files Element
+            let fileinput = document.getElementById("files");
+            fileinput.click();
+        });
+    td = tr.append('div').attr('class', 'td');
+    td.append('pre').attr('id', 'session_private_key')
+    // Submit Button
+    const submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
+        .attr('id', 'submit_btn')
+        .attr('type', 'button')
+        .text('Save')
+        .on('click', () => {
+            if (session_config.user.trim() !== '' && session_config.tenancy.trim() !== '' && session_config.fingerprint.trim() !== '' && session_config.region.trim() !== '' && session_config.key_content.trim() !== '') {
+                okitSessionOciConfigs.configs[profile_name] = session_config
+                okitOciConfig.load()
+                // Hide modal dialog
+                $(jqId('modal_dialog_wrapper')).addClass('hidden');
+            } else {
+                alert('All Config Properties are required.')
+            }
+        });
+    // Show
+    $(jqId('modal_dialog_wrapper')).removeClass('hidden');
 }
 
 function handleSlideOutMouseOver(elem) {

@@ -13,6 +13,7 @@
         "required": true,
         "label": "Compartment",
         "id": "compartment_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "compartment"
       },
@@ -25,6 +26,7 @@
         "required": false,
         "label": "Defined Tags",
         "id": "defined_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -37,6 +39,7 @@
         "required": false,
         "label": "Description",
         "id": "description",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -49,6 +52,7 @@
         "required": false,
         "label": "Email Notification",
         "id": "email_notification",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -61,6 +65,7 @@
         "required": true,
         "label": "Feature Set",
         "id": "feature_set",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -73,6 +78,7 @@
         "required": false,
         "label": "Freeform Tags",
         "id": "freeform_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -85,6 +91,7 @@
         "required": true,
         "label": "Idcs Access Token",
         "id": "idcs_access_token",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -97,6 +104,7 @@
         "required": true,
         "label": "License Type",
         "id": "license_type",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -109,6 +117,7 @@
         "required": true,
         "label": "Name",
         "id": "name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -121,6 +130,7 @@
         "required": false,
         "label": "Private Access Channels",
         "id": "private_access_channels",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -133,6 +143,7 @@
         "required": false,
         "label": "Service Url",
         "id": "service_url",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -145,6 +156,7 @@
         "required": false,
         "label": "Time Updated",
         "id": "time_updated",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -157,6 +169,7 @@
         "required": false,
         "label": "Vanity Url Details",
         "id": "vanity_url_details",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -179,6 +192,7 @@
             "required": true,
             "label": "Capacity Type",
             "id": "capacity.capacity_type",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -191,6 +205,7 @@
             "required": true,
             "label": "Capacity Value",
             "id": "capacity.capacity_value",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           }
@@ -215,6 +230,7 @@
             "required": true,
             "label": "Network Endpoint Type",
             "id": "network_endpoint_details.network_endpoint_type",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -227,6 +243,7 @@
             "required": false,
             "label": "Subnet",
             "id": "network_endpoint_details.subnet_id",
+            "staticLookup": false,
             "lookup": true,
             "lookupResource": "subnet"
           },
@@ -239,6 +256,7 @@
             "required": false,
             "label": "Vcn",
             "id": "network_endpoint_details.vcn_id",
+            "staticLookup": false,
             "lookup": true,
             "lookupResource": "vcn"
           },
@@ -251,6 +269,7 @@
             "required": false,
             "label": "Whitelisted Ips",
             "id": "network_endpoint_details.whitelisted_ips",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -273,6 +292,7 @@
                 "required": false,
                 "label": "Whitelisted Ips",
                 "id": "network_endpoint_details.whitelisted_vcns.whitelisted_ips",
+                "staticLookup": false,
                 "lookup": false,
                 "lookupResource": ""
               }
@@ -296,6 +316,7 @@
         "required": false,
         "label": "Available Kubernetes Upgrades",
         "id": "available_kubernetes_upgrades",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -308,6 +329,7 @@
         "required": true,
         "label": "Compartment",
         "id": "compartment_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "compartment"
       },
@@ -320,6 +342,7 @@
         "required": false,
         "label": "Kms Key",
         "id": "kms_key_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "kms_key"
       },
@@ -332,6 +355,7 @@
         "required": true,
         "label": "Kubernetes Version",
         "id": "kubernetes_version",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -344,6 +368,7 @@
         "required": false,
         "label": "Lifecycle Details",
         "id": "lifecycle_details",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -356,6 +381,7 @@
         "required": true,
         "label": "Name",
         "id": "name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -368,6 +394,7 @@
         "required": true,
         "label": "Vcn",
         "id": "vcn_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "vcn"
       },
@@ -390,6 +417,7 @@
             "required": false,
             "label": "Is Public Ip Enabled",
             "id": "endpoint_config.is_public_ip_enabled",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -402,6 +430,7 @@
             "required": false,
             "label": "Nsg",
             "id": "endpoint_config.nsg_ids",
+            "staticLookup": false,
             "lookup": true,
             "lookupResource": "nsg"
           },
@@ -414,6 +443,7 @@
             "required": true,
             "label": "Subnet",
             "id": "endpoint_config.subnet_id",
+            "staticLookup": false,
             "lookup": true,
             "lookupResource": "subnet"
           }
@@ -438,6 +468,7 @@
             "required": false,
             "label": "Is Policy Enabled",
             "id": "image_policy_config.is_policy_enabled",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -460,6 +491,7 @@
                 "required": false,
                 "label": "Kms Key",
                 "id": "image_policy_config.key_details.kms_key_id",
+                "staticLookup": false,
                 "lookup": true,
                 "lookupResource": "kms_key"
               }
@@ -486,6 +518,7 @@
             "required": false,
             "label": "Service Lb Subnet",
             "id": "options.service_lb_subnet_ids",
+            "staticLookup": false,
             "lookup": true,
             "lookupResource": "service_lb_subnet"
           },
@@ -508,6 +541,7 @@
                 "required": false,
                 "label": "Is Kubernetes Dashboard Enabled",
                 "id": "options.add_ons.is_kubernetes_dashboard_enabled",
+                "staticLookup": false,
                 "lookup": false,
                 "lookupResource": ""
               },
@@ -520,6 +554,7 @@
                 "required": false,
                 "label": "Is Tiller Enabled",
                 "id": "options.add_ons.is_tiller_enabled",
+                "staticLookup": false,
                 "lookup": false,
                 "lookupResource": ""
               }
@@ -544,6 +579,7 @@
                 "required": false,
                 "label": "Is Pod Security Policy Enabled",
                 "id": "options.admission_controller_options.is_pod_security_policy_enabled",
+                "staticLookup": false,
                 "lookup": false,
                 "lookupResource": ""
               }
@@ -568,6 +604,7 @@
                 "required": false,
                 "label": "Pods Cidr",
                 "id": "options.kubernetes_network_config.pods_cidr",
+                "staticLookup": false,
                 "lookup": false,
                 "lookupResource": ""
               },
@@ -580,6 +617,7 @@
                 "required": false,
                 "label": "Services Cidr",
                 "id": "options.kubernetes_network_config.services_cidr",
+                "staticLookup": false,
                 "lookup": false,
                 "lookupResource": ""
               }
@@ -603,6 +641,7 @@
         "required": true,
         "label": "Cluster",
         "id": "cluster_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "cluster"
       },
@@ -615,6 +654,7 @@
         "required": true,
         "label": "Compartment",
         "id": "compartment_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "compartment"
       },
@@ -627,6 +667,7 @@
         "required": true,
         "label": "Kubernetes Version",
         "id": "kubernetes_version",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -639,30 +680,7 @@
         "required": true,
         "label": "Name",
         "id": "name",
-        "lookup": false,
-        "lookupResource": ""
-      },
-      "node_image_id": {
-        "provider": "oci",
-        "key": "nodeImageId",
-        "name": "node_image_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Node Image",
-        "id": "node_image_id",
-        "lookup": true,
-        "lookupResource": "node_image"
-      },
-      "node_image_name": {
-        "provider": "oci",
-        "key": "nodeImageName",
-        "name": "node_image_name",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Node Image Name",
-        "id": "node_image_name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -675,6 +693,7 @@
         "required": false,
         "label": "Node Metadata",
         "id": "node_metadata",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -687,6 +706,7 @@
         "required": true,
         "label": "Node Shape",
         "id": "node_shape",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -699,6 +719,7 @@
         "required": false,
         "label": "Quantity Per Subnet",
         "id": "quantity_per_subnet",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -711,6 +732,7 @@
         "required": false,
         "label": "Ssh Public Key",
         "id": "ssh_public_key",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -723,6 +745,7 @@
         "required": false,
         "label": "Subnet",
         "id": "subnet_ids",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "subnet"
       },
@@ -745,6 +768,7 @@
             "required": false,
             "label": "Key",
             "id": "initial_node_labels.key",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -757,6 +781,7 @@
             "required": false,
             "label": "Value",
             "id": "initial_node_labels.value",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           }
@@ -781,6 +806,7 @@
             "required": true,
             "label": "Size",
             "id": "node_config_details.size",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -803,7 +829,8 @@
                 "required": true,
                 "label": "Availability Domain",
                 "id": "node_config_details.placement_configs.availability_domain",
-                "lookup": false,
+                "staticLookup": true,
+                "lookup": true,
                 "lookupResource": ""
               },
               "subnet_id": {
@@ -815,6 +842,7 @@
                 "required": true,
                 "label": "Subnet",
                 "id": "node_config_details.placement_configs.subnet_id",
+                "staticLookup": false,
                 "lookup": true,
                 "lookupResource": "subnet"
               }
@@ -841,6 +869,7 @@
             "required": false,
             "label": "Memory In Gbs",
             "id": "node_shape_config.memory_in_gbs",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -853,6 +882,7 @@
             "required": false,
             "label": "Ocpus",
             "id": "node_shape_config.ocpus",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           }
@@ -877,6 +907,7 @@
             "required": false,
             "label": "Boot Volume Size In Gbs",
             "id": "node_source_details.boot_volume_size_in_gbs",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -889,6 +920,7 @@
             "required": true,
             "label": "Image",
             "id": "node_source_details.image_id",
+            "staticLookup": false,
             "lookup": true,
             "lookupResource": "image"
           },
@@ -901,6 +933,7 @@
             "required": true,
             "label": "Source Type",
             "id": "node_source_details.source_type",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           }
@@ -922,6 +955,7 @@
         "required": true,
         "label": "Compartment",
         "id": "compartment_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "compartment"
       },
@@ -934,6 +968,7 @@
         "required": false,
         "label": "Cpe Device Shape",
         "id": "cpe_device_shape_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "cpe_device_shape"
       },
@@ -946,6 +981,7 @@
         "required": false,
         "label": "Defined Tags",
         "id": "defined_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -958,6 +994,7 @@
         "required": false,
         "label": "Display Name",
         "id": "display_name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -970,6 +1007,7 @@
         "required": false,
         "label": "Freeform Tags",
         "id": "freeform_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -982,6 +1020,7 @@
         "required": true,
         "label": "Ip Address",
         "id": "ip_address",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       }
@@ -1001,6 +1040,7 @@
         "required": true,
         "label": "Compartment",
         "id": "compartment_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "compartment"
       },
@@ -1013,6 +1053,7 @@
         "required": false,
         "label": "Defined Tags",
         "id": "defined_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -1025,6 +1066,7 @@
         "required": false,
         "label": "Display Name",
         "id": "display_name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -1037,6 +1079,7 @@
         "required": false,
         "label": "Freeform Tags",
         "id": "freeform_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -1049,6 +1092,7 @@
         "required": true,
         "label": "Vcn",
         "id": "vcn_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "vcn"
       },
@@ -1071,6 +1115,7 @@
             "required": false,
             "label": "Custom Dns Servers",
             "id": "options.custom_dns_servers",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -1083,6 +1128,7 @@
             "required": false,
             "label": "Search Domain Names",
             "id": "options.search_domain_names",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -1095,6 +1141,7 @@
             "required": false,
             "label": "Server Type",
             "id": "options.server_type",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -1107,6 +1154,7 @@
             "required": true,
             "label": "Type",
             "id": "options.type",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           }
@@ -1128,6 +1176,7 @@
         "required": true,
         "label": "Compartment",
         "id": "compartment_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "compartment"
       },
@@ -1140,6 +1189,7 @@
         "required": false,
         "label": "Defined Tags",
         "id": "defined_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -1152,6 +1202,7 @@
         "required": false,
         "label": "Display Name",
         "id": "display_name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -1164,6 +1215,7 @@
         "required": false,
         "label": "Freeform Tags",
         "id": "freeform_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -1176,6 +1228,7 @@
         "required": false,
         "label": "Redundancy Status",
         "id": "redundancy_status",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       }
@@ -1195,6 +1248,7 @@
         "required": false,
         "label": "Compartment",
         "id": "compartment_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "compartment"
       },
@@ -1207,6 +1261,7 @@
         "required": false,
         "label": "Defined Tags",
         "id": "defined_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -1219,6 +1274,7 @@
         "required": false,
         "label": "Display Name",
         "id": "display_name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -1231,6 +1287,7 @@
         "required": true,
         "label": "Drg",
         "id": "drg_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "drg"
       },
@@ -1243,6 +1300,7 @@
         "required": false,
         "label": "Drg Route Table",
         "id": "drg_route_table_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "drg_route_table"
       },
@@ -1255,6 +1313,7 @@
         "required": false,
         "label": "Export Drg Route Distribution",
         "id": "export_drg_route_distribution_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "export_drg_route_distribution"
       },
@@ -1267,6 +1326,7 @@
         "required": false,
         "label": "Freeform Tags",
         "id": "freeform_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -1279,6 +1339,7 @@
         "required": false,
         "label": "Is Cross Tenancy",
         "id": "is_cross_tenancy",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -1291,6 +1352,7 @@
         "required": false,
         "label": "Route Table",
         "id": "route_table_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "route_table"
       },
@@ -1303,6 +1365,7 @@
         "required": false,
         "label": "Vcn",
         "id": "vcn_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "vcn"
       },
@@ -1325,6 +1388,7 @@
             "required": false,
             "label": "Ipsec Connection",
             "id": "network_details.ipsec_connection_id",
+            "staticLookup": false,
             "lookup": true,
             "lookupResource": "ipsec_connection"
           },
@@ -1337,6 +1401,7 @@
             "required": false,
             "label": "Route Table",
             "id": "network_details.route_table_id",
+            "staticLookup": false,
             "lookup": true,
             "lookupResource": "route_table"
           },
@@ -1349,6 +1414,7 @@
             "required": true,
             "label": "Type",
             "id": "network_details.type",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           }
@@ -1370,6 +1436,7 @@
         "required": false,
         "label": "Compartment",
         "id": "compartment_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "compartment"
       },
@@ -1382,6 +1449,7 @@
         "required": false,
         "label": "Defined Tags",
         "id": "defined_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -1394,6 +1462,7 @@
         "required": false,
         "label": "Display Name",
         "id": "display_name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -1406,6 +1475,7 @@
         "required": true,
         "label": "Distribution Type",
         "id": "distribution_type",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -1418,6 +1488,7 @@
         "required": true,
         "label": "Drg",
         "id": "drg_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "drg"
       },
@@ -1430,6 +1501,7 @@
         "required": false,
         "label": "Freeform Tags",
         "id": "freeform_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       }
@@ -1449,6 +1521,7 @@
         "required": true,
         "label": "Action",
         "id": "action",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -1461,6 +1534,7 @@
         "required": true,
         "label": "Drg Route Distribution",
         "id": "drg_route_distribution_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "drg_route_distribution"
       },
@@ -1473,6 +1547,7 @@
         "required": true,
         "label": "Priority",
         "id": "priority",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -1495,6 +1570,7 @@
             "required": false,
             "label": "Attachment Type",
             "id": "match_criteria.attachment_type",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -1507,6 +1583,7 @@
             "required": false,
             "label": "Drg Attachment",
             "id": "match_criteria.drg_attachment_id",
+            "staticLookup": false,
             "lookup": true,
             "lookupResource": "drg_attachment"
           },
@@ -1519,6 +1596,7 @@
             "required": false,
             "label": "Match Type",
             "id": "match_criteria.match_type",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           }
@@ -1540,6 +1618,7 @@
         "required": false,
         "label": "Compartment",
         "id": "compartment_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "compartment"
       },
@@ -1552,6 +1631,7 @@
         "required": false,
         "label": "Defined Tags",
         "id": "defined_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -1564,6 +1644,7 @@
         "required": false,
         "label": "Display Name",
         "id": "display_name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -1576,6 +1657,7 @@
         "required": true,
         "label": "Drg",
         "id": "drg_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "drg"
       },
@@ -1588,6 +1670,7 @@
         "required": false,
         "label": "Freeform Tags",
         "id": "freeform_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -1600,6 +1683,7 @@
         "required": false,
         "label": "Import Drg Route Distribution",
         "id": "import_drg_route_distribution_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "import_drg_route_distribution"
       },
@@ -1612,6 +1696,7 @@
         "required": false,
         "label": "Is Ecmp Enabled",
         "id": "is_ecmp_enabled",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -1624,6 +1709,7 @@
         "required": false,
         "label": "Remove Import Trigger",
         "id": "remove_import_trigger",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       }
@@ -1643,6 +1729,7 @@
         "required": true,
         "label": "Destination",
         "id": "destination",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -1655,6 +1742,7 @@
         "required": true,
         "label": "Destination Type",
         "id": "destination_type",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -1667,6 +1755,7 @@
         "required": true,
         "label": "Drg Route Table",
         "id": "drg_route_table_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "drg_route_table"
       },
@@ -1679,6 +1768,7 @@
         "required": false,
         "label": "Is Blackhole",
         "id": "is_blackhole",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -1691,6 +1781,7 @@
         "required": false,
         "label": "Is Conflict",
         "id": "is_conflict",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -1703,6 +1794,7 @@
         "required": true,
         "label": "Next Hop Drg Attachment",
         "id": "next_hop_drg_attachment_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "next_hop_drg_attachment"
       },
@@ -1715,6 +1807,7 @@
         "required": false,
         "label": "Route Provenance",
         "id": "route_provenance",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -1727,6 +1820,7 @@
         "required": false,
         "label": "Route Type",
         "id": "route_type",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       }
@@ -1746,7 +1840,8 @@
         "required": true,
         "label": "Availability Domain",
         "id": "availability_domain",
-        "lookup": false,
+        "staticLookup": true,
+        "lookup": true,
         "lookupResource": ""
       },
       "compartment_id": {
@@ -1758,6 +1853,7 @@
         "required": true,
         "label": "Compartment",
         "id": "compartment_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "compartment"
       },
@@ -1770,6 +1866,7 @@
         "required": false,
         "label": "Defined Tags",
         "id": "defined_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -1782,6 +1879,7 @@
         "required": false,
         "label": "Display Name",
         "id": "display_name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -1794,7 +1892,8 @@
         "required": false,
         "label": "Fault Domain",
         "id": "fault_domain",
-        "lookup": false,
+        "staticLookup": true,
+        "lookup": true,
         "lookupResource": ""
       },
       "freeform_tags": {
@@ -1806,30 +1905,7 @@
         "required": false,
         "label": "Freeform Tags",
         "id": "freeform_tags",
-        "lookup": false,
-        "lookupResource": ""
-      },
-      "hostname_label": {
-        "provider": "oci",
-        "key": "hostnameLabel",
-        "name": "hostname_label",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Hostname Label",
-        "id": "hostname_label",
-        "lookup": false,
-        "lookupResource": ""
-      },
-      "image": {
-        "provider": "oci",
-        "key": "image",
-        "name": "image",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Image",
-        "id": "image",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -1842,6 +1918,7 @@
         "required": false,
         "label": "Is Pv Encryption In Transit Enabled",
         "id": "is_pv_encryption_in_transit_enabled",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -1854,6 +1931,7 @@
         "required": false,
         "label": "Metadata",
         "id": "metadata",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -1866,6 +1944,7 @@
         "required": false,
         "label": "Region",
         "id": "region",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -1878,20 +1957,9 @@
         "required": true,
         "label": "Shape",
         "id": "shape",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
-      },
-      "subnet_id": {
-        "provider": "oci",
-        "key": "subnetId",
-        "name": "subnet_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Subnet",
-        "id": "subnet_id",
-        "lookup": true,
-        "lookupResource": "subnet"
       },
       "agent_config": {
         "provider": "oci",
@@ -1912,6 +1980,7 @@
             "required": false,
             "label": "Are All Plugins Disabled",
             "id": "agent_config.are_all_plugins_disabled",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -1924,6 +1993,7 @@
             "required": false,
             "label": "Is Management Disabled",
             "id": "agent_config.is_management_disabled",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -1936,6 +2006,7 @@
             "required": false,
             "label": "Is Monitoring Disabled",
             "id": "agent_config.is_monitoring_disabled",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -1958,6 +2029,7 @@
                 "required": true,
                 "label": "Desired State",
                 "id": "agent_config.plugins_config.desired_state",
+                "staticLookup": false,
                 "lookup": false,
                 "lookupResource": ""
               },
@@ -1970,6 +2042,7 @@
                 "required": true,
                 "label": "Name",
                 "id": "agent_config.plugins_config.name",
+                "staticLookup": false,
                 "lookup": false,
                 "lookupResource": ""
               }
@@ -1987,27 +2060,16 @@
         "label": "Create Vnic Details",
         "id": "create_vnic_details",
         "attributes": {
-          "assign_private_dns_record": {
-            "provider": "oci",
-            "key": "assignPrivateDnsRecord",
-            "name": "assign_private_dns_record",
-            "type": "bool",
-            "subtype": "",
-            "required": false,
-            "label": "Assign Private Dns Record",
-            "id": "create_vnic_details.assign_private_dns_record",
-            "lookup": false,
-            "lookupResource": ""
-          },
           "assign_public_ip": {
             "provider": "oci",
             "key": "assignPublicIp",
             "name": "assign_public_ip",
-            "type": "string",
+            "type": "bool",
             "subtype": "",
             "required": false,
             "label": "Assign Public Ip",
             "id": "create_vnic_details.assign_public_ip",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -2020,6 +2082,7 @@
             "required": false,
             "label": "Defined Tags",
             "id": "create_vnic_details.defined_tags",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -2032,6 +2095,7 @@
             "required": false,
             "label": "Display Name",
             "id": "create_vnic_details.display_name",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -2044,6 +2108,7 @@
             "required": false,
             "label": "Freeform Tags",
             "id": "create_vnic_details.freeform_tags",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -2056,6 +2121,7 @@
             "required": false,
             "label": "Hostname Label",
             "id": "create_vnic_details.hostname_label",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -2068,6 +2134,7 @@
             "required": false,
             "label": "Nsg",
             "id": "create_vnic_details.nsg_ids",
+            "staticLookup": false,
             "lookup": true,
             "lookupResource": "nsg"
           },
@@ -2080,6 +2147,7 @@
             "required": false,
             "label": "Skip Source Dest Check",
             "id": "create_vnic_details.skip_source_dest_check",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -2092,6 +2160,7 @@
             "required": false,
             "label": "Subnet",
             "id": "create_vnic_details.subnet_id",
+            "staticLookup": false,
             "lookup": true,
             "lookupResource": "subnet"
           }
@@ -2116,6 +2185,7 @@
             "required": false,
             "label": "Memory In Gbs",
             "id": "shape_config.memory_in_gbs",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -2128,6 +2198,7 @@
             "required": false,
             "label": "Ocpus",
             "id": "shape_config.ocpus",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           }
@@ -2152,6 +2223,7 @@
             "required": false,
             "label": "Boot Volume Size In Gbs",
             "id": "source_details.boot_volume_size_in_gbs",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -2164,6 +2236,7 @@
             "required": false,
             "label": "Kms Key",
             "id": "source_details.kms_key_id",
+            "staticLookup": false,
             "lookup": true,
             "lookupResource": "kms_key"
           },
@@ -2176,6 +2249,7 @@
             "required": true,
             "label": "Source",
             "id": "source_details.source_id",
+            "staticLookup": false,
             "lookup": true,
             "lookupResource": "source"
           },
@@ -2188,6 +2262,7 @@
             "required": true,
             "label": "Source Type",
             "id": "source_details.source_type",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           }
@@ -2209,6 +2284,7 @@
         "required": true,
         "label": "Compartment",
         "id": "compartment_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "compartment"
       },
@@ -2221,6 +2297,7 @@
         "required": false,
         "label": "Defined Tags",
         "id": "defined_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -2233,6 +2310,7 @@
         "required": false,
         "label": "Display Name",
         "id": "display_name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -2245,6 +2323,7 @@
         "required": false,
         "label": "Enabled",
         "id": "enabled",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -2257,6 +2336,7 @@
         "required": false,
         "label": "Freeform Tags",
         "id": "freeform_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -2269,6 +2349,7 @@
         "required": true,
         "label": "Vcn",
         "id": "vcn_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "vcn"
       }
@@ -2288,6 +2369,7 @@
         "required": true,
         "label": "Compartment",
         "id": "compartment_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "compartment"
       },
@@ -2300,6 +2382,7 @@
         "required": true,
         "label": "Cpe",
         "id": "cpe_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "cpe"
       },
@@ -2312,6 +2395,7 @@
         "required": false,
         "label": "Cpe Local Identifier",
         "id": "cpe_local_identifier",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -2324,6 +2408,7 @@
         "required": false,
         "label": "Cpe Local Identifier Type",
         "id": "cpe_local_identifier_type",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -2336,6 +2421,7 @@
         "required": false,
         "label": "Defined Tags",
         "id": "defined_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -2348,6 +2434,7 @@
         "required": false,
         "label": "Display Name",
         "id": "display_name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -2360,6 +2447,7 @@
         "required": true,
         "label": "Drg",
         "id": "drg_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "drg"
       },
@@ -2372,6 +2460,7 @@
         "required": false,
         "label": "Freeform Tags",
         "id": "freeform_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -2384,6 +2473,7 @@
         "required": true,
         "label": "Static Routes",
         "id": "static_routes",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       }
@@ -2403,6 +2493,7 @@
         "required": true,
         "label": "Compartment",
         "id": "compartment_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "compartment"
       },
@@ -2415,6 +2506,7 @@
         "required": false,
         "label": "Defined Tags",
         "id": "defined_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -2427,6 +2519,7 @@
         "required": false,
         "label": "Display Name",
         "id": "display_name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -2439,6 +2532,7 @@
         "required": false,
         "label": "Freeform Tags",
         "id": "freeform_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -2451,6 +2545,7 @@
         "required": false,
         "label": "Is Cross Tenancy Peering",
         "id": "is_cross_tenancy_peering",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -2463,6 +2558,7 @@
         "required": false,
         "label": "Peer Advertised Cidr",
         "id": "peer_advertised_cidr",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -2475,6 +2571,7 @@
         "required": false,
         "label": "Peer Advertised Cidr Details",
         "id": "peer_advertised_cidr_details",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -2487,6 +2584,7 @@
         "required": false,
         "label": "Peer",
         "id": "peer_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "peer"
       },
@@ -2499,6 +2597,7 @@
         "required": false,
         "label": "Peering Status",
         "id": "peering_status",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -2511,6 +2610,7 @@
         "required": false,
         "label": "Peering Status Details",
         "id": "peering_status_details",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -2523,6 +2623,7 @@
         "required": false,
         "label": "Route Table",
         "id": "route_table_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "route_table"
       },
@@ -2535,6 +2636,7 @@
         "required": true,
         "label": "Vcn",
         "id": "vcn_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "vcn"
       }
@@ -2554,6 +2656,7 @@
         "required": false,
         "label": "Block Traffic",
         "id": "block_traffic",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -2566,6 +2669,7 @@
         "required": true,
         "label": "Compartment",
         "id": "compartment_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "compartment"
       },
@@ -2578,6 +2682,7 @@
         "required": false,
         "label": "Defined Tags",
         "id": "defined_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -2590,6 +2695,7 @@
         "required": false,
         "label": "Display Name",
         "id": "display_name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -2602,32 +2708,9 @@
         "required": false,
         "label": "Freeform Tags",
         "id": "freeform_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
-      },
-      "nat_ip": {
-        "provider": "oci",
-        "key": "natIp",
-        "name": "nat_ip",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Nat Ip",
-        "id": "nat_ip",
-        "lookup": false,
-        "lookupResource": ""
-      },
-      "public_ip_id": {
-        "provider": "oci",
-        "key": "publicIpId",
-        "name": "public_ip_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Public Ip",
-        "id": "public_ip_id",
-        "lookup": true,
-        "lookupResource": "public_ip"
       },
       "vcn_id": {
         "provider": "oci",
@@ -2638,6 +2721,7 @@
         "required": true,
         "label": "Vcn",
         "id": "vcn_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "vcn"
       }
@@ -2657,6 +2741,7 @@
         "required": true,
         "label": "Compartment",
         "id": "compartment_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "compartment"
       },
@@ -2669,6 +2754,7 @@
         "required": false,
         "label": "Defined Tags",
         "id": "defined_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -2681,6 +2767,7 @@
         "required": false,
         "label": "Display Name",
         "id": "display_name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -2693,6 +2780,7 @@
         "required": false,
         "label": "Freeform Tags",
         "id": "freeform_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -2705,6 +2793,7 @@
         "required": true,
         "label": "Vcn",
         "id": "vcn_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "vcn"
       }
@@ -2724,6 +2813,7 @@
         "required": true,
         "label": "Compartment",
         "id": "compartment_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "compartment"
       },
@@ -2736,6 +2826,7 @@
         "required": false,
         "label": "Defined Tags",
         "id": "defined_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -2748,6 +2839,7 @@
         "required": false,
         "label": "Display Name",
         "id": "display_name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -2760,6 +2852,7 @@
         "required": true,
         "label": "Drg",
         "id": "drg_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "drg"
       },
@@ -2772,6 +2865,7 @@
         "required": false,
         "label": "Freeform Tags",
         "id": "freeform_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -2784,6 +2878,7 @@
         "required": false,
         "label": "Is Cross Tenancy Peering",
         "id": "is_cross_tenancy_peering",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -2796,6 +2891,7 @@
         "required": false,
         "label": "Peer",
         "id": "peer_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "peer"
       },
@@ -2808,6 +2904,7 @@
         "required": false,
         "label": "Peer Region Name",
         "id": "peer_region_name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -2820,6 +2917,7 @@
         "required": false,
         "label": "Peer Tenancy",
         "id": "peer_tenancy_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "peer_tenancy"
       },
@@ -2832,6 +2930,7 @@
         "required": false,
         "label": "Peering Status",
         "id": "peering_status",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       }
@@ -2851,6 +2950,7 @@
         "required": true,
         "label": "Compartment",
         "id": "compartment_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "compartment"
       },
@@ -2863,6 +2963,7 @@
         "required": false,
         "label": "Defined Tags",
         "id": "defined_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -2875,6 +2976,7 @@
         "required": false,
         "label": "Display Name",
         "id": "display_name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -2887,6 +2989,7 @@
         "required": false,
         "label": "Freeform Tags",
         "id": "freeform_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -2899,6 +3002,7 @@
         "required": true,
         "label": "Vcn",
         "id": "vcn_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "vcn"
       },
@@ -2912,18 +3016,6 @@
         "label": "Route Rules",
         "id": "route_rules",
         "attributes": {
-          "cidr_block": {
-            "provider": "oci",
-            "key": "cidrBlock",
-            "name": "cidr_block",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Cidr Block",
-            "id": "route_rules.cidr_block",
-            "lookup": false,
-            "lookupResource": ""
-          },
           "description": {
             "provider": "oci",
             "key": "description",
@@ -2933,6 +3025,7 @@
             "required": false,
             "label": "Description",
             "id": "route_rules.description",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -2945,6 +3038,7 @@
             "required": false,
             "label": "Destination",
             "id": "route_rules.destination",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -2957,6 +3051,7 @@
             "required": false,
             "label": "Destination Type",
             "id": "route_rules.destination_type",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -2969,6 +3064,7 @@
             "required": true,
             "label": "Network Entity",
             "id": "route_rules.network_entity_id",
+            "staticLookup": false,
             "lookup": true,
             "lookupResource": "network_entity"
           }
@@ -2990,6 +3086,7 @@
         "required": true,
         "label": "Compartment",
         "id": "compartment_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "compartment"
       },
@@ -3002,6 +3099,7 @@
         "required": false,
         "label": "Defined Tags",
         "id": "defined_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -3014,6 +3112,7 @@
         "required": false,
         "label": "Display Name",
         "id": "display_name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -3026,6 +3125,7 @@
         "required": false,
         "label": "Freeform Tags",
         "id": "freeform_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -3038,6 +3138,7 @@
         "required": true,
         "label": "Vcn",
         "id": "vcn_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "vcn"
       },
@@ -3060,6 +3161,7 @@
             "required": false,
             "label": "Description",
             "id": "egress_security_rules.description",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -3072,6 +3174,7 @@
             "required": true,
             "label": "Destination",
             "id": "egress_security_rules.destination",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -3084,6 +3187,7 @@
             "required": false,
             "label": "Destination Type",
             "id": "egress_security_rules.destination_type",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -3096,6 +3200,7 @@
             "required": true,
             "label": "Protocol",
             "id": "egress_security_rules.protocol",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -3108,6 +3213,7 @@
             "required": false,
             "label": "Stateless",
             "id": "egress_security_rules.stateless",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -3130,6 +3236,7 @@
                 "required": false,
                 "label": "Code",
                 "id": "egress_security_rules.icmp_options.code",
+                "staticLookup": false,
                 "lookup": false,
                 "lookupResource": ""
               },
@@ -3142,6 +3249,7 @@
                 "required": true,
                 "label": "Type",
                 "id": "egress_security_rules.icmp_options.type",
+                "staticLookup": false,
                 "lookup": false,
                 "lookupResource": ""
               }
@@ -3166,6 +3274,7 @@
                 "required": false,
                 "label": "Max",
                 "id": "egress_security_rules.tcp_options.max",
+                "staticLookup": false,
                 "lookup": false,
                 "lookupResource": ""
               },
@@ -3178,6 +3287,7 @@
                 "required": false,
                 "label": "Min",
                 "id": "egress_security_rules.tcp_options.min",
+                "staticLookup": false,
                 "lookup": false,
                 "lookupResource": ""
               },
@@ -3200,6 +3310,7 @@
                     "required": true,
                     "label": "Max",
                     "id": "egress_security_rules.tcp_options.source_port_range.max",
+                    "staticLookup": false,
                     "lookup": false,
                     "lookupResource": ""
                   },
@@ -3212,6 +3323,7 @@
                     "required": true,
                     "label": "Min",
                     "id": "egress_security_rules.tcp_options.source_port_range.min",
+                    "staticLookup": false,
                     "lookup": false,
                     "lookupResource": ""
                   }
@@ -3238,6 +3350,7 @@
                 "required": false,
                 "label": "Max",
                 "id": "egress_security_rules.udp_options.max",
+                "staticLookup": false,
                 "lookup": false,
                 "lookupResource": ""
               },
@@ -3250,6 +3363,7 @@
                 "required": false,
                 "label": "Min",
                 "id": "egress_security_rules.udp_options.min",
+                "staticLookup": false,
                 "lookup": false,
                 "lookupResource": ""
               },
@@ -3272,6 +3386,7 @@
                     "required": true,
                     "label": "Max",
                     "id": "egress_security_rules.udp_options.source_port_range.max",
+                    "staticLookup": false,
                     "lookup": false,
                     "lookupResource": ""
                   },
@@ -3284,6 +3399,7 @@
                     "required": true,
                     "label": "Min",
                     "id": "egress_security_rules.udp_options.source_port_range.min",
+                    "staticLookup": false,
                     "lookup": false,
                     "lookupResource": ""
                   }
@@ -3312,6 +3428,7 @@
             "required": false,
             "label": "Description",
             "id": "ingress_security_rules.description",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -3324,6 +3441,7 @@
             "required": true,
             "label": "Protocol",
             "id": "ingress_security_rules.protocol",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -3336,6 +3454,7 @@
             "required": true,
             "label": "Source",
             "id": "ingress_security_rules.source",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -3348,6 +3467,7 @@
             "required": false,
             "label": "Source Type",
             "id": "ingress_security_rules.source_type",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -3360,6 +3480,7 @@
             "required": false,
             "label": "Stateless",
             "id": "ingress_security_rules.stateless",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -3382,6 +3503,7 @@
                 "required": false,
                 "label": "Code",
                 "id": "ingress_security_rules.icmp_options.code",
+                "staticLookup": false,
                 "lookup": false,
                 "lookupResource": ""
               },
@@ -3394,6 +3516,7 @@
                 "required": true,
                 "label": "Type",
                 "id": "ingress_security_rules.icmp_options.type",
+                "staticLookup": false,
                 "lookup": false,
                 "lookupResource": ""
               }
@@ -3418,6 +3541,7 @@
                 "required": false,
                 "label": "Max",
                 "id": "ingress_security_rules.tcp_options.max",
+                "staticLookup": false,
                 "lookup": false,
                 "lookupResource": ""
               },
@@ -3430,6 +3554,7 @@
                 "required": false,
                 "label": "Min",
                 "id": "ingress_security_rules.tcp_options.min",
+                "staticLookup": false,
                 "lookup": false,
                 "lookupResource": ""
               },
@@ -3452,6 +3577,7 @@
                     "required": true,
                     "label": "Max",
                     "id": "ingress_security_rules.tcp_options.source_port_range.max",
+                    "staticLookup": false,
                     "lookup": false,
                     "lookupResource": ""
                   },
@@ -3464,6 +3590,7 @@
                     "required": true,
                     "label": "Min",
                     "id": "ingress_security_rules.tcp_options.source_port_range.min",
+                    "staticLookup": false,
                     "lookup": false,
                     "lookupResource": ""
                   }
@@ -3490,6 +3617,7 @@
                 "required": false,
                 "label": "Max",
                 "id": "ingress_security_rules.udp_options.max",
+                "staticLookup": false,
                 "lookup": false,
                 "lookupResource": ""
               },
@@ -3502,6 +3630,7 @@
                 "required": false,
                 "label": "Min",
                 "id": "ingress_security_rules.udp_options.min",
+                "staticLookup": false,
                 "lookup": false,
                 "lookupResource": ""
               },
@@ -3524,6 +3653,7 @@
                     "required": true,
                     "label": "Max",
                     "id": "ingress_security_rules.udp_options.source_port_range.max",
+                    "staticLookup": false,
                     "lookup": false,
                     "lookupResource": ""
                   },
@@ -3536,6 +3666,7 @@
                     "required": true,
                     "label": "Min",
                     "id": "ingress_security_rules.udp_options.source_port_range.min",
+                    "staticLookup": false,
                     "lookup": false,
                     "lookupResource": ""
                   }
@@ -3561,6 +3692,7 @@
         "required": false,
         "label": "Block Traffic",
         "id": "block_traffic",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -3573,6 +3705,7 @@
         "required": true,
         "label": "Compartment",
         "id": "compartment_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "compartment"
       },
@@ -3585,6 +3718,7 @@
         "required": false,
         "label": "Defined Tags",
         "id": "defined_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -3597,6 +3731,7 @@
         "required": false,
         "label": "Display Name",
         "id": "display_name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -3609,6 +3744,7 @@
         "required": false,
         "label": "Freeform Tags",
         "id": "freeform_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -3621,6 +3757,7 @@
         "required": false,
         "label": "Route Table",
         "id": "route_table_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "route_table"
       },
@@ -3633,6 +3770,7 @@
         "required": true,
         "label": "Vcn",
         "id": "vcn_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "vcn"
       },
@@ -3655,6 +3793,7 @@
             "required": true,
             "label": "Service",
             "id": "services.service_id",
+            "staticLookup": false,
             "lookup": true,
             "lookupResource": "service"
           },
@@ -3667,6 +3806,7 @@
             "required": false,
             "label": "Service Name",
             "id": "services.service_name",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           }
@@ -3688,7 +3828,8 @@
         "required": false,
         "label": "Availability Domain",
         "id": "availability_domain",
-        "lookup": false,
+        "staticLookup": true,
+        "lookup": true,
         "lookupResource": ""
       },
       "cidr_block": {
@@ -3700,6 +3841,7 @@
         "required": true,
         "label": "Cidr Block",
         "id": "cidr_block",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -3712,6 +3854,7 @@
         "required": true,
         "label": "Compartment",
         "id": "compartment_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "compartment"
       },
@@ -3724,6 +3867,7 @@
         "required": false,
         "label": "Defined Tags",
         "id": "defined_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -3736,6 +3880,7 @@
         "required": false,
         "label": "Dhcp Options",
         "id": "dhcp_options_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "dhcp_options"
       },
@@ -3748,6 +3893,7 @@
         "required": false,
         "label": "Display Name",
         "id": "display_name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -3760,6 +3906,7 @@
         "required": false,
         "label": "Dns Label",
         "id": "dns_label",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -3772,6 +3919,7 @@
         "required": false,
         "label": "Freeform Tags",
         "id": "freeform_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -3784,18 +3932,7 @@
         "required": false,
         "label": "Ipv6cidr Block",
         "id": "ipv6cidr_block",
-        "lookup": false,
-        "lookupResource": ""
-      },
-      "ipv6virtual_router_ip": {
-        "provider": "oci",
-        "key": "ipv6virtualRouterIp",
-        "name": "ipv6virtual_router_ip",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Ipv6virtual Router Ip",
-        "id": "ipv6virtual_router_ip",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -3808,6 +3945,7 @@
         "required": false,
         "label": "Prohibit Internet Ingress",
         "id": "prohibit_internet_ingress",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -3820,6 +3958,7 @@
         "required": false,
         "label": "Prohibit Public Ip On Vnic",
         "id": "prohibit_public_ip_on_vnic",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -3832,6 +3971,7 @@
         "required": false,
         "label": "Route Table",
         "id": "route_table_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "route_table"
       },
@@ -3844,20 +3984,9 @@
         "required": false,
         "label": "Security List",
         "id": "security_list_ids",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "security_list"
-      },
-      "subnet_domain_name": {
-        "provider": "oci",
-        "key": "subnetDomainName",
-        "name": "subnet_domain_name",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Subnet Domain Name",
-        "id": "subnet_domain_name",
-        "lookup": false,
-        "lookupResource": ""
       },
       "vcn_id": {
         "provider": "oci",
@@ -3868,6 +3997,7 @@
         "required": true,
         "label": "Vcn",
         "id": "vcn_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "vcn"
       }
@@ -3887,6 +4017,7 @@
         "required": false,
         "label": "Cidr Blocks",
         "id": "cidr_blocks",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -3899,6 +4030,7 @@
         "required": true,
         "label": "Compartment",
         "id": "compartment_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "compartment"
       },
@@ -3911,6 +4043,7 @@
         "required": false,
         "label": "Defined Tags",
         "id": "defined_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -3923,6 +4056,7 @@
         "required": false,
         "label": "Display Name",
         "id": "display_name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -3935,6 +4069,7 @@
         "required": false,
         "label": "Dns Label",
         "id": "dns_label",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -3947,6 +4082,7 @@
         "required": false,
         "label": "Freeform Tags",
         "id": "freeform_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -3959,6 +4095,7 @@
         "required": false,
         "label": "Ipv6cidr Blocks",
         "id": "ipv6cidr_blocks",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -3971,6 +4108,7 @@
         "required": false,
         "label": "Is Ipv6enabled",
         "id": "is_ipv6enabled",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       }
@@ -3990,6 +4128,7 @@
         "required": false,
         "label": "Auto Tuned Vpus Per Gb",
         "id": "auto_tuned_vpus_per_gb",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4002,20 +4141,9 @@
         "required": true,
         "label": "Availability Domain",
         "id": "availability_domain",
-        "lookup": false,
-        "lookupResource": ""
-      },
-      "backup_policy_id": {
-        "provider": "oci",
-        "key": "backupPolicyId",
-        "name": "backup_policy_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Backup Policy",
-        "id": "backup_policy_id",
+        "staticLookup": true,
         "lookup": true,
-        "lookupResource": "backup_policy"
+        "lookupResource": ""
       },
       "block_volume_replicas_deletion": {
         "provider": "oci",
@@ -4026,6 +4154,7 @@
         "required": false,
         "label": "Block Volume Replicas Deletion",
         "id": "block_volume_replicas_deletion",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4038,6 +4167,7 @@
         "required": true,
         "label": "Compartment",
         "id": "compartment_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "compartment"
       },
@@ -4050,6 +4180,7 @@
         "required": false,
         "label": "Defined Tags",
         "id": "defined_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4062,6 +4193,7 @@
         "required": false,
         "label": "Display Name",
         "id": "display_name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4074,18 +4206,7 @@
         "required": false,
         "label": "Freeform Tags",
         "id": "freeform_tags",
-        "lookup": false,
-        "lookupResource": ""
-      },
-      "is_auto_tune_enabled": {
-        "provider": "oci",
-        "key": "isAutoTuneEnabled",
-        "name": "is_auto_tune_enabled",
-        "type": "bool",
-        "subtype": "",
-        "required": false,
-        "label": "Is Auto Tune Enabled",
-        "id": "is_auto_tune_enabled",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4098,6 +4219,7 @@
         "required": false,
         "label": "Is Hydrated",
         "id": "is_hydrated",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4110,6 +4232,7 @@
         "required": false,
         "label": "Kms Key",
         "id": "kms_key_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "kms_key"
       },
@@ -4122,18 +4245,7 @@
         "required": false,
         "label": "Size In Gbs",
         "id": "size_in_gbs",
-        "lookup": false,
-        "lookupResource": ""
-      },
-      "size_in_mbs": {
-        "provider": "oci",
-        "key": "sizeInMbs",
-        "name": "size_in_mbs",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Size In Mbs",
-        "id": "size_in_mbs",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4146,6 +4258,7 @@
         "required": false,
         "label": "Volume Backup",
         "id": "volume_backup_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "volume_backup"
       },
@@ -4158,6 +4271,7 @@
         "required": false,
         "label": "Volume Group",
         "id": "volume_group_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "volume_group"
       },
@@ -4170,6 +4284,7 @@
         "required": false,
         "label": "Vpus Per Gb",
         "id": "vpus_per_gb",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4192,7 +4307,8 @@
             "required": true,
             "label": "Availability Domain",
             "id": "block_volume_replicas.availability_domain",
-            "lookup": false,
+            "staticLookup": true,
+            "lookup": true,
             "lookupResource": ""
           },
           "block_volume_replica_id": {
@@ -4204,6 +4320,7 @@
             "required": false,
             "label": "Block Volume Replica",
             "id": "block_volume_replicas.block_volume_replica_id",
+            "staticLookup": false,
             "lookup": true,
             "lookupResource": "block_volume_replica"
           },
@@ -4216,6 +4333,7 @@
             "required": false,
             "label": "Display Name",
             "id": "block_volume_replicas.display_name",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           }
@@ -4240,6 +4358,7 @@
             "required": true,
             "label": "Type",
             "id": "source_details.type",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           }
@@ -4261,6 +4380,7 @@
         "required": false,
         "label": "Admin Password",
         "id": "admin_password",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4273,6 +4393,7 @@
         "required": false,
         "label": "Are Primary Whitelisted Ips Used",
         "id": "are_primary_whitelisted_ips_used",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4285,6 +4406,7 @@
         "required": false,
         "label": "Autonomous Container Database",
         "id": "autonomous_container_database_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "autonomous_container_database"
       },
@@ -4297,6 +4419,7 @@
         "required": false,
         "label": "Autonomous Database Backup",
         "id": "autonomous_database_backup_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "autonomous_database_backup"
       },
@@ -4309,6 +4432,7 @@
         "required": false,
         "label": "Autonomous Database",
         "id": "autonomous_database_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "autonomous_database"
       },
@@ -4321,6 +4445,7 @@
         "required": false,
         "label": "Available Upgrade Versions",
         "id": "available_upgrade_versions",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4333,6 +4458,7 @@
         "required": false,
         "label": "Clone Type",
         "id": "clone_type",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4345,6 +4471,7 @@
         "required": true,
         "label": "Compartment",
         "id": "compartment_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "compartment"
       },
@@ -4357,6 +4484,7 @@
         "required": true,
         "label": "Cpu Core Count",
         "id": "cpu_core_count",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4369,6 +4497,7 @@
         "required": false,
         "label": "Data Safe Status",
         "id": "data_safe_status",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4381,6 +4510,7 @@
         "required": false,
         "label": "Data Storage Size In Gb",
         "id": "data_storage_size_in_gb",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4393,6 +4523,7 @@
         "required": false,
         "label": "Data Storage Size In Tbs",
         "id": "data_storage_size_in_tbs",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4405,6 +4536,7 @@
         "required": true,
         "label": "Db Name",
         "id": "db_name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4417,6 +4549,7 @@
         "required": false,
         "label": "Db Version",
         "id": "db_version",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4429,6 +4562,7 @@
         "required": false,
         "label": "Db Workload",
         "id": "db_workload",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4441,6 +4575,7 @@
         "required": false,
         "label": "Defined Tags",
         "id": "defined_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4453,6 +4588,7 @@
         "required": false,
         "label": "Display Name",
         "id": "display_name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4465,6 +4601,7 @@
         "required": false,
         "label": "Failed Data Recovery In Seconds",
         "id": "failed_data_recovery_in_seconds",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4477,6 +4614,7 @@
         "required": false,
         "label": "Freeform Tags",
         "id": "freeform_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4489,6 +4627,7 @@
         "required": false,
         "label": "Infrastructure Type",
         "id": "infrastructure_type",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4501,6 +4640,7 @@
         "required": false,
         "label": "Is Access Control Enabled",
         "id": "is_access_control_enabled",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4513,6 +4653,7 @@
         "required": false,
         "label": "Is Auto Scaling Enabled",
         "id": "is_auto_scaling_enabled",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4525,6 +4666,7 @@
         "required": false,
         "label": "Is Data Guard Enabled",
         "id": "is_data_guard_enabled",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4537,6 +4679,7 @@
         "required": false,
         "label": "Is Dedicated",
         "id": "is_dedicated",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4549,6 +4692,7 @@
         "required": false,
         "label": "Is Free Tier",
         "id": "is_free_tier",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4561,6 +4705,7 @@
         "required": false,
         "label": "Is Preview",
         "id": "is_preview",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4573,6 +4718,7 @@
         "required": false,
         "label": "Is Preview Version With Service Terms Accepted",
         "id": "is_preview_version_with_service_terms_accepted",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4585,6 +4731,7 @@
         "required": false,
         "label": "Is Refreshable Clone",
         "id": "is_refreshable_clone",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4597,6 +4744,7 @@
         "required": false,
         "label": "Key Store",
         "id": "key_store_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "key_store"
       },
@@ -4609,6 +4757,7 @@
         "required": false,
         "label": "Key Store Wallet Name",
         "id": "key_store_wallet_name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4621,6 +4770,7 @@
         "required": false,
         "label": "License Model",
         "id": "license_model",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4633,6 +4783,7 @@
         "required": false,
         "label": "Lifecycle Details",
         "id": "lifecycle_details",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4645,6 +4796,7 @@
         "required": false,
         "label": "Nsg",
         "id": "nsg_ids",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "nsg"
       },
@@ -4657,6 +4809,7 @@
         "required": false,
         "label": "Open Mode",
         "id": "open_mode",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4669,6 +4822,7 @@
         "required": false,
         "label": "Operations Insights Status",
         "id": "operations_insights_status",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4681,6 +4835,7 @@
         "required": false,
         "label": "Permission Level",
         "id": "permission_level",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4693,6 +4848,7 @@
         "required": false,
         "label": "Private Endpoint",
         "id": "private_endpoint",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4705,6 +4861,7 @@
         "required": false,
         "label": "Private Endpoint Ip",
         "id": "private_endpoint_ip",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4717,6 +4874,7 @@
         "required": false,
         "label": "Private Endpoint Label",
         "id": "private_endpoint_label",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4729,6 +4887,7 @@
         "required": false,
         "label": "Refreshable Mode",
         "id": "refreshable_mode",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4741,6 +4900,7 @@
         "required": false,
         "label": "Refreshable Status",
         "id": "refreshable_status",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4753,6 +4913,7 @@
         "required": false,
         "label": "Role",
         "id": "role",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4765,6 +4926,7 @@
         "required": false,
         "label": "Rotate Key Trigger",
         "id": "rotate_key_trigger",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4777,6 +4939,7 @@
         "required": false,
         "label": "Service Console Url",
         "id": "service_console_url",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4789,6 +4952,7 @@
         "required": false,
         "label": "Source",
         "id": "source",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4801,6 +4965,7 @@
         "required": false,
         "label": "Source",
         "id": "source_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "source"
       },
@@ -4813,6 +4978,7 @@
         "required": false,
         "label": "Standby Whitelisted Ips",
         "id": "standby_whitelisted_ips",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4825,6 +4991,7 @@
         "required": false,
         "label": "Subnet",
         "id": "subnet_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "subnet"
       },
@@ -4837,6 +5004,7 @@
         "required": false,
         "label": "Switchover To",
         "id": "switchover_to",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4849,6 +5017,7 @@
         "required": false,
         "label": "Timestamp",
         "id": "timestamp",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4861,6 +5030,7 @@
         "required": false,
         "label": "Used Data Storage Size In Tbs",
         "id": "used_data_storage_size_in_tbs",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4873,6 +5043,7 @@
         "required": false,
         "label": "Whitelisted Ips",
         "id": "whitelisted_ips",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4895,6 +5066,7 @@
             "required": false,
             "label": "Email",
             "id": "customer_contacts.email",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           }
@@ -4916,7 +5088,8 @@
         "required": true,
         "label": "Availability Domain",
         "id": "availability_domain",
-        "lookup": false,
+        "staticLookup": true,
+        "lookup": true,
         "lookupResource": ""
       },
       "backup_network_nsg_ids": {
@@ -4928,6 +5101,7 @@
         "required": false,
         "label": "Backup Network Nsg",
         "id": "backup_network_nsg_ids",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "backup_network_nsg"
       },
@@ -4940,6 +5114,7 @@
         "required": false,
         "label": "Backup Subnet",
         "id": "backup_subnet_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "backup_subnet"
       },
@@ -4952,6 +5127,7 @@
         "required": false,
         "label": "Cluster Name",
         "id": "cluster_name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4964,6 +5140,7 @@
         "required": true,
         "label": "Compartment",
         "id": "compartment_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "compartment"
       },
@@ -4976,6 +5153,7 @@
         "required": false,
         "label": "Cpu Core Count",
         "id": "cpu_core_count",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -4988,6 +5166,7 @@
         "required": false,
         "label": "Data Storage Percentage",
         "id": "data_storage_percentage",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -5000,6 +5179,7 @@
         "required": false,
         "label": "Data Storage Size In Gb",
         "id": "data_storage_size_in_gb",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -5012,6 +5192,7 @@
         "required": false,
         "label": "Database Edition",
         "id": "database_edition",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -5024,6 +5205,7 @@
         "required": false,
         "label": "Defined Tags",
         "id": "defined_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -5036,6 +5218,7 @@
         "required": false,
         "label": "Disk Redundancy",
         "id": "disk_redundancy",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -5048,6 +5231,7 @@
         "required": false,
         "label": "Display Name",
         "id": "display_name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -5060,6 +5244,7 @@
         "required": false,
         "label": "Domain",
         "id": "domain",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -5072,6 +5257,7 @@
         "required": false,
         "label": "Fault Domains",
         "id": "fault_domains",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -5084,6 +5270,7 @@
         "required": false,
         "label": "Freeform Tags",
         "id": "freeform_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -5096,6 +5283,7 @@
         "required": true,
         "label": "Hostname",
         "id": "hostname",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -5108,6 +5296,7 @@
         "required": false,
         "label": "Kms Key",
         "id": "kms_key_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "kms_key"
       },
@@ -5120,6 +5309,7 @@
         "required": false,
         "label": "Kms Key Version",
         "id": "kms_key_version_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "kms_key_version"
       },
@@ -5132,6 +5322,7 @@
         "required": false,
         "label": "Last Maintenance Run",
         "id": "last_maintenance_run_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "last_maintenance_run"
       },
@@ -5144,6 +5335,7 @@
         "required": false,
         "label": "Last Patch History Entry",
         "id": "last_patch_history_entry_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "last_patch_history_entry"
       },
@@ -5156,6 +5348,7 @@
         "required": false,
         "label": "License Model",
         "id": "license_model",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -5168,6 +5361,7 @@
         "required": false,
         "label": "Lifecycle Details",
         "id": "lifecycle_details",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -5180,6 +5374,7 @@
         "required": false,
         "label": "Listener Port",
         "id": "listener_port",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -5192,6 +5387,7 @@
         "required": false,
         "label": "Next Maintenance Run",
         "id": "next_maintenance_run_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "next_maintenance_run"
       },
@@ -5204,6 +5400,7 @@
         "required": false,
         "label": "Node Count",
         "id": "node_count",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -5216,6 +5413,7 @@
         "required": false,
         "label": "Nsg",
         "id": "nsg_ids",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "nsg"
       },
@@ -5228,6 +5426,7 @@
         "required": false,
         "label": "Point In Time Data Disk Clone Timestamp",
         "id": "point_in_time_data_disk_clone_timestamp",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -5240,6 +5439,7 @@
         "required": false,
         "label": "Private Ip",
         "id": "private_ip",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -5252,6 +5452,7 @@
         "required": false,
         "label": "Reco Storage Size In Gb",
         "id": "reco_storage_size_in_gb",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -5264,6 +5465,7 @@
         "required": false,
         "label": "Scan Dns Name",
         "id": "scan_dns_name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -5276,6 +5478,7 @@
         "required": false,
         "label": "Scan Dns Record",
         "id": "scan_dns_record_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "scan_dns_record"
       },
@@ -5288,6 +5491,7 @@
         "required": false,
         "label": "Scan Ip",
         "id": "scan_ip_ids",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "scan_ip"
       },
@@ -5300,6 +5504,7 @@
         "required": true,
         "label": "Shape",
         "id": "shape",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -5312,6 +5517,7 @@
         "required": false,
         "label": "Source",
         "id": "source",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -5324,6 +5530,7 @@
         "required": false,
         "label": "Source Db System",
         "id": "source_db_system_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "source_db_system"
       },
@@ -5336,6 +5543,7 @@
         "required": false,
         "label": "Sparse Diskgroup",
         "id": "sparse_diskgroup",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -5348,6 +5556,7 @@
         "required": true,
         "label": "Ssh Public Keys",
         "id": "ssh_public_keys",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -5360,6 +5569,7 @@
         "required": true,
         "label": "Subnet",
         "id": "subnet_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "subnet"
       },
@@ -5372,6 +5582,7 @@
         "required": false,
         "label": "Time Zone",
         "id": "time_zone",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -5384,6 +5595,7 @@
         "required": false,
         "label": "Version",
         "id": "version",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -5396,6 +5608,7 @@
         "required": false,
         "label": "Vip",
         "id": "vip_ids",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "vip"
       },
@@ -5408,6 +5621,7 @@
         "required": false,
         "label": "Zone",
         "id": "zone_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "zone"
       },
@@ -5430,6 +5644,7 @@
             "required": false,
             "label": "Create Async",
             "id": "db_home.create_async",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -5442,6 +5657,7 @@
             "required": false,
             "label": "Database Software Image",
             "id": "db_home.database_software_image_id",
+            "staticLookup": false,
             "lookup": true,
             "lookupResource": "database_software_image"
           },
@@ -5454,6 +5670,7 @@
             "required": false,
             "label": "Db Home Location",
             "id": "db_home.db_home_location",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -5466,6 +5683,7 @@
             "required": false,
             "label": "Db Version",
             "id": "db_home.db_version",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -5478,6 +5696,7 @@
             "required": false,
             "label": "Defined Tags",
             "id": "db_home.defined_tags",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -5490,6 +5709,7 @@
             "required": false,
             "label": "Display Name",
             "id": "db_home.display_name",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -5502,6 +5722,7 @@
             "required": false,
             "label": "Freeform Tags",
             "id": "db_home.freeform_tags",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -5514,6 +5735,7 @@
             "required": false,
             "label": "Last Patch History Entry",
             "id": "db_home.last_patch_history_entry_id",
+            "staticLookup": false,
             "lookup": true,
             "lookupResource": "last_patch_history_entry"
           },
@@ -5526,6 +5748,7 @@
             "required": false,
             "label": "Lifecycle Details",
             "id": "db_home.lifecycle_details",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -5548,6 +5771,7 @@
                 "required": true,
                 "label": "Admin Password",
                 "id": "db_home.database.admin_password",
+                "staticLookup": false,
                 "lookup": false,
                 "lookupResource": ""
               },
@@ -5560,6 +5784,7 @@
                 "required": false,
                 "label": "Backup",
                 "id": "db_home.database.backup_id",
+                "staticLookup": false,
                 "lookup": true,
                 "lookupResource": "backup"
               },
@@ -5572,6 +5797,7 @@
                 "required": false,
                 "label": "Backup Tde Password",
                 "id": "db_home.database.backup_tde_password",
+                "staticLookup": false,
                 "lookup": false,
                 "lookupResource": ""
               },
@@ -5584,6 +5810,7 @@
                 "required": false,
                 "label": "Character Set",
                 "id": "db_home.database.character_set",
+                "staticLookup": false,
                 "lookup": false,
                 "lookupResource": ""
               },
@@ -5596,6 +5823,7 @@
                 "required": false,
                 "label": "Database",
                 "id": "db_home.database.database_id",
+                "staticLookup": false,
                 "lookup": true,
                 "lookupResource": "database"
               },
@@ -5608,6 +5836,7 @@
                 "required": false,
                 "label": "Database Software Image",
                 "id": "db_home.database.database_software_image_id",
+                "staticLookup": false,
                 "lookup": true,
                 "lookupResource": "database_software_image"
               },
@@ -5620,6 +5849,7 @@
                 "required": false,
                 "label": "Db Domain",
                 "id": "db_home.database.db_domain",
+                "staticLookup": false,
                 "lookup": false,
                 "lookupResource": ""
               },
@@ -5632,6 +5862,7 @@
                 "required": false,
                 "label": "Db Name",
                 "id": "db_home.database.db_name",
+                "staticLookup": false,
                 "lookup": false,
                 "lookupResource": ""
               },
@@ -5644,6 +5875,7 @@
                 "required": false,
                 "label": "Db Unique Name",
                 "id": "db_home.database.db_unique_name",
+                "staticLookup": false,
                 "lookup": false,
                 "lookupResource": ""
               },
@@ -5656,6 +5888,7 @@
                 "required": false,
                 "label": "Db Workload",
                 "id": "db_home.database.db_workload",
+                "staticLookup": false,
                 "lookup": false,
                 "lookupResource": ""
               },
@@ -5668,6 +5901,7 @@
                 "required": false,
                 "label": "Defined Tags",
                 "id": "db_home.database.defined_tags",
+                "staticLookup": false,
                 "lookup": false,
                 "lookupResource": ""
               },
@@ -5680,6 +5914,7 @@
                 "required": false,
                 "label": "Freeform Tags",
                 "id": "db_home.database.freeform_tags",
+                "staticLookup": false,
                 "lookup": false,
                 "lookupResource": ""
               },
@@ -5692,6 +5927,7 @@
                 "required": false,
                 "label": "Lifecycle Details",
                 "id": "db_home.database.lifecycle_details",
+                "staticLookup": false,
                 "lookup": false,
                 "lookupResource": ""
               },
@@ -5704,6 +5940,7 @@
                 "required": false,
                 "label": "Ncharacter Set",
                 "id": "db_home.database.ncharacter_set",
+                "staticLookup": false,
                 "lookup": false,
                 "lookupResource": ""
               },
@@ -5716,6 +5953,7 @@
                 "required": false,
                 "label": "Pdb Name",
                 "id": "db_home.database.pdb_name",
+                "staticLookup": false,
                 "lookup": false,
                 "lookupResource": ""
               },
@@ -5728,6 +5966,7 @@
                 "required": false,
                 "label": "Tde Wallet Password",
                 "id": "db_home.database.tde_wallet_password",
+                "staticLookup": false,
                 "lookup": false,
                 "lookupResource": ""
               },
@@ -5740,6 +5979,7 @@
                 "required": false,
                 "label": "Time Stamp For Point In Time Recovery",
                 "id": "db_home.database.time_stamp_for_point_in_time_recovery",
+                "staticLookup": false,
                 "lookup": false,
                 "lookupResource": ""
               },
@@ -5762,6 +6002,7 @@
                     "required": false,
                     "label": "Auto Backup Enabled",
                     "id": "db_home.database.db_backup_config.auto_backup_enabled",
+                    "staticLookup": false,
                     "lookup": false,
                     "lookupResource": ""
                   },
@@ -5774,6 +6015,7 @@
                     "required": false,
                     "label": "Auto Backup Window",
                     "id": "db_home.database.db_backup_config.auto_backup_window",
+                    "staticLookup": false,
                     "lookup": false,
                     "lookupResource": ""
                   },
@@ -5786,6 +6028,7 @@
                     "required": false,
                     "label": "Recovery Window In Days",
                     "id": "db_home.database.db_backup_config.recovery_window_in_days",
+                    "staticLookup": false,
                     "lookup": false,
                     "lookupResource": ""
                   },
@@ -5808,6 +6051,7 @@
                         "required": false,
                         "label": "Type",
                         "id": "db_home.database.db_backup_config.backup_destination_details.type",
+                        "staticLookup": false,
                         "lookup": false,
                         "lookupResource": ""
                       }
@@ -5838,6 +6082,7 @@
             "required": false,
             "label": "Storage Management",
             "id": "db_system_options.storage_management",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           }
@@ -5862,6 +6107,7 @@
             "required": false,
             "label": "Hours Of Day",
             "id": "maintenance_window_details.hours_of_day",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -5874,6 +6120,7 @@
             "required": false,
             "label": "Lead Time In Weeks",
             "id": "maintenance_window_details.lead_time_in_weeks",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -5886,6 +6133,7 @@
             "required": false,
             "label": "Preference",
             "id": "maintenance_window_details.preference",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -5898,6 +6146,7 @@
             "required": false,
             "label": "Weeks Of Month",
             "id": "maintenance_window_details.weeks_of_month",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -5920,6 +6169,7 @@
                 "required": false,
                 "label": "Name",
                 "id": "maintenance_window_details.days_of_week.name",
+                "staticLookup": false,
                 "lookup": false,
                 "lookupResource": ""
               }
@@ -5944,6 +6194,7 @@
                 "required": false,
                 "label": "Name",
                 "id": "maintenance_window_details.months.name",
+                "staticLookup": false,
                 "lookup": false,
                 "lookupResource": ""
               }
@@ -5967,7 +6218,8 @@
         "required": true,
         "label": "Availability Domain",
         "id": "availability_domain",
-        "lookup": false,
+        "staticLookup": true,
+        "lookup": true,
         "lookupResource": ""
       },
       "compartment_id": {
@@ -5979,6 +6231,7 @@
         "required": true,
         "label": "Compartment",
         "id": "compartment_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "compartment"
       },
@@ -5991,6 +6244,7 @@
         "required": false,
         "label": "Defined Tags",
         "id": "defined_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6003,6 +6257,7 @@
         "required": false,
         "label": "Display Name",
         "id": "display_name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6015,6 +6270,7 @@
         "required": false,
         "label": "Freeform Tags",
         "id": "freeform_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6027,6 +6283,7 @@
         "required": false,
         "label": "Is Clone Parent",
         "id": "is_clone_parent",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6039,6 +6296,7 @@
         "required": false,
         "label": "Is Hydrated",
         "id": "is_hydrated",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6051,6 +6309,7 @@
         "required": false,
         "label": "Kms Key",
         "id": "kms_key_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "kms_key"
       },
@@ -6063,6 +6322,7 @@
         "required": false,
         "label": "Lifecycle Details",
         "id": "lifecycle_details",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6075,6 +6335,7 @@
         "required": false,
         "label": "Metered Bytes",
         "id": "metered_bytes",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6087,6 +6348,7 @@
         "required": false,
         "label": "Source Snapshot",
         "id": "source_snapshot_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "source_snapshot"
       }
@@ -6106,7 +6368,8 @@
         "required": true,
         "label": "Availability Domain",
         "id": "availability_domain",
-        "lookup": false,
+        "staticLookup": true,
+        "lookup": true,
         "lookupResource": ""
       },
       "compartment_id": {
@@ -6118,6 +6381,7 @@
         "required": true,
         "label": "Compartment",
         "id": "compartment_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "compartment"
       },
@@ -6130,6 +6394,7 @@
         "required": false,
         "label": "Defined Tags",
         "id": "defined_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6142,6 +6407,7 @@
         "required": false,
         "label": "Display Name",
         "id": "display_name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6154,6 +6420,7 @@
         "required": false,
         "label": "Export Set",
         "id": "export_set_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "export_set"
       },
@@ -6166,6 +6433,7 @@
         "required": false,
         "label": "Freeform Tags",
         "id": "freeform_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6178,6 +6446,7 @@
         "required": false,
         "label": "Hostname Label",
         "id": "hostname_label",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6190,6 +6459,7 @@
         "required": false,
         "label": "Ip Address",
         "id": "ip_address",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6202,6 +6472,7 @@
         "required": false,
         "label": "Lifecycle Details",
         "id": "lifecycle_details",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6214,6 +6485,7 @@
         "required": false,
         "label": "Nsg",
         "id": "nsg_ids",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "nsg"
       },
@@ -6226,6 +6498,7 @@
         "required": false,
         "label": "Private Ip",
         "id": "private_ip_ids",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "private_ip"
       },
@@ -6238,6 +6511,7 @@
         "required": true,
         "label": "Subnet",
         "id": "subnet_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "subnet"
       }
@@ -6257,6 +6531,7 @@
         "required": false,
         "label": "Compartment",
         "id": "compartment_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "compartment"
       },
@@ -6269,6 +6544,7 @@
         "required": false,
         "label": "Defined Tags",
         "id": "defined_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6281,6 +6557,7 @@
         "required": true,
         "label": "Description",
         "id": "description",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6293,6 +6570,7 @@
         "required": false,
         "label": "Enable Delete",
         "id": "enable_delete",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6305,6 +6583,7 @@
         "required": false,
         "label": "Freeform Tags",
         "id": "freeform_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6317,6 +6596,7 @@
         "required": true,
         "label": "Name",
         "id": "name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       }
@@ -6327,18 +6607,6 @@
     "type": "object",
     "subtype": "",
     "attributes": {
-      "ETag": {
-        "provider": "oci",
-        "key": "etag",
-        "name": "ETag",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Etag",
-        "id": "ETag",
-        "lookup": false,
-        "lookupResource": ""
-      },
       "compartment_id": {
         "provider": "oci",
         "key": "compartmentId",
@@ -6348,6 +6616,7 @@
         "required": true,
         "label": "Compartment",
         "id": "compartment_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "compartment"
       },
@@ -6360,6 +6629,7 @@
         "required": false,
         "label": "Defined Tags",
         "id": "defined_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6372,6 +6642,7 @@
         "required": true,
         "label": "Description",
         "id": "description",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6384,18 +6655,7 @@
         "required": false,
         "label": "Freeform Tags",
         "id": "freeform_tags",
-        "lookup": false,
-        "lookupResource": ""
-      },
-      "lastUpdateETag": {
-        "provider": "oci",
-        "key": "lastupdateetag",
-        "name": "lastUpdateETag",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Lastupdateetag",
-        "id": "lastUpdateETag",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6408,18 +6668,7 @@
         "required": true,
         "label": "Name",
         "id": "name",
-        "lookup": false,
-        "lookupResource": ""
-      },
-      "policyHash": {
-        "provider": "oci",
-        "key": "policyhash",
-        "name": "policyHash",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Policyhash",
-        "id": "policyHash",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6432,6 +6681,7 @@
         "required": true,
         "label": "Statements",
         "id": "statements",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6444,6 +6694,7 @@
         "required": false,
         "label": "Version Date",
         "id": "version_date",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       }
@@ -6463,6 +6714,7 @@
         "required": true,
         "label": "Compartment",
         "id": "compartment_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "compartment"
       },
@@ -6475,6 +6727,7 @@
         "required": false,
         "label": "Current Key Version",
         "id": "current_key_version",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6487,6 +6740,7 @@
         "required": false,
         "label": "Defined Tags",
         "id": "defined_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6499,6 +6753,7 @@
         "required": false,
         "label": "Desired State",
         "id": "desired_state",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6511,6 +6766,7 @@
         "required": true,
         "label": "Display Name",
         "id": "display_name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6523,6 +6779,7 @@
         "required": false,
         "label": "Freeform Tags",
         "id": "freeform_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6535,6 +6792,7 @@
         "required": false,
         "label": "Is Primary",
         "id": "is_primary",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6547,6 +6805,7 @@
         "required": true,
         "label": "Management Endpoint",
         "id": "management_endpoint",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6559,6 +6818,7 @@
         "required": false,
         "label": "Protection Mode",
         "id": "protection_mode",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6571,6 +6831,7 @@
         "required": false,
         "label": "Restore Trigger",
         "id": "restore_trigger",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6583,6 +6844,7 @@
         "required": false,
         "label": "Restored From Key",
         "id": "restored_from_key_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "restored_from_key"
       },
@@ -6595,6 +6857,7 @@
         "required": false,
         "label": "Time Of Deletion",
         "id": "time_of_deletion",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6607,6 +6870,7 @@
         "required": false,
         "label": "Vault",
         "id": "vault_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "vault"
       },
@@ -6629,6 +6893,7 @@
             "required": true,
             "label": "Algorithm",
             "id": "key_shape.algorithm",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -6641,6 +6906,7 @@
             "required": false,
             "label": "Curve",
             "id": "key_shape.curve_id",
+            "staticLookup": false,
             "lookup": true,
             "lookupResource": "curve"
           },
@@ -6653,6 +6919,7 @@
             "required": true,
             "label": "Length",
             "id": "key_shape.length",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           }
@@ -6677,6 +6944,7 @@
             "required": true,
             "label": "Content Length",
             "id": "restore_from_file.content_length",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -6689,6 +6957,7 @@
             "required": false,
             "label": "Content Md5",
             "id": "restore_from_file.content_md5",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -6701,6 +6970,7 @@
             "required": true,
             "label": "Restore Key From File Details",
             "id": "restore_from_file.restore_key_from_file_details",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           }
@@ -6725,6 +6995,7 @@
             "required": false,
             "label": "Bucket",
             "id": "restore_from_object_store.bucket",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -6737,6 +7008,7 @@
             "required": true,
             "label": "Destination",
             "id": "restore_from_object_store.destination",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -6749,6 +7021,7 @@
             "required": false,
             "label": "Namespace",
             "id": "restore_from_object_store.namespace",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -6761,6 +7034,7 @@
             "required": false,
             "label": "Object",
             "id": "restore_from_object_store.object",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -6773,6 +7047,7 @@
             "required": false,
             "label": "Uri",
             "id": "restore_from_object_store.uri",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           }
@@ -6794,6 +7069,7 @@
         "required": true,
         "label": "Compartment",
         "id": "compartment_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "compartment"
       },
@@ -6806,6 +7082,7 @@
         "required": false,
         "label": "Crypto Endpoint",
         "id": "crypto_endpoint",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6818,6 +7095,7 @@
         "required": false,
         "label": "Defined Tags",
         "id": "defined_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6830,6 +7108,7 @@
         "required": true,
         "label": "Display Name",
         "id": "display_name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6842,6 +7121,7 @@
         "required": false,
         "label": "Freeform Tags",
         "id": "freeform_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6854,6 +7134,7 @@
         "required": false,
         "label": "Is Primary",
         "id": "is_primary",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6866,6 +7147,7 @@
         "required": false,
         "label": "Management Endpoint",
         "id": "management_endpoint",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6878,6 +7160,7 @@
         "required": false,
         "label": "Restore Trigger",
         "id": "restore_trigger",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6890,6 +7173,7 @@
         "required": false,
         "label": "Restored From Vault",
         "id": "restored_from_vault_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "restored_from_vault"
       },
@@ -6902,6 +7186,7 @@
         "required": false,
         "label": "Time Of Deletion",
         "id": "time_of_deletion",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6914,6 +7199,7 @@
         "required": true,
         "label": "Vault Type",
         "id": "vault_type",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -6936,6 +7222,7 @@
             "required": true,
             "label": "Content Length",
             "id": "restore_from_file.content_length",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -6948,6 +7235,7 @@
             "required": false,
             "label": "Content Md5",
             "id": "restore_from_file.content_md5",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -6960,6 +7248,7 @@
             "required": true,
             "label": "Restore Vault From File Details",
             "id": "restore_from_file.restore_vault_from_file_details",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           }
@@ -6984,6 +7273,7 @@
             "required": false,
             "label": "Bucket",
             "id": "restore_from_object_store.bucket",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -6996,6 +7286,7 @@
             "required": true,
             "label": "Destination",
             "id": "restore_from_object_store.destination",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -7008,6 +7299,7 @@
             "required": false,
             "label": "Namespace",
             "id": "restore_from_object_store.namespace",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -7020,6 +7312,7 @@
             "required": false,
             "label": "Object",
             "id": "restore_from_object_store.object",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -7032,6 +7325,7 @@
             "required": false,
             "label": "Uri",
             "id": "restore_from_object_store.uri",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           }
@@ -7053,6 +7347,7 @@
         "required": true,
         "label": "Compartment",
         "id": "compartment_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "compartment"
       },
@@ -7065,6 +7360,7 @@
         "required": false,
         "label": "Defined Tags",
         "id": "defined_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -7077,6 +7373,7 @@
         "required": true,
         "label": "Display Name",
         "id": "display_name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -7089,18 +7386,7 @@
         "required": false,
         "label": "Freeform Tags",
         "id": "freeform_tags",
-        "lookup": false,
-        "lookupResource": ""
-      },
-      "ip_addresses": {
-        "provider": "oci",
-        "key": "ipAddresses",
-        "name": "ip_addresses",
-        "type": "list",
-        "subtype": "string",
-        "required": false,
-        "label": "Ip Addresses",
-        "id": "ip_addresses",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -7113,6 +7399,7 @@
         "required": false,
         "label": "Ip Mode",
         "id": "ip_mode",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -7125,6 +7412,7 @@
         "required": false,
         "label": "Is Private",
         "id": "is_private",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -7137,6 +7425,7 @@
         "required": false,
         "label": "Network Security Group",
         "id": "network_security_group_ids",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "network_security_group"
       },
@@ -7149,6 +7438,7 @@
         "required": true,
         "label": "Shape",
         "id": "shape",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -7161,6 +7451,7 @@
         "required": true,
         "label": "Subnet",
         "id": "subnet_ids",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "subnet"
       },
@@ -7194,6 +7485,7 @@
             "required": true,
             "label": "Maximum Bandwidth In Mbps",
             "id": "shape_details.maximum_bandwidth_in_mbps",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -7206,6 +7498,7 @@
             "required": true,
             "label": "Minimum Bandwidth In Mbps",
             "id": "shape_details.minimum_bandwidth_in_mbps",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           }
@@ -7227,6 +7520,7 @@
         "required": true,
         "label": "Admin Password",
         "id": "admin_password",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -7239,6 +7533,7 @@
         "required": true,
         "label": "Admin Username",
         "id": "admin_username",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -7251,7 +7546,8 @@
         "required": true,
         "label": "Availability Domain",
         "id": "availability_domain",
-        "lookup": false,
+        "staticLookup": true,
+        "lookup": true,
         "lookupResource": ""
       },
       "compartment_id": {
@@ -7263,6 +7559,7 @@
         "required": true,
         "label": "Compartment",
         "id": "compartment_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "compartment"
       },
@@ -7275,6 +7572,7 @@
         "required": false,
         "label": "Configuration",
         "id": "configuration_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "configuration"
       },
@@ -7287,6 +7585,7 @@
         "required": false,
         "label": "Data Storage Size In Gb",
         "id": "data_storage_size_in_gb",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -7299,6 +7598,7 @@
         "required": false,
         "label": "Defined Tags",
         "id": "defined_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -7311,6 +7611,7 @@
         "required": false,
         "label": "Description",
         "id": "description",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -7323,6 +7624,7 @@
         "required": false,
         "label": "Display Name",
         "id": "display_name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -7335,7 +7637,8 @@
         "required": false,
         "label": "Fault Domain",
         "id": "fault_domain",
-        "lookup": false,
+        "staticLookup": true,
+        "lookup": true,
         "lookupResource": ""
       },
       "freeform_tags": {
@@ -7347,6 +7650,7 @@
         "required": false,
         "label": "Freeform Tags",
         "id": "freeform_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -7359,6 +7663,7 @@
         "required": false,
         "label": "Hostname Label",
         "id": "hostname_label",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -7371,6 +7676,7 @@
         "required": false,
         "label": "Ip Address",
         "id": "ip_address",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -7383,6 +7689,7 @@
         "required": false,
         "label": "Is Analytics Cluster Attached",
         "id": "is_analytics_cluster_attached",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -7395,6 +7702,7 @@
         "required": false,
         "label": "Is Heat Wave Cluster Attached",
         "id": "is_heat_wave_cluster_attached",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -7407,6 +7715,7 @@
         "required": false,
         "label": "Is Highly Available",
         "id": "is_highly_available",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -7419,18 +7728,7 @@
         "required": false,
         "label": "Lifecycle Details",
         "id": "lifecycle_details",
-        "lookup": false,
-        "lookupResource": ""
-      },
-      "mysql_version": {
-        "provider": "oci",
-        "key": "mysqlVersion",
-        "name": "mysql_version",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Mysql Version",
-        "id": "mysql_version",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -7443,6 +7741,7 @@
         "required": false,
         "label": "Port",
         "id": "port",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -7455,6 +7754,7 @@
         "required": false,
         "label": "Port X",
         "id": "port_x",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -7467,6 +7767,7 @@
         "required": true,
         "label": "Shape Name",
         "id": "shape_name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -7479,6 +7780,7 @@
         "required": false,
         "label": "Shutdown Type",
         "id": "shutdown_type",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -7491,6 +7793,7 @@
         "required": true,
         "label": "Subnet",
         "id": "subnet_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "subnet"
       },
@@ -7503,6 +7806,7 @@
         "required": false,
         "label": "Time Updated",
         "id": "time_updated",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -7525,6 +7829,7 @@
             "required": false,
             "label": "Defined Tags",
             "id": "backup_policy.defined_tags",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -7537,6 +7842,7 @@
             "required": false,
             "label": "Freeform Tags",
             "id": "backup_policy.freeform_tags",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -7549,6 +7855,7 @@
             "required": false,
             "label": "Is Enabled",
             "id": "backup_policy.is_enabled",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -7561,6 +7868,7 @@
             "required": false,
             "label": "Retention In Days",
             "id": "backup_policy.retention_in_days",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -7573,6 +7881,7 @@
             "required": false,
             "label": "Window Start Time",
             "id": "backup_policy.window_start_time",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           }
@@ -7597,6 +7906,7 @@
             "required": true,
             "label": "Window Start Time",
             "id": "maintenance.window_start_time",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           }
@@ -7621,6 +7931,7 @@
             "required": false,
             "label": "Backup",
             "id": "source.backup_id",
+            "staticLookup": false,
             "lookup": true,
             "lookupResource": "backup"
           },
@@ -7633,6 +7944,7 @@
             "required": true,
             "label": "Source Type",
             "id": "source.source_type",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           }
@@ -7654,6 +7966,7 @@
         "required": true,
         "label": "Compartment",
         "id": "compartment_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "compartment"
       },
@@ -7666,6 +7979,7 @@
         "required": false,
         "label": "Defined Tags",
         "id": "defined_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -7678,6 +7992,7 @@
         "required": true,
         "label": "Display Name",
         "id": "display_name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -7690,6 +8005,7 @@
         "required": false,
         "label": "Freeform Tags",
         "id": "freeform_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -7702,6 +8018,7 @@
         "required": false,
         "label": "Is Preserve Source Destination",
         "id": "is_preserve_source_destination",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -7714,6 +8031,7 @@
         "required": false,
         "label": "Is Private",
         "id": "is_private",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -7726,6 +8044,7 @@
         "required": false,
         "label": "Lifecycle Details",
         "id": "lifecycle_details",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -7738,6 +8057,7 @@
         "required": false,
         "label": "Network Security Group",
         "id": "network_security_group_ids",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "network_security_group"
       },
@@ -7750,6 +8070,7 @@
         "required": true,
         "label": "Subnet",
         "id": "subnet_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "subnet"
       },
@@ -7762,6 +8083,7 @@
         "required": false,
         "label": "Time Updated",
         "id": "time_updated",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -7792,6 +8114,7 @@
         "required": false,
         "label": "Compartment",
         "id": "compartment_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "compartment"
       },
@@ -7804,6 +8127,7 @@
         "required": false,
         "label": "Is If Not Exists",
         "id": "is_if_not_exists",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -7816,6 +8140,7 @@
         "required": false,
         "label": "Lifecycle Details",
         "id": "lifecycle_details",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -7828,6 +8153,7 @@
         "required": true,
         "label": "Name",
         "id": "name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -7840,6 +8166,7 @@
         "required": false,
         "label": "Table",
         "id": "table_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "table"
       },
@@ -7852,6 +8179,7 @@
         "required": false,
         "label": "Table Name",
         "id": "table_name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -7864,6 +8192,7 @@
         "required": true,
         "label": "Table Name Or",
         "id": "table_name_or_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "table_name_or"
       },
@@ -7886,6 +8215,7 @@
             "required": true,
             "label": "Column Name",
             "id": "keys.column_name",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -7898,6 +8228,7 @@
             "required": false,
             "label": "Json Field Type",
             "id": "keys.json_field_type",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -7910,6 +8241,7 @@
             "required": false,
             "label": "Json Path",
             "id": "keys.json_path",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           }
@@ -7931,6 +8263,7 @@
         "required": true,
         "label": "Compartment",
         "id": "compartment_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "compartment"
       },
@@ -7943,6 +8276,7 @@
         "required": true,
         "label": "Ddl Statement",
         "id": "ddl_statement",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -7955,6 +8289,7 @@
         "required": false,
         "label": "Defined Tags",
         "id": "defined_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -7967,6 +8302,7 @@
         "required": false,
         "label": "Freeform Tags",
         "id": "freeform_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -7979,6 +8315,7 @@
         "required": false,
         "label": "Is Auto Reclaimable",
         "id": "is_auto_reclaimable",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -7991,6 +8328,7 @@
         "required": false,
         "label": "Lifecycle Details",
         "id": "lifecycle_details",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -8003,6 +8341,7 @@
         "required": true,
         "label": "Name",
         "id": "name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -8015,6 +8354,7 @@
         "required": false,
         "label": "Time Of Expiration",
         "id": "time_of_expiration",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -8027,6 +8367,7 @@
         "required": false,
         "label": "Time Updated",
         "id": "time_updated",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -8049,6 +8390,7 @@
             "required": true,
             "label": "Max Read Units",
             "id": "table_limits.max_read_units",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -8061,6 +8403,7 @@
             "required": true,
             "label": "Max Storage In Gbs",
             "id": "table_limits.max_storage_in_gbs",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -8073,6 +8416,7 @@
             "required": true,
             "label": "Max Write Units",
             "id": "table_limits.max_write_units",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           }
@@ -8094,6 +8438,7 @@
         "required": false,
         "label": "Access Type",
         "id": "access_type",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -8106,6 +8451,7 @@
         "required": false,
         "label": "Approximate Count",
         "id": "approximate_count",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -8118,6 +8464,7 @@
         "required": false,
         "label": "Approximate Size",
         "id": "approximate_size",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -8130,6 +8477,7 @@
         "required": false,
         "label": "Auto Tiering",
         "id": "auto_tiering",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -8142,6 +8490,7 @@
         "required": false,
         "label": "Bucket",
         "id": "bucket_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "bucket"
       },
@@ -8154,6 +8503,7 @@
         "required": true,
         "label": "Compartment",
         "id": "compartment_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "compartment"
       },
@@ -8166,6 +8516,7 @@
         "required": false,
         "label": "Defined Tags",
         "id": "defined_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -8178,6 +8529,7 @@
         "required": false,
         "label": "Freeform Tags",
         "id": "freeform_tags",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -8190,6 +8542,7 @@
         "required": false,
         "label": "Is Read Only",
         "id": "is_read_only",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -8202,6 +8555,7 @@
         "required": false,
         "label": "Kms Key",
         "id": "kms_key_id",
+        "staticLookup": false,
         "lookup": true,
         "lookupResource": "kms_key"
       },
@@ -8214,6 +8568,7 @@
         "required": false,
         "label": "Metadata",
         "id": "metadata",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -8226,6 +8581,7 @@
         "required": true,
         "label": "Name",
         "id": "name",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -8238,6 +8594,7 @@
         "required": true,
         "label": "Namespace",
         "id": "namespace",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -8250,6 +8607,7 @@
         "required": false,
         "label": "Object Events Enabled",
         "id": "object_events_enabled",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -8262,6 +8620,7 @@
         "required": false,
         "label": "Replication Enabled",
         "id": "replication_enabled",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -8274,6 +8633,7 @@
         "required": false,
         "label": "Storage Tier",
         "id": "storage_tier",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -8286,6 +8646,7 @@
         "required": false,
         "label": "Versioning",
         "id": "versioning",
+        "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
@@ -8308,6 +8669,7 @@
             "required": true,
             "label": "Display Name",
             "id": "retention_rules.display_name",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -8320,6 +8682,7 @@
             "required": false,
             "label": "Retention Rule",
             "id": "retention_rules.retention_rule_id",
+            "staticLookup": false,
             "lookup": true,
             "lookupResource": "retention_rule"
           },
@@ -8332,6 +8695,7 @@
             "required": false,
             "label": "Time Modified",
             "id": "retention_rules.time_modified",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -8344,6 +8708,7 @@
             "required": false,
             "label": "Time Rule Locked",
             "id": "retention_rules.time_rule_locked",
+            "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
           },
@@ -8366,6 +8731,7 @@
                 "required": true,
                 "label": "Time Amount",
                 "id": "retention_rules.duration.time_amount",
+                "staticLookup": false,
                 "lookup": false,
                 "lookupResource": ""
               },
@@ -8378,6 +8744,7 @@
                 "required": true,
                 "label": "Time Unit",
                 "id": "retention_rules.duration.time_unit",
+                "staticLookup": false,
                 "lookup": false,
                 "lookupResource": ""
               }

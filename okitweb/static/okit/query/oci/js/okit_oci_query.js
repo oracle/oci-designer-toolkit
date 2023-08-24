@@ -37,7 +37,13 @@ class OkitOCIQuery {
         console.info('------------- All Resources Query --------------------');
         let me = this;
         const self = this;
+        const profile = request.config_profile
         this.region_query_count[request.region] = 1;
+        console.debug('OkitOCIQuery: Query All Resources Request', request)
+        const section = okitOciConfig.getSection(profile)
+        const config = section && section.session ? okitSessionOciConfigs.configs[profile] : {}
+        request.config = JSON.stringify(config)
+        console.debug('OkitOCIQuery: Query All Resources Request', request)
         $.ajax({
             cache: false,
             type: 'get',

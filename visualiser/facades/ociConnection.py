@@ -25,7 +25,7 @@ logger = getLogger()
 
 class OCIConnection(object):
     PAGINATION_LIMIT = 1000
-    OKIT_VERSION = 'v0.53.0'
+    OKIT_VERSION = 'v0.54.0'
 
     def __init__(self, config=None, configfile=None, profile=None, region=None, signer=None):
         self.tenancy_ocid = ''
@@ -35,6 +35,11 @@ class OCIConnection(object):
         self.profile = profile
         self.region = region
         self.instance_principal = (os.getenv('OCI_CLI_AUTH', 'config') == 'instance_principal')
+        logger.info(f'OCIConnection: Passed Config {type(self.config)} {self.config}')
+        if (self.config is not None):
+            logger.info(f'OCIConnection: Passed Config {type(self.config)} {self.config.keys()} {self.config}')
+        if (self.config is not None and self.region is not None):
+            self.config['region'] = region
         # Create Instance Security Signer
         logger.info('OCI_CLI_AUTH = ' + os.getenv('OCI_CLI_AUTH', 'Undefined'))
         if signer is None:
@@ -116,14 +121,25 @@ class OCIConnection(object):
 
     def signerFromConfig(self):
         self.loadConfig()
-        self.signer = oci.Signer(
-            tenancy=self.config["tenancy"],
-            # tenancy=self.config.get('boat_tenancy', self.config["tenancy"]),
-            user=self.config["user"],
-            fingerprint=self.config["fingerprint"],
-            private_key_file_location=self.config.get("key_file"),
-            pass_phrase=oci.config.get_config_value_or_default(self.config, "pass_phrase")
-        )
+        if self.config.get("key_content") is not None:
+            self.signer = oci.Signer(
+                tenancy=self.config["tenancy"],
+                # tenancy=self.config.get('boat_tenancy', self.config["tenancy"]),
+                user=self.config["user"],
+                fingerprint=self.config["fingerprint"],
+                private_key_file_location=None,
+                pass_phrase=oci.config.get_config_value_or_default(self.config, "pass_phrase"),
+                private_key_content=self.config.get("key_content")
+            )
+        else:
+            self.signer = oci.Signer(
+                tenancy=self.config["tenancy"],
+                # tenancy=self.config.get('boat_tenancy', self.config["tenancy"]),
+                user=self.config["user"],
+                fingerprint=self.config["fingerprint"],
+                private_key_file_location=self.config.get("key_file"),
+                pass_phrase=oci.config.get_config_value_or_default(self.config, "pass_phrase")
+            )
         self.instance_principal = False
 
     def loadConfig(self):
@@ -138,10 +154,13 @@ class OCIConnection(object):
         logger.debug('>>>>>>>>>>>>>>>> Config File    : {0!s:s}'.format(self.configfile))
         logger.debug('>>>>>>>>>>>>>>>> Profile        : {0!s:s}'.format(self.profile))
         # Read Config
-        if self.configfile is None:
-            self.config = oci.config.from_file(profile_name=self.profile)
-        else:
-            self.config = oci.config.from_file(file_location=self.configfile, profile_name=self.profile)
+        try:
+            if self.configfile is None:
+                self.config = oci.config.from_file(profile_name=self.profile)
+            else:
+                self.config = oci.config.from_file(file_location=self.configfile, profile_name=self.profile)
+        except oci.exceptions.ProfileNotFound as e:
+            self.config = {}
         logger.debug('>>>>>>>>>>>>>>>> Profile Config : {0!s:s}'.format(self.config))
         if config is not None:
             self.config.update(config)

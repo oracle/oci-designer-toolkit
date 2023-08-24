@@ -112,6 +112,20 @@
     color: #336600;
 }
 
+.okit-warning-div {
+    display: inline-flex;
+    min-width: 100%;
+    margin: auto;
+    align-items: center;
+}
+
+.okit-warning-label {
+    padding: 5px;
+    font-weight: bolder;
+    font-style: italic;
+    color: #660000;
+}
+
 .okit-validation-results {
     margin-right: 1em;
 }

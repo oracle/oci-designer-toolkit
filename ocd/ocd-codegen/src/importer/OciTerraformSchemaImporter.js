@@ -6,6 +6,7 @@
 import { OcdSchemaImporter } from './OcdSchemaImporter.js'
 import ignoreElements from './json/oci_ignore_elements.json' assert { type: "json" }
 import resourceMap from './json/oci_resource_map.json' assert { type: "json" }
+import elementOverrides from './json/oci_element_overrides.json' assert { type: "json" }
 
 class OciTerraformSchemaImporter extends OcdSchemaImporter {
 
@@ -26,18 +27,20 @@ class OciTerraformSchemaImporter extends OcdSchemaImporter {
     getAttributes(key, block, hierarchy=[]) {
         const ignore_block_types = ['timeouts']
         const ignore_attributes = ignoreElements[key] ? [...ignoreElements.common, ...ignoreElements[key]] : ignoreElements.common
+        const type_overrides = elementOverrides.types[key] ? {...elementOverrides.types.common, ...elementOverrides.types[key]} : elementOverrides.types.common
         // Simple attributes
-        let attributes = block.attributes ? Object.entries(block.attributes).filter(([k, v]) => !ignore_attributes.includes(k)).reduce((r, [k, v]) => {
+        let attributes = block.attributes ? Object.entries(block.attributes).filter(([k, v]) => !ignore_attributes.includes(k) && !v.deprecated).reduce((r, [k, v]) => {
             r[k] = {
                 provider: 'oci',
                 key: this.toCamelCase(k),
                 name: k,
-                type: Array.isArray(v.type) ? v.type[0] : v.type,
+                type: Array.isArray(v.type) ? v.type[0] : type_overrides[k] ? type_overrides[k] : v.type,
                 subtype: Array.isArray(v.type) ? v.type[1] : '',
                 required: v.required ? v.required : false,
                 label: k.endsWith('_id') || k.endsWith('_ids') ? this.titleCase(k.split('_').slice(0, -1).join(' ')) : this.titleCase(k.split('_').join(' ')),
                 id: [...hierarchy, k].join('.'),
-                lookup: this.isReference(k) || this.isMultiReference(k),
+                staticLookup: this.isStaticLookup(k),
+                lookup: this.isReference(k) || this.isMultiReference(k) || this.isLookupOverride(k),
                 lookupResource: this.isReference(k) || this.isMultiReference(k) ? this.lookupResource(k) : ''
             }
             return r
@@ -66,6 +69,8 @@ class OciTerraformSchemaImporter extends OcdSchemaImporter {
 
     isReference = (key) => key && key.endsWith('_id')
     isMultiReference = (key) => key && key.endsWith('_ids')
+    isLookupOverride = (key) => elementOverrides.lookups.includes(key) || elementOverrides.staticLookups.includes(key)
+    isStaticLookup = (key) => elementOverrides.staticLookups.includes(key)
     lookupResource = (key) => key.split('_').slice(0, -1).join('_').toLowerCase()
 }
 
