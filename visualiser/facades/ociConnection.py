@@ -25,7 +25,7 @@ logger = getLogger()
 
 class OCIConnection(object):
     PAGINATION_LIMIT = 1000
-    OKIT_VERSION = 'v0.54.0'
+    OKIT_VERSION = 'v0.54.1'
 
     def __init__(self, config=None, configfile=None, profile=None, region=None, signer=None):
         self.tenancy_ocid = ''
@@ -159,6 +159,8 @@ class OCIConnection(object):
                 self.config = oci.config.from_file(profile_name=self.profile)
             else:
                 self.config = oci.config.from_file(file_location=self.configfile, profile_name=self.profile)
+        except oci.exceptions.ConfigFileNotFound as e:
+            self.config = {}
         except oci.exceptions.ProfileNotFound as e:
             self.config = {}
         logger.debug('>>>>>>>>>>>>>>>> Profile Config : {0!s:s}'.format(self.config))
