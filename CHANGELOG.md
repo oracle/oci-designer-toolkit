@@ -1,6 +1,13 @@
 # Release Notes
 
 
+## Version 0.54.1
+**Release Date**: 25th August 2023
+### Features
+### Bug Fixes
+1. Fix issue where missing config caused server to return error for subscription check and switch from OCI to PCA. Also missing config caused query to fail.
+
+
 ## Version 0.54.0
 **Release Date**: 23rd August 2023
 ### Features
