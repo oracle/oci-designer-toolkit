@@ -152,8 +152,10 @@ def ociResourceManger():
         config_profile = request.args.get('config_profile', default='DEFAULT')
         compartment_id = request.args.get('compartment_id')
         region = request.args.get('region')
+        config = json.loads(request.args.get('config', default='{}', type=str))
+        config.update({'region': region})
         try:
-            config = {'region': region}
+            # config = {'region': region}
             oci_resourcemanager = OCIResourceManagers(config=config, profile=config_profile, compartment_id=compartment_id)
             stacks = oci_resourcemanager.list()
             return json.dumps(stacks, sort_keys=False, indent=2, separators=(',', ': '))
@@ -166,13 +168,15 @@ def ociResourceManger():
         config_profile = request.json.get('location', {}).get('config_profile', 'DEFAULT')
         compartment_id = request.json.get('location', {}).get('compartment_id', None)
         region = request.json.get('location', {}).get('region', None)
+        config = json.loads(request.json.get('location', {}).get('config', '{}'))
+        config.update({'region': region})
         plan_or_apply = request.json.get('location', {}).get('plan_or_apply', 'PLAN')
         create_or_update = request.json.get('location', {}).get('create_or_update', 'CREATE')
         stack_id = request.json.get('location', {}).get('stack_id', '')
         stack_name = request.json.get('location', {}).get('stack_name', 'okit-stack-{0!s:s}'.format(time.strftime('%Y%m%d%H%M%S')))
         logger.info('Using Profile : {0!s:s}'.format(config_profile))
         try:
-            config = {'region': region}
+            # config = {'region': region}
             destination_dir = tempfile.mkdtemp();
             logger.debug(">>>>>>>>>>>>> {0!s:s}".format(destination_dir))
             stack = {}
