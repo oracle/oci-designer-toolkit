@@ -339,7 +339,7 @@ function displayResourceManagerDialog(title='Export To Resource Manager', btn_te
             loadOCICompartments();
             loadRegions(selectRMLastUsedRegion);
         });
-    for (let section of okitOciConfig.sections) {
+    for (let section of okitOciConfig.getSections()) {
         profile_select.append('option')
             .attr('value', section)
             .text(section);
@@ -500,9 +500,13 @@ function displayResourceManagerDialog(title='Export To Resource Manager', btn_te
     $(jqId('modal_dialog_wrapper')).removeClass('hidden');
 }
 function exportToResourceManager() {
+    const profile = $(jqId('config_profile')).val()
+    const section = okitOciConfig.getSection(profile)
+    const config = section && section.session ? okitSessionOciConfigs.configs[profile] : {}
     let request_json = JSON.clone(okitJsonModel);
     request_json.location = {
         config_profile: $(jqId('config_profile')).val(),
+        config: JSON.stringify(config),
         compartment_id: $(jqId('query_compartment_id')).val(),
         region: $(jqId('query_region_id')).val(),
         stack_name: $('input[name=create_update_toggle]:checked').val() === 'CREATE' ? $(jqId('stack_name')).val().trim() : $('#stack_id  option:selected').text().trim(),
@@ -542,6 +546,9 @@ function loadResourceManagerStacks() {
     let select = $(jqId('stack_id'));
     $(select).empty();
     select.append($('<option>').attr('value', 'Retrieving').text('Retrieving..........'));
+    const profile = $(jqId('config_profile')).val()
+    const section = okitOciConfig.getSection(profile)
+    const config = section && section.session ? okitSessionOciConfigs.configs[profile] : {}
     $.ajax({
         cache: false,
         type: 'get',
@@ -551,7 +558,8 @@ function loadResourceManagerStacks() {
         data: {
             config_profile: $(jqId('config_profile')).val(),
             compartment_id: $(jqId('query_compartment_id')).val(),
-            region: $(jqId('query_region_id')).val()
+            region: $(jqId('query_region_id')).val(),
+            config: JSON.stringify(config),
         },
         success: function(resp) {
             let jsonBody = JSON.parse(resp)

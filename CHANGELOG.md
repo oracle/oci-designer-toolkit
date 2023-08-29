@@ -1,6 +1,13 @@
 # Release Notes
 
 
+## Version 0.54.2
+**Release Date**: 29th August 2023
+### Features
+### Bug Fixes
+1. Fix issue where Export To Resource Manager was not using Session based configuration.
+
+
 ## Version 0.54.1
 **Release Date**: 25th August 2023
 ### Features

@@ -25,7 +25,7 @@ logger = getLogger()
 
 class OCIConnection(object):
     PAGINATION_LIMIT = 1000
-    OKIT_VERSION = 'v0.54.1'
+    OKIT_VERSION = 'v0.54.2'
 
     def __init__(self, config=None, configfile=None, profile=None, region=None, signer=None):
         self.tenancy_ocid = ''
@@ -35,9 +35,6 @@ class OCIConnection(object):
         self.profile = profile
         self.region = region
         self.instance_principal = (os.getenv('OCI_CLI_AUTH', 'config') == 'instance_principal')
-        logger.info(f'OCIConnection: Passed Config {type(self.config)} {self.config}')
-        if (self.config is not None):
-            logger.info(f'OCIConnection: Passed Config {type(self.config)} {self.config.keys()} {self.config}')
         if (self.config is not None and self.region is not None):
             self.config['region'] = region
         # Create Instance Security Signer
@@ -150,7 +147,7 @@ class OCIConnection(object):
             config = {}
         if self.profile is None or len(self.profile.strip()) == 0:
             self.profile = 'DEFAULT'
-        logger.debug('>>>>>>>>>>>>>>>> Config         : {0!s:s}'.format(self.config))
+        # logger.debug('>>>>>>>>>>>>>>>> Config         : {0!s:s}'.format(self.config))
         logger.debug('>>>>>>>>>>>>>>>> Config File    : {0!s:s}'.format(self.configfile))
         logger.debug('>>>>>>>>>>>>>>>> Profile        : {0!s:s}'.format(self.profile))
         # Read Config
@@ -163,10 +160,10 @@ class OCIConnection(object):
             self.config = {}
         except oci.exceptions.ProfileNotFound as e:
             self.config = {}
-        logger.debug('>>>>>>>>>>>>>>>> Profile Config : {0!s:s}'.format(self.config))
+        # logger.debug('>>>>>>>>>>>>>>>> Profile Config : {0!s:s}'.format(self.config))
         if config is not None:
             self.config.update(config)
-        logger.debug('>>>>>>>>>>>>>>>> Merged Config  : {0!s:s}'.format(self.config))
+        # logger.debug('>>>>>>>>>>>>>>>> Merged Config  : {0!s:s}'.format(self.config))
 
     def getTenancy(self):
         if self.tenancy_ocid is None or self.tenancy_ocid == '':
