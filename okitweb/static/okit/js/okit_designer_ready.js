@@ -16,13 +16,7 @@ let okitGitConfig = undefined;
 let okitAutoSave = undefined;
 let okitRegions = undefined;
 //let okitTabularView = new OkitTabularJsonView();
-/*
-** Ready function initiated on page load.
- */
-$(document).ready(function() {
-    /*
-    ** Initialise OKIT Variables
-     */
+const initialiseGlobals = () => {
     okitSessionOciConfigs = new OkitSessionOCIConfigs();
     okitSettings = new OkitSettings();
     okitOciConfig = new OkitOCIConfig(loadHeaderConfigDropDown);
@@ -30,7 +24,24 @@ $(document).ready(function() {
     okitOciData = new OkitOCIData(okitSettings.profile, okitSettings.region);
     okitGitConfig = new OkitGITConfig();
     okitOciProductPricing = new OkitOciProductPricing()
-    // okitJsonModel = new OkitJson();
+
+}
+/*
+** Ready function initiated on page load.
+ */
+$(document).ready(function() {
+    /*
+    ** Initialise OKIT Variables
+     */
+    initialiseGlobals()
+    // okitSessionOciConfigs = new OkitSessionOCIConfigs();
+    // okitSettings = new OkitSettings();
+    // okitOciConfig = new OkitOCIConfig(loadHeaderConfigDropDown);
+    // okitRegions = new OkitRegions(loadHeaderRegionsDropDown);
+    // okitOciData = new OkitOCIData(okitSettings.profile, okitSettings.region);
+    // okitGitConfig = new OkitGITConfig();
+    // okitOciProductPricing = new OkitOciProductPricing()
+    // // okitJsonModel = new OkitJson();
     newModel()
     okitJsonView = OkitCompartmentJsonView.newView(okitJsonModel, okitOciData, resource_icons);
     // okitJsonView = new OkitCompartmentJsonView(okitJsonModel);
