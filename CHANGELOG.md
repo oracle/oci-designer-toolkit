@@ -1,6 +1,13 @@
 # Release Notes
 
 
+## Version 0.54.4
+**Release Date**: 31st August 2023
+### Features
+### Bug Fixes
+1. Fix issue where banner dropdown failing to load on hard refresh.
+
+
 ## Version 0.54.3
 **Release Date**: 31st August 2023
 ### Features
