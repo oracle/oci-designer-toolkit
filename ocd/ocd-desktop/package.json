@@ -21,7 +21,9 @@
   "config": {
     "forge": {
       "packagerConfig": {
-        "asar": true
+        "asar": true,
+        "name": "ocd",
+        "executableName": "ocd"
       },
       "rebuildConfig": {},
       "makers": [
