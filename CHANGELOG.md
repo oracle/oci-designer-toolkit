@@ -1,6 +1,13 @@
 # Release Notes
 
 
+## Version 0.54.3
+**Release Date**: 31st August 2023
+### Features
+### Bug Fixes
+1. Modify load calls for OkitOciData to use Promise and async.
+
+
 ## Version 0.54.2
 **Release Date**: 29th August 2023
 ### Features

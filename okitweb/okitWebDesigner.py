@@ -72,7 +72,10 @@ def readConfigFileSections(config_file='~/.oci/config'):
         config = configparser.ConfigParser()
         config.read(abs_config_file)
         config_sections = []
-        if 'DEFAULT' in config:
+        logger.info(f'Read Config: {config}')
+        for section in config:
+            logger.info(f'Config Section: {section} - has tenancy {config.has_option(section, "tenancy")}')
+        if 'DEFAULT' in config and config.has_option('DEFAULT', 'tenancy'):
             config_sections = ['DEFAULT']
         config_sections.extend(config.sections())
     else:
@@ -92,25 +95,26 @@ def readAndValidateConfigFileSections(config_file='~/.oci/config'):
         #     config_sections = ['DEFAULT']
         # config_sections.extend(config.sections())
         for section in config:
-            entry = {
-                "section": section,
-                "valid": True,
-                "reason": ''
-            }
-            # Validate Key
-            # key_file = config[section]['key_file']
-            # if not os.path.exists(os.path.expanduser(key_file)):
-            #     entry["valid"] = False
-            #     entry["reason"] = f'{key_file} does not exist in ~/.oci'
-            if config.has_option(section, 'key_file'):
-                key_file = config[section]['key_file']
-                if not os.path.exists(os.path.expanduser(key_file)):
+            if config.has_option(section, 'tenancy'):
+                entry = {
+                    "section": section,
+                    "valid": True,
+                    "reason": ''
+                }
+                # Validate Key
+                # key_file = config[section]['key_file']
+                # if not os.path.exists(os.path.expanduser(key_file)):
+                #     entry["valid"] = False
+                #     entry["reason"] = f'{key_file} does not exist in ~/.oci'
+                if config.has_option(section, 'key_file'):
+                    key_file = config[section]['key_file']
+                    if not os.path.exists(os.path.expanduser(key_file)):
+                        entry["valid"] = False
+                        entry["reason"] = '[{0!s:s}] Key File {1!s:s} does not exist.'.format(section, key_file)
+                else:
                     entry["valid"] = False
-                    entry["reason"] = '[{0!s:s}] Key File {1!s:s} does not exist.'.format(section, key_file)
-            else:
-                entry["valid"] = False
-                entry["reason"] = '[{0!s:s}] Key File entry does not exist.'.format(section)
-            config_sections.append(entry)
+                    entry["reason"] = '[{0!s:s}] Key File entry does not exist.'.format(section)
+                config_sections.append(entry)
     else:
         config_sections = [{"section": 'InstancePrincipal', "valid": True, "reason": ''}]
     logger.info('Config Sections {0!s:s}'.format(config_sections))
