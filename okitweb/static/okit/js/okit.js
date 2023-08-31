@@ -598,6 +598,7 @@ class OkitRegions {
         this.setLocalStorage(profile, this.regions)
     }
 
+    /*
     storeLocal1(profile) {
         console.info(`Storing Local Region data for ${profile}`);
         const local_data = localStorage.getItem(this.key)
@@ -620,12 +621,13 @@ class OkitRegions {
             return false;
         }
     }
+    */
 
     loadLocal(profile) {
         console.info(`Loading Local Region data for ${profile}`);
         const regions = this.getLocalStorage(profile)
         if (regions) {
-            console.info(`Found Local Region Data for ${profile}`);
+            console.info(`Found Local Region Data for ${profile} ${regions}`);
             this.regions = regions
             return true;
         } else {
@@ -634,10 +636,10 @@ class OkitRegions {
     }
 
     load(profile) {
-        console.info('OkitRegions: Loading Region data for', profile);
+        console.info('OkitRegions: Loading Region data for', profile, this.loaded_callback);
         this.regions = []
         if (!this.loadLocal(profile)) this.query(profile)
-        else if (self.loaded_callback) self.loaded_callback()
+        else if (this.loaded_callback) this.loaded_callback()
     }
 
     query(profile) {
