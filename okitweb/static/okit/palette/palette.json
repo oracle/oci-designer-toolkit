@@ -1,14 +1,14 @@
 {
-    "targets": ["oci", "freetier", "pca"],
+    "targets": ["oci", "freetier", "pca", "c3"],
     "groups": [
         {
             "title": "Containers",
-            "targets": ["oci", "freetier", "pca"],
+            "targets": ["oci", "freetier", "pca", "c3"],
             "svg": "containers.svg",
             "resources": [
                 {
                     "title": "Compartment",
-                    "targets": ["oci", "pca"],
+                    "targets": ["oci", "pca", "c3"],
                     "svg": "Compartments.svg"
                 },
                 {
@@ -30,12 +30,12 @@
         },
         {
             "title": "Compute",
-            "targets": ["oci", "freetier", "pca"],
+            "targets": ["oci", "freetier", "pca", "c3"],
             "svg": "compute.svg",
             "resources": [
                 {
                     "title": "Instance",
-                    "targets": ["oci", "freetier", "pca"],
+                    "targets": ["oci", "freetier", "pca", "c3"],
                     "svg": "VirtualMachine.svg"
                 },
                 {
@@ -70,17 +70,17 @@
                 },
                 {
                     "title": "Instance Configuration",
-                    "targets": ["oci", "pca"],
+                    "targets": ["oci", "pca", "c3"],
                     "svg": "VirtualMachineApplication.svg"
                 },
                 {
                     "title": "Instance Pool",
-                    "targets": ["oci", "pca"],
+                    "targets": ["oci", "pca", "c3"],
                     "svg": "InstancePools.svg"
                 },
                 {
                     "title": "Autoscaling Configuration",
-                    "targets": ["oci", "pca"],
+                    "targets": ["oci", "pca", "c3"],
                     "svg": "Autoscaling.svg"
                 }
             ]
@@ -144,12 +144,12 @@
         },
         {
             "title": "Networking",
-            "targets": ["oci", "freetier", "pca"],
+            "targets": ["oci", "freetier", "pca", "c3"],
             "svg": "networking.svg",
             "resources": [
                 {
                     "title": "Load Balancer",
-                    "targets": ["oci", "pca"],
+                    "targets": ["oci", "pca", "c3"],
                     "svg": "LoadBalancerLB.svg"
                 },
                 {
@@ -159,37 +159,37 @@
                 },
                 {
                     "title": "Virtual Cloud Network",
-                    "targets": ["oci", "freetier", "pca"],
+                    "targets": ["oci", "freetier", "pca", "c3"],
                     "svg": "VirtualCloudNetworkVCN.svg"
                 },
                 {
                     "title": "Subnet",
-                    "targets": ["oci", "freetier", "pca"],
+                    "targets": ["oci", "freetier", "pca", "c3"],
                     "svg": "Backbone.svg"
                 },
                 {
                     "title": "Route Table",
-                    "targets": ["oci", "freetier", "pca"],
+                    "targets": ["oci", "freetier", "pca", "c3"],
                     "svg": "RouteTable.svg"
                 },
                 {
                     "title": "Security List",
-                    "targets": ["oci", "freetier", "pca"],
+                    "targets": ["oci", "freetier", "pca", "c3"],
                     "svg": "SecurityList.svg"
                 },
                 {
                     "title": "Network Security Group",
-                    "targets": ["oci", "pca"],
+                    "targets": ["oci", "pca", "c3"],
                     "svg": "NetworkSecurityGroup.svg"
                 },
                 {
                     "title": "DHCP Option",
-                    "targets": ["oci", "freetier", "pca"],
+                    "targets": ["oci", "freetier", "pca", "c3"],
                     "svg": "DHCPOptions.svg"
                 },
                 {
                     "title": "DNS Zone",
-                    "targets": ["oci", "freetier", "pca"],
+                    "targets": ["oci", "freetier", "pca", "c3"],
                     "svg": "DomainNameSystemDNS.svg"
                 },
                 {
@@ -221,22 +221,22 @@
         },
         {
             "title": "Gateways",
-            "targets": ["oci", "freetier", "pca"],
+            "targets": ["oci", "freetier", "pca", "c3"],
             "svg": "gateways.svg",
             "resources": [
                 {
                     "title": "Internet Gateway",
-                    "targets": ["oci", "freetier", "pca"],
+                    "targets": ["oci", "freetier", "pca", "c3"],
                     "svg": "InternetGateway.svg"
                 },
                 {
                     "title": "NAT Gateway",
-                    "targets": ["oci", "freetier", "pca"],
+                    "targets": ["oci", "freetier", "pca", "c3"],
                     "svg": "NATGateway.svg"
                 },
                 {
                     "title": "Local Peering Gateway",
-                    "targets": ["oci", "pca"],
+                    "targets": ["oci", "pca", "c3"],
                     "svg": "LocalPeeringGatewayLPG.svg"
                 },
                 {
@@ -246,12 +246,12 @@
                 },
                 {
                     "title": "Dynamic Routing Gateway Attachment",
-                    "targets": ["pca", "hidden"],
+                    "targets": ["pca", "c3", "hidden"],
                     "svg": "DRGAttachment.svg"
                 },
                 {
                     "title": "Dynamic Routing Gateway",
-                    "targets": ["pca", "hidden"],
+                    "targets": ["pca", "c3", "hidden"],
                     "svg": "DynamicRoutingGatewayDRG.svg"
                 },
                 {
@@ -268,12 +268,12 @@
         },
         {
             "title": "Storage",
-            "targets": ["oci", "freetier", "pca"],
+            "targets": ["oci", "freetier", "pca", "c3"],
             "svg": "storage.svg",
             "resources": [
                 {
                     "title": "Block Storage Volume",
-                    "targets": ["oci", "freetier", "pca"],
+                    "targets": ["oci", "freetier", "pca", "c3"],
                     "svg": "BlockStorage.svg"
                 },
                 {
@@ -283,19 +283,19 @@
                 },
                 {
                     "title": "Mount Target",
-                    "targets": ["oci", "pca"],
+                    "targets": ["oci", "pca", "c3"],
                     "svg": "MountTarget.svg"
                 },
                 {
                     "title": "File System",
-                    "targets": ["oci", "pca"],
+                    "targets": ["oci", "pca", "c3"],
                     "svg": "FileSystem.svg"
                 }
             ]
         },
         {
             "title": "Identity",
-            "targets": ["oci", "freetier", "pca"],
+            "targets": ["oci", "freetier", "pca", "c3"],
             "svg": "identity.svg",
             "resources": [
                 {
@@ -305,7 +305,7 @@
                 },
                 {
                     "title": "Policy",
-                    "targets": ["oci", "pca"],
+                    "targets": ["oci", "pca", "c3"],
                     "svg": "Policies.svg"
                 },
                 {

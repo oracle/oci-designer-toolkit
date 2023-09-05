@@ -59,10 +59,13 @@ class InstanceConfiguration extends OkitArtifact {
                     is_management_disabled: false
                 },
                 availability_domain: '1',
-                shape: platform !== 'pca' ? 'VM.Standard.E3.Flex' : '',
+                shape: this.isOCI() ? 'VM.Standard.E3.Flex' : '',
+                // shape: platform !== 'pca' ? 'VM.Standard.E3.Flex' : '',
                 shape_config: {
-                    memory_in_gbs: platform !== 'pca' ? 16 : '', 
-                    ocpus: platform !== 'pca' ? 1 : ''    
+                    memory_in_gbs: this.isOCI() ? 16 : '', 
+                    ocpus: this.isOCI() ? 1 : ''    
+                    // memory_in_gbs: platform !== 'pca' ? 16 : '', 
+                    // ocpus: platform !== 'pca' ? 1 : ''    
                 },
                 source_details: {
                     image_id: '',

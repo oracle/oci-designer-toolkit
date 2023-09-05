@@ -17,7 +17,7 @@ class OkitJson {
         this.documentation = `# Description\n__Created ${getCurrentDateTime()}__\n\n--------------------------------------\n\n`;
         this.metadata = {
             resource_count: 0,
-            platform: pca_mode ? 'pca' : 'oci',
+            platform: pca_mode ? 'pca' : c3_mode ? 'c3' : 'oci',
             created: now,
             updated: now,
             okit_version: okitVersion,
@@ -38,7 +38,7 @@ class OkitJson {
         }
     }
 
-    get deployment_platforms() {return ['oci', 'pca', 'freetier']}
+    get deployment_platforms() {return ['oci', 'pca', 'c3', 'freetier']}
     get created() {return this.metadata.created}
     get updated() {return this.metadata.updated}
     get okit_version() {return this.metadata.okit_version}
@@ -349,7 +349,10 @@ class OkitArtifact {
     }
 
     getOkitJson() {return this.okit_json}
+    isOCI() {return this.getOkitJson() && this.getOkitJson().metadata.platform === 'oci'}
+    isFreetier() {return this.getOkitJson() && this.getOkitJson().metadata.platform === 'freetier'}
     isPCA() {return this.getOkitJson() && this.getOkitJson().metadata.platform === 'pca'}
+    isC3() {return this.getOkitJson() && this.getOkitJson().metadata.platform === 'c3'}
 
     get name() {return this.display_name;}
     set name(name) {this.display_name = name;}
@@ -504,7 +507,8 @@ class OkitArtifact {
     generateResourceNameFromDisplayName = (name) => titleCase(name.split('_').join('-')).split(' ').join('').replaceAll('-','_')
 
     estimateCost = () => {
-        if (this.getOkitJson().metadata.platform === 'pca') return ''
+        if (!this.isOCI()) return ''
+        // if (this.getOkitJson().metadata.platform === 'pca') return ''
         const get_price_function = OkitOciProductPricing.getPriceFunctionName(this.constructor.name)
         const pricing = okitOciProductPricing ? okitOciProductPricing : new OkitOciProductPricing()
         console.info(`>>>>>> Estimating Resource Cost: ${get_price_function}`)
