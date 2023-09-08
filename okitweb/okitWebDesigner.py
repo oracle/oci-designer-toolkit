@@ -334,12 +334,14 @@ def console():
 
 @bp.route('oci', defaults={'target': 'oci'}, methods=(['GET']))
 @bp.route('pca', defaults={'target': 'pca'}, methods=(['GET']))
+@bp.route('c3', defaults={'target': 'c3'}, methods=(['GET']))
 def designer(target):
     local = current_app.config.get('LOCAL', False)
     if not local and session.get('username', None) is None:
         logger.info('<<<<<<<<<<<<<<<<<<<<<<<<< Redirect to Login >>>>>>>>>>>>>>>>>>>>>>>>>')
         return redirect(url_for('okit.login'), code=302)
     pca_mode = (target == 'pca')
+    c3_mode = (target == 'c3')
     oci_mode = (target == 'oci')
     developer_mode = False
     experimental_mode = False
@@ -391,6 +393,7 @@ def designer(target):
                            local_okit=local,
                            oci_mode=oci_mode, 
                            pca_mode=pca_mode, 
+                           c3_mode=c3_mode, 
                            target=target,
                            developer_mode=developer_mode, 
                            experimental_mode=experimental_mode, 
