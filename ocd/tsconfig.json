@@ -1,0 +1,11 @@
+{
+    "files": [],
+    "references": [
+        {"path": "packages/core"},
+        {"path": "packages/model"},
+        {"path": "packages/query"},
+        {"path": "packages/export"},
+        {"path": "packages/import"},
+        {"path": "packages/cli"}
+    ]
+}

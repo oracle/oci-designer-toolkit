@@ -1,0 +1,49 @@
+{
+  "name": "@ocd/cli",
+  "version": "1.0.0",
+  "description": "OKIT Open Cloud Designer Command-line",
+  "title": "OKIT Open Cloud Designer DeskCommand-linetop",
+  "author": {
+    "name": "Andrew Hopkinson",
+    "email": "andrew.hopkinson@oracle.com",
+    "url": "https://github.com/oracle/oci-designer-toolkit"
+  },
+  "bugs": "https://github.com/oracle/oci-designer-toolkit/issues",
+  "keywords": [
+    "ocd",
+    "okit"
+  ],
+  "license": "UPL-1.0",
+  "main": "lib/esm/index.js",
+  "module": "lib/esm/index.js",
+  "files": [
+    "lib/"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    
+    "compile": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
+
+    "import-oci-terraform-schema": "node lib/esm/ocd-codegen.js import terraform-schema -i ./src/schema/tf-schema.json -o ./src/schema/oci-schema.json",
+    "import": "npm run import-oci-terraform-schema",
+
+    "generate-oci-model":      "node lib/esm/ocd-codegen.js generate oci-model-js      -s ./src/schema/oci-schema.json -d ../model/src/provider/oci",
+    "generate-oci-properties": "node lib/esm/ocd-codegen.js generate oci-properties-js -s ./src/schema/oci-schema.json -d ../desktop/src/components/properties/provider/oci",
+    "generate-oci-terraform":  "node lib/esm/ocd-codegen.js generate oci-terraform-js  -s ./src/schema/oci-schema.json -d ../export/src/terraform/provider/oci",
+    "generate-oci":            "npm run generate-oci-model && npm run generate-oci-properties && npm run generate-oci-terraform",
+
+    "generate": "npm run generate-oci",
+
+    "import-and-generate-oci": "npm run import-oci-terraform-schema && npm run generate-oci",
+    "import-and-generate": "npm run import-and-generate-oci"
+
+  },
+  "dependencies": {
+    "@ocd/codegen": "^1.0.0",
+    "@ocd/core": "^1.0.0",
+    "@ocd/export": "^1.0.0",
+    "@ocd/import": "^1.0.0",
+    "@ocd/model": "^1.0.0",
+    "@ocd/query": "^1.0.0"
+  }
+}

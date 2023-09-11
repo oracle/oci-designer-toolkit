@@ -1,0 +1,45 @@
+{
+  "name": "ocd",
+  "version": "1.0.0",
+  "description": "OKIT Open Cloud Designer Desktop",
+  "title": "OKIT Open Cloud Designer Desktop",
+  "author": {
+    "name": "Andrew Hopkinson",
+    "email": "andrew.hopkinson@oracle.com",
+    "url": "https://github.com/oracle/oci-designer-toolkit"
+  },
+  "bugs": "https://github.com/oracle/oci-designer-toolkit/issues",
+  "keywords": [
+    "ocd",
+    "okit"
+  ],
+  "license": "UPL-1.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npm run build --workspaces --if-present",
+    "compile": "npm run compile --workspaces --if-present",
+    "compile-for-codegen": "npm run compile --workspce=packages/core --workspace=packages/codgen --workspace=packages/cli",
+    "import-and-generate": "npm run import-and-generate --workspace=packages/cli",
+    "desktop": "npm run desktop --workspace=packages/desktop"
+  },
+  "workspaces": [
+    "packages/core",
+    "packages/codegen",
+    "packages/model",
+    "packages/query",
+    "packages/import",
+    "packages/export",
+    "packages/react",
+    "packages/web",
+    "packages/desktop",
+    "packages/cli"
+  ],
+  "devDependencies": {
+    "@types/uuid": "^9.0.2",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "uuid": "^9.0.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "@ocd/react",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@ocd/core": "^1.0.0",
+    "@ocd/model": "^1.0.0"
+  }
+}
