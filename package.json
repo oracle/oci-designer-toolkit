@@ -10,9 +10,11 @@
     },
     "bugs": "https://github.com/oracle/oci-designer-toolkit/issues",
     "scripts": {
-        "install": "cd ocd && npm run install",
+        "install": "cd ocd && npm install",
         "import-and-generate": "cd ocd && npm run import-and-generate",
+        "compile-for-codegen": "cd ocd && npm run compile-for-codegen",
         "build": "cd ocd && npm run build",
-        "desktop": "cd ocd && npm run desktop"
+        "desktop": "cd ocd && npm run desktop",
+        "fresh-install": "npm run install && npm run compile-for-codegen && npm run import-and-generate && npm run build"
     }
 }
