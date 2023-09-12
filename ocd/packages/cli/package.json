@@ -21,9 +21,9 @@
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    
+    "pack": "mkdir -p ./dist && npm pack --pack-destination ./dist",
     "compile": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
-    "build": "npm run compile"
+    "build": "npm run compile && npm run pack"
 
   },
   "dependencies": {
