@@ -20,8 +20,8 @@
     "fresh-install": "npm install && npm run compile-for-codegen && npm run import-and-generate && npm run build",
     "build": "npm run build --workspaces --if-present",
     "compile": "npm run compile --workspaces --if-present",
-    "compile-for-codegen": "npm run compile --workspace=packages/core --workspace=packages/codegen",
-    "import-and-generate": "npm run import-and-generate --workspace=packages/codegen",
+    "compile-for-codegen": "npm run compile --workspace=packages/core --workspace=packages/codegen --workspace=packages/codegen-cli",
+    "import-and-generate": "npm run import-and-generate --workspace=packages/codegen-cli",
     "desktop": "npm run desktop --workspace=packages/desktop"
   },
   "workspaces": [
@@ -34,7 +34,8 @@
     "packages/react",
     "packages/web",
     "packages/desktop",
-    "packages/cli"
+    "packages/cli",
+    "packages/codegen-cli"
   ],
   "devDependencies": {
     "@types/uuid": "^9.0.2",

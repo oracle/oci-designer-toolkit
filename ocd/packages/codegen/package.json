@@ -23,20 +23,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "pack": "mkdir -p ./dist && npm pack --pack-destination ./dist",
     "compile": "tsc -p tsconfig.json",
-    "build": "npm run compile && npm run pack",
-
-    "import-oci-terraform-schema": "node lib/esm/ocd-codegen.js import terraform-schema -i ./schema/tf-schema.json -o ./schema/oci-schema.json",
-    "import": "npm run import-oci-terraform-schema",
-
-    "generate-oci-model":      "node lib/esm/ocd-codegen.js generate oci-model-js      -s ./schema/oci-schema.json -d ../model/src/provider/oci",
-    "generate-oci-properties": "node lib/esm/ocd-codegen.js generate oci-properties-js -s ./schema/oci-schema.json -d ../desktop/src/components/properties/provider/oci",
-    "generate-oci-terraform":  "node lib/esm/ocd-codegen.js generate oci-terraform-js  -s ./schema/oci-schema.json -d ../export/src/terraform/provider/oci",
-    "generate-oci":            "npm run generate-oci-model && npm run generate-oci-properties && npm run generate-oci-terraform",
-
-    "generate": "npm run generate-oci",
-
-    "import-and-generate-oci": "npm run import-oci-terraform-schema && npm run generate-oci",
-    "import-and-generate": "npm run import-and-generate-oci"
+    "build": "npm run compile && npm run pack"
   },
   "dependencies": {
     "@ocd/core": "^1.0.0",
