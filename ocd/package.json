@@ -21,7 +21,7 @@
     "build": "npm run build --workspaces --if-present",
     "compile": "npm run compile --workspaces --if-present",
     "compile-for-codegen": "npm run compile --workspace=packages/core --workspace=packages/codegen",
-    "import-and-generate": "npm run import-and-generate --workspace=packages/codgen",
+    "import-and-generate": "npm run import-and-generate --workspace=packages/codegen",
     "desktop": "npm run desktop --workspace=packages/desktop"
   },
   "workspaces": [
