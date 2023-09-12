@@ -23,7 +23,8 @@
       "packagerConfig": {
         "asar": true,
         "name": "ocd",
-        "executableName": "ocd"
+        "executableName": "ocd",
+        "icon": "./public/assets/icon"
       },
       "rebuildConfig": {},
       "makers": [
