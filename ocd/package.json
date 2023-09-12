@@ -20,7 +20,7 @@
     "fresh-install": "npm install && npm run compile-for-codegen && npm run import-and-generate && npm run build",
     "build": "npm run build --workspaces --if-present",
     "compile": "npm run compile --workspaces --if-present",
-    "compile-for-codegen": "npm run compile --workspce=packages/core --workspce=packages/query --workspace=packages/codgen --workspace=packages/cli",
+    "compile-for-codegen": "npm run compile --workspce=packages/core && npm run compile --workspce=packages/query && npm run compile --workspace=packages/codgen && npm run compile --workspace=packages/cli",
     "import-and-generate": "npm run import-and-generate --workspace=packages/cli",
     "desktop": "npm run desktop --workspace=packages/desktop"
   },
