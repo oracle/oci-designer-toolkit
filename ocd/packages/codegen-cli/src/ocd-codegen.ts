@@ -7,11 +7,7 @@
 
 import fs from 'fs'
 import path from 'path'
-export { OciTerraformSchemaImporter } from "./importer/OciTerraformSchemaImporter"
-export { OciTerraformGenerator } from "./generator/OciTerraformGenerator"
-export { OcdPropertiesGenerator } from "./generator/OcdPropertiesGenerator"
-export { OcdModelGenerator } from "./generator/OcdModelGenerator"
-// import { OcdModelGenerator, OcdPropertiesGenerator, OciTerraformGenerator, OciTerraformSchemaImporter } from '@ocd/codegen'
+import { OcdModelGenerator, OcdPropertiesGenerator, OciTerraformGenerator, OciTerraformSchemaImporter } from '@ocd/codegen'
 import { parseArgs } from "node:util"
 
 const options = {

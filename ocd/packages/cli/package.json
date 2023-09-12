@@ -27,7 +27,6 @@
 
   },
   "dependencies": {
-    "@ocd/codegen": "^1.0.0",
     "@ocd/core": "^1.0.0",
     "@ocd/export": "^1.0.0",
     "@ocd/import": "^1.0.0",
