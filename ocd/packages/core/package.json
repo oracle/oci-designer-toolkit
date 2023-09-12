@@ -14,7 +14,7 @@
     "okit"
   ],
   "license": "UPL-1.0",
-  "main": "lib/cjs/index.js",
+  "main": "lib/esm/index.js",
   "module": "lib/esm/index.js",
   "files": [
     "lib/"
