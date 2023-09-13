@@ -3,6 +3,7 @@ module.exports = {
         asar: true,
         name: 'ocd',
         executableName: 'ocd',
+        icon: './public/assets/icon'
         // prune: false,
     },
     rebuildConfig: {},
