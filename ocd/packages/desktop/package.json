@@ -102,11 +102,12 @@
     "electron": "WEB_URL=http://localhost:3000 electron .",
     "electron-forge": "WEB_URL=http://localhost:3000 electron-forge start",
     "electron-forge-dev": "npm run build && electron-forge start",
-    "desktop": "npm run electron-forge-dev",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "build-all": "npm run build && npm run make"
+    "build-all": "npm run build && npm run make",
+    "desktop": "npm run electron-forge-dev",
+    "web": "npm run start"
   },
   "eslintConfig": {
     "extends": [
