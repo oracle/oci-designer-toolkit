@@ -47,5 +47,7 @@ export { OciServiceGateway } from './resources/OciServiceGateway'
 export { OciSubnet } from './resources/OciSubnet'
 export { OciVault } from './resources/OciVault'
 export { OciVcn } from './resources/OciVcn'
+export { OciVnicAttachment } from './resources/OciVnicAttachment'
 export { OciVolume } from './resources/OciVolume'
+export { OciVolumeAttachment } from './resources/OciVolumeAttachment'
     
