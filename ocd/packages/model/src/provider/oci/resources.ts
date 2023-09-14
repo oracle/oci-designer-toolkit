@@ -47,5 +47,7 @@ export { OciServiceGateway, OciServiceGatewayClient } from './resources/OciServi
 export { OciSubnet, OciSubnetClient } from './resources/OciSubnet'
 export { OciVault, OciVaultClient } from './resources/OciVault'
 export { OciVcn, OciVcnClient } from './resources/OciVcn'
+export { OciVnicAttachment, OciVnicAttachmentClient } from './resources/OciVnicAttachment'
 export { OciVolume, OciVolumeClient } from './resources/OciVolume'
+export { OciVolumeAttachment, OciVolumeAttachmentClient } from './resources/OciVolumeAttachment'
     

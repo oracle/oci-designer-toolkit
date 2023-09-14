@@ -6,13 +6,15 @@
 import * as common from 'oci-common'
 import * as core from "oci-core"
 import * as identity from "oci-identity"
-import { OcdDesign } from '@ocd/model'
+import { OcdDesign, OciModelResources } from '@ocd/model'
 
 export class OciQuery {
     profile
     provider
     identityClient: identity.IdentityClient
     vcnClient: core.VirtualNetworkClient
+    computeClient: core.ComputeClient
+    blockstorageClient: core.BlockstorageClient
     constructor(profile: string='DEFAULT', region?: string) {
         this.profile = profile
         this.provider = new common.ConfigFileAuthenticationDetailsProvider(undefined, profile)
@@ -20,6 +22,8 @@ export class OciQuery {
         if (region) this.provider.setRegion(region)
         this.identityClient = new identity.IdentityClient({ authenticationDetailsProvider: this.provider })
         this.vcnClient = new core.VirtualNetworkClient({ authenticationDetailsProvider: this.provider })
+        this.computeClient = new core.ComputeClient({ authenticationDetailsProvider: this.provider })
+        this.blockstorageClient = new core.BlockstorageClient({ authenticationDetailsProvider: this.provider })
     }
 
     newDesign = () => OcdDesign.newDesign()
@@ -32,7 +36,7 @@ export class OciQuery {
         return displayName
     }
 
-    listRegions() {
+    listRegions(): Promise<any> {
         return new Promise((resolve, reject) => {
             if (!this.identityClient) this.identityClient = new identity.IdentityClient({ authenticationDetailsProvider: this.provider })
             const listRegionsRequest: identity.requests.ListRegionsRequest = {}
@@ -50,7 +54,7 @@ export class OciQuery {
         })
     }
 
-    listTenancyCompartments() {
+    listTenancyCompartments(): Promise<any> {
         return new Promise((resolve, reject) => {
             if (!this.identityClient) this.identityClient = new identity.IdentityClient({ authenticationDetailsProvider: this.provider })
             const listCompartmentsReq: identity.requests.ListCompartmentsRequest = {compartmentId: this.provider.getTenantId(), compartmentIdInSubtree: true}
@@ -60,9 +64,6 @@ export class OciQuery {
                 if (results[0].status === 'fulfilled' && results[1].status === 'fulfilled') {
                     results[1].value[0].compartmentId = ''
                     const resources = [...results[1].value, ...results[0].value.items].map((c) => {return {...c, root: c.compartmentId === ''}})
-                    // const resources = results[0].value.items.map((c) => {return {...c, root: c.compartmentId.startsWith('ocid1.tenancy')}})
-                    console.debug('Main: Tenancy Compartment', results[1])
-                    console.debug('Main: Tenancy Compartments', JSON.stringify(resources, null, 4))
                     resolve(resources)
                 } else {
                     reject('All Compartments Query Failed')
@@ -71,7 +72,7 @@ export class OciQuery {
         })
     }
 
-    queryTenancy(compartmentIds: string[]) {
+    queryTenancy(compartmentIds: string[]): Promise<any> {
         console.debug('QciQuery: queryTenancy')
         return new Promise((resolve, reject) => {
             const design = this.newDesign()
@@ -83,7 +84,24 @@ export class OciQuery {
             const listNatGateways = this.listNatGateways(compartmentIds)
             const listRouteTables = this.listRouteTables(compartmentIds)
             const listSecurityLists = this.listSecurityLists(compartmentIds)
-            const queries = [getCompartments, listVcns, listSubnets, listRouteTables, listSecurityLists, listDhcpOptions, listInternetGateways, listNatGateways]
+            const listInstances = this.listInstances(compartmentIds)
+            const listVnicAttachments = this.listVnicAttachments(compartmentIds)
+            const listVolumeAttachments = this.listVolumeAttachments(compartmentIds)
+            const listVolumes = this.listVolumes(compartmentIds)
+            const queries = [
+                getCompartments, 
+                listVcns, 
+                listSubnets, 
+                listRouteTables, 
+                listSecurityLists, 
+                listDhcpOptions, 
+                listInternetGateways, 
+                listNatGateways, 
+                listInstances, 
+                listVnicAttachments, 
+                listVolumeAttachments,
+                listVolumes
+            ]
             Promise.allSettled(queries).then((results) => {
                 console.debug('OciQuery: queryTenancy: All Settled')
                 // Compartments
@@ -112,7 +130,20 @@ export class OciQuery {
                 // NAT Gateways
                 // @ts-ignore
                 design.model.oci.resources.nat_gateway = results[queries.indexOf(listNatGateways)].value
-
+                // Volumes
+                // @ts-ignore
+                design.model.oci.resources.volume = results[queries.indexOf(listVolumes)].value
+                // Instances
+                // @ts-ignore
+                const vnicAttachments = results[queries.indexOf(listVnicAttachments)].value
+                // @ts-ignore
+                const volumeAttachments = results[queries.indexOf(listVolumeAttachments)].value
+                // @ts-ignore
+                design.model.oci.resources.instance = results[queries.indexOf(listInstances)].value
+                design.model.oci.resources.instance.forEach((i) => {
+                    i.vnicAttachments = vnicAttachments.filter((v: OciModelResources.OciVnicAttachment) => v.instanceId === i.id).map((v: OciModelResources.OciVnicAttachment) => v.vnic)
+                    i.volumeAttachments = volumeAttachments.filter((v: OciModelResources.OciVolumeAttachment) => v.instanceId === i.id)
+                })
                 // console.debug('OciQuery: queryTenancy:', JSON.stringify(design, null, 4))
                 resolve(design)
             }).catch((reason) => {
@@ -244,6 +275,92 @@ export class OciQuery {
                 console.debug('OciQuery: listVCNs: All Settled')
                 //@ts-ignore
                 const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
+                resolve(resources)
+            }).catch((reason) => {
+                console.error(reason)
+                reject(reason)
+            })
+        })
+    }
+
+    listInstances(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const requests: core.requests.ListInstancesRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
+            const queries = requests.map((r) => this.computeClient.listInstances(r))
+            Promise.allSettled(queries).then((results) => {
+                console.debug('OciQuery: listInstances: All Settled')
+                //@ts-ignore
+                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
+                resolve(resources)
+            }).catch((reason) => {
+                console.error(reason)
+                reject(reason)
+            })
+        })
+    }
+
+    listVnicAttachments(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const requests: core.requests.ListVnicAttachmentsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
+            const queries = requests.map((r) => this.computeClient.listVnicAttachments(r))
+            Promise.allSettled(queries).then((results) => {
+                console.debug('OciQuery: listVnicAttachments: All Settled')
+                //@ts-ignore
+                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], []) as core.VnicAttachment[]
+                const vnicIds = resources.map(r => r.vnicId)
+                this.getVnics(vnicIds).then((response) => {
+                    //@ts-ignore
+                    resources.forEach((r) => r.vnic = response.find((v) => v.id === r.vnicId))
+                    resolve(resources)
+                })
+                // resolve(resources)
+            }).catch((reason) => {
+                console.error(reason)
+                reject(reason)
+            })
+        })
+    }
+
+    listVolumeAttachments(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const requests: core.requests.ListVolumeAttachmentsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
+            const queries = requests.map((r) => this.computeClient.listVolumeAttachments(r))
+            Promise.allSettled(queries).then((results) => {
+                console.debug('OciQuery: listVolumeAttachments: All Settled')
+                //@ts-ignore
+                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
+                resolve(resources)
+            }).catch((reason) => {
+                console.error(reason)
+                reject(reason)
+            })
+        })
+    }
+
+    listVolumes(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const requests: core.requests.ListVolumesRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
+            const queries = requests.map((r) => this.blockstorageClient.listVolumes(r))
+            Promise.allSettled(queries).then((results) => {
+                console.debug('OciQuery: listVolumes: All Settled')
+                //@ts-ignore
+                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
+                resolve(resources)
+            }).catch((reason) => {
+                console.error(reason)
+                reject(reason)
+            })
+        })
+    }
+
+    getVnics(vnicIds: string[], retryCount: number = 0): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const requests: core.requests.GetVnicRequest[] = vnicIds.map((id) => {return {vnicId: id}})
+            const queries = requests.map((r) => this.vcnClient.getVnic(r))
+            Promise.allSettled(queries).then((results) => {
+                console.debug('OciQuery: getVnics: All Settled')
+                //@ts-ignore
+                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, c.value.vnic], []).sort(r => r.isPrimary)
                 resolve(resources)
             }).catch((reason) => {
                 console.error(reason)
