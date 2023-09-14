@@ -154,7 +154,6 @@ export class OciQuery {
     }
 
     getCompartments(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        console.debug('QciQuery: getCompartments', compartmentIds)
         return new Promise((resolve, reject) => {
             const requests: identity.requests.GetCompartmentRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
             const queries = requests.map((r) => this.identityClient.getCompartment(r))
