@@ -18,6 +18,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "fresh-install": "npm install && npm run compile-for-codegen && npm run import-and-generate && npm run build",
+    "reinstall": "npm run fresh-install",
     "build": "npm run build --workspaces --if-present",
     "compile": "npm run compile --workspaces --if-present",
     "compile-for-codegen": "npm run compile --workspace=packages/core --workspace=packages/codegen --workspace=packages/codegen-cli",
