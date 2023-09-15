@@ -84,6 +84,7 @@ export class OciQuery {
             const listNatGateways = this.listNatGateways(compartmentIds)
             const listRouteTables = this.listRouteTables(compartmentIds)
             const listSecurityLists = this.listSecurityLists(compartmentIds)
+            const listNetworkSecurityGroups = this.listNetworkSecurityGroups(compartmentIds)
             const listInstances = this.listInstances(compartmentIds)
             const listVnicAttachments = this.listVnicAttachments(compartmentIds)
             const listVolumeAttachments = this.listVolumeAttachments(compartmentIds)
@@ -94,6 +95,7 @@ export class OciQuery {
                 listSubnets, 
                 listRouteTables, 
                 listSecurityLists, 
+                listNetworkSecurityGroups,
                 listDhcpOptions, 
                 listInternetGateways, 
                 listNatGateways, 
@@ -121,6 +123,9 @@ export class OciQuery {
                 // Security Lists
                 // @ts-ignore
                 design.model.oci.resources.security_list = results[queries.indexOf(listSecurityLists)].value
+                // Network Security Groups
+                // @ts-ignore
+                design.model.oci.resources.network_security_group = results[queries.indexOf(listNetworkSecurityGroups)].value
                 // DHCP Options
                 // @ts-ignore
                 design.model.oci.resources.dhcp_options = results[queries.indexOf(listDhcpOptions)].value
@@ -234,6 +239,43 @@ export class OciQuery {
         })
     }
 
+    listNetworkSecurityGroups(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const requests: core.requests.ListNetworkSecurityGroupsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
+            const queries = requests.map((r) => this.vcnClient.listNetworkSecurityGroups(r))
+            Promise.allSettled(queries).then((results) => {
+                console.debug('OciQuery: listNetworkSecurityGroups: All Settled')
+                //@ts-ignore
+                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], []) as Record<string, any>[]
+                const nsgIds = resources.map(r => r.id)
+                this.listNetworkSecurityGroupSecurityRules(nsgIds).then((response) => {
+                    //@ts-ignore
+                    resources.forEach((r) => r.rules = response.filter((n) => r.id === n.nsgId))
+                    resolve(resources)
+                })
+            }).catch((reason) => {
+                console.error(reason)
+                reject(reason)
+            })
+        })
+    }
+
+    listNetworkSecurityGroupSecurityRules(nsgIds: string[], retryCount: number = 0): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const requests: core.requests.ListNetworkSecurityGroupSecurityRulesRequest[] = nsgIds.map((id) => {return {networkSecurityGroupId: id}})
+            const queries = requests.map((r) => this.vcnClient.listNetworkSecurityGroupSecurityRules(r))
+            Promise.allSettled(queries).then((results) => {
+                console.debug('OciQuery: listNetworkSecurityGroupSecurityRules: All Settled')
+                //@ts-ignore
+                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c, i) => [...a, ...c.value.items.map((s) => {return {...s, nsgId: nsgIds[i]}})], [])
+                resolve(resources)
+            }).catch((reason) => {
+                console.error(reason)
+                reject(reason)
+            })
+        })
+    }
+
     listSecurityLists(compartmentIds: string[], retryCount: number = 0): Promise<any> {
         return new Promise((resolve, reject) => {
             const requests: core.requests.ListSecurityListsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
@@ -305,7 +347,7 @@ export class OciQuery {
             Promise.allSettled(queries).then((results) => {
                 console.debug('OciQuery: listVnicAttachments: All Settled')
                 //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], []) as core.VnicAttachment[]
+                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], []) as Record<string, any>[]
                 const vnicIds = resources.map(r => r.vnicId)
                 this.getVnics(vnicIds).then((response) => {
                     //@ts-ignore
