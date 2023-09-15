@@ -83,7 +83,6 @@ export class OcdDocument {
         // console.info(`OcdDocument: ociResource`, ociResources)
         let modelResource = undefined
         if (paletteResource.provider === 'oci') {
-            modelResource = {id: `ocd-${paletteResource.class}-${uuidv4()}`}
             // @ts-ignore 
             const client = OciModelResources[resourceNamespace]
             if (client) {

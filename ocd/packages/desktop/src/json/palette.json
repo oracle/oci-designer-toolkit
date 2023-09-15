@@ -49,17 +49,17 @@
                         {
                             "container": false,
                             "title": "Database System",
-                            "class": "oci-database-system"
+                            "class": "oci-db-system"
                         },
                         {
                             "container": false,
                             "title": "MySQL Database System",
-                            "class": "oci-mysql-database-system"
+                            "class": "oci-mysql-db-system"
                         },
                         {
                             "container": false,
                             "title": "NoSQL Database",
-                            "class": "oci-nosql-database"
+                            "class": "oci-nosql-table"
                         }
                     ]
                 },
@@ -176,8 +176,13 @@
                         },
                         {
                             "container": false,
-                            "title": "File Storage System",
-                            "class": "oci-file-storage-system"
+                            "title": "File System",
+                            "class": "oci-file-system"
+                        },
+                        {
+                            "container": false,
+                            "title": "Mount Target",
+                            "class": "oci-mount-target"
                         }
                     ]
                 },

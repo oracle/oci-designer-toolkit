@@ -94,26 +94,28 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
             console.info('x:', x, 'y:', y)
             // Add to OCD Model/View
             const modelResource: OcdResource = dragData.existingResource ? dragData.resource : ocdDocument.addResource(dragData.dragObject, compartmentId)
-            ocdDocument.setResourceParent(modelResource.id, pocid)
-            const coords: OcdViewCoords = ocdDocument.newCoords()
-            coords.id = uuid()
-            coords.pgid = pgid
-            coords.ocid = modelResource.id
-            coords.pocid = pocid
-            coords.x = x / transformMatrix[0]
-            coords.y = y / transformMatrix[3]
-            coords.w = container ? 300 : 32
-            coords.h = container ? 200 : 32
-            coords.title = dragData.dragObject.title
-            coords.class = dragData.dragObject.class
-            coords.container = container
-            ocdDocument.addCoords(coords, page.id, pgid)
-            // Set as selected
-            ocdDocument.selectedResource = {
-                modelId: modelResource.id,
-                pageId: ocdDocument.getActivePage().id,
-                coordsId: coords.id,
-                class: dragData.dragObject.class
+            if (modelResource) {
+                ocdDocument.setResourceParent(modelResource.id, pocid)
+                const coords: OcdViewCoords = ocdDocument.newCoords()
+                coords.id = uuid()
+                coords.pgid = pgid
+                coords.ocid = modelResource.id
+                coords.pocid = pocid
+                coords.x = x / transformMatrix[0]
+                coords.y = y / transformMatrix[3]
+                coords.w = container ? 300 : 32
+                coords.h = container ? 200 : 32
+                coords.title = dragData.dragObject.title
+                coords.class = dragData.dragObject.class
+                coords.container = container
+                ocdDocument.addCoords(coords, page.id, pgid)
+                // Set as selected
+                ocdDocument.selectedResource = {
+                    modelId: modelResource.id,
+                    pageId: ocdDocument.getActivePage().id,
+                    coordsId: coords.id,
+                    class: dragData.dragObject.class
+                }
             }
             // Clear Drag Data Information
             setDragData(newDragData())
