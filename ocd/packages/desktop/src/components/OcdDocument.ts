@@ -189,6 +189,13 @@ export class OcdDocument {
     removePage(id: string) {
         this.design.view.pages = this.design.view.pages.filter((p) => p.id !== id)
     }
+    duplicatePage(id: string) {
+        const sourcePage = this.getPage(id)
+        const duplicatePage = this.addPage()
+        duplicatePage.title = `${sourcePage.title} Copy`
+        duplicatePage.coords = JSON.parse(JSON.stringify(sourcePage.coords))
+        duplicatePage.connectors = JSON.parse(JSON.stringify(sourcePage.connectors))
+    }
     resetPanZoom = () => OcdDesign.resetPanZoom()
 
     // @ts-ignore 
