@@ -355,6 +355,7 @@ summary {
 
 .ocd-console-toolbar-dropdown-item > ul.show {
     display: block;
+    cursor: pointer;
 }
 
 .ocd-console-toolbar-dropdown-item > ul.slide-up {
@@ -364,7 +365,6 @@ summary {
 .ocd-mouseover-highlight:hover {
     color: #1d2733;
     box-shadow: 0 0 5px #1d2733;
-    text-shadow: 0 0 5px #1d2733;
 }
 
 .ocd-dropdown-menu-item {
