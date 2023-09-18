@@ -357,6 +357,16 @@ summary {
     display: block;
 }
 
+.ocd-console-toolbar-dropdown-item > ul.slide-up {
+    bottom: var(--console-pages-bar-height);
+}
+
+.ocd-mouseover-highlight:hover {
+    color: #1d2733;
+    box-shadow: 0 0 5px #1d2733;
+    text-shadow: 0 0 5px #1d2733;
+}
+
 .ocd-dropdown-menu-item {
     display: block;
     padding: 0 10px 0 10px;
