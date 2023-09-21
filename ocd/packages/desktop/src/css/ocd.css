@@ -185,15 +185,17 @@ summary {
 */
 
 .ocd-console {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: [console-header] var(--console-header-height) [console-toolbar] var(--console-toolbar-height) [console-body] auto [console-footer] var(--console-footer-height);
+    /* display: flex;
+    flex-direction: column; */
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 
     width: 100%;
     height: 100vh;
-    background-color: white;
+    background-color: var(--console-background-colour);
 }
 
 .ocd-console-title-bar {
