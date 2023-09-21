@@ -875,6 +875,12 @@ summary {
     max-height: var(--console-layers-bar-height);
     width: 100%;
     border-bottom: #312D2A solid 1px;
+    overflow-x: auto;
+    scrollbar-width: none; /* Firefox */
+}
+
+.ocd-designer-canvas-layers::-webkit-scrollbar {
+    display: none;  /* Safari and Chrome */
 }
 
 .ocd-designer-canvas-layer {
@@ -944,6 +950,12 @@ summary {
     max-height: var(--console-pages-bar-height);
     width: 100%;
     border-top: #312D2A solid 1px;
+    overflow-x: auto;
+    scrollbar-width: none; /* Firefox */
+}
+
+.ocd-designer-canvas-pages::-webkit-scrollbar {
+    display: none;  /* Safari and Chrome */
 }
 
 .ocd-designer-canvas-page {
@@ -954,6 +966,7 @@ summary {
     padding-left: 5px;
     padding-right: 5px;
     font-size: smaller;
+    white-space: nowrap;
 }
 
 .ocd-designer-canvas-page:hover {
