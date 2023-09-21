@@ -553,11 +553,24 @@ summary {
 */
 
 .ocd-designer {
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: var(--console-palette-width) calc(100% - var(--console-palette-width) - var(--console-properties-width)) var(--console-properties-width);
+    /* flex-direction: row; */
     box-sizing: border-box;
     width: 100%;
     height: 100%;
+}
+
+.ocd-designer-left-panel-only {
+    grid-template-columns: var(--console-palette-width) calc(100% - var(--console-palette-width));
+}
+
+.ocd-designer-right-panel-only {
+    grid-template-columns: calc(100% - var(--console-properties-width)) var(--console-properties-width);
+}
+
+.ocd-designer-palette-and-properties {
+    grid-template-columns: var(--console-palette-width) calc(100% - var(--console-palette-width) - var(--console-properties-width)) var(--console-properties-width);
 }
 
 .ocd-designer-left-panel {
