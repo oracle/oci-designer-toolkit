@@ -567,6 +567,7 @@ summary {
     overflow-y: hidden;
     box-sizing: border-box;
     width: var(--console-palette-width);
+    min-width: var(--console-palette-width);
     min-height: 100%;
     border-right: #555555 1px solid;
 }
@@ -1186,13 +1187,14 @@ summary {
     border: none;
 }
 
-.ocd-designer-properties {
+.ocd-designer-properties, .ocd-designer-right-panel {
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
     overflow-y: hidden;
     box-sizing: border-box;
     width: var(--console-properties-width);
+    min-width: var(--console-properties-width);
     min-height: 100%;
     border-left: #555555 1px solid;
 }
