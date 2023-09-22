@@ -123,7 +123,7 @@
     "browserify-fs": "^1.0.0",
     "buffer": "^6.0.3",
     "crypto-browserify": "^3.12.0",
-    "electron": "^25.2.0",
+    "electron": "^25.8.1",
     "electron-builder": "^23.6.0",
     "https-browserify": "^1.0.0",
     "os-browserify": "^0.3.0",
