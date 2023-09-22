@@ -271,7 +271,7 @@ is downloaded from github. Once the VM is built the vagrant up should just take 
 
 If you have a Linux machine and would like to install OKIT directly without the need for Docker or Vagrant then 
 this can be achieved using the following simple instructions. We assume that you have already created the appropriate OCI SDK config
-file in ~/.oci and associated ssh keys/config in ~/.ssh.
+file in, __root users__ ~/.oci and associated ssh keys/config in ~/.ssh.
 
 The instructions below give 2 options for the server either HTTP or HTTPS and it is up to the user to choose the appropriate 
 command based on their requirements.
@@ -279,6 +279,8 @@ command based on their requirements.
 These instructions will install OKIT in the root directory __/okit__. If you would like OKIT in an alternative directory 
 modify the OKIT_DIR environment variable. In addition the __/etc/systemd/system/gunicorn.service__ and __${OKIT_DIR}/config/gunicorn_http*.py__ 
 files will need to modified to reflect this new location.
+
+__NOTE: The service will run as root and hence will require the oci config and associated key files to be below roots home directory__
 
 ```bash
 export OKIT_DIR=${HOME}/okit
