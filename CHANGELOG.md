@@ -1,6 +1,13 @@
 # Release Notes
 
 
+## Version 0.54.5
+**Release Date**: 22nd September 2023
+### Features
+### Bug Fixes
+1. Update Linux Native install instructions to specify OCI Config information must exist below roots home directory.
+
+
 ## Version 0.54.4
 **Release Date**: 31st August 2023
 ### Features
