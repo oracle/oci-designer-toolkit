@@ -874,6 +874,7 @@ summary {
     min-height: var(--console-layers-bar-height);
     max-height: var(--console-layers-bar-height);
     width: 100%;
+    max-width: 100%;
     border-bottom: #312D2A solid 1px;
     overflow-x: auto;
     scrollbar-width: none; /* Firefox */
@@ -949,6 +950,7 @@ summary {
     min-height: var(--console-pages-bar-height);
     max-height: var(--console-pages-bar-height);
     width: 100%;
+    max-width: 100%;
     border-top: #312D2A solid 1px;
     overflow-x: auto;
     scrollbar-width: none; /* Firefox */
