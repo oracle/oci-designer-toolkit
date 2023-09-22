@@ -185,15 +185,17 @@ summary {
 */
 
 .ocd-console {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: [console-header] var(--console-header-height) [console-toolbar] var(--console-toolbar-height) [console-body] auto [console-footer] var(--console-footer-height);
+    /* display: flex;
+    flex-direction: column; */
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 
     width: 100%;
     height: 100vh;
-    background-color: white;
+    background-color: var(--console-background-colour);
 }
 
 .ocd-console-title-bar {
@@ -378,16 +380,14 @@ summary {
 }
 
 .ocd-console-body {
-    position: relative;
-    margin: 0;
-    padding: 0;
+    display: block;
     box-sizing: border-box;
-    flex: auto;
     width: 100%;
     overflow: hidden;
 }
 
 .ocd-console-footer {
+    display: block;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -553,11 +553,24 @@ summary {
 */
 
 .ocd-designer {
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: var(--console-palette-width) calc(100% - var(--console-palette-width) - var(--console-properties-width)) var(--console-properties-width);
+    /* flex-direction: row; */
     box-sizing: border-box;
     width: 100%;
     height: 100%;
+}
+
+.ocd-designer-left-panel-only {
+    grid-template-columns: var(--console-palette-width) calc(100% - var(--console-palette-width));
+}
+
+.ocd-designer-right-panel-only {
+    grid-template-columns: calc(100% - var(--console-properties-width)) var(--console-properties-width);
+}
+
+.ocd-designer-palette-and-properties {
+    grid-template-columns: var(--console-palette-width) calc(100% - var(--console-palette-width) - var(--console-properties-width)) var(--console-properties-width);
 }
 
 .ocd-designer-left-panel {
@@ -567,6 +580,7 @@ summary {
     overflow-y: hidden;
     box-sizing: border-box;
     width: var(--console-palette-width);
+    min-width: var(--console-palette-width);
     min-height: 100%;
     border-right: #555555 1px solid;
 }
@@ -860,7 +874,14 @@ summary {
     min-height: var(--console-layers-bar-height);
     max-height: var(--console-layers-bar-height);
     width: 100%;
+    max-width: 100%;
     border-bottom: #312D2A solid 1px;
+    overflow-x: auto;
+    scrollbar-width: none; /* Firefox */
+}
+
+.ocd-designer-canvas-layers::-webkit-scrollbar {
+    display: none;  /* Safari and Chrome */
 }
 
 .ocd-designer-canvas-layer {
@@ -929,7 +950,14 @@ summary {
     min-height: var(--console-pages-bar-height);
     max-height: var(--console-pages-bar-height);
     width: 100%;
+    max-width: 100%;
     border-top: #312D2A solid 1px;
+    overflow-x: auto;
+    scrollbar-width: none; /* Firefox */
+}
+
+.ocd-designer-canvas-pages::-webkit-scrollbar {
+    display: none;  /* Safari and Chrome */
 }
 
 .ocd-designer-canvas-page {
@@ -940,6 +968,7 @@ summary {
     padding-left: 5px;
     padding-right: 5px;
     font-size: smaller;
+    white-space: nowrap;
 }
 
 .ocd-designer-canvas-page:hover {
@@ -1186,13 +1215,14 @@ summary {
     border: none;
 }
 
-.ocd-designer-properties {
+.ocd-designer-properties, .ocd-designer-right-panel {
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
     overflow-y: hidden;
     box-sizing: border-box;
     width: var(--console-properties-width);
+    min-width: var(--console-properties-width);
     min-height: 100%;
     border-left: #555555 1px solid;
 }

@@ -2,6 +2,8 @@
 ** SVG Look & Feel Variables
 */
 :root {
+    --console-background-colour: #ffffff;
+
     --svg-container-resource-stroke: #312D2A;
     --svg-container-resource-stroke-width: 1;
     --svg-container-resource-stroke-dasharray: 3, 2;
