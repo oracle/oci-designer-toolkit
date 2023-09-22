@@ -1,28 +1,49 @@
 {
-    "name": "ocd",
-    "description": "OKIT Open Cloud Designer",
-    "not-workspaces": [
-        "ocd-codegen",
-        "ocd-core",
-        "ocd-export",
-        "ocd-import",
-        "ocd-query",
-        "ocd-react",
-        "ocd-desktop",
-        "ocd-vscode"
-    ],
-    "scripts": {
-        "install-ocd-codegen": "cd ocd-codegen && npm install",
-        "install-ocd-react": "cd ocd-react && npm install",
-        "install-ocd-desktop": "cd ocd-desktop && npm install",
-        "install": "npm run install-ocd-codegen && npm run install-ocd-desktop && npm run import-and-generate",
-        "build-ocd-react": "cd ocd-react && npm run build",
-        "build-ocd-desktop": "cd ocd-desktop && npm run build",
-        "build": "npm run build-ocd-desktop",
-        "import": "cd ocd-codegen && npm run import",
-        "generate": "cd ocd-codegen && npm run generate",
-        "import-and-generate": "cd ocd-codegen && npm run import-and-generate",
-        "web": "cd ocd-desktop && npm run start",
-        "desktop": "cd ocd-desktop && npm run build-all"
-    }
+  "name": "ocd",
+  "version": "1.0.0",
+  "description": "OKIT Open Cloud Designer Desktop",
+  "title": "OKIT Open Cloud Designer Desktop",
+  "author": {
+    "name": "Andrew Hopkinson",
+    "email": "andrew.hopkinson@oracle.com",
+    "url": "https://github.com/oracle/oci-designer-toolkit"
+  },
+  "bugs": "https://github.com/oracle/oci-designer-toolkit/issues",
+  "keywords": [
+    "ocd",
+    "okit"
+  ],
+  "license": "UPL-1.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "fresh-install": "npm install && npm run compile-for-codegen && npm run import-and-generate && npm run build",
+    "reinstall": "npm run fresh-install",
+    "build": "npm run build --workspaces --if-present",
+    "compile": "npm run compile --workspaces --if-present",
+    "compile-for-codegen": "npm run compile --workspace=packages/core --workspace=packages/codegen --workspace=packages/codegen-cli",
+    "import-and-generate": "npm run import-and-generate --workspace=packages/codegen-cli",
+    "desktop": "npm run desktop --workspace=packages/desktop",
+    "web": "npm run web --workspace=packages/desktop"
+  },
+  "workspaces": [
+    "packages/core",
+    "packages/codegen",
+    "packages/model",
+    "packages/query",
+    "packages/import",
+    "packages/export",
+    "packages/react",
+    "packages/web",
+    "packages/desktop",
+    "packages/cli",
+    "packages/codegen-cli"
+  ],
+  "devDependencies": {
+    "@types/uuid": "^9.0.2",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "uuid": "^9.0.0"
+  }
 }

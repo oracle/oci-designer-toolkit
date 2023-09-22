@@ -17,19 +17,15 @@ Before the application can be either built as a desktop or run as a web server a
 installed. This can be achieve by executing the __install__ script, from this directory, as follows:
 
 ``` bash
-npm run install
+npm run fresh-install
 ```
 
-# Building Desktop Application
+# Running Desktop Application
 
 1. Build Desktop Application
 ```bash
 npm run desktop
 ```
-2. Install Application from 
-    1. ./dist/linux/
-    2. ./dist/mac/ocd-0.1.0.dmg
-    3. ./dist/win/ocd Setup 0.1.0.exe
 
 # Running Development Web Application
 
@@ -73,19 +69,5 @@ The Page/View Tabs (at base of canvas) allow the user to create multiple visual 
 ## Properties
 
 The properties panel provides access to the edittable properties available for the selected Resource. In addition the User can provide Resource specific documentation that will be included in any generated Markdown.
-
-# Scripts
-
-- __install__ : Installs all required modules for the sub packages
-- __build__ : Script will build all packages within the ocd workspace
-- __import__ : Imports the Terraform Schemas and converts them to the standard OCD Resource schema that can then be used to generate the TypeScript 
-and React code.
-- __generate__ : Reads the OCD Schema file and generates Model, Properties and Terraform TypeScript / React files.
-- __import-and-generate__ : Executes "import" and then "generate" scripts
-- __web__ : Runs the development React web application and presents the Web BUI on [http://localhost:3000/](http://localhost:3000/)
-- __desktop__ : Executes the build process and generates installation files in the ./dist directory.
-    - __linux-desktop__ : Build just linux desktop
-    - __macos-desktop__ : Build just MacOS desktop
-    - __win-desktop__ : Build just Windows desktop
 
 

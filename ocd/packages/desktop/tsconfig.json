@@ -1,0 +1,27 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "references": [
+      {"path": "../core"},
+      {"path": "../export"},
+      {"path": "../import"},
+      {"path": "../model"},
+      {"path": "../query"}
+  ],
+  "compilerOptions": {
+    "allowJs": true,
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "isolatedModules": true,
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "jsx": "react-jsx",
+
+    "composite": false
+  },
+  "include": [
+    "src"
+  ]
+}

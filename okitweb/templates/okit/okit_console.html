@@ -12,6 +12,7 @@
     <script type="text/javascript">const developer_mode = {{ developer_mode | lower }};</script>
     <script type="text/javascript">const a2c_mode = {{ a2c_mode | lower }};</script>
     <script type="text/javascript">const pca_mode = {{ pca_mode | lower }};</script>
+    <script type="text/javascript">const c3_mode = {{ c3_mode | lower }};</script>
     <script type="text/javascript">const oci_mode = {{ oci_mode | lower }};</script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_common.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_console.js') }}"></script>
@@ -45,6 +46,7 @@
                 </div>
                 <div class="td okit-white okit-logo"></div>
                 {%- if pca_mode -%}<div class="td oracle-console-pca-logo"></div>{%- endif -%} 
+                {%- if c3_mode -%}<div class="td oracle-console-c3-logo"></div>{%- endif -%} 
                 {%- if oci_mode -%}<div class="td oracle-console-logo"></div>{%- endif -%}
                 <div class="td"></div>
                 {% if local_okit %}

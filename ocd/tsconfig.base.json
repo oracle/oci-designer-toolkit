@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "incremental": true,
+    "target": "ES2022",
+    "module": "NodeNext",
+    "lib": [
+      "ES2022",
+      "ESNext",
+      "dom",
+      "dom.iterable"
+    ],
+    "declaration": true,
+    "moduleResolution": "NodeNext",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "resolveJsonModule": true,
+
+    "composite": true
+  }
+}

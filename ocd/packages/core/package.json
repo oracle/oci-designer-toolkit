@@ -1,0 +1,28 @@
+{
+  "name": "@ocd/core",
+  "version": "1.0.0",
+  "description": "OKIT Open Cloud Designer Core Utility Module",
+  "title": "OKIT Open Cloud Designer Core Utility Module",
+  "author": {
+    "name": "Andrew Hopkinson",
+    "email": "andrew.hopkinson@oracle.com",
+    "url": "https://github.com/oracle/oci-designer-toolkit"
+  },
+  "bugs": "https://github.com/oracle/oci-designer-toolkit/issues",
+  "keywords": [
+    "ocd",
+    "okit"
+  ],
+  "license": "UPL-1.0",
+  "main": "lib/esm/index.js",
+  "module": "lib/esm/index.js",
+  "files": [
+    "lib/"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "pack": "mkdir -p ./dist && npm pack --pack-destination ./dist",
+    "compile": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
+    "build": "npm run compile && npm run pack"
+  }
+}

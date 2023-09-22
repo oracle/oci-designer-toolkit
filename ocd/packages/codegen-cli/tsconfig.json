@@ -1,0 +1,13 @@
+{
+    "extends": "../../tsconfig.base.json",
+    "references": [
+        {"path": "../core"},
+        {"path": "../codegen"}
+    ],
+    "compilerOptions": {
+        "rootDir": "src",
+        "outDir": "lib/esm",
+    },
+    "include": ["src"],
+    "exclude": ["schema"]
+}

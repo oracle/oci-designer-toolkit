@@ -18,7 +18,8 @@ class Instance extends OkitArtifact {
         // this.display_name = this.generateDefaultName(okitjson.instances.length + 1);
         this.availability_domain = '1';
         this.compartment_id = '';
-        this.shape = okitjson && okitjson.metadata.platform !== 'pca' ? 'VM.Standard.E3.Flex' : '';
+        // this.shape = okitjson && okitjson.metadata.platform !== 'pca' ? 'VM.Standard.E3.Flex' : '';
+        this.shape = this.isOCI() ? 'VM.Standard.E3.Flex' : '';
         // # Optional
         this.count = 1;
         this.fault_domain = '';
@@ -43,8 +44,10 @@ class Instance extends OkitArtifact {
             user_data: ''
         };
         this.shape_config = {
-            memory_in_gbs: okitjson && okitjson.metadata.platform !== 'pca' ? 16 : '', 
-            ocpus: okitjson && okitjson.metadata.platform !== 'pca' ? 1 : ''
+            memory_in_gbs: this.isOCI() ? 16 : '', 
+            ocpus: this.isOCI() ? 1 : ''
+            // memory_in_gbs: okitjson && okitjson.metadata.platform !== 'pca' ? 16 : '', 
+            // ocpus: okitjson && okitjson.metadata.platform !== 'pca' ? 1 : ''
         };
         // TODO: Future
         //this.launch_options_specified = false;

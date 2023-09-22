@@ -24,6 +24,8 @@ okit.wpr
 **/dist/
 **/build/
 **/node_modules
+**/out/
+**/lib/
 # **/package-lock.json
 
 # Containers
