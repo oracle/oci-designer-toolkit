@@ -230,11 +230,9 @@ export const OcdSetLookupProperty = ({ ocdDocument, setOcdDocument, resource, co
     const properties = config && config.properties ? config.properties : {}
     const resources = attribute.provider === 'oci' ? ocdDocument.getOciResourceList(attribute.lookupResource ? attribute.lookupResource : '') : []
     const resourceType = OcdUtils.toResourceType(attribute.lookupResource)
-    console.debug('OcdPropertyTypes: OcdSetLookupProperty', JSON.stringify(attribute, null, 4), JSON.stringify(resources, null, 2))
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const securityListId = e.target.id
         const checked = e.target.checked
-        console.debug('OcdPropertyTypes: OcdSetLookupProperty', checked, securityListId, e)
         if (checked) resource[attribute.key].push(securityListId)
         else resource[attribute.key] = resource[attribute.key].filter((s: string) => s !== securityListId)
         setOcdDocument(OcdDocument.clone(ocdDocument))
