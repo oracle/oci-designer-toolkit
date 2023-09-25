@@ -27,20 +27,22 @@ export namespace OciLoadBalancer {
     }
     export function allowedParentTypes(): string[] {
         console.debug('OciLoadBalancer: Allowed Parent Types')
-        return []
+        return ['Subnet']
     }
     export function getParentId(resource: OciLoadBalancer): string {
         console.debug('OciLoadBalancer: Getting Parent Id to for', resource.displayName, resource.id)
-        return resource.compartmentId
+        let parentId = resource.subnetIds.length && resource.subnetIds[0] !== '' ? resource.subnetIds[0] as string  : resource.compartmentId as string
+        return parentId
     }
     export function setParentId(resource: OciLoadBalancer, parentId: string): OciLoadBalancer {
         console.debug('OciLoadBalancer: Setting Parent Id to', parentId, 'for', resource.displayName, resource.id)
+        resource.subnetIds[0] = parentId
         return resource
     }
     export function getConnectionIds(resource: OciLoadBalancer): string[] {
         // This List of Ids does not include the Parent Id or Compartment Id
         console.debug('OciLoadBalancer: Getting Connection Ids to for', resource.displayName, resource.id)
-        return []
+        return resource.subnetIds.slice(1)
     }
     
     export function newOciReservedIps(): OciReservedIps {

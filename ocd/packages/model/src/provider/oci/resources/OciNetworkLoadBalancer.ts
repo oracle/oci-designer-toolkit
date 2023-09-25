@@ -23,14 +23,16 @@ export namespace OciNetworkLoadBalancer {
     }
     export function allowedParentTypes(): string[] {
         console.debug('OciNetworkLoadBalancer: Allowed Parent Types')
-        return []
+        return ['Subnet']
     }
     export function getParentId(resource: OciNetworkLoadBalancer): string {
         console.debug('OciNetworkLoadBalancer: Getting Parent Id to for', resource.displayName, resource.id)
-        return resource.compartmentId
+        let parentId = resource.subnetId !== '' ? resource.subnetId as string  : resource.compartmentId as string
+        return parentId
     }
     export function setParentId(resource: OciNetworkLoadBalancer, parentId: string): OciNetworkLoadBalancer {
         console.debug('OciNetworkLoadBalancer: Setting Parent Id to', parentId, 'for', resource.displayName, resource.id)
+        resource.subnetId = parentId
         return resource
     }
     export function getConnectionIds(resource: OciNetworkLoadBalancer): string[] {
