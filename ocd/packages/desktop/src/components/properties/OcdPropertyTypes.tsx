@@ -174,24 +174,6 @@ export const OcdStaticLookupProperty = ({ ocdDocument, setOcdDocument, resource,
     )
 }
 
-// export const OcdObjectProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
-//     return (
-//         <div></div>
-//     )
-// }
-
-// export const OcdObjectListProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
-//     return (
-//         <div className='ocd-property-row'>
-//             <details open={true}>
-//                 <summary className='summary-background'>{attribute.label}</summary>
-//                 <div className='ocd-resource-properties'>
-//                 </div>
-//             </details>
-//         </div>
-//     )
-// }
-
 export const OcdStringListProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
     const properties = config && config.properties ? config.properties : {}
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -245,8 +227,30 @@ export const OcdSetProperty = ({ ocdDocument, setOcdDocument, resource, config, 
 }
 
 export const OcdSetLookupProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
+    const properties = config && config.properties ? config.properties : {}
+    const resources = attribute.provider === 'oci' ? ocdDocument.getOciResourceList(attribute.lookupResource ? attribute.lookupResource : '') : []
+    const resourceType = OcdUtils.toResourceType(attribute.lookupResource)
+    console.debug('OcdPropertyTypes: OcdSetLookupProperty', JSON.stringify(attribute, null, 4), JSON.stringify(resources, null, 2))
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const securityListId = e.target.id
+        const checked = e.target.checked
+        console.debug('OcdPropertyTypes: OcdSetLookupProperty', checked, securityListId, e)
+        if (checked) resource[attribute.key].push(securityListId)
+        else resource[attribute.key] = resource[attribute.key].filter((s: string) => s !== securityListId)
+        setOcdDocument(OcdDocument.clone(ocdDocument))
+    }
     return (
-        <div></div>
+        <div className='ocd-property-row ocd-simple-property-row'>
+            <div><label>{attribute.label}</label></div>
+            <div>
+                <div className='ocd-set-lookup'>
+                    {resources.filter((r) => r.resourceType !== resourceType || r.id !== resource.id).map((r: OcdResource) => {
+                            // return <div key={r.id}></div>
+                            return <div key={r.id}><input type='checkbox' id={r.id} key={r.id} onChange={onChange} checked={resource[attribute.key].includes(r.id)}></input><label htmlFor={r.id}>{r.displayName}</label></div>
+                        })}
+                </div>
+            </div>
+        </div>
     )
 }
 
