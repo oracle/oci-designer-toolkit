@@ -118,6 +118,7 @@ export const OcdNumberProperty = ({ ocdDocument, setOcdDocument, resource, confi
 
 export const OcdBooleanProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
     const properties = config && config.properties ? config.properties : {}
+    const id = `${resource[attribute.key]}_${resource.id}`
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         resource[attribute.key] = e.target.checked
         setOcdDocument(OcdDocument.clone(ocdDocument))
@@ -125,7 +126,7 @@ export const OcdBooleanProperty = ({ ocdDocument, setOcdDocument, resource, conf
     return (
         <div className='ocd-property-row ocd-simple-property-row'>
             <div></div>
-            <div><input type='checkbox' checked={resource[attribute.key]} {...properties} onChange={onChange}></input><label>{attribute.label}</label></div>
+            <div><input type='checkbox' id={id} checked={resource[attribute.key]} {...properties} onChange={onChange}></input><label htmlFor={id}>{attribute.label}</label></div>
         </div>
     )
 }
@@ -136,9 +137,6 @@ export const OcdLookupProperty = ({ ocdDocument, setOcdDocument, resource, confi
     const baseFilter = (r: any) => r.resourceType !== resourceType || r.id !== resource.id
     const customFilter = config && config.resourceFilter ? (r: any) => config.resourceFilter  && config.resourceFilter(r, resource) : config && config.simpleFilter ? config.simpleFilter : () => true
     const resources = attribute.provider === 'oci' ? ocdDocument.getOciResourceList(attribute.lookupResource ? attribute.lookupResource : '').filter(customFilter).filter(baseFilter) : []
-    // console.debug('OcdPropertyTypes: OcdLookupProperty: Filter', customFilter)
-    // console.debug('OcdPropertyTypes: OcdLookupProperty: Resource', resource)
-    // console.debug('OcdPropertyTypes: OcdLookupProperty: Resources', resources)
     const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         resource[attribute.key] = e.target.value
         setOcdDocument(OcdDocument.clone(ocdDocument))
