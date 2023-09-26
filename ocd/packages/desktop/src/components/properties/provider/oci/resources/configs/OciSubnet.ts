@@ -20,6 +20,24 @@ export namespace OciSubnetConfigs {
                     {id: '2', displayName: 'Availability Domain 2'},
                     {id: '3', displayName: 'Availability Domain 3'}
                 ]
+            },
+            {
+                id: 'dhcp_options_id',
+                properties: {},
+                configs: [],
+                resourceFilter: (r, resource) => r.vcnId === resource.vcnId
+            },
+            {
+                id: 'route_table_id',
+                properties: {},
+                configs: [],
+                resourceFilter: (r, resource) => r.vcnId === resource.vcnId
+            },
+            {
+                id: 'security_list_ids',
+                properties: {},
+                configs: [],
+                resourceFilter: (r, resource) => r.vcnId === resource.vcnId
             }
         ]
     }
