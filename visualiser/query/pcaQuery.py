@@ -90,7 +90,7 @@ class PCAQuery(OCIConnection):
         self.dropdown_json = {}
         self.resource_map = {
             "AllCompartments": {
-                "method": self.tenancy_compartments, 
+                "method": self.all_compartments, 
                 "client": "identity", 
                 "array": "all_compartments"
                 }, 
