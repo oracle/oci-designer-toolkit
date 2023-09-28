@@ -6,7 +6,7 @@
 import { OcdDesign, OciResource } from "@ocd/model";
 import { OcdExporter, OutputData } from "../OcdExporter";
 import { OciModelResources as Model } from '@ocd/model'
-// import * as Terraform  from './provider/oci/resources'
+import * as OciTerraformResources  from './provider/oci/resources'
 import { OcdUtils } from "@ocd/core";
 
 interface ResourceMap extends Record<string, string> {}
@@ -24,33 +24,39 @@ export class OcdTerraformExporter extends OcdExporter {
             "oci_provider.tf": [this.ociProvider()],
             "oci_metadata.tf": [this.ociMetadata()]
         }
+        // Id to Terraform Resource Name Map
+        // console.debug('OcdTerraformExporter: Id => Resources', this.getResources())
+        const idTFResourceMap: Record<string, string> = this.getResources().reduce((a, c) => {a[c.id] = c.terraformResourceName; return a}, {} as Record<string, string>)
+        // console.debug('OcdTerraformExporter: Id => TF Resource Map', idTFResourceMap)
         // Pre-Create Output file Entries
         Object.entries(this.resourceFileMap).forEach(([k, v]) => outputData[this.resourceFileMap.hasOwnProperty(k) ? this.resourceFileMap[k] : this.resourceFileMap['unknown']] = [])
         // Generate OCI Terraform
         Object.entries(design.model.oci.resources).forEach(([k, v]) => {
             const className = OcdUtils.toClassName('Oci', k)
             const filename = this.resourceFileMap.hasOwnProperty(k) ? this.resourceFileMap[k] : this.resourceFileMap['unknown']
-            console.info('Class Name', className)
-            console.info('File Name', filename)
+            // console.debug('OcdTerraformExporter: File Name', filename)
+            // console.debug('OcdTerraformExporter: Class Name', className)
+            // @ts-ignore
+            // console.debug('OcdTerraformExporter: Class', OciTerraformResources[className])
             v.forEach((r: OciResource) => {
                 // @ts-ignore 
-                const tfResource = new Terraform[className](r)
-                console.info('Generator Resource', tfResource)
+                const tfResource = new OciTerraformResources[className](r, idTFResourceMap)
+                console.debug('OcdTerraformExporter: Generator Resource', tfResource)
                 const output = outputData.hasOwnProperty(filename) ? outputData[filename] : outputData[filename] = []
                 output.push(tfResource.generate(r))
-                console.info('Output', output)
+                console.debug('OcdTerraformExporter: Output', output)
             })
         })
-        console.info('Output Data', outputData)
+        // console.debug('OcdTerraformExporter: Output Data', outputData)
         const allResources: string[] = Object.values(outputData).reduce((a, c) => [...a, ...c], [])
-        console.info('All Resources', allResources)
+        // console.debug('OcdTerraformExporter: All Resources', allResources)
         this.terraform = allResources.join('\n')
-        console.info('Terraform', this.terraform)
+        console.debug('OcdTerraformExporter: Terraform', this.terraform)
         return outputData
     }
     ociProvider = () => {return `
 terraform {
-    required_version = ">= 0.12.0"
+    required_version = ">= 0.12.0, <= 1.5.0"
 }
 
 # ------ Connect to Provider
