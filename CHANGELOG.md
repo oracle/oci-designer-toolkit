@@ -1,6 +1,13 @@
 # Release Notes
 
 
+## Version 0.55.0
+**Release Date**: 22nd September 2023
+### Features
+1. Extend PCA Query to lookup Images in all Tenancy Compartments.
+### Bug Fixes
+
+
 ## Version 0.54.5
 **Release Date**: 22nd September 2023
 ### Features

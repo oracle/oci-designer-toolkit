@@ -569,6 +569,10 @@ summary {
     grid-template-columns: calc(100% - var(--console-properties-width)) var(--console-properties-width);
 }
 
+.ocd-designer-no-side-panels {
+    grid-template-columns: 100%;
+}
+
 .ocd-designer-palette-and-properties {
     grid-template-columns: var(--console-palette-width) calc(100% - var(--console-palette-width) - var(--console-properties-width)) var(--console-properties-width);
 }
@@ -891,6 +895,11 @@ summary {
     border-right: #555555 solid 1px;
     padding-right: 5px;
     font-size: smaller;
+}
+
+.ocd-designer-canvas-layer > label {
+    padding: 0 5px;
+    font-weight: bolder;
 }
 
 .ocd-designer-canvas-layer:hover {

@@ -14,6 +14,9 @@ class OcdExporter {
         this.design = OcdDesign.newDesign()
     }
 
+    getOciResources() {return Object.values(this.design.model.oci.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], [])}
+    getResources() {return this.getOciResources()}
+
     export = (design: OcdDesign): string | OutputData => ''
 
     toTitleCase = (str: string) => OcdUtils.toTitleCase(str)
