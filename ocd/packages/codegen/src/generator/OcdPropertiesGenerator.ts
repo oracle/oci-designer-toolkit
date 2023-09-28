@@ -70,7 +70,7 @@ export const ${this.reactResourceName(resource)} = ({ ocdDocument, setOcdDocumen
 
 import { v4 as uuidv4 } from 'uuid'
 import OcdDocument from '../../../../../OcdDocument'
-import { GeneratedResourceProperties, OcdBooleanProperty, OcdListProperty, OcdLookupProperty, OcdMapProperty, OcdNumberProperty, OcdNumberListProperty, OcdSetLookupProperty, OcdSetProperty, OcdStaticLookupProperty, OcdStringListProperty, OcdTextProperty, ResourceProperty} from '../../../../OcdPropertyTypes'
+import { GeneratedResourceProperties, OcdBooleanProperty, OcdListProperty, OcdLookupProperty, OcdLookupListProperty, OcdMapProperty, OcdNumberProperty, OcdNumberListProperty, OcdSetLookupProperty, OcdSetProperty, OcdStaticLookupProperty, OcdStringListProperty, OcdTextProperty, ResourceProperty} from '../../../../OcdPropertyTypes'
 import { OciModelResources as Model } from '@ocd/model'
 //import * as Model  from '../../../../../../model/provider/oci/resources/${this.modelFilename(resource)}'
 
@@ -169,6 +169,7 @@ export namespace ${this.configNamespace(resource)} {
         else if (attribute.type === 'string')                                 return `<OcdTextProperty         ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} />`
         else if (attribute.type === 'bool')                                   return `<OcdBooleanProperty      ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} />`
         else if (attribute.type === 'number')                                 return `<OcdNumberProperty       ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} />`
+        else if (attribute.type === 'list' && attribute.lookup)               return `<OcdLookupListProperty   ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} />`
         else if (attribute.type === 'list' && attribute.subtype === 'string') return `<OcdStringListProperty   ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} />`
         else if (attribute.type === 'list' && attribute.subtype === 'number') return `<OcdNumberListProperty   ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} />`
         else if (attribute.type === 'set' && attribute.lookup)                return `<OcdSetLookupProperty    ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} />`

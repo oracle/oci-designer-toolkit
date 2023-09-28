@@ -157,6 +157,33 @@ export const OcdLookupProperty = ({ ocdDocument, setOcdDocument, resource, confi
     )
 }
 
+export const OcdLookupListProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
+    const properties = config && config.properties ? config.properties : {}
+    const resourceType = OcdUtils.toResourceType(attribute.lookupResource)
+    const baseFilter = (r: any) => r.resourceType !== resourceType || r.id !== resource.id
+    const customFilter = config && config.resourceFilter ? (r: any) => config.resourceFilter  && config.resourceFilter(r, resource) : config && config.simpleFilter ? config.simpleFilter : () => true
+    const resources = attribute.provider === 'oci' ? ocdDocument.getOciResourceList(attribute.lookupResource ? attribute.lookupResource : '').filter(customFilter).filter(baseFilter) : []
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const securityListId = e.target.id
+        const checked = e.target.checked
+        if (checked) resource[attribute.key].push(securityListId)
+        else resource[attribute.key] = resource[attribute.key].filter((s: string) => s !== securityListId)
+        setOcdDocument(OcdDocument.clone(ocdDocument))
+    }
+    return (
+        <div className='ocd-property-row ocd-simple-property-row'>
+            <div><label>{attribute.label}</label></div>
+            <div>
+                <div className='ocd-set-lookup'>
+                    {resources.map((r: OcdResource) => {
+                            return <div key={r.id}><input type='checkbox' id={r.id} key={r.id} {...properties} onChange={onChange} checked={resource[attribute.key].includes(r.id)}></input><label htmlFor={r.id}>{r.displayName}</label></div>
+                        })}
+                </div>
+            </div>
+        </div>
+    )
+}
+
 export const OcdStaticLookupProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
     const properties = config && config.properties ? config.properties : {}
     const resources = config && config.options ? config.options : []
