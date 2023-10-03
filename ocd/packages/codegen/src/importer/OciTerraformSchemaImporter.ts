@@ -41,7 +41,7 @@ export class OciTerraformSchemaImporter extends OcdSchemaImporter {
                 key: this.toCamelCase(k),
                 name: k,
                 // @ts-ignore
-                type: Array.isArray(v.type) ? v.type[0] : type_overrides[k] ? type_overrides[k] : v.type,
+                type: this.isMultiReference(k) ? 'list' : Array.isArray(v.type) ? v.type[0] : type_overrides[k] ? type_overrides[k] : v.type,
                 // @ts-ignore
                 subtype: Array.isArray(v.type) ? v.type[1] : '',
                 // @ts-ignore

@@ -18,8 +18,8 @@ resource "oci_core_subnet" "{{ resource_name }}" {
     compartment_id             = {{ compartment_id }}
     vcn_id                     = {{ vcn_id }}
     cidr_block                 = {{ cidr_block | safe }}
-    # Optional
-{% if availability_domain is defined and availability_domain | int != 0 %}
+    # Optional 
+{% if availability_domain is defined and availability_domain | safe | int != 0 %}
     availability_domain        = data.oci_identity_availability_domains.AvailabilityDomains.availability_domains[{{ availability_domain | safe }} - 1]["name"]
 {% endif %}
 {% if display_name is defined %}

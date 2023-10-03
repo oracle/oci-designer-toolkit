@@ -6,6 +6,7 @@
 ### Features
 1. Extend PCA Query to lookup Images in all Tenancy Compartments.
 ### Bug Fixes
+1. Resolve issue where availability domain was not passed as integer to the subnet.jinja2
 
 
 ## Version 0.54.5
