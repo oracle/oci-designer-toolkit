@@ -159,6 +159,8 @@ class OCITerraformGenerator(OCIGenerator):
         elif isinstance(value, bool):
             # return str(value).lower()
             return value
+        elif isinstance(value, int):
+            return value
         else:
             return '"{0!s:s}"'.format(value)
             # return value
