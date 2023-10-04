@@ -58,7 +58,7 @@ export const menuItems = [
                         const ocdDocument = OcdDocument.new()
                         ocdDocument.design = JSON.parse(resp)
                         setOcdDocument(ocdDocument)
-                    })
+                    }).catch((reason) => {console.debug(reason)})
                 }
             },
             {
@@ -149,7 +149,7 @@ export const menuItems = [
                                 ocdDocument.design = okitImporter.parse(resp)
                                 ocdDocument.autoLayout(ocdDocument.getActivePage().id)
                                 setOcdDocument(ocdDocument)
-                            })
+                            }).catch((reason) => {console.debug(reason)})
                         }
                     },
                     {

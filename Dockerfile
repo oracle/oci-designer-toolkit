@@ -6,7 +6,7 @@ FROM oraclelinux:8
 ARG BRANCH=master
 LABEL "provider"="Oracle" \
       "issues"="https://github.com/oracle/oci-designer-toolkit/issues" \
-      "version"="0.54.5" \
+      "version"="0.55.0" \
       "description"="OKIT Web Server Container." \
       "copyright"="Copyright (c) 2020, 2022, Oracle and/or its affiliates."
 # SHELL ["/bin/bash", "-c"]

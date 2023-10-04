@@ -22,7 +22,9 @@ export interface ResourcePropertyAttributes {
     lookupResource?: string
 }
 
-export type filterType = (r: any) => any[]
+export type SimpleFilterType = (r: any) => boolean
+
+export type ResourceFilterType = (r: any, resource: any) => boolean
 
 export interface ResourceElementProperties extends Record<string, any> {
     pattern?: string
@@ -36,8 +38,9 @@ export interface ResourceElementProperties extends Record<string, any> {
 export interface ResourceElementConfig extends Record<string, any> {
     id: string
     properties: ResourceElementProperties
-    filter?: filterType                  // Filter function for Reference Selects
-    displayCondition?(): boolean         // Function to identify if conditional elements should be displayed
+    resourceFilter?: ResourceFilterType // Filter function for Resource Selects. Checks Resource attributes against array element attributes
+    simpleFilter?: SimpleFilterType     // Filter function for Reference Selects. Simple test of array element attribute against constant
+    displayCondition?(): boolean        // Function to identify if conditional elements should be displayed
     configs: ResourceElementConfig[]
     options?: ResourceElementConfigOption[]
 }
@@ -115,6 +118,7 @@ export const OcdNumberProperty = ({ ocdDocument, setOcdDocument, resource, confi
 
 export const OcdBooleanProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
     const properties = config && config.properties ? config.properties : {}
+    const id = `${resource[attribute.key]}_${resource.id}`
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         resource[attribute.key] = e.target.checked
         setOcdDocument(OcdDocument.clone(ocdDocument))
@@ -122,16 +126,17 @@ export const OcdBooleanProperty = ({ ocdDocument, setOcdDocument, resource, conf
     return (
         <div className='ocd-property-row ocd-simple-property-row'>
             <div></div>
-            <div><input type='checkbox' checked={resource[attribute.key]} {...properties} onChange={onChange}></input><label>{attribute.label}</label></div>
+            <div><input type='checkbox' id={id} checked={resource[attribute.key]} {...properties} onChange={onChange}></input><label htmlFor={id}>{attribute.label}</label></div>
         </div>
     )
 }
 
 export const OcdLookupProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
     const properties = config && config.properties ? config.properties : {}
-    const resources = attribute.provider === 'oci' ? ocdDocument.getOciResourceList(attribute.lookupResource ? attribute.lookupResource : '') : []
     const resourceType = OcdUtils.toResourceType(attribute.lookupResource)
-    // console.info('Resources', resources)
+    const baseFilter = (r: any) => r.resourceType !== resourceType || r.id !== resource.id
+    const customFilter = config && config.resourceFilter ? (r: any) => config.resourceFilter  && config.resourceFilter(r, resource) : config && config.simpleFilter ? config.simpleFilter : () => true
+    const resources = attribute.provider === 'oci' ? ocdDocument.getOciResourceList(attribute.lookupResource ? attribute.lookupResource : '').filter(customFilter).filter(baseFilter) : []
     const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         resource[attribute.key] = e.target.value
         setOcdDocument(OcdDocument.clone(ocdDocument))
@@ -143,10 +148,37 @@ export const OcdLookupProperty = ({ ocdDocument, setOcdDocument, resource, confi
                 <select value={resource[attribute.key]} {...properties} onChange={onChange}>
                     {/* {!attribute.required && <option defaultValue='' key={`${attribute.lookupResource}-empty-option`}></option> } */}
                     <option value='' key={`${attribute.lookupResource}-empty-option`}></option>
-                    {resources.filter((r) => r.resourceType !== resourceType || r.id !== resource.id).map((r: OcdResource) => {
+                    {resources.map((r: OcdResource) => {
                         return <option value={r.id} key={r.id}>{r.displayName}</option>
                     })}
                 </select>
+            </div>
+        </div>
+    )
+}
+
+export const OcdLookupListProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
+    const properties = config && config.properties ? config.properties : {}
+    const resourceType = OcdUtils.toResourceType(attribute.lookupResource)
+    const baseFilter = (r: any) => r.resourceType !== resourceType || r.id !== resource.id
+    const customFilter = config && config.resourceFilter ? (r: any) => config.resourceFilter  && config.resourceFilter(r, resource) : config && config.simpleFilter ? config.simpleFilter : () => true
+    const resources = attribute.provider === 'oci' ? ocdDocument.getOciResourceList(attribute.lookupResource ? attribute.lookupResource : '').filter(customFilter).filter(baseFilter) : []
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const securityListId = e.target.id
+        const checked = e.target.checked
+        if (checked) resource[attribute.key].push(securityListId)
+        else resource[attribute.key] = resource[attribute.key].filter((s: string) => s !== securityListId)
+        setOcdDocument(OcdDocument.clone(ocdDocument))
+    }
+    return (
+        <div className='ocd-property-row ocd-simple-property-row'>
+            <div><label>{attribute.label}</label></div>
+            <div>
+                <div className='ocd-set-lookup'>
+                    {resources.map((r: OcdResource) => {
+                            return <div key={r.id}><input type='checkbox' id={r.id} key={r.id} {...properties} onChange={onChange} checked={resource[attribute.key].includes(r.id)}></input><label htmlFor={r.id}>{r.displayName}</label></div>
+                        })}
+                </div>
             </div>
         </div>
     )
@@ -173,24 +205,6 @@ export const OcdStaticLookupProperty = ({ ocdDocument, setOcdDocument, resource,
         </div>
     )
 }
-
-// export const OcdObjectProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
-//     return (
-//         <div></div>
-//     )
-// }
-
-// export const OcdObjectListProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
-//     return (
-//         <div className='ocd-property-row'>
-//             <details open={true}>
-//                 <summary className='summary-background'>{attribute.label}</summary>
-//                 <div className='ocd-resource-properties'>
-//                 </div>
-//             </details>
-//         </div>
-//     )
-// }
 
 export const OcdStringListProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
     const properties = config && config.properties ? config.properties : {}
@@ -245,8 +259,29 @@ export const OcdSetProperty = ({ ocdDocument, setOcdDocument, resource, config, 
 }
 
 export const OcdSetLookupProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
+    const properties = config && config.properties ? config.properties : {}
+    const resourceType = OcdUtils.toResourceType(attribute.lookupResource)
+    const baseFilter = (r: any) => r.resourceType !== resourceType || r.id !== resource.id
+    const customFilter = config && config.resourceFilter ? (r: any) => config.resourceFilter  && config.resourceFilter(r, resource) : config && config.simpleFilter ? config.simpleFilter : () => true
+    const resources = attribute.provider === 'oci' ? ocdDocument.getOciResourceList(attribute.lookupResource ? attribute.lookupResource : '').filter(customFilter).filter(baseFilter) : []
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const securityListId = e.target.id
+        const checked = e.target.checked
+        if (checked) resource[attribute.key].push(securityListId)
+        else resource[attribute.key] = resource[attribute.key].filter((s: string) => s !== securityListId)
+        setOcdDocument(OcdDocument.clone(ocdDocument))
+    }
     return (
-        <div></div>
+        <div className='ocd-property-row ocd-simple-property-row'>
+            <div><label>{attribute.label}</label></div>
+            <div>
+                <div className='ocd-set-lookup'>
+                    {resources.map((r: OcdResource) => {
+                            return <div key={r.id}><input type='checkbox' id={r.id} key={r.id} {...properties} onChange={onChange} checked={resource[attribute.key].includes(r.id)}></input><label htmlFor={r.id}>{r.displayName}</label></div>
+                        })}
+                </div>
+            </div>
+        </div>
     )
 }
 

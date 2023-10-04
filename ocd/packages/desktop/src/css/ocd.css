@@ -569,6 +569,10 @@ summary {
     grid-template-columns: calc(100% - var(--console-properties-width)) var(--console-properties-width);
 }
 
+.ocd-designer-no-side-panels {
+    grid-template-columns: 100%;
+}
+
 .ocd-designer-palette-and-properties {
     grid-template-columns: var(--console-palette-width) calc(100% - var(--console-palette-width) - var(--console-properties-width)) var(--console-properties-width);
 }
@@ -893,6 +897,11 @@ summary {
     font-size: smaller;
 }
 
+.ocd-designer-canvas-layer > label {
+    padding: 0 5px;
+    font-weight: bolder;
+}
+
 .ocd-designer-canvas-layer:hover {
     box-shadow: 0 0 5px #1d2733;
 }
@@ -996,6 +1005,31 @@ summary {
 
 .ocd-designer-canvas-svg {
     fill: white;
+}
+
+/*
+** Terraform View
+*/
+
+.ocd-terraform-view {
+    display: flex;
+    flex-direction: column;
+    /* grid-template-rows: var(--console-layers-bar-height), calc(100% - var(--console-layers-bar-height)); */
+    max-height: 100%;
+}
+
+.ocd-selected-terraform-content {
+    display: block;
+    overflow: auto;
+    width: 100%;
+    /* height: 100%;
+    max-height: 100%; */
+    flex-grow: 1;
+}
+
+.ocd-selected-terraform-content > pre {
+    max-height: 100%;
+    margin: 5px;
 }
 
 .ocd-svg-icon {

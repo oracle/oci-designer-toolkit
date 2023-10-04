@@ -27,7 +27,7 @@ from model.okitValidation import OCIJsonValidator
 logger = getLogger()
 
 class OCIGenerator(object):
-    OKIT_VERSION = "0.54.5"
+    OKIT_VERSION = "0.55.0"
     def __init__(self, template_dir, output_dir, visualiser_json, use_vars=False, add_provider=True):
         # Initialise generator output data variables
         self.rendered_resources = {}
@@ -229,6 +229,7 @@ class OCIGenerator(object):
     resource_template_map = {
         "drgs": ["drg.jinja2", "drg_route_distribution.jinja2", "drg_route_table.jinja2"],
     }
+    integer_elements = ["availability_domain"]
 
     def generate(self):
         # Validate input json
@@ -325,6 +326,9 @@ class OCIGenerator(object):
                         # Add Variable
                         parent[key] = self.formatJinja2Variable(val[4:].replace('\n', '\\n').replace('"', '\\"'))
                         # parent[key] = self.formatJinja2Value(val)
+                    elif val != '' and key in self.integer_elements:
+                        # Simple numeric
+                        parent[key] = self.formatJinja2Value(int(val))
                     elif val != '':
                         # Add Simple Value
                         parent[key] = self.formatJinja2Value(val.replace('\n', '\\n').replace('"', '\\"'))

@@ -38,7 +38,7 @@ const OcdCanvasView = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument, s
 
 const OcdDesigner = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument}: ConsolePageProps): JSX.Element => {
     const [dragData, setDragData] = useState(newDragData())
-    const className = `ocd-designer ${ocdConsoleConfig.config.showPalette && !ocdConsoleConfig.config.showProperties ? 'ocd-designer-left-panel-only' : !ocdConsoleConfig.config.showPalette && ocdConsoleConfig.config.showProperties ? 'ocd-designer-right-panel-only' : ''}`
+    const className = `ocd-designer ${ocdConsoleConfig.config.showPalette && !ocdConsoleConfig.config.showProperties ? 'ocd-designer-left-panel-only' : !ocdConsoleConfig.config.showPalette && ocdConsoleConfig.config.showProperties ? 'ocd-designer-right-panel-only' : !ocdConsoleConfig.config.showPalette && !ocdConsoleConfig.config.showProperties ? 'ocd-designer-no-side-panels' : ''}`
     return (
         <div className={className}>
             {ocdConsoleConfig.config.showPalette && <OcdPalette 

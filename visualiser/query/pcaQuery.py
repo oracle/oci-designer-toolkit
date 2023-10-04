@@ -72,6 +72,7 @@ class PCAQuery(OCIConnection):
         "Volume"
     ]
     ANCILLARY_RESOURCES = [
+        "AllCompartments", 
         "AvailabilityDomain", 
         "BootVolume",
         "BootVolumeAttachment", 
@@ -88,6 +89,11 @@ class PCAQuery(OCIConnection):
         self.ancillary_resources = {}
         self.dropdown_json = {}
         self.resource_map = {
+            "AllCompartments": {
+                "method": self.all_compartments, 
+                "client": "identity", 
+                "array": "all_compartments"
+                }, 
             "AvailabilityDomain": {
                 "method": self.availability_domains, 
                 "client": "identity", 
@@ -322,6 +328,23 @@ class PCAQuery(OCIConnection):
         return self.dropdown_json
     
     # Ancillary Resources
+    def all_compartments(self):
+        logger.info(f'>> PCAQuery - Getting Tenancy Compartments')
+        resource_map = self.resource_map["AllCompartments"]
+        client = self.clients[resource_map["client"]]
+        # Get Tenancy
+        tenancy = client.get_tenancy(tenancy_id=self.tenancy_ocid).data
+        self.all_compartments = [self.toJson(tenancy)]
+        # All Sub Compartments
+        results = oci.pagination.list_call_get_all_results(client.list_compartments, compartment_id=self.tenancy_ocid, compartment_id_in_subtree=True).data
+        # Convert to Json object
+        # self.all_compartments = self.toJson(results)
+        self.all_compartments.extend(self.toJson(results))
+        self.all_compartment_ids = [c['id'] for c in self.all_compartments]
+        logger.info(f'>> PCADQuery - Getting Tenancy Compartments')
+        logger.info(f'>>>>         - Found {len(self.all_compartment_ids)} Tenancy Compartments')
+        return 
+    
     def availability_domains(self):
         resource_map = self.resource_map["AvailabilityDomain"]
         client = self.clients[resource_map["client"]]
@@ -382,9 +405,10 @@ class PCAQuery(OCIConnection):
         array = resource_map["array"]
         resources = []
         # Images
-        results = oci.pagination.list_call_get_all_results(client.list_images, compartment_id=self.tenancy_ocid).data
-        # Convert to Json object
-        resources = self.toJson(results)
+        for compartment_id in self.all_compartment_ids:
+            results = oci.pagination.list_call_get_all_results(client.list_images, compartment_id=compartment_id).data
+            # Convert to Json object
+            resources.extend(self.toJson(results))
         self.ancillary_resources[array] = resources
         return self.ancillary_resources[array]
 
