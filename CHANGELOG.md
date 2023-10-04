@@ -5,6 +5,8 @@
 **Release Date**: 22nd September 2023
 ### Features
 1. Extend PCA Query to lookup Images in all Tenancy Compartments.
+2. Remove unsupported DNS Zone icon.
+3. Prep for C3 Release.
 ### Bug Fixes
 1. Resolve issue where availability domain was not passed as integer to the subnet.jinja2
 
