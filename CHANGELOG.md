@@ -2,7 +2,7 @@
 
 
 ## Version 0.55.0
-**Release Date**: 22nd September 2023
+**Release Date**: 4th October 2023
 ### Features
 1. Extend PCA Query to lookup Images in all Tenancy Compartments.
 2. Remove unsupported DNS Zone icon.
