@@ -101,7 +101,7 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
                 <div className='ocd-dialog-body'>
                     <div>
                         <div>Profile</div><div>
-                            <select onChange={onProfileChanged}>
+                            <select onChange={onProfileChanged} value={selectedProfile}>
                                 {profiles.map((p) => {return <option key={p} value={p}>{p}</option>})}
                             </select>
                         </div>

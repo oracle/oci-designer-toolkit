@@ -3,6 +3,8 @@
     --console-menubar-height: 25px;
     --console-header-height: 50px;
     --console-toolbar-height: 25px;
+    --console-toolbar-icon-height: 25px;
+    --console-toolbar-icon-width: 25px;
     --console-footer-height: 30px;
     --console-logo-height: 50px;
     --console-logo-width: 50px;
@@ -869,6 +871,15 @@ summary {
     flex-grow: 1;
 }
 
+.ocd-designer-canvas-layers-bar {
+    display: grid;
+    grid-template-columns: var(--console-toolbar-icon-width) auto var(--console-toolbar-icon-width);
+    width: 100%;
+    border-bottom: #312D2A solid 1px;
+    padding: 0;
+    margin: 0;
+}
+
 .ocd-designer-canvas-layers {
     display: flex;
     box-sizing: border-box;
@@ -950,6 +961,15 @@ summary {
     background-color: inherit;
 }
 
+.ocd-designer-canvas-pages-bar {
+    display: grid;
+    grid-template-columns: var(--console-toolbar-icon-width) auto var(--console-toolbar-icon-width);
+    width: 100%;
+    border-top: #312D2A solid 1px;
+    padding: 0;
+    margin: 0;
+}
+
 .ocd-designer-canvas-pages {
     display: flex;
     box-sizing: border-box;
@@ -960,7 +980,9 @@ summary {
     max-height: var(--console-pages-bar-height);
     width: 100%;
     max-width: 100%;
-    border-top: #312D2A solid 1px;
+    /* border-top: #312D2A solid 1px; */
+    border-left: #312D2A solid 1px;
+    border-right: #312D2A solid 1px;
     overflow-x: auto;
     scrollbar-width: none; /* Firefox */
 }
