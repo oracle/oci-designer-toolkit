@@ -47,7 +47,8 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
         console.debug('OciQueryDialog: loadRegions: Profile', profile)
         OciApiFacade.listRegions(profile).then((results) => {
             setRegions(results)
-            setSelectedRegion(results[0].id)
+            const homeRegion = results.find((r: Record<string, any>) => r.isHomeRegion)
+            setSelectedRegion(homeRegion ? homeRegion.id : results[0].id)
         }).catch((reason) => {
             setRegions([regionsLoading])
         })
@@ -105,7 +106,7 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
                             </select>
                         </div>
                         <div>Region</div><div>
-                            <select onChange={onRegionChanged}>
+                            <select onChange={onRegionChanged} value={selectedRegion}>
                                 {regions.map((r) => {return <option key={r.id} value={r.id}>{r.displayName}</option>})}
                             </select>
                         </div>

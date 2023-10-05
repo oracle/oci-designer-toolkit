@@ -311,7 +311,7 @@ export class OciQuery {
         })
     }
 
-    listRegions(): Promise<any> {
+    listAllRegions(): Promise<any> {
         return new Promise((resolve, reject) => {
             // if (!this.identityClient) this.identityClient = new identity.IdentityClient({ authenticationDetailsProvider: this.provider })
             const listRegionsRequest: identity.requests.ListRegionsRequest = {}
@@ -321,6 +321,24 @@ export class OciQuery {
                 const sorter = (a, b) => a.displayName.localeCompare(b.displayName)
                 if (results[0].status === 'fulfilled') {
                     const resources = results[0].value.items.map((r) => {return {id: r.name, displayName: this.regionNameToDisplayName(r.name as string), ...r}}).sort(sorter).reverse()
+                    resolve(resources)
+                } else {
+                    reject('Regions Query Failed')
+                }
+            })
+        })
+    }
+
+    listRegions(): Promise<any> {
+        return new Promise((resolve, reject) => {
+            // if (!this.identityClient) this.identityClient = new identity.IdentityClient({ authenticationDetailsProvider: this.provider })
+            const listRegionsRequest: identity.requests.ListRegionSubscriptionsRequest = {tenancyId: this.provider.getTenantId()}
+            const regionsQuery = this.identityClient.listRegionSubscriptions(listRegionsRequest)
+            Promise.allSettled([regionsQuery]).then((results) => {
+                // @ts-ignore 
+                const sorter = (a, b) => a.displayName.localeCompare(b.displayName)
+                if (results[0].status === 'fulfilled') {
+                    const resources = results[0].value.items.map((r) => {return {id: r.regionName, displayName: this.regionNameToDisplayName(r.regionName as string), ...r}}).sort(sorter).reverse()
                     resolve(resources)
                 } else {
                     reject('Regions Query Failed')
