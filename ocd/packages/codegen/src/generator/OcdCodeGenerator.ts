@@ -111,6 +111,9 @@ ${resources.sort().map((r) => `export { ${this.resourceName(r)} } from './${this
     generatedDirectory = () => 'generated'
     resourcesDirectory = () => 'resources'
 
+    // Model
+    modelElementName = (name) => `${this.toCamelCase(name.replaceAll('.', '_'))}`
+
     // Common
     resourceCommonName = (resource: string) => {return `${this.prefix}${this.toTitleCase(resource.split('_').join(' ')).split(' ').join('')}`}
     resourceName = (resource: string) => {return `${this.prefix}${this.toTitleCase(resource.split('_').join(' ')).split(' ').join('')}`}
