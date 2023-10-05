@@ -49,21 +49,21 @@ const OcdCanvasPages = ({ ocdDocument, setOcdDocument }: PageBarPagesProps): JSX
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
     return (
-        <div className='ocd-designer-canvas-pages'
-            key='ocd-designer-canvas-pages'
-            >
+        <div className='ocd-designer-canvas-pages-bar' key='ocd-designer-canvas-pages-bar'>
                 <OcdPagesThreeDotMenu
                     ocdDocument={ocdDocument}
                     setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)}
                 />
-                {ocdDocument.design.view.pages.map((page: OcdViewPage) => {
-                    return <OcdCanvasPage
-                    ocdDocument={ocdDocument}
-                    setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)}
-                    page={page}
-                    key={`page-${page.id}`}
-                />
-                })}
+                <div className='ocd-designer-canvas-pages' key='ocd-designer-canvas-pages'>
+                    {ocdDocument.design.view.pages.map((page: OcdViewPage) => {
+                        return <OcdCanvasPage
+                        ocdDocument={ocdDocument}
+                        setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)}
+                        page={page}
+                        key={`page-${page.id}`}
+                    />
+                    })}
+                </div>
                 <div className='ocd-add-layer ocd-layer-icon add-plus'
                     onClick={() => onClickAddPage()}
                 ></div>
@@ -103,7 +103,7 @@ const OcdPagesThreeDotMenu = ({ocdDocument, setOcdDocument}: PageBarMenuProps): 
                     <div className='three-dot-menu ocd-console-toolbar-icon'></div>
                     <ul className={`${menuVisible ? 'show slide-up' : 'hidden'}`}>
                         <li className='ocd-dropdown-menu-item ocd-mouseover-highlight'><div  onClick={onDuplicatePageClick}>Duplicate "{activePageName}"</div></li>
-                        <li className='ocd-dropdown-menu-item ocd-mouseover-highlight'><div  onClick={onDeletePageClick}>Delete "{activePageName}"</div></li>
+                        {ocdDocument.design.view.pages.length > 1 && <li className='ocd-dropdown-menu-item ocd-mouseover-highlight'><div  onClick={onDeletePageClick}>Delete "{activePageName}"</div></li>}
                         <li className='ocd-dropdown-menu-item ocd-mouseover-highlight'><div  onClick={onAddPageClick}>Add Page</div></li>
                     </ul>
                 </li>
