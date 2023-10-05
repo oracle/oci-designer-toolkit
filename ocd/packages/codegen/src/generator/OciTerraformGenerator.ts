@@ -9,7 +9,6 @@ import { OcdCodeGenerator } from './OcdCodeGenerator.js'
 import { OcdUtils } from '@ocd/core'
 
 export class OciTerraformGenerator extends OcdCodeGenerator {
-    indentation = ['', '    ', '        ', '            ', '                ']
     constructor () {
         super()
         this.ignoreAttributes = [...this.commonElements, ...this.commonIgnoreElements]

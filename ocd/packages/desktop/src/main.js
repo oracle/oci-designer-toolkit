@@ -45,6 +45,7 @@ app.whenReady().then(() => {
 	ipcMain.handle('ociQuery:listTenancyCompartments', handleListTenancyCompartments)
 	ipcMain.handle('ociQuery:queryTenancy', handleQueryTenancy)
 	ipcMain.handle('ociQuery:queryDropdown', handleQueryDropdown)
+	ipcMain.handle('ociExport:exportTerraform', handleExportTerraform)
 	createWindow()
 	app.on('activate', function () {
 	  if (BrowserWindow.getAllWindows().length === 0) createWindow()
@@ -110,5 +111,10 @@ async function handleQueryTenancy(event, profile, compartmentIds, region) {
 async function handleQueryDropdown(event, profile, region) {
 	console.debug('Electron Main: handleQueryDropdown')
 	const ociQuery = new OciQuery(profile, region)
+	return new Promise((resolve, reject) => {reject('Currently Not Implemented')})
+}
+
+async function handleExportTerraform(event, design, directory) {
+	console.debug('Electron Main: handleExportTerraform')
 	return new Promise((resolve, reject) => {reject('Currently Not Implemented')})
 }
