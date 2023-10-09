@@ -874,10 +874,14 @@ summary {
 .ocd-designer-canvas-layers-bar {
     display: grid;
     grid-template-columns: var(--console-toolbar-icon-width) auto var(--console-toolbar-icon-width);
+    height: var(--console-layers-bar-height);
+    min-height: var(--console-layers-bar-height);
+    max-height: var(--console-layers-bar-height);
     width: 100%;
     border-bottom: #312D2A solid 1px;
     padding: 0;
     margin: 0;
+    box-sizing: border-box;
 }
 
 .ocd-designer-canvas-layers {
@@ -885,12 +889,12 @@ summary {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    height: var(--console-layers-bar-height);
+    /* height: var(--console-layers-bar-height);
     min-height: var(--console-layers-bar-height);
-    max-height: var(--console-layers-bar-height);
+    max-height: var(--console-layers-bar-height); */
     width: 100%;
     max-width: 100%;
-    border-bottom: #312D2A solid 1px;
+    /* border-bottom: #312D2A solid 1px; */
     overflow-x: auto;
     scrollbar-width: none; /* Firefox */
 }
@@ -968,6 +972,7 @@ summary {
     border-top: #312D2A solid 1px;
     padding: 0;
     margin: 0;
+    box-sizing: border-box;
 }
 
 .ocd-designer-canvas-pages {
