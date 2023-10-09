@@ -14,8 +14,9 @@ import { HexColorPicker, HexColorInput } from 'react-colorful'
 
 const OcdResourcePropertiesHeader = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
     const selectedResource = ocdDocument.getSelectedResource()
+    const activePage = ocdDocument.getActivePage()
     const padlock: string = selectedResource ? selectedResource.locked ? 'padlock-closed' : 'padlock-open' : 'padlock-open'
-    const title: string = selectedResource ? `${selectedResource.resourceTypeName} (${ocdDocument.getDisplayName(ocdDocument.selectedResource.modelId)})` : ''
+    const title: string = selectedResource ? `${selectedResource.resourceTypeName} (${ocdDocument.getDisplayName(ocdDocument.selectedResource.modelId)})` : `Page (${activePage.title})`
     return (
         <div className='ocd-properties-header'>
             <div className={`property-editor-title ${ocdDocument.selectedResource.class}`}>
@@ -65,13 +66,15 @@ const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourcePr
 
 const OcdResourceDocumentation = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
     const selectedResource = ocdDocument.getSelectedResource()
+    const activePage = ocdDocument.getActivePage()
     const onChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-        selectedResource.documentation = e.target.value
+        if (selectedResource) selectedResource.documentation = e.target.value
+        else activePage.documentation = e.target.value
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
     return (
         <div className={`ocd-properties-panel ocd-properties-panel-theme ocd-properties-documentation-panel`}>
-            <textarea onChange={onChange}></textarea>
+            <textarea onChange={onChange} value={selectedResource ? selectedResource.documentation : activePage.documentation}></textarea>
         </div>
     )
 }
@@ -350,7 +353,8 @@ const OcdColourPicker = ({colour, setColour}: DesignerColourPicker): JSX.Element
 
 const OcdProperties = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
     const selectedResource = ocdDocument.selectedResource
-    const [activeTab, setActivieTab] = useState('properties')
+    console.debug('OcdProperties: Selected Resource', ocdDocument.selectedResource, ocdDocument.getSelectedResource())
+    const [activeTab, setActivieTab] = useState(ocdDocument.selectedResource.modelId !== '' ? 'properties' : 'documentation')
     const onPropertiesTabClick = (tab: string) => {
         setActivieTab(tab.toLowerCase())
     }
@@ -363,9 +367,9 @@ const OcdProperties = ({ocdDocument, setOcdDocument}: DesignerResourceProperties
     return (
         <div className='ocd-designer-properties'>
             <div className={`ocd-designer-tab-bar ocd-designer-tab-bar-theme`}>
-                <div className={`ocd-designer-tab ocd-designer-tab-theme ${activeTab === 'properties' ? 'ocd-designer-active-tab-theme' : ''}`} onClick={() => onPropertiesTabClick('Properties')}><span>Properties</span></div>
+                <div className={`ocd-designer-tab ocd-designer-tab-theme ${activeTab === 'properties' ? 'ocd-designer-active-tab-theme' : ''} ${ocdDocument.selectedResource.modelId === '' ? 'hidden' : ''}`} onClick={() => onPropertiesTabClick('Properties')}><span>Properties</span></div>
                 <div className={`ocd-designer-tab ocd-designer-tab-theme ${activeTab === 'documentation' ? 'ocd-designer-active-tab-theme' : ''}`} onClick={() => onPropertiesTabClick('Documentation')}><span>Documentation</span></div>
-                <div className={`ocd-designer-tab ocd-designer-tab-theme ${activeTab === 'style' ? 'ocd-designer-active-tab-theme' : ''}`} onClick={() => onPropertiesTabClick('Style')}><span>Style</span></div>
+                <div className={`ocd-designer-tab ocd-designer-tab-theme ${activeTab === 'style' ? 'ocd-designer-active-tab-theme' : ''} ${ocdDocument.selectedResource.modelId === '' ? 'hidden' : ''}`} onClick={() => onPropertiesTabClick('Style')}><span>Style</span></div>
                 <div className={`ocd-designer-tab ocd-designer-tab-theme ${activeTab === 'arrange' ? 'ocd-designer-active-tab-theme' : ''} ${ocdDocument.selectedResource.coordsId === '' ? 'hidden' : ''}`} onClick={() => onPropertiesTabClick('Arrange')}><span>Arrange</span></div>
             </div>
             <OcdResourcePropertiesHeader

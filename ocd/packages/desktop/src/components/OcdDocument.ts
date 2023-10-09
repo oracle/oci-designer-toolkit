@@ -175,7 +175,7 @@ export class OcdDocument {
         const viewPage: OcdViewPage = {
             id: `page-${uuidv4()}`,
             title: `Page ${this.design.view.pages.length + 1}`,
-            description: '',
+            documentation: '',
             layers: layers,
             coords: [],
             connectors: [],
