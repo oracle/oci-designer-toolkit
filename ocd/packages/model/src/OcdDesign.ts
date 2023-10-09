@@ -91,6 +91,7 @@ export interface OcdPageLayer {
 export interface OcdViewPage {
     id: string,
     title: string,
+    description: string,
     layers: OcdViewLayer[],
     coords: OcdViewCoords[],
     connectors: OcdViewConnector[],
@@ -177,6 +178,7 @@ export namespace OcdDesign {
                     {
                         id: `page-${uuidv4()}`,
                         title: 'Open Cloud Design',
+                        description: '',
                         layers: [layer],
                         coords: [],
                         connectors: [],
