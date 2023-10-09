@@ -362,6 +362,10 @@ summary {
     cursor: pointer;
 }
 
+.ocd-console-toolbar-dropdown-item > ul.slide-down {
+    top: var(--console-layers-bar-height);
+}
+
 .ocd-console-toolbar-dropdown-item > ul.slide-up {
     bottom: var(--console-pages-bar-height);
 }
@@ -874,10 +878,14 @@ summary {
 .ocd-designer-canvas-layers-bar {
     display: grid;
     grid-template-columns: var(--console-toolbar-icon-width) auto var(--console-toolbar-icon-width);
+    height: var(--console-layers-bar-height);
+    min-height: var(--console-layers-bar-height);
+    max-height: var(--console-layers-bar-height);
     width: 100%;
     border-bottom: #312D2A solid 1px;
     padding: 0;
     margin: 0;
+    box-sizing: border-box;
 }
 
 .ocd-designer-canvas-layers {
@@ -891,7 +899,10 @@ summary {
     width: 100%;
     max-width: 100%;
     border-bottom: #312D2A solid 1px;
+    border-left: #312D2A solid 1px;
+    border-right: #312D2A solid 1px;
     overflow-x: auto;
+    overflow-y: hidden;
     scrollbar-width: none; /* Firefox */
 }
 
@@ -906,6 +917,9 @@ summary {
     border-right: #555555 solid 1px;
     padding-right: 5px;
     font-size: smaller;
+    box-sizing: border-box;
+    height: var(--console-layers-bar-height);
+    max-height: var(--console-layers-bar-height);
 }
 
 .ocd-designer-canvas-layer > label {
@@ -968,6 +982,7 @@ summary {
     border-top: #312D2A solid 1px;
     padding: 0;
     margin: 0;
+    box-sizing: border-box;
 }
 
 .ocd-designer-canvas-pages {
