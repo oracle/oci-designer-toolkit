@@ -11,6 +11,7 @@ import OcdDocument from './OcdDocument'
 import { OcdLookupProperty, OcdTextProperty, ResourceElementConfig, ResourceProperties } from './properties/OcdPropertyTypes'
 import * as ociResources from './properties/provider/oci/resources'
 import { HexColorPicker, HexColorInput } from 'react-colorful'
+import Markdown from 'react-markdown'
 
 const OcdResourcePropertiesHeader = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
     const selectedResource = ocdDocument.getSelectedResource()
@@ -65,6 +66,7 @@ const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourcePr
 }
 
 const OcdResourceDocumentation = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
+    const [preview, setPreview] = useState(false)
     const selectedResource = ocdDocument.getSelectedResource()
     const activePage = ocdDocument.getActivePage()
     const onChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -72,9 +74,12 @@ const OcdResourceDocumentation = ({ocdDocument, setOcdDocument}: DesignerResourc
         else activePage.documentation = e.target.value
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
+    const onPreviewChanged = () => setPreview(!preview)
     return (
         <div className={`ocd-properties-panel ocd-properties-panel-theme ocd-properties-documentation-panel`}>
-            <textarea onChange={onChange} value={selectedResource ? selectedResource.documentation : activePage.documentation}></textarea>
+            <div className='ocd-properties-documentation-preview-bar'><input id='documentation_preview_checkbox' type='checkbox' checked={preview} onChange={onPreviewChanged}></input><label htmlFor='documentation_preview_checkbox'>Preview</label></div>
+            {!preview && <textarea onChange={onChange} value={selectedResource ? selectedResource.documentation : activePage.documentation}></textarea>}
+            {preview && <div className='ocd-properties-documentation-preview'><Markdown>{selectedResource ? selectedResource.documentation : activePage.documentation}</Markdown></div>}
         </div>
     )
 }
