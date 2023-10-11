@@ -47,8 +47,9 @@ export namespace OcdCommonConfigs {
             {
                 id: 'dns_label',
                 properties: {
-                    pattern: "^[\w\._-]+$|^var\.+$|^var\.+$",
-                    title: 'Valid DNS Label'
+                    maxlength: '15',
+                    pattern: '^[a-zA-Z][a-zA-Z0-9]{0,15}$|^var\.+$',
+                    title: 'Only letters and numbers, starting with a letter. 15 characters max, or a variable starting "var."'
                 },
                 configs: []
             },
@@ -56,8 +57,56 @@ export namespace OcdCommonConfigs {
                 id: 'hostname_label',
                 properties: {
                     maxlength: '64',
-                    pattern: '^[a-zA-Z][a-zA-Z0-9]{0,64}$',
+                    pattern: '^[a-zA-Z][a-zA-Z0-9]{0,64}$|^var\.+$',
                     title: 'Hostname can only be letters and numbers, starting with a letter. 64 characters max.'
+                },
+                configs: []
+            },
+            {
+                id: 'admin_password',
+                properties: {
+                    pattern: '^var\.+$',
+                    title: 'Password fields only support Variables.'
+                },
+                configs: []
+            },
+            {
+                id: 'database_admin_password',
+                properties: {
+                    pattern: '^var\.+$',
+                    title: 'Password fields only support Variables.'
+                },
+                configs: []
+            },
+            {
+                id: 'backup_tde_password',
+                properties: {
+                    pattern: '^var\.+$',
+                    title: 'Password fields only support Variables.'
+                },
+                configs: []
+            },
+            {
+                id: 'tde_wallet_password',
+                properties: {
+                    pattern: '^var\.+$',
+                    title: 'Password fields only support Variables.'
+                },
+                configs: []
+            },
+            {
+                id: 'cluster_admin_password',
+                properties: {
+                    pattern: '^var\.+$',
+                    title: 'Password fields only support Variables.'
+                },
+                configs: []
+            },
+            {
+                id: 'vpc_password',
+                properties: {
+                    pattern: '^var\.+$',
+                    title: 'Password fields only support Variables.'
                 },
                 configs: []
              }

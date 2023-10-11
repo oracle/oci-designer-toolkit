@@ -9,7 +9,7 @@ const url = require("url")
 // const { handleLoadOciConfigProfiles } = require ("./electron/OcdApi")
 // const { ConfigFileReader } = require ('oci-common')
 const common = require ('oci-common')
-const { OciQuery } = require('@ocd/query')
+const { OciQuery, OciReferenceDataQuery } = require('@ocd/query')
 
 // if (require('electron-squirrel-startup')) app.quit()
 
@@ -110,8 +110,8 @@ async function handleQueryTenancy(event, profile, compartmentIds, region) {
 
 async function handleQueryDropdown(event, profile, region) {
 	console.debug('Electron Main: handleQueryDropdown')
-	const ociQuery = new OciQuery(profile, region)
-	return new Promise((resolve, reject) => {reject('Currently Not Implemented')})
+	const ociQuery = new OciReferenceDataQuery(profile, region)
+	return ociQuery.query()
 }
 
 async function handleExportTerraform(event, design, directory) {

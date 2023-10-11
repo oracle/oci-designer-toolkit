@@ -4,3 +4,4 @@
 */
 
 export { OciQuery } from './OciQuery'
+export { OciReferenceDataQuery } from './OciReferenceDataQuery'
