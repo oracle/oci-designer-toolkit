@@ -59,7 +59,7 @@ export class OciReferenceDataQuery {
                     // @ts-ignore
                     if (results[queries.indexOf(listImages)].status === 'fulfilled') referenceData.shape = results[queries.indexOf(listImages)].value
 
-                    console.debug('OciReferenceDataQuery:', referenceData)
+                    // console.debug('OciReferenceDataQuery:', referenceData)
                     resolve(referenceData)
                 })
             }).catch((reason) => {
