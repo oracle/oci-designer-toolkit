@@ -1356,6 +1356,7 @@ summary {
     font-size: smaller;
     margin-top: auto;
     margin-bottom: auto;
+    padding-bottom: 2px;
 }
 
 .ocd-properties-documentation-preview {
