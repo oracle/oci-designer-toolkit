@@ -195,7 +195,12 @@ export class OcdDocument {
         const duplicatePage = this.addPage()
         duplicatePage.title = `${sourcePage.title} Copy`
         duplicatePage.coords = JSON.parse(JSON.stringify(sourcePage.coords))
+        duplicatePage.coords = this.updateDuplatedCoords(duplicatePage.coords)
         duplicatePage.connectors = JSON.parse(JSON.stringify(sourcePage.connectors))
+    }
+    updateDuplatedCoords(coords: OcdViewCoords[], pgid: string=''): OcdViewCoords[] {
+        const updatedCoords: OcdViewCoords[] = coords.map((c) => {return {...c, id: `gid-${uuidv4()}`, pgid: pgid}}).map((c) => {return {...c, ...c.coords ? {coords: this.updateDuplatedCoords(c.coords, c.id)} : {}}})
+        return updatedCoords
     }
     resetPanZoom = () => OcdDesign.resetPanZoom()
 
