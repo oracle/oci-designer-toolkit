@@ -25,11 +25,12 @@ const loadDesktopState = () => {
 		y: undefined,
 		width: Math.round(size.width / 2),
 		height: Math.round((size.height / 3) * 2),
-		isMaximised: false
+		isMaximised: false,
+		isFullScreen: false
 	}
 	if (!fs.existsSync(ocdWindowStateFilename)) fs.writeFileSync(ocdWindowStateFilename, JSON.stringify(initialState, null, 4))
 	const config = fs.readFileSync(ocdWindowStateFilename, 'utf-8')
-	return JSON.parse(config) 
+	return {...initialState, ...JSON.parse(config)} 
 }
 
 const saveDesktopState = (config) => {
@@ -53,14 +54,17 @@ const createWindow = () => {
 
 	const saveState = () => {
 		desktopState.isMaximised = mainWindow.isMaximized()
+		desktopState.isFullScreen = mainWindow.isFullScreen()
 		const bounds = mainWindow.getBounds()
-		if (!mainWindow.isMaximized()) desktopState = {...desktopState, ...bounds}
+		if (!mainWindow.isMaximized() && !mainWindow.isFullScreen()) desktopState = {...desktopState, ...bounds}
 		saveDesktopState(desktopState)
 	}
 
 	// mainWindow.on('move', (e) => console.debug('Move Event'))
 	mainWindow.on('moved', (e) => saveState())
 	// mainWindow.on('resize', (e) => console.debug('Resize Event'))
+	mainWindow.on('enter-full-screen', (e) => saveState())
+	mainWindow.on('leave-full-screen', (e) => saveState())
 	mainWindow.on('resized', (e) => saveState())
 	mainWindow.on('close', (e) => saveState())
 
@@ -75,6 +79,7 @@ const createWindow = () => {
 	mainWindow.loadURL(startUrl)
 
 	if (desktopState.isMaximised) mainWindow.maximize()
+	mainWindow.setFullScreen(desktopState.isFullScreen)
 
 	// Open the DevTools.
 	// mainWindow.webContents.openDevTools()
@@ -176,7 +181,7 @@ async function handleLoadConsoleConfig(event) {
             highlightCompartmentResources: false
         }
 		// if (!fs.existsSync(ocdConfigDirectory)) fs.mkdirSync(ocdConfigDirectory)
-		console.debug('Load Console Config: ', ocdConsoleConfigFilename)
+		// console.debug('Load Console Config: ', ocdConsoleConfigFilename)
 		try {
 			if (!fs.existsSync(ocdConsoleConfigFilename)) fs.writeFileSync(ocdConsoleConfigFilename, JSON.stringify(defaultConfig, null, 4))
 			const config = fs.readFileSync(ocdConsoleConfigFilename, 'utf-8')
@@ -191,7 +196,7 @@ async function handleSaveConsoleConfig(event, config) {
 	console.debug('Electron Main: handleLoadConfig')
 	return new Promise((resolve, reject) => {
 		// if (!fs.existsSync(ocdConfigDirectory)) fs.mkdirSync(ocdConfigDirectory)
-		console.debug('Save Console Config: ', ocdConsoleConfigFilename)
+		// console.debug('Save Console Config: ', ocdConsoleConfigFilename)
 		try {
 			fs.writeFileSync(ocdConsoleConfigFilename, JSON.stringify(config, null, 4))
 			resolve(config)
