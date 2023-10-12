@@ -4,6 +4,7 @@
 */
 
 import { OcdDesign } from "@ocd/model"
+import { OcdConsoleConfiguration } from "./components/OcdConsoleConfiguration"
 
 export interface OcdElectronAPI {
     loadOCIConfigProfiles: () => Promise<void>,
@@ -12,6 +13,8 @@ export interface OcdElectronAPI {
     queryTenancy: (profile: string, compartmentIds: string[], region: string) => Promise<void>,
     queryDropdown: (profile: string, region: string) => Promise<void>,
     exportTerraform: (design: OcdDesign, directory: string) => Promise<void>,
+    loadConsoleConfig: () => Promise<void>,
+    saveConsoleConfig: (config: OcdConsoleConfiguration) => Promise<void>,
 }
   
 declare global {

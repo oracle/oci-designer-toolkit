@@ -12,6 +12,8 @@ contextBridge.exposeInMainWorld('ocdAPI', {
   queryTenancy: (profile, compartmentIds, region) => ipcRenderer.invoke('ociQuery:queryTenancy', profile, compartmentIds, region),
   queryDropdown: (profile, region) => ipcRenderer.invoke('ociQuery:queryDropdown', profile, region),
   exportTerraform: (design, directory) => ipcRenderer.invoke('ociExport:exportTerraform', design, directory),
+  loadConsoleConfig: () => ipcRenderer.invoke('ocdConfig:loadConsoleConfig'),
+  saveConsoleConfig: (config) => ipcRenderer.invoke('ocdConfig:saveConsoleConfig', config),
 })
 
 console.debug('Preload script')
