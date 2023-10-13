@@ -30,7 +30,7 @@ const OcdTabular = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcd
                     <div className='thead ocd-tabular-list-header'><div className='tr'><div className='th'>{ociResources[selected].length}</div><div className='th'>Name</div><div className='th'>Compartment</div></div></div>
                     <div className='tbody ocd-tabular-list-body'>
                     {ociResources[selected].map((r: OciResource, i: number) => {
-                        return <div className='tr'><div className='td'>{i + 1}</div><div className='td'>{r.displayName}</div><div className='td'>{r.compartmentId ? ocdDocument.getResource(r.compartmentId).displayName : ''}</div></div>
+                        return <div className='tr'><div className='td'>{i + 1}</div><div className='td'>{r.displayName}</div><div className='td'>{ocdDocument.getResource(r.compartmentId) ? ocdDocument.getResource(r.compartmentId).displayName : ''}</div></div>
                         // return <OcdTabularResourceRow
                         // index={i + 1}
                         // ociResource={r}

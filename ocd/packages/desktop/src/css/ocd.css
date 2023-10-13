@@ -944,6 +944,7 @@ summary {
 .ocd-designer-canvas-layer > label {
     padding: 0 5px;
     font-weight: bolder;
+    text-wrap: nowrap;
 }
 
 .ocd-designer-canvas-layer:hover {
