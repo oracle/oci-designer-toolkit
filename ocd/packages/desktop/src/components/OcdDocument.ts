@@ -72,6 +72,7 @@ export class OcdDocument {
 
     getOciResourceList(key: string) {return this.design.model.oci.resources[key] ? this.design.model.oci.resources[key] : []}
     getOciResources() {return Object.values(this.design.model.oci.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], [])}
+    getOciResourcesObject() {return this.design.model.oci.resources}
     getResources() {return this.getOciResources()}
     getResource(id='') {return this.getResources().find((r: OcdResource) => r.id === id)}
     addResource(paletteResource: PaletteResource, compartmentId: string) {
