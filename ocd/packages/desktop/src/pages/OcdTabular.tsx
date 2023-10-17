@@ -7,10 +7,16 @@ import { useState } from "react"
 import { ConsolePageProps } from "../types/Console"
 import { OcdUtils } from "@ocd/core"
 import { OciResource } from "@ocd/model"
+import { OciDefault } from "../components/tabular/provider/oci/OciTabularContents"
+import * as ociTabularResources from '../components/tabular/provider/oci/resources'
 
 const OcdTabular = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument}: ConsolePageProps): JSX.Element => {
     const [selected, setSelected] = useState('compartment')
     const ociResources = ocdDocument.getOciResourcesObject()
+    const resourceJSXMethod = `${OcdUtils.toTitleCase('Oci')}${OcdUtils.toTitleCase(selected)}`
+    // @ts-ignore 
+    const ResourceTabularContents = ociTabularResources[resourceJSXMethod] ? ociTabularResources[resourceJSXMethod] : OciDefault
+    console.debug('OcdTabular: JMXMethod', resourceJSXMethod, ResourceTabularContents, ociTabularResources)
     const onClick = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault()
         e.stopPropagation()
@@ -26,26 +32,17 @@ const OcdTabular = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcd
                 })}
             </div>
             <div id='selected_resource_tab' className='ocd-selected-tabular-content'>
-                <div id='ocd_resource_grid' className='table ocd-tabular-content'>
+                <ResourceTabularContents ocdDocument={ocdDocument} ociResources={ociResources} selected={selected}/>
+                {/* <div id='ocd_resource_grid' className='table ocd-tabular-content'>
                     <div className='thead ocd-tabular-list-header'><div className='tr'><div className='th'>{ociResources[selected].length}</div><div className='th'>Name</div><div className='th'>Compartment</div></div></div>
                     <div className='tbody ocd-tabular-list-body'>
                     {ociResources[selected].map((r: OciResource, i: number) => {
                         return <div className='tr'><div className='td'>{i + 1}</div><div className='td'>{r.displayName}</div><div className='td'>{ocdDocument.getResource(r.compartmentId) ? ocdDocument.getResource(r.compartmentId).displayName : ''}</div></div>
-                        // return <OcdTabularResourceRow
-                        // index={i + 1}
-                        // ociResource={r}
-                        // />
                     })}
                     </div>
-                </div>
+                </div> */}
             </div>
         </div>
-    )
-}
-
-const OcdTabularResourceRow = ({ index, ociResource }: {index: number, ociResource: OciResource}): JSX.Element => {
-    return (
-        <div className='ocd-tabular-list-row'><div>{index}</div><div>{ociResource.displayName}</div></div>
     )
 }
 

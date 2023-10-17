@@ -6,7 +6,7 @@
 import React, { MouseEventHandler } from 'react'
 import { OcdConsoleConfig } from '../components/OcdConsoleConfiguration'
 import OcdDocument from '../components/OcdDocument'
-import { OcdViewConnector, OcdViewCoords } from '@ocd/model'
+import { OcdResources, OcdViewConnector, OcdViewCoords, OciResource } from '@ocd/model'
 import { DragData } from './DragData'
 import { OcdContextMenu } from '../components/OcdCanvas'
 
@@ -76,3 +76,9 @@ export interface OcdMouseEvents extends Record<string, MouseEventHandler<SVGGEle
 // export interface OcdMouseEvents {
 //     [key: string]: Function   
 // }
+
+export interface OciTabularResourceProps {
+    ocdDocument: OcdDocument
+    ociResources: OcdResources
+    selected: string
+}

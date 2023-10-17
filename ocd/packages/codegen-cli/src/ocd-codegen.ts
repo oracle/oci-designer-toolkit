@@ -7,7 +7,7 @@
 
 import fs from 'fs'
 import path from 'path'
-import { OcdModelGenerator, OcdPropertiesGenerator, OciTerraformGenerator, OciTerraformSchemaImporter } from '@ocd/codegen'
+import { OcdModelGenerator, OcdPropertiesGenerator, OcdTabularGenerator, OciTerraformGenerator, OciTerraformSchemaImporter } from '@ocd/codegen'
 import { parseArgs } from "node:util"
 
 const options = {
@@ -42,7 +42,11 @@ console.info('')
 const command = args.positionals[0]
 const subcommand = args.positionals[1]
 if (command.toLocaleLowerCase() === 'generate') {
-    if (subcommand.toLocaleLowerCase() === 'oci-model-js' || subcommand.toLocaleLowerCase() === 'oci-properties-js' || subcommand.toLocaleLowerCase() === 'oci-terraform-js') {
+    if (subcommand.toLocaleLowerCase() === 'oci-model-js' 
+        || subcommand.toLocaleLowerCase() === 'oci-properties-js' 
+        || subcommand.toLocaleLowerCase() === 'oci-tabular-js'
+        || subcommand.toLocaleLowerCase() === 'oci-terraform-js'
+        ) {
         // Source Schema file will be first in the list after command
         const input_filename = args.values.schema
         const input_data = fs.readFileSync(input_filename, 'utf-8')
@@ -54,6 +58,7 @@ if (command.toLocaleLowerCase() === 'generate') {
         if (subcommand.toLocaleLowerCase() === 'oci-model-js') generator = new OcdModelGenerator()
         else if (subcommand.toLocaleLowerCase() === 'oci-properties-js') generator = new OcdPropertiesGenerator()
         else if (subcommand.toLocaleLowerCase() === 'oci-terraform-js') generator = new OciTerraformGenerator()
+        else if (subcommand.toLocaleLowerCase() === 'oci-tabular-js') generator = new OcdTabularGenerator()
         Object.entries(schema).forEach(([key, value]) => {
             generator.generate(key, value)
             generator.writeFiles(outputDirectory, key, force_resource_file)

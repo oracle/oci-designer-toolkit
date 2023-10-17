@@ -3,7 +3,7 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-export { OcdDesign, OcdViewPage, OcdViewCoords, OcdViewLayer, OcdBaseModel, OcdViewPoint,OcdViewConnector,  OcdViewCoordsStyle } from './OcdDesign'
+export { OcdDesign, OcdViewPage, OcdViewCoords, OcdViewLayer, OcdBaseModel, OcdViewPoint, OcdViewConnector, OcdViewCoordsStyle } from './OcdDesign'
 export { OcdResources, OciResources } from './OcdDesign'
 export { PaletteGroup, PaletteResource } from './OcdPalette'
 export { OcdResource } from './OcdResource'
