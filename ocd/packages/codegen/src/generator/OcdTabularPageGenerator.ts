@@ -24,17 +24,19 @@ export class OcdTabularGenerator extends OcdCodeGenerator {
 
 import { OciResource } from "@ocd/model"
 import { OciTabularResourceProps } from "../../../../../types/ReactComponentProperties"
+import { OcdTabularContents } from "../OciTabularContents"
 
 export const ${this.reactResourceName(resource)} = ({ ocdDocument, ociResources, selected }: OciTabularResourceProps): JSX.Element => {
+    const columnTitles: string[] = []
+    const resourceElements: string[] = []
     return (
-        <div id='ocd_resource_grid' className='table ocd-tabular-content'>
-            <div className='thead ocd-tabular-list-header'><div className='tr'><div className='th'>{ociResources[selected].length}</div><div className='th'>Name</div><div className='th'>Compartment</div></div></div>
-            <div className='tbody ocd-tabular-list-body'>
-                {ociResources[selected].map((r: OciResource, i: number) => {
-                    return <div className='tr' key={\`tabular-{r.id}\`}><div className='td'>{i + 1}</div><div className='td'>{r.displayName}</div><div className='td'>{ocdDocument.getResource(r.compartmentId) ? ocdDocument.getResource(r.compartmentId).displayName : ''}</div></div>
-                })}
-            </div>
-        </div>
+        <OcdTabularContents 
+            ocdDocument={ocdDocument}
+            ociResources={ociResources}
+            selected={selected}
+            columnTitles={columnTitles}
+            resourceElements={resourceElements}
+        />
     )
 }
 `
