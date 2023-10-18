@@ -133,6 +133,14 @@
     background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xMCAxNWExLjY2NyAxLjY2NyAwIDExMCAzLjMzM0ExLjY2NyAxLjY2NyAwIDAxMTAgMTV6bTEuNjY3LTVhMS42NjcgMS42NjcgMCAxMC0zLjMzNCAwIDEuNjY3IDEuNjY3IDAgMDAzLjMzNCAwem0wLTYuNjY3YTEuNjY3IDEuNjY3IDAgMTAtMy4zMzQgMCAxLjY2NyAxLjY2NyAwIDAwMy4zMzQgMHoiIGZpbGw9IiMyMjIiLz48L3N2Zz4=");
 }
 
+.sort-ascending {
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTM2IDE4TDI0IDMwIDEyIDE4IiBzdHJva2U9IiMxNjE1MTMiIHN0cm9rZS13aWR0aD0iNCIvPjwvc3ZnPg==");
+}
+
+.sort-descending {
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTEyIDMwbDEyLTEyIDEyIDEyIiBzdHJva2U9IiMxNjE1MTMiIHN0cm9rZS13aWR0aD0iNCIvPjwvc3ZnPg==");
+}
+
 /*
 ** Element Themes
 */
