@@ -49,14 +49,16 @@ export const OcdTabularContents = ({ ocdDocument, ociResources, selected, column
     }
     const isElementId = (name: string) => name ? name.endsWith('Id') : false
     const isElementIdList = (name: string) => name ? name.endsWith('Ids') : false
+    const ascClasses = 'ocd-sort-background-icon sort-ascending'
+    const dscClasses = 'ocd-sort-background-icon sort-descending'
     return (
         <div id='ocd_resource_grid' className='table ocd-tabular-content'>
             <div className='thead ocd-tabular-list-header'>
                 <div className='tr' key={`tabular-header-row`}>
                     <div className='th'>{ociResources[selected].length}</div>
-                    <div className='th' onClick={() => onSortClick('displayName')}>Name</div>
-                    <div className='th' onClick={() => onSortClick('compartmentId')}>Compartment</div>
-                    {columnTitles.map((title: string, i: number) => {return <div className='th' onClick={() => onSortClick(resourceElements[i])}>{title}</div>})}
+                    <div className={`th ocd-sortable-column ${sortColumn === 'displayName' ? sortAscending ? ascClasses : dscClasses : ''}`} onClick={() => onSortClick('displayName')}>Name</div>
+                    <div className={`th ocd-sortable-column ${sortColumn === 'compartmentId' ? sortAscending ? ascClasses : dscClasses : ''}`} onClick={() => onSortClick('compartmentId')}>Compartment</div>
+                    {columnTitles.map((title: string, i: number) => {return <div className={`th ocd-sortable-column ${sortColumn === resourceElements[i] ? sortAscending ? ascClasses : dscClasses : ''}`} onClick={() => onSortClick(resourceElements[i])}>{title}</div>})}
                 </div>
             </div>
             <div className='tbody ocd-tabular-list-body'>

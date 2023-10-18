@@ -195,6 +195,16 @@ summary {
     margin: 0 5px 0 5px;
 }
 
+.ocd-sort-background-icon {
+    background-repeat: no-repeat;
+    background-position: right;
+    background-size: 15px;
+}
+
+.ocd-sortable-column {
+    cursor: default;
+}
+
 
 
 
