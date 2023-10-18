@@ -16,6 +16,7 @@ export const OciPolicy = ({ ocdDocument, ociResources, selected }: OciTabularRes
             selected={selected}
             columnTitles={columnTitles}
             resourceElements={resourceElements}
+            key={'OciPolicyTabularContents'}
         />
     )
 }

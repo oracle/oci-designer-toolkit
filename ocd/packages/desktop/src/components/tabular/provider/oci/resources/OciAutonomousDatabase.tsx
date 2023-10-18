@@ -16,6 +16,7 @@ export const OciAutonomousDatabase = ({ ocdDocument, ociResources, selected }: O
             selected={selected}
             columnTitles={columnTitles}
             resourceElements={resourceElements}
+            key={'OciAutonomousDatabaseTabularContents'}
         />
     )
 }

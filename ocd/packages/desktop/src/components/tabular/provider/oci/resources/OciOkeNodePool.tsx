@@ -16,6 +16,7 @@ export const OciOkeNodePool = ({ ocdDocument, ociResources, selected }: OciTabul
             selected={selected}
             columnTitles={columnTitles}
             resourceElements={resourceElements}
+            key={'OciOkeNodePoolTabularContents'}
         />
     )
 }

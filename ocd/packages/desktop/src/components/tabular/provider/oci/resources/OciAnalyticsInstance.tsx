@@ -16,6 +16,7 @@ export const OciAnalyticsInstance = ({ ocdDocument, ociResources, selected }: Oc
             selected={selected}
             columnTitles={columnTitles}
             resourceElements={resourceElements}
+            key={'OciAnalyticsInstanceTabularContents'}
         />
     )
 }

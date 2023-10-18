@@ -39,10 +39,15 @@ export const OcdTabularContents = ({ ocdDocument, ociResources, selected, column
         result = sortAscending ? result : result * -1
         return result
     }
+    const getReferenceDisplayName = (id: string) => {
+        const resource = ocdDocument.getResource(id)
+        return resource ? resource.displayName : 'Unknown'
+    }
+    const isElementId = (name: string) => name ? name.endsWith('Id') : false
     return (
         <div id='ocd_resource_grid' className='table ocd-tabular-content'>
             <div className='thead ocd-tabular-list-header'>
-                <div className='tr'>
+                <div className='tr' key={`tabular-header-row`}>
                     <div className='th'>{ociResources[selected].length}</div>
                     <div className='th' onClick={() => onSortClick('displayName')}>Name</div>
                     <div className='th' onClick={() => onSortClick('compartmentId')}>Compartment</div>
@@ -53,8 +58,9 @@ export const OcdTabularContents = ({ ocdDocument, ociResources, selected, column
                 {ociResources[selected].sort(sortFunction).map((r: OciResource, i: number) => {
                     return <div className='tr' key={`tabular-${r.id}`}>
                                 <div className='td'>{i + 1}</div><div className='td'>{r.displayName}</div>
-                                <div className='td'>{ocdDocument.getResource(r.compartmentId) ? ocdDocument.getResource(r.compartmentId).displayName : ''}</div>
-                                {resourceElements.map((element) => {return <div className='td'>{String(r[element])}</div>})}
+                                <div className='td'>{getReferenceDisplayName(r.compartmentId)}</div>
+                                {/* <div className='td'>{ocdDocument.getResource(r.compartmentId) ? ocdDocument.getResource(r.compartmentId).displayName : ''}</div> */}
+                                {resourceElements.map((element) => {return <div className='td'>{isElementId(element) ? getReferenceDisplayName(r[element]) : String(r[element])}</div>})}
                             </div>
                 })}
             </div>

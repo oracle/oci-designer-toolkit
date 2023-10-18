@@ -35,6 +35,7 @@ export const ${this.reactResourceName(resource)} = ({ ocdDocument, ociResources,
             selected={selected}
             columnTitles={columnTitles}
             resourceElements={resourceElements}
+            key={'${this.reactResourceName(resource)}TabularContents'}
         />
     )
 }

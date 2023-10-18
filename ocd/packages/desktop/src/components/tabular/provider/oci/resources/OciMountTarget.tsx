@@ -16,6 +16,7 @@ export const OciMountTarget = ({ ocdDocument, ociResources, selected }: OciTabul
             selected={selected}
             columnTitles={columnTitles}
             resourceElements={resourceElements}
+            key={'OciMountTargetTabularContents'}
         />
     )
 }

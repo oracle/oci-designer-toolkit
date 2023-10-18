@@ -16,6 +16,7 @@ export const OciNetworkSecurityGroup = ({ ocdDocument, ociResources, selected }:
             selected={selected}
             columnTitles={columnTitles}
             resourceElements={resourceElements}
+            key={'OciNetworkSecurityGroupTabularContents'}
         />
     )
 }

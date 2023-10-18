@@ -16,6 +16,7 @@ export const OciDbSystem = ({ ocdDocument, ociResources, selected }: OciTabularR
             selected={selected}
             columnTitles={columnTitles}
             resourceElements={resourceElements}
+            key={'OciDbSystemTabularContents'}
         />
     )
 }

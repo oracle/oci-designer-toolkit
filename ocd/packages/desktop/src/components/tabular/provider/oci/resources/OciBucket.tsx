@@ -16,6 +16,7 @@ export const OciBucket = ({ ocdDocument, ociResources, selected }: OciTabularRes
             selected={selected}
             columnTitles={columnTitles}
             resourceElements={resourceElements}
+            key={'OciBucketTabularContents'}
         />
     )
 }

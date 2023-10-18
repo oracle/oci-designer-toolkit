@@ -16,6 +16,7 @@ export const OciNetworkLoadBalancer = ({ ocdDocument, ociResources, selected }: 
             selected={selected}
             columnTitles={columnTitles}
             resourceElements={resourceElements}
+            key={'OciNetworkLoadBalancerTabularContents'}
         />
     )
 }

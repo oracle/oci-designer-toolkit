@@ -7,8 +7,8 @@ import { OciTabularResourceProps } from "../../../../../types/ReactComponentProp
 import { OcdTabularContents } from "../OciTabularContents"
 
 export const OciSubnet = ({ ocdDocument, ociResources, selected }: OciTabularResourceProps): JSX.Element => {
-    const columnTitles: string[] = []
-    const resourceElements: string[] = []
+    const columnTitles: string[] = ['VCN', 'CIDR Block', 'DNS Label']
+    const resourceElements: string[] = ['vcnId', 'cidrBlock', 'dnsLabel']
     return (
         <OcdTabularContents 
             ocdDocument={ocdDocument}
@@ -16,6 +16,7 @@ export const OciSubnet = ({ ocdDocument, ociResources, selected }: OciTabularRes
             selected={selected}
             columnTitles={columnTitles}
             resourceElements={resourceElements}
+            key={'OciSubnetTabularContents'}
         />
     )
 }
