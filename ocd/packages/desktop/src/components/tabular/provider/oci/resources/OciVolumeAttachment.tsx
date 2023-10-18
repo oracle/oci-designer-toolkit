@@ -16,6 +16,7 @@ export const OciVolumeAttachment = ({ ocdDocument, ociResources, selected }: Oci
             selected={selected}
             columnTitles={columnTitles}
             resourceElements={resourceElements}
+            key={'OciVolumeAttachmentTabularContents'}
         />
     )
 }

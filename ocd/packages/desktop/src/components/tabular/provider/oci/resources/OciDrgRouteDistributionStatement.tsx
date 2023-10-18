@@ -16,6 +16,7 @@ export const OciDrgRouteDistributionStatement = ({ ocdDocument, ociResources, se
             selected={selected}
             columnTitles={columnTitles}
             resourceElements={resourceElements}
+            key={'OciDrgRouteDistributionStatementTabularContents'}
         />
     )
 }

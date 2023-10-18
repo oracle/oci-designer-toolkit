@@ -16,6 +16,7 @@ export const OciNosqlTable = ({ ocdDocument, ociResources, selected }: OciTabula
             selected={selected}
             columnTitles={columnTitles}
             resourceElements={resourceElements}
+            key={'OciNosqlTableTabularContents'}
         />
     )
 }

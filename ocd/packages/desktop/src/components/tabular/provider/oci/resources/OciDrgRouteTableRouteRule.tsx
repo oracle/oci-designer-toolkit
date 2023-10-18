@@ -16,6 +16,7 @@ export const OciDrgRouteTableRouteRule = ({ ocdDocument, ociResources, selected 
             selected={selected}
             columnTitles={columnTitles}
             resourceElements={resourceElements}
+            key={'OciDrgRouteTableRouteRuleTabularContents'}
         />
     )
 }

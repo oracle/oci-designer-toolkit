@@ -16,6 +16,7 @@ export const OciSecurityList = ({ ocdDocument, ociResources, selected }: OciTabu
             selected={selected}
             columnTitles={columnTitles}
             resourceElements={resourceElements}
+            key={'OciSecurityListTabularContents'}
         />
     )
 }

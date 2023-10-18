@@ -16,6 +16,7 @@ export const OciDrgAttachment = ({ ocdDocument, ociResources, selected }: OciTab
             selected={selected}
             columnTitles={columnTitles}
             resourceElements={resourceElements}
+            key={'OciDrgAttachmentTabularContents'}
         />
     )
 }

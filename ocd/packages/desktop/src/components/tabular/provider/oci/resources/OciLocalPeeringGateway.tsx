@@ -16,6 +16,7 @@ export const OciLocalPeeringGateway = ({ ocdDocument, ociResources, selected }: 
             selected={selected}
             columnTitles={columnTitles}
             resourceElements={resourceElements}
+            key={'OciLocalPeeringGatewayTabularContents'}
         />
     )
 }

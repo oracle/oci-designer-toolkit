@@ -16,6 +16,7 @@ export const OciServiceGateway = ({ ocdDocument, ociResources, selected }: OciTa
             selected={selected}
             columnTitles={columnTitles}
             resourceElements={resourceElements}
+            key={'OciServiceGatewayTabularContents'}
         />
     )
 }
