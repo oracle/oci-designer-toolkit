@@ -3,7 +3,6 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import { OciResource } from "@ocd/model"
 import { OciTabularResourceProps } from "../../../../../types/ReactComponentProperties"
 import { OcdTabularContents } from "../OciTabularContents"
 

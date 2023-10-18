@@ -22,7 +22,6 @@ export class OcdTabularGenerator extends OcdCodeGenerator {
     content = (resource, schema) => {
         const contents = `${this.copyright()}
 
-import { OciResource } from "@ocd/model"
 import { OciTabularResourceProps } from "../../../../../types/ReactComponentProperties"
 import { OcdTabularContents } from "../OciTabularContents"
 
