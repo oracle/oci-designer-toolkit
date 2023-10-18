@@ -6,9 +6,9 @@
 import { OciTabularResourceProps } from "../../../../../types/ReactComponentProperties"
 import { OcdTabularContents } from "../OciTabularContents"
 
-export const OciVcn = ({ ocdDocument, ociResources, selected }: OciTabularResourceProps): JSX.Element => {
-    const columnTitles = ['CIDR Blocks', 'DNS Label']
-    const resourceElements = ['cidrBlocks', 'dnsLabel']
+export const OciDrgRouteDistribution = ({ ocdDocument, ociResources, selected }: OciTabularResourceProps): JSX.Element => {
+    const columnTitles: string[] = []
+    const resourceElements: string[] = []
     return (
         <OcdTabularContents 
             ocdDocument={ocdDocument}

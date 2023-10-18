@@ -82,3 +82,8 @@ export interface OciTabularResourceProps {
     ociResources: OcdResources
     selected: string
 }
+
+export interface OciTabularContentsProps extends OciTabularResourceProps {
+    columnTitles: string[]
+    resourceElements: string[]
+}
