@@ -32,8 +32,9 @@ export const OcdTabularContents = ({ ocdDocument, ociResources, selected, column
     const sortFunction = (a: Record<string, any>, b: Record<string, any>): number => {
         let result = 0
         if (!sortColumn || sortColumn === '') result = 0
-        else if (Array.isArray(a[sortColumn])) result = a[sortColumn].join(', ').localeCompare(b[sortColumn].join(', '))
-        // Need to add test for Id and get the appropriate display name to sort
+        else if (Array.isArray(a[sortColumn])) result = a[sortColumn].join(',').localeCompare(b[sortColumn].join(','))
+        else if (isElementId(sortColumn)) result = getReferenceDisplayName(a[sortColumn]).localeCompare(getReferenceDisplayName(b[sortColumn]))
+        else if (isElementIdList(sortColumn)) result = getReferenceListDisplayNames(a[sortColumn]).localeCompare(getReferenceDisplayName(b[sortColumn]))
         else result = String(a[sortColumn]).localeCompare(String(b[sortColumn]))
         // Check Ascending or Descending
         result = sortAscending ? result : result * -1
@@ -43,7 +44,11 @@ export const OcdTabularContents = ({ ocdDocument, ociResources, selected, column
         const resource = ocdDocument.getResource(id)
         return resource ? resource.displayName : 'Unknown'
     }
+    const getReferenceListDisplayNames = (ids: string[]) => {
+        return ids ? ids.map((id) => getReferenceDisplayName(id)).join(', ') : ''
+    }
     const isElementId = (name: string) => name ? name.endsWith('Id') : false
+    const isElementIdList = (name: string) => name ? name.endsWith('Ids') : false
     return (
         <div id='ocd_resource_grid' className='table ocd-tabular-content'>
             <div className='thead ocd-tabular-list-header'>
@@ -60,7 +65,7 @@ export const OcdTabularContents = ({ ocdDocument, ociResources, selected, column
                                 <div className='td'>{i + 1}</div><div className='td'>{r.displayName}</div>
                                 <div className='td'>{getReferenceDisplayName(r.compartmentId)}</div>
                                 {/* <div className='td'>{ocdDocument.getResource(r.compartmentId) ? ocdDocument.getResource(r.compartmentId).displayName : ''}</div> */}
-                                {resourceElements.map((element) => {return <div className='td'>{isElementId(element) ? getReferenceDisplayName(r[element]) : String(r[element])}</div>})}
+                                {resourceElements.map((element) => {return <div className='td'>{isElementId(element) ? getReferenceDisplayName(r[element]) : isElementIdList(element) ? getReferenceListDisplayNames(r[element]) : String(r[element])}</div>})}
                             </div>
                 })}
             </div>
