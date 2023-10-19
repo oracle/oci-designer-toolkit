@@ -47,7 +47,7 @@ export namespace OcdCommonConfigs {
             {
                 id: 'dns_label',
                 properties: {
-                    maxlength: '15',
+                    maxLength: 15,
                     pattern: '^[a-zA-Z][a-zA-Z0-9]{0,15}$|^var\.+$',
                     title: 'Only letters and numbers, starting with a letter. 15 characters max, or a variable starting "var."'
                 },
@@ -56,7 +56,7 @@ export namespace OcdCommonConfigs {
             {
                 id: 'hostname_label',
                 properties: {
-                    maxlength: '64',
+                    maxLength: 64,
                     pattern: '^[a-zA-Z][a-zA-Z0-9]{0,64}$|^var\.+$',
                     title: 'Hostname can only be letters and numbers, starting with a letter. 64 characters max.'
                 },

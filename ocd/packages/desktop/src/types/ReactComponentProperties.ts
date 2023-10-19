@@ -6,7 +6,7 @@
 import React, { MouseEventHandler } from 'react'
 import { OcdConsoleConfig } from '../components/OcdConsoleConfiguration'
 import OcdDocument from '../components/OcdDocument'
-import { OcdResources, OcdViewConnector, OcdViewCoords, OciResource } from '@ocd/model'
+import { OcdResource, OcdResources, OcdViewConnector, OcdViewCoords, OciResource } from '@ocd/model'
 import { DragData } from './DragData'
 import { OcdContextMenu } from '../components/OcdCanvas'
 
@@ -85,5 +85,23 @@ export interface OciTabularResourceProps {
 
 export interface OciTabularContentsProps extends OciTabularResourceProps {
     columnTitles: string[]
+    resourceElements: string[]
+}
+
+export interface OciTabularHeaderProps {
+    columnTitles: string[]
+    ociResources: OcdResources
+    resourceElements: string[]
+    selected: string
+    sortColumn: string
+    sortAscending: boolean
+    onSortClick: React.Dispatch<any>
+}
+
+export interface OciTabularRowProps {
+    ocdDocument: OcdDocument
+    ociResources: OcdResources
+    index: number
+    resource: OcdResource
     resourceElements: string[]
 }
