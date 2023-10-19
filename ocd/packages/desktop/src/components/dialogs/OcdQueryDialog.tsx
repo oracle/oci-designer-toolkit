@@ -79,9 +79,10 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
             const resultsOciResources = results.model.oci.resources
             Object.entries(resultsOciResources).forEach(([key, value]) => {
                 const namespace = `Oci${OcdUtils.toResourceType(key)}`
-                console.debug('OcdQueryDialog: Namespace:', namespace)
                 // @ts-ignore
-                design.model.oci.resources[key] = value.map((v) => {return {...OciModelResources[namespace].newResource(), ...v, locked: true, readOnly: true}})
+                console.debug('OcdQueryDialog: Namespace:', namespace, OciModelResources[namespace])
+                // @ts-ignore
+                if(OciModelResources[namespace]) design.model.oci.resources[key] = value.map((v) => {return {...OciModelResources[namespace].newResource(), ...v, locked: true, readOnly: true}})
             })
             design.view.pages[0].layers = []
             clone.design = design
