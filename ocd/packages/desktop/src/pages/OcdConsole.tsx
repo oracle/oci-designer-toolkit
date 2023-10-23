@@ -16,6 +16,7 @@ import OcdTerraform from './OcdTerraform'
 import OcdVariables from './OcdVariables'
 import { OcdQueryDialog } from '../components/dialogs/OcdQueryDialog'
 import { OcdConfigFacade } from '../facade/OcdConfigFacade'
+import OcdDocumentation from './OcdDocumentation'
 // import { OcdPropertiesPanel, OcdPropertiesToolbarButton } from '../properties/OcdPropertiesPanel'
 
 const ThemeContext = createContext('')
@@ -190,6 +191,7 @@ const OcdConsoleBody = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, se
     const showQueryDialog = ocdDocument.query
     const DisplayPage = ocdConsoleConfig.config.displayPage === 'bom' ? OcdBom : 
                         ocdConsoleConfig.config.displayPage === 'designer' ? OcdDesigner : 
+                        ocdConsoleConfig.config.displayPage === 'documentation' ? OcdDocumentation : 
                         ocdConsoleConfig.config.displayPage === 'markdown' ? OcdMarkdown : 
                         ocdConsoleConfig.config.displayPage === 'tabular' ? OcdTabular : 
                         ocdConsoleConfig.config.displayPage === 'terraform' ? OcdTerraform : 

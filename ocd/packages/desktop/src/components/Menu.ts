@@ -273,6 +273,13 @@ export const menuItems = [
                 }
             },
             {
+                label: 'Documentation',
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
+                    ocdConsoleConfig.config.displayPage = 'documentation'
+                    setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+                }
+            },
+            {
                 label: 'Variables',
                 click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
                     ocdConsoleConfig.config.displayPage = 'variables'
