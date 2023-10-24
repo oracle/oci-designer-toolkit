@@ -453,6 +453,7 @@ class OCIGenerator(object):
         return standardised_name
 
     def createZipArchive(self, dir, archivename):
+        logger.info(f'Creating Zip Archive for directory : {dir} {archivename}')
         shutil.make_archive(archivename, 'zip', dir)
         zipname = '{0:s}.zip'.format(str(archivename))
         return zipname

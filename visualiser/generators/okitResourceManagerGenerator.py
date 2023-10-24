@@ -84,6 +84,7 @@ class OCIResourceManagerGenerator(OCITerraformGenerator):
         self.run_variables['compartment_ocid'] = self.resource_manager_keys['compartment_ocid']
         # Get Data
         generated_tf = self.toJson(True)
+        logger.info(f'Resource Manager Generated TF {generated_tf}')
         for key, value in generated_tf.items():
             writeTerraformFile(os.path.join(self.output_dir, key), value)
         return
