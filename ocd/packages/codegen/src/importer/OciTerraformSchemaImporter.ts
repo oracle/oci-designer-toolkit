@@ -15,9 +15,12 @@ import { OcdUtils } from '@ocd/core'
 export class OciTerraformSchemaImporter extends OcdSchemaImporter {
 
     convert(source_schema: TerraformSchema) {
-        const self = this
+        console.info('Resource Map', JSON.stringify(resourceMap, null, 4))
+        const resourceKeys = Object.keys(resourceMap)
+        console.info('Resource Keys', resourceKeys)
+        // const self = this
         // console.info('Processing', Object.entries(source_schema.provider_schemas["registry.terraform.io/hashicorp/oci"].resource_schemas).filter(([k, v]) => Object.keys(self.resource_map).indexOf(k) >= 0))
-        Object.entries(source_schema.provider_schemas["registry.terraform.io/hashicorp/oci"].resource_schemas).filter(([k, v]) => Object.keys(resourceMap).indexOf(k) >= 0).forEach(([key, value]) => {
+        Object.entries(source_schema.provider_schemas["registry.terraform.io/hashicorp/oci"].resource_schemas).filter(([k, v]) => resourceKeys.includes(k)).forEach(([key, value]) => {
             console.info('Processing', key)
             this.ocd_schema[resourceMap[key]] = {
                 'tf_resource': key,
