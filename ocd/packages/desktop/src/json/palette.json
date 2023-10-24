@@ -110,7 +110,7 @@
                         {
                             "container": false,
                             "title": "IPSec Connection",
-                            "class": "oci-ipsec-connection"
+                            "class": "oci-ipsec"
                         },
                         {
                             "container": false,
@@ -120,7 +120,7 @@
                         {
                             "container": false,
                             "title": "Customer Premise Equipment",
-                            "class": "oci-customer-premise-equipment"
+                            "class": "oci-cpe"
                         }
                     ]
                 },
