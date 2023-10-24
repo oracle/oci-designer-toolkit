@@ -49,8 +49,6 @@ export const OcdTabularContents = ({ ocdDocument, ociResources, selected, column
     }
     const isElementId = (name: string) => name ? name.endsWith('Id') : false
     const isElementIdList = (name: string) => name ? name.endsWith('Ids') : false
-    const ascClasses = 'ocd-sort-background-icon sort-ascending'
-    const dscClasses = 'ocd-sort-background-icon sort-descending'
     return (
         <div id='ocd_resource_grid' className='table ocd-tabular-content'>
             <div className='thead ocd-tabular-list-header'>
