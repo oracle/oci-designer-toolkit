@@ -10,10 +10,15 @@ export class OciTerraformResource extends OcdTerraformResource {
     typeDisplayNameMap: Record<string, string> = {
         Compartment: 'name'
     }
+    isHomeRegion: boolean
+    constructor(idTFResourceMap={}, isHomeRegion: boolean = false) {
+        super(idTFResourceMap)
+        this.isHomeRegion = isHomeRegion
+    }
     commonAssignments = (resource: OciResource) => {
         console.debug('OciTerraformResource:', resource, resource.resourceType, this.typeDisplayNameMap, this.typeDisplayNameMap.hasOwnProperty(resource.resourceType))
-        return `
-    ${this.generateReferenceAttribute("compartment_id", resource.compartmentId, true)}
+        return `${this.isHomeRegion ? 'provider       = oci.home_region' : ''}
+    ${resource.compartmentId && resource.compartmentId !== '' ? this.generateReferenceAttribute("compartment_id", resource.compartmentId, true) : 'compartment_id = var.compartment_ocid'}
     ${this.generateTextAttribute(this.typeDisplayNameMap.hasOwnProperty(resource.resourceType) ? this.typeDisplayNameMap[resource.resourceType] : 'display_name', resource.displayName, true)}
 `
 

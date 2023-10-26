@@ -2610,19 +2610,6 @@
         "lookup": true,
         "lookupResource": "compartment"
       },
-      "compute_cluster_id": {
-        "provider": "oci",
-        "key": "computeClusterId",
-        "name": "compute_cluster_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Compute Cluster",
-        "id": "compute_cluster_id",
-        "staticLookup": false,
-        "lookup": true,
-        "lookupResource": "compute_cluster"
-      },
       "defined_tags": {
         "provider": "oci",
         "key": "definedTags",
@@ -2674,19 +2661,6 @@
         "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
-      },
-      "instance_configuration_id": {
-        "provider": "oci",
-        "key": "instanceConfigurationId",
-        "name": "instance_configuration_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Instance Configuration",
-        "id": "instance_configuration_id",
-        "staticLookup": false,
-        "lookup": true,
-        "lookupResource": "instance_configuration"
       },
       "is_cross_numa_node": {
         "provider": "oci",
@@ -2749,19 +2723,6 @@
         "required": false,
         "label": "Shape",
         "id": "shape",
-        "staticLookup": false,
-        "lookup": false,
-        "lookupResource": ""
-      },
-      "update_operation_constraint": {
-        "provider": "oci",
-        "key": "updateOperationConstraint",
-        "name": "update_operation_constraint",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Update Operation Constraint",
-        "id": "update_operation_constraint",
         "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
@@ -2994,19 +2955,6 @@
             "lookup": false,
             "lookupResource": ""
           },
-          "nvmes": {
-            "provider": "oci",
-            "key": "nvmes",
-            "name": "nvmes",
-            "type": "number",
-            "subtype": "",
-            "required": false,
-            "label": "Nvmes",
-            "id": "shape_config.nvmes",
-            "staticLookup": false,
-            "lookup": false,
-            "lookupResource": ""
-          },
           "ocpus": {
             "provider": "oci",
             "key": "ocpus",
@@ -3016,19 +2964,6 @@
             "required": false,
             "label": "Ocpus",
             "id": "shape_config.ocpus",
-            "staticLookup": false,
-            "lookup": false,
-            "lookupResource": ""
-          },
-          "vcpus": {
-            "provider": "oci",
-            "key": "vcpus",
-            "name": "vcpus",
-            "type": "number",
-            "subtype": "",
-            "required": false,
-            "label": "Vcpus",
-            "id": "shape_config.vcpus",
             "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
@@ -3109,70 +3044,6 @@
             "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
-          },
-          "instance_source_image_filter_details": {
-            "provider": "oci",
-            "key": "instanceSourceImageFilterDetails",
-            "name": "instance_source_image_filter_details",
-            "type": "object",
-            "subtype": "",
-            "required": false,
-            "label": "Instance Source Image Filter Details",
-            "id": "source_details.instance_source_image_filter_details",
-            "attributes": {
-              "compartment_id": {
-                "provider": "oci",
-                "key": "compartmentId",
-                "name": "compartment_id",
-                "type": "string",
-                "subtype": "",
-                "required": true,
-                "label": "Compartment",
-                "id": "source_details.instance_source_image_filter_details.compartment_id",
-                "staticLookup": false,
-                "lookup": true,
-                "lookupResource": "compartment"
-              },
-              "defined_tags_filter": {
-                "provider": "oci",
-                "key": "definedTagsFilter",
-                "name": "defined_tags_filter",
-                "type": "map",
-                "subtype": "string",
-                "required": false,
-                "label": "Defined Tags Filter",
-                "id": "source_details.instance_source_image_filter_details.defined_tags_filter",
-                "staticLookup": false,
-                "lookup": false,
-                "lookupResource": ""
-              },
-              "operating_system": {
-                "provider": "oci",
-                "key": "operatingSystem",
-                "name": "operating_system",
-                "type": "string",
-                "subtype": "",
-                "required": false,
-                "label": "Operating System",
-                "id": "source_details.instance_source_image_filter_details.operating_system",
-                "staticLookup": false,
-                "lookup": false,
-                "lookupResource": ""
-              },
-              "operating_system_version": {
-                "provider": "oci",
-                "key": "operatingSystemVersion",
-                "name": "operating_system_version",
-                "type": "string",
-                "subtype": "",
-                "required": false,
-                "label": "Operating System Version",
-                "id": "source_details.instance_source_image_filter_details.operating_system_version",
-                "staticLookup": false,
-                "lookup": false,
-                "lookupResource": ""
-              }
-            }
           }
         }
       }
@@ -4851,7 +4722,7 @@
         "type": "string",
         "subtype": "",
         "required": false,
-        "label": "Dns Label",
+        "label": "DNS Label",
         "id": "dns_label",
         "staticLookup": false,
         "lookup": false,
@@ -4968,19 +4839,6 @@
     "type": "object",
     "subtype": "",
     "attributes": {
-      "byoipv6cidr_blocks": {
-        "provider": "oci",
-        "key": "byoipv6cidrBlocks",
-        "name": "byoipv6cidr_blocks",
-        "type": "list",
-        "subtype": "string",
-        "required": false,
-        "label": "Byoipv6cidr Blocks",
-        "id": "byoipv6cidr_blocks",
-        "staticLookup": false,
-        "lookup": false,
-        "lookupResource": ""
-      },
       "cidr_blocks": {
         "provider": "oci",
         "key": "cidrBlocks",
@@ -4988,7 +4846,7 @@
         "type": "list",
         "subtype": "string",
         "required": false,
-        "label": "Cidr Blocks",
+        "label": "IPV4 CIDRs",
         "id": "cidr_blocks",
         "staticLookup": false,
         "lookup": false,
@@ -5040,7 +4898,7 @@
         "type": "string",
         "subtype": "",
         "required": false,
-        "label": "Dns Label",
+        "label": "DNS Label",
         "id": "dns_label",
         "staticLookup": false,
         "lookup": false,
@@ -5059,19 +4917,6 @@
         "lookup": false,
         "lookupResource": ""
       },
-      "ipv6cidr_blocks": {
-        "provider": "oci",
-        "key": "ipv6cidrBlocks",
-        "name": "ipv6cidr_blocks",
-        "type": "list",
-        "subtype": "string",
-        "required": false,
-        "label": "Ipv6cidr Blocks",
-        "id": "ipv6cidr_blocks",
-        "staticLookup": false,
-        "lookup": false,
-        "lookupResource": ""
-      },
       "ipv6private_cidr_blocks": {
         "provider": "oci",
         "key": "ipv6privateCidrBlocks",
@@ -5079,7 +4924,7 @@
         "type": "list",
         "subtype": "string",
         "required": false,
-        "label": "Ipv6private Cidr Blocks",
+        "label": "IPV6 Private CIDRs",
         "id": "ipv6private_cidr_blocks",
         "staticLookup": false,
         "lookup": false,
@@ -5092,7 +4937,7 @@
         "type": "bool",
         "subtype": "",
         "required": false,
-        "label": "Is Ipv6enabled",
+        "label": "IPV6 Enabled",
         "id": "is_ipv6enabled",
         "staticLookup": false,
         "lookup": false,
@@ -5110,44 +4955,6 @@
         "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
-      },
-      "byoipv6cidr_details": {
-        "provider": "oci",
-        "key": "byoipv6cidrDetails",
-        "name": "byoipv6cidr_details",
-        "type": "list",
-        "subtype": "",
-        "required": false,
-        "label": "Byoipv6cidr Details",
-        "id": "byoipv6cidr_details",
-        "attributes": {
-          "byoipv6range_id": {
-            "provider": "oci",
-            "key": "byoipv6rangeId",
-            "name": "byoipv6range_id",
-            "type": "string",
-            "subtype": "",
-            "required": true,
-            "label": "Byoipv6range",
-            "id": "byoipv6cidr_details.byoipv6range_id",
-            "staticLookup": false,
-            "lookup": true,
-            "lookupResource": "byoipv6range"
-          },
-          "ipv6cidr_block": {
-            "provider": "oci",
-            "key": "ipv6cidrBlock",
-            "name": "ipv6cidr_block",
-            "type": "string",
-            "subtype": "",
-            "required": true,
-            "label": "Ipv6cidr Block",
-            "id": "byoipv6cidr_details.ipv6cidr_block",
-            "staticLookup": false,
-            "lookup": false,
-            "lookupResource": ""
-          }
-        }
       }
     }
   },

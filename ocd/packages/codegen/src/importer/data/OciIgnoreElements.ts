@@ -37,11 +37,14 @@ export const ignoreElements: OcdIgnoreElements = {
         "baseline_ocpu_utilization",
         "boot_volume_id",
         "capacity_reservation_id",
+        "compute_cluster_id",
         "dedicated_vm_host_id",
         "extended_metadata",
         "gpu_description",
         "gpus",
+        "instance_configuration_id",
         "instance_options",
+        "instance_source_image_filter_details",
         "ipxe_script",
         "launch_mode",
         "launch_options",
@@ -50,6 +53,7 @@ export const ignoreElements: OcdIgnoreElements = {
         "local_disks_total_size_in_gbs",
         "max_vnic_attachments",
         "networking_bandwidth_in_gbps",
+        "nvmes",
         "platform_config",
         "preemptible_instance_config",
         "preserve_boot_volume",
@@ -57,6 +61,8 @@ export const ignoreElements: OcdIgnoreElements = {
         "processor_description",
         "public_ip",
         "time_maintenance_reboot_due",
+        "update_operation_constraint",
+        "vcpus",
         "vlan_id"
     ],
     "oci_core_nat_gateway": [
@@ -82,10 +88,13 @@ export const ignoreElements: OcdIgnoreElements = {
         "multipath_devices"
     ],
     "oci_core_vcn": [
+        "byoipv6cidr_blocks",
+        "byoipv6cidr_details",
         "cidr_block",
         "default_dhcp_options_id",
         "default_route_table_id",
         "default_security_list_id",
+        "ipv6cidr_blocks",
         "ipv6public_cidr_block",
         "vcn_domain_name"
     ],
