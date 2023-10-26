@@ -107,7 +107,7 @@
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "build-all": "npm run build && npm run make",
-    "desktop": "npm run electron-forge start",
+    "desktop": "electron-forge start",
     "web": "npm run start"
   },
   "eslintConfig": {

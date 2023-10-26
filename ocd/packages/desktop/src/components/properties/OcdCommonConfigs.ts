@@ -61,55 +61,7 @@ export namespace OcdCommonConfigs {
                     title: 'Hostname can only be letters and numbers, starting with a letter. 64 characters max.'
                 },
                 configs: []
-            },
-            {
-                id: 'admin_password',
-                properties: {
-                    pattern: '^var\.+$',
-                    title: 'Password fields only support Variables.'
-                },
-                configs: []
-            },
-            {
-                id: 'database_admin_password',
-                properties: {
-                    pattern: '^var\.+$',
-                    title: 'Password fields only support Variables.'
-                },
-                configs: []
-            },
-            {
-                id: 'backup_tde_password',
-                properties: {
-                    pattern: '^var\.+$',
-                    title: 'Password fields only support Variables.'
-                },
-                configs: []
-            },
-            {
-                id: 'tde_wallet_password',
-                properties: {
-                    pattern: '^var\.+$',
-                    title: 'Password fields only support Variables.'
-                },
-                configs: []
-            },
-            {
-                id: 'cluster_admin_password',
-                properties: {
-                    pattern: '^var\.+$',
-                    title: 'Password fields only support Variables.'
-                },
-                configs: []
-            },
-            {
-                id: 'vpc_password',
-                properties: {
-                    pattern: '^var\.+$',
-                    title: 'Password fields only support Variables.'
-                },
-                configs: []
-             }
+            }
         ]
     }
 }
