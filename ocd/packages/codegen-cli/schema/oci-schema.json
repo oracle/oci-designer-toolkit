@@ -4942,19 +4942,6 @@
         "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
-      },
-      "is_oracle_gua_allocation_enabled": {
-        "provider": "oci",
-        "key": "isOracleGuaAllocationEnabled",
-        "name": "is_oracle_gua_allocation_enabled",
-        "type": "bool",
-        "subtype": "",
-        "required": false,
-        "label": "Is Oracle Gua Allocation Enabled",
-        "id": "is_oracle_gua_allocation_enabled",
-        "staticLookup": false,
-        "lookup": false,
-        "lookupResource": ""
       }
     }
   },
