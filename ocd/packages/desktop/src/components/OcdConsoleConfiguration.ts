@@ -4,14 +4,17 @@
 */
 
 export interface OcdConsoleConfiguration {
-    showPalette: boolean,
-    showModelPalette: boolean,
-    showProvidersPalette: string[],
-    verboseProviderPalette: boolean,
-    displayPage: 'bom' | 'designer' | 'documentation' | 'markdown' | 'tabular' | 'terraform' | 'variables',
-    detailedResource: boolean,
-    showProperties: boolean,
+    showPalette: boolean
+    showModelPalette: boolean
+    showProvidersPalette: string[]
+    verboseProviderPalette: boolean
+    displayPage: 'bom' | 'designer' | 'documentation' | 'markdown' | 'tabular' | 'terraform' | 'variables'
+    detailedResource: boolean
+    showProperties: boolean
     highlightCompartmentResources: boolean
+    recentDesigns: string[]
+    maxRecent: number
+    currentFilename: string
 }
 
 export class OcdConsoleConfig {
@@ -34,7 +37,10 @@ export class OcdConsoleConfig {
             displayPage: 'designer',
             detailedResource: true,
             showProperties: true,
-            highlightCompartmentResources: false
+            highlightCompartmentResources: false,
+            recentDesigns: [],
+            maxRecent: 10,
+            currentFilename: ''
         }
     }
 }

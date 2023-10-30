@@ -3,7 +3,7 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-const { app, BrowserWindow, ipcMain, screen } = require("electron")
+const { app, dialog, BrowserWindow, ipcMain, screen } = require("electron")
 const path = require("path")
 const url = require("url")
 const fs = require("fs")
@@ -37,10 +37,12 @@ const saveDesktopState = (config) => {
 	fs.writeFileSync(ocdWindowStateFilename, JSON.stringify(config, null, 4))
 }
 
+let mainWindow = undefined
+
 const createWindow = () => {
 	let desktopState = loadDesktopState()
 	// Create the browser window.
-	const mainWindow = new BrowserWindow({
+	mainWindow = new BrowserWindow({
 		x: desktopState.x,
 		y: desktopState.y,
 		width: desktopState.width,
@@ -86,12 +88,17 @@ const createWindow = () => {
 }
 
 app.whenReady().then(() => {
+	// OCI API Calls / Query
 	ipcMain.handle('ociConfig:loadProfiles', handleLoadOciConfigProfiles)
 	ipcMain.handle('ociQuery:listRegions', handleListRegions)
 	ipcMain.handle('ociQuery:listTenancyCompartments', handleListTenancyCompartments)
 	ipcMain.handle('ociQuery:queryTenancy', handleQueryTenancy)
 	ipcMain.handle('ociQuery:queryDropdown', handleQueryDropdown)
-	ipcMain.handle('ociExport:exportTerraform', handleExportTerraform)
+	// OCD Design 
+	ipcMain.handle('ocdDesign:loadDesign', handleLoadDesign)
+	ipcMain.handle('ocdDesign:saveDesign', handleSaveDesign)
+	ipcMain.handle('ocdDesign:exportTerraform', handleExportTerraform)
+	// OCD Configuration
 	ipcMain.handle('ocdConfig:loadConsoleConfig', handleLoadConsoleConfig)
 	ipcMain.handle('ocdConfig:saveConsoleConfig', handleSaveConsoleConfig)
 	createWindow()
@@ -160,6 +167,48 @@ async function handleQueryDropdown(event, profile, region) {
 	console.debug('Electron Main: handleQueryDropdown')
 	const ociQuery = new OciReferenceDataQuery(profile, region)
 	return ociQuery.query()
+}
+
+async function handleLoadDesign(event, filename) {
+	console.debug('Electron Main: handleLoadDesign')
+	return new Promise((resolve, reject) => {
+		// if (!fs.existsSync(ocdConfigDirectory)) fs.mkdirSync(ocdConfigDirectory)
+		// console.debug('Save Console Config: ', ocdConsoleConfigFilename)
+		try {
+			// fs.writeFileSync(filename, JSON.stringify(design, null, 4))
+			if (!filename || !fs.existsSync(filename) || !fs.statSync(filename).isFile()) {
+				dialog.showOpenDialog(mainWindow, {
+					properties: ['openFile'],
+					filters: [{name: 'Filetype', extensions: ['okit']}]
+				  }).then(result => {
+					const design = result.canceled ? {} : fs.readFileSync(result.filePaths[0], 'utf-8')
+					resolve({canceled: result.canceled, filename: result.filePaths[0], design: JSON.parse(design)})
+				}).catch(err => {
+					console.error(err)
+					reject(err)
+				})
+			} else {
+				const design = fs.readFileSync(filename, 'utf-8')
+				resolve({canceled: false, filename: filename, design: JSON.parse(design)})
+			}
+		} catch (err) {
+			reject(err)
+		}
+	})
+}
+
+async function handleSaveDesign(event, design, filename) {
+	console.debug('Electron Main: handleSaveDesign')
+	return new Promise((resolve, reject) => {
+		// if (!fs.existsSync(ocdConfigDirectory)) fs.mkdirSync(ocdConfigDirectory)
+		// console.debug('Save Console Config: ', ocdConsoleConfigFilename)
+		try {
+			fs.writeFileSync(filename, JSON.stringify(design, null, 4))
+			resolve(design)
+		} catch (err) {
+			reject(err)
+		}
+	})
 }
 
 async function handleExportTerraform(event, design, directory) {

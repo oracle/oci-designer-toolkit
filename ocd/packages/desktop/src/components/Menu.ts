@@ -7,6 +7,8 @@ import { OcdOKITImporter } from '@ocd/import'
 import { OcdOKITExporter, OcdTerraformExporter } from '@ocd/export'
 import OcdConsoleConfig from './OcdConsoleConfiguration'
 import OcdDocument from './OcdDocument'
+import { OcdDesignFacade } from '../facade/OcdDesignFacade'
+import { OcdConfigFacade } from '../facade/OcdConfigFacade'
 
 export interface MenuItem {
     label: string,
@@ -28,37 +30,26 @@ export const menuItems = [
             },
             {
                 label: 'Open',
-                click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
-                    const openFile = async () => {
-                        try {
-                            const options = {
-                                multiple: false,
-                                types: [
-                                    {
-                                        description: 'OKIT Files',
-                                        accept: {
-                                            'application/json': ['.okit'],
-                                            // 'text/plain': ['.md']
-                                        },
-                                    },
-                                ],
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
+                    OcdDesignFacade.loadDesign('').then((results) => {
+                        console.debug('Menu: Load:', results)
+                        if (!results.canceled) {
+                            const ocdDocument = OcdDocument.new()
+                            ocdDocument.design = results.design
+                            setOcdDocument(ocdDocument)
+                            const clone = OcdConsoleConfig.clone(ocdConsoleConfig)
+                            if (results.filename && results.filename !== '') {
+                                clone.config.currentFilename = results.filename
+                                const recentDesigns: string[] = ocdConsoleConfig.config.recentDesigns ? ocdConsoleConfig.config.recentDesigns.filter((f) => f !== results.filename) : []
+                                clone.config.recentDesigns = [results.filename, ...recentDesigns].slice(0, ocdConsoleConfig.config.maxRecent)
+                            } else {
+                                clone.config.currentFilename = ''
                             }
-                            // Always returns an array.
-                            // @ts-ignore 
-                            const [handle] = await window.showOpenFilePicker(options)
-                            const file = await handle.getFile()
-                            const contents = await file.text()
-                            return contents
-                        } catch (err: any) {
-                            console.error(err.name, err.message)
-                            throw err
+                            setOcdConsoleConfig(clone)
+                            console.debug('Menu: Load: Config', clone)
+                            OcdConfigFacade.saveConsoleConfig(clone.config).catch((resp) => {console.warn(resp)})
                         }
-                    }
-                    openFile().then((resp) => {
-                        const ocdDocument = OcdDocument.new()
-                        ocdDocument.design = JSON.parse(resp)
-                        setOcdDocument(ocdDocument)
-                    }).catch((reason) => {console.debug(reason)})
+                    }).catch((resp) => {console.warn('Load Design Failed with', resp)})
                 }
             },
             {
@@ -69,8 +60,12 @@ export const menuItems = [
             },
             {
                 label: 'Save',
-                click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
-                    alert('Currently not implemented.')
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
+                    if (ocdConsoleConfig.config.currentFilename && ocdConsoleConfig.config.currentFilename !== '') {
+                        OcdDesignFacade.saveDesign(ocdDocument.design, ocdConsoleConfig.config.currentFilename)
+                    } else {
+                        alert('Currently not implemented.')
+                    }
                 }
             },
             {

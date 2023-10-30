@@ -6,12 +6,17 @@
 const { contextBridge, ipcRenderer } = require('electron')
 
 contextBridge.exposeInMainWorld('ocdAPI', {
+	// OCI API Calls / Query
   loadOCIConfigProfiles: () => ipcRenderer.invoke('ociConfig:loadProfiles'),
   listRegions: (profile) => ipcRenderer.invoke('ociQuery:listRegions', profile),
   listTenancyCompartments: (profile) => ipcRenderer.invoke('ociQuery:listTenancyCompartments', profile),
   queryTenancy: (profile, compartmentIds, region) => ipcRenderer.invoke('ociQuery:queryTenancy', profile, compartmentIds, region),
   queryDropdown: (profile, region) => ipcRenderer.invoke('ociQuery:queryDropdown', profile, region),
-  exportTerraform: (design, directory) => ipcRenderer.invoke('ociExport:exportTerraform', design, directory),
+	// OCD Design 
+  loadDesign: (design, filename) => ipcRenderer.invoke('ocdDesign:loadDesign', filename),
+  saveDesign: (design, filename) => ipcRenderer.invoke('ocdDesign:saveDesign', design, filename),
+  exportTerraform: (design, directory) => ipcRenderer.invoke('ocdDesign:exportTerraform', design, directory),
+	// OCD Configuration
   loadConsoleConfig: () => ipcRenderer.invoke('ocdConfig:loadConsoleConfig'),
   saveConsoleConfig: (config) => ipcRenderer.invoke('ocdConfig:saveConsoleConfig', config),
 })

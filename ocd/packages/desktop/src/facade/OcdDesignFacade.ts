@@ -4,12 +4,19 @@
 */
 
 import { OcdDesign } from "@ocd/model"
+import { OcdDesignerBrowserActions } from "../actions/OcdDesignBrowserActions"
 
 /*
 ** Facade exists so we can switch between Electron based and Web based which will require a web server
 */
 
-export namespace OcdExportFacade {
+export namespace OcdDesignFacade {
+    export const loadDesign = (filename: string): Promise<any> => {
+        return window.ocdAPI ? window.ocdAPI.loadDesign(filename) : OcdDesignerBrowserActions.loadDesign(filename)
+    }
+    export const saveDesign = (design: OcdDesign, filename: string): Promise<any> => {
+        return window.ocdAPI ? window.ocdAPI.saveDesign(design, filename) : new Promise((resolve, reject) => {reject('Currently Not Implemented')})
+    }
     export const exportTerraform = (design: OcdDesign, directory: string): Promise<any> => {
         return window.ocdAPI ? window.ocdAPI.exportTerraform(design, directory) : new Promise((resolve, reject) => {reject('Currently Not Implemented')})
     }
