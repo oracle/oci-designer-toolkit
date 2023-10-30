@@ -7,12 +7,17 @@ import { OcdDesign } from "@ocd/model"
 import { OcdConsoleConfiguration } from "./components/OcdConsoleConfiguration"
 
 export interface OcdElectronAPI {
+    // OCI API Calls / Query
     loadOCIConfigProfiles: () => Promise<void>,
     listRegions: (profile: string) => Promise<void>,
     listTenancyCompartments: (profile: string) => Promise<void>,
     queryTenancy: (profile: string, compartmentIds: string[], region: string) => Promise<void>,
     queryDropdown: (profile: string, region: string) => Promise<void>,
+	// OCD Design 
+    loadDesign: (filename: string) => Promise<void>,
+    saveDesign: (design: OcdDesign, filename: string) => Promise<void>,
     exportTerraform: (design: OcdDesign, directory: string) => Promise<void>,
+	// OCD Configuration
     loadConsoleConfig: () => Promise<void>,
     saveConsoleConfig: (config: OcdConsoleConfiguration) => Promise<void>,
 }
