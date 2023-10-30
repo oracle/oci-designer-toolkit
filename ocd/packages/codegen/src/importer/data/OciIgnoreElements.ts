@@ -96,6 +96,7 @@ export const ignoreElements: OcdIgnoreElements = {
         "default_security_list_id",
         "ipv6cidr_blocks",
         "ipv6public_cidr_block",
+        "is_oracle_gua_allocation_enabled",
         "vcn_domain_name"
     ],
     "oci_database_autonomous_database": [

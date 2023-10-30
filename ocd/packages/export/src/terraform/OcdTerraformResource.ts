@@ -43,6 +43,13 @@ export class OcdTerraformResource {
         else if (Array.isArray(value) && value.length > 0) return `${this.indentation[level]}${name} = [${value.map((v: string) => `local.${this.idTFResourceMap[v]}_id`)}]`
         else return `${this.indentation[level]}# ${name} = "${value}"`
     }
+    generateStringListAttribute = (name: string, value: string | string[] | undefined, required: boolean, level=0) => {
+        console.debug('OcdTerraformResource: generateStringListAttribute:', value, typeof value)
+        if (!Array.isArray(value) && this.isVariable(value)) return `${this.indentation[level]}${name} = ${this.formatVariable(value as string)}`
+        else if (required && Array.isArray(value)) return `${this.indentation[level]}${name} = [${value.map((v: string) => `"${v}"`)}]`
+        else if (Array.isArray(value) && value.length > 0) return `${this.indentation[level]}${name} = [${value.map((v: string) => `"${v}"`)}]`
+        else return `${this.indentation[level]}# ${name} = "${value}"`
+    }
 
     // if (attribute.type === 'string')      return `${name} = \\\`\${this.isVariable(resource.${this.toCamelCase(name)}) ? this.formatVariable(resource.${this.toCamelCase(name)}) : "resource.${this.toCamelCase(name)}"}\\\``
     // else if (attribute.type === 'bool')   return `${name} = \${resource.${this.toCamelCase(name)}}`
