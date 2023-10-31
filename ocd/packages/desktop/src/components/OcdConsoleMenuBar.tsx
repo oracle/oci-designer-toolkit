@@ -3,18 +3,22 @@
 ** Licensed under the GNU GENERAL PUBLIC LICENSE v 3.0 as shown at https://www.gnu.org/licenses/.
 */
 
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { menuItems, MenuItem } from './Menu'
 import OcdDocument from './OcdDocument'
 import { ConsoleMenuProps, ConsolePageProps } from '../types/Console'
 import OcdConsoleConfig from './OcdConsoleConfiguration'
+import { ActiveFileContext, ConsoleConfigContext } from '../pages/OcdConsole'
 
 const OcdConsoleMenuItem = ({ menuItem, depth, ocdDocument, setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig }: any): JSX.Element => {
+    // @ts-ignore
+    const {activeFilename, setActiveFilename} = useContext(ActiveFileContext)
     const [dropdown, setDropdown] = useState(false)
     const onMouseEnter = () => {setDropdown(true)}
     const onMouseLeave = () => {setDropdown(false)}
     const closeDropdown = () => {setDropdown(!dropdown)}
-    const onClick = () => {menuItem.click(ocdDocument, (ocdDocument: OcdDocument) => setOcdDocument(ocdDocument), ocdConsoleConfig, (ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig))}
+    const onClick = () => {menuItem.click(ocdDocument, (ocdDocument: OcdDocument) => setOcdDocument(ocdDocument), ocdConsoleConfig, (ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig), activeFilename, (activeFilename: string) => setActiveFilename(activeFilename))}
+    console.debug(`OcdConsoleMenuItem: (${activeFilename})`, setActiveFilename)
     return (
         <li
         className={`${depth > 0 ? 'ocd-submenu-item' : 'ocd-menu-item'}`}

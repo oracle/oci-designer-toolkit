@@ -38,6 +38,7 @@ const saveDesktopState = (config) => {
 }
 
 let mainWindow = undefined
+let activeFile = undefined
 
 const createWindow = () => {
 	let desktopState = loadDesktopState()
@@ -198,13 +199,34 @@ async function handleLoadDesign(event, filename) {
 }
 
 async function handleSaveDesign(event, design, filename) {
-	console.debug('Electron Main: handleSaveDesign')
+	console.debug('Electron Main: handleSaveDesign', design, filename)
 	return new Promise((resolve, reject) => {
-		// if (!fs.existsSync(ocdConfigDirectory)) fs.mkdirSync(ocdConfigDirectory)
-		// console.debug('Save Console Config: ', ocdConsoleConfigFilename)
+		// // if (!fs.existsSync(ocdConfigDirectory)) fs.mkdirSync(ocdConfigDirectory)
+		// // console.debug('Save Console Config: ', ocdConsoleConfigFilename)
+		// try {
+		// 	fs.writeFileSync(filename, JSON.stringify(design, null, 4))
+		// 	resolve(design)
+		// } catch (err) {
+		// 	reject(err)
+		// }
 		try {
-			fs.writeFileSync(filename, JSON.stringify(design, null, 4))
-			resolve(design)
+			// fs.writeFileSync(filename, JSON.stringify(design, null, 4))
+			if (!filename || !fs.existsSync(filename) || !fs.statSync(filename).isFile()) {
+				dialog.showSaveDialog(mainWindow, {
+					properties: ['openFile'],
+					filters: [{name: 'Filetype', extensions: ['okit']}]
+				  }).then(result => {
+					if (!result.canceled) fs.writeFileSync(result.filePath, JSON.stringify(design, null, 4))
+					// resolve(result.canceled ? '' : result.filePath)
+					resolve({canceled: false, filename: result.canceled ? '' : result.filePath, design: design})
+				}).catch(err => {
+					console.error(err)
+					reject(err)
+				})
+			} else {
+				fs.writeFileSync(filename, JSON.stringify(design, null, 4))
+				resolve({canceled: false, filename: filename, design: design})
+			}
 		} catch (err) {
 			reject(err)
 		}
