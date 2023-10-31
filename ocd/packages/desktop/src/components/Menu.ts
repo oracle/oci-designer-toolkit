@@ -23,27 +23,25 @@ export const menuItems = [
         submenu: [
             {
                 label: 'New',
-                click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFilename: string, setActiveFilename: Function) => {
                     const document: OcdDocument = OcdDocument.new()
                     setOcdDocument(document)
+                    setActiveFilename('')
                 }
             },
             {
                 label: 'Open',
-                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFilename: string, setActiveFilename: Function) => {
                     OcdDesignFacade.loadDesign('').then((results) => {
-                        console.debug('Menu: Load:', results)
                         if (!results.canceled) {
                             const ocdDocument = OcdDocument.new()
                             ocdDocument.design = results.design
                             setOcdDocument(ocdDocument)
+                            setActiveFilename(results.filename)
                             const clone = OcdConsoleConfig.clone(ocdConsoleConfig)
                             if (results.filename && results.filename !== '') {
-                                clone.config.currentFilename = results.filename
                                 const recentDesigns: string[] = ocdConsoleConfig.config.recentDesigns ? ocdConsoleConfig.config.recentDesigns.filter((f) => f !== results.filename) : []
                                 clone.config.recentDesigns = [results.filename, ...recentDesigns].slice(0, ocdConsoleConfig.config.maxRecent)
-                            } else {
-                                clone.config.currentFilename = ''
                             }
                             setOcdConsoleConfig(clone)
                             console.debug('Menu: Load: Config', clone)
@@ -60,41 +58,23 @@ export const menuItems = [
             },
             {
                 label: 'Save',
-                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
-                    if (ocdConsoleConfig.config.currentFilename && ocdConsoleConfig.config.currentFilename !== '') {
-                        OcdDesignFacade.saveDesign(ocdDocument.design, ocdConsoleConfig.config.currentFilename)
-                    } else {
-                        alert('Currently not implemented.')
-                    }
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFilename: string, setActiveFilename: Function) => {
+                    OcdDesignFacade.saveDesign(ocdDocument.design, activeFilename).then((results) => {
+                        if (!results.canceled) {
+                            setActiveFilename(results.filename)
+                        }
+                    }).catch((resp) => {console.warn('Load Design Failed with', resp)})
                 }
             },
             {
                 label: 'Save As',
-                click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
-                    const saveFile = async (ocdDocument: OcdDocument) => {
-                        try {
-                            const options = {
-                                types: [
-                                    {
-                                        description: 'OKIT Files',
-                                        accept: {
-                                            'application/json': ['.okit'],
-                                        },
-                                    },
-                                ],
-                            }
-                            // @ts-ignore 
-                            const handle = await window.showSaveFilePicker(options)
-                            const writable = await handle.createWritable()
-                            const okitJson = JSON.stringify(ocdDocument.design, null, 2)
-                            await writable.write(okitJson)
-                            await writable.close()
-                            return handle
-                        } catch (err: any) {
-                            console.error(err.name, err.message);
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFilename: string, setActiveFilename: Function) => {
+                    const suggestedName = activeFilename && activeFilename !== '' ? `${activeFilename.split('.')[0]}_Copy.okit` : ''    
+                    OcdDesignFacade.saveDesign(ocdDocument.design, suggestedName).then((results) => {
+                        if (!results.canceled) {
+                            setActiveFilename(results.filename)
                         }
-                    }
-                    saveFile(ocdDocument).then((resp) => console.info('Saved', resp))             
+                    }).catch((resp) => {console.warn('Load Design Failed with', resp)})
                 }
             },
             {
