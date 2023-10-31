@@ -173,10 +173,7 @@ async function handleQueryDropdown(event, profile, region) {
 async function handleLoadDesign(event, filename) {
 	console.debug('Electron Main: handleLoadDesign')
 	return new Promise((resolve, reject) => {
-		// if (!fs.existsSync(ocdConfigDirectory)) fs.mkdirSync(ocdConfigDirectory)
-		// console.debug('Save Console Config: ', ocdConsoleConfigFilename)
 		try {
-			// fs.writeFileSync(filename, JSON.stringify(design, null, 4))
 			if (!filename || !fs.existsSync(filename) || !fs.statSync(filename).isFile()) {
 				dialog.showOpenDialog(mainWindow, {
 					properties: ['openFile'],
@@ -201,16 +198,7 @@ async function handleLoadDesign(event, filename) {
 async function handleSaveDesign(event, design, filename) {
 	console.debug('Electron Main: handleSaveDesign', design, filename)
 	return new Promise((resolve, reject) => {
-		// // if (!fs.existsSync(ocdConfigDirectory)) fs.mkdirSync(ocdConfigDirectory)
-		// // console.debug('Save Console Config: ', ocdConsoleConfigFilename)
-		// try {
-		// 	fs.writeFileSync(filename, JSON.stringify(design, null, 4))
-		// 	resolve(design)
-		// } catch (err) {
-		// 	reject(err)
-		// }
 		try {
-			// fs.writeFileSync(filename, JSON.stringify(design, null, 4))
 			if (!filename || !fs.existsSync(filename) || !fs.statSync(filename).isFile()) {
 				dialog.showSaveDialog(mainWindow, {
 					defaultPath: filename,
@@ -218,7 +206,6 @@ async function handleSaveDesign(event, design, filename) {
 					filters: [{name: 'Filetype', extensions: ['okit']}]
 				  }).then(result => {
 					if (!result.canceled) fs.writeFileSync(result.filePath, JSON.stringify(design, null, 4))
-					// resolve(result.canceled ? '' : result.filePath)
 					resolve({canceled: false, filename: result.canceled ? '' : result.filePath, design: design})
 				}).catch(err => {
 					console.error(err)
@@ -252,8 +239,6 @@ async function handleLoadConsoleConfig(event) {
             showProperties: true,
             highlightCompartmentResources: false
         }
-		// if (!fs.existsSync(ocdConfigDirectory)) fs.mkdirSync(ocdConfigDirectory)
-		// console.debug('Load Console Config: ', ocdConsoleConfigFilename)
 		try {
 			if (!fs.existsSync(ocdConsoleConfigFilename)) fs.writeFileSync(ocdConsoleConfigFilename, JSON.stringify(defaultConfig, null, 4))
 			const config = fs.readFileSync(ocdConsoleConfigFilename, 'utf-8')
@@ -267,8 +252,6 @@ async function handleLoadConsoleConfig(event) {
 async function handleSaveConsoleConfig(event, config) {
 	console.debug('Electron Main: handleLoadConfig')
 	return new Promise((resolve, reject) => {
-		// if (!fs.existsSync(ocdConfigDirectory)) fs.mkdirSync(ocdConfigDirectory)
-		// console.debug('Save Console Config: ', ocdConsoleConfigFilename)
 		try {
 			fs.writeFileSync(ocdConsoleConfigFilename, JSON.stringify(config, null, 4))
 			resolve(config)
