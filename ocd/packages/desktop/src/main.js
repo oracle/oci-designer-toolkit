@@ -213,7 +213,8 @@ async function handleSaveDesign(event, design, filename) {
 			// fs.writeFileSync(filename, JSON.stringify(design, null, 4))
 			if (!filename || !fs.existsSync(filename) || !fs.statSync(filename).isFile()) {
 				dialog.showSaveDialog(mainWindow, {
-					properties: ['openFile'],
+					defaultPath: filename,
+					properties: ['openFile', 'createDirectory'],
 					filters: [{name: 'Filetype', extensions: ['okit']}]
 				  }).then(result => {
 					if (!result.canceled) fs.writeFileSync(result.filePath, JSON.stringify(design, null, 4))

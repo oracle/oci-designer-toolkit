@@ -108,8 +108,9 @@ export const menuItems = [
                     //         console.error(err.name, err.message);
                     //     }
                     // }
-                    // saveFile(ocdDocument).then((resp) => console.info('Saved', resp))             
-                    OcdDesignFacade.saveDesign(ocdDocument.design, '').then((results) => {
+                    // saveFile(ocdDocument).then((resp) => console.info('Saved', resp))         
+                    const suggestedName = activeFilename && activeFilename !== '' ? `${activeFilename.split('.')[0]}_Copy.okit` : ''    
+                    OcdDesignFacade.saveDesign(ocdDocument.design, suggestedName).then((results) => {
                         console.debug('Menu: Save:', results)
                         if (!results.canceled) {
                             setActiveFilename(results.filename)
