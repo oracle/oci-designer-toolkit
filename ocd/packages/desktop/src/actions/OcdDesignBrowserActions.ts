@@ -76,7 +76,8 @@ export namespace OcdDesignerBrowserActions {
 
     export const discardConfirmation = (): Promise<any> => {
         return new Promise((resolve, reject) => {
-            reject('Not implemented')
+            alert('OCD Design has been modified, changes will be lost.')
+            resolve(true)
         })
     }
 }

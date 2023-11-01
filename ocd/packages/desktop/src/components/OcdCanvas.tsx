@@ -177,6 +177,7 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
         e.stopPropagation()
         if (dragging) {
             console.info('OcdCanvas: SVG Drag End', ocdDocument.dragResource)
+            const hasMoved = coordinates.x !== 0 || coordinates.y !== 0
             setDragging(false)
             // Test if container dropped on self
             if (ocdDocument.dragResource.parent && ocdDocument.dragResource.resource.id === ocdDocument.dragResource.parent.id) {
@@ -204,7 +205,7 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
             ocdDocument.dragResource = ocdDocument.newDragResource()
             // Redraw
             setOcdDocument(OcdDocument.clone(ocdDocument))
-            if (!activeFile.modified) setActiveFile({name: activeFile.name, modified: true})
+            if (!activeFile.modified && hasMoved) setActiveFile({name: activeFile.name, modified: true})
         } else if (panning) {
             setPanning(false)
             setCoordinates({ x: 0, y: 0 })

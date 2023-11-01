@@ -60,22 +60,6 @@ export const menuItems = [
                         }).catch((resp) => {console.warn('Discard Failed with', resp)})
                     } else {
                         loadDesign('', setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig, setActiveFile)
-                        // OcdDesignFacade.loadDesign('').then((results) => {
-                        //     if (!results.canceled) {
-                        //         const ocdDocument = OcdDocument.new()
-                        //         ocdDocument.design = results.design
-                        //         setOcdDocument(ocdDocument)
-                        //         setActiveFile({name: results.filename, modified: false})
-                        //         updateRecentFiles(results.filename, ocdConsoleConfig, setOcdConsoleConfig)
-                        //         // const clone = OcdConsoleConfig.clone(ocdConsoleConfig)
-                        //         // if (results.filename && results.filename !== '') {
-                        //         //     const recentDesigns: string[] = ocdConsoleConfig.config.recentDesigns ? ocdConsoleConfig.config.recentDesigns.filter((f) => f !== results.filename) : []
-                        //         //     clone.config.recentDesigns = [results.filename, ...recentDesigns].slice(0, ocdConsoleConfig.config.maxRecent)
-                        //         // }
-                        //         // setOcdConsoleConfig(clone)
-                        //         // OcdConfigFacade.saveConsoleConfig(clone.config).catch((resp) => {console.warn(resp)})
-                        //     }
-                        // }).catch((resp) => {console.warn('Load Design Failed with', resp)})
                     }
                 }
             },
@@ -97,23 +81,6 @@ export const menuItems = [
                             } else {
                                 loadDesign(r, setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig, setActiveFile)
                             }
-                            // OcdDesignFacade.loadDesign(r).then((results) => {
-                            //     if (!results.canceled) {
-                            //         const ocdDocument = OcdDocument.new()
-                            //         ocdDocument.design = results.design
-                            //         setOcdDocument(ocdDocument)
-                            //         setActiveFile({name: results.filename, modified: false})
-                            //         updateRecentFiles(results.filename, ocdConsoleConfig, setOcdConsoleConfig)
-                            //         // const clone = OcdConsoleConfig.clone(ocdConsoleConfig)
-                            //         // if (results.filename && results.filename !== '') {
-                            //         //     const recentDesigns: string[] = ocdConsoleConfig.config.recentDesigns ? ocdConsoleConfig.config.recentDesigns.filter((f) => f !== results.filename) : []
-                            //         //     clone.config.recentDesigns = [results.filename, ...recentDesigns].slice(0, ocdConsoleConfig.config.maxRecent)
-                            //         // }
-                            //         // setOcdConsoleConfig(clone)
-                            //         // console.debug('Menu: Load: Config', clone)
-                            //         // OcdConfigFacade.saveConsoleConfig(clone.config).catch((resp) => {console.warn(resp)})
-                            //     }
-                            // }).catch((resp) => {console.warn('Load Design Failed with', resp)})
                         }
                     }})
                 }
@@ -135,14 +102,15 @@ export const menuItems = [
                     OcdDesignFacade.saveDesign(ocdDocument.design, '').then((results) => {
                         if (!results.canceled) {
                             setActiveFile({name: results.filename, modified: false})
-                            const clone = OcdConsoleConfig.clone(ocdConsoleConfig)
-                            if (results.filename && results.filename !== '') {
-                                const recentDesigns: string[] = ocdConsoleConfig.config.recentDesigns ? ocdConsoleConfig.config.recentDesigns.filter((f) => f !== results.filename) : []
-                                clone.config.recentDesigns = [results.filename, ...recentDesigns].slice(0, ocdConsoleConfig.config.maxRecent)
-                            }
-                            setOcdConsoleConfig(clone)
-                            console.debug('Menu: Load: Config', clone)
-                            OcdConfigFacade.saveConsoleConfig(clone.config).catch((resp) => {console.warn(resp)})
+                            updateRecentFiles(results.filename, ocdConsoleConfig, setOcdConsoleConfig)
+                            // const clone = OcdConsoleConfig.clone(ocdConsoleConfig)
+                            // if (results.filename && results.filename !== '') {
+                            //     const recentDesigns: string[] = ocdConsoleConfig.config.recentDesigns ? ocdConsoleConfig.config.recentDesigns.filter((f) => f !== results.filename) : []
+                            //     clone.config.recentDesigns = [results.filename, ...recentDesigns].slice(0, ocdConsoleConfig.config.maxRecent)
+                            // }
+                            // setOcdConsoleConfig(clone)
+                            // console.debug('Menu: Load: Config', clone)
+                            // OcdConfigFacade.saveConsoleConfig(clone.config).catch((resp) => {console.warn(resp)})
                         }
                     }).catch((resp) => {console.warn('Load Design Failed with', resp)})
                 }
