@@ -13,7 +13,7 @@ import { OcdConfigFacade } from '../facade/OcdConfigFacade'
 export interface MenuItem {
     label: string,
     click?: Function | undefined,
-    submenu?: MenuItem[]
+    submenu?: MenuItem[] | Function
 }
 
 export const menuItems = [
@@ -44,7 +44,6 @@ export const menuItems = [
                                 clone.config.recentDesigns = [results.filename, ...recentDesigns].slice(0, ocdConsoleConfig.config.maxRecent)
                             }
                             setOcdConsoleConfig(clone)
-                            console.debug('Menu: Load: Config', clone)
                             OcdConfigFacade.saveConsoleConfig(clone.config).catch((resp) => {console.warn(resp)})
                         }
                     }).catch((resp) => {console.warn('Load Design Failed with', resp)})
@@ -54,6 +53,31 @@ export const menuItems = [
                 label: 'Open Recent',
                 click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
                     alert('Currently not implemented.')
+                },
+                submenu: (ocdConsoleConfig: OcdConsoleConfig) => {
+                    const config = ocdConsoleConfig.config
+                    return config.recentDesigns.map((r) => {return {
+                        label: r,
+                        click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFilename: string, setActiveFilename: Function) => {
+                            console.debug('>>>> Opening:', r)
+                            OcdDesignFacade.loadDesign(r).then((results) => {
+                                if (!results.canceled) {
+                                    const ocdDocument = OcdDocument.new()
+                                    ocdDocument.design = results.design
+                                    setOcdDocument(ocdDocument)
+                                    setActiveFilename(results.filename)
+                                    const clone = OcdConsoleConfig.clone(ocdConsoleConfig)
+                                    if (results.filename && results.filename !== '') {
+                                        const recentDesigns: string[] = ocdConsoleConfig.config.recentDesigns ? ocdConsoleConfig.config.recentDesigns.filter((f) => f !== results.filename) : []
+                                        clone.config.recentDesigns = [results.filename, ...recentDesigns].slice(0, ocdConsoleConfig.config.maxRecent)
+                                    }
+                                    setOcdConsoleConfig(clone)
+                                    console.debug('Menu: Load: Config', clone)
+                                    OcdConfigFacade.saveConsoleConfig(clone.config).catch((resp) => {console.warn(resp)})
+                                }
+                            }).catch((resp) => {console.warn('Load Design Failed with', resp)})
+                        }
+                    }})
                 }
             },
             {
@@ -73,6 +97,14 @@ export const menuItems = [
                     OcdDesignFacade.saveDesign(ocdDocument.design, suggestedName).then((results) => {
                         if (!results.canceled) {
                             setActiveFilename(results.filename)
+                            const clone = OcdConsoleConfig.clone(ocdConsoleConfig)
+                            if (results.filename && results.filename !== '') {
+                                const recentDesigns: string[] = ocdConsoleConfig.config.recentDesigns ? ocdConsoleConfig.config.recentDesigns.filter((f) => f !== results.filename) : []
+                                clone.config.recentDesigns = [results.filename, ...recentDesigns].slice(0, ocdConsoleConfig.config.maxRecent)
+                            }
+                            setOcdConsoleConfig(clone)
+                            console.debug('Menu: Load: Config', clone)
+                            OcdConfigFacade.saveConsoleConfig(clone.config).catch((resp) => {console.warn(resp)})
                         }
                     }).catch((resp) => {console.warn('Load Design Failed with', resp)})
                 }

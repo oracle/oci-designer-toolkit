@@ -196,7 +196,7 @@ async function handleLoadDesign(event, filename) {
 }
 
 async function handleSaveDesign(event, design, filename) {
-	console.debug('Electron Main: handleSaveDesign', design, filename)
+	console.debug('Electron Main: handleSaveDesign')
 	return new Promise((resolve, reject) => {
 		try {
 			if (!filename || !fs.existsSync(filename) || !fs.statSync(filename).isFile()) {
@@ -237,7 +237,9 @@ async function handleLoadConsoleConfig(event) {
             displayPage: 'designer',
             detailedResource: true,
             showProperties: true,
-            highlightCompartmentResources: false
+            highlightCompartmentResources: false,
+            recentDesigns: [],
+            maxRecent: 10,
         }
 		try {
 			if (!fs.existsSync(ocdConsoleConfigFilename)) fs.writeFileSync(ocdConsoleConfigFilename, JSON.stringify(defaultConfig, null, 4))

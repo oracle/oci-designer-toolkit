@@ -18,7 +18,7 @@ const OcdConsoleMenuItem = ({ menuItem, depth, ocdDocument, setOcdDocument, ocdC
     const onMouseLeave = () => {setDropdown(false)}
     const closeDropdown = () => {setDropdown(!dropdown)}
     const onClick = () => {menuItem.click(ocdDocument, (ocdDocument: OcdDocument) => setOcdDocument(ocdDocument), ocdConsoleConfig, (ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig), activeFilename, (activeFilename: string) => setActiveFilename(activeFilename))}
-    console.debug(`OcdConsoleMenuItem: (${activeFilename})`, setActiveFilename)
+    console.debug('OcdConsoleMenuItem:', menuItem.label, menuItem.click)
     return (
         <li
         className={`${depth > 0 ? 'ocd-submenu-item' : 'ocd-menu-item'}`}
@@ -26,11 +26,24 @@ const OcdConsoleMenuItem = ({ menuItem, depth, ocdDocument, setOcdDocument, ocdC
         onMouseLeave={onMouseLeave}
         onClick={closeDropdown}
         >
-            {menuItem.submenu ? (
+            {menuItem.submenu && Array.isArray(menuItem.submenu) ? (
                 <>
                 <a href='#' className={`${menuItem.submenu && depth > 0 ? 'ocd-submenu-item-has-submenu' : ''}`} onClick={() => console.info(`Clicked ${menuItem.label}`)}>{menuItem.label}</a>
                 <OcdConsoleSubMenu
                     submenus={menuItem.submenu}
+                    dropdown={dropdown}
+                    depth={depth}
+                    ocdConsoleConfig={ocdConsoleConfig} 
+                    setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} 
+                    ocdDocument={ocdDocument} 
+                    setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)}
+                />
+                </>
+            ) : menuItem.submenu && menuItem.submenu(ocdConsoleConfig).length > 0 ? (
+                <>
+                <a href='#' className={`${menuItem.submenu && depth > 0 ? 'ocd-submenu-item-has-submenu' : ''}`} onClick={() => console.info(`Clicked ${menuItem.label}`)}>{menuItem.label}</a>
+                <OcdConsoleSubMenu
+                    submenus={menuItem.submenu(ocdConsoleConfig)}
                     dropdown={dropdown}
                     depth={depth}
                     ocdConsoleConfig={ocdConsoleConfig} 

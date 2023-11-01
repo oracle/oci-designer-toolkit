@@ -14,7 +14,6 @@ export interface OcdConsoleConfiguration {
     highlightCompartmentResources: boolean
     recentDesigns: string[]
     maxRecent: number
-    currentFilename: string
 }
 
 export class OcdConsoleConfig {
@@ -40,7 +39,6 @@ export class OcdConsoleConfig {
             highlightCompartmentResources: false,
             recentDesigns: [],
             maxRecent: 10,
-            currentFilename: ''
         }
     }
 }
