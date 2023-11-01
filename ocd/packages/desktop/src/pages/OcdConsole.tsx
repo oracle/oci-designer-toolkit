@@ -26,7 +26,7 @@ export const ConsoleConfigContext = createContext({})
 const OcdConsole = (): JSX.Element => {
     const [ocdDocument, setOcdDocument] = useState(OcdDocument.new())
     const [ocdConsoleConfig, setOcdConsoleConfig] = useState(OcdConsoleConfig.new())
-    const [activeFilename, setActiveFilename] = useState('')
+    const [activeFile, setActiveFile] = useState({name: '', modified: false})
     useEffect(() => {
         OcdConfigFacade.loadConsoleConfig().then((results) => {
             console.debug('OcdConsole: Load Config', results)
@@ -42,7 +42,7 @@ const OcdConsole = (): JSX.Element => {
     }
     return (
         <ConsoleConfigContext.Provider value={{ocdConsoleConfig, setOcdConsoleConfig}}>
-            <ActiveFileContext.Provider value={{activeFilename, setActiveFilename}}>
+            <ActiveFileContext.Provider value={{activeFile, setActiveFile}}>
                 <div className='ocd-console'>
                     <OcdConsoleHeader ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
                     <OcdConsoleToolbar ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
@@ -223,13 +223,13 @@ const OcdConsoleBody = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, se
 
 const OcdConsoleFooter = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument }: ConsolePageProps): JSX.Element => {
     // @ts-ignore
-    const {activeFilename, setActiveFilename} = useContext(ActiveFileContext)
-    const filenameClass = '' // `ocd-design-modified ocd-active-file-modified-icon`
+    const {activeFile, setActiveFile} = useContext(ActiveFileContext)
+    const filenameClass = `${activeFile.modified ? 'ocd-design-modified ocd-active-file-modified-icon' : ''}`
     return (
         <div className='ocd-console-footer ocd-console-footer-theme'>
             <div className='ocd-footer-left'>
                 <div>
-                    <div className={filenameClass} title='Design Modified'><label>{activeFilename}</label></div>
+                    <div className={filenameClass} title='Design Modified'><label>{activeFile.name}</label></div>
                 </div>
             </div>
             <div className='ocd-footer-centre'></div>

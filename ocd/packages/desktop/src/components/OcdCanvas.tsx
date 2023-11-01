@@ -4,12 +4,13 @@
 */
 
 import { v4 as uuidv4 } from 'uuid'
-import OcdDocument, { OcdDragResource, OcdSelectedResource } from './OcdDocument'
-import OcdResourceSvg, { OcdConnector, OcdDragResourceGhostSvg, OcdSvgContextMenu } from './OcdResourceSvg'
+import { OcdDocument, OcdDragResource, OcdSelectedResource } from './OcdDocument'
+import { OcdResourceSvg, OcdConnector, OcdDragResourceGhostSvg, OcdSvgContextMenu } from './OcdResourceSvg'
 import { OcdResource, OcdViewConnector, OcdViewCoords, OcdViewLayer, OcdViewPage } from '@ocd/model'
 import { CanvasProps, OcdMouseEvents } from '../types/ReactComponentProperties'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { newDragData } from '../types/DragData'
+import { ActiveFileContext } from '../pages/OcdConsole'
 
 export interface OcdContextMenu {
     show: boolean
@@ -25,6 +26,8 @@ export interface Point {
 
 export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument, setOcdDocument }: CanvasProps): JSX.Element => {
     console.info('OcdCanvas: OCD Document:', ocdDocument)
+    // @ts-ignore
+    const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const uuid = () => `gid-${uuidv4()}`
     const page: OcdViewPage = ocdDocument.getActivePage()
     const layers = page.layers.filter((l: OcdViewLayer) => l.visible).map((l: OcdViewLayer) => l.id)
@@ -122,6 +125,7 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
             // Redraw
             console.info('OcdCanvas: Design:', ocdDocument)
             setOcdDocument(OcdDocument.clone(ocdDocument))
+            if (!activeFile.modified) setActiveFile({name: activeFile.name, modified: true})
         }
         return false
     }
@@ -200,6 +204,7 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
             ocdDocument.dragResource = ocdDocument.newDragResource()
             // Redraw
             setOcdDocument(OcdDocument.clone(ocdDocument))
+            if (!activeFile.modified) setActiveFile({name: activeFile.name, modified: true})
         } else if (panning) {
             setPanning(false)
             setCoordinates({ x: 0, y: 0 })
@@ -299,6 +304,7 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
             setDragResource(ocdDocument.newDragResource())
             // Redraw
             setOcdDocument(OcdDocument.clone(ocdDocument))
+            if (!activeFile.modified) setActiveFile({name: activeFile.name, modified: true})
         }
     }
     const svgDragDropEvents: OcdMouseEvents = {
