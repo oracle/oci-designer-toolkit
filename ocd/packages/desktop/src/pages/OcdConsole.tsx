@@ -3,7 +3,7 @@
 ** Licensed under the GNU GENERAL PUBLIC LICENSE v 3.0 as shown at https://www.gnu.org/licenses/.
 */
 
-import React, { createContext, useEffect, useRef, useState } from 'react'
+import React, { createContext, useContext, useEffect, useRef, useState } from 'react'
 import OcdDesigner from './OcdDesigner'
 import OcdDocument from '../components/OcdDocument'
 import OcdConsoleMenuBar from '../components/OcdConsoleMenuBar'
@@ -222,8 +222,19 @@ const OcdConsoleBody = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, se
 }
 
 const OcdConsoleFooter = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument }: ConsolePageProps): JSX.Element => {
+    // @ts-ignore
+    const {activeFilename, setActiveFilename} = useContext(ActiveFileContext)
+    const filenameClass = '' // `ocd-design-modified ocd-active-file-modified-icon`
     return (
-        <div className='ocd-console-footer ocd-console-footer-theme'></div>
+        <div className='ocd-console-footer ocd-console-footer-theme'>
+            <div className='ocd-footer-left'>
+                <div>
+                    <div className={filenameClass} title='Design Modified'><label>{activeFilename}</label></div>
+                </div>
+            </div>
+            <div className='ocd-footer-centre'></div>
+            <div className='ocd-footer-right'></div>
+        </div>
     )
 }
 

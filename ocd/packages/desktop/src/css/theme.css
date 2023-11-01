@@ -141,6 +141,10 @@
     background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTEyIDMwbDEyLTEyIDEyIDEyIiBzdHJva2U9IiMxNjE1MTMiIHN0cm9rZS13aWR0aD0iNCIvPjwvc3ZnPg==");
 }
 
+.ocd-design-modified {
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTE2IDE0Yy0zIDIuNjY3LTcuMiAxMC40IDAgMjBtLTQuNDM0LTI0Yy00LjIgMy43MzMtMTAuMDggMTQuNTYgMCAyOE0zMiAxNGMzIDIuNjY3IDcuMiAxMC40IDAgMjBtNC40MzQtMjRjNC4yIDMuNzMzIDEwLjA4IDE0LjU2IDAgMjhNMjggMjRhNCA0IDAgMTEtOCAwIDQgNCAwIDAxOCAweiIgc3Ryb2tlPSIjMDQ0MGMwIiBzdHJva2Utd2lkdGg9IjQiLz48L3N2Zz4=")
+}
+
 /*
 ** Element Themes
 */

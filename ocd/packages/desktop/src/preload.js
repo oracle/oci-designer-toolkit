@@ -13,7 +13,7 @@ contextBridge.exposeInMainWorld('ocdAPI', {
   queryTenancy: (profile, compartmentIds, region) => ipcRenderer.invoke('ociQuery:queryTenancy', profile, compartmentIds, region),
   queryDropdown: (profile, region) => ipcRenderer.invoke('ociQuery:queryDropdown', profile, region),
 	// OCD Design 
-  loadDesign: (design, filename) => ipcRenderer.invoke('ocdDesign:loadDesign', filename),
+  loadDesign: (filename) => ipcRenderer.invoke('ocdDesign:loadDesign', filename),
   saveDesign: (design, filename) => ipcRenderer.invoke('ocdDesign:saveDesign', design, filename),
   exportTerraform: (design, directory) => ipcRenderer.invoke('ocdDesign:exportTerraform', design, directory),
 	// OCD Configuration
