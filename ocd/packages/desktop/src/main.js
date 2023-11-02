@@ -98,6 +98,7 @@ app.whenReady().then(() => {
 	// OCD Design 
 	ipcMain.handle('ocdDesign:loadDesign', handleLoadDesign)
 	ipcMain.handle('ocdDesign:saveDesign', handleSaveDesign)
+	ipcMain.handle('ocdDesign:discardConfirmation', handleDiscardConfirmation)
 	ipcMain.handle('ocdDesign:exportTerraform', handleExportTerraform)
 	// OCD Configuration
 	ipcMain.handle('ocdConfig:loadConsoleConfig', handleLoadConsoleConfig)
@@ -195,13 +196,13 @@ async function handleLoadDesign(event, filename) {
 	})
 }
 
-async function handleSaveDesign(event, design, filename) {
+async function handleSaveDesign(event, design, filename, suggestedFilename='') {
 	console.debug('Electron Main: handleSaveDesign')
 	return new Promise((resolve, reject) => {
 		try {
 			if (!filename || !fs.existsSync(filename) || !fs.statSync(filename).isFile()) {
 				dialog.showSaveDialog(mainWindow, {
-					defaultPath: filename,
+					defaultPath: suggestedFilename,
 					properties: ['openFile', 'createDirectory'],
 					filters: [{name: 'Filetype', extensions: ['okit']}]
 				  }).then(result => {
@@ -218,6 +219,23 @@ async function handleSaveDesign(event, design, filename) {
 		} catch (err) {
 			reject(err)
 		}
+	})
+}
+
+async function handleDiscardConfirmation(event) {
+	return new Promise((resolve, reject) => {
+		const options = {
+			type: 'question',
+			message: 'All Changes Will Be Lost',
+			details: 'OCD Design has been modified.',
+			buttons: ['Discard Changes', 'Cancel'],
+			defaultId: 1
+		}
+		dialog.showMessageBox(mainWindow, options).then((result) => {
+			console.debug('Discard Confirmation', result)
+			const discardResponse = [true, false]
+			resolve(discardResponse[result.response])
+		})
 	})
 }
 

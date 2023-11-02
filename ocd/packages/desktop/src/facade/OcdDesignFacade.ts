@@ -17,6 +17,9 @@ export namespace OcdDesignFacade {
     export const saveDesign = (design: OcdDesign, filename: string): Promise<any> => {
         return window.ocdAPI ? window.ocdAPI.saveDesign(design, filename) : OcdDesignerBrowserActions.saveDesign(design, filename)
     }
+    export const discardConfirmation = (): Promise<any> => {
+        return window.ocdAPI ? window.ocdAPI.discardConfirmation() : OcdDesignerBrowserActions.discardConfirmation()
+    }
     export const exportTerraform = (design: OcdDesign, directory: string): Promise<any> => {
         return window.ocdAPI ? window.ocdAPI.exportTerraform(design, directory) : new Promise((resolve, reject) => {reject('Currently Not Implemented')})
     }

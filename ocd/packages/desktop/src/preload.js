@@ -15,6 +15,7 @@ contextBridge.exposeInMainWorld('ocdAPI', {
 	// OCD Design 
   loadDesign: (filename) => ipcRenderer.invoke('ocdDesign:loadDesign', filename),
   saveDesign: (design, filename) => ipcRenderer.invoke('ocdDesign:saveDesign', design, filename),
+  discardConfirmation: () => ipcRenderer.invoke('ocdDesign:discardConfirmation'),
   exportTerraform: (design, directory) => ipcRenderer.invoke('ocdDesign:exportTerraform', design, directory),
 	// OCD Configuration
   loadConsoleConfig: () => ipcRenderer.invoke('ocdConfig:loadConsoleConfig'),

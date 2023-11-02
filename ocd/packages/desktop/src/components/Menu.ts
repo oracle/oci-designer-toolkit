@@ -23,30 +23,44 @@ export const menuItems = [
         submenu: [
             {
                 label: 'New',
-                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFilename: string, setActiveFilename: Function) => {
-                    const document: OcdDocument = OcdDocument.new()
-                    setOcdDocument(document)
-                    setActiveFilename('')
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
+                    if (activeFile.modified) {
+                        OcdDesignFacade.discardConfirmation().then((discard) => {
+                            if (discard) {
+                                const document: OcdDocument = OcdDocument.new()
+                                setOcdDocument(document)
+                                setActiveFile({name: '', modified: false})
+                            }
+                        }).catch((resp) => {console.warn('Discard Failed with', resp)})
+                    } else {
+                        const document: OcdDocument = OcdDocument.new()
+                        setOcdDocument(document)
+                        setActiveFile({name: '', modified: false})
+                    }
                 }
             },
             {
                 label: 'Open',
-                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFilename: string, setActiveFilename: Function) => {
-                    OcdDesignFacade.loadDesign('').then((results) => {
-                        if (!results.canceled) {
-                            const ocdDocument = OcdDocument.new()
-                            ocdDocument.design = results.design
-                            setOcdDocument(ocdDocument)
-                            setActiveFilename(results.filename)
-                            const clone = OcdConsoleConfig.clone(ocdConsoleConfig)
-                            if (results.filename && results.filename !== '') {
-                                const recentDesigns: string[] = ocdConsoleConfig.config.recentDesigns ? ocdConsoleConfig.config.recentDesigns.filter((f) => f !== results.filename) : []
-                                clone.config.recentDesigns = [results.filename, ...recentDesigns].slice(0, ocdConsoleConfig.config.maxRecent)
-                            }
-                            setOcdConsoleConfig(clone)
-                            OcdConfigFacade.saveConsoleConfig(clone.config).catch((resp) => {console.warn(resp)})
-                        }
-                    }).catch((resp) => {console.warn('Load Design Failed with', resp)})
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
+                    if (activeFile.modified) {
+                        OcdDesignFacade.discardConfirmation().then((discard) => {
+                            if (discard) loadDesign('', setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig, setActiveFile)
+                            // if (discard) {
+                            //     OcdDesignFacade.loadDesign('').then((results) => {
+                            //         if (!results.canceled) {
+                            //             const ocdDocument = OcdDocument.new()
+                            //             ocdDocument.design = results.design
+                            //             setOcdDocument(ocdDocument)
+                            //             setActiveFile({name: results.filename, modified: false})
+                            //             updateRecentFiles(results.filename, ocdConsoleConfig, setOcdConsoleConfig)
+                            //         }
+                            //     }).catch((resp) => {console.warn('Load Design Failed with', resp)})
+        
+                            // }
+                        }).catch((resp) => {console.warn('Discard Failed with', resp)})
+                    } else {
+                        loadDesign('', setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig, setActiveFile)
+                    }
                 }
             },
             {
@@ -58,53 +72,45 @@ export const menuItems = [
                     const config = ocdConsoleConfig.config
                     return config.recentDesigns.map((r) => {return {
                         label: r,
-                        click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFilename: string, setActiveFilename: Function) => {
+                        click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
                             console.debug('>>>> Opening:', r)
-                            OcdDesignFacade.loadDesign(r).then((results) => {
-                                if (!results.canceled) {
-                                    const ocdDocument = OcdDocument.new()
-                                    ocdDocument.design = results.design
-                                    setOcdDocument(ocdDocument)
-                                    setActiveFilename(results.filename)
-                                    const clone = OcdConsoleConfig.clone(ocdConsoleConfig)
-                                    if (results.filename && results.filename !== '') {
-                                        const recentDesigns: string[] = ocdConsoleConfig.config.recentDesigns ? ocdConsoleConfig.config.recentDesigns.filter((f) => f !== results.filename) : []
-                                        clone.config.recentDesigns = [results.filename, ...recentDesigns].slice(0, ocdConsoleConfig.config.maxRecent)
-                                    }
-                                    setOcdConsoleConfig(clone)
-                                    console.debug('Menu: Load: Config', clone)
-                                    OcdConfigFacade.saveConsoleConfig(clone.config).catch((resp) => {console.warn(resp)})
-                                }
-                            }).catch((resp) => {console.warn('Load Design Failed with', resp)})
+                            if (activeFile.modified) {
+                                OcdDesignFacade.discardConfirmation().then((discard) => {
+                                    if (discard) loadDesign(r, setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig, setActiveFile)
+                                }).catch((resp) => {console.warn('Discard Failed with', resp)})
+                            } else {
+                                loadDesign(r, setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig, setActiveFile)
+                            }
                         }
                     }})
                 }
             },
             {
                 label: 'Save',
-                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFilename: string, setActiveFilename: Function) => {
-                    OcdDesignFacade.saveDesign(ocdDocument.design, activeFilename).then((results) => {
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
+                    OcdDesignFacade.saveDesign(ocdDocument.design, activeFile.name).then((results) => {
                         if (!results.canceled) {
-                            setActiveFilename(results.filename)
+                            setActiveFile({name: results.filename, modified: false})
                         }
-                    }).catch((resp) => {console.warn('Load Design Failed with', resp)})
+                    }).catch((resp) => {console.warn('Save Design Failed with', resp)})
                 }
             },
             {
                 label: 'Save As',
-                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFilename: string, setActiveFilename: Function) => {
-                    const suggestedName = activeFilename && activeFilename !== '' ? `${activeFilename.split('.')[0]}_Copy.okit` : ''    
-                    OcdDesignFacade.saveDesign(ocdDocument.design, suggestedName).then((results) => {
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
+                    const suggestedName = activeFile && activeFile.name && activeFile.name !== '' ? `${activeFile.name.split('.')[0]}_Copy.okit` : ''    
+                    OcdDesignFacade.saveDesign(ocdDocument.design, '').then((results) => {
                         if (!results.canceled) {
-                            setActiveFilename(results.filename)
-                            const clone = OcdConsoleConfig.clone(ocdConsoleConfig)
-                            if (results.filename && results.filename !== '') {
-                                const recentDesigns: string[] = ocdConsoleConfig.config.recentDesigns ? ocdConsoleConfig.config.recentDesigns.filter((f) => f !== results.filename) : []
-                                clone.config.recentDesigns = [results.filename, ...recentDesigns].slice(0, ocdConsoleConfig.config.maxRecent)
-                            }
-                            setOcdConsoleConfig(clone)
-                            console.debug('Menu: Load: Config', clone)
-                            OcdConfigFacade.saveConsoleConfig(clone.config).catch((resp) => {console.warn(resp)})
+                            setActiveFile({name: results.filename, modified: false})
+                            updateRecentFiles(results.filename, ocdConsoleConfig, setOcdConsoleConfig)
+                            // const clone = OcdConsoleConfig.clone(ocdConsoleConfig)
+                            // if (results.filename && results.filename !== '') {
+                            //     const recentDesigns: string[] = ocdConsoleConfig.config.recentDesigns ? ocdConsoleConfig.config.recentDesigns.filter((f) => f !== results.filename) : []
+                            //     clone.config.recentDesigns = [results.filename, ...recentDesigns].slice(0, ocdConsoleConfig.config.maxRecent)
+                            // }
+                            // setOcdConsoleConfig(clone)
+                            // console.debug('Menu: Load: Config', clone)
+                            // OcdConfigFacade.saveConsoleConfig(clone.config).catch((resp) => {console.warn(resp)})
                         }
                     }).catch((resp) => {console.warn('Load Design Failed with', resp)})
                 }
@@ -407,3 +413,30 @@ export const menuItems = [
         ]
     }
 ]
+
+export const updateRecentFiles = (filename: string, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
+    if (filename && filename !== '') {
+        const clone = OcdConsoleConfig.clone(ocdConsoleConfig)
+        const recentDesigns: string[] = ocdConsoleConfig.config.recentDesigns ? ocdConsoleConfig.config.recentDesigns.filter((f) => f !== filename) : []
+        clone.config.recentDesigns = [filename, ...recentDesigns].slice(0, ocdConsoleConfig.config.maxRecent)
+        setOcdConsoleConfig(clone)
+        console.debug('Menu: Load: Config', clone)
+        OcdConfigFacade.saveConsoleConfig(clone.config).catch((resp) => {console.warn(resp)})
+    }
+}
+
+export const loadDesign = (filename: string, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, setActiveFile: Function): Promise<any> => {
+    return OcdDesignFacade.loadDesign(filename).then((results) => {
+        if (!results.canceled) {
+            const ocdDocument = OcdDocument.new()
+            ocdDocument.design = results.design
+            setOcdDocument(ocdDocument)
+            setActiveFile({name: results.filename, modified: false})
+            updateRecentFiles(results.filename, ocdConsoleConfig, setOcdConsoleConfig)
+        }
+    }).catch((resp) => {console.warn('Load Design Failed with', resp)})
+}
+
+export const saveDesign = () => {
+    
+}

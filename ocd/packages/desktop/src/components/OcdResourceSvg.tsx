@@ -4,12 +4,13 @@
 ** Licensed under the GNU GENERAL PUBLIC LICENSE v 3.0 as shown at https://www.gnu.org/licenses/.
 */
 
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
-import OcdDocument, { OcdDragResource, OcdSelectedResource } from './OcdDocument'
+import { OcdDocument, OcdDragResource, OcdSelectedResource } from './OcdDocument'
 import { OcdViewPage, OcdViewConnector, OcdViewCoords, OcdViewLayer } from '@ocd/model'
 import { ResourceRectProps, ResourceForeignObjectProps, ResourceSvgProps, ResourceSvgContextMenuProps, ResourceSvgGhostProps, OcdMouseEvents, ConnectorSvgProps } from '../types/ReactComponentProperties'
 import { OcdContextMenu } from './OcdCanvas'
+import { ActiveFileContext } from '../pages/OcdConsole'
 
 export const OcdSvgContextMenu = ({ contextMenu, setContextMenu, ocdDocument, setOcdDocument, resource }: ResourceSvgContextMenuProps): JSX.Element => {
     console.info('OcdResourceSvg: OcdSvgContextMenu')
@@ -255,6 +256,8 @@ const OcdContainerRect = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
 }
 
 const OcdResizePoint = ({resource, cx, cy, position, setDimensions, onResize, onResizeEnd}: any): JSX.Element => {
+    //@ts-ignore
+    const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const [mouseOver, setMouseOver] = useState(false)
     const [dragging, setDragging] = useState(false)
     const [origin, setOrigin] = useState({ x: 0, y: 0 });
@@ -284,6 +287,7 @@ const OcdResizePoint = ({resource, cx, cy, position, setDimensions, onResize, on
     const onResizeDragEnd = (e: React.MouseEvent<SVGElement>) => {
         e.stopPropagation()
         e.preventDefault()
+        const hasMoved = (position === 'east' && (e.clientX !== origin.x)) || (position === 'south' && (e.clientY !== origin.y))
         setDragging(false)
         const dimensions = {
             x: position === 'west' ? e.clientX - origin.x : 0,
@@ -293,6 +297,7 @@ const OcdResizePoint = ({resource, cx, cy, position, setDimensions, onResize, on
         }
         // setDimensions(dimensions)
         onResizeEnd(dimensions)
+        if (!activeFile.modified && hasMoved) setActiveFile({name: activeFile.name, modified: true})
     }
     const onMouseOver = (e: React.MouseEvent<SVGElement>) => {
         e.stopPropagation()

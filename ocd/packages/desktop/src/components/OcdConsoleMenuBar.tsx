@@ -12,12 +12,12 @@ import { ActiveFileContext, ConsoleConfigContext } from '../pages/OcdConsole'
 
 const OcdConsoleMenuItem = ({ menuItem, depth, ocdDocument, setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig }: any): JSX.Element => {
     // @ts-ignore
-    const {activeFilename, setActiveFilename} = useContext(ActiveFileContext)
+    const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const [dropdown, setDropdown] = useState(false)
     const onMouseEnter = () => {setDropdown(true)}
     const onMouseLeave = () => {setDropdown(false)}
     const closeDropdown = () => {setDropdown(!dropdown)}
-    const onClick = () => {menuItem.click(ocdDocument, (ocdDocument: OcdDocument) => setOcdDocument(ocdDocument), ocdConsoleConfig, (ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig), activeFilename, (activeFilename: string) => setActiveFilename(activeFilename))}
+    const onClick = () => {menuItem.click(ocdDocument, (ocdDocument: OcdDocument) => setOcdDocument(ocdDocument), ocdConsoleConfig, (ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig), activeFile, (activeFile: Record<string, any>) => setActiveFile(activeFile))}
     console.debug('OcdConsoleMenuItem:', menuItem.label, menuItem.click)
     return (
         <li
