@@ -6,6 +6,7 @@
 import { OciResource } from "@ocd/model"
 import { OciTabularContentsProps, OciTabularHeaderProps, OciTabularResourceProps, OciTabularRowProps } from "../../../../types/ReactComponentProperties"
 import { useState } from "react"
+import { OcdUtils } from "@ocd/core"
 
 export const OciDefault = ({ ocdDocument, ociResources, selected }: OciTabularResourceProps): JSX.Element => {
     return (
@@ -85,9 +86,9 @@ export const OcdTabularHeader = ({columnTitles, ociResources, resourceElements, 
     return (
         <div className='tr' key={`${selected}-tabular-header-row`}>
             <div className='th'>{ociResources[selected].length}</div>
-            <div className={`th ocd-sortable-column ${sortColumn === 'displayName' ? sortAscending ? ascClasses : dscClasses : ''}`} onClick={() => onSortClick('displayName')}>Name</div>
-            <div className={`th ocd-sortable-column ${sortColumn === 'compartmentId' ? sortAscending ? ascClasses : dscClasses : ''}`} onClick={() => onSortClick('compartmentId')}>Compartment</div>
-            {columnTitles.map((title: string, i: number) => {return <div className={`th ocd-sortable-column ${sortColumn === resourceElements[i] ? sortAscending ? ascClasses : dscClasses : ''}`} onClick={() => onSortClick(resourceElements[i])}>{title}</div>})}
+            <div className={`th ocd-sortable-column ${sortColumn === 'displayName' ? sortAscending ? ascClasses : dscClasses : ''}`} onClick={() => onSortClick('displayName')} key={`${selected}-tabular-header-row-displayName`}>Name</div>
+            <div className={`th ocd-sortable-column ${sortColumn === 'compartmentId' ? sortAscending ? ascClasses : dscClasses : ''}`} onClick={() => onSortClick('compartmentId')} key={`${selected}-tabular-header-row-compartmentId`}>Compartment</div>
+            {columnTitles.map((title: string, i: number) => {return <div className={`th ocd-sortable-column ${sortColumn === resourceElements[i] ? sortAscending ? ascClasses : dscClasses : ''}`} onClick={() => onSortClick(resourceElements[i])} key={`${selected}-tabular-header-row-${OcdUtils.toUnderscoreCase(title)}`}>{title}</div>})}
         </div>
     )
 }
