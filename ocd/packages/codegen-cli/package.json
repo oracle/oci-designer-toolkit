@@ -33,7 +33,8 @@
     "generate-oci-properties": "node lib/esm/ocd-codegen.js generate oci-properties-js -s ./schema/oci-schema.json -d ../desktop/src/components/properties/provider/oci",
     "generate-oci-tabular":    "node lib/esm/ocd-codegen.js generate oci-tabular-js    -s ./schema/oci-schema.json -d ../desktop/src/components/tabular/provider/oci",
     "generate-oci-terraform":  "node lib/esm/ocd-codegen.js generate oci-terraform-js  -s ./schema/oci-schema.json -d ../export/src/terraform/provider/oci",
-    "generate-oci":            "npm run generate-oci-model && npm run generate-oci-properties && npm run generate-oci-terraform && npm run generate-oci-tabular",
+    "generate-oci-validator":  "node lib/esm/ocd-codegen.js generate oci-validator-js  -s ./schema/oci-schema.json -d ../model/src/validator/provider/oci",
+    "generate-oci":            "npm run generate-oci-model && npm run generate-oci-properties && npm run generate-oci-terraform && npm run generate-oci-tabular && npm run generate-oci-validator",
 
     "generate": "npm run generate-oci",
 
