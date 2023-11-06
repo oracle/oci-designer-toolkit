@@ -11,6 +11,7 @@ export interface OcdValidationResult {
     message: string
     element: string
     title: string
+    class?: string
 }
 
 export interface OcdValidatorResource extends Record<string, any> {}

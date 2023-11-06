@@ -40,6 +40,7 @@ details {
     box-sizing: border-box;
     margin-top: 1em;
     width: 100%;
+    max-width: 100%;
 }
 
 details:not([open]) {
@@ -83,6 +84,7 @@ details[open] > summary.summary-background {
 
 summary {
     width: 100%;
+    max-width: 100%;
     box-sizing: border-box;
     font-weight: bold;
     min-height: 20px;
@@ -1834,6 +1836,74 @@ summary {
 .ocd-property-row > div:first-child > label {
     font-weight: bolder;
 }
+
+/* Properties Validation */
+.ocd-validation-results {
+    margin-right: 1em;
+}
+
+.ocd-validation-results .ocd-details-body {
+    padding-right: 1em;
+}
+
+.ocd-validation-result {
+    border-radius: 5px;
+    border: grey 1px solid;
+    width: 100%;
+    /* margin: 5px; */
+    margin: 5px 25px 5px 5px;
+}
+
+.ocd-validation-error-result {
+    border-left-color: #cc0000;
+    border-left-width: 5px;
+    border-left-style: solid;
+    padding: 10px;
+    width: 100%;
+}
+
+.ocd-validation-error-highlight {
+    fill: #cc0000;
+}
+
+.ocd-validation-warning-result {
+    border-left-color: #ffcc00;
+    border-left-width: 5px;
+    border-left-style: solid;
+    padding: 10px;
+    width: 100%;
+}
+
+.ocd-validation-warning-highlight {
+    fill: #ffcc00;
+}
+
+.ocd-validation-information-result {
+    border-left-color: #5c85d6;
+    border-left-width: 5px;
+    border-left-style: solid;
+    padding: 10px;
+    width: 100%;
+}
+
+.ocd-validation-result-title {
+    padding-left: 25px;
+    width: 100%;
+    height: 20px;
+    vertical-align: middle;
+    background-position-x: left;
+    background-position-y: center;
+    background-repeat: no-repeat;
+    background-size: 20px 20px;
+    color: darkgray;
+}
+
+.ocd-validation-message {
+    word-wrap: normal;
+    width: 100%;
+    margin-top: 5px;
+}
+
 
 
 
