@@ -33,6 +33,15 @@ export namespace ${this.namespaceName(resource)} {
     export function isResourceValid(resource: Model.${this.interfaceName(resource)}, resources: OciResources): boolean {
         return (validateResource(resource, resources).filter((v: OcdValidationResult) => !v.valid).length > 0)
     }
+    export function hasErrors(resource: Model.${this.interfaceName(resource)}, resources: OciResources): boolean {
+        return (validateResource(resource, resources).filter((v: OcdValidationResult) => v.type === 'error').length > 0)
+    }
+    export function hasWarnings(resource: Model.${this.interfaceName(resource)}, resources: OciResources): boolean {
+        return (validateResource(resource, resources).filter((v: OcdValidationResult) => v.type === 'warning').length > 0)
+    }
+    export function hasInformation(resource: Model.${this.interfaceName(resource)}, resources: OciResources): boolean {
+        return (validateResource(resource, resources).filter((v: OcdValidationResult) => v.type === 'information').length > 0)
+    }
     function customValidation(resource: Model.${this.interfaceName(resource)}, resources: OciResources): OcdValidationResult[] {
         const results: OcdValidationResult[] = []
         return results

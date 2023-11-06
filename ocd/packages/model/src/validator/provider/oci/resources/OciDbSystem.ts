@@ -15,6 +15,15 @@ export namespace OciDbSystem {
     export function isResourceValid(resource: Model.OciDbSystem, resources: OciResources): boolean {
         return (validateResource(resource, resources).filter((v: OcdValidationResult) => !v.valid).length > 0)
     }
+    export function hasErrors(resource: Model.OciDbSystem, resources: OciResources): boolean {
+        return (validateResource(resource, resources).filter((v: OcdValidationResult) => v.type === 'error').length > 0)
+    }
+    export function hasWarnings(resource: Model.OciDbSystem, resources: OciResources): boolean {
+        return (validateResource(resource, resources).filter((v: OcdValidationResult) => v.type === 'warning').length > 0)
+    }
+    export function hasInformation(resource: Model.OciDbSystem, resources: OciResources): boolean {
+        return (validateResource(resource, resources).filter((v: OcdValidationResult) => v.type === 'information').length > 0)
+    }
     function customValidation(resource: Model.OciDbSystem, resources: OciResources): OcdValidationResult[] {
         const results: OcdValidationResult[] = []
         return results
