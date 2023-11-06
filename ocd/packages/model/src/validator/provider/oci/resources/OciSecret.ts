@@ -15,6 +15,15 @@ export namespace OciSecret {
     export function isResourceValid(resource: Model.OciSecret, resources: OciResources): boolean {
         return (validateResource(resource, resources).filter((v: OcdValidationResult) => !v.valid).length > 0)
     }
+    export function hasErrors(resource: Model.OciSecret, resources: OciResources): boolean {
+        return (validateResource(resource, resources).filter((v: OcdValidationResult) => v.type === 'error').length > 0)
+    }
+    export function hasWarnings(resource: Model.OciSecret, resources: OciResources): boolean {
+        return (validateResource(resource, resources).filter((v: OcdValidationResult) => v.type === 'warning').length > 0)
+    }
+    export function hasInformation(resource: Model.OciSecret, resources: OciResources): boolean {
+        return (validateResource(resource, resources).filter((v: OcdValidationResult) => v.type === 'information').length > 0)
+    }
     function customValidation(resource: Model.OciSecret, resources: OciResources): OcdValidationResult[] {
         const results: OcdValidationResult[] = []
         return results

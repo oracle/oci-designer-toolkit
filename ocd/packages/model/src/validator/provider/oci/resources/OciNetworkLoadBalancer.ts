@@ -15,6 +15,15 @@ export namespace OciNetworkLoadBalancer {
     export function isResourceValid(resource: Model.OciNetworkLoadBalancer, resources: OciResources): boolean {
         return (validateResource(resource, resources).filter((v: OcdValidationResult) => !v.valid).length > 0)
     }
+    export function hasErrors(resource: Model.OciNetworkLoadBalancer, resources: OciResources): boolean {
+        return (validateResource(resource, resources).filter((v: OcdValidationResult) => v.type === 'error').length > 0)
+    }
+    export function hasWarnings(resource: Model.OciNetworkLoadBalancer, resources: OciResources): boolean {
+        return (validateResource(resource, resources).filter((v: OcdValidationResult) => v.type === 'warning').length > 0)
+    }
+    export function hasInformation(resource: Model.OciNetworkLoadBalancer, resources: OciResources): boolean {
+        return (validateResource(resource, resources).filter((v: OcdValidationResult) => v.type === 'information').length > 0)
+    }
     function customValidation(resource: Model.OciNetworkLoadBalancer, resources: OciResources): OcdValidationResult[] {
         const results: OcdValidationResult[] = []
         return results
