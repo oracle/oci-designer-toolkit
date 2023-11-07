@@ -517,6 +517,12 @@ summary {
     font-size: 14px;
 }
 
+.ocd-menu-item-icon {
+    background-position: center left 3px;
+    background-repeat: no-repeat;
+    background-size: 13px;
+}
+
 .ocd-menu-item>a {
     display: block;
     padding: 0 10px 0 10px;

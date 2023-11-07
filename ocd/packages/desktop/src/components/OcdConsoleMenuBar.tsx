@@ -39,11 +39,11 @@ const OcdConsoleMenuItem = ({ menuItem, depth, ocdDocument, setOcdDocument, ocdC
                     setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)}
                 />
                 </>
-            ) : menuItem.submenu && menuItem.submenu(ocdConsoleConfig).length > 0 ? (
+            ) : menuItem.submenu && menuItem.submenu(ocdConsoleConfig, ocdDocument).length > 0 ? (
                 <>
                 <a href='#' className={`${menuItem.submenu && depth > 0 ? 'ocd-submenu-item-has-submenu' : ''}`} onClick={() => console.info(`Clicked ${menuItem.label}`)}>{menuItem.label}</a>
                 <OcdConsoleSubMenu
-                    submenus={menuItem.submenu(ocdConsoleConfig)}
+                    submenus={menuItem.submenu(ocdConsoleConfig, ocdDocument)}
                     dropdown={dropdown}
                     depth={depth}
                     ocdConsoleConfig={ocdConsoleConfig} 
@@ -53,7 +53,7 @@ const OcdConsoleMenuItem = ({ menuItem, depth, ocdDocument, setOcdDocument, ocdC
                 />
                 </>
             ) : menuItem.click ? (
-                <a href='#' onClick={onClick}>{menuItem.label}</a>
+                <a href='#' onClick={onClick} className={menuItem.class ? `ocd-menu-item-icon  ${menuItem.class}` : ''}>{menuItem.label}</a>
             ) : (
                 <a href='#' onClick={() => console.info(`Clicked ${menuItem.label}`)}>{menuItem.label}</a>
             )}

@@ -204,7 +204,27 @@ export class OcdDocument {
         const updatedCoords: OcdViewCoords[] = coords.map((c) => {return {...c, id: `gid-${uuidv4()}`, pgid: pgid}}).map((c) => {return {...c, ...c.coords ? {coords: this.updateDuplatedCoords(c.coords, c.id)} : {}}})
         return updatedCoords
     }
-    resetPanZoom = () => OcdDesign.resetPanZoom()
+    resetPanZoom = () => {
+        const page = this.getActivePage()
+        page.transform = OcdDesign.resetPanZoom()
+        return page.transform
+    }
+    zoomIn = () => {
+        const page = this.getActivePage()
+        const newMatrix = page.transform.slice()
+        newMatrix[0] *= 1.15
+        newMatrix[3] *= 1.15
+        if (newMatrix[0] >= 0.3 && newMatrix[0] <= 5) page.transform = newMatrix
+        return page.transform
+    }
+    zoomOut = () => {
+        const page = this.getActivePage()
+        const newMatrix = page.transform.slice()
+        newMatrix[0] *= 0.9
+        newMatrix[3] *= 0.9
+        if (newMatrix[0] >= 0.3 && newMatrix[0] <= 3) page.transform = newMatrix
+        return page.transform
+    }
 
     // @ts-ignore 
     // getLayer = (id: string): OcdViewLayer => this.design.model.oci.resources.compartment.find((c) => c.id === id)
