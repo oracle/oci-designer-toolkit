@@ -9,10 +9,13 @@ import OcdConsoleConfig from './OcdConsoleConfiguration'
 import OcdDocument from './OcdDocument'
 import { OcdDesignFacade } from '../facade/OcdDesignFacade'
 import { OcdConfigFacade } from '../facade/OcdConfigFacade'
+import { OcdViewLayer, OcdViewPage } from '@ocd/model'
 
 export interface MenuItem {
     label: string
     class?: string
+    trueClass?: string
+    falseClass?: string
     click?: Function | undefined
     submenu?: MenuItem[] | Function
 }
@@ -338,6 +341,21 @@ export const menuItems = [
                 label: 'Layers',
                 click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
                     alert('Currently not implemented.')
+                },
+                submenu: (ocdConsoleConfig: OcdConsoleConfig, ocdDocument: OcdDocument) => {
+                    const page: OcdViewPage = ocdDocument.getActivePage()
+                    return page.layers.map((layer: OcdViewLayer) => {return {
+                        label: ocdDocument.getLayerName(layer.id),
+                        class: layer.visible ? 'eye-show' : 'eye-hide',
+                        click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
+                            const page: OcdViewPage = ocdDocument.getActivePage()
+                            // @ts-ignore 
+                            page.layers.find((l: OcdViewLayer) => l.id === layer.id).visible = !layer.visible
+                            console.info(`Change Visibility ${layer.visible} ${ocdDocument}`)
+                            // setViewPage(structuredClone(page))
+                            setOcdDocument(OcdDocument.clone(ocdDocument))
+                        }
+                    }})
                 }
             },
             {
