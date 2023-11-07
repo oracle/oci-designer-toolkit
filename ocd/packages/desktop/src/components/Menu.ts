@@ -11,8 +11,9 @@ import { OcdDesignFacade } from '../facade/OcdDesignFacade'
 import { OcdConfigFacade } from '../facade/OcdConfigFacade'
 
 export interface MenuItem {
-    label: string,
-    click?: Function | undefined,
+    label: string
+    class?: string
+    click?: Function | undefined
     submenu?: MenuItem[] | Function
 }
 
@@ -342,19 +343,25 @@ export const menuItems = [
             {
                 label: 'Reset View',
                 click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
-                    alert('Currently not implemented.')
+                    const clone = OcdDocument.clone(ocdDocument)
+                    clone.resetPanZoom()
+                    setOcdDocument(clone)
                 }
             },
             {
                 label: 'Zoom In',
                 click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
-                    alert('Currently not implemented.')
+                    const clone = OcdDocument.clone(ocdDocument)
+                    clone.zoomIn()
+                    setOcdDocument(clone)
                 }
             },
             {
                 label: 'Zoom Out',
                 click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
-                    alert('Currently not implemented.')
+                    const clone = OcdDocument.clone(ocdDocument)
+                    clone.zoomOut()
+                    setOcdDocument(clone)
                 }
             }
         ]
