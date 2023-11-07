@@ -1125,6 +1125,7 @@ summary {
     /* min-height: 100%; */
     flex-grow: 1;
     position: relative;
+    overflow: auto;
 }
 
 .ocd-designer-canvas-svg {

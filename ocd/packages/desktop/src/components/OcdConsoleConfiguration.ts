@@ -12,6 +12,7 @@ export interface OcdConsoleConfiguration {
     detailedResource: boolean
     showProperties: boolean
     highlightCompartmentResources: boolean
+    zoomOnWheel: boolean
     recentDesigns: string[]
     maxRecent: number
 }
@@ -37,6 +38,7 @@ export class OcdConsoleConfig {
             detailedResource: true,
             showProperties: true,
             highlightCompartmentResources: false,
+            zoomOnWheel: false,
             recentDesigns: [],
             maxRecent: 10,
         }

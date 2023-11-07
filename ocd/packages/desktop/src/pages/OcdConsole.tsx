@@ -109,17 +109,24 @@ const OcdConsoleConfigEditor = ({ ocdConsoleConfig, setOcdConsoleConfig }: any):
         ocdConsoleConfig.config.highlightCompartmentResources = !ocdConsoleConfig.config.highlightCompartmentResources
         setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
     }
+    const zoomOnWheelOnChange = () => {
+        ocdConsoleConfig.config.zoomOnWheel = !ocdConsoleConfig.config.zoomOnWheel
+        setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+    }
     return (
         <div className='ocd-console-toolbar-dropdown ocd-console-toolbar-dropdown-theme'>
             <ul>
                 <li className='ocd-console-toolbar-dropdown-item' onClick={toggleDropdown}>
                     <div className='left-palette ocd-console-toolbar-icon'></div>
                     <ul className={`${dropdown ? 'show' : 'hidden'}`}>
-                        <li className='ocd-dropdown-menu-item'><div><input id='detailedResource' type='checkbox' onChange={detailedResourceOnChange} ref={cbRef} checked={ocdConsoleConfig.config.detailedResource}/>Resource Details</div></li>
                         <li className='ocd-dropdown-menu-item'><div><input id='showMPalette' type='checkbox' onChange={showPaletteOnChange} ref={cbRef} checked={ocdConsoleConfig.config.showPalette}/>Display Palette</div></li>
                         <li className='ocd-dropdown-menu-item'><div><input id='verboseProviderPalette' type='checkbox' onChange={verboseProviderPaletteOnChange} ref={cbRef} checked={ocdConsoleConfig.config.verboseProviderPalette}/>Verbose Palette</div></li>
                         <li className='ocd-dropdown-menu-item'><div><input id='showProperties' type='checkbox' onChange={showPropertiesOnChange} ref={cbRef} checked={ocdConsoleConfig.config.showProperties}/>Display Properties</div></li>
+                        <li className='ocd-dropdown-menu-item'><div>--------------------------------</div></li>
+                        <li className='ocd-dropdown-menu-item'><div><input id='detailedResource' type='checkbox' onChange={detailedResourceOnChange} ref={cbRef} checked={ocdConsoleConfig.config.detailedResource}/>Resource Details</div></li>
                         <li className='ocd-dropdown-menu-item'><div><input id='highlightCompartmentResources' type='checkbox' onChange={highlightCompartmentResourcesOnChange} ref={cbRef} checked={ocdConsoleConfig.config.highlightCompartmentResources}/>Highlight Compartment Resources</div></li>
+                        <li className='ocd-dropdown-menu-item'><div>--------------------------------</div></li>
+                        <li className='ocd-dropdown-menu-item'><div><input id='zoomOnWheel' type='checkbox' onChange={zoomOnWheelOnChange} ref={cbRef} checked={ocdConsoleConfig.config.zoomOnWheel}/>Allow Zoom Mouse Wheel</div></li>
                     </ul>
                 </li>
             </ul>
@@ -159,7 +166,7 @@ const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument,
         const newMatrix = page.transform.slice()
         newMatrix[0] *= 1.15
         newMatrix[3] *= 1.15
-        if (newMatrix[0] >= 0.3 && newMatrix[0] <= 3) page.transform = newMatrix
+        if (newMatrix[0] >= 0.3 && newMatrix[0] <= 5) page.transform = newMatrix
         setOcdDocument(clone)
     }
     return (
