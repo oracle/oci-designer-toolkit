@@ -1125,6 +1125,7 @@ summary {
     /* min-height: 100%; */
     flex-grow: 1;
     position: relative;
+    overflow: auto;
 }
 
 .ocd-designer-canvas-svg {
@@ -1838,6 +1839,13 @@ summary {
 }
 
 /* Properties Validation */
+.ocd-validation-tab {
+    background-position: right;
+    background-repeat: no-repeat;
+    background-size: 20px;
+    padding-right: 20px;
+}
+
 .ocd-validation-results {
     margin-right: 1em;
 }

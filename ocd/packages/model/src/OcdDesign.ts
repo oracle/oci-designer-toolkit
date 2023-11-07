@@ -89,13 +89,14 @@ export interface OcdPageLayer {
 }
 
 export interface OcdViewPage {
-    id: string,
-    title: string,
-    documentation: string,
-    layers: OcdViewLayer[],
-    coords: OcdViewCoords[],
-    connectors: OcdViewConnector[],
-    selected: boolean,
+    id: string
+    title: string
+    documentation: string
+    layers: OcdViewLayer[]
+    coords: OcdViewCoords[]
+    connectors: OcdViewConnector[]
+    selected: boolean
+    grid: boolean
     transform: number[]
 }
 
@@ -183,6 +184,7 @@ export namespace OcdDesign {
                         coords: [],
                         connectors: [],
                         selected: true,
+                        grid: false,
                         transform: OcdDesign.resetPanZoom()
                     }
                 ]

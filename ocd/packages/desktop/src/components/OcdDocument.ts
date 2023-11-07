@@ -181,6 +181,7 @@ export class OcdDocument {
             coords: [],
             connectors: [],
             selected: true,
+            grid: false,
             transform: this.resetPanZoom()
         }
         this.design.view.pages.forEach((p) => p.selected = false)
