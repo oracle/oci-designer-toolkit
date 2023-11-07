@@ -148,28 +148,16 @@ const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument,
     const onZoomOutClick = () => {
         const clone = OcdDocument.clone(ocdDocument)
         clone.zoomOut()
-        // const page = clone.getActivePage()
-        // const newMatrix = page.transform.slice()
-        // newMatrix[0] *= 0.9
-        // newMatrix[3] *= 0.9
-        // if (newMatrix[0] >= 0.3 && newMatrix[0] <= 3) page.transform = newMatrix
         setOcdDocument(clone)
     }
     const onZoom121Click = () => {
         const clone = OcdDocument.clone(ocdDocument)
         clone.resetPanZoom()
-        // const page = clone.getActivePage()
-        // page.transform = ocdDocument.resetPanZoom()
         setOcdDocument(clone)
     }
     const onZoomInClick = () => {
         const clone = OcdDocument.clone(ocdDocument)
         clone.zoomIn()
-        // const page = clone.getActivePage()
-        // const newMatrix = page.transform.slice()
-        // newMatrix[0] *= 1.15
-        // newMatrix[3] *= 1.15
-        // if (newMatrix[0] >= 0.3 && newMatrix[0] <= 5) page.transform = newMatrix
         setOcdDocument(clone)
     }
     return (
