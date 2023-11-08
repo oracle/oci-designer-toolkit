@@ -26,7 +26,7 @@ export interface ResourcePropertyAttributes {
 
 export type SimpleFilterType = (r: any) => boolean
 
-export type ResourceFilterType = (r: any, resource: any) => boolean
+export type ResourceFilterType = (r: any, resource: any, rootResource: OcdResource) => boolean
 
 export interface ResourceElementProperties extends Record<string, any> {
     pattern?: string
@@ -167,7 +167,7 @@ export const OcdLookupProperty = ({ ocdDocument, setOcdDocument, resource, confi
     const lookupGroups = config && config.lookupGroups ? config.lookupGroups : []
     const resourceType = OcdUtils.toResourceType(attribute.lookupResource)
     const baseFilter = (r: any) => r.resourceType !== resourceType || r.id !== resource.id
-    const customFilter = config && config.resourceFilter ? (r: any) => config.resourceFilter  && config.resourceFilter(r, resource) : config && config.simpleFilter ? config.simpleFilter : () => true
+    const customFilter = config && config.resourceFilter ? (r: any) => config.resourceFilter && config.resourceFilter(r, resource, rootResource) : config && config.simpleFilter ? config.simpleFilter : () => true
     const resources = attribute.provider === 'oci' ? ocdDocument.getOciResourceList(attribute.lookupResource ? attribute.lookupResource : '').filter(customFilter).filter(baseFilter) : []
     lookupGroups.forEach((g) => {
         const resourceType = OcdUtils.toResourceType(g.lookupResource) 
@@ -210,7 +210,7 @@ export const OcdLookupListProperty = ({ ocdDocument, setOcdDocument, resource, c
     const properties = config && config.properties ? config.properties : {}
     const resourceType = OcdUtils.toResourceType(attribute.lookupResource)
     const baseFilter = (r: any) => r.resourceType !== resourceType || r.id !== resource.id
-    const customFilter = config && config.resourceFilter ? (r: any) => config.resourceFilter  && config.resourceFilter(r, resource) : config && config.simpleFilter ? config.simpleFilter : () => true
+    const customFilter = config && config.resourceFilter ? (r: any) => config.resourceFilter  && config.resourceFilter(r, resource, rootResource) : config && config.simpleFilter ? config.simpleFilter : () => true
     const resources = attribute.provider === 'oci' ? ocdDocument.getOciResourceList(attribute.lookupResource ? attribute.lookupResource : '').filter(customFilter).filter(baseFilter) : []
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const securityListId = e.target.id
@@ -327,7 +327,7 @@ export const OcdSetLookupProperty = ({ ocdDocument, setOcdDocument, resource, co
     const properties = config && config.properties ? config.properties : {}
     const resourceType = OcdUtils.toResourceType(attribute.lookupResource)
     const baseFilter = (r: any) => r.resourceType !== resourceType || r.id !== resource.id
-    const customFilter = config && config.resourceFilter ? (r: any) => config.resourceFilter  && config.resourceFilter(r, resource) : config && config.simpleFilter ? config.simpleFilter : () => true
+    const customFilter = config && config.resourceFilter ? (r: any) => config.resourceFilter  && config.resourceFilter(r, resource, rootResource) : config && config.simpleFilter ? config.simpleFilter : () => true
     const resources = attribute.provider === 'oci' ? ocdDocument.getOciResourceList(attribute.lookupResource ? attribute.lookupResource : '').filter(customFilter).filter(baseFilter) : []
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const securityListId = e.target.id

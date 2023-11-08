@@ -38,7 +38,8 @@ export namespace OciRouteTableConfigs {
                 {displayName: 'Dynamic Routing Gateways', lookupResource: 'drg_attachment'},
                 {displayName: 'Service Gateways', lookupResource: 'service_gateway'},
                 {displayName: 'Local Peering Gateways', lookupResource: 'local_peering_gateway'}
-            ]
+            ],
+            resourceFilter: (r, resource, rootResource) => r.vcnId === rootResource.vcnId // r: Gateway / rootResource: route_table
         },
 ]}
 }
