@@ -69,6 +69,9 @@ export const ignoreElements: OcdIgnoreElements = {
         "nat_ip",
         "public_ip_id"
     ],
+    "oci_core_route_table": [
+        "route_type"
+    ],
     "oci_core_subnet": [
         "ipv6virtual_router_ip",
         "subnet_domain_name",

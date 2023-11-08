@@ -2482,8 +2482,8 @@
         "required": true,
         "label": "Destination Type",
         "id": "destination_type",
-        "staticLookup": false,
-        "lookup": false,
+        "staticLookup": true,
+        "lookup": true,
         "lookupResource": ""
       },
       "drg_route_table_id": {
@@ -3856,8 +3856,8 @@
             "required": false,
             "label": "Destination Type",
             "id": "route_rules.destination_type",
-            "staticLookup": false,
-            "lookup": false,
+            "staticLookup": true,
+            "lookup": true,
             "lookupResource": ""
           },
           "network_entity_id": {
@@ -3872,19 +3872,6 @@
             "staticLookup": false,
             "lookup": true,
             "lookupResource": "network_entity"
-          },
-          "route_type": {
-            "provider": "oci",
-            "key": "routeType",
-            "name": "route_type",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Route Type",
-            "id": "route_rules.route_type",
-            "staticLookup": false,
-            "lookup": false,
-            "lookupResource": ""
           }
         }
       }
@@ -4005,8 +3992,8 @@
             "required": false,
             "label": "Destination Type",
             "id": "egress_security_rules.destination_type",
-            "staticLookup": false,
-            "lookup": false,
+            "staticLookup": true,
+            "lookup": true,
             "lookupResource": ""
           },
           "protocol": {
