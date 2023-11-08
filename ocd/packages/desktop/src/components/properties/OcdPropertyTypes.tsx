@@ -45,10 +45,16 @@ export interface ResourceElementConfig extends Record<string, any> {
     displayCondition?(): boolean        // Function to identify if conditional elements should be displayed
     configs: ResourceElementConfig[]
     options?: ResourceElementConfigOption[]
+    lookupGroups?: ResourceElementConfigLookupGroup[]
 }
 export interface ResourceElementConfigOption {
     id: string
     displayName: string
+}
+export interface ResourceElementConfigLookupGroup {
+    displayName: string,
+    lookupResource: string
+    resources?: OcdResource[]
 }
 
 export interface ResourceProperties {
@@ -143,13 +149,19 @@ export const OcdBooleanProperty = ({ ocdDocument, setOcdDocument, resource, conf
 }
 
 export const OcdLookupProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute }: ResourceProperty): JSX.Element => {
+    console.debug('OcdPropertyTypes: OcdLookupProperty', config, attribute)
     // @ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const properties = config && config.properties ? config.properties : {}
+    const lookupGroups = config && config.lookupGroups ? config.lookupGroups : []
     const resourceType = OcdUtils.toResourceType(attribute.lookupResource)
     const baseFilter = (r: any) => r.resourceType !== resourceType || r.id !== resource.id
     const customFilter = config && config.resourceFilter ? (r: any) => config.resourceFilter  && config.resourceFilter(r, resource) : config && config.simpleFilter ? config.simpleFilter : () => true
     const resources = attribute.provider === 'oci' ? ocdDocument.getOciResourceList(attribute.lookupResource ? attribute.lookupResource : '').filter(customFilter).filter(baseFilter) : []
+    lookupGroups.forEach((g) => {
+        const resourceType = OcdUtils.toResourceType(g.lookupResource) 
+        g.resources = attribute.provider === 'oci' ? ocdDocument.getOciResourceList(g.lookupResource ? g.lookupResource : '').filter(customFilter).filter(baseFilter) : []
+    })
     const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         resource[attribute.key] = e.target.value
         setOcdDocument(OcdDocument.clone(ocdDocument))
@@ -162,12 +174,22 @@ export const OcdLookupProperty = ({ ocdDocument, setOcdDocument, resource, confi
                 <select value={resource[attribute.key]} {...properties} onChange={onChange}>
                     {/* {!attribute.required && <option defaultValue='' key={`${attribute.lookupResource}-empty-option`}></option> } */}
                     <option value='' key={`${attribute.lookupResource}-empty-option`}></option>
-                    {resources.map((r: OcdResource) => {
+                    {lookupGroups.length === 0 ? resources.map((r: OcdResource) => {
                         return <option value={r.id} key={r.id}>{r.displayName}</option>
-                    })}
+                    }) : lookupGroups.map((g: ResourceElementConfigLookupGroup) => {return <OcdLookupGroupOption group={g} key={g.displayName}/>})}
                 </select>
             </div>
         </div>
+    )
+}
+
+export const OcdLookupGroupOption = ({group}: {group: ResourceElementConfigLookupGroup}): JSX.Element => {
+    return (
+        <optgroup label={group.displayName}>
+            {group.resources && group.resources.map((r: OcdResource) => {
+                return <option value={r.id} key={r.id}>{r.displayName}</option>
+            })}
+        </optgroup>
     )
 }
 
