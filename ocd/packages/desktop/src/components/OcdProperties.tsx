@@ -28,7 +28,7 @@ const OcdResourcePropertiesHeader = ({ocdDocument, setOcdDocument}: DesignerReso
     )
 }
 
-const OciCommonResourceProperties = ({ocdDocument, setOcdDocument, resource}: ResourceProperties): JSX.Element => {
+const OciCommonResourceProperties = ({ocdDocument, setOcdDocument, resource, rootResource}: ResourceProperties): JSX.Element => {
     const config: ResourceElementConfig | undefined = undefined
     const displayName = {"provider": "oci", "key": "displayName", "name": "displayName", "type": "string", "subtype": "", "required": true, "label": "Name", "id": "displayName"}
     const compartmentId = {"provider": "oci", "key": "compartmentId", "name": "compartmentId", "type": "string", "subtype": "", "required": true, "label": "Compartment", "id": "compartmentId", "lookupResource": "compartment"}
@@ -37,8 +37,8 @@ const OciCommonResourceProperties = ({ocdDocument, setOcdDocument, resource}: Re
             <details open={true}>
                 <summary className='summary-background'>Core</summary>
                 <div>
-                <OcdTextProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={config} attribute={displayName} />
-                <OcdLookupProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={config} attribute={compartmentId} />
+                <OcdTextProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={config} rootResource={rootResource} attribute={displayName} />
+                <OcdLookupProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={config} rootResource={rootResource} attribute={compartmentId} />
                 </div>
             </details>
         </div>
@@ -56,6 +56,7 @@ const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourcePr
                 ocdDocument={ocdDocument} 
                 setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} 
                 resource={selectedResource}
+                rootResource={selectedResource}
             />}
             {selectedResource && ResourceProperties && <ResourceProperties 
                 ocdDocument={ocdDocument} 
