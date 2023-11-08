@@ -174,13 +174,6 @@ export const OcdLookupProperty = ({ ocdDocument, setOcdDocument, resource, confi
                 <select value={resource[attribute.key]} {...properties} onChange={onChange}>
                     {/* {!attribute.required && <option defaultValue='' key={`${attribute.lookupResource}-empty-option`}></option> } */}
                     <option value='' key={`${attribute.lookupResource}-empty-option`}></option>
-                    {/* {lookupGroups.length > 0 && lookupGroups.map((g: ResourceElementConfigLookupGroup) => {})} */}
-                    {/* {resources.map((r: OcdResource) => {
-                        return <option value={r.id} key={r.id}>{r.displayName}</option>
-                    })} */}
-                    {/* {lookupGroups.length === 0 ? resources.map((r: OcdResource) => {
-                        return <option value={r.id} key={r.id}>{r.displayName}</option>
-                    }) : lookupGroups.map((g: ResourceElementConfigLookupGroup) => {<OcdLookupGroupOption group={g}/>})} */}
                     {lookupGroups.length === 0 ? resources.map((r: OcdResource) => {
                         return <option value={r.id} key={r.id}>{r.displayName}</option>
                     }) : lookupGroups.map((g: ResourceElementConfigLookupGroup) => {return <OcdLookupGroupOption group={g} key={g.displayName}/>})}
