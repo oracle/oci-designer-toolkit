@@ -65,9 +65,13 @@ export const ignoreElements: OcdIgnoreElements = {
         "vcpus",
         "vlan_id"
     ],
+    "oci_core_internet_gateway": [
+        "route_table_id"
+    ],
     "oci_core_nat_gateway": [
         "nat_ip",
-        "public_ip_id"
+        "public_ip_id",
+        "route_table_id"
     ],
     "oci_core_route_table": [
         "route_type"
