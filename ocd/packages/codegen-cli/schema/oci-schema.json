@@ -3119,19 +3119,6 @@
         "lookup": false,
         "lookupResource": ""
       },
-      "route_table_id": {
-        "provider": "oci",
-        "key": "routeTableId",
-        "name": "route_table_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Route Table",
-        "id": "route_table_id",
-        "staticLookup": false,
-        "lookup": true,
-        "lookupResource": "route_table"
-      },
       "vcn_id": {
         "provider": "oci",
         "key": "vcnId",
@@ -3503,19 +3490,6 @@
         "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
-      },
-      "route_table_id": {
-        "provider": "oci",
-        "key": "routeTableId",
-        "name": "route_table_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Route Table",
-        "id": "route_table_id",
-        "staticLookup": false,
-        "lookup": true,
-        "lookupResource": "route_table"
       },
       "vcn_id": {
         "provider": "oci",
@@ -4005,8 +3979,8 @@
             "required": true,
             "label": "Protocol",
             "id": "egress_security_rules.protocol",
-            "staticLookup": false,
-            "lookup": false,
+            "staticLookup": true,
+            "lookup": true,
             "lookupResource": ""
           },
           "stateless": {
@@ -4246,8 +4220,8 @@
             "required": true,
             "label": "Protocol",
             "id": "ingress_security_rules.protocol",
-            "staticLookup": false,
-            "lookup": false,
+            "staticLookup": true,
+            "lookup": true,
             "lookupResource": ""
           },
           "source": {

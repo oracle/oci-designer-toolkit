@@ -12,10 +12,10 @@ export class OcdTerraformResource {
     isVariable = (data: string | undefined): boolean => data !== undefined && data.startsWith('var.')
     formatVariable = (data: string | undefined): string | undefined => data
     generateReferenceAttribute = (name: string, value: string | undefined, required: boolean, level=0) => {
-        if (this.isVariable(value)) return `${name} = ${this.formatVariable(value)}`
-        else if (required) return `${name} = local.${this.idTFResourceMap[value as string]}_id`
-        else if (value && value !== '') return `${name} = local.${this.idTFResourceMap[value]}_id`
-        else return `# ${name} = "${value}"`
+        if (this.isVariable(value)) return `${this.indentation[level]}${name} = ${this.formatVariable(value)}`
+        else if (required) return `${this.indentation[level]}${name} = local.${this.idTFResourceMap[value as string]}_id`
+        else if (value && value !== '') return `${this.indentation[level]}${name} = local.${this.idTFResourceMap[value]}_id`
+        else return `${this.indentation[level]}# ${name} = "${value}"`
     }
     generateTextAttribute = (name: string, value: string | undefined, required: boolean, level=0) => {
         console.debug('OcdTerraformResource: generateTextAttribute:', name, 'Level:', level, `(${this.indentation[level]})`)

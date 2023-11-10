@@ -25,19 +25,19 @@ export namespace OciSubnetConfigs {
                 id: 'dhcp_options_id',
                 properties: {},
                 configs: [],
-                resourceFilter: (r, resource) => r.vcnId === resource.vcnId // r: dhcp_option / resource: subnet
+                resourceFilter: (r, resource, rootResource) => r.vcnId === resource.vcnId // r: dhcp_option / resource: subnet
             },
             {
                 id: 'route_table_id',
                 properties: {},
                 configs: [],
-                resourceFilter: (r, resource) => r.vcnId === resource.vcnId // r: route_table / resource: subnet
+                resourceFilter: (r, resource, rootResource) => r.vcnId === resource.vcnId // r: route_table / resource: subnet
             },
             {
                 id: 'security_list_ids',
                 properties: {},
                 configs: [],
-                resourceFilter: (r, resource) => r.vcnId === resource.vcnId // r: security_list / resource: subnet
+                resourceFilter: (r, resource, rootResource) => r.vcnId === resource.vcnId // r: security_list / resource: subnet
             }
         ]
     }
