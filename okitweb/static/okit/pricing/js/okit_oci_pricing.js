@@ -82,15 +82,15 @@ class OkitOciProductPricing {
         Promise.allSettled([oci_products, products, sku_map, shapes]).then(results => {
             this.products = results[0].status === 'fulfilled' ? results[0].value : results[1].value
             this.sku_map = results[2].value
-            if (results[3].status === 'fulfilled'){
-                let shape_sku_map = {}
-                results[3].value.items.forEach((item) => {
-                    let shape_skus = {} 
-                    item.products.forEach((p) => shape_skus[p.type.value] = p.partNumber)
-                    shape_sku_map[item.name] = shape_skus
-                })
-                this.sku_map.instance.shape = shape_sku_map
-            }
+            // if (results[3].status === 'fulfilled'){
+            //     let shape_sku_map = {}
+            //     results[3].value.items.forEach((item) => {
+            //         let shape_skus = {} 
+            //         item.products.forEach((p) => shape_skus[p.type.value] = p.partNumber)
+            //         shape_sku_map[item.name] = shape_skus
+            //     })
+            //     this.sku_map.instance.shape = shape_sku_map
+            // }
             console.debug(this)
         })
 
