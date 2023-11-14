@@ -30,7 +30,9 @@ class InstanceOciPricing extends OkitOciPricingResource {
 
     getBoM(resource) {
         resource = resource ? resource : this.resource
+        console.debug('Instance BoM: Resource', resource)
         const skus = this.sku_map.instance.shape[resource.shape]
+        console.debug('Instance BoM: Skus', skus)
         let bom = {
             skus: [], 
             price_per_month: this.getPrice(resource)
