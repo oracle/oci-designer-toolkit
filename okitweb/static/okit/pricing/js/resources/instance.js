@@ -105,13 +105,16 @@ class InstanceOciPricing extends OkitOciPricingResource {
     getOcpuBoMEntry(sku, resource) {
         resource = resource ? resource : this.resource
         sku = sku ? sku : this.sku_map.instance.shape[resource.shape].ocpu
+        console.debug('Instance BoM: Sku', sku)
         const shape = this.getShapeDetails(resource.shape)
+        console.debug('Instance BoM: Shape', shape)
         const bom_entry = this.newSkuEntry(sku)
         bom_entry.quantity = 1
         bom_entry.utilization = +this.monthly_utilization // Hrs/Month
         // bom_entry.units = +resource.shape_config.ocpus // OCPUs
         bom_entry.units = shape.is_flexible ? +resource.shape_config.ocpus : shape.ocpus // OCPUs
         bom_entry.price_per_month = this.getOcpuCost(sku, resource)
+        console.debug('Instance BoM: Entry', bom_entry)
         return bom_entry
     }
 
