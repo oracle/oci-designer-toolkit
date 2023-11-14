@@ -104,13 +104,13 @@ class OkitOciProductPricing {
         if (model.metadata.platform !== 'oci') return {bom: this.bom, estimate: this.cost_estimate}
         if (model && this.sku_map) {
             Object.entries(model).filter(([k, v]) => Array.isArray(v)).forEach(([resource_name, resource_list]) => resource_list.forEach((resource) => {
-                console.debug('Generate BoM: Processing Resource', resource_name)
+                // console.debug('Generate BoM: Processing Resource', resource_name)
                 // Get Skus
                 const get_sku_function = OkitOciProductPricing.getBoMFunctionName(titleCase(resource_name.replaceAll('_', ' ')).replaceAll(' ', '').slice(0, -1))
-                console.debug('Generate BoM: Get Sku Function:', get_sku_function)
+                // console.debug('Generate BoM: Get Sku Function:', get_sku_function)
                 if (this[get_sku_function]) {
                     const bom_details = this[get_sku_function](resource, this)
-                    console.debug('Generate BoM: Details:', bom_details)
+                    // console.debug('Generate BoM: Details:', bom_details)
                     bom_details.skus.filter(sb => sb.sku && sb.sku !== '').forEach((sku_bom) => {
                         const bom_entry = this.getBoMSkuEntry(sku_bom.sku)
                         bom_entry.quantity += sku_bom.quantity
