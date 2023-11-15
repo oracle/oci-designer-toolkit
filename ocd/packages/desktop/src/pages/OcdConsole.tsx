@@ -17,38 +17,61 @@ import OcdVariables from './OcdVariables'
 import { OcdQueryDialog } from '../components/dialogs/OcdQueryDialog'
 import { OcdConfigFacade } from '../facade/OcdConfigFacade'
 import OcdDocumentation from './OcdDocumentation'
+import { OcdCache, OcdCacheData } from '../components/OcdCache'
+import { OcdCacheFacade } from '../facade/OcdCacheFacade'
 // import { OcdPropertiesPanel, OcdPropertiesToolbarButton } from '../properties/OcdPropertiesPanel'
 
 export const ThemeContext = createContext('')
 export const ActiveFileContext = createContext({})
 export const ConsoleConfigContext = createContext({})
+export const CacheContext = createContext({})
 
 const OcdConsole = (): JSX.Element => {
     const [ocdDocument, setOcdDocument] = useState(OcdDocument.new())
     const [ocdConsoleConfig, setOcdConsoleConfig] = useState(OcdConsoleConfig.new())
+    const [ocdCache, setOcdCache] = useState(OcdCacheData.new())
     const [activeFile, setActiveFile] = useState({name: '', modified: false})
     useEffect(() => {
         OcdConfigFacade.loadConsoleConfig().then((results) => {
             console.debug('OcdConsole: Load Config', results)
             const consoleConfig = new OcdConsoleConfig(results)
             setOcdConsoleConfig(consoleConfig)
-        }).catch((response) => console.debug('OcdConsole:', response))
+        }).catch((response) => {
+            console.debug('OcdConsole:', response)
+            OcdConfigFacade.saveConsoleConfig(ocdConsoleConfig.config).then((results) => {console.debug('OcdConsole: Saved Config')}).catch((response) => console.debug('OcdConsole:', response))
+        })
+    }, [])
+    useEffect(() => {
+        OcdCacheFacade.loadCache().then((results) => {
+            console.debug('OcdConsole: Load Cache', results)
+            const cacheData = new OcdCacheData(results)
+            setOcdCache(cacheData)
+        }).catch((response) => {
+            console.debug('OcdConsole:', response)
+            OcdCacheFacade.saveCache(ocdCache.cache).then((results) => {console.debug('OcdConsole: Saved Cache')}).catch((response) => console.debug('OcdConsole:', response))
+        })
     }, [])
     // const [ociConfig, setOciConfig] = useState('')
     useEffect(() => {setOcdDocument(ocdDocument)}, [ocdDocument])
     const setAndSaveOcdConsoleConfig = (consoleConfig: OcdConsoleConfig) => {
-        OcdConfigFacade.saveConsoleConfig(consoleConfig.config).then((results) => {console.debug('OcdConsole: Save Config')}).catch((response) => console.debug('OcdConsole:', response))
+        OcdConfigFacade.saveConsoleConfig(consoleConfig.config).then((results) => {console.debug('OcdConsole: Saved Config')}).catch((response) => console.debug('OcdConsole:', response))
         setOcdConsoleConfig(consoleConfig)
+    }
+    const setAndSaveOcdCache = (cacheData: OcdCacheData) => {
+        OcdCacheFacade.saveCache(cacheData.cache).then((results) => {console.debug('OcdConsole: Saved Cache')}).catch((response) => console.debug('OcdConsole:', response))
+        setOcdCache(cacheData)
     }
     return (
         <ConsoleConfigContext.Provider value={{ocdConsoleConfig, setOcdConsoleConfig}}>
             <ActiveFileContext.Provider value={{activeFile, setActiveFile}}>
-                <div className='ocd-console'>
-                    <OcdConsoleHeader ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
-                    <OcdConsoleToolbar ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
-                    <OcdConsoleBody ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
-                    <OcdConsoleFooter ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
-                </div>
+                <CacheContext.Provider value={{ocdCache, setOcdCache}}>
+                    <div className='ocd-console'>
+                        <OcdConsoleHeader ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
+                        <OcdConsoleToolbar ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
+                        <OcdConsoleBody ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
+                        <OcdConsoleFooter ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
+                    </div>
+                </CacheContext.Provider>
             </ActiveFileContext.Provider>
         </ConsoleConfigContext.Provider>
     )

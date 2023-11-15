@@ -20,6 +20,9 @@ contextBridge.exposeInMainWorld('ocdAPI', {
 	// OCD Configuration
   loadConsoleConfig: () => ipcRenderer.invoke('ocdConfig:loadConsoleConfig'),
   saveConsoleConfig: (config) => ipcRenderer.invoke('ocdConfig:saveConsoleConfig', config),
+	// OCD Cache
+  loadCache: () => ipcRenderer.invoke('ocdCache:loadCache'),
+  saveCache: (config) => ipcRenderer.invoke('ocdCache:saveCache', config),
 })
 
 console.debug('Preload script')

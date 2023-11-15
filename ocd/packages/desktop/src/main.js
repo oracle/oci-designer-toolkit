@@ -15,6 +15,7 @@ const { OciQuery, OciReferenceDataQuery } = require('@ocd/query')
 // if (require('electron-squirrel-startup')) app.quit()
 const ocdConfigDirectory = path.join(app.getPath('home'), '.ocd')
 const ocdConsoleConfigFilename = path.join(ocdConfigDirectory, 'console_config.json')
+const ocdCacheFilename = path.join(ocdConfigDirectory, 'cache.json')
 const ocdWindowStateFilename = path.join(ocdConfigDirectory, 'desktop.json')
 if (!fs.existsSync(ocdConfigDirectory)) fs.mkdirSync(ocdConfigDirectory)
 
@@ -103,6 +104,9 @@ app.whenReady().then(() => {
 	// OCD Configuration
 	ipcMain.handle('ocdConfig:loadConsoleConfig', handleLoadConsoleConfig)
 	ipcMain.handle('ocdConfig:saveConsoleConfig', handleSaveConsoleConfig)
+	// OCD Cache
+	ipcMain.handle('ocdCache:loadCache', handleLoadCache)
+	ipcMain.handle('ocdCache:saveCache', handleSaveCache)
 	createWindow()
 	app.on('activate', function () {
 	  if (BrowserWindow.getAllWindows().length === 0) createWindow()
@@ -260,7 +264,8 @@ async function handleLoadConsoleConfig(event) {
             maxRecent: 10,
         }
 		try {
-			if (!fs.existsSync(ocdConsoleConfigFilename)) fs.writeFileSync(ocdConsoleConfigFilename, JSON.stringify(defaultConfig, null, 4))
+			// if (!fs.existsSync(ocdConsoleConfigFilename)) fs.writeFileSync(ocdConsoleConfigFilename, JSON.stringify(defaultConfig, null, 4))
+			if (!fs.existsSync(ocdConsoleConfigFilename)) reject('Console Config does not exist')
 			const config = fs.readFileSync(ocdConsoleConfigFilename, 'utf-8')
 			resolve(JSON.parse(config))
 		} catch (err) {
@@ -270,11 +275,51 @@ async function handleLoadConsoleConfig(event) {
 }
 
 async function handleSaveConsoleConfig(event, config) {
-	console.debug('Electron Main: handleLoadConfig')
+	console.debug('Electron Main: handleSaveConfig')
 	return new Promise((resolve, reject) => {
 		try {
 			fs.writeFileSync(ocdConsoleConfigFilename, JSON.stringify(config, null, 4))
 			resolve(config)
+		} catch (err) {
+			reject(err)
+		}
+	})
+}
+
+async function handleLoadCache(event) {
+	console.debug('Electron Main: handleLoadCache')
+	return new Promise((resolve, reject) => {
+		try {
+			// if (!fs.existsSync(ocdCacheFilename)) fs.writeFileSync(ocdCacheFilename, JSON.stringify(defaultCache, null, 4))
+			if (!fs.existsSync(ocdCacheFilename)) reject('Cache does not exist')
+			const config = fs.readFileSync(ocdCacheFilename, 'utf-8')
+			resolve(JSON.parse(config))
+		} catch (err) {
+			reject(err)
+		}
+	})
+}
+
+async function handleSaveCache(event, cache) {
+	console.debug('Electron Main: handleSaveCache')
+	return new Promise((resolve, reject) => {
+		try {
+			fs.writeFileSync(ocdCacheFilename, JSON.stringify(cache, null, 4))
+			resolve(cache)
+		} catch (err) {
+			reject(err)
+		}
+	})
+}
+
+async function handleLoadCacheProfile(event, profile) {
+	console.debug('Electron Main: handleLoadCacheProfile')
+	return new Promise((resolve, reject) => {
+		try {
+			// if (!fs.existsSync(ocdCacheFilename)) fs.writeFileSync(ocdCacheFilename, JSON.stringify(defaultCache, null, 4))
+			if (!fs.existsSync(ocdCacheFilename)) reject('Cache does not exist')
+			const config = fs.readFileSync(ocdCacheFilename, 'utf-8')
+			resolve(JSON.parse(config))
 		} catch (err) {
 			reject(err)
 		}

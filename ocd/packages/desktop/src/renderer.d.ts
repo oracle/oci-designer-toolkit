@@ -5,6 +5,7 @@
 
 import { OcdDesign } from "@ocd/model"
 import { OcdConsoleConfiguration } from "./components/OcdConsoleConfiguration"
+import { OcdCache } from "../components/OcdCache"
 
 export interface OcdElectronAPI {
     // OCI API Calls / Query
@@ -21,6 +22,9 @@ export interface OcdElectronAPI {
 	// OCD Configuration
     loadConsoleConfig: () => Promise<void>,
     saveConsoleConfig: (config: OcdConsoleConfiguration) => Promise<void>,
+	// OCD Cache
+    loadCache: () => Promise<void>,
+    saveCache: (cache: OcdCache) => Promise<void>,
 }
   
 declare global {
