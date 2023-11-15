@@ -1,0 +1,20 @@
+/*
+** Copyright (c) 2020, 2023, Oracle and/or its affiliates.
+** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+*/
+
+import { OcdCache } from "../components/OcdCache";
+
+export const defaultCache: OcdCache = {
+    profile: 'DEFAULT',
+    region: '',
+    dropdownData: {
+        shipped: {
+            all: {
+            }
+        }
+    }
+}
+
+export default defaultCache
+// module.exports = { defaultCache }
