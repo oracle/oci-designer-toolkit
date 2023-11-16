@@ -21,13 +21,13 @@ export class OcdCacheData {
     constructor (cache: any = undefined) {
         if (typeof cache === 'string' && cache.length > 0) this.cache = JSON.parse(cache)
         else if (cache instanceof Object) this.cache = cache
-        else this.cache = this.newConsoleConfiguration()
+        else this.cache = this.newCache()
     }
 
     static new = () => new OcdCacheData()
     static clone = (ocdConsoleState: OcdCacheData) => new OcdCacheData(ocdConsoleState.cache)
 
-    newConsoleConfiguration = (): OcdCache => defaultCache
+    newCache = (): OcdCache => defaultCache
     // newConsoleConfiguration = (): OcdCache => {
     //     return {
     //         profile: 'DEFAULT',
