@@ -5,6 +5,7 @@
 **Release Date**: 15th November 2023
 ### Features
 1. Update pricing module for new GPU
+2. Extend functionality of OCD Alpha Release
 ### Bug Fixes
 
 
