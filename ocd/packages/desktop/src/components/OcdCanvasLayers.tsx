@@ -6,8 +6,10 @@
 import OcdDocument, { OcdSelectedResource } from './OcdDocument'
 import { OcdViewLayer, OcdViewPage } from '@ocd/model'
 import { OciModelResources } from '@ocd/model'
+import { LayerBarMenuProps, LayerBarLayerProps, LayerBarLayersProps } from '../types/Console'
+import { useState } from 'react'
 
-const OcdCanvasLayer = ({ ocdDocument, setOcdDocument, layer } : any): JSX.Element => {
+const OcdCanvasLayer = ({ ocdDocument, setOcdDocument, layer } : LayerBarLayerProps): JSX.Element => {
     const style: React.CSSProperties = {}
     if (layer.style !== undefined && layer.style.fill !== undefined) style.backgroundColor = `${layer.style.fill}${style.opacity = layer.selected ? 'ff' : '33'}`
     const onVisibilityClick = () => {
@@ -70,7 +72,7 @@ const OcdCanvasLayer = ({ ocdDocument, setOcdDocument, layer } : any): JSX.Eleme
     )
 }
 
-const OcdCanvasLayers = ({ ocdDocument, setOcdDocument }: any): JSX.Element => {
+const OcdCanvasLayers = ({ ocdDocument, setOcdDocument }: LayerBarLayersProps): JSX.Element => {
     const onClickAddLayer = () => {
         console.debug('OcdCanvasLayers: Adding Layer')
         const compartment = OciModelResources.OciCompartment.newResource()
@@ -93,20 +95,86 @@ const OcdCanvasLayers = ({ ocdDocument, setOcdDocument }: any): JSX.Element => {
     // const layer: OcdViewLayer = page.layers.find((l: OcdViewLayer) => l.selected)
 
     return (
-        <div className='ocd-designer-canvas-layers'
-            key='ocd-designer-canvas-layers'
-            >
-                {page.layers.map((l: OcdViewLayer) => {
-                    return <OcdCanvasLayer
-                        ocdDocument={ocdDocument}
-                        setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)}
-                        layer={l}
-                        key={`layer-${l.id}`}
-                    />
-                })}
+        <div className='ocd-designer-canvas-layers-bar' key='ocd-designer-canvas-layers-bar'>
+                <OcdLayersThreeDotMenu
+                    ocdDocument={ocdDocument}
+                    setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)}
+                />
+                <div className='ocd-designer-canvas-layers' key='ocd-designer-canvas-layers'>
+                    {page.layers.map((l: OcdViewLayer) => {
+                        return <OcdCanvasLayer
+                            ocdDocument={ocdDocument}
+                            setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)}
+                            layer={l}
+                            key={`layer-${l.id}`}
+                        />
+                    })}
+                </div>
                 <div className='ocd-add-layer ocd-layer-icon add-plus'
                     onClick={() => onClickAddLayer()}
                 ></div>
+        </div>
+    )
+}
+
+const OcdLayersThreeDotMenu = ({ocdDocument, setOcdDocument}: LayerBarMenuProps): JSX.Element => {
+    const [menuVisible, setMenuVisible] = useState(false)
+    const onToggleMenuClick = () => {setMenuVisible(!menuVisible)}
+    const onDeleteLayerClick = () => {
+        const page: OcdViewPage = ocdDocument.getActivePage()
+        const layer = page.layers.find((l) => l.selected)
+        const clone = OcdDocument.clone(ocdDocument)
+        console.debug('OcdCanvasLayers: Delete Layer', layer)
+        if (layer) {
+            clone.removeLayer(layer.id)
+            if (ocdDocument.selectedResource.modelId === layer.id) {
+                console.debug('OcdCanvasLayers: Delete Layer Changed Selected', page.layers[0].id)
+                const selectedResource: OcdSelectedResource = {
+                    modelId: page.layers[0].id,
+                    pageId: page.id,
+                    coordsId: '',
+                    class: layer.class
+                }
+                clone.selectedResource = selectedResource
+                page.layers[0].selected = true
+            }
+            setOcdDocument(clone)
+        }
+        setMenuVisible(false)
+    }
+    const onAddLayerClick = () => {
+        console.debug('OcdCanvasLayers: Adding Layer')
+        const compartment = OciModelResources.OciCompartment.newResource()
+        ocdDocument.design.model.oci.resources.compartment.push(compartment)
+        // Add Layer
+        ocdDocument.addLayer(compartment.id)
+        const page: OcdViewPage = ocdDocument.getActivePage()
+        page.layers.forEach((l: OcdViewLayer) => l.selected = l.id === compartment.id)
+        const selectedResource: OcdSelectedResource = {
+            modelId: compartment.id,
+            pageId: ocdDocument.getActivePage().id,
+            coordsId: '',
+            class: page.layers[0].class
+        }
+        ocdDocument.selectedResource = selectedResource
+        setOcdDocument(OcdDocument.clone(ocdDocument))
+        setMenuVisible(false)
+    }
+    const page: OcdViewPage = ocdDocument.getActivePage()
+    const layer = page.layers.find((l) => l.selected)
+    const selectedLayerName = layer ?  ocdDocument.getLayerName(layer.id) : ''
+
+    return (
+        <div className='ocd-console-toolbar-dropdown ocd-console-toolbar-dropdown-theme'>
+            <ul>
+                <li className='ocd-console-toolbar-dropdown-item' onClick={onToggleMenuClick}>
+                    <div className='three-dot-menu ocd-console-toolbar-icon'></div>
+                    <ul className={`${menuVisible ? 'show slide-down' : 'hidden'}`}>
+                        {page.layers.length > 1 && <li className='ocd-dropdown-menu-item ocd-mouseover-highlight'><div  onClick={onDeleteLayerClick}>Delete "{selectedLayerName}"</div></li>}
+                        <li className='ocd-dropdown-menu-item ocd-mouseover-highlight'><div  onClick={onAddLayerClick}>Add Page</div></li>
+                    </ul>
+                </li>
+            </ul>
         </div>
     )
 }

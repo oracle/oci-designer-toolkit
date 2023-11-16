@@ -7,3 +7,5 @@ export { OciTerraformSchemaImporter } from "./importer/OciTerraformSchemaImporte
 export { OciTerraformGenerator } from "./generator/OciTerraformGenerator"
 export { OcdPropertiesGenerator } from "./generator/OcdPropertiesGenerator"
 export { OcdModelGenerator } from "./generator/OcdModelGenerator"
+export { OcdTabularGenerator } from "./generator/OcdTabularPageGenerator"
+export { OcdValidatorGenerator } from "./generator/OcdValidatorGenerator"

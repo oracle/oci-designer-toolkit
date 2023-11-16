@@ -72,6 +72,7 @@ export class OcdDocument {
 
     getOciResourceList(key: string) {return this.design.model.oci.resources[key] ? this.design.model.oci.resources[key] : []}
     getOciResources() {return Object.values(this.design.model.oci.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], [])}
+    getOciResourcesObject() {return this.design.model.oci.resources}
     getResources() {return this.getOciResources()}
     getResource(id='') {return this.getResources().find((r: OcdResource) => r.id === id)}
     addResource(paletteResource: PaletteResource, compartmentId: string) {
@@ -175,10 +176,12 @@ export class OcdDocument {
         const viewPage: OcdViewPage = {
             id: `page-${uuidv4()}`,
             title: `Page ${this.design.view.pages.length + 1}`,
+            documentation: '',
             layers: layers,
             coords: [],
             connectors: [],
             selected: true,
+            grid: false,
             transform: this.resetPanZoom()
         }
         this.design.view.pages.forEach((p) => p.selected = false)
@@ -194,9 +197,34 @@ export class OcdDocument {
         const duplicatePage = this.addPage()
         duplicatePage.title = `${sourcePage.title} Copy`
         duplicatePage.coords = JSON.parse(JSON.stringify(sourcePage.coords))
+        duplicatePage.coords = this.updateDuplatedCoords(duplicatePage.coords)
         duplicatePage.connectors = JSON.parse(JSON.stringify(sourcePage.connectors))
     }
-    resetPanZoom = () => OcdDesign.resetPanZoom()
+    updateDuplatedCoords(coords: OcdViewCoords[], pgid: string=''): OcdViewCoords[] {
+        const updatedCoords: OcdViewCoords[] = coords.map((c) => {return {...c, id: `gid-${uuidv4()}`, pgid: pgid}}).map((c) => {return {...c, ...c.coords ? {coords: this.updateDuplatedCoords(c.coords, c.id)} : {}}})
+        return updatedCoords
+    }
+    resetPanZoom = () => {
+        const page = this.getActivePage()
+        page.transform = OcdDesign.resetPanZoom()
+        return page.transform
+    }
+    zoomIn = () => {
+        const page = this.getActivePage()
+        const newMatrix = page.transform.slice()
+        newMatrix[0] *= 1.15
+        newMatrix[3] *= 1.15
+        if (newMatrix[0] >= 0.3 && newMatrix[0] <= 5) page.transform = newMatrix
+        return page.transform
+    }
+    zoomOut = () => {
+        const page = this.getActivePage()
+        const newMatrix = page.transform.slice()
+        newMatrix[0] *= 0.9
+        newMatrix[3] *= 0.9
+        if (newMatrix[0] >= 0.3 && newMatrix[0] <= 3) page.transform = newMatrix
+        return page.transform
+    }
 
     // @ts-ignore 
     // getLayer = (id: string): OcdViewLayer => this.design.model.oci.resources.compartment.find((c) => c.id === id)

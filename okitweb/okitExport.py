@@ -121,3 +121,59 @@ def markdown():
     else:
         return '404'
 
+@bp.route('resource-manager', methods=(['GET']))
+def resourceManager():
+    if request.method == 'GET':
+        instance_path = current_app.instance_path
+        root_dir = request.args.get('root_dir', default='/tmp')
+        terraform_dir = request.args.get('terraform_dir', default='/tmp')
+        destination = request.args.get('destination', default='zip')
+        directory = request.args.get('directory', default='')
+        design = json.loads(request.args.get('design', default='{}'))
+        git = request.args.get('git', default=False)
+        git_commit_msg = request.args.get('git_commit_msg', default='')
+        add_suffix = True
+        response_json = {}
+        if destination == 'file':
+            destination_dir = os.path.join(instance_path, root_dir.strip('/'), directory.strip('/'))
+            add_suffix = False
+        elif destination == 'git':
+            destination_dir = '/tmp'
+        else:
+            destination_dir = tempfile.mkdtemp()
+        logger.debug(f'Export To RM Terraform Instance Path {instance_path}')
+        logger.debug(f'Export To Terraform Destination {destination}')
+        logger.debug(f'Export To Terraform Root Directory {root_dir}')
+        logger.debug(f'Export To Terraform Directory {directory}')
+        logger.debug(f'Export To Terraform Destination Directory {destination_dir}')
+        generator = OCIResourceManagerGenerator(template_root, destination_dir, design, use_vars=False)
+        generator.generate()
+        if destination == 'file':
+            response_json = generator.toJson()
+            generator.writeFiles()
+        elif destination == 'zip':
+            generator.writeFiles()
+            zipname = generator.createZipArchive(os.path.join(destination_dir, 'resource-manager'), "/tmp/okit-resource-manager")
+            logger.debug('Zipfile : {0:s}'.format(str(zipname)))
+            shutil.rmtree(destination_dir)
+            filename = os.path.split(zipname)
+            logger.debug('Split Zipfile : {0:s}'.format(str(filename)))
+            return send_from_directory('/tmp', "okit-resource-manager.zip", mimetype='application/zip', as_attachment=True)
+        elif destination == 'json':
+            response_json = generator.toJson()
+        if git:
+            top_dir = os.path.normpath(os.path.dirname(directory.strip('/'))).split(os.sep)
+            git_repo_dir = os.path.join(instance_path, root_dir, top_dir[0], top_dir[1])
+            full_directory_name = os.path.join(instance_path, root_dir, directory.strip('/'))
+            logger.debug(f'Git Root Dir : {git_repo_dir}')
+            logger.debug(f'Directory : {directory}')
+            logger.debug(f'Dest Directory : {full_directory_name}')
+            repo = Repo(git_repo_dir)
+            repo.remotes.origin.pull()
+            repo.index.add(destination_dir)
+            repo.index.commit("commit changes from okit:" + git_commit_msg)
+            repo.remotes.origin.push()
+        return json.dumps(response_json, sort_keys=False, indent=2, separators=(',', ': '))
+    else:
+        return '404'
+

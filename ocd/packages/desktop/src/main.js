@@ -3,27 +3,74 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-const { app, BrowserWindow, ipcMain } = require("electron")
+const { app, dialog, BrowserWindow, ipcMain, screen } = require("electron")
 const path = require("path")
 const url = require("url")
+const fs = require("fs")
 // const { handleLoadOciConfigProfiles } = require ("./electron/OcdApi")
 // const { ConfigFileReader } = require ('oci-common')
 const common = require ('oci-common')
-const { OciQuery } = require('@ocd/query')
+const { OciQuery, OciReferenceDataQuery } = require('@ocd/query')
 
 // if (require('electron-squirrel-startup')) app.quit()
+const ocdConfigDirectory = path.join(app.getPath('home'), '.ocd')
+const ocdConsoleConfigFilename = path.join(ocdConfigDirectory, 'console_config.json')
+const ocdCacheFilename = path.join(ocdConfigDirectory, 'cache.json')
+const ocdWindowStateFilename = path.join(ocdConfigDirectory, 'desktop.json')
+if (!fs.existsSync(ocdConfigDirectory)) fs.mkdirSync(ocdConfigDirectory)
+
+const loadDesktopState = () => {
+	const size = screen.getPrimaryDisplay().workAreaSize
+	const initialState = {
+		x: undefined,
+		y: undefined,
+		width: Math.round(size.width / 2),
+		height: Math.round((size.height / 3) * 2),
+		isMaximised: false,
+		isFullScreen: false
+	}
+	if (!fs.existsSync(ocdWindowStateFilename)) fs.writeFileSync(ocdWindowStateFilename, JSON.stringify(initialState, null, 4))
+	const config = fs.readFileSync(ocdWindowStateFilename, 'utf-8')
+	return {...initialState, ...JSON.parse(config)} 
+}
+
+const saveDesktopState = (config) => {
+	fs.writeFileSync(ocdWindowStateFilename, JSON.stringify(config, null, 4))
+}
+
+let mainWindow = undefined
+let activeFile = undefined
 
 const createWindow = () => {
+	let desktopState = loadDesktopState()
 	// Create the browser window.
-	const mainWindow = new BrowserWindow({
-		width: 1600,
-		height: 1200,
+	mainWindow = new BrowserWindow({
+		x: desktopState.x,
+		y: desktopState.y,
+		width: desktopState.width,
+		height: desktopState.height,
 		webPreferences: {
 			nodeIntegration: true,
 			contextIsolation: true,
 			preload: path.join(__dirname, 'preload.js')
 		},
 	})
+
+	const saveState = () => {
+		desktopState.isMaximised = mainWindow.isMaximized()
+		desktopState.isFullScreen = mainWindow.isFullScreen()
+		const bounds = mainWindow.getBounds()
+		if (!mainWindow.isMaximized() && !mainWindow.isFullScreen()) desktopState = {...desktopState, ...bounds}
+		saveDesktopState(desktopState)
+	}
+
+	// mainWindow.on('move', (e) => console.debug('Move Event'))
+	mainWindow.on('moved', (e) => saveState())
+	// mainWindow.on('resize', (e) => console.debug('Resize Event'))
+	mainWindow.on('enter-full-screen', (e) => saveState())
+	mainWindow.on('leave-full-screen', (e) => saveState())
+	mainWindow.on('resized', (e) => saveState())
+	mainWindow.on('close', (e) => saveState())
 
 	// and load the index.html of the app.
 	const startUrl =
@@ -35,16 +82,31 @@ const createWindow = () => {
 		})
 	mainWindow.loadURL(startUrl)
 
+	if (desktopState.isMaximised) mainWindow.maximize()
+	mainWindow.setFullScreen(desktopState.isFullScreen)
+
 	// Open the DevTools.
 	// mainWindow.webContents.openDevTools()
 }
 
 app.whenReady().then(() => {
+	// OCI API Calls / Query
 	ipcMain.handle('ociConfig:loadProfiles', handleLoadOciConfigProfiles)
 	ipcMain.handle('ociQuery:listRegions', handleListRegions)
 	ipcMain.handle('ociQuery:listTenancyCompartments', handleListTenancyCompartments)
 	ipcMain.handle('ociQuery:queryTenancy', handleQueryTenancy)
 	ipcMain.handle('ociQuery:queryDropdown', handleQueryDropdown)
+	// OCD Design 
+	ipcMain.handle('ocdDesign:loadDesign', handleLoadDesign)
+	ipcMain.handle('ocdDesign:saveDesign', handleSaveDesign)
+	ipcMain.handle('ocdDesign:discardConfirmation', handleDiscardConfirmation)
+	ipcMain.handle('ocdDesign:exportTerraform', handleExportTerraform)
+	// OCD Configuration
+	ipcMain.handle('ocdConfig:loadConsoleConfig', handleLoadConsoleConfig)
+	ipcMain.handle('ocdConfig:saveConsoleConfig', handleSaveConsoleConfig)
+	// OCD Cache
+	ipcMain.handle('ocdCache:loadCache', handleLoadCache)
+	ipcMain.handle('ocdCache:saveCache', handleSaveCache)
 	createWindow()
 	app.on('activate', function () {
 	  if (BrowserWindow.getAllWindows().length === 0) createWindow()
@@ -109,6 +171,157 @@ async function handleQueryTenancy(event, profile, compartmentIds, region) {
 
 async function handleQueryDropdown(event, profile, region) {
 	console.debug('Electron Main: handleQueryDropdown')
-	const ociQuery = new OciQuery(profile, region)
+	const ociQuery = new OciReferenceDataQuery(profile, region)
+	return ociQuery.query()
+}
+
+async function handleLoadDesign(event, filename) {
+	console.debug('Electron Main: handleLoadDesign')
+	return new Promise((resolve, reject) => {
+		try {
+			if (!filename || !fs.existsSync(filename) || !fs.statSync(filename).isFile()) {
+				dialog.showOpenDialog(mainWindow, {
+					properties: ['openFile'],
+					filters: [{name: 'Filetype', extensions: ['okit']}]
+				  }).then(result => {
+					const design = result.canceled ? {} : fs.readFileSync(result.filePaths[0], 'utf-8')
+					resolve({canceled: result.canceled, filename: result.filePaths[0], design: JSON.parse(design)})
+				}).catch(err => {
+					console.error(err)
+					reject(err)
+				})
+			} else {
+				const design = fs.readFileSync(filename, 'utf-8')
+				resolve({canceled: false, filename: filename, design: JSON.parse(design)})
+			}
+		} catch (err) {
+			reject(err)
+		}
+	})
+}
+
+async function handleSaveDesign(event, design, filename, suggestedFilename='') {
+	console.debug('Electron Main: handleSaveDesign')
+	return new Promise((resolve, reject) => {
+		try {
+			if (!filename || !fs.existsSync(filename) || !fs.statSync(filename).isFile()) {
+				dialog.showSaveDialog(mainWindow, {
+					defaultPath: suggestedFilename,
+					properties: ['openFile', 'createDirectory'],
+					filters: [{name: 'Filetype', extensions: ['okit']}]
+				  }).then(result => {
+					if (!result.canceled) fs.writeFileSync(result.filePath, JSON.stringify(design, null, 4))
+					resolve({canceled: false, filename: result.canceled ? '' : result.filePath, design: design})
+				}).catch(err => {
+					console.error(err)
+					reject(err)
+				})
+			} else {
+				fs.writeFileSync(filename, JSON.stringify(design, null, 4))
+				resolve({canceled: false, filename: filename, design: design})
+			}
+		} catch (err) {
+			reject(err)
+		}
+	})
+}
+
+async function handleDiscardConfirmation(event) {
+	return new Promise((resolve, reject) => {
+		const options = {
+			type: 'question',
+			message: 'All Changes Will Be Lost',
+			details: 'OCD Design has been modified.',
+			buttons: ['Discard Changes', 'Cancel'],
+			defaultId: 1
+		}
+		dialog.showMessageBox(mainWindow, options).then((result) => {
+			console.debug('Discard Confirmation', result)
+			const discardResponse = [true, false]
+			resolve(discardResponse[result.response])
+		})
+	})
+}
+
+async function handleExportTerraform(event, design, directory) {
+	console.debug('Electron Main: handleExportTerraform')
 	return new Promise((resolve, reject) => {reject('Currently Not Implemented')})
+}
+
+async function handleLoadConsoleConfig(event) {
+	console.debug('Electron Main: handleLoadConfig')
+	return new Promise((resolve, reject) => {
+		const defaultConfig = {
+            showPalette: true,
+            showModelPalette: true,
+            showProvidersPalette: ['oci'],
+            verboseProviderPalette: false,
+            displayPage: 'designer',
+            detailedResource: true,
+            showProperties: true,
+            highlightCompartmentResources: false,
+            recentDesigns: [],
+            maxRecent: 10,
+        }
+		try {
+			// if (!fs.existsSync(ocdConsoleConfigFilename)) fs.writeFileSync(ocdConsoleConfigFilename, JSON.stringify(defaultConfig, null, 4))
+			if (!fs.existsSync(ocdConsoleConfigFilename)) reject('Console Config does not exist')
+			const config = fs.readFileSync(ocdConsoleConfigFilename, 'utf-8')
+			resolve(JSON.parse(config))
+		} catch (err) {
+			reject(err)
+		}
+	})
+}
+
+async function handleSaveConsoleConfig(event, config) {
+	console.debug('Electron Main: handleSaveConfig')
+	return new Promise((resolve, reject) => {
+		try {
+			fs.writeFileSync(ocdConsoleConfigFilename, JSON.stringify(config, null, 4))
+			resolve(config)
+		} catch (err) {
+			reject(err)
+		}
+	})
+}
+
+async function handleLoadCache(event) {
+	console.debug('Electron Main: handleLoadCache')
+	return new Promise((resolve, reject) => {
+		try {
+			// if (!fs.existsSync(ocdCacheFilename)) fs.writeFileSync(ocdCacheFilename, JSON.stringify(defaultCache, null, 4))
+			if (!fs.existsSync(ocdCacheFilename)) reject('Cache does not exist')
+			const config = fs.readFileSync(ocdCacheFilename, 'utf-8')
+			resolve(JSON.parse(config))
+		} catch (err) {
+			reject(err)
+		}
+	})
+}
+
+async function handleSaveCache(event, cache) {
+	console.debug('Electron Main: handleSaveCache')
+	return new Promise((resolve, reject) => {
+		try {
+			fs.writeFileSync(ocdCacheFilename, JSON.stringify(cache, null, 4))
+			resolve(cache)
+		} catch (err) {
+			reject(err)
+		}
+	})
+}
+
+async function handleLoadCacheProfile(event, profile) {
+	console.debug('Electron Main: handleLoadCacheProfile')
+	return new Promise((resolve, reject) => {
+		try {
+			// if (!fs.existsSync(ocdCacheFilename)) fs.writeFileSync(ocdCacheFilename, JSON.stringify(defaultCache, null, 4))
+			if (!fs.existsSync(ocdCacheFilename)) reject('Cache does not exist')
+			const config = fs.readFileSync(ocdCacheFilename, 'utf-8')
+			resolve(JSON.parse(config))
+		} catch (err) {
+			reject(err)
+		}
+	})
 }

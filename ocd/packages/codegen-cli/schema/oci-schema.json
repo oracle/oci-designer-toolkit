@@ -95,6 +95,19 @@
         "lookup": false,
         "lookupResource": ""
       },
+      "kms_key_id": {
+        "provider": "oci",
+        "key": "kmsKeyId",
+        "name": "kms_key_id",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Kms Key",
+        "id": "kms_key_id",
+        "staticLookup": false,
+        "lookup": true,
+        "lookupResource": "kms_key"
+      },
       "license_type": {
         "provider": "oci",
         "key": "licenseType",
@@ -121,19 +134,6 @@
         "lookup": false,
         "lookupResource": ""
       },
-      "private_access_channels": {
-        "provider": "oci",
-        "key": "privateAccessChannels",
-        "name": "private_access_channels",
-        "type": "map",
-        "subtype": "string",
-        "required": false,
-        "label": "Private Access Channels",
-        "id": "private_access_channels",
-        "staticLookup": false,
-        "lookup": false,
-        "lookupResource": ""
-      },
       "service_url": {
         "provider": "oci",
         "key": "serviceUrl",
@@ -156,19 +156,6 @@
         "required": false,
         "label": "Time Updated",
         "id": "time_updated",
-        "staticLookup": false,
-        "lookup": false,
-        "lookupResource": ""
-      },
-      "vanity_url_details": {
-        "provider": "oci",
-        "key": "vanityUrlDetails",
-        "name": "vanity_url_details",
-        "type": "map",
-        "subtype": "string",
-        "required": false,
-        "label": "Vanity Url Details",
-        "id": "vanity_url_details",
         "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
@@ -234,6 +221,19 @@
             "lookup": false,
             "lookupResource": ""
           },
+          "network_security_group_ids": {
+            "provider": "oci",
+            "key": "networkSecurityGroupIds",
+            "name": "network_security_group_ids",
+            "type": "list",
+            "subtype": "string",
+            "required": false,
+            "label": "Network Security Group",
+            "id": "network_endpoint_details.network_security_group_ids",
+            "staticLookup": false,
+            "lookup": true,
+            "lookupResource": "network_security_group"
+          },
           "subnet_id": {
             "provider": "oci",
             "key": "subnetId",
@@ -273,6 +273,19 @@
             "lookup": false,
             "lookupResource": ""
           },
+          "whitelisted_services": {
+            "provider": "oci",
+            "key": "whitelistedServices",
+            "name": "whitelisted_services",
+            "type": "list",
+            "subtype": "string",
+            "required": false,
+            "label": "Whitelisted Services",
+            "id": "network_endpoint_details.whitelisted_services",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          },
           "whitelisted_vcns": {
             "provider": "oci",
             "key": "whitelistedVcns",
@@ -299,6 +312,221 @@
             }
           }
         }
+      }
+    }
+  },
+  "bastion": {
+    "tf_resource": "oci_bastion_bastion",
+    "type": "object",
+    "subtype": "",
+    "attributes": {
+      "bastion_type": {
+        "provider": "oci",
+        "key": "bastionType",
+        "name": "bastion_type",
+        "type": "string",
+        "subtype": "",
+        "required": true,
+        "label": "Bastion Type",
+        "id": "bastion_type",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
+      "client_cidr_block_allow_list": {
+        "provider": "oci",
+        "key": "clientCidrBlockAllowList",
+        "name": "client_cidr_block_allow_list",
+        "type": "list",
+        "subtype": "string",
+        "required": false,
+        "label": "Client Cidr Block Allow List",
+        "id": "client_cidr_block_allow_list",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
+      "compartment_id": {
+        "provider": "oci",
+        "key": "compartmentId",
+        "name": "compartment_id",
+        "type": "string",
+        "subtype": "",
+        "required": true,
+        "label": "Compartment",
+        "id": "compartment_id",
+        "staticLookup": false,
+        "lookup": true,
+        "lookupResource": "compartment"
+      },
+      "defined_tags": {
+        "provider": "oci",
+        "key": "definedTags",
+        "name": "defined_tags",
+        "type": "map",
+        "subtype": "string",
+        "required": false,
+        "label": "Defined Tags",
+        "id": "defined_tags",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
+      "dns_proxy_status": {
+        "provider": "oci",
+        "key": "dnsProxyStatus",
+        "name": "dns_proxy_status",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Dns Proxy Status",
+        "id": "dns_proxy_status",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
+      "freeform_tags": {
+        "provider": "oci",
+        "key": "freeformTags",
+        "name": "freeform_tags",
+        "type": "map",
+        "subtype": "string",
+        "required": false,
+        "label": "Freeform Tags",
+        "id": "freeform_tags",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
+      "lifecycle_details": {
+        "provider": "oci",
+        "key": "lifecycleDetails",
+        "name": "lifecycle_details",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Lifecycle Details",
+        "id": "lifecycle_details",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
+      "max_session_ttl_in_seconds": {
+        "provider": "oci",
+        "key": "maxSessionTtlInSeconds",
+        "name": "max_session_ttl_in_seconds",
+        "type": "number",
+        "subtype": "",
+        "required": false,
+        "label": "Max Session Ttl In Seconds",
+        "id": "max_session_ttl_in_seconds",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
+      "max_sessions_allowed": {
+        "provider": "oci",
+        "key": "maxSessionsAllowed",
+        "name": "max_sessions_allowed",
+        "type": "number",
+        "subtype": "",
+        "required": false,
+        "label": "Max Sessions Allowed",
+        "id": "max_sessions_allowed",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
+      "name": {
+        "provider": "oci",
+        "key": "name",
+        "name": "name",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Name",
+        "id": "name",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
+      "phone_book_entry": {
+        "provider": "oci",
+        "key": "phoneBookEntry",
+        "name": "phone_book_entry",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Phone Book Entry",
+        "id": "phone_book_entry",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
+      "private_endpoint_ip_address": {
+        "provider": "oci",
+        "key": "privateEndpointIpAddress",
+        "name": "private_endpoint_ip_address",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Private Endpoint Ip Address",
+        "id": "private_endpoint_ip_address",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
+      "static_jump_host_ip_addresses": {
+        "provider": "oci",
+        "key": "staticJumpHostIpAddresses",
+        "name": "static_jump_host_ip_addresses",
+        "type": "list",
+        "subtype": "string",
+        "required": false,
+        "label": "Static Jump Host Ip Addresses",
+        "id": "static_jump_host_ip_addresses",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
+      "target_subnet_id": {
+        "provider": "oci",
+        "key": "targetSubnetId",
+        "name": "target_subnet_id",
+        "type": "string",
+        "subtype": "",
+        "required": true,
+        "label": "Target Subnet",
+        "id": "target_subnet_id",
+        "staticLookup": false,
+        "lookup": true,
+        "lookupResource": "target_subnet"
+      },
+      "target_vcn_id": {
+        "provider": "oci",
+        "key": "targetVcnId",
+        "name": "target_vcn_id",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Target Vcn",
+        "id": "target_vcn_id",
+        "staticLookup": false,
+        "lookup": true,
+        "lookupResource": "target_vcn"
+      },
+      "time_updated": {
+        "provider": "oci",
+        "key": "timeUpdated",
+        "name": "time_updated",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Time Updated",
+        "id": "time_updated",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
       }
     }
   },
@@ -332,6 +560,32 @@
         "staticLookup": false,
         "lookup": true,
         "lookupResource": "compartment"
+      },
+      "defined_tags": {
+        "provider": "oci",
+        "key": "definedTags",
+        "name": "defined_tags",
+        "type": "map",
+        "subtype": "string",
+        "required": false,
+        "label": "Defined Tags",
+        "id": "defined_tags",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
+      "freeform_tags": {
+        "provider": "oci",
+        "key": "freeformTags",
+        "name": "freeform_tags",
+        "type": "map",
+        "subtype": "string",
+        "required": false,
+        "label": "Freeform Tags",
+        "id": "freeform_tags",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
       },
       "kms_key_id": {
         "provider": "oci",
@@ -385,6 +639,19 @@
         "lookup": false,
         "lookupResource": ""
       },
+      "type": {
+        "provider": "oci",
+        "key": "type",
+        "name": "type",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Type",
+        "id": "type",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
       "vcn_id": {
         "provider": "oci",
         "key": "vcnId",
@@ -397,6 +664,31 @@
         "staticLookup": false,
         "lookup": true,
         "lookupResource": "vcn"
+      },
+      "cluster_pod_network_options": {
+        "provider": "oci",
+        "key": "clusterPodNetworkOptions",
+        "name": "cluster_pod_network_options",
+        "type": "list",
+        "subtype": "",
+        "required": false,
+        "label": "Cluster Pod Network Options",
+        "id": "cluster_pod_network_options",
+        "attributes": {
+          "cni_type": {
+            "provider": "oci",
+            "key": "cniType",
+            "name": "cni_type",
+            "type": "string",
+            "subtype": "",
+            "required": true,
+            "label": "Cni Type",
+            "id": "cluster_pod_network_options.cni_type",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          }
+        }
       },
       "endpoint_config": {
         "provider": "oci",
@@ -622,6 +914,82 @@
                 "lookupResource": ""
               }
             }
+          },
+          "persistent_volume_config": {
+            "provider": "oci",
+            "key": "persistentVolumeConfig",
+            "name": "persistent_volume_config",
+            "type": "object",
+            "subtype": "",
+            "required": false,
+            "label": "Persistent Volume Config",
+            "id": "options.persistent_volume_config",
+            "attributes": {
+              "defined_tags": {
+                "provider": "oci",
+                "key": "definedTags",
+                "name": "defined_tags",
+                "type": "map",
+                "subtype": "string",
+                "required": false,
+                "label": "Defined Tags",
+                "id": "options.persistent_volume_config.defined_tags",
+                "staticLookup": false,
+                "lookup": false,
+                "lookupResource": ""
+              },
+              "freeform_tags": {
+                "provider": "oci",
+                "key": "freeformTags",
+                "name": "freeform_tags",
+                "type": "map",
+                "subtype": "string",
+                "required": false,
+                "label": "Freeform Tags",
+                "id": "options.persistent_volume_config.freeform_tags",
+                "staticLookup": false,
+                "lookup": false,
+                "lookupResource": ""
+              }
+            }
+          },
+          "service_lb_config": {
+            "provider": "oci",
+            "key": "serviceLbConfig",
+            "name": "service_lb_config",
+            "type": "object",
+            "subtype": "",
+            "required": false,
+            "label": "Service Lb Config",
+            "id": "options.service_lb_config",
+            "attributes": {
+              "defined_tags": {
+                "provider": "oci",
+                "key": "definedTags",
+                "name": "defined_tags",
+                "type": "map",
+                "subtype": "string",
+                "required": false,
+                "label": "Defined Tags",
+                "id": "options.service_lb_config.defined_tags",
+                "staticLookup": false,
+                "lookup": false,
+                "lookupResource": ""
+              },
+              "freeform_tags": {
+                "provider": "oci",
+                "key": "freeformTags",
+                "name": "freeform_tags",
+                "type": "map",
+                "subtype": "string",
+                "required": false,
+                "label": "Freeform Tags",
+                "id": "options.service_lb_config.freeform_tags",
+                "staticLookup": false,
+                "lookup": false,
+                "lookupResource": ""
+              }
+            }
           }
         }
       }
@@ -658,15 +1026,54 @@
         "lookup": true,
         "lookupResource": "compartment"
       },
+      "defined_tags": {
+        "provider": "oci",
+        "key": "definedTags",
+        "name": "defined_tags",
+        "type": "map",
+        "subtype": "string",
+        "required": false,
+        "label": "Defined Tags",
+        "id": "defined_tags",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
+      "freeform_tags": {
+        "provider": "oci",
+        "key": "freeformTags",
+        "name": "freeform_tags",
+        "type": "map",
+        "subtype": "string",
+        "required": false,
+        "label": "Freeform Tags",
+        "id": "freeform_tags",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
       "kubernetes_version": {
         "provider": "oci",
         "key": "kubernetesVersion",
         "name": "kubernetes_version",
         "type": "string",
         "subtype": "",
-        "required": true,
+        "required": false,
         "label": "Kubernetes Version",
         "id": "kubernetes_version",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
+      "lifecycle_details": {
+        "provider": "oci",
+        "key": "lifecycleDetails",
+        "name": "lifecycle_details",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Lifecycle Details",
+        "id": "lifecycle_details",
         "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
@@ -797,6 +1204,71 @@
         "label": "Node Config Details",
         "id": "node_config_details",
         "attributes": {
+          "defined_tags": {
+            "provider": "oci",
+            "key": "definedTags",
+            "name": "defined_tags",
+            "type": "map",
+            "subtype": "string",
+            "required": false,
+            "label": "Defined Tags",
+            "id": "node_config_details.defined_tags",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          },
+          "freeform_tags": {
+            "provider": "oci",
+            "key": "freeformTags",
+            "name": "freeform_tags",
+            "type": "map",
+            "subtype": "string",
+            "required": false,
+            "label": "Freeform Tags",
+            "id": "node_config_details.freeform_tags",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          },
+          "is_pv_encryption_in_transit_enabled": {
+            "provider": "oci",
+            "key": "isPvEncryptionInTransitEnabled",
+            "name": "is_pv_encryption_in_transit_enabled",
+            "type": "bool",
+            "subtype": "",
+            "required": false,
+            "label": "Is Pv Encryption In Transit Enabled",
+            "id": "node_config_details.is_pv_encryption_in_transit_enabled",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          },
+          "kms_key_id": {
+            "provider": "oci",
+            "key": "kmsKeyId",
+            "name": "kms_key_id",
+            "type": "string",
+            "subtype": "",
+            "required": false,
+            "label": "Kms Key",
+            "id": "node_config_details.kms_key_id",
+            "staticLookup": false,
+            "lookup": true,
+            "lookupResource": "kms_key"
+          },
+          "nsg_ids": {
+            "provider": "oci",
+            "key": "nsgIds",
+            "name": "nsg_ids",
+            "type": "list",
+            "subtype": "string",
+            "required": false,
+            "label": "Nsg",
+            "id": "node_config_details.nsg_ids",
+            "staticLookup": false,
+            "lookup": true,
+            "lookupResource": "nsg"
+          },
           "size": {
             "provider": "oci",
             "key": "size",
@@ -809,6 +1281,70 @@
             "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
+          },
+          "node_pool_pod_network_option_details": {
+            "provider": "oci",
+            "key": "nodePoolPodNetworkOptionDetails",
+            "name": "node_pool_pod_network_option_details",
+            "type": "object",
+            "subtype": "",
+            "required": false,
+            "label": "Node Pool Pod Network Option Details",
+            "id": "node_config_details.node_pool_pod_network_option_details",
+            "attributes": {
+              "cni_type": {
+                "provider": "oci",
+                "key": "cniType",
+                "name": "cni_type",
+                "type": "string",
+                "subtype": "",
+                "required": true,
+                "label": "Cni Type",
+                "id": "node_config_details.node_pool_pod_network_option_details.cni_type",
+                "staticLookup": false,
+                "lookup": false,
+                "lookupResource": ""
+              },
+              "max_pods_per_node": {
+                "provider": "oci",
+                "key": "maxPodsPerNode",
+                "name": "max_pods_per_node",
+                "type": "number",
+                "subtype": "",
+                "required": false,
+                "label": "Max Pods Per Node",
+                "id": "node_config_details.node_pool_pod_network_option_details.max_pods_per_node",
+                "staticLookup": false,
+                "lookup": false,
+                "lookupResource": ""
+              },
+              "pod_nsg_ids": {
+                "provider": "oci",
+                "key": "podNsgIds",
+                "name": "pod_nsg_ids",
+                "type": "list",
+                "subtype": "string",
+                "required": false,
+                "label": "Pod Nsg",
+                "id": "node_config_details.node_pool_pod_network_option_details.pod_nsg_ids",
+                "staticLookup": false,
+                "lookup": true,
+                "lookupResource": "pod_nsg"
+              },
+              "pod_subnet_ids": {
+                "provider": "oci",
+                "key": "podSubnetIds",
+                "name": "pod_subnet_ids",
+                "type": "list",
+                "subtype": "string",
+                "required": false,
+                "label": "Pod Subnet",
+                "id": "node_config_details.node_pool_pod_network_option_details.pod_subnet_ids",
+                "staticLookup": false,
+                "lookup": true,
+                "lookupResource": "pod_subnet"
+              }
+            }
           },
           "placement_configs": {
             "provider": "oci",
@@ -833,6 +1369,32 @@
                 "lookup": true,
                 "lookupResource": ""
               },
+              "capacity_reservation_id": {
+                "provider": "oci",
+                "key": "capacityReservationId",
+                "name": "capacity_reservation_id",
+                "type": "string",
+                "subtype": "",
+                "required": false,
+                "label": "Capacity Reservation",
+                "id": "node_config_details.placement_configs.capacity_reservation_id",
+                "staticLookup": false,
+                "lookup": true,
+                "lookupResource": "capacity_reservation"
+              },
+              "fault_domains": {
+                "provider": "oci",
+                "key": "faultDomains",
+                "name": "fault_domains",
+                "type": "list",
+                "subtype": "string",
+                "required": false,
+                "label": "Fault Domains",
+                "id": "node_config_details.placement_configs.fault_domains",
+                "staticLookup": false,
+                "lookup": false,
+                "lookupResource": ""
+              },
               "subnet_id": {
                 "provider": "oci",
                 "key": "subnetId",
@@ -845,8 +1407,147 @@
                 "staticLookup": false,
                 "lookup": true,
                 "lookupResource": "subnet"
+              },
+              "preemptible_node_config": {
+                "provider": "oci",
+                "key": "preemptibleNodeConfig",
+                "name": "preemptible_node_config",
+                "type": "object",
+                "subtype": "",
+                "required": false,
+                "label": "Preemptible Node Config",
+                "id": "node_config_details.placement_configs.preemptible_node_config",
+                "attributes": {
+                  "preemption_action": {
+                    "provider": "oci",
+                    "key": "preemptionAction",
+                    "name": "preemption_action",
+                    "type": "object",
+                    "subtype": "",
+                    "required": false,
+                    "label": "Preemption Action",
+                    "id": "node_config_details.placement_configs.preemptible_node_config.preemption_action",
+                    "attributes": {
+                      "is_preserve_boot_volume": {
+                        "provider": "oci",
+                        "key": "isPreserveBootVolume",
+                        "name": "is_preserve_boot_volume",
+                        "type": "bool",
+                        "subtype": "",
+                        "required": false,
+                        "label": "Is Preserve Boot Volume",
+                        "id": "node_config_details.placement_configs.preemptible_node_config.preemption_action.is_preserve_boot_volume",
+                        "staticLookup": false,
+                        "lookup": false,
+                        "lookupResource": ""
+                      },
+                      "type": {
+                        "provider": "oci",
+                        "key": "type",
+                        "name": "type",
+                        "type": "string",
+                        "subtype": "",
+                        "required": true,
+                        "label": "Type",
+                        "id": "node_config_details.placement_configs.preemptible_node_config.preemption_action.type",
+                        "staticLookup": false,
+                        "lookup": false,
+                        "lookupResource": ""
+                      }
+                    }
+                  }
+                }
               }
             }
+          }
+        }
+      },
+      "node_eviction_node_pool_settings": {
+        "provider": "oci",
+        "key": "nodeEvictionNodePoolSettings",
+        "name": "node_eviction_node_pool_settings",
+        "type": "object",
+        "subtype": "",
+        "required": false,
+        "label": "Node Eviction Node Pool Settings",
+        "id": "node_eviction_node_pool_settings",
+        "attributes": {
+          "eviction_grace_duration": {
+            "provider": "oci",
+            "key": "evictionGraceDuration",
+            "name": "eviction_grace_duration",
+            "type": "string",
+            "subtype": "",
+            "required": false,
+            "label": "Eviction Grace Duration",
+            "id": "node_eviction_node_pool_settings.eviction_grace_duration",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          },
+          "is_force_delete_after_grace_duration": {
+            "provider": "oci",
+            "key": "isForceDeleteAfterGraceDuration",
+            "name": "is_force_delete_after_grace_duration",
+            "type": "bool",
+            "subtype": "",
+            "required": false,
+            "label": "Is Force Delete After Grace Duration",
+            "id": "node_eviction_node_pool_settings.is_force_delete_after_grace_duration",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          }
+        }
+      },
+      "node_pool_cycling_details": {
+        "provider": "oci",
+        "key": "nodePoolCyclingDetails",
+        "name": "node_pool_cycling_details",
+        "type": "object",
+        "subtype": "",
+        "required": false,
+        "label": "Node Pool Cycling Details",
+        "id": "node_pool_cycling_details",
+        "attributes": {
+          "is_node_cycling_enabled": {
+            "provider": "oci",
+            "key": "isNodeCyclingEnabled",
+            "name": "is_node_cycling_enabled",
+            "type": "bool",
+            "subtype": "",
+            "required": false,
+            "label": "Is Node Cycling Enabled",
+            "id": "node_pool_cycling_details.is_node_cycling_enabled",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          },
+          "maximum_surge": {
+            "provider": "oci",
+            "key": "maximumSurge",
+            "name": "maximum_surge",
+            "type": "string",
+            "subtype": "",
+            "required": false,
+            "label": "Maximum Surge",
+            "id": "node_pool_cycling_details.maximum_surge",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          },
+          "maximum_unavailable": {
+            "provider": "oci",
+            "key": "maximumUnavailable",
+            "name": "maximum_unavailable",
+            "type": "string",
+            "subtype": "",
+            "required": false,
+            "label": "Maximum Unavailable",
+            "id": "node_pool_cycling_details.maximum_unavailable",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
           }
         }
       },
@@ -1066,6 +1767,19 @@
         "required": false,
         "label": "Display Name",
         "id": "display_name",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
+      "domain_name_type": {
+        "provider": "oci",
+        "key": "domainNameType",
+        "name": "domain_name_type",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Domain Name Type",
+        "id": "domain_name_type",
         "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
@@ -1417,6 +2131,19 @@
             "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
+          },
+          "vcn_route_type": {
+            "provider": "oci",
+            "key": "vcnRouteType",
+            "name": "vcn_route_type",
+            "type": "string",
+            "subtype": "",
+            "required": false,
+            "label": "Vcn Route Type",
+            "id": "network_details.vcn_route_type",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
           }
         }
       }
@@ -1720,6 +2447,19 @@
     "type": "object",
     "subtype": "",
     "attributes": {
+      "attributes": {
+        "provider": "oci",
+        "key": "attributes",
+        "name": "attributes",
+        "type": "map",
+        "subtype": "string",
+        "required": false,
+        "label": "Attributes",
+        "id": "attributes",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
       "destination": {
         "provider": "oci",
         "key": "destination",
@@ -1742,8 +2482,8 @@
         "required": true,
         "label": "Destination Type",
         "id": "destination_type",
-        "staticLookup": false,
-        "lookup": false,
+        "staticLookup": true,
+        "lookup": true,
         "lookupResource": ""
       },
       "drg_route_table_id": {
@@ -1831,6 +2571,19 @@
     "type": "object",
     "subtype": "",
     "attributes": {
+      "async": {
+        "provider": "oci",
+        "key": "async",
+        "name": "async",
+        "type": "bool",
+        "subtype": "",
+        "required": false,
+        "label": "Async",
+        "id": "async",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
       "availability_domain": {
         "provider": "oci",
         "key": "availabilityDomain",
@@ -1909,6 +2662,19 @@
         "lookup": false,
         "lookupResource": ""
       },
+      "is_cross_numa_node": {
+        "provider": "oci",
+        "key": "isCrossNumaNode",
+        "name": "is_cross_numa_node",
+        "type": "bool",
+        "subtype": "",
+        "required": false,
+        "label": "Is Cross Numa Node",
+        "id": "is_cross_numa_node",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
       "is_pv_encryption_in_transit_enabled": {
         "provider": "oci",
         "key": "isPvEncryptionInTransitEnabled",
@@ -1954,7 +2720,7 @@
         "name": "shape",
         "type": "string",
         "subtype": "",
-        "required": true,
+        "required": false,
         "label": "Shape",
         "id": "shape",
         "staticLookup": false,
@@ -2227,6 +2993,19 @@
             "lookup": false,
             "lookupResource": ""
           },
+          "boot_volume_vpus_per_gb": {
+            "provider": "oci",
+            "key": "bootVolumeVpusPerGb",
+            "name": "boot_volume_vpus_per_gb",
+            "type": "string",
+            "subtype": "",
+            "required": false,
+            "label": "Boot Volume Vpus Per Gb",
+            "id": "source_details.boot_volume_vpus_per_gb",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          },
           "kms_key_id": {
             "provider": "oci",
             "key": "kmsKeyId",
@@ -2246,7 +3025,7 @@
             "name": "source_id",
             "type": "string",
             "subtype": "",
-            "required": true,
+            "required": false,
             "label": "Source",
             "id": "source_details.source_id",
             "staticLookup": false,
@@ -3051,8 +3830,8 @@
             "required": false,
             "label": "Destination Type",
             "id": "route_rules.destination_type",
-            "staticLookup": false,
-            "lookup": false,
+            "staticLookup": true,
+            "lookup": true,
             "lookupResource": ""
           },
           "network_entity_id": {
@@ -3187,8 +3966,8 @@
             "required": false,
             "label": "Destination Type",
             "id": "egress_security_rules.destination_type",
-            "staticLookup": false,
-            "lookup": false,
+            "staticLookup": true,
+            "lookup": true,
             "lookupResource": ""
           },
           "protocol": {
@@ -3200,8 +3979,8 @@
             "required": true,
             "label": "Protocol",
             "id": "egress_security_rules.protocol",
-            "staticLookup": false,
-            "lookup": false,
+            "staticLookup": true,
+            "lookup": true,
             "lookupResource": ""
           },
           "stateless": {
@@ -3441,8 +4220,8 @@
             "required": true,
             "label": "Protocol",
             "id": "ingress_security_rules.protocol",
-            "staticLookup": false,
-            "lookup": false,
+            "staticLookup": true,
+            "lookup": true,
             "lookupResource": ""
           },
           "source": {
@@ -3904,7 +4683,7 @@
         "type": "string",
         "subtype": "",
         "required": false,
-        "label": "Dns Label",
+        "label": "DNS Label",
         "id": "dns_label",
         "staticLookup": false,
         "lookup": false,
@@ -3932,6 +4711,19 @@
         "required": false,
         "label": "Ipv6cidr Block",
         "id": "ipv6cidr_block",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
+      "ipv6cidr_blocks": {
+        "provider": "oci",
+        "key": "ipv6cidrBlocks",
+        "name": "ipv6cidr_blocks",
+        "type": "list",
+        "subtype": "string",
+        "required": false,
+        "label": "Ipv6cidr Blocks",
+        "id": "ipv6cidr_blocks",
         "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
@@ -4015,7 +4807,7 @@
         "type": "list",
         "subtype": "string",
         "required": false,
-        "label": "Cidr Blocks",
+        "label": "IPV4 CIDRs",
         "id": "cidr_blocks",
         "staticLookup": false,
         "lookup": false,
@@ -4067,7 +4859,7 @@
         "type": "string",
         "subtype": "",
         "required": false,
-        "label": "Dns Label",
+        "label": "DNS Label",
         "id": "dns_label",
         "staticLookup": false,
         "lookup": false,
@@ -4086,15 +4878,15 @@
         "lookup": false,
         "lookupResource": ""
       },
-      "ipv6cidr_blocks": {
+      "ipv6private_cidr_blocks": {
         "provider": "oci",
-        "key": "ipv6cidrBlocks",
-        "name": "ipv6cidr_blocks",
+        "key": "ipv6privateCidrBlocks",
+        "name": "ipv6private_cidr_blocks",
         "type": "list",
         "subtype": "string",
         "required": false,
-        "label": "Ipv6cidr Blocks",
-        "id": "ipv6cidr_blocks",
+        "label": "IPV6 Private CIDRs",
+        "id": "ipv6private_cidr_blocks",
         "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
@@ -4106,7 +4898,7 @@
         "type": "bool",
         "subtype": "",
         "required": false,
-        "label": "Is Ipv6enabled",
+        "label": "IPV6 Enabled",
         "id": "is_ipv6enabled",
         "staticLookup": false,
         "lookup": false,
@@ -4567,6 +5359,44 @@
         "lookup": false,
         "lookupResource": ""
       },
+      "autotune_policies": {
+        "provider": "oci",
+        "key": "autotunePolicies",
+        "name": "autotune_policies",
+        "type": "list",
+        "subtype": "",
+        "required": false,
+        "label": "Autotune Policies",
+        "id": "autotune_policies",
+        "attributes": {
+          "autotune_type": {
+            "provider": "oci",
+            "key": "autotuneType",
+            "name": "autotune_type",
+            "type": "string",
+            "subtype": "",
+            "required": true,
+            "label": "Autotune Type",
+            "id": "autotune_policies.autotune_type",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          },
+          "max_vpus_per_gb": {
+            "provider": "oci",
+            "key": "maxVpusPerGb",
+            "name": "max_vpus_per_gb",
+            "type": "string",
+            "subtype": "",
+            "required": false,
+            "label": "Max Vpus Per Gb",
+            "id": "autotune_policies.max_vpus_per_gb",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          }
+        }
+      },
       "block_volume_replicas": {
         "provider": "oci",
         "key": "blockVolumeReplicas",
@@ -4676,32 +5506,6 @@
         "lookup": true,
         "lookupResource": ""
       },
-      "chap_secret": {
-        "provider": "oci",
-        "key": "chapSecret",
-        "name": "chap_secret",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Chap Secret",
-        "id": "chap_secret",
-        "staticLookup": false,
-        "lookup": false,
-        "lookupResource": ""
-      },
-      "chap_username": {
-        "provider": "oci",
-        "key": "chapUsername",
-        "name": "chap_username",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Chap Username",
-        "id": "chap_username",
-        "staticLookup": false,
-        "lookup": false,
-        "lookupResource": ""
-      },
       "device": {
         "provider": "oci",
         "key": "device",
@@ -4728,6 +5532,19 @@
         "lookup": false,
         "lookupResource": ""
       },
+      "encryption_in_transit_type": {
+        "provider": "oci",
+        "key": "encryptionInTransitType",
+        "name": "encryption_in_transit_type",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Encryption In Transit Type",
+        "id": "encryption_in_transit_type",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
       "instance_id": {
         "provider": "oci",
         "key": "instanceId",
@@ -4741,28 +5558,28 @@
         "lookup": true,
         "lookupResource": "instance"
       },
-      "ipv4": {
+      "is_agent_auto_iscsi_login_enabled": {
         "provider": "oci",
-        "key": "ipv4",
-        "name": "ipv4",
-        "type": "string",
+        "key": "isAgentAutoIscsiLoginEnabled",
+        "name": "is_agent_auto_iscsi_login_enabled",
+        "type": "bool",
         "subtype": "",
         "required": false,
-        "label": "Ipv4",
-        "id": "ipv4",
+        "label": "Is Agent Auto Iscsi Login Enabled",
+        "id": "is_agent_auto_iscsi_login_enabled",
         "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
       },
-      "iqn": {
+      "is_multipath": {
         "provider": "oci",
-        "key": "iqn",
-        "name": "iqn",
-        "type": "string",
+        "key": "isMultipath",
+        "name": "is_multipath",
+        "type": "bool",
         "subtype": "",
         "required": false,
-        "label": "Iqn",
-        "id": "iqn",
+        "label": "Is Multipath",
+        "id": "is_multipath",
         "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
@@ -4917,15 +5734,41 @@
         "lookup": true,
         "lookupResource": "autonomous_database"
       },
-      "available_upgrade_versions": {
+      "autonomous_maintenance_schedule_type": {
         "provider": "oci",
-        "key": "availableUpgradeVersions",
-        "name": "available_upgrade_versions",
-        "type": "list",
-        "subtype": "string",
+        "key": "autonomousMaintenanceScheduleType",
+        "name": "autonomous_maintenance_schedule_type",
+        "type": "string",
+        "subtype": "",
         "required": false,
-        "label": "Available Upgrade Versions",
-        "id": "available_upgrade_versions",
+        "label": "Autonomous Maintenance Schedule Type",
+        "id": "autonomous_maintenance_schedule_type",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
+      "backup_retention_period_in_days": {
+        "provider": "oci",
+        "key": "backupRetentionPeriodInDays",
+        "name": "backup_retention_period_in_days",
+        "type": "number",
+        "subtype": "",
+        "required": false,
+        "label": "Backup Retention Period In Days",
+        "id": "backup_retention_period_in_days",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
+      "character_set": {
+        "provider": "oci",
+        "key": "characterSet",
+        "name": "character_set",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Character Set",
+        "id": "character_set",
         "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
@@ -4956,13 +5799,39 @@
         "lookup": true,
         "lookupResource": "compartment"
       },
+      "compute_count": {
+        "provider": "oci",
+        "key": "computeCount",
+        "name": "compute_count",
+        "type": "number",
+        "subtype": "",
+        "required": false,
+        "label": "Compute Count",
+        "id": "compute_count",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
+      "compute_model": {
+        "provider": "oci",
+        "key": "computeModel",
+        "name": "compute_model",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Compute Model",
+        "id": "compute_model",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
       "cpu_core_count": {
         "provider": "oci",
         "key": "cpuCoreCount",
         "name": "cpu_core_count",
         "type": "number",
         "subtype": "",
-        "required": true,
+        "required": false,
         "label": "Cpu Core Count",
         "id": "cpu_core_count",
         "staticLookup": false,
@@ -5008,15 +5877,15 @@
         "lookup": false,
         "lookupResource": ""
       },
-      "db_name": {
+      "database_edition": {
         "provider": "oci",
-        "key": "dbName",
-        "name": "db_name",
+        "key": "databaseEdition",
+        "name": "database_edition",
         "type": "string",
         "subtype": "",
-        "required": true,
-        "label": "Db Name",
-        "id": "db_name",
+        "required": false,
+        "label": "Database Edition",
+        "id": "database_edition",
         "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
@@ -5073,19 +5942,6 @@
         "lookup": false,
         "lookupResource": ""
       },
-      "failed_data_recovery_in_seconds": {
-        "provider": "oci",
-        "key": "failedDataRecoveryInSeconds",
-        "name": "failed_data_recovery_in_seconds",
-        "type": "number",
-        "subtype": "",
-        "required": false,
-        "label": "Failed Data Recovery In Seconds",
-        "id": "failed_data_recovery_in_seconds",
-        "staticLookup": false,
-        "lookup": false,
-        "lookupResource": ""
-      },
       "freeform_tags": {
         "provider": "oci",
         "key": "freeformTags",
@@ -5095,19 +5951,6 @@
         "required": false,
         "label": "Freeform Tags",
         "id": "freeform_tags",
-        "staticLookup": false,
-        "lookup": false,
-        "lookupResource": ""
-      },
-      "infrastructure_type": {
-        "provider": "oci",
-        "key": "infrastructureType",
-        "name": "infrastructure_type",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Infrastructure Type",
-        "id": "infrastructure_type",
         "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
@@ -5134,6 +5977,19 @@
         "required": false,
         "label": "Is Auto Scaling Enabled",
         "id": "is_auto_scaling_enabled",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
+      "is_auto_scaling_for_storage_enabled": {
+        "provider": "oci",
+        "key": "isAutoScalingForStorageEnabled",
+        "name": "is_auto_scaling_for_storage_enabled",
+        "type": "bool",
+        "subtype": "",
+        "required": false,
+        "label": "Is Auto Scaling For Storage Enabled",
+        "id": "is_auto_scaling_for_storage_enabled",
         "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
@@ -5177,15 +6033,28 @@
         "lookup": false,
         "lookupResource": ""
       },
-      "is_preview": {
+      "is_local_data_guard_enabled": {
         "provider": "oci",
-        "key": "isPreview",
-        "name": "is_preview",
+        "key": "isLocalDataGuardEnabled",
+        "name": "is_local_data_guard_enabled",
         "type": "bool",
         "subtype": "",
         "required": false,
-        "label": "Is Preview",
-        "id": "is_preview",
+        "label": "Is Local Data Guard Enabled",
+        "id": "is_local_data_guard_enabled",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
+      "is_mtls_connection_required": {
+        "provider": "oci",
+        "key": "isMtlsConnectionRequired",
+        "name": "is_mtls_connection_required",
+        "type": "bool",
+        "subtype": "",
+        "required": false,
+        "label": "Is Mtls Connection Required",
+        "id": "is_mtls_connection_required",
         "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
@@ -5203,44 +6072,18 @@
         "lookup": false,
         "lookupResource": ""
       },
-      "is_refreshable_clone": {
+      "kms_key_id": {
         "provider": "oci",
-        "key": "isRefreshableClone",
-        "name": "is_refreshable_clone",
-        "type": "bool",
-        "subtype": "",
-        "required": false,
-        "label": "Is Refreshable Clone",
-        "id": "is_refreshable_clone",
-        "staticLookup": false,
-        "lookup": false,
-        "lookupResource": ""
-      },
-      "key_store_id": {
-        "provider": "oci",
-        "key": "keyStoreId",
-        "name": "key_store_id",
+        "key": "kmsKeyId",
+        "name": "kms_key_id",
         "type": "string",
         "subtype": "",
         "required": false,
-        "label": "Key Store",
-        "id": "key_store_id",
+        "label": "Kms Key",
+        "id": "kms_key_id",
         "staticLookup": false,
         "lookup": true,
-        "lookupResource": "key_store"
-      },
-      "key_store_wallet_name": {
-        "provider": "oci",
-        "key": "keyStoreWalletName",
-        "name": "key_store_wallet_name",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Key Store Wallet Name",
-        "id": "key_store_wallet_name",
-        "staticLookup": false,
-        "lookup": false,
-        "lookupResource": ""
+        "lookupResource": "kms_key"
       },
       "license_model": {
         "provider": "oci",
@@ -5268,6 +6111,32 @@
         "lookup": false,
         "lookupResource": ""
       },
+      "max_cpu_core_count": {
+        "provider": "oci",
+        "key": "maxCpuCoreCount",
+        "name": "max_cpu_core_count",
+        "type": "number",
+        "subtype": "",
+        "required": false,
+        "label": "Max Cpu Core Count",
+        "id": "max_cpu_core_count",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
+      "ncharacter_set": {
+        "provider": "oci",
+        "key": "ncharacterSet",
+        "name": "ncharacter_set",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Ncharacter Set",
+        "id": "ncharacter_set",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
       "nsg_ids": {
         "provider": "oci",
         "key": "nsgIds",
@@ -5281,41 +6150,15 @@
         "lookup": true,
         "lookupResource": "nsg"
       },
-      "open_mode": {
+      "ocpu_count": {
         "provider": "oci",
-        "key": "openMode",
-        "name": "open_mode",
-        "type": "string",
+        "key": "ocpuCount",
+        "name": "ocpu_count",
+        "type": "number",
         "subtype": "",
         "required": false,
-        "label": "Open Mode",
-        "id": "open_mode",
-        "staticLookup": false,
-        "lookup": false,
-        "lookupResource": ""
-      },
-      "operations_insights_status": {
-        "provider": "oci",
-        "key": "operationsInsightsStatus",
-        "name": "operations_insights_status",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Operations Insights Status",
-        "id": "operations_insights_status",
-        "staticLookup": false,
-        "lookup": false,
-        "lookupResource": ""
-      },
-      "permission_level": {
-        "provider": "oci",
-        "key": "permissionLevel",
-        "name": "permission_level",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Permission Level",
-        "id": "permission_level",
+        "label": "Ocpu Count",
+        "id": "ocpu_count",
         "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
@@ -5333,32 +6176,6 @@
         "lookup": false,
         "lookupResource": ""
       },
-      "private_endpoint_ip": {
-        "provider": "oci",
-        "key": "privateEndpointIp",
-        "name": "private_endpoint_ip",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Private Endpoint Ip",
-        "id": "private_endpoint_ip",
-        "staticLookup": false,
-        "lookup": false,
-        "lookupResource": ""
-      },
-      "private_endpoint_label": {
-        "provider": "oci",
-        "key": "privateEndpointLabel",
-        "name": "private_endpoint_label",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Private Endpoint Label",
-        "id": "private_endpoint_label",
-        "staticLookup": false,
-        "lookup": false,
-        "lookupResource": ""
-      },
       "refreshable_mode": {
         "provider": "oci",
         "key": "refreshableMode",
@@ -5372,41 +6189,28 @@
         "lookup": false,
         "lookupResource": ""
       },
-      "refreshable_status": {
+      "secret_id": {
         "provider": "oci",
-        "key": "refreshableStatus",
-        "name": "refreshable_status",
+        "key": "secretId",
+        "name": "secret_id",
         "type": "string",
         "subtype": "",
         "required": false,
-        "label": "Refreshable Status",
-        "id": "refreshable_status",
+        "label": "Secret",
+        "id": "secret_id",
         "staticLookup": false,
-        "lookup": false,
-        "lookupResource": ""
+        "lookup": true,
+        "lookupResource": "secret"
       },
-      "role": {
+      "secret_version_number": {
         "provider": "oci",
-        "key": "role",
-        "name": "role",
-        "type": "string",
+        "key": "secretVersionNumber",
+        "name": "secret_version_number",
+        "type": "number",
         "subtype": "",
         "required": false,
-        "label": "Role",
-        "id": "role",
-        "staticLookup": false,
-        "lookup": false,
-        "lookupResource": ""
-      },
-      "rotate_key_trigger": {
-        "provider": "oci",
-        "key": "rotateKeyTrigger",
-        "name": "rotate_key_trigger",
-        "type": "bool",
-        "subtype": "",
-        "required": false,
-        "label": "Rotate Key Trigger",
-        "id": "rotate_key_trigger",
+        "label": "Secret Version Number",
+        "id": "secret_version_number",
         "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
@@ -5476,19 +6280,6 @@
         "lookup": true,
         "lookupResource": "subnet"
       },
-      "switchover_to": {
-        "provider": "oci",
-        "key": "switchoverTo",
-        "name": "switchover_to",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Switchover To",
-        "id": "switchover_to",
-        "staticLookup": false,
-        "lookup": false,
-        "lookupResource": ""
-      },
       "timestamp": {
         "provider": "oci",
         "key": "timestamp",
@@ -5502,18 +6293,31 @@
         "lookup": false,
         "lookupResource": ""
       },
-      "used_data_storage_size_in_tbs": {
+      "use_latest_available_backup_time_stamp": {
         "provider": "oci",
-        "key": "usedDataStorageSizeInTbs",
-        "name": "used_data_storage_size_in_tbs",
-        "type": "number",
+        "key": "useLatestAvailableBackupTimeStamp",
+        "name": "use_latest_available_backup_time_stamp",
+        "type": "bool",
         "subtype": "",
         "required": false,
-        "label": "Used Data Storage Size In Tbs",
-        "id": "used_data_storage_size_in_tbs",
+        "label": "Use Latest Available Backup Time Stamp",
+        "id": "use_latest_available_backup_time_stamp",
         "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
+      },
+      "vault_id": {
+        "provider": "oci",
+        "key": "vaultId",
+        "name": "vault_id",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Vault",
+        "id": "vault_id",
+        "staticLookup": false,
+        "lookup": true,
+        "lookupResource": "vault"
       },
       "whitelisted_ips": {
         "provider": "oci",
@@ -5859,6 +6663,19 @@
         "lookup": false,
         "lookupResource": ""
       },
+      "memory_size_in_gbs": {
+        "provider": "oci",
+        "key": "memorySizeInGbs",
+        "name": "memory_size_in_gbs",
+        "type": "number",
+        "subtype": "",
+        "required": false,
+        "label": "Memory Size In Gbs",
+        "id": "memory_size_in_gbs",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
       "next_maintenance_run_id": {
         "provider": "oci",
         "key": "nextMaintenanceRunId",
@@ -5897,6 +6714,19 @@
         "staticLookup": false,
         "lookup": true,
         "lookupResource": "nsg"
+      },
+      "os_version": {
+        "provider": "oci",
+        "key": "osVersion",
+        "name": "os_version",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Os Version",
+        "id": "os_version",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
       },
       "point_in_time_data_disk_clone_timestamp": {
         "provider": "oci",
@@ -6041,6 +6871,19 @@
         "lookup": false,
         "lookupResource": ""
       },
+      "storage_volume_performance_mode": {
+        "provider": "oci",
+        "key": "storageVolumePerformanceMode",
+        "name": "storage_volume_performance_mode",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Storage Volume Performance Mode",
+        "id": "storage_volume_performance_mode",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
       "subnet_id": {
         "provider": "oci",
         "key": "subnetId",
@@ -6105,6 +6948,57 @@
         "staticLookup": false,
         "lookup": true,
         "lookupResource": "zone"
+      },
+      "data_collection_options": {
+        "provider": "oci",
+        "key": "dataCollectionOptions",
+        "name": "data_collection_options",
+        "type": "object",
+        "subtype": "",
+        "required": false,
+        "label": "Data Collection Options",
+        "id": "data_collection_options",
+        "attributes": {
+          "is_diagnostics_events_enabled": {
+            "provider": "oci",
+            "key": "isDiagnosticsEventsEnabled",
+            "name": "is_diagnostics_events_enabled",
+            "type": "bool",
+            "subtype": "",
+            "required": false,
+            "label": "Is Diagnostics Events Enabled",
+            "id": "data_collection_options.is_diagnostics_events_enabled",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          },
+          "is_health_monitoring_enabled": {
+            "provider": "oci",
+            "key": "isHealthMonitoringEnabled",
+            "name": "is_health_monitoring_enabled",
+            "type": "bool",
+            "subtype": "",
+            "required": false,
+            "label": "Is Health Monitoring Enabled",
+            "id": "data_collection_options.is_health_monitoring_enabled",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          },
+          "is_incident_logs_enabled": {
+            "provider": "oci",
+            "key": "isIncidentLogsEnabled",
+            "name": "is_incident_logs_enabled",
+            "type": "bool",
+            "subtype": "",
+            "required": false,
+            "label": "Is Incident Logs Enabled",
+            "id": "data_collection_options.is_incident_logs_enabled",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          }
+        }
       },
       "db_home": {
         "provider": "oci",
@@ -6399,6 +7293,32 @@
                 "lookup": false,
                 "lookupResource": ""
               },
+              "kms_key_id": {
+                "provider": "oci",
+                "key": "kmsKeyId",
+                "name": "kms_key_id",
+                "type": "string",
+                "subtype": "",
+                "required": false,
+                "label": "Kms Key",
+                "id": "db_home.database.kms_key_id",
+                "staticLookup": false,
+                "lookup": true,
+                "lookupResource": "kms_key"
+              },
+              "kms_key_version_id": {
+                "provider": "oci",
+                "key": "kmsKeyVersionId",
+                "name": "kms_key_version_id",
+                "type": "string",
+                "subtype": "",
+                "required": false,
+                "label": "Kms Key Version",
+                "id": "db_home.database.kms_key_version_id",
+                "staticLookup": false,
+                "lookup": true,
+                "lookupResource": "kms_key_version"
+              },
               "lifecycle_details": {
                 "provider": "oci",
                 "key": "lifecycleDetails",
@@ -6464,6 +7384,19 @@
                 "lookup": false,
                 "lookupResource": ""
               },
+              "vault_id": {
+                "provider": "oci",
+                "key": "vaultId",
+                "name": "vault_id",
+                "type": "string",
+                "subtype": "",
+                "required": false,
+                "label": "Vault",
+                "id": "db_home.database.vault_id",
+                "staticLookup": false,
+                "lookup": true,
+                "lookupResource": "vault"
+              },
               "db_backup_config": {
                 "provider": "oci",
                 "key": "dbBackupConfig",
@@ -6500,6 +7433,45 @@
                     "lookup": false,
                     "lookupResource": ""
                   },
+                  "auto_full_backup_day": {
+                    "provider": "oci",
+                    "key": "autoFullBackupDay",
+                    "name": "auto_full_backup_day",
+                    "type": "string",
+                    "subtype": "",
+                    "required": false,
+                    "label": "Auto Full Backup Day",
+                    "id": "db_home.database.db_backup_config.auto_full_backup_day",
+                    "staticLookup": false,
+                    "lookup": false,
+                    "lookupResource": ""
+                  },
+                  "auto_full_backup_window": {
+                    "provider": "oci",
+                    "key": "autoFullBackupWindow",
+                    "name": "auto_full_backup_window",
+                    "type": "string",
+                    "subtype": "",
+                    "required": false,
+                    "label": "Auto Full Backup Window",
+                    "id": "db_home.database.db_backup_config.auto_full_backup_window",
+                    "staticLookup": false,
+                    "lookup": false,
+                    "lookupResource": ""
+                  },
+                  "backup_deletion_policy": {
+                    "provider": "oci",
+                    "key": "backupDeletionPolicy",
+                    "name": "backup_deletion_policy",
+                    "type": "string",
+                    "subtype": "",
+                    "required": false,
+                    "label": "Backup Deletion Policy",
+                    "id": "db_home.database.db_backup_config.backup_deletion_policy",
+                    "staticLookup": false,
+                    "lookup": false,
+                    "lookupResource": ""
+                  },
                   "recovery_window_in_days": {
                     "provider": "oci",
                     "key": "recoveryWindowInDays",
@@ -6509,6 +7481,19 @@
                     "required": false,
                     "label": "Recovery Window In Days",
                     "id": "db_home.database.db_backup_config.recovery_window_in_days",
+                    "staticLookup": false,
+                    "lookup": false,
+                    "lookupResource": ""
+                  },
+                  "run_immediate_full_backup": {
+                    "provider": "oci",
+                    "key": "runImmediateFullBackup",
+                    "name": "run_immediate_full_backup",
+                    "type": "bool",
+                    "subtype": "",
+                    "required": false,
+                    "label": "Run Immediate Full Backup",
+                    "id": "db_home.database.db_backup_config.run_immediate_full_backup",
                     "staticLookup": false,
                     "lookup": false,
                     "lookupResource": ""
@@ -6523,6 +7508,19 @@
                     "label": "Backup Destination Details",
                     "id": "db_home.database.db_backup_config.backup_destination_details",
                     "attributes": {
+                      "dbrs_policy_id": {
+                        "provider": "oci",
+                        "key": "dbrsPolicyId",
+                        "name": "dbrs_policy_id",
+                        "type": "string",
+                        "subtype": "",
+                        "required": false,
+                        "label": "Dbrs Policy",
+                        "id": "db_home.database.db_backup_config.backup_destination_details.dbrs_policy_id",
+                        "staticLookup": false,
+                        "lookup": true,
+                        "lookupResource": "dbrs_policy"
+                      },
                       "type": {
                         "provider": "oci",
                         "key": "type",
@@ -6579,6 +7577,19 @@
         "label": "Maintenance Window Details",
         "id": "maintenance_window_details",
         "attributes": {
+          "custom_action_timeout_in_mins": {
+            "provider": "oci",
+            "key": "customActionTimeoutInMins",
+            "name": "custom_action_timeout_in_mins",
+            "type": "number",
+            "subtype": "",
+            "required": false,
+            "label": "Custom Action Timeout In Mins",
+            "id": "maintenance_window_details.custom_action_timeout_in_mins",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          },
           "hours_of_day": {
             "provider": "oci",
             "key": "hoursOfDay",
@@ -6592,6 +7603,32 @@
             "lookup": false,
             "lookupResource": ""
           },
+          "is_custom_action_timeout_enabled": {
+            "provider": "oci",
+            "key": "isCustomActionTimeoutEnabled",
+            "name": "is_custom_action_timeout_enabled",
+            "type": "bool",
+            "subtype": "",
+            "required": false,
+            "label": "Is Custom Action Timeout Enabled",
+            "id": "maintenance_window_details.is_custom_action_timeout_enabled",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          },
+          "is_monthly_patching_enabled": {
+            "provider": "oci",
+            "key": "isMonthlyPatchingEnabled",
+            "name": "is_monthly_patching_enabled",
+            "type": "bool",
+            "subtype": "",
+            "required": false,
+            "label": "Is Monthly Patching Enabled",
+            "id": "maintenance_window_details.is_monthly_patching_enabled",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          },
           "lead_time_in_weeks": {
             "provider": "oci",
             "key": "leadTimeInWeeks",
@@ -6601,6 +7638,19 @@
             "required": false,
             "label": "Lead Time In Weeks",
             "id": "maintenance_window_details.lead_time_in_weeks",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          },
+          "patching_mode": {
+            "provider": "oci",
+            "key": "patchingMode",
+            "name": "patching_mode",
+            "type": "string",
+            "subtype": "",
+            "required": false,
+            "label": "Patching Mode",
+            "id": "maintenance_window_details.patching_mode",
             "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
@@ -6742,6 +7792,19 @@
         "lookup": false,
         "lookupResource": ""
       },
+      "filesystem_snapshot_policy_id": {
+        "provider": "oci",
+        "key": "filesystemSnapshotPolicyId",
+        "name": "filesystem_snapshot_policy_id",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Filesystem Snapshot Policy",
+        "id": "filesystem_snapshot_policy_id",
+        "staticLookup": false,
+        "lookup": true,
+        "lookupResource": "filesystem_snapshot_policy"
+      },
       "freeform_tags": {
         "provider": "oci",
         "key": "freeformTags",
@@ -6777,6 +7840,19 @@
         "required": false,
         "label": "Is Hydrated",
         "id": "is_hydrated",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
+      "is_targetable": {
+        "provider": "oci",
+        "key": "isTargetable",
+        "name": "is_targetable",
+        "type": "bool",
+        "subtype": "",
+        "required": false,
+        "label": "Is Targetable",
+        "id": "is_targetable",
         "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
@@ -6819,6 +7895,19 @@
         "staticLookup": false,
         "lookup": false,
         "lookupResource": ""
+      },
+      "replication_target_id": {
+        "provider": "oci",
+        "key": "replicationTargetId",
+        "name": "replication_target_id",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Replication Target",
+        "id": "replication_target_id",
+        "staticLookup": false,
+        "lookup": true,
+        "lookupResource": "replication_target"
       },
       "source_snapshot_id": {
         "provider": "oci",
@@ -6931,6 +8020,19 @@
         "lookup": false,
         "lookupResource": ""
       },
+      "idmap_type": {
+        "provider": "oci",
+        "key": "idmapType",
+        "name": "idmap_type",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Idmap Type",
+        "id": "idmap_type",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
       "ip_address": {
         "provider": "oci",
         "key": "ipAddress",
@@ -6995,6 +8097,199 @@
         "staticLookup": false,
         "lookup": true,
         "lookupResource": "subnet"
+      },
+      "kerberos": {
+        "provider": "oci",
+        "key": "kerberos",
+        "name": "kerberos",
+        "type": "object",
+        "subtype": "",
+        "required": false,
+        "label": "Kerberos",
+        "id": "kerberos",
+        "attributes": {
+          "backup_key_tab_secret_version": {
+            "provider": "oci",
+            "key": "backupKeyTabSecretVersion",
+            "name": "backup_key_tab_secret_version",
+            "type": "number",
+            "subtype": "",
+            "required": false,
+            "label": "Backup Key Tab Secret Version",
+            "id": "kerberos.backup_key_tab_secret_version",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          },
+          "current_key_tab_secret_version": {
+            "provider": "oci",
+            "key": "currentKeyTabSecretVersion",
+            "name": "current_key_tab_secret_version",
+            "type": "number",
+            "subtype": "",
+            "required": false,
+            "label": "Current Key Tab Secret Version",
+            "id": "kerberos.current_key_tab_secret_version",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          },
+          "is_kerberos_enabled": {
+            "provider": "oci",
+            "key": "isKerberosEnabled",
+            "name": "is_kerberos_enabled",
+            "type": "bool",
+            "subtype": "",
+            "required": false,
+            "label": "Is Kerberos Enabled",
+            "id": "kerberos.is_kerberos_enabled",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          },
+          "kerberos_realm": {
+            "provider": "oci",
+            "key": "kerberosRealm",
+            "name": "kerberos_realm",
+            "type": "string",
+            "subtype": "",
+            "required": true,
+            "label": "Kerberos Realm",
+            "id": "kerberos.kerberos_realm",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          },
+          "key_tab_secret_id": {
+            "provider": "oci",
+            "key": "keyTabSecretId",
+            "name": "key_tab_secret_id",
+            "type": "string",
+            "subtype": "",
+            "required": false,
+            "label": "Key Tab Secret",
+            "id": "kerberos.key_tab_secret_id",
+            "staticLookup": false,
+            "lookup": true,
+            "lookupResource": "key_tab_secret"
+          }
+        }
+      },
+      "ldap_idmap": {
+        "provider": "oci",
+        "key": "ldapIdmap",
+        "name": "ldap_idmap",
+        "type": "object",
+        "subtype": "",
+        "required": false,
+        "label": "Ldap Idmap",
+        "id": "ldap_idmap",
+        "attributes": {
+          "cache_lifetime_seconds": {
+            "provider": "oci",
+            "key": "cacheLifetimeSeconds",
+            "name": "cache_lifetime_seconds",
+            "type": "number",
+            "subtype": "",
+            "required": false,
+            "label": "Cache Lifetime Seconds",
+            "id": "ldap_idmap.cache_lifetime_seconds",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          },
+          "cache_refresh_interval_seconds": {
+            "provider": "oci",
+            "key": "cacheRefreshIntervalSeconds",
+            "name": "cache_refresh_interval_seconds",
+            "type": "number",
+            "subtype": "",
+            "required": false,
+            "label": "Cache Refresh Interval Seconds",
+            "id": "ldap_idmap.cache_refresh_interval_seconds",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          },
+          "group_search_base": {
+            "provider": "oci",
+            "key": "groupSearchBase",
+            "name": "group_search_base",
+            "type": "string",
+            "subtype": "",
+            "required": false,
+            "label": "Group Search Base",
+            "id": "ldap_idmap.group_search_base",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          },
+          "negative_cache_lifetime_seconds": {
+            "provider": "oci",
+            "key": "negativeCacheLifetimeSeconds",
+            "name": "negative_cache_lifetime_seconds",
+            "type": "number",
+            "subtype": "",
+            "required": false,
+            "label": "Negative Cache Lifetime Seconds",
+            "id": "ldap_idmap.negative_cache_lifetime_seconds",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          },
+          "outbound_connector1id": {
+            "provider": "oci",
+            "key": "outboundConnector1id",
+            "name": "outbound_connector1id",
+            "type": "string",
+            "subtype": "",
+            "required": false,
+            "label": "Outbound Connector1id",
+            "id": "ldap_idmap.outbound_connector1id",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          },
+          "outbound_connector2id": {
+            "provider": "oci",
+            "key": "outboundConnector2id",
+            "name": "outbound_connector2id",
+            "type": "string",
+            "subtype": "",
+            "required": false,
+            "label": "Outbound Connector2id",
+            "id": "ldap_idmap.outbound_connector2id",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          },
+          "schema_type": {
+            "provider": "oci",
+            "key": "schemaType",
+            "name": "schema_type",
+            "type": "string",
+            "subtype": "",
+            "required": false,
+            "label": "Schema Type",
+            "id": "ldap_idmap.schema_type",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          },
+          "user_search_base": {
+            "provider": "oci",
+            "key": "userSearchBase",
+            "name": "user_search_base",
+            "type": "string",
+            "subtype": "",
+            "required": false,
+            "label": "User Search Base",
+            "id": "ldap_idmap.user_search_base",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          }
+        }
       }
     }
   },
@@ -7998,7 +9293,7 @@
         "name": "admin_password",
         "type": "string",
         "subtype": "",
-        "required": true,
+        "required": false,
         "label": "Admin Password",
         "id": "admin_password",
         "staticLookup": false,
@@ -8011,7 +9306,7 @@
         "name": "admin_username",
         "type": "string",
         "subtype": "",
-        "required": true,
+        "required": false,
         "label": "Admin Username",
         "id": "admin_username",
         "staticLookup": false,
@@ -8056,6 +9351,19 @@
         "staticLookup": false,
         "lookup": true,
         "lookupResource": "configuration"
+      },
+      "crash_recovery": {
+        "provider": "oci",
+        "key": "crashRecovery",
+        "name": "crash_recovery",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Crash Recovery",
+        "id": "crash_recovery",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
       },
       "data_storage_size_in_gb": {
         "provider": "oci",
@@ -8213,6 +9521,19 @@
         "lookup": false,
         "lookupResource": ""
       },
+      "mysql_version": {
+        "provider": "oci",
+        "key": "mysqlVersion",
+        "name": "mysql_version",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Mysql Version",
+        "id": "mysql_version",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
       "port": {
         "provider": "oci",
         "key": "port",
@@ -8365,6 +9686,82 @@
             "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
+          },
+          "pitr_policy": {
+            "provider": "oci",
+            "key": "pitrPolicy",
+            "name": "pitr_policy",
+            "type": "object",
+            "subtype": "",
+            "required": false,
+            "label": "Pitr Policy",
+            "id": "backup_policy.pitr_policy",
+            "attributes": {
+              "is_enabled": {
+                "provider": "oci",
+                "key": "isEnabled",
+                "name": "is_enabled",
+                "type": "bool",
+                "subtype": "",
+                "required": false,
+                "label": "Is Enabled",
+                "id": "backup_policy.pitr_policy.is_enabled",
+                "staticLookup": false,
+                "lookup": false,
+                "lookupResource": ""
+              }
+            }
+          }
+        }
+      },
+      "deletion_policy": {
+        "provider": "oci",
+        "key": "deletionPolicy",
+        "name": "deletion_policy",
+        "type": "list",
+        "subtype": "",
+        "required": false,
+        "label": "Deletion Policy",
+        "id": "deletion_policy",
+        "attributes": {
+          "automatic_backup_retention": {
+            "provider": "oci",
+            "key": "automaticBackupRetention",
+            "name": "automatic_backup_retention",
+            "type": "string",
+            "subtype": "",
+            "required": false,
+            "label": "Automatic Backup Retention",
+            "id": "deletion_policy.automatic_backup_retention",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          },
+          "final_backup": {
+            "provider": "oci",
+            "key": "finalBackup",
+            "name": "final_backup",
+            "type": "string",
+            "subtype": "",
+            "required": false,
+            "label": "Final Backup",
+            "id": "deletion_policy.final_backup",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          },
+          "is_delete_protected": {
+            "provider": "oci",
+            "key": "isDeleteProtected",
+            "name": "is_delete_protected",
+            "type": "bool",
+            "subtype": "",
+            "required": false,
+            "label": "Is Delete Protected",
+            "id": "deletion_policy.is_delete_protected",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
           }
         }
       },
@@ -8416,6 +9813,32 @@
             "lookup": true,
             "lookupResource": "backup"
           },
+          "db_system_id": {
+            "provider": "oci",
+            "key": "dbSystemId",
+            "name": "db_system_id",
+            "type": "string",
+            "subtype": "",
+            "required": false,
+            "label": "Db System",
+            "id": "source.db_system_id",
+            "staticLookup": false,
+            "lookup": true,
+            "lookupResource": "db_system"
+          },
+          "recovery_point": {
+            "provider": "oci",
+            "key": "recoveryPoint",
+            "name": "recovery_point",
+            "type": "string",
+            "subtype": "",
+            "required": false,
+            "label": "Recovery Point",
+            "id": "source.recovery_point",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          },
           "source_type": {
             "provider": "oci",
             "key": "sourceType",
@@ -8425,6 +9848,19 @@
             "required": true,
             "label": "Source Type",
             "id": "source.source_type",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          },
+          "source_url": {
+            "provider": "oci",
+            "key": "sourceUrl",
+            "name": "source_url",
+            "type": "string",
+            "subtype": "",
+            "required": false,
+            "label": "Source Url",
+            "id": "source.source_url",
             "staticLookup": false,
             "lookup": false,
             "lookupResource": ""
@@ -8541,6 +9977,19 @@
         "staticLookup": false,
         "lookup": true,
         "lookupResource": "network_security_group"
+      },
+      "nlb_ip_version": {
+        "provider": "oci",
+        "key": "nlbIpVersion",
+        "name": "nlb_ip_version",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Nlb Ip Version",
+        "id": "nlb_ip_version",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
       },
       "subnet_id": {
         "provider": "oci",
@@ -8862,6 +10311,19 @@
         "label": "Table Limits",
         "id": "table_limits",
         "attributes": {
+          "capacity_mode": {
+            "provider": "oci",
+            "key": "capacityMode",
+            "name": "capacity_mode",
+            "type": "string",
+            "subtype": "",
+            "required": false,
+            "label": "Capacity Mode",
+            "id": "table_limits.capacity_mode",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          },
           "max_read_units": {
             "provider": "oci",
             "key": "maxReadUnits",
@@ -9230,6 +10692,310 @@
                 "lookupResource": ""
               }
             }
+          }
+        }
+      }
+    }
+  },
+  "secret": {
+    "tf_resource": "oci_vault_secret",
+    "type": "object",
+    "subtype": "",
+    "attributes": {
+      "compartment_id": {
+        "provider": "oci",
+        "key": "compartmentId",
+        "name": "compartment_id",
+        "type": "string",
+        "subtype": "",
+        "required": true,
+        "label": "Compartment",
+        "id": "compartment_id",
+        "staticLookup": false,
+        "lookup": true,
+        "lookupResource": "compartment"
+      },
+      "current_version_number": {
+        "provider": "oci",
+        "key": "currentVersionNumber",
+        "name": "current_version_number",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Current Version Number",
+        "id": "current_version_number",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
+      "defined_tags": {
+        "provider": "oci",
+        "key": "definedTags",
+        "name": "defined_tags",
+        "type": "map",
+        "subtype": "string",
+        "required": false,
+        "label": "Defined Tags",
+        "id": "defined_tags",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
+      "description": {
+        "provider": "oci",
+        "key": "description",
+        "name": "description",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Description",
+        "id": "description",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
+      "freeform_tags": {
+        "provider": "oci",
+        "key": "freeformTags",
+        "name": "freeform_tags",
+        "type": "map",
+        "subtype": "string",
+        "required": false,
+        "label": "Freeform Tags",
+        "id": "freeform_tags",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
+      "key_id": {
+        "provider": "oci",
+        "key": "keyId",
+        "name": "key_id",
+        "type": "string",
+        "subtype": "",
+        "required": true,
+        "label": "Key",
+        "id": "key_id",
+        "staticLookup": false,
+        "lookup": true,
+        "lookupResource": "key"
+      },
+      "lifecycle_details": {
+        "provider": "oci",
+        "key": "lifecycleDetails",
+        "name": "lifecycle_details",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Lifecycle Details",
+        "id": "lifecycle_details",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
+      "metadata": {
+        "provider": "oci",
+        "key": "metadata",
+        "name": "metadata",
+        "type": "map",
+        "subtype": "string",
+        "required": false,
+        "label": "Metadata",
+        "id": "metadata",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
+      "secret_name": {
+        "provider": "oci",
+        "key": "secretName",
+        "name": "secret_name",
+        "type": "string",
+        "subtype": "",
+        "required": true,
+        "label": "Secret Name",
+        "id": "secret_name",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
+      "time_of_current_version_expiry": {
+        "provider": "oci",
+        "key": "timeOfCurrentVersionExpiry",
+        "name": "time_of_current_version_expiry",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Time Of Current Version Expiry",
+        "id": "time_of_current_version_expiry",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
+      "time_of_deletion": {
+        "provider": "oci",
+        "key": "timeOfDeletion",
+        "name": "time_of_deletion",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Time Of Deletion",
+        "id": "time_of_deletion",
+        "staticLookup": false,
+        "lookup": false,
+        "lookupResource": ""
+      },
+      "vault_id": {
+        "provider": "oci",
+        "key": "vaultId",
+        "name": "vault_id",
+        "type": "string",
+        "subtype": "",
+        "required": true,
+        "label": "Vault",
+        "id": "vault_id",
+        "staticLookup": false,
+        "lookup": true,
+        "lookupResource": "vault"
+      },
+      "secret_content": {
+        "provider": "oci",
+        "key": "secretContent",
+        "name": "secret_content",
+        "type": "object",
+        "subtype": "",
+        "required": false,
+        "label": "Secret Content",
+        "id": "secret_content",
+        "attributes": {
+          "content": {
+            "provider": "oci",
+            "key": "content",
+            "name": "content",
+            "type": "string",
+            "subtype": "",
+            "required": true,
+            "label": "Content",
+            "id": "secret_content.content",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          },
+          "content_type": {
+            "provider": "oci",
+            "key": "contentType",
+            "name": "content_type",
+            "type": "string",
+            "subtype": "",
+            "required": true,
+            "label": "Content Type",
+            "id": "secret_content.content_type",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          },
+          "name": {
+            "provider": "oci",
+            "key": "name",
+            "name": "name",
+            "type": "string",
+            "subtype": "",
+            "required": false,
+            "label": "Name",
+            "id": "secret_content.name",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          },
+          "stage": {
+            "provider": "oci",
+            "key": "stage",
+            "name": "stage",
+            "type": "string",
+            "subtype": "",
+            "required": false,
+            "label": "Stage",
+            "id": "secret_content.stage",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          }
+        }
+      },
+      "secret_rules": {
+        "provider": "oci",
+        "key": "secretRules",
+        "name": "secret_rules",
+        "type": "list",
+        "subtype": "",
+        "required": false,
+        "label": "Secret Rules",
+        "id": "secret_rules",
+        "attributes": {
+          "is_enforced_on_deleted_secret_versions": {
+            "provider": "oci",
+            "key": "isEnforcedOnDeletedSecretVersions",
+            "name": "is_enforced_on_deleted_secret_versions",
+            "type": "bool",
+            "subtype": "",
+            "required": false,
+            "label": "Is Enforced On Deleted Secret Versions",
+            "id": "secret_rules.is_enforced_on_deleted_secret_versions",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          },
+          "is_secret_content_retrieval_blocked_on_expiry": {
+            "provider": "oci",
+            "key": "isSecretContentRetrievalBlockedOnExpiry",
+            "name": "is_secret_content_retrieval_blocked_on_expiry",
+            "type": "bool",
+            "subtype": "",
+            "required": false,
+            "label": "Is Secret Content Retrieval Blocked On Expiry",
+            "id": "secret_rules.is_secret_content_retrieval_blocked_on_expiry",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          },
+          "rule_type": {
+            "provider": "oci",
+            "key": "ruleType",
+            "name": "rule_type",
+            "type": "string",
+            "subtype": "",
+            "required": true,
+            "label": "Rule Type",
+            "id": "secret_rules.rule_type",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          },
+          "secret_version_expiry_interval": {
+            "provider": "oci",
+            "key": "secretVersionExpiryInterval",
+            "name": "secret_version_expiry_interval",
+            "type": "string",
+            "subtype": "",
+            "required": false,
+            "label": "Secret Version Expiry Interval",
+            "id": "secret_rules.secret_version_expiry_interval",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
+          },
+          "time_of_absolute_expiry": {
+            "provider": "oci",
+            "key": "timeOfAbsoluteExpiry",
+            "name": "time_of_absolute_expiry",
+            "type": "string",
+            "subtype": "",
+            "required": false,
+            "label": "Time Of Absolute Expiry",
+            "id": "secret_rules.time_of_absolute_expiry",
+            "staticLookup": false,
+            "lookup": false,
+            "lookupResource": ""
           }
         }
       }

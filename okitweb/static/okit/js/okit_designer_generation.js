@@ -586,6 +586,40 @@ function handleExportToResourceManagerGit(e) {
     hideNavMenu();
     okitJsonModel.validate(generateResourceManagerLocal);
 }
+function generateResourceManagerLocalGet(results) {
+    if (results.valid) {
+        let requestJson = JSON.parse(JSON.stringify(okitJsonModel));
+        console.info(okitSettings);
+        requestJson.use_variables = okitSettings.is_variables;
+        $.ajax({
+            cache: false,
+            type: 'get',
+            url: 'export/resource-manager',
+            dataType: 'text',
+            contentType: 'application/zip',
+            data: {
+                destination: 'zip',
+                design: JSON.stringify(okitJsonModel)
+            },
+            success: function(resp, status, xhr) {
+                console.info('Response : ' + resp);
+                console.info('Response : ' + typeof resp);
+                console.info('xhr : ' + xhr.getAllResponseHeaders("Content-Type"));
+                const blob = new Blob([resp], { type: 'application/zip' });
+                let link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = 'okit-resource-manager-terraform.zip';
+                link.click();
+            },
+            error: function(xhr, status, error) {
+                console.info('Status : '+ status)
+                console.info('Error : '+ error)
+            }
+        });
+    } else {
+        validationFailedNotification();
+    }
+}
 function generateResourceManagerLocal(results) {
     if (results.valid) {
         let requestJson = JSON.parse(JSON.stringify(okitJsonModel));
@@ -593,13 +627,13 @@ function generateResourceManagerLocal(results) {
         requestJson.use_variables = okitSettings.is_variables;
         $.ajax({
             type: 'post',
-            url: 'generate/resource-manager',
+            url: 'generate/resource-manager/local',
             dataType: 'text',
             contentType: 'application/json',
             data: JSON.stringify(requestJson),
             success: function(resp) {
                 console.info('Response : ' + resp);
-                saveZip('generate/resource-manager');
+                saveZip('generate/resource-manager/local');
             },
             error: function(xhr, status, error) {
                 console.info('Status : '+ status)

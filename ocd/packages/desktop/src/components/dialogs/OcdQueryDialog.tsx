@@ -47,7 +47,8 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
         console.debug('OciQueryDialog: loadRegions: Profile', profile)
         OciApiFacade.listRegions(profile).then((results) => {
             setRegions(results)
-            setSelectedRegion(results[0].id)
+            const homeRegion = results.find((r: Record<string, any>) => r.isHomeRegion)
+            setSelectedRegion(homeRegion ? homeRegion.id : results[0].id)
         }).catch((reason) => {
             setRegions([regionsLoading])
         })
@@ -78,9 +79,10 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
             const resultsOciResources = results.model.oci.resources
             Object.entries(resultsOciResources).forEach(([key, value]) => {
                 const namespace = `Oci${OcdUtils.toResourceType(key)}`
-                console.debug('OcdQueryDialog: Namespace:', namespace)
                 // @ts-ignore
-                design.model.oci.resources[key] = value.map((v) => {return {...OciModelResources[namespace].newResource(), ...v, locked: true, readOnly: true}})
+                console.debug('OcdQueryDialog: Namespace:', namespace, OciModelResources[namespace])
+                // @ts-ignore
+                if(OciModelResources[namespace]) design.model.oci.resources[key] = value.map((v) => {return {...OciModelResources[namespace].newResource(), ...v, locked: true, readOnly: true}})
             })
             design.view.pages[0].layers = []
             clone.design = design
@@ -100,12 +102,12 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
                 <div className='ocd-dialog-body'>
                     <div>
                         <div>Profile</div><div>
-                            <select onChange={onProfileChanged}>
+                            <select onChange={onProfileChanged} value={selectedProfile}>
                                 {profiles.map((p) => {return <option key={p} value={p}>{p}</option>})}
                             </select>
                         </div>
                         <div>Region</div><div>
-                            <select onChange={onRegionChanged}>
+                            <select onChange={onRegionChanged} value={selectedRegion}>
                                 {regions.map((r) => {return <option key={r.id} value={r.id}>{r.displayName}</option>})}
                             </select>
                         </div>

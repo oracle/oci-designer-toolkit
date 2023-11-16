@@ -12,6 +12,7 @@
 
 export { OciAnalyticsInstance, OciAnalyticsInstanceClient } from './resources/OciAnalyticsInstance'
 export { OciAutonomousDatabase, OciAutonomousDatabaseClient } from './resources/OciAutonomousDatabase'
+export { OciBastion, OciBastionClient } from './resources/OciBastion'
 export { OciBucket, OciBucketClient } from './resources/OciBucket'
 export { OciCompartment, OciCompartmentClient } from './resources/OciCompartment'
 export { OciCpe, OciCpeClient } from './resources/OciCpe'
@@ -42,6 +43,7 @@ export { OciOkeNodePool, OciOkeNodePoolClient } from './resources/OciOkeNodePool
 export { OciPolicy, OciPolicyClient } from './resources/OciPolicy'
 export { OciRemotePeeringConnection, OciRemotePeeringConnectionClient } from './resources/OciRemotePeeringConnection'
 export { OciRouteTable, OciRouteTableClient } from './resources/OciRouteTable'
+export { OciSecret, OciSecretClient } from './resources/OciSecret'
 export { OciSecurityList, OciSecurityListClient } from './resources/OciSecurityList'
 export { OciServiceGateway, OciServiceGatewayClient } from './resources/OciServiceGateway'
 export { OciSubnet, OciSubnetClient } from './resources/OciSubnet'

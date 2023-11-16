@@ -7,11 +7,17 @@ import { OcdOKITImporter } from '@ocd/import'
 import { OcdOKITExporter, OcdTerraformExporter } from '@ocd/export'
 import OcdConsoleConfig from './OcdConsoleConfiguration'
 import OcdDocument from './OcdDocument'
+import { OcdDesignFacade } from '../facade/OcdDesignFacade'
+import { OcdConfigFacade } from '../facade/OcdConfigFacade'
+import { OcdViewLayer, OcdViewPage } from '@ocd/model'
 
 export interface MenuItem {
-    label: string,
-    click?: Function | undefined,
-    submenu?: MenuItem[]
+    label: string
+    class?: string
+    trueClass?: string
+    falseClass?: string
+    click?: Function | undefined
+    submenu?: MenuItem[] | Function
 }
 
 export const menuItems = [
@@ -21,85 +27,96 @@ export const menuItems = [
         submenu: [
             {
                 label: 'New',
-                click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
-                    const document: OcdDocument = OcdDocument.new()
-                    setOcdDocument(document)
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
+                    if (activeFile.modified) {
+                        OcdDesignFacade.discardConfirmation().then((discard) => {
+                            if (discard) {
+                                const document: OcdDocument = OcdDocument.new()
+                                setOcdDocument(document)
+                                setActiveFile({name: '', modified: false})
+                            }
+                        }).catch((resp) => {console.warn('Discard Failed with', resp)})
+                    } else {
+                        const document: OcdDocument = OcdDocument.new()
+                        setOcdDocument(document)
+                        setActiveFile({name: '', modified: false})
+                    }
                 }
             },
             {
                 label: 'Open',
-                click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
-                    const openFile = async () => {
-                        try {
-                            const options = {
-                                multiple: false,
-                                types: [
-                                    {
-                                        description: 'OKIT Files',
-                                        accept: {
-                                            'application/json': ['.okit'],
-                                            // 'text/plain': ['.md']
-                                        },
-                                    },
-                                ],
-                            }
-                            // Always returns an array.
-                            // @ts-ignore 
-                            const [handle] = await window.showOpenFilePicker(options)
-                            const file = await handle.getFile()
-                            const contents = await file.text()
-                            return contents
-                        } catch (err: any) {
-                            console.error(err.name, err.message)
-                            throw err
-                        }
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
+                    if (activeFile.modified) {
+                        OcdDesignFacade.discardConfirmation().then((discard) => {
+                            if (discard) loadDesign('', setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig, setActiveFile)
+                            // if (discard) {
+                            //     OcdDesignFacade.loadDesign('').then((results) => {
+                            //         if (!results.canceled) {
+                            //             const ocdDocument = OcdDocument.new()
+                            //             ocdDocument.design = results.design
+                            //             setOcdDocument(ocdDocument)
+                            //             setActiveFile({name: results.filename, modified: false})
+                            //             updateRecentFiles(results.filename, ocdConsoleConfig, setOcdConsoleConfig)
+                            //         }
+                            //     }).catch((resp) => {console.warn('Load Design Failed with', resp)})
+        
+                            // }
+                        }).catch((resp) => {console.warn('Discard Failed with', resp)})
+                    } else {
+                        loadDesign('', setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig, setActiveFile)
                     }
-                    openFile().then((resp) => {
-                        const ocdDocument = OcdDocument.new()
-                        ocdDocument.design = JSON.parse(resp)
-                        setOcdDocument(ocdDocument)
-                    }).catch((reason) => {console.debug(reason)})
                 }
             },
             {
                 label: 'Open Recent',
                 click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
                     alert('Currently not implemented.')
+                },
+                submenu: (ocdConsoleConfig: OcdConsoleConfig) => {
+                    const config = ocdConsoleConfig.config
+                    return config.recentDesigns.map((r) => {return {
+                        label: r,
+                        click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
+                            console.debug('>>>> Opening:', r)
+                            if (activeFile.modified) {
+                                OcdDesignFacade.discardConfirmation().then((discard) => {
+                                    if (discard) loadDesign(r, setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig, setActiveFile)
+                                }).catch((resp) => {console.warn('Discard Failed with', resp)})
+                            } else {
+                                loadDesign(r, setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig, setActiveFile)
+                            }
+                        }
+                    }})
                 }
             },
             {
                 label: 'Save',
-                click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
-                    alert('Currently not implemented.')
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
+                    OcdDesignFacade.saveDesign(ocdDocument.design, activeFile.name).then((results) => {
+                        if (!results.canceled) {
+                            setActiveFile({name: results.filename, modified: false})
+                        }
+                    }).catch((resp) => {console.warn('Save Design Failed with', resp)})
                 }
             },
             {
                 label: 'Save As',
-                click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
-                    const saveFile = async (ocdDocument: OcdDocument) => {
-                        try {
-                            const options = {
-                                types: [
-                                    {
-                                        description: 'OKIT Files',
-                                        accept: {
-                                            'application/json': ['.okit'],
-                                        },
-                                    },
-                                ],
-                            }
-                            // @ts-ignore 
-                            const handle = await window.showSaveFilePicker(options)
-                            const writable = await handle.createWritable()
-                            const okitJson = JSON.stringify(ocdDocument.design, null, 2)
-                            await writable.write(okitJson)
-                            await writable.close()
-                            return handle
-                        } catch (err: any) {
-                            console.error(err.name, err.message);
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
+                    const suggestedName = activeFile && activeFile.name && activeFile.name !== '' ? `${activeFile.name.split('.')[0]}_Copy.okit` : ''    
+                    OcdDesignFacade.saveDesign(ocdDocument.design, '').then((results) => {
+                        if (!results.canceled) {
+                            setActiveFile({name: results.filename, modified: false})
+                            updateRecentFiles(results.filename, ocdConsoleConfig, setOcdConsoleConfig)
+                            // const clone = OcdConsoleConfig.clone(ocdConsoleConfig)
+                            // if (results.filename && results.filename !== '') {
+                            //     const recentDesigns: string[] = ocdConsoleConfig.config.recentDesigns ? ocdConsoleConfig.config.recentDesigns.filter((f) => f !== results.filename) : []
+                            //     clone.config.recentDesigns = [results.filename, ...recentDesigns].slice(0, ocdConsoleConfig.config.maxRecent)
+                            // }
+                            // setOcdConsoleConfig(clone)
+                            // console.debug('Menu: Load: Config', clone)
+                            // OcdConfigFacade.saveConsoleConfig(clone.config).catch((resp) => {console.warn(resp)})
                         }
-                    }
-                    saveFile(ocdDocument).then((resp) => console.info('Saved', resp))             
+                    }).catch((resp) => {console.warn('Load Design Failed with', resp)})
                 }
             },
             {
@@ -273,6 +290,13 @@ export const menuItems = [
                 }
             },
             {
+                label: 'Documentation',
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
+                    ocdConsoleConfig.config.displayPage = 'documentation'
+                    setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+                }
+            },
+            {
                 label: 'Variables',
                 click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
                     ocdConsoleConfig.config.displayPage = 'variables'
@@ -317,24 +341,45 @@ export const menuItems = [
                 label: 'Layers',
                 click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
                     alert('Currently not implemented.')
+                },
+                submenu: (ocdConsoleConfig: OcdConsoleConfig, ocdDocument: OcdDocument) => {
+                    const page: OcdViewPage = ocdDocument.getActivePage()
+                    return page.layers.map((layer: OcdViewLayer) => {return {
+                        label: ocdDocument.getLayerName(layer.id),
+                        class: layer.visible ? 'eye-show' : 'eye-hide',
+                        click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
+                            const page: OcdViewPage = ocdDocument.getActivePage()
+                            // @ts-ignore 
+                            page.layers.find((l: OcdViewLayer) => l.id === layer.id).visible = !layer.visible
+                            console.info(`Change Visibility ${layer.visible} ${ocdDocument}`)
+                            // setViewPage(structuredClone(page))
+                            setOcdDocument(OcdDocument.clone(ocdDocument))
+                        }
+                    }})
                 }
             },
             {
                 label: 'Reset View',
                 click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
-                    alert('Currently not implemented.')
+                    const clone = OcdDocument.clone(ocdDocument)
+                    clone.resetPanZoom()
+                    setOcdDocument(clone)
                 }
             },
             {
                 label: 'Zoom In',
                 click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
-                    alert('Currently not implemented.')
+                    const clone = OcdDocument.clone(ocdDocument)
+                    clone.zoomIn()
+                    setOcdDocument(clone)
                 }
             },
             {
                 label: 'Zoom Out',
                 click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
-                    alert('Currently not implemented.')
+                    const clone = OcdDocument.clone(ocdDocument)
+                    clone.zoomOut()
+                    setOcdDocument(clone)
                 }
             }
         ]
@@ -393,3 +438,30 @@ export const menuItems = [
         ]
     }
 ]
+
+export const updateRecentFiles = (filename: string, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
+    if (filename && filename !== '') {
+        const clone = OcdConsoleConfig.clone(ocdConsoleConfig)
+        const recentDesigns: string[] = ocdConsoleConfig.config.recentDesigns ? ocdConsoleConfig.config.recentDesigns.filter((f) => f !== filename) : []
+        clone.config.recentDesigns = [filename, ...recentDesigns].slice(0, ocdConsoleConfig.config.maxRecent)
+        setOcdConsoleConfig(clone)
+        console.debug('Menu: Load: Config', clone)
+        OcdConfigFacade.saveConsoleConfig(clone.config).catch((resp) => {console.warn(resp)})
+    }
+}
+
+export const loadDesign = (filename: string, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, setActiveFile: Function): Promise<any> => {
+    return OcdDesignFacade.loadDesign(filename).then((results) => {
+        if (!results.canceled) {
+            const ocdDocument = OcdDocument.new()
+            ocdDocument.design = results.design
+            setOcdDocument(ocdDocument)
+            setActiveFile({name: results.filename, modified: false})
+            updateRecentFiles(results.filename, ocdConsoleConfig, setOcdConsoleConfig)
+        }
+    }).catch((resp) => {console.warn('Load Design Failed with', resp)})
+}
+
+export const saveDesign = () => {
+    
+}

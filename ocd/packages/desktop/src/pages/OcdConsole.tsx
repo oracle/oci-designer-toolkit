@@ -3,11 +3,11 @@
 ** Licensed under the GNU GENERAL PUBLIC LICENSE v 3.0 as shown at https://www.gnu.org/licenses/.
 */
 
-import React, { createContext, useEffect, useRef, useState } from 'react'
+import React, { createContext, useContext, useEffect, useRef, useState } from 'react'
 import OcdDesigner from './OcdDesigner'
 import OcdDocument from '../components/OcdDocument'
 import OcdConsoleMenuBar from '../components/OcdConsoleMenuBar'
-import OcdConsoleConfig from '../components/OcdConsoleConfiguration'
+import { OcdConsoleConfig, OcdConsoleConfiguration } from '../components/OcdConsoleConfiguration'
 import { ConsoleHeaderProps, ConsolePageProps, ConsoleToolbarProps } from '../types/Console'
 import OcdBom from './OcdBom'
 import OcdMarkdown from './OcdMarkdown'
@@ -15,24 +15,64 @@ import OcdTabular from './OcdTabular'
 import OcdTerraform from './OcdTerraform'
 import OcdVariables from './OcdVariables'
 import { OcdQueryDialog } from '../components/dialogs/OcdQueryDialog'
+import { OcdConfigFacade } from '../facade/OcdConfigFacade'
+import OcdDocumentation from './OcdDocumentation'
+import { OcdCache, OcdCacheData } from '../components/OcdCache'
+import { OcdCacheFacade } from '../facade/OcdCacheFacade'
 // import { OcdPropertiesPanel, OcdPropertiesToolbarButton } from '../properties/OcdPropertiesPanel'
 
-const ThemeContext = createContext('')
-export const ConsoleConfigContext = createContext(OcdConsoleConfig.new())
+export const ThemeContext = createContext('')
+export const ActiveFileContext = createContext({})
+export const ConsoleConfigContext = createContext({})
+export const CacheContext = createContext({})
 
 const OcdConsole = (): JSX.Element => {
     const [ocdDocument, setOcdDocument] = useState(OcdDocument.new())
     const [ocdConsoleConfig, setOcdConsoleConfig] = useState(OcdConsoleConfig.new())
+    const [ocdCache, setOcdCache] = useState(OcdCacheData.new())
+    const [activeFile, setActiveFile] = useState({name: '', modified: false})
+    useEffect(() => {
+        OcdConfigFacade.loadConsoleConfig().then((results) => {
+            console.debug('OcdConsole: Load Config', results)
+            const consoleConfig = new OcdConsoleConfig(results)
+            setOcdConsoleConfig(consoleConfig)
+        }).catch((response) => {
+            console.debug('OcdConsole:', response)
+            OcdConfigFacade.saveConsoleConfig(ocdConsoleConfig.config).then((results) => {console.debug('OcdConsole: Saved Config')}).catch((response) => console.debug('OcdConsole:', response))
+        })
+    }, [])
+    useEffect(() => {
+        OcdCacheFacade.loadCache().then((results) => {
+            console.debug('OcdConsole: Load Cache', results)
+            const cacheData = new OcdCacheData(results)
+            setOcdCache(cacheData)
+        }).catch((response) => {
+            console.debug('OcdConsole:', response)
+            OcdCacheFacade.saveCache(ocdCache.cache).then((results) => {console.debug('OcdConsole: Saved Cache')}).catch((response) => console.debug('OcdConsole:', response))
+        })
+    }, [])
     // const [ociConfig, setOciConfig] = useState('')
     useEffect(() => {setOcdDocument(ocdDocument)}, [ocdDocument])
+    const setAndSaveOcdConsoleConfig = (consoleConfig: OcdConsoleConfig) => {
+        OcdConfigFacade.saveConsoleConfig(consoleConfig.config).then((results) => {console.debug('OcdConsole: Saved Config')}).catch((response) => console.debug('OcdConsole:', response))
+        setOcdConsoleConfig(consoleConfig)
+    }
+    const setAndSaveOcdCache = (cacheData: OcdCacheData) => {
+        OcdCacheFacade.saveCache(cacheData.cache).then((results) => {console.debug('OcdConsole: Saved Cache')}).catch((response) => console.debug('OcdConsole:', response))
+        setOcdCache(cacheData)
+    }
     return (
-        <ConsoleConfigContext.Provider value={ocdConsoleConfig}>
-            <div className='ocd-console'>
-                <OcdConsoleHeader ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
-                <OcdConsoleToolbar ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
-                <OcdConsoleBody ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
-                <OcdConsoleFooter ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
-            </div>
+        <ConsoleConfigContext.Provider value={{ocdConsoleConfig, setOcdConsoleConfig}}>
+            <ActiveFileContext.Provider value={{activeFile, setActiveFile}}>
+                <CacheContext.Provider value={{ocdCache, setOcdCache}}>
+                    <div className='ocd-console'>
+                        <OcdConsoleHeader ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
+                        <OcdConsoleToolbar ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
+                        <OcdConsoleBody ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
+                        <OcdConsoleFooter ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
+                    </div>
+                </CacheContext.Provider>
+            </ActiveFileContext.Provider>
         </ConsoleConfigContext.Provider>
     )
 }
@@ -92,17 +132,24 @@ const OcdConsoleConfigEditor = ({ ocdConsoleConfig, setOcdConsoleConfig }: any):
         ocdConsoleConfig.config.highlightCompartmentResources = !ocdConsoleConfig.config.highlightCompartmentResources
         setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
     }
+    const zoomOnWheelOnChange = () => {
+        ocdConsoleConfig.config.zoomOnWheel = !ocdConsoleConfig.config.zoomOnWheel
+        setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+    }
     return (
         <div className='ocd-console-toolbar-dropdown ocd-console-toolbar-dropdown-theme'>
             <ul>
                 <li className='ocd-console-toolbar-dropdown-item' onClick={toggleDropdown}>
                     <div className='left-palette ocd-console-toolbar-icon'></div>
                     <ul className={`${dropdown ? 'show' : 'hidden'}`}>
-                        <li className='ocd-dropdown-menu-item'><div><input id='detailedResource' type='checkbox' onChange={detailedResourceOnChange} ref={cbRef} checked={ocdConsoleConfig.config.detailedResource}/>Resource Details</div></li>
                         <li className='ocd-dropdown-menu-item'><div><input id='showMPalette' type='checkbox' onChange={showPaletteOnChange} ref={cbRef} checked={ocdConsoleConfig.config.showPalette}/>Display Palette</div></li>
                         <li className='ocd-dropdown-menu-item'><div><input id='verboseProviderPalette' type='checkbox' onChange={verboseProviderPaletteOnChange} ref={cbRef} checked={ocdConsoleConfig.config.verboseProviderPalette}/>Verbose Palette</div></li>
                         <li className='ocd-dropdown-menu-item'><div><input id='showProperties' type='checkbox' onChange={showPropertiesOnChange} ref={cbRef} checked={ocdConsoleConfig.config.showProperties}/>Display Properties</div></li>
+                        <li className='ocd-dropdown-menu-item'><div>--------------------------------</div></li>
+                        <li className='ocd-dropdown-menu-item'><div><input id='detailedResource' type='checkbox' onChange={detailedResourceOnChange} ref={cbRef} checked={ocdConsoleConfig.config.detailedResource}/>Resource Details</div></li>
                         <li className='ocd-dropdown-menu-item'><div><input id='highlightCompartmentResources' type='checkbox' onChange={highlightCompartmentResourcesOnChange} ref={cbRef} checked={ocdConsoleConfig.config.highlightCompartmentResources}/>Highlight Compartment Resources</div></li>
+                        <li className='ocd-dropdown-menu-item'><div>--------------------------------</div></li>
+                        <li className='ocd-dropdown-menu-item'><div><input id='zoomOnWheel' type='checkbox' onChange={zoomOnWheelOnChange} ref={cbRef} checked={ocdConsoleConfig.config.zoomOnWheel}/>Allow Zoom Mouse Wheel</div></li>
                     </ul>
                 </li>
             </ul>
@@ -123,26 +170,17 @@ const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument,
     }
     const onZoomOutClick = () => {
         const clone = OcdDocument.clone(ocdDocument)
-        const page = clone.getActivePage()
-        const newMatrix = page.transform.slice()
-        newMatrix[0] *= 0.9
-        newMatrix[3] *= 0.9
-        if (newMatrix[0] >= 0.3 && newMatrix[0] <= 3) page.transform = newMatrix
+        clone.zoomOut()
         setOcdDocument(clone)
     }
     const onZoom121Click = () => {
         const clone = OcdDocument.clone(ocdDocument)
-        const page = clone.getActivePage()
-        page.transform = ocdDocument.resetPanZoom()
+        clone.resetPanZoom()
         setOcdDocument(clone)
     }
     const onZoomInClick = () => {
         const clone = OcdDocument.clone(ocdDocument)
-        const page = clone.getActivePage()
-        const newMatrix = page.transform.slice()
-        newMatrix[0] *= 1.15
-        newMatrix[3] *= 1.15
-        if (newMatrix[0] >= 0.3 && newMatrix[0] <= 3) page.transform = newMatrix
+        clone.zoomIn()
         setOcdDocument(clone)
     }
     return (
@@ -178,6 +216,7 @@ const OcdConsoleBody = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, se
     const showQueryDialog = ocdDocument.query
     const DisplayPage = ocdConsoleConfig.config.displayPage === 'bom' ? OcdBom : 
                         ocdConsoleConfig.config.displayPage === 'designer' ? OcdDesigner : 
+                        ocdConsoleConfig.config.displayPage === 'documentation' ? OcdDocumentation : 
                         ocdConsoleConfig.config.displayPage === 'markdown' ? OcdMarkdown : 
                         ocdConsoleConfig.config.displayPage === 'tabular' ? OcdTabular : 
                         ocdConsoleConfig.config.displayPage === 'terraform' ? OcdTerraform : 
@@ -204,8 +243,19 @@ const OcdConsoleBody = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, se
 }
 
 const OcdConsoleFooter = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument }: ConsolePageProps): JSX.Element => {
+    // @ts-ignore
+    const {activeFile, setActiveFile} = useContext(ActiveFileContext)
+    const filenameClass = `${activeFile.modified ? 'ocd-design-modified ocd-active-file-modified-icon' : ''}`
     return (
-        <div className='ocd-console-footer ocd-console-footer-theme'></div>
+        <div className='ocd-console-footer ocd-console-footer-theme'>
+            <div className='ocd-footer-left'>
+                <div>
+                    <div className={filenameClass} title='Design Modified'><label>{activeFile.name}</label></div>
+                </div>
+            </div>
+            <div className='ocd-footer-centre'></div>
+            <div className='ocd-footer-right'></div>
+        </div>
     )
 }
 

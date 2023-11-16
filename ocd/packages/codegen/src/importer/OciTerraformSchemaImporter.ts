@@ -7,6 +7,7 @@ import { OcdSchemaImporter } from './OcdSchemaImporter'
 import { ignoreElements } from './data/OciIgnoreElements'
 import { resourceMap } from './data/OciResourceMap'
 import { elementOverrides } from './data/OciElementOverrides' 
+import { attributeMap } from './data/OcdAttributeMap'
 import { TerrafomSchemaEntry, TerraformSchema } from '../types/TerraformSchema'
 import{ OcdSchemaEntry } from '../types/OcdSchema'
 import { OcdResourceMap } from '../types/OcdImporterData'
@@ -15,9 +16,12 @@ import { OcdUtils } from '@ocd/core'
 export class OciTerraformSchemaImporter extends OcdSchemaImporter {
 
     convert(source_schema: TerraformSchema) {
-        const self = this
+        console.info('Resource Map', JSON.stringify(resourceMap, null, 4))
+        const resourceKeys = Object.keys(resourceMap)
+        console.info('Resource Keys', resourceKeys)
+        // const self = this
         // console.info('Processing', Object.entries(source_schema.provider_schemas["registry.terraform.io/hashicorp/oci"].resource_schemas).filter(([k, v]) => Object.keys(self.resource_map).indexOf(k) >= 0))
-        Object.entries(source_schema.provider_schemas["registry.terraform.io/hashicorp/oci"].resource_schemas).filter(([k, v]) => Object.keys(resourceMap).indexOf(k) >= 0).forEach(([key, value]) => {
+        Object.entries(source_schema.provider_schemas["registry.terraform.io/hashicorp/oci"].resource_schemas).filter(([k, v]) => resourceKeys.includes(k)).forEach(([key, value]) => {
             console.info('Processing', key)
             this.ocd_schema[resourceMap[key]] = {
                 'tf_resource': key,
@@ -46,7 +50,7 @@ export class OciTerraformSchemaImporter extends OcdSchemaImporter {
                 subtype: Array.isArray(v.type) ? v.type[1] : '',
                 // @ts-ignore
                 required: v.required ? v.required : false,
-                label: k.endsWith('_id') || k.endsWith('_ids') ? OcdUtils.toTitleCase(k.split('_').slice(0, -1).join(' ')) : OcdUtils.toTitleCase(k.split('_').join(' ')),
+                label: this.toLabel(k),
                 id: [...hierarchy, k].join('.'),
                 staticLookup: this.isStaticLookup(k),
                 lookup: this.isReference(k) || this.isMultiReference(k) || this.isLookupOverride(k),
@@ -67,7 +71,7 @@ export class OciTerraformSchemaImporter extends OcdSchemaImporter {
                     subtype: v.nesting_mode === 'set' ? 'object' : '',
                     // @ts-ignore
                     required: v.required ? v.required : false,
-                    label: OcdUtils.toTitleCase(k.split('_').join(' ')),
+                    label: this.toLabel(k),
                     id: [...hierarchy, k].join('.'),
                     // @ts-ignore
                     attributes: this.getAttributes(key, v.block, [...hierarchy, k])
@@ -85,6 +89,7 @@ export class OciTerraformSchemaImporter extends OcdSchemaImporter {
     isLookupOverride = (key: string) => elementOverrides.lookups.includes(key) || elementOverrides.staticLookups.includes(key)
     isStaticLookup = (key: string) => elementOverrides.staticLookups.includes(key)
     lookupResource = (key: string) => key.split('_').slice(0, -1).join('_').toLowerCase()
+    toLabel = (key: string) => Object.hasOwn(attributeMap, key) ? attributeMap[key].label : key.endsWith('_id') || key.endsWith('_ids') ? OcdUtils.toTitleCase(key.split('_').slice(0, -1).join(' ')) : OcdUtils.toTitleCase(key.split('_').join(' '))
 }
 
 export default OciTerraformSchemaImporter

@@ -19,7 +19,7 @@ const OcdTerraform = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setO
         setSelected(selectedTab)
     }
     const selectedTerraform = terraform[selected]
-    console.debug('OcdTerraform:', terraform)
+    // console.debug('OcdTerraform:', terraform)
     return (
         <div className='ocd-terraform-view'>
             <div id='terraform_files' className='ocd-designer-canvas-layers'>

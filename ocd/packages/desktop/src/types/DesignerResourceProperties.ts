@@ -3,6 +3,7 @@
 ** Licensed under the GNU GENERAL PUBLIC LICENSE v 3.0 as shown at https://www.gnu.org/licenses/.
 */
 
+import { OcdResource, OcdValidationResult } from "@ocd/model"
 import OcdDocument from "../components/OcdDocument"
 
 export interface DesignerResourceProperties {
@@ -13,4 +14,9 @@ export interface DesignerResourceProperties {
 export interface DesignerColourPicker {
     colour: string
     setColour: Function
+}
+
+export interface DesignerResourceValidationResult {
+    result: OcdValidationResult
+    resource: OcdResource
 }

@@ -3,18 +3,22 @@
 ** Licensed under the GNU GENERAL PUBLIC LICENSE v 3.0 as shown at https://www.gnu.org/licenses/.
 */
 
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { menuItems, MenuItem } from './Menu'
 import OcdDocument from './OcdDocument'
 import { ConsoleMenuProps, ConsolePageProps } from '../types/Console'
 import OcdConsoleConfig from './OcdConsoleConfiguration'
+import { ActiveFileContext, ConsoleConfigContext } from '../pages/OcdConsole'
 
 const OcdConsoleMenuItem = ({ menuItem, depth, ocdDocument, setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig }: any): JSX.Element => {
+    // @ts-ignore
+    const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const [dropdown, setDropdown] = useState(false)
     const onMouseEnter = () => {setDropdown(true)}
     const onMouseLeave = () => {setDropdown(false)}
     const closeDropdown = () => {setDropdown(!dropdown)}
-    const onClick = () => {menuItem.click(ocdDocument, (ocdDocument: OcdDocument) => setOcdDocument(ocdDocument), ocdConsoleConfig, (ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig))}
+    const onClick = () => {menuItem.click(ocdDocument, (ocdDocument: OcdDocument) => setOcdDocument(ocdDocument), ocdConsoleConfig, (ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig), activeFile, (activeFile: Record<string, any>) => setActiveFile(activeFile))}
+    console.debug('OcdConsoleMenuItem:', menuItem.label, menuItem.click)
     return (
         <li
         className={`${depth > 0 ? 'ocd-submenu-item' : 'ocd-menu-item'}`}
@@ -22,7 +26,7 @@ const OcdConsoleMenuItem = ({ menuItem, depth, ocdDocument, setOcdDocument, ocdC
         onMouseLeave={onMouseLeave}
         onClick={closeDropdown}
         >
-            {menuItem.submenu ? (
+            {menuItem.submenu && Array.isArray(menuItem.submenu) ? (
                 <>
                 <a href='#' className={`${menuItem.submenu && depth > 0 ? 'ocd-submenu-item-has-submenu' : ''}`} onClick={() => console.info(`Clicked ${menuItem.label}`)}>{menuItem.label}</a>
                 <OcdConsoleSubMenu
@@ -35,8 +39,21 @@ const OcdConsoleMenuItem = ({ menuItem, depth, ocdDocument, setOcdDocument, ocdC
                     setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)}
                 />
                 </>
+            ) : menuItem.submenu && menuItem.submenu(ocdConsoleConfig, ocdDocument).length > 0 ? (
+                <>
+                <a href='#' className={`${menuItem.submenu && depth > 0 ? 'ocd-submenu-item-has-submenu' : ''}`} onClick={() => console.info(`Clicked ${menuItem.label}`)}>{menuItem.label}</a>
+                <OcdConsoleSubMenu
+                    submenus={menuItem.submenu(ocdConsoleConfig, ocdDocument)}
+                    dropdown={dropdown}
+                    depth={depth}
+                    ocdConsoleConfig={ocdConsoleConfig} 
+                    setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} 
+                    ocdDocument={ocdDocument} 
+                    setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)}
+                />
+                </>
             ) : menuItem.click ? (
-                <a href='#' onClick={onClick}>{menuItem.label}</a>
+                <a href='#' onClick={onClick} className={menuItem.class ? `ocd-menu-item-icon  ${menuItem.class}` : ''}>{menuItem.label}</a>
             ) : (
                 <a href='#' onClick={() => console.info(`Clicked ${menuItem.label}`)}>{menuItem.label}</a>
             )}

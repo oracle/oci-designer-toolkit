@@ -9,7 +9,11 @@ export const elementOverrides: OcdElementOverrides = {
     "lookups": [],
     "staticLookups": [
         "availability_domain",
-        "fault_domain"
+        "destination_type",
+        "fault_domain",
+        "protocol",
+        "egress_security_rules.protocol",
+        "ingress_security_rules.protocol"
     ],
     "types": {
         "common": {},

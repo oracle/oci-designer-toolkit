@@ -4,18 +4,21 @@
 */
 
 import { useRef, useState } from 'react'
-import { OcdResource, OcdViewCoordsStyle, OcdViewPage } from '@ocd/model'
-import { DesignerColourPicker, DesignerResourceProperties } from '../types/DesignerResourceProperties'
+import { OcdResource, OcdViewCoordsStyle, OcdViewPage, OciResourceValidation, OciResources } from '@ocd/model'
+import { DesignerColourPicker, DesignerResourceProperties, DesignerResourceValidationResult } from '../types/DesignerResourceProperties'
 import { OcdUtils } from '@ocd/core'
-import OcdDocument from './OcdDocument'
+import { OcdDocument } from './OcdDocument'
 import { OcdLookupProperty, OcdTextProperty, ResourceElementConfig, ResourceProperties } from './properties/OcdPropertyTypes'
 import * as ociResources from './properties/provider/oci/resources'
 import { HexColorPicker, HexColorInput } from 'react-colorful'
+import Markdown from 'react-markdown'
+import { OcdValidationResult } from '@ocd/model'
 
 const OcdResourcePropertiesHeader = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
     const selectedResource = ocdDocument.getSelectedResource()
+    const activePage = ocdDocument.getActivePage()
     const padlock: string = selectedResource ? selectedResource.locked ? 'padlock-closed' : 'padlock-open' : 'padlock-open'
-    const title: string = selectedResource ? `${selectedResource.resourceTypeName} (${ocdDocument.getDisplayName(ocdDocument.selectedResource.modelId)})` : ''
+    const title: string = selectedResource ? `${selectedResource.resourceTypeName} (${ocdDocument.getDisplayName(ocdDocument.selectedResource.modelId)})` : `Page (${activePage.title})`
     return (
         <div className='ocd-properties-header'>
             <div className={`property-editor-title ${ocdDocument.selectedResource.class}`}>
@@ -25,7 +28,7 @@ const OcdResourcePropertiesHeader = ({ocdDocument, setOcdDocument}: DesignerReso
     )
 }
 
-const OciCommonResourceProperties = ({ocdDocument, setOcdDocument, resource}: ResourceProperties): JSX.Element => {
+const OciCommonResourceProperties = ({ocdDocument, setOcdDocument, resource, rootResource}: ResourceProperties): JSX.Element => {
     const config: ResourceElementConfig | undefined = undefined
     const displayName = {"provider": "oci", "key": "displayName", "name": "displayName", "type": "string", "subtype": "", "required": true, "label": "Name", "id": "displayName"}
     const compartmentId = {"provider": "oci", "key": "compartmentId", "name": "compartmentId", "type": "string", "subtype": "", "required": true, "label": "Compartment", "id": "compartmentId", "lookupResource": "compartment"}
@@ -34,8 +37,8 @@ const OciCommonResourceProperties = ({ocdDocument, setOcdDocument, resource}: Re
             <details open={true}>
                 <summary className='summary-background'>Core</summary>
                 <div>
-                <OcdTextProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={config} attribute={displayName} />
-                <OcdLookupProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={config} attribute={compartmentId} />
+                <OcdTextProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={config} rootResource={rootResource} attribute={displayName} />
+                <OcdLookupProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={config} rootResource={rootResource} attribute={compartmentId} />
                 </div>
             </details>
         </div>
@@ -53,6 +56,7 @@ const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourcePr
                 ocdDocument={ocdDocument} 
                 setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} 
                 resource={selectedResource}
+                rootResource={selectedResource}
             />}
             {selectedResource && ResourceProperties && <ResourceProperties 
                 ocdDocument={ocdDocument} 
@@ -64,14 +68,20 @@ const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourcePr
 }
 
 const OcdResourceDocumentation = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
+    const [preview, setPreview] = useState(false)
     const selectedResource = ocdDocument.getSelectedResource()
+    const activePage = ocdDocument.getActivePage()
     const onChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-        selectedResource.documentation = e.target.value
+        if (selectedResource) selectedResource.documentation = e.target.value
+        else activePage.documentation = e.target.value
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
+    const onPreviewChanged = () => setPreview(!preview)
     return (
         <div className={`ocd-properties-panel ocd-properties-panel-theme ocd-properties-documentation-panel`}>
-            <textarea onChange={onChange}></textarea>
+            <div className='ocd-properties-documentation-preview-bar'><input id='documentation_preview_checkbox' type='checkbox' checked={preview} onChange={onPreviewChanged}></input><label htmlFor='documentation_preview_checkbox'>Preview</label></div>
+            {!preview && <textarea onChange={onChange} value={selectedResource ? selectedResource.documentation : activePage.documentation}></textarea>}
+            {preview && <div className='ocd-properties-documentation-preview'><Markdown>{selectedResource ? selectedResource.documentation : activePage.documentation}</Markdown></div>}
         </div>
     )
 }
@@ -348,9 +358,117 @@ const OcdColourPicker = ({colour, setColour}: DesignerColourPicker): JSX.Element
     )
 }
 
+const OcdResourceValidation =  ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
+    const selectedResource: OcdResource = ocdDocument.getSelectedResource()
+    const ociResources: OciResources = ocdDocument.getOciResourcesObject()
+    const resourceValidationMethod = selectedResource ? `${OcdUtils.toTitleCase(selectedResource.provider)}${selectedResource.resourceType}` : ''
+    // @ts-ignore 
+    const ResourceValidation = OciResourceValidation[resourceValidationMethod]
+    const validationResults = ResourceValidation.validateResource(selectedResource, ociResources)
+    const errors = validationResults.filter((v: OcdValidationResult) => v.type === 'error')
+    const warnings = validationResults.filter((v: OcdValidationResult) => v.type === 'warning')
+    const information = validationResults.filter((v: OcdValidationResult) => v.type === 'information')
+    console.debug('OcdProperties: OcdResourceValidation', validationResults)
+    return (
+        <div className={`ocd-properties-panel ocd-properties-panel-theme ocd-properties-validation-panel ocd-validation-results`}>
+            <details className='ocd-details' open={errors.length > 0 ? true : false}>
+                <summary className={`summary-background`}><label>{`Errors (${errors.length})`}</label></summary>
+                <div className='ocd-details-body'>
+                    {errors.map((r: OcdValidationResult) => {
+                        return <OcdResourceValidationResult
+                                    result={r}
+                                    resource={selectedResource}
+                                    key={`${r.element}-${r.message.toLowerCase().replace(' ', '_')}`}
+                        />
+                    })}
+                </div>
+            </details>
+            <details className='ocd-details' open={warnings.length > 0 ? true : false}>
+                <summary className={`summary-background`}><label>{`Warning (${warnings.length})`}</label></summary>
+                <div className='ocd-details-body'>
+                    {warnings.map((r: OcdValidationResult) => {
+                            return <OcdResourceValidationResult
+                                        result={r}
+                                        resource={selectedResource}
+                                        key={`${r.element}-${r.message.toLowerCase().replace(' ', '_')}`}
+                            />
+                        })}
+                </div>
+            </details>
+            <details className='ocd-details' open={information.length > 0 ? true : false}>
+                <summary className={`summary-background`}><label>{`Information (${information.length})`}</label></summary>
+                <div className='ocd-details-body'>
+                    {information.map((r: OcdValidationResult) => {
+                            return <OcdResourceValidationResult
+                                        result={r}
+                                        resource={selectedResource}
+                                        key={`${r.element}-${r.message.toLowerCase().replace(' ', '_')}`}
+                            />
+                        })}
+                </div>
+            </details>
+        </div>
+    )
+}
+const OcdResourceValidationResult = ({result, resource}: DesignerResourceValidationResult): JSX.Element => {
+    console.debug('OcdProperties: Validation Error', result, resource)
+    const resultClassName = result.type === 'error' ? 'ocd-validation-error-result' :
+                                            'warning' ? 'ocd-validation-warning-result' :
+                                            'information' ? 'ocd-validation-information-result' :
+                                            ''
+    return (
+        <div className='ocd-validation-result'>
+            <div className={resultClassName}>
+                <div className={`ocd-validation-result-title ${result.class}`}>{result.title}</div>
+                <div className='ocd-validation-message'>{result.message}</div>
+            </div>
+        </div>
+    )
+}
+const OcdResourceValidationError = ({result, resource}: DesignerResourceValidationResult): JSX.Element => {
+    console.debug('OcdProperties: Validation Error', result, resource)
+    return (
+        <div className='ocd-validation-result'>
+            <div className='ocd-validation-error-result'>
+                <div className={`ocd-validation-result-title ${result.class}`}>{result.title}</div>
+                <div className='ocd-validation-message'>{result.message}</div>
+            </div>
+        </div>
+    )
+}
+const OcdResourceValidationWarning = ({result, resource}: DesignerResourceValidationResult): JSX.Element => {
+    return (
+        <div className='ocd-validation-result'>
+            <div className='ocd-validation-warning-result'>
+            <div className={`ocd-validation-result-title ${result.class}`}>{result.title}</div>
+                <div className='ocd-validation-message'>{result.message}</div>
+            </div>
+        </div>
+    )
+}
+const OcdResourceValidationInformation = ({result, resource}: DesignerResourceValidationResult): JSX.Element => {
+    return (
+        <div className='ocd-validation-result'>
+            <div className='ocd-validation-information-result'>
+            <div className={`ocd-validation-result-title ${result.class}`}>{result.title}</div>
+                <div className='ocd-validation-message'>{result.message}</div>
+            </div>
+        </div>
+    )
+}
+
 const OcdProperties = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
+    const ociResources: OciResources = ocdDocument.getOciResourcesObject()
+    const resourceValidationMethod = ocdDocument.getSelectedResource() ? `${OcdUtils.toTitleCase(ocdDocument.getSelectedResource().provider)}${ocdDocument.getSelectedResource().resourceType}` : ''
+    // @ts-ignore 
+    const ResourceValidation = OciResourceValidation[resourceValidationMethod]
+    const validationResults = ResourceValidation ? ResourceValidation.validateResource(ocdDocument.getSelectedResource(), ociResources) : []
+    const hasErrors = validationResults.filter((v: OcdValidationResult) => v.type === 'error').length > 0
+    const hasWarnings = validationResults.filter((v: OcdValidationResult) => v.type === 'warning').length > 0
+    const validationTabClass = `ocd-validation-tab ${hasErrors ? 'ocd-validation-error' : hasWarnings ? 'ocd-validation-warning' : 'ocd-validation-ok'}`
     const selectedResource = ocdDocument.selectedResource
-    const [activeTab, setActivieTab] = useState('properties')
+    console.debug('OcdProperties: Selected Resource', ocdDocument.selectedResource, ocdDocument.getSelectedResource())
+    const [activeTab, setActivieTab] = useState(ocdDocument.selectedResource.modelId !== '' ? 'properties' : 'documentation')
     const onPropertiesTabClick = (tab: string) => {
         setActivieTab(tab.toLowerCase())
     }
@@ -359,14 +477,16 @@ const OcdProperties = ({ocdDocument, setOcdDocument}: DesignerResourceProperties
                       activeTab === 'arrange' ? OcdResourceArrangement :
                       activeTab === 'style' && selectedResource.coordsId !== '' ? OcdResourceStyle :
                       activeTab === 'style' ? OcdLayerStyle :
+                      activeTab === 'validation' ? OcdResourceValidation :
                       OcdResourceProperties
     return (
         <div className='ocd-designer-properties'>
             <div className={`ocd-designer-tab-bar ocd-designer-tab-bar-theme`}>
-                <div className={`ocd-designer-tab ocd-designer-tab-theme ${activeTab === 'properties' ? 'ocd-designer-active-tab-theme' : ''}`} onClick={() => onPropertiesTabClick('Properties')}><span>Properties</span></div>
+                {ocdDocument.selectedResource.modelId !== '' && <div className={`ocd-designer-tab ocd-designer-tab-theme ${activeTab === 'properties' ? 'ocd-designer-active-tab-theme' : ''}`} onClick={() => onPropertiesTabClick('Properties')}><span>Properties</span></div>}
                 <div className={`ocd-designer-tab ocd-designer-tab-theme ${activeTab === 'documentation' ? 'ocd-designer-active-tab-theme' : ''}`} onClick={() => onPropertiesTabClick('Documentation')}><span>Documentation</span></div>
-                <div className={`ocd-designer-tab ocd-designer-tab-theme ${activeTab === 'style' ? 'ocd-designer-active-tab-theme' : ''}`} onClick={() => onPropertiesTabClick('Style')}><span>Style</span></div>
-                <div className={`ocd-designer-tab ocd-designer-tab-theme ${activeTab === 'arrange' ? 'ocd-designer-active-tab-theme' : ''} ${ocdDocument.selectedResource.coordsId === '' ? 'hidden' : ''}`} onClick={() => onPropertiesTabClick('Arrange')}><span>Arrange</span></div>
+                {ocdDocument.selectedResource.modelId !== '' && <div className={`ocd-designer-tab ocd-designer-tab-theme ${activeTab === 'style' ? 'ocd-designer-active-tab-theme' : ''}`} onClick={() => onPropertiesTabClick('Style')}><span>Style</span></div>}
+                {ocdDocument.selectedResource.coordsId !== '' && <div className={`ocd-designer-tab ocd-designer-tab-theme ${activeTab === 'arrange' ? 'ocd-designer-active-tab-theme' : ''}`} onClick={() => onPropertiesTabClick('Arrange')}><span>Arrange</span></div>}
+                {ocdDocument.selectedResource.modelId !== '' && <div className={`ocd-designer-tab ocd-designer-tab-theme ${validationTabClass} ${activeTab === 'validation' ? 'ocd-designer-active-tab-theme' : ''}`} onClick={() => onPropertiesTabClick('Validation')}><span>Validation</span></div>}
             </div>
             <OcdResourcePropertiesHeader
                 ocdDocument={ocdDocument} 

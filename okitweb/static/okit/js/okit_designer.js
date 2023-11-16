@@ -211,9 +211,9 @@ function loaded(evt) {
     console.info(fileJson);
     if (fileJson.hasOwnProperty('compartments')) {
         console.info('>> Single Region File')
-        // okitJsonModel = new OkitJson(fileString);
-        newModel(fileString)
-        newCompartmentView();
+        // newModel(fileString)
+        // newCompartmentView();
+        loadModelFromJson(fileString)
     } else {
         console.info('>> Multi Region File.')
         showRegionTabBar();
@@ -236,6 +236,19 @@ function loaded(evt) {
 }
 function errorHandler(evt) {
     console.info('Error: ' + evt.target.error.name);
+}
+/*
+** Load Model From JSON
+*/
+function loadModelFromJson(model) {
+    // console.debug('loadModelFromJson:', model)
+    if (model) {
+        newModel(model)
+        newCompartmentView();
+        displayOkitJson();
+        displayCompartmentView();
+        displayTreeView();
+    }
 }
 /*
 ** Save Model as Json
