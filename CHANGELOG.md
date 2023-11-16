@@ -1,6 +1,13 @@
 # Release Notes
 
 
+## Version 0.56.0
+**Release Date**: 15th November 2023
+### Features
+1. Update pricing module for new GPU
+### Bug Fixes
+
+
 ## Version 0.55.0
 **Release Date**: 4th October 2023
 ### Features
