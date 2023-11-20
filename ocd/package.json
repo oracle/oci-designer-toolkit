@@ -17,8 +17,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "install": "npm install && npm run compile-for-codegen && npm run import-and-generate && npm run build",
-    "reinstall": "npm run install",
+    "install-and-codgen": "npm install && npm run compile-for-codegen && npm run import-and-generate && npm run build",
+    "reinstall": "npm run install-and-codgen",
     "build": "npm run build --workspaces --if-present",
     "compile": "npm run compile --workspaces --if-present",
     "compile-for-codegen": "npm run compile --workspace=packages/core --workspace=packages/codegen --workspace=packages/codegen-cli",
