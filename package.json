@@ -12,6 +12,7 @@
     "scripts": {
         "desktop": "cd ocd && npm run desktop",
         "web": "cd ocd && npm run web",
-        "fresh-install": "cd ocd && npm run fresh-install"
+        "install": "cd ocd && npm run install",
+        "build": "cd ocd && npm run build"
     }
 }

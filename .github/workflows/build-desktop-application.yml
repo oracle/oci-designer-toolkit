@@ -3,7 +3,7 @@ name: Build/Release
 on: 
   push:
     branches:
-      - 'toxophilist/master'
+      - 'nightly'
 
 env:
   CI: false
@@ -25,10 +25,10 @@ jobs:
           node-version: ${{ matrix.version }}
       - run: node --version
       - run: npm --version
-      - run: npm run first-install
-      # - run: npm run build
+      - run: npm run install
+      - run: npm run build
       # - run: npm run desktop
       # - run: npm run electron
-      # - run: ls ./ocd/dist
-      #   if: always()
+      - run: ls ./ocd/dist
+        if: always()
 
