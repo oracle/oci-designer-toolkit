@@ -30,17 +30,6 @@ export class OcdCacheData {
     static clone = (ocdConsoleState: OcdCacheData) => new OcdCacheData(ocdConsoleState.cache)
 
     newCache = (): OcdCache => defaultCache
-    // newConsoleConfiguration = (): OcdCache => {
-    //     return {
-    //         profile: 'DEFAULT',
-    //         region: '',
-    //         dropdownData: {
-    //             shipped: {
-    //                 all: {}
-    //             }
-    //         }
-    //     }
-    // }
 
     loadProfileRegionCache(profile: string, region: string): Promise<OcdCacheRegionData> {
         return new Promise((resolve, reject) => {
