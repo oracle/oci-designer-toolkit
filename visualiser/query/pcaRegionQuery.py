@@ -77,7 +77,8 @@ class PCARegionQuery(OCIConnection):
         regions = self.regions()
         logger.info('>>>>> PCA Regions ' + jsonToFormattedString(regions))
         for region in regions:
-            region['display_name'] = region["name"]
+            # region['display_name'] = region["name"]
+            region['display_name'] = self.config['region']
             region['is_home_region'] = True
             # region["id"] = region["name"]
             region["id"] = self.config['region']
