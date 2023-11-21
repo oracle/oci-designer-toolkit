@@ -3,7 +3,7 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import { common, core } from "oci-sdk"
+import { common, core, loadbalancer } from "oci-sdk"
 import { OciQuery } from "./OciQuery"
 import { OciResource } from "@ocd/model"
 
@@ -15,6 +15,7 @@ export class OciReferenceDataQuery {
     ociQuery: OciQuery
     // Clients
     computeClient: core.ComputeClient
+    loadbalancerClient: loadbalancer.LoadBalancerClient
     constructor(profile: string='DEFAULT', region?: string) {
         this.profile = profile
         this.provider = new common.ConfigFileAuthenticationDetailsProvider(undefined, profile)
@@ -31,6 +32,7 @@ export class OciReferenceDataQuery {
         // this.identityClient = new identity.IdentityClient(this.authenticationConfiguration, this.clientConfiguration)
         // this.vcnClient = new core.VirtualNetworkClient(this.authenticationConfiguration, this.clientConfiguration)
         this.computeClient = new core.ComputeClient(this.authenticationConfiguration, this.clientConfiguration)
+        this.loadbalancerClient = new loadbalancer.LoadBalancerClient(this.authenticationConfiguration, this.clientConfiguration)
     }
 
     query(): Promise<any> {
@@ -43,9 +45,11 @@ export class OciReferenceDataQuery {
                 // Compute
                 const listShapes = this.listShapes()
                 const listImages = this.listImages(compartmentIds)
+                const listLoadbalancerShapes = this.listLoadbalancerShapes(compartmentIds)
                 const queries = [
                     listShapes,
-                    listImages
+                    listImages,
+                    listLoadbalancerShapes
                 ]
                 Promise.allSettled(queries).then((results) => {
                     console.debug('OciReferenceDataQuery: query: All Settled', results)
@@ -57,7 +61,13 @@ export class OciReferenceDataQuery {
                     if (results[queries.indexOf(listShapes)].status === 'fulfilled') referenceData.shape = results[queries.indexOf(listShapes)].value
                     // Images
                     // @ts-ignore
-                    if (results[queries.indexOf(listImages)].status === 'fulfilled') referenceData.shape = results[queries.indexOf(listImages)].value
+                    if (results[queries.indexOf(listImages)].status === 'fulfilled') referenceData.image = results[queries.indexOf(listImages)].value
+                    /*
+                    ** Loadbalancer
+                    */
+                    // Loadbalancer Shapes
+                    // @ts-ignore
+                    if (results[queries.indexOf(listLoadbalancerShapes)].status === 'fulfilled') referenceData.loadbalancer_shape = results[queries.indexOf(listLoadbalancerShapes)].value
 
                     // console.debug('OciReferenceDataQuery:', referenceData)
                     resolve(referenceData)
@@ -74,7 +84,7 @@ export class OciReferenceDataQuery {
             const requests: core.requests.ListImagesRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
             const queries = requests.map((r) => this.computeClient.listImages(r))
             Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listImages: All Settled', results)
+                console.debug('OciQuery: listImages: All Settled')
                 //@ts-ignore
                 const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], []).map((r) => {return {
                         id: r.displayName,
@@ -87,7 +97,32 @@ export class OciReferenceDataQuery {
                         lifecycleState: r.lifecycleState
                     }
                 }).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
-                resolve(resources)
+                // @ts-ignore
+                const uniqueResources = Array.from(new Set(resources.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
+                resolve(uniqueResources)
+                // resolve(resources)
+            }).catch((reason) => {
+                console.error(reason)
+                reject(reason)
+            })
+        })
+    }
+
+    listLoadbalancerShapes(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const requests: loadbalancer.requests.ListShapesRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
+            const queries = requests.map((r) => this.loadbalancerClient.listShapes(r))
+            Promise.allSettled(queries).then((results) => {
+                console.debug('OciQuery: listLoadbalancerShapes: All Settled')
+                //@ts-ignore
+                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], []).map((r) => {return {
+                        id: r.name,
+                        displayName: r.name
+                    }
+                }).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
+                // @ts-ignore
+                const uniqueResources = Array.from(new Set(resources.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
+                resolve(uniqueResources)
             }).catch((reason) => {
                 console.error(reason)
                 reject(reason)
