@@ -1,6 +1,13 @@
 # Release Notes
 
 
+## Version 0.5.0
+**Release Date**: 
+### Features
+### Bug Fixes
+1. Change Validation so that missing hostname does not report failure for this warning.
+
+
 ## Version 0.56.0
 **Release Date**: 15th November 2023
 ### Features
