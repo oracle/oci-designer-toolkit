@@ -6,6 +6,8 @@
 ### Features
 ### Bug Fixes
 1. Change Validation so that missing hostname does not report failure for this warning.
+2. Change PCA Volume Attachment query to convert AD Correctly.
+3. For Numeric fields in the Generator remove all none decimal characters.
 
 
 ## Version 0.56.0

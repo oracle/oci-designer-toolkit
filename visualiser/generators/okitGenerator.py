@@ -328,7 +328,7 @@ class OCIGenerator(object):
                         # parent[key] = self.formatJinja2Value(val)
                     elif val != '' and key in self.integer_elements:
                         # Simple numeric
-                        parent[key] = self.formatJinja2Value(int(val))
+                        parent[key] = self.formatJinja2Value(int(''.join(c for c in val if c.isdecimal()))) # Only take decimal value
                     elif val != '':
                         # Add Simple Value
                         parent[key] = self.formatJinja2Value(val.replace('\n', '\\n').replace('"', '\\"'))

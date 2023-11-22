@@ -472,6 +472,9 @@ class PCAQuery(OCIConnection):
             results = oci.pagination.list_call_get_all_results(client.list_volume_attachments, compartment_id=compartment_id).data
             # Convert to Json object
             resources = self.toJson(results)
+            for r in resources:
+                if 'availability_domain' in r and len(r['availability_domain']) > 0:
+                    r['availability_domain'] = r['availability_domain'][-1]
             self.ancillary_resources[array].extend(resources)
         return self.ancillary_resources[array]
 
