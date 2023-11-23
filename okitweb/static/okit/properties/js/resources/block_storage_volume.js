@@ -37,7 +37,7 @@ class BlockStorageVolumeProperties extends OkitResourceProperties {
         this.size_in_gbs = size_in_gb.input
         this.append(this.size_tbody, size_in_gb.row)
         // Performance
-        const vpus_per_gb_data = this.resource.isOCI() ? {min: 0, max: 120, step: 10} : {min: 0, max: 20, step: 20}
+        const vpus_per_gb_data = this.resource.isOCI() ? {min: 0, max: 120, step: 10} : {min: 10, max: 20, step: 10}
         const vpus_per_gb = this.createInput('number', 'Volume Performance', `${self.id}_vpus_per_gb`, '', (d, i, n) => {self.resource.vpus_per_gb = n[i].value; self.vpus_per_gb_range.property('value', self.resource.vpus_per_gb); this.setPerformanceTitle()}, vpus_per_gb_data)
         this.vpus_per_gb = vpus_per_gb.input
         this.vpus_per_gb_label = vpus_per_gb.title
