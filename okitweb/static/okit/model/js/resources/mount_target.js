@@ -44,7 +44,7 @@ class MountTarget extends OkitArtifact {
         return {
             resource_name: `${this.generateResourceName()}Export`,
             file_system_id: '',
-            path: '',
+            path: this.isOCI() ? '' : 'AUTOSELECT',
             options: this.newExportOptions()
         }
     }
