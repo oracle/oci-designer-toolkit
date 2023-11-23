@@ -20,7 +20,7 @@ class BlockStorageVolume extends OkitArtifact {
         this.kms_key_id = '';
         this.size_in_gbs = 1024;
         this.backup_policy = '';
-        this.vpus_per_gb = '0';
+        this.vpus_per_gb = '10';
         // Update with any passed data
         this.merge(data);
         this.convert();
