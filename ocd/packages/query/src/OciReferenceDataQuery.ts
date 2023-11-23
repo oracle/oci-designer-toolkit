@@ -3,7 +3,7 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import { common, core, loadbalancer, mysql } from "oci-sdk"
+import { common, core, database, loadbalancer, mysql } from "oci-sdk"
 import { OciQuery } from "./OciQuery"
 import { OciResource } from "@ocd/model"
 
@@ -15,8 +15,10 @@ export class OciReferenceDataQuery {
     ociQuery: OciQuery
     // Clients
     computeClient: core.ComputeClient
+    databaseClient: database.DatabaseClient
     loadbalancerClient: loadbalancer.LoadBalancerClient
     mysqlClient: mysql.MysqlaasClient
+    vcnClient: core.VirtualNetworkClient
     constructor(profile: string='DEFAULT', region?: string) {
         this.profile = profile
         this.provider = new common.ConfigFileAuthenticationDetailsProvider(undefined, profile)
@@ -33,8 +35,10 @@ export class OciReferenceDataQuery {
         // this.identityClient = new identity.IdentityClient(this.authenticationConfiguration, this.clientConfiguration)
         // this.vcnClient = new core.VirtualNetworkClient(this.authenticationConfiguration, this.clientConfiguration)
         this.computeClient = new core.ComputeClient(this.authenticationConfiguration, this.clientConfiguration)
+        this.databaseClient = new database.DatabaseClient(this.authenticationConfiguration, this.clientConfiguration)
         this.loadbalancerClient = new loadbalancer.LoadBalancerClient(this.authenticationConfiguration, this.clientConfiguration)
         this.mysqlClient = new mysql.MysqlaasClient(this.authenticationConfiguration, this.clientConfiguration)
+        this.vcnClient = new core.VirtualNetworkClient(this.authenticationConfiguration, this.clientConfiguration)
     }
 
     query(): Promise<any> {
@@ -51,13 +55,19 @@ export class OciReferenceDataQuery {
                 const listMySQLShapes = this.listMySQLShapes(compartmentIds)
                 const listMySQLVersions = this.listMySQLVersions(compartmentIds)
                 const listMySQLConfigurations = this.listMySQLConfigurations(compartmentIds)
+                const listDbSystemShapes = this.listDbSystemShapes(compartmentIds)
+                const listDbSystemVersions = this.listDbSystemVersions(compartmentIds)
+                const listCpeDeviceShapes = this.listCpeDeviceShapes()
                 const queries = [
                     listShapes,
                     listImages,
                     listLoadbalancerShapes,
                     listMySQLShapes,
                     listMySQLVersions,
-                    listMySQLConfigurations
+                    listMySQLConfigurations,
+                    listDbSystemShapes,
+                    listDbSystemVersions,
+                    listCpeDeviceShapes
                 ]
                 Promise.allSettled(queries).then((results) => {
                     console.debug('OciReferenceDataQuery: query: All Settled', results)
@@ -82,16 +92,98 @@ export class OciReferenceDataQuery {
                     // MySQL Configurations
                     // @ts-ignore
                     if (results[queries.indexOf(listMySQLConfigurations)].status === 'fulfilled') referenceData.mysql_configuration = results[queries.indexOf(listMySQLConfigurations)].value
+                    // MySQL Shape
+                    // @ts-ignore
+                    if (results[queries.indexOf(listMySQLShapes)].status === 'fulfilled') referenceData.mysql_shape = results[queries.indexOf(listMySQLShapes)].value
                     // MySQL Versions
                     // @ts-ignore
                     if (results[queries.indexOf(listMySQLVersions)].status === 'fulfilled') referenceData.mysql_version = results[queries.indexOf(listMySQLVersions)].value
-                    // MySQL Versions
+                    /*
+                    ** Database
+                    */
+                    // DB System Shape
                     // @ts-ignore
-                    if (results[queries.indexOf(listMySQLVersions)].status === 'fulfilled') referenceData.mysql_version = results[queries.indexOf(listMySQLVersions)].value
+                    if (results[queries.indexOf(listDbSystemShapes)].status === 'fulfilled') referenceData.db_system_shape = results[queries.indexOf(listDbSystemShapes)].value
+                    // DB System Version
+                    // @ts-ignore
+                    if (results[queries.indexOf(listDbSystemVersions)].status === 'fulfilled') referenceData.db_version = results[queries.indexOf(listDbSystemVersions)].value
+                    /*
+                    ** CPE
+                    */
+                    // CPE Device Shape
+                    // @ts-ignore
+                    if (results[queries.indexOf(listCpeDeviceShapes)].status === 'fulfilled') referenceData.cpe_device_shape = results[queries.indexOf(listCpeDeviceShapes)].value
 
                     // console.debug('OciReferenceDataQuery:', referenceData)
                     resolve(referenceData)
                 })
+            }).catch((reason) => {
+                console.error(reason)
+                reject(reason)
+            })
+        })
+    }
+
+    listCpeDeviceShapes(retryCount: number = 0): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const request: core.requests.ListCpeDeviceShapesRequest = {}
+            const shapeQuery = this.vcnClient.listCpeDeviceShapes(request)
+            shapeQuery.then((results) => {
+                console.debug('listCpeDeviceShapes: listCpeDeviceShapes: All Settled')
+                //@ts-ignore
+                const resources = results.items.map((r) => {return {
+                        ...r,
+                        id: r.cpeDeviceInfo?.platformSoftwareVersion, 
+                        displayName: `${r.cpeDeviceInfo?.vendor} ${r.cpeDeviceInfo?.platformSoftwareVersion}` 
+                    }
+                })
+                resolve(resources)
+            }).catch((reason) => {
+                console.error(reason)
+                reject(reason)
+            })
+        })
+    }
+
+    listDbSystemShapes(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const requests: database.requests.ListDbSystemShapesRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
+            const queries = requests.map((r) => this.databaseClient.listDbSystemShapes(r))
+            Promise.allSettled(queries).then((results) => {
+                console.debug('OciQuery: listDbSystemShapes: All Settled')
+                //@ts-ignore
+                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], []).map((r) => {return {
+                        ...r,
+                        id: r.name,
+                        displayName: r.name
+                    }
+                }).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
+                // @ts-ignore
+                const uniqueResources = Array.from(new Set(resources.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
+                resolve(uniqueResources)
+            }).catch((reason) => {
+                console.error(reason)
+                reject(reason)
+            })
+        })
+    }
+
+    listDbSystemVersions(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const requests: database.requests.ListDbVersionsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
+            const queries = requests.map((r) => this.databaseClient.listDbVersions(r))
+            Promise.allSettled(queries).then((results) => {
+                console.debug('OciQuery: listDbSystemVersions: All Settled')
+                //@ts-ignore
+                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], []).map((r) => {return {
+                        ...r,
+                        id: r.version,
+                        displayName: r.version
+                    }
+                }).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
+                // @ts-ignore
+                const uniqueResources = Array.from(new Set(resources.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
+                resolve(uniqueResources)
             }).catch((reason) => {
                 console.error(reason)
                 reject(reason)
