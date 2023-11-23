@@ -4,6 +4,9 @@
 ## Version 0.5.0
 **Release Date**: 
 ### Features
+1. Force Mount Target exports to have AUTOSELECT path for none OCI targets.
+2. Force Instance volumes attachment type to PAravirtualized for none OCI targets.
+
 ### Bug Fixes
 1. Change Validation so that missing hostname does not report failure for this warning.
 2. Change PCA Volume Attachment query to convert AD Correctly.
