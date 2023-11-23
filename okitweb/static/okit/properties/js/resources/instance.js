@@ -461,7 +461,8 @@ class InstanceProperties extends OkitResourceProperties {
         this.loadSelect(volume.input, 'block_storage_volume', true)
         volume.input.property('value', attachment.volume_id)
         // Attachment Type
-        const attachment_type = this.createInput('select', 'Attachment Type', `${id}_attachment_type`, idx, (d, i, n) => {attachment.attachment_type = n[i].value})
+        const attachment_type_data = this.resource.isOCI() ? {} : {disabled: true}
+        const attachment_type = this.createInput('select', 'Attachment Type', `${id}_attachment_type`, idx, (d, i, n) => {attachment.attachment_type = n[i].value}, attachment_type_data)
         this.append(attachment_table.tbody, attachment_type.row)
         this.loadAttachmentTypeSelect(attachment_type.input)
         attachment_type.input.property('value', attachment.attachment_type)
