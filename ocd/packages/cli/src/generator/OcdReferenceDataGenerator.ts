@@ -7,7 +7,7 @@
 
 import fs from 'fs'
 import path from 'path'
-import { OcdCodeGenerator } from './OcdCodeGenerator.js'
+import { OcdCodeGenerator } from '@ocd/codegen'
 import { OciReferenceDataQuery } from '@ocd/query'
 
 export class OcdReferenceDataGenerator extends OcdCodeGenerator {

@@ -7,7 +7,7 @@
 
 import fs from 'fs'
 import path from 'path'
-import { OcdModelGenerator, OcdPropertiesGenerator, OcdReferenceDataGenerator, OcdTabularGenerator, OciTerraformGenerator, OciTerraformSchemaImporter, OcdValidatorGenerator } from '@ocd/codegen'
+import { OcdModelGenerator, OcdPropertiesGenerator, OcdTabularGenerator, OciTerraformGenerator, OciTerraformSchemaImporter, OcdValidatorGenerator } from '@ocd/codegen'
 import { parseArgs } from "node:util"
 
 const options = {
@@ -47,7 +47,6 @@ if (command.toLocaleLowerCase() === 'generate') {
         || subcommand.toLocaleLowerCase() === 'oci-tabular-js'
         || subcommand.toLocaleLowerCase() === 'oci-terraform-js'
         || subcommand.toLocaleLowerCase() === 'oci-validator-js'
-        || subcommand.toLocaleLowerCase() === 'oci-reference-data-js'
         ) {
         // Source Schema file will be first in the list after command
         const input_filename = args.values.schema
@@ -57,25 +56,19 @@ if (command.toLocaleLowerCase() === 'generate') {
         const schema = JSON.parse(input_data)
         const force_resource_file = args.values.force
         let generator = undefined
-        if (subcommand.toLocaleLowerCase() === 'oci-reference-data-js') {
-            generator = new OcdReferenceDataGenerator()
-            generator.writeFiles(outputDirectory, '', true)
-        } else {
-            if (subcommand.toLocaleLowerCase() === 'oci-model-js') generator = new OcdModelGenerator()
-            else if (subcommand.toLocaleLowerCase() === 'oci-properties-js') generator = new OcdPropertiesGenerator()
-            else if (subcommand.toLocaleLowerCase() === 'oci-terraform-js') generator = new OciTerraformGenerator()
-            else if (subcommand.toLocaleLowerCase() === 'oci-tabular-js') generator = new OcdTabularGenerator()
-            else if (subcommand.toLocaleLowerCase() === 'oci-validator-js') generator = new OcdValidatorGenerator()
-            else if (subcommand.toLocaleLowerCase() === 'oci-reference-data-js') generator = new OcdReferenceDataGenerator()
-            Object.entries(schema).forEach(([key, value]) => {
-                generator.generate(key, value)
-                generator.writeFiles(outputDirectory, key, force_resource_file)
-            })
-            if (generator.resources.length > 0) {
-                // console.info(generator.resourceFile)
-                const resource_file_name = path.join(outputDirectory, 'resources.ts')
-                fs.writeFileSync(resource_file_name, generator.resourceFile)
-            }
+        if (subcommand.toLocaleLowerCase() === 'oci-model-js') generator = new OcdModelGenerator()
+        else if (subcommand.toLocaleLowerCase() === 'oci-properties-js') generator = new OcdPropertiesGenerator()
+        else if (subcommand.toLocaleLowerCase() === 'oci-terraform-js') generator = new OciTerraformGenerator()
+        else if (subcommand.toLocaleLowerCase() === 'oci-tabular-js') generator = new OcdTabularGenerator()
+        else if (subcommand.toLocaleLowerCase() === 'oci-validator-js') generator = new OcdValidatorGenerator()
+        Object.entries(schema).forEach(([key, value]) => {
+            generator.generate(key, value)
+            generator.writeFiles(outputDirectory, key, force_resource_file)
+        })
+        if (generator.resources.length > 0) {
+            // console.info(generator.resourceFile)
+            const resource_file_name = path.join(outputDirectory, 'resources.ts')
+            fs.writeFileSync(resource_file_name, generator.resourceFile)
         }
     } 
 } else if (command.toLocaleLowerCase() === 'import') {
