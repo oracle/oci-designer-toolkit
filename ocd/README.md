@@ -14,13 +14,31 @@ Electron is used to generate native installers for simplicity of installation an
 
 # Installing
 Before the application can be either built as a desktop or run as a web server all appropriate node modules must be 
-installed. This can be achieve by executing the __install__ script, from this directory, as follows:
+installed. This can be achieve by executing the __fresh-install__ of __reinstall__ script, from this directory, as follows:
 
 ``` bash
 npm run fresh-install
 ```
 
-# Running Desktop Application
+This will create the oci-designer-toolkit/oci/__dist__ directory which will contain a subdirectory for the appropriate opperating system, for example :
+
+```bash
+ls -1
+builder-debug.yml
+builder-effective-config.yaml
+mac
+
+ls -1 mac
+mac
+ocd-0.1.0.dmg
+ocd-0.1.0.dmg.blockmap
+ocd-0.1.0.zip
+ocd-0.1.0.zip.blockmap
+```
+
+In the above example the **ocd-0.1.0.dmg** can be opened in the normal way on a mac and the app will be installed.
+
+# Running Desktop Application without installing
 
 1. Build Desktop Application
 ```bash
