@@ -12,7 +12,7 @@
     "scripts": {
         "desktop": "cd ocd && npm run desktop",
         "web": "cd ocd && npm run web",
-        "install": "cd ocd && npm run install",
+        "install": "cd ocd && npm install",
         "compile": "cd ocd && npm run compile-for-codegen",
         "generate": "cd ocd && npm run import-and-generate",
         "build": "cd ocd && npm run build"
