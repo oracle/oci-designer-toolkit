@@ -6,6 +6,7 @@
 ### Features
 1. Force Mount Target exports to have AUTOSELECT path for none OCI targets.
 2. Force Instance volumes attachment type to PAravirtualized for none OCI targets.
+3. Modify Block Storage Volume for PCA to allow specification of High Performance.
 
 ### Bug Fixes
 1. Change Validation so that missing hostname does not report failure for this warning.
