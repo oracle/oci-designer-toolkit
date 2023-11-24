@@ -3,7 +3,7 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import { common, core, database, loadbalancer, mysql } from "oci-sdk"
+import { common, core, database, datascience, loadbalancer, mysql } from "oci-sdk"
 import { OciQuery } from "./OciQuery"
 import { OciResource } from "@ocd/model"
 
@@ -16,6 +16,7 @@ export class OciReferenceDataQuery {
     // Clients
     computeClient: core.ComputeClient
     databaseClient: database.DatabaseClient
+    datascienceClient: datascience.DataScienceClient
     loadbalancerClient: loadbalancer.LoadBalancerClient
     mysqlClient: mysql.MysqlaasClient
     vcnClient: core.VirtualNetworkClient
@@ -36,6 +37,7 @@ export class OciReferenceDataQuery {
         // this.vcnClient = new core.VirtualNetworkClient(this.authenticationConfiguration, this.clientConfiguration)
         this.computeClient = new core.ComputeClient(this.authenticationConfiguration, this.clientConfiguration)
         this.databaseClient = new database.DatabaseClient(this.authenticationConfiguration, this.clientConfiguration)
+        this.datascienceClient = new datascience.DataScienceClient(this.authenticationConfiguration, this.clientConfiguration)
         this.loadbalancerClient = new loadbalancer.LoadBalancerClient(this.authenticationConfiguration, this.clientConfiguration)
         this.mysqlClient = new mysql.MysqlaasClient(this.authenticationConfiguration, this.clientConfiguration)
         this.vcnClient = new core.VirtualNetworkClient(this.authenticationConfiguration, this.clientConfiguration)
@@ -58,6 +60,7 @@ export class OciReferenceDataQuery {
                 const listDbSystemShapes = this.listDbSystemShapes(compartmentIds)
                 const listDbSystemVersions = this.listDbSystemVersions(compartmentIds)
                 const listCpeDeviceShapes = this.listCpeDeviceShapes()
+                const listDataScienceNotebookSessionShapes = this.listDataScienceNotebookSessionShapes(compartmentIds)
                 const queries = [
                     listShapes,
                     listImages,
@@ -67,7 +70,8 @@ export class OciReferenceDataQuery {
                     listMySQLConfigurations,
                     listDbSystemShapes,
                     listDbSystemVersions,
-                    listCpeDeviceShapes
+                    listCpeDeviceShapes,
+                    listDataScienceNotebookSessionShapes
                 ]
                 Promise.allSettled(queries).then((results) => {
                     console.debug('OciReferenceDataQuery: query: All Settled', results)
@@ -113,6 +117,12 @@ export class OciReferenceDataQuery {
                     // CPE Device Shape
                     // @ts-ignore
                     if (results[queries.indexOf(listCpeDeviceShapes)].status === 'fulfilled') referenceData.cpe_device_shape = results[queries.indexOf(listCpeDeviceShapes)].value
+                    /*
+                    ** DataScience
+                    */
+                    // DataScience Notebook Session Shape
+                    // @ts-ignore
+                    if (results[queries.indexOf(listDataScienceNotebookSessionShapes)].status === 'fulfilled') referenceData.datascience_notebook_session_shape = results[queries.indexOf(listDataScienceNotebookSessionShapes)].value
 
                     // console.debug('OciReferenceDataQuery:', referenceData)
                     resolve(referenceData)
@@ -138,6 +148,29 @@ export class OciReferenceDataQuery {
                     }
                 })
                 resolve(resources)
+            }).catch((reason) => {
+                console.error(reason)
+                reject(reason)
+            })
+        })
+    }
+
+    listDataScienceNotebookSessionShapes(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const requests: datascience.requests.ListNotebookSessionShapesRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
+            const queries = requests.map((r) => this.datascienceClient.listNotebookSessionShapes(r))
+            Promise.allSettled(queries).then((results) => {
+                console.debug('OciQuery: listDataScienceNotebookSessionShapes: All Settled')
+                //@ts-ignore
+                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], []).map((r) => {return {
+                        ...r,
+                        id: r.name,
+                        displayName: r.name
+                    }
+                }).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
+                // @ts-ignore
+                const uniqueResources = Array.from(new Set(resources.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
+                resolve(uniqueResources)
             }).catch((reason) => {
                 console.error(reason)
                 reject(reason)
