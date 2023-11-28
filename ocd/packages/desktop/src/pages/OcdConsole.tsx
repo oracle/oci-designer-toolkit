@@ -19,6 +19,7 @@ import { OcdConfigFacade } from '../facade/OcdConfigFacade'
 import OcdDocumentation from './OcdDocumentation'
 import { OcdCache, OcdCacheData } from '../components/OcdCache'
 import { OcdCacheFacade } from '../facade/OcdCacheFacade'
+import { loadDesign } from '../components/Menu'
 // import { OcdPropertiesPanel, OcdPropertiesToolbarButton } from '../properties/OcdPropertiesPanel'
 
 export const ThemeContext = createContext('')
@@ -32,6 +33,17 @@ const OcdConsole = (): JSX.Element => {
     const [ocdCache, setOcdCache] = useState(OcdCacheData.new())
     const [activeFile, setActiveFile] = useState({name: '', modified: false})
     useEffect(() => {
+        // @ts-ignore
+        if (window.ocdAPI) window.ocdAPI.onOpenFile((event, filePath) => {
+            console.debug('OcdDesignFacade: onOpenFile', filePath)
+            loadDesign(filePath, setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig, setActiveFile).then((results) => {
+                if (!results.canceled) {
+                    console.debug(results.design)
+                }
+            }).catch((resp) => {console.warn('Load Design Failed with', resp)})
+        })
+    }, []) // Empty Array to only run on initial render
+    useEffect(() => {
         OcdConfigFacade.loadConsoleConfig().then((results) => {
             console.debug('OcdConsole: Load Config', results)
             const consoleConfig = new OcdConsoleConfig(results)
@@ -40,7 +52,7 @@ const OcdConsole = (): JSX.Element => {
             console.debug('OcdConsole:', response)
             OcdConfigFacade.saveConsoleConfig(ocdConsoleConfig.config).then((results) => {console.debug('OcdConsole: Saved Config')}).catch((response) => console.debug('OcdConsole:', response))
         })
-    }, [])
+    }, []) // Empty Array to only run on initial render
     useEffect(() => {
         OcdCacheFacade.loadCache().then((results) => {
             console.debug('OcdConsole: Load Cache', results)
@@ -50,9 +62,9 @@ const OcdConsole = (): JSX.Element => {
             console.debug('OcdConsole:', response)
             OcdCacheFacade.saveCache(ocdCache.cache).then((results) => {console.debug('OcdConsole: Saved Cache')}).catch((response) => console.debug('OcdConsole:', response))
         })
-    }, [])
+    }, []) // Empty Array to only run on initial render
     // const [ociConfig, setOciConfig] = useState('')
-    useEffect(() => {setOcdDocument(ocdDocument)}, [ocdDocument])
+    // useEffect(() => {setOcdDocument(ocdDocument)}, [ocdDocument])
     const setAndSaveOcdConsoleConfig = (consoleConfig: OcdConsoleConfig) => {
         OcdConfigFacade.saveConsoleConfig(consoleConfig.config).then((results) => {console.debug('OcdConsole: Saved Config')}).catch((response) => console.debug('OcdConsole:', response))
         setOcdConsoleConfig(consoleConfig)

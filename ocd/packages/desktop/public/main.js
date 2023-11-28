@@ -40,6 +40,8 @@ const saveDesktopState = (config) => {
 
 let mainWindow = undefined
 let activeFile = undefined
+let filePath = undefined
+let ready = false
 
 const createWindow = () => {
 	let desktopState = loadDesktopState()
@@ -72,6 +74,9 @@ const createWindow = () => {
 	mainWindow.on('resized', (e) => saveState())
 	mainWindow.on('close', (e) => saveState())
 
+	// Remove Menu
+	// mainWindow.removeMenu()
+	// mainWindow.setMenu(null)
 	// and load the index.html of the app.
 	const startUrl =
 		process.env.WEB_URL ||
@@ -111,6 +116,13 @@ app.whenReady().then(() => {
 	app.on('activate', function () {
 	  if (BrowserWindow.getAllWindows().length === 0) createWindow()
 	})
+    mainWindow.webContents.on('did-finish-load', function() {
+        if (filePath) {
+            mainWindow.webContents.send('open-file', filePath)
+            filePath = null
+        }
+    });
+	ready = true
   })
   
   
@@ -121,6 +133,19 @@ app.on("window-all-closed", () => {
 		app.quit()
 	}
 })
+
+app.on("open-file", function(event, path) {
+    event.preventDefault()
+    filePath = path
+
+    if (ready) {
+        mainWindow.webContents.send('open-file', filePath)
+        filePath = null
+        return
+    }
+});
+
+
 
 // app.on("activate", () => {
 // 	// On OS X it's common to re-create a window in the app when the

@@ -24,3 +24,13 @@ export namespace OcdDesignFacade {
         return window.ocdAPI ? window.ocdAPI.exportTerraform(design, directory) : new Promise((resolve, reject) => {reject('Currently Not Implemented')})
     }
 }
+
+// // @ts-ignore
+// if (window.ocdAPI) window.ocdAPI.onOpenFile((event, filePath) => {
+//     console.debug('OcdDesignFacade: onOpenFile', filePath)
+//     OcdDesignFacade.loadDesign(filePath).then((results) => {
+//         if (!results.canceled) {
+//             console.debug(results.design)
+//         }
+//     }).catch((resp) => {console.warn('Load Design Failed with', resp)})
+// })

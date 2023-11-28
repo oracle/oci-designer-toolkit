@@ -364,7 +364,7 @@ const OcdResourceValidation =  ({ocdDocument, setOcdDocument}: DesignerResourceP
     const resourceValidationMethod = selectedResource ? `${OcdUtils.toTitleCase(selectedResource.provider)}${selectedResource.resourceType}` : ''
     // @ts-ignore 
     const ResourceValidation = OciResourceValidation[resourceValidationMethod]
-    const validationResults = ResourceValidation.validateResource(selectedResource, ociResources)
+    const validationResults = ResourceValidation ? ResourceValidation.validateResource(selectedResource, ociResources) : []
     const errors = validationResults.filter((v: OcdValidationResult) => v.type === 'error')
     const warnings = validationResults.filter((v: OcdValidationResult) => v.type === 'warning')
     const information = validationResults.filter((v: OcdValidationResult) => v.type === 'information')

@@ -23,6 +23,8 @@ contextBridge.exposeInMainWorld('ocdAPI', {
 	// OCD Cache
   loadCache: () => ipcRenderer.invoke('ocdCache:loadCache'),
   saveCache: (config) => ipcRenderer.invoke('ocdCache:saveCache', config),
+  // Main -> Renderer One Way
+  onOpenFile: (callback) => ipcRenderer.on('open-file', callback)
 })
 
 console.debug('Preload script')

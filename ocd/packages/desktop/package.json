@@ -72,12 +72,22 @@
       "output": "../../dist/${os}",
       "buildResources": "assets"
     },
+    "fileAssociations": [
+      {
+        "ext": "okit",
+        "name": "OCD Design",
+        "role": "Editor"
+      }
+    ],
     "mac": {
       "icon": "build/assets/icon.icns",
       "category": "public.app-category.developer-tools"
     },
     "win": {
       "icon": "build/assets/icon.ico"
+    },
+    "nsis": {
+      "perMachine": true
     },
     "linux": {
       "icon": "build/assets/icon.png",
