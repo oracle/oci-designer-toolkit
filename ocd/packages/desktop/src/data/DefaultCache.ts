@@ -18,7 +18,7 @@ export const defaultCache: OcdCache = {
     dropdownData: {
         shipped: {
             all: {
-                "shape": [
+                "shapes": [
                     {
                         "id": "BM.Standard.A1.160",
                         "displayName": "BM.Standard.A1.160",
@@ -1148,9 +1148,27 @@ export const defaultCache: OcdCache = {
                         "ocpus": 24,
                         "memoryInGBs": 320,
                         "isFlexible": false
+                    },
+                    {
+                        "id": "VM.Standard1.1",
+                        "displayName": "VM.Standard1.1",
+                        "shape": "VM.Standard1.1",
+                        "ocpus": 1,
+                        "memoryInGBs": 7,
+                        "isFlexible": false
                     }
                 ],
-                "image": [
+                "images": [
+                    {
+                        "id": "Oracle-Linux-8.8-2023.08.31-0",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaaavjvtr344mtwklu5dirue6ubplrowd2bd7ur4anqbk5u23jbbpta",
+                        "displayName": "Oracle-Linux-8.8-2023.08.31-0",
+                        "platform": true,
+                        "operatingSystem": "Oracle Linux",
+                        "operatingSystemVersion": "8",
+                        "billableSizeInGBs": 5,
+                        "lifecycleState": "AVAILABLE"
+                    },
                     {
                         "id": "Oracle-Linux-8.8-2023.09.26-0",
                         "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaa3ceen6r4koca7ai47yigikvlhxwrshopc4muy4b5mey7hvlvn4ua",
@@ -2142,7 +2160,7 @@ export const defaultCache: OcdCache = {
                         "lifecycleState": "AVAILABLE"
                     }
                 ],
-                "loadbalancer_shape": [
+                "loadbalancerShapes": [
                     {
                         "id": "100Mbps",
                         "displayName": "100Mbps"
@@ -2168,7 +2186,7 @@ export const defaultCache: OcdCache = {
                         "displayName": "flexible"
                     }
                 ],
-                "mysql_configuration": [
+                "mysqlConfigurations": [
                     {
                         "id": "ocid1.mysqlconfiguration.oc1..aaaaaaaa26nlo52flargskecrmud73p52wwpy7xzjzzgo5iomgo3goc3akca",
                         "compartmentId": null,
@@ -3444,7 +3462,7 @@ export const defaultCache: OcdCache = {
                         "definedTags": null
                     }
                 ],
-                "mysql_shape": [
+                "mysqlShapes": [
                     {
                         "name": "MySQL.HeatWave.BM.Standard",
                         "cpuCoreCount": 128,
@@ -3918,7 +3936,7 @@ export const defaultCache: OcdCache = {
                         "displayName": "VM.Standard.E2.8"
                     }
                 ],
-                "mysql_version": [
+                "mysqlVersions": [
                     {
                         "versionFamily": "8 - Innovation",
                         "versions": [
@@ -3962,7 +3980,7 @@ export const defaultCache: OcdCache = {
                         "displayName": "8.0"
                     }
                 ],
-                "db_system_shape": [
+                "dbSystemShapes": [
                     {
                         "availableCoreCount": 48,
                         "availableCoreCountPerNode": 24,
@@ -5206,7 +5224,7 @@ export const defaultCache: OcdCache = {
                         "displayName": "VM.Standard3.Flex"
                     }
                 ],
-                "db_version": [
+                "dbVersions": [
                     {
                         "isLatestForMajorVersion": true,
                         "isPreviewDbVersion": null,
@@ -6765,7 +6783,21 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-7.6"
                         }
                     ]
-                }
+                },
+                "volumeBackupPolicies": [
+                    {
+                        "id": "bronze",
+                        "displayName": "Bronze"
+                    },
+                    {
+                        "id": "gold",
+                        "displayName": "Gold"
+                    },
+                    {
+                        "id": "silver",
+                        "displayName": "Silver"
+                    }
+                ]
             }
         }
     }

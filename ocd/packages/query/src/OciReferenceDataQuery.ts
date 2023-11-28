@@ -6,6 +6,7 @@
 import { common, containerengine, core, database, datascience, limits, loadbalancer, mysql } from "oci-sdk"
 import { OciQuery } from "./OciQuery"
 import { OciResource } from "@ocd/model"
+import { OcdUtils } from "@ocd/core"
 
 export class OciReferenceDataQuery {
     profile: string
@@ -14,6 +15,7 @@ export class OciReferenceDataQuery {
     authenticationConfiguration: common.AuthParams
     ociQuery: OciQuery
     // Clients
+    blockstorageClient: core.BlockstorageClient
     computeClient: core.ComputeClient
     containerengineClient: containerengine.ContainerEngineClient
     databaseClient: database.DatabaseClient
@@ -36,7 +38,7 @@ export class OciReferenceDataQuery {
         this.authenticationConfiguration = { authenticationDetailsProvider: this.provider }
         // Initialise All Clients
         // this.identityClient = new identity.IdentityClient(this.authenticationConfiguration, this.clientConfiguration)
-        // this.vcnClient = new core.VirtualNetworkClient(this.authenticationConfiguration, this.clientConfiguration)
+        this.blockstorageClient = new core.BlockstorageClient(this.authenticationConfiguration, this.clientConfiguration)
         this.computeClient = new core.ComputeClient(this.authenticationConfiguration, this.clientConfiguration)
         this.containerengineClient = new containerengine.ContainerEngineClient(this.authenticationConfiguration, this.clientConfiguration)
         this.databaseClient = new database.DatabaseClient(this.authenticationConfiguration, this.clientConfiguration)
@@ -75,6 +77,8 @@ export class OciReferenceDataQuery {
                 const listPodShapes = this.listPodShapes(compartmentIds)
                 const getClusterOptions = this.getClusterOptions()
                 const getNodePoolOptions = this.getNodePoolOptions()
+                // Storage
+                const listVolumeBackupPolicies = this.listVolumeBackupPolicies(compartmentIds)
 
                 // Query Promise Array
                 const queries = [
@@ -91,7 +95,8 @@ export class OciReferenceDataQuery {
                     listServices,
                     listPodShapes,
                     getClusterOptions,
-                    getNodePoolOptions
+                    getNodePoolOptions,
+                    listVolumeBackupPolicies
                 ]
                 Promise.allSettled(queries).then((results) => {
                     console.debug('OciReferenceDataQuery: query: All Settled')
@@ -100,37 +105,37 @@ export class OciReferenceDataQuery {
                     */
                     // Shapes
                     // @ts-ignore
-                    if (results[queries.indexOf(listShapes)].status === 'fulfilled') referenceData.shape = results[queries.indexOf(listShapes)].value
+                    if (results[queries.indexOf(listShapes)].status === 'fulfilled') referenceData.shapes = results[queries.indexOf(listShapes)].value
                     // Images
                     // @ts-ignore
-                    if (results[queries.indexOf(listImages)].status === 'fulfilled') referenceData.image = results[queries.indexOf(listImages)].value
+                    if (results[queries.indexOf(listImages)].status === 'fulfilled') referenceData.images = results[queries.indexOf(listImages)].value
                     /*
                     ** Loadbalancer
                     */
                     // Loadbalancer Shapes
                     // @ts-ignore
-                    if (results[queries.indexOf(listLoadbalancerShapes)].status === 'fulfilled') referenceData.loadbalancer_shape = results[queries.indexOf(listLoadbalancerShapes)].value
+                    if (results[queries.indexOf(listLoadbalancerShapes)].status === 'fulfilled') referenceData.loadbalancerShapes = results[queries.indexOf(listLoadbalancerShapes)].value
                     /*
                     ** MySQL
                     */
                     // MySQL Configurations
                     // @ts-ignore
-                    if (results[queries.indexOf(listMySQLConfigurations)].status === 'fulfilled') referenceData.mysql_configuration = results[queries.indexOf(listMySQLConfigurations)].value
+                    if (results[queries.indexOf(listMySQLConfigurations)].status === 'fulfilled') referenceData.mysqlConfigurations = results[queries.indexOf(listMySQLConfigurations)].value
                     // MySQL Shape
                     // @ts-ignore
-                    if (results[queries.indexOf(listMySQLShapes)].status === 'fulfilled') referenceData.mysql_shape = results[queries.indexOf(listMySQLShapes)].value
+                    if (results[queries.indexOf(listMySQLShapes)].status === 'fulfilled') referenceData.mysqlShapes = results[queries.indexOf(listMySQLShapes)].value
                     // MySQL Versions
                     // @ts-ignore
-                    if (results[queries.indexOf(listMySQLVersions)].status === 'fulfilled') referenceData.mysql_version = results[queries.indexOf(listMySQLVersions)].value
+                    if (results[queries.indexOf(listMySQLVersions)].status === 'fulfilled') referenceData.mysqlVersions = results[queries.indexOf(listMySQLVersions)].value
                     /*
                     ** Database
                     */
                     // DB System Shape
                     // @ts-ignore
-                    if (results[queries.indexOf(listDbSystemShapes)].status === 'fulfilled') referenceData.db_system_shape = results[queries.indexOf(listDbSystemShapes)].value
+                    if (results[queries.indexOf(listDbSystemShapes)].status === 'fulfilled') referenceData.dbSystemShapes = results[queries.indexOf(listDbSystemShapes)].value
                     // DB System Version
                     // @ts-ignore
-                    if (results[queries.indexOf(listDbSystemVersions)].status === 'fulfilled') referenceData.db_version = results[queries.indexOf(listDbSystemVersions)].value
+                    if (results[queries.indexOf(listDbSystemVersions)].status === 'fulfilled') referenceData.dbVersions = results[queries.indexOf(listDbSystemVersions)].value
                     /*
                     ** CPE
                     */
@@ -169,6 +174,12 @@ export class OciReferenceDataQuery {
                         // @ts-ignore
                         referenceData.nodePoolOptions = results[queries.indexOf(getNodePoolOptions)].value
                     }
+                    /*
+                    ** Storage
+                    */
+                    // Volume Backup Policies
+                    // @ts-ignore
+                    if (results[queries.indexOf(listVolumeBackupPolicies)].status === 'fulfilled') referenceData.volumeBackupPolicies = results[queries.indexOf(listVolumeBackupPolicies)].value
 
                     // console.debug('OciReferenceDataQuery:', referenceData)
                     resolve(referenceData)
@@ -493,6 +504,28 @@ export class OciReferenceDataQuery {
                     }
                 })
                 resolve(resources)
+            }).catch((reason) => {
+                console.error(reason)
+                reject(reason)
+            })
+        })
+    }
+
+    listVolumeBackupPolicies(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const requests: core.requests.ListVolumeBackupPoliciesRequest[] = [{}, ...compartmentIds.map((id) => {return {compartmentId: id}})]
+            const queries = requests.map((r) => this.blockstorageClient.listVolumeBackupPolicies(r))
+            Promise.allSettled(queries).then((results) => {
+                console.debug('OciReferenceDataQuery: listVolumeBackupPolicies: All Settled')
+                //@ts-ignore
+                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], []).map((r) => {return {
+                        id: r.displayName,
+                        displayName: OcdUtils.toTitle(r.displayName)
+                    }
+                }).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
+                // @ts-ignore
+                const uniqueResources = Array.from(new Set(resources.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
+                resolve(uniqueResources)
             }).catch((reason) => {
                 console.error(reason)
                 reject(reason)
