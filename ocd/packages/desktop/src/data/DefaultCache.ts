@@ -5280,7 +5280,7 @@ export const defaultCache: OcdCache = {
                         "displayName": "23.0.0.0.0"
                     }
                 ],
-                "cpe_device_shape": [
+                "cpeDeviceShape": [
                     {
                         "id": "RTX RTX830 Firmware Rev.15.02.03",
                         "cpeDeviceInfo": {
@@ -5402,7 +5402,7 @@ export const defaultCache: OcdCache = {
                         "displayName": "WatchGuard Firebox with Fireware v12"
                     }
                 ],
-                "datascience_notebook_session_shape": [
+                "datascienceNotebookSessionShapes": [
                     {
                         "name": "BM.GPU.A10.4",
                         "coreCount": 64,
@@ -5547,7 +5547,1225 @@ export const defaultCache: OcdCache = {
                         "id": "VM.Standard3.Flex",
                         "displayName": "VM.Standard3.Flex"
                     }
-                ]
+                ],
+                "services": [
+                    {
+                        "name": "adm",
+                        "description": "Application Dependency Management",
+                        "id": "adm",
+                        "displayName": "adm"
+                    },
+                    {
+                        "name": "ai-anomaly-detection",
+                        "description": "AI Anomaly Detection",
+                        "id": "ai-anomaly-detection",
+                        "displayName": "ai-anomaly-detection"
+                    },
+                    {
+                        "name": "ai-forecasting",
+                        "description": "AI Forecasting",
+                        "id": "ai-forecasting",
+                        "displayName": "ai-forecasting"
+                    },
+                    {
+                        "name": "ai-generative",
+                        "description": "Generative AI",
+                        "id": "ai-generative",
+                        "displayName": "ai-generative"
+                    },
+                    {
+                        "name": "ai-language",
+                        "description": "AI Language",
+                        "id": "ai-language",
+                        "displayName": "ai-language"
+                    },
+                    {
+                        "name": "ai-vision",
+                        "description": "AI Vision",
+                        "id": "ai-vision",
+                        "displayName": "ai-vision"
+                    },
+                    {
+                        "name": "analytics",
+                        "description": "Analytics",
+                        "id": "analytics",
+                        "displayName": "analytics"
+                    },
+                    {
+                        "name": "api-gateway",
+                        "description": "API Gateway",
+                        "id": "api-gateway",
+                        "displayName": "api-gateway"
+                    },
+                    {
+                        "name": "apm",
+                        "description": "Application Performance Monitoring",
+                        "id": "apm",
+                        "displayName": "apm"
+                    },
+                    {
+                        "name": "app-configuration",
+                        "description": "Application Configuration",
+                        "id": "app-configuration",
+                        "displayName": "app-configuration"
+                    },
+                    {
+                        "name": "atat",
+                        "description": "Account Tracking and Automation Tools",
+                        "id": "atat",
+                        "displayName": "atat"
+                    },
+                    {
+                        "name": "auto-scaling",
+                        "description": "Auto Scaling",
+                        "id": "auto-scaling",
+                        "displayName": "auto-scaling"
+                    },
+                    {
+                        "name": "autonomous-recovery-service",
+                        "description": "Autonomous Recovery Service",
+                        "id": "autonomous-recovery-service",
+                        "displayName": "autonomous-recovery-service"
+                    },
+                    {
+                        "name": "big-data",
+                        "description": "Big Data",
+                        "id": "big-data",
+                        "displayName": "big-data"
+                    },
+                    {
+                        "name": "block-storage",
+                        "description": "Block Volume",
+                        "id": "block-storage",
+                        "displayName": "block-storage"
+                    },
+                    {
+                        "name": "blockchain",
+                        "description": "Blockchain",
+                        "id": "blockchain",
+                        "displayName": "blockchain"
+                    },
+                    {
+                        "name": "ccatc",
+                        "description": "Compute Cloud at Customer",
+                        "id": "ccatc",
+                        "displayName": "ccatc"
+                    },
+                    {
+                        "name": "cloud-bridge",
+                        "description": "Oracle Cloud Bridge",
+                        "id": "cloud-bridge",
+                        "displayName": "cloud-bridge"
+                    },
+                    {
+                        "name": "cloud-shell",
+                        "description": "Cloud Shell",
+                        "id": "cloud-shell",
+                        "displayName": "cloud-shell"
+                    },
+                    {
+                        "name": "cloudguard",
+                        "description": "Cloud Guard",
+                        "id": "cloudguard",
+                        "displayName": "cloudguard"
+                    },
+                    {
+                        "name": "compartments",
+                        "description": "Compartments",
+                        "id": "compartments",
+                        "displayName": "compartments"
+                    },
+                    {
+                        "name": "compute",
+                        "description": "Compute",
+                        "id": "compute",
+                        "displayName": "compute"
+                    },
+                    {
+                        "name": "compute-management",
+                        "description": "Compute Management",
+                        "id": "compute-management",
+                        "displayName": "compute-management"
+                    },
+                    {
+                        "name": "container-engine",
+                        "description": "Container Engine",
+                        "id": "container-engine",
+                        "displayName": "container-engine"
+                    },
+                    {
+                        "name": "cost-management",
+                        "description": "Cost Management",
+                        "id": "cost-management",
+                        "displayName": "cost-management"
+                    },
+                    {
+                        "name": "dashboard",
+                        "description": "Dashboard",
+                        "id": "dashboard",
+                        "displayName": "dashboard"
+                    },
+                    {
+                        "name": "data-catalog",
+                        "description": "Data Catalog",
+                        "id": "data-catalog",
+                        "displayName": "data-catalog"
+                    },
+                    {
+                        "name": "data-flow",
+                        "description": "Data Flow",
+                        "id": "data-flow",
+                        "displayName": "data-flow"
+                    },
+                    {
+                        "name": "data-integration",
+                        "description": "Data Integration",
+                        "id": "data-integration",
+                        "displayName": "data-integration"
+                    },
+                    {
+                        "name": "data-labeling",
+                        "description": "Data Labeling",
+                        "id": "data-labeling",
+                        "displayName": "data-labeling"
+                    },
+                    {
+                        "name": "data-science",
+                        "description": "Data Science",
+                        "id": "data-science",
+                        "displayName": "data-science"
+                    },
+                    {
+                        "name": "data-transfer",
+                        "description": "Data Transfer",
+                        "id": "data-transfer",
+                        "displayName": "data-transfer"
+                    },
+                    {
+                        "name": "database",
+                        "description": "Database",
+                        "id": "database",
+                        "displayName": "database"
+                    },
+                    {
+                        "name": "database-migration",
+                        "description": "Database Migration",
+                        "id": "database-migration",
+                        "displayName": "database-migration"
+                    },
+                    {
+                        "name": "dbtools",
+                        "description": "Database Tools",
+                        "id": "dbtools",
+                        "displayName": "dbtools"
+                    },
+                    {
+                        "name": "devops",
+                        "description": "DevOps",
+                        "id": "devops",
+                        "displayName": "devops"
+                    },
+                    {
+                        "name": "digital-assistant",
+                        "description": "Digital Assistant",
+                        "id": "digital-assistant",
+                        "displayName": "digital-assistant"
+                    },
+                    {
+                        "name": "digital-media",
+                        "description": "Digital Media Services",
+                        "id": "digital-media",
+                        "displayName": "digital-media"
+                    },
+                    {
+                        "name": "disaster-recovery",
+                        "description": "Full Stack Disaster Recovery",
+                        "id": "disaster-recovery",
+                        "displayName": "disaster-recovery"
+                    },
+                    {
+                        "name": "dns",
+                        "description": "DNS",
+                        "id": "dns",
+                        "displayName": "dns"
+                    },
+                    {
+                        "name": "email-delivery",
+                        "description": "Email Delivery",
+                        "id": "email-delivery",
+                        "displayName": "email-delivery"
+                    },
+                    {
+                        "name": "events",
+                        "description": "Events",
+                        "id": "events",
+                        "displayName": "events"
+                    },
+                    {
+                        "name": "exadata-fleet-update",
+                        "description": "Exadata Fleet Update",
+                        "id": "exadata-fleet-update",
+                        "displayName": "exadata-fleet-update"
+                    },
+                    {
+                        "name": "faas",
+                        "description": "Functions",
+                        "id": "faas",
+                        "displayName": "faas"
+                    },
+                    {
+                        "name": "fams",
+                        "description": "Fleet Application Management",
+                        "id": "fams",
+                        "displayName": "fams"
+                    },
+                    {
+                        "name": "fast-connect",
+                        "description": "Fast Connect",
+                        "id": "fast-connect",
+                        "displayName": "fast-connect"
+                    },
+                    {
+                        "name": "filesystem",
+                        "description": "File Storage",
+                        "id": "filesystem",
+                        "displayName": "filesystem"
+                    },
+                    {
+                        "name": "goldengate",
+                        "description": "GoldenGate",
+                        "id": "goldengate",
+                        "displayName": "goldengate"
+                    },
+                    {
+                        "name": "health-checks",
+                        "description": "Health Check",
+                        "id": "health-checks",
+                        "displayName": "health-checks"
+                    },
+                    {
+                        "name": "integration",
+                        "description": "Integration",
+                        "id": "integration",
+                        "displayName": "integration"
+                    },
+                    {
+                        "name": "java-management",
+                        "description": "Java Management",
+                        "id": "java-management",
+                        "displayName": "java-management"
+                    },
+                    {
+                        "name": "kms",
+                        "description": "Key Management",
+                        "id": "kms",
+                        "displayName": "kms"
+                    },
+                    {
+                        "name": "licensemanager",
+                        "description": "License Manager",
+                        "id": "licensemanager",
+                        "displayName": "licensemanager"
+                    },
+                    {
+                        "name": "limits",
+                        "description": "Limits",
+                        "id": "limits",
+                        "displayName": "limits"
+                    },
+                    {
+                        "name": "load-balancer",
+                        "description": "LbaaS",
+                        "id": "load-balancer",
+                        "displayName": "load-balancer"
+                    },
+                    {
+                        "name": "logging",
+                        "description": "Logging",
+                        "id": "logging",
+                        "displayName": "logging"
+                    },
+                    {
+                        "name": "logging-analytics",
+                        "description": "Logging Analytics",
+                        "id": "logging-analytics",
+                        "displayName": "logging-analytics"
+                    },
+                    {
+                        "name": "management-agent",
+                        "description": "Management Agent",
+                        "id": "management-agent",
+                        "displayName": "management-agent"
+                    },
+                    {
+                        "name": "management-dashboard",
+                        "description": "Management Dashboard",
+                        "id": "management-dashboard",
+                        "displayName": "management-dashboard"
+                    },
+                    {
+                        "name": "marketplace-publisher",
+                        "description": "Marketplace Publisher",
+                        "id": "marketplace-publisher",
+                        "displayName": "marketplace-publisher"
+                    },
+                    {
+                        "name": "mysql",
+                        "description": "MySQL HeatWave",
+                        "id": "mysql",
+                        "displayName": "mysql"
+                    },
+                    {
+                        "name": "mysql-heatwave-on-aws",
+                        "description": "MySQL HeatWave on AWS",
+                        "id": "mysql-heatwave-on-aws",
+                        "displayName": "mysql-heatwave-on-aws"
+                    },
+                    {
+                        "name": "network-firewall",
+                        "description": "Network Firewall",
+                        "id": "network-firewall",
+                        "displayName": "network-firewall"
+                    },
+                    {
+                        "name": "network-load-balancer-api",
+                        "description": "Network Load Balancer",
+                        "id": "network-load-balancer-api",
+                        "displayName": "network-load-balancer-api"
+                    },
+                    {
+                        "name": "network-path-analyzer",
+                        "description": "Network Path Analyzer",
+                        "id": "network-path-analyzer",
+                        "displayName": "network-path-analyzer"
+                    },
+                    {
+                        "name": "nosql",
+                        "description": "NoSQL",
+                        "id": "nosql",
+                        "displayName": "nosql"
+                    },
+                    {
+                        "name": "notifications",
+                        "description": "Notifications",
+                        "id": "notifications",
+                        "displayName": "notifications"
+                    },
+                    {
+                        "name": "object-storage",
+                        "description": "Object Storage",
+                        "id": "object-storage",
+                        "displayName": "object-storage"
+                    },
+                    {
+                        "name": "ocm-migration",
+                        "description": "Oracle Cloud Migration",
+                        "id": "ocm-migration",
+                        "displayName": "ocm-migration"
+                    },
+                    {
+                        "name": "ocvp",
+                        "description": "VMware Solution",
+                        "id": "ocvp",
+                        "displayName": "ocvp"
+                    },
+                    {
+                        "name": "open-search",
+                        "description": "OpenSearch",
+                        "id": "open-search",
+                        "displayName": "open-search"
+                    },
+                    {
+                        "name": "organizations",
+                        "description": "Organizations",
+                        "id": "organizations",
+                        "displayName": "organizations"
+                    },
+                    {
+                        "name": "osd",
+                        "description": "Oracle Sharded Database",
+                        "id": "osd",
+                        "displayName": "osd"
+                    },
+                    {
+                        "name": "osmh",
+                        "description": "OS Management Hub",
+                        "id": "osmh",
+                        "displayName": "osmh"
+                    },
+                    {
+                        "name": "postgresql",
+                        "description": "PostgreSQL",
+                        "id": "postgresql",
+                        "displayName": "postgresql"
+                    },
+                    {
+                        "name": "queue",
+                        "description": "Queue",
+                        "id": "queue",
+                        "displayName": "queue"
+                    },
+                    {
+                        "name": "redis",
+                        "description": "Redis",
+                        "id": "redis",
+                        "displayName": "redis"
+                    },
+                    {
+                        "name": "regions",
+                        "description": "Regions",
+                        "id": "regions",
+                        "displayName": "regions"
+                    },
+                    {
+                        "name": "resource-manager",
+                        "description": "Resource Manager",
+                        "id": "resource-manager",
+                        "displayName": "resource-manager"
+                    },
+                    {
+                        "name": "secure-desktops",
+                        "description": "Secure Desktops",
+                        "id": "secure-desktops",
+                        "displayName": "secure-desktops"
+                    },
+                    {
+                        "name": "service-connector-hub",
+                        "description": "Service Connector Hub",
+                        "id": "service-connector-hub",
+                        "displayName": "service-connector-hub"
+                    },
+                    {
+                        "name": "service-mesh",
+                        "description": "Service Mesh",
+                        "id": "service-mesh",
+                        "displayName": "service-mesh"
+                    },
+                    {
+                        "name": "streaming",
+                        "description": "Streaming",
+                        "id": "streaming",
+                        "displayName": "streaming"
+                    },
+                    {
+                        "name": "subscription-pricing",
+                        "description": "Subscription Pricing",
+                        "id": "subscription-pricing",
+                        "displayName": "subscription-pricing"
+                    },
+                    {
+                        "name": "vcn",
+                        "description": "Virtual Cloud Network",
+                        "id": "vcn",
+                        "displayName": "vcn"
+                    },
+                    {
+                        "name": "vcnip",
+                        "description": "IP Management",
+                        "id": "vcnip",
+                        "displayName": "vcnip"
+                    },
+                    {
+                        "name": "visualbuilder",
+                        "description": "Visual Builder",
+                        "id": "visualbuilder",
+                        "displayName": "visualbuilder"
+                    },
+                    {
+                        "name": "vpn",
+                        "description": "VPN",
+                        "id": "vpn",
+                        "displayName": "vpn"
+                    },
+                    {
+                        "name": "vulnerability-scanning",
+                        "description": "Vulnerability Scanning",
+                        "id": "vulnerability-scanning",
+                        "displayName": "vulnerability-scanning"
+                    },
+                    {
+                        "name": "waa",
+                        "description": "Web Application Acceleration",
+                        "id": "waa",
+                        "displayName": "waa"
+                    },
+                    {
+                        "name": "waas",
+                        "description": "WaaS",
+                        "id": "waas",
+                        "displayName": "waas"
+                    },
+                    {
+                        "name": "waf",
+                        "description": "Web Application Firewall",
+                        "id": "waf",
+                        "displayName": "waf"
+                    }
+                ],
+                "podShapes": [
+                    {
+                        "name": "Pod.Standard.A1.Flex",
+                        "processorDescription": null,
+                        "id": "Pod.Standard.A1.Flex",
+                        "displayName": "Pod.Standard.A1.Flex"
+                    },
+                    {
+                        "name": "Pod.Standard.E3.Flex",
+                        "processorDescription": null,
+                        "id": "Pod.Standard.E3.Flex",
+                        "displayName": "Pod.Standard.E3.Flex"
+                    },
+                    {
+                        "name": "Pod.Standard.E4.Flex",
+                        "processorDescription": null,
+                        "id": "Pod.Standard.E4.Flex",
+                        "displayName": "Pod.Standard.E4.Flex"
+                    }
+                ],
+                "kubernetesVersions": [
+                    {
+                        "id": "v1.25.4",
+                        "displayName": "v1.25.4",
+                        "version": "v1.25.4"
+                    },
+                    {
+                        "id": "v1.25.12",
+                        "displayName": "v1.25.12",
+                        "version": "v1.25.12"
+                    },
+                    {
+                        "id": "v1.26.2",
+                        "displayName": "v1.26.2",
+                        "version": "v1.26.2"
+                    },
+                    {
+                        "id": "v1.26.7",
+                        "displayName": "v1.26.7",
+                        "version": "v1.26.7"
+                    },
+                    {
+                        "id": "v1.27.2",
+                        "displayName": "v1.27.2",
+                        "version": "v1.27.2"
+                    }
+                ],
+                "clusterPodNetworkOptions": [
+                    {
+                        "cniType": "OCI_VCN_IP_NATIVE",
+                        "id": "OCI_VCN_IP_NATIVE",
+                        "displayName": "OCI_VCN_IP_NATIVE"
+                    },
+                    {
+                        "cniType": "FLANNEL_OVERLAY",
+                        "id": "FLANNEL_OVERLAY",
+                        "displayName": "FLANNEL_OVERLAY"
+                    }
+                ],
+                "nodePoolOptions": {
+                    "kubernetesVersions": [
+                        {
+                            "id": "v1.25.4",
+                            "displayName": "v1.25.4",
+                            "version": "v1.25.4"
+                        },
+                        {
+                            "id": "v1.25.12",
+                            "displayName": "v1.25.12",
+                            "version": "v1.25.12"
+                        },
+                        {
+                            "id": "v1.26.2",
+                            "displayName": "v1.26.2",
+                            "version": "v1.26.2"
+                        },
+                        {
+                            "id": "v1.26.7",
+                            "displayName": "v1.26.7",
+                            "version": "v1.26.7"
+                        },
+                        {
+                            "id": "v1.27.2",
+                            "displayName": "v1.27.2",
+                            "version": "v1.27.2"
+                        }
+                    ],
+                    "shapes": [
+                        {
+                            "id": "BM.DenseIO.E4.128",
+                            "displayName": "BM.DenseIO.E4.128"
+                        },
+                        {
+                            "id": "BM.DenseIO2.52",
+                            "displayName": "BM.DenseIO2.52"
+                        },
+                        {
+                            "id": "BM.Optimized3.36",
+                            "displayName": "BM.Optimized3.36"
+                        },
+                        {
+                            "id": "BM.Standard.A1.160",
+                            "displayName": "BM.Standard.A1.160"
+                        },
+                        {
+                            "id": "BM.Standard.E2.64",
+                            "displayName": "BM.Standard.E2.64"
+                        },
+                        {
+                            "id": "BM.Standard.E3.128",
+                            "displayName": "BM.Standard.E3.128"
+                        },
+                        {
+                            "id": "BM.Standard.E4.128",
+                            "displayName": "BM.Standard.E4.128"
+                        },
+                        {
+                            "id": "BM.Standard.E5.192",
+                            "displayName": "BM.Standard.E5.192"
+                        },
+                        {
+                            "id": "BM.Standard1.36",
+                            "displayName": "BM.Standard1.36"
+                        },
+                        {
+                            "id": "BM.Standard2.52",
+                            "displayName": "BM.Standard2.52"
+                        },
+                        {
+                            "id": "BM.Standard3.64",
+                            "displayName": "BM.Standard3.64"
+                        },
+                        {
+                            "id": "VM.DenseIO.E4.Flex",
+                            "displayName": "VM.DenseIO.E4.Flex"
+                        },
+                        {
+                            "id": "VM.DenseIO2.16",
+                            "displayName": "VM.DenseIO2.16"
+                        },
+                        {
+                            "id": "VM.DenseIO2.24",
+                            "displayName": "VM.DenseIO2.24"
+                        },
+                        {
+                            "id": "VM.DenseIO2.8",
+                            "displayName": "VM.DenseIO2.8"
+                        },
+                        {
+                            "id": "VM.Optimized3.Flex",
+                            "displayName": "VM.Optimized3.Flex"
+                        },
+                        {
+                            "id": "VM.Standard.A1.Flex",
+                            "displayName": "VM.Standard.A1.Flex"
+                        },
+                        {
+                            "id": "VM.Standard.AMD.Generic",
+                            "displayName": "VM.Standard.AMD.Generic"
+                        },
+                        {
+                            "id": "VM.Standard.Ampere.Generic",
+                            "displayName": "VM.Standard.Ampere.Generic"
+                        },
+                        {
+                            "id": "VM.Standard.E2.1",
+                            "displayName": "VM.Standard.E2.1"
+                        },
+                        {
+                            "id": "VM.Standard.E2.2",
+                            "displayName": "VM.Standard.E2.2"
+                        },
+                        {
+                            "id": "VM.Standard.E2.4",
+                            "displayName": "VM.Standard.E2.4"
+                        },
+                        {
+                            "id": "VM.Standard.E2.8",
+                            "displayName": "VM.Standard.E2.8"
+                        },
+                        {
+                            "id": "VM.Standard.E3.Flex",
+                            "displayName": "VM.Standard.E3.Flex"
+                        },
+                        {
+                            "id": "VM.Standard.E4.Flex",
+                            "displayName": "VM.Standard.E4.Flex"
+                        },
+                        {
+                            "id": "VM.Standard.E5.Flex",
+                            "displayName": "VM.Standard.E5.Flex"
+                        },
+                        {
+                            "id": "VM.Standard.Intel.Generic",
+                            "displayName": "VM.Standard.Intel.Generic"
+                        },
+                        {
+                            "id": "VM.Standard.x86.Generic",
+                            "displayName": "VM.Standard.x86.Generic"
+                        },
+                        {
+                            "id": "VM.Standard1.1",
+                            "displayName": "VM.Standard1.1"
+                        },
+                        {
+                            "id": "VM.Standard1.16",
+                            "displayName": "VM.Standard1.16"
+                        },
+                        {
+                            "id": "VM.Standard1.2",
+                            "displayName": "VM.Standard1.2"
+                        },
+                        {
+                            "id": "VM.Standard1.4",
+                            "displayName": "VM.Standard1.4"
+                        },
+                        {
+                            "id": "VM.Standard1.8",
+                            "displayName": "VM.Standard1.8"
+                        },
+                        {
+                            "id": "VM.Standard2.1",
+                            "displayName": "VM.Standard2.1"
+                        },
+                        {
+                            "id": "VM.Standard2.16",
+                            "displayName": "VM.Standard2.16"
+                        },
+                        {
+                            "id": "VM.Standard2.2",
+                            "displayName": "VM.Standard2.2"
+                        },
+                        {
+                            "id": "VM.Standard2.24",
+                            "displayName": "VM.Standard2.24"
+                        },
+                        {
+                            "id": "VM.Standard2.4",
+                            "displayName": "VM.Standard2.4"
+                        },
+                        {
+                            "id": "VM.Standard2.8",
+                            "displayName": "VM.Standard2.8"
+                        },
+                        {
+                            "id": "VM.Standard3.Flex",
+                            "displayName": "VM.Standard3.Flex"
+                        }
+                    ],
+                    "images": [
+                        {
+                            "id": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.27.2-648",
+                            "displayName": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.27.2-648"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.26.7-648",
+                            "displayName": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.26.7-648"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.26.2-648",
+                            "displayName": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.26.2-648"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.25.4-648",
+                            "displayName": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.25.4-648"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.25.12-648",
+                            "displayName": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.25.12-648"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-aarch64-2023.08.31-0-OKE-1.27.2-642",
+                            "displayName": "Oracle-Linux-8.8-aarch64-2023.08.31-0-OKE-1.27.2-642"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-aarch64-2023.08.31-0-OKE-1.26.7-642",
+                            "displayName": "Oracle-Linux-8.8-aarch64-2023.08.31-0-OKE-1.26.7-642"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-aarch64-2023.08.31-0-OKE-1.26.2-645",
+                            "displayName": "Oracle-Linux-8.8-aarch64-2023.08.31-0-OKE-1.26.2-645"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-aarch64-2023.08.31-0-OKE-1.25.4-645",
+                            "displayName": "Oracle-Linux-8.8-aarch64-2023.08.31-0-OKE-1.25.4-645"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-aarch64-2023.08.31-0-OKE-1.25.12-642",
+                            "displayName": "Oracle-Linux-8.8-aarch64-2023.08.31-0-OKE-1.25.12-642"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-aarch64-2023.07.31-1-OKE-1.27.2-633",
+                            "displayName": "Oracle-Linux-8.8-aarch64-2023.07.31-1-OKE-1.27.2-633"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-aarch64-2023.07.31-1-OKE-1.26.7-633",
+                            "displayName": "Oracle-Linux-8.8-aarch64-2023.07.31-1-OKE-1.26.7-633"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-aarch64-2023.07.31-1-OKE-1.26.2-645",
+                            "displayName": "Oracle-Linux-8.8-aarch64-2023.07.31-1-OKE-1.26.2-645"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-aarch64-2023.07.31-1-OKE-1.25.4-645",
+                            "displayName": "Oracle-Linux-8.8-aarch64-2023.07.31-1-OKE-1.25.4-645"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-aarch64-2023.07.31-1-OKE-1.25.12-633",
+                            "displayName": "Oracle-Linux-8.8-aarch64-2023.07.31-1-OKE-1.25.12-633"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.08.31-0-OKE-1.27.2-642",
+                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.08.31-0-OKE-1.27.2-642"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.08.31-0-OKE-1.26.7-642",
+                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.08.31-0-OKE-1.26.7-642"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.08.31-0-OKE-1.26.2-645",
+                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.08.31-0-OKE-1.26.2-645"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.08.31-0-OKE-1.25.4-645",
+                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.08.31-0-OKE-1.25.4-645"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.08.31-0-OKE-1.25.12-642",
+                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.08.31-0-OKE-1.25.12-642"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.07.31-1-OKE-1.27.2-633",
+                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.07.31-1-OKE-1.27.2-633"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.07.31-1-OKE-1.26.7-633",
+                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.07.31-1-OKE-1.26.7-633"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.07.31-1-OKE-1.26.2-645",
+                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.07.31-1-OKE-1.26.2-645"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.07.31-1-OKE-1.25.4-645",
+                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.07.31-1-OKE-1.25.4-645"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.07.31-1-OKE-1.25.12-633",
+                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.07.31-1-OKE-1.25.12-633"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.06.30-0-OKE-1.27.2-632",
+                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.06.30-0-OKE-1.27.2-632"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.06.30-0-OKE-1.26.2-632",
+                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.06.30-0-OKE-1.26.2-632"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.06.30-0-OKE-1.25.4-632",
+                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.06.30-0-OKE-1.25.4-632"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.27.2-648",
+                            "displayName": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.27.2-648"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.26.7-648",
+                            "displayName": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.26.7-648"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.26.2-648",
+                            "displayName": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.26.2-648"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.25.4-648",
+                            "displayName": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.25.4-648"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.25.12-648",
+                            "displayName": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.25.12-648"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-2023.08.31-0-OKE-1.27.2-642",
+                            "displayName": "Oracle-Linux-8.8-2023.08.31-0-OKE-1.27.2-642"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-2023.08.31-0-OKE-1.26.7-642",
+                            "displayName": "Oracle-Linux-8.8-2023.08.31-0-OKE-1.26.7-642"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-2023.08.31-0-OKE-1.26.2-645",
+                            "displayName": "Oracle-Linux-8.8-2023.08.31-0-OKE-1.26.2-645"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-2023.08.31-0-OKE-1.25.4-645",
+                            "displayName": "Oracle-Linux-8.8-2023.08.31-0-OKE-1.25.4-645"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-2023.08.31-0-OKE-1.25.12-642",
+                            "displayName": "Oracle-Linux-8.8-2023.08.31-0-OKE-1.25.12-642"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-2023.07.31-1-OKE-1.27.2-633",
+                            "displayName": "Oracle-Linux-8.8-2023.07.31-1-OKE-1.27.2-633"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-2023.07.31-1-OKE-1.26.7-633",
+                            "displayName": "Oracle-Linux-8.8-2023.07.31-1-OKE-1.26.7-633"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-2023.07.31-1-OKE-1.26.2-645",
+                            "displayName": "Oracle-Linux-8.8-2023.07.31-1-OKE-1.26.2-645"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-2023.07.31-1-OKE-1.25.4-645",
+                            "displayName": "Oracle-Linux-8.8-2023.07.31-1-OKE-1.25.4-645"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-2023.07.31-1-OKE-1.25.12-633",
+                            "displayName": "Oracle-Linux-8.8-2023.07.31-1-OKE-1.25.12-633"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.27.2-648",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.27.2-648"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.26.7-648",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.26.7-648"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.26.2-648",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.26.2-648"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.25.4-648",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.25.4-648"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.25.12-648",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.25.12-648"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-aarch64-2023.08.31-0-OKE-1.27.2-642",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2023.08.31-0-OKE-1.27.2-642"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-aarch64-2023.08.31-0-OKE-1.26.7-642",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2023.08.31-0-OKE-1.26.7-642"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-aarch64-2023.08.31-0-OKE-1.26.2-645",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2023.08.31-0-OKE-1.26.2-645"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-aarch64-2023.08.31-0-OKE-1.25.4-645",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2023.08.31-0-OKE-1.25.4-645"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-aarch64-2023.08.31-0-OKE-1.25.12-642",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2023.08.31-0-OKE-1.25.12-642"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-aarch64-2023.07.31-0-OKE-1.27.2-633",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2023.07.31-0-OKE-1.27.2-633"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-aarch64-2023.07.31-0-OKE-1.26.7-633",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2023.07.31-0-OKE-1.26.7-633"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-aarch64-2023.07.31-0-OKE-1.26.2-645",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2023.07.31-0-OKE-1.26.2-645"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-aarch64-2023.07.31-0-OKE-1.25.4-645",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2023.07.31-0-OKE-1.25.4-645"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-aarch64-2023.07.31-0-OKE-1.25.12-633",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2023.07.31-0-OKE-1.25.12-633"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.08.31-0-OKE-1.27.2-642",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.08.31-0-OKE-1.27.2-642"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.08.31-0-OKE-1.26.7-642",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.08.31-0-OKE-1.26.7-642"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.08.31-0-OKE-1.26.2-645",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.08.31-0-OKE-1.26.2-645"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.08.31-0-OKE-1.25.4-645",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.08.31-0-OKE-1.25.4-645"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.08.31-0-OKE-1.25.12-642",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.08.31-0-OKE-1.25.12-642"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.07.31-0-OKE-1.27.2-633",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.07.31-0-OKE-1.27.2-633"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.07.31-0-OKE-1.26.7-633",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.07.31-0-OKE-1.26.7-633"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.07.31-0-OKE-1.26.2-645",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.07.31-0-OKE-1.26.2-645"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.07.31-0-OKE-1.25.4-645",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.07.31-0-OKE-1.25.4-645"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.07.31-0-OKE-1.25.12-633",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.07.31-0-OKE-1.25.12-633"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.06.30-0-OKE-1.27.2-632",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.06.30-0-OKE-1.27.2-632"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.06.30-0-OKE-1.26.2-632",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.06.30-0-OKE-1.26.2-632"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.06.30-0-OKE-1.25.4-632",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.06.30-0-OKE-1.25.4-632"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.27.2-648",
+                            "displayName": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.27.2-648"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.26.7-648",
+                            "displayName": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.26.7-648"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.26.2-648",
+                            "displayName": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.26.2-648"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.25.4-648",
+                            "displayName": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.25.4-648"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.25.12-648",
+                            "displayName": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.25.12-648"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-2023.08.31-0-OKE-1.27.2-642",
+                            "displayName": "Oracle-Linux-7.9-2023.08.31-0-OKE-1.27.2-642"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-2023.08.31-0-OKE-1.26.7-642",
+                            "displayName": "Oracle-Linux-7.9-2023.08.31-0-OKE-1.26.7-642"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-2023.08.31-0-OKE-1.26.2-645",
+                            "displayName": "Oracle-Linux-7.9-2023.08.31-0-OKE-1.26.2-645"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-2023.08.31-0-OKE-1.25.4-645",
+                            "displayName": "Oracle-Linux-7.9-2023.08.31-0-OKE-1.25.4-645"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-2023.08.31-0-OKE-1.25.12-642",
+                            "displayName": "Oracle-Linux-7.9-2023.08.31-0-OKE-1.25.12-642"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-2023.07.31-1-OKE-1.27.2-633",
+                            "displayName": "Oracle-Linux-7.9-2023.07.31-1-OKE-1.27.2-633"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-2023.07.31-1-OKE-1.26.7-633",
+                            "displayName": "Oracle-Linux-7.9-2023.07.31-1-OKE-1.26.7-633"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-2023.07.31-1-OKE-1.26.2-645",
+                            "displayName": "Oracle-Linux-7.9-2023.07.31-1-OKE-1.26.2-645"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-2023.07.31-1-OKE-1.25.4-645",
+                            "displayName": "Oracle-Linux-7.9-2023.07.31-1-OKE-1.25.4-645"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-2023.07.31-1-OKE-1.25.12-633",
+                            "displayName": "Oracle-Linux-7.9-2023.07.31-1-OKE-1.25.12-633"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-aarch64-2023.10.24-0",
+                            "displayName": "Oracle-Linux-8.8-aarch64-2023.10.24-0"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-aarch64-2023.09.26-0",
+                            "displayName": "Oracle-Linux-8.8-aarch64-2023.09.26-0"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-aarch64-2023.08.31-0",
+                            "displayName": "Oracle-Linux-8.8-aarch64-2023.08.31-0"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.09.26-0",
+                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.09.26-0"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.08.31-0",
+                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.08.31-0"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.08.16-0",
+                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.08.16-0"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-2023.09.26-0",
+                            "displayName": "Oracle-Linux-8.8-2023.09.26-0"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-2023.08.31-0",
+                            "displayName": "Oracle-Linux-8.8-2023.08.31-0"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-aarch64-2023.10.24-0",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2023.10.24-0"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-aarch64-2023.09.26-0",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2023.09.26-0"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-aarch64-2023.08.31-0",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2023.08.31-0"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.09.26-0",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.09.26-0"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.08.31-0",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.08.31-0"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.07.31-0",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.07.31-0"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-2023.09.26-0",
+                            "displayName": "Oracle-Linux-7.9-2023.09.26-0"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-2023.08.31-0",
+                            "displayName": "Oracle-Linux-7.9-2023.08.31-0"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.6",
+                            "displayName": "Oracle-Linux-7.6"
+                        }
+                    ]
+                }
             }
         }
     }
