@@ -8,7 +8,7 @@ import { defaultCache } from '../data/DefaultCache'
 
 export interface OcdCacheEntry extends Record <string, any> {}
 
-export interface OcdCacheRegionData extends Record <string, OcdCacheEntry[]> {}
+export interface OcdCacheRegionData extends Record <string, OcdCacheEntry[] | OcdCacheEntry> {}
 
 export interface OcdCacheProfileData extends Record <string, OcdCacheRegionData> {}
 
