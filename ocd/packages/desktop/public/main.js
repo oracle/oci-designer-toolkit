@@ -75,8 +75,8 @@ const createWindow = () => {
 	mainWindow.on('close', (e) => saveState())
 
 	// Remove Menu
-	mainWindow.removeMenu()
-	mainWindow.setMenu(null)
+	// mainWindow.removeMenu()
+	// mainWindow.setMenu(null)
 	// and load the index.html of the app.
 	const startUrl =
 		process.env.WEB_URL ||
@@ -116,6 +116,12 @@ app.whenReady().then(() => {
 	app.on('activate', function () {
 	  if (BrowserWindow.getAllWindows().length === 0) createWindow()
 	})
+    mainWindow.webContents.on('did-finish-load', function() {
+        if (filePath) {
+            mainWindow.webContents.send('open-file', filePath)
+            filePath = null
+        }
+    });
 	ready = true
   })
   

@@ -25,8 +25,12 @@ export namespace OcdDesignFacade {
     }
 }
 
-// @ts-ignore
-if (window.ocdAPI) window.ocdAPI.onOpenFile((event, filePath) => {
-    console.debug('OcdDesignFacade: onOpenFile', filePath)
-    OcdDesignFacade.loadDesign(filePath)
-})
+// // @ts-ignore
+// if (window.ocdAPI) window.ocdAPI.onOpenFile((event, filePath) => {
+//     console.debug('OcdDesignFacade: onOpenFile', filePath)
+//     OcdDesignFacade.loadDesign(filePath).then((results) => {
+//         if (!results.canceled) {
+//             console.debug(results.design)
+//         }
+//     }).catch((resp) => {console.warn('Load Design Failed with', resp)})
+// })
