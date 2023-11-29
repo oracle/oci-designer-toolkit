@@ -12,8 +12,10 @@ export const elementOverrides: OcdElementOverrides = {
         "destination_type",
         "fault_domain",
         "protocol",
+        "source_type",
         "egress_security_rules.protocol",
-        "ingress_security_rules.protocol"
+        "ingress_security_rules.protocol",
+        "ingress_security_rules.source_type"
     ],
     "types": {
         "common": {},

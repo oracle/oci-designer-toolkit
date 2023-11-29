@@ -7,7 +7,7 @@ import React, { createContext, useContext, useEffect, useRef, useState } from 'r
 import OcdDesigner from './OcdDesigner'
 import OcdDocument from '../components/OcdDocument'
 import OcdConsoleMenuBar from '../components/OcdConsoleMenuBar'
-import { OcdConsoleConfig, OcdConsoleConfiguration } from '../components/OcdConsoleConfiguration'
+import { OcdConsoleConfig } from '../components/OcdConsoleConfiguration'
 import { ConsoleHeaderProps, ConsolePageProps, ConsoleToolbarProps } from '../types/Console'
 import OcdBom from './OcdBom'
 import OcdMarkdown from './OcdMarkdown'
@@ -17,7 +17,7 @@ import OcdVariables from './OcdVariables'
 import { OcdQueryDialog } from '../components/dialogs/OcdQueryDialog'
 import { OcdConfigFacade } from '../facade/OcdConfigFacade'
 import OcdDocumentation from './OcdDocumentation'
-import { OcdCache, OcdCacheData } from '../components/OcdCache'
+import { OcdCacheData } from '../components/OcdCache'
 import { OcdCacheFacade } from '../facade/OcdCacheFacade'
 import { loadDesign } from '../components/Menu'
 // import { OcdPropertiesPanel, OcdPropertiesToolbarButton } from '../properties/OcdPropertiesPanel'
@@ -34,13 +34,9 @@ const OcdConsole = (): JSX.Element => {
     const [activeFile, setActiveFile] = useState({name: '', modified: false})
     useEffect(() => {
         // @ts-ignore
-        if (window.ocdAPI) window.ocdAPI.onOpenFile((event, filePath) => {
+        if (window.ocdAPI) window.ocdAPI.onOpenFile((event, filePath) => { // Running as an Electron App
             console.debug('OcdDesignFacade: onOpenFile', filePath)
-            loadDesign(filePath, setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig, setActiveFile).then((results) => {
-                if (!results.canceled) {
-                    console.debug(results.design)
-                }
-            }).catch((resp) => {console.warn('Load Design Failed with', resp)})
+            loadDesign(filePath, setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig, setActiveFile)
         })
     }, []) // Empty Array to only run on initial render
     useEffect(() => {

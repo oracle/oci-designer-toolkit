@@ -9,6 +9,11 @@ import { OcdDocument } from '../OcdDocument'
 import { useContext } from 'react'
 import { ActiveFileContext } from '../../pages/OcdConsole'
 
+export interface ResourcePropertyCondition {
+    element?: string,
+    value?: boolean | string | number | Function
+}
+
 export interface ResourcePropertyAttributes {
     provider: string
     key: string
@@ -21,7 +26,9 @@ export interface ResourcePropertyAttributes {
     attributes?: {[key: string]: ResourcePropertyAttributes}
     staticLookup?: boolean
     lookup?: boolean
-    lookupResource?: string
+    lookupResource?: string,
+    conditional: boolean,
+    condition: ResourcePropertyCondition
 }
 
 export type SimpleFilterType = (r: any) => boolean
@@ -99,6 +106,16 @@ export namespace OcdResourceProperties {
         else if (attribute.type === 'set')                                    return `<OcdSetProperty        ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} />`
         else if (attribute.type === 'map')                                    return `<OcdMapProperty        ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} />`
     }
+}
+
+export const isPropertyDisplayConditionTrue = (conditional: boolean, condition: ResourcePropertyCondition, resource: OcdResource, rootResource: OcdResource): boolean => {
+    // If not conditional then we will always display
+    if (!conditional) return true
+    // Check condition
+    const element = condition.element ? condition.element.indexOf('_') ? OcdUtils.toCamelCase(condition.element)  : condition.element : ''
+    let display = condition.element ? resource[element] === condition.value : false
+    // console.debug('OcdPropertyTypes: isPropertyDisplayConditionTrue', element, display, condition, resource)
+    return display
 }
 
 export const OcdTextProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute, rootResource }: ResourceProperty): JSX.Element => {
@@ -271,12 +288,19 @@ export const OcdStringListProperty = ({ ocdDocument, setOcdDocument, resource, c
     const onBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.target.reportValidity()
     }
+    const className = isPropertyDisplayConditionTrue(attribute.conditional, attribute.condition, resource, rootResource) ? `ocd-property-row ocd-simple-property-row` : `collapsed hidden`
     return (
-        <div className='ocd-property-row ocd-simple-property-row'>
+        <div className={className}>
             <div><label>{attribute.label}</label></div>
             <div><input type='text' value={resource[attribute.key].join(',')} {...properties} onChange={onChange} onBlur={onBlur}></input></div>
         </div>
     )
+    // return (
+    //     <div className='ocd-property-row ocd-simple-property-row'>
+    //         <div><label>{attribute.label}</label></div>
+    //         <div><input type='text' value={resource[attribute.key].join(',')} {...properties} onChange={onChange} onBlur={onBlur}></input></div>
+    //     </div>
+    // )
 }
 
 export const OcdNumberListProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute, rootResource }: ResourceProperty): JSX.Element => {
