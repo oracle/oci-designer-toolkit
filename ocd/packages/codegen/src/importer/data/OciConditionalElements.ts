@@ -25,6 +25,11 @@ export const conditionalElements: OcdConditionalElements = {
         }
     },
     "oci_core_vcn": {
+        "cidr_blocks": {
+            "element": "is_ipv6enabled",
+            "operator": "ne",
+            "value": true
+        },
         "ipv6private_cidr_blocks": {
             "element": "is_ipv6enabled",
             "operator": "eq",

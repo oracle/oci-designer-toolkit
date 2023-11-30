@@ -5556,8 +5556,12 @@
         "staticLookup": false,
         "lookup": false,
         "lookupResource": "",
-        "conditional": false,
-        "condition": {}
+        "conditional": true,
+        "condition": {
+          "element": "is_ipv6enabled",
+          "operator": "ne",
+          "value": true
+        }
       },
       "compartment_id": {
         "provider": "oci",
