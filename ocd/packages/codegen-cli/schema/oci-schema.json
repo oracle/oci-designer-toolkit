@@ -4402,8 +4402,8 @@
             "required": false,
             "label": "Destination Type",
             "id": "route_rules.destination_type",
-            "staticLookup": false,
-            "lookup": false,
+            "staticLookup": true,
+            "lookup": true,
             "lookupResource": "",
             "conditional": false,
             "condition": {}

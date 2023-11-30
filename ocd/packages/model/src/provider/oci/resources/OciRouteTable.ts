@@ -37,7 +37,8 @@ export namespace OciRouteTable {
     export function getConnectionIds(resource: OciRouteTable): string[] {
         // This List of Ids does not include the Parent Id or Compartment Id
         console.debug('OciRouteTable: Getting Connection Ids to for', resource.displayName, resource.id)
-        return []
+        let associationIds = resource.routeRules ? resource.routeRules.map((r) => r.networkEntityId) : []
+        return associationIds
     }
     
     export function newOciRouteRules(): OciRouteRules {
