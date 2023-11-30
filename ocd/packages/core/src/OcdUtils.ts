@@ -34,4 +34,17 @@ export namespace OcdUtils {
     export function toClassName(prefix: string = 'Oci', str: string): string {
         return `${prefix}${OcdUtils.toTitleCase(str ? str.split('_').join(' ') : 'Unknown').replace(/\W+/g, '')}`
     }
+    export function isCondition(leftHandSide: string | number | boolean | Array<any> | Function | undefined, operator: string | undefined, rightHandSide: string | number | boolean | Array<any> | Function | undefined): boolean {
+        let isTrue = false
+        // console.debug('OcdUtils: isConditional', leftHandSide, operator, rightHandSide)
+        if (operator === 'eq') isTrue = (leftHandSide === rightHandSide)
+        else if (operator === 'ne') isTrue = (leftHandSide !== rightHandSide)
+        else if (operator === 'lt') isTrue = (leftHandSide !== undefined && rightHandSide !== undefined && leftHandSide < rightHandSide)
+        else if (operator === 'gt') isTrue = (leftHandSide !== undefined && rightHandSide !== undefined && leftHandSide > rightHandSide)
+        else if (operator === 'le') isTrue = (leftHandSide !== undefined && rightHandSide !== undefined && leftHandSide <= rightHandSide)
+        else if (operator === 'ge') isTrue = (leftHandSide !== undefined && rightHandSide !== undefined && leftHandSide >= rightHandSide)
+        else if (operator === 'in') isTrue = (leftHandSide !== undefined && Array.isArray(rightHandSide) && rightHandSide.includes(leftHandSide))
+        else isTrue = false
+        return isTrue
+    }
 }
