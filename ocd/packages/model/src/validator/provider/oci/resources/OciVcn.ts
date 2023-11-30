@@ -25,7 +25,12 @@ export namespace OciVcn {
         return (validateResource(resource, resources).filter((v: OcdValidationResult) => v.type === 'information').length > 0)
     }
     function customValidation(resource: Model.OciVcn, resources: OciResources): OcdValidationResult[] {
-        const results: OcdValidationResult[] = []
+        const results: OcdValidationResult[] = [
+            ...cidrBlocks(resource, resources),
+            ...ipv6cidrBlocks(resource, resources)
+        ]
         return results
     }
+    const cidrBlocks = (resource: OcdValidatorResource, resources: OciResources): OcdValidationResult[] => {return !resource.isIpv6enabled ? [OcdResourceValidator.validateRequiredStringList("cidr_blocks", resource.cidrBlock, 'IPv4 Cidr Blocks', 'oci-vcn', resources)] : []}
+    const ipv6cidrBlocks = (resource: OcdValidatorResource, resources: OciResources): OcdValidationResult[] => {return resource.isIpv6enabled ? [OcdResourceValidator.validateRequiredStringList("ipv6_cidr_blocks", resource.ipv6cidrBlocks, 'IPv6 Cidr Blocks', 'oci-vcn', resources)] : []}
 }
