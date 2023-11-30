@@ -191,7 +191,7 @@
                     "class": "oci-identity",
                     "resources": [
                         {
-                            "container": true,
+                            "container": false,
                             "title": "Bastion",
                             "class": "oci-bastion"
                         },
