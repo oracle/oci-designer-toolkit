@@ -32,7 +32,8 @@ export namespace OciIpsec {
     export function getConnectionIds(resource: OciIpsec): string[] {
         // This List of Ids does not include the Parent Id or Compartment Id
         console.debug('OciIpsec: Getting Connection Ids to for', resource.displayName, resource.id)
-        return []
+        let associationIds = resource.cpeId ? [resource.cpeId] : []
+        return associationIds
     }
     
 }
