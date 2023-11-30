@@ -7,6 +7,7 @@ import { OcdUtils } from "@ocd/core"
 
 interface ResourcePropertyCondition {
     element?: string,
+    operator?: 'eq' | 'lt' | 'gt' | 'ne' | 'le' | 'ge' | 'in'
     value?: boolean | string | number | Function
 }
 
@@ -63,7 +64,8 @@ export class OcdTerraformResource {
         if (!conditional) return true
         // Check condition
         const element = condition.element ? condition.element.indexOf('_') ? OcdUtils.toCamelCase(condition.element)  : condition.element : ''
-        let display = condition.element ? resource[element] === condition.value : false
+        const display = OcdUtils.isCondition(resource[element], condition.operator, condition.value)
+        // const display = condition.element ? resource[element] === condition.value : false
         // console.debug('OcdPropertyTypes: isPropertyDisplayConditionTrue', element, display, condition, resource)
         return display
     }

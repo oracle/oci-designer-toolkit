@@ -1574,7 +1574,7 @@
                 "label": "Availability Domain",
                 "id": "node_config_details.placement_configs.availability_domain",
                 "staticLookup": false,
-                "lookup": true,
+                "lookup": false,
                 "lookupResource": "",
                 "conditional": false,
                 "condition": {}
@@ -4559,7 +4559,7 @@
             "label": "Destination Type",
             "id": "egress_security_rules.destination_type",
             "staticLookup": true,
-            "lookup": false,
+            "lookup": true,
             "lookupResource": "",
             "conditional": false,
             "condition": {}
@@ -4574,7 +4574,7 @@
             "label": "Protocol",
             "id": "egress_security_rules.protocol",
             "staticLookup": true,
-            "lookup": false,
+            "lookup": true,
             "lookupResource": "",
             "conditional": false,
             "condition": {}
@@ -4606,6 +4606,7 @@
             "conditional": true,
             "condition": {
               "element": "protocol",
+              "operator": "eq",
               "value": "1"
             },
             "attributes": {
@@ -4653,6 +4654,7 @@
             "conditional": true,
             "condition": {
               "element": "protocol",
+              "operator": "eq",
               "value": "6"
             },
             "attributes": {
@@ -4744,6 +4746,7 @@
             "conditional": true,
             "condition": {
               "element": "protocol",
+              "operator": "eq",
               "value": "17"
             },
             "attributes": {
@@ -4862,7 +4865,7 @@
             "label": "Protocol",
             "id": "ingress_security_rules.protocol",
             "staticLookup": true,
-            "lookup": false,
+            "lookup": true,
             "lookupResource": "",
             "conditional": false,
             "condition": {}
@@ -4892,7 +4895,7 @@
             "label": "Source Type",
             "id": "ingress_security_rules.source_type",
             "staticLookup": true,
-            "lookup": false,
+            "lookup": true,
             "lookupResource": "",
             "conditional": false,
             "condition": {}
@@ -4924,6 +4927,7 @@
             "conditional": true,
             "condition": {
               "element": "protocol",
+              "operator": "eq",
               "value": "1"
             },
             "attributes": {
@@ -4971,6 +4975,7 @@
             "conditional": true,
             "condition": {
               "element": "protocol",
+              "operator": "eq",
               "value": "6"
             },
             "attributes": {
@@ -5062,6 +5067,7 @@
             "conditional": true,
             "condition": {
               "element": "protocol",
+              "operator": "eq",
               "value": "17"
             },
             "attributes": {
@@ -5643,6 +5649,7 @@
         "conditional": true,
         "condition": {
           "element": "is_ipv6enabled",
+          "operator": "eq",
           "value": true
         }
       },
@@ -6250,7 +6257,7 @@
             "label": "Availability Domain",
             "id": "block_volume_replicas.availability_domain",
             "staticLookup": false,
-            "lookup": true,
+            "lookup": false,
             "lookupResource": "",
             "conditional": false,
             "condition": {}

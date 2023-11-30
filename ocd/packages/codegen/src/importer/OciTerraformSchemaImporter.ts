@@ -42,6 +42,7 @@ export class OciTerraformSchemaImporter extends OcdSchemaImporter {
         // Simple attributes
         // @ts-ignore
         let attributes = block.attributes ? Object.entries(block.attributes).filter(([k, v]) => !ignore_attributes.includes(k) && !v.deprecated).reduce((r, [k, v]) => {
+            const id = [...hierarchy, k].join('.')
             r[k] = {
                 provider: 'oci',
                 key: this.toCamelCase(k),
@@ -53,10 +54,11 @@ export class OciTerraformSchemaImporter extends OcdSchemaImporter {
                 // @ts-ignore
                 required: v.required ? v.required : false,
                 label: this.toLabel(k),
-                id: [...hierarchy, k].join('.'),
-                staticLookup: this.isStaticLookup([...hierarchy, k].join('.')),
+                id: id,
+                staticLookup: this.isStaticLookup(id),
                 // staticLookup: this.isStaticLookup(k),
-                lookup: this.isReference(k) || this.isMultiReference(k) || this.isLookupOverride(k),
+                // lookup: this.isReference(k) || this.isMultiReference(k) || this.isLookupOverride(k),
+                lookup: this.isReference(k) || this.isMultiReference(k) || this.isLookupOverride(id),
                 lookupResource: this.isReference(k) || this.isMultiReference(k) ? this.lookupResource(k) : '',
                 conditional: this.isConditional(key, k),
                 condition: this.isConditional(key, k) ? conditionalElements[key][k] : {}
@@ -66,6 +68,7 @@ export class OciTerraformSchemaImporter extends OcdSchemaImporter {
         // Block / Object Attributes
         if (block.block_types) {
             attributes = Object.entries(block.block_types).filter(([k, v]) => !ignore_attributes.includes(k)).reduce((r, [k, v]) => {
+                const id = [...hierarchy, k].join('.')
                 r[k] = {
                     provider: 'oci',
                     key: this.toCamelCase(k),
@@ -77,7 +80,7 @@ export class OciTerraformSchemaImporter extends OcdSchemaImporter {
                     // @ts-ignore
                     required: v.required ? v.required : false,
                     label: this.toLabel(k),
-                    id: [...hierarchy, k].join('.'),
+                    id: id,
                     conditional: this.isConditional(key, k),
                     condition: this.isConditional(key, k) ? conditionalElements[key][k] : {},
                     // @ts-ignore

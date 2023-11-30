@@ -10,20 +10,24 @@ export const conditionalElements: OcdConditionalElements = {
     "oci_core_security_list": {
         "icmp_options": {
             "element": "protocol",
+            "operator": "eq",
             "value": "1"
         },
         "tcp_options": {
             "element": "protocol",
+            "operator": "eq",
             "value": "6"
         },
         "udp_options": {
             "element": "protocol",
+            "operator": "eq",
             "value": "17"
         }
     },
     "oci_core_vcn": {
         "ipv6private_cidr_blocks": {
             "element": "is_ipv6enabled",
+            "operator": "eq",
             "value": true
         }
     }
