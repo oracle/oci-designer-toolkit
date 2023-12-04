@@ -27,14 +27,15 @@ export namespace OciSecret {
     }
     export function allowedParentTypes(): string[] {
         console.debug('OciSecret: Allowed Parent Types')
-        return []
+        return ['Vault']
     }
     export function getParentId(resource: OciSecret): string {
         console.debug('OciSecret: Getting Parent Id to for', resource.displayName, resource.id)
-        return resource.compartmentId
+        return resource.vaultId
     }
     export function setParentId(resource: OciSecret, parentId: string): OciSecret {
         console.debug('OciSecret: Setting Parent Id to', parentId, 'for', resource.displayName, resource.id)
+        resource.vaultId = parentId
         return resource
     }
     export function getConnectionIds(resource: OciSecret): string[] {

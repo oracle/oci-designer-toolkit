@@ -6,7 +6,7 @@
 import { OcdResource } from '@ocd/model'
 import { OcdUtils } from '@ocd/core'
 import { OcdDocument } from '../OcdDocument'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { ActiveFileContext } from '../../pages/OcdConsole'
 
 export interface ResourcePropertyCondition {
@@ -265,6 +265,15 @@ export const OcdStaticLookupProperty = ({ ocdDocument, setOcdDocument, resource,
         setOcdDocument(OcdDocument.clone(ocdDocument))
         if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
+    useEffect(() => {
+        if (!resource[attribute.key] || resource[attribute.key] === '') {
+            if (resources.length > 0) {
+                resource[attribute.key] = resources[0].id
+                // setOcdDocument(OcdDocument.clone(ocdDocument))
+                // if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
+            }
+        }
+    })
     return (
         <div className='ocd-property-row ocd-simple-property-row'>
             <div><label>{attribute.label}</label></div>
