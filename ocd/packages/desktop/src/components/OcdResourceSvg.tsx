@@ -155,9 +155,9 @@ const OcdSimpleRect = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resource
             y='0' 
             width='32' 
             height='32' 
-            data-gid={resource.id} 
-            data-ocid={resource.ocid} 
-            data-pocid={resource.pocid}
+            // data-gid={resource.id} 
+            // data-ocid={resource.ocid} 
+            // data-pocid={resource.pocid}
             >
         </rect>
     )
@@ -241,10 +241,10 @@ const OcdContainerRect = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
                 y={rY} 
                 width={width} 
                 height={height} 
-                data-gid={resource.id} 
-                data-pgid={resource.pgid} 
-                data-ocid={resource.ocid} 
-                data-pocid={resource.pocid}
+                // data-gid={resource.id} 
+                // data-pgid={resource.pgid} 
+                // data-ocid={resource.ocid} 
+                // data-pocid={resource.pocid}
                 >
             </rect>
             {/* {ocdDocument.selectedResource.coordsId === resource.id && <OcdResizePoint resource={resource} cx={width / 2} cy={0} position={'north'} setDimensions={setDimensions} onResize={onResize} onResizeEnd={onResizeEnd}/>} */}
@@ -508,12 +508,12 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
     return (
         <g className='ocd-designer-resource' 
             id={resource.id} 
-            data-ox={resource.x} 
-            data-oy={resource.y} 
-            data-gid={resource.id} 
-            data-pgid={resource.pgid} 
-            data-ocid={resource.ocid} 
-            data-pocid={resource.pocid}
+            // data-ox={resource.x} 
+            // data-oy={resource.y} 
+            // data-gid={resource.id} 
+            // data-pgid={resource.pgid} 
+            // data-ocid={resource.ocid} 
+            // data-pocid={resource.pocid}
             transform={`translate(${gX}, ${gY})`}
             // onMouseDown={svgDragDropEvents.onSVGDragStart}
             // onMouseMove={svgDragDropEvents.onSVGDrag}
