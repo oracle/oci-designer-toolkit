@@ -34,6 +34,9 @@ export namespace OcdUtils {
     export function toClassName(prefix: string = 'Oci', str: string): string {
         return `${prefix}${OcdUtils.toTitleCase(str ? str.split('_').join(' ') : 'Unknown').replace(/\W+/g, '')}`
     }
+    export function toResourceNamespaceName(prefix: string, resource: string) {
+        return `${prefix}${OcdUtils.toTitleCase(resource.split('_').join(' ')).split(' ').join('')}`
+    }
     export function isCondition(leftHandSide: string | number | boolean | Array<any> | Function | undefined, operator: string | undefined, rightHandSide: string | number | boolean | Array<any> | Function | undefined): boolean {
         let isTrue = false
         // console.debug('OcdUtils: isConditional', leftHandSide, operator, rightHandSide)

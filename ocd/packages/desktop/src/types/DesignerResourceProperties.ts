@@ -16,6 +16,10 @@ export interface DesignerColourPicker {
     setColour: Function
 }
 
+export interface DesignerValidationResult {
+    result: OcdValidationResult
+}
+
 export interface DesignerResourceValidationResult {
     result: OcdValidationResult
     resource: OcdResource

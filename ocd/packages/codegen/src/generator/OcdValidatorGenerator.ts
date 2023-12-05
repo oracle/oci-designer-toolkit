@@ -106,10 +106,10 @@ export namespace ${this.namespaceName(resource)} {
     validatorSimpleElementType = (resource, name, attribute, level=0) => {
         // if (resource === 'bucket') console.debug(`${name}:`, attribute)
         if (attribute.required) {
-            if (attribute.type === 'string')      return `OcdResourceValidator.validateRequiredText("${name}", resource.${this.toCamelCase(name)}, '${attribute.label}', '${this.cssClassName(resource)}', resources)`
-            else if (attribute.type === 'bool')   return `OcdResourceValidator.validateRequiredBoolean("${name}", resource.${this.toCamelCase(name)}, '${attribute.label}', '${this.cssClassName(resource)}', resources)`
-            else if (attribute.type === 'number') return `OcdResourceValidator.validateRequiredNumber("${name}", resource.${this.toCamelCase(name)}, '${attribute.label}', '${this.cssClassName(resource)}', resources)`
-            else if (attribute.type === 'list' && attribute.subtype === 'string') return `OcdResourceValidator.validateRequiredStringList( "${name}", resource.${this.toCamelCase(name)}, '${attribute.label}', '${this.cssClassName(resource)}',resources)`
+            if (attribute.type === 'string')      return `OcdResourceValidator.validateRequiredText(resource.displayName, '${name}', resource.${this.toCamelCase(name)}, '${attribute.label}', '${this.cssClassName(resource)}', resources)`
+            else if (attribute.type === 'bool')   return `OcdResourceValidator.validateRequiredBoolean(resource.displayName, '${name}', resource.${this.toCamelCase(name)}, '${attribute.label}', '${this.cssClassName(resource)}', resources)`
+            else if (attribute.type === 'number') return `OcdResourceValidator.validateRequiredNumber(resource.displayName, '${name}', resource.${this.toCamelCase(name)}, '${attribute.label}', '${this.cssClassName(resource)}', resources)`
+            else if (attribute.type === 'list' && attribute.subtype === 'string') return `OcdResourceValidator.validateRequiredStringList(resource.displayName, '${name}', resource.${this.toCamelCase(name)}, '${attribute.label}', '${this.cssClassName(resource)}',resources)`
             // else return `OcdResourceValidator.noDefaultValidation("${name}", resource.${this.toCamelCase(name)}, '${this.toCamelCase(name)} Type ${attribute.type} Required ${attribute.required}', resources)`    
             else return ''
         } else {
