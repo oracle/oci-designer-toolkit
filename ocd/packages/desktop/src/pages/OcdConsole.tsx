@@ -20,6 +20,8 @@ import OcdDocumentation from './OcdDocumentation'
 import { OcdCacheData } from '../components/OcdCache'
 import { OcdCacheFacade } from '../facade/OcdCacheFacade'
 import { loadDesign } from '../components/Menu'
+import { OcdValidationResult, OcdValidator } from '@ocd/model'
+import OcdValidation from './OcdValidation'
 // import { OcdPropertiesPanel, OcdPropertiesToolbarButton } from '../properties/OcdPropertiesPanel'
 
 export const ThemeContext = createContext('')
@@ -172,6 +174,7 @@ const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument,
         console.info(setOcdConsoleConfig)
         console.info(ocdDocument.design)
         console.info(setOcdDocument)
+        OcdValidator.validate(ocdDocument.design)
     }
     const onEstimateClick = () => {
         console.info('Estimate Clicked')
@@ -191,6 +194,11 @@ const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument,
         clone.zoomIn()
         setOcdDocument(clone)
     }
+    const validationResults = OcdValidator.validate(ocdDocument.design)
+    const hasErrors = validationResults.filter((v: OcdValidationResult) => v.type === 'error').length > 0
+    const hasWarnings = validationResults.filter((v: OcdValidationResult) => v.type === 'warning').length > 0
+    const validateClassName = `ocd-console-toolbar-icon ${hasErrors ? 'ocd-validation-error' : hasWarnings ? 'ocd-validation-warning' : 'ocd-validation-ok'}`
+    const validateTitle = hasErrors ? 'Design has validation errors' : hasWarnings ? 'Design has validation warnings' : 'Design validated'
     return (
         <div className='ocd-console-toolbar ocd-console-toolbar-theme'>
             <div className='ocd-toolbar-left'>
@@ -211,9 +219,10 @@ const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument,
             </div>
             <div className='ocd-toolbar-right'>
                 <div>
-                    <div className='validate ocd-console-toolbar-icon' onClick={onValidateClick}></div>
+                    {/* <div className='validate ocd-console-toolbar-icon' onClick={onValidateClick}></div> */}
+                    <div className={validateClassName} title={validateTitle} onClick={onValidateClick}></div>
                     {/* <OcdPropertiesToolbarButton ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} /> */}
-                    <div className='cost-estimate ocd-console-toolbar-icon' onClick={onEstimateClick}></div>
+                    {/* <div className='cost-estimate ocd-console-toolbar-icon' onClick={onEstimateClick}></div> */}
                 </div>
             </div>
         </div>
@@ -229,6 +238,7 @@ const OcdConsoleBody = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, se
                         ocdConsoleConfig.config.displayPage === 'tabular' ? OcdTabular : 
                         ocdConsoleConfig.config.displayPage === 'terraform' ? OcdTerraform : 
                         ocdConsoleConfig.config.displayPage === 'variables' ? OcdVariables : 
+                        ocdConsoleConfig.config.displayPage === 'validation' ? OcdValidation : 
                         OcdDesigner
     console.debug('OcdConsole: Show Query Dialog', showQueryDialog)
     return (
