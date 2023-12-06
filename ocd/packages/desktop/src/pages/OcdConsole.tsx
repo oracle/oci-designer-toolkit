@@ -169,13 +169,15 @@ const OcdConsoleConfigEditor = ({ ocdConsoleConfig, setOcdConsoleConfig }: any):
 
 const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument }: ConsoleToolbarProps): JSX.Element => {
     const onValidateClick = () => {
-        console.info('Validate Clicked')
-        console.info(ocdConsoleConfig)
-        console.info(setOcdConsoleConfig)
-        console.info(ocdDocument.design)
-        console.info(setOcdDocument)
-        OcdValidator.validate(ocdDocument.design)
-    }
+        // console.info('Validate Clicked')
+        // console.info(ocdConsoleConfig)
+        // console.info(setOcdConsoleConfig)
+        // console.info(ocdDocument.design)
+        // console.info(setOcdDocument)
+        // OcdValidator.validate(ocdDocument.design)
+        ocdConsoleConfig.config.displayPage = 'validation'
+        setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+}
     const onEstimateClick = () => {
         console.info('Estimate Clicked')
     }
