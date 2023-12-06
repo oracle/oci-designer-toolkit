@@ -5,13 +5,16 @@
 
 import { CompartmentPickerProps, QueryDialogProps } from "../../types/Dialogs"
 import { OciApiFacade } from "../../facade/OciApiFacade"
-import { useState } from "react"
+import { useContext, useState } from "react"
 // import { OciCompartment } from "../../model/provider/oci/resources"
 import { OciModelResources } from '@ocd/model'
 import OcdDocument from "../OcdDocument"
 import { OcdUtils } from '@ocd/core'
+import { ActiveFileContext } from "../../pages/OcdConsole"
 
 export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps): JSX.Element => {
+    // @ts-ignore
+    const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const loadingState = '......Reading OCI Config'
     const regionsLoading = {id: 'Select Valid Profile', displayName: 'Select Valid Profile'}
     const className = `ocd-query-dialog`
@@ -92,6 +95,7 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
             // Auto Arrange
             clone.autoLayout(clone.getActivePage().id)
             setOcdDocument(clone)
+            setActiveFile({name: '', modified: false})
         })
     }
    

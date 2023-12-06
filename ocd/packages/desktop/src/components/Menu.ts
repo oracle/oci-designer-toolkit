@@ -121,11 +121,22 @@ export const menuItems = [
             },
             {
                 label: 'Query',
-                click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
-                    const clone = OcdDocument.clone(ocdDocument)
-                    clone.query = !ocdDocument.query
-                    console.debug('Menu: Setting Query', ocdDocument, clone)
-                    setOcdDocument(clone)
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
+                    if (activeFile.modified) {
+                        OcdDesignFacade.discardConfirmation().then((discard) => {
+                            if (discard) {
+                                const clone = OcdDocument.clone(ocdDocument)
+                                clone.query = !ocdDocument.query
+                                console.debug('Menu: Setting Query', ocdDocument, clone)
+                                setOcdDocument(clone)
+                            }
+                        }).catch((resp) => {console.warn('Discard Failed with', resp)})
+                    } else {
+                        const clone = OcdDocument.clone(ocdDocument)
+                        clone.query = !ocdDocument.query
+                        console.debug('Menu: Setting Query', ocdDocument, clone)
+                        setOcdDocument(clone)
+                        }
                 }
             },
             {
@@ -330,14 +341,14 @@ export const menuItems = [
                     ocdConsoleConfig.config.displayPage = 'terraform'
                     setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
                 }
-            // },
+            }
             // {
             //     label: 'Validation Results',
             //     click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
             //         ocdConsoleConfig.config.displayPage = 'validation'
             //         setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
             //     }
-            }
+            // }
         ]
     },
     {
