@@ -330,13 +330,13 @@ export const menuItems = [
                     ocdConsoleConfig.config.displayPage = 'terraform'
                     setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
                 }
-            },
-            {
-                label: 'Validation Results',
-                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
-                    ocdConsoleConfig.config.displayPage = 'validation'
-                    setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
-                }
+            // },
+            // {
+            //     label: 'Validation Results',
+            //     click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
+            //         ocdConsoleConfig.config.displayPage = 'validation'
+            //         setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+            //     }
             }
         ]
     },
