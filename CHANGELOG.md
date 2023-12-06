@@ -1,11 +1,11 @@
 # Release Notes
 
 
-## Version 0.5.0
-**Release Date**: 
+## Version 0.57.0
+**Release Date**: 6th December 2023
 ### Features
 1. Force Mount Target exports to have AUTOSELECT path for none OCI targets.
-2. Force Instance volumes attachment type to PAravirtualized for none OCI targets.
+2. Force Instance volumes attachment type to Paravirtualized for none OCI targets.
 3. Modify Block Storage Volume for PCA to allow specification of High Performance.
 
 ### Bug Fixes
