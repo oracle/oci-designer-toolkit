@@ -30,8 +30,8 @@ const OcdResourcePropertiesHeader = ({ocdDocument, setOcdDocument}: DesignerReso
 
 const OciCommonResourceProperties = ({ocdDocument, setOcdDocument, resource, rootResource}: ResourceProperties): JSX.Element => {
     const config: ResourceElementConfig | undefined = undefined
-    const displayName = {"provider": "oci", "key": "displayName", "name": "displayName", "type": "string", "subtype": "", "required": true, "label": "Name", "id": "displayName"}
-    const compartmentId = {"provider": "oci", "key": "compartmentId", "name": "compartmentId", "type": "string", "subtype": "", "required": true, "label": "Compartment", "id": "compartmentId", "lookupResource": "compartment"}
+    const displayName = {"provider": "oci", "key": "displayName", "name": "displayName", "type": "string", "subtype": "", "required": true, "label": "Name", "id": "displayName", "conditional": false, "condition": {}}
+    const compartmentId = {"provider": "oci", "key": "compartmentId", "name": "compartmentId", "type": "string", "subtype": "", "required": true, "label": "Compartment", "id": "compartmentId", "lookupResource": "compartment", "conditional": false, "condition": {}}
     return (
         <div>
             <details open={true}>
@@ -364,7 +364,7 @@ const OcdResourceValidation =  ({ocdDocument, setOcdDocument}: DesignerResourceP
     const resourceValidationMethod = selectedResource ? `${OcdUtils.toTitleCase(selectedResource.provider)}${selectedResource.resourceType}` : ''
     // @ts-ignore 
     const ResourceValidation = OciResourceValidation[resourceValidationMethod]
-    const validationResults = ResourceValidation.validateResource(selectedResource, ociResources)
+    const validationResults = ResourceValidation ? ResourceValidation.validateResource(selectedResource, ociResources) : []
     const errors = validationResults.filter((v: OcdValidationResult) => v.type === 'error')
     const warnings = validationResults.filter((v: OcdValidationResult) => v.type === 'warning')
     const information = validationResults.filter((v: OcdValidationResult) => v.type === 'information')

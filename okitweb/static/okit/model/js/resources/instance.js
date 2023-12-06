@@ -160,7 +160,17 @@ class Instance extends OkitArtifact {
      */
     deleteReferences() {
         // Instance Volume Attachment
-        this.getOkitJson().getLoadBalancers().forEach((r) => r.instance_ids = r.instance_ids.filter((id) => id != this.id))
+        // this.getOkitJson().getLoadBalancers().forEach((r) => r.instance_ids = r.instance_ids.filter((id) => id != this.id))
+        this.getOkitJson().getLoadBalancers().forEach((lb) => {
+            lb.backend_sets.forEach((bs) => {
+                bs.backends = bs.backends.filter((b) => b.target_id != this.id)
+            })
+        })
+        this.getOkitJson().getNetworkLoadBalancers().forEach((lb) => {
+            lb.backend_sets.forEach((bs) => {
+                bs.backends = bs.backends.filter((b) => b.target_id != this.id)
+            })
+        })
     }
 
     getNamePrefix() {

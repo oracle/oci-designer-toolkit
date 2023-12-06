@@ -88,7 +88,8 @@ class MountTargetProperties extends OkitResourceProperties {
         this.loadSelect(fss.input, 'file_system', false, this.fss_filter)
         fss.input.property('value', fs_export.file_system_id)
         // Path
-        const path = this.createInput('text', 'Path', `${id}_path`, idx, (d, i, n) => fs_export.path = n[i].value)
+        const path_data = this.resource.isOCI() ? {} : {readonly: true}
+        const path = this.createInput('text', 'Path', `${id}_path`, idx, (d, i, n) => fs_export.path = n[i].value, path_data)
         this.append(et.table, path.row)
         path.input.property('value', fs_export.path)
         // CIDR

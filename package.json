@@ -10,8 +10,19 @@
     },
     "bugs": "https://github.com/oracle/oci-designer-toolkit/issues",
     "scripts": {
+        "github-action-install": "cd ocd && npm run github-action-install",
+        "github-action-compile-for-codegen": "cd ocd && npm run github-action-compile-for-codegen",
+        "github-action-generate": "cd ocd && npm run github-action-generate",
+        "github-action-compile": "cd ocd && npm run github-action-compile",
+        "github-action-pack": "cd ocd && npm run github-action-pack",
+        "github-action-build-react": "cd ocd && npm run github-action-build-react",
+        "github-action-build-electron": "cd ocd && npm run github-action-build-electron",
+
         "desktop": "cd ocd && npm run desktop",
         "web": "cd ocd && npm run web",
-        "fresh-install": "cd ocd && npm run fresh-install"
+        "install": "cd ocd && npm install",
+        "compile": "cd ocd && npm run compile-for-codegen",
+        "generate": "cd ocd && npm run import-and-generate",
+        "build": "cd ocd && npm run build"
     }
 }

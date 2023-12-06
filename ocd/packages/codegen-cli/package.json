@@ -22,18 +22,18 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
 
-    "pack": "mkdir -p ./dist && npm pack --pack-destination ./dist",
+    "pack": "mkdir -p dist && npm pack --pack-destination dist",
     "compile": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
     "build": "npm run compile && npm run pack",
 
     "import-oci-terraform-schema": "node lib/esm/ocd-codegen.js import terraform-schema -i ./schema/tf-schema.json -o ./schema/oci-schema.json",
     "import": "npm run import-oci-terraform-schema",
 
-    "generate-oci-model":      "node lib/esm/ocd-codegen.js generate oci-model-js      -s ./schema/oci-schema.json -d ../model/src/provider/oci",
-    "generate-oci-properties": "node lib/esm/ocd-codegen.js generate oci-properties-js -s ./schema/oci-schema.json -d ../desktop/src/components/properties/provider/oci",
-    "generate-oci-tabular":    "node lib/esm/ocd-codegen.js generate oci-tabular-js    -s ./schema/oci-schema.json -d ../desktop/src/components/tabular/provider/oci",
-    "generate-oci-terraform":  "node lib/esm/ocd-codegen.js generate oci-terraform-js  -s ./schema/oci-schema.json -d ../export/src/terraform/provider/oci",
-    "generate-oci-validator":  "node lib/esm/ocd-codegen.js generate oci-validator-js  -s ./schema/oci-schema.json -d ../model/src/validator/provider/oci",
+    "generate-oci-model":          "node lib/esm/ocd-codegen.js generate oci-model-js      -s ./schema/oci-schema.json -d ../model/src/provider/oci",
+    "generate-oci-properties":     "node lib/esm/ocd-codegen.js generate oci-properties-js -s ./schema/oci-schema.json -d ../desktop/src/components/properties/provider/oci",
+    "generate-oci-tabular":        "node lib/esm/ocd-codegen.js generate oci-tabular-js    -s ./schema/oci-schema.json -d ../desktop/src/components/tabular/provider/oci",
+    "generate-oci-terraform":      "node lib/esm/ocd-codegen.js generate oci-terraform-js  -s ./schema/oci-schema.json -d ../export/src/terraform/provider/oci",
+    "generate-oci-validator":      "node lib/esm/ocd-codegen.js generate oci-validator-js  -s ./schema/oci-schema.json -d ../model/src/validator/provider/oci",
     "generate-oci":            "npm run generate-oci-model && npm run generate-oci-properties && npm run generate-oci-terraform && npm run generate-oci-tabular && npm run generate-oci-validator",
 
     "generate": "npm run generate-oci",

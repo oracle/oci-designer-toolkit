@@ -21,12 +21,13 @@
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "pack": "mkdir -p ./dist && npm pack --pack-destination ./dist",
+    "pack": "mkdir -p dist && npm pack --pack-destination dist",
     "compile": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
-    "build": "npm run compile && npm run pack"
-
+    "build": "npm run compile && npm run pack",
+    "generate-oci-reference-data": "node lib/esm/ocd-generate-default-cache.js  -d ../desktop/src/data"
   },
   "dependencies": {
+    "@ocd/codegen": "^1.0.0",
     "@ocd/core": "^1.0.0",
     "@ocd/export": "^1.0.0",
     "@ocd/import": "^1.0.0",

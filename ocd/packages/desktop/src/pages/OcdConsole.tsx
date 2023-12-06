@@ -7,7 +7,7 @@ import React, { createContext, useContext, useEffect, useRef, useState } from 'r
 import OcdDesigner from './OcdDesigner'
 import OcdDocument from '../components/OcdDocument'
 import OcdConsoleMenuBar from '../components/OcdConsoleMenuBar'
-import { OcdConsoleConfig, OcdConsoleConfiguration } from '../components/OcdConsoleConfiguration'
+import { OcdConsoleConfig } from '../components/OcdConsoleConfiguration'
 import { ConsoleHeaderProps, ConsolePageProps, ConsoleToolbarProps } from '../types/Console'
 import OcdBom from './OcdBom'
 import OcdMarkdown from './OcdMarkdown'
@@ -17,8 +17,11 @@ import OcdVariables from './OcdVariables'
 import { OcdQueryDialog } from '../components/dialogs/OcdQueryDialog'
 import { OcdConfigFacade } from '../facade/OcdConfigFacade'
 import OcdDocumentation from './OcdDocumentation'
-import { OcdCache, OcdCacheData } from '../components/OcdCache'
+import { OcdCacheData } from '../components/OcdCache'
 import { OcdCacheFacade } from '../facade/OcdCacheFacade'
+import { loadDesign } from '../components/Menu'
+import { OcdValidationResult, OcdValidator } from '@ocd/model'
+import OcdValidation from './OcdValidation'
 // import { OcdPropertiesPanel, OcdPropertiesToolbarButton } from '../properties/OcdPropertiesPanel'
 
 export const ThemeContext = createContext('')
@@ -32,6 +35,13 @@ const OcdConsole = (): JSX.Element => {
     const [ocdCache, setOcdCache] = useState(OcdCacheData.new())
     const [activeFile, setActiveFile] = useState({name: '', modified: false})
     useEffect(() => {
+        // @ts-ignore
+        if (window.ocdAPI) window.ocdAPI.onOpenFile((event, filePath) => { // Running as an Electron App
+            console.debug('OcdDesignFacade: onOpenFile', filePath)
+            loadDesign(filePath, setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig, setActiveFile)
+        })
+    }, []) // Empty Array to only run on initial render
+    useEffect(() => {
         OcdConfigFacade.loadConsoleConfig().then((results) => {
             console.debug('OcdConsole: Load Config', results)
             const consoleConfig = new OcdConsoleConfig(results)
@@ -40,7 +50,7 @@ const OcdConsole = (): JSX.Element => {
             console.debug('OcdConsole:', response)
             OcdConfigFacade.saveConsoleConfig(ocdConsoleConfig.config).then((results) => {console.debug('OcdConsole: Saved Config')}).catch((response) => console.debug('OcdConsole:', response))
         })
-    }, [])
+    }, []) // Empty Array to only run on initial render
     useEffect(() => {
         OcdCacheFacade.loadCache().then((results) => {
             console.debug('OcdConsole: Load Cache', results)
@@ -50,9 +60,9 @@ const OcdConsole = (): JSX.Element => {
             console.debug('OcdConsole:', response)
             OcdCacheFacade.saveCache(ocdCache.cache).then((results) => {console.debug('OcdConsole: Saved Cache')}).catch((response) => console.debug('OcdConsole:', response))
         })
-    }, [])
+    }, []) // Empty Array to only run on initial render
     // const [ociConfig, setOciConfig] = useState('')
-    useEffect(() => {setOcdDocument(ocdDocument)}, [ocdDocument])
+    // useEffect(() => {setOcdDocument(ocdDocument)}, [ocdDocument])
     const setAndSaveOcdConsoleConfig = (consoleConfig: OcdConsoleConfig) => {
         OcdConfigFacade.saveConsoleConfig(consoleConfig.config).then((results) => {console.debug('OcdConsole: Saved Config')}).catch((response) => console.debug('OcdConsole:', response))
         setOcdConsoleConfig(consoleConfig)
@@ -159,12 +169,9 @@ const OcdConsoleConfigEditor = ({ ocdConsoleConfig, setOcdConsoleConfig }: any):
 
 const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument }: ConsoleToolbarProps): JSX.Element => {
     const onValidateClick = () => {
-        console.info('Validate Clicked')
-        console.info(ocdConsoleConfig)
-        console.info(setOcdConsoleConfig)
-        console.info(ocdDocument.design)
-        console.info(setOcdDocument)
-    }
+        ocdConsoleConfig.config.displayPage = 'validation'
+        setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+}
     const onEstimateClick = () => {
         console.info('Estimate Clicked')
     }
@@ -183,6 +190,12 @@ const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument,
         clone.zoomIn()
         setOcdDocument(clone)
     }
+    const hideZoomClassName = ocdConsoleConfig.config.displayPage === 'designer' ? '' : 'hidden'
+    const validationResults = OcdValidator.validate(ocdDocument.design)
+    const hasErrors = validationResults.filter((v: OcdValidationResult) => v.type === 'error').length > 0
+    const hasWarnings = validationResults.filter((v: OcdValidationResult) => v.type === 'warning').length > 0
+    const validateClassName = `ocd-console-toolbar-icon ${hasErrors ? 'ocd-validation-error' : hasWarnings ? 'ocd-validation-warning' : 'ocd-validation-ok'}`
+    const validateTitle = hasErrors ? 'Design has validation errors' : hasWarnings ? 'Design has validation warnings' : 'Design validated'
     return (
         <div className='ocd-console-toolbar ocd-console-toolbar-theme'>
             <div className='ocd-toolbar-left'>
@@ -196,16 +209,17 @@ const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument,
             </div>
             <div className='ocd-toolbar-centre'>
                 <div>
-                    <div className='zoom-out ocd-console-toolbar-icon' onClick={onZoomOutClick}></div>
-                    <div className='zoom-121 ocd-console-toolbar-icon' onClick={onZoom121Click}></div>
-                    <div className='zoom-in ocd-console-toolbar-icon' onClick={onZoomInClick}></div>
+                    <div className={`zoom-out ocd-console-toolbar-icon ${hideZoomClassName}`} onClick={onZoomOutClick}></div>
+                    <div className={`zoom-121 ocd-console-toolbar-icon ${hideZoomClassName}`} onClick={onZoom121Click}></div>
+                    <div className={`zoom-in ocd-console-toolbar-icon ${hideZoomClassName}`}  onClick={onZoomInClick}></div>
                 </div>
             </div>
             <div className='ocd-toolbar-right'>
                 <div>
-                    <div className='validate ocd-console-toolbar-icon' onClick={onValidateClick}></div>
+                    {/* <div className='validate ocd-console-toolbar-icon' onClick={onValidateClick}></div> */}
+                    <div className={validateClassName} title={validateTitle} onClick={onValidateClick}></div>
                     {/* <OcdPropertiesToolbarButton ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} /> */}
-                    <div className='cost-estimate ocd-console-toolbar-icon' onClick={onEstimateClick}></div>
+                    {/* <div className='cost-estimate ocd-console-toolbar-icon' onClick={onEstimateClick}></div> */}
                 </div>
             </div>
         </div>
@@ -221,6 +235,7 @@ const OcdConsoleBody = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, se
                         ocdConsoleConfig.config.displayPage === 'tabular' ? OcdTabular : 
                         ocdConsoleConfig.config.displayPage === 'terraform' ? OcdTerraform : 
                         ocdConsoleConfig.config.displayPage === 'variables' ? OcdVariables : 
+                        ocdConsoleConfig.config.displayPage === 'validation' ? OcdValidation : 
                         OcdDesigner
     console.debug('OcdConsole: Show Query Dialog', showQueryDialog)
     return (

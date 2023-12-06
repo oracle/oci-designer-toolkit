@@ -3,6 +3,14 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
+import { OcdUtils } from "@ocd/core"
+
+interface ResourcePropertyCondition {
+    element?: string,
+    operator?: 'eq' | 'lt' | 'gt' | 'ne' | 'le' | 'ge' | 'in'
+    value?: boolean | string | number | Function
+}
+
 export class OcdTerraformResource {
     indentation = ['', '    ', '        ', '            ', '                ']
     idTFResourceMap: Record<string, string> = {}
@@ -51,6 +59,17 @@ export class OcdTerraformResource {
         else return `${this.indentation[level]}# ${name} = "${value}"`
     }
 
+    isPropertyAssignConditionTrue = (conditional: boolean, condition: ResourcePropertyCondition, resource: Record<string, any>): boolean => {
+        // If not conditional then we will always display
+        if (!conditional) return true
+        // Check condition
+        const element = condition.element ? condition.element.indexOf('_') ? OcdUtils.toCamelCase(condition.element)  : condition.element : ''
+        const display = OcdUtils.isCondition(resource[element], condition.operator, condition.value)
+        // const display = condition.element ? resource[element] === condition.value : false
+        // console.debug('OcdPropertyTypes: isPropertyDisplayConditionTrue', element, display, condition, resource)
+        return display
+    }
+    
     // if (attribute.type === 'string')      return `${name} = \\\`\${this.isVariable(resource.${this.toCamelCase(name)}) ? this.formatVariable(resource.${this.toCamelCase(name)}) : "resource.${this.toCamelCase(name)}"}\\\``
     // else if (attribute.type === 'bool')   return `${name} = \${resource.${this.toCamelCase(name)}}`
     // else if (attribute.type === 'number') return `${name} = \${resource.${this.toCamelCase(name)}}`

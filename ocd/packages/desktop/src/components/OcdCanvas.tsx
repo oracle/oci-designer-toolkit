@@ -364,8 +364,8 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
                         <pattern id="small-grid" width="8" height="8" patternUnits="userSpaceOnUse"><path d="M 8 0 L 0 0 0 8" fill="none" stroke="gray" strokeWidth="0.5"></path></pattern>
                         <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse"><rect width="80" height="80" fill="url(#small-grid)"></rect><path d="M 80 0 L 0 0 0 80" fill="none" stroke="darkgray" strokeWidth="1"></path></pattern>
                     </defs>
+                    {page.grid && <OcdCanvasGrid/>}
                     <g id='matrix-group' transform={`matrix(${transformMatrix.join(' ')})`}>
-                        {page.grid && <OcdCanvasGrid/>}
                         <g>
                             {visibleCoords.map((r: OcdViewCoords) => {
                                 return <OcdResourceSvg

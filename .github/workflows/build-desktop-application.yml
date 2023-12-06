@@ -3,7 +3,7 @@ name: Build/Release
 on: 
   push:
     branches:
-      - 'toxophilist/master'
+      - 'nightly'
 
 env:
   CI: false
@@ -15,7 +15,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
+        # os: [macos-latest, ubuntu-latest, windows-latest]
+        os: [macos-latest, windows-latest]
         version: [latest]
 
     steps:
@@ -25,10 +26,19 @@ jobs:
           node-version: ${{ matrix.version }}
       - run: node --version
       - run: npm --version
-      - run: npm run first-install
+      # - run: npm run install
+      # - run: npm run compile
+      # - run: npm run generate
       # - run: npm run build
+      - run: npm run github-action-install
+      - run: npm run github-action-compile-for-codegen
+      - run: npm run github-action-generate
+      - run: npm run github-action-compile
+      - run: npm run github-action-pack
+      - run: npm run github-action-build-react
+      - run: npm run github-action-build-electron
       # - run: npm run desktop
       # - run: npm run electron
-      # - run: ls ./ocd/dist
-      #   if: always()
+      - run: ls ./ocd/dist
+        if: always()
 

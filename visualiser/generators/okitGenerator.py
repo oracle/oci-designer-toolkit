@@ -27,7 +27,7 @@ from model.okitValidation import OCIJsonValidator
 logger = getLogger()
 
 class OCIGenerator(object):
-    OKIT_VERSION = "0.56.0"
+    OKIT_VERSION = "0.57.0"
     def __init__(self, template_dir, output_dir, visualiser_json, use_vars=False, add_provider=True):
         # Initialise generator output data variables
         self.rendered_resources = {}
@@ -328,7 +328,7 @@ class OCIGenerator(object):
                         # parent[key] = self.formatJinja2Value(val)
                     elif val != '' and key in self.integer_elements:
                         # Simple numeric
-                        parent[key] = self.formatJinja2Value(int(val))
+                        parent[key] = self.formatJinja2Value(int(''.join(c for c in val if c.isdecimal()))) # Only take decimal value
                     elif val != '':
                         # Add Simple Value
                         parent[key] = self.formatJinja2Value(val.replace('\n', '\\n').replace('"', '\\"'))

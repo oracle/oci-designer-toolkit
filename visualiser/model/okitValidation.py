@@ -447,7 +447,6 @@ class OCIJsonValidator(object):
                 self.results['warnings'].append(warning)
             # Check Hostname
             if artefact.get('primary_vnic', {}).get('hostname_label', '') == '':
-                self.valid = False
                 warning = {
                     'id': artefact['id'],
                     'type': 'Instance',

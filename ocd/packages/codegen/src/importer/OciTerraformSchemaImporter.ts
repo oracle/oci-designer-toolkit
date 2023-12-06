@@ -7,6 +7,7 @@ import { OcdSchemaImporter } from './OcdSchemaImporter'
 import { ignoreElements } from './data/OciIgnoreElements'
 import { resourceMap } from './data/OciResourceMap'
 import { elementOverrides } from './data/OciElementOverrides' 
+import { conditionalElements } from './data/OciConditionalElements'
 import { attributeMap } from './data/OcdAttributeMap'
 import { TerrafomSchemaEntry, TerraformSchema } from '../types/TerraformSchema'
 import{ OcdSchemaEntry } from '../types/OcdSchema'
@@ -22,7 +23,7 @@ export class OciTerraformSchemaImporter extends OcdSchemaImporter {
         // const self = this
         // console.info('Processing', Object.entries(source_schema.provider_schemas["registry.terraform.io/hashicorp/oci"].resource_schemas).filter(([k, v]) => Object.keys(self.resource_map).indexOf(k) >= 0))
         Object.entries(source_schema.provider_schemas["registry.terraform.io/hashicorp/oci"].resource_schemas).filter(([k, v]) => resourceKeys.includes(k)).forEach(([key, value]) => {
-            console.info('Processing', key)
+            console.info('OcdTerraformSchemaImporter: Processing Resource', key)
             this.ocd_schema[resourceMap[key]] = {
                 'tf_resource': key,
                 'type': 'object',
@@ -34,12 +35,14 @@ export class OciTerraformSchemaImporter extends OcdSchemaImporter {
     }
 
     getAttributes(key: string, block: TerrafomSchemaEntry, hierarchy=[]) {
+        // console.debug('OcdTerraformSchemaImporter: Resource', key)
         const ignore_block_types = ['timeouts']
         const ignore_attributes = ignoreElements[key] ? [...ignoreElements.common, ...ignoreElements[key]] : ignoreElements.common
         const type_overrides = elementOverrides.types[key] ? {...elementOverrides.types.common, ...elementOverrides.types[key]} : elementOverrides.types.common
         // Simple attributes
         // @ts-ignore
         let attributes = block.attributes ? Object.entries(block.attributes).filter(([k, v]) => !ignore_attributes.includes(k) && !v.deprecated).reduce((r, [k, v]) => {
+            const id = [...hierarchy, k].join('.')
             r[k] = {
                 provider: 'oci',
                 key: this.toCamelCase(k),
@@ -51,16 +54,21 @@ export class OciTerraformSchemaImporter extends OcdSchemaImporter {
                 // @ts-ignore
                 required: v.required ? v.required : false,
                 label: this.toLabel(k),
-                id: [...hierarchy, k].join('.'),
-                staticLookup: this.isStaticLookup(k),
-                lookup: this.isReference(k) || this.isMultiReference(k) || this.isLookupOverride(k),
-                lookupResource: this.isReference(k) || this.isMultiReference(k) ? this.lookupResource(k) : ''
+                id: id,
+                staticLookup: this.isStaticLookup(id),
+                // staticLookup: this.isStaticLookup(k),
+                // lookup: this.isReference(k) || this.isMultiReference(k) || this.isLookupOverride(k),
+                lookup: this.isReference(k) || this.isMultiReference(k) || this.isLookupOverride(id),
+                lookupResource: this.isReference(k) || this.isMultiReference(k) ? this.lookupResource(k) : '',
+                conditional: this.isConditional(key, k),
+                condition: this.isConditional(key, k) ? conditionalElements[key][k] : {}
             }
             return r
         }, {} as OcdSchemaEntry) : {}
         // Block / Object Attributes
         if (block.block_types) {
             attributes = Object.entries(block.block_types).filter(([k, v]) => !ignore_attributes.includes(k)).reduce((r, [k, v]) => {
+                const id = [...hierarchy, k].join('.')
                 r[k] = {
                     provider: 'oci',
                     key: this.toCamelCase(k),
@@ -72,7 +80,9 @@ export class OciTerraformSchemaImporter extends OcdSchemaImporter {
                     // @ts-ignore
                     required: v.required ? v.required : false,
                     label: this.toLabel(k),
-                    id: [...hierarchy, k].join('.'),
+                    id: id,
+                    conditional: this.isConditional(key, k),
+                    condition: this.isConditional(key, k) ? conditionalElements[key][k] : {},
                     // @ts-ignore
                     attributes: this.getAttributes(key, v.block, [...hierarchy, k])
                 }
@@ -90,6 +100,7 @@ export class OciTerraformSchemaImporter extends OcdSchemaImporter {
     isStaticLookup = (key: string) => elementOverrides.staticLookups.includes(key)
     lookupResource = (key: string) => key.split('_').slice(0, -1).join('_').toLowerCase()
     toLabel = (key: string) => Object.hasOwn(attributeMap, key) ? attributeMap[key].label : key.endsWith('_id') || key.endsWith('_ids') ? OcdUtils.toTitleCase(key.split('_').slice(0, -1).join(' ')) : OcdUtils.toTitleCase(key.split('_').join(' '))
+    isConditional = (key: string, element: string) => Object.hasOwn(conditionalElements, key) && Object.hasOwn(conditionalElements[key], element)
 }
 
 export default OciTerraformSchemaImporter

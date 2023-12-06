@@ -346,7 +346,7 @@ const OcdForeignObject = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
     const gX = 0
     const gY = 0
     const onChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-        ocdDocument.setDisplayName(resource.ocid, e.target.value.trim())
+        ocdDocument.setDisplayName(resource.ocid, e.target.value)
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
     const onMouseMove = (e: React.MouseEvent<HTMLElement>) => {
