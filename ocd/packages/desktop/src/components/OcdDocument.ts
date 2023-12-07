@@ -79,18 +79,27 @@ export class OcdDocument {
         const resourceList = paletteResource.class.split('-').slice(1).join('_')
         const resourceClass = paletteResource.class.toLowerCase().split('-').map((w) => `${w.charAt(0).toUpperCase()}${w.slice(1)}`).join('')
         const resourceNamespace: string = `${resourceClass}`
-        const resourceClient: string = `${resourceClass}`
-        // console.info('OcdDocument: List:', resourceList, 'Class:', resourceClass, 'Client:', resourceClient)
-        // console.info(`OcdDocument: ociResource`, ociResources)
+        const resourceClient: string = `${resourceClass}Client`
+        // @ts-ignore
         let modelResource = undefined
         if (paletteResource.provider === 'oci') {
             // @ts-ignore 
             const client = OciModelResources[resourceNamespace]
+            console.debug('OcdDocument: Namespace',resourceNamespace , client)
             if (client) {
                 modelResource = client.newResource()
                 modelResource.compartmentId = compartmentId
-                console.info(modelResource)
+                console.debug('OcdDocument:', modelResource)
                 this.design.model.oci.resources[resourceList] ? this.design.model.oci.resources[resourceList].push(modelResource) : this.design.model.oci.resources[resourceList] = [modelResource]
+                const additionalResources = client.getAdditionalResources?.() // Use Optional Chaining to test if function exists
+                if (additionalResources) {
+                    console.debug('OcdDocument: Creating Additional Resources', additionalResources)
+                    additionalResources.forEach((r: PaletteResource) => {
+                        const additionalResource = this.addResource(r, compartmentId)
+                        // @ts-ignore
+                        this.setResourceParent(additionalResource.id, modelResource.id)
+                    })
+                }
             } else {
                 alert(`Resource ${resourceClass} has not yet been implemented.`)
             }

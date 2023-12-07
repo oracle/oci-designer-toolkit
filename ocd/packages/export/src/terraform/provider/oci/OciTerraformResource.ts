@@ -15,14 +15,26 @@ export class OciTerraformResource extends OcdTerraformResource {
         super(idTFResourceMap)
         this.isHomeRegion = isHomeRegion
     }
+//     commonAssignmentsOld = (resource: OciResource) => {
+//         console.debug('OciTerraformResource:', resource, resource.resourceType, this.typeDisplayNameMap, this.typeDisplayNameMap.hasOwnProperty(resource.resourceType))
+//         return `${this.isHomeRegion ? 'provider       = oci.home_region' : ''}
+//     ${resource.compartmentId && resource.compartmentId !== '' ? this.generateReferenceAttribute("compartment_id", resource.compartmentId, true) : 'compartment_id = var.compartment_ocid'}
+//     ${this.generateTextAttribute(this.typeDisplayNameMap.hasOwnProperty(resource.resourceType) ? this.typeDisplayNameMap[resource.resourceType] : 'display_name', resource.displayName, true)}
+// `
+//     }
     commonAssignments = (resource: OciResource) => {
         console.debug('OciTerraformResource:', resource, resource.resourceType, this.typeDisplayNameMap, this.typeDisplayNameMap.hasOwnProperty(resource.resourceType))
-        return `${this.isHomeRegion ? 'provider       = oci.home_region' : ''}
-    ${resource.compartmentId && resource.compartmentId !== '' ? this.generateReferenceAttribute("compartment_id", resource.compartmentId, true) : 'compartment_id = var.compartment_ocid'}
-    ${this.generateTextAttribute(this.typeDisplayNameMap.hasOwnProperty(resource.resourceType) ? this.typeDisplayNameMap[resource.resourceType] : 'display_name', resource.displayName, true)}
+        return `${this.homeRegion()}
+    ${this.compartmentId(resource)}
+    ${this.displayName(resource)}
 `
-
     }
+    generateAdditionalResourceLocals(resource: OciResource) {
+        return ''
+    }
+    homeRegion = (): string => this.isHomeRegion ? 'provider       = oci.home_region' : ''
+    compartmentId = (resource: Record<string, any>, level=0): string => {return resource.compartmentId && resource.compartmentId !== '' ? this.generateReferenceAttribute("compartment_id", resource.compartmentId, true) : 'compartment_id = var.compartment_ocid'}
+    displayName = (resource: Record<string, any>, level=0): string => {return this.generateTextAttribute(this.typeDisplayNameMap.hasOwnProperty(resource.resourceType) ? this.typeDisplayNameMap[resource.resourceType] : 'display_name', resource.displayName, true)}
 }
 
 export default OciTerraformResource
