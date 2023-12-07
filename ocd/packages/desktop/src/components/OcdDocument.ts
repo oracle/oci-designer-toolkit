@@ -98,6 +98,8 @@ export class OcdDocument {
                         const additionalResource = this.addResource(r, compartmentId)
                         // @ts-ignore
                         this.setResourceParent(additionalResource.id, modelResource.id)
+                        // @ts-ignore
+                        client.setAdditionalResourceValues?.(modelResource, additionalResource)
                     })
                 }
             } else {
