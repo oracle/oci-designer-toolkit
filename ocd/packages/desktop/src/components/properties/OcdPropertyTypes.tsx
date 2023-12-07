@@ -64,6 +64,10 @@ export interface ResourceElementConfigLookupGroup {
     lookupResource: string
     resources?: OcdResource[]
 }
+export interface ResourceAdditionElements {
+    jsxElement: Function
+    afterElement?: string
+}
 
 export interface ResourceRootProperties {
     ocdDocument: OcdDocument
@@ -73,6 +77,7 @@ export interface ResourceRootProperties {
 
 export interface GeneratedResourceRootProperties extends ResourceRootProperties {
     configs: ResourceElementConfig[]
+    additionalElements?: ResourceAdditionElements[]
 }
 
 export interface ResourceProperties {
@@ -85,6 +90,7 @@ export interface ResourceProperties {
 export interface GeneratedResourceProperties extends ResourceProperties {
     configs: ResourceElementConfig[]
     onDelete?(child: any): void
+    additionalElements?: ResourceAdditionElements[]
 }
 
 export interface ResourceProperty extends ResourceProperties {
