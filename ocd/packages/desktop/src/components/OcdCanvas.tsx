@@ -131,9 +131,9 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
                 }
                 let additionalY = 60 + y
                 let additionalX = 15 + x
-                additionalResources.forEach((r: OcdAddResourceResponse) => {
+                additionalResources.forEach((r: OcdResource) => {
                     console.debug('OcdCanvas: Additional Resource', r)
-                    const modelResource = r.modelResource
+                    const modelResource = r
                     if (modelResource) {
                         const childCoords: OcdViewCoords = ocdDocument.newCoords()
                         childCoords.id = uuid()
