@@ -28,7 +28,7 @@ export interface OcdDragResource {
 
 export interface OcdAddResourceResponse {
     modelResource: OcdResource | undefined
-    additionalResources: OcdAddResourceResponse[]
+    additionalResources: OcdResource[]
 }
 
 export class OcdDocument {
@@ -102,7 +102,7 @@ export class OcdDocument {
                 if (additionalResources) {
                     console.debug('OcdDocument: Creating Additional Resources', additionalResources)
                     additionalResources.forEach((r: PaletteResource) => {
-                        const additionalResource = this.addResource(r, compartmentId)
+                        const additionalResource = this.addResource(r, compartmentId).modelResource
                         //@ts-ignore
                         response.additionalResources.push(additionalResource)
                         // @ts-ignore
