@@ -26,6 +26,11 @@ export interface OcdDragResource {
     parent?: OcdViewCoords
 }
 
+export interface OcdAddResourceResponse {
+    modelResource: OcdResource | undefined
+    additionalResources: OcdAddResourceResponse[]
+}
+
 export class OcdDocument {
     query: boolean
     design: OcdDesign
@@ -82,6 +87,7 @@ export class OcdDocument {
         const resourceClient: string = `${resourceClass}Client`
         // @ts-ignore
         let modelResource = undefined
+        let response: OcdAddResourceResponse = {modelResource: undefined, additionalResources: []}
         if (paletteResource.provider === 'oci') {
             // @ts-ignore 
             const client = OciModelResources[resourceNamespace]
@@ -89,6 +95,7 @@ export class OcdDocument {
             if (client) {
                 modelResource = client.newResource()
                 modelResource.compartmentId = compartmentId
+                response.modelResource = modelResource
                 console.debug('OcdDocument:', modelResource)
                 this.design.model.oci.resources[resourceList] ? this.design.model.oci.resources[resourceList].push(modelResource) : this.design.model.oci.resources[resourceList] = [modelResource]
                 const additionalResources = client.getAdditionalResources?.() // Use Optional Chaining to test if function exists
@@ -96,6 +103,8 @@ export class OcdDocument {
                     console.debug('OcdDocument: Creating Additional Resources', additionalResources)
                     additionalResources.forEach((r: PaletteResource) => {
                         const additionalResource = this.addResource(r, compartmentId)
+                        //@ts-ignore
+                        response.additionalResources.push(additionalResource)
                         // @ts-ignore
                         this.setResourceParent(additionalResource.id, modelResource.id)
                         // @ts-ignore
@@ -109,7 +118,8 @@ export class OcdDocument {
             alert(`Provider ${paletteResource.provider} has not yet been implemented.`)
         }
         // console.info('OcdDocument: Added Resource:', modelResource)
-        return modelResource
+        // return modelResource
+        return response
     }
     removeResource(id: string) {
         // Delete from Model
