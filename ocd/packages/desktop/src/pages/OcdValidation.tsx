@@ -14,6 +14,9 @@ const OcdValidation = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, set
     const errors = validationResults.filter((v: OcdValidationResult) => v.type === 'error')
     const warnings = validationResults.filter((v: OcdValidationResult) => v.type === 'warning')
     const information = validationResults.filter((v: OcdValidationResult) => v.type === 'information')
+    console.debug('Errors:', errors)
+    console.debug('Warnings:', warnings)
+    console.debug('Information:', information)
     return (
         <div className='ocd-validation-view'>
             <details className='ocd-details' open={errors.length > 0 ? true : false}>

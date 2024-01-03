@@ -70,6 +70,7 @@ import { OcdResourceValidator, OcdValidationResult, OcdValidatorResource } from 
 
 export namespace ${this.namespaceName(resource)} {
     export function validateResource(resource: Model.${this.interfaceName(resource)}, resources: OciResources): OcdValidationResult[] {
+        const displayName = resource.displayName
         const results: OcdValidationResult[] = [
             ${Object.entries(schema.attributes).filter(([k, v]) => !this.ignoreAttributes.includes(k)).map(([k, a]) => this.attributeToValidatorAssignment(resource, k, a)).join(',\n            ')}
         ]
@@ -90,26 +91,26 @@ export namespace ${this.namespaceName(resource)} {
     */
 
     attributeToValidatorAssignment = (resource, name, attribute, level=0) => {
-        if (attribute.type === 'string' && attribute.lookup)                  return `...${this.validatorSimpleName(attribute.name)}(resource, resources)`
-        else if (attribute.type === 'string')                                 return `...${this.validatorSimpleName(attribute.name)}(resource, resources)`
-        else if (attribute.type === 'bool')                                   return `...${this.validatorSimpleName(attribute.name)}(resource, resources)`
-        else if (attribute.type === 'number')                                 return `...${this.validatorSimpleName(attribute.name)}(resource, resources)`
-        else if (attribute.type === 'list' && attribute.subtype === 'string') return `...${this.validatorSimpleName(attribute.name)}(resource, resources)`
-        else if (attribute.type === 'object')                                 return `...${this.validatorObjectName(attribute.name)}(resource.${this.modelElementName(attribute.name)}, resources)`
-        else if (attribute.type === 'list' && attribute.subtype === 'object') return `...${this.validatorObjectListName(attribute.name)}(resource.${this.modelElementName(attribute.name)}, resources)`
-        else if (attribute.type === 'list' && attribute.lookup) return `${this.validatorSimpleName(attribute.name)}(resource, resources)`
-        else if (attribute.type === 'set')    return `...${this.validatorSimpleName(attribute.name)}(resource, resources)`
-        else if (attribute.type === 'map')    return `...${this.validatorSimpleName(attribute.name)}(resource, resources)`
-        else return `...${this.validatorSimpleName(attribute.name)}(resource, resources)`
+        if (attribute.type === 'string' && attribute.lookup)                  return `...${this.validatorSimpleName(attribute.name)}(resource, resources, displayName)`
+        else if (attribute.type === 'string')                                 return `...${this.validatorSimpleName(attribute.name)}(resource, resources, displayName)`
+        else if (attribute.type === 'bool')                                   return `...${this.validatorSimpleName(attribute.name)}(resource, resources, displayName)`
+        else if (attribute.type === 'number')                                 return `...${this.validatorSimpleName(attribute.name)}(resource, resources, displayName)`
+        else if (attribute.type === 'list' && attribute.subtype === 'string') return `...${this.validatorSimpleName(attribute.name)}(resource, resources, displayName)`
+        else if (attribute.type === 'object')                                 return `...OcdResourceValidator.isPropertyValidationConditionTrue(${attribute.conditional}, ${JSON.stringify(attribute.condition)}, resource) ? ${this.validatorObjectName(attribute.name)}(resource.${this.modelElementName(attribute.name)}, resources, displayName) : []`
+        else if (attribute.type === 'list' && attribute.subtype === 'object') return `...${this.validatorObjectListName(attribute.name)}(resource.${this.modelElementName(attribute.name)}, resources, displayName)`
+        else if (attribute.type === 'list' && attribute.lookup) return `${this.validatorSimpleName(attribute.name)}(resource, resources, displayName)`
+        else if (attribute.type === 'set')    return `...${this.validatorSimpleName(attribute.name)}(resource, resources, displayName)`
+        else if (attribute.type === 'map')    return `...${this.validatorSimpleName(attribute.name)}(resource, resources, displayName)`
+        else return `...${this.validatorSimpleName(attribute.name)}(resource, resources, displayName)`
     }
 
     validatorSimpleElementType = (resource, name, attribute, level=0) => {
         // if (resource === 'bucket') console.debug(`${name}:`, attribute)
         if (attribute.required) {
-            if (attribute.type === 'string')      return `OcdResourceValidator.validateRequiredText(resource.displayName, '${name}', resource.${this.toCamelCase(name)}, '${attribute.label}', '${this.cssClassName(resource)}', resources)`
-            else if (attribute.type === 'bool')   return `OcdResourceValidator.validateRequiredBoolean(resource.displayName, '${name}', resource.${this.toCamelCase(name)}, '${attribute.label}', '${this.cssClassName(resource)}', resources)`
-            else if (attribute.type === 'number') return `OcdResourceValidator.validateRequiredNumber(resource.displayName, '${name}', resource.${this.toCamelCase(name)}, '${attribute.label}', '${this.cssClassName(resource)}', resources)`
-            else if (attribute.type === 'list' && attribute.subtype === 'string') return `OcdResourceValidator.validateRequiredStringList(resource.displayName, '${name}', resource.${this.toCamelCase(name)}, '${attribute.label}', '${this.cssClassName(resource)}',resources)`
+            if (attribute.type === 'string')      return `OcdResourceValidator.validateRequiredText(displayName, '${name}', resource.${this.toCamelCase(name)}, '${attribute.label}', '${this.cssClassName(resource)}', resources)`
+            else if (attribute.type === 'bool')   return `OcdResourceValidator.validateRequiredBoolean(displayName, '${name}', resource.${this.toCamelCase(name)}, '${attribute.label}', '${this.cssClassName(resource)}', resources)`
+            else if (attribute.type === 'number') return `OcdResourceValidator.validateRequiredNumber(displayName, '${name}', resource.${this.toCamelCase(name)}, '${attribute.label}', '${this.cssClassName(resource)}', resources)`
+            else if (attribute.type === 'list' && attribute.subtype === 'string') return `OcdResourceValidator.validateRequiredStringList(displayName, '${name}', resource.${this.toCamelCase(name)}, '${attribute.label}', '${this.cssClassName(resource)}',resources)`
             // else return `OcdResourceValidator.noDefaultValidation("${name}", resource.${this.toCamelCase(name)}, '${this.toCamelCase(name)} Type ${attribute.type} Required ${attribute.required}', resources)`    
             else return ''
         } else {
@@ -132,9 +133,9 @@ export namespace ${this.namespaceName(resource)} {
         const simpleTypes = ['string', 'bool', 'number']
         const groupTypes = ['list', 'set', 'map']
         if (simpleTypes.includes(attribute.type) || (groupTypes.includes(attribute.type) && simpleTypes.includes(attribute.subtype))) {
-            return `const ${this.validatorSimpleName(attribute.name)} = (resource: OcdValidatorResource, resources: OciResources): OcdValidationResult[] => {return [${this.validatorSimpleElementType(resource, attribute.name, attribute)}]}`
+            return `const ${this.validatorSimpleName(attribute.name)} = (resource: OcdValidatorResource, resources: OciResources, displayName=''): OcdValidationResult[] => {return [${this.validatorSimpleElementType(resource, attribute.name, attribute)}]}`
         } else {
-            return `const ${this.validatorSimpleName(attribute.name)} = (resource: OcdValidatorResource, resources: OciResources): OcdValidationResult[] => {return [${this.validatorSimpleElementType(resource, attribute.name, attribute)}]}`
+            return `const ${this.validatorSimpleName(attribute.name)} = (resource: OcdValidatorResource, resources: OciResources, displayName=''): OcdValidationResult[] => {return [${this.validatorSimpleElementType(resource, attribute.name, attribute)}]}`
         }
     }
 
@@ -146,7 +147,7 @@ export namespace ${this.namespaceName(resource)} {
 
     validatorObjectElement = (resource, attribute, level=0) => {
         // return `${this.validatorObjectName(attribute.name)} = (resource: Record<string, any>): string => {
-        return `const ${this.validatorObjectName(attribute.name)} = (resource: OcdValidatorResource | undefined, resources: OciResources): OcdValidationResult[] => {
+        return `const ${this.validatorObjectName(attribute.name)} = (resource: OcdValidatorResource | undefined, resources: OciResources, displayName=''): OcdValidationResult[] => {
             const results: OcdValidationResult[] = resource ?  [
                         ${Object.entries(attribute.attributes).filter(([k, v]) => !this.ignoreAttributes.includes(k)).map(([k, a]) => this.attributeToValidatorAssignment(resource, k, a, level+1)).join(',\n                        ')}
                 ] : []
@@ -156,8 +157,8 @@ export namespace ${this.namespaceName(resource)} {
 
     validatorObjectListElement = (resource, attribute, level=0) => {
         return `${this.validatorObjectElement(resource, attribute)}
-    const ${this.validatorObjectListName(attribute.name)} = (resource: OcdValidatorResource[] | undefined, resources: OciResources): OcdValidationResult[] => {
-        const results: OcdValidationResult[] = resource ? resource.reduce((a, c) => [...a as OcdValidationResult[], ...${this.validatorObjectName(attribute.name)}(c, resources)], [] as OcdValidationResult[]) as OcdValidationResult[] : []
+    const ${this.validatorObjectListName(attribute.name)} = (resource: OcdValidatorResource[] | undefined, resources: OciResources, displayName=''): OcdValidationResult[] => {
+        const results: OcdValidationResult[] = resource ? resource.reduce((a, c) => [...a as OcdValidationResult[], ...${this.validatorObjectName(attribute.name)}(c, resources, displayName)], [] as OcdValidationResult[]) as OcdValidationResult[] : []
         return results
     }`
     // # ObjectListElement ${this.toCamelCase(attribute.name)} Type ${attribute.type} SubType ${attribute.subtype} Required ${attribute.required} 
