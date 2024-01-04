@@ -84,7 +84,7 @@ export class OcdDocument {
         const resourceList = paletteResource.class.split('-').slice(1).join('_')
         const resourceClass = paletteResource.class.toLowerCase().split('-').map((w) => `${w.charAt(0).toUpperCase()}${w.slice(1)}`).join('')
         const resourceNamespace: string = `${resourceClass}`
-        const resourceClient: string = `${resourceClass}Client`
+        // const resourceClient: string = `${resourceClass}Client`
         // @ts-ignore
         let modelResource = undefined
         let response: OcdAddResourceResponse = {modelResource: undefined, additionalResources: []}
