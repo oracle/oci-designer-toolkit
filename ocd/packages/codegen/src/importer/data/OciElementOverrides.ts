@@ -17,12 +17,16 @@ export const elementOverrides: OcdElementOverrides = {
         "egress_security_rules.protocol",
         "egress_security_rules.destination_type",
         "ingress_security_rules.protocol",
-        "ingress_security_rules.source_type"
+        "ingress_security_rules.source_type",
+        "options.type",
+        "options.server_type"
     ],
     "types": {
         "common": {},
         "oci_core_instance": {
             "assign_public_ip": "bool"
+        },
+        "oci_core_dhcp_options": {
         }
     }
 }

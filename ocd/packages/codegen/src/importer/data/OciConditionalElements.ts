@@ -35,5 +35,22 @@ export const conditionalElements: OcdConditionalElements = {
             "operator": "eq",
             "value": true
         }
+    },
+    "oci_core_dhcp_options": {
+        "search_domain_names": {
+            "element": "type",
+            "operator": "eq",
+            "value": "SearchDomain"
+        },
+        "server_type": {
+            "element": "type",
+            "operator": "eq",
+            "value": "DomainNameServer"
+        },
+        "custom_dns_servers": {
+            "element": "server_type",
+            "operator": "eq",
+            "value": "CustomDnsServer"
+        }
     }
 }

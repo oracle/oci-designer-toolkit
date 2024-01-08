@@ -31,14 +31,14 @@ resource "oci_core_default_route_table" "${resource.terraformResourceName}" {
 }
 
 locals {
-    ${resource.terraformResourceName}_id = oci_core_route_table.${resource.terraformResourceName}.id
+    ${resource.terraformResourceName}_id = oci_core_default_route_table.${resource.terraformResourceName}.id
     ${this.generateAdditionalResourceLocals(resource)}
 }
 `
     return content
     }
     // Simple Elements
-    manageDefaultResourceId = (resource: Record<string, any>, level=0): string => {return `${this.indentation[level]}default_route_table_id = local.${this.idTFResourceMap[resource.vcnId]}_default_route_table_id`}
+    manageDefaultResourceId = (resource: Record<string, any>, level=0): string => {return `${this.indentation[level]}manage_default_resource_id = local.${this.idTFResourceMap[resource.vcnId]}_default_route_table_id`}
 }
 
 export default OciRouteTable

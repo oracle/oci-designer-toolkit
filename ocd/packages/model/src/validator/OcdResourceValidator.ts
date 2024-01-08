@@ -90,6 +90,28 @@ export namespace OcdResourceValidator {
             }
         return result
     }
+    export function validateRequiredList(displayName: string, key: string, value: string[], title: string, cssClass: string, resources: OcdResources, message: string | undefined = undefined): OcdValidationResult {
+        const result: OcdValidationResult = (!value || value.length === 0) ? 
+            {
+                valid: false,
+                type: 'error',
+                message: message ? message : `${title} at least one value must be specified.`,
+                element: key,
+                title: title,
+                displayName: displayName,
+                class: cssClass
+            } :
+            {
+                valid: true,
+                type: '',
+                message: `${title} has value.`,
+                element: key,
+                title: title,
+                displayName: displayName,
+                class: cssClass
+            }
+        return result
+    }
     export function validateRequiredBoolean(displayName: string, key: string, value: boolean, title: string, cssClass: string, resources: OcdResources, message: string | undefined = undefined): OcdValidationResult {
         const result: OcdValidationResult = (!value) ? 
             {
