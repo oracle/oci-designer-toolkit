@@ -280,8 +280,9 @@ export const OcdStaticLookupProperty = ({ ocdDocument, setOcdDocument, resource,
             }
         }
     })
+    const className = isPropertyDisplayConditionTrue(attribute.conditional, attribute.condition, resource, rootResource) ? `ocd-property-row ocd-simple-property-row` : `collapsed hidden`
     return (
-        <div className='ocd-property-row ocd-simple-property-row'>
+        <div className={className}>
             <div><label>{attribute.label}</label></div>
             <div>
                 <select value={resource[attribute.key]} {...properties} onChange={onChange}>
