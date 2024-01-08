@@ -37,6 +37,9 @@ export namespace OcdUtils {
     export function toResourceNamespaceName(prefix: string, resource: string) {
         return `${prefix}${OcdUtils.toTitleCase(resource.split('_').join(' ')).split(' ').join('')}`
     }
+    export function toDnsLabel(name: string): string {
+        return name.toLowerCase().replace(/[^a-z]/g, '').slice(0, 15)
+    }
     export function isCondition(leftHandSide: string | number | boolean | Array<any> | Function | undefined, operator: string | undefined, rightHandSide: string | number | boolean | Array<any> | Function | undefined): boolean {
         let isTrue = false
         // console.debug('OcdUtils: isConditional', leftHandSide, operator, rightHandSide)

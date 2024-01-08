@@ -2110,8 +2110,12 @@
             "staticLookup": false,
             "lookup": false,
             "lookupResource": "",
-            "conditional": false,
-            "condition": {}
+            "conditional": true,
+            "condition": {
+              "element": "server_type",
+              "operator": "eq",
+              "value": "CustomDnsServer"
+            }
           },
           "search_domain_names": {
             "provider": "oci",
@@ -2125,8 +2129,12 @@
             "staticLookup": false,
             "lookup": false,
             "lookupResource": "",
-            "conditional": false,
-            "condition": {}
+            "conditional": true,
+            "condition": {
+              "element": "type",
+              "operator": "eq",
+              "value": "SearchDomain"
+            }
           },
           "server_type": {
             "provider": "oci",
@@ -2137,11 +2145,15 @@
             "required": false,
             "label": "Server Type",
             "id": "options.server_type",
-            "staticLookup": false,
-            "lookup": false,
+            "staticLookup": true,
+            "lookup": true,
             "lookupResource": "",
-            "conditional": false,
-            "condition": {}
+            "conditional": true,
+            "condition": {
+              "element": "type",
+              "operator": "eq",
+              "value": "DomainNameServer"
+            }
           },
           "type": {
             "provider": "oci",
@@ -2152,8 +2164,8 @@
             "required": true,
             "label": "Type",
             "id": "options.type",
-            "staticLookup": false,
-            "lookup": false,
+            "staticLookup": true,
+            "lookup": true,
             "lookupResource": "",
             "conditional": false,
             "condition": {}

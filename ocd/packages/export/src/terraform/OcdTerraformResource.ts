@@ -39,9 +39,10 @@ export class OcdTerraformResource {
         else return `${this.indentation[level]}# ${name} = ${value}`
     }
     generateNumberAttribute = (name: string, value: string | number | undefined, required: boolean, level=0) => {
+        console.debug('OcdTerraformResource: generateNumberAttribute:', value, typeof value)
         if (typeof value === 'string' && this.isVariable(value)) return `${this.indentation[level]}${name} = ${this.formatVariable(value)}`
         else if (required) return `${this.indentation[level]}${name} = ${value}`
-        else if (value && typeof value === 'number') return `${this.indentation[level]}${name} = ${value}`
+        else if (value !== undefined && typeof value === 'number') return `${this.indentation[level]}${name} = ${value}`
         else return `${this.indentation[level]}# ${name} = ${value}`
     }
     generateReferenceListAttribute = (name: string, value: string | string[] | undefined, required: boolean, level=0) => {
@@ -65,15 +66,9 @@ export class OcdTerraformResource {
         // Check condition
         const element = condition.element ? condition.element.indexOf('_') ? OcdUtils.toCamelCase(condition.element)  : condition.element : ''
         const display = OcdUtils.isCondition(resource[element], condition.operator, condition.value)
-        // const display = condition.element ? resource[element] === condition.value : false
-        // console.debug('OcdPropertyTypes: isPropertyDisplayConditionTrue', element, display, condition, resource)
         return display
     }
     
-    // if (attribute.type === 'string')      return `${name} = \\\`\${this.isVariable(resource.${this.toCamelCase(name)}) ? this.formatVariable(resource.${this.toCamelCase(name)}) : "resource.${this.toCamelCase(name)}"}\\\``
-    // else if (attribute.type === 'bool')   return `${name} = \${resource.${this.toCamelCase(name)}}`
-    // else if (attribute.type === 'number') return `${name} = \${resource.${this.toCamelCase(name)}}`
-
 }
 
 export default OcdTerraformResource

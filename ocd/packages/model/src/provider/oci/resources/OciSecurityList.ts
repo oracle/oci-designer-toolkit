@@ -110,7 +110,7 @@ export namespace OciSecurityList {
                 "protocol": "all",
                 "tcpOptions": undefined,
                 "udpOptions": undefined,
-                "description": ""
+                "description": "Default All Egress Rule"
             }
         );
         // Ingress Rules
@@ -131,7 +131,7 @@ export namespace OciSecurityList {
                     }
                 },
                 "udpOptions": undefined,
-                "description": ""
+                "description": " Default SSH Ingress Rule"
             }
         );
         resource.ingressSecurityRules.push(
@@ -146,7 +146,7 @@ export namespace OciSecurityList {
                 "sourceType": "CIDR_BLOCK",
                 "tcpOptions": undefined,
                 "udpOptions": undefined,
-                "description": ""
+                "description": "Default Ingress Rule"
             }
         );
         resource.ingressSecurityRules.push(
@@ -161,7 +161,7 @@ export namespace OciSecurityList {
                 "sourceType": "CIDR_BLOCK",
                 "tcpOptions": undefined,
                 "udpOptions": undefined,
-                "description": ""
+                "description": "Default VCN Access Ingress Rule"
             }
         );
     }

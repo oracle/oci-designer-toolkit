@@ -32,14 +32,14 @@ resource "oci_core_default_security_list" "${resource.terraformResourceName}" {
 }
 
 locals {
-    ${resource.terraformResourceName}_id = oci_core_security_list.${resource.terraformResourceName}.id
+    ${resource.terraformResourceName}_id = oci_core_default_security_list.${resource.terraformResourceName}.id
     ${this.generateAdditionalResourceLocals(resource)}
 }
 `
     return content
     }
     // Simple Elements
-    manageDefaultResourceId = (resource: Record<string, any>, level=0): string => {return `${this.indentation[level]}default_security_list_id = local.${this.idTFResourceMap[resource.vcnId]}_default_security_list_id`}
+    manageDefaultResourceId = (resource: Record<string, any>, level=0): string => {return `${this.indentation[level]}manage_default_resource_id = local.${this.idTFResourceMap[resource.vcnId]}_default_security_list_id`}
 }
 
 export default OciSecurityList
