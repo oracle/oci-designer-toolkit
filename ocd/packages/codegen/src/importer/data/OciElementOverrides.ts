@@ -19,7 +19,8 @@ export const elementOverrides: OcdElementOverrides = {
         "ingress_security_rules.protocol",
         "ingress_security_rules.source_type",
         "options.type",
-        "options.server_type"
+        "options.server_type",
+        "domain_name_type"
     ],
     "types": {
         "common": {},

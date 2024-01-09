@@ -52,7 +52,7 @@ const OcdCanvasLayer = ({ ocdDocument, setOcdDocument, layer } : LayerBarLayerPr
         setOcdDocument(clone)
     }
     const onChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-        ocdDocument.setDisplayName(layer.id, e.target.value)
+        ocdDocument.setDisplayName(layer.id, e.target.value.trim())
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
     const title = ocdDocument.getLayerName(layer.id)
