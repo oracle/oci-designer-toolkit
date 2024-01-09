@@ -2111,11 +2111,19 @@
             "lookup": false,
             "lookupResource": "",
             "conditional": true,
-            "condition": {
-              "element": "server_type",
-              "operator": "eq",
-              "value": "CustomDnsServer"
-            }
+            "condition": [
+              {
+                "element": "server_type",
+                "operator": "eq",
+                "value": "CustomDnsServer"
+              },
+              {
+                "logic_operator": "and",
+                "element": "type",
+                "operator": "eq",
+                "value": "DomainNameServer"
+              }
+            ]
           },
           "search_domain_names": {
             "provider": "oci",

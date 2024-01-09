@@ -6,6 +6,13 @@
 import { resourceMap } from './OcdResourceMap'
 
 export namespace OcdUtils {
+    export interface ResourcePropertyCondition {
+        logic_operator?: 'and' | 'or'
+        element?: string
+        operator?: 'eq' | 'lt' | 'gt' | 'ne' | 'le' | 'ge' | 'in'
+        value?: boolean | string | number | Function
+    }
+    export interface OcdResource extends Record<string, any> {}
     export function toTitle(str: string): string {
         let key = str as keyof typeof resourceMap
         return Object.hasOwn(resourceMap, key) ? resourceMap[key].title : OcdUtils.toTitleCase(str.split('_').join(' '))
@@ -53,4 +60,20 @@ export namespace OcdUtils {
         else isTrue = false
         return isTrue
     }
-}
+    export const isPropertyConditionTrue = (conditional: boolean, condition: ResourcePropertyCondition | ResourcePropertyCondition[], resource: OcdResource, rootResource: OcdResource): boolean => {
+        // If not conditional then we will always display
+        if (!conditional) return true
+        // Check condition
+        let display = false
+        if (!Array.isArray(condition)){
+            const element = condition.element ? condition.element.indexOf('_') ? OcdUtils.toCamelCase(condition.element)  : condition.element : ''
+            display = OcdUtils.isCondition(resource[element], condition.operator, condition.value)
+        } else {
+            condition.forEach((c) => {
+                const isTrue = isPropertyConditionTrue(conditional, c, resource, rootResource)
+                display = !c.logic_operator ? isTrue : c.logic_operator === 'and' ? display && isTrue : display || isTrue
+            })
+        }
+        return display
+    }
+    }
