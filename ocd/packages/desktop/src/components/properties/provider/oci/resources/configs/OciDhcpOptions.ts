@@ -11,6 +11,17 @@ export namespace OciDhcpOptionsConfigs {
         return [
             ...OciCommonConfigs.configs(),
             {
+                id: 'domain_name_type',
+                properties: {},
+                configs: [],
+                options: [
+                    {id: '', displayName: ''},
+                    {id: 'VCN_DOMAIN', displayName: 'Vcn Domain'},
+                    {id: 'SUBNET_DOMAIN', displayName: 'Subnet Domain'},
+                    {id: 'CUSTOM_DOMAIN', displayName: 'Custom Domain'}
+                ]
+            },
+            {
                 id: 'options.type',
                 properties: {},
                 configs: [],
@@ -41,7 +52,7 @@ export namespace OciDhcpOptionsConfigs {
                 id: 'options.search_domain_names',
                 properties: {
                     placeholder: 'vcn.oracle.com,test.com',
-                    title: 'Comma list domain names'
+                    title: 'Comma separated list domain names'
                 },
                 configs: []
             }

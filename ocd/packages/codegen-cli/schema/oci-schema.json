@@ -2050,8 +2050,8 @@
         "required": false,
         "label": "Domain Name Type",
         "id": "domain_name_type",
-        "staticLookup": false,
-        "lookup": false,
+        "staticLookup": true,
+        "lookup": true,
         "lookupResource": "",
         "conditional": false,
         "condition": {}
