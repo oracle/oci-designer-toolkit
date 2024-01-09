@@ -9,11 +9,13 @@ import { OcdDocument } from '../OcdDocument'
 import { useContext, useEffect } from 'react'
 import { ActiveFileContext } from '../../pages/OcdConsole'
 
-export interface ResourcePropertyCondition {
-    element?: string,
-    operator?: 'eq' | 'lt' | 'gt' | 'ne' | 'le' | 'ge' | 'in'
-    value?: boolean | string | number | Function
-}
+export interface ResourcePropertyCondition extends OcdUtils.ResourcePropertyCondition {}
+// export interface ResourcePropertyCondition {
+//     logic_operator?: 'and' | 'or'
+//     element?: string
+//     operator?: 'eq' | 'lt' | 'gt' | 'ne' | 'le' | 'ge' | 'in'
+//     value?: boolean | string | number | Function
+// }
 
 export interface ResourcePropertyAttributes {
     provider: string
@@ -29,7 +31,7 @@ export interface ResourcePropertyAttributes {
     lookup?: boolean
     lookupResource?: string,
     conditional: boolean,
-    condition: ResourcePropertyCondition
+    condition: ResourcePropertyCondition | ResourcePropertyCondition[]
 }
 
 export type SimpleFilterType = (r: any) => boolean
@@ -115,16 +117,22 @@ export namespace OcdResourceProperties {
     }
 }
 
-export const isPropertyDisplayConditionTrue = (conditional: boolean, condition: ResourcePropertyCondition, resource: OcdResource, rootResource: OcdResource): boolean => {
-    // If not conditional then we will always display
-    if (!conditional) return true
-    // Check condition
-    const element = condition.element ? condition.element.indexOf('_') ? OcdUtils.toCamelCase(condition.element)  : condition.element : ''
-    const display = OcdUtils.isCondition(resource[element], condition.operator, condition.value)
-    // const display = condition.element ? OcdUtils.isCondition(resource[element], condition.operator, condition.value) : false
-    // const display = condition.element ? resource[element] === condition.value : false
-    // console.debug('OcdPropertyTypes: isPropertyDisplayConditionTrue', element, display, condition, resource)
-    return display
+export const isPropertyDisplayConditionTrue = (conditional: boolean, condition: ResourcePropertyCondition | ResourcePropertyCondition[], resource: OcdResource, rootResource: OcdResource): boolean => {
+    return OcdUtils.isPropertyConditionTrue(conditional, condition, resource, resource)
+    // // If not conditional then we will always display
+    // if (!conditional) return true
+    // // Check condition
+    // let display = false
+    // if (!Array.isArray(condition)){
+    //     const element = condition.element ? condition.element.indexOf('_') ? OcdUtils.toCamelCase(condition.element)  : condition.element : ''
+    //     display = OcdUtils.isCondition(resource[element], condition.operator, condition.value)
+    // } else {
+    //     condition.forEach((c) => {
+    //         const isTrue = isPropertyDisplayConditionTrue(conditional, c, resource, rootResource)
+    //         display = !c.logic_operator ? isTrue : c.logic_operator === 'and' ? display && isTrue : display || isTrue
+    //     })
+    // }
+    // return display
 }
 
 export const OcdTextProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute, rootResource }: ResourceProperty): JSX.Element => {
@@ -275,11 +283,11 @@ export const OcdStaticLookupProperty = ({ ocdDocument, setOcdDocument, resource,
         if (!resource[attribute.key] || resource[attribute.key] === '') {
             if (resources.length > 0) {
                 resource[attribute.key] = resources[0].id
-                // setOcdDocument(OcdDocument.clone(ocdDocument))
+                setOcdDocument(OcdDocument.clone(ocdDocument))
                 // if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
             }
         }
-    })
+    }, [])
     const className = isPropertyDisplayConditionTrue(attribute.conditional, attribute.condition, resource, rootResource) ? `ocd-property-row ocd-simple-property-row` : `collapsed hidden`
     return (
         <div className={className}>

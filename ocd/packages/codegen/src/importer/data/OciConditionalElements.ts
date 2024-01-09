@@ -47,10 +47,18 @@ export const conditionalElements: OcdConditionalElements = {
             "operator": "eq",
             "value": "DomainNameServer"
         },
-        "custom_dns_servers": {
-            "element": "server_type",
-            "operator": "eq",
-            "value": "CustomDnsServer"
-        }
+        "custom_dns_servers": [
+            {
+                "element": "server_type",
+                "operator": "eq",
+                "value": "CustomDnsServer"
+            },
+            {
+                "logic_operator": "and",
+                "element": "type",
+                "operator": "eq",
+                "value": "DomainNameServer"
+            }
+        ]
     }
 }

@@ -5,11 +5,12 @@
 
 import { OcdUtils } from "@ocd/core"
 
-interface ResourcePropertyCondition {
-    element?: string,
-    operator?: 'eq' | 'lt' | 'gt' | 'ne' | 'le' | 'ge' | 'in'
-    value?: boolean | string | number | Function
-}
+interface ResourcePropertyCondition extends OcdUtils.ResourcePropertyCondition {}
+// interface ResourcePropertyCondition {
+//     element?: string,
+//     operator?: 'eq' | 'lt' | 'gt' | 'ne' | 'le' | 'ge' | 'in'
+//     value?: boolean | string | number | Function
+// }
 
 export class OcdTerraformResource {
     indentation = ['', '    ', '        ', '            ', '                ']
@@ -60,13 +61,14 @@ export class OcdTerraformResource {
         else return `${this.indentation[level]}# ${name} = "${value}"`
     }
 
-    isPropertyAssignConditionTrue = (conditional: boolean, condition: ResourcePropertyCondition, resource: Record<string, any>): boolean => {
-        // If not conditional then we will always display
-        if (!conditional) return true
-        // Check condition
-        const element = condition.element ? condition.element.indexOf('_') ? OcdUtils.toCamelCase(condition.element)  : condition.element : ''
-        const display = OcdUtils.isCondition(resource[element], condition.operator, condition.value)
-        return display
+    isPropertyAssignConditionTrue = (conditional: boolean, condition: ResourcePropertyCondition | ResourcePropertyCondition[], resource: Record<string, any>): boolean => {
+        return OcdUtils.isPropertyConditionTrue(conditional, condition, resource, resource)
+        // // If not conditional then we will always display
+        // if (!conditional) return true
+        // // Check condition
+        // const element = condition.element ? condition.element.indexOf('_') ? OcdUtils.toCamelCase(condition.element)  : condition.element : ''
+        // const display = OcdUtils.isCondition(resource[element], condition.operator, condition.value)
+        // return display
     }
     
 }
