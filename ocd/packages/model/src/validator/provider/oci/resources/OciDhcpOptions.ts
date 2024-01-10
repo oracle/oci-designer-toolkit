@@ -30,5 +30,5 @@ export namespace OciDhcpOptions {
         ]
         return results
     }
-    const options = (resource: OcdValidatorResource, resources: OciResources): OcdValidationResult[] => {return [OcdResourceValidator.validateRequiredList(resource.displayName, "options", resource.optionsObjectList, 'Options', 'oci-vcn', resources)]}
+    const options = (resource: OcdValidatorResource, resources: OciResources): OcdValidationResult[] => {return [OcdResourceValidator.validateRequiredList(resource.displayName, "options", resource.options, 'Options', 'oci-vcn', resources)]}
 }

@@ -20,6 +20,14 @@ export class OcdTerraformResource {
     }
     isVariable = (data: string | undefined): boolean => data !== undefined && data.startsWith('var.')
     formatVariable = (data: string | undefined): string | undefined => data
+    isGenerateAttribute = (name: string, value: string | number | undefined, required: boolean) => {
+        console.debug('OcdTerraformResource: isGenerateNumberAttribute:', value, typeof value)
+        if (required) return true
+        else if (typeof value === 'string' && this.isVariable(value)) return true
+        else if (value !== undefined && typeof value === 'string' && value.trim() !== '') return true
+        else if (value !== undefined && typeof value === 'number' && value !== 0) return true
+        else return false
+    }
     generateReferenceAttribute = (name: string, value: string | undefined, required: boolean, level=0) => {
         if (this.isVariable(value)) return `${this.indentation[level]}${name} = ${this.formatVariable(value)}`
         else if (required) return `${this.indentation[level]}${name} = local.${this.idTFResourceMap[value as string]}_id`
@@ -43,7 +51,8 @@ export class OcdTerraformResource {
         console.debug('OcdTerraformResource: generateNumberAttribute:', value, typeof value)
         if (typeof value === 'string' && this.isVariable(value)) return `${this.indentation[level]}${name} = ${this.formatVariable(value)}`
         else if (required) return `${this.indentation[level]}${name} = ${value}`
-        else if (value !== undefined && typeof value === 'number') return `${this.indentation[level]}${name} = ${value}`
+        // else if (value !== undefined && typeof value === 'number') return `${this.indentation[level]}${name} = ${value}`
+        else if (value !== undefined && typeof value === 'number' && value !== 0) return `${this.indentation[level]}${name} = ${value}`
         else return `${this.indentation[level]}# ${name} = ${value}`
     }
     generateReferenceListAttribute = (name: string, value: string | string[] | undefined, required: boolean, level=0) => {

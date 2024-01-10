@@ -39,7 +39,7 @@ locals {
     return content
     }
     // Simple Elements
-    manageDefaultResourceId = (resource: Record<string, any>, level=0): string => {return `${this.indentation[level]}manage_default_resource_id = local.${this.idTFResourceMap[resource.vcnId]}_default_security_list_id`}
+    manageDefaultResourceId = (resource: Record<string, any>, level=0): string => {return `${this.indentation[level]}manage_default_resource_id = local.${this.idTFResourceMap[resource.vcnId]}_default_dhcp_options_id`}
 }
 
 export default OciDhcpOptions
