@@ -68,6 +68,7 @@ export namespace OciVcn {
     export function setAdditionalResourceValues(resource: OciVcn, additionalResource: OciRouteTable | OciSecurityList | OciDhcpOptions) {
         additionalResource.vcnDefault = true
         if (additionalResource.resourceType === 'SecurityList') OciSecurityList.addDefaultRules(additionalResource, resource)
+        else if (additionalResource.resourceType === 'DhcpOptions') OciDhcpOptions.addDefaultOptions(additionalResource, resource)
     }
     
 }
