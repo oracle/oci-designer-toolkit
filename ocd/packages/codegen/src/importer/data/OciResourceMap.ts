@@ -24,6 +24,7 @@ export const resourceMap: OcdResourceMap = {
     "oci_core_local_peering_gateway": "local_peering_gateway",
     "oci_core_nat_gateway": "nat_gateway",
     "oci_core_network_security_group": "network_security_group",
+    "oci_core_network_security_group_security_rule": "network_security_group_security_rule",
     "oci_core_remote_peering_connection": "remote_peering_connection",
     "oci_core_route_table": "route_table",
     "oci_core_security_list": "security_list",
