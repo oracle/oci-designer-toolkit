@@ -36,6 +36,7 @@ export { OciMysqlDbSystem, OciMysqlDbSystemClient } from './resources/OciMysqlDb
 export { OciNatGateway, OciNatGatewayClient } from './resources/OciNatGateway'
 export { OciNetworkLoadBalancer, OciNetworkLoadBalancerClient } from './resources/OciNetworkLoadBalancer'
 export { OciNetworkSecurityGroup, OciNetworkSecurityGroupClient } from './resources/OciNetworkSecurityGroup'
+export { OciNetworkSecurityGroupSecurityRule, OciNetworkSecurityGroupSecurityRuleClient } from './resources/OciNetworkSecurityGroupSecurityRule'
 export { OciNosqlIndex, OciNosqlIndexClient } from './resources/OciNosqlIndex'
 export { OciNosqlTable, OciNosqlTableClient } from './resources/OciNosqlTable'
 export { OciOkeCluster, OciOkeClusterClient } from './resources/OciOkeCluster'

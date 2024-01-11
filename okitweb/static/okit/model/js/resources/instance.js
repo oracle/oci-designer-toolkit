@@ -67,6 +67,7 @@ class Instance extends OkitArtifact {
         delete this.subnet_id;
         Object.defineProperty(this, 'primary_vnic', {get: function() {return this.vnic_attachments[0];}, set: function(vnic) {this.vnic_attachments[0] = vnic;}, enumerable: true });
         Object.defineProperty(this, 'subnet_id', {get: function() {return this.primary_vnic.subnet_id;}, set: function(id) {this.primary_vnic.subnet_id = id;}, enumerable: true });
+        Object.defineProperty(this, 'public_ip', {get: function() {return this.primary_vnic.public_ip;}, set: function(id) {}, enumerable: true });
         Object.defineProperty(this, 'instance_type', {get: function() {return !this.shape ? 'vm' : this.shape.toLowerCase().substr(0,2);}, set: function(type) {}, enumerable: true });
         Object.defineProperty(this, 'chipset', {get: function() {return !this.shape ? 'intel' : this.shape.startsWith('VM.') && this.shape.includes('.E') ? 'amd' : this.shape.startsWith('VM.') && this.shape.includes('.A') ? 'arm' : 'intel'}, set: function(chipset) {}, enumerable: true });
         Object.defineProperty(this, 'shape_series', {get: function() {return !this.shape ? 'intel' : this.shape.startsWith('VM.') && this.shape.includes('.E') ? 'amd' : this.shape.startsWith('VM.') && this.shape.includes('.A') ? 'arm' : 'intel'}, set: function(chipset) {}, enumerable: true });
