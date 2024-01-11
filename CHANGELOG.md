@@ -1,13 +1,19 @@
 # Release Notes
 
 
+## Version 0.58.0
+**Release Date**: 6th December 2023
+### Features
+1. Add Public IP to tabular display for Instance
+### Bug Fixes
+
+
 ## Version 0.57.0
 **Release Date**: 6th December 2023
 ### Features
 1. Force Mount Target exports to have AUTOSELECT path for none OCI targets.
 2. Force Instance volumes attachment type to Paravirtualized for none OCI targets.
 3. Modify Block Storage Volume for PCA to allow specification of High Performance.
-
 ### Bug Fixes
 1. Change Validation so that missing hostname does not report failure for this warning.
 2. Change PCA Volume Attachment query to convert AD Correctly.
