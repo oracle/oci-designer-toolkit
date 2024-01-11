@@ -75,11 +75,13 @@ export class OcdDocument {
     getParentResource = () => this.getResource(this.dragResource.modelId)
     getParentResourceCoords = () => this.getCoords(this.dragResource.coordsId)
 
+    isOciResourceList(key: string): boolean {return this.design.model.oci.resources[key] ? true : false}
     getOciResourceList(key: string) {return this.design.model.oci.resources[key] ? this.design.model.oci.resources[key] : []}
     getOciResources() {return Object.values(this.design.model.oci.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], [])}
     getOciResourcesObject() {return this.design.model.oci.resources}
     getResources() {return this.getOciResources()}
     getResource(id='') {return this.getResources().find((r: OcdResource) => r.id === id)}
+    addOciReasourceToList(key: string, modelResource: OciResource) {this.design.model.oci.resources[key] ? this.design.model.oci.resources[key].push(modelResource) : this.design.model.oci.resources[key] = [modelResource]}
     addResource(paletteResource: PaletteResource, compartmentId: string) {
         const resourceList = paletteResource.class.split('-').slice(1).join('_')
         const resourceClass = paletteResource.class.toLowerCase().split('-').map((w) => `${w.charAt(0).toUpperCase()}${w.slice(1)}`).join('')
@@ -97,7 +99,8 @@ export class OcdDocument {
                 modelResource.compartmentId = compartmentId
                 response.modelResource = modelResource
                 console.debug('OcdDocument:', modelResource)
-                this.design.model.oci.resources[resourceList] ? this.design.model.oci.resources[resourceList].push(modelResource) : this.design.model.oci.resources[resourceList] = [modelResource]
+                this.addOciReasourceToList(resourceList, modelResource)
+                // this.design.model.oci.resources[resourceList] ? this.design.model.oci.resources[resourceList].push(modelResource) : this.design.model.oci.resources[resourceList] = [modelResource]
                 const additionalResources = client.getAdditionalResources?.() // Use Optional Chaining to test if function exists
                 if (additionalResources) {
                     console.debug('OcdDocument: Creating Additional Resources', additionalResources)

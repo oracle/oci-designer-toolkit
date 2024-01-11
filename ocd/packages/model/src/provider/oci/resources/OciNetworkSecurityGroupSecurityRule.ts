@@ -39,14 +39,16 @@ export namespace OciNetworkSecurityGroupSecurityRule {
     }
     export function allowedParentTypes(): string[] {
         console.debug('OciNetworkSecurityGroupSecurityRule: Allowed Parent Types')
-        return []
+        return ['NetworkSecurityGroup']
     }
     export function getParentId(resource: OciNetworkSecurityGroupSecurityRule): string {
         console.debug('OciNetworkSecurityGroupSecurityRule: Getting Parent Id to for', resource.displayName, resource.id)
-        return resource.compartmentId
+        const parentId = resource.networkSecurityGroupId !== '' ? resource.networkSecurityGroupId : resource.compartmentId
+        return parentId
     }
     export function setParentId(resource: OciNetworkSecurityGroupSecurityRule, parentId: string): OciNetworkSecurityGroupSecurityRule {
         console.debug('OciNetworkSecurityGroupSecurityRule: Setting Parent Id to', parentId, 'for', resource.displayName, resource.id)
+        resource.networkSecurityGroupId = parentId
         return resource
     }
     export function getConnectionIds(resource: OciNetworkSecurityGroupSecurityRule): string[] {

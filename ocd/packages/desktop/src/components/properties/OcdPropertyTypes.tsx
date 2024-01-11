@@ -80,6 +80,8 @@ export interface ResourceRootProperties {
 export interface GeneratedResourceRootProperties extends ResourceRootProperties {
     configs: ResourceElementConfig[]
     additionalElements?: ResourceAdditionElements[]
+    summaryTitle?: string | Function
+    onDelete?(child: any): void
 }
 
 export interface ResourceProperties {
@@ -87,6 +89,8 @@ export interface ResourceProperties {
     setOcdDocument: React.Dispatch<any>
     resource: OcdResource
     rootResource: OcdResource
+    summaryTitle?: string | Function
+    onDelete?(child: any): void
 }
 
 export interface GeneratedResourceProperties extends ResourceProperties {
