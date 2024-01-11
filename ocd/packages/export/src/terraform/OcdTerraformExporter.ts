@@ -32,6 +32,7 @@ export class OcdTerraformExporter extends OcdExporter {
         network_firewall: "oci_networking.tf",
         network_load_balancer: "oci_networking.tf",
         network_security_group: "oci_networking.tf",
+        network_security_group_security_rule: "oci_networking.tf",
         remote_peering_connection: "oci_networking.tf",
         route_table: "oci_networking.tf",
         security_list: "oci_networking.tf",

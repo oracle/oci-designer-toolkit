@@ -7,6 +7,48 @@ import { OcdConditionalElements } from "../../types/OcdImporterData";
 
 export const conditionalElements: OcdConditionalElements = {
     "common": {},
+    "oci_core_dhcp_options": {
+        "search_domain_names": {
+            "element": "type",
+            "operator": "eq",
+            "value": "SearchDomain"
+        },
+        "server_type": {
+            "element": "type",
+            "operator": "eq",
+            "value": "DomainNameServer"
+        },
+        "custom_dns_servers": [
+            {
+                "element": "server_type",
+                "operator": "eq",
+                "value": "CustomDnsServer"
+            },
+            {
+                "logic_operator": "and",
+                "element": "type",
+                "operator": "eq",
+                "value": "DomainNameServer"
+            }
+        ]
+    },
+    "oci_core_network_security_group_security_rule": {
+        "icmp_options": {
+            "element": "protocol",
+            "operator": "eq",
+            "value": "1"
+        },
+        "tcp_options": {
+            "element": "protocol",
+            "operator": "eq",
+            "value": "6"
+        },
+        "udp_options": {
+            "element": "protocol",
+            "operator": "eq",
+            "value": "17"
+        }
+    },
     "oci_core_security_list": {
         "icmp_options": {
             "element": "protocol",
@@ -35,30 +77,5 @@ export const conditionalElements: OcdConditionalElements = {
             "operator": "eq",
             "value": true
         }
-    },
-    "oci_core_dhcp_options": {
-        "search_domain_names": {
-            "element": "type",
-            "operator": "eq",
-            "value": "SearchDomain"
-        },
-        "server_type": {
-            "element": "type",
-            "operator": "eq",
-            "value": "DomainNameServer"
-        },
-        "custom_dns_servers": [
-            {
-                "element": "server_type",
-                "operator": "eq",
-                "value": "CustomDnsServer"
-            },
-            {
-                "logic_operator": "and",
-                "element": "type",
-                "operator": "eq",
-                "value": "DomainNameServer"
-            }
-        ]
     }
 }

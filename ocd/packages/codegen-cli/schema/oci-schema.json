@@ -2874,8 +2874,8 @@
         "required": true,
         "label": "Destination Type",
         "id": "destination_type",
-        "staticLookup": false,
-        "lookup": false,
+        "staticLookup": true,
+        "lookup": true,
         "lookupResource": "",
         "conditional": false,
         "condition": {}
@@ -4178,8 +4178,8 @@
         "required": false,
         "label": "Destination Type",
         "id": "destination_type",
-        "staticLookup": false,
-        "lookup": false,
+        "staticLookup": true,
+        "lookup": true,
         "lookupResource": "",
         "conditional": false,
         "condition": {}
@@ -4238,8 +4238,8 @@
         "required": true,
         "label": "Protocol",
         "id": "protocol",
-        "staticLookup": false,
-        "lookup": false,
+        "staticLookup": true,
+        "lookup": true,
         "lookupResource": "",
         "conditional": false,
         "condition": {}
@@ -4268,8 +4268,8 @@
         "required": false,
         "label": "Source Type",
         "id": "source_type",
-        "staticLookup": false,
-        "lookup": false,
+        "staticLookup": true,
+        "lookup": true,
         "lookupResource": "",
         "conditional": false,
         "condition": {}
@@ -4298,8 +4298,12 @@
         "required": false,
         "label": "Icmp Options",
         "id": "icmp_options",
-        "conditional": false,
-        "condition": {},
+        "conditional": true,
+        "condition": {
+          "element": "protocol",
+          "operator": "eq",
+          "value": "1"
+        },
         "attributes": {
           "code": {
             "provider": "oci",
@@ -4342,8 +4346,12 @@
         "required": false,
         "label": "Tcp Options",
         "id": "tcp_options",
-        "conditional": false,
-        "condition": {},
+        "conditional": true,
+        "condition": {
+          "element": "protocol",
+          "operator": "eq",
+          "value": "6"
+        },
         "attributes": {
           "destination_port_range": {
             "provider": "oci",
@@ -4444,8 +4452,12 @@
         "required": false,
         "label": "Udp Options",
         "id": "udp_options",
-        "conditional": false,
-        "condition": {},
+        "conditional": true,
+        "condition": {
+          "element": "protocol",
+          "operator": "eq",
+          "value": "17"
+        },
         "attributes": {
           "destination_port_range": {
             "provider": "oci",

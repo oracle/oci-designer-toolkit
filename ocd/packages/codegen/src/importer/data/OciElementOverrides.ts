@@ -9,10 +9,10 @@ export const elementOverrides: OcdElementOverrides = {
     "lookups": [],
     "staticLookups": [
         "availability_domain",
-        // "destination_type",
+        "destination_type",
         "fault_domain",
-        // "protocol",
-        // "source_type",
+        "protocol",
+        "source_type",
         "route_rules.destination_type",
         "egress_security_rules.protocol",
         "egress_security_rules.destination_type",
@@ -24,10 +24,23 @@ export const elementOverrides: OcdElementOverrides = {
     ],
     "types": {
         "common": {},
+        "oci_core_dhcp_options": {
+            "staticLookups": [
+                "egress_security_rules.protocol",
+                "egress_security_rules.destination_type",
+                "ingress_security_rules.protocol",
+                "ingress_security_rules.source_type",
+            ]
+        },
         "oci_core_instance": {
             "assign_public_ip": "bool"
         },
-        "oci_core_dhcp_options": {
+        "oci_core_network_security_group_security_rule": {
+            "staticLookups": [
+                "destination_type",
+                "protocol",
+                "source_type"        
+            ]
         }
     }
 }

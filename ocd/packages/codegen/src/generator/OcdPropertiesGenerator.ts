@@ -73,14 +73,29 @@ import { v4 as uuidv4 } from 'uuid'
 import OcdDocument from '../../../../../OcdDocument'
 import { GeneratedResourceProperties, GeneratedResourceRootProperties, OcdBooleanProperty, OcdListProperty, OcdLookupProperty, OcdLookupListProperty, OcdMapProperty, OcdNumberProperty, OcdNumberListProperty, OcdSetLookupProperty, OcdSetProperty, OcdStaticLookupProperty, OcdStringListProperty, OcdTextProperty, ResourceProperty, isPropertyDisplayConditionTrue} from '../../../../OcdPropertyTypes'
 import { OciModelResources as Model } from '@ocd/model'
-//import * as Model  from '../../../../../../model/provider/oci/resources/${this.modelFilename(resource)}'
+import { useState } from 'react'
 
-export const ${this.reactResourceGeneratedName(resource)} = ({ ocdDocument, setOcdDocument, resource, configs, additionalElements = [] }: GeneratedResourceRootProperties): JSX.Element => {
+export const ${this.reactResourceGeneratedName(resource)} = ({ ocdDocument, setOcdDocument, resource, configs, additionalElements = [], summaryTitle = 'Resource', onDelete = undefined }: GeneratedResourceRootProperties): JSX.Element => {
     const rootResource = resource
+    const className = onDelete === undefined ? 'summary-background' : 'summary-background ocd-summary-row'
+    const deleteClassName = onDelete === undefined ? 'hidden' : 'delete-property action-button-background action-button-column action-button'
+    const open = true
+    const [title, setTitle] = useState(summaryTitle ? typeof summaryTitle === 'string' ? summaryTitle : summaryTitle(resource, open) : 'Resource')
+    const onDeleteClick = (e: React.MouseEvent<HTMLElement>) => {
+        e.stopPropagation()
+        e.preventDefault()
+        if (onDelete) onDelete(resource)
+    }
+    const onToggle = (e: React.MouseEvent<HTMLDetailsElement>) => {
+        e.stopPropagation()
+        e.preventDefault()
+        // @ts-ignore
+        if (typeof summaryTitle === 'function') setTitle(summaryTitle(resource, e.target.open))
+    }
     return (
         <div>
-            <details open={true}>
-                <summary className='summary-background'>Resource</summary>
+            <details open={true} onToggle={onToggle}>
+                <summary className={className}><div>{title}</div><div className={deleteClassName} onClick={onDeleteClick}></div></summary>
                 <div className='ocd-resource-properties'>
                     ${Object.entries(schema.attributes).filter(([k, v]) => !this.ignoreAttributes.includes(k)).map(([k, a]) => this.attributeToReactElement(resource, k, a)).join('\n                    ')}
                 </div>
