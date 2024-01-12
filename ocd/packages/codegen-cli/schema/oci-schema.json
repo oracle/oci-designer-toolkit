@@ -4166,8 +4166,12 @@
         "staticLookup": false,
         "lookup": false,
         "lookupResource": "",
-        "conditional": false,
-        "condition": {}
+        "conditional": true,
+        "condition": {
+          "element": "direction",
+          "operator": "eq",
+          "value": "INGRESS"
+        }
       },
       "destination_type": {
         "provider": "oci",
@@ -4181,8 +4185,12 @@
         "staticLookup": true,
         "lookup": true,
         "lookupResource": "",
-        "conditional": false,
-        "condition": {}
+        "conditional": true,
+        "condition": {
+          "element": "direction",
+          "operator": "eq",
+          "value": "INGRESS"
+        }
       },
       "direction": {
         "provider": "oci",
@@ -4193,8 +4201,8 @@
         "required": true,
         "label": "Direction",
         "id": "direction",
-        "staticLookup": false,
-        "lookup": false,
+        "staticLookup": true,
+        "lookup": true,
         "lookupResource": "",
         "conditional": false,
         "condition": {}
@@ -4256,8 +4264,12 @@
         "staticLookup": false,
         "lookup": false,
         "lookupResource": "",
-        "conditional": false,
-        "condition": {}
+        "conditional": true,
+        "condition": {
+          "element": "direction",
+          "operator": "eq",
+          "value": "EGRESS"
+        }
       },
       "source_type": {
         "provider": "oci",
@@ -4271,8 +4283,12 @@
         "staticLookup": true,
         "lookup": true,
         "lookupResource": "",
-        "conditional": false,
-        "condition": {}
+        "conditional": true,
+        "condition": {
+          "element": "direction",
+          "operator": "eq",
+          "value": "EGRESS"
+        }
       },
       "stateless": {
         "provider": "oci",

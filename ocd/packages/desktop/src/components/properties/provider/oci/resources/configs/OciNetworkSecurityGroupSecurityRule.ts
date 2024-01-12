@@ -29,6 +29,15 @@ export namespace OciNetworkSecurityGroupSecurityRuleConfigs {
                 ]
             },
             {
+                id: 'direction',
+                properties: {},
+                configs: [],
+                options: [
+                    {id: 'INGRESS', displayName: 'Ingress'},
+                    {id: 'EGRESS', displayName: 'Egress'}
+                ]
+            },
+            {
                 id: 'protocol',
                 properties: {},
                 configs: [],

@@ -10,6 +10,7 @@ export const elementOverrides: OcdElementOverrides = {
     "staticLookups": [
         "availability_domain",
         "destination_type",
+        "direction",
         "fault_domain",
         "protocol",
         "source_type",
