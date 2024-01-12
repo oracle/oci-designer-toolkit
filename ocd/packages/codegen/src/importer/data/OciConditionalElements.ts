@@ -33,6 +33,26 @@ export const conditionalElements: OcdConditionalElements = {
         ]
     },
     "oci_core_network_security_group_security_rule": {
+        "destination": {
+            "element": "direction",
+            "operator": "eq",
+            "value": "INGRESS"
+        },
+        "destination_type": {
+            "element": "direction",
+            "operator": "eq",
+            "value": "INGRESS"
+        },
+        "source": {
+            "element": "direction",
+            "operator": "eq",
+            "value": "EGRESS"
+        },
+        "source_type": {
+            "element": "direction",
+            "operator": "eq",
+            "value": "EGRESS"
+        },
         "icmp_options": {
             "element": "protocol",
             "operator": "eq",
