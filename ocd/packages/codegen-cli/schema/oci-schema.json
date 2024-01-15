@@ -2874,8 +2874,8 @@
         "required": true,
         "label": "Destination Type",
         "id": "destination_type",
-        "staticLookup": true,
-        "lookup": true,
+        "staticLookup": false,
+        "lookup": false,
         "lookupResource": "",
         "conditional": false,
         "condition": {}
@@ -4201,8 +4201,8 @@
         "required": true,
         "label": "Direction",
         "id": "direction",
-        "staticLookup": true,
-        "lookup": true,
+        "staticLookup": false,
+        "lookup": false,
         "lookupResource": "",
         "conditional": false,
         "condition": {}
@@ -4855,8 +4855,8 @@
             "required": false,
             "label": "Destination Type",
             "id": "route_rules.destination_type",
-            "staticLookup": true,
-            "lookup": true,
+            "staticLookup": false,
+            "lookup": false,
             "lookupResource": "",
             "conditional": false,
             "condition": {}
