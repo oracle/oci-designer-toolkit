@@ -6,8 +6,10 @@
 import { OcdElementOverrides } from "../../types/OcdImporterData";
 
 export const elementOverrides: OcdElementOverrides = {
-    "lookups": [],
-    "staticLookups": [
+    "lookups": {
+        "common": []
+    },
+    "staticLookups1": [
         "availability_domain",
         "destination_type",
         "direction",
@@ -23,25 +25,33 @@ export const elementOverrides: OcdElementOverrides = {
         "options.server_type",
         "domain_name_type"
     ],
+    "staticLookups": {
+        "common": [
+            "availability_domain",
+            "fault_domain"
+        ],
+        "oci_core_dhcp_options": [
+            "options.type",
+            "options.server_type",
+            "domain_name_type",
+        ],
+        "oci_core_network_security_group_security_rule": [
+            "destination_type",
+            "direction",
+            "protocol",
+            "source_type"        
+        ],
+        "oci_core_security_list": [
+            "egress_security_rules.protocol",
+            "egress_security_rules.destination_type",
+            "ingress_security_rules.protocol",
+            "ingress_security_rules.source_type",
+        ]
+    },
     "types": {
         "common": {},
-        "oci_core_dhcp_options": {
-            "staticLookups": [
-                "egress_security_rules.protocol",
-                "egress_security_rules.destination_type",
-                "ingress_security_rules.protocol",
-                "ingress_security_rules.source_type",
-            ]
-        },
         "oci_core_instance": {
             "assign_public_ip": "bool"
         },
-        "oci_core_network_security_group_security_rule": {
-            "staticLookups": [
-                "destination_type",
-                "protocol",
-                "source_type"        
-            ]
-        }
     }
 }
