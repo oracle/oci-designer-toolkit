@@ -4201,8 +4201,8 @@
         "required": true,
         "label": "Direction",
         "id": "direction",
-        "staticLookup": false,
-        "lookup": false,
+        "staticLookup": true,
+        "lookup": true,
         "lookupResource": "",
         "conditional": false,
         "condition": {}

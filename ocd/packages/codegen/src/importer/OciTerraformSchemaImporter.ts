@@ -35,7 +35,7 @@ export class OciTerraformSchemaImporter extends OcdSchemaImporter {
     }
 
     getAttributes(key: string, block: TerrafomSchemaEntry, hierarchy=[]) {
-        console.debug('OcdTerraformSchemaImporter: Resource', key)
+        // console.debug('OcdTerraformSchemaImporter: Resource', key)
         const ignore_block_types = ['timeouts']
         const ignore_attributes = ignoreElements[key] ? [...ignoreElements.common, ...ignoreElements[key]] : ignoreElements.common
         const type_overrides = elementOverrides.types[key] ? {...elementOverrides.types.common, ...elementOverrides.types[key]} : elementOverrides.types.common
@@ -96,16 +96,8 @@ export class OciTerraformSchemaImporter extends OcdSchemaImporter {
 
     isReference = (key: string) => key && key.endsWith('_id')
     isMultiReference = (key: string) => key && key.endsWith('_ids')
-    isLookupOverride = (key: string, resource: string = 'common') => {
-        const isLookup = elementOverrides.lookups.common.includes(key) || (Object.hasOwn(elementOverrides.lookups, resource) && elementOverrides.lookups[resource].includes(key)) || this.isStaticLookup(key, resource)
-        if (isLookup) console.debug('isLookupOverride:', isLookup, key, resource)
-        return isLookup
-    }
-    isStaticLookup = (key: string, resource: string = 'common') => {
-        const isStatic = elementOverrides.staticLookups.common.includes(key) || (Object.hasOwn(elementOverrides.staticLookups, resource) && elementOverrides.staticLookups[resource].includes(key))
-        if (isStatic) console.debug('isStaticLookup:', isStatic, key, resource)
-        return isStatic
-    }
+    isLookupOverride = (key: string, resource: string = 'common') => elementOverrides.lookups.common.includes(key) || (Object.hasOwn(elementOverrides.lookups, resource) && elementOverrides.lookups[resource].includes(key)) || this.isStaticLookup(key, resource)
+    isStaticLookup = (key: string, resource: string = 'common') => elementOverrides.staticLookups.common.includes(key) || (Object.hasOwn(elementOverrides.staticLookups, resource) && elementOverrides.staticLookups[resource].includes(key))
     lookupResource = (key: string) => key.split('_').slice(0, -1).join('_').toLowerCase()
     toLabel = (key: string) => Object.hasOwn(attributeMap, key) ? attributeMap[key].label : key.endsWith('_id') || key.endsWith('_ids') ? OcdUtils.toTitleCase(key.split('_').slice(0, -1).join(' ')) : OcdUtils.toTitleCase(key.split('_').join(' '))
     isConditional = (key: string, element: string) => Object.hasOwn(conditionalElements, key) && Object.hasOwn(conditionalElements[key], element)
