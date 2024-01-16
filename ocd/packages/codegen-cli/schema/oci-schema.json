@@ -4170,7 +4170,7 @@
         "condition": {
           "element": "direction",
           "operator": "eq",
-          "value": "INGRESS"
+          "value": "EGRESS"
         }
       },
       "destination_type": {
@@ -4189,7 +4189,7 @@
         "condition": {
           "element": "direction",
           "operator": "eq",
-          "value": "INGRESS"
+          "value": "EGRESS"
         }
       },
       "direction": {
@@ -4203,21 +4203,6 @@
         "id": "direction",
         "staticLookup": true,
         "lookup": true,
-        "lookupResource": "",
-        "conditional": false,
-        "condition": {}
-      },
-      "is_valid": {
-        "provider": "oci",
-        "key": "isValid",
-        "name": "is_valid",
-        "type": "bool",
-        "subtype": "",
-        "required": false,
-        "label": "Is Valid",
-        "id": "is_valid",
-        "staticLookup": false,
-        "lookup": false,
         "lookupResource": "",
         "conditional": false,
         "condition": {}
@@ -4268,7 +4253,7 @@
         "condition": {
           "element": "direction",
           "operator": "eq",
-          "value": "EGRESS"
+          "value": "INGRESS"
         }
       },
       "source_type": {
@@ -4287,7 +4272,7 @@
         "condition": {
           "element": "direction",
           "operator": "eq",
-          "value": "EGRESS"
+          "value": "INGRESS"
         }
       },
       "stateless": {
