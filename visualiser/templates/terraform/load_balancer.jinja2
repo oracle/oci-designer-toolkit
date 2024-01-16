@@ -71,7 +71,7 @@ resource "oci_load_balancer_backend_set" "{{ backend_set.resource_name }}" {
         protocol = {{ backend_set.health_checker.protocol | safe }}
         #Optional
 {% if backend_set.health_checker.interval_in_millis is defined %}
-        interval_in_millis = {{ backend_set.health_checker.interval_in_millis | safe }}
+        interval_ms = {{ backend_set.health_checker.interval_ms | safe }}
 {% endif %}
 {% if backend_set.health_checker.port is defined %}
         port = {{ backend_set.health_checker.port | safe }}
