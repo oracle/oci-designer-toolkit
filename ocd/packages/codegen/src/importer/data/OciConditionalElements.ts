@@ -36,22 +36,22 @@ export const conditionalElements: OcdConditionalElements = {
         "destination": {
             "element": "direction",
             "operator": "eq",
-            "value": "INGRESS"
+            "value": "EGRESS"
         },
         "destination_type": {
             "element": "direction",
             "operator": "eq",
-            "value": "INGRESS"
+            "value": "EGRESS"
         },
         "source": {
             "element": "direction",
             "operator": "eq",
-            "value": "EGRESS"
+            "value": "INGRESS"
         },
         "source_type": {
             "element": "direction",
             "operator": "eq",
-            "value": "EGRESS"
+            "value": "INGRESS"
         },
         "icmp_options": {
             "element": "protocol",

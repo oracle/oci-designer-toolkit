@@ -73,6 +73,9 @@ export const ignoreElements: OcdIgnoreElements = {
         "public_ip_id",
         "route_table_id"
     ],
+    "oci_core_network_security_group_security_rule": [
+        "is_valid"
+    ],
     "oci_core_route_table": [
         "route_type"
     ],
