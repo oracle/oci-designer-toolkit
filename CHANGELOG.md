@@ -6,6 +6,7 @@
 ### Features
 1. Add Public IP to tabular display for Instance
 ### Bug Fixes
+1. Fix name miss match error for Load Balancer Heath Checker interval.
 
 
 ## Version 0.57.0
