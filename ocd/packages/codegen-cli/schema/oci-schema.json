@@ -882,7 +882,7 @@
             "staticLookup": false,
             "cacheLookup": false,
             "lookup": true,
-            "lookupResource": "nsg",
+            "lookupResource": "network_security_group",
             "conditional": false,
             "condition": {}
           },
@@ -1541,7 +1541,7 @@
             "staticLookup": false,
             "cacheLookup": false,
             "lookup": true,
-            "lookupResource": "nsg",
+            "lookupResource": "network_security_group",
             "conditional": false,
             "condition": {}
           },
@@ -3395,52 +3395,6 @@
             "lookupResource": "",
             "conditional": false,
             "condition": {}
-          },
-          "plugins_config": {
-            "provider": "oci",
-            "key": "pluginsConfig",
-            "name": "plugins_config",
-            "type": "list",
-            "subtype": "",
-            "required": false,
-            "label": "Plugins Config",
-            "id": "agent_config.plugins_config",
-            "conditional": false,
-            "condition": {},
-            "attributes": {
-              "desired_state": {
-                "provider": "oci",
-                "key": "desiredState",
-                "name": "desired_state",
-                "type": "string",
-                "subtype": "",
-                "required": true,
-                "label": "Desired State",
-                "id": "agent_config.plugins_config.desired_state",
-                "staticLookup": false,
-                "cacheLookup": false,
-                "lookup": false,
-                "lookupResource": "",
-                "conditional": false,
-                "condition": {}
-              },
-              "name": {
-                "provider": "oci",
-                "key": "name",
-                "name": "name",
-                "type": "string",
-                "subtype": "",
-                "required": true,
-                "label": "Name",
-                "id": "agent_config.plugins_config.name",
-                "staticLookup": false,
-                "cacheLookup": false,
-                "lookup": false,
-                "lookupResource": "",
-                "conditional": false,
-                "condition": {}
-              }
-            }
           }
         }
       },
@@ -3451,7 +3405,7 @@
         "type": "object",
         "subtype": "",
         "required": false,
-        "label": "Create Vnic Details",
+        "label": "Network Details",
         "id": "create_vnic_details",
         "conditional": false,
         "condition": {},
@@ -3548,7 +3502,7 @@
             "staticLookup": false,
             "cacheLookup": false,
             "lookup": true,
-            "lookupResource": "nsg",
+            "lookupResource": "network_security_group",
             "conditional": false,
             "condition": {}
           },
@@ -3595,8 +3549,12 @@
         "required": false,
         "label": "Shape Config",
         "id": "shape_config",
-        "conditional": false,
-        "condition": {},
+        "conditional": true,
+        "condition": {
+          "element": "shape",
+          "operator": "eq",
+          "value": ".Flex"
+        },
         "attributes": {
           "memory_in_gbs": {
             "provider": "oci",
@@ -3644,38 +3602,6 @@
         "conditional": false,
         "condition": {},
         "attributes": {
-          "boot_volume_size_in_gbs": {
-            "provider": "oci",
-            "key": "bootVolumeSizeInGbs",
-            "name": "boot_volume_size_in_gbs",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Boot Volume Size In Gbs",
-            "id": "source_details.boot_volume_size_in_gbs",
-            "staticLookup": false,
-            "cacheLookup": false,
-            "lookup": false,
-            "lookupResource": "",
-            "conditional": false,
-            "condition": {}
-          },
-          "boot_volume_vpus_per_gb": {
-            "provider": "oci",
-            "key": "bootVolumeVpusPerGb",
-            "name": "boot_volume_vpus_per_gb",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Boot Volume Vpus Per Gb",
-            "id": "source_details.boot_volume_vpus_per_gb",
-            "staticLookup": false,
-            "cacheLookup": false,
-            "lookup": false,
-            "lookupResource": "",
-            "conditional": false,
-            "condition": {}
-          },
           "kms_key_id": {
             "provider": "oci",
             "key": "kmsKeyId",
@@ -3702,9 +3628,9 @@
             "label": "Source",
             "id": "source_details.source_id",
             "staticLookup": false,
-            "cacheLookup": false,
+            "cacheLookup": true,
             "lookup": true,
-            "lookupResource": "source",
+            "lookupResource": "images",
             "conditional": false,
             "condition": {}
           },
@@ -3717,9 +3643,9 @@
             "required": true,
             "label": "Source Type",
             "id": "source_details.source_type",
-            "staticLookup": false,
+            "staticLookup": true,
             "cacheLookup": false,
-            "lookup": false,
+            "lookup": true,
             "lookupResource": "",
             "conditional": false,
             "condition": {}
@@ -6610,7 +6536,7 @@
         "type": "object",
         "subtype": "",
         "required": false,
-        "label": "Create Vnic Details",
+        "label": "Network Details",
         "id": "create_vnic_details",
         "conditional": false,
         "condition": {},
@@ -6723,7 +6649,7 @@
             "staticLookup": false,
             "cacheLookup": false,
             "lookup": true,
-            "lookupResource": "nsg",
+            "lookupResource": "network_security_group",
             "conditional": false,
             "condition": {}
           },
@@ -7972,7 +7898,7 @@
         "staticLookup": false,
         "cacheLookup": false,
         "lookup": true,
-        "lookupResource": "nsg",
+        "lookupResource": "network_security_group",
         "conditional": false,
         "condition": {}
       },
@@ -8665,7 +8591,7 @@
         "staticLookup": false,
         "cacheLookup": false,
         "lookup": true,
-        "lookupResource": "nsg",
+        "lookupResource": "network_security_group",
         "conditional": false,
         "condition": {}
       },
@@ -10325,7 +10251,7 @@
         "staticLookup": false,
         "cacheLookup": false,
         "lookup": true,
-        "lookupResource": "nsg",
+        "lookupResource": "network_security_group",
         "conditional": false,
         "condition": {}
       },

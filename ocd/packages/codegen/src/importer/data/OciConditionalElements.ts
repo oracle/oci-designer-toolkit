@@ -32,6 +32,13 @@ export const conditionalElements: OcdConditionalElements = {
             }
         ]
     },
+    "oci_core_instance": {
+        "shape_config": {
+            "element": "shape",
+            "operator": "eq",
+            "value": ".Flex"
+        }
+    },
     "oci_core_network_security_group_security_rule": {
         "destination": {
             "element": "direction",

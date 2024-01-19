@@ -60,7 +60,7 @@ export class OciTerraformSchemaImporter extends OcdSchemaImporter {
                 // staticLookup: this.isStaticLookup(k),
                 // lookup: this.isReference(k) || this.isMultiReference(k) || this.isLookupOverride(k),
                 lookup: this.isReference(k) || this.isMultiReference(k) || this.isLookupOverride(id, key),
-                lookupResource: this.isReference(k) || this.isMultiReference(k) ? this.lookupResource(k) : this.isCacheLookup(id, key) ? this.cacheLookupResource(id, key) : '',
+                lookupResource: this.isCacheLookup(id, key) ? this.cacheLookupResource(id, key) : this.isReference(k) || this.isMultiReference(k) ? this.lookupResource(k) : '',
                 conditional: this.isConditional(key, k),
                 condition: this.isConditional(key, k) ? conditionalElements[key][k] : {}
             }
@@ -100,7 +100,7 @@ export class OciTerraformSchemaImporter extends OcdSchemaImporter {
     isLookupOverride = (key: string, resource: string = 'common') => elementOverrides.lookups.common.includes(key) || (Object.hasOwn(elementOverrides.lookups, resource) && elementOverrides.lookups[resource].includes(key)) || this.isStaticLookup(key, resource)
     isStaticLookup = (key: string, resource: string = 'common') => elementOverrides.staticLookups.common.includes(key) || (Object.hasOwn(elementOverrides.staticLookups, resource) && elementOverrides.staticLookups[resource].includes(key))
     isCacheLookup = (key: string, resource: string = 'common') => Object.hasOwn(elementOverrides.cacheLookups.common, key) || (Object.hasOwn(elementOverrides.cacheLookups, resource) && Object.hasOwn(elementOverrides.cacheLookups[resource], key))
-    lookupResource = (key: string) => key.split('_').slice(0, -1).join('_').toLowerCase()
+    lookupResource = (key: string) => Object.hasOwn(elementOverrides.resourceLookupOverrides.common, key) ? elementOverrides.resourceLookupOverrides.common[key] : key.split('_').slice(0, -1).join('_').toLowerCase()
     cacheLookupResource = (key: string, resource: string = 'common') => (Object.hasOwn(elementOverrides.cacheLookups, resource) && Object.hasOwn(elementOverrides.cacheLookups[resource], key)) ? elementOverrides.cacheLookups[resource][key] : elementOverrides.cacheLookups.common[key]
     toLabel = (key: string) => Object.hasOwn(attributeMap, key) ? attributeMap[key].label : key.endsWith('_id') || key.endsWith('_ids') ? OcdUtils.toTitleCase(key.split('_').slice(0, -1).join(' ')) : OcdUtils.toTitleCase(key.split('_').join(' '))
     isConditional = (key: string, element: string) => Object.hasOwn(conditionalElements, key) && Object.hasOwn(conditionalElements[key], element)

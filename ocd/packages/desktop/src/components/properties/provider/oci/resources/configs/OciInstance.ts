@@ -28,6 +28,20 @@ export namespace OciInstanceConfigs {
                     {displayName: 'Virtual Machine', simpleFilter: (r) => !r.isFlexible && r.id.startsWith('VM.')},
                     {displayName: 'Bare Metal', simpleFilter: (r) => !r.isFlexible && r.id.startsWith('BM.')}
                 ]
+            },
+            {
+                id: 'source_details.source_id',
+                properties: {},
+                configs: [],
+                resourceFilter: (r, resource, rootResource) => r.shapes.includes(rootResource.shape)
+            },
+            {
+                id: 'source_details.source_type',
+                properties: {},
+                configs: [],
+                options: [
+                    {id: 'image', displayName: 'Image'}
+                ]
             }
         ]
     }
