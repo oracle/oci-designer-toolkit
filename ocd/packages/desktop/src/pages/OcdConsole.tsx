@@ -33,6 +33,7 @@ const OcdConsole = (): JSX.Element => {
     const [ocdDocument, setOcdDocument] = useState(OcdDocument.new())
     const [ocdConsoleConfig, setOcdConsoleConfig] = useState(OcdConsoleConfig.new())
     const [ocdCache, setOcdCache] = useState(OcdCacheData.new())
+    // const [ocdCache, setOcdCache]: [OcdCacheData | undefined, any] = useState()
     const [activeFile, setActiveFile] = useState({name: '', modified: false})
     useEffect(() => {
         // @ts-ignore
@@ -51,16 +52,32 @@ const OcdConsole = (): JSX.Element => {
             OcdConfigFacade.saveConsoleConfig(ocdConsoleConfig.config).then((results) => {console.debug('OcdConsole: Saved Config')}).catch((response) => console.debug('OcdConsole:', response))
         })
     }, []) // Empty Array to only run on initial render
-    useEffect(() => {
-        OcdCacheFacade.loadCache().then((results) => {
-            console.debug('OcdConsole: Load Cache', results)
-            const cacheData = new OcdCacheData(results)
-            setOcdCache(cacheData)
-        }).catch((response) => {
-            console.debug('OcdConsole:', response)
-            OcdCacheFacade.saveCache(ocdCache.cache).then((results) => {console.debug('OcdConsole: Saved Cache')}).catch((response) => console.debug('OcdConsole:', response))
-        })
-    }, []) // Empty Array to only run on initial render
+    // useEffect(() => {
+    //     OcdCacheFacade.loadCache().then((results) => {
+    //         console.debug('OcdConsole: Load Cache', results)
+    //         const cacheData = new OcdCacheData(results)
+    //         setOcdCache(cacheData)
+    //     }).catch((response) => {
+    //         console.debug('OcdConsole:', response)
+    //         OcdCacheFacade.saveCache(ocdCache.cache).then((results) => {console.debug('OcdConsole: Saved Cache')}).catch((response) => console.debug('OcdConsole:', response))
+    //     })
+    // }, []) // Empty Array to only run on initial render
+    // useEffect(() => {
+    //     if (ocdCache === undefined) {
+    //         OcdCacheFacade.loadCache().then((results) => {
+    //             console.debug('OcdConsole: Load Cache', results)
+    //             const cacheData = new OcdCacheData(results)
+    //             setOcdCache(cacheData)
+    //         }).catch((response) => {
+    //             console.debug('OcdConsole:', response)
+    //             const cacheData = OcdCacheData.new()
+    //             setOcdCache(cacheData)
+    //             // OcdCacheFacade.saveCache(ocdCache.cache).then((results) => {console.debug('OcdConsole: Saved Cache')}).catch((response) => console.debug('OcdConsole:', response))
+    //         })
+    //     } else {
+    //         OcdCacheFacade.saveCache(ocdCache.cache).then((results) => {console.debug('OcdConsole: Saved Cache')}).catch((response) => console.debug('OcdConsole:', response))
+    //     }
+    // }, [ocdCache]) // Empty Array to only run on initial render
     // const [ociConfig, setOciConfig] = useState('')
     // useEffect(() => {setOcdDocument(ocdDocument)}, [ocdDocument])
     const setAndSaveOcdConsoleConfig = (consoleConfig: OcdConsoleConfig) => {

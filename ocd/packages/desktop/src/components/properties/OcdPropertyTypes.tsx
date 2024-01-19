@@ -7,7 +7,7 @@ import { OcdResource } from '@ocd/model'
 import { OcdUtils } from '@ocd/core'
 import { OcdDocument } from '../OcdDocument'
 import { useContext, useEffect } from 'react'
-import { ActiveFileContext } from '../../pages/OcdConsole'
+import { ActiveFileContext, CacheContext } from '../../pages/OcdConsole'
 
 export interface ResourcePropertyCondition extends OcdUtils.ResourcePropertyCondition {}
 // export interface ResourcePropertyCondition {
@@ -28,6 +28,7 @@ export interface ResourcePropertyAttributes {
     id: string
     attributes?: {[key: string]: ResourcePropertyAttributes}
     staticLookup?: boolean
+    cacheLookup?: boolean
     lookup?: boolean
     lookupResource?: string,
     conditional: boolean,
@@ -63,8 +64,9 @@ export interface ResourceElementConfigOption {
 }
 export interface ResourceElementConfigLookupGroup {
     displayName: string,
-    lookupResource: string
+    lookupResource?: string
     resources?: OcdResource[]
+    simpleFilter?: SimpleFilterType     // Filter function for Reference Selects. Simple test of array element attribute against constant
 }
 export interface ResourceAdditionElements {
     jsxElement: Function
@@ -306,6 +308,50 @@ export const OcdStaticLookupProperty = ({ ocdDocument, setOcdDocument, resource,
                     {resources.map((r: ResourceElementConfigOption) => {
                         return <option value={r.id} key={r.id}>{r.displayName}</option>
                     })}
+                </select>
+            </div>
+        </div>
+    )
+}
+
+export const OcdCacheLookupProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute, rootResource }: ResourceProperty): JSX.Element => {
+    console.debug('OcdPropertyTypes: OcdCacheLookupProperty', config, attribute, resource)
+    // @ts-ignore
+    const {activeFile, setActiveFile} = useContext(ActiveFileContext)
+    // @ts-ignore
+    const {ocdCache, setOcdCache} = useContext(CacheContext)
+    const properties = config && config.properties ? config.properties : {}
+    const lookupGroups = config && config.lookupGroups ? config.lookupGroups : []
+    const resourceType = OcdUtils.toResourceType(attribute.lookupResource)
+    const baseFilter = (r: any) => r.resourceType !== resourceType || r.id !== resource.id
+    const customFilter = config && config.resourceFilter ? (r: any) => config.resourceFilter && config.resourceFilter(r, resource, rootResource) : config && config.simpleFilter ? config.simpleFilter : () => true
+    const resources = attribute.provider === 'oci' ? ocdCache.getOciReferenceDataList(attribute.lookupResource ? attribute.lookupResource : '').filter(customFilter).filter(baseFilter) : []
+    // const resources = attribute.provider === 'oci' ? ocdDocument.getOciResourceList(attribute.lookupResource ? attribute.lookupResource : '').filter(customFilter).filter(baseFilter) : []
+    lookupGroups.forEach((g) => {
+        if (Object.hasOwn(g, 'lookupResource')) {
+            const resourceType = OcdUtils.toResourceType(g.lookupResource) 
+            g.resources = attribute.provider === 'oci' ? ocdCache.getOciReferenceDataList(g.lookupResource ? g.lookupResource : '').filter(customFilter).filter(baseFilter) : []
+        } else if (Object.hasOwn(g, 'simpleFilter')) {
+            g.resources = attribute.provider === 'oci' ? ocdCache.getOciReferenceDataList(attribute.lookupResource ? attribute.lookupResource : '').filter(customFilter).filter(baseFilter).filter(g.simpleFilter) : []
+        }
+    })
+    const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        resource[attribute.key] = e.target.value
+        setOcdDocument(OcdDocument.clone(ocdDocument))
+        if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
+    }
+    const className = isPropertyDisplayConditionTrue(attribute.conditional, attribute.condition, resource, rootResource) ? `ocd-property-row ocd-simple-property-row` : `collapsed hidden`
+    console.debug('OcdPropertyTypes: OcdCacheLookupProperty', config, attribute, resource, resources)
+    return (
+        <div className={className}>
+            <div><label>{attribute.label}</label></div>
+            <div>
+                <select value={resource[attribute.key]} {...properties} onChange={onChange}>
+                    {/* {!attribute.required && <option defaultValue='' key={`${attribute.lookupResource}-empty-option`}></option> } */}
+                    <option value='' key={`${attribute.lookupResource}-empty-option`}></option>
+                    {lookupGroups.length === 0 ? resources.map((r: OcdResource) => {
+                        return <option value={r.id} key={r.id}>{r.displayName}</option>
+                    }) : lookupGroups.map((g: ResourceElementConfigLookupGroup) => {return <OcdLookupGroupOption group={g} key={g.displayName}/>})}
                 </select>
             </div>
         </div>

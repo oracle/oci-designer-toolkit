@@ -9,6 +9,9 @@ export const attributeMap: OcdAttributeMap = {
     "cidr_blocks": {
         "label": "IPV4 CIDRs"
     },
+    "create_vnic_details": {
+        "label": "Network Details"
+    },
     "dns_label": {
         "label": "DNS Label"
     },

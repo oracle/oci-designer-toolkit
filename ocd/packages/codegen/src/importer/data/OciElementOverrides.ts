@@ -6,8 +6,23 @@
 import { OcdElementOverrides } from "../../types/OcdImporterData";
 
 export const elementOverrides: OcdElementOverrides = {
+    "resourceLookupOverrides": {
+        "common": {
+            "nsg_ids": "network_security_group"
+        },
+    },
     "lookups": {
-        "common": []
+        "common": [],
+        "oci_core_instance": [
+            "shape"
+        ],
+    },
+    "cacheLookups": {
+        "common": {},
+        "oci_core_instance": {
+            "shape": "shapes",
+            "source_details.source_id": "images"
+        },
     },
     "staticLookups": {
         "common": [
@@ -18,6 +33,9 @@ export const elementOverrides: OcdElementOverrides = {
             "options.type",
             "options.server_type",
             "domain_name_type",
+        ],
+        "oci_core_instance": [
+            "source_details.source_type"
         ],
         "oci_core_network_security_group_security_rule": [
             "destination_type",

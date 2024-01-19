@@ -338,6 +338,35 @@ export class OciReferenceDataQuery {
                 }).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
                 // @ts-ignore
                 const uniqueResources = Array.from(new Set(resources.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
+                const imageIds = uniqueResources.map((r) => r.ocid)
+                this.listImageShapeCompatabilities(imageIds).then((compatibilities) => {
+                    uniqueResources.forEach((r) => r.shapes = compatibilities.filter((c: Record<string, string>) => c.imageId === r.ocid).map((c: Record<string, string>) => c.shape))
+                    resolve(uniqueResources)
+                }).catch((reason) => {
+                    console.error(reason)
+                    reject(reason)
+                })
+                // resolve(resources)
+            }).catch((reason) => {
+                console.error(reason)
+                reject(reason)
+            })
+        })
+    }
+
+    listImageShapeCompatabilities(imageIds: string[], retryCount: number = 0): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const requests: core.requests.ListImageShapeCompatibilityEntriesRequest[] = imageIds.map((id) => {return {imageId: id}})
+            const queries = requests.map((r) => this.computeClient.listImageShapeCompatibilityEntries(r))
+            Promise.allSettled(queries).then((results) => {
+                console.debug('OciReferenceDataQuery: listImageShapeCompatabilities: All Settled')
+                //@ts-ignore
+                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], []).map((r) => {return {
+                        ...r
+                    }
+                }).sort((a: OciResource, b: OciResource) => a.imageId.localeCompare(b.imageId))
+                // @ts-ignore
+                const uniqueResources = Array.from(new Set(resources.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
                 resolve(uniqueResources)
                 // resolve(resources)
             }).catch((reason) => {
@@ -471,7 +500,7 @@ export class OciReferenceDataQuery {
                 const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], []).map((r) => {return {
                         ...r,
                         id: r.name,
-                        displayName: r.name
+                        displayName: r.description
                     }
                 }).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
                 // @ts-ignore
@@ -491,7 +520,6 @@ export class OciReferenceDataQuery {
             shapeQuery.then((results) => {
                 console.debug('OciReferenceDataQuery: listShapes: All Settled')
                 //@ts-ignore
-                // const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
                 const resources = results.items.map((s) => {return {
                         id: s.shape, 
                         displayName: s.shape, 
@@ -502,7 +530,7 @@ export class OciReferenceDataQuery {
                         memoryOptions: s.memoryOptions, 
                         isFlexible: s.isFlexible
                     }
-                })
+                }).sort((a, b) => a.displayName.localeCompare(b.displayName)).filter((resource, idx, self) => idx === self.findIndex((r) => r.id === resource.id)) // De-duplicated
                 resolve(resources)
             }).catch((reason) => {
                 console.error(reason)
