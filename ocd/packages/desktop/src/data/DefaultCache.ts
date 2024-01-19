@@ -20,25 +20,17 @@ export const defaultCache: OcdCache = {
             all: {
                 "shapes": [
                     {
-                        "id": "BM.Standard.A1.160",
-                        "displayName": "BM.Standard.A1.160",
-                        "shape": "BM.Standard.A1.160",
-                        "ocpus": 160,
-                        "memoryInGBs": 1024,
+                        "id": "BM.DenseIO.E4.128",
+                        "displayName": "BM.DenseIO.E4.128",
+                        "shape": "BM.DenseIO.E4.128",
+                        "ocpus": 128,
+                        "memoryInGBs": 2048,
                         "isFlexible": false
                     },
                     {
-                        "id": "BM.Standard3.64",
-                        "displayName": "BM.Standard3.64",
-                        "shape": "BM.Standard3.64",
-                        "ocpus": 64,
-                        "memoryInGBs": 1024,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "BM.Standard2.52",
-                        "displayName": "BM.Standard2.52",
-                        "shape": "BM.Standard2.52",
+                        "id": "BM.DenseIO2.52",
+                        "displayName": "BM.DenseIO2.52",
+                        "shape": "BM.DenseIO2.52",
                         "ocpus": 52,
                         "memoryInGBs": 768,
                         "isFlexible": false
@@ -52,9 +44,25 @@ export const defaultCache: OcdCache = {
                         "isFlexible": false
                     },
                     {
-                        "id": "BM.DenseIO.E4.128",
-                        "displayName": "BM.DenseIO.E4.128",
-                        "shape": "BM.DenseIO.E4.128",
+                        "id": "BM.Standard.A1.160",
+                        "displayName": "BM.Standard.A1.160",
+                        "shape": "BM.Standard.A1.160",
+                        "ocpus": 160,
+                        "memoryInGBs": 1024,
+                        "isFlexible": false
+                    },
+                    {
+                        "id": "BM.Standard.E2.64",
+                        "displayName": "BM.Standard.E2.64",
+                        "shape": "BM.Standard.E2.64",
+                        "ocpus": 64,
+                        "memoryInGBs": 512,
+                        "isFlexible": false
+                    },
+                    {
+                        "id": "BM.Standard.E3.128",
+                        "displayName": "BM.Standard.E3.128",
+                        "shape": "BM.Standard.E3.128",
                         "ocpus": 128,
                         "memoryInGBs": 2048,
                         "isFlexible": false
@@ -68,27 +76,11 @@ export const defaultCache: OcdCache = {
                         "isFlexible": false
                     },
                     {
-                        "id": "BM.Standard.E3.128",
-                        "displayName": "BM.Standard.E3.128",
-                        "shape": "BM.Standard.E3.128",
-                        "ocpus": 128,
-                        "memoryInGBs": 2048,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "BM.Standard.E2.64",
-                        "displayName": "BM.Standard.E2.64",
-                        "shape": "BM.Standard.E2.64",
-                        "ocpus": 64,
-                        "memoryInGBs": 512,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "BM.DenseIO2.52",
-                        "displayName": "BM.DenseIO2.52",
-                        "shape": "BM.DenseIO2.52",
-                        "ocpus": 52,
-                        "memoryInGBs": 768,
+                        "id": "BM.Standard.E5.192",
+                        "displayName": "BM.Standard.E5.192",
+                        "shape": "BM.Standard.E5.192",
+                        "ocpus": 192,
+                        "memoryInGBs": 2304,
                         "isFlexible": false
                     },
                     {
@@ -97,6 +89,67 @@ export const defaultCache: OcdCache = {
                         "shape": "BM.Standard1.36",
                         "ocpus": 36,
                         "memoryInGBs": 256,
+                        "isFlexible": false
+                    },
+                    {
+                        "id": "BM.Standard2.52",
+                        "displayName": "BM.Standard2.52",
+                        "shape": "BM.Standard2.52",
+                        "ocpus": 52,
+                        "memoryInGBs": 768,
+                        "isFlexible": false
+                    },
+                    {
+                        "id": "BM.Standard3.64",
+                        "displayName": "BM.Standard3.64",
+                        "shape": "BM.Standard3.64",
+                        "ocpus": 64,
+                        "memoryInGBs": 1024,
+                        "isFlexible": false
+                    },
+                    {
+                        "id": "VM.DenseIO.E4.Flex",
+                        "displayName": "VM.DenseIO.E4.Flex",
+                        "shape": "VM.DenseIO.E4.Flex",
+                        "ocpus": 1,
+                        "memoryInGBs": 16,
+                        "ocpuOptions": {
+                            "min": 1,
+                            "max": 64,
+                            "maxPerNumaNode": 64
+                        },
+                        "memoryOptions": {
+                            "minInGBs": 1,
+                            "maxInGBs": 1024,
+                            "defaultPerOcpuInGBs": 16,
+                            "minPerOcpuInGBs": 1,
+                            "maxPerOcpuInGBs": 64,
+                            "maxPerNumaNodeInGBs": 1024
+                        },
+                        "isFlexible": true
+                    },
+                    {
+                        "id": "VM.DenseIO2.16",
+                        "displayName": "VM.DenseIO2.16",
+                        "shape": "VM.DenseIO2.16",
+                        "ocpus": 16,
+                        "memoryInGBs": 240,
+                        "isFlexible": false
+                    },
+                    {
+                        "id": "VM.DenseIO2.24",
+                        "displayName": "VM.DenseIO2.24",
+                        "shape": "VM.DenseIO2.24",
+                        "ocpus": 24,
+                        "memoryInGBs": 320,
+                        "isFlexible": false
+                    },
+                    {
+                        "id": "VM.DenseIO2.8",
+                        "displayName": "VM.DenseIO2.8",
+                        "shape": "VM.DenseIO2.8",
+                        "ocpus": 8,
+                        "memoryInGBs": 120,
                         "isFlexible": false
                     },
                     {
@@ -121,48 +174,6 @@ export const defaultCache: OcdCache = {
                         "isFlexible": true
                     },
                     {
-                        "id": "VM.Standard.E4.Flex",
-                        "displayName": "VM.Standard.E4.Flex",
-                        "shape": "VM.Standard.E4.Flex",
-                        "ocpus": 1,
-                        "memoryInGBs": 16,
-                        "ocpuOptions": {
-                            "min": 1,
-                            "max": 114,
-                            "maxPerNumaNode": 64
-                        },
-                        "memoryOptions": {
-                            "minInGBs": 1,
-                            "maxInGBs": 1760,
-                            "defaultPerOcpuInGBs": 16,
-                            "minPerOcpuInGBs": 1,
-                            "maxPerOcpuInGBs": 64,
-                            "maxPerNumaNodeInGBs": 1024
-                        },
-                        "isFlexible": true
-                    },
-                    {
-                        "id": "VM.Standard.E3.Flex",
-                        "displayName": "VM.Standard.E3.Flex",
-                        "shape": "VM.Standard.E3.Flex",
-                        "ocpus": 1,
-                        "memoryInGBs": 16,
-                        "ocpuOptions": {
-                            "min": 1,
-                            "max": 114,
-                            "maxPerNumaNode": 64
-                        },
-                        "memoryOptions": {
-                            "minInGBs": 1,
-                            "maxInGBs": 1776,
-                            "defaultPerOcpuInGBs": 16,
-                            "minPerOcpuInGBs": 1,
-                            "maxPerOcpuInGBs": 64,
-                            "maxPerNumaNodeInGBs": 1024
-                        },
-                        "isFlexible": true
-                    },
-                    {
                         "id": "VM.Standard.A1.Flex",
                         "displayName": "VM.Standard.A1.Flex",
                         "shape": "VM.Standard.A1.Flex",
@@ -180,192 +191,6 @@ export const defaultCache: OcdCache = {
                             "minPerOcpuInGBs": 1,
                             "maxPerOcpuInGBs": 64,
                             "maxPerNumaNodeInGBs": 512
-                        },
-                        "isFlexible": true
-                    },
-                    {
-                        "id": "VM.Standard2.1",
-                        "displayName": "VM.Standard2.1",
-                        "shape": "VM.Standard2.1",
-                        "ocpus": 1,
-                        "memoryInGBs": 15,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "VM.Standard2.2",
-                        "displayName": "VM.Standard2.2",
-                        "shape": "VM.Standard2.2",
-                        "ocpus": 2,
-                        "memoryInGBs": 30,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "VM.Standard2.4",
-                        "displayName": "VM.Standard2.4",
-                        "shape": "VM.Standard2.4",
-                        "ocpus": 4,
-                        "memoryInGBs": 60,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "VM.Standard2.8",
-                        "displayName": "VM.Standard2.8",
-                        "shape": "VM.Standard2.8",
-                        "ocpus": 8,
-                        "memoryInGBs": 120,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "VM.Standard2.16",
-                        "displayName": "VM.Standard2.16",
-                        "shape": "VM.Standard2.16",
-                        "ocpus": 16,
-                        "memoryInGBs": 240,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "VM.Standard2.24",
-                        "displayName": "VM.Standard2.24",
-                        "shape": "VM.Standard2.24",
-                        "ocpus": 24,
-                        "memoryInGBs": 320,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "VM.Standard.E2.1",
-                        "displayName": "VM.Standard.E2.1",
-                        "shape": "VM.Standard.E2.1",
-                        "ocpus": 1,
-                        "memoryInGBs": 8,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "VM.Standard.E2.2",
-                        "displayName": "VM.Standard.E2.2",
-                        "shape": "VM.Standard.E2.2",
-                        "ocpus": 2,
-                        "memoryInGBs": 16,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "VM.Standard.E2.4",
-                        "displayName": "VM.Standard.E2.4",
-                        "shape": "VM.Standard.E2.4",
-                        "ocpus": 4,
-                        "memoryInGBs": 32,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "VM.Standard.E2.8",
-                        "displayName": "VM.Standard.E2.8",
-                        "shape": "VM.Standard.E2.8",
-                        "ocpus": 8,
-                        "memoryInGBs": 64,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "VM.Standard3.Flex",
-                        "displayName": "VM.Standard3.Flex",
-                        "shape": "VM.Standard3.Flex",
-                        "ocpus": 1,
-                        "memoryInGBs": 16,
-                        "ocpuOptions": {
-                            "min": 1,
-                            "max": 56,
-                            "maxPerNumaNode": 32
-                        },
-                        "memoryOptions": {
-                            "minInGBs": 1,
-                            "maxInGBs": 896,
-                            "defaultPerOcpuInGBs": 16,
-                            "minPerOcpuInGBs": 1,
-                            "maxPerOcpuInGBs": 64,
-                            "maxPerNumaNodeInGBs": 512
-                        },
-                        "isFlexible": true
-                    },
-                    {
-                        "id": "VM.DenseIO2.8",
-                        "displayName": "VM.DenseIO2.8",
-                        "shape": "VM.DenseIO2.8",
-                        "ocpus": 8,
-                        "memoryInGBs": 120,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "VM.DenseIO2.16",
-                        "displayName": "VM.DenseIO2.16",
-                        "shape": "VM.DenseIO2.16",
-                        "ocpus": 16,
-                        "memoryInGBs": 240,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "VM.DenseIO2.24",
-                        "displayName": "VM.DenseIO2.24",
-                        "shape": "VM.DenseIO2.24",
-                        "ocpus": 24,
-                        "memoryInGBs": 320,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "VM.Standard1.1",
-                        "displayName": "VM.Standard1.1",
-                        "shape": "VM.Standard1.1",
-                        "ocpus": 1,
-                        "memoryInGBs": 7,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "VM.Standard1.2",
-                        "displayName": "VM.Standard1.2",
-                        "shape": "VM.Standard1.2",
-                        "ocpus": 2,
-                        "memoryInGBs": 14,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "VM.Standard1.4",
-                        "displayName": "VM.Standard1.4",
-                        "shape": "VM.Standard1.4",
-                        "ocpus": 4,
-                        "memoryInGBs": 28,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "VM.Standard1.8",
-                        "displayName": "VM.Standard1.8",
-                        "shape": "VM.Standard1.8",
-                        "ocpus": 8,
-                        "memoryInGBs": 56,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "VM.Standard1.16",
-                        "displayName": "VM.Standard1.16",
-                        "shape": "VM.Standard1.16",
-                        "ocpus": 16,
-                        "memoryInGBs": 112,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "VM.DenseIO.E4.Flex",
-                        "displayName": "VM.DenseIO.E4.Flex",
-                        "shape": "VM.DenseIO.E4.Flex",
-                        "ocpus": 1,
-                        "memoryInGBs": 16,
-                        "ocpuOptions": {
-                            "min": 1,
-                            "max": 64,
-                            "maxPerNumaNode": 64
-                        },
-                        "memoryOptions": {
-                            "minInGBs": 1,
-                            "maxInGBs": 1024,
-                            "defaultPerOcpuInGBs": 16,
-                            "minPerOcpuInGBs": 1,
-                            "maxPerOcpuInGBs": 64,
-                            "maxPerNumaNodeInGBs": 1024
                         },
                         "isFlexible": true
                     },
@@ -412,260 +237,6 @@ export const defaultCache: OcdCache = {
                         "isFlexible": true
                     },
                     {
-                        "id": "VM.Standard.Intel.Generic",
-                        "displayName": "VM.Standard.Intel.Generic",
-                        "shape": "VM.Standard.Intel.Generic",
-                        "ocpus": 1,
-                        "memoryInGBs": 16,
-                        "ocpuOptions": {
-                            "min": 1,
-                            "max": 32,
-                            "maxPerNumaNode": 32
-                        },
-                        "memoryOptions": {
-                            "minInGBs": 1,
-                            "maxInGBs": 512,
-                            "defaultPerOcpuInGBs": null,
-                            "minPerOcpuInGBs": 1,
-                            "maxPerOcpuInGBs": 64,
-                            "maxPerNumaNodeInGBs": 512
-                        },
-                        "isFlexible": true
-                    },
-                    {
-                        "id": "VM.Standard.x86.Generic",
-                        "displayName": "VM.Standard.x86.Generic",
-                        "shape": "VM.Standard.x86.Generic",
-                        "ocpus": 1,
-                        "memoryInGBs": 16,
-                        "ocpuOptions": {
-                            "min": 1,
-                            "max": 32,
-                            "maxPerNumaNode": 32
-                        },
-                        "memoryOptions": {
-                            "minInGBs": 1,
-                            "maxInGBs": 512,
-                            "defaultPerOcpuInGBs": null,
-                            "minPerOcpuInGBs": 1,
-                            "maxPerOcpuInGBs": 64,
-                            "maxPerNumaNodeInGBs": 512
-                        },
-                        "isFlexible": true
-                    },
-                    {
-                        "id": "BM.Standard.E5.192",
-                        "displayName": "BM.Standard.E5.192",
-                        "shape": "BM.Standard.E5.192",
-                        "ocpus": 192,
-                        "memoryInGBs": 2304,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "BM.Standard.A1.160",
-                        "displayName": "BM.Standard.A1.160",
-                        "shape": "BM.Standard.A1.160",
-                        "ocpus": 160,
-                        "memoryInGBs": 1024,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "BM.Standard3.64",
-                        "displayName": "BM.Standard3.64",
-                        "shape": "BM.Standard3.64",
-                        "ocpus": 64,
-                        "memoryInGBs": 1024,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "BM.Standard2.52",
-                        "displayName": "BM.Standard2.52",
-                        "shape": "BM.Standard2.52",
-                        "ocpus": 52,
-                        "memoryInGBs": 768,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "BM.Optimized3.36",
-                        "displayName": "BM.Optimized3.36",
-                        "shape": "BM.Optimized3.36",
-                        "ocpus": 36,
-                        "memoryInGBs": 512,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "BM.DenseIO.E4.128",
-                        "displayName": "BM.DenseIO.E4.128",
-                        "shape": "BM.DenseIO.E4.128",
-                        "ocpus": 128,
-                        "memoryInGBs": 2048,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "BM.Standard.E4.128",
-                        "displayName": "BM.Standard.E4.128",
-                        "shape": "BM.Standard.E4.128",
-                        "ocpus": 128,
-                        "memoryInGBs": 2048,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "BM.Standard.E3.128",
-                        "displayName": "BM.Standard.E3.128",
-                        "shape": "BM.Standard.E3.128",
-                        "ocpus": 128,
-                        "memoryInGBs": 2048,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "BM.Standard.E2.64",
-                        "displayName": "BM.Standard.E2.64",
-                        "shape": "BM.Standard.E2.64",
-                        "ocpus": 64,
-                        "memoryInGBs": 512,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "BM.DenseIO2.52",
-                        "displayName": "BM.DenseIO2.52",
-                        "shape": "BM.DenseIO2.52",
-                        "ocpus": 52,
-                        "memoryInGBs": 768,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "VM.Optimized3.Flex",
-                        "displayName": "VM.Optimized3.Flex",
-                        "shape": "VM.Optimized3.Flex",
-                        "ocpus": 1,
-                        "memoryInGBs": 14,
-                        "ocpuOptions": {
-                            "min": 1,
-                            "max": 18,
-                            "maxPerNumaNode": 18
-                        },
-                        "memoryOptions": {
-                            "minInGBs": 1,
-                            "maxInGBs": 256,
-                            "defaultPerOcpuInGBs": 14,
-                            "minPerOcpuInGBs": 1,
-                            "maxPerOcpuInGBs": 64,
-                            "maxPerNumaNodeInGBs": 256
-                        },
-                        "isFlexible": true
-                    },
-                    {
-                        "id": "VM.Standard.E4.Flex",
-                        "displayName": "VM.Standard.E4.Flex",
-                        "shape": "VM.Standard.E4.Flex",
-                        "ocpus": 1,
-                        "memoryInGBs": 16,
-                        "ocpuOptions": {
-                            "min": 1,
-                            "max": 114,
-                            "maxPerNumaNode": 64
-                        },
-                        "memoryOptions": {
-                            "minInGBs": 1,
-                            "maxInGBs": 1760,
-                            "defaultPerOcpuInGBs": 16,
-                            "minPerOcpuInGBs": 1,
-                            "maxPerOcpuInGBs": 64,
-                            "maxPerNumaNodeInGBs": 1024
-                        },
-                        "isFlexible": true
-                    },
-                    {
-                        "id": "VM.Standard.E3.Flex",
-                        "displayName": "VM.Standard.E3.Flex",
-                        "shape": "VM.Standard.E3.Flex",
-                        "ocpus": 1,
-                        "memoryInGBs": 16,
-                        "ocpuOptions": {
-                            "min": 1,
-                            "max": 114,
-                            "maxPerNumaNode": 64
-                        },
-                        "memoryOptions": {
-                            "minInGBs": 1,
-                            "maxInGBs": 1776,
-                            "defaultPerOcpuInGBs": 16,
-                            "minPerOcpuInGBs": 1,
-                            "maxPerOcpuInGBs": 64,
-                            "maxPerNumaNodeInGBs": 1024
-                        },
-                        "isFlexible": true
-                    },
-                    {
-                        "id": "VM.Standard.A1.Flex",
-                        "displayName": "VM.Standard.A1.Flex",
-                        "shape": "VM.Standard.A1.Flex",
-                        "ocpus": 1,
-                        "memoryInGBs": 6,
-                        "ocpuOptions": {
-                            "min": 1,
-                            "max": 80,
-                            "maxPerNumaNode": 80
-                        },
-                        "memoryOptions": {
-                            "minInGBs": 1,
-                            "maxInGBs": 512,
-                            "defaultPerOcpuInGBs": 6,
-                            "minPerOcpuInGBs": 1,
-                            "maxPerOcpuInGBs": 64,
-                            "maxPerNumaNodeInGBs": 512
-                        },
-                        "isFlexible": true
-                    },
-                    {
-                        "id": "VM.Standard2.1",
-                        "displayName": "VM.Standard2.1",
-                        "shape": "VM.Standard2.1",
-                        "ocpus": 1,
-                        "memoryInGBs": 15,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "VM.Standard2.2",
-                        "displayName": "VM.Standard2.2",
-                        "shape": "VM.Standard2.2",
-                        "ocpus": 2,
-                        "memoryInGBs": 30,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "VM.Standard2.4",
-                        "displayName": "VM.Standard2.4",
-                        "shape": "VM.Standard2.4",
-                        "ocpus": 4,
-                        "memoryInGBs": 60,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "VM.Standard2.8",
-                        "displayName": "VM.Standard2.8",
-                        "shape": "VM.Standard2.8",
-                        "ocpus": 8,
-                        "memoryInGBs": 120,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "VM.Standard2.16",
-                        "displayName": "VM.Standard2.16",
-                        "shape": "VM.Standard2.16",
-                        "ocpus": 16,
-                        "memoryInGBs": 240,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "VM.Standard2.24",
-                        "displayName": "VM.Standard2.24",
-                        "shape": "VM.Standard2.24",
-                        "ocpus": 24,
-                        "memoryInGBs": 320,
-                        "isFlexible": false
-                    },
-                    {
                         "id": "VM.Standard.E2.1",
                         "displayName": "VM.Standard.E2.1",
                         "shape": "VM.Standard.E2.1",
@@ -698,64 +269,40 @@ export const defaultCache: OcdCache = {
                         "isFlexible": false
                     },
                     {
-                        "id": "VM.Standard3.Flex",
-                        "displayName": "VM.Standard3.Flex",
-                        "shape": "VM.Standard3.Flex",
+                        "id": "VM.Standard.E3.Flex",
+                        "displayName": "VM.Standard.E3.Flex",
+                        "shape": "VM.Standard.E3.Flex",
                         "ocpus": 1,
                         "memoryInGBs": 16,
                         "ocpuOptions": {
                             "min": 1,
-                            "max": 56,
-                            "maxPerNumaNode": 32
-                        },
-                        "memoryOptions": {
-                            "minInGBs": 1,
-                            "maxInGBs": 896,
-                            "defaultPerOcpuInGBs": 16,
-                            "minPerOcpuInGBs": 1,
-                            "maxPerOcpuInGBs": 64,
-                            "maxPerNumaNodeInGBs": 512
-                        },
-                        "isFlexible": true
-                    },
-                    {
-                        "id": "VM.DenseIO2.8",
-                        "displayName": "VM.DenseIO2.8",
-                        "shape": "VM.DenseIO2.8",
-                        "ocpus": 8,
-                        "memoryInGBs": 120,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "VM.DenseIO2.16",
-                        "displayName": "VM.DenseIO2.16",
-                        "shape": "VM.DenseIO2.16",
-                        "ocpus": 16,
-                        "memoryInGBs": 240,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "VM.DenseIO2.24",
-                        "displayName": "VM.DenseIO2.24",
-                        "shape": "VM.DenseIO2.24",
-                        "ocpus": 24,
-                        "memoryInGBs": 320,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "VM.DenseIO.E4.Flex",
-                        "displayName": "VM.DenseIO.E4.Flex",
-                        "shape": "VM.DenseIO.E4.Flex",
-                        "ocpus": 1,
-                        "memoryInGBs": 16,
-                        "ocpuOptions": {
-                            "min": 1,
-                            "max": 64,
+                            "max": 114,
                             "maxPerNumaNode": 64
                         },
                         "memoryOptions": {
                             "minInGBs": 1,
-                            "maxInGBs": 1024,
+                            "maxInGBs": 1776,
+                            "defaultPerOcpuInGBs": 16,
+                            "minPerOcpuInGBs": 1,
+                            "maxPerOcpuInGBs": 64,
+                            "maxPerNumaNodeInGBs": 1024
+                        },
+                        "isFlexible": true
+                    },
+                    {
+                        "id": "VM.Standard.E4.Flex",
+                        "displayName": "VM.Standard.E4.Flex",
+                        "shape": "VM.Standard.E4.Flex",
+                        "ocpus": 1,
+                        "memoryInGBs": 16,
+                        "ocpuOptions": {
+                            "min": 1,
+                            "max": 114,
+                            "maxPerNumaNode": 64
+                        },
+                        "memoryOptions": {
+                            "minInGBs": 1,
+                            "maxInGBs": 1760,
                             "defaultPerOcpuInGBs": 16,
                             "minPerOcpuInGBs": 1,
                             "maxPerOcpuInGBs": 64,
@@ -785,48 +332,6 @@ export const defaultCache: OcdCache = {
                         "isFlexible": true
                     },
                     {
-                        "id": "VM.Standard.AMD.Generic",
-                        "displayName": "VM.Standard.AMD.Generic",
-                        "shape": "VM.Standard.AMD.Generic",
-                        "ocpus": 1,
-                        "memoryInGBs": 16,
-                        "ocpuOptions": {
-                            "min": 1,
-                            "max": 64,
-                            "maxPerNumaNode": 64
-                        },
-                        "memoryOptions": {
-                            "minInGBs": 1,
-                            "maxInGBs": 1024,
-                            "defaultPerOcpuInGBs": null,
-                            "minPerOcpuInGBs": 1,
-                            "maxPerOcpuInGBs": 64,
-                            "maxPerNumaNodeInGBs": 1024
-                        },
-                        "isFlexible": true
-                    },
-                    {
-                        "id": "VM.Standard.Ampere.Generic",
-                        "displayName": "VM.Standard.Ampere.Generic",
-                        "shape": "VM.Standard.Ampere.Generic",
-                        "ocpus": 1,
-                        "memoryInGBs": 6,
-                        "ocpuOptions": {
-                            "min": 1,
-                            "max": 80,
-                            "maxPerNumaNode": 80
-                        },
-                        "memoryOptions": {
-                            "minInGBs": 1,
-                            "maxInGBs": 512,
-                            "defaultPerOcpuInGBs": null,
-                            "minPerOcpuInGBs": 1,
-                            "maxPerOcpuInGBs": 64,
-                            "maxPerNumaNodeInGBs": 512
-                        },
-                        "isFlexible": true
-                    },
-                    {
                         "id": "VM.Standard.Intel.Generic",
                         "displayName": "VM.Standard.Intel.Generic",
                         "shape": "VM.Standard.Intel.Generic",
@@ -869,162 +374,6 @@ export const defaultCache: OcdCache = {
                         "isFlexible": true
                     },
                     {
-                        "id": "BM.Standard.E5.192",
-                        "displayName": "BM.Standard.E5.192",
-                        "shape": "BM.Standard.E5.192",
-                        "ocpus": 192,
-                        "memoryInGBs": 2304,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "BM.Standard.A1.160",
-                        "displayName": "BM.Standard.A1.160",
-                        "shape": "BM.Standard.A1.160",
-                        "ocpus": 160,
-                        "memoryInGBs": 1024,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "BM.Standard3.64",
-                        "displayName": "BM.Standard3.64",
-                        "shape": "BM.Standard3.64",
-                        "ocpus": 64,
-                        "memoryInGBs": 1024,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "BM.Standard2.52",
-                        "displayName": "BM.Standard2.52",
-                        "shape": "BM.Standard2.52",
-                        "ocpus": 52,
-                        "memoryInGBs": 768,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "BM.Optimized3.36",
-                        "displayName": "BM.Optimized3.36",
-                        "shape": "BM.Optimized3.36",
-                        "ocpus": 36,
-                        "memoryInGBs": 512,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "BM.Standard.E4.128",
-                        "displayName": "BM.Standard.E4.128",
-                        "shape": "BM.Standard.E4.128",
-                        "ocpus": 128,
-                        "memoryInGBs": 2048,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "BM.Standard.E3.128",
-                        "displayName": "BM.Standard.E3.128",
-                        "shape": "BM.Standard.E3.128",
-                        "ocpus": 128,
-                        "memoryInGBs": 2048,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "BM.Standard.E2.64",
-                        "displayName": "BM.Standard.E2.64",
-                        "shape": "BM.Standard.E2.64",
-                        "ocpus": 64,
-                        "memoryInGBs": 512,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "BM.DenseIO2.52",
-                        "displayName": "BM.DenseIO2.52",
-                        "shape": "BM.DenseIO2.52",
-                        "ocpus": 52,
-                        "memoryInGBs": 768,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "VM.Optimized3.Flex",
-                        "displayName": "VM.Optimized3.Flex",
-                        "shape": "VM.Optimized3.Flex",
-                        "ocpus": 1,
-                        "memoryInGBs": 14,
-                        "ocpuOptions": {
-                            "min": 1,
-                            "max": 18,
-                            "maxPerNumaNode": 18
-                        },
-                        "memoryOptions": {
-                            "minInGBs": 1,
-                            "maxInGBs": 256,
-                            "defaultPerOcpuInGBs": 14,
-                            "minPerOcpuInGBs": 1,
-                            "maxPerOcpuInGBs": 64,
-                            "maxPerNumaNodeInGBs": 256
-                        },
-                        "isFlexible": true
-                    },
-                    {
-                        "id": "VM.Standard.E4.Flex",
-                        "displayName": "VM.Standard.E4.Flex",
-                        "shape": "VM.Standard.E4.Flex",
-                        "ocpus": 1,
-                        "memoryInGBs": 16,
-                        "ocpuOptions": {
-                            "min": 1,
-                            "max": 114,
-                            "maxPerNumaNode": 64
-                        },
-                        "memoryOptions": {
-                            "minInGBs": 1,
-                            "maxInGBs": 1760,
-                            "defaultPerOcpuInGBs": 16,
-                            "minPerOcpuInGBs": 1,
-                            "maxPerOcpuInGBs": 64,
-                            "maxPerNumaNodeInGBs": 1024
-                        },
-                        "isFlexible": true
-                    },
-                    {
-                        "id": "VM.Standard.E3.Flex",
-                        "displayName": "VM.Standard.E3.Flex",
-                        "shape": "VM.Standard.E3.Flex",
-                        "ocpus": 1,
-                        "memoryInGBs": 16,
-                        "ocpuOptions": {
-                            "min": 1,
-                            "max": 114,
-                            "maxPerNumaNode": 64
-                        },
-                        "memoryOptions": {
-                            "minInGBs": 1,
-                            "maxInGBs": 1776,
-                            "defaultPerOcpuInGBs": 16,
-                            "minPerOcpuInGBs": 1,
-                            "maxPerOcpuInGBs": 64,
-                            "maxPerNumaNodeInGBs": 1024
-                        },
-                        "isFlexible": true
-                    },
-                    {
-                        "id": "VM.Standard.A1.Flex",
-                        "displayName": "VM.Standard.A1.Flex",
-                        "shape": "VM.Standard.A1.Flex",
-                        "ocpus": 1,
-                        "memoryInGBs": 6,
-                        "ocpuOptions": {
-                            "min": 1,
-                            "max": 80,
-                            "maxPerNumaNode": 80
-                        },
-                        "memoryOptions": {
-                            "minInGBs": 1,
-                            "maxInGBs": 512,
-                            "defaultPerOcpuInGBs": 6,
-                            "minPerOcpuInGBs": 1,
-                            "maxPerOcpuInGBs": 64,
-                            "maxPerNumaNodeInGBs": 512
-                        },
-                        "isFlexible": true
-                    },
-                    {
                         "id": "VM.Standard2.1",
                         "displayName": "VM.Standard2.1",
                         "shape": "VM.Standard2.1",
@@ -1033,11 +382,27 @@ export const defaultCache: OcdCache = {
                         "isFlexible": false
                     },
                     {
+                        "id": "VM.Standard2.16",
+                        "displayName": "VM.Standard2.16",
+                        "shape": "VM.Standard2.16",
+                        "ocpus": 16,
+                        "memoryInGBs": 240,
+                        "isFlexible": false
+                    },
+                    {
                         "id": "VM.Standard2.2",
                         "displayName": "VM.Standard2.2",
                         "shape": "VM.Standard2.2",
                         "ocpus": 2,
                         "memoryInGBs": 30,
+                        "isFlexible": false
+                    },
+                    {
+                        "id": "VM.Standard2.24",
+                        "displayName": "VM.Standard2.24",
+                        "shape": "VM.Standard2.24",
+                        "ocpus": 24,
+                        "memoryInGBs": 320,
                         "isFlexible": false
                     },
                     {
@@ -1054,54 +419,6 @@ export const defaultCache: OcdCache = {
                         "shape": "VM.Standard2.8",
                         "ocpus": 8,
                         "memoryInGBs": 120,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "VM.Standard2.16",
-                        "displayName": "VM.Standard2.16",
-                        "shape": "VM.Standard2.16",
-                        "ocpus": 16,
-                        "memoryInGBs": 240,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "VM.Standard2.24",
-                        "displayName": "VM.Standard2.24",
-                        "shape": "VM.Standard2.24",
-                        "ocpus": 24,
-                        "memoryInGBs": 320,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "VM.Standard.E2.1",
-                        "displayName": "VM.Standard.E2.1",
-                        "shape": "VM.Standard.E2.1",
-                        "ocpus": 1,
-                        "memoryInGBs": 8,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "VM.Standard.E2.2",
-                        "displayName": "VM.Standard.E2.2",
-                        "shape": "VM.Standard.E2.2",
-                        "ocpus": 2,
-                        "memoryInGBs": 16,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "VM.Standard.E2.4",
-                        "displayName": "VM.Standard.E2.4",
-                        "shape": "VM.Standard.E2.4",
-                        "ocpus": 4,
-                        "memoryInGBs": 32,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "VM.Standard.E2.8",
-                        "displayName": "VM.Standard.E2.8",
-                        "shape": "VM.Standard.E2.8",
-                        "ocpus": 8,
-                        "memoryInGBs": 64,
                         "isFlexible": false
                     },
                     {
@@ -1124,71 +441,9 @@ export const defaultCache: OcdCache = {
                             "maxPerNumaNodeInGBs": 512
                         },
                         "isFlexible": true
-                    },
-                    {
-                        "id": "VM.DenseIO2.8",
-                        "displayName": "VM.DenseIO2.8",
-                        "shape": "VM.DenseIO2.8",
-                        "ocpus": 8,
-                        "memoryInGBs": 120,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "VM.DenseIO2.16",
-                        "displayName": "VM.DenseIO2.16",
-                        "shape": "VM.DenseIO2.16",
-                        "ocpus": 16,
-                        "memoryInGBs": 240,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "VM.DenseIO2.24",
-                        "displayName": "VM.DenseIO2.24",
-                        "shape": "VM.DenseIO2.24",
-                        "ocpus": 24,
-                        "memoryInGBs": 320,
-                        "isFlexible": false
-                    },
-                    {
-                        "id": "VM.Standard1.1",
-                        "displayName": "VM.Standard1.1",
-                        "shape": "VM.Standard1.1",
-                        "ocpus": 1,
-                        "memoryInGBs": 7,
-                        "isFlexible": false
                     }
                 ],
                 "images": [
-                    {
-                        "id": "Oracle-Linux-8.8-2023.08.31-0",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaaavjvtr344mtwklu5dirue6ubplrowd2bd7ur4anqbk5u23jbbpta",
-                        "displayName": "Oracle-Linux-8.8-2023.08.31-0",
-                        "platform": true,
-                        "operatingSystem": "Oracle Linux",
-                        "operatingSystemVersion": "8",
-                        "billableSizeInGBs": 5,
-                        "lifecycleState": "AVAILABLE"
-                    },
-                    {
-                        "id": "Oracle-Linux-8.8-2023.09.26-0",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaa3ceen6r4koca7ai47yigikvlhxwrshopc4muy4b5mey7hvlvn4ua",
-                        "displayName": "Oracle-Linux-8.8-2023.09.26-0",
-                        "platform": true,
-                        "operatingSystem": "Oracle Linux",
-                        "operatingSystemVersion": "8",
-                        "billableSizeInGBs": 5,
-                        "lifecycleState": "AVAILABLE"
-                    },
-                    {
-                        "id": "Oracle-Linux-8.8-aarch64-2023.08.31-0",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaayz3ii2zcj2xifw5guzwczwm4efmr5psjbq4asquxbkznsa4gpywa",
-                        "displayName": "Oracle-Linux-8.8-aarch64-2023.08.31-0",
-                        "platform": true,
-                        "operatingSystem": "Oracle Linux",
-                        "operatingSystemVersion": "8",
-                        "billableSizeInGBs": 5,
-                        "lifecycleState": "AVAILABLE"
-                    },
                     {
                         "id": "Oracle-Linux-8.8-aarch64-2023.09.26-0",
                         "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaasdoxaqr6n6frbgtgyo4yskzb3lykam33cuyq6bbbomj4i7rfg7za",
@@ -1197,7 +452,12 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Oracle Linux",
                         "operatingSystemVersion": "8",
                         "billableSizeInGBs": 5,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.Standard.A1.Flex",
+                            "VM.Standard.Ampere.Generic",
+                            "BM.Standard.A1.160"
+                        ]
                     },
                     {
                         "id": "Oracle-Linux-8.8-aarch64-2023.10.24-0",
@@ -1207,17 +467,27 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Oracle Linux",
                         "operatingSystemVersion": "8",
                         "billableSizeInGBs": 5,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.Standard.A1.Flex",
+                            "VM.Standard.Ampere.Generic",
+                            "BM.Standard.A1.160"
+                        ]
                     },
                     {
-                        "id": "Oracle-Linux-8.8-Gen2-GPU-2023.08.16-0",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaaeytd25otcyrtqgm4hbhsneriiug53i6vj5iqxvypr7i5hjbnorma",
-                        "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.08.16-0",
+                        "id": "Oracle-Linux-8.8-aarch64-2023.12.13-0",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaah4msscolcs7qdazefqkl6i7zpmmkt5ovakis2juqp7x5lvtcqf2a",
+                        "displayName": "Oracle-Linux-8.8-aarch64-2023.12.13-0",
                         "platform": true,
                         "operatingSystem": "Oracle Linux",
                         "operatingSystemVersion": "8",
-                        "billableSizeInGBs": 16,
-                        "lifecycleState": "AVAILABLE"
+                        "billableSizeInGBs": 5,
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.Standard.A1.Flex",
+                            "VM.Standard.Ampere.Generic",
+                            "BM.Standard.A1.160"
+                        ]
                     },
                     {
                         "id": "Oracle-Linux-8.8-Gen2-GPU-2023.08.31-0",
@@ -1227,7 +497,27 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Oracle Linux",
                         "operatingSystemVersion": "8",
                         "billableSizeInGBs": 16,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.GPU.A10.1",
+                            "VM.GPU.A10.2",
+                            "VM.GPU.GU1.1",
+                            "VM.GPU.GU1.2",
+                            "VM.GPU2.1",
+                            "VM.GPU3.1",
+                            "VM.GPU3.2",
+                            "VM.GPU3.4",
+                            "VM.Standard.E5.Flex",
+                            "BM.GPU4.8",
+                            "BM.GPU.B4.8",
+                            "BM.GPU.A100-v2.8",
+                            "BM.Standard.E5.192",
+                            "BM.GPU2.2",
+                            "BM.GPU3.8",
+                            "BM.GPU.T1.2",
+                            "BM.GPU.A10.4",
+                            "BM.GPU.T1-2.4"
+                        ]
                     },
                     {
                         "id": "Oracle-Linux-8.8-Gen2-GPU-2023.09.26-0",
@@ -1237,7 +527,53 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Oracle Linux",
                         "operatingSystemVersion": "8",
                         "billableSizeInGBs": 16,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.GPU.A10.1",
+                            "VM.GPU.A10.2",
+                            "VM.GPU.GU1.1",
+                            "VM.GPU.GU1.2",
+                            "VM.GPU2.1",
+                            "VM.GPU3.1",
+                            "VM.GPU3.2",
+                            "VM.GPU3.4",
+                            "BM.GPU4.8",
+                            "BM.GPU.B4.8",
+                            "BM.GPU.A100-v2.8",
+                            "BM.GPU2.2",
+                            "BM.GPU3.8",
+                            "BM.GPU.T1.2",
+                            "BM.GPU.A10.4",
+                            "BM.GPU.T1-2.4"
+                        ]
+                    },
+                    {
+                        "id": "Oracle-Linux-8.8-Gen2-GPU-2023.12.13-0",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaakf2w66mmoxjxpbu5kmhpo64uhbb5dohiyo52nm2pkosjglrlrzfa",
+                        "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.12.13-0",
+                        "platform": true,
+                        "operatingSystem": "Oracle Linux",
+                        "operatingSystemVersion": "8",
+                        "billableSizeInGBs": 16,
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.GPU.A10.1",
+                            "VM.GPU.A10.2",
+                            "VM.GPU.GU1.1",
+                            "VM.GPU.GU1.2",
+                            "VM.GPU2.1",
+                            "VM.GPU3.1",
+                            "VM.GPU3.2",
+                            "VM.GPU3.4",
+                            "BM.GPU4.8",
+                            "BM.GPU.B4.8",
+                            "BM.GPU.A100-v2.8",
+                            "BM.GPU2.2",
+                            "BM.GPU3.8",
+                            "BM.GPU.T1.2",
+                            "BM.GPU.A10.4",
+                            "BM.GPU.T1-2.4"
+                        ]
                     },
                     {
                         "id": "Oracle-Linux-9.1-Minimal-2023.06.29-0",
@@ -1247,7 +583,53 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Oracle Linux",
                         "operatingSystemVersion": "9 Minimal",
                         "billableSizeInGBs": 2,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.DenseIO.E4.Flex",
+                            "VM.DenseIO1.16",
+                            "VM.DenseIO1.4",
+                            "VM.DenseIO1.8",
+                            "VM.DenseIO2.16",
+                            "VM.DenseIO2.24",
+                            "VM.DenseIO2.8",
+                            "VM.GPU.A10.1",
+                            "VM.GPU.A10.2",
+                            "VM.GPU.GU1.1",
+                            "VM.GPU.GU1.2",
+                            "VM.GPU2.1",
+                            "VM.GPU3.1",
+                            "VM.GPU3.2",
+                            "VM.GPU3.4",
+                            "VM.Optimized3.Flex",
+                            "VM.Standard.AMD.Generic",
+                            "VM.Standard.B1.1",
+                            "VM.Standard.B1.16",
+                            "VM.Standard.B1.2",
+                            "VM.Standard.B1.4",
+                            "VM.Standard.B1.8",
+                            "VM.Standard.E2.1",
+                            "VM.Standard.E2.1.Micro",
+                            "VM.Standard.E2.2",
+                            "VM.Standard.E2.4",
+                            "VM.Standard.E2.8",
+                            "VM.Standard.E3.Flex",
+                            "VM.Standard.E4.Flex",
+                            "VM.Standard.Intel.Generic",
+                            "VM.Standard.x86.Generic",
+                            "VM.Standard1.1",
+                            "VM.Standard1.16",
+                            "VM.Standard1.2",
+                            "VM.Standard1.4",
+                            "VM.Standard1.8",
+                            "VM.Standard2.1",
+                            "VM.Standard2.16",
+                            "VM.Standard2.2",
+                            "VM.Standard2.24",
+                            "VM.Standard2.4",
+                            "VM.Standard2.8",
+                            "VM.Standard2.Flex",
+                            "VM.Standard3.Flex"
+                        ]
                     },
                     {
                         "id": "Oracle-Linux-9.1-Minimal-2023.07.07-0",
@@ -1257,7 +639,53 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Oracle Linux",
                         "operatingSystemVersion": "9 Minimal",
                         "billableSizeInGBs": 2,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.DenseIO.E4.Flex",
+                            "VM.DenseIO1.16",
+                            "VM.DenseIO1.4",
+                            "VM.DenseIO1.8",
+                            "VM.DenseIO2.16",
+                            "VM.DenseIO2.24",
+                            "VM.DenseIO2.8",
+                            "VM.GPU.A10.1",
+                            "VM.GPU.A10.2",
+                            "VM.GPU.GU1.1",
+                            "VM.GPU.GU1.2",
+                            "VM.GPU2.1",
+                            "VM.GPU3.1",
+                            "VM.GPU3.2",
+                            "VM.GPU3.4",
+                            "VM.Optimized3.Flex",
+                            "VM.Standard.AMD.Generic",
+                            "VM.Standard.B1.1",
+                            "VM.Standard.B1.16",
+                            "VM.Standard.B1.2",
+                            "VM.Standard.B1.4",
+                            "VM.Standard.B1.8",
+                            "VM.Standard.E2.1",
+                            "VM.Standard.E2.1.Micro",
+                            "VM.Standard.E2.2",
+                            "VM.Standard.E2.4",
+                            "VM.Standard.E2.8",
+                            "VM.Standard.E3.Flex",
+                            "VM.Standard.E4.Flex",
+                            "VM.Standard.Intel.Generic",
+                            "VM.Standard.x86.Generic",
+                            "VM.Standard1.1",
+                            "VM.Standard1.16",
+                            "VM.Standard1.2",
+                            "VM.Standard1.4",
+                            "VM.Standard1.8",
+                            "VM.Standard2.1",
+                            "VM.Standard2.16",
+                            "VM.Standard2.2",
+                            "VM.Standard2.24",
+                            "VM.Standard2.4",
+                            "VM.Standard2.8",
+                            "VM.Standard2.Flex",
+                            "VM.Standard3.Flex"
+                        ]
                     },
                     {
                         "id": "Oracle-Linux-9.2-2023.08.31-0",
@@ -1267,7 +695,75 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Oracle Linux",
                         "operatingSystemVersion": "9",
                         "billableSizeInGBs": 5,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.DenseIO.E4.Flex",
+                            "VM.DenseIO1.16",
+                            "VM.DenseIO1.4",
+                            "VM.DenseIO1.8",
+                            "VM.DenseIO2.16",
+                            "VM.DenseIO2.24",
+                            "VM.DenseIO2.8",
+                            "VM.GPU.A10.1",
+                            "VM.GPU.A10.2",
+                            "VM.GPU.GU1.1",
+                            "VM.GPU.GU1.2",
+                            "VM.GPU2.1",
+                            "VM.GPU3.1",
+                            "VM.GPU3.2",
+                            "VM.GPU3.4",
+                            "VM.Optimized3.Flex",
+                            "VM.Standard.AMD.Generic",
+                            "VM.Standard.B1.1",
+                            "VM.Standard.B1.16",
+                            "VM.Standard.B1.2",
+                            "VM.Standard.B1.4",
+                            "VM.Standard.B1.8",
+                            "VM.Standard.E2.1",
+                            "VM.Standard.E2.1.Micro",
+                            "VM.Standard.E2.2",
+                            "VM.Standard.E2.4",
+                            "VM.Standard.E2.8",
+                            "VM.Standard.E3.Flex",
+                            "VM.Standard.E4.Flex",
+                            "VM.Standard.E5.Flex",
+                            "VM.Standard.Intel.Generic",
+                            "VM.Standard.x86.Generic",
+                            "VM.Standard1.1",
+                            "VM.Standard1.16",
+                            "VM.Standard1.2",
+                            "VM.Standard1.4",
+                            "VM.Standard1.8",
+                            "VM.Standard2.1",
+                            "VM.Standard2.16",
+                            "VM.Standard2.2",
+                            "VM.Standard2.24",
+                            "VM.Standard2.4",
+                            "VM.Standard2.8",
+                            "VM.Standard2.Flex",
+                            "VM.Standard3.Flex",
+                            "BM.Standard.E2.64",
+                            "BM.Standard.E3.128",
+                            "BM.Standard.E4.128",
+                            "BM.GPU.B4.8",
+                            "BM.GPU.A100-v2.8",
+                            "BM.DenseIO.E4.128",
+                            "BM.DenseIO.E5.128",
+                            "BM.Standard.E5.192",
+                            "BM.Standard1.36",
+                            "BM.HighIO1.36",
+                            "BM.DenseIO1.36",
+                            "BM.Standard.B1.44",
+                            "BM.GPU2.2",
+                            "BM.HPC2.36",
+                            "BM.Standard2.52",
+                            "BM.GPU3.8",
+                            "BM.DenseIO2.52",
+                            "BM.GPU.T1.2",
+                            "BM.Optimized3.36",
+                            "BM.Standard3.64",
+                            "BM.GPU.A10.4"
+                        ]
                     },
                     {
                         "id": "Oracle-Linux-9.2-2023.09.26-0",
@@ -1277,17 +773,156 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Oracle Linux",
                         "operatingSystemVersion": "9",
                         "billableSizeInGBs": 5,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.DenseIO.E4.Flex",
+                            "VM.DenseIO.E5.Flex",
+                            "VM.DenseIO1.16",
+                            "VM.DenseIO1.4",
+                            "VM.DenseIO1.8",
+                            "VM.DenseIO2.16",
+                            "VM.DenseIO2.24",
+                            "VM.DenseIO2.8",
+                            "VM.GPU.A10.1",
+                            "VM.GPU.A10.2",
+                            "VM.GPU.GU1.1",
+                            "VM.GPU.GU1.2",
+                            "VM.GPU2.1",
+                            "VM.GPU3.1",
+                            "VM.GPU3.2",
+                            "VM.GPU3.4",
+                            "VM.Optimized3.Flex",
+                            "VM.Standard.AMD.Generic",
+                            "VM.Standard.B1.1",
+                            "VM.Standard.B1.16",
+                            "VM.Standard.B1.2",
+                            "VM.Standard.B1.4",
+                            "VM.Standard.B1.8",
+                            "VM.Standard.E2.1",
+                            "VM.Standard.E2.1.Micro",
+                            "VM.Standard.E2.2",
+                            "VM.Standard.E2.4",
+                            "VM.Standard.E2.8",
+                            "VM.Standard.E3.Flex",
+                            "VM.Standard.E4.Flex",
+                            "VM.Standard.E5.Flex",
+                            "VM.Standard.Intel.Generic",
+                            "VM.Standard.x86.Generic",
+                            "VM.Standard1.1",
+                            "VM.Standard1.16",
+                            "VM.Standard1.2",
+                            "VM.Standard1.4",
+                            "VM.Standard1.8",
+                            "VM.Standard2.1",
+                            "VM.Standard2.16",
+                            "VM.Standard2.2",
+                            "VM.Standard2.24",
+                            "VM.Standard2.4",
+                            "VM.Standard2.8",
+                            "VM.Standard2.Flex",
+                            "VM.Standard3.Flex",
+                            "BM.Standard.E2.64",
+                            "BM.Standard.E3.128",
+                            "BM.Standard.E4.128",
+                            "BM.GPU.B4.8",
+                            "BM.GPU.A100-v2.8",
+                            "BM.DenseIO.E4.128",
+                            "BM.DenseIO.E5.128",
+                            "BM.Standard.E5.192",
+                            "BM.Standard1.36",
+                            "BM.HighIO1.36",
+                            "BM.DenseIO1.36",
+                            "BM.Standard.B1.44",
+                            "BM.GPU2.2",
+                            "BM.HPC2.36",
+                            "BM.Standard2.52",
+                            "BM.GPU3.8",
+                            "BM.DenseIO2.52",
+                            "BM.GPU.T1.2",
+                            "BM.Optimized3.36",
+                            "BM.Standard3.64",
+                            "BM.GPU.A10.4"
+                        ]
                     },
                     {
-                        "id": "Oracle-Linux-9.2-aarch64-2023.08.31-0",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaa3d5w622nufqgh65mz654kedthshqzv2wyrpaxawiln4wmthqddzq",
-                        "displayName": "Oracle-Linux-9.2-aarch64-2023.08.31-0",
+                        "id": "Oracle-Linux-9.2-2023.12.08-0",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaaqv6lftm274fss5ugmrhjk4tidmsz2n5vu6varr7rineyi4gkn7sa",
+                        "displayName": "Oracle-Linux-9.2-2023.12.08-0",
                         "platform": true,
                         "operatingSystem": "Oracle Linux",
                         "operatingSystemVersion": "9",
                         "billableSizeInGBs": 5,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.DenseIO.E4.Flex",
+                            "VM.DenseIO.E5.Flex",
+                            "VM.DenseIO1.16",
+                            "VM.DenseIO1.4",
+                            "VM.DenseIO1.8",
+                            "VM.DenseIO2.16",
+                            "VM.DenseIO2.24",
+                            "VM.DenseIO2.8",
+                            "VM.GPU.A10.1",
+                            "VM.GPU.A10.2",
+                            "VM.GPU.GU1.1",
+                            "VM.GPU.GU1.2",
+                            "VM.GPU2.1",
+                            "VM.GPU3.1",
+                            "VM.GPU3.2",
+                            "VM.GPU3.4",
+                            "VM.Optimized3.Flex",
+                            "VM.Standard.AMD.Generic",
+                            "VM.Standard.B1.1",
+                            "VM.Standard.B1.16",
+                            "VM.Standard.B1.2",
+                            "VM.Standard.B1.4",
+                            "VM.Standard.B1.8",
+                            "VM.Standard.E2.1",
+                            "VM.Standard.E2.1.Micro",
+                            "VM.Standard.E2.2",
+                            "VM.Standard.E2.4",
+                            "VM.Standard.E2.8",
+                            "VM.Standard.E3.Flex",
+                            "VM.Standard.E4.Flex",
+                            "VM.Standard.E5.Flex",
+                            "VM.Standard.Intel.Generic",
+                            "VM.Standard.x86.Generic",
+                            "VM.Standard1.1",
+                            "VM.Standard1.16",
+                            "VM.Standard1.2",
+                            "VM.Standard1.4",
+                            "VM.Standard1.8",
+                            "VM.Standard2.1",
+                            "VM.Standard2.16",
+                            "VM.Standard2.2",
+                            "VM.Standard2.24",
+                            "VM.Standard2.4",
+                            "VM.Standard2.8",
+                            "VM.Standard2.Flex",
+                            "VM.Standard3.Flex",
+                            "BM.Standard.E2.64",
+                            "BM.Standard.E3.128",
+                            "BM.Standard.E4.128",
+                            "BM.GPU.B4.8",
+                            "BM.GPU.A100-v2.8",
+                            "BM.DenseIO.E4.128",
+                            "BM.DenseIO.E5.128",
+                            "BM.Standard.E5.192",
+                            "BM.GPU.H100.8",
+                            "BM.Standard1.36",
+                            "BM.HighIO1.36",
+                            "BM.DenseIO1.36",
+                            "BM.Standard.B1.44",
+                            "BM.GPU2.2",
+                            "BM.HPC2.36",
+                            "BM.Standard2.52",
+                            "BM.GPU3.8",
+                            "BM.DenseIO2.52",
+                            "BM.GPU.T1.2",
+                            "BM.Optimized3.36",
+                            "BM.Standard3.64",
+                            "BM.GPU.A10.4"
+                        ]
                     },
                     {
                         "id": "Oracle-Linux-9.2-aarch64-2023.09.26-0",
@@ -1297,7 +932,12 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Oracle Linux",
                         "operatingSystemVersion": "9",
                         "billableSizeInGBs": 5,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.Standard.A1.Flex",
+                            "VM.Standard.Ampere.Generic",
+                            "BM.Standard.A1.160"
+                        ]
                     },
                     {
                         "id": "Oracle-Linux-9.2-aarch64-2023.10.24-0",
@@ -1307,7 +947,83 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Oracle Linux",
                         "operatingSystemVersion": "9",
                         "billableSizeInGBs": 5,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.Standard.A1.Flex",
+                            "VM.Standard.Ampere.Generic",
+                            "BM.Standard.A1.160"
+                        ]
+                    },
+                    {
+                        "id": "Oracle-Linux-9.2-aarch64-2023.12.08-0",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaawzpekaj6vrxxu4ov7qotlwh3qiuqyybqgex2cyzowrnnkoox7owa",
+                        "displayName": "Oracle-Linux-9.2-aarch64-2023.12.08-0",
+                        "platform": true,
+                        "operatingSystem": "Oracle Linux",
+                        "operatingSystemVersion": "9",
+                        "billableSizeInGBs": 5,
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.Standard.A1.Flex",
+                            "VM.Standard.Ampere.Generic",
+                            "BM.Standard.A1.160"
+                        ]
+                    },
+                    {
+                        "id": "Oracle-Linux-9.2-Minimal-2023.09.30-1",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaacycvhgwfyjxzcuwwzlbdsdkgodmzdpq6h3nw6cl53yg6xra4zf2q",
+                        "displayName": "Oracle-Linux-9.2-Minimal-2023.09.30-1",
+                        "platform": true,
+                        "operatingSystem": "Oracle Linux",
+                        "operatingSystemVersion": "9 Minimal",
+                        "billableSizeInGBs": 3,
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.DenseIO.E4.Flex",
+                            "VM.DenseIO1.16",
+                            "VM.DenseIO1.4",
+                            "VM.DenseIO1.8",
+                            "VM.DenseIO2.16",
+                            "VM.DenseIO2.24",
+                            "VM.DenseIO2.8",
+                            "VM.GPU.A10.1",
+                            "VM.GPU.A10.2",
+                            "VM.GPU.GU1.1",
+                            "VM.GPU.GU1.2",
+                            "VM.GPU2.1",
+                            "VM.GPU3.1",
+                            "VM.GPU3.2",
+                            "VM.GPU3.4",
+                            "VM.Optimized3.Flex",
+                            "VM.Standard.AMD.Generic",
+                            "VM.Standard.B1.1",
+                            "VM.Standard.B1.16",
+                            "VM.Standard.B1.2",
+                            "VM.Standard.B1.4",
+                            "VM.Standard.B1.8",
+                            "VM.Standard.E2.1",
+                            "VM.Standard.E2.1.Micro",
+                            "VM.Standard.E2.2",
+                            "VM.Standard.E2.4",
+                            "VM.Standard.E2.8",
+                            "VM.Standard.E3.Flex",
+                            "VM.Standard.E4.Flex",
+                            "VM.Standard.Intel.Generic",
+                            "VM.Standard.x86.Generic",
+                            "VM.Standard1.1",
+                            "VM.Standard1.16",
+                            "VM.Standard1.2",
+                            "VM.Standard1.4",
+                            "VM.Standard1.8",
+                            "VM.Standard2.1",
+                            "VM.Standard2.16",
+                            "VM.Standard2.2",
+                            "VM.Standard2.24",
+                            "VM.Standard2.4",
+                            "VM.Standard2.8",
+                            "VM.Standard2.Flex",
+                            "VM.Standard3.Flex"
+                        ]
                     },
                     {
                         "id": "Oracle-Linux-Cloud-Developer-8.4-2021.08.27-0",
@@ -1317,7 +1033,58 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Oracle Linux Cloud Developer",
                         "operatingSystemVersion": "8",
                         "billableSizeInGBs": 19,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.DenseIO1.16",
+                            "VM.DenseIO1.4",
+                            "VM.DenseIO1.8",
+                            "VM.DenseIO2.16",
+                            "VM.DenseIO2.24",
+                            "VM.DenseIO2.8",
+                            "VM.GPU2.1",
+                            "VM.GPU3.1",
+                            "VM.GPU3.2",
+                            "VM.GPU3.4",
+                            "VM.Optimized3.Flex",
+                            "VM.Standard.AMD.Generic",
+                            "VM.Standard.B1.1",
+                            "VM.Standard.B1.16",
+                            "VM.Standard.B1.2",
+                            "VM.Standard.B1.4",
+                            "VM.Standard.B1.8",
+                            "VM.Standard.E2.1",
+                            "VM.Standard.E2.1.Micro",
+                            "VM.Standard.E2.2",
+                            "VM.Standard.E2.4",
+                            "VM.Standard.E2.8",
+                            "VM.Standard.E3.Flex",
+                            "VM.Standard.E4.Flex",
+                            "VM.Standard1.1",
+                            "VM.Standard1.16",
+                            "VM.Standard1.2",
+                            "VM.Standard1.4",
+                            "VM.Standard1.8",
+                            "VM.Standard2.1",
+                            "VM.Standard2.16",
+                            "VM.Standard2.2",
+                            "VM.Standard2.24",
+                            "VM.Standard2.4",
+                            "VM.Standard2.8",
+                            "BM.Standard.E2.64",
+                            "BM.Standard.E3.128",
+                            "BM.GPU4.8",
+                            "BM.Standard.E4.128",
+                            "BM.Standard1.36",
+                            "BM.HighIO1.36",
+                            "BM.DenseIO1.36",
+                            "BM.Standard.B1.44",
+                            "BM.GPU2.2",
+                            "BM.HPC2.36",
+                            "BM.Standard2.52",
+                            "BM.GPU3.8",
+                            "BM.DenseIO2.52",
+                            "BM.Optimized3.36"
+                        ]
                     },
                     {
                         "id": "Oracle-Linux-Cloud-Developer-8.4-aarch64-2021.08.27-0",
@@ -1327,7 +1094,12 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Oracle Linux Cloud Developer",
                         "operatingSystemVersion": "8",
                         "billableSizeInGBs": 14,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.Standard.A1.Flex",
+                            "VM.Standard.Ampere.Generic",
+                            "BM.Standard.A1.160"
+                        ]
                     },
                     {
                         "id": "Oracle-Linux-Cloud-Developer-8.5-2022.05.22-0",
@@ -1337,7 +1109,65 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Oracle Linux Cloud Developer",
                         "operatingSystemVersion": "8",
                         "billableSizeInGBs": 24,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.DenseIO.E4.Flex",
+                            "VM.DenseIO1.16",
+                            "VM.DenseIO1.4",
+                            "VM.DenseIO1.8",
+                            "VM.DenseIO2.16",
+                            "VM.DenseIO2.24",
+                            "VM.DenseIO2.8",
+                            "VM.GPU2.1",
+                            "VM.GPU3.1",
+                            "VM.GPU3.2",
+                            "VM.GPU3.4",
+                            "VM.Optimized3.Flex",
+                            "VM.Standard.AMD.Generic",
+                            "VM.Standard.B1.1",
+                            "VM.Standard.B1.16",
+                            "VM.Standard.B1.2",
+                            "VM.Standard.B1.4",
+                            "VM.Standard.B1.8",
+                            "VM.Standard.E2.1",
+                            "VM.Standard.E2.1.Micro",
+                            "VM.Standard.E2.2",
+                            "VM.Standard.E2.4",
+                            "VM.Standard.E2.8",
+                            "VM.Standard.E3.Flex",
+                            "VM.Standard.E4.Flex",
+                            "VM.Standard.Intel.Generic",
+                            "VM.Standard.x86.Generic",
+                            "VM.Standard1.1",
+                            "VM.Standard1.16",
+                            "VM.Standard1.2",
+                            "VM.Standard1.4",
+                            "VM.Standard1.8",
+                            "VM.Standard2.1",
+                            "VM.Standard2.16",
+                            "VM.Standard2.2",
+                            "VM.Standard2.24",
+                            "VM.Standard2.4",
+                            "VM.Standard2.8",
+                            "VM.Standard3.Flex",
+                            "BM.Standard.E2.64",
+                            "BM.Standard.E3.128",
+                            "BM.Standard.E4.128",
+                            "BM.GPU.B4.8",
+                            "BM.DenseIO.E4.128",
+                            "BM.Standard1.36",
+                            "BM.HighIO1.36",
+                            "BM.DenseIO1.36",
+                            "BM.Standard.B1.44",
+                            "BM.GPU2.2",
+                            "BM.HPC2.36",
+                            "BM.Standard2.52",
+                            "BM.GPU3.8",
+                            "BM.DenseIO2.52",
+                            "BM.GPU.T1.2",
+                            "BM.Optimized3.36",
+                            "BM.Standard3.64"
+                        ]
                     },
                     {
                         "id": "Oracle-Linux-Cloud-Developer-8.5-aarch64-2022.05.22-0",
@@ -1347,7 +1177,12 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Oracle Linux Cloud Developer",
                         "operatingSystemVersion": "8",
                         "billableSizeInGBs": 18,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.Standard.A1.Flex",
+                            "VM.Standard.Ampere.Generic",
+                            "BM.Standard.A1.160"
+                        ]
                     },
                     {
                         "id": "Oracle-Linux-Cloud-Developer-8.7-2023.04.28-1",
@@ -1357,7 +1192,65 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Oracle Linux Cloud Developer",
                         "operatingSystemVersion": "8",
                         "billableSizeInGBs": 25,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.DenseIO.E4.Flex",
+                            "VM.DenseIO1.16",
+                            "VM.DenseIO1.4",
+                            "VM.DenseIO1.8",
+                            "VM.DenseIO2.16",
+                            "VM.DenseIO2.24",
+                            "VM.DenseIO2.8",
+                            "VM.GPU2.1",
+                            "VM.GPU3.1",
+                            "VM.GPU3.2",
+                            "VM.GPU3.4",
+                            "VM.Optimized3.Flex",
+                            "VM.Standard.AMD.Generic",
+                            "VM.Standard.B1.1",
+                            "VM.Standard.B1.16",
+                            "VM.Standard.B1.2",
+                            "VM.Standard.B1.4",
+                            "VM.Standard.B1.8",
+                            "VM.Standard.E2.1",
+                            "VM.Standard.E2.1.Micro",
+                            "VM.Standard.E2.2",
+                            "VM.Standard.E2.4",
+                            "VM.Standard.E2.8",
+                            "VM.Standard.E3.Flex",
+                            "VM.Standard.E4.Flex",
+                            "VM.Standard.Intel.Generic",
+                            "VM.Standard.x86.Generic",
+                            "VM.Standard1.1",
+                            "VM.Standard1.16",
+                            "VM.Standard1.2",
+                            "VM.Standard1.4",
+                            "VM.Standard1.8",
+                            "VM.Standard2.1",
+                            "VM.Standard2.16",
+                            "VM.Standard2.2",
+                            "VM.Standard2.24",
+                            "VM.Standard2.4",
+                            "VM.Standard2.8",
+                            "VM.Standard3.Flex",
+                            "BM.Standard.E2.64",
+                            "BM.Standard.E3.128",
+                            "BM.Standard.E4.128",
+                            "BM.GPU.B4.8",
+                            "BM.DenseIO.E4.128",
+                            "BM.Standard1.36",
+                            "BM.HighIO1.36",
+                            "BM.DenseIO1.36",
+                            "BM.Standard.B1.44",
+                            "BM.GPU2.2",
+                            "BM.HPC2.36",
+                            "BM.Standard2.52",
+                            "BM.GPU3.8",
+                            "BM.DenseIO2.52",
+                            "BM.GPU.T1.2",
+                            "BM.Optimized3.36",
+                            "BM.Standard3.64"
+                        ]
                     },
                     {
                         "id": "Oracle-Linux-Cloud-Developer-8.7-aarch64-2023.04.28-2",
@@ -1367,7 +1260,12 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Oracle Linux Cloud Developer",
                         "operatingSystemVersion": "8",
                         "billableSizeInGBs": 22,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.Standard.A1.Flex",
+                            "VM.Standard.Ampere.Generic",
+                            "BM.Standard.A1.160"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2012-R2-Datacenter-Edition-BM-2020.11.14-0",
@@ -1377,7 +1275,14 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2012 R2 Datacenter",
                         "billableSizeInGBs": 0,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.Standard.A1.Flex",
+                            "VM.Standard.Ampere.Generic",
+                            "BM.Standard1.36",
+                            "BM.HighIO1.36",
+                            "BM.DenseIO1.36"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2012-R2-Datacenter-Edition-BM-2020.12.15-0",
@@ -1387,7 +1292,12 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2012 R2 Datacenter",
                         "billableSizeInGBs": 0,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.Standard1.36",
+                            "BM.HighIO1.36",
+                            "BM.DenseIO1.36"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2012-R2-Datacenter-Edition-BM-2021.02.19-0",
@@ -1397,7 +1307,12 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2012 R2 Datacenter",
                         "billableSizeInGBs": 0,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.Standard1.36",
+                            "BM.HighIO1.36",
+                            "BM.DenseIO1.36"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2012-R2-Datacenter-Edition-BM-Gen2-2023.08.18-0",
@@ -1407,7 +1322,13 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2012 R2 Datacenter",
                         "billableSizeInGBs": 16,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.GPU2.2",
+                            "BM.HPC2.36",
+                            "BM.Standard2.52",
+                            "BM.GPU3.8"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2012-R2-Datacenter-Edition-BM-Gen2-2023.09.13-0",
@@ -1417,7 +1338,13 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2012 R2 Datacenter",
                         "billableSizeInGBs": 16,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.GPU2.2",
+                            "BM.HPC2.36",
+                            "BM.Standard2.52",
+                            "BM.GPU3.8"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2012-R2-Datacenter-Edition-BM-Gen2-2023.10.10-0",
@@ -1427,7 +1354,13 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2012 R2 Datacenter",
                         "billableSizeInGBs": 16,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.GPU2.2",
+                            "BM.HPC2.36",
+                            "BM.Standard2.52",
+                            "BM.GPU3.8"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2012-R2-Datacenter-Edition-BM-Gen2-DenseIO-2023.08.17-0",
@@ -1437,7 +1370,10 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2012 R2 Datacenter",
                         "billableSizeInGBs": 16,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.DenseIO2.52"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2012-R2-Datacenter-Edition-BM-Gen2-DenseIO-2023.09.12-0",
@@ -1447,7 +1383,10 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2012 R2 Datacenter",
                         "billableSizeInGBs": 16,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.DenseIO2.52"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2012-R2-Datacenter-Edition-BM-Gen2-DenseIO-2023.10.10-0",
@@ -1457,7 +1396,10 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2012 R2 Datacenter",
                         "billableSizeInGBs": 16,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.DenseIO2.52"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2012-R2-Datacenter-Edition-BM-Gen2-E2-2023.08.17-0",
@@ -1467,7 +1409,10 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2012 R2 Datacenter",
                         "billableSizeInGBs": 16,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.Standard.E2.64"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2012-R2-Datacenter-Edition-BM-Gen2-E2-2023.09.13-0",
@@ -1477,7 +1422,10 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2012 R2 Datacenter",
                         "billableSizeInGBs": 16,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.Standard.E2.64"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2012-R2-Datacenter-Edition-BM-Gen2-E2-2023.10.10-0",
@@ -1487,7 +1435,10 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2012 R2 Datacenter",
                         "billableSizeInGBs": 17,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.Standard.E2.64"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2012-R2-Standard-Edition-VM-2023.08.17-0",
@@ -1497,7 +1448,52 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2012 R2 Standard",
                         "billableSizeInGBs": 17,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.DenseIO1.16",
+                            "VM.DenseIO1.4",
+                            "VM.DenseIO1.8",
+                            "VM.DenseIO2.16",
+                            "VM.DenseIO2.24",
+                            "VM.DenseIO2.8",
+                            "VM.GPU.A10.1",
+                            "VM.GPU.A10.2",
+                            "VM.GPU.GU1.1",
+                            "VM.GPU.GU1.2",
+                            "VM.GPU2.1",
+                            "VM.GPU3.1",
+                            "VM.GPU3.2",
+                            "VM.GPU3.4",
+                            "VM.Optimized3.Flex",
+                            "VM.Standard.AMD.Generic",
+                            "VM.Standard.B1.1",
+                            "VM.Standard.B1.16",
+                            "VM.Standard.B1.2",
+                            "VM.Standard.B1.4",
+                            "VM.Standard.B1.8",
+                            "VM.Standard.E2.1",
+                            "VM.Standard.E2.2",
+                            "VM.Standard.E2.4",
+                            "VM.Standard.E2.8",
+                            "VM.Standard.E3.Flex",
+                            "VM.Standard.E4.Flex",
+                            "VM.Standard.E5.Flex",
+                            "VM.Standard.Intel.Generic",
+                            "VM.Standard.x86.Generic",
+                            "VM.Standard1.1",
+                            "VM.Standard1.16",
+                            "VM.Standard1.2",
+                            "VM.Standard1.4",
+                            "VM.Standard1.8",
+                            "VM.Standard2.1",
+                            "VM.Standard2.16",
+                            "VM.Standard2.2",
+                            "VM.Standard2.24",
+                            "VM.Standard2.4",
+                            "VM.Standard2.8",
+                            "VM.Standard2.Flex",
+                            "VM.Standard3.Flex"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2012-R2-Standard-Edition-VM-2023.09.12-0",
@@ -1507,7 +1503,52 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2012 R2 Standard",
                         "billableSizeInGBs": 17,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.DenseIO1.16",
+                            "VM.DenseIO1.4",
+                            "VM.DenseIO1.8",
+                            "VM.DenseIO2.16",
+                            "VM.DenseIO2.24",
+                            "VM.DenseIO2.8",
+                            "VM.GPU.A10.1",
+                            "VM.GPU.A10.2",
+                            "VM.GPU.GU1.1",
+                            "VM.GPU.GU1.2",
+                            "VM.GPU2.1",
+                            "VM.GPU3.1",
+                            "VM.GPU3.2",
+                            "VM.GPU3.4",
+                            "VM.Optimized3.Flex",
+                            "VM.Standard.AMD.Generic",
+                            "VM.Standard.B1.1",
+                            "VM.Standard.B1.16",
+                            "VM.Standard.B1.2",
+                            "VM.Standard.B1.4",
+                            "VM.Standard.B1.8",
+                            "VM.Standard.E2.1",
+                            "VM.Standard.E2.2",
+                            "VM.Standard.E2.4",
+                            "VM.Standard.E2.8",
+                            "VM.Standard.E3.Flex",
+                            "VM.Standard.E4.Flex",
+                            "VM.Standard.E5.Flex",
+                            "VM.Standard.Intel.Generic",
+                            "VM.Standard.x86.Generic",
+                            "VM.Standard1.1",
+                            "VM.Standard1.16",
+                            "VM.Standard1.2",
+                            "VM.Standard1.4",
+                            "VM.Standard1.8",
+                            "VM.Standard2.1",
+                            "VM.Standard2.16",
+                            "VM.Standard2.2",
+                            "VM.Standard2.24",
+                            "VM.Standard2.4",
+                            "VM.Standard2.8",
+                            "VM.Standard2.Flex",
+                            "VM.Standard3.Flex"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2012-R2-Standard-Edition-VM-2023.10.10-0",
@@ -1517,7 +1558,52 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2012 R2 Standard",
                         "billableSizeInGBs": 16,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.DenseIO1.16",
+                            "VM.DenseIO1.4",
+                            "VM.DenseIO1.8",
+                            "VM.DenseIO2.16",
+                            "VM.DenseIO2.24",
+                            "VM.DenseIO2.8",
+                            "VM.GPU.A10.1",
+                            "VM.GPU.A10.2",
+                            "VM.GPU.GU1.1",
+                            "VM.GPU.GU1.2",
+                            "VM.GPU2.1",
+                            "VM.GPU3.1",
+                            "VM.GPU3.2",
+                            "VM.GPU3.4",
+                            "VM.Optimized3.Flex",
+                            "VM.Standard.AMD.Generic",
+                            "VM.Standard.B1.1",
+                            "VM.Standard.B1.16",
+                            "VM.Standard.B1.2",
+                            "VM.Standard.B1.4",
+                            "VM.Standard.B1.8",
+                            "VM.Standard.E2.1",
+                            "VM.Standard.E2.2",
+                            "VM.Standard.E2.4",
+                            "VM.Standard.E2.8",
+                            "VM.Standard.E3.Flex",
+                            "VM.Standard.E4.Flex",
+                            "VM.Standard.E5.Flex",
+                            "VM.Standard.Intel.Generic",
+                            "VM.Standard.x86.Generic",
+                            "VM.Standard1.1",
+                            "VM.Standard1.16",
+                            "VM.Standard1.2",
+                            "VM.Standard1.4",
+                            "VM.Standard1.8",
+                            "VM.Standard2.1",
+                            "VM.Standard2.16",
+                            "VM.Standard2.2",
+                            "VM.Standard2.24",
+                            "VM.Standard2.4",
+                            "VM.Standard2.8",
+                            "VM.Standard2.Flex",
+                            "VM.Standard3.Flex"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2016-Datacenter-Edition-BM-Gen2-2023.08.17-0",
@@ -1527,7 +1613,13 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2016 Datacenter",
                         "billableSizeInGBs": 19,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.GPU2.2",
+                            "BM.HPC2.36",
+                            "BM.Standard2.52",
+                            "BM.GPU3.8"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2016-Datacenter-Edition-BM-Gen2-2023.09.12-0",
@@ -1537,7 +1629,13 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2016 Datacenter",
                         "billableSizeInGBs": 19,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.GPU2.2",
+                            "BM.HPC2.36",
+                            "BM.Standard2.52",
+                            "BM.GPU3.8"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2016-Datacenter-Edition-BM-Gen2-2023.10.10-0",
@@ -1547,7 +1645,13 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2016 Datacenter",
                         "billableSizeInGBs": 19,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.GPU2.2",
+                            "BM.HPC2.36",
+                            "BM.Standard2.52",
+                            "BM.GPU3.8"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2016-Datacenter-Edition-BM-Gen2-DenseIO-2023.08.17-0",
@@ -1557,7 +1661,10 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2016 Datacenter",
                         "billableSizeInGBs": 19,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.DenseIO2.52"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2016-Datacenter-Edition-BM-Gen2-DenseIO-2023.09.12-0",
@@ -1567,7 +1674,10 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2016 Datacenter",
                         "billableSizeInGBs": 19,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.DenseIO2.52"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2016-Datacenter-Edition-BM-Gen2-DenseIO-2023.10.10-0",
@@ -1577,7 +1687,10 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2016 Datacenter",
                         "billableSizeInGBs": 19,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.DenseIO2.52"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2016-Datacenter-Edition-BM-Gen2-E2-2023.08.17-0",
@@ -1587,7 +1700,10 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2016 Datacenter",
                         "billableSizeInGBs": 19,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.Standard.E2.64"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2016-Datacenter-Edition-BM-Gen2-E2-2023.09.12-0",
@@ -1597,7 +1713,10 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2016 Datacenter",
                         "billableSizeInGBs": 19,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.Standard.E2.64"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2016-Datacenter-Edition-BM-Gen2-E2-2023.10.10-0",
@@ -1607,7 +1726,10 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2016 Datacenter",
                         "billableSizeInGBs": 19,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.Standard.E2.64"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2016-Datacenter-Edition-BM-X9-2023.08.17-0",
@@ -1617,7 +1739,11 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2016 Datacenter",
                         "billableSizeInGBs": 19,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.Optimized3.36",
+                            "BM.Standard3.64"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2016-Datacenter-Edition-BM-X9-2023.09.12-0",
@@ -1627,7 +1753,11 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2016 Datacenter",
                         "billableSizeInGBs": 19,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.Optimized3.36",
+                            "BM.Standard3.64"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2016-Datacenter-Edition-BM-X9-2023.10.10-0",
@@ -1637,7 +1767,11 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2016 Datacenter",
                         "billableSizeInGBs": 19,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.Optimized3.36",
+                            "BM.Standard3.64"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2016-Standard-Core-VM-2023.08.17-0",
@@ -1647,7 +1781,53 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2016 Standard Core",
                         "billableSizeInGBs": 12,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.DenseIO.E4.Flex",
+                            "VM.DenseIO1.16",
+                            "VM.DenseIO1.4",
+                            "VM.DenseIO1.8",
+                            "VM.DenseIO2.16",
+                            "VM.DenseIO2.24",
+                            "VM.DenseIO2.8",
+                            "VM.GPU.A10.1",
+                            "VM.GPU.A10.2",
+                            "VM.GPU.GU1.1",
+                            "VM.GPU.GU1.2",
+                            "VM.GPU2.1",
+                            "VM.GPU3.1",
+                            "VM.GPU3.2",
+                            "VM.GPU3.4",
+                            "VM.Optimized3.Flex",
+                            "VM.Standard.AMD.Generic",
+                            "VM.Standard.B1.1",
+                            "VM.Standard.B1.16",
+                            "VM.Standard.B1.2",
+                            "VM.Standard.B1.4",
+                            "VM.Standard.B1.8",
+                            "VM.Standard.E2.1",
+                            "VM.Standard.E2.2",
+                            "VM.Standard.E2.4",
+                            "VM.Standard.E2.8",
+                            "VM.Standard.E3.Flex",
+                            "VM.Standard.E4.Flex",
+                            "VM.Standard.E5.Flex",
+                            "VM.Standard.Intel.Generic",
+                            "VM.Standard.x86.Generic",
+                            "VM.Standard1.1",
+                            "VM.Standard1.16",
+                            "VM.Standard1.2",
+                            "VM.Standard1.4",
+                            "VM.Standard1.8",
+                            "VM.Standard2.1",
+                            "VM.Standard2.16",
+                            "VM.Standard2.2",
+                            "VM.Standard2.24",
+                            "VM.Standard2.4",
+                            "VM.Standard2.8",
+                            "VM.Standard2.Flex",
+                            "VM.Standard3.Flex"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2016-Standard-Core-VM-2023.09.25-0",
@@ -1657,7 +1837,54 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2016 Standard Core",
                         "billableSizeInGBs": 13,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.DenseIO.E4.Flex",
+                            "VM.DenseIO.E5.Flex",
+                            "VM.DenseIO1.16",
+                            "VM.DenseIO1.4",
+                            "VM.DenseIO1.8",
+                            "VM.DenseIO2.16",
+                            "VM.DenseIO2.24",
+                            "VM.DenseIO2.8",
+                            "VM.GPU.A10.1",
+                            "VM.GPU.A10.2",
+                            "VM.GPU.GU1.1",
+                            "VM.GPU.GU1.2",
+                            "VM.GPU2.1",
+                            "VM.GPU3.1",
+                            "VM.GPU3.2",
+                            "VM.GPU3.4",
+                            "VM.Optimized3.Flex",
+                            "VM.Standard.AMD.Generic",
+                            "VM.Standard.B1.1",
+                            "VM.Standard.B1.16",
+                            "VM.Standard.B1.2",
+                            "VM.Standard.B1.4",
+                            "VM.Standard.B1.8",
+                            "VM.Standard.E2.1",
+                            "VM.Standard.E2.2",
+                            "VM.Standard.E2.4",
+                            "VM.Standard.E2.8",
+                            "VM.Standard.E3.Flex",
+                            "VM.Standard.E4.Flex",
+                            "VM.Standard.E5.Flex",
+                            "VM.Standard.Intel.Generic",
+                            "VM.Standard.x86.Generic",
+                            "VM.Standard1.1",
+                            "VM.Standard1.16",
+                            "VM.Standard1.2",
+                            "VM.Standard1.4",
+                            "VM.Standard1.8",
+                            "VM.Standard2.1",
+                            "VM.Standard2.16",
+                            "VM.Standard2.2",
+                            "VM.Standard2.24",
+                            "VM.Standard2.4",
+                            "VM.Standard2.8",
+                            "VM.Standard2.Flex",
+                            "VM.Standard3.Flex"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2016-Standard-Core-VM-2023.10.10-0",
@@ -1667,7 +1894,54 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2016 Standard Core",
                         "billableSizeInGBs": 13,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.DenseIO.E4.Flex",
+                            "VM.DenseIO.E5.Flex",
+                            "VM.DenseIO1.16",
+                            "VM.DenseIO1.4",
+                            "VM.DenseIO1.8",
+                            "VM.DenseIO2.16",
+                            "VM.DenseIO2.24",
+                            "VM.DenseIO2.8",
+                            "VM.GPU.A10.1",
+                            "VM.GPU.A10.2",
+                            "VM.GPU.GU1.1",
+                            "VM.GPU.GU1.2",
+                            "VM.GPU2.1",
+                            "VM.GPU3.1",
+                            "VM.GPU3.2",
+                            "VM.GPU3.4",
+                            "VM.Optimized3.Flex",
+                            "VM.Standard.AMD.Generic",
+                            "VM.Standard.B1.1",
+                            "VM.Standard.B1.16",
+                            "VM.Standard.B1.2",
+                            "VM.Standard.B1.4",
+                            "VM.Standard.B1.8",
+                            "VM.Standard.E2.1",
+                            "VM.Standard.E2.2",
+                            "VM.Standard.E2.4",
+                            "VM.Standard.E2.8",
+                            "VM.Standard.E3.Flex",
+                            "VM.Standard.E4.Flex",
+                            "VM.Standard.E5.Flex",
+                            "VM.Standard.Intel.Generic",
+                            "VM.Standard.x86.Generic",
+                            "VM.Standard1.1",
+                            "VM.Standard1.16",
+                            "VM.Standard1.2",
+                            "VM.Standard1.4",
+                            "VM.Standard1.8",
+                            "VM.Standard2.1",
+                            "VM.Standard2.16",
+                            "VM.Standard2.2",
+                            "VM.Standard2.24",
+                            "VM.Standard2.4",
+                            "VM.Standard2.8",
+                            "VM.Standard2.Flex",
+                            "VM.Standard3.Flex"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2016-Standard-Edition-VM-2023.08.17-0",
@@ -1677,7 +1951,53 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2016 Standard",
                         "billableSizeInGBs": 19,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.DenseIO.E4.Flex",
+                            "VM.DenseIO1.16",
+                            "VM.DenseIO1.4",
+                            "VM.DenseIO1.8",
+                            "VM.DenseIO2.16",
+                            "VM.DenseIO2.24",
+                            "VM.DenseIO2.8",
+                            "VM.GPU.A10.1",
+                            "VM.GPU.A10.2",
+                            "VM.GPU.GU1.1",
+                            "VM.GPU.GU1.2",
+                            "VM.GPU2.1",
+                            "VM.GPU3.1",
+                            "VM.GPU3.2",
+                            "VM.GPU3.4",
+                            "VM.Optimized3.Flex",
+                            "VM.Standard.AMD.Generic",
+                            "VM.Standard.B1.1",
+                            "VM.Standard.B1.16",
+                            "VM.Standard.B1.2",
+                            "VM.Standard.B1.4",
+                            "VM.Standard.B1.8",
+                            "VM.Standard.E2.1",
+                            "VM.Standard.E2.2",
+                            "VM.Standard.E2.4",
+                            "VM.Standard.E2.8",
+                            "VM.Standard.E3.Flex",
+                            "VM.Standard.E4.Flex",
+                            "VM.Standard.E5.Flex",
+                            "VM.Standard.Intel.Generic",
+                            "VM.Standard.x86.Generic",
+                            "VM.Standard1.1",
+                            "VM.Standard1.16",
+                            "VM.Standard1.2",
+                            "VM.Standard1.4",
+                            "VM.Standard1.8",
+                            "VM.Standard2.1",
+                            "VM.Standard2.16",
+                            "VM.Standard2.2",
+                            "VM.Standard2.24",
+                            "VM.Standard2.4",
+                            "VM.Standard2.8",
+                            "VM.Standard2.Flex",
+                            "VM.Standard3.Flex"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2016-Standard-Edition-VM-2023.09.16-0",
@@ -1687,7 +2007,54 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2016 Standard",
                         "billableSizeInGBs": 19,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.DenseIO.E4.Flex",
+                            "VM.DenseIO.E5.Flex",
+                            "VM.DenseIO1.16",
+                            "VM.DenseIO1.4",
+                            "VM.DenseIO1.8",
+                            "VM.DenseIO2.16",
+                            "VM.DenseIO2.24",
+                            "VM.DenseIO2.8",
+                            "VM.GPU.A10.1",
+                            "VM.GPU.A10.2",
+                            "VM.GPU.GU1.1",
+                            "VM.GPU.GU1.2",
+                            "VM.GPU2.1",
+                            "VM.GPU3.1",
+                            "VM.GPU3.2",
+                            "VM.GPU3.4",
+                            "VM.Optimized3.Flex",
+                            "VM.Standard.AMD.Generic",
+                            "VM.Standard.B1.1",
+                            "VM.Standard.B1.16",
+                            "VM.Standard.B1.2",
+                            "VM.Standard.B1.4",
+                            "VM.Standard.B1.8",
+                            "VM.Standard.E2.1",
+                            "VM.Standard.E2.2",
+                            "VM.Standard.E2.4",
+                            "VM.Standard.E2.8",
+                            "VM.Standard.E3.Flex",
+                            "VM.Standard.E4.Flex",
+                            "VM.Standard.E5.Flex",
+                            "VM.Standard.Intel.Generic",
+                            "VM.Standard.x86.Generic",
+                            "VM.Standard1.1",
+                            "VM.Standard1.16",
+                            "VM.Standard1.2",
+                            "VM.Standard1.4",
+                            "VM.Standard1.8",
+                            "VM.Standard2.1",
+                            "VM.Standard2.16",
+                            "VM.Standard2.2",
+                            "VM.Standard2.24",
+                            "VM.Standard2.4",
+                            "VM.Standard2.8",
+                            "VM.Standard2.Flex",
+                            "VM.Standard3.Flex"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2016-Standard-Edition-VM-2023.10.10-0",
@@ -1697,7 +2064,54 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2016 Standard",
                         "billableSizeInGBs": 19,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.DenseIO.E4.Flex",
+                            "VM.DenseIO.E5.Flex",
+                            "VM.DenseIO1.16",
+                            "VM.DenseIO1.4",
+                            "VM.DenseIO1.8",
+                            "VM.DenseIO2.16",
+                            "VM.DenseIO2.24",
+                            "VM.DenseIO2.8",
+                            "VM.GPU.A10.1",
+                            "VM.GPU.A10.2",
+                            "VM.GPU.GU1.1",
+                            "VM.GPU.GU1.2",
+                            "VM.GPU2.1",
+                            "VM.GPU3.1",
+                            "VM.GPU3.2",
+                            "VM.GPU3.4",
+                            "VM.Optimized3.Flex",
+                            "VM.Standard.AMD.Generic",
+                            "VM.Standard.B1.1",
+                            "VM.Standard.B1.16",
+                            "VM.Standard.B1.2",
+                            "VM.Standard.B1.4",
+                            "VM.Standard.B1.8",
+                            "VM.Standard.E2.1",
+                            "VM.Standard.E2.2",
+                            "VM.Standard.E2.4",
+                            "VM.Standard.E2.8",
+                            "VM.Standard.E3.Flex",
+                            "VM.Standard.E4.Flex",
+                            "VM.Standard.E5.Flex",
+                            "VM.Standard.Intel.Generic",
+                            "VM.Standard.x86.Generic",
+                            "VM.Standard1.1",
+                            "VM.Standard1.16",
+                            "VM.Standard1.2",
+                            "VM.Standard1.4",
+                            "VM.Standard1.8",
+                            "VM.Standard2.1",
+                            "VM.Standard2.16",
+                            "VM.Standard2.2",
+                            "VM.Standard2.24",
+                            "VM.Standard2.4",
+                            "VM.Standard2.8",
+                            "VM.Standard2.Flex",
+                            "VM.Standard3.Flex"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2016-Standard-Edition-VM-B1-2021.02.13-0",
@@ -1707,7 +2121,14 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2016 Standard",
                         "billableSizeInGBs": 0,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.Standard.B1.1",
+                            "VM.Standard.B1.16",
+                            "VM.Standard.B1.2",
+                            "VM.Standard.B1.4",
+                            "VM.Standard.B1.8"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2016-Standard-Edition-VM-B1-2021.03.18-0",
@@ -1717,7 +2138,14 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2016 Standard",
                         "billableSizeInGBs": 0,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.Standard.B1.1",
+                            "VM.Standard.B1.16",
+                            "VM.Standard.B1.2",
+                            "VM.Standard.B1.4",
+                            "VM.Standard.B1.8"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2019-Datacenter-Edition-BM-E3-2023.08.18-0",
@@ -1727,7 +2155,10 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2019 Datacenter",
                         "billableSizeInGBs": 15,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.Standard.E3.128"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2019-Datacenter-Edition-BM-E3-2023.09.12-0",
@@ -1737,7 +2168,10 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2019 Datacenter",
                         "billableSizeInGBs": 15,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.Standard.E3.128"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2019-Datacenter-Edition-BM-E3-2023.10.10-0",
@@ -1747,7 +2181,10 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2019 Datacenter",
                         "billableSizeInGBs": 15,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.Standard.E3.128"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2019-Datacenter-Edition-BM-E4-2023.07.12-0",
@@ -1757,7 +2194,10 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2019 Datacenter",
                         "billableSizeInGBs": 15,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.Standard.E4.128"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2019-Datacenter-Edition-BM-E4-2023.09.25-0",
@@ -1767,7 +2207,10 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2019 Datacenter",
                         "billableSizeInGBs": 15,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.Standard.E4.128"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2019-Datacenter-Edition-BM-E4-2023.10.10-0",
@@ -1777,7 +2220,10 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2019 Datacenter",
                         "billableSizeInGBs": 15,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.Standard.E4.128"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2019-Datacenter-Edition-BM-E4-DenseIO-2023.10.17-0",
@@ -1787,7 +2233,10 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2019 Datacenter",
                         "billableSizeInGBs": 15,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.DenseIO.E4.128"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2019-Datacenter-Edition-BM-E5-2023.08.28-0",
@@ -1797,7 +2246,11 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2019 Datacenter",
                         "billableSizeInGBs": 15,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.DenseIO.E5.128",
+                            "BM.Standard.E5.192"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2019-Datacenter-Edition-BM-E5-2023.09.13-0",
@@ -1807,7 +2260,11 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2019 Datacenter",
                         "billableSizeInGBs": 15,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.DenseIO.E5.128",
+                            "BM.Standard.E5.192"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2019-Datacenter-Edition-BM-E5-2023.10.12-0",
@@ -1817,7 +2274,11 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2019 Datacenter",
                         "billableSizeInGBs": 15,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.DenseIO.E5.128",
+                            "BM.Standard.E5.192"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2019-Datacenter-Edition-BM-X9-2023.08.17-0",
@@ -1827,7 +2288,11 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2019 Datacenter",
                         "billableSizeInGBs": 15,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.Optimized3.36",
+                            "BM.Standard3.64"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2019-Datacenter-Edition-BM-X9-2023.09.28-0",
@@ -1837,7 +2302,12 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2019 Datacenter",
                         "billableSizeInGBs": 15,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.GPU.T1.2",
+                            "BM.Optimized3.36",
+                            "BM.Standard3.64"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2019-Datacenter-Edition-BM-X9-2023.10.10-0",
@@ -1847,7 +2317,12 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2019 Datacenter",
                         "billableSizeInGBs": 15,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.GPU.T1.2",
+                            "BM.Optimized3.36",
+                            "BM.Standard3.64"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2019-Standard-Core-VM-2023.08.17-0",
@@ -1857,7 +2332,53 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2019 Standard Core",
                         "billableSizeInGBs": 11,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.DenseIO.E4.Flex",
+                            "VM.DenseIO1.16",
+                            "VM.DenseIO1.4",
+                            "VM.DenseIO1.8",
+                            "VM.DenseIO2.16",
+                            "VM.DenseIO2.24",
+                            "VM.DenseIO2.8",
+                            "VM.GPU.A10.1",
+                            "VM.GPU.A10.2",
+                            "VM.GPU.GU1.1",
+                            "VM.GPU.GU1.2",
+                            "VM.GPU2.1",
+                            "VM.GPU3.1",
+                            "VM.GPU3.2",
+                            "VM.GPU3.4",
+                            "VM.Optimized3.Flex",
+                            "VM.Standard.AMD.Generic",
+                            "VM.Standard.B1.1",
+                            "VM.Standard.B1.16",
+                            "VM.Standard.B1.2",
+                            "VM.Standard.B1.4",
+                            "VM.Standard.B1.8",
+                            "VM.Standard.E2.1",
+                            "VM.Standard.E2.2",
+                            "VM.Standard.E2.4",
+                            "VM.Standard.E2.8",
+                            "VM.Standard.E3.Flex",
+                            "VM.Standard.E4.Flex",
+                            "VM.Standard.E5.Flex",
+                            "VM.Standard.Intel.Generic",
+                            "VM.Standard.x86.Generic",
+                            "VM.Standard1.1",
+                            "VM.Standard1.16",
+                            "VM.Standard1.2",
+                            "VM.Standard1.4",
+                            "VM.Standard1.8",
+                            "VM.Standard2.1",
+                            "VM.Standard2.16",
+                            "VM.Standard2.2",
+                            "VM.Standard2.24",
+                            "VM.Standard2.4",
+                            "VM.Standard2.8",
+                            "VM.Standard2.Flex",
+                            "VM.Standard3.Flex"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2019-Standard-Core-VM-2023.09.28-0",
@@ -1867,7 +2388,54 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2019 Standard Core",
                         "billableSizeInGBs": 11,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.DenseIO.E4.Flex",
+                            "VM.DenseIO.E5.Flex",
+                            "VM.DenseIO1.16",
+                            "VM.DenseIO1.4",
+                            "VM.DenseIO1.8",
+                            "VM.DenseIO2.16",
+                            "VM.DenseIO2.24",
+                            "VM.DenseIO2.8",
+                            "VM.GPU.A10.1",
+                            "VM.GPU.A10.2",
+                            "VM.GPU.GU1.1",
+                            "VM.GPU.GU1.2",
+                            "VM.GPU2.1",
+                            "VM.GPU3.1",
+                            "VM.GPU3.2",
+                            "VM.GPU3.4",
+                            "VM.Optimized3.Flex",
+                            "VM.Standard.AMD.Generic",
+                            "VM.Standard.B1.1",
+                            "VM.Standard.B1.16",
+                            "VM.Standard.B1.2",
+                            "VM.Standard.B1.4",
+                            "VM.Standard.B1.8",
+                            "VM.Standard.E2.1",
+                            "VM.Standard.E2.2",
+                            "VM.Standard.E2.4",
+                            "VM.Standard.E2.8",
+                            "VM.Standard.E3.Flex",
+                            "VM.Standard.E4.Flex",
+                            "VM.Standard.E5.Flex",
+                            "VM.Standard.Intel.Generic",
+                            "VM.Standard.x86.Generic",
+                            "VM.Standard1.1",
+                            "VM.Standard1.16",
+                            "VM.Standard1.2",
+                            "VM.Standard1.4",
+                            "VM.Standard1.8",
+                            "VM.Standard2.1",
+                            "VM.Standard2.16",
+                            "VM.Standard2.2",
+                            "VM.Standard2.24",
+                            "VM.Standard2.4",
+                            "VM.Standard2.8",
+                            "VM.Standard2.Flex",
+                            "VM.Standard3.Flex"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2019-Standard-Core-VM-2023.10.10-0",
@@ -1877,7 +2445,54 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2019 Standard Core",
                         "billableSizeInGBs": 11,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.DenseIO.E4.Flex",
+                            "VM.DenseIO.E5.Flex",
+                            "VM.DenseIO1.16",
+                            "VM.DenseIO1.4",
+                            "VM.DenseIO1.8",
+                            "VM.DenseIO2.16",
+                            "VM.DenseIO2.24",
+                            "VM.DenseIO2.8",
+                            "VM.GPU.A10.1",
+                            "VM.GPU.A10.2",
+                            "VM.GPU.GU1.1",
+                            "VM.GPU.GU1.2",
+                            "VM.GPU2.1",
+                            "VM.GPU3.1",
+                            "VM.GPU3.2",
+                            "VM.GPU3.4",
+                            "VM.Optimized3.Flex",
+                            "VM.Standard.AMD.Generic",
+                            "VM.Standard.B1.1",
+                            "VM.Standard.B1.16",
+                            "VM.Standard.B1.2",
+                            "VM.Standard.B1.4",
+                            "VM.Standard.B1.8",
+                            "VM.Standard.E2.1",
+                            "VM.Standard.E2.2",
+                            "VM.Standard.E2.4",
+                            "VM.Standard.E2.8",
+                            "VM.Standard.E3.Flex",
+                            "VM.Standard.E4.Flex",
+                            "VM.Standard.E5.Flex",
+                            "VM.Standard.Intel.Generic",
+                            "VM.Standard.x86.Generic",
+                            "VM.Standard1.1",
+                            "VM.Standard1.16",
+                            "VM.Standard1.2",
+                            "VM.Standard1.4",
+                            "VM.Standard1.8",
+                            "VM.Standard2.1",
+                            "VM.Standard2.16",
+                            "VM.Standard2.2",
+                            "VM.Standard2.24",
+                            "VM.Standard2.4",
+                            "VM.Standard2.8",
+                            "VM.Standard2.Flex",
+                            "VM.Standard3.Flex"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2019-Standard-Edition-VM-2023.08.17-0",
@@ -1887,7 +2502,39 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2019 Standard",
                         "billableSizeInGBs": 15,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.DenseIO.E4.Flex",
+                            "VM.DenseIO1.16",
+                            "VM.DenseIO1.4",
+                            "VM.DenseIO1.8",
+                            "VM.GPU.A10.1",
+                            "VM.GPU.A10.2",
+                            "VM.GPU.GU1.1",
+                            "VM.GPU.GU1.2",
+                            "VM.Optimized3.Flex",
+                            "VM.Standard.AMD.Generic",
+                            "VM.Standard.B1.1",
+                            "VM.Standard.B1.16",
+                            "VM.Standard.B1.2",
+                            "VM.Standard.B1.4",
+                            "VM.Standard.B1.8",
+                            "VM.Standard.E2.1",
+                            "VM.Standard.E2.2",
+                            "VM.Standard.E2.4",
+                            "VM.Standard.E2.8",
+                            "VM.Standard.E3.Flex",
+                            "VM.Standard.E4.Flex",
+                            "VM.Standard.E5.Flex",
+                            "VM.Standard.Intel.Generic",
+                            "VM.Standard.x86.Generic",
+                            "VM.Standard1.1",
+                            "VM.Standard1.16",
+                            "VM.Standard1.2",
+                            "VM.Standard1.4",
+                            "VM.Standard1.8",
+                            "VM.Standard3.Flex"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2019-Standard-Edition-VM-2023.09.28-0",
@@ -1897,7 +2544,40 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2019 Standard",
                         "billableSizeInGBs": 15,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.DenseIO.E4.Flex",
+                            "VM.DenseIO.E5.Flex",
+                            "VM.DenseIO1.16",
+                            "VM.DenseIO1.4",
+                            "VM.DenseIO1.8",
+                            "VM.GPU.A10.1",
+                            "VM.GPU.A10.2",
+                            "VM.GPU.GU1.1",
+                            "VM.GPU.GU1.2",
+                            "VM.Optimized3.Flex",
+                            "VM.Standard.AMD.Generic",
+                            "VM.Standard.B1.1",
+                            "VM.Standard.B1.16",
+                            "VM.Standard.B1.2",
+                            "VM.Standard.B1.4",
+                            "VM.Standard.B1.8",
+                            "VM.Standard.E2.1",
+                            "VM.Standard.E2.2",
+                            "VM.Standard.E2.4",
+                            "VM.Standard.E2.8",
+                            "VM.Standard.E3.Flex",
+                            "VM.Standard.E4.Flex",
+                            "VM.Standard.E5.Flex",
+                            "VM.Standard.Intel.Generic",
+                            "VM.Standard.x86.Generic",
+                            "VM.Standard1.1",
+                            "VM.Standard1.16",
+                            "VM.Standard1.2",
+                            "VM.Standard1.4",
+                            "VM.Standard1.8",
+                            "VM.Standard3.Flex"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2019-Standard-Edition-VM-2023.10.10-0",
@@ -1907,7 +2587,40 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2019 Standard",
                         "billableSizeInGBs": 15,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.DenseIO.E4.Flex",
+                            "VM.DenseIO.E5.Flex",
+                            "VM.DenseIO1.16",
+                            "VM.DenseIO1.4",
+                            "VM.DenseIO1.8",
+                            "VM.GPU.A10.1",
+                            "VM.GPU.A10.2",
+                            "VM.GPU.GU1.1",
+                            "VM.GPU.GU1.2",
+                            "VM.Optimized3.Flex",
+                            "VM.Standard.AMD.Generic",
+                            "VM.Standard.B1.1",
+                            "VM.Standard.B1.16",
+                            "VM.Standard.B1.2",
+                            "VM.Standard.B1.4",
+                            "VM.Standard.B1.8",
+                            "VM.Standard.E2.1",
+                            "VM.Standard.E2.2",
+                            "VM.Standard.E2.4",
+                            "VM.Standard.E2.8",
+                            "VM.Standard.E3.Flex",
+                            "VM.Standard.E4.Flex",
+                            "VM.Standard.E5.Flex",
+                            "VM.Standard.Intel.Generic",
+                            "VM.Standard.x86.Generic",
+                            "VM.Standard1.1",
+                            "VM.Standard1.16",
+                            "VM.Standard1.2",
+                            "VM.Standard1.4",
+                            "VM.Standard1.8",
+                            "VM.Standard3.Flex"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2019-Standard-Edition-VM-Gen2-2023.08.17-0",
@@ -1917,7 +2630,23 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2019 Standard",
                         "billableSizeInGBs": 15,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.DenseIO2.16",
+                            "VM.DenseIO2.24",
+                            "VM.DenseIO2.8",
+                            "VM.GPU2.1",
+                            "VM.GPU3.1",
+                            "VM.GPU3.2",
+                            "VM.GPU3.4",
+                            "VM.Standard2.1",
+                            "VM.Standard2.16",
+                            "VM.Standard2.2",
+                            "VM.Standard2.24",
+                            "VM.Standard2.4",
+                            "VM.Standard2.8",
+                            "VM.Standard2.Flex"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2019-Standard-Edition-VM-Gen2-2023.09.12-0",
@@ -1927,7 +2656,23 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2019 Standard",
                         "billableSizeInGBs": 15,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.DenseIO2.16",
+                            "VM.DenseIO2.24",
+                            "VM.DenseIO2.8",
+                            "VM.GPU2.1",
+                            "VM.GPU3.1",
+                            "VM.GPU3.2",
+                            "VM.GPU3.4",
+                            "VM.Standard2.1",
+                            "VM.Standard2.16",
+                            "VM.Standard2.2",
+                            "VM.Standard2.24",
+                            "VM.Standard2.4",
+                            "VM.Standard2.8",
+                            "VM.Standard2.Flex"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2019-Standard-Edition-VM-Gen2-2023.10.10-0",
@@ -1937,7 +2682,23 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2019 Standard",
                         "billableSizeInGBs": 15,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.DenseIO2.16",
+                            "VM.DenseIO2.24",
+                            "VM.DenseIO2.8",
+                            "VM.GPU2.1",
+                            "VM.GPU3.1",
+                            "VM.GPU3.2",
+                            "VM.GPU3.4",
+                            "VM.Standard2.1",
+                            "VM.Standard2.16",
+                            "VM.Standard2.2",
+                            "VM.Standard2.24",
+                            "VM.Standard2.4",
+                            "VM.Standard2.8",
+                            "VM.Standard2.Flex"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2022-Datacenter-Edition-BM-E3-2023.08.17-0",
@@ -1947,7 +2708,10 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2022 Datacenter",
                         "billableSizeInGBs": 14,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.Standard.E3.128"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2022-Datacenter-Edition-BM-E3-2023.09.12-0",
@@ -1957,7 +2721,10 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2022 Datacenter",
                         "billableSizeInGBs": 15,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.Standard.E3.128"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2022-Datacenter-Edition-BM-E3-2023.10.10-0",
@@ -1967,7 +2734,10 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2022 Datacenter",
                         "billableSizeInGBs": 15,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.Standard.E3.128"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2022-Datacenter-Edition-BM-E4-2023.06.13-0",
@@ -1977,7 +2747,10 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2022 Datacenter",
                         "billableSizeInGBs": 14,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.Standard.E4.128"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2022-Datacenter-Edition-BM-E4-2023.09.28-0",
@@ -1987,7 +2760,10 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2022 Datacenter",
                         "billableSizeInGBs": 15,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.Standard.E4.128"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2022-Datacenter-Edition-BM-E4-2023.10.10-0",
@@ -1997,7 +2773,10 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2022 Datacenter",
                         "billableSizeInGBs": 15,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.Standard.E4.128"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2022-Datacenter-Edition-BM-E4-DenseIO-2023.10.17-0",
@@ -2007,7 +2786,10 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2022 Datacenter",
                         "billableSizeInGBs": 15,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.DenseIO.E4.128"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2022-Datacenter-Edition-BM-E5-2023.08.28-0",
@@ -2017,7 +2799,11 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2022 Datacenter",
                         "billableSizeInGBs": 15,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.DenseIO.E5.128",
+                            "BM.Standard.E5.192"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2022-Datacenter-Edition-BM-E5-2023.09.12-0",
@@ -2027,7 +2813,11 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2022 Datacenter",
                         "billableSizeInGBs": 15,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.DenseIO.E5.128",
+                            "BM.Standard.E5.192"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2022-Datacenter-Edition-BM-E5-2023.10.18-0",
@@ -2037,7 +2827,11 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2022 Datacenter",
                         "billableSizeInGBs": 15,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.DenseIO.E5.128",
+                            "BM.Standard.E5.192"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2022-Datacenter-Edition-BM-X9-2023.08.21-0",
@@ -2047,7 +2841,12 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2022 Datacenter",
                         "billableSizeInGBs": 14,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.GPU.T1.2",
+                            "BM.Optimized3.36",
+                            "BM.Standard3.64"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2022-Datacenter-Edition-BM-X9-2023.09.12-0",
@@ -2057,7 +2856,12 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2022 Datacenter",
                         "billableSizeInGBs": 15,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.GPU.T1.2",
+                            "BM.Optimized3.36",
+                            "BM.Standard3.64"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2022-Datacenter-Edition-BM-X9-2023.10.10-0",
@@ -2067,7 +2871,12 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2022 Datacenter",
                         "billableSizeInGBs": 15,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "BM.GPU.T1.2",
+                            "BM.Optimized3.36",
+                            "BM.Standard3.64"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2022-Standard-Core-VM-2023.08.17-0",
@@ -2077,7 +2886,53 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2022 Standard Core",
                         "billableSizeInGBs": 10,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.DenseIO.E4.Flex",
+                            "VM.DenseIO1.16",
+                            "VM.DenseIO1.4",
+                            "VM.DenseIO1.8",
+                            "VM.DenseIO2.16",
+                            "VM.DenseIO2.24",
+                            "VM.DenseIO2.8",
+                            "VM.GPU.A10.1",
+                            "VM.GPU.A10.2",
+                            "VM.GPU.GU1.1",
+                            "VM.GPU.GU1.2",
+                            "VM.GPU2.1",
+                            "VM.GPU3.1",
+                            "VM.GPU3.2",
+                            "VM.GPU3.4",
+                            "VM.Optimized3.Flex",
+                            "VM.Standard.AMD.Generic",
+                            "VM.Standard.B1.1",
+                            "VM.Standard.B1.16",
+                            "VM.Standard.B1.2",
+                            "VM.Standard.B1.4",
+                            "VM.Standard.B1.8",
+                            "VM.Standard.E2.1",
+                            "VM.Standard.E2.2",
+                            "VM.Standard.E2.4",
+                            "VM.Standard.E2.8",
+                            "VM.Standard.E3.Flex",
+                            "VM.Standard.E4.Flex",
+                            "VM.Standard.E5.Flex",
+                            "VM.Standard.Intel.Generic",
+                            "VM.Standard.x86.Generic",
+                            "VM.Standard1.1",
+                            "VM.Standard1.16",
+                            "VM.Standard1.2",
+                            "VM.Standard1.4",
+                            "VM.Standard1.8",
+                            "VM.Standard2.1",
+                            "VM.Standard2.16",
+                            "VM.Standard2.2",
+                            "VM.Standard2.24",
+                            "VM.Standard2.4",
+                            "VM.Standard2.8",
+                            "VM.Standard2.Flex",
+                            "VM.Standard3.Flex"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2022-Standard-Core-VM-2023.09.28-0",
@@ -2087,7 +2942,54 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2022 Standard Core",
                         "billableSizeInGBs": 10,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.DenseIO.E4.Flex",
+                            "VM.DenseIO.E5.Flex",
+                            "VM.DenseIO1.16",
+                            "VM.DenseIO1.4",
+                            "VM.DenseIO1.8",
+                            "VM.DenseIO2.16",
+                            "VM.DenseIO2.24",
+                            "VM.DenseIO2.8",
+                            "VM.GPU.A10.1",
+                            "VM.GPU.A10.2",
+                            "VM.GPU.GU1.1",
+                            "VM.GPU.GU1.2",
+                            "VM.GPU2.1",
+                            "VM.GPU3.1",
+                            "VM.GPU3.2",
+                            "VM.GPU3.4",
+                            "VM.Optimized3.Flex",
+                            "VM.Standard.AMD.Generic",
+                            "VM.Standard.B1.1",
+                            "VM.Standard.B1.16",
+                            "VM.Standard.B1.2",
+                            "VM.Standard.B1.4",
+                            "VM.Standard.B1.8",
+                            "VM.Standard.E2.1",
+                            "VM.Standard.E2.2",
+                            "VM.Standard.E2.4",
+                            "VM.Standard.E2.8",
+                            "VM.Standard.E3.Flex",
+                            "VM.Standard.E4.Flex",
+                            "VM.Standard.E5.Flex",
+                            "VM.Standard.Intel.Generic",
+                            "VM.Standard.x86.Generic",
+                            "VM.Standard1.1",
+                            "VM.Standard1.16",
+                            "VM.Standard1.2",
+                            "VM.Standard1.4",
+                            "VM.Standard1.8",
+                            "VM.Standard2.1",
+                            "VM.Standard2.16",
+                            "VM.Standard2.2",
+                            "VM.Standard2.24",
+                            "VM.Standard2.4",
+                            "VM.Standard2.8",
+                            "VM.Standard2.Flex",
+                            "VM.Standard3.Flex"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2022-Standard-Core-VM-2023.10.10-0",
@@ -2097,7 +2999,54 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2022 Standard Core",
                         "billableSizeInGBs": 10,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.DenseIO.E4.Flex",
+                            "VM.DenseIO.E5.Flex",
+                            "VM.DenseIO1.16",
+                            "VM.DenseIO1.4",
+                            "VM.DenseIO1.8",
+                            "VM.DenseIO2.16",
+                            "VM.DenseIO2.24",
+                            "VM.DenseIO2.8",
+                            "VM.GPU.A10.1",
+                            "VM.GPU.A10.2",
+                            "VM.GPU.GU1.1",
+                            "VM.GPU.GU1.2",
+                            "VM.GPU2.1",
+                            "VM.GPU3.1",
+                            "VM.GPU3.2",
+                            "VM.GPU3.4",
+                            "VM.Optimized3.Flex",
+                            "VM.Standard.AMD.Generic",
+                            "VM.Standard.B1.1",
+                            "VM.Standard.B1.16",
+                            "VM.Standard.B1.2",
+                            "VM.Standard.B1.4",
+                            "VM.Standard.B1.8",
+                            "VM.Standard.E2.1",
+                            "VM.Standard.E2.2",
+                            "VM.Standard.E2.4",
+                            "VM.Standard.E2.8",
+                            "VM.Standard.E3.Flex",
+                            "VM.Standard.E4.Flex",
+                            "VM.Standard.E5.Flex",
+                            "VM.Standard.Intel.Generic",
+                            "VM.Standard.x86.Generic",
+                            "VM.Standard1.1",
+                            "VM.Standard1.16",
+                            "VM.Standard1.2",
+                            "VM.Standard1.4",
+                            "VM.Standard1.8",
+                            "VM.Standard2.1",
+                            "VM.Standard2.16",
+                            "VM.Standard2.2",
+                            "VM.Standard2.24",
+                            "VM.Standard2.4",
+                            "VM.Standard2.8",
+                            "VM.Standard2.Flex",
+                            "VM.Standard3.Flex"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2022-Standard-Edition-VM-2023.08.17-0",
@@ -2107,7 +3056,39 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2022 Standard",
                         "billableSizeInGBs": 15,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.DenseIO.E4.Flex",
+                            "VM.DenseIO1.16",
+                            "VM.DenseIO1.4",
+                            "VM.DenseIO1.8",
+                            "VM.GPU.A10.1",
+                            "VM.GPU.A10.2",
+                            "VM.GPU.GU1.1",
+                            "VM.GPU.GU1.2",
+                            "VM.Optimized3.Flex",
+                            "VM.Standard.AMD.Generic",
+                            "VM.Standard.B1.1",
+                            "VM.Standard.B1.16",
+                            "VM.Standard.B1.2",
+                            "VM.Standard.B1.4",
+                            "VM.Standard.B1.8",
+                            "VM.Standard.E2.1",
+                            "VM.Standard.E2.2",
+                            "VM.Standard.E2.4",
+                            "VM.Standard.E2.8",
+                            "VM.Standard.E3.Flex",
+                            "VM.Standard.E4.Flex",
+                            "VM.Standard.E5.Flex",
+                            "VM.Standard.Intel.Generic",
+                            "VM.Standard.x86.Generic",
+                            "VM.Standard1.1",
+                            "VM.Standard1.16",
+                            "VM.Standard1.2",
+                            "VM.Standard1.4",
+                            "VM.Standard1.8",
+                            "VM.Standard3.Flex"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2022-Standard-Edition-VM-2023.09.28-0",
@@ -2117,7 +3098,40 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2022 Standard",
                         "billableSizeInGBs": 15,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.DenseIO.E4.Flex",
+                            "VM.DenseIO.E5.Flex",
+                            "VM.DenseIO1.16",
+                            "VM.DenseIO1.4",
+                            "VM.DenseIO1.8",
+                            "VM.GPU.A10.1",
+                            "VM.GPU.A10.2",
+                            "VM.GPU.GU1.1",
+                            "VM.GPU.GU1.2",
+                            "VM.Optimized3.Flex",
+                            "VM.Standard.AMD.Generic",
+                            "VM.Standard.B1.1",
+                            "VM.Standard.B1.16",
+                            "VM.Standard.B1.2",
+                            "VM.Standard.B1.4",
+                            "VM.Standard.B1.8",
+                            "VM.Standard.E2.1",
+                            "VM.Standard.E2.2",
+                            "VM.Standard.E2.4",
+                            "VM.Standard.E2.8",
+                            "VM.Standard.E3.Flex",
+                            "VM.Standard.E4.Flex",
+                            "VM.Standard.E5.Flex",
+                            "VM.Standard.Intel.Generic",
+                            "VM.Standard.x86.Generic",
+                            "VM.Standard1.1",
+                            "VM.Standard1.16",
+                            "VM.Standard1.2",
+                            "VM.Standard1.4",
+                            "VM.Standard1.8",
+                            "VM.Standard3.Flex"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2022-Standard-Edition-VM-2023.10.10-0",
@@ -2127,7 +3141,40 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2022 Standard",
                         "billableSizeInGBs": 15,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.DenseIO.E4.Flex",
+                            "VM.DenseIO.E5.Flex",
+                            "VM.DenseIO1.16",
+                            "VM.DenseIO1.4",
+                            "VM.DenseIO1.8",
+                            "VM.GPU.A10.1",
+                            "VM.GPU.A10.2",
+                            "VM.GPU.GU1.1",
+                            "VM.GPU.GU1.2",
+                            "VM.Optimized3.Flex",
+                            "VM.Standard.AMD.Generic",
+                            "VM.Standard.B1.1",
+                            "VM.Standard.B1.16",
+                            "VM.Standard.B1.2",
+                            "VM.Standard.B1.4",
+                            "VM.Standard.B1.8",
+                            "VM.Standard.E2.1",
+                            "VM.Standard.E2.2",
+                            "VM.Standard.E2.4",
+                            "VM.Standard.E2.8",
+                            "VM.Standard.E3.Flex",
+                            "VM.Standard.E4.Flex",
+                            "VM.Standard.E5.Flex",
+                            "VM.Standard.Intel.Generic",
+                            "VM.Standard.x86.Generic",
+                            "VM.Standard1.1",
+                            "VM.Standard1.16",
+                            "VM.Standard1.2",
+                            "VM.Standard1.4",
+                            "VM.Standard1.8",
+                            "VM.Standard3.Flex"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2022-Standard-Edition-VM-PV-2023.08.17-0",
@@ -2137,7 +3184,23 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2022 Standard",
                         "billableSizeInGBs": 15,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.DenseIO2.16",
+                            "VM.DenseIO2.24",
+                            "VM.DenseIO2.8",
+                            "VM.GPU2.1",
+                            "VM.GPU3.1",
+                            "VM.GPU3.2",
+                            "VM.GPU3.4",
+                            "VM.Standard2.1",
+                            "VM.Standard2.16",
+                            "VM.Standard2.2",
+                            "VM.Standard2.24",
+                            "VM.Standard2.4",
+                            "VM.Standard2.8",
+                            "VM.Standard2.Flex"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2022-Standard-Edition-VM-PV-2023.09.12-0",
@@ -2147,7 +3210,23 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2022 Standard",
                         "billableSizeInGBs": 15,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.DenseIO2.16",
+                            "VM.DenseIO2.24",
+                            "VM.DenseIO2.8",
+                            "VM.GPU2.1",
+                            "VM.GPU3.1",
+                            "VM.GPU3.2",
+                            "VM.GPU3.4",
+                            "VM.Standard2.1",
+                            "VM.Standard2.16",
+                            "VM.Standard2.2",
+                            "VM.Standard2.24",
+                            "VM.Standard2.4",
+                            "VM.Standard2.8",
+                            "VM.Standard2.Flex"
+                        ]
                     },
                     {
                         "id": "Windows-Server-2022-Standard-Edition-VM-PV-2023.10.10-0",
@@ -2157,7 +3236,23 @@ export const defaultCache: OcdCache = {
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2022 Standard",
                         "billableSizeInGBs": 15,
-                        "lifecycleState": "AVAILABLE"
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.DenseIO2.16",
+                            "VM.DenseIO2.24",
+                            "VM.DenseIO2.8",
+                            "VM.GPU2.1",
+                            "VM.GPU3.1",
+                            "VM.GPU3.2",
+                            "VM.GPU3.4",
+                            "VM.Standard2.1",
+                            "VM.Standard2.16",
+                            "VM.Standard2.2",
+                            "VM.Standard2.24",
+                            "VM.Standard2.4",
+                            "VM.Standard2.8",
+                            "VM.Standard2.Flex"
+                        ]
                     }
                 ],
                 "loadbalancerShapes": [
@@ -3947,6 +5042,10 @@ export const defaultCache: OcdCache = {
                             {
                                 "version": "8.2.0",
                                 "description": "8.2.0"
+                            },
+                            {
+                                "version": "8.3.0",
+                                "description": "8.3.0"
                             }
                         ],
                         "id": "8 - Innovation",
@@ -3955,10 +5054,6 @@ export const defaultCache: OcdCache = {
                     {
                         "versionFamily": "8.0",
                         "versions": [
-                            {
-                                "version": "8.0.31",
-                                "description": "8.0.31"
-                            },
                             {
                                 "version": "8.0.32",
                                 "description": "8.0.32"
@@ -3974,6 +5069,10 @@ export const defaultCache: OcdCache = {
                             {
                                 "version": "8.0.35",
                                 "description": "8.0.35"
+                            },
+                            {
+                                "version": "8.0.36",
+                                "description": "8.0.36"
                             }
                         ],
                         "id": "8.0",
@@ -5494,6 +6593,14 @@ export const defaultCache: OcdCache = {
                         "displayName": "VM.Optimized3.Flex"
                     },
                     {
+                        "name": "VM.Standard.A1.Flex",
+                        "coreCount": 80,
+                        "memoryInGBs": 512,
+                        "shapeSeries": "ARM",
+                        "id": "VM.Standard.A1.Flex",
+                        "displayName": "VM.Standard.A1.Flex"
+                    },
+                    {
                         "name": "VM.Standard.E3.Flex",
                         "coreCount": 64,
                         "memoryInGBs": 1024,
@@ -5571,553 +6678,559 @@ export const defaultCache: OcdCache = {
                         "name": "adm",
                         "description": "Application Dependency Management",
                         "id": "adm",
-                        "displayName": "adm"
+                        "displayName": "Application Dependency Management"
                     },
                     {
                         "name": "ai-anomaly-detection",
                         "description": "AI Anomaly Detection",
                         "id": "ai-anomaly-detection",
-                        "displayName": "ai-anomaly-detection"
+                        "displayName": "AI Anomaly Detection"
                     },
                     {
                         "name": "ai-forecasting",
                         "description": "AI Forecasting",
                         "id": "ai-forecasting",
-                        "displayName": "ai-forecasting"
+                        "displayName": "AI Forecasting"
                     },
                     {
                         "name": "ai-generative",
                         "description": "Generative AI",
                         "id": "ai-generative",
-                        "displayName": "ai-generative"
+                        "displayName": "Generative AI"
                     },
                     {
                         "name": "ai-language",
                         "description": "AI Language",
                         "id": "ai-language",
-                        "displayName": "ai-language"
+                        "displayName": "AI Language"
                     },
                     {
                         "name": "ai-vision",
                         "description": "AI Vision",
                         "id": "ai-vision",
-                        "displayName": "ai-vision"
+                        "displayName": "AI Vision"
                     },
                     {
                         "name": "analytics",
                         "description": "Analytics",
                         "id": "analytics",
-                        "displayName": "analytics"
+                        "displayName": "Analytics"
                     },
                     {
                         "name": "api-gateway",
                         "description": "API Gateway",
                         "id": "api-gateway",
-                        "displayName": "api-gateway"
+                        "displayName": "API Gateway"
                     },
                     {
                         "name": "apm",
                         "description": "Application Performance Monitoring",
                         "id": "apm",
-                        "displayName": "apm"
+                        "displayName": "Application Performance Monitoring"
                     },
                     {
                         "name": "app-configuration",
                         "description": "Application Configuration",
                         "id": "app-configuration",
-                        "displayName": "app-configuration"
+                        "displayName": "Application Configuration"
                     },
                     {
                         "name": "atat",
                         "description": "Account Tracking and Automation Tools",
                         "id": "atat",
-                        "displayName": "atat"
+                        "displayName": "Account Tracking and Automation Tools"
                     },
                     {
                         "name": "auto-scaling",
                         "description": "Auto Scaling",
                         "id": "auto-scaling",
-                        "displayName": "auto-scaling"
+                        "displayName": "Auto Scaling"
                     },
                     {
                         "name": "autonomous-recovery-service",
                         "description": "Autonomous Recovery Service",
                         "id": "autonomous-recovery-service",
-                        "displayName": "autonomous-recovery-service"
+                        "displayName": "Autonomous Recovery Service"
                     },
                     {
                         "name": "big-data",
                         "description": "Big Data",
                         "id": "big-data",
-                        "displayName": "big-data"
+                        "displayName": "Big Data"
                     },
                     {
                         "name": "block-storage",
                         "description": "Block Volume",
                         "id": "block-storage",
-                        "displayName": "block-storage"
+                        "displayName": "Block Volume"
                     },
                     {
                         "name": "blockchain",
                         "description": "Blockchain",
                         "id": "blockchain",
-                        "displayName": "blockchain"
+                        "displayName": "Blockchain"
                     },
                     {
                         "name": "ccatc",
                         "description": "Compute Cloud at Customer",
                         "id": "ccatc",
-                        "displayName": "ccatc"
+                        "displayName": "Compute Cloud at Customer"
                     },
                     {
                         "name": "cloud-bridge",
                         "description": "Oracle Cloud Bridge",
                         "id": "cloud-bridge",
-                        "displayName": "cloud-bridge"
+                        "displayName": "Oracle Cloud Bridge"
                     },
                     {
                         "name": "cloud-shell",
                         "description": "Cloud Shell",
                         "id": "cloud-shell",
-                        "displayName": "cloud-shell"
+                        "displayName": "Cloud Shell"
                     },
                     {
                         "name": "cloudguard",
                         "description": "Cloud Guard",
                         "id": "cloudguard",
-                        "displayName": "cloudguard"
+                        "displayName": "Cloud Guard"
                     },
                     {
                         "name": "compartments",
                         "description": "Compartments",
                         "id": "compartments",
-                        "displayName": "compartments"
+                        "displayName": "Compartments"
                     },
                     {
                         "name": "compute",
                         "description": "Compute",
                         "id": "compute",
-                        "displayName": "compute"
+                        "displayName": "Compute"
                     },
                     {
                         "name": "compute-management",
                         "description": "Compute Management",
                         "id": "compute-management",
-                        "displayName": "compute-management"
+                        "displayName": "Compute Management"
                     },
                     {
                         "name": "container-engine",
                         "description": "Container Engine",
                         "id": "container-engine",
-                        "displayName": "container-engine"
+                        "displayName": "Container Engine"
                     },
                     {
                         "name": "cost-management",
                         "description": "Cost Management",
                         "id": "cost-management",
-                        "displayName": "cost-management"
+                        "displayName": "Cost Management"
                     },
                     {
                         "name": "dashboard",
                         "description": "Dashboard",
                         "id": "dashboard",
-                        "displayName": "dashboard"
+                        "displayName": "Dashboard"
                     },
                     {
                         "name": "data-catalog",
                         "description": "Data Catalog",
                         "id": "data-catalog",
-                        "displayName": "data-catalog"
+                        "displayName": "Data Catalog"
                     },
                     {
                         "name": "data-flow",
                         "description": "Data Flow",
                         "id": "data-flow",
-                        "displayName": "data-flow"
+                        "displayName": "Data Flow"
                     },
                     {
                         "name": "data-integration",
                         "description": "Data Integration",
                         "id": "data-integration",
-                        "displayName": "data-integration"
+                        "displayName": "Data Integration"
                     },
                     {
                         "name": "data-labeling",
                         "description": "Data Labeling",
                         "id": "data-labeling",
-                        "displayName": "data-labeling"
+                        "displayName": "Data Labeling"
                     },
                     {
                         "name": "data-science",
                         "description": "Data Science",
                         "id": "data-science",
-                        "displayName": "data-science"
+                        "displayName": "Data Science"
                     },
                     {
                         "name": "data-transfer",
                         "description": "Data Transfer",
                         "id": "data-transfer",
-                        "displayName": "data-transfer"
+                        "displayName": "Data Transfer"
                     },
                     {
                         "name": "database",
                         "description": "Database",
                         "id": "database",
-                        "displayName": "database"
+                        "displayName": "Database"
                     },
                     {
                         "name": "database-migration",
                         "description": "Database Migration",
                         "id": "database-migration",
-                        "displayName": "database-migration"
+                        "displayName": "Database Migration"
                     },
                     {
                         "name": "dbtools",
                         "description": "Database Tools",
                         "id": "dbtools",
-                        "displayName": "dbtools"
+                        "displayName": "Database Tools"
                     },
                     {
                         "name": "devops",
                         "description": "DevOps",
                         "id": "devops",
-                        "displayName": "devops"
+                        "displayName": "DevOps"
                     },
                     {
                         "name": "digital-assistant",
                         "description": "Digital Assistant",
                         "id": "digital-assistant",
-                        "displayName": "digital-assistant"
+                        "displayName": "Digital Assistant"
                     },
                     {
                         "name": "digital-media",
                         "description": "Digital Media Services",
                         "id": "digital-media",
-                        "displayName": "digital-media"
+                        "displayName": "Digital Media Services"
                     },
                     {
                         "name": "disaster-recovery",
                         "description": "Full Stack Disaster Recovery",
                         "id": "disaster-recovery",
-                        "displayName": "disaster-recovery"
+                        "displayName": "Full Stack Disaster Recovery"
                     },
                     {
                         "name": "dns",
                         "description": "DNS",
                         "id": "dns",
-                        "displayName": "dns"
+                        "displayName": "DNS"
                     },
                     {
                         "name": "email-delivery",
                         "description": "Email Delivery",
                         "id": "email-delivery",
-                        "displayName": "email-delivery"
+                        "displayName": "Email Delivery"
                     },
                     {
                         "name": "events",
                         "description": "Events",
                         "id": "events",
-                        "displayName": "events"
+                        "displayName": "Events"
                     },
                     {
                         "name": "exadata-fleet-update",
                         "description": "Exadata Fleet Update",
                         "id": "exadata-fleet-update",
-                        "displayName": "exadata-fleet-update"
+                        "displayName": "Exadata Fleet Update"
                     },
                     {
                         "name": "faas",
                         "description": "Functions",
                         "id": "faas",
-                        "displayName": "faas"
+                        "displayName": "Functions"
                     },
                     {
                         "name": "fams",
                         "description": "Fleet Application Management",
                         "id": "fams",
-                        "displayName": "fams"
+                        "displayName": "Fleet Application Management"
                     },
                     {
                         "name": "fast-connect",
                         "description": "Fast Connect",
                         "id": "fast-connect",
-                        "displayName": "fast-connect"
+                        "displayName": "Fast Connect"
                     },
                     {
                         "name": "filesystem",
                         "description": "File Storage",
                         "id": "filesystem",
-                        "displayName": "filesystem"
+                        "displayName": "File Storage"
                     },
                     {
                         "name": "goldengate",
                         "description": "GoldenGate",
                         "id": "goldengate",
-                        "displayName": "goldengate"
+                        "displayName": "GoldenGate"
                     },
                     {
                         "name": "health-checks",
                         "description": "Health Check",
                         "id": "health-checks",
-                        "displayName": "health-checks"
+                        "displayName": "Health Check"
                     },
                     {
                         "name": "integration",
                         "description": "Integration",
                         "id": "integration",
-                        "displayName": "integration"
+                        "displayName": "Integration"
                     },
                     {
                         "name": "java-management",
                         "description": "Java Management",
                         "id": "java-management",
-                        "displayName": "java-management"
+                        "displayName": "Java Management"
                     },
                     {
                         "name": "kms",
                         "description": "Key Management",
                         "id": "kms",
-                        "displayName": "kms"
+                        "displayName": "Key Management"
                     },
                     {
                         "name": "licensemanager",
                         "description": "License Manager",
                         "id": "licensemanager",
-                        "displayName": "licensemanager"
+                        "displayName": "License Manager"
                     },
                     {
                         "name": "limits",
                         "description": "Limits",
                         "id": "limits",
-                        "displayName": "limits"
+                        "displayName": "Limits"
                     },
                     {
                         "name": "load-balancer",
                         "description": "LbaaS",
                         "id": "load-balancer",
-                        "displayName": "load-balancer"
+                        "displayName": "LbaaS"
                     },
                     {
                         "name": "logging",
                         "description": "Logging",
                         "id": "logging",
-                        "displayName": "logging"
+                        "displayName": "Logging"
                     },
                     {
                         "name": "logging-analytics",
                         "description": "Logging Analytics",
                         "id": "logging-analytics",
-                        "displayName": "logging-analytics"
+                        "displayName": "Logging Analytics"
                     },
                     {
                         "name": "management-agent",
                         "description": "Management Agent",
                         "id": "management-agent",
-                        "displayName": "management-agent"
+                        "displayName": "Management Agent"
                     },
                     {
                         "name": "management-dashboard",
                         "description": "Management Dashboard",
                         "id": "management-dashboard",
-                        "displayName": "management-dashboard"
+                        "displayName": "Management Dashboard"
                     },
                     {
                         "name": "marketplace-publisher",
                         "description": "Marketplace Publisher",
                         "id": "marketplace-publisher",
-                        "displayName": "marketplace-publisher"
+                        "displayName": "Marketplace Publisher"
                     },
                     {
                         "name": "mysql",
                         "description": "MySQL HeatWave",
                         "id": "mysql",
-                        "displayName": "mysql"
+                        "displayName": "MySQL HeatWave"
                     },
                     {
                         "name": "mysql-heatwave-on-aws",
                         "description": "MySQL HeatWave on AWS",
                         "id": "mysql-heatwave-on-aws",
-                        "displayName": "mysql-heatwave-on-aws"
+                        "displayName": "MySQL HeatWave on AWS"
                     },
                     {
                         "name": "network-firewall",
                         "description": "Network Firewall",
                         "id": "network-firewall",
-                        "displayName": "network-firewall"
+                        "displayName": "Network Firewall"
                     },
                     {
                         "name": "network-load-balancer-api",
                         "description": "Network Load Balancer",
                         "id": "network-load-balancer-api",
-                        "displayName": "network-load-balancer-api"
+                        "displayName": "Network Load Balancer"
                     },
                     {
                         "name": "network-path-analyzer",
                         "description": "Network Path Analyzer",
                         "id": "network-path-analyzer",
-                        "displayName": "network-path-analyzer"
+                        "displayName": "Network Path Analyzer"
                     },
                     {
                         "name": "nosql",
                         "description": "NoSQL",
                         "id": "nosql",
-                        "displayName": "nosql"
+                        "displayName": "NoSQL"
                     },
                     {
                         "name": "notifications",
                         "description": "Notifications",
                         "id": "notifications",
-                        "displayName": "notifications"
+                        "displayName": "Notifications"
                     },
                     {
                         "name": "object-storage",
                         "description": "Object Storage",
                         "id": "object-storage",
-                        "displayName": "object-storage"
+                        "displayName": "Object Storage"
                     },
                     {
                         "name": "ocm-migration",
                         "description": "Oracle Cloud Migration",
                         "id": "ocm-migration",
-                        "displayName": "ocm-migration"
+                        "displayName": "Oracle Cloud Migration"
                     },
                     {
                         "name": "ocvp",
                         "description": "VMware Solution",
                         "id": "ocvp",
-                        "displayName": "ocvp"
+                        "displayName": "VMware Solution"
                     },
                     {
                         "name": "open-search",
                         "description": "OpenSearch",
                         "id": "open-search",
-                        "displayName": "open-search"
+                        "displayName": "OpenSearch"
                     },
                     {
                         "name": "organizations",
                         "description": "Organizations",
                         "id": "organizations",
-                        "displayName": "organizations"
+                        "displayName": "Organizations"
                     },
                     {
                         "name": "osd",
-                        "description": "Oracle Sharded Database",
+                        "description": "Globally Distributed Database",
                         "id": "osd",
-                        "displayName": "osd"
+                        "displayName": "Globally Distributed Database"
                     },
                     {
                         "name": "osmh",
                         "description": "OS Management Hub",
                         "id": "osmh",
-                        "displayName": "osmh"
+                        "displayName": "OS Management Hub"
                     },
                     {
                         "name": "postgresql",
                         "description": "PostgreSQL",
                         "id": "postgresql",
-                        "displayName": "postgresql"
+                        "displayName": "PostgreSQL"
                     },
                     {
                         "name": "queue",
                         "description": "Queue",
                         "id": "queue",
-                        "displayName": "queue"
+                        "displayName": "Queue"
                     },
                     {
                         "name": "redis",
                         "description": "Redis",
                         "id": "redis",
-                        "displayName": "redis"
+                        "displayName": "Redis"
                     },
                     {
                         "name": "regions",
                         "description": "Regions",
                         "id": "regions",
-                        "displayName": "regions"
+                        "displayName": "Regions"
                     },
                     {
                         "name": "resource-manager",
                         "description": "Resource Manager",
                         "id": "resource-manager",
-                        "displayName": "resource-manager"
+                        "displayName": "Resource Manager"
                     },
                     {
                         "name": "secure-desktops",
                         "description": "Secure Desktops",
                         "id": "secure-desktops",
-                        "displayName": "secure-desktops"
+                        "displayName": "Secure Desktops"
                     },
                     {
                         "name": "service-connector-hub",
                         "description": "Service Connector Hub",
                         "id": "service-connector-hub",
-                        "displayName": "service-connector-hub"
+                        "displayName": "Service Connector Hub"
                     },
                     {
                         "name": "service-mesh",
                         "description": "Service Mesh",
                         "id": "service-mesh",
-                        "displayName": "service-mesh"
+                        "displayName": "Service Mesh"
+                    },
+                    {
+                        "name": "stack-monitoring",
+                        "description": "Stack Monitoring",
+                        "id": "stack-monitoring",
+                        "displayName": "Stack Monitoring"
                     },
                     {
                         "name": "streaming",
                         "description": "Streaming",
                         "id": "streaming",
-                        "displayName": "streaming"
+                        "displayName": "Streaming"
                     },
                     {
                         "name": "subscription-pricing",
                         "description": "Subscription Pricing",
                         "id": "subscription-pricing",
-                        "displayName": "subscription-pricing"
+                        "displayName": "Subscription Pricing"
                     },
                     {
                         "name": "vcn",
                         "description": "Virtual Cloud Network",
                         "id": "vcn",
-                        "displayName": "vcn"
+                        "displayName": "Virtual Cloud Network"
                     },
                     {
                         "name": "vcnip",
                         "description": "IP Management",
                         "id": "vcnip",
-                        "displayName": "vcnip"
+                        "displayName": "IP Management"
                     },
                     {
                         "name": "visualbuilder",
                         "description": "Visual Builder",
                         "id": "visualbuilder",
-                        "displayName": "visualbuilder"
+                        "displayName": "Visual Builder"
                     },
                     {
                         "name": "vpn",
                         "description": "VPN",
                         "id": "vpn",
-                        "displayName": "vpn"
+                        "displayName": "VPN"
                     },
                     {
                         "name": "vulnerability-scanning",
                         "description": "Vulnerability Scanning",
                         "id": "vulnerability-scanning",
-                        "displayName": "vulnerability-scanning"
+                        "displayName": "Vulnerability Scanning"
                     },
                     {
                         "name": "waa",
                         "description": "Web Application Acceleration",
                         "id": "waa",
-                        "displayName": "waa"
+                        "displayName": "Web Application Acceleration"
                     },
                     {
                         "name": "waas",
                         "description": "WaaS",
                         "id": "waas",
-                        "displayName": "waas"
+                        "displayName": "WaaS"
                     },
                     {
                         "name": "waf",
                         "description": "Web Application Firewall",
                         "id": "waf",
-                        "displayName": "waf"
+                        "displayName": "Web Application Firewall"
                     }
                 ],
                 "podShapes": [
@@ -6165,6 +7278,11 @@ export const defaultCache: OcdCache = {
                         "id": "v1.27.2",
                         "displayName": "v1.27.2",
                         "version": "v1.27.2"
+                    },
+                    {
+                        "id": "v1.28.2",
+                        "displayName": "v1.28.2",
+                        "version": "v1.28.2"
                     }
                 ],
                 "clusterPodNetworkOptions": [
@@ -6205,6 +7323,11 @@ export const defaultCache: OcdCache = {
                             "id": "v1.27.2",
                             "displayName": "v1.27.2",
                             "version": "v1.27.2"
+                        },
+                        {
+                            "id": "v1.28.2",
+                            "displayName": "v1.28.2",
+                            "version": "v1.28.2"
                         }
                     ],
                     "shapes": [
@@ -6321,26 +7444,6 @@ export const defaultCache: OcdCache = {
                             "displayName": "VM.Standard.x86.Generic"
                         },
                         {
-                            "id": "VM.Standard1.1",
-                            "displayName": "VM.Standard1.1"
-                        },
-                        {
-                            "id": "VM.Standard1.16",
-                            "displayName": "VM.Standard1.16"
-                        },
-                        {
-                            "id": "VM.Standard1.2",
-                            "displayName": "VM.Standard1.2"
-                        },
-                        {
-                            "id": "VM.Standard1.4",
-                            "displayName": "VM.Standard1.4"
-                        },
-                        {
-                            "id": "VM.Standard1.8",
-                            "displayName": "VM.Standard1.8"
-                        },
-                        {
                             "id": "VM.Standard2.1",
                             "displayName": "VM.Standard2.1"
                         },
@@ -6371,64 +7474,120 @@ export const defaultCache: OcdCache = {
                     ],
                     "images": [
                         {
+                            "id": "Oracle-Linux-8.8-aarch64-2023.12.13-0-OKE-1.28.2-668",
+                            "displayName": "Oracle-Linux-8.8-aarch64-2023.12.13-0-OKE-1.28.2-668"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-aarch64-2023.12.13-0-OKE-1.27.2-668",
+                            "displayName": "Oracle-Linux-8.8-aarch64-2023.12.13-0-OKE-1.27.2-668"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-aarch64-2023.12.13-0-OKE-1.26.7-668",
+                            "displayName": "Oracle-Linux-8.8-aarch64-2023.12.13-0-OKE-1.26.7-668"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-aarch64-2023.12.13-0-OKE-1.26.2-668",
+                            "displayName": "Oracle-Linux-8.8-aarch64-2023.12.13-0-OKE-1.26.2-668"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-aarch64-2023.12.13-0-OKE-1.25.4-668",
+                            "displayName": "Oracle-Linux-8.8-aarch64-2023.12.13-0-OKE-1.25.4-668"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-aarch64-2023.12.13-0-OKE-1.25.12-668",
+                            "displayName": "Oracle-Linux-8.8-aarch64-2023.12.13-0-OKE-1.25.12-668"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.28.2-653",
+                            "displayName": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.28.2-653"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.27.2-653",
+                            "displayName": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.27.2-653"
+                        },
+                        {
                             "id": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.27.2-648",
                             "displayName": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.27.2-648"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.26.7-653",
+                            "displayName": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.26.7-653"
                         },
                         {
                             "id": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.26.7-648",
                             "displayName": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.26.7-648"
                         },
                         {
+                            "id": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.26.2-653",
+                            "displayName": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.26.2-653"
+                        },
+                        {
                             "id": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.26.2-648",
                             "displayName": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.26.2-648"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.25.4-653",
+                            "displayName": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.25.4-653"
                         },
                         {
                             "id": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.25.4-648",
                             "displayName": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.25.4-648"
                         },
                         {
+                            "id": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.25.12-653",
+                            "displayName": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.25.12-653"
+                        },
+                        {
                             "id": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.25.12-648",
                             "displayName": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.25.12-648"
                         },
                         {
-                            "id": "Oracle-Linux-8.8-aarch64-2023.08.31-0-OKE-1.27.2-642",
-                            "displayName": "Oracle-Linux-8.8-aarch64-2023.08.31-0-OKE-1.27.2-642"
+                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.12.13-0-OKE-1.28.2-668",
+                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.12.13-0-OKE-1.28.2-668"
                         },
                         {
-                            "id": "Oracle-Linux-8.8-aarch64-2023.08.31-0-OKE-1.26.7-642",
-                            "displayName": "Oracle-Linux-8.8-aarch64-2023.08.31-0-OKE-1.26.7-642"
+                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.12.13-0-OKE-1.27.2-668",
+                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.12.13-0-OKE-1.27.2-668"
                         },
                         {
-                            "id": "Oracle-Linux-8.8-aarch64-2023.08.31-0-OKE-1.26.2-645",
-                            "displayName": "Oracle-Linux-8.8-aarch64-2023.08.31-0-OKE-1.26.2-645"
+                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.12.13-0-OKE-1.26.7-668",
+                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.12.13-0-OKE-1.26.7-668"
                         },
                         {
-                            "id": "Oracle-Linux-8.8-aarch64-2023.08.31-0-OKE-1.25.4-645",
-                            "displayName": "Oracle-Linux-8.8-aarch64-2023.08.31-0-OKE-1.25.4-645"
+                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.12.13-0-OKE-1.26.2-668",
+                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.12.13-0-OKE-1.26.2-668"
                         },
                         {
-                            "id": "Oracle-Linux-8.8-aarch64-2023.08.31-0-OKE-1.25.12-642",
-                            "displayName": "Oracle-Linux-8.8-aarch64-2023.08.31-0-OKE-1.25.12-642"
+                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.12.13-0-OKE-1.25.4-668",
+                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.12.13-0-OKE-1.25.4-668"
                         },
                         {
-                            "id": "Oracle-Linux-8.8-aarch64-2023.07.31-1-OKE-1.27.2-633",
-                            "displayName": "Oracle-Linux-8.8-aarch64-2023.07.31-1-OKE-1.27.2-633"
+                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.12.13-0-OKE-1.25.12-668",
+                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.12.13-0-OKE-1.25.12-668"
                         },
                         {
-                            "id": "Oracle-Linux-8.8-aarch64-2023.07.31-1-OKE-1.26.7-633",
-                            "displayName": "Oracle-Linux-8.8-aarch64-2023.07.31-1-OKE-1.26.7-633"
+                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.09.26-0-OKE-1.28.2-653",
+                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.09.26-0-OKE-1.28.2-653"
                         },
                         {
-                            "id": "Oracle-Linux-8.8-aarch64-2023.07.31-1-OKE-1.26.2-645",
-                            "displayName": "Oracle-Linux-8.8-aarch64-2023.07.31-1-OKE-1.26.2-645"
+                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.09.26-0-OKE-1.27.2-653",
+                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.09.26-0-OKE-1.27.2-653"
                         },
                         {
-                            "id": "Oracle-Linux-8.8-aarch64-2023.07.31-1-OKE-1.25.4-645",
-                            "displayName": "Oracle-Linux-8.8-aarch64-2023.07.31-1-OKE-1.25.4-645"
+                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.09.26-0-OKE-1.26.7-653",
+                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.09.26-0-OKE-1.26.7-653"
                         },
                         {
-                            "id": "Oracle-Linux-8.8-aarch64-2023.07.31-1-OKE-1.25.12-633",
-                            "displayName": "Oracle-Linux-8.8-aarch64-2023.07.31-1-OKE-1.25.12-633"
+                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.09.26-0-OKE-1.26.2-653",
+                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.09.26-0-OKE-1.26.2-653"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.09.26-0-OKE-1.25.4-653",
+                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.09.26-0-OKE-1.25.4-653"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.09.26-0-OKE-1.25.12-653",
+                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.09.26-0-OKE-1.25.12-653"
                         },
                         {
                             "id": "Oracle-Linux-8.8-Gen2-GPU-2023.08.31-0-OKE-1.27.2-642",
@@ -6451,156 +7610,188 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.08.31-0-OKE-1.25.12-642"
                         },
                         {
-                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.07.31-1-OKE-1.27.2-633",
-                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.07.31-1-OKE-1.27.2-633"
+                            "id": "Oracle-Linux-8.8-2023.12.13-0-OKE-1.28.2-668",
+                            "displayName": "Oracle-Linux-8.8-2023.12.13-0-OKE-1.28.2-668"
                         },
                         {
-                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.07.31-1-OKE-1.26.7-633",
-                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.07.31-1-OKE-1.26.7-633"
+                            "id": "Oracle-Linux-8.8-2023.12.13-0-OKE-1.27.2-668",
+                            "displayName": "Oracle-Linux-8.8-2023.12.13-0-OKE-1.27.2-668"
                         },
                         {
-                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.07.31-1-OKE-1.26.2-645",
-                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.07.31-1-OKE-1.26.2-645"
+                            "id": "Oracle-Linux-8.8-2023.12.13-0-OKE-1.26.7-668",
+                            "displayName": "Oracle-Linux-8.8-2023.12.13-0-OKE-1.26.7-668"
                         },
                         {
-                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.07.31-1-OKE-1.25.4-645",
-                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.07.31-1-OKE-1.25.4-645"
+                            "id": "Oracle-Linux-8.8-2023.12.13-0-OKE-1.26.2-668",
+                            "displayName": "Oracle-Linux-8.8-2023.12.13-0-OKE-1.26.2-668"
                         },
                         {
-                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.07.31-1-OKE-1.25.12-633",
-                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.07.31-1-OKE-1.25.12-633"
+                            "id": "Oracle-Linux-8.8-2023.12.13-0-OKE-1.25.4-668",
+                            "displayName": "Oracle-Linux-8.8-2023.12.13-0-OKE-1.25.4-668"
                         },
                         {
-                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.06.30-0-OKE-1.27.2-632",
-                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.06.30-0-OKE-1.27.2-632"
+                            "id": "Oracle-Linux-8.8-2023.12.13-0-OKE-1.25.12-668",
+                            "displayName": "Oracle-Linux-8.8-2023.12.13-0-OKE-1.25.12-668"
                         },
                         {
-                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.06.30-0-OKE-1.26.2-632",
-                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.06.30-0-OKE-1.26.2-632"
+                            "id": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.28.2-653",
+                            "displayName": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.28.2-653"
                         },
                         {
-                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.06.30-0-OKE-1.25.4-632",
-                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.06.30-0-OKE-1.25.4-632"
+                            "id": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.27.2-653",
+                            "displayName": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.27.2-653"
                         },
                         {
                             "id": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.27.2-648",
                             "displayName": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.27.2-648"
                         },
                         {
+                            "id": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.26.7-653",
+                            "displayName": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.26.7-653"
+                        },
+                        {
                             "id": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.26.7-648",
                             "displayName": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.26.7-648"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.26.2-653",
+                            "displayName": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.26.2-653"
                         },
                         {
                             "id": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.26.2-648",
                             "displayName": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.26.2-648"
                         },
                         {
+                            "id": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.25.4-653",
+                            "displayName": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.25.4-653"
+                        },
+                        {
                             "id": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.25.4-648",
                             "displayName": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.25.4-648"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.25.12-653",
+                            "displayName": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.25.12-653"
                         },
                         {
                             "id": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.25.12-648",
                             "displayName": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.25.12-648"
                         },
                         {
-                            "id": "Oracle-Linux-8.8-2023.08.31-0-OKE-1.27.2-642",
-                            "displayName": "Oracle-Linux-8.8-2023.08.31-0-OKE-1.27.2-642"
+                            "id": "Oracle-Linux-7.9-aarch64-2023.12.08-0-OKE-1.28.2-668",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2023.12.08-0-OKE-1.28.2-668"
                         },
                         {
-                            "id": "Oracle-Linux-8.8-2023.08.31-0-OKE-1.26.7-642",
-                            "displayName": "Oracle-Linux-8.8-2023.08.31-0-OKE-1.26.7-642"
+                            "id": "Oracle-Linux-7.9-aarch64-2023.12.08-0-OKE-1.27.2-668",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2023.12.08-0-OKE-1.27.2-668"
                         },
                         {
-                            "id": "Oracle-Linux-8.8-2023.08.31-0-OKE-1.26.2-645",
-                            "displayName": "Oracle-Linux-8.8-2023.08.31-0-OKE-1.26.2-645"
+                            "id": "Oracle-Linux-7.9-aarch64-2023.12.08-0-OKE-1.26.7-668",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2023.12.08-0-OKE-1.26.7-668"
                         },
                         {
-                            "id": "Oracle-Linux-8.8-2023.08.31-0-OKE-1.25.4-645",
-                            "displayName": "Oracle-Linux-8.8-2023.08.31-0-OKE-1.25.4-645"
+                            "id": "Oracle-Linux-7.9-aarch64-2023.12.08-0-OKE-1.26.2-668",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2023.12.08-0-OKE-1.26.2-668"
                         },
                         {
-                            "id": "Oracle-Linux-8.8-2023.08.31-0-OKE-1.25.12-642",
-                            "displayName": "Oracle-Linux-8.8-2023.08.31-0-OKE-1.25.12-642"
+                            "id": "Oracle-Linux-7.9-aarch64-2023.12.08-0-OKE-1.25.4-668",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2023.12.08-0-OKE-1.25.4-668"
                         },
                         {
-                            "id": "Oracle-Linux-8.8-2023.07.31-1-OKE-1.27.2-633",
-                            "displayName": "Oracle-Linux-8.8-2023.07.31-1-OKE-1.27.2-633"
+                            "id": "Oracle-Linux-7.9-aarch64-2023.12.08-0-OKE-1.25.12-668",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2023.12.08-0-OKE-1.25.12-668"
                         },
                         {
-                            "id": "Oracle-Linux-8.8-2023.07.31-1-OKE-1.26.7-633",
-                            "displayName": "Oracle-Linux-8.8-2023.07.31-1-OKE-1.26.7-633"
+                            "id": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.28.2-653",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.28.2-653"
                         },
                         {
-                            "id": "Oracle-Linux-8.8-2023.07.31-1-OKE-1.26.2-645",
-                            "displayName": "Oracle-Linux-8.8-2023.07.31-1-OKE-1.26.2-645"
-                        },
-                        {
-                            "id": "Oracle-Linux-8.8-2023.07.31-1-OKE-1.25.4-645",
-                            "displayName": "Oracle-Linux-8.8-2023.07.31-1-OKE-1.25.4-645"
-                        },
-                        {
-                            "id": "Oracle-Linux-8.8-2023.07.31-1-OKE-1.25.12-633",
-                            "displayName": "Oracle-Linux-8.8-2023.07.31-1-OKE-1.25.12-633"
+                            "id": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.27.2-653",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.27.2-653"
                         },
                         {
                             "id": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.27.2-648",
                             "displayName": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.27.2-648"
                         },
                         {
+                            "id": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.26.7-653",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.26.7-653"
+                        },
+                        {
                             "id": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.26.7-648",
                             "displayName": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.26.7-648"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.26.2-653",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.26.2-653"
                         },
                         {
                             "id": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.26.2-648",
                             "displayName": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.26.2-648"
                         },
                         {
+                            "id": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.25.4-653",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.25.4-653"
+                        },
+                        {
                             "id": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.25.4-648",
                             "displayName": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.25.4-648"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.25.12-653",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.25.12-653"
                         },
                         {
                             "id": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.25.12-648",
                             "displayName": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.25.12-648"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-aarch64-2023.08.31-0-OKE-1.27.2-642",
-                            "displayName": "Oracle-Linux-7.9-aarch64-2023.08.31-0-OKE-1.27.2-642"
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.12.08-0-OKE-1.28.2-668",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.12.08-0-OKE-1.28.2-668"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-aarch64-2023.08.31-0-OKE-1.26.7-642",
-                            "displayName": "Oracle-Linux-7.9-aarch64-2023.08.31-0-OKE-1.26.7-642"
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.12.08-0-OKE-1.27.2-668",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.12.08-0-OKE-1.27.2-668"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-aarch64-2023.08.31-0-OKE-1.26.2-645",
-                            "displayName": "Oracle-Linux-7.9-aarch64-2023.08.31-0-OKE-1.26.2-645"
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.12.08-0-OKE-1.26.7-668",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.12.08-0-OKE-1.26.7-668"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-aarch64-2023.08.31-0-OKE-1.25.4-645",
-                            "displayName": "Oracle-Linux-7.9-aarch64-2023.08.31-0-OKE-1.25.4-645"
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.12.08-0-OKE-1.26.2-668",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.12.08-0-OKE-1.26.2-668"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-aarch64-2023.08.31-0-OKE-1.25.12-642",
-                            "displayName": "Oracle-Linux-7.9-aarch64-2023.08.31-0-OKE-1.25.12-642"
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.12.08-0-OKE-1.25.4-668",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.12.08-0-OKE-1.25.4-668"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-aarch64-2023.07.31-0-OKE-1.27.2-633",
-                            "displayName": "Oracle-Linux-7.9-aarch64-2023.07.31-0-OKE-1.27.2-633"
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.12.08-0-OKE-1.25.12-668",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.12.08-0-OKE-1.25.12-668"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-aarch64-2023.07.31-0-OKE-1.26.7-633",
-                            "displayName": "Oracle-Linux-7.9-aarch64-2023.07.31-0-OKE-1.26.7-633"
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.09.26-0-OKE-1.28.2-653",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.09.26-0-OKE-1.28.2-653"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-aarch64-2023.07.31-0-OKE-1.26.2-645",
-                            "displayName": "Oracle-Linux-7.9-aarch64-2023.07.31-0-OKE-1.26.2-645"
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.09.26-0-OKE-1.27.2-653",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.09.26-0-OKE-1.27.2-653"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-aarch64-2023.07.31-0-OKE-1.25.4-645",
-                            "displayName": "Oracle-Linux-7.9-aarch64-2023.07.31-0-OKE-1.25.4-645"
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.09.26-0-OKE-1.26.7-653",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.09.26-0-OKE-1.26.7-653"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-aarch64-2023.07.31-0-OKE-1.25.12-633",
-                            "displayName": "Oracle-Linux-7.9-aarch64-2023.07.31-0-OKE-1.25.12-633"
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.09.26-0-OKE-1.26.2-653",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.09.26-0-OKE-1.26.2-653"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.09.26-0-OKE-1.25.4-653",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.09.26-0-OKE-1.25.4-653"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.09.26-0-OKE-1.25.12-653",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.09.26-0-OKE-1.25.12-653"
                         },
                         {
                             "id": "Oracle-Linux-7.9-Gen2-GPU-2023.08.31-0-OKE-1.27.2-642",
@@ -6623,96 +7814,76 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.08.31-0-OKE-1.25.12-642"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.07.31-0-OKE-1.27.2-633",
-                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.07.31-0-OKE-1.27.2-633"
+                            "id": "Oracle-Linux-7.9-2023.12.08-0-OKE-1.28.2-668",
+                            "displayName": "Oracle-Linux-7.9-2023.12.08-0-OKE-1.28.2-668"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.07.31-0-OKE-1.26.7-633",
-                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.07.31-0-OKE-1.26.7-633"
+                            "id": "Oracle-Linux-7.9-2023.12.08-0-OKE-1.27.2-668",
+                            "displayName": "Oracle-Linux-7.9-2023.12.08-0-OKE-1.27.2-668"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.07.31-0-OKE-1.26.2-645",
-                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.07.31-0-OKE-1.26.2-645"
+                            "id": "Oracle-Linux-7.9-2023.12.08-0-OKE-1.26.7-668",
+                            "displayName": "Oracle-Linux-7.9-2023.12.08-0-OKE-1.26.7-668"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.07.31-0-OKE-1.25.4-645",
-                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.07.31-0-OKE-1.25.4-645"
+                            "id": "Oracle-Linux-7.9-2023.12.08-0-OKE-1.26.2-668",
+                            "displayName": "Oracle-Linux-7.9-2023.12.08-0-OKE-1.26.2-668"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.07.31-0-OKE-1.25.12-633",
-                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.07.31-0-OKE-1.25.12-633"
+                            "id": "Oracle-Linux-7.9-2023.12.08-0-OKE-1.25.4-668",
+                            "displayName": "Oracle-Linux-7.9-2023.12.08-0-OKE-1.25.4-668"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.06.30-0-OKE-1.27.2-632",
-                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.06.30-0-OKE-1.27.2-632"
+                            "id": "Oracle-Linux-7.9-2023.12.08-0-OKE-1.25.12-668",
+                            "displayName": "Oracle-Linux-7.9-2023.12.08-0-OKE-1.25.12-668"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.06.30-0-OKE-1.26.2-632",
-                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.06.30-0-OKE-1.26.2-632"
+                            "id": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.28.2-653",
+                            "displayName": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.28.2-653"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.06.30-0-OKE-1.25.4-632",
-                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.06.30-0-OKE-1.25.4-632"
+                            "id": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.27.2-653",
+                            "displayName": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.27.2-653"
                         },
                         {
                             "id": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.27.2-648",
                             "displayName": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.27.2-648"
                         },
                         {
+                            "id": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.26.7-653",
+                            "displayName": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.26.7-653"
+                        },
+                        {
                             "id": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.26.7-648",
                             "displayName": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.26.7-648"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.26.2-653",
+                            "displayName": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.26.2-653"
                         },
                         {
                             "id": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.26.2-648",
                             "displayName": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.26.2-648"
                         },
                         {
+                            "id": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.25.4-653",
+                            "displayName": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.25.4-653"
+                        },
+                        {
                             "id": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.25.4-648",
                             "displayName": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.25.4-648"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.25.12-653",
+                            "displayName": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.25.12-653"
                         },
                         {
                             "id": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.25.12-648",
                             "displayName": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.25.12-648"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-2023.08.31-0-OKE-1.27.2-642",
-                            "displayName": "Oracle-Linux-7.9-2023.08.31-0-OKE-1.27.2-642"
-                        },
-                        {
-                            "id": "Oracle-Linux-7.9-2023.08.31-0-OKE-1.26.7-642",
-                            "displayName": "Oracle-Linux-7.9-2023.08.31-0-OKE-1.26.7-642"
-                        },
-                        {
-                            "id": "Oracle-Linux-7.9-2023.08.31-0-OKE-1.26.2-645",
-                            "displayName": "Oracle-Linux-7.9-2023.08.31-0-OKE-1.26.2-645"
-                        },
-                        {
-                            "id": "Oracle-Linux-7.9-2023.08.31-0-OKE-1.25.4-645",
-                            "displayName": "Oracle-Linux-7.9-2023.08.31-0-OKE-1.25.4-645"
-                        },
-                        {
-                            "id": "Oracle-Linux-7.9-2023.08.31-0-OKE-1.25.12-642",
-                            "displayName": "Oracle-Linux-7.9-2023.08.31-0-OKE-1.25.12-642"
-                        },
-                        {
-                            "id": "Oracle-Linux-7.9-2023.07.31-1-OKE-1.27.2-633",
-                            "displayName": "Oracle-Linux-7.9-2023.07.31-1-OKE-1.27.2-633"
-                        },
-                        {
-                            "id": "Oracle-Linux-7.9-2023.07.31-1-OKE-1.26.7-633",
-                            "displayName": "Oracle-Linux-7.9-2023.07.31-1-OKE-1.26.7-633"
-                        },
-                        {
-                            "id": "Oracle-Linux-7.9-2023.07.31-1-OKE-1.26.2-645",
-                            "displayName": "Oracle-Linux-7.9-2023.07.31-1-OKE-1.26.2-645"
-                        },
-                        {
-                            "id": "Oracle-Linux-7.9-2023.07.31-1-OKE-1.25.4-645",
-                            "displayName": "Oracle-Linux-7.9-2023.07.31-1-OKE-1.25.4-645"
-                        },
-                        {
-                            "id": "Oracle-Linux-7.9-2023.07.31-1-OKE-1.25.12-633",
-                            "displayName": "Oracle-Linux-7.9-2023.07.31-1-OKE-1.25.12-633"
+                            "id": "Oracle-Linux-8.8-aarch64-2023.12.13-0",
+                            "displayName": "Oracle-Linux-8.8-aarch64-2023.12.13-0"
                         },
                         {
                             "id": "Oracle-Linux-8.8-aarch64-2023.10.24-0",
@@ -6723,8 +7894,8 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-8.8-aarch64-2023.09.26-0"
                         },
                         {
-                            "id": "Oracle-Linux-8.8-aarch64-2023.08.31-0",
-                            "displayName": "Oracle-Linux-8.8-aarch64-2023.08.31-0"
+                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.12.13-0",
+                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.12.13-0"
                         },
                         {
                             "id": "Oracle-Linux-8.8-Gen2-GPU-2023.09.26-0",
@@ -6735,8 +7906,8 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.08.31-0"
                         },
                         {
-                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.08.16-0",
-                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.08.16-0"
+                            "id": "Oracle-Linux-8.8-2023.12.13-0",
+                            "displayName": "Oracle-Linux-8.8-2023.12.13-0"
                         },
                         {
                             "id": "Oracle-Linux-8.8-2023.09.26-0",
@@ -6747,6 +7918,10 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-8.8-2023.08.31-0"
                         },
                         {
+                            "id": "Oracle-Linux-7.9-aarch64-2023.12.08-0",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2023.12.08-0"
+                        },
+                        {
                             "id": "Oracle-Linux-7.9-aarch64-2023.10.24-0",
                             "displayName": "Oracle-Linux-7.9-aarch64-2023.10.24-0"
                         },
@@ -6755,8 +7930,8 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-7.9-aarch64-2023.09.26-0"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-aarch64-2023.08.31-0",
-                            "displayName": "Oracle-Linux-7.9-aarch64-2023.08.31-0"
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.12.08-0",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.12.08-0"
                         },
                         {
                             "id": "Oracle-Linux-7.9-Gen2-GPU-2023.09.26-0",
@@ -6767,8 +7942,8 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.08.31-0"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.07.31-0",
-                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.07.31-0"
+                            "id": "Oracle-Linux-7.9-2023.12.08-0",
+                            "displayName": "Oracle-Linux-7.9-2023.12.08-0"
                         },
                         {
                             "id": "Oracle-Linux-7.9-2023.09.26-0",

@@ -18,7 +18,17 @@ export namespace OciInstanceConfigs {
                     title: 'Hostname can only be letters and numbers, starting with a letter. 64 characters max.'
                 },
                 configs: []
-             }
+            },
+            {
+                id: 'shape',
+                properties: {},
+                configs: [],
+                lookupGroups: [
+                    {displayName: 'Flexible Virtual Machine', simpleFilter: (r) => r.isFlexible},
+                    {displayName: 'Virtual Machine', simpleFilter: (r) => !r.isFlexible && r.id.startsWith('VM.')},
+                    {displayName: 'Bare Metal', simpleFilter: (r) => !r.isFlexible && r.id.startsWith('BM.')}
+                ]
+            }
         ]
     }
 }

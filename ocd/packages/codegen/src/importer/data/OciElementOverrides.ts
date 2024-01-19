@@ -7,7 +7,16 @@ import { OcdElementOverrides } from "../../types/OcdImporterData";
 
 export const elementOverrides: OcdElementOverrides = {
     "lookups": {
-        "common": []
+        "common": [],
+        "oci_core_instance": [
+            "shape"
+        ],
+    },
+    "cacheLookups": {
+        "common": {},
+        "oci_core_instance": {
+            "shape": "shapes"
+        },
     },
     "staticLookups": {
         "common": [
