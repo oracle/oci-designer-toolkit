@@ -3256,22 +3256,6 @@
         "conditional": false,
         "condition": {}
       },
-      "is_cross_numa_node": {
-        "provider": "oci",
-        "key": "isCrossNumaNode",
-        "name": "is_cross_numa_node",
-        "type": "bool",
-        "subtype": "",
-        "required": false,
-        "label": "Is Cross Numa Node",
-        "id": "is_cross_numa_node",
-        "staticLookup": false,
-        "cacheLookup": false,
-        "lookup": false,
-        "lookupResource": "",
-        "conditional": false,
-        "condition": {}
-      },
       "is_pv_encryption_in_transit_enabled": {
         "provider": "oci",
         "key": "isPvEncryptionInTransitEnabled",

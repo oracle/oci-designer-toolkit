@@ -49,6 +49,8 @@ export class OcdCacheData {
     loadCache(): Promise<any> {
         return OcdCacheFacade.loadCache().then((results) => {
             this.cache = results
+            this.cache.dropdownData.shipped = defaultCache.dropdownData.shipped
+            this.saveCache()
         }).catch((response) => {
             this.cache = this.newCache()
             this.saveCache()
