@@ -48,6 +48,7 @@ export const ignoreElements: OcdIgnoreElements = {
         "instance_options",
         "instance_source_image_filter_details",
         "ipxe_script",
+        "is_cross_numa_node",
         "launch_mode",
         "launch_options",
         "local_disk_description",
