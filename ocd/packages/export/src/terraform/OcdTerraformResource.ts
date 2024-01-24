@@ -86,23 +86,6 @@ export class OcdTerraformResource {
         // const display = OcdUtils.isCondition(resource[element], condition.operator, condition.value)
         // return display
     }
-
-    // Cache Look Ups
-    generateCacheAttribute = (name: string, value: string | undefined, required: boolean, level=0, lookupResource=''): string => {
-        const simpleCacheAttributes = ['shapes']
-        const lookupCacheAttributes = ['images']
-        if (simpleCacheAttributes.includes(lookupResource)) return this.generateTextAttribute(name, value, required, level)
-        else if (lookupCacheAttributes.includes(lookupResource)) return this.generateCacheLookupAttribute(name, lookupResource.slice(0, -1), required, level)
-        return ''
-    }
-
-    generateCacheLookupAttribute = (name: string, value: string | undefined, required: boolean, level=0): string => {
-        if (this.isVariable(value)) return `${this.indentation[level]}${name} = ${this.formatVariable(value)}`
-        else if (required) return `${this.indentation[level]}${name} = local.${this.terraformResourceName}_${value as string}_id`
-        else if (value && value !== '') return `${this.indentation[level]}${name} = local.${this.terraformResourceName}_${value as string}_id`
-        else return `${this.indentation[level]}# ${name} = "${value}"`
-    }
-    
 }
 
 export default OcdTerraformResource
