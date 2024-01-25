@@ -18,11 +18,12 @@ export interface OcdValidationResult {
 
 export interface OcdValidatorResource extends Record<string, any> {}
 
-interface ResourcePropertyValidationCondition {
-    element?: string,
-    operator?: 'eq' | 'lt' | 'gt' | 'ne' | 'le' | 'ge' | 'in'
-    value?: boolean | string | number | Function
-}
+interface ResourcePropertyValidationCondition extends OcdUtils.ResourcePropertyCondition {}
+// interface ResourcePropertyValidationCondition {
+//     element?: string,
+//     operator?: 'eq' | 'lt' | 'gt' | 'ne' | 'le' | 'ge' | 'in'
+//     value?: boolean | string | number | Function
+// }
 
 export namespace OcdResourceValidator {
     export function isPropertyValidationConditionTrue(conditional: boolean, condition: ResourcePropertyValidationCondition, resource: Record<string, any>): boolean {

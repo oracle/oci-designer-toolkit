@@ -33,6 +33,7 @@ export const ignoreElements: OcdIgnoreElements = {
     ],
     "oci_core_instance": [
         "assign_private_dns_record",
+        "async",
         "availability_config",
         "baseline_ocpu_utilization",
         "boot_volume_id",

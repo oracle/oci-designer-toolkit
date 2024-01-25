@@ -9,7 +9,7 @@ export namespace OcdUtils {
     export interface ResourcePropertyCondition {
         logic_operator?: 'and' | 'or'
         element?: string
-        operator?: 'eq' | 'lt' | 'gt' | 'ne' | 'le' | 'ge' | 'in'
+        operator?: 'eq' | 'lt' | 'gt' | 'ne' | 'le' | 'ge' | 'in' | 'ew' | 'sw'
         value?: boolean | string | number | Function
     }
     export interface OcdResource extends Record<string, any> {}
@@ -57,6 +57,8 @@ export namespace OcdUtils {
         else if (operator === 'le') isTrue = (leftHandSide !== undefined && rightHandSide !== undefined && leftHandSide <= rightHandSide)
         else if (operator === 'ge') isTrue = (leftHandSide !== undefined && rightHandSide !== undefined && leftHandSide >= rightHandSide)
         else if (operator === 'in') isTrue = (leftHandSide !== undefined && Array.isArray(rightHandSide) && rightHandSide.includes(leftHandSide))
+        else if (operator === 'ew') isTrue = (leftHandSide !== undefined && rightHandSide !== undefined && leftHandSide.toLocaleString().endsWith(rightHandSide.toLocaleString()))
+        else if (operator === 'sw') isTrue = (leftHandSide !== undefined && rightHandSide !== undefined && leftHandSide.toLocaleString().startsWith(rightHandSide.toLocaleString()))
         else isTrue = false
         return isTrue
     }
