@@ -3144,22 +3144,6 @@
     "type": "object",
     "subtype": "",
     "attributes": {
-      "async": {
-        "provider": "oci",
-        "key": "async",
-        "name": "async",
-        "type": "bool",
-        "subtype": "",
-        "required": false,
-        "label": "Async",
-        "id": "async",
-        "staticLookup": false,
-        "cacheLookup": false,
-        "lookup": false,
-        "lookupResource": "",
-        "conditional": false,
-        "condition": {}
-      },
       "availability_domain": {
         "provider": "oci",
         "key": "availabilityDomain",
@@ -3536,7 +3520,7 @@
         "conditional": true,
         "condition": {
           "element": "shape",
-          "operator": "eq",
+          "operator": "ew",
           "value": ".Flex"
         },
         "attributes": {

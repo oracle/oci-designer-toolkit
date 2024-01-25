@@ -43,6 +43,11 @@ export namespace OciInstance {
         if (resource.createVnicDetails) resource.createVnicDetails.hostnameLabel = resource.displayName?.toLowerCase().replace(' ', '')
         // Default Shape 
         resource.shape = 'VM.Standard.A1.Flex'
+        // Default Memory & OCPU
+        if (resource.shapeConfig) {
+            resource.shapeConfig.memoryInGbs = 6
+            resource.shapeConfig.ocpus = 1
+        }
         // Default Availability Domain
         resource.availabilityDomain = '1'
         return resource
