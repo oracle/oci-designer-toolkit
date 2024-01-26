@@ -55,5 +55,46 @@ export const elementOverrides: OcdElementOverrides = {
         "oci_core_instance": {
             "assign_public_ip": "bool"
         },
+    },
+    "maps": {
+        "common": {},
+        "oci_core_instance": {
+            "metadata": {
+                "attributes": {
+                    "ssh_authorized_keys": {
+                        "provider": "oci",
+                        "key": "sshAuthorizedKeys",
+                        "name": "ssh_authorized_keys",
+                        "type": "string",
+                        "subtype": "",
+                        "required": false,
+                        "label": "Authorised Keys",
+                        "id": "metadata.ssh_authorized_keys",
+                        "staticLookup": false,
+                        "cacheLookup": false,
+                        "lookup": false,
+                        "lookupResource": "",
+                        "conditional": false,
+                        "condition": {}
+                    },
+                    "user_data": {
+                        "provider": "oci",
+                        "key": "userData",
+                        "name": "user_data",
+                        "type": "string",
+                        "subtype": "",
+                        "required": false,
+                        "label": "Cloud Init",
+                        "id": "metadata.user_data",
+                        "staticLookup": false,
+                        "cacheLookup": false,
+                        "lookup": false,
+                        "lookupResource": "",
+                        "conditional": false,
+                        "condition": {}
+                    }
+                }
+            }
+        },
     }
 }
