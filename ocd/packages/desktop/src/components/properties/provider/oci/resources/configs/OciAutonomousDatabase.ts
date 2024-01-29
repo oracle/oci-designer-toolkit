@@ -7,5 +7,20 @@ import { ResourceElementConfig } from "../../../../OcdPropertyTypes"
 import { OciCommonConfigs } from "../../OciCommonConfigs"
 
 export namespace OciAutonomousDatabaseConfigs {
-    export function configs(): ResourceElementConfig[] {return [...OciCommonConfigs.configs()]}
+    export function configs(): ResourceElementConfig[] {
+        return [
+            ...OciCommonConfigs.configs(),
+            {
+                id: 'db_workload',
+                properties: {},
+                configs: [],
+                options: [
+                    {id: 'OLTP', displayName: 'Transaction Processing database'},
+                    {id: 'DW', displayName: 'Data Warehouse database'},
+                    {id: 'AJD', displayName: 'JSON Database'},
+                    {id: 'APEX', displayName: 'Oracle APEX Application'}
+                ]
+            },
+        ]
+    }
 }
