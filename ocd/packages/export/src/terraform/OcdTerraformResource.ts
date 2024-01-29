@@ -48,6 +48,14 @@ export class OcdTerraformResource {
         else if (value && value.trim() !== '') return `${this.indentation[level]}${name} = "${value}"`
         else return `${this.indentation[level]}# ${name} = "${value}"`
     }
+    generateBase64EncodedTextAttribute = (name: string, value: string | undefined, required: boolean, level=0) => {
+        console.debug('OcdTerraformResource: generateTextAttribute:', name, 'Level:', level, `(${this.indentation[level]})`)
+        const data = value ? value.replaceAll('\n', '\\n').replaceAll('"', '\\"') : ''
+        if (this.isVariable(value)) return `${this.indentation[level]}${name} = ${this.formatVariable(value)}`
+        else if (required) return `${this.indentation[level]}${name} = base64encode("${data}")`
+        else if (value && value.trim() !== '') return `${this.indentation[level]}${name} = base64encode("${data}")`
+        else return `${this.indentation[level]}# ${name} = base64encode("${data}")`
+    }
     generateBooleanAttribute = (name: string, value: string | boolean | undefined, required: boolean, level=0) => {
         if (typeof value === 'string' && this.isVariable(value)) return `${this.indentation[level]}${name} = ${this.formatVariable(value)}`
         else if (required) return `${this.indentation[level]}${name} = ${value}`

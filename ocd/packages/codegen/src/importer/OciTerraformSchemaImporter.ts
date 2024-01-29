@@ -17,13 +17,13 @@ import { OcdUtils } from '@ocd/core'
 export class OciTerraformSchemaImporter extends OcdSchemaImporter {
 
     convert(source_schema: TerraformSchema) {
-        console.info('Resource Map', JSON.stringify(resourceMap, null, 4))
+        console.debug('Resource Map', JSON.stringify(resourceMap, null, 4))
         const resourceKeys = Object.keys(resourceMap)
-        console.info('Resource Keys', resourceKeys)
+        console.debug('Resource Keys', resourceKeys)
         // const self = this
         // console.info('Processing', Object.entries(source_schema.provider_schemas["registry.terraform.io/hashicorp/oci"].resource_schemas).filter(([k, v]) => Object.keys(self.resource_map).indexOf(k) >= 0))
         Object.entries(source_schema.provider_schemas["registry.terraform.io/hashicorp/oci"].resource_schemas).filter(([k, v]) => resourceKeys.includes(k)).forEach(([key, value]) => {
-            console.info('OcdTerraformSchemaImporter: Processing Resource', key)
+            console.debug('OcdTerraformSchemaImporter: Processing Resource', key)
             this.ocd_schema[resourceMap[key]] = {
                 'tf_resource': key,
                 'type': 'object',
@@ -39,6 +39,7 @@ export class OciTerraformSchemaImporter extends OcdSchemaImporter {
         const ignore_block_types = ['timeouts']
         const ignore_attributes = ignoreElements[key] ? [...ignoreElements.common, ...ignoreElements[key]] : ignoreElements.common
         const type_overrides = elementOverrides.types[key] ? {...elementOverrides.types.common, ...elementOverrides.types[key]} : elementOverrides.types.common
+        const maps = {...elementOverrides.maps.common, ...elementOverrides.maps[key] !== undefined ? elementOverrides.maps[key] : {}}
         // Simple attributes
         // @ts-ignore
         let attributes = block.attributes ? Object.entries(block.attributes).filter(([k, v]) => !ignore_attributes.includes(k) && !v.deprecated).reduce((r, [k, v]) => {
@@ -63,6 +64,12 @@ export class OciTerraformSchemaImporter extends OcdSchemaImporter {
                 lookupResource: this.isCacheLookup(id, key) ? this.cacheLookupResource(id, key) : this.isReference(k) || this.isMultiReference(k) ? this.lookupResource(k) : '',
                 conditional: this.isConditional(key, k),
                 condition: this.isConditional(key, k) ? conditionalElements[key][k] : {}
+            }
+            if (r[k].type === 'map' && Object.hasOwn(maps, k)) {
+                // console.debug('OcdTerraformSchemaImporter: Found Map', key, k, JSON.stringify(maps, null, 4))
+                r[k].type = 'object'
+                r[k].subtype = 'map'
+                r[k].attributes = maps[k].attributes
             }
             return r
         }, {} as OcdSchemaEntry) : {}

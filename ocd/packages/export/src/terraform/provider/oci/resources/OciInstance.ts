@@ -22,6 +22,9 @@ locals {
 `
     return content
     }
+    // Overrides
+    // User Data (userData)
+    userData = (resource: Record<string, any>, level=0): string => {return this.isPropertyAssignConditionTrue(false, {}, resource) ? this.generateBase64EncodedTextAttribute("user_data", resource.userData, false, level) : ''}
 }
 
 export default OciInstance

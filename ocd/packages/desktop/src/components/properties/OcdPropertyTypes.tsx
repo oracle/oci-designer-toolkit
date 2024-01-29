@@ -202,6 +202,27 @@ export const OcdBooleanProperty = ({ ocdDocument, setOcdDocument, resource, conf
     )
 }
 
+export const OcdCodeProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute, rootResource }: ResourceProperty): JSX.Element => {
+    // @ts-ignore
+    const {activeFile, setActiveFile} = useContext(ActiveFileContext)
+    const properties = config && config.properties ? config.properties : {}
+    const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        resource[attribute.key] = e.target.value
+        setOcdDocument(OcdDocument.clone(ocdDocument))
+        if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
+    }
+    const onBlur = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        e.target.reportValidity()
+    }
+    const className = isPropertyDisplayConditionTrue(attribute.conditional, attribute.condition, resource, rootResource) ? `ocd-property-row ocd-simple-property-row` : `collapsed hidden`
+    return (
+        <div className={className}>
+            <div><label>{attribute.label}</label></div>
+            <div><textarea value={resource[attribute.key]} {...properties} onChange={onChange} onBlur={onBlur}></textarea></div>
+        </div>
+    )
+}
+
 export const OcdLookupProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute, rootResource }: ResourceProperty): JSX.Element => {
     console.debug('OcdPropertyTypes: OcdLookupProperty', config, attribute, resource)
     // @ts-ignore
