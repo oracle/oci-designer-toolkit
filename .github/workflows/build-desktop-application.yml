@@ -26,10 +26,6 @@ jobs:
           node-version: ${{ matrix.version }}
       - run: node --version
       - run: npm --version
-      # - run: npm run install
-      # - run: npm run compile
-      # - run: npm run generate
-      # - run: npm run build
       - run: npm run github-action-install
       - run: npm run github-action-compile-for-codegen
       - run: npm run github-action-generate
@@ -37,19 +33,17 @@ jobs:
       - run: npm run github-action-pack
       - run: npm run github-action-build-react
       - run: npm run github-action-build-electron
-      # - run: npm run desktop
-      # - run: npm run electron
       - run: ls ./ocd/dist
         if: always()
 
-      - name: Create Release
+      - name: Create Mac Release
         if: matrix.os == 'macos-latest'
-        id: create_release
+        id: create_release_mac
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v0.1.0.${{ github.ref_name }}
+          tag_name: v0.1.0.${{ github.ref_name }}.${{ matrix.os }}
           release_name: Release ${{ github.ref_name }} ${{ matrix.os }}
           draft: false
           prerelease: false
@@ -60,10 +54,21 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          upload_url: ${{ steps.create_release_mac.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
           asset_path: ./ocd/dist/mac/ocd-0.1.0.dmg
           asset_name: ocd-0.1.0.dmg
           asset_content_type: application/octet-stream
+      - name: Create Windows Release
+        if: matrix.os == 'windows-latest'
+        id: create_release_win
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v0.1.0.${{ github.ref_name }}.${{ matrix.os }}
+          release_name: Release ${{ github.ref_name }} ${{ matrix.os }}
+          draft: false
+          prerelease: false
       - name: Upload Windows Release Asset
         if: matrix.os == 'windows-latest'
         id: upload-win-release-asset 
@@ -71,7 +76,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          upload_url: ${{ steps.create_release_win.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
           asset_path: ./ocd/dist/win/ocd-0.1.0.exe
           asset_name: ocd-0.1.0.exe
           asset_content_type: application/x-msdownload
