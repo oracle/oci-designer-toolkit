@@ -1433,7 +1433,10 @@ summary {
 
 .ocd-selected-terraform-content > pre {
     max-height: 100%;
+    max-width: 100%;
     margin: 5px;
+    word-wrap: normal;
+    text-wrap: pretty;
 }
 
 

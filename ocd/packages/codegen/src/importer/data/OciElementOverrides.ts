@@ -23,6 +23,7 @@ export const elementOverrides: OcdElementOverrides = {
             "shape": "shapes",
             "source_details.source_id": "images"
         },
+        "oci_database_autonomous_database": {}
     },
     "staticLookups": {
         "common": [
@@ -48,12 +49,61 @@ export const elementOverrides: OcdElementOverrides = {
             "egress_security_rules.destination_type",
             "ingress_security_rules.protocol",
             "ingress_security_rules.source_type",
+        ],
+        "oci_database_autonomous_database": [
+            "compute_model",
+            "data_safe_status",
+            "database_edition",
+            "db_version",
+            "db_workload",
+            "license_model"
         ]
     },
     "types": {
         "common": {},
         "oci_core_instance": {
             "assign_public_ip": "bool"
+        },
+    },
+    "maps": {
+        "common": {},
+        "oci_core_instance": {
+            "metadata": {
+                "attributes": {
+                    "ssh_authorized_keys": {
+                        "provider": "oci",
+                        "key": "sshAuthorizedKeys",
+                        "name": "ssh_authorized_keys",
+                        "type": "string",
+                        "subtype": "",
+                        "required": false,
+                        "label": "Authorised Keys",
+                        "id": "metadata.ssh_authorized_keys",
+                        "staticLookup": false,
+                        "cacheLookup": false,
+                        "lookup": false,
+                        "lookupResource": "",
+                        "conditional": false,
+                        "condition": {}
+                    },
+                    "user_data": {
+                        "provider": "oci",
+                        "key": "userData",
+                        "name": "user_data",
+                        "type": "string",
+                        "subtype": "code",
+                        "required": false,
+                        "label": "Cloud Init",
+                        "id": "metadata.user_data",
+                        "staticLookup": false,
+                        "cacheLookup": false,
+                        "lookup": false,
+                        "lookupResource": "",
+                        "conditional": false,
+                        "condition": {}
+                    }
+                }
+            }
         },
     }
 }

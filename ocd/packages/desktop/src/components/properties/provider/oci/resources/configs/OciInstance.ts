@@ -20,6 +20,22 @@ export namespace OciInstanceConfigs {
                 configs: []
             },
             {
+                id: 'metadata.ssh_authorized_keys',
+                properties: {
+                    pattern: '^ssh-(ed25519|rsa|dss|ecdsa) AAAA(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{2}==|[A-Za-z0-9+\/]{3}=|[A-Za-z0-9+\/]{4})( [^@]+@[^@]+)?$',
+                    title: 'SSH Public key must be specified'
+                },
+                configs: []
+            },
+            {
+                id: 'metadata.user_data',
+                properties: {
+                    rows: 10,
+                    cols: 38
+                },
+                configs: []
+            },
+            {
                 id: 'shape',
                 properties: {},
                 configs: [],
