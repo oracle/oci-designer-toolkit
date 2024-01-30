@@ -53,14 +53,6 @@ jobs:
           release_name: Release ${{ github.ref_name }} ${{ matrix.os }}
           draft: false
           prerelease: false
-      - name: Get Release
-        if: always()
-        id: nightly_release
-        uses: joutvhu/get-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: v0.1.0.${{ github.ref_name }}
       - name: Upload Mac Release Asset
         if: matrix.os == 'macos-latest'
         id: upload-mac-release-asset 
@@ -68,7 +60,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.nightly_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
           asset_path: ./ocd/dist/mac/ocd-0.1.0.dmg
           asset_name: ocd-0.1.0.dmg
           asset_content_type: application/octet-stream
@@ -79,7 +71,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.nightly_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
           asset_path: ./ocd/dist/win/ocd-0.1.0.exe
           asset_name: ocd-0.1.0.exe
           asset_content_type: application/x-msdownload
