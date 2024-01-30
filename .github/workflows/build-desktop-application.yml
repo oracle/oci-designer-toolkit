@@ -9,7 +9,7 @@ env:
   CI: false
 
 jobs:
-  build:
+  release:
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -42,9 +42,6 @@ jobs:
       - run: ls ./ocd/dist
         if: always()
 
-  release:
-    runs-on: macos-latest
-    steps:  
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -56,6 +53,7 @@ jobs:
           draft: false
           prerelease: false
       - name: Upload Release Asset
+        if: matrix.os == 'ubuntu-latest'
         id: upload-release-asset 
         uses: actions/upload-release-asset@v1
         env:
