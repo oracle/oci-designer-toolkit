@@ -36,6 +36,14 @@ jobs:
       - run: ls ./ocd/dist
         if: always()
 
+      - name: Upload Mac Artifact
+        if: matrix.os == 'macos-latest'
+        id: upload-mac-release-artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mac-artifact
+          path: ./ocd/dist/mac/ocd*.*
+
       - name: Create Mac Release
         if: matrix.os == 'macos-latest'
         id: create_release_mac
@@ -58,6 +66,7 @@ jobs:
           asset_path: ./ocd/dist/mac/ocd-0.1.0.dmg
           asset_name: ocd-0.1.0.dmg
           asset_content_type: application/octet-stream
+
       - name: Create Windows Release
         if: matrix.os == 'windows-latest'
         id: create_release_win
