@@ -366,40 +366,6 @@ export class OciQuery {
         })
     }
 
-    listTenancyCompartments1(): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const query = async () => {
-                const listCompartmentsReq: identity.requests.ListCompartmentsRequest = {compartmentId: this.provider.getTenantId(), compartmentIdInSubtree: true, limit: 10000}
-                const compartmentResponseIterator = this.identityClient.listCompartmentsResponseIterator(listCompartmentsReq)
-                const getTenancyResponse = await this.getCompartments([this.provider.getTenantId()])
-                getTenancyResponse[0].compartmentId = ''
-                getTenancyResponse[0].root = true
-                let resources = getTenancyResponse
-                // console.debug('OciQuery: listTenancyCompartments: Async - ', getTenancyResponse)
-                // console.debug('OciQuery: listTenancyCompartments: Async - ', await compartmentResponseIterator.next())
-                let done = false
-                while (!done) {
-                    const response = await compartmentResponseIterator.next()
-                    done = response.done !== undefined ? response.done : true
-                    if (response.value) resources = [...resources, ...response.value.items]
-                }
-                // console.debug('OciQuery: listTenancyCompartments: Async - ', resources, '\nLength:', resources.length)
-                // resolve(resources)
-                return resources
-            }
-            query().then((results) => {
-                console.debug('OciQuery: listTenancyCompartments: All Settled')
-                // @ts-ignore
-                // resolve(results.values)
-                resolve(results)
-            })
-            // Promise.allSettled([query()]).then((results) => {
-            //     console.debug('OciQuery: listTenancyCompartments: All Settled')
-            //     resolve(results.values)
-            // })
-        })
-    }
-
     listTenancyCompartments(): Promise<any> {
         return new Promise((resolve, reject) => {
             const listCompartmentsReq: identity.requests.ListCompartmentsRequest = {compartmentId: this.provider.getTenantId(), compartmentIdInSubtree: true, limit: 10000}
@@ -411,24 +377,6 @@ export class OciQuery {
                 if (results[0].status === 'fulfilled' && results[1].status === 'fulfilled') {
                     results[0].value[0].compartmentId = ''
                     const resources = [...results[0].value, ...results[1].value].map((c) => {return {...c, root: c.compartmentId === ''}})
-                    resolve(resources)
-                } else {
-                    reject('All Compartments Query Failed')
-                }
-            })
-        })
-    }
-
-    listTenancyCompartmentsOrig(): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const listCompartmentsReq: identity.requests.ListCompartmentsRequest = {compartmentId: this.provider.getTenantId(), compartmentIdInSubtree: true, limit: 10000}
-            const compartmentQuery = this.identityClient.listCompartments(listCompartmentsReq)
-            const getTenancy = this.getCompartments([this.provider.getTenantId()])
-            Promise.allSettled([getTenancy, compartmentQuery]).then((results) => {
-                console.debug('OciQuery: listTenancyCompartments: All Settled')
-                if (results[0].status === 'fulfilled' && results[1].status === 'fulfilled') {
-                    results[0].value[0].compartmentId = ''
-                    const resources = [...results[0].value, ...results[1].value.items].map((c) => {return {...c, root: c.compartmentId === ''}})
                     resolve(resources)
                 } else {
                     reject('All Compartments Query Failed')
