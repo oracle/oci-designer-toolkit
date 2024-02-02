@@ -8,8 +8,9 @@
 // import * as identity from "oci-identity"
 import { OcdDesign, OciModelResources } from '@ocd/model'
 import { analytics, bastion, common, core, database, filestorage, identity, keymanagement, loadbalancer, mysql, networkloadbalancer, nosql, objectstorage, vault } from 'oci-sdk'
+import OciCommonQuery from './OciQueryCommon'
 
-export class OciQuery {
+export class OciQuery extends OciCommonQuery {
     profile
     provider
     identityClient: identity.IdentityClient
@@ -32,6 +33,7 @@ export class OciQuery {
     authenticationConfiguration: common.AuthParams
 
     constructor(profile: string='DEFAULT', region?: string) {
+        super()
         this.profile = profile
         this.provider = new common.ConfigFileAuthenticationDetailsProvider(undefined, profile)
         console.debug('OciQuery: Region', region)
@@ -347,24 +349,24 @@ export class OciQuery {
         })
     }
 
-    getAllResponseData(responseIterator: AsyncIterableIterator<any>): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const query = async (responseIterator: AsyncIterableIterator<any>) => {
-                let done = false
-                let resources: any[] = []
-                while (!done) {
-                    const response = await responseIterator.next()
-                    done = response.done !== undefined ? response.done : true
-                    if (response.value) resources = [...resources, ...response.value.items]
-                }
-                return resources
-            }
-            query(responseIterator).then((results) => {
-                console.debug('OciQuery: getAllResponseData: All Settled')
-                resolve(results)
-            })
-        })
-    }
+    // getAllResponseData(responseIterator: AsyncIterableIterator<any>): Promise<any> {
+    //     return new Promise((resolve, reject) => {
+    //         const query = async (responseIterator: AsyncIterableIterator<any>) => {
+    //             let done = false
+    //             let resources: any[] = []
+    //             while (!done) {
+    //                 const response = await responseIterator.next()
+    //                 done = response.done !== undefined ? response.done : true
+    //                 if (response.value) resources = [...resources, ...response.value.items]
+    //             }
+    //             return resources
+    //         }
+    //         query(responseIterator).then((results) => {
+    //             console.debug('OciQuery: getAllResponseData: All Settled')
+    //             resolve(results)
+    //         })
+    //     })
+    // }
 
     listTenancyCompartments(): Promise<any> {
         return new Promise((resolve, reject) => {
