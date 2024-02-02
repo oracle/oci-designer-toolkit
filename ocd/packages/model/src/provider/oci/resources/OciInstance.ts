@@ -69,6 +69,7 @@ export namespace OciInstance {
         console.debug('OciInstance: Getting Parent Id to for', resource.displayName, resource.id)
         let parentId = resource.createVnicDetails && resource.createVnicDetails.subnetId !== '' ? resource.createVnicDetails.subnetId as string  : resource.compartmentId as string
         if (resource.vnicAttachments && resource.vnicAttachments.length > 0) {
+            console.debug('OciInstance: getParentId', JSON.stringify(resource.vnicAttachments, null, 4))
             parentId = resource.vnicAttachments[0].subnetId as string
         }
         return parentId
