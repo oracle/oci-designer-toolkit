@@ -41,8 +41,10 @@ jobs:
         id: upload-mac-release-artifact
         uses: actions/upload-artifact@v4
         with:
-          name: mac-artifact
-          path: ./ocd/dist/mac/ocd*.*
+          name: binary-${{ matrix.os }}-${{ matrix.version }}
+          path: ./ocd/dist/mac/ocd-0.1.0.dmg
+          overwrite: true
+          retention-days: 21
 
       - name: Create Mac Release
         if: matrix.os == 'macos-latest'
