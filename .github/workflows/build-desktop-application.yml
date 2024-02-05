@@ -19,6 +19,10 @@ jobs:
         os: [macos-latest, windows-latest]
         version: [latest]
 
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      RELEASE_TAG: 0.1.0.ocd.nightly
+
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -46,6 +50,27 @@ jobs:
           overwrite: true
           retention-days: 7
 
+      - name: Read ocd README.md file
+        id: release_body
+        run: echo "body=$(cat ./ocd/README.md)" >> $GITHUB_OUTPUT      
+
+      - name: Get Release
+        id: get_alpha_release
+        run: |
+          echo "upload_url=$(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /repos/oracle/oci-designer-toolkit/releases/tags/v0.1.0-alpha.ocd.nightly --jq  '.upload_url')" >> $GITHUB_OUTPUT
+          
+      - name: Upload Mac Release Asset
+        if: matrix.os == 'macos-latest'
+        id: upload-mac-release-asset-to-alpha 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.get_alpha_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: ./ocd/dist/mac/ocd-0.1.0.dmg
+          asset_name: ocd-0.1.0.dmg
+          asset_content_type: application/octet-stream
+  
       - name: Create Mac Release
         if: matrix.os == 'macos-latest'
         id: create_release_mac
@@ -74,10 +99,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh api \
-          -H "Accept: application/vnd.github+json" \
-          -H "X-GitHub-Api-Version: 2022-11-28" \
-          /repos/oracle/oci-designer-toolkit/releases/tags/v0.1.0.nightly.macos-latest
+          gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /repos/oracle/oci-designer-toolkit/releases/tags/v0.1.0.nightly.macos-latest --jq '.id'
 
 
       - name: Create Windows Release
