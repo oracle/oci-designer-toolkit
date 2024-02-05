@@ -8,12 +8,32 @@ The OCD project is a refactoring of the original OKIT implementation and TypeScr
 based implementation using React to build the interface and provide the WebServer. In addition
 Electron is used to generate native installers for simplicity of installation and use.
 
+This Alpha release is to show the new desktop functionality available in the OKIT OCD (OKIT Cloud Desktop) release and is not
+guarenteed to be 100% functional. At present the following resources and features are availble but we will be rleasing updates 
+regularly.
+
+| Resource          | Properties | Terraform |
+| ----------------- | :--------: | :-------: |
+| VCN               | &check;    | &check;   |
+| Subnet            | &check;    | &check;   |
+| Security List     | &check;    | &check;   |
+| Route Table       | &check;    | &check;   |
+| DHCP Options      | &check;    | &check;   |
+| Internet Gateway  | &check;    | &check;   |
+| NAT Gateway       | &check;    | &check;   |
+| Instance          | &check;    | &check;   |
+
+Not all menu options are currently available and if selected will display a message saying they are currently not availble,
+again these will be added over time.
+
+If you have any comments please leave them on the GitHub issues marked as ___OCD Alpha:___
+
 # OCD Desktop Features 
 
 The OCD Desktop / Web interface is composed of a number of section similar to those provided in the original OKIT BUI. These 
 provide similar functionality but with some key difference that will be document below.
 
-![OCD Desktop](images/OcdDesktop.png)
+![OCD Desktop](https://github.com/oracle/oci-designer-toolkit/blob/nightly/ocd/images/OcdDesktop.png)
 
 ## Palette
 
