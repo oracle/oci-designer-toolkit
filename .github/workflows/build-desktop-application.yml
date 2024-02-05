@@ -44,7 +44,7 @@ jobs:
           name: binary-${{ matrix.os }}-${{ matrix.version }}
           path: ./ocd/dist/mac/ocd-0.1.0.dmg
           overwrite: true
-          retention-days: 21
+          retention-days: 7
 
       - name: Create Mac Release
         if: matrix.os == 'macos-latest'
@@ -70,6 +70,12 @@ jobs:
           asset_name: ocd-0.1.0.dmg
           asset_content_type: application/octet-stream
       - run: echo "Upload URL ${{ steps.create_release_mac.outputs.upload_url }}"
+      - run: |
+          gh api \
+          -H "Accept: application/vnd.github+json" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          /repos/oracle/oci-designer-toolkit/releases/tags/v0.1.0.nightly.macos-latest
+
 
       - name: Create Windows Release
         if: matrix.os == 'windows-latest'
