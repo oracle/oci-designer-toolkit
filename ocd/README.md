@@ -8,52 +8,6 @@ The OCD project is a refactoring of the original OKIT implementation and TypeScr
 based implementation using React to build the interface and provide the WebServer. In addition
 Electron is used to generate native installers for simplicity of installation and use.
 
-# Prerequisites
-
-- node / npm
-
-# Installing
-Before the application can be either built as a desktop or run as a web server all appropriate node modules must be 
-installed. This can be achieve by executing the __fresh-install__ of __reinstall__ script, from this directory, as follows:
-
-``` bash
-npm run fresh-install
-```
-
-This will create the oci-designer-toolkit/oci/__dist__ directory which will contain a subdirectory for the appropriate opperating system, for example :
-
-```bash
-ls -1
-builder-debug.yml
-builder-effective-config.yaml
-mac
-
-ls -1 mac
-mac
-ocd-0.1.0.dmg
-ocd-0.1.0.dmg.blockmap
-ocd-0.1.0.zip
-ocd-0.1.0.zip.blockmap
-```
-
-In the above example the **ocd-0.1.0.dmg** can be opened in the normal way on a mac and the app will be installed.
-
-# Running Desktop Application without installing
-
-1. Build Desktop Application
-```bash
-npm run desktop
-```
-
-# Running Development Web Application
-
-1. Run Web Server
-```bash
-npm run web
-```
-2. Access BUI on [http://localhost:3000/](http://localhost:3000/)
-
-
 # OCD Desktop Features 
 
 The OCD Desktop / Web interface is composed of a number of section similar to those provided in the original OKIT BUI. These 
@@ -87,6 +41,55 @@ The Page/View Tabs (at base of canvas) allow the user to create multiple visual 
 ## Properties
 
 The properties panel provides access to the edittable properties available for the selected Resource. In addition the User can provide Resource specific documentation that will be included in any generated Markdown.
+
+# Build Your Own
+
+## Prerequisites
+
+- node / npm
+
+## Installing
+Before the application can be either built as a desktop or run as a web server all appropriate node modules must be 
+installed. This can be achieve by executing the __fresh-install__ of __reinstall__ script, from this directory, as follows:
+
+``` bash
+npm run fresh-install
+```
+
+This will create the oci-designer-toolkit/oci/__dist__ directory which will contain a subdirectory for the appropriate opperating system, for example :
+
+```bash
+ls -1
+builder-debug.yml
+builder-effective-config.yaml
+mac
+
+ls -1 mac
+mac
+ocd-0.1.0.dmg
+ocd-0.1.0.dmg.blockmap
+ocd-0.1.0.zip
+ocd-0.1.0.zip.blockmap
+```
+
+In the above example the **ocd-0.1.0.dmg** can be opened in the normal way on a mac and the app will be installed.
+
+## Running Desktop Application without installing
+
+1. Build Desktop Application
+```bash
+npm run desktop
+```
+
+## Running Development Web Application
+
+1. Run Web Server
+```bash
+npm run web
+```
+2. Access BUI on [http://localhost:3000/](http://localhost:3000/)
+
+
 
 
  npm init -y

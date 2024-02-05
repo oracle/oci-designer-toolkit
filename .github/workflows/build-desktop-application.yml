@@ -55,6 +55,7 @@ jobs:
         with:
           tag_name: v0.1.0.${{ github.ref_name }}.${{ matrix.os }}
           release_name: Release ${{ github.ref_name }} ${{ matrix.os }}
+          body_path: ./ocd/README.md
           draft: false
           prerelease: false
       - name: Upload Mac Release Asset
@@ -68,6 +69,7 @@ jobs:
           asset_path: ./ocd/dist/mac/ocd-0.1.0.dmg
           asset_name: ocd-0.1.0.dmg
           asset_content_type: application/octet-stream
+      - run: echo "Upload URL ${{ steps.create_release_mac.outputs.upload_url }}"
 
       - name: Create Windows Release
         if: matrix.os == 'windows-latest'
@@ -78,6 +80,7 @@ jobs:
         with:
           tag_name: v0.1.0.${{ github.ref_name }}.${{ matrix.os }}
           release_name: Release ${{ github.ref_name }} ${{ matrix.os }}
+          body_path: ./ocd/README.md
           draft: false
           prerelease: false
       - name: Upload Windows Release Asset

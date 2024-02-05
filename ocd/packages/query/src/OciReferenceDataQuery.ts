@@ -7,8 +7,9 @@ import { common, containerengine, core, database, datascience, limits, loadbalan
 import { OciQuery } from "./OciQuery"
 import { OciResource } from "@ocd/model"
 import { OcdUtils } from "@ocd/core"
+import OciCommonQuery from "./OciQueryCommon"
 
-export class OciReferenceDataQuery {
+export class OciReferenceDataQuery extends OciCommonQuery {
     profile: string
     provider: common.ConfigFileAuthenticationDetailsProvider
     clientConfiguration: common.ClientConfiguration
@@ -25,6 +26,7 @@ export class OciReferenceDataQuery {
     mysqlClient: mysql.MysqlaasClient
     vcnClient: core.VirtualNetworkClient
     constructor(profile: string='DEFAULT', region?: string) {
+        super()
         this.profile = profile
         this.provider = new common.ConfigFileAuthenticationDetailsProvider(undefined, profile)
         this.ociQuery = new OciQuery(profile, region)
