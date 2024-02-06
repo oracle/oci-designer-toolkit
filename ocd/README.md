@@ -111,16 +111,3 @@ npm run web
 
 
 
-
- npm init -y
- npm init -y --scope @ocd -w packages/core
- npm init -y --scope @ocd -w packages/model
- npm init -y --scope @ocd -w packages/query
- npm init -y --scope @ocd -w packages/import
- npm init -y --scope @ocd -w packages/export
- npm init -y --scope @ocd -w packages/web
- npm init -y --scope @ocd -w packages/desktop
- npm install @ocd/core -w @ocd/model
- npm install @ocd/core -w @ocd/query
- npm install @ocd/model -w @ocd/query
- npm init -y --scope @ocd -w packages/codegen
