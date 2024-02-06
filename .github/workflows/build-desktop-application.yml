@@ -49,7 +49,7 @@ jobs:
           overwrite: true
           retention-days: 7
       - name: Upload Windows Artifact
-        if: matrix.os == 'macos-latest'
+        if: matrix.os == 'windows-latest'
         id: upload-win-release-artifact
         uses: actions/upload-artifact@v4
         with:
