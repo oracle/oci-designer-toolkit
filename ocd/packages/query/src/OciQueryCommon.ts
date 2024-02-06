@@ -19,10 +19,13 @@ export class OciCommonQuery {
             query(responseIterator).then((results) => {
                 console.debug('OciCommonQuery: getAllResponseData: All Settled')
                 resolve(results)
+            }).catch((reason) => {
+                console.error('OciCommonQuery: getAllResponseData: Error', reason)
+                reject(reason)
             })
         })
     }
 }
 
 export default OciCommonQuery
-module.exports = { OciQuery: OciCommonQuery }
+module.exports = { OciCommonQuery }
