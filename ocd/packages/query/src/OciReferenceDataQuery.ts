@@ -7,7 +7,7 @@ import { common, containerengine, core, database, datascience, limits, loadbalan
 import { OciQuery } from "./OciQuery"
 import { OciResource } from "@ocd/model"
 import { OcdUtils } from "@ocd/core"
-import OciCommonQuery from "./OciQueryCommon"
+import { OciCommonQuery } from './OciQueryCommon'
 
 export class OciReferenceDataQuery extends OciCommonQuery {
     profile: string
@@ -322,6 +322,44 @@ export class OciReferenceDataQuery extends OciCommonQuery {
 
     listImages(compartmentIds: string[], retryCount: number = 0): Promise<any> {
         return new Promise((resolve, reject) => {
+            const requests: core.requests.ListImagesRequest[] = compartmentIds.map((id) => {return {compartmentId: id, limit: 10000}})
+            const responseIterators = requests.map((r) => this.computeClient.listImagesResponseIterator(r))
+            const queries = responseIterators.map((r) => this.getAllResponseData(r))
+            // const queries = requests.map((r) => this.computeClient.listImages(r))
+            Promise.allSettled(queries).then((results) => {
+                console.debug('OciReferenceDataQuery: listImages: All Settled', results)
+                //@ts-ignore
+                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value], []).map((r) => {return {
+                        id: r.displayName,
+                        ocid: r.id,
+                        displayName: r.displayName,
+                        platform: r.compartmentId === null,
+                        operatingSystem: r.operatingSystem,
+                        operatingSystemVersion: r.operatingSystemVersion,
+                        billableSizeInGBs: r.billableSizeInGBs,
+                        lifecycleState: r.lifecycleState
+                    }
+                }).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
+                // @ts-ignore
+                const uniqueResources = Array.from(new Set(resources.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
+                const imageIds = uniqueResources.map((r) => r.ocid)
+                this.listImageShapeCompatabilities(imageIds).then((compatibilities) => {
+                    uniqueResources.forEach((r) => r.shapes = compatibilities.filter((c: Record<string, string>) => c.imageId === r.ocid).map((c: Record<string, string>) => c.shape))
+                    resolve(uniqueResources)
+                }).catch((reason) => {
+                    console.error('OciReferenceDataQuery: listImages: Error', reason)
+                    reject(reason)
+                })
+                // resolve(resources)
+            }).catch((reason) => {
+                console.error('OciReferenceDataQuery: listImages: Error', reason)
+                reject(reason)
+            })
+        })
+    }
+
+    listImagesOrig(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+        return new Promise((resolve, reject) => {
             const requests: core.requests.ListImagesRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
             const queries = requests.map((r) => this.computeClient.listImages(r))
             Promise.allSettled(queries).then((results) => {
@@ -358,7 +396,7 @@ export class OciReferenceDataQuery extends OciCommonQuery {
 
     listImageShapeCompatabilities(imageIds: string[], retryCount: number = 0): Promise<any> {
         return new Promise((resolve, reject) => {
-            const requests: core.requests.ListImageShapeCompatibilityEntriesRequest[] = imageIds.map((id) => {return {imageId: id}})
+            const requests: core.requests.ListImageShapeCompatibilityEntriesRequest[] = imageIds.map((id) => {return {imageId: id, limit: 10000}})
             const queries = requests.map((r) => this.computeClient.listImageShapeCompatibilityEntries(r))
             Promise.allSettled(queries).then((results) => {
                 console.debug('OciReferenceDataQuery: listImageShapeCompatabilities: All Settled')
