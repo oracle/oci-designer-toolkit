@@ -8,23 +8,25 @@ import { OcdConsoleConfiguration } from "./components/OcdConsoleConfiguration"
 import { OcdCache } from "../components/OcdCache"
 
 export interface OcdElectronAPI {
+    // Build Information
+    getVersion: () => Promise<void>
     // OCI API Calls / Query
-    loadOCIConfigProfiles: () => Promise<void>,
-    listRegions: (profile: string) => Promise<void>,
-    listTenancyCompartments: (profile: string) => Promise<void>,
-    queryTenancy: (profile: string, compartmentIds: string[], region: string) => Promise<void>,
-    queryDropdown: (profile: string, region: string) => Promise<void>,
+    loadOCIConfigProfiles: () => Promise<void>
+    listRegions: (profile: string) => Promise<void>
+    listTenancyCompartments: (profile: string) => Promise<void>
+    queryTenancy: (profile: string, compartmentIds: string[], region: string) => Promise<void>
+    queryDropdown: (profile: string, region: string) => Promise<void>
 	// OCD Design 
-    loadDesign: (filename: string) => Promise<void>,
-    saveDesign: (design: OcdDesign, filename: string) => Promise<void>,
-    discardConfirmation: () => Promise<void>,
-    exportTerraform: (design: OcdDesign, directory: string) => Promise<void>,
+    loadDesign: (filename: string) => Promise<void>
+    saveDesign: (design: OcdDesign, filename: string) => Promise<void>
+    discardConfirmation: () => Promise<void>
+    exportTerraform: (design: OcdDesign, directory: string) => Promise<void>
 	// OCD Configuration
-    loadConsoleConfig: () => Promise<void>,
-    saveConsoleConfig: (config: OcdConsoleConfiguration) => Promise<void>,
+    loadConsoleConfig: () => Promise<void>
+    saveConsoleConfig: (config: OcdConsoleConfiguration) => Promise<void>
 	// OCD Cache
-    loadCache: () => Promise<void>,
-    saveCache: (cache: OcdCache) => Promise<void>,
+    loadCache: () => Promise<void>
+    saveCache: (cache: OcdCache) => Promise<void>
 }
   
 declare global {

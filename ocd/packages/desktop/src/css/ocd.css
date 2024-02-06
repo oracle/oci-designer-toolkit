@@ -424,7 +424,8 @@ summary {
 }
 
 .ocd-console-footer {
-    display: block;
+    display: flex;
+    grid-auto-flow: column;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -486,12 +487,19 @@ summary {
 .ocd-footer-right {
     display: inline-block;
     margin-left: auto;
+    margin-right: 10px;
     align-items: right;
+    height: 100%;
 }
 
 .ocd-footer-right > div {
     display: grid;
     grid-auto-flow: column;
+    height: 100%;
+}
+
+.ocd-footer-right > div > label {
+    margin: auto;
 }
 
 

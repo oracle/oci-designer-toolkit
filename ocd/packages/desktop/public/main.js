@@ -95,6 +95,8 @@ const createWindow = () => {
 }
 
 app.whenReady().then(() => {
+	// Build Information
+	ipcMain.handle('ocdBuild:getVersion', handleGetVersion)
 	// OCI API Calls / Query
 	ipcMain.handle('ociConfig:loadProfiles', handleLoadOciConfigProfiles)
 	ipcMain.handle('ociQuery:listRegions', handleListRegions)
@@ -163,6 +165,16 @@ console.debug(app.getPath('userData'))
 /*
 ** Electron IPC Handlers required for the OCD Desktop.
 */
+
+async function handleGetVersion() {
+	console.debug('Electron Main: handleGetVersion')
+	return new Promise((resolve, reject) => {
+		const buildInformation = {
+			version: app.getVersion()
+		}
+		resolve(buildInformation)
+	})
+}
 
 async function handleLoadOciConfigProfiles() {
 	console.debug('Electron Main: handleLoadOciConfigProfiles')

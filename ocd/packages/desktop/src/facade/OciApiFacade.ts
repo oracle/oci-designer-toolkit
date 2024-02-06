@@ -8,6 +8,9 @@
 */
 
 export namespace OciApiFacade {
+    export const getVersion = (): Promise<any> => {
+        return window.ocdAPI ? window.ocdAPI.getVersion() : new Promise((resolve, reject) => {reject('Currently Not Implemented')})
+    }
     export const loadOCIConfigProfiles = (): Promise<any> => {
         return window.ocdAPI ? window.ocdAPI.loadOCIConfigProfiles() : new Promise((resolve, reject) => {reject('Currently Not Implemented')})
     }
