@@ -49,9 +49,9 @@ jobs:
           overwrite: true
           retention-days: 7
 
-      - name: Read ocd README.md file
-        id: release_body
-        run: echo "body=$(cat ./ocd/README.md)" >> $GITHUB_OUTPUT      
+      # - name: Read ocd README.md file
+      #   id: release_body
+      #   run: echo "body=$(cat ./ocd/README.md)" >> $GITHUB_OUTPUT      
 
       - name: Get Release
         id: get_alpha_release
