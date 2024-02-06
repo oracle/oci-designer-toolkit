@@ -20,7 +20,6 @@ jobs:
         version: [latest]
 
     env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       RELEASE_TAG: 0.1.0.ocd.nightly
 
     steps:
@@ -56,6 +55,8 @@ jobs:
 
       - name: Get Release
         id: get_alpha_release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "upload_url=$(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /repos/oracle/oci-designer-toolkit/releases/tags/v0.1.0-alpha.ocd.nightly --jq  '.upload_url')" >> $GITHUB_OUTPUT
           
