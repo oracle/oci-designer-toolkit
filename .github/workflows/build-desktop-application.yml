@@ -48,7 +48,7 @@ jobs:
           path: ./ocd/dist/mac/ocd-0.1.0.dmg
           overwrite: true
           retention-days: 7
-      - name: Upload Mac Artifact
+      - name: Upload Windows Artifact
         if: matrix.os == 'macos-latest'
         id: upload-win-release-artifact
         uses: actions/upload-artifact@v4
