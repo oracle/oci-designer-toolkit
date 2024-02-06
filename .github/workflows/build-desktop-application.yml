@@ -7,7 +7,7 @@ on:
 
 env:
   CI: false
-  RELEASE_TAG: 0.1.0-alpha.ocd.nightly
+  RELEASE_TAG: v0.1.0-alpha.ocd.nightly
 
 jobs:
   create-release: 
@@ -24,8 +24,8 @@ jobs:
       - name: Get Release
         id: get_alpha_release
         run: |
-          echo "upload_url=$(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /repos/oracle/oci-designer-toolkit/releases/tags/v0.1.0-alpha.ocd.nightly --jq  '.upload_url')" >> $GITHUB_OUTPUT
-          echo "id=$(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /repos/oracle/oci-designer-toolkit/releases/tags/v0.1.0-alpha.ocd.nightly --jq  '.id')" >> $GITHUB_OUTPUT
+          echo "upload_url=$(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /repos/oracle/oci-designer-toolkit/releases/tags/${{ env.RELEASE_TAG }} --jq  '.upload_url')" >> $GITHUB_OUTPUT
+          echo "id=$(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /repos/oracle/oci-designer-toolkit/releases/tags/${{ env.RELEASE_TAG }} --jq  '.id')" >> $GITHUB_OUTPUT
       - name: Delete Release
         id: delete_alpha_release
         run: |
