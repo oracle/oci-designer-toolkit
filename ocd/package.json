@@ -9,6 +9,11 @@
     "url": "https://github.com/oracle/oci-designer-toolkit"
   },
   "bugs": "https://github.com/oracle/oci-designer-toolkit/issues",
+  "repository": {
+    "type": "github",
+    "url": "https://github.com/oracle/oci-designer-toolkit.git",
+    "directory": "ocd"
+  },
   "keywords": [
     "ocd",
     "okit"
