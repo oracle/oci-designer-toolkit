@@ -7,6 +7,7 @@ on:
 
 env:
   CI: false
+  OCD_VERSION: 0.1.0-alpha
   RELEASE_TAG: v0.1.0-alpha.ocd.nightly
   MAC_ARTEFACT: ocd-mac
   WIN_ARTEFACT: ocd-win
@@ -52,7 +53,6 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # os: [macos-latest, ubuntu-latest, windows-latest]
         os: [macos-latest, windows-latest]
         version: [latest]
     steps:
@@ -77,7 +77,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.MAC_ARTEFACT }}
-          path: ./ocd/dist/mac/ocd-0.1.0.dmg
+          path: ./ocd/dist/mac/${{ env.OCD_VERSION }}.dmg
           overwrite: true
           retention-days: 7
       - name: Upload Windows Artifact
@@ -86,58 +86,10 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.WIN_ARTEFACT }}
-          path: ./ocd/dist/win/ocd-0.1.0.exe
+          path: ./ocd/dist/win/${{ env.OCD_VERSION }}.exe
           overwrite: true
           retention-days: 7
   
-      # - name: Create Mac Release
-      #   if: matrix.os == 'macos-latest'
-      #   id: create_release_mac
-      #   uses: actions/create-release@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     tag_name: v0.1.0.${{ github.ref_name }}.${{ matrix.os }}
-      #     release_name: Release ${{ github.ref_name }} ${{ matrix.os }}
-      #     body_path: ./ocd/README.md
-      #     draft: false
-      #     prerelease: false
-      # - name: Upload Mac Release Asset
-      #   if: matrix.os == 'macos-latest'
-      #   id: upload-mac-release-asset 
-      #   uses: actions/upload-release-asset@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     upload_url: ${{ steps.create_release_mac.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-      #     asset_path: ./ocd/dist/mac/ocd-0.1.0.dmg
-      #     asset_name: ocd-0.1.0.dmg
-      #     asset_content_type: application/octet-stream
-
-      # - name: Create Windows Release
-      #   if: matrix.os == 'windows-latest'
-      #   id: create_release_win
-      #   uses: actions/create-release@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     tag_name: v0.1.0.${{ github.ref_name }}.${{ matrix.os }}
-      #     release_name: Release ${{ github.ref_name }} ${{ matrix.os }}
-      #     body_path: ./ocd/README.md
-      #     draft: false
-      #     prerelease: false
-      # - name: Upload Windows Release Asset
-      #   if: matrix.os == 'windows-latest'
-      #   id: upload-win-release-asset 
-      #   uses: actions/upload-release-asset@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     upload_url: ${{ steps.create_release_win.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-      #     asset_path: ./ocd/dist/win/ocd-0.1.0.exe
-      #     asset_name: ocd-0.1.0.exe
-      #     asset_content_type: application/x-msdownload
-
   release:
     needs: [create-release, build]
     runs-on: ubuntu-latest
@@ -167,8 +119,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.get_alpha_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: ${{ env.RELEASE_ARTEFACTS_DIR }}/ocd-0.1.0.dmg
-          asset_name: ocd-0.1.0.dmg
+          asset_path: ${{ env.RELEASE_ARTEFACTS_DIR }}/${{ env.OCD_VERSION }}.dmg
+          asset_name: .dmg
           asset_content_type: application/octet-stream
       - name: Upload Windows Release Asset
         id: upload-windows-release-asset-to-alpha 
@@ -177,7 +129,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.get_alpha_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: ${{ env.RELEASE_ARTEFACTS_DIR }}/ocd-0.1.0.exe
-          asset_name: ocd-0.1.0.exe
+          asset_path: ${{ env.RELEASE_ARTEFACTS_DIR }}/.exe
+          asset_name: .exe
           asset_content_type: application/x-msdownload
   

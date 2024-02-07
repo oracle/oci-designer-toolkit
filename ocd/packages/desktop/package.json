@@ -1,7 +1,7 @@
 {
   "name": "@ocd/desktop",
   "productName": "ocd",
-  "version": "0.1.0",
+  "version": "0.1.0-alpha",
   "description": "OKIT Open Cloud Designer Desktop",
   "title": "OKIT Open Cloud Designer Desktop",
   "author": {

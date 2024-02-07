@@ -22,14 +22,12 @@ import { OcdCacheFacade } from '../facade/OcdCacheFacade'
 import { loadDesign } from '../components/Menu'
 import { OcdValidationResult, OcdValidator } from '@ocd/model'
 import OcdValidation from './OcdValidation'
-import { OciApiFacade } from '../facade/OciApiFacade'
-// import { OcdPropertiesPanel, OcdPropertiesToolbarButton } from '../properties/OcdPropertiesPanel'
+import { buildDetails } from '../data/OcdBuildDetails'
 
 export const ThemeContext = createContext('')
 export const ActiveFileContext = createContext({})
 export const ConsoleConfigContext = createContext({})
 export const CacheContext = createContext({})
-export const AppContext = createContext({})
 
 const OcdConsole = (): JSX.Element => {
     const [ocdDocument, setOcdDocument] = useState(OcdDocument.new())
@@ -37,7 +35,6 @@ const OcdConsole = (): JSX.Element => {
     const [ocdCache, setOcdCache] = useState(OcdCacheData.new())
     // const [ocdCache, setOcdCache]: [OcdCacheData | undefined, any] = useState()
     const [activeFile, setActiveFile] = useState({name: '', modified: false})
-    const [appConfig, setAppConfig] = useState({})
     useEffect(() => {
         // @ts-ignore
         if (window.ocdAPI) window.ocdAPI.onOpenFile((event, filePath) => { // Running as an Electron App
@@ -53,14 +50,6 @@ const OcdConsole = (): JSX.Element => {
         }).catch((response) => {
             console.debug('OcdConsole: Load Console Config', response)
             OcdConfigFacade.saveConsoleConfig(ocdConsoleConfig.config).then((results) => {console.debug('OcdConsole: Saved Console Config')}).catch((response) => console.debug('OcdConsole:', response))
-        })
-        OciApiFacade.getVersion().then((results) => {
-            console.debug('OcdConsole: Load App Config', results)
-            const appConfig: Record<string, string> = results
-            setAppConfig(appConfig)
-        }).catch((response) => {
-            console.debug('OcdConsole: Load App Config', response)
-            setAppConfig({version: '0.0.0'})
         })
     }, []) // Empty Array to only run on initial render
     // useEffect(() => {
@@ -103,14 +92,12 @@ const OcdConsole = (): JSX.Element => {
         <ConsoleConfigContext.Provider value={{ocdConsoleConfig, setOcdConsoleConfig}}>
             <ActiveFileContext.Provider value={{activeFile, setActiveFile}}>
                 <CacheContext.Provider value={{ocdCache, setOcdCache}}>
-                    <AppContext.Provider value={{appConfig, setAppConfig}}>
-                        <div className='ocd-console'>
-                            <OcdConsoleHeader ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
-                            <OcdConsoleToolbar ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
-                            <OcdConsoleBody ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
-                            <OcdConsoleFooter ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
-                        </div>
-                    </AppContext.Provider>
+                    <div className='ocd-console'>
+                        <OcdConsoleHeader ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
+                        <OcdConsoleToolbar ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
+                        <OcdConsoleBody ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
+                        <OcdConsoleFooter ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
+                    </div>
                 </CacheContext.Provider>
             </ActiveFileContext.Provider>
         </ConsoleConfigContext.Provider>
@@ -290,8 +277,6 @@ const OcdConsoleBody = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, se
 const OcdConsoleFooter = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument }: ConsolePageProps): JSX.Element => {
     // @ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
-    // @ts-ignore
-    const {appConfig, setAppConfig} = useContext(AppContext)
     const filenameClass = `${activeFile.modified ? 'ocd-design-modified ocd-active-file-modified-icon' : ''}`
     return (
         <div className='ocd-console-footer ocd-console-footer-theme'>
@@ -303,7 +288,7 @@ const OcdConsoleFooter = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, 
             <div className='ocd-footer-centre'></div>
             <div className='ocd-footer-right'>
                 <div>
-                    <label>Version: {appConfig.version}</label>
+                <label>Version: {buildDetails.version} Build Date: {buildDetails.utc}</label>
                 </div>
             </div>
         </div>
