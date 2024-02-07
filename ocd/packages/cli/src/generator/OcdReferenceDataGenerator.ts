@@ -56,7 +56,7 @@ export default defaultCache
     }
     writeResourceFiles(outputDirectory: string, resource: string, force = false) {}
     writeGeneratedResourceFiles(outputDirectory: string, resource: string, force = false) {}
-    }
+}
 
 export default OcdReferenceDataGenerator
 module.exports = { OcdReferenceDataGenerator: OcdReferenceDataGenerator }

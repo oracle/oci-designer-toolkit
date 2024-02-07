@@ -5,11 +5,8 @@
 // TODO: Remove Following
 // @ts-nocheck
 
-import fs from 'fs'
-import path from 'path'
-import { OciReferenceDataQuery } from "@ocd/query";
 import { parseArgs } from "node:util"
-import { OcdReferenceDataGenerator } from "./generator/OcdReferenceDataGenerator"
+import { OcdBuildDateGenerator } from '@ocd/codegen'
 
 const options = {
     schema: {
@@ -28,6 +25,10 @@ const options = {
         type: 'string',
         short: 'd'
     },
+    package: {
+        type: 'string',
+        short: 'p'
+    },
     force: {
         type: 'boolean',
         short: 'f',
@@ -41,10 +42,7 @@ console.info('')
 
 // Read command as first argument
 const outputDirectory = args.values.destination
-// const outputFilename = 'DefaultCache.ts'
-// const resourceFilename = path.join(outputDirectory, outputFilename)
-const referenceDataQuery = new OciReferenceDataQuery()
+const packageJsonFilename = args.values.package
 const force = true
-
-const generator = new OcdReferenceDataGenerator()
-generator.writeFiles(outputDirectory, '', force)
+const generator = new OcdBuildDateGenerator()
+generator.writeFiles(outputDirectory, packageJsonFilename, force)
