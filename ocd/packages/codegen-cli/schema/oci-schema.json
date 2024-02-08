@@ -3158,7 +3158,8 @@
         "lookup": true,
         "lookupResource": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "1"
       },
       "compartment_id": {
         "provider": "oci",
@@ -3222,7 +3223,8 @@
         "lookup": true,
         "lookupResource": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "FAULT-DOMAIN-1"
       },
       "freeform_tags": {
         "provider": "oci",
@@ -3336,7 +3338,8 @@
         "lookup": true,
         "lookupResource": "shapes",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "VM.Standard.A1.Flex"
       },
       "agent_config": {
         "provider": "oci",
@@ -3572,7 +3575,8 @@
             "lookup": false,
             "lookupResource": "",
             "conditional": false,
-            "condition": {}
+            "condition": {},
+            "default": "6"
           },
           "ocpus": {
             "provider": "oci",
@@ -3588,7 +3592,8 @@
             "lookup": false,
             "lookupResource": "",
             "conditional": false,
-            "condition": {}
+            "condition": {},
+            "default": "1"
           }
         }
       },
@@ -3650,7 +3655,8 @@
             "lookup": true,
             "lookupResource": "",
             "conditional": false,
-            "condition": {}
+            "condition": {},
+            "default": "image"
           }
         }
       }
@@ -6011,7 +6017,8 @@
         "lookup": true,
         "lookupResource": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "1"
       },
       "cidr_block": {
         "provider": "oci",
@@ -6401,7 +6408,8 @@
         "lookup": true,
         "lookupResource": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "1"
       },
       "compartment_id": {
         "provider": "oci",
@@ -6758,7 +6766,8 @@
         "lookup": true,
         "lookupResource": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "1"
       },
       "block_volume_replicas_deletion": {
         "provider": "oci",
@@ -7111,7 +7120,8 @@
         "lookup": true,
         "lookupResource": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "1"
       },
       "device": {
         "provider": "oci",
@@ -7360,38 +7370,6 @@
         "conditional": false,
         "condition": {}
       },
-      "compute_count": {
-        "provider": "oci",
-        "key": "computeCount",
-        "name": "compute_count",
-        "type": "number",
-        "subtype": "",
-        "required": false,
-        "label": "Compute Count",
-        "id": "compute_count",
-        "staticLookup": false,
-        "cacheLookup": false,
-        "lookup": false,
-        "lookupResource": "",
-        "conditional": false,
-        "condition": {}
-      },
-      "compute_model": {
-        "provider": "oci",
-        "key": "computeModel",
-        "name": "compute_model",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Compute Model",
-        "id": "compute_model",
-        "staticLookup": true,
-        "cacheLookup": false,
-        "lookup": true,
-        "lookupResource": "",
-        "conditional": false,
-        "condition": {}
-      },
       "cpu_core_count": {
         "provider": "oci",
         "key": "cpuCoreCount",
@@ -7408,22 +7386,6 @@
         "conditional": false,
         "condition": {}
       },
-      "data_safe_status": {
-        "provider": "oci",
-        "key": "dataSafeStatus",
-        "name": "data_safe_status",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Data Safe Status",
-        "id": "data_safe_status",
-        "staticLookup": true,
-        "cacheLookup": false,
-        "lookup": true,
-        "lookupResource": "",
-        "conditional": false,
-        "condition": {}
-      },
       "data_storage_size_in_tbs": {
         "provider": "oci",
         "key": "dataStorageSizeInTbs",
@@ -7436,22 +7398,6 @@
         "staticLookup": false,
         "cacheLookup": false,
         "lookup": false,
-        "lookupResource": "",
-        "conditional": false,
-        "condition": {}
-      },
-      "database_edition": {
-        "provider": "oci",
-        "key": "databaseEdition",
-        "name": "database_edition",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Database Edition",
-        "id": "database_edition",
-        "staticLookup": true,
-        "cacheLookup": false,
-        "lookup": true,
         "lookupResource": "",
         "conditional": false,
         "condition": {}
@@ -7481,10 +7427,10 @@
         "required": false,
         "label": "Db Version",
         "id": "db_version",
-        "staticLookup": true,
-        "cacheLookup": false,
-        "lookup": true,
-        "lookupResource": "",
+        "staticLookup": false,
+        "cacheLookup": true,
+        "lookup": false,
+        "lookupResource": "autonomousDbVersions",
         "conditional": false,
         "condition": {}
       },
@@ -7502,7 +7448,8 @@
         "lookup": true,
         "lookupResource": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "OLTP"
       },
       "defined_tags": {
         "provider": "oci",
@@ -7582,7 +7529,8 @@
         "lookup": false,
         "lookupResource": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": true
       },
       "is_auto_scaling_for_storage_enabled": {
         "provider": "oci",
@@ -7726,7 +7674,8 @@
         "lookup": true,
         "lookupResource": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "LICENSE_INCLUDED"
       },
       "nsg_ids": {
         "provider": "oci",
@@ -7741,22 +7690,6 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "network_security_group",
-        "conditional": false,
-        "condition": {}
-      },
-      "ocpu_count": {
-        "provider": "oci",
-        "key": "ocpuCount",
-        "name": "ocpu_count",
-        "type": "number",
-        "subtype": "",
-        "required": false,
-        "label": "Ocpu Count",
-        "id": "ocpu_count",
-        "staticLookup": false,
-        "cacheLookup": false,
-        "lookup": false,
-        "lookupResource": "",
         "conditional": false,
         "condition": {}
       },
@@ -7860,7 +7793,7 @@
         "provider": "oci",
         "key": "whitelistedIps",
         "name": "whitelisted_ips",
-        "type": "set",
+        "type": "list",
         "subtype": "string",
         "required": false,
         "label": "Whitelisted Ips",
@@ -7871,36 +7804,6 @@
         "lookupResource": "",
         "conditional": false,
         "condition": {}
-      },
-      "customer_contacts": {
-        "provider": "oci",
-        "key": "customerContacts",
-        "name": "customer_contacts",
-        "type": "list",
-        "subtype": "",
-        "required": false,
-        "label": "Customer Contacts",
-        "id": "customer_contacts",
-        "conditional": false,
-        "condition": {},
-        "attributes": {
-          "email": {
-            "provider": "oci",
-            "key": "email",
-            "name": "email",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Email",
-            "id": "customer_contacts.email",
-            "staticLookup": false,
-            "cacheLookup": false,
-            "lookup": false,
-            "lookupResource": "",
-            "conditional": false,
-            "condition": {}
-          }
-        }
       }
     }
   },
@@ -7923,7 +7826,8 @@
         "lookup": true,
         "lookupResource": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "1"
       },
       "backup_network_nsg_ids": {
         "provider": "oci",
@@ -8243,7 +8147,8 @@
         "lookup": false,
         "lookupResource": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "LICENSE_INCLUDED"
       },
       "lifecycle_details": {
         "provider": "oci",
@@ -9608,7 +9513,8 @@
         "lookup": true,
         "lookupResource": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "1"
       },
       "compartment_id": {
         "provider": "oci",
@@ -9839,7 +9745,8 @@
         "lookup": true,
         "lookupResource": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "1"
       },
       "compartment_id": {
         "provider": "oci",
@@ -11526,7 +11433,8 @@
         "lookup": true,
         "lookupResource": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "1"
       },
       "compartment_id": {
         "provider": "oci",
@@ -11654,7 +11562,8 @@
         "lookup": true,
         "lookupResource": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "FAULT-DOMAIN-1"
       },
       "freeform_tags": {
         "provider": "oci",

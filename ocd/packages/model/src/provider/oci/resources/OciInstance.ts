@@ -44,18 +44,18 @@ export namespace OciInstance {
         }
         if (resource.createVnicDetails) resource.createVnicDetails.hostnameLabel = resource.displayName?.toLowerCase().replace(' ', '')
         // Default Shape 
-        resource.shape = 'VM.Standard.A1.Flex'
+        // resource.shape = 'VM.Standard.A1.Flex'
         // Default Memory & OCPU
-        if (resource.shapeConfig) {
-            resource.shapeConfig.memoryInGbs = 6
-            resource.shapeConfig.ocpus = 1
-        }
+        // if (resource.shapeConfig) {
+        //     resource.shapeConfig.memoryInGbs = 6
+        //     resource.shapeConfig.ocpus = 1
+        // }
         // Default Availability Domain
-        resource.availabilityDomain = '1'
+        // resource.availabilityDomain = '1'
         // Default source Type
-        if (resource.sourceDetails) {
-            resource.sourceDetails.sourceType = 'image'
-        }
+        // if (resource.sourceDetails) {
+        //     resource.sourceDetails.sourceType = 'image'
+        // }
         return resource
     }
     export function cloneResource(resource: OciInstance, type?: string): OciInstance {
