@@ -49,7 +49,14 @@ export namespace OciInstanceConfigs {
                 id: 'source_details.source_id',
                 properties: {},
                 configs: [],
-                resourceFilter: (r, resource, rootResource) => r.shapes.includes(rootResource.shape)
+                resourceFilter: (r, resource, rootResource) => r.shapes.includes(rootResource.shape),
+                lookupGroups: [
+                    {displayName: 'Oracle', simpleFilter: (r) => r.id.startsWith('Oracle')},
+                    {displayName: 'Windows', simpleFilter: (r) => r.id.startsWith('Windows')},
+                    {displayName: 'Canonical', simpleFilter: (r) => !r.id.startsWith('Canonical')},
+                    {displayName: 'CentOS', simpleFilter: (r) => r.id.startsWith('CentOS')},
+                    {displayName: 'Others', simpleFilter: (r) => ! r.id.startsWith('Oracle') &&  r.id.startsWith('Windows') &&  r.id.startsWith('Canonical') &&  r.id.startsWith('CentOS')}
+                ]
             },
             {
                 id: 'source_details.source_type',

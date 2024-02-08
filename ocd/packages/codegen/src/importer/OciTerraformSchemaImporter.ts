@@ -35,11 +35,12 @@ export class OciTerraformSchemaImporter extends OcdSchemaImporter {
     }
 
     getAttributes(key: string, block: TerrafomSchemaEntry, hierarchy=[]) {
-        // console.debug('OcdTerraformSchemaImporter: Resource', key)
         const ignore_block_types = ['timeouts']
         const ignore_attributes = ignoreElements[key] ? [...ignoreElements.common, ...ignoreElements[key]] : ignoreElements.common
         const type_overrides = elementOverrides.types[key] ? {...elementOverrides.types.common, ...elementOverrides.types[key]} : elementOverrides.types.common
         const maps = {...elementOverrides.maps.common, ...elementOverrides.maps[key] !== undefined ? elementOverrides.maps[key] : {}}
+        const defaults = {...elementOverrides.defaults.common, ...elementOverrides.defaults[key] !== undefined ? elementOverrides.defaults[key] : {}}
+        // console.debug('OcdTerraformSchemaImporter: Resource', key, type_overrides)
         // Simple attributes
         // @ts-ignore
         let attributes = block.attributes ? Object.entries(block.attributes).filter(([k, v]) => !ignore_attributes.includes(k) && !v.deprecated).reduce((r, [k, v]) => {
@@ -49,9 +50,9 @@ export class OciTerraformSchemaImporter extends OcdSchemaImporter {
                 key: this.toCamelCase(k),
                 name: k,
                 // @ts-ignore
-                type: this.isMultiReference(k) ? 'list' : Array.isArray(v.type) ? v.type[0] : type_overrides[k] ? type_overrides[k] : v.type,
+                type: type_overrides[k] ? type_overrides[k][0] : this.isMultiReference(k) ? 'list' : Array.isArray(v.type) ? v.type[0] : v.type,
                 // @ts-ignore
-                subtype: Array.isArray(v.type) ? v.type[1] : '',
+                subtype: type_overrides[k] && type_overrides[k].length > 1 ? type_overrides[k][1] : Array.isArray(v.type) ? v.type[1] : '',
                 // @ts-ignore
                 required: v.required ? v.required : false,
                 label: this.toLabel(k),
@@ -63,7 +64,8 @@ export class OciTerraformSchemaImporter extends OcdSchemaImporter {
                 lookup: this.isReference(k) || this.isMultiReference(k) || this.isLookupOverride(id, key),
                 lookupResource: this.isCacheLookup(id, key) ? this.cacheLookupResource(id, key) : this.isReference(k) || this.isMultiReference(k) ? this.lookupResource(k) : '',
                 conditional: this.isConditional(key, k),
-                condition: this.isConditional(key, k) ? conditionalElements[key][k] : {}
+                condition: this.isConditional(key, k) ? conditionalElements[key][k] : {},
+                default: defaults[id] !== undefined ? defaults[id] : undefined
             }
             if (r[k].type === 'map' && Object.hasOwn(maps, k)) {
                 // console.debug('OcdTerraformSchemaImporter: Found Map', key, k, JSON.stringify(maps, null, 4))

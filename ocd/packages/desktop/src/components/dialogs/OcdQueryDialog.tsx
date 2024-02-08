@@ -25,6 +25,7 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
     const [selectedProfile, setSelectedProfile] = useState('DEFAULT')
     const [selectedRegion, setSelectedRegion] = useState('')
     const [selectedCompartmentIds, setSelectedCompartmentIds] = useState([])
+    const [hierarchy, setHierarchy] = useState('')
     if (!profilesLoaded) OciApiFacade.loadOCIConfigProfiles().then((results) => {
         setProfilesLoaded(true)
         setProfiles(results)
@@ -69,7 +70,7 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
         const clone = OcdDocument.clone(ocdDocument)
         clone.query = !ocdDocument.query
         setOcdDocument(clone)
-}
+    }
     const onClickQuery = (e: React.MouseEvent<HTMLButtonElement>) => {
         console.debug('OcdQueryDialog: Selected Compartments', selectedCompartmentIds)
         OciApiFacade.queryTenancy(selectedProfile, selectedCompartmentIds, selectedRegion).then((results) => {
@@ -123,9 +124,11 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
                                     setSelectedCompartmentIds={setSelectedCompartmentIds}
                                     root={true}
                                     parentId={''}
+                                    setHierarchy={setHierarchy}
                                 />
                             </div>
                         </div>
+                        <div></div><div className="ocd-compartment-hierarchy">{hierarchy}</div>
                     </div>
                 </div>
                 <div className='ocd-dialog-footer'>
@@ -139,7 +142,7 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
     )
 }
 
-const CompartmentPicker = ({compartments, selectedCompartmentIds, setSelectedCompartmentIds, root, parentId}: CompartmentPickerProps): JSX.Element => {
+const CompartmentPicker = ({compartments, selectedCompartmentIds, setSelectedCompartmentIds, root, parentId, setHierarchy}: CompartmentPickerProps): JSX.Element => {
     const filter = root ? (c: OciModelResources.OciCompartment) => c.root : (c: OciModelResources.OciCompartment) => c.compartmentId === parentId
     const filteredCompartments = compartments.filter(filter)
     console.debug('OcdQueryDialog:', root, parentId, filteredCompartments)
@@ -149,17 +152,27 @@ const CompartmentPicker = ({compartments, selectedCompartmentIds, setSelectedCom
         const compartmentIds = selected ? [...selectedCompartmentIds, id] : selectedCompartmentIds.filter((i) => i !== id)
         setSelectedCompartmentIds(compartmentIds)
     }
+    const getHierarchy = (id: string): string[] => {
+        const compartment: OciModelResources.OciCompartment | undefined = compartments.find((c: OciModelResources.OciCompartment) => c.id === id)
+        const hierarchy: string[] = compartment === undefined ? [''] : [...getHierarchy(compartment.compartmentId), compartment.name]
+        return hierarchy
+    }
+    const onMouseOver = (id: string) => {
+        console.debug('OcdQueryDialog: onMouseOver', id)
+        setHierarchy(id === '' ? '' : getHierarchy(id).join('/'))
+    }
     return (
         <ul>
             {filteredCompartments.length > 0 && filteredCompartments.map((c) => {
                 return <li key={c.id}>
-                            <label><input type="checkbox" checked={selectedCompartmentIds.includes(c.id)} onChange={(e) => onChange(e, c.id)}></input>{c.name}</label>
+                            <label onMouseEnter={(e) => onMouseOver(c.id)} onMouseLeave={(e) => onMouseOver('')}><input type="checkbox" checked={selectedCompartmentIds.includes(c.id)} onChange={(e) => onChange(e, c.id)}></input>{c.name}</label>
                             {compartments.filter((cc) => cc.compartmentId === c.id).length > 0 && <CompartmentPicker 
                                 compartments={compartments} 
                                 selectedCompartmentIds={selectedCompartmentIds}
                                 setSelectedCompartmentIds={setSelectedCompartmentIds}
                                 root={false}
                                 parentId={c.id}
+                                setHierarchy={setHierarchy}
                             />}
                     </li>
             })}

@@ -71,6 +71,7 @@ export class OciReferenceDataQuery extends OciCommonQuery {
                 const listMySQLConfigurations = this.listMySQLConfigurations(compartmentIds)
                 const listDbSystemShapes = this.listDbSystemShapes(compartmentIds)
                 const listDbSystemVersions = this.listDbSystemVersions(compartmentIds)
+                const listAutonomousDbVersions = this.listAutonomousDbVersions(compartmentIds)
                 // Customer
                 const listCpeDeviceShapes = this.listCpeDeviceShapes()
                 // Limits
@@ -92,6 +93,7 @@ export class OciReferenceDataQuery extends OciCommonQuery {
                     listMySQLConfigurations,
                     listDbSystemShapes,
                     listDbSystemVersions,
+                    listAutonomousDbVersions,
                     listCpeDeviceShapes,
                     listDataScienceNotebookSessionShapes,
                     listServices,
@@ -138,6 +140,9 @@ export class OciReferenceDataQuery extends OciCommonQuery {
                     // DB System Version
                     // @ts-ignore
                     if (results[queries.indexOf(listDbSystemVersions)].status === 'fulfilled') referenceData.dbVersions = results[queries.indexOf(listDbSystemVersions)].value
+                    // Autonomous DB Version
+                    // @ts-ignore
+                    if (results[queries.indexOf(listAutonomousDbVersions)].status === 'fulfilled') referenceData.autonomousDbVersions = results[queries.indexOf(listAutonomousDbVersions)].value
                     /*
                     ** CPE
                     */
@@ -223,6 +228,29 @@ export class OciReferenceDataQuery extends OciCommonQuery {
                     images: results.nodePoolOptions.sources?.map((s) => {return {id: s.sourceName, displayName: s.sourceName}})
                 }
                 resolve(resources)
+            }).catch((reason) => {
+                console.error(reason)
+                reject(reason)
+            })
+        })
+    }
+
+    listAutonomousDbVersions(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const requests: database.requests.ListAutonomousDbVersionsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
+            const queries = requests.map((r) => this.databaseClient.listAutonomousDbVersions(r))
+            Promise.allSettled(queries).then((results) => {
+                console.debug('OciReferenceDataQuery: listAutonomousDbVersions: All Settled')
+                //@ts-ignore
+                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], []).map((r) => {return {
+                        ...r,
+                        id: r.version,
+                        displayName: r.version
+                    }
+                }).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
+                // @ts-ignore
+                const uniqueResources = Array.from(new Set(resources.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
+                resolve(uniqueResources)
             }).catch((reason) => {
                 console.error(reason)
                 reject(reason)

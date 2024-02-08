@@ -6,6 +6,23 @@
 import { OcdElementOverrides } from "../../types/OcdImporterData";
 
 export const elementOverrides: OcdElementOverrides = {
+    "defaults": {
+        "common": {
+            "availability_domain": '1',
+            "fault_domain": "FAULT-DOMAIN-1",
+            "license_model": "LICENSE_INCLUDED"
+        },
+        "oci_core_instance": {
+            "shape": "VM.Standard.A1.Flex",
+            "shape_config.memory_in_gbs": "6",
+            "shape_config.ocpus": "1",
+            "source_details.source_type": "image"
+        },
+        "oci_database_autonomous_database": {
+            "db_workload": "OLTP",
+            "is_auto_scaling_enabled": true
+        }
+    },
     "resourceLookupOverrides": {
         "common": {
             "nsg_ids": "network_security_group"
@@ -23,7 +40,9 @@ export const elementOverrides: OcdElementOverrides = {
             "shape": "shapes",
             "source_details.source_id": "images"
         },
-        "oci_database_autonomous_database": {}
+        "oci_database_autonomous_database": {
+            "db_version": "autonomousDbVersions"
+        }
     },
     "staticLookups": {
         "common": [
@@ -54,7 +73,6 @@ export const elementOverrides: OcdElementOverrides = {
             "compute_model",
             "data_safe_status",
             "database_edition",
-            "db_version",
             "db_workload",
             "license_model"
         ]
@@ -62,7 +80,10 @@ export const elementOverrides: OcdElementOverrides = {
     "types": {
         "common": {},
         "oci_core_instance": {
-            "assign_public_ip": "bool"
+            "assign_public_ip": ["bool"]
+        },
+        "oci_database_autonomous_database": {
+            "whitelisted_ips": ["list", "string"]
         },
     },
     "maps": {

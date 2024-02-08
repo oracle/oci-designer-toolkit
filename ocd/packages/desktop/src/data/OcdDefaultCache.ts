@@ -10132,6 +10132,104 @@ export const defaultCache: OcdCache = {
                         "displayName": "23.0.0.0.0"
                     }
                 ],
+                "autonomousDbVersions": [
+                    {
+                        "dbWorkload": "AJD",
+                        "details": "www.oracle.com/ajd",
+                        "isDedicated": false,
+                        "isDefaultForFree": true,
+                        "isDefaultForPaid": true,
+                        "isFreeTierEnabled": true,
+                        "isPaidEnabled": true,
+                        "version": "19c",
+                        "id": "19c",
+                        "displayName": "19c"
+                    },
+                    {
+                        "dbWorkload": "APEX",
+                        "details": "www.oracle.com/apex",
+                        "isDedicated": false,
+                        "isDefaultForFree": true,
+                        "isDefaultForPaid": true,
+                        "isFreeTierEnabled": true,
+                        "isPaidEnabled": true,
+                        "version": "19c",
+                        "id": "19c",
+                        "displayName": "19c"
+                    },
+                    {
+                        "dbWorkload": "OLTP",
+                        "details": "www.oracle.com/atp",
+                        "isDedicated": false,
+                        "isDefaultForFree": true,
+                        "isDefaultForPaid": true,
+                        "isFreeTierEnabled": true,
+                        "isPaidEnabled": true,
+                        "version": "19c",
+                        "id": "19c",
+                        "displayName": "19c"
+                    },
+                    {
+                        "dbWorkload": "DW",
+                        "details": "www.oracle.com/atp",
+                        "isDedicated": false,
+                        "isDefaultForFree": true,
+                        "isDefaultForPaid": true,
+                        "isFreeTierEnabled": true,
+                        "isPaidEnabled": true,
+                        "version": "19c",
+                        "id": "19c",
+                        "displayName": "19c"
+                    },
+                    {
+                        "dbWorkload": "APEX",
+                        "details": "www.oracle.com/apex",
+                        "isDedicated": false,
+                        "isDefaultForFree": false,
+                        "isDefaultForPaid": false,
+                        "isFreeTierEnabled": true,
+                        "isPaidEnabled": false,
+                        "version": "21c",
+                        "id": "21c",
+                        "displayName": "21c"
+                    },
+                    {
+                        "dbWorkload": "OLTP",
+                        "details": null,
+                        "isDedicated": false,
+                        "isDefaultForFree": false,
+                        "isDefaultForPaid": false,
+                        "isFreeTierEnabled": true,
+                        "isPaidEnabled": false,
+                        "version": "21c",
+                        "id": "21c",
+                        "displayName": "21c"
+                    },
+                    {
+                        "dbWorkload": "AJD",
+                        "details": "www.oracle.com/ajd",
+                        "isDedicated": false,
+                        "isDefaultForFree": false,
+                        "isDefaultForPaid": false,
+                        "isFreeTierEnabled": true,
+                        "isPaidEnabled": false,
+                        "version": "21c",
+                        "id": "21c",
+                        "displayName": "21c"
+                    },
+                    {
+                        "dbWorkload": "DW",
+                        "details": null,
+                        "isDedicated": false,
+                        "isDefaultForFree": false,
+                        "isDefaultForPaid": false,
+                        "isFreeTierEnabled": true,
+                        "isPaidEnabled": false,
+                        "version": "21c",
+                        "id": "21c",
+                        "displayName": "21c"
+                    }
+                ],
                 "cpeDeviceShape": [
                     {
                         "id": "RTX RTX830 Firmware Rev.15.02.03",

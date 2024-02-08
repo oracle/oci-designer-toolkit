@@ -96,6 +96,15 @@ export namespace OciCommonConfigs {
                     title: 'Password fields only support Variables.'
                 },
                 configs: []
+            },
+            {
+                id: 'whitelisted_ips',
+                properties: {
+                    placeholder: '0.0.0.0/0,0.0.0.0/0',
+                    pattern: "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(3[0-2]|[1-2][0-9]|[0-9]))(,\s?|$))+|^(var\.+(,\s?|$))",
+                    title: 'Comma separated IPv4 CIDR blocks'
+                },
+                configs: []
              }
         ]
     }

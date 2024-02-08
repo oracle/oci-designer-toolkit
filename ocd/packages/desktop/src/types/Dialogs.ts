@@ -17,4 +17,5 @@ export interface CompartmentPickerProps {
     setSelectedCompartmentIds: React.Dispatch<any>
     root: boolean
     parentId: string
+    setHierarchy: React.Dispatch<any>
 }

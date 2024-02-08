@@ -27,13 +27,24 @@ const OcdModelPalette = ({ ocdConsoleConfig, setDragData, ocdDocument }: Palette
 const OcdModelPaletteProviders = ({ provider, model, setDragData }: any): JSX.Element => {
     const open = true
     const modelExcludeResources = ['compartment']
+    const hiddenResourceTypes = [
+        'load_balancer_backend',
+        'load_balancer_backend_set',
+        'load_balancer_listener',
+        'network_load_balancer_backend',
+        'network_load_balancer_backend_set',
+        'network_load_balancer_listener',
+        'network_security_group_security_rule',
+        'vnic_attachments',
+        'volume-attachments'
+    ]
     return (
         <div className='ocd-designer-palette-provider'>
             <details id={provider.title} open={open}>
                 <summary><div className={provider}><label>{provider.toUpperCase()}</label></div></summary>
                 <div>
                     <ul>
-                        {Object.entries(model.resources).filter(([k, v]) => !modelExcludeResources.includes(k)).sort((a, b) => a[0].localeCompare(b[0])).map(([k, resources]) => {
+                        {Object.entries(model.resources).filter(([k, v]) => !modelExcludeResources.includes(k)).sort((a, b) => a[0].localeCompare(b[0])).filter(([k, r]) => !hiddenResourceTypes.includes(k)).map(([k, resources]) => {
                             return <OcdModelPaletteResources 
                                         provider={provider}
                                         type={k} 

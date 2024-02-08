@@ -32,7 +32,8 @@ export interface ResourcePropertyAttributes {
     lookup?: boolean
     lookupResource?: string,
     conditional: boolean,
-    condition: ResourcePropertyCondition | ResourcePropertyCondition[]
+    condition: ResourcePropertyCondition | ResourcePropertyCondition[],
+    default?: string | number | boolean
 }
 
 export type SimpleFilterType = (r: any) => boolean
