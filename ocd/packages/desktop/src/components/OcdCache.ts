@@ -4,7 +4,7 @@
 */
 
 import { OciApiFacade } from "../facade/OciApiFacade"
-import { defaultCache } from '../data/DefaultCache'
+import { defaultCache } from '../data/OcdDefaultCache'
 import { OcdCacheFacade } from "../facade/OcdCacheFacade"
 
 export interface OcdCacheEntry extends Record <string, any> {}
