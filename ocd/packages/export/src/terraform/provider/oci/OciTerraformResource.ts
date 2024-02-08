@@ -47,6 +47,7 @@ export class OciTerraformResource extends OcdTerraformResource {
     // Metadata / Cache - Dropdown Data Generation
     retrieveShapeId = () => '' // Simple Text Replace Reference
     retrieveImageId = () => {return 'Method must be define in Resource class'}
+    retrieveAutonomousdbversionId = () => {return 'Method must be define in Resource class'}
 }
 
 export default OciTerraformResource
