@@ -2031,7 +2031,7 @@ summary {
     border: 1px solid var(--dialog-input-border-colour);
     padding: 2px;
     box-sizing: border-box;
-    height: 430px;
+    height: 410px;
     width: 410px;
     overflow-y: scroll;
     overflow-x: hidden;
@@ -2053,6 +2053,19 @@ summary {
 .ocd-compartment-picker li > label {
     font-family: var(--dialog-input-font-family);
     font-size: var(--dialog-input-font-size);
+}
+
+.ocd-compartment-picker li > label:hover {
+    /* background-color: var(--dialog-highlight-colour); */
+    font-weight: bolder;
+}
+
+.ocd-compartment-search {
+    margin-right: 5px;
+}
+
+.ocd-compartment-search > input {
+    width: 100%;
 }
 
 .ocd-compartment-hierarchy {
