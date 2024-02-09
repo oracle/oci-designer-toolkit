@@ -18,4 +18,5 @@ export interface CompartmentPickerProps {
     root: boolean
     parentId: string
     setHierarchy: React.Dispatch<any>
+    refs: Record<string, React.RefObject<any>>
 }

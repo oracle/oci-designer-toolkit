@@ -11,6 +11,7 @@ import { OciModelResources } from '@ocd/model'
 import OcdDocument from "../OcdDocument"
 import { OcdUtils } from '@ocd/core'
 import { ActiveFileContext } from "../../pages/OcdConsole"
+import React from "react"
 
 export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps): JSX.Element => {
     // @ts-ignore
@@ -21,11 +22,15 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
     const [profiles, setProfiles] = useState([loadingState])
     const [profilesLoaded, setProfilesLoaded] = useState(false)
     const [regions, setRegions] = useState([regionsLoading])
-    const [compartments, setCompartments] = useState([])
+    const [compartments, setCompartments] = useState([] as OciModelResources.OciCompartment[])
     const [selectedProfile, setSelectedProfile] = useState('DEFAULT')
     const [selectedRegion, setSelectedRegion] = useState('')
     const [selectedCompartmentIds, setSelectedCompartmentIds] = useState([])
     const [hierarchy, setHierarchy] = useState('')
+    const refs: Record<string, React.RefObject<any>> = compartments.reduce((acc, value: OciModelResources.OciCompartment) => {
+        acc[value.hierarchy] = React.createRef();
+        return acc;
+      }, {} as Record<string, React.RefObject<any>>);
     if (!profilesLoaded) OciApiFacade.loadOCIConfigProfiles().then((results) => {
         setProfilesLoaded(true)
         setProfiles(results)
@@ -61,10 +66,16 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
         console.debug('OciQueryDialog: loadCompartments: Profile', profile)
         OciApiFacade.listTenancyCompartments(profile).then((results) => {
             console.debug('OcdQueryDialog: Compartments', results)
-            setCompartments(results)
+            const compartments = results.map((c: OciModelResources.OciCompartment) => {return {...c, hierarchy: getHierarchy(c.id, results).join('/')}})
+            setCompartments(compartments)
         }).catch((reason) => {
             setCompartments([])
         })
+    }
+    const getHierarchy = (id: string, compartments: OciModelResources.OciCompartment[]): string[] => {
+        const compartment: OciModelResources.OciCompartment | undefined = compartments.find((c: OciModelResources.OciCompartment) => c.id === id)
+        const hierarchy: string[] = compartment === undefined ? [''] : [...getHierarchy(compartment.compartmentId, compartments), compartment.name]
+        return hierarchy
     }
     const onClickCancel = (e: React.MouseEvent<HTMLButtonElement>) => {
         const clone = OcdDocument.clone(ocdDocument)
@@ -99,6 +110,12 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
             setActiveFile({name: '', modified: false})
         })
     }
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        // console.debug('OcdQueryDialog: onChange', e)
+        const keys = Object.keys(refs).filter((k) => k.includes(e.target.value))
+        if (keys.length > 0) refs[keys[0]].current.scrollIntoView(true)
+        // if (keys.length > 0) refs[keys[0]].current.scrollIntoView({behavior: 'smooth', block: 'start', inline: 'nearest'})
+    }
    
     return (
         <div className={className}>
@@ -116,6 +133,7 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
                                 {regions.map((r) => {return <option key={r.id} value={r.id}>{r.displayName}</option>})}
                             </select>
                         </div>
+                        <div></div><div className="ocd-compartment-search"><input type="text" onChange={onChange}></input></div>
                         <div>Compartments</div><div>
                             <div className="ocd-compartment-picker">
                                 <CompartmentPicker 
@@ -125,6 +143,7 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
                                     root={true}
                                     parentId={''}
                                     setHierarchy={setHierarchy}
+                                    refs={refs}
                                 />
                             </div>
                         </div>
@@ -142,29 +161,31 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
     )
 }
 
-const CompartmentPicker = ({compartments, selectedCompartmentIds, setSelectedCompartmentIds, root, parentId, setHierarchy}: CompartmentPickerProps): JSX.Element => {
+const CompartmentPicker = ({compartments, selectedCompartmentIds, setSelectedCompartmentIds, root, parentId, setHierarchy, refs}: CompartmentPickerProps): JSX.Element => {
     const filter = root ? (c: OciModelResources.OciCompartment) => c.root : (c: OciModelResources.OciCompartment) => c.compartmentId === parentId
     const filteredCompartments = compartments.filter(filter)
     console.debug('OcdQueryDialog:', root, parentId, filteredCompartments)
     const onChange = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
         const selected = e.target.checked
-        console.debug('OcdQueryDialog: Selected', selected)
+        // console.debug('OcdQueryDialog: Selected', selected)
         const compartmentIds = selected ? [...selectedCompartmentIds, id] : selectedCompartmentIds.filter((i) => i !== id)
         setSelectedCompartmentIds(compartmentIds)
     }
-    const getHierarchy = (id: string): string[] => {
-        const compartment: OciModelResources.OciCompartment | undefined = compartments.find((c: OciModelResources.OciCompartment) => c.id === id)
-        const hierarchy: string[] = compartment === undefined ? [''] : [...getHierarchy(compartment.compartmentId), compartment.name]
-        return hierarchy
-    }
+    // const getHierarchy = (id: string): string[] => {
+    //     const compartment: OciModelResources.OciCompartment | undefined = compartments.find((c: OciModelResources.OciCompartment) => c.id === id)
+    //     const hierarchy: string[] = compartment === undefined ? [''] : [...getHierarchy(compartment.compartmentId), compartment.name]
+    //     return hierarchy
+    // }
     const onMouseOver = (id: string) => {
-        console.debug('OcdQueryDialog: onMouseOver', id)
-        setHierarchy(id === '' ? '' : getHierarchy(id).join('/'))
+        // console.debug('OcdQueryDialog: onMouseOver', id)
+        // setHierarchy(id === '' ? '' : getHierarchy(id).join('/'))
+        const compartment: OciModelResources.OciCompartment | undefined = compartments.find((c: OciModelResources.OciCompartment) => c.id === id)
+        setHierarchy(compartment !== undefined ? compartment.hierarchy : '')
     }
     return (
         <ul>
             {filteredCompartments.length > 0 && filteredCompartments.map((c) => {
-                return <li key={c.id}>
+                return <li key={c.id} ref={refs[c.hierarchy]}>
                             <label onMouseEnter={(e) => onMouseOver(c.id)} onMouseLeave={(e) => onMouseOver('')}><input type="checkbox" checked={selectedCompartmentIds.includes(c.id)} onChange={(e) => onChange(e, c.id)}></input>{c.name}</label>
                             {compartments.filter((cc) => cc.compartmentId === c.id).length > 0 && <CompartmentPicker 
                                 compartments={compartments} 
@@ -173,6 +194,7 @@ const CompartmentPicker = ({compartments, selectedCompartmentIds, setSelectedCom
                                 root={false}
                                 parentId={c.id}
                                 setHierarchy={setHierarchy}
+                                refs={refs}
                             />}
                     </li>
             })}
