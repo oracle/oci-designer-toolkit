@@ -9,6 +9,7 @@
 import { OcdDesign, OciModelResources } from '@ocd/model'
 import { analytics, bastion, common, core, database, filestorage, identity, keymanagement, loadbalancer, mysql, networkloadbalancer, nosql, objectstorage, vault } from 'oci-sdk'
 import { OciCommonQuery } from './OciQueryCommon'
+import { OcdUtils } from '@ocd/core'
 
 export class OciQuery extends OciCommonQuery {
     profile
@@ -69,7 +70,8 @@ export class OciQuery extends OciCommonQuery {
         const nameParts = name.split('-')
         const region = nameParts[0].toUpperCase()
         const city = `${nameParts[1].charAt(0).toUpperCase()}${nameParts[1].substring(1).toLowerCase()}`
-        const displayName = `${region} ${city}`
+        // const displayName = `${region} ${city}`
+        const displayName = nameParts.slice(0, -1).map((p) => OcdUtils.capitaliseFirstCharacter(p)).join(' ')
         return displayName
     }
 

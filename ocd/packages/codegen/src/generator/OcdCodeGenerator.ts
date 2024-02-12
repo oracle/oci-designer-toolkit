@@ -183,6 +183,7 @@ ${resources.sort().map((r) => `export { ${this.resourceName(r)} } from './${this
 
     toTitleCase = (str) => str.replace(/\b\w+/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase();}).replaceAll('-', '_').replace(/\W+/g, ' ')
     toCamelCase = (str) => `${this.toTitleCase(str.split('_').join(' ')).split(' ').map((e, i) => i === 0 ? e.toLowerCase() : e).join('')}`
+    capitaliseFirstCharacter = (str) => `${str.charAt(0).toUpperCase()}${str.slice(1)}`
 
     getSchemaObjects = (schema) => Object.values(schema.attributes).filter(f => f.attributes).reduce((a, c) => [...a, c, ...this.getSchemaObjects(c)], []).reduce((a, c) => [...a, ...a.find((o) => o.name === c.name) ? [] : [c]], [])
     getSchemaAttributes = (schema) => Object.values(schema.attributes).reduce((a, c) => [...a, c, ...c.attributes ? this.getSchemaAttributes(c) : []], []).reduce((a, c) => [...a, ...a.find((o) => o.name === c.name) ? [] : [c]], [])

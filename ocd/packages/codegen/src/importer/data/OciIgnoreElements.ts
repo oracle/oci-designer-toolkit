@@ -140,6 +140,7 @@ export const ignoreElements: OcdIgnoreElements = {
         "disaster_recovery_region_type",
         "failed_data_recovery_in_seconds",
         "infrastructure_type",
+        "is_access_control_enabled",
         "is_preview",
         "is_reconnect_clone_enabled",
         "is_refreshable_clone",

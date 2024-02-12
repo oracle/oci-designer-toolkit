@@ -113,8 +113,10 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         // console.debug('OcdQueryDialog: onChange', e)
         const keys = Object.keys(refs).filter((k) => k.includes(e.target.value))
-        if (keys.length > 0) refs[keys[0]].current.scrollIntoView(true)
+        // if (keys.length > 0) refs[keys[0]].current.scrollIntoView(true)
         // if (keys.length > 0) refs[keys[0]].current.scrollIntoView({behavior: 'smooth', block: 'start', inline: 'nearest'})
+        // if (keys.length > 0) refs[keys[0]].current.scrollIntoView({behavior: 'smooth', block: 'nearest', inline: 'nearest'})
+        if (keys.length > 0) refs[keys[0]].current.scrollIntoView({behavior: 'smooth', block: 'center', inline: 'nearest'})
     }
    
     return (
@@ -133,7 +135,7 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
                                 {regions.map((r) => {return <option key={r.id} value={r.id}>{r.displayName}</option>})}
                             </select>
                         </div>
-                        <div></div><div className="ocd-compartment-search"><input type="text" onChange={onChange}></input></div>
+                        <div></div><div className="ocd-compartment-search"><input type="text" onChange={onChange} placeholder="Search"></input></div>
                         <div>Compartments</div><div>
                             <div className="ocd-compartment-picker">
                                 <CompartmentPicker 

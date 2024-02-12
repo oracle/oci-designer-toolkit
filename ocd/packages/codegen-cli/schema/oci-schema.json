@@ -7499,22 +7499,6 @@
         "conditional": false,
         "condition": {}
       },
-      "is_access_control_enabled": {
-        "provider": "oci",
-        "key": "isAccessControlEnabled",
-        "name": "is_access_control_enabled",
-        "type": "bool",
-        "subtype": "",
-        "required": false,
-        "label": "Is Access Control Enabled",
-        "id": "is_access_control_enabled",
-        "staticLookup": false,
-        "cacheLookup": false,
-        "lookup": false,
-        "lookupResource": "",
-        "conditional": false,
-        "condition": {}
-      },
       "is_auto_scaling_enabled": {
         "provider": "oci",
         "key": "isAutoScalingEnabled",

@@ -11,7 +11,7 @@ export class OciTerraformResource extends OcdTerraformResource {
         Compartment: 'name'
     }
     isHomeRegion: boolean
-    simpleCacheAttributes = ['shapes']
+    simpleCacheAttributes = ['shapes', 'autonomousDbVersions']
     lookupCacheAttributes = ['images']
     constructor(idTFResourceMap={}, isHomeRegion: boolean = false) {
         super(idTFResourceMap)
@@ -35,9 +35,15 @@ export class OciTerraformResource extends OcdTerraformResource {
     generateCacheAttribute = (name: string, value: string | undefined, required: boolean, level=0, lookupResource=''): string => {
         if (this.simpleCacheAttributes.includes(lookupResource)) return this.generateTextAttribute(name, value, required, level)
         else if (this.lookupCacheAttributes.includes(lookupResource)) return this.generateCacheLookupAttribute(name, lookupResource.slice(0, -1), required, level)
-        return ''
+        return `# Cache Attribute ${lookupResource} Simple/Lookup not specified`
     }
 
+    // generateCacheLookupAttribute = (name: string, value: string | undefined, required: boolean, level=0): string => {
+    //     if (this.isVariable(value)) return `${this.indentation[level]}${name} = ${this.formatVariable(value)}`
+    //     else if (required) return `${this.indentation[level]}${name} = local.${this.terraformResourceName}_${name as string}_id`
+    //     else if (value && value !== '') return `${this.indentation[level]}${name} = local.${this.terraformResourceName}_${name as string}_id`
+    //     else return `${this.indentation[level]}# ${name} = "${value}"`
+    // }
     generateCacheLookupAttribute = (name: string, value: string | undefined, required: boolean, level=0): string => {
         if (this.isVariable(value)) return `${this.indentation[level]}${name} = ${this.formatVariable(value)}`
         else if (required) return `${this.indentation[level]}${name} = local.${this.terraformResourceName}_${value as string}_id`
@@ -45,9 +51,11 @@ export class OciTerraformResource extends OcdTerraformResource {
         else return `${this.indentation[level]}# ${name} = "${value}"`
     }
     // Metadata / Cache - Dropdown Data Generation
+    // Simple Text Replace Reference
+    retrieveAutonomousDbVersionId = () => '' // Simple Text Replace Reference
     retrieveShapeId = () => '' // Simple Text Replace Reference
+    // Id Lookups
     retrieveImageId = () => {return 'Method must be define in Resource class'}
-    retrieveAutonomousdbversionId = () => {return 'Method must be define in Resource class'}
 }
 
 export default OciTerraformResource

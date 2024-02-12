@@ -68,6 +68,7 @@ export class OcdTerraformResource {
         else if (required) return `${this.indentation[level]}${name} = ${value}`
         // else if (value !== undefined && typeof value === 'number') return `${this.indentation[level]}${name} = ${value}`
         else if (value !== undefined && typeof value === 'number' && value !== 0) return `${this.indentation[level]}${name} = ${value}`
+        else if (value !== undefined && typeof value === 'string' && value !== '') return `${this.indentation[level]}${name} = ${parseInt(value)}`
         else return `${this.indentation[level]}# ${name} = ${value}`
     }
     generateReferenceListAttribute = (name: string, value: string | string[] | undefined, required: boolean, level=0) => {
