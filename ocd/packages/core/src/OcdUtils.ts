@@ -78,4 +78,5 @@ export namespace OcdUtils {
         }
         return display
     }
-    }
+    export function capitaliseFirstCharacter(str: string): string {return `${str.charAt(0).toUpperCase()}${str.slice(1)}`}
+}
