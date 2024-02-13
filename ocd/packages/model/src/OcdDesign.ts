@@ -106,6 +106,7 @@ export interface OcdUserDefined extends Record<string, any> {
 }
 
 export interface OcdVariable {
+    key: string
     name: string,
     default: string | number,
     description: string
@@ -209,6 +210,14 @@ export namespace OcdDesign {
             class: '',
             showParentConnection: true,
             showConnections: true
+        }
+    }
+    export function newVariable(): OcdVariable {
+        return {
+            key: uuidv4(),
+            name: '',
+            default: '',
+            description: ''
         }
     }
 }
