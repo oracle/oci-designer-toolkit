@@ -4,7 +4,7 @@
 */
 
 export { OcdDesign, OcdViewPage, OcdViewCoords, OcdViewLayer, OcdBaseModel, OcdViewPoint, OcdViewConnector, OcdViewCoordsStyle } from './OcdDesign'
-export { OcdResources, OciResources } from './OcdDesign'
+export { OcdResources, OciResources, OcdVariable } from './OcdDesign'
 export { PaletteGroup, PaletteResource } from './OcdPalette'
 export { OcdResource } from './OcdResource'
 export { OciResource } from './provider/oci/OciResource'
