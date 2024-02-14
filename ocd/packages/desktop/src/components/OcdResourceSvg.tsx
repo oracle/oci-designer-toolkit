@@ -338,10 +338,10 @@ const OcdResizePoint = ({resource, cx, cy, position, setDimensions, onResize, on
 
 const OcdForeignObject = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resource, hidden }: ResourceForeignObjectProps) => {
     const id = `${resource.id}-fo`
-    const backgroundColourClass = `${resource.class}-background-colour`
     const containerLayout = (resource.container && (!resource.detailsStyle || resource.detailsStyle === 'default'))
     const detailedLayout = ((resource.detailsStyle && resource.detailsStyle === 'detailed') || ((!resource.detailsStyle || resource.detailsStyle === 'default') && ocdConsoleConfig.config.detailedResource))
     // const detailedLayout = (ocdConsoleConfig.config.detailedResource || (resource.detailsStyle && resource.detailsStyle === 'detailed'))
+    const backgroundColourClass = `${resource.class}-background-colour ${containerLayout ? 'ocd-svg-container-icon-background' : detailedLayout ? 'ocd-svg-detailed-icon-background' : 'ocd-svg-simple-icon-background'}`
     const foreignObjectClass = `ocd-svg-foreign-object ${containerLayout ? 'ocd-svg-resource-container' : detailedLayout ? 'ocd-svg-resource-detailed' : 'ocd-svg-resource-simple'}`
     const gX = 0
     const gY = 0
@@ -353,6 +353,7 @@ const OcdForeignObject = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
         // Stop Bubbling when name input click to disable SVG Drag functionality
         e.stopPropagation()
     }
+    const getTitle = () => `${resource.title} ${ocdDocument.getAdditionalTitleInfo(resource.ocid)}`
     const style = resource.style ? resource.style : {} as React.CSSProperties
     if (hidden) {
         style.opacity = 0
@@ -369,7 +370,7 @@ const OcdForeignObject = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
                     <div className={`${resource.class} ocd-svg-icon`}></div>
                 </div>
                 <div className='ocd-svg-foreign-object-display-name'>
-                    <span>{resource.title}</span>
+                    <span>{getTitle()}</span>
                     <input type='text' value={ocdDocument.getDisplayName(resource.ocid)} 
                         onChange={onChange} 
                         onMouseMove={onMouseMove} 

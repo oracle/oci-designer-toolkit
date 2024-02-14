@@ -55,8 +55,14 @@ const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourcePr
     const resourceJSXMethod = selectedResource ? `${OcdUtils.toTitleCase(selectedResource.provider)}${selectedResource.resourceType}` : ''
     // @ts-ignore 
     const ResourceProperties = ociResources[resourceJSXMethod]
+    const variables = selectedResource && selectedResource.provider === 'oci' ? ocdDocument.getOciVariables() : []
     return (
         <div className={`ocd-properties-panel ocd-properties-panel-theme`}>
+            <datalist id='variables'>
+                {variables.map((v) => 
+                <option value={`var.${v.name}`}/>
+                )}
+            </datalist>
             {selectedResource && selectedResource.provider === 'oci' && <OciCommonResourceProperties 
                 ocdDocument={ocdDocument} 
                 setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} 
