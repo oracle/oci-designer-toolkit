@@ -8,6 +8,7 @@ import { OciModelResources } from '@ocd/model'
 import { OcdDesign, OcdViewPage, OcdViewCoords, OcdViewLayer, OcdBaseModel, OcdViewPoint, OcdViewCoordsStyle, OcdResource, OciResource, PaletteResource } from '@ocd/model'
 import { OcdAutoLayout } from './OcdAutoLayout'
 import { OcdUtils } from '@ocd/core'
+import additionTitleInfo from '../data/OcdAdditionTitleInfo'
 
 export interface OcdSelectedResource {
     modelId: string
@@ -186,6 +187,12 @@ export class OcdDocument {
         const resource = this.getResource(id)
         const associationIds: string[] = (resource.provider === 'oci') ? OciResource.getAssociationIds(resource) : []
         return associationIds
+    }
+    getAdditionalTitleInfo(id: string): string {
+        const resource = this.getResource(id)
+        const key = resource.resourceType
+        if (Object.hasOwn(additionTitleInfo, key)) return `${resource[additionTitleInfo[key]]}`
+        else return ''
     }
 
     getOciVariables = () => this.design.model.oci.vars

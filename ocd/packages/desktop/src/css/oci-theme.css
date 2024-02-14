@@ -221,4 +221,26 @@
 ** Background Colours
 */
 
-/* .oci-instance-background-colour {} */
+.oci-dhcp-options-background-colour {
+    background-color: var(--svg-network-resources-background-colour);
+}
+
+.oci-instance-background-colour {
+    background-color: var(--svg-infrastructure-resources-background-colour);
+}
+
+.oci-route-table-background-colour {
+    background-color: var(--svg-network-resources-background-colour);
+}
+
+.oci-security-list-background-colour {
+    background-color: var(--svg-network-resources-background-colour);
+}
+
+.oci-subnet-background-colour {
+    background-color: var(--svg-network-resources-background-colour);
+}
+
+.oci-vcn-background-colour {
+    background-color: var(--svg-network-resources-background-colour);
+}

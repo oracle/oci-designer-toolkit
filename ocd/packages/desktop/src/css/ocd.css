@@ -1342,6 +1342,26 @@ summary {
     box-shadow: 0 0 5px #1d2733;
 }
 
+.ocd-svg-container-icon-background {
+    border-color: var(--svg-simple-resource-stroke);
+    border-width: var(--svg-simple-resource-stroke-width);
+    border-top-left-radius: 5px 5px;
+    border-bottom-right-radius: 5px 5px;
+}
+
+.ocd-svg-detailed-icon-background {
+    border-color: var(--svg-simple-resource-stroke);
+    border-width: var(--svg-simple-resource-stroke-width);
+    border-top-left-radius: 5px 5px;
+    border-bottom-left-radius: 5px 5px;
+}
+
+.ocd-svg-simple-icon-background {
+    border-color: var(--svg-simple-resource-stroke);
+    border-width: var(--svg-simple-resource-stroke-width);
+    border-radius: 5px 5px;
+}
+
 
 
 

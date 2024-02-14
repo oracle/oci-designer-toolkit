@@ -32,6 +32,9 @@
     --svg-resource-association-connector-stroke-dasharray: 3, 2;
     --svg-resource-association-connector-stroke-opacitiy: 1;
 
+    --svg-network-resources-background-colour: #796087;
+    --svg-infrastructure-resources-background-colour: #3B7087;
+
     --dialog-background-colour: #ffffff;
     --dialog-border-colour: #131243;
     --dialog-title-background-colour: #ffffff;
