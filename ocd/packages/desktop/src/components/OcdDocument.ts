@@ -188,6 +188,8 @@ export class OcdDocument {
         return associationIds
     }
 
+    getOciVariables = () => this.design.model.oci.vars
+
     // @ts-ignore 
     getPage = (id: string): OcdViewPage => this.design.view.pages.find((v) => v.id === id)
     // @ts-ignore 

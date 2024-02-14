@@ -158,7 +158,7 @@ export const OcdTextProperty = ({ ocdDocument, setOcdDocument, resource, config,
     return (
         <div className={className}>
             <div><label>{attribute.label}</label></div>
-            <div><input type='text' value={resource[attribute.key]} {...properties} onChange={onChange} onBlur={onBlur}></input></div>
+            <div><input type='text' value={resource[attribute.key]} {...properties} list='variables' onChange={onChange} onBlur={onBlur}></input></div>
         </div>
     )
 }
@@ -396,7 +396,7 @@ export const OcdStringListProperty = ({ ocdDocument, setOcdDocument, resource, c
     return (
         <div className={className}>
             <div><label>{attribute.label}</label></div>
-            <div><input type='text' value={resource[attribute.key].join(',')} {...properties} onChange={onChange} onBlur={onBlur}></input></div>
+            <div><input type='text' value={resource[attribute.key].join(',')} {...properties} list='variables' onChange={onChange} onBlur={onBlur}></input></div>
         </div>
     )
     // return (
@@ -423,7 +423,7 @@ export const OcdNumberListProperty = ({ ocdDocument, setOcdDocument, resource, c
     return (
         <div className={className}>
             <div><label>{attribute.label}</label></div>
-            <div><input type='text' value={resource[attribute.key].join(',')} {...properties} onChange={onChange} onBlur={onBlur}></input></div>
+            <div><input type='text' value={resource[attribute.key].join(',')} {...properties} list='variables' onChange={onChange} onBlur={onBlur}></input></div>
         </div>
     )
 }
