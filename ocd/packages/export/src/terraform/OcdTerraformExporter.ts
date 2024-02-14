@@ -211,7 +211,6 @@ ${this.design.model.oci.vars.map((v) => this.variableStatement(v)).join('')}
     `}
     variableStatement = (v: OcdVariable) => {
         return `variable "${v.name}" {
-    type = string
     ${v.default !== '' ? `default = "${v.default}"` : ''}
     description = "${v.description}"
 }
