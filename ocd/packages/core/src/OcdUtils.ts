@@ -79,4 +79,14 @@ export namespace OcdUtils {
         return display
     }
     export function capitaliseFirstCharacter(str: string): string {return `${str.charAt(0).toUpperCase()}${str.slice(1)}`}
+    export function rgbaToHex(rgba: string, removeAlpha = false): string {
+        return "#" + rgba.replace(/^rgba?\(|\s+|\)$/g, '') // Get's rgba / rgb string values
+          .split(',') // splits them at ","
+          .filter((s: string, index: number) => !removeAlpha || index !== 3)
+          .map((s: string) => parseFloat(s)) // Converts them to numbers
+          .map((n: number, index: number) => index === 3 ? Math.round(n * 255) : n) // Converts alpha to 255 number
+          .map((n: number) => n.toString(16)) // Converts numbers to hex
+          .map((s: string) => s.length === 1 ? "0" + s : s) // Adds 0 when length of one number is 1
+          .join("") // Puts the array to togehter to a string
+    }
 }
