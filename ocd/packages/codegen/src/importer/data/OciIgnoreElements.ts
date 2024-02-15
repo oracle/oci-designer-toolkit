@@ -218,6 +218,16 @@ export const ignoreElements: OcdIgnoreElements = {
     "oci_load_balancer_load_balancer": [
         "ip_address_details"
     ],
+    "oci_load_balancer_backend_set": [
+        "backend",
+        "lb_cookie_session_persistence_configuration",
+        "session_persistence_configuration",
+        "ssl_configuration"
+    ],
+    "oci_load_balancer_listener": [
+        "connection_configuration",
+        "ssl_configuration"
+    ],
     "oci_mysql_mysql_db_system": [
         "analytics_cluster",
         "channels",
@@ -228,6 +238,9 @@ export const ignoreElements: OcdIgnoreElements = {
     ],
     "oci_network_load_balancer_network_load_balancer": [
         "ip_addresses"
+    ],
+    "oci_network_load_balancer_backend_set": [
+        "backend"
     ],
     "oci_nosql_table": [
         "schema"
