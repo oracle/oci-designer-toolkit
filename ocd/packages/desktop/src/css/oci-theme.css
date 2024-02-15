@@ -244,10 +244,6 @@
     background-color: var(--svg-storage-resources-background-colour);
 }
 
-/* .oci-db-system-background-colour {
-    background-color: var(--svg-database-resources-background-colour);
-} */
-
 /* Networking */
 .oci-dhcp-options-background-colour,
 .oci-load-balancer-background-colour,
@@ -268,47 +264,3 @@
 .oci-nat-gateway-background-colour {
     background-color: var(--svg-gateway-resources-background-colour);
 }
-
-/* .oci-load-balancer-background-colour {
-    background-color: var(--svg-network-resources-background-colour);
-} */
-
-/* .oci-mysql-db-system-background-colour {
-    background-color: var(--svg-database-resources-background-colour);
-} */
-
-/* .oci-nat-gateway-background-colour {
-    background-color: var(--svg-gateway-resources-background-colour);
-} */
-
-/* .oci-network-load-balancer-background-colour {
-    background-color: var(--svg-network-resources-background-colour);
-} */
-
-/* .oci-network-security-group-background-colour {
-    background-color: var(--svg-network-resources-background-colour);
-} */
-
-/* .oci-nosql-table-background-colour {
-    background-color: var(--svg-database-resources-background-colour);
-} */
-
-/* .oci-route-table-background-colour {
-    background-color: var(--svg-network-resources-background-colour);
-} */
-
-/* .oci-security-list-background-colour {
-    background-color: var(--svg-network-resources-background-colour);
-} */
-
-/* .oci-subnet-background-colour {
-    background-color: var(--svg-network-resources-background-colour);
-} */
-
-/* .oci-vcn-background-colour {
-    background-color: var(--svg-network-resources-background-colour);
-} */
-
-/* .oci-volume-background-colour {
-    background-color: var(--svg-storage-resources-background-colour);
-} */
