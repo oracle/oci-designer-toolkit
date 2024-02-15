@@ -620,7 +620,7 @@ export const OcdDragResourceGhostSvg = ({ ocdConsoleConfig, ocdDocument, setOcdD
 
 export const OcdConnector = ({ocdConsoleConfig, ocdDocument, connector, parentConnector}: ConnectorSvgProps): JSX.Element => {
     const simpleWidth = 40
-    const detailedWidth = 150
+    const detailedWidth = 170
     const simpleHeight = 40
     const controlPoint = 100
     // Start Coords Dimensions

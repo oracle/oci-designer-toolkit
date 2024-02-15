@@ -17,7 +17,7 @@
     --canvas-icon-height: 40px;
     --canvas-icon-width: 40px;
     --canvas-resource-simple-width: 40px;
-    --canvas-resource-detailed-width: 150px;
+    --canvas-resource-detailed-width: 170px;
     --canvas-resource-container-width: 200px;
 
     --tabular-row-number-column-width: 40px;
@@ -1256,8 +1256,7 @@ summary {
 
 .ocd-svg-foreign-object-display-name {
     display: block;
-    margin: 0 0 0 5px;
-    padding: 0;
+    padding: 0 0 0 5px;
     margin: auto;
 }
 
