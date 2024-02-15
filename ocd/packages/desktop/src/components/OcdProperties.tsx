@@ -10,7 +10,7 @@ import { OcdUtils } from '@ocd/core'
 import { OcdDocument } from './OcdDocument'
 import { OcdLookupProperty, OcdTextProperty, ResourceElementConfig, ResourceProperties } from './properties/OcdPropertyTypes'
 import * as ociResources from './properties/provider/oci/resources'
-import { HexColorPicker, HexColorInput } from 'react-colorful'
+import { HexColorPicker, HexColorInput, RgbaColorPicker, RgbaStringColorPicker } from 'react-colorful'
 import Markdown from 'react-markdown'
 import { OcdValidationResult } from '@ocd/model'
 
@@ -182,11 +182,11 @@ const OcdResourceStyle = ({ocdDocument, setOcdDocument}: DesignerResourcePropert
     // style.fill
     const coordsFill = (coordsStyle !== undefined && coordsStyle.fill !== undefined) ? coordsStyle.fill : undefined
     const fillChecked = (coordsFill !== undefined) as boolean
-    const fill = coordsFill !== undefined ? coordsFill : '#aabbcc'
+    const fill = coordsFill !== undefined ? coordsFill : 'rgba(170, 187, 204, 0.5)' //'#aabbcc'
     // style.stroke
     const coordsStroke = (coordsStyle !== undefined && coordsStyle.stroke !== undefined) ? coordsStyle.stroke : undefined
     const strokeChecked = (coordsStroke !== undefined) as boolean
-    const stroke = coordsStroke !== undefined ? coordsStroke : '#aabbcc'
+    const stroke = coordsStroke !== undefined ? coordsStroke : 'rgba(170, 187, 204, 1)' //'#aabbcc'
     // style.strokeDasharray
     const coordsStrokeDasharray = (coordsStyle !== undefined && coordsStyle.strokeDasharray !== undefined) ? coordsStyle.strokeDasharray : undefined
     const strokeDasharray = coordsStrokeDasharray !== undefined ? coordsStrokeDasharray : 'default'
@@ -212,7 +212,7 @@ const OcdResourceStyle = ({ocdDocument, setOcdDocument}: DesignerResourcePropert
         // const style = coords !== undefined && coords.style !== undefined ? JSON.parse(JSON.stringify(coords.style)) : {} as OcdViewCoordsStyle
         const style = coordsStyle !== undefined ? JSON.parse(JSON.stringify(coordsStyle)) : {} as OcdViewCoordsStyle
         style.fill = colour
-        console.debug('OcdProperties: Set Fill Colour', coords)
+        console.debug('OcdProperties: Colour - Fill', coords)
         if (coords) {ocdDocument.updateCoords({...coords, style: style}, page.id)}
         const clone = OcdDocument.clone(ocdDocument)
         setOcdDocument(clone)
@@ -238,7 +238,7 @@ const OcdResourceStyle = ({ocdDocument, setOcdDocument}: DesignerResourcePropert
         // const style = coords !== undefined && coords.style !== undefined ? JSON.parse(JSON.stringify(coords.style)) : {} as OcdViewCoordsStyle
         const style = coordsStyle !== undefined ? JSON.parse(JSON.stringify(coordsStyle)) : {} as OcdViewCoordsStyle
         style.stroke = colour
-        console.debug('OcdProperties: Set Stroke Colour', coords)
+        console.debug('OcdProperties: Colour - Stroke', coords)
         if (coords) {ocdDocument.updateCoords({...coords, style: style}, page.id)}
         const clone = OcdDocument.clone(ocdDocument)
         setOcdDocument(clone)
@@ -312,7 +312,7 @@ const OcdLayerStyle = ({ocdDocument, setOcdDocument}: DesignerResourceProperties
     const layerStyle = (layer !== undefined && layer.style !== undefined) ? layer.style : undefined
     const layerFill = (layerStyle !== undefined && layerStyle.fill !== undefined) ? layerStyle.fill : undefined
     const fillChecked = (layerFill !== undefined) as boolean
-    const fill = layerFill !== undefined ? layerFill : '#aabbcc'
+    const fill = layerFill !== undefined ? layerFill : 'rgba(170, 187, 204, 1)' //'#aabbcc'
 
     const fillCheckedChanged = () => {
         console.debug('OcdProperties: fillCheckedChanged', fillChecked, layer)
@@ -331,7 +331,7 @@ const OcdLayerStyle = ({ocdDocument, setOcdDocument}: DesignerResourceProperties
     const setFillColour = (colour: string) => {
         const style = layerStyle !== undefined ? JSON.parse(JSON.stringify(layerStyle)) : {} as OcdViewCoordsStyle
         style.fill = colour
-        console.debug('OcdProperties: Set Fill Colour', layer)
+        console.debug('OcdProperties: Colour - Layer', layer)
         ocdDocument.updateLayerStyle(layer.id, style)
         const clone = OcdDocument.clone(ocdDocument)
         setOcdDocument(clone)
@@ -349,6 +349,7 @@ const OcdLayerStyle = ({ocdDocument, setOcdDocument}: DesignerResourceProperties
 }
 const OcdColourPicker = ({colour, setColour}: DesignerColourPicker): JSX.Element => {
     console.debug('OcdProperties: Colour', colour)
+    // const [rgbaColor, setRgbaColor] = useState({ r: 200, g: 150, b: 35, a: 0.5 })
     const [pickerOpen, setPickerOpen] = useState(false)
     const colourChanged = (colour: string) => {
         console.debug('OcdProperties: Colour Changed', colour)
@@ -362,8 +363,10 @@ const OcdColourPicker = ({colour, setColour}: DesignerColourPicker): JSX.Element
                 onClick={() => setPickerOpen(!pickerOpen)}
             ></div>
             {pickerOpen && <div className='ocd-colour-picker-popup'>
-                <div><HexColorPicker color={colour} onChange={colourChanged} /></div>
-                <div><HexColorInput color={colour} onChange={colourChanged} /></div>
+                {/* <div><RgbaColorPicker color={rgbaColor} onChange={setRgbaColor} /></div> */}
+                <div><RgbaStringColorPicker color={colour} onChange={colourChanged} /></div>
+                {/* <div><HexColorPicker color={colour} onChange={colourChanged} /></div> */}
+                {/* <div><HexColorInput color={colour} onChange={colourChanged} /></div> */}
             </div>}
         </div>
     )
