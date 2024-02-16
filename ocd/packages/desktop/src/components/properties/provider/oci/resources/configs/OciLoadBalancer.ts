@@ -7,5 +7,16 @@ import { ResourceElementConfig } from "../../../../OcdPropertyTypes"
 import { OciCommonConfigs } from "../../OciCommonConfigs"
 
 export namespace OciLoadBalancerConfigs {
-    export function configs(): ResourceElementConfig[] {return [...OciCommonConfigs.configs()]}
+    export function configs(): ResourceElementConfig[] {return [
+        ...OciCommonConfigs.configs(),
+        {
+            id: 'ip_mode',
+            properties: {},
+            configs: [],
+            options: [
+                {id: 'IPV4', displayName: 'IPV4'},
+                {id: 'IPV6', displayName: 'IPV6'}
+            ]
+        }
+]}
 }

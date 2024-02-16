@@ -216,7 +216,8 @@ export const ignoreElements: OcdIgnoreElements = {
         "replica_details"
     ],
     "oci_load_balancer_load_balancer": [
-        "ip_address_details"
+        "ip_address_details",
+        "reserved_ips"
     ],
     "oci_load_balancer_backend_set": [
         "backend",

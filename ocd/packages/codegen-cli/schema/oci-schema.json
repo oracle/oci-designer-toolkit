@@ -11749,12 +11749,13 @@
         "required": false,
         "label": "Ip Mode",
         "id": "ip_mode",
-        "staticLookup": false,
+        "staticLookup": true,
         "cacheLookup": false,
-        "lookup": false,
+        "lookup": true,
         "lookupResource": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "IPV4"
       },
       "is_private": {
         "provider": "oci",
@@ -11798,11 +11799,12 @@
         "label": "Shape",
         "id": "shape",
         "staticLookup": false,
-        "cacheLookup": false,
+        "cacheLookup": true,
         "lookup": false,
-        "lookupResource": "",
+        "lookupResource": "loadbalancerShapes",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "flexible"
       },
       "subnet_ids": {
         "provider": "oci",
@@ -11819,19 +11821,6 @@
         "lookupResource": "subnet",
         "conditional": false,
         "condition": {}
-      },
-      "reserved_ips": {
-        "provider": "oci",
-        "key": "reservedIps",
-        "name": "reserved_ips",
-        "type": "list",
-        "subtype": "",
-        "required": false,
-        "label": "Reserved Ips",
-        "id": "reserved_ips",
-        "conditional": false,
-        "condition": {},
-        "attributes": {}
       },
       "shape_details": {
         "provider": "oci",

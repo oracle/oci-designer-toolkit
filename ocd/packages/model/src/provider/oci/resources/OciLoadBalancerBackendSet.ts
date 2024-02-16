@@ -46,7 +46,7 @@ export namespace OciLoadBalancerBackendSet {
     }
 
     export function getBackends(resource: OciLoadBalancerBackendSet, allResources: OcdResources): OciLoadBalancerBackend[] {
-        return allResources.load_balancer_backend.filter((r) => r.loadBalancerId === resource.loadBalancerId && r.backendsetName === resource.displayName)
+        return allResources.load_balancer_backend ? allResources.load_balancer_backend.filter((r) => r.loadBalancerId === resource.loadBalancerId && r.backendsetName === resource.displayName) : []
     }
     
     export function newOciHealthChecker(): OciHealthChecker {

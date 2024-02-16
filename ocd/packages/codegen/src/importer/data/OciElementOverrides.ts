@@ -21,6 +21,10 @@ export const elementOverrides: OcdElementOverrides = {
         "oci_database_autonomous_database": {
             "db_workload": "OLTP",
             "is_auto_scaling_enabled": true
+        },
+        "oci_load_balancer_load_balancer": {
+            "shape": "flexible",
+            "ip_mode": "IPV4"
         }
     },
     "resourceLookupOverrides": {
@@ -42,6 +46,9 @@ export const elementOverrides: OcdElementOverrides = {
         },
         "oci_database_autonomous_database": {
             "db_version": "autonomousDbVersions"
+        },
+        "oci_load_balancer_load_balancer": {
+            "shape": "loadbalancerShapes"
         }
     },
     "staticLookups": {
@@ -75,6 +82,9 @@ export const elementOverrides: OcdElementOverrides = {
             "database_edition",
             "db_workload",
             "license_model"
+        ],
+        "oci_load_balancer_load_balancer": [
+            "ip_mode"
         ]
     },
     "types": {
