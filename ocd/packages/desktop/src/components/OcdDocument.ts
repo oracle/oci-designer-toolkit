@@ -78,8 +78,10 @@ export class OcdDocument {
 
     isOciResourceList(key: string): boolean {return this.design.model.oci.resources[key] ? true : false}
     getOciResourceList(key: string) {return this.design.model.oci.resources[key] ? this.design.model.oci.resources[key] : []}
+    getOciResourceLists() {return this.design.model.oci.resources}
     getOciResources() {return Object.values(this.design.model.oci.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], [])}
     getOciResourcesObject() {return this.design.model.oci.resources}
+    getResourceLists() {return {...this.getOciResourceLists()}}
     getResources() {return this.getOciResources()}
     getResource(id='') {return this.getResources().find((r: OcdResource) => r.id === id)}
     addOciReasourceToList(key: string, modelResource: OciResource) {this.design.model.oci.resources[key] ? this.design.model.oci.resources[key].push(modelResource) : this.design.model.oci.resources[key] = [modelResource]}
@@ -185,7 +187,7 @@ export class OcdDocument {
     }
     getResourceAssociationIds(id: string): string[] {
         const resource = this.getResource(id)
-        const associationIds: string[] = (resource.provider === 'oci') ? OciResource.getAssociationIds(resource) : []
+        const associationIds: string[] = (resource.provider === 'oci') ? OciResource.getAssociationIds(resource, this.getResourceLists()) : []
         return associationIds
     }
     getAdditionalTitleInfo(id: string): string {

@@ -13,6 +13,12 @@ export namespace OcdUtils {
         value?: boolean | string | number | Function
     }
     export interface OcdResource extends Record<string, any> {}
+    export interface RgbaColour {
+        r: number
+        g: number
+        b: number
+        a: number
+    }
     export function toTitle(str: string): string {
         let key = str as keyof typeof resourceMap
         return Object.hasOwn(resourceMap, key) ? resourceMap[key].title : OcdUtils.toTitleCase(str.split('_').join(' '))
@@ -88,5 +94,14 @@ export namespace OcdUtils {
           .map((n: number) => n.toString(16)) // Converts numbers to hex
           .map((s: string) => s.length === 1 ? "0" + s : s) // Adds 0 when length of one number is 1
           .join("") // Puts the array to togehter to a string
+    }
+    export function rgbaToJson(rgba: string): OcdUtils.RgbaColour {
+        const values = rgba.replace(/^rgba?\(|\s+|\)$/g, '').split(',')
+        return {
+            r: parseInt(values[0]),
+            g: parseInt(values[1]),
+            b: parseInt(values[2]),
+            a: parseFloat(values[3])
+        }
     }
 }
