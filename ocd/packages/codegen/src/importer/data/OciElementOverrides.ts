@@ -25,6 +25,16 @@ export const elementOverrides: OcdElementOverrides = {
         "oci_load_balancer_load_balancer": {
             "shape": "flexible",
             "ip_mode": "IPV4"
+        },
+        "oci_load_balancer_backend_set": {
+            "policy": "ROUND_ROBIN",
+            "health_checker.interval_ms": "10000",
+            "health_checker.port": "80",
+            "health_checker.protocol": "HTTP",
+            "health_checker.retries": "3",
+            "health_checker.return_code": "200",
+            "health_checker.timeout_in_millis": "3000",
+            "health_checker.url_path": "/",
         }
     },
     "resourceLookupOverrides": {
@@ -85,7 +95,11 @@ export const elementOverrides: OcdElementOverrides = {
         ],
         "oci_load_balancer_load_balancer": [
             "ip_mode"
-        ]
+        ],
+        "oci_load_balancer_backend_set": [
+            "policy",
+            "health_checker.protocol"
+        ],
     },
     "types": {
         "common": {},

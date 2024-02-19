@@ -7,5 +7,26 @@ import { ResourceElementConfig } from "../../../../OcdPropertyTypes"
 import { OciCommonConfigs } from "../../OciCommonConfigs"
 
 export namespace OciLoadBalancerBackendSetConfigs {
-    export function configs(): ResourceElementConfig[] {return [...OciCommonConfigs.configs()]}
+    export function configs(): ResourceElementConfig[] {return [
+        ...OciCommonConfigs.configs(),
+        {
+            id: 'policy',
+            properties: {},
+            configs: [],
+            options: [
+                {id: 'ROUND_ROBIN', displayName: 'Round Robin'},
+                {id: 'LEAST_CONNECTIONS', displayName: 'Least Connection'},
+                {id: 'IP_HASH', displayName: 'IP Hash'}
+            ]
+        },
+        {
+            id: 'health_checker.protocol',
+            properties: {},
+            configs: [],
+            options: [
+                {id: 'HTTP', displayName: 'HTTP'},
+                {id: 'TCP', displayName: 'TCP'},
+            ]
+        },
+    ]}
 }

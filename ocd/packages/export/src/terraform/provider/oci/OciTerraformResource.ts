@@ -8,14 +8,17 @@ import { OciModelResources as Model, OciResource } from '@ocd/model'
 
 export class OciTerraformResource extends OcdTerraformResource {
     typeDisplayNameMap: Record<string, string> = {
-        Compartment: 'name'
+        Compartment: 'name',
+        LoadBalancerBackendSet: 'name'
     }
+    isIgnoreCompartmentId: boolean
     isHomeRegion: boolean
-    simpleCacheAttributes = ['shapes', 'autonomousDbVersions']
+    simpleCacheAttributes = ['shapes', 'autonomousDbVersions', 'loadbalancerShapes']
     lookupCacheAttributes = ['images']
-    constructor(idTFResourceMap={}, isHomeRegion: boolean = false) {
+    constructor(idTFResourceMap={}, isHomeRegion: boolean = false, isIgnoreCompartmentId: boolean = false) {
         super(idTFResourceMap)
         this.isHomeRegion = isHomeRegion
+        this.isIgnoreCompartmentId = isIgnoreCompartmentId
     }
     commonAssignments = (resource: OciResource) => {
         console.debug('OciTerraformResource:', resource, resource.resourceType, this.typeDisplayNameMap, this.typeDisplayNameMap.hasOwnProperty(resource.resourceType))
@@ -28,7 +31,7 @@ export class OciTerraformResource extends OcdTerraformResource {
         return ''
     }
     homeRegion = (): string => this.isHomeRegion ? 'provider       = oci.home_region' : ''
-    compartmentId = (resource: Record<string, any>, level=0): string => {return resource.compartmentId && resource.compartmentId !== '' ? this.generateReferenceAttribute("compartment_id", resource.compartmentId, true) : 'compartment_id = var.compartment_ocid'}
+    compartmentId = (resource: Record<string, any>, level=0): string => {return this.isIgnoreCompartmentId ? '' : resource.compartmentId && resource.compartmentId !== '' ? this.generateReferenceAttribute("compartment_id", resource.compartmentId, true) : 'compartment_id = var.compartment_ocid'}
     displayName = (resource: Record<string, any>, level=0): string => {return this.generateTextAttribute(this.typeDisplayNameMap.hasOwnProperty(resource.resourceType) ? this.typeDisplayNameMap[resource.resourceType] : 'display_name', resource.displayName, true)}
 
     // Cache Look Ups

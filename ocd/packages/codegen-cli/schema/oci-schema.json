@@ -11353,12 +11353,13 @@
         "required": true,
         "label": "Policy",
         "id": "policy",
-        "staticLookup": false,
+        "staticLookup": true,
         "cacheLookup": false,
-        "lookup": false,
+        "lookup": true,
         "lookupResource": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "ROUND_ROBIN"
       },
       "health_checker": {
         "provider": "oci",
@@ -11386,7 +11387,8 @@
             "lookup": false,
             "lookupResource": "",
             "conditional": false,
-            "condition": {}
+            "condition": {},
+            "default": "10000"
           },
           "is_force_plain_text": {
             "provider": "oci",
@@ -11418,7 +11420,8 @@
             "lookup": false,
             "lookupResource": "",
             "conditional": false,
-            "condition": {}
+            "condition": {},
+            "default": "80"
           },
           "protocol": {
             "provider": "oci",
@@ -11429,12 +11432,13 @@
             "required": true,
             "label": "Protocol",
             "id": "health_checker.protocol",
-            "staticLookup": false,
+            "staticLookup": true,
             "cacheLookup": false,
-            "lookup": false,
+            "lookup": true,
             "lookupResource": "",
             "conditional": false,
-            "condition": {}
+            "condition": {},
+            "default": "HTTP"
           },
           "response_body_regex": {
             "provider": "oci",
@@ -11466,7 +11470,8 @@
             "lookup": false,
             "lookupResource": "",
             "conditional": false,
-            "condition": {}
+            "condition": {},
+            "default": "3"
           },
           "return_code": {
             "provider": "oci",
@@ -11482,7 +11487,8 @@
             "lookup": false,
             "lookupResource": "",
             "conditional": false,
-            "condition": {}
+            "condition": {},
+            "default": "200"
           },
           "timeout_in_millis": {
             "provider": "oci",
@@ -11498,7 +11504,8 @@
             "lookup": false,
             "lookupResource": "",
             "conditional": false,
-            "condition": {}
+            "condition": {},
+            "default": "3000"
           },
           "url_path": {
             "provider": "oci",
@@ -11514,7 +11521,8 @@
             "lookup": false,
             "lookupResource": "",
             "conditional": false,
-            "condition": {}
+            "condition": {},
+            "default": "/"
           }
         }
       }
@@ -11831,8 +11839,12 @@
         "required": false,
         "label": "Shape Details",
         "id": "shape_details",
-        "conditional": false,
-        "condition": {},
+        "conditional": true,
+        "condition": {
+          "element": "shape",
+          "operator": "eq",
+          "value": "flexible"
+        },
         "attributes": {
           "maximum_bandwidth_in_mbps": {
             "provider": "oci",
