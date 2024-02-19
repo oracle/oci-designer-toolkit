@@ -17,6 +17,20 @@ export namespace OciLoadBalancerConfigs {
                 {id: 'IPV4', displayName: 'IPV4'},
                 {id: 'IPV6', displayName: 'IPV6'}
             ]
-        }
-]}
+        },
+        {
+            id: 'shape_details.maximum_bandwidth_in_mbps',
+            properties: {
+                min: 0
+            },
+            configs: []
+        },
+        {
+            id: 'shape_details.minimum_bandwidth_in_mbps',
+            properties: {
+                min: 0
+            },
+            configs: []
+        },
+    ]}
 }

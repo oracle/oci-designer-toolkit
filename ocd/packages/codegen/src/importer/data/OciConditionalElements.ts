@@ -104,5 +104,19 @@ export const conditionalElements: OcdConditionalElements = {
             "operator": "eq",
             "value": true
         }
-    }
+    },
+    "oci_load_balancer_load_balancer": {
+        "shape_details": {
+            "element": "shape",
+            "operator": "eq",
+            "value": "flexible"
+        }
+    },
+    "oci_load_balancer_backend_set": {
+        "compartment_id": {
+            "element": "compartment_id",
+            "operator": "eq",
+            "value": false
+        }
+    },
 }

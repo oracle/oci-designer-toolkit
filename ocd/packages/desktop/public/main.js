@@ -315,6 +315,7 @@ async function handleSaveConsoleConfig(event, config) {
 	console.debug('Electron Main: handleSaveConfig')
 	return new Promise((resolve, reject) => {
 		try {
+			if (!config.showPreviousViewOnStart) config.displayPage = 'designer' // If we do not want to display previous page then default to designer.
 			fs.writeFileSync(ocdConsoleConfigFilename, JSON.stringify(config, null, 4))
 			resolve(config)
 		} catch (err) {
