@@ -21,14 +21,16 @@ export namespace OciLoadBalancerBackend {
     }
     export function allowedParentTypes(): string[] {
         console.debug('OciLoadBalancerBackend: Allowed Parent Types')
-        return []
+        return ['LoadBalancerBackendSet']
     }
     export function getParentId(resource: OciLoadBalancerBackend): string {
         console.debug('OciLoadBalancerBackend: Getting Parent Id to for', resource.displayName, resource.id)
-        return resource.compartmentId
+        let parentId = resource.backendSetId !== '' ? resource.backendSetId : resource.compartmentId
+        return parentId
     }
     export function setParentId(resource: OciLoadBalancerBackend, parentId: string): OciLoadBalancerBackend {
         console.debug('OciLoadBalancerBackend: Setting Parent Id to', parentId, 'for', resource.displayName, resource.id)
+        resource.backendSetId = parentId
         return resource
     }
     export function getConnectionIds(resource: OciLoadBalancerBackend, allResources: OcdResources): string[] {
