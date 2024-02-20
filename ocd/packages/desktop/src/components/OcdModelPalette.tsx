@@ -29,11 +29,7 @@ const OcdModelPaletteProviders = ({ provider, model, setDragData }: any): JSX.El
     const modelExcludeResources = ['compartment']
     const hiddenResourceTypes = [
         'load_balancer_backend',
-        'load_balancer_backend_set',
-        'load_balancer_listener',
         'network_load_balancer_backend',
-        'network_load_balancer_backend_set',
-        'network_load_balancer_listener',
         'network_security_group_security_rule',
         'vnic_attachments',
         'volume-attachments'
@@ -87,8 +83,8 @@ const OcdModelPaletteResources = ({ provider, type, resources, setDragData }: an
 const OcdModelPaletteResource = ({ provider, type, resource, onDragStart, onDragEnd }: any): JSX.Element => {
     // const classname = `${provider}-${type}`
     const classname = OcdUtils.toCssClassName(provider, type)
-    const containerResources = ['vcn', 'subnet']
-    console.info('Classname:', classname)
+    const containerResources = ['vcn', 'subnet', 'load_balancer']
+    console.info('OcdModelPalette: Classname:', classname, type)
     const onPaletteDragStart = (e: React.MouseEvent<HTMLElement>) => {
         // Get current Target Coordinates
         const currentTargetRect = e.currentTarget.getBoundingClientRect()
