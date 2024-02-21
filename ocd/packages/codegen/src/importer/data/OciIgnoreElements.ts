@@ -219,6 +219,9 @@ export const ignoreElements: OcdIgnoreElements = {
         "ip_address_details",
         "reserved_ips"
     ],
+    "oci_load_balancer_backend": [
+        "ip_address"
+    ],
     "oci_load_balancer_backend_set": [
         "backend",
         "lb_cookie_session_persistence_configuration",
@@ -239,6 +242,9 @@ export const ignoreElements: OcdIgnoreElements = {
     ],
     "oci_network_load_balancer_network_load_balancer": [
         "ip_addresses"
+    ],
+    "oci_network_load_balancer_backend": [
+        "ip_address"
     ],
     "oci_network_load_balancer_backend_set": [
         "backend"
