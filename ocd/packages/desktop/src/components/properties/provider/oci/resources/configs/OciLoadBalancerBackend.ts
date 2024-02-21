@@ -7,5 +7,22 @@ import { ResourceElementConfig } from "../../../../OcdPropertyTypes"
 import { OciCommonConfigs } from "../../OciCommonConfigs"
 
 export namespace OciLoadBalancerBackendConfigs {
-    export function configs(): ResourceElementConfig[] {return [...OciCommonConfigs.configs()]}
+    export function configs(): ResourceElementConfig[] {return [
+        ...OciCommonConfigs.configs(),
+        {
+            id: 'ip_address',
+            properties: {disabled: true},
+            configs: []
+        },
+        {
+            id: 'port',
+            properties: {min: 1},
+            configs: []
+        },
+        {
+            id: 'weight',
+            properties: {min: 1, max: 100},
+            configs: []
+        },
+    ]}
 }

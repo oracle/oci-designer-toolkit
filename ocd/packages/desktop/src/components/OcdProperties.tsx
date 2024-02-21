@@ -3,7 +3,7 @@
 ** Licensed under the GNU GENERAL PUBLIC LICENSE v 3.0 as shown at https://www.gnu.org/licenses/.
 */
 
-import { useRef, useState } from 'react'
+import { useContext, useRef, useState } from 'react'
 import { OcdResource, OcdViewCoordsStyle, OcdViewPage, OciResourceValidation, OciResources } from '@ocd/model'
 import { DesignerColourPicker, DesignerResourceProperties, DesignerResourceValidationResult } from '../types/DesignerResourceProperties'
 import { OcdUtils } from '@ocd/core'
@@ -13,6 +13,7 @@ import * as ociResources from './properties/provider/oci/resources'
 import { HexColorPicker, HexColorInput, RgbaColorPicker, RgbaStringColorPicker } from 'react-colorful'
 import Markdown from 'react-markdown'
 import { OcdValidationResult } from '@ocd/model'
+import { CacheContext } from '../pages/OcdConsole'
 
 const OcdResourcePropertiesHeader = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
     const selectedResource = ocdDocument.getSelectedResource()
@@ -51,7 +52,12 @@ const OciCommonResourceProperties = ({ocdDocument, setOcdDocument, resource, roo
 }
 
 const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
+    // @ts-ignore
+    const {ocdCache, setOcdCache} = useContext(CacheContext)
     const selectedResource: OcdResource = ocdDocument.getSelectedResource()
+    const resourceProxyName = selectedResource ? `${OcdUtils.toTitleCase(selectedResource.provider)}${selectedResource.resourceType}Proxy` : ''
+    // @ts-ignore 
+    const selectedResourceProxy: Proxy<any> = Object.hasOwn(ociResources, resourceProxyName) ? ociResources[resourceProxyName].proxyResource(ocdDocument, selectedResource, ocdCache) : selectedResource
     const resourceJSXMethod = selectedResource ? `${OcdUtils.toTitleCase(selectedResource.provider)}${selectedResource.resourceType}` : ''
     // @ts-ignore 
     const ResourceProperties = ociResources[resourceJSXMethod]
@@ -66,13 +72,13 @@ const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourcePr
             {selectedResource && selectedResource.provider === 'oci' && <OciCommonResourceProperties 
                 ocdDocument={ocdDocument} 
                 setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} 
-                resource={selectedResource}
-                rootResource={selectedResource}
+                resource={selectedResourceProxy}
+                rootResource={selectedResourceProxy}
             />}
             {selectedResource && ResourceProperties && <ResourceProperties 
                 ocdDocument={ocdDocument} 
                 setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} 
-                resource={selectedResource}
+                resource={selectedResourceProxy}
             />}
         </div>
     )

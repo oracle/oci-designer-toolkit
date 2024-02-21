@@ -26,6 +26,9 @@ export const elementOverrides: OcdElementOverrides = {
             "shape": "flexible",
             "ip_mode": "IPV4"
         },
+        "oci_load_balancer_backend": {
+            "weight": 1
+        },
         "oci_load_balancer_backend_set": {
             "policy": "ROUND_ROBIN",
             "health_checker.interval_ms": "10000",

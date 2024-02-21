@@ -112,6 +112,23 @@ export const conditionalElements: OcdConditionalElements = {
             "value": "flexible"
         }
     },
+    "oci_load_balancer_backend": {
+        "backendset_name": {
+            "element": "backendset_name",
+            "operator": "eq",
+            "value": false
+        },
+        "ip_address": {
+            "element": "ip_address",
+            "operator": "ne",
+            "value": ''
+        },
+        "load_balancer_id": {
+            "element": "load_balancer_id",
+            "operator": "eq",
+            "value": false
+        }
+    },
     "oci_load_balancer_backend_set": {
         "compartment_id": {
             "element": "compartment_id",
