@@ -118,6 +118,11 @@ export const conditionalElements: OcdConditionalElements = {
             "operator": "eq",
             "value": false
         },
+        "ip_address": {
+            "element": "ip_address",
+            "operator": "ne",
+            "value": ''
+        },
         "load_balancer_id": {
             "element": "load_balancer_id",
             "operator": "eq",

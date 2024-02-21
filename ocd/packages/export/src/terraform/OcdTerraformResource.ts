@@ -35,10 +35,10 @@ export class OcdTerraformResource {
         else if (value && value !== '') return `${this.indentation[level]}${name} = ${formatString.replace('$s', value as string)}`
         else return `${this.indentation[level]}# ${name} = "${value}"`
     }
-    generateReferenceAttribute = (name: string, value: string | undefined, required: boolean, level=0) => {
+    generateReferenceAttribute = (name: string, value: string | undefined, required: boolean, level=0, element: string = 'id') => {
         if (this.isVariable(value)) return `${this.indentation[level]}${name} = ${this.formatVariable(value)}`
-        else if (required) return `${this.indentation[level]}${name} = local.${this.idTFResourceMap[value as string]}_id`
-        else if (value && value !== '') return `${this.indentation[level]}${name} = local.${this.idTFResourceMap[value]}_id`
+        else if (required) return `${this.indentation[level]}${name} = local.${this.idTFResourceMap[value as string]}_${element}`
+        else if (value && value !== '') return `${this.indentation[level]}${name} = local.${this.idTFResourceMap[value]}_${element}`
         else return `${this.indentation[level]}# ${name} = "${value}"`
     }
     generateTextAttribute = (name: string, value: string | undefined, required: boolean, level=0) => {

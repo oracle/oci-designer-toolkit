@@ -10,6 +10,15 @@ export namespace OciLoadBalancerBackendSetConfigs {
     export function configs(): ResourceElementConfig[] {return [
         ...OciCommonConfigs.configs(),
         {
+            id: 'display_name',
+            properties: {
+                maxLength: 64,
+                pattern: '^[a-zA-Z][a-zA-Z0-9]{0,64}$|^var\.+$',
+                title: 'Backend Set Name can only be letters and numbers, starting with a letter. 64 characters max.'
+            },
+            configs: []
+        },
+        {
             id: 'policy',
             properties: {},
             configs: [],
