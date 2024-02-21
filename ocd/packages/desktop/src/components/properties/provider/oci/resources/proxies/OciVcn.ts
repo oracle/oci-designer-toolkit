@@ -5,7 +5,7 @@
 
 import { OcdCacheData } from '../../../../../OcdCache'
 import { OcdDocument } from '../../../../../OcdDocument'
-import { OcdResource } from '@ocd/model'
+import { OciModelResources as Model } from '@ocd/model'
 
 export namespace OciVcnProxy {
     export function proxyHandler(ocdDocument: OcdDocument, ocdCache: OcdCacheData)  {
@@ -21,9 +21,9 @@ export namespace OciVcnProxy {
         }
         return proxyHandler
     }
-    export function proxyResource(ocdDocument: OcdDocument, resource: OcdResource, ocdCache: OcdCacheData) {
+    export function proxyResource(ocdDocument: OcdDocument, resource: Model.OciVcn, ocdCache: OcdCacheData) {
         const pH = proxyHandler(ocdDocument, ocdCache)
-        const proxyResource = new Proxy(resource, pH)
+        const proxyResource = new Proxy<Model.OciVcn>(resource, pH)
         return proxyResource
     }
 }

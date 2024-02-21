@@ -57,7 +57,7 @@ const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourcePr
     const selectedResource: OcdResource = ocdDocument.getSelectedResource()
     const resourceProxyName = selectedResource ? `${OcdUtils.toTitleCase(selectedResource.provider)}${selectedResource.resourceType}Proxy` : ''
     // @ts-ignore 
-    const selectedResourceProxy: Proxy<any> = ociResources[resourceProxyName].proxyResource(ocdDocument, selectedResource, ocdCache)
+    const selectedResourceProxy: Proxy<any> = Object.hasOwn(ociResources, resourceProxyName) ? ociResources[resourceProxyName].proxyResource(ocdDocument, selectedResource, ocdCache) : selectedResource
     const resourceJSXMethod = selectedResource ? `${OcdUtils.toTitleCase(selectedResource.provider)}${selectedResource.resourceType}` : ''
     // @ts-ignore 
     const ResourceProperties = ociResources[resourceJSXMethod]

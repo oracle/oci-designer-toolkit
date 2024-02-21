@@ -153,7 +153,7 @@ export namespace ${this.configNamespace(resource)} {
 
 import { OcdCacheData } from '../../../../../OcdCache'
 import { OcdDocument } from '../../../../../OcdDocument'
-import { OcdResource } from '@ocd/model'
+import { OciModelResources as Model } from '@ocd/model'
 
 export namespace ${this.proxyNamespace(resource)} {
     export function proxyHandler(ocdDocument: OcdDocument, ocdCache: OcdCacheData)  {
@@ -169,9 +169,9 @@ export namespace ${this.proxyNamespace(resource)} {
         }
         return proxyHandler
     }
-    export function proxyResource(ocdDocument: OcdDocument, resource: OcdResource, ocdCache: OcdCacheData) {
+    export function proxyResource(ocdDocument: OcdDocument, resource: Model.${this.interfaceName(resource)}, ocdCache: OcdCacheData) {
         const pH = proxyHandler(ocdDocument, ocdCache)
-        const proxyResource = new Proxy(resource, pH)
+        const proxyResource = new Proxy<Model.${this.interfaceName(resource)}>(resource, pH)
         return proxyResource
     }
 }

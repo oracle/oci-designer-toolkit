@@ -25,6 +25,8 @@ export const OciLoadBalancerBackendsObjectList = ({ ocdDocument, setOcdDocument,
         e.preventDefault()
         const loadBalancerBackend = Model.OciLoadBalancerBackend.newResource()
         Model.OciLoadBalancerBackend.setParentId(loadBalancerBackend, rootResource.id)
+        loadBalancerBackend.loadBalancerId = rootResource.loadBalancerId
+        loadBalancerBackend.backendsetName = rootResource.displayName
         ocdDocument.addOciReasourceToList('load_balancer_backend', loadBalancerBackend)
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }

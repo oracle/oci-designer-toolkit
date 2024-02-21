@@ -5,7 +5,7 @@
 
 import { OcdCacheData } from '../../../../../OcdCache'
 import { OcdDocument } from '../../../../../OcdDocument'
-import { OcdResource } from '@ocd/model'
+import { OciModelResources as Model } from '@ocd/model'
 
 export namespace OciLoadBalancerProxy {
     export function proxyHandler(ocdDocument: OcdDocument, ocdCache: OcdCacheData)  {
@@ -21,9 +21,9 @@ export namespace OciLoadBalancerProxy {
         }
         return proxyHandler
     }
-    export function proxyResource(ocdDocument: OcdDocument, resource: OcdResource, ocdCache: OcdCacheData) {
+    export function proxyResource(ocdDocument: OcdDocument, resource: Model.OciLoadBalancer, ocdCache: OcdCacheData) {
         const pH = proxyHandler(ocdDocument, ocdCache)
-        const proxyResource = new Proxy(resource, pH)
+        const proxyResource = new Proxy<Model.OciLoadBalancer>(resource, pH)
         return proxyResource
     }
 }
