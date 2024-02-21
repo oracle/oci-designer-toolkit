@@ -52,6 +52,9 @@ const OciCommonResourceProperties = ({ocdDocument, setOcdDocument, resource, roo
 
 const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
     const selectedResource: OcdResource = ocdDocument.getSelectedResource()
+    const resourceProxyName = selectedResource ? `${OcdUtils.toTitleCase(selectedResource.provider)}${selectedResource.resourceType}Proxy` : ''
+    // @ts-ignore 
+    const selectedResourceProxy: Proxy<any> = ociResources[resourceProxyName].proxyResource(ocdDocument, selectedResource)
     const resourceJSXMethod = selectedResource ? `${OcdUtils.toTitleCase(selectedResource.provider)}${selectedResource.resourceType}` : ''
     // @ts-ignore 
     const ResourceProperties = ociResources[resourceJSXMethod]
@@ -66,13 +69,16 @@ const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourcePr
             {selectedResource && selectedResource.provider === 'oci' && <OciCommonResourceProperties 
                 ocdDocument={ocdDocument} 
                 setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} 
-                resource={selectedResource}
-                rootResource={selectedResource}
+                resource={selectedResourceProxy}
+                rootResource={selectedResourceProxy}
+                // resource={selectedResource}
+                // rootResource={selectedResource}
             />}
             {selectedResource && ResourceProperties && <ResourceProperties 
                 ocdDocument={ocdDocument} 
                 setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} 
-                resource={selectedResource}
+                resource={selectedResourceProxy}
+                // resource={selectedResource}
             />}
         </div>
     )
