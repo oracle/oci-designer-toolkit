@@ -71,14 +71,11 @@ const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourcePr
                 setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} 
                 resource={selectedResourceProxy}
                 rootResource={selectedResourceProxy}
-                // resource={selectedResource}
-                // rootResource={selectedResource}
             />}
             {selectedResource && ResourceProperties && <ResourceProperties 
                 ocdDocument={ocdDocument} 
                 setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} 
                 resource={selectedResourceProxy}
-                // resource={selectedResource}
             />}
         </div>
     )
