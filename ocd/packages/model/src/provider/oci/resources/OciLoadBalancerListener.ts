@@ -35,7 +35,8 @@ export namespace OciLoadBalancerListener {
     export function getConnectionIds(resource: OciLoadBalancerListener, allResources: OcdResources): string[] {
         // This List of Ids does not include the Parent Id or Compartment Id
         console.debug('OciLoadBalancerListener: Getting Connection Ids to for', resource.displayName, resource.id)
-        return []
+        let associationIds = [resource.defaultBackendSetName]
+        return associationIds
     }
     
 }

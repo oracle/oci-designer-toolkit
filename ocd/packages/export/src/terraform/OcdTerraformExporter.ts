@@ -29,6 +29,7 @@ export class OcdTerraformExporter extends OcdExporter {
         load_balancer: "oci_networking.tf",
         load_balancer_backend: "oci_networking.tf",
         load_balancer_backend_set: "oci_networking.tf",
+        load_balancer_listener: "oci_networking.tf",
         local_peering_gateway: "oci_networking.tf",
         nat_gateway: "oci_networking.tf",
         network_firewall: "oci_networking.tf",

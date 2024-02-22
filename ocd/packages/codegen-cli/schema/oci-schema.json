@@ -17,6 +17,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "compartment",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -33,6 +34,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -49,6 +51,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -65,6 +68,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -81,6 +85,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -97,6 +102,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -113,6 +119,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -129,6 +136,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "kms_key",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -145,6 +153,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -161,6 +170,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -177,6 +187,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -193,6 +204,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -221,6 +233,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -237,6 +250,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           }
@@ -267,6 +281,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -283,6 +298,7 @@
             "cacheLookup": false,
             "lookup": true,
             "lookupResource": "network_security_group",
+            "lookupResourceElement": "id",
             "conditional": false,
             "condition": {}
           },
@@ -299,6 +315,7 @@
             "cacheLookup": false,
             "lookup": true,
             "lookupResource": "subnet",
+            "lookupResourceElement": "id",
             "conditional": false,
             "condition": {}
           },
@@ -315,6 +332,7 @@
             "cacheLookup": false,
             "lookup": true,
             "lookupResource": "vcn",
+            "lookupResourceElement": "id",
             "conditional": false,
             "condition": {}
           },
@@ -331,6 +349,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -347,6 +366,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -375,6 +395,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               }
@@ -402,6 +423,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -418,6 +440,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -434,6 +457,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "compartment",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -450,6 +474,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -466,6 +491,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -482,6 +508,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -498,6 +525,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -514,6 +542,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -530,6 +559,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -546,6 +576,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -562,6 +593,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -578,6 +610,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -594,6 +627,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -610,6 +644,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "target_subnet",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -626,6 +661,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "target_vcn",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -642,6 +678,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       }
@@ -665,6 +702,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -681,6 +719,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "compartment",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -697,6 +736,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -713,6 +753,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -729,6 +770,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "kms_key",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -745,6 +787,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -761,6 +804,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -777,6 +821,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -793,6 +838,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -809,6 +855,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "vcn",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -837,6 +884,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           }
@@ -867,6 +915,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -883,6 +932,7 @@
             "cacheLookup": false,
             "lookup": true,
             "lookupResource": "network_security_group",
+            "lookupResourceElement": "id",
             "conditional": false,
             "condition": {}
           },
@@ -899,6 +949,7 @@
             "cacheLookup": false,
             "lookup": true,
             "lookupResource": "subnet",
+            "lookupResourceElement": "id",
             "conditional": false,
             "condition": {}
           }
@@ -929,6 +980,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -957,6 +1009,7 @@
                 "cacheLookup": false,
                 "lookup": true,
                 "lookupResource": "kms_key",
+                "lookupResourceElement": "id",
                 "conditional": false,
                 "condition": {}
               }
@@ -989,6 +1042,7 @@
             "cacheLookup": false,
             "lookup": true,
             "lookupResource": "service_lb_subnet",
+            "lookupResourceElement": "id",
             "conditional": false,
             "condition": {}
           },
@@ -1017,6 +1071,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               },
@@ -1033,6 +1088,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               }
@@ -1063,6 +1119,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               }
@@ -1093,6 +1150,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               },
@@ -1109,6 +1167,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               }
@@ -1139,6 +1198,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               },
@@ -1155,6 +1215,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               }
@@ -1185,6 +1246,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               },
@@ -1201,6 +1263,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               }
@@ -1228,6 +1291,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "cluster",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -1244,6 +1308,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "compartment",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -1260,6 +1325,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -1276,6 +1342,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -1292,6 +1359,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -1308,6 +1376,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -1324,6 +1393,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -1340,6 +1410,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -1356,6 +1427,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -1372,6 +1444,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -1388,6 +1461,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -1404,6 +1478,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "subnet",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -1432,6 +1507,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -1448,6 +1524,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           }
@@ -1478,6 +1555,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -1494,6 +1572,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -1510,6 +1589,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -1526,6 +1606,7 @@
             "cacheLookup": false,
             "lookup": true,
             "lookupResource": "kms_key",
+            "lookupResourceElement": "id",
             "conditional": false,
             "condition": {}
           },
@@ -1542,6 +1623,7 @@
             "cacheLookup": false,
             "lookup": true,
             "lookupResource": "network_security_group",
+            "lookupResourceElement": "id",
             "conditional": false,
             "condition": {}
           },
@@ -1558,6 +1640,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -1586,6 +1669,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               },
@@ -1602,6 +1686,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               },
@@ -1618,6 +1703,7 @@
                 "cacheLookup": false,
                 "lookup": true,
                 "lookupResource": "pod_nsg",
+                "lookupResourceElement": "id",
                 "conditional": false,
                 "condition": {}
               },
@@ -1634,6 +1720,7 @@
                 "cacheLookup": false,
                 "lookup": true,
                 "lookupResource": "pod_subnet",
+                "lookupResourceElement": "id",
                 "conditional": false,
                 "condition": {}
               }
@@ -1664,6 +1751,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               },
@@ -1680,6 +1768,7 @@
                 "cacheLookup": false,
                 "lookup": true,
                 "lookupResource": "capacity_reservation",
+                "lookupResourceElement": "id",
                 "conditional": false,
                 "condition": {}
               },
@@ -1696,6 +1785,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               },
@@ -1712,6 +1802,7 @@
                 "cacheLookup": false,
                 "lookup": true,
                 "lookupResource": "subnet",
+                "lookupResourceElement": "id",
                 "conditional": false,
                 "condition": {}
               },
@@ -1752,6 +1843,7 @@
                         "cacheLookup": false,
                         "lookup": false,
                         "lookupResource": "",
+                        "lookupResourceElement": "",
                         "conditional": false,
                         "condition": {}
                       },
@@ -1768,6 +1860,7 @@
                         "cacheLookup": false,
                         "lookup": false,
                         "lookupResource": "",
+                        "lookupResourceElement": "",
                         "conditional": false,
                         "condition": {}
                       }
@@ -1804,6 +1897,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -1820,6 +1914,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           }
@@ -1850,6 +1945,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -1866,6 +1962,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -1882,6 +1979,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           }
@@ -1912,6 +2010,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -1928,6 +2027,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           }
@@ -1958,6 +2058,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -1974,6 +2075,7 @@
             "cacheLookup": false,
             "lookup": true,
             "lookupResource": "image",
+            "lookupResourceElement": "id",
             "conditional": false,
             "condition": {}
           },
@@ -1990,6 +2092,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           }
@@ -2015,6 +2118,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "compartment",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -2031,6 +2135,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "cpe_device_shape",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -2047,6 +2152,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -2063,6 +2169,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -2079,6 +2186,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -2095,6 +2203,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       }
@@ -2118,6 +2227,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "compartment",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -2134,6 +2244,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -2150,6 +2261,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -2165,7 +2277,8 @@
         "staticLookup": true,
         "cacheLookup": false,
         "lookup": true,
-        "lookupResource": "",
+        "lookupResource": "domain_name",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -2182,6 +2295,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -2198,6 +2312,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "vcn",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -2226,6 +2341,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": true,
             "condition": [
               {
@@ -2254,6 +2370,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": true,
             "condition": {
               "element": "type",
@@ -2273,7 +2390,8 @@
             "staticLookup": true,
             "cacheLookup": false,
             "lookup": true,
-            "lookupResource": "",
+            "lookupResource": "server",
+            "lookupResourceElement": "id",
             "conditional": true,
             "condition": {
               "element": "type",
@@ -2294,6 +2412,7 @@
             "cacheLookup": false,
             "lookup": true,
             "lookupResource": "",
+            "lookupResourceElement": "id",
             "conditional": false,
             "condition": {}
           }
@@ -2319,6 +2438,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "compartment",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -2335,6 +2455,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -2351,6 +2472,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -2367,6 +2489,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -2383,6 +2506,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       }
@@ -2406,6 +2530,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "compartment",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -2422,6 +2547,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -2438,6 +2564,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -2454,6 +2581,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "drg",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -2470,6 +2598,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "drg_route_table",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -2486,6 +2615,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "export_drg_route_distribution",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -2502,6 +2632,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -2518,6 +2649,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -2534,6 +2666,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "route_table",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -2550,6 +2683,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "vcn",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -2578,6 +2712,7 @@
             "cacheLookup": false,
             "lookup": true,
             "lookupResource": "ipsec_connection",
+            "lookupResourceElement": "id",
             "conditional": false,
             "condition": {}
           },
@@ -2594,6 +2729,7 @@
             "cacheLookup": false,
             "lookup": true,
             "lookupResource": "route_table",
+            "lookupResourceElement": "id",
             "conditional": false,
             "condition": {}
           },
@@ -2610,6 +2746,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -2626,6 +2763,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           }
@@ -2651,6 +2789,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "compartment",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -2667,6 +2806,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -2683,6 +2823,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -2699,6 +2840,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -2715,6 +2857,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "drg",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -2731,6 +2874,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       }
@@ -2754,6 +2898,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -2770,6 +2915,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "drg_route_distribution",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -2786,6 +2932,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -2814,6 +2961,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -2830,6 +2978,7 @@
             "cacheLookup": false,
             "lookup": true,
             "lookupResource": "drg_attachment",
+            "lookupResourceElement": "id",
             "conditional": false,
             "condition": {}
           },
@@ -2846,6 +2995,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           }
@@ -2871,6 +3021,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "compartment",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -2887,6 +3038,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -2903,6 +3055,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -2919,6 +3072,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "drg",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -2935,6 +3089,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -2951,6 +3106,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "import_drg_route_distribution",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -2967,6 +3123,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -2983,6 +3140,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       }
@@ -3006,6 +3164,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -3022,6 +3181,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -3038,6 +3198,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -3054,6 +3215,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "drg_route_table",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -3070,6 +3232,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -3086,6 +3249,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -3102,6 +3266,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "next_hop_drg_attachment",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -3118,6 +3283,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -3134,6 +3300,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       }
@@ -3156,7 +3323,8 @@
         "staticLookup": true,
         "cacheLookup": false,
         "lookup": true,
-        "lookupResource": "",
+        "lookupResource": "availability",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {},
         "default": "1"
@@ -3174,6 +3342,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "compartment",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -3190,6 +3359,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -3206,6 +3376,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -3221,7 +3392,8 @@
         "staticLookup": true,
         "cacheLookup": false,
         "lookup": true,
-        "lookupResource": "",
+        "lookupResource": "fault",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {},
         "default": "FAULT-DOMAIN-1"
@@ -3239,6 +3411,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -3255,6 +3428,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -3271,6 +3445,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {},
         "attributes": {
@@ -3321,6 +3496,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -3337,6 +3513,7 @@
         "cacheLookup": true,
         "lookup": true,
         "lookupResource": "shapes",
+        "lookupResourceElement": "shapes",
         "conditional": false,
         "condition": {},
         "default": "VM.Standard.A1.Flex"
@@ -3366,6 +3543,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -3382,6 +3560,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -3398,6 +3577,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           }
@@ -3428,6 +3608,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -3444,6 +3625,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -3460,6 +3642,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -3476,6 +3659,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -3492,6 +3676,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -3508,6 +3693,7 @@
             "cacheLookup": false,
             "lookup": true,
             "lookupResource": "network_security_group",
+            "lookupResourceElement": "id",
             "conditional": false,
             "condition": {}
           },
@@ -3524,6 +3710,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -3540,6 +3727,7 @@
             "cacheLookup": false,
             "lookup": true,
             "lookupResource": "subnet",
+            "lookupResourceElement": "id",
             "conditional": false,
             "condition": {}
           }
@@ -3574,6 +3762,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {},
             "default": "6"
@@ -3591,6 +3780,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {},
             "default": "1"
@@ -3622,6 +3812,7 @@
             "cacheLookup": false,
             "lookup": true,
             "lookupResource": "kms_key",
+            "lookupResourceElement": "id",
             "conditional": false,
             "condition": {}
           },
@@ -3638,6 +3829,7 @@
             "cacheLookup": true,
             "lookup": true,
             "lookupResource": "images",
+            "lookupResourceElement": "images",
             "conditional": false,
             "condition": {}
           },
@@ -3653,7 +3845,8 @@
             "staticLookup": true,
             "cacheLookup": false,
             "lookup": true,
-            "lookupResource": "",
+            "lookupResource": "source",
+            "lookupResourceElement": "id",
             "conditional": false,
             "condition": {},
             "default": "image"
@@ -3680,6 +3873,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "compartment",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -3696,6 +3890,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -3712,6 +3907,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -3728,6 +3924,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -3744,6 +3941,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -3760,6 +3958,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "vcn",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       }
@@ -3783,6 +3982,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "compartment",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -3799,6 +3999,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "cpe",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -3815,6 +4016,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -3831,6 +4033,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -3847,6 +4050,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -3863,6 +4067,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -3879,6 +4084,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "drg",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -3895,6 +4101,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -3911,6 +4118,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       }
@@ -3934,6 +4142,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "compartment",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -3950,6 +4159,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -3966,6 +4176,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -3982,6 +4193,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -3998,6 +4210,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -4014,6 +4227,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -4030,6 +4244,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -4046,6 +4261,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "peer",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -4062,6 +4278,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -4078,6 +4295,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -4094,6 +4312,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "route_table",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -4110,6 +4329,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "vcn",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       }
@@ -4133,6 +4353,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -4149,6 +4370,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "compartment",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -4165,6 +4387,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -4181,6 +4404,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -4197,6 +4421,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -4213,6 +4438,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "vcn",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       }
@@ -4236,6 +4462,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "compartment",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -4252,6 +4479,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -4268,6 +4496,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -4284,6 +4513,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -4300,6 +4530,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "vcn",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       }
@@ -4323,6 +4554,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -4339,6 +4571,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": true,
         "condition": {
           "element": "direction",
@@ -4358,7 +4591,8 @@
         "staticLookup": true,
         "cacheLookup": false,
         "lookup": true,
-        "lookupResource": "",
+        "lookupResource": "destination",
+        "lookupResourceElement": "id",
         "conditional": true,
         "condition": {
           "element": "direction",
@@ -4379,6 +4613,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -4395,6 +4630,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "network_security_group",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -4411,6 +4647,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -4427,6 +4664,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": true,
         "condition": {
           "element": "direction",
@@ -4446,7 +4684,8 @@
         "staticLookup": true,
         "cacheLookup": false,
         "lookup": true,
-        "lookupResource": "",
+        "lookupResource": "source",
+        "lookupResourceElement": "id",
         "conditional": true,
         "condition": {
           "element": "direction",
@@ -4467,6 +4706,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -4499,6 +4739,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -4515,6 +4756,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           }
@@ -4561,6 +4803,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               },
@@ -4577,6 +4820,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               }
@@ -4607,6 +4851,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               },
@@ -4623,6 +4868,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               }
@@ -4671,6 +4917,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               },
@@ -4687,6 +4934,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               }
@@ -4717,6 +4965,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               },
@@ -4733,6 +4982,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               }
@@ -4760,6 +5010,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "compartment",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -4776,6 +5027,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -4792,6 +5044,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -4808,6 +5061,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "drg",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -4824,6 +5078,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -4840,6 +5095,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -4856,6 +5112,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "peer",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -4872,6 +5129,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -4888,6 +5146,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "peer_tenancy",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -4904,6 +5163,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       }
@@ -4927,6 +5187,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "compartment",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -4943,6 +5204,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -4959,6 +5221,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -4975,6 +5238,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -4991,6 +5255,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "vcn",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -5019,6 +5284,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -5035,6 +5301,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -5051,6 +5318,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -5067,6 +5335,7 @@
             "cacheLookup": false,
             "lookup": true,
             "lookupResource": "network_entity",
+            "lookupResourceElement": "id",
             "conditional": false,
             "condition": {}
           }
@@ -5092,6 +5361,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "compartment",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -5108,6 +5378,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -5124,6 +5395,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -5140,6 +5412,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -5156,6 +5429,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "vcn",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -5184,6 +5458,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -5200,6 +5475,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -5215,7 +5491,8 @@
             "staticLookup": true,
             "cacheLookup": false,
             "lookup": true,
-            "lookupResource": "",
+            "lookupResource": "destination",
+            "lookupResourceElement": "id",
             "conditional": false,
             "condition": {}
           },
@@ -5232,6 +5509,7 @@
             "cacheLookup": false,
             "lookup": true,
             "lookupResource": "",
+            "lookupResourceElement": "id",
             "conditional": false,
             "condition": {}
           },
@@ -5248,6 +5526,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -5280,6 +5559,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               },
@@ -5296,6 +5576,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               }
@@ -5330,6 +5611,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               },
@@ -5346,6 +5628,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               },
@@ -5374,6 +5657,7 @@
                     "cacheLookup": false,
                     "lookup": false,
                     "lookupResource": "",
+                    "lookupResourceElement": "",
                     "conditional": false,
                     "condition": {}
                   },
@@ -5390,6 +5674,7 @@
                     "cacheLookup": false,
                     "lookup": false,
                     "lookupResource": "",
+                    "lookupResourceElement": "",
                     "conditional": false,
                     "condition": {}
                   }
@@ -5426,6 +5711,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               },
@@ -5442,6 +5728,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               },
@@ -5470,6 +5757,7 @@
                     "cacheLookup": false,
                     "lookup": false,
                     "lookupResource": "",
+                    "lookupResourceElement": "",
                     "conditional": false,
                     "condition": {}
                   },
@@ -5486,6 +5774,7 @@
                     "cacheLookup": false,
                     "lookup": false,
                     "lookupResource": "",
+                    "lookupResourceElement": "",
                     "conditional": false,
                     "condition": {}
                   }
@@ -5520,6 +5809,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -5536,6 +5826,7 @@
             "cacheLookup": false,
             "lookup": true,
             "lookupResource": "",
+            "lookupResourceElement": "id",
             "conditional": false,
             "condition": {}
           },
@@ -5552,6 +5843,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -5567,7 +5859,8 @@
             "staticLookup": true,
             "cacheLookup": false,
             "lookup": true,
-            "lookupResource": "",
+            "lookupResource": "source",
+            "lookupResourceElement": "id",
             "conditional": false,
             "condition": {}
           },
@@ -5584,6 +5877,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -5616,6 +5910,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               },
@@ -5632,6 +5927,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               }
@@ -5666,6 +5962,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               },
@@ -5682,6 +5979,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               },
@@ -5710,6 +6008,7 @@
                     "cacheLookup": false,
                     "lookup": false,
                     "lookupResource": "",
+                    "lookupResourceElement": "",
                     "conditional": false,
                     "condition": {}
                   },
@@ -5726,6 +6025,7 @@
                     "cacheLookup": false,
                     "lookup": false,
                     "lookupResource": "",
+                    "lookupResourceElement": "",
                     "conditional": false,
                     "condition": {}
                   }
@@ -5762,6 +6062,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               },
@@ -5778,6 +6079,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               },
@@ -5806,6 +6108,7 @@
                     "cacheLookup": false,
                     "lookup": false,
                     "lookupResource": "",
+                    "lookupResourceElement": "",
                     "conditional": false,
                     "condition": {}
                   },
@@ -5822,6 +6125,7 @@
                     "cacheLookup": false,
                     "lookup": false,
                     "lookupResource": "",
+                    "lookupResourceElement": "",
                     "conditional": false,
                     "condition": {}
                   }
@@ -5851,6 +6155,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -5867,6 +6172,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "compartment",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -5883,6 +6189,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -5899,6 +6206,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -5915,6 +6223,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -5931,6 +6240,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "route_table",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -5947,6 +6257,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "vcn",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -5975,6 +6286,7 @@
             "cacheLookup": false,
             "lookup": true,
             "lookupResource": "service",
+            "lookupResourceElement": "id",
             "conditional": false,
             "condition": {}
           },
@@ -5991,6 +6303,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           }
@@ -6015,7 +6328,8 @@
         "staticLookup": true,
         "cacheLookup": false,
         "lookup": true,
-        "lookupResource": "",
+        "lookupResource": "availability",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {},
         "default": "1"
@@ -6033,6 +6347,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -6049,6 +6364,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "compartment",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -6065,6 +6381,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -6081,6 +6398,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "dhcp_options",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -6097,6 +6415,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -6113,6 +6432,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -6129,6 +6449,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -6145,6 +6466,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -6161,6 +6483,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -6177,6 +6500,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -6193,6 +6517,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -6209,6 +6534,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "route_table",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -6225,6 +6551,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "security_list",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -6241,6 +6568,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "vcn",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       }
@@ -6264,6 +6592,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": true,
         "condition": {
           "element": "is_ipv6enabled",
@@ -6284,6 +6613,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "compartment",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -6300,6 +6630,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -6316,6 +6647,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -6332,6 +6664,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -6348,6 +6681,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -6364,6 +6698,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": true,
         "condition": {
           "element": "is_ipv6enabled",
@@ -6384,6 +6719,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       }
@@ -6406,7 +6742,8 @@
         "staticLookup": true,
         "cacheLookup": false,
         "lookup": true,
-        "lookupResource": "",
+        "lookupResource": "availability",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {},
         "default": "1"
@@ -6424,6 +6761,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "compartment",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -6440,6 +6778,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -6456,6 +6795,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "instance",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -6472,6 +6812,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -6488,6 +6829,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "subnet",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -6504,6 +6846,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "vlan",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -6520,6 +6863,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -6536,6 +6880,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "vnic",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -6564,6 +6909,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -6580,6 +6926,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -6596,6 +6943,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -6612,6 +6960,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -6628,6 +6977,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -6644,6 +6994,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -6660,6 +7011,7 @@
             "cacheLookup": false,
             "lookup": true,
             "lookupResource": "network_security_group",
+            "lookupResourceElement": "id",
             "conditional": false,
             "condition": {}
           },
@@ -6676,6 +7028,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -6692,6 +7045,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -6708,6 +7062,7 @@
             "cacheLookup": false,
             "lookup": true,
             "lookupResource": "subnet",
+            "lookupResourceElement": "id",
             "conditional": false,
             "condition": {}
           },
@@ -6724,6 +7079,7 @@
             "cacheLookup": false,
             "lookup": true,
             "lookupResource": "vlan",
+            "lookupResourceElement": "id",
             "conditional": false,
             "condition": {}
           }
@@ -6749,6 +7105,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -6764,7 +7121,8 @@
         "staticLookup": true,
         "cacheLookup": false,
         "lookup": true,
-        "lookupResource": "",
+        "lookupResource": "availability",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {},
         "default": "1"
@@ -6782,6 +7140,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -6798,6 +7157,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "compartment",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -6814,6 +7174,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -6830,6 +7191,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -6846,6 +7208,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -6862,6 +7225,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -6878,6 +7242,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "kms_key",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -6894,6 +7259,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -6910,6 +7276,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "volume_backup",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -6926,6 +7293,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "volume_group",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -6942,6 +7310,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -6970,6 +7339,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -6986,6 +7356,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           }
@@ -7016,6 +7387,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -7032,6 +7404,7 @@
             "cacheLookup": false,
             "lookup": true,
             "lookupResource": "block_volume_replica",
+            "lookupResourceElement": "id",
             "conditional": false,
             "condition": {}
           },
@@ -7048,6 +7421,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           }
@@ -7078,6 +7452,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           }
@@ -7103,6 +7478,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -7118,7 +7494,8 @@
         "staticLookup": true,
         "cacheLookup": false,
         "lookup": true,
-        "lookupResource": "",
+        "lookupResource": "availability",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {},
         "default": "1"
@@ -7136,6 +7513,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -7152,6 +7530,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -7168,6 +7547,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -7184,6 +7564,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "instance",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -7200,6 +7581,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -7216,6 +7598,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -7232,6 +7615,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -7248,6 +7632,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -7264,6 +7649,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -7280,6 +7666,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -7296,6 +7683,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -7312,6 +7700,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "volume",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       }
@@ -7335,6 +7724,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -7351,6 +7741,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -7367,6 +7758,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "compartment",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -7383,6 +7775,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -7399,6 +7792,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -7415,6 +7809,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -7431,6 +7826,7 @@
         "cacheLookup": true,
         "lookup": false,
         "lookupResource": "autonomousDbVersions",
+        "lookupResourceElement": "autonomousDbVersions",
         "conditional": false,
         "condition": {}
       },
@@ -7446,7 +7842,8 @@
         "staticLookup": true,
         "cacheLookup": false,
         "lookup": true,
-        "lookupResource": "",
+        "lookupResource": "db",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {},
         "default": "OLTP"
@@ -7464,6 +7861,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -7480,6 +7878,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -7496,6 +7895,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -7512,6 +7912,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {},
         "default": true
@@ -7529,6 +7930,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -7545,6 +7947,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -7561,6 +7964,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -7577,6 +7981,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -7593,6 +7998,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -7609,6 +8015,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -7625,6 +8032,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -7641,6 +8049,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "kms_key",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -7656,7 +8065,8 @@
         "staticLookup": true,
         "cacheLookup": false,
         "lookup": true,
-        "lookupResource": "",
+        "lookupResource": "license",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {},
         "default": "LICENSE_INCLUDED"
@@ -7674,6 +8084,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "network_security_group",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -7690,6 +8101,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -7706,6 +8118,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "secret",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -7722,6 +8135,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -7738,6 +8152,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -7754,6 +8169,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "subnet",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -7770,6 +8186,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "vault",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -7786,6 +8203,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       }
@@ -7808,7 +8226,8 @@
         "staticLookup": true,
         "cacheLookup": false,
         "lookup": true,
-        "lookupResource": "",
+        "lookupResource": "availability",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {},
         "default": "1"
@@ -7826,6 +8245,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "backup_network_nsg",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -7842,6 +8262,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "backup_subnet",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -7858,6 +8279,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -7874,6 +8296,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "compartment",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -7890,6 +8313,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -7906,6 +8330,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -7922,6 +8347,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -7938,6 +8364,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -7954,6 +8381,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -7970,6 +8398,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -7986,6 +8415,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -8002,6 +8432,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -8018,6 +8449,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -8034,6 +8466,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -8050,6 +8483,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -8066,6 +8500,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "kms_key",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -8082,6 +8517,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "kms_key_version",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -8098,6 +8534,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "last_maintenance_run",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -8114,6 +8551,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "last_patch_history_entry",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -8130,6 +8568,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {},
         "default": "LICENSE_INCLUDED"
@@ -8147,6 +8586,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -8163,6 +8603,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -8179,6 +8620,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -8195,6 +8637,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "next_maintenance_run",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -8211,6 +8654,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -8227,6 +8671,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "network_security_group",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -8243,6 +8688,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -8259,6 +8705,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -8275,6 +8722,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -8291,6 +8739,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -8307,6 +8756,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -8323,6 +8773,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "scan_dns_record",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -8339,6 +8790,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "scan_ip",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -8355,6 +8807,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -8371,6 +8824,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -8387,6 +8841,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "source_db_system",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -8403,6 +8858,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -8419,6 +8875,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -8435,6 +8892,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -8451,6 +8909,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "subnet",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -8467,6 +8926,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -8483,6 +8943,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -8499,6 +8960,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "vip",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -8515,6 +8977,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "zone",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -8543,6 +9006,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -8559,6 +9023,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -8575,6 +9040,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           }
@@ -8605,6 +9071,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -8621,6 +9088,7 @@
             "cacheLookup": false,
             "lookup": true,
             "lookupResource": "database_software_image",
+            "lookupResourceElement": "id",
             "conditional": false,
             "condition": {}
           },
@@ -8637,6 +9105,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -8653,6 +9122,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -8669,6 +9139,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -8685,6 +9156,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -8701,6 +9173,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -8717,6 +9190,7 @@
             "cacheLookup": false,
             "lookup": true,
             "lookupResource": "last_patch_history_entry",
+            "lookupResourceElement": "id",
             "conditional": false,
             "condition": {}
           },
@@ -8733,6 +9207,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -8761,6 +9236,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               },
@@ -8777,6 +9253,7 @@
                 "cacheLookup": false,
                 "lookup": true,
                 "lookupResource": "backup",
+                "lookupResourceElement": "id",
                 "conditional": false,
                 "condition": {}
               },
@@ -8793,6 +9270,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               },
@@ -8809,6 +9287,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               },
@@ -8825,6 +9304,7 @@
                 "cacheLookup": false,
                 "lookup": true,
                 "lookupResource": "database",
+                "lookupResourceElement": "id",
                 "conditional": false,
                 "condition": {}
               },
@@ -8841,6 +9321,7 @@
                 "cacheLookup": false,
                 "lookup": true,
                 "lookupResource": "database_software_image",
+                "lookupResourceElement": "id",
                 "conditional": false,
                 "condition": {}
               },
@@ -8857,6 +9338,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               },
@@ -8873,6 +9355,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               },
@@ -8889,6 +9372,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               },
@@ -8905,6 +9389,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               },
@@ -8921,6 +9406,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               },
@@ -8937,6 +9423,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               },
@@ -8953,6 +9440,7 @@
                 "cacheLookup": false,
                 "lookup": true,
                 "lookupResource": "kms_key",
+                "lookupResourceElement": "id",
                 "conditional": false,
                 "condition": {}
               },
@@ -8969,6 +9457,7 @@
                 "cacheLookup": false,
                 "lookup": true,
                 "lookupResource": "kms_key_version",
+                "lookupResourceElement": "id",
                 "conditional": false,
                 "condition": {}
               },
@@ -8985,6 +9474,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               },
@@ -9001,6 +9491,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               },
@@ -9017,6 +9508,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               },
@@ -9033,6 +9525,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               },
@@ -9049,6 +9542,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               },
@@ -9065,6 +9559,7 @@
                 "cacheLookup": false,
                 "lookup": true,
                 "lookupResource": "vault",
+                "lookupResourceElement": "id",
                 "conditional": false,
                 "condition": {}
               },
@@ -9093,6 +9588,7 @@
                     "cacheLookup": false,
                     "lookup": false,
                     "lookupResource": "",
+                    "lookupResourceElement": "",
                     "conditional": false,
                     "condition": {}
                   },
@@ -9109,6 +9605,7 @@
                     "cacheLookup": false,
                     "lookup": false,
                     "lookupResource": "",
+                    "lookupResourceElement": "",
                     "conditional": false,
                     "condition": {}
                   },
@@ -9125,6 +9622,7 @@
                     "cacheLookup": false,
                     "lookup": false,
                     "lookupResource": "",
+                    "lookupResourceElement": "",
                     "conditional": false,
                     "condition": {}
                   },
@@ -9141,6 +9639,7 @@
                     "cacheLookup": false,
                     "lookup": false,
                     "lookupResource": "",
+                    "lookupResourceElement": "",
                     "conditional": false,
                     "condition": {}
                   },
@@ -9157,6 +9656,7 @@
                     "cacheLookup": false,
                     "lookup": false,
                     "lookupResource": "",
+                    "lookupResourceElement": "",
                     "conditional": false,
                     "condition": {}
                   },
@@ -9173,6 +9673,7 @@
                     "cacheLookup": false,
                     "lookup": false,
                     "lookupResource": "",
+                    "lookupResourceElement": "",
                     "conditional": false,
                     "condition": {}
                   },
@@ -9189,6 +9690,7 @@
                     "cacheLookup": false,
                     "lookup": false,
                     "lookupResource": "",
+                    "lookupResourceElement": "",
                     "conditional": false,
                     "condition": {}
                   },
@@ -9217,6 +9719,7 @@
                         "cacheLookup": false,
                         "lookup": true,
                         "lookupResource": "dbrs_policy",
+                        "lookupResourceElement": "id",
                         "conditional": false,
                         "condition": {}
                       },
@@ -9233,6 +9736,7 @@
                         "cacheLookup": false,
                         "lookup": false,
                         "lookupResource": "",
+                        "lookupResourceElement": "",
                         "conditional": false,
                         "condition": {}
                       }
@@ -9269,6 +9773,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           }
@@ -9299,6 +9804,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -9315,6 +9821,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -9331,6 +9838,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -9347,6 +9855,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -9363,6 +9872,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -9379,6 +9889,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -9395,6 +9906,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -9411,6 +9923,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -9439,6 +9952,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               }
@@ -9469,6 +9983,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               }
@@ -9495,7 +10010,8 @@
         "staticLookup": true,
         "cacheLookup": false,
         "lookup": true,
-        "lookupResource": "",
+        "lookupResource": "availability",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {},
         "default": "1"
@@ -9513,6 +10029,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "compartment",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -9529,6 +10046,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -9545,6 +10063,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -9561,6 +10080,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "filesystem_snapshot_policy",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -9577,6 +10097,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -9593,6 +10114,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -9609,6 +10131,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -9625,6 +10148,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -9641,6 +10165,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "kms_key",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -9657,6 +10182,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -9673,6 +10199,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -9689,6 +10216,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "replication_target",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -9705,6 +10233,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "source_snapshot",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       }
@@ -9727,7 +10256,8 @@
         "staticLookup": true,
         "cacheLookup": false,
         "lookup": true,
-        "lookupResource": "",
+        "lookupResource": "availability",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {},
         "default": "1"
@@ -9745,6 +10275,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "compartment",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -9761,6 +10292,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -9777,6 +10309,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -9793,6 +10326,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "export_set",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -9809,6 +10343,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -9825,6 +10360,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -9841,6 +10377,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -9857,6 +10394,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -9873,6 +10411,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -9889,6 +10428,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "network_security_group",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -9905,6 +10445,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "private_ip",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -9921,6 +10462,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "subnet",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -9949,6 +10491,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -9965,6 +10508,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -9981,6 +10525,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -9997,6 +10542,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -10013,6 +10559,7 @@
             "cacheLookup": false,
             "lookup": true,
             "lookupResource": "key_tab_secret",
+            "lookupResourceElement": "id",
             "conditional": false,
             "condition": {}
           }
@@ -10043,6 +10590,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -10059,6 +10607,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -10075,6 +10624,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -10091,6 +10641,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -10107,6 +10658,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -10123,6 +10675,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -10139,6 +10692,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -10155,6 +10709,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           }
@@ -10180,6 +10735,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "compartment",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -10196,6 +10752,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -10212,6 +10769,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -10228,6 +10786,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -10244,6 +10803,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -10260,6 +10820,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       }
@@ -10283,6 +10844,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "compartment",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -10299,6 +10861,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -10315,6 +10878,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -10331,6 +10895,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -10347,6 +10912,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -10363,6 +10929,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -10379,6 +10946,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       }
@@ -10402,6 +10970,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "compartment",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -10418,6 +10987,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -10434,6 +11004,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -10450,6 +11021,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -10466,6 +11038,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -10482,6 +11055,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -10498,6 +11072,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -10514,6 +11089,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -10530,6 +11106,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -10546,6 +11123,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -10562,6 +11140,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "restored_from_key",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -10578,6 +11157,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -10594,6 +11174,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "vault",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -10622,6 +11203,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -10638,6 +11220,7 @@
             "cacheLookup": false,
             "lookup": true,
             "lookupResource": "curve",
+            "lookupResourceElement": "id",
             "conditional": false,
             "condition": {}
           },
@@ -10654,6 +11237,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           }
@@ -10684,6 +11268,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -10700,6 +11285,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -10716,6 +11302,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           }
@@ -10746,6 +11333,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -10762,6 +11350,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -10778,6 +11367,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -10794,6 +11384,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -10810,6 +11401,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           }
@@ -10835,6 +11427,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "compartment",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -10851,6 +11444,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -10867,6 +11461,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -10883,6 +11478,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -10899,6 +11495,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -10915,6 +11512,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -10931,6 +11529,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -10947,6 +11546,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -10963,6 +11563,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "restored_from_vault",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -10979,6 +11580,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -10995,6 +11597,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -11023,6 +11626,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -11039,6 +11643,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -11055,6 +11660,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           }
@@ -11085,6 +11691,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -11101,6 +11708,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -11117,6 +11725,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -11133,6 +11742,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -11149,6 +11759,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           }
@@ -11174,6 +11785,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": true,
         "condition": {
           "element": "backendset_name",
@@ -11194,6 +11806,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -11210,6 +11823,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -11226,6 +11840,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": true,
         "condition": {
           "element": "ip_address",
@@ -11246,6 +11861,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "load_balancer",
+        "lookupResourceElement": "id",
         "conditional": true,
         "condition": {
           "element": "load_balancer_id",
@@ -11266,6 +11882,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -11282,6 +11899,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -11298,6 +11916,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -11314,6 +11933,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {},
         "default": 1
@@ -11338,6 +11958,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "load_balancer",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -11354,6 +11975,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -11370,6 +11992,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {},
         "default": "ROUND_ROBIN"
@@ -11399,6 +12022,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {},
             "default": "10000"
@@ -11416,6 +12040,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -11432,6 +12057,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {},
             "default": "80"
@@ -11449,6 +12075,7 @@
             "cacheLookup": false,
             "lookup": true,
             "lookupResource": "",
+            "lookupResourceElement": "id",
             "conditional": false,
             "condition": {},
             "default": "HTTP"
@@ -11466,6 +12093,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -11482,6 +12110,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {},
             "default": "3"
@@ -11499,6 +12128,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {},
             "default": "200"
@@ -11516,6 +12146,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {},
             "default": "3000"
@@ -11533,6 +12164,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {},
             "default": "/"
@@ -11553,12 +12185,13 @@
         "type": "string",
         "subtype": "",
         "required": true,
-        "label": "Default Backend Set Name",
+        "label": "Backend Set",
         "id": "default_backend_set_name",
         "staticLookup": false,
         "cacheLookup": false,
-        "lookup": false,
-        "lookupResource": "",
+        "lookup": true,
+        "lookupResource": "load_balancer_backend_set",
+        "lookupResourceElement": "name",
         "conditional": false,
         "condition": {}
       },
@@ -11575,6 +12208,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -11591,6 +12225,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "load_balancer",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -11607,6 +12242,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -11623,6 +12259,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -11639,8 +12276,10 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "80"
       },
       "protocol": {
         "provider": "oci",
@@ -11652,11 +12291,13 @@
         "label": "Protocol",
         "id": "protocol",
         "staticLookup": false,
-        "cacheLookup": false,
+        "cacheLookup": true,
         "lookup": false,
-        "lookupResource": "",
+        "lookupResource": "listLoadbalancerProtocols",
+        "lookupResourceElement": "listLoadbalancerProtocols",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "HTTP"
       },
       "routing_policy_name": {
         "provider": "oci",
@@ -11671,6 +12312,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -11687,6 +12329,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       }
@@ -11710,6 +12353,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "compartment",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -11726,6 +12370,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -11742,6 +12387,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -11758,6 +12404,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -11773,7 +12420,8 @@
         "staticLookup": true,
         "cacheLookup": false,
         "lookup": true,
-        "lookupResource": "",
+        "lookupResource": "ip",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {},
         "default": "IPV4"
@@ -11791,6 +12439,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -11807,6 +12456,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "network_security_group",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -11823,6 +12473,7 @@
         "cacheLookup": true,
         "lookup": false,
         "lookupResource": "loadbalancerShapes",
+        "lookupResourceElement": "loadbalancerShapes",
         "conditional": false,
         "condition": {},
         "default": "flexible"
@@ -11840,6 +12491,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "subnet",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -11872,6 +12524,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -11888,6 +12541,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           }
@@ -11913,6 +12567,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -11929,6 +12584,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -11944,7 +12600,8 @@
         "staticLookup": true,
         "cacheLookup": false,
         "lookup": true,
-        "lookupResource": "",
+        "lookupResource": "availability",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {},
         "default": "1"
@@ -11962,6 +12619,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "compartment",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -11978,6 +12636,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "configuration",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -11994,6 +12653,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -12010,6 +12670,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -12026,6 +12687,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -12042,6 +12704,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -12058,6 +12721,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -12073,7 +12737,8 @@
         "staticLookup": true,
         "cacheLookup": false,
         "lookup": true,
-        "lookupResource": "",
+        "lookupResource": "fault",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {},
         "default": "FAULT-DOMAIN-1"
@@ -12091,6 +12756,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -12107,6 +12773,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -12123,6 +12790,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -12139,6 +12807,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -12155,6 +12824,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -12171,6 +12841,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -12187,6 +12858,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -12203,6 +12875,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -12219,6 +12892,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -12235,6 +12909,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -12251,6 +12926,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -12267,6 +12943,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -12283,6 +12960,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "subnet",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -12299,6 +12977,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -12327,6 +13006,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -12343,6 +13023,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -12359,6 +13040,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -12375,6 +13057,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -12391,6 +13074,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -12419,6 +13103,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               }
@@ -12451,6 +13136,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -12467,6 +13153,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -12483,6 +13170,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           }
@@ -12513,6 +13201,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           }
@@ -12543,6 +13232,7 @@
             "cacheLookup": false,
             "lookup": true,
             "lookupResource": "backup",
+            "lookupResourceElement": "id",
             "conditional": false,
             "condition": {}
           },
@@ -12559,6 +13249,7 @@
             "cacheLookup": false,
             "lookup": true,
             "lookupResource": "db_system",
+            "lookupResourceElement": "id",
             "conditional": false,
             "condition": {}
           },
@@ -12575,6 +13266,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -12591,6 +13283,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -12607,6 +13300,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           }
@@ -12632,6 +13326,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "compartment",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -12648,6 +13343,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -12664,6 +13360,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -12680,6 +13377,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -12696,6 +13394,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -12712,6 +13411,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -12728,6 +13428,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -12744,6 +13445,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "network_security_group",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -12760,6 +13462,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -12776,6 +13479,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "subnet",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -12792,6 +13496,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -12828,6 +13533,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "compartment",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -12844,6 +13550,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -12860,6 +13567,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -12876,6 +13584,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -12892,6 +13601,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "table",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -12908,6 +13618,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -12924,6 +13635,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "table_name_or",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -12952,6 +13664,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -12968,6 +13681,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -12984,6 +13698,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           }
@@ -13009,6 +13724,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "compartment",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -13025,6 +13741,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -13041,6 +13758,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -13057,6 +13775,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -13073,6 +13792,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -13089,6 +13809,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -13105,6 +13826,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -13121,6 +13843,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -13137,6 +13860,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -13165,6 +13889,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -13181,6 +13906,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -13197,6 +13923,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -13213,6 +13940,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           }
@@ -13238,6 +13966,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -13254,6 +13983,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -13270,6 +14000,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -13286,6 +14017,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -13302,6 +14034,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "bucket",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -13318,6 +14051,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "compartment",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -13334,6 +14068,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -13350,6 +14085,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -13366,6 +14102,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -13382,6 +14119,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "kms_key",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -13398,6 +14136,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -13414,6 +14153,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -13430,6 +14170,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -13446,6 +14187,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -13462,6 +14204,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -13478,6 +14221,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -13494,6 +14238,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -13522,6 +14267,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -13538,6 +14284,7 @@
             "cacheLookup": false,
             "lookup": true,
             "lookupResource": "retention_rule",
+            "lookupResourceElement": "id",
             "conditional": false,
             "condition": {}
           },
@@ -13554,6 +14301,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -13570,6 +14318,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -13598,6 +14347,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               },
@@ -13614,6 +14364,7 @@
                 "cacheLookup": false,
                 "lookup": false,
                 "lookupResource": "",
+                "lookupResourceElement": "",
                 "conditional": false,
                 "condition": {}
               }
@@ -13641,6 +14392,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "compartment",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -13657,6 +14409,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -13673,6 +14426,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -13689,6 +14443,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -13705,6 +14460,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -13721,6 +14477,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "key",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -13737,6 +14494,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -13753,6 +14511,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -13769,6 +14528,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -13785,6 +14545,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -13801,6 +14562,7 @@
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
+        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -13817,6 +14579,7 @@
         "cacheLookup": false,
         "lookup": true,
         "lookupResource": "vault",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -13845,6 +14608,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -13861,6 +14625,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -13877,6 +14642,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -13893,6 +14659,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           }
@@ -13923,6 +14690,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -13939,6 +14707,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -13955,6 +14724,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -13971,6 +14741,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           },
@@ -13987,6 +14758,7 @@
             "cacheLookup": false,
             "lookup": false,
             "lookupResource": "",
+            "lookupResourceElement": "",
             "conditional": false,
             "condition": {}
           }

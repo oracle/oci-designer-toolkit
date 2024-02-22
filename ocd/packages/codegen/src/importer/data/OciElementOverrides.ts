@@ -38,17 +38,42 @@ export const elementOverrides: OcdElementOverrides = {
             "health_checker.return_code": "200",
             "health_checker.timeout_in_millis": "3000",
             "health_checker.url_path": "/",
+        },
+        "oci_load_balancer_listener": {
+            "port": "80",
+            "protocol": "HTTP"
         }
     },
-    "resourceLookupOverrides": {
+    "labels": {
         "common": {
-            "nsg_ids": "network_security_group"
+            "cidr_blocks": "IPV4 CIDRs",
+            "cpu_core_count": "OCPU Cores",
+            "create_vnic_details": "Network Details",
+            "data_storage_size_in_tbs": "Storage (in TBs)",
+            "db_name": "Database Name",
+            "dns_label": "DNS Label",
+            "ipv6private_cidr_blocks": "IPV6 Private CIDRs",
+            "is_ipv6enabled": "IPV6 Enabled"        
         },
+        "oci_load_balancer_listener": {
+            "default_backend_set_name": "Backend Set"
+        }
+    },
+    "lookupOverrides": {
+        "common": {
+            "nsg_ids": {"list": "network_security_group", "element": "id"}
+        },
+        "oci_load_balancer_listener": {
+            "default_backend_set_name": {"list": "load_balancer_backend_set", "element": "name"}
+        }
     },
     "lookups": {
         "common": [],
         "oci_core_instance": [
             "shape"
+        ],
+        "oci_load_balancer_listener": [
+            "default_backend_set_name"
         ],
     },
     "cacheLookups": {
@@ -62,6 +87,9 @@ export const elementOverrides: OcdElementOverrides = {
         },
         "oci_load_balancer_load_balancer": {
             "shape": "loadbalancerShapes"
+        },
+        "oci_load_balancer_listener": {
+            "protocol": "listLoadbalancerProtocols"
         }
     },
     "staticLookups": {
@@ -112,6 +140,9 @@ export const elementOverrides: OcdElementOverrides = {
         "oci_database_autonomous_database": {
             "whitelisted_ips": ["list", "string"]
         },
+        "oci_load_balancer_listener": {
+            "hostname_names": ["list", "string"]
+        }
     },
     "maps": {
         "common": {},

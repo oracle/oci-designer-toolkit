@@ -9,11 +9,12 @@ import { OciModelResources as Model, OciResource } from '@ocd/model'
 export class OciTerraformResource extends OcdTerraformResource {
     typeDisplayNameMap: Record<string, string> = {
         Compartment: 'name',
-        LoadBalancerBackendSet: 'name'
+        LoadBalancerBackendSet: 'name',
+        LoadBalancerListener: 'name'
     }
     isIgnoreCompartmentId: boolean
     isHomeRegion: boolean
-    simpleCacheAttributes = ['shapes', 'autonomousDbVersions', 'loadbalancerShapes']
+    simpleCacheAttributes = ['shapes', 'autonomousDbVersions', 'loadbalancerShapes', 'listLoadbalancerProtocols']
     lookupCacheAttributes = ['images']
     constructor(idTFResourceMap={}, isHomeRegion: boolean = false, isIgnoreCompartmentId: boolean = false) {
         super(idTFResourceMap)
@@ -57,6 +58,7 @@ export class OciTerraformResource extends OcdTerraformResource {
     // Simple Text Replace Reference
     retrieveAutonomousDbVersionId = () => '' // Simple Text Replace Reference
     retrieveShapeId = () => '' // Simple Text Replace Reference
+    retrieveListLoadbalancerProtocolId = () => '' // Simple Text Replace Reference
     retrieveLoadbalancerShapeId = () => '' // Simple Text Replace Reference
     // Id Lookups
     retrieveImageId = () => {return 'Method must be define in Resource class'}

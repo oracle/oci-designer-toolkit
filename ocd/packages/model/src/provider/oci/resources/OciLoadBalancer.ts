@@ -43,7 +43,9 @@ export namespace OciLoadBalancer {
     export function getConnectionIds(resource: OciLoadBalancer, allResources: OcdResources): string[] {
         // This List of Ids does not include the Parent Id or Compartment Id
         console.debug('OciLoadBalancer: Getting Connection Ids to for', resource.displayName, resource.id)
-        return resource.subnetIds.slice(1)
+        let associationIds = resource.subnetIds.slice(1)
+        if (resource.networkSecurityGroupIds) associationIds = [...associationIds, ...resource.networkSecurityGroupIds ? resource.networkSecurityGroupIds : []]
+        return associationIds
     }
     
     // export function newOciReservedIps(): OciReservedIps {

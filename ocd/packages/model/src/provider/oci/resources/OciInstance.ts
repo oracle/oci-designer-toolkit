@@ -85,6 +85,7 @@ export namespace OciInstance {
         // This List of Ids does not include the Parent Id or Compartment Id
         console.debug('OciInstance: Getting Connection Ids to for', resource.displayName, resource.id)
         let associationIds = resource.volumeAttachments ? [...resource.volumeAttachments.map(v => v.volumeId)] : []
+        if (resource.createVnicDetails) associationIds = [...associationIds, ...resource.createVnicDetails.nsgIds ? resource.createVnicDetails.nsgIds : []]
         if (resource.vnicAttachments) associationIds = [...associationIds, ...resource.vnicAttachments.slice(1).map(v => v.id)]
         return associationIds
     }

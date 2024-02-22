@@ -7016,6 +7016,34 @@ export const defaultCache: OcdCache = {
                         "displayName": "flexible"
                     }
                 ],
+                "listLoadbalancerPolicies": [
+                    {
+                        "id": "IP_HASH",
+                        "displayName": "Ip Hash"
+                    },
+                    {
+                        "id": "LEAST_CONNECTIONS",
+                        "displayName": "Least Connections"
+                    },
+                    {
+                        "id": "ROUND_ROBIN",
+                        "displayName": "Round Robin"
+                    }
+                ],
+                "listLoadbalancerProtocols": [
+                    {
+                        "id": "HTTP",
+                        "displayName": "HTTP"
+                    },
+                    {
+                        "id": "HTTP2",
+                        "displayName": "HTTP2"
+                    },
+                    {
+                        "id": "TCP",
+                        "displayName": "TCP"
+                    }
+                ],
                 "mysqlConfigurations": [
                     {
                         "id": "ocid1.mysqlconfiguration.oc1..aaaaaaaa26nlo52flargskecrmud73p52wwpy7xzjzzgo5iomgo3goc3akca",
@@ -7116,6 +7144,34 @@ export const defaultCache: OcdCache = {
                         "definedTags": null
                     },
                     {
+                        "id": "ocid1.mysqlconfiguration.oc1..aaaaaaaa3nxmnfhhxmwczg6wymvx2seey2tmqmdmiifekdf77za4worikhea",
+                        "compartmentId": null,
+                        "description": "Default standalone configuration for the MySQL.2 MySQL shape",
+                        "displayName": "MySQL.2.Standalone",
+                        "shapeName": "MySQL.2",
+                        "type": "DEFAULT",
+                        "lifecycleState": "ACTIVE",
+                        "applicationProgress": null,
+                        "timeCreated": "2018-09-21T10:00:00.000Z",
+                        "timeUpdated": null,
+                        "freeformTags": null,
+                        "definedTags": null
+                    },
+                    {
+                        "id": "ocid1.mysqlconfiguration.oc1..aaaaaaaa3u3evs3tgpzyjiioycrz7butxjobj4hdqwpl3eqk5m6t4wmpeaza",
+                        "compartmentId": null,
+                        "description": "Default high availability configuration for the MySQL.32 MySQL shape",
+                        "displayName": "MySQL.32.HA",
+                        "shapeName": "MySQL.32",
+                        "type": "DEFAULT",
+                        "lifecycleState": "ACTIVE",
+                        "applicationProgress": null,
+                        "timeCreated": "2018-09-21T10:00:00.000Z",
+                        "timeUpdated": null,
+                        "freeformTags": null,
+                        "definedTags": null
+                    },
+                    {
                         "id": "ocid1.mysqlconfiguration.oc1..aaaaaaaa3y7j4wbmf2ario7ewje56g57xjwa2txjca23rbmnegjve2lvsmzq",
                         "compartmentId": null,
                         "description": "Default standalone configuration for the MySQL.VM.Standard2.16.240GB MySQL shape",
@@ -7135,6 +7191,34 @@ export const defaultCache: OcdCache = {
                         "description": "Default high availability configuration for the MySQL.VM.Optimized3.8.128GB MySQL shape",
                         "displayName": "MySQL.VM.Optimized3.8.128GB.HA",
                         "shapeName": "MySQL.VM.Optimized3.8.128GB",
+                        "type": "DEFAULT",
+                        "lifecycleState": "ACTIVE",
+                        "applicationProgress": null,
+                        "timeCreated": "2018-09-21T10:00:00.000Z",
+                        "timeUpdated": null,
+                        "freeformTags": null,
+                        "definedTags": null
+                    },
+                    {
+                        "id": "ocid1.mysqlconfiguration.oc1..aaaaaaaa52quz4quamnma5z6ymwk262wpgy6anqzcg6462rixy6zb4m7645q",
+                        "compartmentId": null,
+                        "description": "Default high availability configuration for the MySQL.64 MySQL shape",
+                        "displayName": "MySQL.64.HA",
+                        "shapeName": "MySQL.64",
+                        "type": "DEFAULT",
+                        "lifecycleState": "ACTIVE",
+                        "applicationProgress": null,
+                        "timeCreated": "2018-09-21T10:00:00.000Z",
+                        "timeUpdated": null,
+                        "freeformTags": null,
+                        "definedTags": null
+                    },
+                    {
+                        "id": "ocid1.mysqlconfiguration.oc1..aaaaaaaa5gotw2a2dhp4d6oi5xpuooaayaovn5wtg45wdn5dblbvlal26uaq",
+                        "compartmentId": null,
+                        "description": "Default standalone configuration for the MySQL.64 MySQL shape",
+                        "displayName": "MySQL.64.Standalone",
+                        "shapeName": "MySQL.64",
                         "type": "DEFAULT",
                         "lifecycleState": "ACTIVE",
                         "applicationProgress": null,
@@ -7317,6 +7401,20 @@ export const defaultCache: OcdCache = {
                         "description": "Default standalone configuration for the MySQL.VM.Standard2.8.120GB MySQL shape",
                         "displayName": "MySQL.VM.Standard2.8.120GB.Standalone",
                         "shapeName": "MySQL.VM.Standard2.8.120GB",
+                        "type": "DEFAULT",
+                        "lifecycleState": "ACTIVE",
+                        "applicationProgress": null,
+                        "timeCreated": "2018-09-21T10:00:00.000Z",
+                        "timeUpdated": null,
+                        "freeformTags": null,
+                        "definedTags": null
+                    },
+                    {
+                        "id": "ocid1.mysqlconfiguration.oc1..aaaaaaaabjoa2iyeqwtp2bxljlicyt3t7u5ge32cxuhggg3fzvachb6zsnlq",
+                        "compartmentId": null,
+                        "description": "Default standalone configuration for the MySQL.8 MySQL shape",
+                        "displayName": "MySQL.8.Standalone",
+                        "shapeName": "MySQL.8",
                         "type": "DEFAULT",
                         "lifecycleState": "ACTIVE",
                         "applicationProgress": null,
@@ -7662,11 +7760,39 @@ export const defaultCache: OcdCache = {
                         "definedTags": null
                     },
                     {
+                        "id": "ocid1.mysqlconfiguration.oc1..aaaaaaaahcvmsvtujp27l6wkcf7agxxzi7y3ittb5c2ygr5ycnkro6bxazza",
+                        "compartmentId": null,
+                        "description": "Default high availability configuration for the MySQL.48 MySQL shape",
+                        "displayName": "MySQL.48.HA",
+                        "shapeName": "MySQL.48",
+                        "type": "DEFAULT",
+                        "lifecycleState": "ACTIVE",
+                        "applicationProgress": null,
+                        "timeCreated": "2018-09-21T10:00:00.000Z",
+                        "timeUpdated": null,
+                        "freeformTags": null,
+                        "definedTags": null
+                    },
+                    {
                         "id": "ocid1.mysqlconfiguration.oc1..aaaaaaaahgiqob6oo3cwcoq2nbc3u2wz4uwlwblgyes6veogg6rv564aexwq",
                         "compartmentId": null,
                         "description": "Default high availability configuration for the MySQL.VM.Standard.E3.1.16GB MySQL shape",
                         "displayName": "MySQL.VM.Standard.E3.1.16GB.HA",
                         "shapeName": "MySQL.VM.Standard.E3.1.16GB",
+                        "type": "DEFAULT",
+                        "lifecycleState": "ACTIVE",
+                        "applicationProgress": null,
+                        "timeCreated": "2018-09-21T10:00:00.000Z",
+                        "timeUpdated": null,
+                        "freeformTags": null,
+                        "definedTags": null
+                    },
+                    {
+                        "id": "ocid1.mysqlconfiguration.oc1..aaaaaaaaivzvkitk3kcdoybkjiqtlmwo6gq36xdmnnjl5fpvunenrykn5nrq",
+                        "compartmentId": null,
+                        "description": "Default high availability configuration for the MySQL.4 MySQL shape",
+                        "displayName": "MySQL.4.HA",
+                        "shapeName": "MySQL.4",
                         "type": "DEFAULT",
                         "lifecycleState": "ACTIVE",
                         "applicationProgress": null,
@@ -7723,6 +7849,20 @@ export const defaultCache: OcdCache = {
                         "description": "Default standalone configuration for the MySQL.VM.Standard.E3.2.32GB MySQL shape",
                         "displayName": "MySQL.VM.Standard.E3.2.32GB.Standalone",
                         "shapeName": "MySQL.VM.Standard.E3.2.32GB",
+                        "type": "DEFAULT",
+                        "lifecycleState": "ACTIVE",
+                        "applicationProgress": null,
+                        "timeCreated": "2018-09-21T10:00:00.000Z",
+                        "timeUpdated": null,
+                        "freeformTags": null,
+                        "definedTags": null
+                    },
+                    {
+                        "id": "ocid1.mysqlconfiguration.oc1..aaaaaaaakx4e47m7y4hctpmtgepqu5rcssjq6wrls25liqmdn26vd3hjaesa",
+                        "compartmentId": null,
+                        "description": "Default standalone configuration for the MySQL.256 MySQL shape",
+                        "displayName": "MySQL.256.Standalone",
+                        "shapeName": "MySQL.256",
                         "type": "DEFAULT",
                         "lifecycleState": "ACTIVE",
                         "applicationProgress": null,
@@ -7900,6 +8040,20 @@ export const defaultCache: OcdCache = {
                         "definedTags": null
                     },
                     {
+                        "id": "ocid1.mysqlconfiguration.oc1..aaaaaaaao6f3g7zzv6jg75a7zzfgjoard7s5mytztxvmi56uxa7n3elyvbua",
+                        "compartmentId": null,
+                        "description": "Default high availability configuration for the MySQL.256 MySQL shape",
+                        "displayName": "MySQL.256.HA",
+                        "shapeName": "MySQL.256",
+                        "type": "DEFAULT",
+                        "lifecycleState": "ACTIVE",
+                        "applicationProgress": null,
+                        "timeCreated": "2018-09-21T10:00:00.000Z",
+                        "timeUpdated": null,
+                        "freeformTags": null,
+                        "definedTags": null
+                    },
+                    {
                         "id": "ocid1.mysqlconfiguration.oc1..aaaaaaaaofsmc7gdxkdisbf4kos34riyldvuxwutdeafuo4rj22e2mrffl3a",
                         "compartmentId": null,
                         "description": "Default standalone configuration for the MySQL.VM.Standard2.1.15GB MySQL shape",
@@ -7970,6 +8124,20 @@ export const defaultCache: OcdCache = {
                         "definedTags": null
                     },
                     {
+                        "id": "ocid1.mysqlconfiguration.oc1..aaaaaaaaq4muo4joffbk4yl4z2jjhuy7ppm6ildtddyugwa3rx655umxdvxq",
+                        "compartmentId": null,
+                        "description": "Default standalone configuration for the MySQL.4 MySQL shape",
+                        "displayName": "MySQL.4.Standalone",
+                        "shapeName": "MySQL.4",
+                        "type": "DEFAULT",
+                        "lifecycleState": "ACTIVE",
+                        "applicationProgress": null,
+                        "timeCreated": "2018-09-21T10:00:00.000Z",
+                        "timeUpdated": null,
+                        "freeformTags": null,
+                        "definedTags": null
+                    },
+                    {
                         "id": "ocid1.mysqlconfiguration.oc1..aaaaaaaaq5dioa6dxw3wm4pfcwygb5fvvzpdzrfexen6syrwu4m3s5grfzpq",
                         "compartmentId": null,
                         "description": "Default standalone configuration for the MySQL.VM.Optimized3.4.64GB MySQL shape",
@@ -7989,6 +8157,20 @@ export const defaultCache: OcdCache = {
                         "description": "Default high availability configuration for the MySQL.VM.Standard.E4.8.128GB MySQL shape",
                         "displayName": "MySQL.VM.Standard.E4.8.128GB.HA",
                         "shapeName": "MySQL.VM.Standard.E4.8.128GB",
+                        "type": "DEFAULT",
+                        "lifecycleState": "ACTIVE",
+                        "applicationProgress": null,
+                        "timeCreated": "2018-09-21T10:00:00.000Z",
+                        "timeUpdated": null,
+                        "freeformTags": null,
+                        "definedTags": null
+                    },
+                    {
+                        "id": "ocid1.mysqlconfiguration.oc1..aaaaaaaaqwkdrxipvkmy5cukdhkyxbhuonzcozickc33twprluevprbjnc2a",
+                        "compartmentId": null,
+                        "description": "Default high availability configuration for the MySQL.16 MySQL shape",
+                        "displayName": "MySQL.16.HA",
+                        "shapeName": "MySQL.16",
                         "type": "DEFAULT",
                         "lifecycleState": "ACTIVE",
                         "applicationProgress": null,
@@ -8124,6 +8306,20 @@ export const defaultCache: OcdCache = {
                         "definedTags": null
                     },
                     {
+                        "id": "ocid1.mysqlconfiguration.oc1..aaaaaaaaurqzbwjbglg5hsoha4sjmkbf5u4oakdmnoyvorx3ghvajlz6oivq",
+                        "compartmentId": null,
+                        "description": "Default high availability configuration for the MySQL.2 MySQL shape",
+                        "displayName": "MySQL.2.HA",
+                        "shapeName": "MySQL.2",
+                        "type": "DEFAULT",
+                        "lifecycleState": "ACTIVE",
+                        "applicationProgress": null,
+                        "timeCreated": "2018-09-21T10:00:00.000Z",
+                        "timeUpdated": null,
+                        "freeformTags": null,
+                        "definedTags": null
+                    },
+                    {
                         "id": "ocid1.mysqlconfiguration.oc1..aaaaaaaauxn6tddkgan34ikhv4jxi7ygdjucqrj7tpcpnzhxx7ywte33pxya",
                         "compartmentId": null,
                         "description": "Default standalone configuration for the MySQL.VM.Standard.E4.4.64GB MySQL shape",
@@ -8180,6 +8376,20 @@ export const defaultCache: OcdCache = {
                         "definedTags": null
                     },
                     {
+                        "id": "ocid1.mysqlconfiguration.oc1..aaaaaaaaw7rgajcqsvcuelshon6w6as5wws2y5vqsey6vfdi7hrqbizmrn7a",
+                        "compartmentId": null,
+                        "description": "Default standalone configuration for the MySQL.16 MySQL shape",
+                        "displayName": "MySQL.16.Standalone",
+                        "shapeName": "MySQL.16",
+                        "type": "DEFAULT",
+                        "lifecycleState": "ACTIVE",
+                        "applicationProgress": null,
+                        "timeCreated": "2018-09-21T10:00:00.000Z",
+                        "timeUpdated": null,
+                        "freeformTags": null,
+                        "definedTags": null
+                    },
+                    {
                         "id": "ocid1.mysqlconfiguration.oc1..aaaaaaaaw7umceg7o3sm2otxjo24w3ttiek5ipdaaqv4pnjrbmecigiknnqq",
                         "compartmentId": null,
                         "description": "Default standalone configuration for the MySQL.HeatWave.VM.Standard MySQL shape",
@@ -8194,11 +8404,39 @@ export const defaultCache: OcdCache = {
                         "definedTags": null
                     },
                     {
+                        "id": "ocid1.mysqlconfiguration.oc1..aaaaaaaawdccvpf4a5dc6wdabu4s2lp4ac35q6uimonpkqfucgeejt6rx3zq",
+                        "compartmentId": null,
+                        "description": "Default high availability configuration for the MySQL.8 MySQL shape",
+                        "displayName": "MySQL.8.HA",
+                        "shapeName": "MySQL.8",
+                        "type": "DEFAULT",
+                        "lifecycleState": "ACTIVE",
+                        "applicationProgress": null,
+                        "timeCreated": "2018-09-21T10:00:00.000Z",
+                        "timeUpdated": null,
+                        "freeformTags": null,
+                        "definedTags": null
+                    },
+                    {
                         "id": "ocid1.mysqlconfiguration.oc1..aaaaaaaaweky3hvms4bxw2uyf6pjcoxzf5gkqzxvxmzolgcu6bufd5bjnpyq",
                         "compartmentId": null,
                         "description": "Default standalone configuration for the MySQL.VM.Standard.E3.1.16GB MySQL shape",
                         "displayName": "MySQL.VM.Standard.E3.1.16GB.Standalone",
                         "shapeName": "MySQL.VM.Standard.E3.1.16GB",
+                        "type": "DEFAULT",
+                        "lifecycleState": "ACTIVE",
+                        "applicationProgress": null,
+                        "timeCreated": "2018-09-21T10:00:00.000Z",
+                        "timeUpdated": null,
+                        "freeformTags": null,
+                        "definedTags": null
+                    },
+                    {
+                        "id": "ocid1.mysqlconfiguration.oc1..aaaaaaaawtkxd55ibp4s4piywy5m3z73oo7dcy5bzhwqsnrokpoi6vyfva5a",
+                        "compartmentId": null,
+                        "description": "Default standalone configuration for the MySQL.32 MySQL shape",
+                        "displayName": "MySQL.32.Standalone",
+                        "shapeName": "MySQL.32",
                         "type": "DEFAULT",
                         "lifecycleState": "ACTIVE",
                         "applicationProgress": null,
@@ -8227,6 +8465,20 @@ export const defaultCache: OcdCache = {
                         "description": "Default high availability configuration for the MySQL.VM.Standard2.1.15GB MySQL shape",
                         "displayName": "MySQL.VM.Standard2.1.15GB.HA",
                         "shapeName": "MySQL.VM.Standard2.1.15GB",
+                        "type": "DEFAULT",
+                        "lifecycleState": "ACTIVE",
+                        "applicationProgress": null,
+                        "timeCreated": "2018-09-21T10:00:00.000Z",
+                        "timeUpdated": null,
+                        "freeformTags": null,
+                        "definedTags": null
+                    },
+                    {
+                        "id": "ocid1.mysqlconfiguration.oc1..aaaaaaaaxpdj6wwxecjg4srmgyzs3aipu22q7tsvj2gra3m5wwiv5m2hze2a",
+                        "compartmentId": null,
+                        "description": "Default standalone configuration for the MySQL.48 MySQL shape",
+                        "displayName": "MySQL.48.Standalone",
+                        "shapeName": "MySQL.48",
                         "type": "DEFAULT",
                         "lifecycleState": "ACTIVE",
                         "applicationProgress": null,
@@ -8770,10 +9022,6 @@ export const defaultCache: OcdCache = {
                     {
                         "versionFamily": "8 - Innovation",
                         "versions": [
-                            {
-                                "version": "8.1.0",
-                                "description": "8.1.0"
-                            },
                             {
                                 "version": "8.2.0",
                                 "description": "8.2.0"
@@ -10134,8 +10382,8 @@ export const defaultCache: OcdCache = {
                 ],
                 "autonomousDbVersions": [
                     {
-                        "dbWorkload": "AJD",
-                        "details": "www.oracle.com/ajd",
+                        "dbWorkload": "OLTP",
+                        "details": "www.oracle.com/atp",
                         "isDedicated": false,
                         "isDefaultForFree": true,
                         "isDefaultForPaid": true,
@@ -10148,18 +10396,6 @@ export const defaultCache: OcdCache = {
                     {
                         "dbWorkload": "APEX",
                         "details": "www.oracle.com/apex",
-                        "isDedicated": false,
-                        "isDefaultForFree": true,
-                        "isDefaultForPaid": true,
-                        "isFreeTierEnabled": true,
-                        "isPaidEnabled": true,
-                        "version": "19c",
-                        "id": "19c",
-                        "displayName": "19c"
-                    },
-                    {
-                        "dbWorkload": "OLTP",
-                        "details": "www.oracle.com/atp",
                         "isDedicated": false,
                         "isDefaultForFree": true,
                         "isDefaultForPaid": true,
@@ -10182,6 +10418,18 @@ export const defaultCache: OcdCache = {
                         "displayName": "19c"
                     },
                     {
+                        "dbWorkload": "AJD",
+                        "details": "www.oracle.com/ajd",
+                        "isDedicated": false,
+                        "isDefaultForFree": true,
+                        "isDefaultForPaid": true,
+                        "isFreeTierEnabled": true,
+                        "isPaidEnabled": true,
+                        "version": "19c",
+                        "id": "19c",
+                        "displayName": "19c"
+                    },
+                    {
                         "dbWorkload": "APEX",
                         "details": "www.oracle.com/apex",
                         "isDedicated": false,
@@ -10194,7 +10442,19 @@ export const defaultCache: OcdCache = {
                         "displayName": "21c"
                     },
                     {
-                        "dbWorkload": "OLTP",
+                        "dbWorkload": "AJD",
+                        "details": "www.oracle.com/ajd",
+                        "isDedicated": false,
+                        "isDefaultForFree": false,
+                        "isDefaultForPaid": false,
+                        "isFreeTierEnabled": true,
+                        "isPaidEnabled": false,
+                        "version": "21c",
+                        "id": "21c",
+                        "displayName": "21c"
+                    },
+                    {
+                        "dbWorkload": "DW",
                         "details": null,
                         "isDedicated": false,
                         "isDefaultForFree": false,
@@ -10206,19 +10466,7 @@ export const defaultCache: OcdCache = {
                         "displayName": "21c"
                     },
                     {
-                        "dbWorkload": "AJD",
-                        "details": "www.oracle.com/ajd",
-                        "isDedicated": false,
-                        "isDefaultForFree": false,
-                        "isDefaultForPaid": false,
-                        "isFreeTierEnabled": true,
-                        "isPaidEnabled": false,
-                        "version": "21c",
-                        "id": "21c",
-                        "displayName": "21c"
-                    },
-                    {
-                        "dbWorkload": "DW",
+                        "dbWorkload": "OLTP",
                         "details": null,
                         "isDedicated": false,
                         "isDefaultForFree": false,
