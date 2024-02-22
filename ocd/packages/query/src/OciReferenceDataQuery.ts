@@ -65,6 +65,8 @@ export class OciReferenceDataQuery extends OciCommonQuery {
                 const listDataScienceNotebookSessionShapes = this.listDataScienceNotebookSessionShapes(compartmentIds)
                 // Networking
                 const listLoadbalancerShapes = this.listLoadbalancerShapes(compartmentIds)
+                const listLoadbalancerPolicies = this.listLoadbalancerPolicies(compartmentIds)
+                const listLoadbalancerProtocols = this.listLoadbalancerProtocols(compartmentIds)
                 // Database
                 const listMySQLShapes = this.listMySQLShapes(compartmentIds)
                 const listMySQLVersions = this.listMySQLVersions(compartmentIds)
@@ -88,6 +90,8 @@ export class OciReferenceDataQuery extends OciCommonQuery {
                     listShapes,
                     listImages,
                     listLoadbalancerShapes,
+                    listLoadbalancerPolicies,
+                    listLoadbalancerProtocols,
                     listMySQLShapes,
                     listMySQLVersions,
                     listMySQLConfigurations,
@@ -119,6 +123,12 @@ export class OciReferenceDataQuery extends OciCommonQuery {
                     // Loadbalancer Shapes
                     // @ts-ignore
                     if (results[queries.indexOf(listLoadbalancerShapes)].status === 'fulfilled') referenceData.loadbalancerShapes = results[queries.indexOf(listLoadbalancerShapes)].value
+                    // Loadbalancer Listener Policies
+                    // @ts-ignore
+                    if (results[queries.indexOf(listLoadbalancerPolicies)].status === 'fulfilled') referenceData.listLoadbalancerPolicies = results[queries.indexOf(listLoadbalancerPolicies)].value
+                    // Loadbalancer Listener Protocols
+                    // @ts-ignore
+                    if (results[queries.indexOf(listLoadbalancerProtocols)].status === 'fulfilled') referenceData.listLoadbalancerProtocols = results[queries.indexOf(listLoadbalancerProtocols)].value
                     /*
                     ** MySQL
                     */
@@ -437,6 +447,50 @@ export class OciReferenceDataQuery extends OciCommonQuery {
                 const uniqueResources = Array.from(new Set(resources.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
                 resolve(uniqueResources)
                 // resolve(resources)
+            }).catch((reason) => {
+                console.error(reason)
+                reject(reason)
+            })
+        })
+    }
+
+    listLoadbalancerPolicies(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const requests: loadbalancer.requests.ListPoliciesRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
+            const queries = requests.map((r) => this.loadbalancerClient.listPolicies(r))
+            Promise.allSettled(queries).then((results) => {
+                console.debug('OciReferenceDataQuery: listLoadbalancerPolicies: All Settled')
+                //@ts-ignore
+                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], []).map((r) => {return {
+                        id: r.name,
+                        displayName: OcdUtils.toTitle(r.name)
+                    }
+                }).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
+                // @ts-ignore
+                const uniqueResources = Array.from(new Set(resources.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
+                resolve(uniqueResources)
+            }).catch((reason) => {
+                console.error(reason)
+                reject(reason)
+            })
+        })
+    }
+
+    listLoadbalancerProtocols(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const requests: loadbalancer.requests.ListProtocolsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
+            const queries = requests.map((r) => this.loadbalancerClient.listProtocols(r))
+            Promise.allSettled(queries).then((results) => {
+                console.debug('OciReferenceDataQuery: listLoadbalancerProtocols: All Settled')
+                //@ts-ignore
+                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], []).map((r) => {return {
+                        id: r.name,
+                        displayName: r.name
+                    }
+                }).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
+                // @ts-ignore
+                const uniqueResources = Array.from(new Set(resources.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
+                resolve(uniqueResources)
             }).catch((reason) => {
                 console.error(reason)
                 reject(reason)

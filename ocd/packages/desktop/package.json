@@ -88,6 +88,10 @@
       "icon": "build/assets/icon.icns",
       "category": "public.app-category.developer-tools"
     },
+    "dmg": {
+      "icon": "build/assets/icon.icns",
+      "background": "build/assets/background.png"
+    },
     "win": {
       "icon": "build/assets/icon.ico"
     },

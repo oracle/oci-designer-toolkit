@@ -12,18 +12,21 @@ This Alpha release is to show the new desktop functionality available in the OKI
 guarenteed to be 100% functional. At present the following resources and features are availble but we will be rleasing updates 
 regularly.
 
-| Resource            | Properties | Terraform |
-| ------------------- | :--------: | :-------: |
-| VCN                 | &check;    | &check;   |
-| Subnet              | &check;    | &check;   |
-| Security List       | &check;    | &check;   |
-| Route Table         | &check;    | &check;   |
-| DHCP Options        | &check;    | &check;   |
-| Internet Gateway    | &check;    | &check;   |
-| NAT Gateway         | &check;    | &check;   |
-| Instance            | &check;    | &check;   |
-| Autonomous Database | &check;    | &check;   |
-| Load Balancer       | &check;    | &check;   |
+| Resource                       | Properties | Terraform | Validation |
+| ------------------------------ | :--------: | :-------: | :--------: |
+| VCN                            | &check;    | &check;   |            |
+| Subnet                         | &check;    | &check;   |            |
+| Security List                  | &check;    | &check;   |            |
+| Route Table                    | &check;    | &check;   |            |
+| DHCP Options                   | &check;    | &check;   |            |
+| Internet Gateway               | &check;    | &check;   |            |
+| NAT Gateway                    | &check;    | &check;   |            |
+| Instance                       | &check;    | &check;   |            |
+| Autonomous Database            | &check;    | &check;   |            |
+| Load Balancer                  | &check;    | &check;   |            |
+| Load Balancer Backend Set      | &check;    | &check;   |            |
+| Load Balancer Backend          | &check;    | &check;   |            |
+| Load Balancer Backend Listener | &check;    | &check;   |            |
 
 Not all menu options are currently available and if selected will display a message saying they are currently not availble,
 again these will be added over time.

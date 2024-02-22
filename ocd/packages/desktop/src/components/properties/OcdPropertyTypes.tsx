@@ -31,6 +31,7 @@ export interface ResourcePropertyAttributes {
     cacheLookup?: boolean
     lookup?: boolean
     lookupResource?: string,
+    lookupResourceElement?: string,
     conditional: boolean,
     condition: ResourcePropertyCondition | ResourcePropertyCondition[],
     default?: string | number | boolean
@@ -385,7 +386,7 @@ export const OcdStringListProperty = ({ ocdDocument, setOcdDocument, resource, c
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const properties = config && config.properties ? config.properties : {}
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        resource[attribute.key] = e.target.value.split(',')
+        resource[attribute.key] = e.target.value.split(',').filter((v) => v !== '')
         setOcdDocument(OcdDocument.clone(ocdDocument))
         if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
