@@ -496,10 +496,17 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
         e.preventDefault()
         console.info('OcdResourceSvg: Resource Mouse Up', resource.ocid, e.clientX, e.clientY)
         if (!contextMenu.show) {
-            if (resource.container && resource.id !== ocdDocument.dragResource.resource.id && !ocdDocument.dragResource.parent) {
-                console.info('>>>OcdResourceSvg: Mouse Up -> Container', resource.id, ocdDocument.dragResource.parent)
-                ocdDocument.dragResource.parent = resource
+            if (resource.container) {
+                const childCoordIds = ocdDocument.getChildCoords([ocdDocument.dragResource.resource]).map((c) => c.id)
+                if (resource.id !== ocdDocument.dragResource.resource.id && !childCoordIds.includes(resource.id) && !ocdDocument.dragResource.parent) {
+                    console.info('>>>OcdResourceSvg: Mouse Up -> Container', resource.id, ocdDocument.dragResource.parent)
+                    ocdDocument.dragResource.parent = resource
+                }
             }
+            // if (resource.container && resource.id !== ocdDocument.dragResource.resource.id && !ocdDocument.dragResource.parent) {
+            //     console.info('>>>OcdResourceSvg: Mouse Up -> Container', resource.id, ocdDocument.dragResource.parent)
+            //     ocdDocument.dragResource.parent = resource
+            // }
         }
     }
     const onNooPEvent = (e: React.MouseEvent<SVGElement>) => {}
