@@ -3,8 +3,8 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import { OcdDesign, OcdVariable, OciResource } from "@ocd/model";
-import { OcdExporter, OutputData } from "../OcdExporter";
+import { OcdDesign, OcdVariable, OciResource } from "@ocd/model"
+import { OcdExporter, OutputData } from "../OcdExporter"
 import { OciModelResources as Model } from '@ocd/model'
 import * as OciTerraformResources  from './provider/oci/resources'
 import { OcdUtils } from "@ocd/core";
