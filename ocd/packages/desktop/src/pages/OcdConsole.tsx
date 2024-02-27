@@ -24,12 +24,18 @@ import { OcdValidationResult, OcdValidator } from '@ocd/model'
 import OcdValidation from './OcdValidation'
 import { buildDetails } from '../data/OcdBuildDetails'
 
+// Import css as text
+// @ts-ignore
+// eslint-disable-next-line import/no-webpack-loader-syntax
+// import svgThemeCss from '!!css-loader?{"sourceMap":false,"exportType":"string"}!../css/oci-theme.css'
+
 export const ThemeContext = createContext('')
 export const ActiveFileContext = createContext({})
 export const ConsoleConfigContext = createContext({})
 export const CacheContext = createContext({})
 
 const OcdConsole = (): JSX.Element => {
+    // console.debug('OcdConsole: CSS', svgThemeCss)
     const [ocdDocument, setOcdDocument] = useState(OcdDocument.new())
     const [ocdConsoleConfig, setOcdConsoleConfig] = useState(OcdConsoleConfig.new())
     const [ocdCache, setOcdCache] = useState(OcdCacheData.new())

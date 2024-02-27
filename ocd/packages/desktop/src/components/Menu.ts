@@ -11,6 +11,11 @@ import { OcdDesignFacade } from '../facade/OcdDesignFacade'
 import { OcdConfigFacade } from '../facade/OcdConfigFacade'
 import { OcdViewLayer, OcdViewPage } from '@ocd/model'
 
+// Import css as text
+// @ts-ignore
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import svgThemeCss from '!!css-loader?{"sourceMap":false,"exportType":"string"}!../css/oci-theme.css'
+
 export interface MenuItem {
     label: string
     class?: string
