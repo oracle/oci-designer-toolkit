@@ -5,4 +5,5 @@
 
 export { OcdExporter } from './OcdExporter'
 export { OcdOKITExporter } from './okit/OcdOKITExporter'
+export { OcdSVGExporter } from './svg/OcdSVGExporter'
 export { OcdTerraformExporter } from './terraform/OcdTerraformExporter'
