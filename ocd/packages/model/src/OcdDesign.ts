@@ -6,6 +6,8 @@ import { v4 as uuidv4 } from 'uuid'
 import * as ociResources from './provider/oci/resources'
 import { version } from './OcdModelVersion'
 import { schemaVersion } from './OcdSchemaVersion'
+import { OcdResource } from './OcdResource'
+import { OciResource } from './provider/oci/OciResource'
 
 export interface OcdMetadata {
     ocdVersion: string,
@@ -193,6 +195,25 @@ export namespace OcdDesign {
             userDefined: {}
         }
     }
+    // Model Methods
+    export function getOciResourceLists(design: OcdDesign) {return design.model.oci.resources}
+    export function getOciResourceList(design: OcdDesign, key: string) {return Object.hasOwn(design.model.oci.resources, key) ? design.model.oci.resources[key] : []}
+    export function getOciResources(design: OcdDesign) {return Object.values(design.model.oci.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], [])}
+    export function getResourceLists(design: OcdDesign) {return {...getOciResourceLists(design)}}
+    export function getResources(design: OcdDesign) {return getOciResources(design)}
+    export function getResource(design: OcdDesign, id='') {return getResources(design).find((r: OcdResource) => r.id === id)}
+    export function getResourceParentId(design: OcdDesign, id: string): string {
+        const resource = getResource(design, id)
+        const parentId: string = (resource.provider === 'oci') ? OciResource.getParentId(resource) : ''
+        return parentId
+    }
+    export function getResourceAssociationIds(design: OcdDesign, id: string): string[] {
+        const resource = getResource(design, id)
+        const associationIds: string[] = (resource.provider === 'oci') ? OciResource.getAssociationIds(resource, getResourceLists(design)) : []
+        return associationIds
+    }
+
+    // View Methods
     export function resetPanZoom(): number[] {
         return [1, 0, 0, 1, 0, 0]
     }
@@ -212,6 +233,22 @@ export namespace OcdDesign {
             showConnections: true
         }
     }
+    export function getAllCoords(design: OcdDesign): OcdViewCoords[] {return design.view.pages.map(p => [...p.coords, ...getChildCoords(p.coords)]).reduce((a, c) => [...a, ...c], [])}
+    export function getAllPageCoords (page: OcdViewPage) {return getChildCoords(page.coords)}
+    export function getCoords(design: OcdDesign, id: string) {return getAllCoords(design).find(c => c.id === id)}
+    export function getChildCoords(coords?: OcdViewCoords[]): OcdViewCoords[] {return coords ? coords.reduce((a, c) => [...a, ...getChildCoords(c.coords)], coords) : []}
+    export function getCoordsRelativeXY(design: OcdDesign, coords: OcdViewCoords): OcdViewPoint { // Relative to root x: 0, y: 0
+        const parentCoords: OcdViewCoords | undefined = getCoords(design, coords.pgid)
+        let relativeXY: OcdViewPoint = {x: coords.x, y: coords.y}
+        if (parentCoords) {
+            const parentXY = getCoordsRelativeXY(design, parentCoords)
+            relativeXY.x += parentXY.x
+            relativeXY.y += parentXY.y
+        }
+        return relativeXY
+    }
+
+    // Variables Methods
     export function newVariable(): OcdVariable {
         return {
             key: uuidv4(),

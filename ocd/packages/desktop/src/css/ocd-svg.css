@@ -1,10 +1,10 @@
 :root {
 
-    --canvas-icon-height: 40px;
-    --canvas-icon-width: 40px;
-    --canvas-resource-simple-width: 40px;
-    --canvas-resource-detailed-width: 170px;
-    --canvas-resource-container-width: 200px;
+    --svg-icon-height: 40px;
+    --svg-icon-width: 40px;
+    --svg-resource-simple-width: 40px;
+    --svg-resource-detailed-width: 170px;
+    --svg-resource-container-width: 200px;
 
     --svg-container-resource-stroke: #312D2A;
     --svg-container-resource-stroke-width: 1;
@@ -42,9 +42,13 @@
 
 }
 
+svg {
+    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+}
+
 .ocd-svg-icon {
-    width: var(--canvas-icon-width);
-    height: var(--canvas-icon-height);
+    width: var(--svg-icon-width);
+    height: var(--svg-icon-height);
     background-repeat: no-repeat;
     background-position-x: center;
     background-position-y: center;
@@ -76,8 +80,8 @@
 }
 
 .ocd-svg-simple {
-    width: var(--canvas-icon-width);
-    height: var(--canvas-icon-height);
+    width: var(--svg-icon-width);
+    height: var(--svg-icon-height);
     stroke: var(--svg-simple-resource-stroke);
     stroke-width: var(--svg-simple-resource-stroke-width);
     stroke-dasharray: var(--svg-simple-resource-stroke-dasharray);
@@ -92,56 +96,24 @@
 }
 
 .ocd-svg-resource-simple {
-    width: var(--canvas-resource-simple-width);
+    width: var(--svg-resource-simple-width);
 }
 
 .ocd-svg-resource-detailed {
-    width: var(--canvas-resource-detailed-width);
+    width: var(--svg-resource-detailed-width);
 }
 
 .ocd-svg-resource-container {
-    width: var(--canvas-resource-container-width);
-}
-
-.ocd-svg-resize {
-    opacity: 0.1;
-}
-
-.ocd-svg-resize-point {
-    fill: purple;
-}
-
-.ocd-svg-container-ew-resize {
-    stroke-width: 3px;
-    stroke: red;
-    stroke-opacity: 1;
-    fill: none;
-    pointer-events: all;
-}
-
-.ocd-svg-container-ew-resize:hover {
-    cursor: ew-resize;
-}
-
-.ocd-svg-container-ns-resize {
-    stroke-width: 3px;
-    stroke: black;
-    stroke-opacity: 0.01;
-    fill: none;
-    pointer-events: all;
-}
-
-.ocd-svg-container-ns-resize:hover {
-    cursor: ns-resize;
+    width: var(--svg-resource-container-width);
 }
 
 .ocd-svg-foreign-object {
-    height: var(--canvas-icon-height);
+    height: var(--svg-icon-height);
 }
 
 .ocd-svg-foreign-object > div {
     display: grid;
-    grid-template-columns: var(--canvas-icon-width) auto;
+    grid-template-columns: var(--svg-icon-width) auto;
     width: 100%;
 }
 
@@ -179,28 +151,8 @@
     background: transparent;
 }
 
-.ocd-svg-drag-ghost {
-    opacity: 0.4;
-    pointer-events: none;
-}
-
-.ocd-svg-context-menu {
-    height: 18em;
-    width: 12em;
-}
-
-.ocd-svg-context-menu > div {
-    /* border: 1px solid black; */
-    border-radius: 5px;
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-    vertical-align: top;
-}
-
-.ocd-svg-context-menu-item a:hover {
-    background-color: #f2f2f2;
-    box-shadow: 0 0 5px #1d2733;
+.ocd-svg-foreign-object-name {
+    font-weight: bolder;
 }
 
 .ocd-svg-container-icon-background {
