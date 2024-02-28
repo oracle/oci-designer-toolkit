@@ -37,21 +37,17 @@ export class OcdSVGExporter extends OcdExporter {
         const svg = `<svg xmlns="http://www.w3.org/2000/svg" fill="white" width="${width}px" height="${height}px">
 <defs></defs>
 <style type="text/css">
-        ${this.css.join('\n')}
+${this.css.join('')}
 </style>
 <g transform="matrix(1 0 0 1 0 0)">
-<g title="Resources">
-${page.coords.map((c) => this.generateResource(c)).join('\n')}
+<g title="Resources">${page.coords.map((c) => this.generateResource(c)).join('')}</g>
 </g>
-</g>
-<g title="ParentConnectors">
-${parentConnectors.map((c) => this.generateConnector(c, true)).join('\n')}
-</g>
-<g title="AssociationConnectors">
-${associationConnectors.map((c) => this.generateConnector(c, false)).join('\n')}
-</g>
+<g title="ParentConnectors">${parentConnectors.map((c) => this.generateConnector(c, true)).join('')}</g>
+<g title="AssociationConnectors">${associationConnectors.map((c) => this.generateConnector(c, false)).join('')}</g>
 </svg>`
-        return svg
+        return svg.replace(/^\s*[\r\n]/gm, '')
+        // return svg
+        // return svg.replaceAll('\n', ' ')
     }
     generateResource(coords: OcdViewCoords): string {
         const resource = this.getResource(coords.ocid)
@@ -63,19 +59,18 @@ ${associationConnectors.map((c) => this.generateConnector(c, false)).join('\n')}
 <rect class="${coords.container ? 'ocd-svg-container' : 'ocd-svg-simple'} ${coords.detailsStyle === 'simple' ? 'ocd-svg-resource-simple' : coords.detailsStyle === 'detailed' ? 'ocd-svg-resource-detailed' : !coords.container && !coords.detailsStyle ? 'ocd-svg-resource-detailed' : ''}" x="0" y="0" width="${coords.w}" height="${coords.h}"></rect>
 <foreignObject class="${foreignObjectClass}" transform="translate(0, 0)">
 <div xmlns="http://www.w3.org/1999/xhtml">
-    <div class="${backgroundColourClass}">
-        <div class="${coords.class} ocd-svg-icon"></div>
-    </div>
-    <div class="ocd-svg-foreign-object-display-name">
-        <span>${resource ? resource.resourceTypeName : ''}</span>
-        <span class="ocd-svg-foreign-object-name">${resource ? resource.displayName : ''}</span>
-    </div>
+<div class="${backgroundColourClass}">
+<div class="${coords.class} ocd-svg-icon"></div>
+</div>
+<div class="ocd-svg-foreign-object-display-name">
+<span>${resource ? resource.resourceTypeName : ''}</span>
+<span class="ocd-svg-foreign-object-name">${resource ? resource.displayName : ''}</span>
+</div>
 </div>
 </foreignObject>
-${coords.coords !== undefined ? coords.coords.map((c) => this.generateResource(c)).join('\n') : ''}
-</g>        
-        `
-        return svg
+${coords.coords !== undefined ? coords.coords.map((c) => this.generateResource(c)).join('\n') : ''}</g>`
+        return svg.replace(/^\s*[\r\n]/gm, '')
+        // return svg.replaceAll('\n', '')
     }
     calculateWidth(coords: OcdViewCoords[]): number {
         const simpleWidth = 40
