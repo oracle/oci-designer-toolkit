@@ -77,13 +77,17 @@ export class OcdDocument {
     getParentResourceCoords = () => this.getCoords(this.dragResource.coordsId)
 
     isOciResourceList(key: string): boolean {return this.design.model.oci.resources[key] ? true : false}
-    getOciResourceList(key: string) {return this.design.model.oci.resources[key] ? this.design.model.oci.resources[key] : []}
-    getOciResourceLists() {return this.design.model.oci.resources}
-    getOciResources() {return Object.values(this.design.model.oci.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], [])}
+    // getOciResourceList(key: string) {return this.design.model.oci.resources[key] ? this.design.model.oci.resources[key] : []}
+    getOciResourceList(key: string) {return OcdDesign.getOciResourceList(this.design, key)}
+    // getOciResourceLists() {return this.design.model.oci.resources}
+    // getOciResources() {return Object.values(this.design.model.oci.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], [])}
     getOciResourcesObject() {return this.design.model.oci.resources}
-    getResourceLists() {return {...this.getOciResourceLists()}}
-    getResources() {return this.getOciResources()}
-    getResource(id='') {return this.getResources().find((r: OcdResource) => r.id === id)}
+    // getResourceLists() {return {...this.getOciResourceLists()}}
+    getResourceLists() {return OcdDesign.getResourceLists(this.design)}
+    // getResources() {return this.getOciResources()}
+    getResources() {return OcdDesign.getOciResources(this.design)}
+    // getResource(id='') {return this.getResources().find((r: OcdResource) => r.id === id)}
+    getResource(id='') {return OcdDesign.getResource(this.design, id)}
     addOciReasourceToList(key: string, modelResource: OciResource) {this.design.model.oci.resources[key] ? this.design.model.oci.resources[key].push(modelResource) : this.design.model.oci.resources[key] = [modelResource]}
     addResource(paletteResource: PaletteResource, compartmentId: string) {
         const resourceList = paletteResource.class.split('-').slice(1).join('_')

@@ -197,6 +197,7 @@ export namespace OcdDesign {
     }
     // Model Methods
     export function getOciResourceLists(design: OcdDesign) {return design.model.oci.resources}
+    export function getOciResourceList(design: OcdDesign, key: string) {return Object.hasOwn(design.model.oci.resources, key) ? design.model.oci.resources[key] : []}
     export function getOciResources(design: OcdDesign) {return Object.values(design.model.oci.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], [])}
     export function getResourceLists(design: OcdDesign) {return {...getOciResourceLists(design)}}
     export function getResources(design: OcdDesign) {return getOciResources(design)}
@@ -246,6 +247,8 @@ export namespace OcdDesign {
         }
         return relativeXY
     }
+
+    // Variables Methods
     export function newVariable(): OcdVariable {
         return {
             key: uuidv4(),
