@@ -717,14 +717,6 @@ summary {
     display: inline-block;
 }
 
-/* .ocd-model-palette li > div > label {
-    clear: both;
-    margin-left: 2em;
-    text-wrap: none;
-    white-space: nowrap;
-    padding-right: 1em;
-} */
-
 .simple-list-element > div {
     display: flex !important;
     flex-direction: row;
@@ -901,11 +893,6 @@ summary {
 .ocd-designer-palette-group>details[open]>summary:before {
     content: '\25BF';
 }
-
-/* .ocd-designer-palette-group>details>div {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-} */
 
 .ocd-designer-palette-group-grid {
     display: grid;
@@ -1121,6 +1108,68 @@ summary {
 .ocd-designer-canvas-svg {
     fill: white;
 }
+
+/*
+** SVG Designer Canvas
+*/
+
+.ocd-svg-resize {
+    opacity: 0.1;
+}
+
+.ocd-svg-resize-point {
+    fill: purple;
+}
+
+.ocd-svg-container-ew-resize {
+    stroke-width: 3px;
+    stroke: red;
+    stroke-opacity: 1;
+    fill: none;
+    pointer-events: all;
+}
+
+.ocd-svg-container-ew-resize:hover {
+    cursor: ew-resize;
+}
+
+.ocd-svg-container-ns-resize {
+    stroke-width: 3px;
+    stroke: black;
+    stroke-opacity: 0.01;
+    fill: none;
+    pointer-events: all;
+}
+
+.ocd-svg-container-ns-resize:hover {
+    cursor: ns-resize;
+}
+
+.ocd-svg-drag-ghost {
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+.ocd-svg-context-menu {
+    height: 18em;
+    width: 12em;
+}
+
+.ocd-svg-context-menu > div {
+    /* border: 1px solid black; */
+    border-radius: 5px;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    vertical-align: top;
+}
+
+.ocd-svg-context-menu-item a:hover {
+    background-color: #f2f2f2;
+    box-shadow: 0 0 5px #1d2733;
+}
+
+
 
 /* .ocd-svg-icon {
     width: var(--canvas-icon-width);
