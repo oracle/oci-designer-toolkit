@@ -46,7 +46,7 @@ export namespace ${this.namespaceName(resource)} {
         return resource.compartmentId
     }
     export function setParentId(resource: ${this.interfaceName(resource)}, parentId: string): ${this.interfaceName(resource)} {
-        console.debug('${this.namespaceName(resource)}: Setting Parent Id to', parentId, 'for', resource.displayName, resource.id)
+        // console.debug('${this.namespaceName(resource)}: Setting Parent Id to', parentId, 'for', resource.displayName, resource.id)
         return resource
     }
     export function getConnectionIds(resource: ${this.interfaceName(resource)}, allResources: OcdResources): string[] {
