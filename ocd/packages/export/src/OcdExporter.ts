@@ -6,7 +6,8 @@
 import { OcdDesign } from "@ocd/model";
 import { OcdUtils } from "@ocd/core";
 
-export interface OutputData extends Record<string, string[]> {}
+export interface OutputDataString extends Record<string, string> {}
+export interface OutputDataStringArray extends Record<string, string[]> {}
 
 class OcdExporter {
     design: OcdDesign
@@ -17,7 +18,7 @@ class OcdExporter {
     getOciResources() {return Object.values(this.design.model.oci.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], [])}
     getResources() {return this.getOciResources()}
 
-    export = (design: OcdDesign): string | OutputData => ''
+    export = (design: OcdDesign): string | OutputDataStringArray | OutputDataString => ''
 
     toTitleCase = (str: string) => OcdUtils.toTitleCase(str)
     toCamelCase = (str: string) => OcdUtils.toCamelCase(str)
