@@ -7,7 +7,7 @@
 
 import fs from 'fs'
 import path from 'path'
-import { OcdModelGenerator, OcdPropertiesGenerator, OcdTabularGenerator, OciTerraformGenerator, OciTerraformSchemaImporter, OcdValidatorGenerator } from '@ocd/codegen'
+import { OcdMarkdownGenerator, OcdModelGenerator, OcdPropertiesGenerator, OcdTabularGenerator, OciTerraformGenerator, OciTerraformSchemaImporter, OcdValidatorGenerator } from '@ocd/codegen'
 import { parseArgs } from "node:util"
 
 const options = {
@@ -43,6 +43,7 @@ const command = args.positionals[0]
 const subcommand = args.positionals[1]
 if (command.toLocaleLowerCase() === 'generate') {
     if (subcommand.toLocaleLowerCase() === 'oci-model-js' 
+        || subcommand.toLocaleLowerCase() === 'oci-markdown-js' 
         || subcommand.toLocaleLowerCase() === 'oci-properties-js' 
         || subcommand.toLocaleLowerCase() === 'oci-tabular-js'
         || subcommand.toLocaleLowerCase() === 'oci-terraform-js'
@@ -57,6 +58,7 @@ if (command.toLocaleLowerCase() === 'generate') {
         const force_resource_file = args.values.force
         let generator = undefined
         if (subcommand.toLocaleLowerCase() === 'oci-model-js') generator = new OcdModelGenerator()
+        else if (subcommand.toLocaleLowerCase() === 'oci-markdown-js') generator = new OcdMarkdownGenerator()
         else if (subcommand.toLocaleLowerCase() === 'oci-properties-js') generator = new OcdPropertiesGenerator()
         else if (subcommand.toLocaleLowerCase() === 'oci-terraform-js') generator = new OciTerraformGenerator()
         else if (subcommand.toLocaleLowerCase() === 'oci-tabular-js') generator = new OcdTabularGenerator()

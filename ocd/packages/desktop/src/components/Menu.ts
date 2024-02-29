@@ -4,7 +4,7 @@
 */
 
 import { OcdOKITImporter } from '@ocd/import'
-import { OcdOKITExporter, OcdTerraformExporter } from '@ocd/export'
+import { OcdOKITExporter, OcdSVGExporter, OcdTerraformExporter, OutputDataString } from '@ocd/export'
 import OcdConsoleConfig from './OcdConsoleConfiguration'
 import OcdDocument from './OcdDocument'
 import { OcdDesignFacade } from '../facade/OcdDesignFacade'
@@ -15,6 +15,9 @@ import { OcdViewLayer, OcdViewPage } from '@ocd/model'
 // @ts-ignore
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import svgThemeCss from '!!css-loader?{"sourceMap":false,"exportType":"string"}!../css/oci-theme.css'
+// @ts-ignore
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import svgSvgCss from '!!css-loader?{"sourceMap":false,"exportType":"string"}!../css/ocd-svg.css'
 
 export interface MenuItem {
     label: string
@@ -222,7 +225,27 @@ export const menuItems = [
                             {
                                 label: 'SVG',
                                 click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
-                                    alert('Currently not implemented.')
+                                    const writeTerraformFile = async (dirHandle: FileSystemDirectoryHandle, filename: string, contents: string) => {
+                                        const fileHandle: FileSystemFileHandle = await dirHandle.getFileHandle(filename, {create: true})
+                                        // @ts-ignore 
+                                        const writable = await fileHandle.createWritable()
+                                        await writable.write(contents)
+                                        await writable.close()
+                                        return writable
+                                    }
+                                    const saveFile = async (ocdDocument: OcdDocument) => {
+                                        try {
+                                            // @ts-ignore 
+                                            const handle = await showDirectoryPicker()
+                                            const exporter = new OcdSVGExporter([svgThemeCss, svgSvgCss])
+                                            const svg: OutputDataString = exporter.export(ocdDocument.design)
+                                            const fileWriters = Object.entries(svg).map(([k, v]) => writeTerraformFile(handle, `${k.replaceAll(' ', '_')}.svg`, v))
+                                            return Promise.all(fileWriters)
+                                        } catch (err: any) {
+                                            console.error(err.name, err.message);
+                                        }
+                                    }
+                                    saveFile(ocdDocument).then((resp) => console.info('Saved', resp))             
                                 }
                             }
                         ]

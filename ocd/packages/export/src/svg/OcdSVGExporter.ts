@@ -4,7 +4,7 @@
 */
 
 import { OcdDesign, OcdResource, OcdViewConnector, OcdViewCoords, OcdViewPage } from "@ocd/model"
-import { OcdExporter, OutputData } from "../OcdExporter"
+import { OcdExporter, OutputDataString, OutputDataStringArray } from "../OcdExporter"
 
 export class OcdSVGExporter extends OcdExporter {
     svg: string = ''
@@ -13,7 +13,7 @@ export class OcdSVGExporter extends OcdExporter {
         super()
         this.css = css
     }
-    export = (design: OcdDesign, pages?: string[]): OutputData => {
+    export = (design: OcdDesign, pages?: string[]): OutputDataString => {
         const pagesToExport = pages === undefined || pages.length === 0 ? design.view.pages : design.view.pages.filter((p) => pages.includes(p.title))
         this.design = design
         let outputSvg = {}
@@ -148,5 +148,6 @@ ${coords.coords !== undefined ? coords.coords.map((c) => this.generateResource(c
         const className = parentConnector ? 'ocd-svg-parent-connector' : 'ocd-svg-association-connector'
         return `<path class="${className}" d="${path.join(' ')}"></path>`
     }
-    
 }
+
+export default OcdSVGExporter
