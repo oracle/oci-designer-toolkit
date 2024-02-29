@@ -7,6 +7,12 @@ import OcdMarkdownResource from '../../OcdMarkdownResource'
 import { OciModelResources as Model, OciResource } from '@ocd/model'
 
 export class OciMarkdownResource extends OcdMarkdownResource {
+    ociCommonGeneration = (resource: OciResource): string => {
+        return `## ${resource.displayName}
+
+${this.ocdCommonGeneration(resource)}
+`
+    }
 }
 
 export default OciMarkdownResource

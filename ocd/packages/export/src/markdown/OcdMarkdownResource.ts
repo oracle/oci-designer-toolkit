@@ -4,8 +4,23 @@
 */
 
 import { OcdUtils } from "@ocd/core"
+import { OcdResource } from "@ocd/model"
 
 export class OcdMarkdownResource {
+    heading = ['#', '##', '###', '####', '#####']
+    ocdCommonGeneration = (resource: OcdResource): string => {
+        return `${resource.documentation}`
+    }
+    generateTextAttribute = (name: string, value: string | undefined, required: boolean, level=0): string => {
+        return `| ${name} | ${value} |`
+    }
+    generateBooleanAttribute = (name: string, value: string | undefined, required: boolean, level=0): string => {
+        return `| ${name} | ${value ? '&check;' : '&cross;'}`
+    }
+    generateNumberAttribute = (name: string, value: string | undefined, required: boolean, level=0): string => {
+        return `| ${name} | ${value} |`
+    }
+
 }
 
 export default OcdMarkdownResource
