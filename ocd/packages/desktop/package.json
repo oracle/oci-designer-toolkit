@@ -128,6 +128,8 @@
     "react-dom": "^18.2.0",
     "react-markdown": "^9.0.0",
     "react-scripts": "5.0.1",
+    "rehype-raw": "^7.0.0",
+    "remark-gfm": "^4.0.0",
     "uuid": "^9.0.0",
     "web-vitals": "^2.1.4"
   },
@@ -147,7 +149,6 @@
     "test-react-scripts": "react-scripts test",
     "start": "react-scripts start",
     "build-old": "react-scripts build",
-
     "electron": "WEB_URL=http://localhost:3000 electron .",
     "electron-forge": "WEB_URL=http://localhost:3000 electron-forge start",
     "electron-forge-dev": "npm run build && electron-forge start",
@@ -155,7 +156,6 @@
     "electron-forge-make": "electron-forge make",
     "electron-forge-publish": "electron-forge publish",
     "electron-forge-build": "npm run build-react-scripts && npm run make",
-
     "electron-start": "electron .",
     "preelectron-linux-pack": "npm run build",
     "electron-linux-pack": "electron-builder build --linux -c.extraMetadata.main=build/main.js",
@@ -166,7 +166,6 @@
     "preelectron-release-pack": "npm run build",
     "electron-release-pack": "electron-builder build --x64 --macos --win --linux -c.extraMetadata.main=build/main.js",
     "electron-pack": "electron-builder build -c.extraMetadata.main=build/main.js",
-
     "build": "npm run build-react-scripts && npm run electron-pack",
     "desktop": "electron-forge start",
     "web": "npm run start"
@@ -198,8 +197,8 @@
     "@electron-forge/maker-zip": "^6.3.0",
     "@electron-forge/plugin-auto-unpack-natives": "^6.3.0",
     "@types/uuid": "^9.0.2",
-    "typescript": "^5.2.2",
     "electron": "26.2.4",
-    "electron-builder": "^24.6.4"
+    "electron-builder": "^24.6.4",
+    "typescript": "^5.2.2"
   }
 }
