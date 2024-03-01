@@ -9,7 +9,7 @@ based implementation using React to build the interface and provide the WebServe
 Electron is used to generate native installers for simplicity of installation and use.
 
 This Alpha release is to show the new desktop functionality available in the OKIT OCD (OKIT Cloud Desktop) release and is not
-guarenteed to be 100% functional. At present the following resources and features are availble but we will be rleasing updates 
+guarenteed to be 100% functional. At present the following resources and features are availble but we will be releasing updates 
 regularly.
 
 | Resource                       | Properties | Terraform | Validation |
