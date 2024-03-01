@@ -25,7 +25,8 @@
     "compile": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
     "build": "npm run compile && npm run pack",
     "generate-oci-reference-data": "node lib/esm/ocd-generate-default-cache.js  -d ../desktop/src/data",
-    "test-export-to-svg": "node lib/esm/ocd-export-to-svg.js  -d ../../test/design.okit -o ../../test/ -c ../desktop/src/css/oci-theme.css -c ../desktop/src/css/ocd-svg.css"
+    "test-export-to-svg": "node lib/esm/ocd-export-to-svg.js  -d ../../test/design.okit -o ../../test/ -c ../desktop/src/css/oci-theme.css -c ../desktop/src/css/ocd-svg.css",
+    "test-export-to-md": "node lib/esm/ocd-export-to-md.js  -d ../../test/design.okit -o ../../test/okit.md -c ../desktop/src/css/oci-theme.css -c ../desktop/src/css/ocd-svg.css"
   },
   "dependencies": {
     "@ocd/codegen": "^1.0.0",

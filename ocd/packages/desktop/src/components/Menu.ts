@@ -4,7 +4,7 @@
 */
 
 import { OcdOKITImporter } from '@ocd/import'
-import { OcdOKITExporter, OcdSVGExporter, OcdTerraformExporter, OutputDataString } from '@ocd/export'
+import { OcdMarkdownExporter, OcdOKITExporter, OcdSVGExporter, OcdTerraformExporter, OutputDataString } from '@ocd/export'
 import OcdConsoleConfig from './OcdConsoleConfiguration'
 import OcdDocument from './OcdDocument'
 import { OcdDesignFacade } from '../facade/OcdDesignFacade'
@@ -280,7 +280,31 @@ export const menuItems = [
                     {
                         label: 'Markdown',
                         click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
-                            alert('Currently not implemented.')
+                            const saveFile = async (ocdDocument: OcdDocument) => {
+                                try {
+                                    const options = {
+                                        types: [
+                                            {
+                                                description: 'Markdown Files',
+                                                accept: {
+                                                    'text/markdown': ['.md'],
+                                                },
+                                            },
+                                        ],
+                                    }
+                                    // @ts-ignore 
+                                    const handle = await window.showSaveFilePicker(options)
+                                    const writable = await handle.createWritable()
+                                    const exporter = new OcdMarkdownExporter([svgThemeCss, svgSvgCss])
+                                    const output = exporter.export(ocdDocument.design)
+                                    await writable.write(output)
+                                    await writable.close()
+                                    return handle
+                                } catch (err: any) {
+                                    console.error(err.name, err.message);
+                                }
+                            }
+                            saveFile(ocdDocument).then((resp) => console.info('Saved', resp))             
                         }
                     },
                     {

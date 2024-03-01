@@ -104,4 +104,5 @@ export namespace OcdUtils {
             a: parseFloat(values[3])
         }
     }
+    export function svgToDataUri(svg: string): string {return `data:image/svg+xml;base64,${btoa(svg)}`}
 }
