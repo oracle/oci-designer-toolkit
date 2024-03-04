@@ -47,6 +47,7 @@ export class OcdTerraformExporter extends OcdExporter {
         file_system: "oci_storage.tf",
         mount_target: "oci_storage.tf",
         volume: "oci_storage.tf",
+        volume_attachment: "oci_storage.tf",
 
         analytics_instance: "oci_compute.tf",
         autoscaling_configuration: "oci_compute.tf",

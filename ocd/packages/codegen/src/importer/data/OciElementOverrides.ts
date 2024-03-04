@@ -18,6 +18,9 @@ export const elementOverrides: OcdElementOverrides = {
             "shape_config.ocpus": "1",
             "source_details.source_type": "image"
         },
+        "oci_core_volume_attachment": {
+            "attachment_type": "paravirtualized"
+        },
         "oci_database_autonomous_database": {
             "db_workload": "OLTP",
             "is_auto_scaling_enabled": true
@@ -116,6 +119,9 @@ export const elementOverrides: OcdElementOverrides = {
             "egress_security_rules.destination_type",
             "ingress_security_rules.protocol",
             "ingress_security_rules.source_type",
+        ],
+        "oci_core_volume_attachment": [
+            "attachment_type"
         ],
         "oci_database_autonomous_database": [
             "compute_model",

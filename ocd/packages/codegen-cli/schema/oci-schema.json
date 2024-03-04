@@ -7474,13 +7474,14 @@
         "required": true,
         "label": "Attachment Type",
         "id": "attachment_type",
-        "staticLookup": false,
+        "staticLookup": true,
         "cacheLookup": false,
-        "lookup": false,
-        "lookupResource": "",
-        "lookupResourceElement": "",
+        "lookup": true,
+        "lookupResource": "attachment",
+        "lookupResourceElement": "id",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "paravirtualized"
       },
       "availability_domain": {
         "provider": "oci",
@@ -7534,23 +7535,6 @@
         "conditional": false,
         "condition": {}
       },
-      "encryption_in_transit_type": {
-        "provider": "oci",
-        "key": "encryptionInTransitType",
-        "name": "encryption_in_transit_type",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Encryption In Transit Type",
-        "id": "encryption_in_transit_type",
-        "staticLookup": false,
-        "cacheLookup": false,
-        "lookup": false,
-        "lookupResource": "",
-        "lookupResourceElement": "",
-        "conditional": false,
-        "condition": {}
-      },
       "instance_id": {
         "provider": "oci",
         "key": "instanceId",
@@ -7582,25 +7566,12 @@
         "lookup": false,
         "lookupResource": "",
         "lookupResourceElement": "",
-        "conditional": false,
-        "condition": {}
-      },
-      "is_multipath": {
-        "provider": "oci",
-        "key": "isMultipath",
-        "name": "is_multipath",
-        "type": "bool",
-        "subtype": "",
-        "required": false,
-        "label": "Is Multipath",
-        "id": "is_multipath",
-        "staticLookup": false,
-        "cacheLookup": false,
-        "lookup": false,
-        "lookupResource": "",
-        "lookupResourceElement": "",
-        "conditional": false,
-        "condition": {}
+        "conditional": true,
+        "condition": {
+          "element": "attachment_type",
+          "operator": "eq",
+          "value": "iscsi"
+        }
       },
       "is_pv_encryption_in_transit_enabled": {
         "provider": "oci",
@@ -7616,8 +7587,12 @@
         "lookup": false,
         "lookupResource": "",
         "lookupResourceElement": "",
-        "conditional": false,
-        "condition": {}
+        "conditional": true,
+        "condition": {
+          "element": "attachment_type",
+          "operator": "eq",
+          "value": "paravirtualized"
+        }
       },
       "is_read_only": {
         "provider": "oci",
@@ -7684,8 +7659,12 @@
         "lookup": false,
         "lookupResource": "",
         "lookupResourceElement": "",
-        "conditional": false,
-        "condition": {}
+        "conditional": true,
+        "condition": {
+          "element": "attachment_type",
+          "operator": "eq",
+          "value": "iscsi"
+        }
       },
       "volume_id": {
         "provider": "oci",

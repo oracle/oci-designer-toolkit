@@ -93,6 +93,28 @@ export const conditionalElements: OcdConditionalElements = {
             "value": "17"
         }
     },
+    "oci_core_volume_attachment": {
+        "encryption_in_transit_type": {
+            "element": "attachment_type",
+            "operator": "eq",
+            "value": "iscsi"
+        },
+        "is_agent_auto_iscsi_login_enabled": {
+            "element": "attachment_type",
+            "operator": "eq",
+            "value": "iscsi"
+        },
+        "is_pv_encryption_in_transit_enabled": {
+            "element": "attachment_type",
+            "operator": "eq",
+            "value": "paravirtualized"
+        },
+        "use_chap": {
+            "element": "attachment_type",
+            "operator": "eq",
+            "value": "iscsi"
+        }
+    },
     "oci_core_vcn": {
         "cidr_blocks": {
             "element": "is_ipv6enabled",
