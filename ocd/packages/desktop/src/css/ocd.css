@@ -1432,6 +1432,36 @@ summary {
     max-height: 100%;
 }
 
+table {
+    border-spacing: 0;
+    border-collapse: collapse;
+    display: block;
+    margin-top: 0;
+    margin-bottom: 16px;
+    width: max-content;
+    max-width: 100%;
+    overflow: auto;
+  }
+  
+  tr {
+    background-color: #ffffff;
+    border-top: 1px solid hsla(210, 18%, 87%, 1);
+  }
+  
+  tr:nth-child(2n) {
+    background-color: #f6f8fa;
+  }
+  
+  td,
+  th {
+    padding: 6px 13px;
+    border: 1px solid #d0d7de;
+  }
+  
+  th {
+    font-weight: 600;
+  }
+  
 
 
 

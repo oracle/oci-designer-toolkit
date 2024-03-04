@@ -49,7 +49,7 @@ ${useDataUri ? `![${page.title}](${svgDataUri})` : svg}
         return `${sortedKeys.map((k) => this.generateOciResourceListMarkdown(k, resourceLists[k])).join('\n')}`
     }
     generateOciResourceListMarkdown(key: string, resources: OciResource[]): string {
-        return `### ${key}
+        return `### ${OcdUtils.toTitle(key)}
 
 ${resources.map((r) => this.generateOciResourceMarkdown(r)).join('\n')}
 `

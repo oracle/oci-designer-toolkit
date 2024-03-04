@@ -97,9 +97,11 @@ export const ignoreElements: OcdIgnoreElements = {
     "oci_core_volume_attachment": [
         "chap_secret",
         "chap_username",
+        "encryption_in_transit_type",
         "ipv4",
         "iqn",
         "iscsi_login_state",
+        "is_multipath",
         "multipath_devices"
     ],
     "oci_core_vcn": [

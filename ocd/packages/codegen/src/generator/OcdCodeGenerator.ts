@@ -169,6 +169,9 @@ ${resources.sort().map((r) => `export { ${this.resourceName(r)} } from './${this
     // Terraform   
     terraformFilename = (resource: string) => this.resourceFilename(resource)
 
+    // Markdown   
+    markdownFilename = (resource: string) => this.resourceFilename(resource)
+
     // // Model
     // resourceModelName = (resource) => `${this.resourceCommonName(resource)}`
     // resourceModelFilename = (resource) => `${this.resourceModelName(resource)}`

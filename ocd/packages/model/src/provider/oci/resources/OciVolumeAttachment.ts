@@ -20,14 +20,16 @@ export namespace OciVolumeAttachment {
     }
     export function allowedParentTypes(): string[] {
         // console.debug('OciVolumeAttachment: Allowed Parent Types')
-        return []
+        return ['Instance']
     }
     export function getParentId(resource: OciVolumeAttachment): string {
         // console.debug('OciVolumeAttachment: Getting Parent Id to for', resource.displayName, resource.id)
-        return resource.compartmentId
+        const parentId = resource.instanceId !== '' ? resource.instanceId : resource.compartmentId
+        return parentId
     }
     export function setParentId(resource: OciVolumeAttachment, parentId: string): OciVolumeAttachment {
         // console.debug('OciVolumeAttachment: Setting Parent Id to', parentId, 'for', resource.displayName, resource.id)
+        resource.instanceId = parentId
         return resource
     }
     export function getConnectionIds(resource: OciVolumeAttachment, allResources: OcdResources): string[] {

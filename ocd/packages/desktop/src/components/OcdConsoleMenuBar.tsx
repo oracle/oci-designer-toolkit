@@ -18,7 +18,7 @@ const OcdConsoleMenuItem = ({ menuItem, depth, ocdDocument, setOcdDocument, ocdC
     const onMouseLeave = () => {setDropdown(false)}
     const closeDropdown = () => {setDropdown(!dropdown)}
     const onClick = () => {menuItem.click(ocdDocument, (ocdDocument: OcdDocument) => setOcdDocument(ocdDocument), ocdConsoleConfig, (ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig), activeFile, (activeFile: Record<string, any>) => setActiveFile(activeFile))}
-    console.debug('OcdConsoleMenuItem:', menuItem.label, menuItem.click)
+    // console.debug('OcdConsoleMenuItem:', menuItem.label, menuItem.click)
     return (
         <li
         className={`${depth > 0 ? 'ocd-submenu-item' : 'ocd-menu-item'}`}

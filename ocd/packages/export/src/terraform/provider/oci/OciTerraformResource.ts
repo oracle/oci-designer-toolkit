@@ -22,7 +22,7 @@ export class OciTerraformResource extends OcdTerraformResource {
         this.isIgnoreCompartmentId = isIgnoreCompartmentId
     }
     commonAssignments = (resource: OciResource) => {
-        console.debug('OciTerraformResource:', resource, resource.resourceType, this.typeDisplayNameMap, this.typeDisplayNameMap.hasOwnProperty(resource.resourceType))
+        // console.debug('OciTerraformResource:', resource, resource.resourceType, this.typeDisplayNameMap, this.typeDisplayNameMap.hasOwnProperty(resource.resourceType))
         return `${this.homeRegion()}
     ${this.compartmentId(resource)}
     ${this.displayName(resource)}
