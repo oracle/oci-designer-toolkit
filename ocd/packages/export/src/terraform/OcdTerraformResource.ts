@@ -21,12 +21,13 @@ export class OcdTerraformResource {
     }
     isVariable = (data: string | undefined): boolean => data !== undefined && data.startsWith('var.')
     formatVariable = (data: string | undefined): string | undefined => data
-    isGenerateAttribute = (name: string, value: string | number | undefined, required: boolean) => {
+    isGenerateAttribute = (name: string, value: string | number | boolean | undefined, required: boolean) => {
         // console.debug('OcdTerraformResource: isGenerateNumberAttribute:', value, typeof value)
         if (required) return true
         else if (typeof value === 'string' && this.isVariable(value)) return true
         else if (value !== undefined && typeof value === 'string' && value.trim() !== '') return true
         else if (value !== undefined && typeof value === 'number' && value !== 0) return true
+        else if (value !== undefined && typeof value === 'boolean') return true
         else return false
     }
     generateMetadataAttribute = (name: string, value: string | undefined, required: boolean, formatString: string, level=0) => {
