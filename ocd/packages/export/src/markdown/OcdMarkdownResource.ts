@@ -7,12 +7,12 @@ import { OcdUtils } from "@ocd/core"
 import { OcdResource } from "@ocd/model"
 
 export class OcdMarkdownResource {
-    heading = ['#', '##', '###', '####', '#####']
+    heading = ['#####', '######', '#######', '########', '#########']
     ocdCommonGeneration = (resource: OcdResource): string => {
         return `${resource.documentation}`
     }
     generateTextAttribute = (name: string, value: string | undefined, required: boolean, level=0): string => {
-        return `| ${name} | ${value} |`
+        return `| ${OcdUtils.toTitle(name)} | ${value} |`
     }
     generateBooleanAttribute = (name: string, value: string | undefined, required: boolean, level=0): string => {
         return `| ${name} | ${value ? '&check;' : '&cross;'}`
