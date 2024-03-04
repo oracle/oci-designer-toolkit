@@ -45,19 +45,9 @@ export const OciNetworkSecurityGroupSecurityRulesObjectList = ({ ocdDocument, se
 }
 
 export const OciNetworkSecurityGroupSecurityRulesObject = ({ ocdDocument, setOcdDocument, resource, configs, rootResource, onDelete, additionalElements = [] }: GeneratedResourceProperties): JSX.Element => {
-    // const onClick = (e: React.MouseEvent<HTMLElement>) => {
-    //     e.stopPropagation()
-    //     e.preventDefault()
-    //     if (onDelete) onDelete(resource)
-    // }
     return (
         <div className='ocd-property-row'>
-            {/* <details open={true}>
-                <summary className='summary-background ocd-summary-row'><div>Rule</div><div className='delete-property action-button-background action-button-column action-button' onClick={onClick}></div></summary>
-                <div className='ocd-resource-properties'> */}
-                    <OciNetworkSecurityGroupSecurityRule ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} rootResource={rootResource} summaryTitle='Rule' onDelete={onDelete} />
-                {/* </div>
-            </details> */}
+            <OciNetworkSecurityGroupSecurityRule ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} rootResource={rootResource} summaryTitle='Rule' onDelete={onDelete} />
         </div>
     )
 }
