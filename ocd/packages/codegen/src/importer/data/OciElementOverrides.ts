@@ -18,6 +18,10 @@ export const elementOverrides: OcdElementOverrides = {
             "shape_config.ocpus": "1",
             "source_details.source_type": "image"
         },
+        "oci_core_volume": {
+            "size_in_gbs": "50",
+            "vpus_per_gb": "0"
+        },
         "oci_core_volume_attachment": {
             "attachment_type": "paravirtualized"
         },
@@ -57,6 +61,9 @@ export const elementOverrides: OcdElementOverrides = {
             "dns_label": "DNS Label",
             "ipv6private_cidr_blocks": "IPV6 Private CIDRs",
             "is_ipv6enabled": "IPV6 Enabled"        
+        },
+        "oci_core_volume": {
+            "vpus_per_gb": "VPUs/Gbs"
         },
         "oci_load_balancer_listener": {
             "default_backend_set_name": "Backend Set"
@@ -142,6 +149,10 @@ export const elementOverrides: OcdElementOverrides = {
         "common": {},
         "oci_core_instance": {
             "assign_public_ip": ["bool"]
+        },
+        "oci_core_volume": {
+            "size_in_gbs": ["number"],
+            "vpus_per_gb": ["number"]
         },
         "oci_database_autonomous_database": {
             "whitelisted_ips": ["list", "string"]

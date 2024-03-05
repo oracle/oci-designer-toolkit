@@ -31,8 +31,8 @@ const OcdModelPaletteProviders = ({ provider, model, setDragData }: any): JSX.El
         'load_balancer_backend',
         'network_load_balancer_backend',
         'network_security_group_security_rule',
-        'vnic_attachments',
-        'volume-attachments'
+        'vnic_attachment',
+        'volume_attachment'
     ]
     return (
         <div className='ocd-designer-palette-provider'>

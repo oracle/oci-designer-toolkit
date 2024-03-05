@@ -27,6 +27,8 @@ regularly.
 | Load Balancer Backend Set      | &check;    | &check;   |            |
 | Load Balancer Backend          | &check;    | &check;   |            |
 | Load Balancer Backend Listener | &check;    | &check;   |            |
+| Block Volume                   | &check;    | &check;   |            |
+| Volume Attachment              | &check;    | &check;   |            |
 
 Not all menu options are currently available and if selected will display a message saying they are currently not availble,
 again these will be added over time.

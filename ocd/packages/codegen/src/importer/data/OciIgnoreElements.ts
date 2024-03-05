@@ -91,10 +91,19 @@ export const ignoreElements: OcdIgnoreElements = {
         "virtual_router_mac"
     ],
     "oci_core_volume": [
+        "auto_tuned_vpus_per_gb",
+        "autotune_policies",
+        "block_volume_replicas",
+        "block_volume_replicas_deletion",
         "is_auto_tune_enabled",
-        "size_in_mbs"
+        "is_hydrated",
+        "size_in_mbs",
+        "source_details",
+        "volume_backup_id",
+        "volume_group_id"
     ],
     "oci_core_volume_attachment": [
+        "availability_domain",
         "chap_secret",
         "chap_username",
         "encryption_in_transit_type",
@@ -102,7 +111,8 @@ export const ignoreElements: OcdIgnoreElements = {
         "iqn",
         "iscsi_login_state",
         "is_multipath",
-        "multipath_devices"
+        "multipath_devices",
+        "port"
     ],
     "oci_core_vcn": [
         "byoipv6cidr_blocks",
