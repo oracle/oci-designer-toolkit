@@ -24,6 +24,7 @@ export class OcdTerraformResource {
     isGenerateAttribute = (name: string, value: string | number | boolean | undefined, required: boolean) => {
         // console.debug('OcdTerraformResource: isGenerateNumberAttribute:', value, typeof value)
         if (required) return true
+        else if (Array.isArray(value) && value.length > 0) return true
         else if (typeof value === 'string' && this.isVariable(value)) return true
         else if (value !== undefined && typeof value === 'string' && value.trim() !== '') return true
         else if (value !== undefined && typeof value === 'number' && value !== 0) return true

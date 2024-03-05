@@ -103,6 +103,7 @@ export const ignoreElements: OcdIgnoreElements = {
         "volume_group_id"
     ],
     "oci_core_volume_attachment": [
+        "availability_domain",
         "chap_secret",
         "chap_username",
         "encryption_in_transit_type",
@@ -110,7 +111,8 @@ export const ignoreElements: OcdIgnoreElements = {
         "iqn",
         "iscsi_login_state",
         "is_multipath",
-        "multipath_devices"
+        "multipath_devices",
+        "port"
     ],
     "oci_core_vcn": [
         "byoipv6cidr_blocks",
