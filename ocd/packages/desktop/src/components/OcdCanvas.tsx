@@ -349,6 +349,26 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
         'onSVGDragEnd': svgDrop,
     }
 
+    const calculateSvgWidth = (coords: OcdViewCoords[]): number => {
+        const simpleWidth = 40
+        const detailedWidth = 170
+        let width = 0
+        coords.forEach((c => width = Math.max(width, (c.x + (c.container && (!c.detailsStyle || c.detailsStyle === 'default') ? c.w : (!c.detailsStyle || c.detailsStyle === 'detailed') ? detailedWidth : simpleWidth)))))
+        width += 100
+        return width
+    }
+
+    const calculateSvgHeight = (coords: OcdViewCoords[]): number => {
+        const simpleHeight = 40
+        let height = 0
+        coords.forEach((c => height = Math.max(height, (c.y + (c.container && (!c.detailsStyle || c.detailsStyle === 'default') ? c.h : simpleHeight)))))
+        height += 100
+        return height
+    }
+
+    const svgWidth = calculateSvgWidth(page.coords)
+    const svgHeight = calculateSvgHeight(page.coords)
+
     // @ts-ignore 
     const allPageCoords = ocdDocument.getAllPageCoords(page)
     const allVisibleCoords = allPageCoords.filter((r: OcdViewCoords) => visibleResourceIds.includes(r.ocid))
@@ -375,8 +395,8 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
             >
             <svg className='ocd-designer-canvas-svg'
                 id='canvas_root_svg' 
-                width='100%' 
-                height='100%' 
+                width={`max(${svgWidth}px, 100%)`} 
+                height={`max(${svgHeight}px, 100%)`}
                 data-gid='' 
                 data-ocid=''
                 onMouseDown={onSVGDragStart}
