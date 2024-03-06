@@ -19,7 +19,7 @@ export class OcdAutoLayout {
     containerHeight = 200
     // Specify Contains and their hierarchy. i.e. compartment -> vcn -> subnet
     containers: string[] = ['vcn', 'subnet']
-    ignore: string[] = ['compartment']
+    ignore: string[] = ['compartment', 'boot_volume_attachment', 'network_security_group_security_rule', 'volume_attachment', 'vnic_attachment', ]
     containerResources: OcdResources = {}
     simpleResources: OcdResources = {}
     uuid = () => `gid-${uuidv4()}`

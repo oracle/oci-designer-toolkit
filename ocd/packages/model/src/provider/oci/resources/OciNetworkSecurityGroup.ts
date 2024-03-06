@@ -38,7 +38,7 @@ export namespace OciNetworkSecurityGroup {
         return []
     }
     export function getNetworkSecurityListSecurityRules(resource: OciNetworkSecurityGroup, allResources: OcdResources): OciNetworkSecurityGroupSecurityRule[] {
-        return allResources.network_security_group_security_rule ? allResources.network_security_group_security_rule.filter((r) => r.network_security_group_id === resource.id) : []
+        return allResources.network_security_group_security_rule ? allResources.network_security_group_security_rule.filter((r) => r.networkSecurityGroupId === resource.id) : []
     }
     
 }

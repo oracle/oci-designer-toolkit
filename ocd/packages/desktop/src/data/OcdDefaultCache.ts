@@ -8546,6 +8546,86 @@ export const defaultCache: OcdCache = {
                 ],
                 "mysqlShapes": [
                     {
+                        "name": "MySQL.16",
+                        "cpuCoreCount": 8,
+                        "memorySizeInGBs": 128,
+                        "isSupportedFor": [
+                            "DBSYSTEM"
+                        ],
+                        "id": "MySQL.16",
+                        "displayName": "MySQL.16"
+                    },
+                    {
+                        "name": "MySQL.2",
+                        "cpuCoreCount": 1,
+                        "memorySizeInGBs": 16,
+                        "isSupportedFor": [
+                            "DBSYSTEM"
+                        ],
+                        "id": "MySQL.2",
+                        "displayName": "MySQL.2"
+                    },
+                    {
+                        "name": "MySQL.256",
+                        "cpuCoreCount": 128,
+                        "memorySizeInGBs": 1024,
+                        "isSupportedFor": [
+                            "DBSYSTEM"
+                        ],
+                        "id": "MySQL.256",
+                        "displayName": "MySQL.256"
+                    },
+                    {
+                        "name": "MySQL.32",
+                        "cpuCoreCount": 16,
+                        "memorySizeInGBs": 256,
+                        "isSupportedFor": [
+                            "DBSYSTEM"
+                        ],
+                        "id": "MySQL.32",
+                        "displayName": "MySQL.32"
+                    },
+                    {
+                        "name": "MySQL.4",
+                        "cpuCoreCount": 2,
+                        "memorySizeInGBs": 32,
+                        "isSupportedFor": [
+                            "DBSYSTEM"
+                        ],
+                        "id": "MySQL.4",
+                        "displayName": "MySQL.4"
+                    },
+                    {
+                        "name": "MySQL.48",
+                        "cpuCoreCount": 24,
+                        "memorySizeInGBs": 384,
+                        "isSupportedFor": [
+                            "DBSYSTEM"
+                        ],
+                        "id": "MySQL.48",
+                        "displayName": "MySQL.48"
+                    },
+                    {
+                        "name": "MySQL.64",
+                        "cpuCoreCount": 32,
+                        "memorySizeInGBs": 512,
+                        "isSupportedFor": [
+                            "DBSYSTEM"
+                        ],
+                        "id": "MySQL.64",
+                        "displayName": "MySQL.64"
+                    },
+                    {
+                        "name": "MySQL.8",
+                        "cpuCoreCount": 4,
+                        "memorySizeInGBs": 64,
+                        "isSupportedFor": [
+                            "DBSYSTEM"
+                        ],
+                        "id": "MySQL.8",
+                        "displayName": "MySQL.8"
+                    },
+                    {
                         "name": "MySQL.HeatWave.BM.Standard",
                         "cpuCoreCount": 128,
                         "memorySizeInGBs": 2048,
@@ -10382,6 +10462,18 @@ export const defaultCache: OcdCache = {
                 ],
                 "autonomousDbVersions": [
                     {
+                        "dbWorkload": "AJD",
+                        "details": "www.oracle.com/ajd",
+                        "isDedicated": false,
+                        "isDefaultForFree": true,
+                        "isDefaultForPaid": true,
+                        "isFreeTierEnabled": true,
+                        "isPaidEnabled": true,
+                        "version": "19c",
+                        "id": "19c",
+                        "displayName": "19c"
+                    },
+                    {
                         "dbWorkload": "OLTP",
                         "details": "www.oracle.com/atp",
                         "isDedicated": false,
@@ -10418,32 +10510,8 @@ export const defaultCache: OcdCache = {
                         "displayName": "19c"
                     },
                     {
-                        "dbWorkload": "AJD",
-                        "details": "www.oracle.com/ajd",
-                        "isDedicated": false,
-                        "isDefaultForFree": true,
-                        "isDefaultForPaid": true,
-                        "isFreeTierEnabled": true,
-                        "isPaidEnabled": true,
-                        "version": "19c",
-                        "id": "19c",
-                        "displayName": "19c"
-                    },
-                    {
                         "dbWorkload": "APEX",
                         "details": "www.oracle.com/apex",
-                        "isDedicated": false,
-                        "isDefaultForFree": false,
-                        "isDefaultForPaid": false,
-                        "isFreeTierEnabled": true,
-                        "isPaidEnabled": false,
-                        "version": "21c",
-                        "id": "21c",
-                        "displayName": "21c"
-                    },
-                    {
-                        "dbWorkload": "AJD",
-                        "details": "www.oracle.com/ajd",
                         "isDedicated": false,
                         "isDefaultForFree": false,
                         "isDefaultForPaid": false,
@@ -10468,6 +10536,18 @@ export const defaultCache: OcdCache = {
                     {
                         "dbWorkload": "OLTP",
                         "details": null,
+                        "isDedicated": false,
+                        "isDefaultForFree": false,
+                        "isDefaultForPaid": false,
+                        "isFreeTierEnabled": true,
+                        "isPaidEnabled": false,
+                        "version": "21c",
+                        "id": "21c",
+                        "displayName": "21c"
+                    },
+                    {
+                        "dbWorkload": "AJD",
+                        "details": "www.oracle.com/ajd",
                         "isDedicated": false,
                         "isDefaultForFree": false,
                         "isDefaultForPaid": false,
@@ -11557,6 +11637,54 @@ export const defaultCache: OcdCache = {
                     ],
                     "images": [
                         {
+                            "id": "Oracle-Linux-8.9-aarch64-2024.01.26-0-OKE-1.28.2-679",
+                            "displayName": "Oracle-Linux-8.9-aarch64-2024.01.26-0-OKE-1.28.2-679"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.9-aarch64-2024.01.26-0-OKE-1.27.2-679",
+                            "displayName": "Oracle-Linux-8.9-aarch64-2024.01.26-0-OKE-1.27.2-679"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.9-aarch64-2024.01.26-0-OKE-1.26.7-679",
+                            "displayName": "Oracle-Linux-8.9-aarch64-2024.01.26-0-OKE-1.26.7-679"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.9-aarch64-2024.01.26-0-OKE-1.25.12-679",
+                            "displayName": "Oracle-Linux-8.9-aarch64-2024.01.26-0-OKE-1.25.12-679"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.9-Gen2-GPU-2024.01.26-0-OKE-1.28.2-679",
+                            "displayName": "Oracle-Linux-8.9-Gen2-GPU-2024.01.26-0-OKE-1.28.2-679"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.9-Gen2-GPU-2024.01.26-0-OKE-1.27.2-679",
+                            "displayName": "Oracle-Linux-8.9-Gen2-GPU-2024.01.26-0-OKE-1.27.2-679"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.9-Gen2-GPU-2024.01.26-0-OKE-1.26.7-679",
+                            "displayName": "Oracle-Linux-8.9-Gen2-GPU-2024.01.26-0-OKE-1.26.7-679"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.9-Gen2-GPU-2024.01.26-0-OKE-1.25.12-679",
+                            "displayName": "Oracle-Linux-8.9-Gen2-GPU-2024.01.26-0-OKE-1.25.12-679"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.9-2024.01.26-0-OKE-1.28.2-679",
+                            "displayName": "Oracle-Linux-8.9-2024.01.26-0-OKE-1.28.2-679"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.9-2024.01.26-0-OKE-1.27.2-679",
+                            "displayName": "Oracle-Linux-8.9-2024.01.26-0-OKE-1.27.2-679"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.9-2024.01.26-0-OKE-1.26.7-679",
+                            "displayName": "Oracle-Linux-8.9-2024.01.26-0-OKE-1.26.7-679"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.9-2024.01.26-0-OKE-1.25.12-679",
+                            "displayName": "Oracle-Linux-8.9-2024.01.26-0-OKE-1.25.12-679"
+                        },
+                        {
                             "id": "Oracle-Linux-8.8-aarch64-2023.12.13-0-OKE-1.28.2-668",
                             "displayName": "Oracle-Linux-8.8-aarch64-2023.12.13-0-OKE-1.28.2-668"
                         },
@@ -11589,16 +11717,8 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.27.2-653"
                         },
                         {
-                            "id": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.27.2-648",
-                            "displayName": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.27.2-648"
-                        },
-                        {
                             "id": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.26.7-653",
                             "displayName": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.26.7-653"
-                        },
-                        {
-                            "id": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.26.7-648",
-                            "displayName": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.26.7-648"
                         },
                         {
                             "id": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.26.2-653",
@@ -11619,10 +11739,6 @@ export const defaultCache: OcdCache = {
                         {
                             "id": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.25.12-653",
                             "displayName": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.25.12-653"
-                        },
-                        {
-                            "id": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.25.12-648",
-                            "displayName": "Oracle-Linux-8.8-aarch64-2023.09.26-0-OKE-1.25.12-648"
                         },
                         {
                             "id": "Oracle-Linux-8.8-Gen2-GPU-2023.12.13-0-OKE-1.28.2-668",
@@ -11673,24 +11789,12 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.09.26-0-OKE-1.25.12-653"
                         },
                         {
-                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.08.31-0-OKE-1.27.2-642",
-                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.08.31-0-OKE-1.27.2-642"
-                        },
-                        {
-                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.08.31-0-OKE-1.26.7-642",
-                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.08.31-0-OKE-1.26.7-642"
-                        },
-                        {
                             "id": "Oracle-Linux-8.8-Gen2-GPU-2023.08.31-0-OKE-1.26.2-645",
                             "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.08.31-0-OKE-1.26.2-645"
                         },
                         {
                             "id": "Oracle-Linux-8.8-Gen2-GPU-2023.08.31-0-OKE-1.25.4-645",
                             "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.08.31-0-OKE-1.25.4-645"
-                        },
-                        {
-                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.08.31-0-OKE-1.25.12-642",
-                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.08.31-0-OKE-1.25.12-642"
                         },
                         {
                             "id": "Oracle-Linux-8.8-2023.12.13-0-OKE-1.28.2-668",
@@ -11725,16 +11829,8 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.27.2-653"
                         },
                         {
-                            "id": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.27.2-648",
-                            "displayName": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.27.2-648"
-                        },
-                        {
                             "id": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.26.7-653",
                             "displayName": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.26.7-653"
-                        },
-                        {
-                            "id": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.26.7-648",
-                            "displayName": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.26.7-648"
                         },
                         {
                             "id": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.26.2-653",
@@ -11757,8 +11853,20 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.25.12-653"
                         },
                         {
-                            "id": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.25.12-648",
-                            "displayName": "Oracle-Linux-8.8-2023.09.26-0-OKE-1.25.12-648"
+                            "id": "Oracle-Linux-7.9-aarch64-2024.01.23-0-OKE-1.28.2-679",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2024.01.23-0-OKE-1.28.2-679"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-aarch64-2024.01.23-0-OKE-1.27.2-679",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2024.01.23-0-OKE-1.27.2-679"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-aarch64-2024.01.23-0-OKE-1.26.7-679",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2024.01.23-0-OKE-1.26.7-679"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-aarch64-2024.01.23-0-OKE-1.25.12-679",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2024.01.23-0-OKE-1.25.12-679"
                         },
                         {
                             "id": "Oracle-Linux-7.9-aarch64-2023.12.08-0-OKE-1.28.2-668",
@@ -11793,16 +11901,8 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.27.2-653"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.27.2-648",
-                            "displayName": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.27.2-648"
-                        },
-                        {
                             "id": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.26.7-653",
                             "displayName": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.26.7-653"
-                        },
-                        {
-                            "id": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.26.7-648",
-                            "displayName": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.26.7-648"
                         },
                         {
                             "id": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.26.2-653",
@@ -11825,8 +11925,20 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.25.12-653"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.25.12-648",
-                            "displayName": "Oracle-Linux-7.9-aarch64-2023.09.26-0-OKE-1.25.12-648"
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2024.01.23-0-OKE-1.28.2-679",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2024.01.23-0-OKE-1.28.2-679"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2024.01.23-0-OKE-1.27.2-679",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2024.01.23-0-OKE-1.27.2-679"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2024.01.23-0-OKE-1.26.7-679",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2024.01.23-0-OKE-1.26.7-679"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2024.01.23-0-OKE-1.25.12-679",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2024.01.23-0-OKE-1.25.12-679"
                         },
                         {
                             "id": "Oracle-Linux-7.9-Gen2-GPU-2023.12.08-0-OKE-1.28.2-668",
@@ -11877,14 +11989,6 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.09.26-0-OKE-1.25.12-653"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.08.31-0-OKE-1.27.2-642",
-                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.08.31-0-OKE-1.27.2-642"
-                        },
-                        {
-                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.08.31-0-OKE-1.26.7-642",
-                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.08.31-0-OKE-1.26.7-642"
-                        },
-                        {
                             "id": "Oracle-Linux-7.9-Gen2-GPU-2023.08.31-0-OKE-1.26.2-645",
                             "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.08.31-0-OKE-1.26.2-645"
                         },
@@ -11893,8 +11997,20 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.08.31-0-OKE-1.25.4-645"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.08.31-0-OKE-1.25.12-642",
-                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.08.31-0-OKE-1.25.12-642"
+                            "id": "Oracle-Linux-7.9-2024.01.23-0-OKE-1.28.2-679",
+                            "displayName": "Oracle-Linux-7.9-2024.01.23-0-OKE-1.28.2-679"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-2024.01.23-0-OKE-1.27.2-679",
+                            "displayName": "Oracle-Linux-7.9-2024.01.23-0-OKE-1.27.2-679"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-2024.01.23-0-OKE-1.26.7-679",
+                            "displayName": "Oracle-Linux-7.9-2024.01.23-0-OKE-1.26.7-679"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-2024.01.23-0-OKE-1.25.12-679",
+                            "displayName": "Oracle-Linux-7.9-2024.01.23-0-OKE-1.25.12-679"
                         },
                         {
                             "id": "Oracle-Linux-7.9-2023.12.08-0-OKE-1.28.2-668",
@@ -11929,16 +12045,8 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.27.2-653"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.27.2-648",
-                            "displayName": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.27.2-648"
-                        },
-                        {
                             "id": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.26.7-653",
                             "displayName": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.26.7-653"
-                        },
-                        {
-                            "id": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.26.7-648",
-                            "displayName": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.26.7-648"
                         },
                         {
                             "id": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.26.2-653",
@@ -11959,10 +12067,6 @@ export const defaultCache: OcdCache = {
                         {
                             "id": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.25.12-653",
                             "displayName": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.25.12-653"
-                        },
-                        {
-                            "id": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.25.12-648",
-                            "displayName": "Oracle-Linux-7.9-2023.09.26-0-OKE-1.25.12-648"
                         },
                         {
                             "id": "Oracle-Linux-8.9-aarch64-2024.01.26-0",

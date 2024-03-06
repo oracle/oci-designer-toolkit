@@ -8,7 +8,7 @@ import { OciApiFacade } from "../../facade/OciApiFacade"
 import { useContext, useState } from "react"
 // import { OciCompartment } from "../../model/provider/oci/resources"
 import { OciModelResources } from '@ocd/model'
-import OcdDocument from "../OcdDocument"
+import { OcdDocument } from "../OcdDocument"
 import { OcdUtils } from '@ocd/core'
 import { ActiveFileContext } from "../../pages/OcdConsole"
 import React from "react"
@@ -92,6 +92,7 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
             design.view.pages[0].title = selectedRegion
             // Copy Result information Across to design
             const resultsOciResources = results.model.oci.resources
+            console.debug('OcdQueryDialog: OciModelResources:', Object.keys(OciModelResources))
             Object.entries(resultsOciResources).forEach(([key, value]) => {
                 const namespace = `Oci${OcdUtils.toResourceType(key)}`
                 // @ts-ignore

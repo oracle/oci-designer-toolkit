@@ -10,6 +10,8 @@ export const resourceMap: OcdResourceMap = {
     "oci_bastion_bastion": "bastion",
     "oci_containerengine_cluster": "oke_cluster",
     "oci_containerengine_node_pool": "oke_node_pool",
+    "oci_core_boot_volume": "boot_volume",
+    "oci_core_boot_volume_attachments": "boot_volume_attachment",
     "oci_core_cpe": "cpe",
     "oci_core_dhcp_options": "dhcp_options",
     "oci_core_drg": "drg",
@@ -55,4 +57,8 @@ export const resourceMap: OcdResourceMap = {
     "oci_nosql_table": "nosql_table",
     "oci_objectstorage_bucket": "bucket",
     "oci_vault_secret": "secret"
+}
+
+export const dataMap: OcdResourceMap = {
+    "oci_core_boot_volume_attachments": "boot_volume_attachment"
 }

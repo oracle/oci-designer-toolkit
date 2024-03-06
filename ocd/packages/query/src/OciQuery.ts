@@ -100,6 +100,7 @@ export class OciQuery extends OciCommonQuery {
             const listCpes = this.listCpes(compartmentIds)
             // Storage
             const listVolumes = this.listVolumes(compartmentIds)
+            const listBootVolumes = this.listBootVolumes(compartmentIds)
             const listFileSystems = this.listFileSystems(compartmentIds)
             const listMountTargets = this.listMountTargets(compartmentIds)
             const listBuckets = this.listBuckets(compartmentIds)
@@ -113,6 +114,7 @@ export class OciQuery extends OciCommonQuery {
             const listInstances = this.listInstances(compartmentIds)
             const listVnicAttachments = this.listVnicAttachments(compartmentIds)
             const listVolumeAttachments = this.listVolumeAttachments(compartmentIds)
+            const listBootVolumeAttachments = this.listBootVolumeAttachments(compartmentIds)
             const listAnalyticsInstances = this.listAnalyticsInstances(compartmentIds)
             const listLoadBalancers = this.listLoadBalancers(compartmentIds)
             const listNetworkLoadBalancers = this.listNetworkLoadBalancers(compartmentIds)
@@ -135,7 +137,9 @@ export class OciQuery extends OciCommonQuery {
                 listInstances, 
                 listVnicAttachments, 
                 listVolumeAttachments, 
+                listBootVolumeAttachments, 
                 listVolumes, 
+                listBootVolumes, 
                 listFileSystems, 
                 listMountTargets, 
                 listBuckets, 
@@ -183,7 +187,11 @@ export class OciQuery extends OciCommonQuery {
                 if (results[queries.indexOf(listSecurityLists)].status === 'fulfilled') design.model.oci.resources.security_list = results[queries.indexOf(listSecurityLists)].value
                 // Network Security Groups
                 // @ts-ignore
-                if (results[queries.indexOf(listNetworkSecurityGroups)].status === 'fulfilled') design.model.oci.resources.network_security_group = results[queries.indexOf(listNetworkSecurityGroups)].value
+                if (results[queries.indexOf(listNetworkSecurityGroups)].status === 'fulfilled') design.model.oci.resources.network_security_group = results[queries.indexOf(listNetworkSecurityGroups)].value.groups
+                // Network Security Groups Rules
+                // @ts-ignore
+                // if (results[queries.indexOf(listNetworkSecurityGroups)].status === 'fulfilled') design.model.oci.resources.network_security_group_security_rules = design.model.oci.resources.network_security_group.reduce((a, c) => [...a, ...c.rules], [])
+                if (results[queries.indexOf(listNetworkSecurityGroups)].status === 'fulfilled') design.model.oci.resources.network_security_group_security_rule = results[queries.indexOf(listNetworkSecurityGroups)].value.rules
                 // DHCP Options
                 // @ts-ignore
                 if (results[queries.indexOf(listDhcpOptions)].status === 'fulfilled') design.model.oci.resources.dhcp_options = results[queries.indexOf(listDhcpOptions)].value
@@ -195,7 +203,7 @@ export class OciQuery extends OciCommonQuery {
                 if (results[queries.indexOf(listNatGateways)].status === 'fulfilled') design.model.oci.resources.nat_gateway = results[queries.indexOf(listNatGateways)].value
                 // IPSec Connection
                 // @ts-ignore
-                if (results[queries.indexOf(listIPSecConnections)].status === 'fulfilled') design.model.oci.resources.ipsec_connection = results[queries.indexOf(listIPSecConnections)].value
+                if (results[queries.indexOf(listIPSecConnections)].status === 'fulfilled') design.model.oci.resources.ipsec = results[queries.indexOf(listIPSecConnections)].value
                 // DRG
                 // @ts-ignore
                 if (results[queries.indexOf(listDrgs)].status === 'fulfilled') design.model.oci.resources.drg = results[queries.indexOf(listDrgs)].value
@@ -218,6 +226,9 @@ export class OciQuery extends OciCommonQuery {
                 // Volumes
                 // @ts-ignore
                 if (results[queries.indexOf(listVolumes)].status === 'fulfilled') design.model.oci.resources.volume = results[queries.indexOf(listVolumes)].value
+                // Boot Volumes
+                // @ts-ignore
+                if (results[queries.indexOf(listBootVolumes)].status === 'fulfilled') design.model.oci.resources.boot_volume = results[queries.indexOf(listBootVolumes)].value
                 // File Systems
                 // @ts-ignore
                 if (results[queries.indexOf(listFileSystems)].status === 'fulfilled') design.model.oci.resources.file_system = results[queries.indexOf(listFileSystems)].value
@@ -233,18 +244,26 @@ export class OciQuery extends OciCommonQuery {
                 */
                 // Instances
                 // @ts-ignore
-                const vnicAttachments = results[queries.indexOf(listVnicAttachments)].status === 'fulfilled' ? results[queries.indexOf(listVnicAttachments)].value : []
-                // @ts-ignore
-                const volumeAttachments = results[queries.indexOf(listVolumeAttachments)].status === 'fulfilled' ? results[queries.indexOf(listVolumeAttachments)].value : []
-                // @ts-ignore
-                if (results[queries.indexOf(listInstances)].status === 'fulfilled') {
+                if (results[queries.indexOf(listInstances)].status === 'fulfilled') design.model.oci.resources.instance = results[queries.indexOf(listInstances)].value
                     // @ts-ignore
-                    design.model.oci.resources.instance = results[queries.indexOf(listInstances)].value
-                    design.model.oci.resources.instance.forEach((i) => {
-                        i.vnicAttachments = vnicAttachments.filter((v: OciModelResources.OciVnicAttachment) => v.instanceId === i.id && v.lifecycleState === 'ATTACHED').map((v: OciModelResources.OciVnicAttachment) => v.vnic)
-                        i.volumeAttachments = volumeAttachments.filter((v: OciModelResources.OciVolumeAttachment) => v.instanceId === i.id)
-                    })
-                }
+                // const vnicAttachments = results[queries.indexOf(listVnicAttachments)].status === 'fulfilled' ? results[queries.indexOf(listVnicAttachments)].value : []
+                if (results[queries.indexOf(listVnicAttachments)].status === 'fulfilled') design.model.oci.resources.vnic_attachment = results[queries.indexOf(listVnicAttachments)].value
+                // @ts-ignore
+                // const volumeAttachments = results[queries.indexOf(listVolumeAttachments)].status === 'fulfilled' ? results[queries.indexOf(listVolumeAttachments)].value : []
+                if (results[queries.indexOf(listVolumeAttachments)].status === 'fulfilled') design.model.oci.resources.volume_attachment = results[queries.indexOf(listVolumeAttachments)].value
+                // @ts-ignore
+                if (results[queries.indexOf(listBootVolumeAttachments)].status === 'fulfilled') design.model.oci.resources.boot_volume_attachment = results[queries.indexOf(listBootVolumeAttachments)].value
+                // console.debug('BootVolumeAttachments:', JSON.stringify(results[queries.indexOf(listBootVolumeAttachments)], null, 2))
+                // console.debug('BootVolumeAttachments:', JSON.stringify(design.model.oci.resources.boot_volume_attachment, null, 2))
+                // @ts-ignore
+                // if (results[queries.indexOf(listInstances)].status === 'fulfilled') {
+                //     // @ts-ignore
+                //     design.model.oci.resources.instance = results[queries.indexOf(listInstances)].value
+                //     design.model.oci.resources.instance.forEach((i) => {
+                //         i.vnicAttachments = vnicAttachments.filter((v: OciModelResources.OciVnicAttachment) => v.instanceId === i.id && v.lifecycleState === 'ATTACHED').map((v: OciModelResources.OciVnicAttachment) => v.vnic)
+                //         i.volumeAttachments = volumeAttachments.filter((v: OciModelResources.OciVolumeAttachment) => v.instanceId === i.id)
+                //     })
+                // }
                 // Load Balancers
                 // @ts-ignore
                 if (results[queries.indexOf(listLoadBalancers)].status === 'fulfilled') design.model.oci.resources.load_balancer = results[queries.indexOf(listLoadBalancers)].value
@@ -748,8 +767,10 @@ export class OciQuery extends OciCommonQuery {
                 const nsgIds = resources.map(r => r.id)
                 this.listNetworkSecurityGroupSecurityRules(nsgIds).then((response) => {
                     //@ts-ignore
-                    resources.forEach((r) => r.rules = response.filter((n) => r.id === n.nsgId))
-                    resolve(resources)
+                    // resources.forEach((r) => r.rules = response.filter((n) => r.id === n.nsgId))
+                    response.forEach((r) => r.networkSecurityGroupId = r.nsgId)
+                    resolve({groups: resources, rules: response})
+                    // resolve(resources)
                 })
             }).catch((reason) => {
                 console.error(reason)
@@ -980,12 +1001,80 @@ export class OciQuery extends OciCommonQuery {
         })
     }
 
+    // listBootVolumeAttachments(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+    //     return new Promise((resolve, reject) => {
+    //         const requests: core.requests.ListBootVolumeAttachmentsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
+    //         const queries = requests.map((r) => this.computeClient.listBootVolumeAttachments(r))
+    //         Promise.allSettled(queries).then((results) => {
+    //             console.debug('OciQuery: listBootVolumeAttachments: All Settled')
+    //             //@ts-ignore
+    //             const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
+    //             resolve(resources)
+    //         }).catch((reason) => {
+    //             console.error(reason)
+    //             reject(reason)
+    //         })
+    //     })
+    // }
+
+    listBootVolumeAttachments(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.listAvailabilityDomains(compartmentIds.slice(0,1)).then((ads) => {
+                const queries = ads.map((r: identity.models.AvailabilityDomain) => this.listBootVolumeAttachmentsByAvailabilityDomain(compartmentIds, r.name as string))
+                Promise.allSettled(queries).then((results) => {
+                    console.debug('OciQuery: listBootVolumeAttachments: All Settled')
+                    //@ts-ignore
+                    const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value], [])
+                    resolve(resources)
+                }).catch((reason) => {
+                    console.error('OciQuery: listBootVolumeAttachments:', reason)
+                    reject(reason)
+                })
+            }).catch((reason) => {
+                console.error('OciQuery: listBootVolumeAttachments:', reason)
+                reject(reason)
+            })
+        })
+    }
+
+    listBootVolumeAttachmentsByAvailabilityDomain(compartmentIds: string[], availabilityDomain: string, retryCount: number = 0): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const requests: core.requests.ListBootVolumeAttachmentsRequest[] = compartmentIds.map((id) => {return {compartmentId: id, availabilityDomain: availabilityDomain}})
+            const queries = requests.map((r) => this.computeClient.listBootVolumeAttachments(r))
+            Promise.allSettled(queries).then((results) => {
+                console.debug('OciQuery: listBootVolumeAttachmentsByAvailabilityDomain: All Settled')
+                //@ts-ignore
+                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
+                resolve(resources)
+            }).catch((reason) => {
+                console.error('OciQuery: listBootVolumeAttachmentsByAvailabilityDomain:', reason)
+                reject(reason)
+            })
+        })
+    }
+
     listVolumes(compartmentIds: string[], retryCount: number = 0): Promise<any> {
         return new Promise((resolve, reject) => {
             const requests: core.requests.ListVolumesRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
             const queries = requests.map((r) => this.blockstorageClient.listVolumes(r))
             Promise.allSettled(queries).then((results) => {
                 console.debug('OciQuery: listVolumes: All Settled')
+                //@ts-ignore
+                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
+                resolve(resources)
+            }).catch((reason) => {
+                console.error(reason)
+                reject(reason)
+            })
+        })
+    }
+
+    listBootVolumes(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const requests: core.requests.ListBootVolumesRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
+            const queries = requests.map((r) => this.blockstorageClient.listBootVolumes(r))
+            Promise.allSettled(queries).then((results) => {
+                console.debug('OciQuery: listBootVolumes: All Settled')
                 //@ts-ignore
                 const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
                 resolve(resources)

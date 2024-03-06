@@ -13,6 +13,8 @@
 export { OciAnalyticsInstance } from './resources/OciAnalyticsInstance'
 export { OciAutonomousDatabase } from './resources/OciAutonomousDatabase'
 export { OciBastion } from './resources/OciBastion'
+export { OciBootVolume } from './resources/OciBootVolume'
+export { OciBootVolumeAttachment } from './resources/OciBootVolumeAttachment'
 export { OciBucket } from './resources/OciBucket'
 export { OciCompartment } from './resources/OciCompartment'
 export { OciCpe } from './resources/OciCpe'
