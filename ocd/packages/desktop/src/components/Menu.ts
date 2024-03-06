@@ -144,7 +144,7 @@ export const menuItems = [
                         clone.query = !ocdDocument.query
                         console.debug('Menu: Setting Query', ocdDocument, clone)
                         setOcdDocument(clone)
-                        }
+                    }
                 }
             },
             {

@@ -24,6 +24,10 @@ export const ignoreElements: OcdIgnoreElements = {
         "node_source",
         "nodes"
     ],
+    "oci_core_boot_volume_attachments": [
+        "boot_volume_attachments",
+        "filter"
+    ],
     "oci_core_drg": [
         "default_drg_route_tables",
         "default_export_drg_route_distribution_id"

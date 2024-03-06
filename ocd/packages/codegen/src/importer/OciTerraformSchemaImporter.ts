@@ -5,7 +5,7 @@
 
 import { OcdSchemaImporter } from './OcdSchemaImporter'
 import { ignoreElements } from './data/OciIgnoreElements'
-import { resourceMap } from './data/OciResourceMap'
+import { resourceMap, dataMap } from './data/OciResourceMap'
 import { elementOverrides } from './data/OciElementOverrides' 
 import { conditionalElements } from './data/OciConditionalElements'
 // import { attributeMap } from './data/OcdAttributeMap'
@@ -19,13 +19,26 @@ export class OciTerraformSchemaImporter extends OcdSchemaImporter {
     convert(source_schema: TerraformSchema) {
         console.debug('Resource Map', JSON.stringify(resourceMap, null, 4))
         const resourceKeys = Object.keys(resourceMap)
+        const dataKeys = Object.keys(dataMap)
         console.debug('Resource Keys', resourceKeys)
         // const self = this
         // console.info('Processing', Object.entries(source_schema.provider_schemas["registry.terraform.io/hashicorp/oci"].resource_schemas).filter(([k, v]) => Object.keys(self.resource_map).indexOf(k) >= 0))
+        // Check Resource Schema
         Object.entries(source_schema.provider_schemas["registry.terraform.io/hashicorp/oci"].resource_schemas).filter(([k, v]) => resourceKeys.includes(k)).forEach(([key, value]) => {
             console.debug('OcdTerraformSchemaImporter: Processing Resource', key)
             this.ocd_schema[resourceMap[key]] = {
                 'tf_resource': key,
+                'type': 'object',
+                'subtype': '',
+                // @ts-ignore
+                'attributes': this.getAttributes(key, value.block)
+            }
+        })
+        // Check Data Schema
+        Object.entries(source_schema.provider_schemas["registry.terraform.io/hashicorp/oci"].data_source_schemas).filter(([k, v]) => dataKeys.includes(k)).forEach(([key, value]) => {
+            console.debug('OcdTerraformSchemaImporter: Processing data', key)
+            this.ocd_schema[dataMap[key]] = {
+                'tf_resource': key.endsWith('s') ? dataMap[key] : key,
                 'type': 'object',
                 'subtype': '',
                 // @ts-ignore
