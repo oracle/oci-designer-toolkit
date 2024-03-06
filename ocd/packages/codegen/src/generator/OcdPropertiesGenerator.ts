@@ -10,6 +10,7 @@ import path from 'path'
 import { OcdCodeGenerator } from './OcdCodeGenerator.js'
 
 export class OcdPropertiesGenerator extends OcdCodeGenerator {
+    objectTypes = ['object']
     constructor () {
         super()
         this.ignoreAttributes = [...this.commonElements, ...this.commonIgnoreElements]
@@ -106,6 +107,7 @@ export const ${this.reactResourceGeneratedName(resource)} = ({ ocdDocument, setO
         // @ts-ignore
         if (typeof summaryTitle === 'function') setTitle(summaryTitle(resource, e.target.open))
     }
+    ${Object.entries(schema.attributes).filter(([k, v]) => !this.ignoreAttributes.includes(k) && this.objectTypes.includes(v.type)).map(([k, a]) => this.attributeToObjectUndefinedTest(resource, k, a)).join('\n    ')}
     return (
         <div>
             <details open={true} onToggle={onToggle}>
@@ -196,6 +198,12 @@ ${resources.sort().map((r) => `export { ${this.proxyNamespace(r)} } from './${th
             return contents
     }
 
+    attributeToObjectUndefinedTest =  (resource, name, attribute): string => {
+        let undefinedTest = ''
+        if (attribute.type === 'object') undefinedTest = `resource['${attribute.key}'] = resource['${attribute.key}'] ? resource['${attribute.key}'] : Model.${this.namespaceName(resource)}.${this.namespaceFunctionName(attribute.name)}()`
+        return undefinedTest
+    }
+
     attributeToReactElement = (resource, name, attribute) => {
         const configFind = `configs.find((c) => c.id === '${attribute.id}')`
         const additionalElement = `{additionalElements && additionalElements.find((a) => a.afterElement === '${attribute.name}') && additionalElements.find((a) => a.afterElement === '${attribute.name}')?.jsxElement({ocdDocument, setOcdDocument, resource, configs, rootResource})}`
@@ -257,6 +265,7 @@ export const ${this.reactSimpleName(attribute.name)} = ({ ocdDocument, setOcdDoc
     reactObjectElement = (resource, attribute) => {
         return `
 export const ${this.reactObjectName(attribute.name)} = ({ ocdDocument, setOcdDocument, resource, configs, rootResource, additionalElements = [] }: GeneratedResourceProperties): JSX.Element => {
+    ${Object.entries(attribute.attributes).filter(([k, v]) => !this.ignoreAttributes.includes(k) && this.objectTypes.includes(v.type)).map(([k, a]) => this.attributeToObjectUndefinedTest(resource, k, a)).join('\n    ')}
     return (
         <div className='ocd-property-row ocd-object-property-row'>
             <details open={true}>
