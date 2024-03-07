@@ -28,11 +28,10 @@ jobs:
       - uses: actions/checkout@v4
       - name: Update Alpha Release
         id: update_release
-        continue-on-error: true
         run: |
           gh release edit ${{ env.RELEASE_TAG }} --title "OCD Alpha Nightly Release" --notes-file ./ocd/README.md --target nightly --latest --prerelease
       - name: Create Alpha Release if Update fails
-        if: failure() || ${{ steps.update_release.outcome == 'failure' }}
+        if: failure()
         id: create_release
         run: |
           gh release create ${{ env.RELEASE_TAG }} --title "OCD Alpha Nightly Release" --notes-file ./ocd/README.md --target nightly --latest --prerelease
