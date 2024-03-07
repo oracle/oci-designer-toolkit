@@ -14,7 +14,7 @@ env:
   RELEASE_ARTEFACTS_DIR: ./release-artefacts
 
 jobs:
-  create-release: 
+  update-or-create-release: 
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -36,7 +36,7 @@ jobs:
           gh release create ${{ env.RELEASE_TAG }} --title "OCD Alpha Nightly Release" --notes-file ./ocd/README.md --target nightly --latest --prerelease
     
   build:
-    needs: [create-release]
+    needs: [update-or-create-release]
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -62,24 +62,6 @@ jobs:
       - run: npm run github-action-build-electron
       - run: ls -R ./ocd/dist
         if: always()
-      - name: Upload Mac Artifact
-        if: matrix.os == 'macos-latest'
-        id: upload-mac-release-artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.MAC_ARTEFACT }}
-          path: ./ocd/dist/mac/ocd-${{ env.OCD_VERSION }}.dmg
-          overwrite: true
-          retention-days: 7
-      - name: Upload Windows Artifact
-        if: matrix.os == 'windows-latest'
-        id: upload-win-release-artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.WIN_ARTEFACT }}
-          path: ./ocd/dist/win/ocd-${{ env.OCD_VERSION }}.exe
-          overwrite: true
-          retention-days: 7
       - name: Upload Mac Artifact to Release
         if: matrix.os == 'macos-latest'
         run: |
@@ -88,47 +70,3 @@ jobs:
         if: matrix.os == 'windows-latest'
         run: |
           gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/win/ocd-${{ env.OCD_VERSION }}.exe --clobber
-      
-  release:
-    needs: [create-release, build]
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      # matrix:
-      #   os: [macos-latest]
-      #   version: [latest]
-    steps:
-      - name: Get Release
-        id: get_alpha_release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo "upload_url=$(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /repos/oracle/oci-designer-toolkit/releases/tags/${{ env.RELEASE_TAG }} --jq  '.upload_url')" >> $GITHUB_OUTPUT
-          echo "id=$(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /repos/oracle/oci-designer-toolkit/releases/tags/${{ env.RELEASE_TAG }} --jq  '.id')" >> $GITHUB_OUTPUT
-      - name: Download Artefacts
-        id: download-release-artefacts
-        uses: actions/download-artifact@v4
-        with:
-          path: ${{ env.RELEASE_ARTEFACTS_DIR }}
-          merge-multiple: true
-      - name: Upload Mac Release Asset
-        id: upload-mac-release-asset-to-alpha 
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.get_alpha_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: ${{ env.RELEASE_ARTEFACTS_DIR }}/ocd-${{ env.OCD_VERSION }}.dmg
-          asset_name: ocd-${{ env.OCD_VERSION }}.dmg
-          asset_content_type: application/octet-stream
-      - name: Upload Windows Release Asset
-        id: upload-windows-release-asset-to-alpha 
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.get_alpha_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: ${{ env.RELEASE_ARTEFACTS_DIR }}/ocd-${{ env.OCD_VERSION }}.exe
-          asset_name: ocd-${{ env.OCD_VERSION }}.exe
-          asset_content_type: application/x-msdownload
-  
