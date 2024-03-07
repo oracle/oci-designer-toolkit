@@ -46,15 +46,10 @@ jobs:
           body_path: ./ocd/README.md
           draft: false
           prerelease: true
-      - name: Read README.md
-        id: read_readme_md
+      - name: Create Release
+        id: create_release
         run: |
-          cat ./ocd/README.md
-          echo "readme='${cat ./ocd/README.md}'" >> $GITHUB_OUTPUT
-      - name: Echo README.md
-        id: echo_readme_md
-        run: |
-          echo "${{ steps.read_readme_md.outputs.readme }}"
+          gh release create ${{ env.RELEASE_TAG }}.gh --title "OCD Alpha Nightly Release" --notes-file ./ocd/README.md --latest --prerelease
   
   build:
     needs: [create-release]
