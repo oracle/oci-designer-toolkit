@@ -28,6 +28,7 @@ const OcdModelPaletteProviders = ({ provider, model, setDragData }: any): JSX.El
     const open = true
     const modelExcludeResources = ['compartment']
     const hiddenResourceTypes = [
+        'boot_volume_attachment',
         'load_balancer_backend',
         'network_load_balancer_backend',
         'network_security_group_security_rule',

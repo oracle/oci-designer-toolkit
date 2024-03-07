@@ -41,7 +41,6 @@ export const ignoreElements: OcdIgnoreElements = {
         "availability_config",
         "baseline_ocpu_utilization",
         "boot_volume_id",
-        "boot_volume_size_in_gbs",
         "boot_volume_vpus_per_gb",
         "capacity_reservation_id",
         "compute_cluster_id",

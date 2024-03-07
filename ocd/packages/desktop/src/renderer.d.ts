@@ -18,9 +18,9 @@ export interface OcdElectronAPI {
     queryDropdown: (profile: string, region: string) => Promise<void>
 	// OCD Design 
     loadDesign: (filename: string) => Promise<void>
-    saveDesign: (design: OcdDesign, filename: string) => Promise<void>
+    saveDesign: (design: OcdDesign | string, filename: string) => Promise<void>
     discardConfirmation: () => Promise<void>
-    exportTerraform: (design: OcdDesign, directory: string) => Promise<void>
+    exportTerraform: (design: OcdDesign | string, directory: string) => Promise<void>
 	// OCD Configuration
     loadConsoleConfig: () => Promise<void>
     saveConsoleConfig: (config: OcdConsoleConfiguration) => Promise<void>

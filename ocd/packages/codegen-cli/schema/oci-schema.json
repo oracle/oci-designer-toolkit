@@ -4206,6 +4206,24 @@
         "conditional": false,
         "condition": {},
         "attributes": {
+          "boot_volume_size_in_gbs": {
+            "provider": "oci",
+            "key": "bootVolumeSizeInGbs",
+            "name": "boot_volume_size_in_gbs",
+            "type": "number",
+            "subtype": "",
+            "required": false,
+            "label": "Boot Volume Size (Gbs)",
+            "id": "source_details.boot_volume_size_in_gbs",
+            "staticLookup": false,
+            "cacheLookup": false,
+            "lookup": false,
+            "lookupResource": "",
+            "lookupResourceElement": "",
+            "conditional": false,
+            "condition": {},
+            "default": "50"
+          },
           "kms_key_id": {
             "provider": "oci",
             "key": "kmsKeyId",

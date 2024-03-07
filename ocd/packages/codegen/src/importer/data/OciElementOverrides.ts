@@ -16,7 +16,8 @@ export const elementOverrides: OcdElementOverrides = {
             "shape": "VM.Standard.A1.Flex",
             "shape_config.memory_in_gbs": "6",
             "shape_config.ocpus": "1",
-            "source_details.source_type": "image"
+            "source_details.source_type": "image",
+            "source_details.boot_volume_size_in_gbs": "50"
         },
         "oci_core_volume": {
             "size_in_gbs": "50",
@@ -61,6 +62,9 @@ export const elementOverrides: OcdElementOverrides = {
             "dns_label": "DNS Label",
             "ipv6private_cidr_blocks": "IPV6 Private CIDRs",
             "is_ipv6enabled": "IPV6 Enabled"        
+        },
+        "oci_core_instance": {
+            "boot_volume_size_in_gbs": "Boot Volume Size (Gbs)"
         },
         "oci_core_volume": {
             "vpus_per_gb": "VPUs/Gbs"
@@ -148,7 +152,8 @@ export const elementOverrides: OcdElementOverrides = {
     "types": {
         "common": {},
         "oci_core_instance": {
-            "assign_public_ip": ["bool"]
+            "assign_public_ip": ["bool"],
+            "boot_volume_size_in_gbs": ["number"]
         },
         "oci_core_volume": {
             "size_in_gbs": ["number"],

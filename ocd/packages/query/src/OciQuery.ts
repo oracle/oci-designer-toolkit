@@ -253,17 +253,23 @@ export class OciQuery extends OciCommonQuery {
                 if (results[queries.indexOf(listVolumeAttachments)].status === 'fulfilled') design.model.oci.resources.volume_attachment = results[queries.indexOf(listVolumeAttachments)].value
                 // @ts-ignore
                 if (results[queries.indexOf(listBootVolumeAttachments)].status === 'fulfilled') design.model.oci.resources.boot_volume_attachment = results[queries.indexOf(listBootVolumeAttachments)].value
-                // console.debug('BootVolumeAttachments:', JSON.stringify(results[queries.indexOf(listBootVolumeAttachments)], null, 2))
-                // console.debug('BootVolumeAttachments:', JSON.stringify(design.model.oci.resources.boot_volume_attachment, null, 2))
-                // @ts-ignore
-                // if (results[queries.indexOf(listInstances)].status === 'fulfilled') {
-                //     // @ts-ignore
-                //     design.model.oci.resources.instance = results[queries.indexOf(listInstances)].value
-                //     design.model.oci.resources.instance.forEach((i) => {
-                //         i.vnicAttachments = vnicAttachments.filter((v: OciModelResources.OciVnicAttachment) => v.instanceId === i.id && v.lifecycleState === 'ATTACHED').map((v: OciModelResources.OciVnicAttachment) => v.vnic)
-                //         i.volumeAttachments = volumeAttachments.filter((v: OciModelResources.OciVolumeAttachment) => v.instanceId === i.id)
-                //     })
-                // }
+                // Set Primaty Vnic
+                if (design.model.oci.resources.vnic_attachment) {
+                    design.model.oci.resources.instance.forEach((i) => {
+                        const primaryVnicAttachment: OciModelResources.OciVnicAttachment = design.model.oci.resources.vnic_attachment.find((v: OciModelResources.OciVnicAttachment) => v.instanceId === i.id && v.lifecycleState === 'ATTACHED' && v.vnic.isPrimary)
+                        //.map((v: OciModelResources.OciVnicAttachment) => v.vnic)
+                        if (primaryVnicAttachment ) {
+                            const primaryVnic = primaryVnicAttachment.vnic
+                            i.createVnicDetails = {
+                                assignPublicIp: (primaryVnic.publicIp && primaryVnic.publicIp !== ''),
+                                hostnameLabel: primaryVnic.hostnameLabel,
+                                nsgIds: primaryVnic.nsgIds,
+                                skipSourceDestCheck: primaryVnic.skipSourceDestCheck,
+                                subnetId: primaryVnic.subnetId
+                            }
+                        }
+                    })
+                }
                 // Load Balancers
                 // @ts-ignore
                 if (results[queries.indexOf(listLoadBalancers)].status === 'fulfilled') design.model.oci.resources.load_balancer = results[queries.indexOf(listLoadBalancers)].value
