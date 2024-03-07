@@ -43,6 +43,9 @@ jobs:
       matrix:
         os: [macos-latest, windows-latest]
         version: [latest]
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v3
