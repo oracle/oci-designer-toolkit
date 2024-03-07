@@ -49,6 +49,7 @@ jobs:
       - name: Read README.md
         id: read_readme_md
         run: |
+          cat ./ocd/README.md
           echo "readme=${cat ./ocd/README.md}" >> $GITHUB_OUTPUT
       - name: Echo README.md
         id: echo_readme_md
