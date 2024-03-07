@@ -83,11 +83,11 @@ jobs:
       - name: Upload Mac Artifact to Release
         if: matrix.os == 'macos-latest'
         run: |
-          gh release upload ./ocd/dist/mac/ocd-${{ env.OCD_VERSION }}.dmg --clobber
+          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/mac/ocd-${{ env.OCD_VERSION }}.dmg %#%"Mac Build" --clobber
       - name: Upload Windows Artifact to Release
         if: matrix.os == 'windows-latest'
         run: |
-          gh release upload ./ocd/dist/win/ocd-${{ env.OCD_VERSION }}.exe --clobber
+          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/win/ocd-${{ env.OCD_VERSION }}.exe %#%"Windows Build" --clobber
       
   release:
     needs: [create-release, build]
