@@ -37,19 +37,8 @@ jobs:
       - name: Create Alpha Release
         if: success() || failure()
         id: create_release_mac
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ env.RELEASE_TAG }}
-          release_name: OCD Alpha Nightly Release
-          body_path: ./ocd/README.md
-          draft: false
-          prerelease: true
-      - name: Create Release
-        id: create_release
         run: |
-          gh release create ${{ env.RELEASE_TAG }}.gh --title "OCD Alpha Nightly Release" --notes-file ./ocd/README.md --latest --prerelease
+          gh release create ${{ env.RELEASE_TAG }} --title "OCD Alpha Nightly Release" --notes-file ./ocd/README.md --latest --prerelease
   
   build:
     needs: [create-release]
