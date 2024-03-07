@@ -16,6 +16,7 @@ env:
 jobs:
   update-or-create-release: 
     runs-on: ubuntu-latest
+    continue-on-error: true
     strategy:
       fail-fast: false
       # matrix:
