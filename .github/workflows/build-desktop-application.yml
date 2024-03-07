@@ -36,7 +36,7 @@ jobs:
         run: |
           gh release create ${{ env.RELEASE_TAG }} --title "OCD Alpha Nightly Release" --notes-file ./ocd/README.md --target nightly --latest --prerelease
     
-  build:
+  build-and-release:
     needs: [update-or-create-release]
     runs-on: ${{ matrix.os }}
     strategy:
