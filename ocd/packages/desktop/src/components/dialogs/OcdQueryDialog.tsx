@@ -85,7 +85,8 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
     const onClickQuery = (e: React.MouseEvent<HTMLButtonElement>) => {
         console.debug('OcdQueryDialog: Selected Compartments', selectedCompartmentIds)
         OciApiFacade.queryTenancy(selectedProfile, selectedCompartmentIds, selectedRegion).then((results) => {
-            console.debug('OcdQueryDialog: Query Tenancy', results)
+            // @ts-ignore
+            console.debug('OcdQueryDialog: Query Tenancy', JSON.stringify(results, null, 2))
             const clone = OcdDocument.clone(ocdDocument)
             const design = clone.newDesign()
             design.metadata.title = 'Queried Cloud Design'

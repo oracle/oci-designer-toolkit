@@ -46,6 +46,13 @@ export namespace OciInstanceConfigs {
                 ]
             },
             {
+                id: 'source_details.boot_volume_size_in_gbs',
+                properties: {
+                    min: 50
+                },
+                configs: []
+            },
+            {
                 id: 'source_details.source_id',
                 properties: {},
                 configs: [],
