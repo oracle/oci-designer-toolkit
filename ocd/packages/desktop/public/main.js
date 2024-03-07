@@ -238,7 +238,8 @@ async function handleLoadDesign(event, filename) {
 }
 
 async function handleSaveDesign(event, design, filename, suggestedFilename='') {
-	console.debug('Electron Main: handleSaveDesign')
+	design = typeof design === 'string' ? JSON.parse(design) : design
+	console.debug('Electron Main: handleSaveDesign', filename, JSON.stringify(design, null, 2))
 	return new Promise((resolve, reject) => {
 		try {
 			if (!filename || !fs.existsSync(filename) || !fs.statSync(filename).isFile()) {
@@ -281,6 +282,7 @@ async function handleDiscardConfirmation(event) {
 }
 
 async function handleExportTerraform(event, design, directory) {
+	design = typeof design === 'string' ? JSON.parse(design) : design
 	console.debug('Electron Main: handleExportTerraform')
 	return new Promise((resolve, reject) => {reject('Currently Not Implemented')})
 }
