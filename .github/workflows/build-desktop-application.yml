@@ -38,7 +38,12 @@ jobs:
         if: success() || failure()
         id: create_release_mac
         run: |
-          gh release create ${{ env.RELEASE_TAG }} --title "OCD Alpha Nightly Release" --notes-file ./ocd/README.md --latest --prerelease
+          gh release create ${{ env.RELEASE_TAG }} --title "OCD Alpha Nightly Release" --notes-file ./ocd/README.md --target nightly --latest --prerelease
+      - name: Update Alpha Release
+        if: success() || failure()
+        id: update_release_mac
+        run: |
+          gh release create ${{ env.RELEASE_TAG }} --title "OCD Alpha Nightly Release" --notes-file ./ocd/README.md --target nightly --latest --prerelease
   
   build:
     needs: [create-release]
