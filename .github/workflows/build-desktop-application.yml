@@ -25,26 +25,16 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
-      - name: Get Release
-        id: get_alpha_release
-        run: |
-          echo "upload_url=$(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /repos/oracle/oci-designer-toolkit/releases/tags/${{ env.RELEASE_TAG }} --jq  '.upload_url')" >> $GITHUB_OUTPUT
-          echo "id=$(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /repos/oracle/oci-designer-toolkit/releases/tags/${{ env.RELEASE_TAG }} --jq  '.id')" >> $GITHUB_OUTPUT
-      - name: Delete Release
-        id: delete_alpha_release
-        run: |
-          gh api --method DELETE -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /repos/oracle/oci-designer-toolkit/releases/${{ steps.get_alpha_release.outputs.id }}
-      - name: Create Alpha Release
-        if: success() || failure()
-        id: create_release_mac
-        run: |
-          gh release create ${{ env.RELEASE_TAG }} --title "OCD Alpha Nightly Release" --notes-file ./ocd/README.md --target nightly --latest --prerelease
       - name: Update Alpha Release
-        if: success() || failure()
         id: update_release_mac
         run: |
           gh release edit ${{ env.RELEASE_TAG }} --title "OCD Alpha Nightly Release" --notes-file ./ocd/README.md --target nightly --latest --prerelease
-  
+      - name: Create Alpha Release if Update fails
+        if: failure()
+        id: create_release_mac
+        run: |
+          gh release create ${{ env.RELEASE_TAG }} --title "OCD Alpha Nightly Release" --notes-file ./ocd/README.md --target nightly --latest --prerelease
+    
   build:
     needs: [create-release]
     runs-on: ${{ matrix.os }}
@@ -87,7 +77,15 @@ jobs:
           path: ./ocd/dist/win/ocd-${{ env.OCD_VERSION }}.exe
           overwrite: true
           retention-days: 7
-  
+      - name: Upload Mac Artifact to Release
+        if: matrix.os == 'macos-latest'
+        run: |
+          gh release upload ./ocd/dist/mac/ocd-${{ env.OCD_VERSION }}.dmg %#%"Mac Build" --clobber
+      - name: Upload Windows Artifact to Release
+        if: matrix.os == 'windows-latest'
+        run: |
+          gh release upload ./ocd/dist/win/ocd-${{ env.OCD_VERSION }}.exe %#%"Windows Build" --clobber
+      
   release:
     needs: [create-release, build]
     runs-on: ubuntu-latest
