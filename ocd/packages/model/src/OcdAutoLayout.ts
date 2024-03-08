@@ -4,7 +4,9 @@
 */
 
 import { v4 as uuidv4 } from 'uuid'
-import { OcdDesign, OcdViewCoords, OcdResources, OciResources, OcdResource, OciResource } from '@ocd/model'
+import { OcdDesign, OcdViewCoords, OcdResources, OciResources } from './OcdDesign'
+import { OcdResource } from './OcdResource'
+import { OciResource } from './provider/oci/OciResource'
 import { OcdUtils } from '@ocd/core'
 
 export class OcdAutoLayout {
