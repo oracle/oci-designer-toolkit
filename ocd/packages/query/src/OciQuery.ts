@@ -175,84 +175,84 @@ export class OciQuery extends OciCommonQuery {
                 */
                 // VCNs
                 // @ts-ignore
-                if (results[queries.indexOf(listVcns)].status === 'fulfilled') design.model.oci.resources.vcn = results[queries.indexOf(listVcns)].value
+                if (results[queries.indexOf(listVcns)].status === 'fulfilled' && results[queries.indexOf(listVcns)].value.length > 0) design.model.oci.resources.vcn = results[queries.indexOf(listVcns)].value
                 // Subnets
                 // @ts-ignore
-                if (results[queries.indexOf(listSubnets)].status === 'fulfilled') design.model.oci.resources.subnet = results[queries.indexOf(listSubnets)].value
+                if (results[queries.indexOf(listSubnets)].status === 'fulfilled' && results[queries.indexOf(listSubnets)].value.length > 0) design.model.oci.resources.subnet = results[queries.indexOf(listSubnets)].value
                 // Route Tables
                 // @ts-ignore
-                if (results[queries.indexOf(listRouteTables)].status === 'fulfilled') design.model.oci.resources.route_table = results[queries.indexOf(listRouteTables)].value
+                if (results[queries.indexOf(listRouteTables)].status === 'fulfilled' && results[queries.indexOf(listRouteTables)].value.length > 0) design.model.oci.resources.route_table = results[queries.indexOf(listRouteTables)].value
                 // Security Lists
                 // @ts-ignore
-                if (results[queries.indexOf(listSecurityLists)].status === 'fulfilled') design.model.oci.resources.security_list = results[queries.indexOf(listSecurityLists)].value
+                if (results[queries.indexOf(listSecurityLists)].status === 'fulfilled' && results[queries.indexOf(listSecurityLists)].value.length > 0) design.model.oci.resources.security_list = results[queries.indexOf(listSecurityLists)].value
                 // Network Security Groups
                 // @ts-ignore
-                if (results[queries.indexOf(listNetworkSecurityGroups)].status === 'fulfilled') design.model.oci.resources.network_security_group = results[queries.indexOf(listNetworkSecurityGroups)].value.groups
+                if (results[queries.indexOf(listNetworkSecurityGroups)].status === 'fulfilled' && results[queries.indexOf(listNetworkSecurityGroups)].value.length > 0) design.model.oci.resources.network_security_group = results[queries.indexOf(listNetworkSecurityGroups)].value.groups
                 // Network Security Groups Rules
                 // @ts-ignore
                 // if (results[queries.indexOf(listNetworkSecurityGroups)].status === 'fulfilled') design.model.oci.resources.network_security_group_security_rules = design.model.oci.resources.network_security_group.reduce((a, c) => [...a, ...c.rules], [])
-                if (results[queries.indexOf(listNetworkSecurityGroups)].status === 'fulfilled') design.model.oci.resources.network_security_group_security_rule = results[queries.indexOf(listNetworkSecurityGroups)].value.rules
+                if (results[queries.indexOf(listNetworkSecurityGroups)].status === 'fulfilled' && results[queries.indexOf(listNetworkSecurityGroups)].value.length > 0) design.model.oci.resources.network_security_group_security_rule = results[queries.indexOf(listNetworkSecurityGroups)].value.rules
                 // DHCP Options
                 // @ts-ignore
-                if (results[queries.indexOf(listDhcpOptions)].status === 'fulfilled') design.model.oci.resources.dhcp_options = results[queries.indexOf(listDhcpOptions)].value
+                if (results[queries.indexOf(listDhcpOptions)].status === 'fulfilled' && results[queries.indexOf(listDhcpOptions)].value.length > 0) design.model.oci.resources.dhcp_options = results[queries.indexOf(listDhcpOptions)].value
                 // Internet Gateways
                 // @ts-ignore
-                if (results[queries.indexOf(listInternetGateways)].status === 'fulfilled') design.model.oci.resources.internet_gateway = results[queries.indexOf(listInternetGateways)].value
+                if (results[queries.indexOf(listInternetGateways)].status === 'fulfilled' && results[queries.indexOf(listInternetGateways)].value.length > 0) design.model.oci.resources.internet_gateway = results[queries.indexOf(listInternetGateways)].value
                 // NAT Gateways
                 // @ts-ignore
-                if (results[queries.indexOf(listNatGateways)].status === 'fulfilled') design.model.oci.resources.nat_gateway = results[queries.indexOf(listNatGateways)].value
+                if (results[queries.indexOf(listNatGateways)].status === 'fulfilled' && results[queries.indexOf(listNatGateways)].value.length > 0) design.model.oci.resources.nat_gateway = results[queries.indexOf(listNatGateways)].value
                 // IPSec Connection
                 // @ts-ignore
-                if (results[queries.indexOf(listIPSecConnections)].status === 'fulfilled') design.model.oci.resources.ipsec = results[queries.indexOf(listIPSecConnections)].value
+                if (results[queries.indexOf(listIPSecConnections)].status === 'fulfilled' && results[queries.indexOf(listIPSecConnections)].value.length > 0) design.model.oci.resources.ipsec = results[queries.indexOf(listIPSecConnections)].value
                 // DRG
                 // @ts-ignore
-                if (results[queries.indexOf(listDrgs)].status === 'fulfilled') design.model.oci.resources.drg = results[queries.indexOf(listDrgs)].value
+                if (results[queries.indexOf(listDrgs)].status === 'fulfilled' && results[queries.indexOf(listDrgs)].value.length > 0) design.model.oci.resources.drg = results[queries.indexOf(listDrgs)].value
                 // DRG Attachment
                 // @ts-ignore
-                if (results[queries.indexOf(listDrgAttachments)].status === 'fulfilled') design.model.oci.resources.drg_attachment = results[queries.indexOf(listDrgAttachments)].value
+                if (results[queries.indexOf(listDrgAttachments)].status === 'fulfilled' && results[queries.indexOf(listDrgAttachments)].value.length > 0) design.model.oci.resources.drg_attachment = results[queries.indexOf(listDrgAttachments)].value
                 // Service Gateway
                 // @ts-ignore
-                if (results[queries.indexOf(listServiceGateways)].status === 'fulfilled') design.model.oci.resources.service_gateway = results[queries.indexOf(listServiceGateways)].value
+                if (results[queries.indexOf(listServiceGateways)].status === 'fulfilled' && results[queries.indexOf(listServiceGateways)].value.length > 0) design.model.oci.resources.service_gateway = results[queries.indexOf(listServiceGateways)].value
                 // Remote Peering Connection
                 // @ts-ignore
-                if (results[queries.indexOf(listRemotePeeringConnections)].status === 'fulfilled') design.model.oci.resources.remote_peering_connection = results[queries.indexOf(listRemotePeeringConnections)].value
+                if (results[queries.indexOf(listRemotePeeringConnections)].status === 'fulfilled' && results[queries.indexOf(listRemotePeeringConnections)].value.length > 0) design.model.oci.resources.remote_peering_connection = results[queries.indexOf(listRemotePeeringConnections)].value
                 // CPE
                 // @ts-ignore
-                if (results[queries.indexOf(listCpes)].status === 'fulfilled') design.model.oci.resources.cpe = results[queries.indexOf(listCpes)].value
+                if (results[queries.indexOf(listCpes)].status === 'fulfilled' && results[queries.indexOf(listCpes)].value.length > 0) design.model.oci.resources.cpe = results[queries.indexOf(listCpes)].value
 
                 /*
                 ** Storage
                 */
                 // Volumes
                 // @ts-ignore
-                if (results[queries.indexOf(listVolumes)].status === 'fulfilled') design.model.oci.resources.volume = results[queries.indexOf(listVolumes)].value
+                if (results[queries.indexOf(listVolumes)].status === 'fulfilled' && results[queries.indexOf(listVolumes)].value.length > 0) design.model.oci.resources.volume = results[queries.indexOf(listVolumes)].value
                 // Boot Volumes
                 // @ts-ignore
-                if (results[queries.indexOf(listBootVolumes)].status === 'fulfilled') design.model.oci.resources.boot_volume = results[queries.indexOf(listBootVolumes)].value
+                if (results[queries.indexOf(listBootVolumes)].status === 'fulfilled' && results[queries.indexOf(listBootVolumes)].value.length > 0) design.model.oci.resources.boot_volume = results[queries.indexOf(listBootVolumes)].value
                 // File Systems
                 // @ts-ignore
-                if (results[queries.indexOf(listFileSystems)].status === 'fulfilled') design.model.oci.resources.file_system = results[queries.indexOf(listFileSystems)].value
+                if (results[queries.indexOf(listFileSystems)].status === 'fulfilled' && results[queries.indexOf(listFileSystems)].value.length > 0) design.model.oci.resources.file_system = results[queries.indexOf(listFileSystems)].value
                 // Mount Targets
                 // @ts-ignore
-                if (results[queries.indexOf(listMountTargets)].status === 'fulfilled') design.model.oci.resources.mount_target = results[queries.indexOf(listMountTargets)].value
+                if (results[queries.indexOf(listMountTargets)].status === 'fulfilled' && results[queries.indexOf(listMountTargets)].value.length > 0) design.model.oci.resources.mount_target = results[queries.indexOf(listMountTargets)].value
                 // Buckets
                 // @ts-ignore
-                if (results[queries.indexOf(listBuckets)].status === 'fulfilled') design.model.oci.resources.bucket = results[queries.indexOf(listBuckets)].value
+                if (results[queries.indexOf(listBuckets)].status === 'fulfilled' && results[queries.indexOf(listBuckets)].value.length > 0) design.model.oci.resources.bucket = results[queries.indexOf(listBuckets)].value
 
                 /*
                 ** Infrastructure
                 */
                 // Instances
                 // @ts-ignore
-                if (results[queries.indexOf(listInstances)].status === 'fulfilled') design.model.oci.resources.instance = results[queries.indexOf(listInstances)].value
+                if (results[queries.indexOf(listInstances)].status === 'fulfilled' && results[queries.indexOf(listInstances)].value.length > 0) design.model.oci.resources.instance = results[queries.indexOf(listInstances)].value
                     // @ts-ignore
                 // const vnicAttachments = results[queries.indexOf(listVnicAttachments)].status === 'fulfilled' ? results[queries.indexOf(listVnicAttachments)].value : []
-                if (results[queries.indexOf(listVnicAttachments)].status === 'fulfilled') design.model.oci.resources.vnic_attachment = results[queries.indexOf(listVnicAttachments)].value
+                if (results[queries.indexOf(listVnicAttachments)].status === 'fulfilled' && results[queries.indexOf(listVnicAttachments)].value.length > 0) design.model.oci.resources.vnic_attachment = results[queries.indexOf(listVnicAttachments)].value
                 // @ts-ignore
                 // const volumeAttachments = results[queries.indexOf(listVolumeAttachments)].status === 'fulfilled' ? results[queries.indexOf(listVolumeAttachments)].value : []
-                if (results[queries.indexOf(listVolumeAttachments)].status === 'fulfilled') design.model.oci.resources.volume_attachment = results[queries.indexOf(listVolumeAttachments)].value
+                if (results[queries.indexOf(listVolumeAttachments)].status === 'fulfilled' && results[queries.indexOf(listVolumeAttachments)].value.length > 0) design.model.oci.resources.volume_attachment = results[queries.indexOf(listVolumeAttachments)].value
                 // @ts-ignore
-                if (results[queries.indexOf(listBootVolumeAttachments)].status === 'fulfilled') design.model.oci.resources.boot_volume_attachment = results[queries.indexOf(listBootVolumeAttachments)].value
+                if (results[queries.indexOf(listBootVolumeAttachments)].status === 'fulfilled' && results[queries.indexOf(listBootVolumeAttachments)].value.length > 0) design.model.oci.resources.boot_volume_attachment = results[queries.indexOf(listBootVolumeAttachments)].value
                 // Set Primaty Vnic
                 if (design.model.oci.resources.vnic_attachment) {
                     design.model.oci.resources.instance.forEach((i) => {
@@ -272,29 +272,29 @@ export class OciQuery extends OciCommonQuery {
                 }
                 // Load Balancers
                 // @ts-ignore
-                if (results[queries.indexOf(listLoadBalancers)].status === 'fulfilled') design.model.oci.resources.load_balancer = results[queries.indexOf(listLoadBalancers)].value
+                if (results[queries.indexOf(listLoadBalancers)].status === 'fulfilled' && results[queries.indexOf(listLoadBalancers)].value.length > 0) design.model.oci.resources.load_balancer = results[queries.indexOf(listLoadBalancers)].value
                 // Network Load Balancers
                 // @ts-ignore
-                if (results[queries.indexOf(listNetworkLoadBalancers)].status === 'fulfilled') design.model.oci.resources.network_load_balancer = results[queries.indexOf(listNetworkLoadBalancers)].value
+                if (results[queries.indexOf(listNetworkLoadBalancers)].status === 'fulfilled' && results[queries.indexOf(listNetworkLoadBalancers)].value.length > 0) design.model.oci.resources.network_load_balancer = results[queries.indexOf(listNetworkLoadBalancers)].value
                 // Analytics Instance
                 // @ts-ignore
-                if (results[queries.indexOf(listAnalyticsInstances)].status === 'fulfilled') design.model.oci.resources.analytics_instance = results[queries.indexOf(listAnalyticsInstances)].value
+                if (results[queries.indexOf(listAnalyticsInstances)].status === 'fulfilled' && results[queries.indexOf(listAnalyticsInstances)].value.length > 0) design.model.oci.resources.analytics_instance = results[queries.indexOf(listAnalyticsInstances)].value
 
                 /*
                 ** Databases
                 */
                 // Autonomous Database
                 // @ts-ignore
-                if (results[queries.indexOf(listAutonomousDatabases)].status === 'fulfilled') design.model.oci.resources.autonomous_database = results[queries.indexOf(listAutonomousDatabases)].value
+                if (results[queries.indexOf(listAutonomousDatabases)].status === 'fulfilled' && results[queries.indexOf(listAutonomousDatabases)].value.length > 0) design.model.oci.resources.autonomous_database = results[queries.indexOf(listAutonomousDatabases)].value
                 // DB System
                 // @ts-ignore
-                if (results[queries.indexOf(listDatabaseSystems)].status === 'fulfilled') design.model.oci.resources.db_system = results[queries.indexOf(listDatabaseSystems)].value
+                if (results[queries.indexOf(listDatabaseSystems)].status === 'fulfilled' && results[queries.indexOf(listDatabaseSystems)].value.length > 0) design.model.oci.resources.db_system = results[queries.indexOf(listDatabaseSystems)].value
                 // MySQL DB System
                 // @ts-ignore
-                if (results[queries.indexOf(listMySqlDatabaseSystems)].status === 'fulfilled') design.model.oci.resources.mysql_db_system = results[queries.indexOf(listMySqlDatabaseSystems)].value
+                if (results[queries.indexOf(listMySqlDatabaseSystems)].status === 'fulfilled' && results[queries.indexOf(listMySqlDatabaseSystems)].value.length > 0) design.model.oci.resources.mysql_db_system = results[queries.indexOf(listMySqlDatabaseSystems)].value
                 // NoSQL DB System
                 // @ts-ignore
-                if (results[queries.indexOf(listNoSqlTables)].status === 'fulfilled') design.model.oci.resources.nosql_table = results[queries.indexOf(listNoSqlTables)].value
+                if (results[queries.indexOf(listNoSqlTables)].status === 'fulfilled' && results[queries.indexOf(listNoSqlTables)].value.length > 0) design.model.oci.resources.nosql_table = results[queries.indexOf(listNoSqlTables)].value
                 // @ts-ignore
                 // const nosql_indexes = results[queries.indexOf(listNoSqlTables)].status === 'fulfilled' ? results[queries.indexOf(listNoSqlIndexes)].value : []
 
@@ -303,16 +303,16 @@ export class OciQuery extends OciCommonQuery {
                 */
                 // Bastion
                 // @ts-ignore
-                if (results[queries.indexOf(listBastions)].status === 'fulfilled') design.model.oci.resources.bastion = results[queries.indexOf(listBastions)].value
+                if (results[queries.indexOf(listBastions)].status === 'fulfilled' && results[queries.indexOf(listBastions)].value.length > 0) design.model.oci.resources.bastion = results[queries.indexOf(listBastions)].value
                 // Vault
                 // @ts-ignore
-                if (results[queries.indexOf(listVaults)].status === 'fulfilled') design.model.oci.resources.vault = results[queries.indexOf(listVaults)].value
+                if (results[queries.indexOf(listVaults)].status === 'fulfilled' && results[queries.indexOf(listVaults)].value.length > 0) design.model.oci.resources.vault = results[queries.indexOf(listVaults)].value
                 // Key
                 // @ts-ignore
-                if (results[queries.indexOf(listKeys)].status === 'fulfilled') design.model.oci.resources.key = results[queries.indexOf(listKeys)].value
+                if (results[queries.indexOf(listKeys)].status === 'fulfilled' && results[queries.indexOf(listKeys)].value.length > 0) design.model.oci.resources.key = results[queries.indexOf(listKeys)].value
                 // Secret
                 // @ts-ignore
-                if (results[queries.indexOf(listSecrets)].status === 'fulfilled') design.model.oci.resources.secret = results[queries.indexOf(listSecrets)].value
+                if (results[queries.indexOf(listSecrets)].status === 'fulfilled' && results[queries.indexOf(listSecrets)].value.length > 0) design.model.oci.resources.secret = results[queries.indexOf(listSecrets)].value
 
                 // console.debug('OciQuery: queryTenancy:', JSON.stringify(design, null, 4))
                 resolve(design)
