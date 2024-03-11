@@ -29,6 +29,7 @@ console.info('')
 // Read command as first argument
 const designFile = args.values.design
 const outputDir = args.values.output
+console.debug('Positionals:', args.positionals)
 
 if (designFile) {
     fs.readFile(designFile, 'utf8', (err, data) => {

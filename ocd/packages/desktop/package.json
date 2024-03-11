@@ -82,6 +82,11 @@
         "ext": "okit",
         "name": "OCD Design",
         "role": "Editor"
+      },
+      {
+        "ext": "ocd",
+        "name": "OCD Design",
+        "role": "Editor"
       }
     ],
     "mac": {

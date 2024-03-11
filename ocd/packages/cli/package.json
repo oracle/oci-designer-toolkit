@@ -25,9 +25,12 @@
     "compile": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
     "build": "npm run compile && npm run pack",
     "generate-oci-reference-data": "node lib/esm/ocd-generate-default-cache.js  -d ../desktop/src/data",
-    "test-export-to-md": "node lib/esm/ocd-export-to-md.js  -d ../../test/design.okit -o ../../test/export/md/okit.md -c ../desktop/src/css/oci-theme.css -c ../desktop/src/css/ocd-svg.css",
-    "test-export-to-svg": "node lib/esm/ocd-export-to-svg.js  -d ../../test/design.okit -o ../../test/export/svg -c ../desktop/src/css/oci-theme.css -c ../desktop/src/css/ocd-svg.css",
-    "test-export-to-tf": "node lib/esm/ocd-export-to-terraform.js  -d ../../test/design.okit -o ../../test/export/tf"
+    "test-export-to-md-orig": "node lib/esm/ocd-export-to-md.js  -d ../../test/design.okit -o ../../test/export/md/okit.md -c ../desktop/src/css/oci-theme.css -c ../desktop/src/css/ocd-svg.css",
+    "test-export-to-md": "node lib/esm/ocd.js export markdown -d ../../test/design.okit -o ../../test/export/md/okit.md -c ../desktop/src/css/oci-theme.css -c ../desktop/src/css/ocd-svg.css",
+    "test-export-to-svg-orig": "node lib/esm/ocd-export-to-svg.js  -d ../../test/design.okit -o ../../test/export/svg -c ../desktop/src/css/oci-theme.css -c ../desktop/src/css/ocd-svg.css",
+    "test-export-to-svg": "node lib/esm/ocd.js export svg -d ../../test/design.okit -O ../../test/export/svg -c ../desktop/src/css/oci-theme.css -c ../desktop/src/css/ocd-svg.css",
+    "test-export-to-tf-orig": "node lib/esm/ocd-export-to-terraform.js  -d ../../test/design.okit -o ../../test/export/tf",
+    "test-export-to-tf": "node lib/esm/ocd.js export terraform -d ../../test/design.okit -O ../../test/export/tf"
   },
   "dependencies": {
     "@ocd/codegen": "^1.0.0",
