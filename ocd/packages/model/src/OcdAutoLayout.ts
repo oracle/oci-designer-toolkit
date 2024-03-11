@@ -4,10 +4,11 @@
 */
 
 import { v4 as uuidv4 } from 'uuid'
-import { OcdDesign, OcdViewCoords, OcdResources, OciResources } from './OcdDesign'
+import { OcdDesign, OcdViewCoords, OcdResources, OciResources, OcdViewPage, OcdViewLayer } from './OcdDesign'
 import { OcdResource } from './OcdResource'
 import { OciResource } from './provider/oci/OciResource'
 import { OcdUtils } from '@ocd/core'
+import { OciCompartment } from './provider/oci/resources/OciCompartment'
 
 export class OcdAutoLayout {
     coords: OcdViewCoords[]
@@ -33,9 +34,9 @@ export class OcdAutoLayout {
         // console.debug('OcdAutoLayout: Container Resources',this.containerResources)
         this.simpleResources = this.getSimpleResources()
         this.addContainerCoords()
-        console.debug('OcdAutoLayout: Container Coords',this.coords)
+        // console.debug('OcdAutoLayout: Container Coords',this.coords)
         this.addSimpleCoords()
-        console.debug('OcdAutoLayout: Added Simple Coords', this.coords)
+        // console.debug('OcdAutoLayout: Added Simple Coords', this.coords)
     }
 
     // getResources(): OcdResource[] {return [...this.getOciResources()]}
@@ -148,4 +149,20 @@ export class OcdAutoLayout {
 
         return this.coords
     }
-}
+
+    autoOciAddLayers() {
+        this.design.view.pages.forEach((p: OcdViewPage) => p.layers = [])
+        this.design.model.oci.resources.compartment.forEach((c: OciCompartment, i: number) => this.addLayer(c.id, i === 0))
+    }
+
+    addLayer(id: string, selected: boolean = false, layerClass: string = 'oci-compartment') {
+        this.design.view.pages.forEach((p: OcdViewPage) => {
+            const layer: OcdViewLayer = {
+                id: id,
+                class: layerClass,
+                visible: true,
+                selected: selected
+            } 
+            p.layers.push(layer)
+        })
+    }}
