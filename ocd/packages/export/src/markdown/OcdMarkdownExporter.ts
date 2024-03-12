@@ -45,20 +45,21 @@ ${useDataUri ? `![${page.title}](${svgDataUri})` : svg}
     }
     generateOciResourcesMarkdown(design: OcdDesign): string {
         const resourceLists = OcdDesign.getOciResourceLists(design)
+        const allResources = OcdDesign.getOciResources(design)
         const sortedKeys = Object.keys(resourceLists).sort((a, b) => a.localeCompare(b))
-        return `${sortedKeys.map((k) => this.generateOciResourceListMarkdown(k, resourceLists[k])).join('\n')}`
+        return `${sortedKeys.map((k) => this.generateOciResourceListMarkdown(k, resourceLists[k], allResources)).join('\n')}`
     }
-    generateOciResourceListMarkdown(key: string, resources: OciResource[]): string {
+    generateOciResourceListMarkdown(key: string, resources: OciResource[], allResources: OciResource[]): string {
         return `### ${OcdUtils.toTitle(key)}
 
-${resources.map((r) => this.generateOciResourceMarkdown(r)).join('\n')}
+${resources.map((r) => this.generateOciResourceMarkdown(r, allResources)).join('\n')}
 `
     }
-    generateOciResourceMarkdown(resource: OciResource): string {
+    generateOciResourceMarkdown(resource: OciResource, allResources: OciResource[]): string {
         const markdownExporterName = `${OcdUtils.toTitleCase(resource.provider)}${resource.resourceType}`
         // @ts-ignore
-        const markdownExporter = new ociMarkdownResources[markdownExporterName](resource)
-        return `${markdownExporter.generate(resource)}`
+        const markdownExporter = new ociMarkdownResources[markdownExporterName](resource, allResources)
+        return `${markdownExporter.generate(resource, allResources)}`
     }
 }
 
