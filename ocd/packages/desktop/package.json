@@ -95,7 +95,11 @@
     },
     "dmg": {
       "icon": "build/assets/icon.icns",
-      "background": "build/assets/background.png"
+      "background": "build/assets/background.png",
+      "window": {
+        "width": 585,
+        "height": 355
+      }
     },
     "win": {
       "icon": "build/assets/icon.ico"

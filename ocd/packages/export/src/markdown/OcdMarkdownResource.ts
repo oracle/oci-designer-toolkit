@@ -7,7 +7,7 @@ import { OcdUtils } from "@ocd/core"
 import { OcdResource } from "@ocd/model"
 
 export class OcdMarkdownResource {
-    heading = ['#####', '######', '#######', '########', '#########']
+    heading = ['#####', '######', '######', '######', '######']
     ocdCommonGeneration = (resource: OcdResource): string => {
         return `${resource.documentation}`
     }
@@ -33,6 +33,11 @@ export class OcdMarkdownResource {
         const refResources = ids.map((id) => allResource.find((r) => r.id === id)).filter((r) => r !== undefined)
         const displayNames = refResources.map((r) => `<li>${r ? `[${r.displayName}](#${r.displayName.toLowerCase().replaceAll(' ', '-')})` : ''}</li>`)
         return `| ${OcdUtils.toTitle(name)} | <ul style="list-style-type: none;padding: 0px;margin: 0px;">${displayNames.join('')}</ul> |`
+    }
+    generateStringListAttribute = (name: string, value: string | string[] | undefined, required: boolean, level=0): string => {
+        const valuesArray = typeof value === 'string' ? value.split(',') : Array.isArray(value) ? value : []
+        const displayValues = valuesArray.map((v) => `<li>${v}</li>`)
+        return `| ${OcdUtils.toTitle(name)} | <ul style="list-style-type: none;padding: 0px;margin: 0px;">${displayValues.join('')}</ul> |`
     }
 }
 
