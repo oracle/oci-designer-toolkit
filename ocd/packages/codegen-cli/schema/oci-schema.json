@@ -4152,6 +4152,7 @@
         "conditional": true,
         "condition": {
           "element": "shape",
+          "relativeToRoot": true,
           "operator": "ew",
           "value": ".Flex"
         },
