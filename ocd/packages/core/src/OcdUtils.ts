@@ -9,6 +9,7 @@ export namespace OcdUtils {
     export interface ResourcePropertyCondition {
         logic_operator?: 'and' | 'or'
         element?: string
+        relativeToRoot?: boolean
         operator?: 'eq' | 'lt' | 'gt' | 'ne' | 'le' | 'ge' | 'in' | 'ew' | 'sw'
         value?: boolean | string | number | Function
     }
@@ -69,13 +70,16 @@ export namespace OcdUtils {
         return isTrue
     }
     export const isPropertyConditionTrue = (conditional: boolean, condition: ResourcePropertyCondition | ResourcePropertyCondition[], resource: OcdResource, rootResource: OcdResource): boolean => {
+        // console.debug('OcdUtils: isPropertyConditionTrue', conditional, condition, resource, rootResource)
         // If not conditional then we will always display
         if (!conditional) return true
         // Check condition
         let display = false
         if (!Array.isArray(condition)){
-            const element = condition.element ? condition.element.indexOf('_') ? OcdUtils.toCamelCase(condition.element)  : condition.element : ''
-            display = OcdUtils.isCondition(resource[element], condition.operator, condition.value)
+            const element = condition.element ? condition.element.indexOf('_') ? OcdUtils.toCamelCase(condition.element) : condition.element : ''
+            // display = OcdUtils.isCondition(resource[element], condition.operator, condition.value)
+            const elementValue = condition.relativeToRoot ? getResourceElementValue(element, rootResource) : getResourceElementValue(element, resource)
+            display = OcdUtils.isCondition(elementValue, condition.operator, condition.value)
         } else {
             condition.forEach((c) => {
                 const isTrue = isPropertyConditionTrue(conditional, c, resource, rootResource)
@@ -83,6 +87,11 @@ export namespace OcdUtils {
             })
         }
         return display
+    }
+    export const getResourceElementValue = (element: string, resource: Record<string, any>): string | number | boolean | string[] => {
+        const elementParts = element.split('.')
+        if (elementParts.length === 1) return resource[elementParts[0]]
+        else return getResourceElementValue(elementParts.slice(1).join('.'), resource[elementParts[0]])
     }
     export function capitaliseFirstCharacter(str: string): string {return `${str.charAt(0).toUpperCase()}${str.slice(1)}`}
     export function rgbaToHex(rgba: string, removeAlpha = false): string {

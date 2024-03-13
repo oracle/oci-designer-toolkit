@@ -35,6 +35,7 @@ export const conditionalElements: OcdConditionalElements = {
     "oci_core_instance": {
         "shape_config": {
             "element": "shape",
+            "relativeToRoot": true,
             "operator": "ew",
             "value": ".Flex"
         }

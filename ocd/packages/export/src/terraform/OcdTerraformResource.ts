@@ -4,6 +4,7 @@
 */
 
 import { OcdUtils } from "@ocd/core"
+import { OcdResource } from "@ocd/model"
 
 interface ResourcePropertyCondition extends OcdUtils.ResourcePropertyCondition {}
 // interface ResourcePropertyCondition {
@@ -88,8 +89,8 @@ export class OcdTerraformResource {
         else return `${this.indentation[level]}# ${name} = "${value}"`
     }
 
-    isPropertyAssignConditionTrue = (conditional: boolean, condition: ResourcePropertyCondition | ResourcePropertyCondition[], resource: Record<string, any>): boolean => {
-        return OcdUtils.isPropertyConditionTrue(conditional, condition, resource, resource)
+    isPropertyAssignConditionTrue = (conditional: boolean, condition: ResourcePropertyCondition | ResourcePropertyCondition[], resource: Record<string, any>, rootResource: OcdResource): boolean => {
+        return OcdUtils.isPropertyConditionTrue(conditional, condition, resource, rootResource)
         // // If not conditional then we will always display
         // if (!conditional) return true
         // // Check condition
