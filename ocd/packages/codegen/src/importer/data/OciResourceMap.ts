@@ -39,6 +39,8 @@ export const resourceMap: OcdResourceMap = {
     "oci_core_volume_attachment": "volume_attachment",
     "oci_database_autonomous_database": "autonomous_database",
     "oci_database_db_system": "db_system",
+    "oci_file_storage_export": "file_system_export",
+    "oci_file_storage_export_set": "file_system_export_set",
     "oci_file_storage_file_system": "file_system",
     "oci_file_storage_mount_target": "mount_target",
     "oci_identity_compartment": "compartment",

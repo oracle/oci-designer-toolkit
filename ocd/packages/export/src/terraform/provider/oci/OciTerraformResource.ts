@@ -62,6 +62,7 @@ export class OciTerraformResource extends OcdTerraformResource {
     retrieveLoadbalancerShapeId = () => '' // Simple Text Replace Reference
     // Id Lookups
     retrieveImageId = () => {return 'Method must be define in Resource class'}
+    retrieveSnapshotPolicieId = () => {return 'Method must be define in Resource class'}
 }
 
 export default OciTerraformResource

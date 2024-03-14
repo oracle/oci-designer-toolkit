@@ -69,6 +69,9 @@ export const elementOverrides: OcdElementOverrides = {
         "oci_core_volume": {
             "vpus_per_gb": "VPUs/Gbs"
         },
+        "oci_file_storage_file_system": {
+            "filesystem_snapshot_policy_id": "Snapshot Policy"
+        },
         "oci_load_balancer_listener": {
             "default_backend_set_name": "Backend Set"
         }
@@ -98,6 +101,9 @@ export const elementOverrides: OcdElementOverrides = {
         },
         "oci_database_autonomous_database": {
             "db_version": "autonomousDbVersions"
+        },
+        "oci_file_storage_file_system": {
+            "filesystem_snapshot_policy_id": "snapshotPolicies"
         },
         "oci_load_balancer_load_balancer": {
             "shape": "loadbalancerShapes"

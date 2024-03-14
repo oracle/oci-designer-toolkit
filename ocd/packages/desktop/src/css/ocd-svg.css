@@ -34,8 +34,10 @@
     --svg-resource-association-connector-stroke-dasharray: 3, 2;
     --svg-resource-association-connector-stroke-opacitiy: 1;
 
+    --svg-analytics-resources-background-colour: rgba(59, 112, 135, 0.9);
     --svg-database-resources-background-colour: rgba(59, 112, 135, 0.9);
     --svg-gateway-resources-background-colour: rgba(59, 112, 135, 0.9);
+    --svg-identity-resources-background-colour: rgba(199, 59, 89, 0.9);
     --svg-infrastructure-resources-background-colour: rgba(59, 112, 135, 0.9);
     --svg-network-resources-background-colour: rgba(121, 96, 135, 0.9);
     --svg-storage-resources-background-colour: rgba(146, 88, 101, 0.9);

@@ -225,7 +225,8 @@
 */
 
 /* Infrastructure */
-.oci-instance-background-colour {
+.oci-instance-background-colour,
+.oci-mount-target-background-colour {
     background-color: var(--svg-infrastructure-resources-background-colour);
 }
 
@@ -240,18 +241,22 @@
 /* Storage */
 .oci-boot-volume-background-colour,
 .oci-bucket-background-colour,
+.oci-file-system-background-colour,
 .oci-volume-background-colour {
     background-color: var(--svg-storage-resources-background-colour);
 }
 
 /* Networking */
 .oci-dhcp-options-background-colour,
+.oci-drg-attachment-background-colour,
+.oci-ipsec-background-colour,
 .oci-load-balancer-background-colour,
 .oci-load-balancer-backend-set-background-colour,
 .oci-load-balancer-listener-background-colour,
 .oci-network-load-balancer-background-colour,
 .oci-network-load-balancer-backend-set-background-colour,
 .oci-network-security-group-background-colour,
+.oci-remote-peering-connection-background-colour,
 .oci-route-table-background-colour,
 .oci-security-list-background-colour,
 .oci-subnet-background-colour,
@@ -260,7 +265,21 @@
 }
 
 /* Gateways */
+.oci-drg-background-colour,
 .oci-internet-gateway-background-colour,
-.oci-nat-gateway-background-colour {
+.oci-local-peering-gateway-background-colour,
+.oci-nat-gateway-background-colour,
+.oci-service-gateway-background-colour {
     background-color: var(--svg-gateway-resources-background-colour);
+}
+
+/* Identity & Security */
+.oci-key-background-colour,
+.oci-vault-background-colour {
+    background-color: var(--svg-identity-resources-background-colour);
+}
+
+/* Analytics */
+.oci-analytics-instance-background-colour {
+    background-color: var(--svg-analytics-resources-background-colour);
 }
