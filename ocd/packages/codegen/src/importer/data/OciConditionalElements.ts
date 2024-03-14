@@ -131,6 +131,7 @@ export const conditionalElements: OcdConditionalElements = {
     "oci_load_balancer_load_balancer": {
         "shape_details": {
             "element": "shape",
+            "relativeToRoot": true,
             "operator": "eq",
             "value": "flexible"
         }

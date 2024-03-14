@@ -27,6 +27,8 @@ export { OciDrgRouteDistributionStatement } from './resources/OciDrgRouteDistrib
 export { OciDrgRouteTable } from './resources/OciDrgRouteTable'
 export { OciDrgRouteTableRouteRule } from './resources/OciDrgRouteTableRouteRule'
 export { OciFileSystem } from './resources/OciFileSystem'
+export { OciFileSystemExport } from './resources/OciFileSystemExport'
+export { OciFileSystemExportSet } from './resources/OciFileSystemExportSet'
 export { OciInstance } from './resources/OciInstance'
 export { OciInternetGateway } from './resources/OciInternetGateway'
 export { OciIpsec } from './resources/OciIpsec'

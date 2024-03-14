@@ -29,8 +29,23 @@ regularly.
 | Load Balancer Backend Listener | &check;    | &check;   |            |            |
 | Block Volume                   | &check;    | &check;   |            |            |
 | Volume Attachment              | &check;    | &check;   |            |            |
-| Boot Volumes                   | &check;    |           |            | &check;    |
-| Boot Volumes Attachment        | &cross;    |           |            | &check;    |
+| Boot Volumes                   | &check;    | &check;   |            | &check;    |
+| Boot Volumes Attachment        | &cross;    | &check;   |            | &check;    |
+| Database System                |            |           |            |            |
+| Service Gateway                |            |           |            |            |
+| DRG                            |            |           |            |            |
+| Local Peering                  |            |           |            |            |
+| IPSec VPN                      |            |           |            |            |
+| Remote Peering                 |            |           |            |            |
+| NoSQL Database                 |            |           |            |            |
+| MySQL (with Heatwave)          |            |           |            |            |
+| Vault                          |            |           |            |            |
+| Key                            |            |           |            |            |
+| Secret                         |            |           |            |            |
+| File System                    |            |           |            |            |
+| Mount Target                   |            |           |            |            |
+| OKE Cluser & Node Pool         |            |           |            |            |
+| Analytics Instance             |            |           |            |            |
 
 Not all menu options are currently available and if selected will display a message saying they are currently not availble,
 again these will be added over time.

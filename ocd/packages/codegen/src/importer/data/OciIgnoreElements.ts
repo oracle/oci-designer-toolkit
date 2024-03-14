@@ -11,6 +11,7 @@ export const ignoreElements: OcdIgnoreElements = {
         "id",
         "inactive_state",
         "is_accessible",
+        "lifecycle_details",
         "state",
         "system_tags",
         "time_created",
@@ -75,6 +76,13 @@ export const ignoreElements: OcdIgnoreElements = {
     ],
     "oci_core_internet_gateway": [
         "route_table_id"
+    ],
+    "oci_core_local_peering_gateway": [
+        "is_cross_tenancy_peering",
+        "peer_advertised_cidr",
+        "peer_advertised_cidr_details",
+        "peering_status",
+        "peering_status_details"
     ],
     "oci_core_nat_gateway": [
         "nat_ip",
@@ -222,7 +230,20 @@ export const ignoreElements: OcdIgnoreElements = {
         "maintenance_window"
     ],
     "oci_file_storage_file_system": [
-        "source_details"
+        "is_clone_parent",
+        "is_hydrated",
+        "is_targetable",
+        "lifecycle_details",
+        "metered_bytes",
+        "replication_target_id",
+        "source_details",
+        "source_snapshot_id"
+    ],
+    "oci_file_storage_mount_target": [
+        "idmap_type",
+        "kerberos",
+        "ldap_idmap",
+        "private_ip"
     ],
     "oci_kms_key": [
         "replica_details"
