@@ -338,6 +338,7 @@ const OcdResizePoint = ({resource, cx, cy, position, setDimensions, onResize, on
 
 const OcdForeignObject = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resource, hidden }: ResourceForeignObjectProps) => {
     const id = `${resource.id}-fo`
+    const inputId = `${id}-input`
     const containerLayout = (resource.container && (!resource.detailsStyle || resource.detailsStyle === 'default'))
     const detailedLayout = ((resource.detailsStyle && resource.detailsStyle === 'detailed') || ((!resource.detailsStyle || resource.detailsStyle === 'default') && ocdConsoleConfig.config.detailedResource))
     // const detailedLayout = (ocdConsoleConfig.config.detailedResource || (resource.detailsStyle && resource.detailsStyle === 'detailed'))
@@ -371,7 +372,7 @@ const OcdForeignObject = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
                 </div>
                 <div className='ocd-svg-foreign-object-display-name'>
                     <span>{getTitle()}</span>
-                    <input type='text' value={ocdDocument.getDisplayName(resource.ocid)} 
+                    <input id={inputId} type='text' value={ocdDocument.getDisplayName(resource.ocid)} 
                         onChange={onChange} 
                         onMouseMove={onMouseMove} 
                         onMouseDown={onMouseMove} 
