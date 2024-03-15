@@ -31,7 +31,8 @@ export const ignoreElements: OcdIgnoreElements = {
     ],
     "oci_core_drg": [
         "default_drg_route_tables",
-        "default_export_drg_route_distribution_id"
+        "default_export_drg_route_distribution_id",
+        "redundancy_status"
     ],
     "oci_core_drg_attachment": [
         "remove_export_drg_route_distribution_trigger"

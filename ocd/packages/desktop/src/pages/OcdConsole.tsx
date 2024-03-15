@@ -117,7 +117,7 @@ const OcdConsoleTitleBar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument
     }
     return (
         <div className='ocd-console-title-bar'>
-            <input type='text' value={ocdDocument.design.metadata.title} onChange={onChange}></input>
+            <input id='ocd_document_title' type='text' value={ocdDocument.design.metadata.title} onChange={onChange}></input>
         </div>
     )
 }

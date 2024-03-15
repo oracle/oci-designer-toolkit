@@ -56,14 +56,16 @@ export namespace OciDbSystem {
     }
     export function allowedParentTypes(): string[] {
         // console.debug('OciDbSystem: Allowed Parent Types')
-        return []
+        return ['Subnet']
     }
     export function getParentId(resource: OciDbSystem): string {
         // console.debug('OciDbSystem: Getting Parent Id to for', resource.displayName, resource.id)
-        return resource.compartmentId
+        const parentId = resource.subnetId
+        return parentId
     }
     export function setParentId(resource: OciDbSystem, parentId: string): OciDbSystem {
         // console.debug('OciDbSystem: Setting Parent Id to', parentId, 'for', resource.displayName, resource.id)
+        resource.subnetId = parentId
         return resource
     }
     export function getConnectionIds(resource: OciDbSystem, allResources: OcdResources): string[] {

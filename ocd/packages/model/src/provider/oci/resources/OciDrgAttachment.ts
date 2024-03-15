@@ -38,9 +38,9 @@ export namespace OciDrgAttachment {
     export function getConnectionIds(resource: OciDrgAttachment, allResources: OcdResources): string[] {
         // This List of Ids does not include the Parent Id or Compartment Id
         // console.debug('OciDrgAttachment: Getting Connection Ids to for', resource.displayName, resource.id)
-        let associationIds = []
-        if (resource.drgId) associationIds.push(resource.drgId)
-        if (resource.routeTableId) associationIds.push(resource.routeTableId)
+        let associationIds: string[] = (resource.routeTableId && resource.routeTableId !== '') ? [resource.routeTableId] : []
+        if (resource.drgId && resource.drgId !== '') associationIds.push(resource.drgId)
+        if (resource.networkDetails?.ipsecConnectionId && resource.networkDetails?.ipsecConnectionId !== '') associationIds.push(resource.networkDetails?.ipsecConnectionId)
         return associationIds
     }
     

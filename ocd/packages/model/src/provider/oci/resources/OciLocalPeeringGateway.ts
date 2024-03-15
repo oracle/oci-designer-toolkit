@@ -34,7 +34,9 @@ export namespace OciLocalPeeringGateway {
     export function getConnectionIds(resource: OciLocalPeeringGateway, allResources: OcdResources): string[] {
         // This List of Ids does not include the Parent Id or Compartment Id
         // console.debug('OciLocalPeeringGateway: Getting Connection Ids to for', resource.displayName, resource.id)
-        return []
+        let associationIds: string[] = (resource.routeTableId && resource.routeTableId !== '') ? [resource.routeTableId] : []
+        if (resource.peerId && resource.peerId !== '') associationIds.push(resource.peerId)
+        return associationIds
     }
     
 }

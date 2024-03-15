@@ -97,7 +97,7 @@ const OcdResourceDocumentation = ({ocdDocument, setOcdDocument}: DesignerResourc
     return (
         <div className={`ocd-properties-panel ocd-properties-panel-theme ocd-properties-documentation-panel`}>
             <div className='ocd-properties-documentation-preview-bar'><input id='documentation_preview_checkbox' type='checkbox' checked={preview} onChange={onPreviewChanged}></input><label htmlFor='documentation_preview_checkbox'>Preview</label></div>
-            {!preview && <textarea onChange={onChange} value={selectedResource ? selectedResource.documentation : activePage.documentation}></textarea>}
+            {!preview && <textarea id='ocd_resource_documentation' onChange={onChange} value={selectedResource ? selectedResource.documentation : activePage.documentation}></textarea>}
             {preview && <div className='ocd-properties-documentation-preview'><Markdown>{selectedResource ? selectedResource.documentation : activePage.documentation}</Markdown></div>}
         </div>
     )
