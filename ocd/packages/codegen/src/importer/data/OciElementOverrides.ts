@@ -60,8 +60,12 @@ export const elementOverrides: OcdElementOverrides = {
             "data_storage_size_in_tbs": "Storage (in TBs)",
             "db_name": "Database Name",
             "dns_label": "DNS Label",
+            "ip_address": "IP Address",
             "ipv6private_cidr_blocks": "IPV6 Private CIDRs",
             "is_ipv6enabled": "IPV6 Enabled"        
+        },
+        "oci_core_cpe": {
+            "cpe_device_shape_id": "Shape"
         },
         "oci_core_instance": {
             "boot_volume_size_in_gbs": "Boot Volume Size (Gbs)"
@@ -95,6 +99,9 @@ export const elementOverrides: OcdElementOverrides = {
     },
     "cacheLookups": {
         "common": {},
+        "oci_core_cpe": {
+            "cpe_device_shape_id": "cpeDeviceShapes"
+        },
         "oci_core_instance": {
             "shape": "shapes",
             "source_details.source_id": "images"
@@ -146,6 +153,13 @@ export const elementOverrides: OcdElementOverrides = {
             "database_edition",
             "db_workload",
             "license_model"
+        ],
+        "oci_kms_key": [
+            "key_shape.algorithm",
+            "key_shape.length"
+        ],
+        "oci_kms_vault": [
+            "vault_type"
         ],
         "oci_load_balancer_load_balancer": [
             "ip_mode"

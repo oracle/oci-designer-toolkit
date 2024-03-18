@@ -93,6 +93,9 @@ export const ignoreElements: OcdIgnoreElements = {
     "oci_core_network_security_group_security_rule": [
         "is_valid"
     ],
+    "oci_core_remote_peering_connection": [
+        "peering_status"
+    ],
     "oci_core_route_table": [
         "route_type"
     ],
@@ -247,10 +250,24 @@ export const ignoreElements: OcdIgnoreElements = {
         "private_ip"
     ],
     "oci_kms_key": [
-        "replica_details"
+        "current_key_version",
+        "desired_state",
+        "replica_details",
+        "restore_trigger",
+        "restored_from_key_id",
+        "time_of_deletion",
+        "restore_from_file",
+        "restore_from_object_store"
     ],
     "oci_kms_vault": [
-        "replica_details"
+        "crypto_endpoint",
+        "replica_details",
+        "management_endpoint",
+        "restore_trigger",
+        "restored_from_vault_id",
+        "time_of_deletion",
+        "restore_from_file",
+        "restore_from_object_store"
     ],
     "oci_load_balancer_load_balancer": [
         "ip_address_details",
@@ -290,5 +307,13 @@ export const ignoreElements: OcdIgnoreElements = {
     "oci_objectstorage_bucket": [
         "etag",
         "object_lifecycle_policy_etag"
-    ]
+    ],
+    "oci_vault_secret": [
+        "current_version_number",
+        "metadata",
+        "secret_rules",
+        "stage",
+        "time_of_current_version_expiry",
+        "time_of_deletion"
+    ],
 }

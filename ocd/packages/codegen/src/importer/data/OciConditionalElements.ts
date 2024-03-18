@@ -77,6 +77,13 @@ export const conditionalElements: OcdConditionalElements = {
             "value": "17"
         }
     },
+    "oci_core_remote_peering_connection": {
+        "peer_tenancy_id": {
+            "element": "is_cross_tenancy_peering",
+            "operator": "eq",
+            "value": true
+        }
+    },
     "oci_core_security_list": {
         "icmp_options": {
             "element": "protocol",

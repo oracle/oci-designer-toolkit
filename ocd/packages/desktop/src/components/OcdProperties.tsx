@@ -54,6 +54,7 @@ const OciCommonResourceProperties = ({ocdDocument, setOcdDocument, resource, roo
 const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
     // @ts-ignore
     const {ocdCache, setOcdCache} = useContext(CacheContext)
+    console.debug('OcdProperties: OcdResourceProperties: OCD Cache:', ocdCache)
     const selectedResource: OcdResource = ocdDocument.getSelectedResource()
     const resourceProxyName = selectedResource ? `${OcdUtils.toTitleCase(selectedResource.provider)}${selectedResource.resourceType}Proxy` : ''
     // @ts-ignore 

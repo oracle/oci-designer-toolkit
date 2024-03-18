@@ -7,5 +7,17 @@ import { ResourceElementConfig } from "../../../../OcdPropertyTypes"
 import { OciCommonConfigs } from "../../OciCommonConfigs"
 
 export namespace OciSecretConfigs {
-    export function configs(): ResourceElementConfig[] {return [...OciCommonConfigs.configs()]}
+    export function configs(): ResourceElementConfig[] {
+        return [
+            ...OciCommonConfigs.configs(),
+            {
+                id: 'secret_content.content',
+                properties: {
+                    pattern: '^var\.+$',
+                    title: 'Password fields only support Variables.'
+                },
+                configs: []
+            },
+        ]
+    }
 }
