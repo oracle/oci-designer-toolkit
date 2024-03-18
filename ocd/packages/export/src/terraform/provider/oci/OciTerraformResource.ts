@@ -14,8 +14,16 @@ export class OciTerraformResource extends OcdTerraformResource {
     }
     isIgnoreCompartmentId: boolean
     isHomeRegion: boolean
-    simpleCacheAttributes = ['shapes', 'autonomousDbVersions', 'loadbalancerShapes', 'listLoadbalancerProtocols']
-    lookupCacheAttributes = ['images']
+    simpleCacheAttributes = [
+        'autonomousDbVersions', 
+        'loadbalancerShapes', 
+        'listLoadbalancerProtocols',
+        'shapes'
+    ]
+    lookupCacheAttributes = [
+        'cpeDeviceShapes', 
+        'images'
+    ]
     constructor(idTFResourceMap={}, isHomeRegion: boolean = false, isIgnoreCompartmentId: boolean = false) {
         super(idTFResourceMap)
         this.isHomeRegion = isHomeRegion
@@ -57,10 +65,11 @@ export class OciTerraformResource extends OcdTerraformResource {
     // Metadata / Cache - Dropdown Data Generation
     // Simple Text Replace Reference
     retrieveAutonomousDbVersionId = () => '' // Simple Text Replace Reference
-    retrieveShapeId = () => '' // Simple Text Replace Reference
     retrieveListLoadbalancerProtocolId = () => '' // Simple Text Replace Reference
     retrieveLoadbalancerShapeId = () => '' // Simple Text Replace Reference
+    retrieveShapeId = () => '' // Simple Text Replace Reference
     // Id Lookups
+    retrieveCpeDeviceShapeId = () => {return 'Method must be define in Resource class'}
     retrieveImageId = () => {return 'Method must be define in Resource class'}
     retrieveSnapshotPolicieId = () => {return 'Method must be define in Resource class'}
 }

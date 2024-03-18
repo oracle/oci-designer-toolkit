@@ -33,6 +33,7 @@ export const OcdCanvasGrid = (): JSX.Element => {
 
 export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument, setOcdDocument }: CanvasProps): JSX.Element => {
     console.info('OcdCanvas: OCD Document:', ocdDocument)
+    console.info('OcdCanvas: OCD Design:', ocdDocument.design)
     // @ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const uuid = () => `gid-${uuidv4()}`

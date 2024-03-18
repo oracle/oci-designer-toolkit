@@ -125,10 +125,10 @@ export class OciReferenceDataQuery extends OciCommonQuery {
                     if (results[queries.indexOf(listLoadbalancerShapes)].status === 'fulfilled') referenceData.loadbalancerShapes = results[queries.indexOf(listLoadbalancerShapes)].value
                     // Loadbalancer Listener Policies
                     // @ts-ignore
-                    if (results[queries.indexOf(listLoadbalancerPolicies)].status === 'fulfilled') referenceData.listLoadbalancerPolicies = results[queries.indexOf(listLoadbalancerPolicies)].value
+                    if (results[queries.indexOf(listLoadbalancerPolicies)].status === 'fulfilled') referenceData.loadbalancerPolicies = results[queries.indexOf(listLoadbalancerPolicies)].value
                     // Loadbalancer Listener Protocols
                     // @ts-ignore
-                    if (results[queries.indexOf(listLoadbalancerProtocols)].status === 'fulfilled') referenceData.listLoadbalancerProtocols = results[queries.indexOf(listLoadbalancerProtocols)].value
+                    if (results[queries.indexOf(listLoadbalancerProtocols)].status === 'fulfilled') referenceData.loadbalancerProtocols = results[queries.indexOf(listLoadbalancerProtocols)].value
                     /*
                     ** MySQL
                     */
@@ -158,7 +158,7 @@ export class OciReferenceDataQuery extends OciCommonQuery {
                     */
                     // CPE Device Shape
                     // @ts-ignore
-                    if (results[queries.indexOf(listCpeDeviceShapes)].status === 'fulfilled') referenceData.cpeDeviceShape = results[queries.indexOf(listCpeDeviceShapes)].value
+                    if (results[queries.indexOf(listCpeDeviceShapes)].status === 'fulfilled') referenceData.cpeDeviceShapes = results[queries.indexOf(listCpeDeviceShapes)].value
                     /*
                     ** DataScience
                     */

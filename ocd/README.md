@@ -34,6 +34,7 @@ regularly.
 | Database System                |            |           |            |            |
 | Service Gateway                |            |           |            |            |
 | DRG                            |            |           |            |            |
+| DRG Attachment                 |            |           |            |            |
 | Local Peering                  |            |           |            |            |
 | IPSec VPN                      |            |           |            |            |
 | Remote Peering                 |            |           |            |            |
