@@ -54,6 +54,9 @@ jobs:
           node-version: ${{ matrix.version }}
       - run: node --version
       - run: npm --version
+      - name: Install Snapcraft on Ubuntu
+        if: startsWith(matrix.os, 'ubuntu')
+        run: sudo snap install snapcraft --classic
       - run: npm run github-action-install
       - run: npm run github-action-compile-for-codegen
       - run: npm run github-action-generate
@@ -76,3 +79,4 @@ jobs:
         run: |
           gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}.rpm --clobber
           gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}.deb --clobber
+          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}.AppImage --clobber
