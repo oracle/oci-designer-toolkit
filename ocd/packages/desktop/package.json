@@ -110,6 +110,7 @@
     "linux": {
       "icon": "build/assets/icon.png",
       "target": [
+        "deb",
         "rpm"
       ]
     }
