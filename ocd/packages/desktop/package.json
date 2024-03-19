@@ -110,9 +110,9 @@
     "linux": {
       "icon": "build/assets/icon.png",
       "target": [
+        "AppImage",
         "deb",
-        "rpm",
-        "snap"
+        "rpm"
       ]
     }
   },
