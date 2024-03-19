@@ -75,3 +75,4 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: |
           gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}.rpm --clobber
+          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}.deb --clobber
