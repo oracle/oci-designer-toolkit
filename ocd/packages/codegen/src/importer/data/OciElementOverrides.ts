@@ -26,6 +26,9 @@ export const elementOverrides: OcdElementOverrides = {
         "oci_core_volume_attachment": {
             "attachment_type": "paravirtualized"
         },
+        "oci_core_service_gateway": {
+            "services.service_id": "All"
+        },
         "oci_database_autonomous_database": {
             "db_workload": "OLTP",
             "is_auto_scaling_enabled": true
@@ -84,6 +87,9 @@ export const elementOverrides: OcdElementOverrides = {
         "common": {
             "nsg_ids": {"list": "network_security_group", "element": "id"}
         },
+        "oci_core_local_peering_gateway": {
+            "peer_id": {"list": "local_peering_gateway", "element": "id"}
+        },
         "oci_load_balancer_listener": {
             "default_backend_set_name": {"list": "load_balancer_backend_set", "element": "name"}
         }
@@ -105,6 +111,9 @@ export const elementOverrides: OcdElementOverrides = {
         "oci_core_instance": {
             "shape": "shapes",
             "source_details.source_id": "images"
+        },
+        "oci_core_service_gateway": {
+            "services.service_id": "serviceGatewayServices"
         },
         "oci_database_autonomous_database": {
             "db_version": "autonomousDbVersions"

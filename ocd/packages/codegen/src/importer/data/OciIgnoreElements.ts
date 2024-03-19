@@ -99,6 +99,10 @@ export const ignoreElements: OcdIgnoreElements = {
     "oci_core_route_table": [
         "route_type"
     ],
+    "oci_core_service_gateway": [
+        "block_traffic",
+        "service_name"
+    ],
     "oci_core_subnet": [
         "ipv6virtual_router_ip",
         "subnet_domain_name",

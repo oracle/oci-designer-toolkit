@@ -31,11 +31,12 @@ regularly.
 | Volume Attachment              | &check;    | &check;   |            |            |
 | Boot Volumes                   | &check;    | &check;   |            | &check;    |
 | Boot Volumes Attachment        | &cross;    | &check;   |            | &check;    |
+| Customer Premises Equipment    | &check;    | &check;   |            |            |
 | Database System                |            |           |            |            |
-| Service Gateway                |            |           |            |            |
+| Service Gateway                | &check;    | &check;   |            |            |
 | DRG                            |            |           |            |            |
 | DRG Attachment                 |            |           |            |            |
-| Local Peering                  |            |           |            |            |
+| Local Peering                  | &check;    | &check;   |            |            |
 | IPSec VPN                      |            |           |            |            |
 | Remote Peering                 |            |           |            |            |
 | NoSQL Database                 |            |           |            |            |

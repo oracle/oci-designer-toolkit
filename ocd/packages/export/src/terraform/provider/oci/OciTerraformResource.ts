@@ -22,7 +22,8 @@ export class OciTerraformResource extends OcdTerraformResource {
     ]
     lookupCacheAttributes = [
         'cpeDeviceShapes', 
-        'images'
+        'images',
+        "serviceGatewayServices"
     ]
     constructor(idTFResourceMap={}, isHomeRegion: boolean = false, isIgnoreCompartmentId: boolean = false) {
         super(idTFResourceMap)
@@ -64,14 +65,15 @@ export class OciTerraformResource extends OcdTerraformResource {
     }
     // Metadata / Cache - Dropdown Data Generation
     // Simple Text Replace Reference
-    retrieveAutonomousDbVersionId = () => '' // Simple Text Replace Reference
-    retrieveListLoadbalancerProtocolId = () => '' // Simple Text Replace Reference
-    retrieveLoadbalancerShapeId = () => '' // Simple Text Replace Reference
-    retrieveShapeId = () => '' // Simple Text Replace Reference
+    retrieveAutonomousDbVersionId = (): string => '' // Simple Text Replace Reference
+    retrieveListLoadbalancerProtocolId = (): string => '' // Simple Text Replace Reference
+    retrieveLoadbalancerShapeId = (): string => '' // Simple Text Replace Reference
+    retrieveShapeId = (): string => '' // Simple Text Replace Reference
     // Id Lookups
-    retrieveCpeDeviceShapeId = () => {return 'Method must be define in Resource class'}
-    retrieveImageId = () => {return 'Method must be define in Resource class'}
-    retrieveSnapshotPolicieId = () => {return 'Method must be define in Resource class'}
+    retrieveCpeDeviceShapeId = (): string => {return 'Method must be define in Resource class'}
+    retrieveImageId = (): string => {return 'Method must be define in Resource class'}
+    retrieveServiceGatewayServiceId = (): string => {return 'Method must be define in Resource class'}
+    retrieveSnapshotPolicieId = (): string => {return 'Method must be define in Resource class'}
 }
 
 export default OciTerraformResource

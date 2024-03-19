@@ -67,6 +67,7 @@ export class OciReferenceDataQuery extends OciCommonQuery {
                 const listLoadbalancerShapes = this.listLoadbalancerShapes(compartmentIds)
                 const listLoadbalancerPolicies = this.listLoadbalancerPolicies(compartmentIds)
                 const listLoadbalancerProtocols = this.listLoadbalancerProtocols(compartmentIds)
+                const listServiceGatewayServices = this.listServiceGatewayServices()
                 // Database
                 const listMySQLShapes = this.listMySQLShapes(compartmentIds)
                 const listMySQLVersions = this.listMySQLVersions(compartmentIds)
@@ -101,6 +102,7 @@ export class OciReferenceDataQuery extends OciCommonQuery {
                     listCpeDeviceShapes,
                     listDataScienceNotebookSessionShapes,
                     listServices,
+                    listServiceGatewayServices,
                     listPodShapes,
                     getClusterOptions,
                     getNodePoolOptions,
@@ -141,6 +143,12 @@ export class OciReferenceDataQuery extends OciCommonQuery {
                     // MySQL Versions
                     // @ts-ignore
                     if (results[queries.indexOf(listMySQLVersions)].status === 'fulfilled') referenceData.mysqlVersions = results[queries.indexOf(listMySQLVersions)].value
+                    /*
+                    ** Network
+                    */
+                    // Service gateway Services
+                    // @ts-ignore
+                    if (results[queries.indexOf(listServiceGatewayServices)].status === 'fulfilled') referenceData.serviceGatewayServices = results[queries.indexOf(listServiceGatewayServices)].value
                     /*
                     ** Database
                     */
@@ -628,6 +636,27 @@ export class OciReferenceDataQuery extends OciCommonQuery {
                 // @ts-ignore
                 const uniqueResources = Array.from(new Set(resources.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
                 resolve(uniqueResources)
+            }).catch((reason) => {
+                console.error(reason)
+                reject(reason)
+            })
+        })
+    }
+
+    listServiceGatewayServices(): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const request: core.requests.ListServicesRequest = {}
+            const shapeQuery = this.vcnClient.listServices(request)
+            shapeQuery.then((results) => {
+                console.debug('OciReferenceDataQuery: listShapes: All Settled')
+                //@ts-ignore
+                const resources = results.items.map((s) => {return {
+                        ...s, 
+                        id: s.name.startsWith('All ') ? 'All' : 'Object Storage',
+                        displayName: `${s.name.split(' ')[0]} ${s.name.split(' ').slice(2).join(' ')}`,
+                    }
+                }).sort((a, b) => a.displayName.localeCompare(b.displayName)).filter((resource, idx, self) => idx === self.findIndex((r) => r.id === resource.id)) // De-duplicated
+                resolve(resources)
             }).catch((reason) => {
                 console.error(reason)
                 reject(reason)

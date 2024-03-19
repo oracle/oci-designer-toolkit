@@ -999,6 +999,10 @@ summary {
     background-color: #d1d1d4;
 }
 
+.ocd-layer-selected input {
+    font-weight: bolder;
+}
+
 .ocd-layer-visiblity-icon {
     display: block;
     height: var(--console-layers-bar-height);
@@ -1094,6 +1098,10 @@ summary {
 
 .ocd-page-selected {
     background-color: #d1d1d4;
+}
+
+.ocd-page-selected span {
+    font-weight: bolder;
 }
 
 .ocd-designer-canvas {

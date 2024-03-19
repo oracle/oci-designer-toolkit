@@ -4567,7 +4567,7 @@
         "staticLookup": false,
         "cacheLookup": false,
         "lookup": true,
-        "lookupResource": "peer",
+        "lookupResource": "local_peering_gateway",
         "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
@@ -6402,23 +6402,6 @@
     "type": "object",
     "subtype": "",
     "attributes": {
-      "block_traffic": {
-        "provider": "oci",
-        "key": "blockTraffic",
-        "name": "block_traffic",
-        "type": "bool",
-        "subtype": "",
-        "required": false,
-        "label": "Block Traffic",
-        "id": "block_traffic",
-        "staticLookup": false,
-        "cacheLookup": false,
-        "lookup": false,
-        "lookupResource": "",
-        "lookupResourceElement": "",
-        "conditional": false,
-        "condition": {}
-      },
       "compartment_id": {
         "provider": "oci",
         "key": "compartmentId",
@@ -6543,29 +6526,13 @@
             "label": "Service",
             "id": "services.service_id",
             "staticLookup": false,
-            "cacheLookup": false,
+            "cacheLookup": true,
             "lookup": true,
-            "lookupResource": "service",
-            "lookupResourceElement": "id",
+            "lookupResource": "serviceGatewayServices",
+            "lookupResourceElement": "serviceGatewayServices",
             "conditional": false,
-            "condition": {}
-          },
-          "service_name": {
-            "provider": "oci",
-            "key": "serviceName",
-            "name": "service_name",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Service Name",
-            "id": "services.service_name",
-            "staticLookup": false,
-            "cacheLookup": false,
-            "lookup": false,
-            "lookupResource": "",
-            "lookupResourceElement": "",
-            "conditional": false,
-            "condition": {}
+            "condition": {},
+            "default": "All"
           }
         }
       }
