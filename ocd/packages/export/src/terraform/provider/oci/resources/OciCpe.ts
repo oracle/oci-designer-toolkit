@@ -15,7 +15,7 @@ data "oci_core_cpe_device_shapes" "${this.terraformResourceName}CpeDeviceShapes"
     }
 }
 locals {
-    ${this.terraformResourceName}_cpeDeviceShape_id = data.oci_core_images.${this.terraformResourceName}CpeDeviceShapes.cpe_device_shapes[0]["cpe_device_shape_id"]
+    ${this.terraformResourceName}_cpeDeviceShape_id = data.oci_core_cpe_device_shapes.${this.terraformResourceName}CpeDeviceShapes.cpe_device_shapes[0]["cpe_device_shape_id"]
 }
 `
         return content

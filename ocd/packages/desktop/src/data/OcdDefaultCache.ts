@@ -9271,6 +9271,22 @@ export const defaultCache: OcdCache = {
                         "displayName": "8.0"
                     }
                 ],
+                "serviceGatewayServices": [
+                    {
+                        "cidrBlock": "all-lhr-services-in-oracle-services-network",
+                        "description": "All LHR Services In Oracle Services Network",
+                        "id": "All",
+                        "name": "All LHR Services In Oracle Services Network",
+                        "displayName": "All Services In Oracle Services Network"
+                    },
+                    {
+                        "cidrBlock": "oci-lhr-objectstorage",
+                        "description": "OCI LHR Object Storage",
+                        "id": "Object Storage",
+                        "name": "OCI LHR Object Storage",
+                        "displayName": "OCI Object Storage"
+                    }
+                ],
                 "dbSystemShapes": [
                     {
                         "availableCoreCount": 48,
