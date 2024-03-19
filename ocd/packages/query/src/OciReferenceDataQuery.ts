@@ -42,6 +42,8 @@ export class OciReferenceDataQuery extends OciCommonQuery {
                 console.debug('OciReferenceDataQuery: Query: Compartments')
                 const compartmentIds = compartments.map((c: OciResource) => c.id)
                 const tenancyId = [this.provider.getTenantId()]
+                // Top Level
+                const listRegions = this.listAllRegions()
                 // Compute
                 const listShapes = this.listShapes()
                 const listImages = this.listImages(compartmentIds)
@@ -71,6 +73,7 @@ export class OciReferenceDataQuery extends OciCommonQuery {
 
                 // Query Promise Array
                 const queries = [
+                    listRegions,
                     listShapes,
                     listImages,
                     listLoadbalancerShapes,
@@ -93,6 +96,12 @@ export class OciReferenceDataQuery extends OciCommonQuery {
                 ]
                 Promise.allSettled(queries).then((results) => {
                     console.debug('OciReferenceDataQuery: query: All Settled')
+                    /*
+                    ** OCI Top Level
+                    */
+                    // All Regions
+                    // @ts-ignore
+                    if (results[queries.indexOf(listRegions)].status === 'fulfilled') referenceData.regions = results[queries.indexOf(listRegions)].value
                     /*
                     ** Compute
                     */

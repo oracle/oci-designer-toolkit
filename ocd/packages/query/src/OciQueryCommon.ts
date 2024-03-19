@@ -32,7 +32,7 @@ export class OciCommonQuery {
         const region = nameParts[0].toUpperCase()
         const city = `${nameParts[1].charAt(0).toUpperCase()}${nameParts[1].substring(1).toLowerCase()}`
         // const displayName = `${region} ${city}`
-        const displayName = nameParts.slice(0, -1).map((p) => OcdUtils.capitaliseFirstCharacter(p)).join(' ')
+        const displayName = nameParts.slice(0, -1).map((p, i) => i === 0 ? p.toUpperCase() : OcdUtils.capitaliseFirstCharacter(p)).join(' ')
         return displayName
     }
 
