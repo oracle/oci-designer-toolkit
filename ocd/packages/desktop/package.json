@@ -109,10 +109,10 @@
     },
     "linux": {
       "icon": "build/assets/icon.png",
+      "executableName": "${productName}-${version}.${ext}",
       "target": [
         "AppImage",
-        "deb",
-        "rpm"
+        "snap"
       ]
     }
   },
