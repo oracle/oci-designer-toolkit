@@ -94,6 +94,7 @@ export const ignoreElements: OcdIgnoreElements = {
         "is_valid"
     ],
     "oci_core_remote_peering_connection": [
+        "is_cross_tenancy_peering",
         "peering_status"
     ],
     "oci_core_route_table": [

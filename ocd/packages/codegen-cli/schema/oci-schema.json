@@ -5355,23 +5355,6 @@
         "conditional": false,
         "condition": {}
       },
-      "is_cross_tenancy_peering": {
-        "provider": "oci",
-        "key": "isCrossTenancyPeering",
-        "name": "is_cross_tenancy_peering",
-        "type": "bool",
-        "subtype": "",
-        "required": false,
-        "label": "Is Cross Tenancy Peering",
-        "id": "is_cross_tenancy_peering",
-        "staticLookup": false,
-        "cacheLookup": false,
-        "lookup": false,
-        "lookupResource": "",
-        "lookupResourceElement": "",
-        "conditional": false,
-        "condition": {}
-      },
       "peer_id": {
         "provider": "oci",
         "key": "peerId",
