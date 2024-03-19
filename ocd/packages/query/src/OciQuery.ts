@@ -12,9 +12,9 @@ import { OciCommonQuery } from './OciQueryCommon'
 import { OcdUtils } from '@ocd/core'
 
 export class OciQuery extends OciCommonQuery {
-    profile
-    provider
-    identityClient: identity.IdentityClient
+    // profile
+    // provider
+    // identityClient: identity.IdentityClient
     vcnClient: core.VirtualNetworkClient
     computeClient: core.ComputeClient
     blockstorageClient: core.BlockstorageClient
@@ -30,23 +30,23 @@ export class OciQuery extends OciCommonQuery {
     loadbalancerClient: loadbalancer.LoadBalancerClient
     networkLoadbalancerClient: networkloadbalancer.NetworkLoadBalancerClient
     nosqlClient: nosql.NosqlClient
-    clientConfiguration: common.ClientConfiguration
-    authenticationConfiguration: common.AuthParams
+    // clientConfiguration: common.ClientConfiguration
+    // authenticationConfiguration: common.AuthParams
 
     constructor(profile: string='DEFAULT', region?: string) {
-        super()
-        this.profile = profile
-        this.provider = new common.ConfigFileAuthenticationDetailsProvider(undefined, profile)
+        super(profile, region)
+        // this.profile = profile
+        // this.provider = new common.ConfigFileAuthenticationDetailsProvider(undefined, profile)
         console.debug('OciQuery: Region', region)
-        if (region) this.provider.setRegion(region)
-        // Define Retry Configuration
-        const retryConfiguration: common.RetryConfiguration = {
-            // terminationStrategy : new common.MaxAttemptsTerminationStrategy(10)
-        }
-        this.clientConfiguration = { retryConfiguration: retryConfiguration }
-        this.authenticationConfiguration = { authenticationDetailsProvider: this.provider }
+        // if (region) this.provider.setRegion(region)
+        // // Define Retry Configuration
+        // const retryConfiguration: common.RetryConfiguration = {
+        //     // terminationStrategy : new common.MaxAttemptsTerminationStrategy(10)
+        // }
+        // this.clientConfiguration = { retryConfiguration: retryConfiguration }
+        // this.authenticationConfiguration = { authenticationDetailsProvider: this.provider }
         // Initialise All Clients
-        this.identityClient = new identity.IdentityClient(this.authenticationConfiguration, this.clientConfiguration)
+        // this.identityClient = new identity.IdentityClient(this.authenticationConfiguration, this.clientConfiguration)
         this.vcnClient = new core.VirtualNetworkClient(this.authenticationConfiguration, this.clientConfiguration)
         this.computeClient = new core.ComputeClient(this.authenticationConfiguration, this.clientConfiguration)
         this.blockstorageClient = new core.BlockstorageClient(this.authenticationConfiguration, this.clientConfiguration)
@@ -66,14 +66,14 @@ export class OciQuery extends OciCommonQuery {
 
     newDesign = () => OcdDesign.newDesign()
 
-    regionNameToDisplayName = (name: string) => {
-        const nameParts = name.split('-')
-        const region = nameParts[0].toUpperCase()
-        const city = `${nameParts[1].charAt(0).toUpperCase()}${nameParts[1].substring(1).toLowerCase()}`
-        // const displayName = `${region} ${city}`
-        const displayName = nameParts.slice(0, -1).map((p) => OcdUtils.capitaliseFirstCharacter(p)).join(' ')
-        return displayName
-    }
+    // regionNameToDisplayName = (name: string) => {
+    //     const nameParts = name.split('-')
+    //     const region = nameParts[0].toUpperCase()
+    //     const city = `${nameParts[1].charAt(0).toUpperCase()}${nameParts[1].substring(1).toLowerCase()}`
+    //     // const displayName = `${region} ${city}`
+    //     const displayName = nameParts.slice(0, -1).map((p) => OcdUtils.capitaliseFirstCharacter(p)).join(' ')
+    //     return displayName
+    // }
 
     // Top Level functions to drive the query
 
@@ -323,40 +323,40 @@ export class OciQuery extends OciCommonQuery {
         })
     }
 
-    getCompartments(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: identity.requests.GetCompartmentRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.identityClient.getCompartment(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: getCompartments: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').map((r) => {return {...r.value.compartment, displayName: r.value.compartment.name}})
-                // console.debug('OciQuery: getCompartments: Resources', resources)
-                resolve(resources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
-        })
-    }
+    // getCompartments(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+    //     return new Promise((resolve, reject) => {
+    //         const requests: identity.requests.GetCompartmentRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
+    //         const queries = requests.map((r) => this.identityClient.getCompartment(r))
+    //         Promise.allSettled(queries).then((results) => {
+    //             console.debug('OciQuery: getCompartments: All Settled')
+    //             //@ts-ignore
+    //             const resources = results.filter((r) => r.status === 'fulfilled').map((r) => {return {...r.value.compartment, displayName: r.value.compartment.name}})
+    //             // console.debug('OciQuery: getCompartments: Resources', resources)
+    //             resolve(resources)
+    //         }).catch((reason) => {
+    //             console.error(reason)
+    //             reject(reason)
+    //         })
+    //     })
+    // }
 
-    listAllRegions(): Promise<any> {
-        return new Promise((resolve, reject) => {
-            // if (!this.identityClient) this.identityClient = new identity.IdentityClient({ authenticationDetailsProvider: this.provider })
-            const listRegionsRequest: identity.requests.ListRegionsRequest = {}
-            const regionsQuery = this.identityClient.listRegions(listRegionsRequest)
-            Promise.allSettled([regionsQuery]).then((results) => {
-                // @ts-ignore 
-                const sorter = (a, b) => a.displayName.localeCompare(b.displayName)
-                if (results[0].status === 'fulfilled') {
-                    const resources = results[0].value.items.map((r) => {return {id: r.name, displayName: this.regionNameToDisplayName(r.name as string), ...r}}).sort(sorter).reverse()
-                    resolve(resources)
-                } else {
-                    reject('Regions Query Failed')
-                }
-            })
-        })
-    }
+    // listAllRegions(): Promise<any> {
+    //     return new Promise((resolve, reject) => {
+    //         // if (!this.identityClient) this.identityClient = new identity.IdentityClient({ authenticationDetailsProvider: this.provider })
+    //         const listRegionsRequest: identity.requests.ListRegionsRequest = {}
+    //         const regionsQuery = this.identityClient.listRegions(listRegionsRequest)
+    //         Promise.allSettled([regionsQuery]).then((results) => {
+    //             // @ts-ignore 
+    //             const sorter = (a, b) => a.displayName.localeCompare(b.displayName)
+    //             if (results[0].status === 'fulfilled') {
+    //                 const resources = results[0].value.items.map((r) => {return {id: r.name, displayName: this.regionNameToDisplayName(r.name as string), ...r}}).sort(sorter).reverse()
+    //                 resolve(resources)
+    //             } else {
+    //                 reject('Regions Query Failed')
+    //             }
+    //         })
+    //     })
+    // }
 
     listRegions(): Promise<any> {
         return new Promise((resolve, reject) => {
@@ -376,24 +376,24 @@ export class OciQuery extends OciCommonQuery {
         })
     }
 
-    listTenancyCompartments(): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const listCompartmentsReq: identity.requests.ListCompartmentsRequest = {compartmentId: this.provider.getTenantId(), compartmentIdInSubtree: true, limit: 10000}
-            const compartmentResponseIterator = this.identityClient.listCompartmentsResponseIterator(listCompartmentsReq)
-            const compartmentQuery = this.getAllResponseData(compartmentResponseIterator)
-            const getTenancy = this.getCompartments([this.provider.getTenantId()])
-            Promise.allSettled([getTenancy, compartmentQuery]).then((results) => {
-                console.debug('OciQuery: listTenancyCompartments: All Settled')
-                if (results[0].status === 'fulfilled' && results[1].status === 'fulfilled') {
-                    results[0].value[0].compartmentId = ''
-                    const resources = [...results[0].value, ...results[1].value].map((c) => {return {...c, root: c.compartmentId === ''}})
-                    resolve(resources)
-                } else {
-                    reject('All Compartments Query Failed')
-                }
-            })
-        })
-    }
+    // listTenancyCompartments(): Promise<any> {
+    //     return new Promise((resolve, reject) => {
+    //         const listCompartmentsReq: identity.requests.ListCompartmentsRequest = {compartmentId: this.provider.getTenantId(), compartmentIdInSubtree: true, limit: 10000}
+    //         const compartmentResponseIterator = this.identityClient.listCompartmentsResponseIterator(listCompartmentsReq)
+    //         const compartmentQuery = this.getAllResponseData(compartmentResponseIterator)
+    //         const getTenancy = this.getCompartments([this.provider.getTenantId()])
+    //         Promise.allSettled([getTenancy, compartmentQuery]).then((results) => {
+    //             console.debug('OciQuery: listTenancyCompartments: All Settled')
+    //             if (results[0].status === 'fulfilled' && results[1].status === 'fulfilled') {
+    //                 results[0].value[0].compartmentId = ''
+    //                 const resources = [...results[0].value, ...results[1].value].map((c) => {return {...c, root: c.compartmentId === ''}})
+    //                 resolve(resources)
+    //             } else {
+    //                 reject('All Compartments Query Failed')
+    //             }
+    //         })
+    //     })
+    // }
 
     // List Function to retrieve most information
 

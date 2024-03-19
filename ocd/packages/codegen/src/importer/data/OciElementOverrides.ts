@@ -112,6 +112,9 @@ export const elementOverrides: OcdElementOverrides = {
             "shape": "shapes",
             "source_details.source_id": "images"
         },
+        "oci_core_remote_peering_connection": {
+            "peer_region_name": "regions"
+        },
         "oci_core_service_gateway": {
             "services.service_id": "serviceGatewayServices"
         },
@@ -183,6 +186,9 @@ export const elementOverrides: OcdElementOverrides = {
         "oci_core_instance": {
             "assign_public_ip": ["bool"],
             "boot_volume_size_in_gbs": ["number"]
+        },
+        "oci_core_remote_peering_connection": {
+            "peer_id": ["string"]
         },
         "oci_core_volume": {
             "size_in_gbs": ["number"],
