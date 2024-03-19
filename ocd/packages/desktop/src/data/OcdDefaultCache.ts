@@ -10607,18 +10607,6 @@ export const defaultCache: OcdCache = {
                 ],
                 "autonomousDbVersions": [
                     {
-                        "dbWorkload": "AJD",
-                        "details": "www.oracle.com/ajd",
-                        "isDedicated": false,
-                        "isDefaultForFree": true,
-                        "isDefaultForPaid": true,
-                        "isFreeTierEnabled": true,
-                        "isPaidEnabled": true,
-                        "version": "19c",
-                        "id": "19c",
-                        "displayName": "19c"
-                    },
-                    {
                         "dbWorkload": "OLTP",
                         "details": "www.oracle.com/atp",
                         "isDedicated": false,
@@ -10655,8 +10643,32 @@ export const defaultCache: OcdCache = {
                         "displayName": "19c"
                     },
                     {
+                        "dbWorkload": "AJD",
+                        "details": "www.oracle.com/ajd",
+                        "isDedicated": false,
+                        "isDefaultForFree": true,
+                        "isDefaultForPaid": true,
+                        "isFreeTierEnabled": true,
+                        "isPaidEnabled": true,
+                        "version": "19c",
+                        "id": "19c",
+                        "displayName": "19c"
+                    },
+                    {
                         "dbWorkload": "APEX",
                         "details": "www.oracle.com/apex",
+                        "isDedicated": false,
+                        "isDefaultForFree": false,
+                        "isDefaultForPaid": false,
+                        "isFreeTierEnabled": true,
+                        "isPaidEnabled": false,
+                        "version": "21c",
+                        "id": "21c",
+                        "displayName": "21c"
+                    },
+                    {
+                        "dbWorkload": "AJD",
+                        "details": "www.oracle.com/ajd",
                         "isDedicated": false,
                         "isDefaultForFree": false,
                         "isDefaultForPaid": false,
@@ -10681,18 +10693,6 @@ export const defaultCache: OcdCache = {
                     {
                         "dbWorkload": "OLTP",
                         "details": null,
-                        "isDedicated": false,
-                        "isDefaultForFree": false,
-                        "isDefaultForPaid": false,
-                        "isFreeTierEnabled": true,
-                        "isPaidEnabled": false,
-                        "version": "21c",
-                        "id": "21c",
-                        "displayName": "21c"
-                    },
-                    {
-                        "dbWorkload": "AJD",
-                        "details": "www.oracle.com/ajd",
                         "isDedicated": false,
                         "isDefaultForFree": false,
                         "isDefaultForPaid": false,

@@ -5382,10 +5382,10 @@
         "label": "Peer Region Name",
         "id": "peer_region_name",
         "staticLookup": false,
-        "cacheLookup": false,
+        "cacheLookup": true,
         "lookup": false,
-        "lookupResource": "",
-        "lookupResourceElement": "",
+        "lookupResource": "regions",
+        "lookupResourceElement": "regions",
         "conditional": false,
         "condition": {}
       },

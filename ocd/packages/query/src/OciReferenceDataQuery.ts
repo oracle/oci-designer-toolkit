@@ -10,11 +10,11 @@ import { OcdUtils } from "@ocd/core"
 import { OciCommonQuery } from './OciQueryCommon'
 
 export class OciReferenceDataQuery extends OciCommonQuery {
-    profile: string
-    provider: common.ConfigFileAuthenticationDetailsProvider
-    clientConfiguration: common.ClientConfiguration
-    authenticationConfiguration: common.AuthParams
-    ociQuery: OciQuery
+    // profile: string
+    // provider: common.ConfigFileAuthenticationDetailsProvider
+    // clientConfiguration: common.ClientConfiguration
+    // authenticationConfiguration: common.AuthParams
+    // ociQuery: OciQuery
     // Clients
     blockstorageClient: core.BlockstorageClient
     computeClient: core.ComputeClient
@@ -26,18 +26,18 @@ export class OciReferenceDataQuery extends OciCommonQuery {
     mysqlClient: mysql.MysqlaasClient
     vcnClient: core.VirtualNetworkClient
     constructor(profile: string='DEFAULT', region?: string) {
-        super()
-        this.profile = profile
-        this.provider = new common.ConfigFileAuthenticationDetailsProvider(undefined, profile)
-        this.ociQuery = new OciQuery(profile, region)
+        super(profile, region)
+        // this.profile = profile
+        // this.provider = new common.ConfigFileAuthenticationDetailsProvider(undefined, profile)
+        // this.ociQuery = new OciQuery(profile, region)
         console.debug('OciReferenceDataQuery: Region', region)
-        if (region) this.provider.setRegion(region)
-        // Define Retry Configuration
-        const retryConfiguration: common.RetryConfiguration = {
-            // terminationStrategy : new common.MaxAttemptsTerminationStrategy(10)
-        }
-        this.clientConfiguration = { retryConfiguration: retryConfiguration }
-        this.authenticationConfiguration = { authenticationDetailsProvider: this.provider }
+        // if (region) this.provider.setRegion(region)
+        // // Define Retry Configuration
+        // const retryConfiguration: common.RetryConfiguration = {
+        //     // terminationStrategy : new common.MaxAttemptsTerminationStrategy(10)
+        // }
+        // this.clientConfiguration = { retryConfiguration: retryConfiguration }
+        // this.authenticationConfiguration = { authenticationDetailsProvider: this.provider }
         // Initialise All Clients
         // this.identityClient = new identity.IdentityClient(this.authenticationConfiguration, this.clientConfiguration)
         this.blockstorageClient = new core.BlockstorageClient(this.authenticationConfiguration, this.clientConfiguration)
@@ -55,7 +55,8 @@ export class OciReferenceDataQuery extends OciCommonQuery {
         console.debug('OciReferenceDataQuery: query')
         return new Promise((resolve, reject) => {
             const referenceData: Record<string, any[]> = {}
-            this.ociQuery.listTenancyCompartments().then((compartments) => {
+            // this.ociQuery.listTenancyCompartments().then((compartments) => {
+            this.listTenancyCompartments().then((compartments) => {
                 console.debug('OciReferenceDataQuery: Query: Compartments')
                 const compartmentIds = compartments.map((c: OciResource) => c.id)
                 const tenancyId = [this.provider.getTenantId()]
