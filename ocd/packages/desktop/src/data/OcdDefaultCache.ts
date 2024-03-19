@@ -18,6 +18,230 @@ export const defaultCache: OcdCache = {
     dropdownData: {
         shipped: {
             all: {
+                "regions": [
+                    {
+                        "id": "us-sanjose-1",
+                        "displayName": "US Sanjose",
+                        "key": "SJC",
+                        "name": "us-sanjose-1"
+                    },
+                    {
+                        "id": "us-phoenix-1",
+                        "displayName": "US Phoenix",
+                        "key": "PHX",
+                        "name": "us-phoenix-1"
+                    },
+                    {
+                        "id": "us-chicago-1",
+                        "displayName": "US Chicago",
+                        "key": "ORD",
+                        "name": "us-chicago-1"
+                    },
+                    {
+                        "id": "us-ashburn-1",
+                        "displayName": "US Ashburn",
+                        "key": "IAD",
+                        "name": "us-ashburn-1"
+                    },
+                    {
+                        "id": "uk-london-1",
+                        "displayName": "UK London",
+                        "key": "LHR",
+                        "name": "uk-london-1"
+                    },
+                    {
+                        "id": "uk-cardiff-1",
+                        "displayName": "UK Cardiff",
+                        "key": "CWL",
+                        "name": "uk-cardiff-1"
+                    },
+                    {
+                        "id": "sa-vinhedo-1",
+                        "displayName": "SA Vinhedo",
+                        "key": "VCP",
+                        "name": "sa-vinhedo-1"
+                    },
+                    {
+                        "id": "sa-valparaiso-1",
+                        "displayName": "SA Valparaiso",
+                        "key": "VAP",
+                        "name": "sa-valparaiso-1"
+                    },
+                    {
+                        "id": "sa-saopaulo-1",
+                        "displayName": "SA Saopaulo",
+                        "key": "GRU",
+                        "name": "sa-saopaulo-1"
+                    },
+                    {
+                        "id": "sa-santiago-1",
+                        "displayName": "SA Santiago",
+                        "key": "SCL",
+                        "name": "sa-santiago-1"
+                    },
+                    {
+                        "id": "sa-bogota-1",
+                        "displayName": "SA Bogota",
+                        "key": "BOG",
+                        "name": "sa-bogota-1"
+                    },
+                    {
+                        "id": "mx-queretaro-1",
+                        "displayName": "MX Queretaro",
+                        "key": "QRO",
+                        "name": "mx-queretaro-1"
+                    },
+                    {
+                        "id": "mx-monterrey-1",
+                        "displayName": "MX Monterrey",
+                        "key": "MTY",
+                        "name": "mx-monterrey-1"
+                    },
+                    {
+                        "id": "me-jeddah-1",
+                        "displayName": "ME Jeddah",
+                        "key": "JED",
+                        "name": "me-jeddah-1"
+                    },
+                    {
+                        "id": "me-dubai-1",
+                        "displayName": "ME Dubai",
+                        "key": "DXB",
+                        "name": "me-dubai-1"
+                    },
+                    {
+                        "id": "me-abudhabi-1",
+                        "displayName": "ME Abudhabi",
+                        "key": "AUH",
+                        "name": "me-abudhabi-1"
+                    },
+                    {
+                        "id": "il-jerusalem-1",
+                        "displayName": "IL Jerusalem",
+                        "key": "MTZ",
+                        "name": "il-jerusalem-1"
+                    },
+                    {
+                        "id": "eu-zurich-1",
+                        "displayName": "EU Zurich",
+                        "key": "ZRH",
+                        "name": "eu-zurich-1"
+                    },
+                    {
+                        "id": "eu-stockholm-1",
+                        "displayName": "EU Stockholm",
+                        "key": "ARN",
+                        "name": "eu-stockholm-1"
+                    },
+                    {
+                        "id": "eu-paris-1",
+                        "displayName": "EU Paris",
+                        "key": "CDG",
+                        "name": "eu-paris-1"
+                    },
+                    {
+                        "id": "eu-milan-1",
+                        "displayName": "EU Milan",
+                        "key": "LIN",
+                        "name": "eu-milan-1"
+                    },
+                    {
+                        "id": "eu-marseille-1",
+                        "displayName": "EU Marseille",
+                        "key": "MRS",
+                        "name": "eu-marseille-1"
+                    },
+                    {
+                        "id": "eu-madrid-1",
+                        "displayName": "EU Madrid",
+                        "key": "MAD",
+                        "name": "eu-madrid-1"
+                    },
+                    {
+                        "id": "eu-frankfurt-1",
+                        "displayName": "EU Frankfurt",
+                        "key": "FRA",
+                        "name": "eu-frankfurt-1"
+                    },
+                    {
+                        "id": "eu-amsterdam-1",
+                        "displayName": "EU Amsterdam",
+                        "key": "AMS",
+                        "name": "eu-amsterdam-1"
+                    },
+                    {
+                        "id": "ca-toronto-1",
+                        "displayName": "CA Toronto",
+                        "key": "YYZ",
+                        "name": "ca-toronto-1"
+                    },
+                    {
+                        "id": "ca-montreal-1",
+                        "displayName": "CA Montreal",
+                        "key": "YUL",
+                        "name": "ca-montreal-1"
+                    },
+                    {
+                        "id": "ap-tokyo-1",
+                        "displayName": "AP Tokyo",
+                        "key": "NRT",
+                        "name": "ap-tokyo-1"
+                    },
+                    {
+                        "id": "ap-sydney-1",
+                        "displayName": "AP Sydney",
+                        "key": "SYD",
+                        "name": "ap-sydney-1"
+                    },
+                    {
+                        "id": "ap-singapore-1",
+                        "displayName": "AP Singapore",
+                        "key": "SIN",
+                        "name": "ap-singapore-1"
+                    },
+                    {
+                        "id": "ap-seoul-1",
+                        "displayName": "AP Seoul",
+                        "key": "ICN",
+                        "name": "ap-seoul-1"
+                    },
+                    {
+                        "id": "ap-osaka-1",
+                        "displayName": "AP Osaka",
+                        "key": "KIX",
+                        "name": "ap-osaka-1"
+                    },
+                    {
+                        "id": "ap-mumbai-1",
+                        "displayName": "AP Mumbai",
+                        "key": "BOM",
+                        "name": "ap-mumbai-1"
+                    },
+                    {
+                        "id": "ap-melbourne-1",
+                        "displayName": "AP Melbourne",
+                        "key": "MEL",
+                        "name": "ap-melbourne-1"
+                    },
+                    {
+                        "id": "ap-hyderabad-1",
+                        "displayName": "AP Hyderabad",
+                        "key": "HYD",
+                        "name": "ap-hyderabad-1"
+                    },
+                    {
+                        "id": "ap-chuncheon-1",
+                        "displayName": "AP Chuncheon",
+                        "key": "YNY",
+                        "name": "ap-chuncheon-1"
+                    },
+                    {
+                        "id": "af-johannesburg-1",
+                        "displayName": "AF Johannesburg",
+                        "key": "JNB",
+                        "name": "af-johannesburg-1"
+                    }
+                ],
                 "shapes": [
                     {
                         "id": "BM.DenseIO.E4.128",
@@ -10607,6 +10831,18 @@ export const defaultCache: OcdCache = {
                 ],
                 "autonomousDbVersions": [
                     {
+                        "dbWorkload": "AJD",
+                        "details": "www.oracle.com/ajd",
+                        "isDedicated": false,
+                        "isDefaultForFree": true,
+                        "isDefaultForPaid": true,
+                        "isFreeTierEnabled": true,
+                        "isPaidEnabled": true,
+                        "version": "19c",
+                        "id": "19c",
+                        "displayName": "19c"
+                    },
+                    {
                         "dbWorkload": "OLTP",
                         "details": "www.oracle.com/atp",
                         "isDedicated": false,
@@ -10643,32 +10879,8 @@ export const defaultCache: OcdCache = {
                         "displayName": "19c"
                     },
                     {
-                        "dbWorkload": "AJD",
-                        "details": "www.oracle.com/ajd",
-                        "isDedicated": false,
-                        "isDefaultForFree": true,
-                        "isDefaultForPaid": true,
-                        "isFreeTierEnabled": true,
-                        "isPaidEnabled": true,
-                        "version": "19c",
-                        "id": "19c",
-                        "displayName": "19c"
-                    },
-                    {
                         "dbWorkload": "APEX",
                         "details": "www.oracle.com/apex",
-                        "isDedicated": false,
-                        "isDefaultForFree": false,
-                        "isDefaultForPaid": false,
-                        "isFreeTierEnabled": true,
-                        "isPaidEnabled": false,
-                        "version": "21c",
-                        "id": "21c",
-                        "displayName": "21c"
-                    },
-                    {
-                        "dbWorkload": "AJD",
-                        "details": "www.oracle.com/ajd",
                         "isDedicated": false,
                         "isDefaultForFree": false,
                         "isDefaultForPaid": false,
@@ -10693,6 +10905,18 @@ export const defaultCache: OcdCache = {
                     {
                         "dbWorkload": "OLTP",
                         "details": null,
+                        "isDedicated": false,
+                        "isDefaultForFree": false,
+                        "isDefaultForPaid": false,
+                        "isFreeTierEnabled": true,
+                        "isPaidEnabled": false,
+                        "version": "21c",
+                        "id": "21c",
+                        "displayName": "21c"
+                    },
+                    {
+                        "dbWorkload": "AJD",
+                        "details": "www.oracle.com/ajd",
                         "isDedicated": false,
                         "isDefaultForFree": false,
                         "isDefaultForPaid": false,
