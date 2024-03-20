@@ -35,7 +35,8 @@ export const ignoreElements: OcdIgnoreElements = {
         "redundancy_status"
     ],
     "oci_core_drg_attachment": [
-        "remove_export_drg_route_distribution_trigger"
+        "remove_export_drg_route_distribution_trigger",
+        "vcn_id"
     ],
     "oci_core_instance": [
         "assign_private_dns_record",
