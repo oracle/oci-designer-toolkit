@@ -17,6 +17,8 @@ export const ignoreElements: OcdIgnoreElements = {
         "time_created",
         "timeouts"
     ],
+    "oci_analytics_analytics_instance":[
+    ],
     "oci_containerengine_cluster": [
         "endpoints",
         "metadata"
@@ -24,6 +26,8 @@ export const ignoreElements: OcdIgnoreElements = {
     "oci_containerengine_node_pool": [
         "node_source",
         "nodes"
+    ],
+    "oci_core_boot_volume": [
     ],
     "oci_core_boot_volume_attachments": [
         "boot_volume_attachments",
@@ -39,18 +43,18 @@ export const ignoreElements: OcdIgnoreElements = {
         "vcn_id"
     ],
     "oci_core_instance": [
-        "assign_private_dns_record",
         "async",
         "availability_config",
-        "baseline_ocpu_utilization",
         "boot_volume_id",
-        "boot_volume_vpus_per_gb",
         "capacity_reservation_id",
         "compute_cluster_id",
+        "create_vnic_details.assign_private_dns_record",
+        "create_vnic_details.private_ip",
+        "create_vnic_details.vlan_id",
         "dedicated_vm_host_id",
         "extended_metadata",
-        "gpu_description",
-        "gpus",
+        "shape_config.gpu_description",
+        "shape_config.gpus",
         "instance_configuration_id",
         "instance_options",
         "instance_source_image_filter_details",
@@ -58,26 +62,30 @@ export const ignoreElements: OcdIgnoreElements = {
         "is_cross_numa_node",
         "launch_mode",
         "launch_options",
-        "local_disk_description",
-        "local_disks",
-        "local_disks_total_size_in_gbs",
-        "max_vnic_attachments",
-        "networking_bandwidth_in_gbps",
-        "nvmes",
         "platform_config",
         "plugins_config",
         "preemptible_instance_config",
         "preserve_boot_volume",
-        "private_ip",
-        "processor_description",
         "public_ip",
+        "shape_config.baseline_ocpu_utilization",
+        "shape_config.processor_description",
+        "shape_config.local_disk_description",
+        "shape_config.local_disks",
+        "shape_config.local_disks_total_size_in_gbs",
+        "shape_config.max_vnic_attachments",
+        "shape_config.networking_bandwidth_in_gbps",
+        "shape_config.nvmes",
+        "shape_config.vcpus",
+        "source_details.boot_volume_vpus_per_gb",
         "time_maintenance_reboot_due",
-        "update_operation_constraint",
-        "vcpus",
-        "vlan_id"
+        "update_operation_constraint"
     ],
     "oci_core_internet_gateway": [
         "route_table_id"
+    ],
+    "oci_core_ipsec": [
+        "cpe_local_identifier",
+        "cpe_local_identifier_type"
     ],
     "oci_core_local_peering_gateway": [
         "is_cross_tenancy_peering",
@@ -99,11 +107,11 @@ export const ignoreElements: OcdIgnoreElements = {
         "peering_status"
     ],
     "oci_core_route_table": [
-        "route_type"
+        "route_rules.route_type"
     ],
     "oci_core_service_gateway": [
         "block_traffic",
-        "service_name"
+        "services.service_name"
     ],
     "oci_core_subnet": [
         "ipv6virtual_router_ip",
@@ -235,7 +243,13 @@ export const ignoreElements: OcdIgnoreElements = {
         "scheduled_operations"
     ],
     "oci_database_db_system": [
-        "connection_strings",
+        "db_home.database.connection_strings",
+        "db_home.database.lifecycle_details",
+        "db_home.database.state",
+        "db_home.database.time_created",
+        "db_home.lifecycle_details",
+        "db_home.state",
+        "db_home.time_created",
         "iorm_config_cache",
         "maintenance_window"
     ],
@@ -300,7 +314,8 @@ export const ignoreElements: OcdIgnoreElements = {
         "point_in_time_recovery_details"
     ],
     "oci_network_load_balancer_network_load_balancer": [
-        "ip_addresses"
+        "ip_addresses",
+        "reserved_ips"
     ],
     "oci_network_load_balancer_backend": [
     ],
@@ -312,13 +327,14 @@ export const ignoreElements: OcdIgnoreElements = {
     ],
     "oci_objectstorage_bucket": [
         "etag",
-        "object_lifecycle_policy_etag"
+        "object_lifecycle_policy_etag",
+        "retention_rules.time_created"
     ],
     "oci_vault_secret": [
         "current_version_number",
         "metadata",
+        "secret_content.stage",
         "secret_rules",
-        "stage",
         "time_of_current_version_expiry",
         "time_of_deletion"
     ],

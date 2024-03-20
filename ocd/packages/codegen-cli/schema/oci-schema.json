@@ -382,6 +382,23 @@
             "conditional": false,
             "condition": {},
             "attributes": {
+              "id": {
+                "provider": "oci",
+                "key": "id",
+                "name": "id",
+                "type": "string",
+                "subtype": "",
+                "required": false,
+                "label": "Id",
+                "id": "network_endpoint_details.whitelisted_vcns.id",
+                "staticLookup": false,
+                "cacheLookup": false,
+                "lookup": false,
+                "lookupResource": "",
+                "lookupResourceElement": "",
+                "conditional": false,
+                "condition": {}
+              },
               "whitelisted_ips": {
                 "provider": "oci",
                 "key": "whitelistedIps",
@@ -2435,6 +2452,23 @@
         "conditional": false,
         "condition": {},
         "attributes": {
+          "id": {
+            "provider": "oci",
+            "key": "id",
+            "name": "id",
+            "type": "string",
+            "subtype": "",
+            "required": true,
+            "label": "Id",
+            "id": "source_details.id",
+            "staticLookup": false,
+            "cacheLookup": false,
+            "lookup": false,
+            "lookupResource": "",
+            "lookupResourceElement": "",
+            "conditional": false,
+            "condition": {}
+          },
           "type": {
             "provider": "oci",
             "key": "type",
@@ -3009,23 +3043,6 @@
         "conditional": false,
         "condition": {}
       },
-      "vcn_id": {
-        "provider": "oci",
-        "key": "vcnId",
-        "name": "vcn_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Vcn",
-        "id": "vcn_id",
-        "staticLookup": false,
-        "cacheLookup": false,
-        "lookup": true,
-        "lookupResource": "vcn",
-        "lookupResourceElement": "id",
-        "conditional": false,
-        "condition": {}
-      },
       "network_details": {
         "provider": "oci",
         "key": "networkDetails",
@@ -3038,6 +3055,23 @@
         "conditional": false,
         "condition": {},
         "attributes": {
+          "id": {
+            "provider": "oci",
+            "key": "id",
+            "name": "id",
+            "type": "string",
+            "subtype": "",
+            "required": true,
+            "label": "Id",
+            "id": "network_details.id",
+            "staticLookup": false,
+            "cacheLookup": false,
+            "lookup": false,
+            "lookupResource": "",
+            "lookupResourceElement": "",
+            "conditional": false,
+            "condition": {}
+          },
           "ipsec_connection_id": {
             "provider": "oci",
             "key": "ipsecConnectionId",
@@ -3822,6 +3856,23 @@
           }
         }
       },
+      "private_ip": {
+        "provider": "oci",
+        "key": "privateIp",
+        "name": "private_ip",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Private Ip",
+        "id": "private_ip",
+        "staticLookup": false,
+        "cacheLookup": false,
+        "lookup": false,
+        "lookupResource": "",
+        "lookupResourceElement": "",
+        "conditional": false,
+        "condition": {}
+      },
       "region": {
         "provider": "oci",
         "key": "region",
@@ -4361,40 +4412,6 @@
         "conditional": false,
         "condition": {}
       },
-      "cpe_local_identifier": {
-        "provider": "oci",
-        "key": "cpeLocalIdentifier",
-        "name": "cpe_local_identifier",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Cpe Local Identifier",
-        "id": "cpe_local_identifier",
-        "staticLookup": false,
-        "cacheLookup": false,
-        "lookup": false,
-        "lookupResource": "",
-        "lookupResourceElement": "",
-        "conditional": false,
-        "condition": {}
-      },
-      "cpe_local_identifier_type": {
-        "provider": "oci",
-        "key": "cpeLocalIdentifierType",
-        "name": "cpe_local_identifier_type",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Cpe Local Identifier Type",
-        "id": "cpe_local_identifier_type",
-        "staticLookup": false,
-        "cacheLookup": false,
-        "lookup": false,
-        "lookupResource": "",
-        "lookupResourceElement": "",
-        "conditional": false,
-        "condition": {}
-      },
       "defined_tags": {
         "provider": "oci",
         "key": "definedTags",
@@ -4478,7 +4495,8 @@
         "lookupResource": "",
         "lookupResourceElement": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "['0.0.0.0/0']"
       }
     }
   },
@@ -5557,11 +5575,11 @@
             "required": false,
             "label": "Destination Type",
             "id": "route_rules.destination_type",
-            "staticLookup": false,
+            "staticLookup": true,
             "cacheLookup": false,
-            "lookup": false,
-            "lookupResource": "",
-            "lookupResourceElement": "",
+            "lookup": true,
+            "lookupResource": "destination",
+            "lookupResourceElement": "id",
             "conditional": false,
             "condition": {}
           },
@@ -6721,7 +6739,7 @@
         "type": "bool",
         "subtype": "",
         "required": false,
-        "label": "Prohibit Public Ip On Vnic",
+        "label": "Private",
         "id": "prohibit_public_ip_on_vnic",
         "staticLookup": false,
         "cacheLookup": false,
@@ -9087,6 +9105,23 @@
             "conditional": false,
             "condition": {}
           },
+          "id": {
+            "provider": "oci",
+            "key": "id",
+            "name": "id",
+            "type": "string",
+            "subtype": "",
+            "required": false,
+            "label": "Id",
+            "id": "db_home.id",
+            "staticLookup": false,
+            "cacheLookup": false,
+            "lookup": false,
+            "lookupResource": "",
+            "lookupResourceElement": "",
+            "conditional": false,
+            "condition": {}
+          },
           "last_patch_history_entry_id": {
             "provider": "oci",
             "key": "lastPatchHistoryEntryId",
@@ -9312,6 +9347,23 @@
                 "required": false,
                 "label": "Freeform Tags",
                 "id": "db_home.database.freeform_tags",
+                "staticLookup": false,
+                "cacheLookup": false,
+                "lookup": false,
+                "lookupResource": "",
+                "lookupResourceElement": "",
+                "conditional": false,
+                "condition": {}
+              },
+              "id": {
+                "provider": "oci",
+                "key": "id",
+                "name": "id",
+                "type": "string",
+                "subtype": "",
+                "required": false,
+                "label": "Id",
+                "id": "db_home.database.id",
                 "staticLookup": false,
                 "cacheLookup": false,
                 "lookup": false,
@@ -9596,6 +9648,23 @@
                         "lookup": true,
                         "lookupResource": "dbrs_policy",
                         "lookupResourceElement": "id",
+                        "conditional": false,
+                        "condition": {}
+                      },
+                      "id": {
+                        "provider": "oci",
+                        "key": "id",
+                        "name": "id",
+                        "type": "string",
+                        "subtype": "",
+                        "required": false,
+                        "label": "Id",
+                        "id": "db_home.database.db_backup_config.backup_destination_details.id",
+                        "staticLookup": false,
+                        "cacheLookup": false,
+                        "lookup": false,
+                        "lookupResource": "",
+                        "lookupResourceElement": "",
                         "conditional": false,
                         "condition": {}
                       },
@@ -12794,19 +12863,6 @@
         "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
-      },
-      "reserved_ips": {
-        "provider": "oci",
-        "key": "reservedIps",
-        "name": "reserved_ips",
-        "type": "list",
-        "subtype": "",
-        "required": false,
-        "label": "Reserved Ips",
-        "id": "reserved_ips",
-        "conditional": false,
-        "condition": {},
-        "attributes": {}
       }
     }
   },

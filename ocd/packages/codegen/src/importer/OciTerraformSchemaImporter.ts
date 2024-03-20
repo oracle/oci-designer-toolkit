@@ -47,6 +47,8 @@ export class OciTerraformSchemaImporter extends OcdSchemaImporter {
         })
     }
 
+    genId = (k: string, hierarchy: string[]=[]) => [...hierarchy, k].join('.')
+
     getAttributes(key: string, block: TerrafomSchemaEntry, hierarchy=[]) {
         const ignore_block_types = ['timeouts']
         const ignore_attributes = ignoreElements[key] ? [...ignoreElements.common, ...ignoreElements[key]] : ignoreElements.common
@@ -58,8 +60,10 @@ export class OciTerraformSchemaImporter extends OcdSchemaImporter {
         // console.debug('OcdTerraformSchemaImporter: Resource', key, type_overrides)
         // Simple attributes
         // @ts-ignore
-        let attributes = block.attributes ? Object.entries(block.attributes).filter(([k, v]) => !ignore_attributes.includes(k) && !v.deprecated).reduce((r, [k, v]) => {
-            const id = [...hierarchy, k].join('.')
+        // let attributes = block.attributes ? Object.entries(block.attributes).filter(([k, v]) => !ignore_attributes.includes(k) && !v.deprecated).reduce((r, [k, v]) => {
+        let attributes = block.attributes ? Object.entries(block.attributes).filter(([k, v]) => !ignore_attributes.includes(this.genId(k, hierarchy)) && !v.deprecated).reduce((r, [k, v]) => {
+            // const id = [...hierarchy, k].join('.')
+            const id = this.genId(k, hierarchy)
             r[k] = {
                 provider: 'oci',
                 key: this.toCamelCase(k),
