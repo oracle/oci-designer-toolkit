@@ -19,6 +19,9 @@ export const elementOverrides: OcdElementOverrides = {
             "source_details.source_type": "image",
             "source_details.boot_volume_size_in_gbs": "50"
         },
+        "oci_core_ipsec": {
+            "static_routes": "['0.0.0.0/0']"
+        },
         "oci_core_volume": {
             "size_in_gbs": "50",
             "vpus_per_gb": "0"
@@ -72,6 +75,9 @@ export const elementOverrides: OcdElementOverrides = {
         },
         "oci_core_instance": {
             "boot_volume_size_in_gbs": "Boot Volume Size (Gbs)"
+        },
+        "oci_core_subnet": {
+            "prohibit_public_ip_on_vnic": "Private"
         },
         "oci_core_volume": {
             "vpus_per_gb": "VPUs/Gbs"
@@ -149,6 +155,9 @@ export const elementOverrides: OcdElementOverrides = {
             "direction",
             "protocol",
             "source_type"        
+        ],
+        "oci_core_route_table": [
+            "route_rules.destination_type"
         ],
         "oci_core_security_list": [
             "egress_security_rules.protocol",

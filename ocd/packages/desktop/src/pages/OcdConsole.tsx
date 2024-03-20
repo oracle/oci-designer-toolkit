@@ -112,7 +112,7 @@ const OcdConsole = (): JSX.Element => {
 
 const OcdConsoleTitleBar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument }: ConsolePageProps): JSX.Element => {
     const onChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-        ocdDocument.design.metadata.title = e.target.value.trim()
+        ocdDocument.design.metadata.title = e.target.value
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
     return (
