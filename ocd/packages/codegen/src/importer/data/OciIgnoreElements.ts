@@ -40,6 +40,7 @@ export const ignoreElements: OcdIgnoreElements = {
     ],
     "oci_core_drg_attachment": [
         "remove_export_drg_route_distribution_trigger",
+        "network_details.ipsec_connection_id",
         "vcn_id"
     ],
     "oci_core_instance": [
@@ -244,14 +245,20 @@ export const ignoreElements: OcdIgnoreElements = {
     ],
     "oci_database_db_system": [
         "db_home.database.connection_strings",
+        "db_home.database.db_backup_config",
         "db_home.database.lifecycle_details",
         "db_home.database.state",
         "db_home.database.time_created",
         "db_home.lifecycle_details",
         "db_home.state",
         "db_home.time_created",
+        "disk_redundancy",
         "iorm_config_cache",
-        "maintenance_window"
+        "kms_key_version_id",
+        "maintenance_window",
+        "maintenance_window_details",
+        "source",
+        "source_db_system_id"
     ],
     "oci_file_storage_file_system": [
         "is_clone_parent",

@@ -107,13 +107,13 @@ export const ${this.reactResourceGeneratedName(resource)} = ({ ocdDocument, setO
         // @ts-ignore
         if (typeof summaryTitle === 'function') setTitle(summaryTitle(resource, e.target.open))
     }
-    ${Object.entries(schema.attributes).filter(([k, v]) => !this.ignoreAttributes.includes(k) && this.objectTypes.includes(v.type)).map(([k, a]) => this.attributeToObjectUndefinedTest(resource, k, a)).join('\n    ')}
+    ${Object.entries(schema.attributes).filter(([k, v]) => !this.ignoreAttributes.includes(v.id) && this.objectTypes.includes(v.type)).map(([k, a]) => this.attributeToObjectUndefinedTest(resource, k, a)).join('\n    ')}
     return (
         <div>
             <details open={true} onToggle={onToggle}>
                 <summary className={className}><div>{title}</div><div className={deleteClassName} onClick={onDeleteClick}></div></summary>
                 <div className='ocd-resource-properties'>
-                    ${Object.entries(schema.attributes).filter(([k, v]) => !this.ignoreAttributes.includes(k)).map(([k, a]) => this.attributeToReactElement(resource, k, a)).join('\n                    ')}
+                    ${Object.entries(schema.attributes).filter(([k, v]) => !this.ignoreAttributes.includes(v.id)).map(([k, a]) => this.attributeToReactElement(resource, k, a)).join('\n                    ')}
                 </div>
             </details>
         </div>
@@ -265,13 +265,13 @@ export const ${this.reactSimpleName(attribute.name)} = ({ ocdDocument, setOcdDoc
     reactObjectElement = (resource, attribute) => {
         return `
 export const ${this.reactObjectName(attribute.name)} = ({ ocdDocument, setOcdDocument, resource, configs, rootResource, additionalElements = [] }: GeneratedResourceProperties): JSX.Element => {
-    ${Object.entries(attribute.attributes).filter(([k, v]) => !this.ignoreAttributes.includes(k) && this.objectTypes.includes(v.type)).map(([k, a]) => this.attributeToObjectUndefinedTest(resource, k, a)).join('\n    ')}
+    ${Object.entries(attribute.attributes).filter(([k, v]) => !this.ignoreAttributes.includes(v.id) && this.objectTypes.includes(v.type)).map(([k, a]) => this.attributeToObjectUndefinedTest(resource, k, a)).join('\n    ')}
     return (
         <div className='ocd-property-row ocd-object-property-row'>
             <details open={true}>
                 <summary className='summary-background'>${attribute.label}</summary>
                 <div className='ocd-resource-properties'>
-                    ${Object.entries(attribute.attributes).filter(([k, v]) => !this.ignoreAttributes.includes(k)).map(([k, a]) => this.attributeToReactElement(resource, k, a)).join('\n                    ')}
+                    ${Object.entries(attribute.attributes).filter(([k, v]) => !this.ignoreAttributes.includes(v.id)).map(([k, a]) => this.attributeToReactElement(resource, k, a)).join('\n                    ')}
                 </div>
             </details>
         </div>
@@ -296,7 +296,7 @@ export const ${this.reactObjectName(attribute.name)} = ({ ocdDocument, setOcdDoc
             <details open={true}>
                 <summary className='summary-background ocd-summary-row'><div>${objectLabel}</div><div className='delete-property action-button-background action-button-column action-button' onClick={onClick}></div></summary>
                 <div className='ocd-resource-properties'>
-                    ${Object.entries(attribute.attributes).filter(([k, v]) => !this.ignoreAttributes.includes(k)).map(([k, a]) => this.attributeToReactElement(resource, k, a)).join('\n                    ')}
+                    ${Object.entries(attribute.attributes).filter(([k, v]) => !this.ignoreAttributes.includes(v.id)).map(([k, a]) => this.attributeToReactElement(resource, k, a)).join('\n                    ')}
                 </div>
             </details>
         </div>

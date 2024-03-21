@@ -72,7 +72,7 @@ export namespace ${this.namespaceName(resource)} {
     export function validateResource(resource: Model.${this.interfaceName(resource)}, resources: OciResources): OcdValidationResult[] {
         const displayName = resource.displayName
         const results: OcdValidationResult[] = [
-            ${Object.entries(schema.attributes).filter(([k, v]) => !this.ignoreAttributes.includes(k)).map(([k, a]) => this.attributeToValidatorAssignment(resource, k, a)).join(',\n            ')}
+            ${Object.entries(schema.attributes).filter(([k, v]) => !this.ignoreAttributes.includes(v.id)).map(([k, a]) => this.attributeToValidatorAssignment(resource, k, a)).join(',\n            ')}
         ]
         return results
     }
@@ -148,11 +148,11 @@ export namespace ${this.namespaceName(resource)} {
     validatorObjectElement = (resource, attribute, level=0) => {
         // return `${this.validatorObjectName(attribute.name)} = (resource: Record<string, any>): string => {
         return `const ${this.validatorObjectName(attribute.name)} = (resource: OcdValidatorResource | undefined, resources: OciResources, displayName=''): OcdValidationResult[] => {
-            const results: OcdValidationResult[] = resource ?  [
-                        ${Object.entries(attribute.attributes).filter(([k, v]) => !this.ignoreAttributes.includes(k)).map(([k, a]) => this.attributeToValidatorAssignment(resource, k, a, level+1)).join(',\n                        ')}
-                ] : []
-            return results
-        }`
+        const results: OcdValidationResult[] = resource ?  [
+                    ${Object.entries(attribute.attributes).filter(([k, v]) => !this.ignoreAttributes.includes(v.id)).map(([k, a]) => this.attributeToValidatorAssignment(resource, k, a, level+1)).join(',\n                        ')}
+            ] : []
+        return results
+    }`
     }
 
     validatorObjectListElement = (resource, attribute, level=0) => {
