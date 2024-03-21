@@ -34,8 +34,10 @@ regularly.
 | Customer Premises Equipment    | &check;    | &check;   |            |            |
 | Database System                |            |           |            |            |
 | Service Gateway                | &check;    | &check;   |            |            |
-| DRG                            |            |           |            |            |
+| DRG                            | &check;    | &check;   |            |            |
 | DRG Attachment                 |            |           |            |            |
+| DRG Route Table                |            |           |            |            |
+| DRG Distribution               |            |           |            |            |
 | Local Peering                  | &check;    | &check;   |            |            |
 | IPSec VPN                      |            |           |            |            |
 | Remote Peering                 |            |           |            |            |

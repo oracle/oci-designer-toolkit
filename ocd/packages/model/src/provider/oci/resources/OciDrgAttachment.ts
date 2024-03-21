@@ -24,23 +24,23 @@ export namespace OciDrgAttachment {
     }
     export function allowedParentTypes(): string[] {
         // console.debug('OciDrgAttachment: Allowed Parent Types')
-        return ['Vcn']
+        return ['Drg']
     }
     export function getParentId(resource: OciDrgAttachment): string {
         // console.debug('OciDrgAttachment: Getting Parent Id to for', resource.displayName, resource.id)
-        return resource.vcnId ? resource.vcnId : ''
+        return resource.drgId ? resource.drgId : ''
     }
     export function setParentId(resource: OciDrgAttachment, parentId: string): OciDrgAttachment {
         // console.debug('OciDrgAttachment: Setting Parent Id to', parentId, 'for', resource.displayName, resource.id)
-        resource.vcnId = parentId
+        resource.drgId = parentId
         return resource
     }
     export function getConnectionIds(resource: OciDrgAttachment, allResources: OcdResources): string[] {
         // This List of Ids does not include the Parent Id or Compartment Id
         // console.debug('OciDrgAttachment: Getting Connection Ids to for', resource.displayName, resource.id)
         let associationIds: string[] = (resource.routeTableId && resource.routeTableId !== '') ? [resource.routeTableId] : []
-        if (resource.drgId && resource.drgId !== '') associationIds.push(resource.drgId)
-        if (resource.networkDetails?.ipsecConnectionId && resource.networkDetails?.ipsecConnectionId !== '') associationIds.push(resource.networkDetails?.ipsecConnectionId)
+        if (resource.vcnId && resource.vcnId !== '') associationIds.push(resource.vcnId)
+        if (resource.networkDetails?.id && resource.networkDetails?.id !== '') associationIds.push(resource.networkDetails?.id)
         return associationIds
     }
     
