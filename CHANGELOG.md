@@ -1,6 +1,13 @@
 # Release Notes
 
 
+## Version 0.59.0
+**Release Date**: 28th March 2024
+### Features
+1. Add Compute Cloud@Customer as deployment platform with associated resources.
+### Bug Fixes
+
+
 ## Version 0.58.0
 **Release Date**: 6th December 2023
 ### Features

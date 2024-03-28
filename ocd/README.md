@@ -50,6 +50,10 @@ regularly.
 | Mount Target                   |            |           |            |            |
 | OKE Cluser & Node Pool         |            |           |            |            |
 | Analytics Instance             |            |           |            |            |
+| Policy                         |            |           |            |            |
+| Dynamic Groups                 |            |           |            |            |
+| Groups                         |            |           |            |            |
+| Users                          |            |           |            |            |
 
 Not all menu options are currently available and if selected will display a message saying they are currently not availble,
 again these will be added over time.
