@@ -82,6 +82,7 @@ class OkitTabularJsonView extends OkitJsonView {
                 'Memory ({total} Gbs)': {property: 'memory_in_gbs', type: 'number', sum: true},
                 '{total} OCPUs': {property: 'ocpus', type: 'number', sum: true},
                 'Subnet': {property: 'subnet_id', lookup: 'model.getSubnet'},
+                'Public IP': {property: 'public_ip'},
                 'Block Volumes': {property: 'block_storage_volume_ids', lookup: 'model.getBlockStorageVolume'},
                 'Status': {property: 'lifecycle_state'},
                 'Fault Domain': {property: 'fault_domain'},

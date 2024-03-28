@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { OcdUtils } from '@ocd/core'
 import { OcdResource } from "../../OcdResource"
 import * as Resources from './resources'
+import { OcdResources } from '../../OcdDesign'
 
 export interface OciResource extends OcdResource {
     region: string
@@ -52,10 +53,10 @@ export namespace OciResource {
         const parentId = Resources[namespace].getParentId(resource)
         return parentId
     }
-    export function getAssociationIds(resource: OciResource): string[] {
+    export function getAssociationIds(resource: OciResource, allResources: OcdResources): string[] {
         const namespace = `Oci${resource.resourceType}`
         // @ts-ignore 
-        const associationIds = Resources[namespace].getConnectionIds(resource)
+        const associationIds = Resources[namespace].getConnectionIds(resource, allResources)
         return associationIds
     }
     export function assignParentIdOrig(child: OciResource, parent: OciResource) {

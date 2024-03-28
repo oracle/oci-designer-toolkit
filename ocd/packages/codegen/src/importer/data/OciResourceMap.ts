@@ -10,6 +10,8 @@ export const resourceMap: OcdResourceMap = {
     "oci_bastion_bastion": "bastion",
     "oci_containerengine_cluster": "oke_cluster",
     "oci_containerengine_node_pool": "oke_node_pool",
+    "oci_core_boot_volume": "boot_volume",
+    "oci_core_boot_volume_attachments": "boot_volume_attachment",
     "oci_core_cpe": "cpe",
     "oci_core_dhcp_options": "dhcp_options",
     "oci_core_drg": "drg",
@@ -24,6 +26,7 @@ export const resourceMap: OcdResourceMap = {
     "oci_core_local_peering_gateway": "local_peering_gateway",
     "oci_core_nat_gateway": "nat_gateway",
     "oci_core_network_security_group": "network_security_group",
+    "oci_core_network_security_group_security_rule": "network_security_group_security_rule",
     "oci_core_remote_peering_connection": "remote_peering_connection",
     "oci_core_route_table": "route_table",
     "oci_core_security_list": "security_list",
@@ -36,6 +39,8 @@ export const resourceMap: OcdResourceMap = {
     "oci_core_volume_attachment": "volume_attachment",
     "oci_database_autonomous_database": "autonomous_database",
     "oci_database_db_system": "db_system",
+    "oci_file_storage_export": "file_system_export",
+    "oci_file_storage_export_set": "file_system_export_set",
     "oci_file_storage_file_system": "file_system",
     "oci_file_storage_mount_target": "mount_target",
     "oci_identity_compartment": "compartment",
@@ -43,10 +48,19 @@ export const resourceMap: OcdResourceMap = {
     "oci_kms_key": "key",
     "oci_kms_vault": "vault",
     "oci_load_balancer_load_balancer": "load_balancer",
+    "oci_load_balancer_backend": "load_balancer_backend",
+    "oci_load_balancer_backend_set": "load_balancer_backend_set",
+    "oci_load_balancer_listener": "load_balancer_listener",
     "oci_mysql_mysql_db_system": "mysql_db_system",
     "oci_network_load_balancer_network_load_balancer": "network_load_balancer",
+    // "oci_network_load_balancer_backend_set": "network_load_balancer_backend_set",
+    // "oci_network_load_balancer_listener": "network_load_balancer_listener",
     "oci_nosql_index": "nosql_index",
     "oci_nosql_table": "nosql_table",
     "oci_objectstorage_bucket": "bucket",
     "oci_vault_secret": "secret"
+}
+
+export const dataMap: OcdResourceMap = {
+    "oci_core_boot_volume_attachments": "boot_volume_attachment"
 }

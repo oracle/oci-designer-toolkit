@@ -27,13 +27,21 @@ const OcdModelPalette = ({ ocdConsoleConfig, setDragData, ocdDocument }: Palette
 const OcdModelPaletteProviders = ({ provider, model, setDragData }: any): JSX.Element => {
     const open = true
     const modelExcludeResources = ['compartment']
+    const hiddenResourceTypes = [
+        'boot_volume_attachment',
+        'load_balancer_backend',
+        'network_load_balancer_backend',
+        'network_security_group_security_rule',
+        'vnic_attachment',
+        'volume_attachment'
+    ]
     return (
         <div className='ocd-designer-palette-provider'>
             <details id={provider.title} open={open}>
                 <summary><div className={provider}><label>{provider.toUpperCase()}</label></div></summary>
                 <div>
                     <ul>
-                        {Object.entries(model.resources).filter(([k, v]) => !modelExcludeResources.includes(k)).sort((a, b) => a[0].localeCompare(b[0])).map(([k, resources]) => {
+                        {Object.entries(model.resources).filter(([k, v]) => !modelExcludeResources.includes(k)).sort((a, b) => a[0].localeCompare(b[0])).filter(([k, r]) => !hiddenResourceTypes.includes(k)).map(([k, resources]) => {
                             return <OcdModelPaletteResources 
                                         provider={provider}
                                         type={k} 
@@ -76,8 +84,8 @@ const OcdModelPaletteResources = ({ provider, type, resources, setDragData }: an
 const OcdModelPaletteResource = ({ provider, type, resource, onDragStart, onDragEnd }: any): JSX.Element => {
     // const classname = `${provider}-${type}`
     const classname = OcdUtils.toCssClassName(provider, type)
-    const containerResources = ['vcn', 'subnet']
-    console.info('Classname:', classname)
+    const containerResources = ['vcn', 'subnet', 'load_balancer']
+    console.info('OcdModelPalette: Classname:', classname, type)
     const onPaletteDragStart = (e: React.MouseEvent<HTMLElement>) => {
         // Get current Target Coordinates
         const currentTargetRect = e.currentTarget.getBoundingClientRect()

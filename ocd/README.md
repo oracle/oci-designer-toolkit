@@ -8,58 +8,64 @@ The OCD project is a refactoring of the original OKIT implementation and TypeScr
 based implementation using React to build the interface and provide the WebServer. In addition
 Electron is used to generate native installers for simplicity of installation and use.
 
-# Prerequisites
+This Alpha release is to show the new desktop functionality available in the OKIT OCD (OKIT Cloud Desktop) release and is not
+guarenteed to be 100% functional. At present the following resources and features are availble but we will be releasing updates 
+regularly.
 
-- node / npm
+| Resource                       | Properties | Terraform | Validation | Query Only |
+| ------------------------------ | :--------: | :-------: | :--------: | :--------: |
+| VCN                            | &check;    | &check;   |            |            |
+| Subnet                         | &check;    | &check;   |            |            |
+| Security List                  | &check;    | &check;   |            |            |
+| Route Table                    | &check;    | &check;   |            |            |
+| DHCP Options                   | &check;    | &check;   |            |            |
+| Internet Gateway               | &check;    | &check;   |            |            |
+| NAT Gateway                    | &check;    | &check;   |            |            |
+| Instance                       | &check;    | &check;   |            |            |
+| Autonomous Database            | &check;    | &check;   |            |            |
+| Load Balancer                  | &check;    | &check;   |            |            |
+| Load Balancer Backend Set      | &check;    | &check;   |            |            |
+| Load Balancer Backend          | &check;    | &check;   |            |            |
+| Load Balancer Backend Listener | &check;    | &check;   |            |            |
+| Block Volume                   | &check;    | &check;   |            |            |
+| Volume Attachment              | &check;    | &check;   |            |            |
+| Boot Volumes                   | &check;    | &check;   |            | &check;    |
+| Boot Volumes Attachment        | &cross;    | &check;   |            | &check;    |
+| Customer Premises Equipment    | &check;    | &check;   |            |            |
+| Database System                |            |           |            |            |
+| Service Gateway                | &check;    | &check;   |            |            |
+| DRG                            | &check;    | &check;   |            |            |
+| DRG Attachment                 |            |           |            |            |
+| DRG Route Table                |            |           |            |            |
+| DRG Distribution               |            |           |            |            |
+| Local Peering                  | &check;    | &check;   |            |            |
+| IPSec VPN                      |            |           |            |            |
+| Remote Peering                 |            |           |            |            |
+| NoSQL Database                 |            |           |            |            |
+| MySQL (with Heatwave)          |            |           |            |            |
+| Vault                          |            |           |            |            |
+| Key                            |            |           |            |            |
+| Secret                         |            |           |            |            |
+| File System                    |            |           |            |            |
+| Mount Target                   |            |           |            |            |
+| OKE Cluser & Node Pool         |            |           |            |            |
+| Analytics Instance             |            |           |            |            |
+| Policy                         |            |           |            |            |
+| Dynamic Groups                 |            |           |            |            |
+| Groups                         |            |           |            |            |
+| Users                          |            |           |            |            |
 
-# Installing
-Before the application can be either built as a desktop or run as a web server all appropriate node modules must be 
-installed. This can be achieve by executing the __fresh-install__ of __reinstall__ script, from this directory, as follows:
+Not all menu options are currently available and if selected will display a message saying they are currently not availble,
+again these will be added over time.
 
-``` bash
-npm run fresh-install
-```
-
-This will create the oci-designer-toolkit/oci/__dist__ directory which will contain a subdirectory for the appropriate opperating system, for example :
-
-```bash
-ls -1
-builder-debug.yml
-builder-effective-config.yaml
-mac
-
-ls -1 mac
-mac
-ocd-0.1.0.dmg
-ocd-0.1.0.dmg.blockmap
-ocd-0.1.0.zip
-ocd-0.1.0.zip.blockmap
-```
-
-In the above example the **ocd-0.1.0.dmg** can be opened in the normal way on a mac and the app will be installed.
-
-# Running Desktop Application without installing
-
-1. Build Desktop Application
-```bash
-npm run desktop
-```
-
-# Running Development Web Application
-
-1. Run Web Server
-```bash
-npm run web
-```
-2. Access BUI on [http://localhost:3000/](http://localhost:3000/)
-
+If you have any comments please leave them on the GitHub issues marked as ___OCD Alpha:___
 
 # OCD Desktop Features 
 
 The OCD Desktop / Web interface is composed of a number of section similar to those provided in the original OKIT BUI. These 
 provide similar functionality but with some key difference that will be document below.
 
-![OCD Desktop](images/OcdDesktop.png)
+![OCD Desktop](https://github.com/oracle/oci-designer-toolkit/blob/nightly/ocd/images/OcdDesktop.png)
 
 ## Palette
 
@@ -88,16 +94,52 @@ The Page/View Tabs (at base of canvas) allow the user to create multiple visual 
 
 The properties panel provides access to the edittable properties available for the selected Resource. In addition the User can provide Resource specific documentation that will be included in any generated Markdown.
 
+# Build Your Own
 
- npm init -y
- npm init -y --scope @ocd -w packages/core
- npm init -y --scope @ocd -w packages/model
- npm init -y --scope @ocd -w packages/query
- npm init -y --scope @ocd -w packages/import
- npm init -y --scope @ocd -w packages/export
- npm init -y --scope @ocd -w packages/web
- npm init -y --scope @ocd -w packages/desktop
- npm install @ocd/core -w @ocd/model
- npm install @ocd/core -w @ocd/query
- npm install @ocd/model -w @ocd/query
- npm init -y --scope @ocd -w packages/codegen
+## Prerequisites
+
+- node / npm
+
+## Installing
+Before the application can be either built as a desktop or run as a web server all appropriate node modules must be 
+installed. This can be achieve by executing the __fresh-install__ of __reinstall__ script, from this directory, as follows:
+
+``` bash
+npm run fresh-install
+```
+
+This will create the oci-designer-toolkit/oci/__dist__ directory which will contain a subdirectory for the appropriate opperating system, for example :
+
+```bash
+ls -1
+builder-debug.yml
+builder-effective-config.yaml
+mac
+
+ls -1 mac
+mac
+ocd-0.1.0.dmg
+ocd-0.1.0.dmg.blockmap
+ocd-0.1.0.zip
+ocd-0.1.0.zip.blockmap
+```
+
+In the above example the **ocd-0.1.0.dmg** can be opened in the normal way on a mac and the app will be installed.
+
+## Running Desktop Application without installing
+
+1. Build Desktop Application
+```bash
+npm run desktop
+```
+
+## Running Development Web Application
+
+1. Run Web Server
+```bash
+npm run web
+```
+2. Access BUI on [http://localhost:3000/](http://localhost:3000/)
+
+
+

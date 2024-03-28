@@ -6,8 +6,9 @@
 import { v4 as uuidv4 } from 'uuid'
 import { OciModelResources } from '@ocd/model'
 import { OcdDesign, OcdViewPage, OcdViewCoords, OcdViewLayer, OcdBaseModel, OcdViewPoint, OcdViewCoordsStyle, OcdResource, OciResource, PaletteResource } from '@ocd/model'
-import { OcdAutoLayout } from './OcdAutoLayout'
+import { OcdAutoLayout } from '@ocd/model'
 import { OcdUtils } from '@ocd/core'
+import additionTitleInfo from '../data/OcdAdditionTitleInfo'
 
 export interface OcdSelectedResource {
     modelId: string
@@ -24,6 +25,11 @@ export interface OcdDragResource {
     class: string
     resource: OcdViewCoords
     parent?: OcdViewCoords
+}
+
+export interface OcdAddResourceResponse {
+    modelResource: OcdResource | undefined
+    additionalResources: OcdResource[]
 }
 
 export class OcdDocument {
@@ -70,27 +76,51 @@ export class OcdDocument {
     getParentResource = () => this.getResource(this.dragResource.modelId)
     getParentResourceCoords = () => this.getCoords(this.dragResource.coordsId)
 
-    getOciResourceList(key: string) {return this.design.model.oci.resources[key] ? this.design.model.oci.resources[key] : []}
-    getOciResources() {return Object.values(this.design.model.oci.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], [])}
+    isOciResourceList(key: string): boolean {return this.design.model.oci.resources[key] ? true : false}
+    // getOciResourceList(key: string) {return this.design.model.oci.resources[key] ? this.design.model.oci.resources[key] : []}
+    getOciResourceList(key: string) {return OcdDesign.getOciResourceList(this.design, key)}
+    // getOciResourceLists() {return this.design.model.oci.resources}
+    // getOciResources() {return Object.values(this.design.model.oci.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], [])}
     getOciResourcesObject() {return this.design.model.oci.resources}
-    getResources() {return this.getOciResources()}
-    getResource(id='') {return this.getResources().find((r: OcdResource) => r.id === id)}
+    // getResourceLists() {return {...this.getOciResourceLists()}}
+    getResourceLists() {return OcdDesign.getResourceLists(this.design)}
+    // getResources() {return this.getOciResources()}
+    getResources() {return OcdDesign.getOciResources(this.design)}
+    // getResource(id='') {return this.getResources().find((r: OcdResource) => r.id === id)}
+    getResource(id='') {return OcdDesign.getResource(this.design, id)}
+    addOciReasourceToList(key: string, modelResource: OciResource) {this.design.model.oci.resources[key] ? this.design.model.oci.resources[key].push(modelResource) : this.design.model.oci.resources[key] = [modelResource]}
     addResource(paletteResource: PaletteResource, compartmentId: string) {
         const resourceList = paletteResource.class.split('-').slice(1).join('_')
         const resourceClass = paletteResource.class.toLowerCase().split('-').map((w) => `${w.charAt(0).toUpperCase()}${w.slice(1)}`).join('')
         const resourceNamespace: string = `${resourceClass}`
-        const resourceClient: string = `${resourceClass}`
-        // console.info('OcdDocument: List:', resourceList, 'Class:', resourceClass, 'Client:', resourceClient)
-        // console.info(`OcdDocument: ociResource`, ociResources)
+        // const resourceClient: string = `${resourceClass}Client`
+        // @ts-ignore
         let modelResource = undefined
+        let response: OcdAddResourceResponse = {modelResource: undefined, additionalResources: []}
         if (paletteResource.provider === 'oci') {
             // @ts-ignore 
             const client = OciModelResources[resourceNamespace]
+            console.debug('OcdDocument: Namespace',resourceNamespace , client)
             if (client) {
                 modelResource = client.newResource()
                 modelResource.compartmentId = compartmentId
-                console.info(modelResource)
-                this.design.model.oci.resources[resourceList] ? this.design.model.oci.resources[resourceList].push(modelResource) : this.design.model.oci.resources[resourceList] = [modelResource]
+                response.modelResource = modelResource
+                console.debug('OcdDocument:', modelResource)
+                this.addOciReasourceToList(resourceList, modelResource)
+                // this.design.model.oci.resources[resourceList] ? this.design.model.oci.resources[resourceList].push(modelResource) : this.design.model.oci.resources[resourceList] = [modelResource]
+                const additionalResources = client.getAdditionalResources?.() // Use Optional Chaining to test if function exists
+                if (additionalResources) {
+                    console.debug('OcdDocument: Creating Additional Resources', additionalResources)
+                    additionalResources.forEach((r: PaletteResource) => {
+                        const additionalResource = this.addResource(r, compartmentId).modelResource
+                        //@ts-ignore
+                        response.additionalResources.push(additionalResource)
+                        // @ts-ignore
+                        this.setResourceParent(additionalResource.id, modelResource.id)
+                        // @ts-ignore
+                        client.setAdditionalResourceValues?.(modelResource, additionalResource)
+                    })
+                }
             } else {
                 alert(`Resource ${resourceClass} has not yet been implemented.`)
             }
@@ -98,7 +128,8 @@ export class OcdDocument {
             alert(`Provider ${paletteResource.provider} has not yet been implemented.`)
         }
         // console.info('OcdDocument: Added Resource:', modelResource)
-        return modelResource
+        // return modelResource
+        return response
     }
     removeResource(id: string) {
         // Delete from Model
@@ -160,9 +191,17 @@ export class OcdDocument {
     }
     getResourceAssociationIds(id: string): string[] {
         const resource = this.getResource(id)
-        const associationIds: string[] = (resource.provider === 'oci') ? OciResource.getAssociationIds(resource) : []
+        const associationIds: string[] = (resource.provider === 'oci') ? OciResource.getAssociationIds(resource, this.getResourceLists()) : []
         return associationIds
     }
+    getAdditionalTitleInfo(id: string): string {
+        const resource = this.getResource(id)
+        const key = resource.resourceType
+        if (Object.hasOwn(additionTitleInfo, key)) return `${resource[additionTitleInfo[key]]}`
+        else return ''
+    }
+
+    getOciVariables = () => this.design.model.oci.vars
 
     // @ts-ignore 
     getPage = (id: string): OcdViewPage => this.design.view.pages.find((v) => v.id === id)
@@ -263,23 +302,7 @@ export class OcdDocument {
         childIds.forEach(id => this.removeResource(id))
     }
 
-    newCoords = (): OcdViewCoords => {
-        return OcdDesign.newCoords()
-        // return {
-        //     id: `gid-${uuidv4()}`,
-        //     pgid: '',
-        //     ocid: '',
-        //     pocid: '',
-        //     x: 0,
-        //     y: 0,
-        //     w: 0,
-        //     h: 0,
-        //     title: '',
-        //     class: '',
-        //     showParentConnection: true,
-        //     showConnections: true
-        // }
-    }
+    newCoords = (): OcdViewCoords => OcdDesign.newCoords()
     getAllCoords = () => {return this.design.view.pages.map(p => [...p.coords, ...this.getChildCoords(p.coords)]).reduce((a, c) => [...a, ...c], [])}
     getAllPageCoords = (page: OcdViewPage) => {return this.getChildCoords(page.coords)}
     getCoords = (id: string) => {return this.design.view.pages.map(p => [...p.coords, ...this.getChildCoords(p.coords)]).reduce((a, c) => [...a, ...c], []).find(c => c.id === id)}

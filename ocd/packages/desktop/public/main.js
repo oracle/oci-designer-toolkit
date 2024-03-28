@@ -95,6 +95,8 @@ const createWindow = () => {
 }
 
 app.whenReady().then(() => {
+	// Build Information
+	ipcMain.handle('ocdBuild:getVersion', handleGetVersion)
 	// OCI API Calls / Query
 	ipcMain.handle('ociConfig:loadProfiles', handleLoadOciConfigProfiles)
 	ipcMain.handle('ociQuery:listRegions', handleListRegions)
@@ -164,6 +166,16 @@ console.debug(app.getPath('userData'))
 ** Electron IPC Handlers required for the OCD Desktop.
 */
 
+async function handleGetVersion() {
+	console.debug('Electron Main: handleGetVersion')
+	return new Promise((resolve, reject) => {
+		const buildInformation = {
+			version: app.getVersion()
+		}
+		resolve(buildInformation)
+	})
+}
+
 async function handleLoadOciConfigProfiles() {
 	console.debug('Electron Main: handleLoadOciConfigProfiles')
 	return new Promise((resolve, reject) => {
@@ -226,7 +238,8 @@ async function handleLoadDesign(event, filename) {
 }
 
 async function handleSaveDesign(event, design, filename, suggestedFilename='') {
-	console.debug('Electron Main: handleSaveDesign')
+	design = typeof design === 'string' ? JSON.parse(design) : design
+	console.debug('Electron Main: handleSaveDesign', filename, JSON.stringify(design, null, 2))
 	return new Promise((resolve, reject) => {
 		try {
 			if (!filename || !fs.existsSync(filename) || !fs.statSync(filename).isFile()) {
@@ -269,6 +282,7 @@ async function handleDiscardConfirmation(event) {
 }
 
 async function handleExportTerraform(event, design, directory) {
+	design = typeof design === 'string' ? JSON.parse(design) : design
 	console.debug('Electron Main: handleExportTerraform')
 	return new Promise((resolve, reject) => {reject('Currently Not Implemented')})
 }
@@ -303,6 +317,7 @@ async function handleSaveConsoleConfig(event, config) {
 	console.debug('Electron Main: handleSaveConfig')
 	return new Promise((resolve, reject) => {
 		try {
+			if (!config.showPreviousViewOnStart) config.displayPage = 'designer' // If we do not want to display previous page then default to designer.
 			fs.writeFileSync(ocdConsoleConfigFilename, JSON.stringify(config, null, 4))
 			resolve(config)
 		} catch (err) {

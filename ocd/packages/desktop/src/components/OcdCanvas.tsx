@@ -4,13 +4,14 @@
 */
 
 import { v4 as uuidv4 } from 'uuid'
-import { OcdDocument, OcdDragResource, OcdSelectedResource } from './OcdDocument'
+import { OcdAddResourceResponse, OcdDocument, OcdDragResource, OcdSelectedResource } from './OcdDocument'
 import { OcdResourceSvg, OcdConnector, OcdDragResourceGhostSvg, OcdSvgContextMenu } from './OcdResourceSvg'
 import { OcdResource, OcdViewConnector, OcdViewCoords, OcdViewLayer, OcdViewPage } from '@ocd/model'
 import { CanvasProps, OcdMouseEvents } from '../types/ReactComponentProperties'
 import { useContext, useState } from 'react'
 import { newDragData } from '../types/DragData'
 import { ActiveFileContext } from '../pages/OcdConsole'
+import { OcdUtils } from '@ocd/core'
 
 export interface OcdContextMenu {
     show: boolean
@@ -32,6 +33,7 @@ export const OcdCanvasGrid = (): JSX.Element => {
 
 export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument, setOcdDocument }: CanvasProps): JSX.Element => {
     console.info('OcdCanvas: OCD Document:', ocdDocument)
+    console.info('OcdCanvas: OCD Design:', ocdDocument.design)
     // @ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const uuid = () => `gid-${uuidv4()}`
@@ -102,7 +104,10 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
             const { x, y } =  point.matrixTransform(svg.getScreenCTM().inverse())
             console.info('x:', x, 'y:', y)
             // Add to OCD Model/View
-            const modelResource: OcdResource = dragData.existingResource ? dragData.resource : ocdDocument.addResource(dragData.dragObject, compartmentId)
+            // const modelResource: OcdResource = dragData.existingResource ? dragData.resource : ocdDocument.addResource(dragData.dragObject, compartmentId)
+            const response: OcdAddResourceResponse = dragData.existingResource ? {modelResource: dragData.resource, additionalResources: []} : ocdDocument.addResource(dragData.dragObject, compartmentId)
+            const modelResource = response.modelResource
+            const additionalResources = response.additionalResources
             if (modelResource) {
                 ocdDocument.setResourceParent(modelResource.id, pocid)
                 const coords: OcdViewCoords = ocdDocument.newCoords()
@@ -113,7 +118,7 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
                 coords.x = x / transformMatrix[0]
                 coords.y = y / transformMatrix[3]
                 coords.w = container ? 300 : 32
-                coords.h = container ? 200 : 32
+                coords.h = container ? 300 : 32
                 coords.title = dragData.dragObject.title
                 coords.class = dragData.dragObject.class
                 coords.container = container
@@ -125,6 +130,28 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
                     coordsId: coords.id,
                     class: dragData.dragObject.class
                 }
+                let additionalY = 60 + y
+                let additionalX = 15 + x
+                additionalResources.forEach((r: OcdResource) => {
+                    console.debug('OcdCanvas: Additional Resource', r)
+                    const modelResource = r
+                    if (modelResource) {
+                        const childCoords: OcdViewCoords = ocdDocument.newCoords()
+                        childCoords.id = uuid()
+                        childCoords.pgid = coords.id
+                        childCoords.ocid = modelResource.id
+                        childCoords.pocid = coords.ocid
+                        childCoords.x = additionalX / transformMatrix[0]
+                        childCoords.y = additionalY / transformMatrix[3]
+                        childCoords.w = 32
+                        childCoords.h = 32
+                        childCoords.title = modelResource.resourceTypeName
+                        childCoords.class = OcdUtils.toCssClassName(modelResource.provider, modelResource.resourceTypeName.split(' ').join('_'))
+                        childCoords.container = false
+                        ocdDocument.addCoords(childCoords, page.id, coords.id)
+                        additionalY += 60 
+                    }
+                })
             }
             // Clear Drag Data Information
             setDragData(newDragData())
@@ -323,6 +350,26 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
         'onSVGDragEnd': svgDrop,
     }
 
+    const calculateSvgWidth = (coords: OcdViewCoords[]): number => {
+        const simpleWidth = 40
+        const detailedWidth = 170
+        let width = 0
+        coords.forEach((c => width = Math.max(width, (c.x + (c.container && (!c.detailsStyle || c.detailsStyle === 'default') ? c.w : (!c.detailsStyle || c.detailsStyle === 'detailed') ? detailedWidth : simpleWidth)))))
+        width += 100
+        return width
+    }
+
+    const calculateSvgHeight = (coords: OcdViewCoords[]): number => {
+        const simpleHeight = 40
+        let height = 0
+        coords.forEach((c => height = Math.max(height, (c.y + (c.container && (!c.detailsStyle || c.detailsStyle === 'default') ? c.h : simpleHeight)))))
+        height += 100
+        return height
+    }
+
+    const svgWidth = calculateSvgWidth(page.coords)
+    const svgHeight = calculateSvgHeight(page.coords)
+
     // @ts-ignore 
     const allPageCoords = ocdDocument.getAllPageCoords(page)
     const allVisibleCoords = allPageCoords.filter((r: OcdViewCoords) => visibleResourceIds.includes(r.ocid))
@@ -349,8 +396,8 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
             >
             <svg className='ocd-designer-canvas-svg'
                 id='canvas_root_svg' 
-                width='100%' 
-                height='100%' 
+                width={`max(${svgWidth}px, 100%)`} 
+                height={`max(${svgHeight}px, 100%)`}
                 data-gid='' 
                 data-ocid=''
                 onMouseDown={onSVGDragStart}

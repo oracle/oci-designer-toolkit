@@ -3,16 +3,17 @@
 ** Licensed under the GNU GENERAL PUBLIC LICENSE v 3.0 as shown at https://www.gnu.org/licenses/.
 */
 
-import { useRef, useState } from 'react'
+import { useContext, useRef, useState } from 'react'
 import { OcdResource, OcdViewCoordsStyle, OcdViewPage, OciResourceValidation, OciResources } from '@ocd/model'
 import { DesignerColourPicker, DesignerResourceProperties, DesignerResourceValidationResult } from '../types/DesignerResourceProperties'
 import { OcdUtils } from '@ocd/core'
 import { OcdDocument } from './OcdDocument'
 import { OcdLookupProperty, OcdTextProperty, ResourceElementConfig, ResourceProperties } from './properties/OcdPropertyTypes'
 import * as ociResources from './properties/provider/oci/resources'
-import { HexColorPicker, HexColorInput } from 'react-colorful'
+import { HexColorPicker, HexColorInput, RgbaColorPicker, RgbaStringColorPicker } from 'react-colorful'
 import Markdown from 'react-markdown'
 import { OcdValidationResult } from '@ocd/model'
+import { CacheContext } from '../pages/OcdConsole'
 
 const OcdResourcePropertiesHeader = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
     const selectedResource = ocdDocument.getSelectedResource()
@@ -29,7 +30,12 @@ const OcdResourcePropertiesHeader = ({ocdDocument, setOcdDocument}: DesignerReso
 }
 
 const OciCommonResourceProperties = ({ocdDocument, setOcdDocument, resource, rootResource}: ResourceProperties): JSX.Element => {
-    const config: ResourceElementConfig | undefined = undefined
+    const selectedResource: OcdResource = ocdDocument.getSelectedResource()
+    const resourceConfigsName = selectedResource ? `${OcdUtils.toTitleCase(selectedResource.provider)}${selectedResource.resourceType}Configs` : ''
+    // @ts-ignore 
+    const resourceConfigs = ociResources[resourceConfigsName]
+    const configs: ResourceElementConfig[] = resourceConfigs.configs()
+    console.debug('OcdProperties: OciCommonResourceProperties: config', configs)
     const displayName = {"provider": "oci", "key": "displayName", "name": "displayName", "type": "string", "subtype": "", "required": true, "label": "Name", "id": "displayName", "conditional": false, "condition": {}}
     const compartmentId = {"provider": "oci", "key": "compartmentId", "name": "compartmentId", "type": "string", "subtype": "", "required": true, "label": "Compartment", "id": "compartmentId", "lookupResource": "compartment", "conditional": false, "condition": {}}
     return (
@@ -37,8 +43,8 @@ const OciCommonResourceProperties = ({ocdDocument, setOcdDocument, resource, roo
             <details open={true}>
                 <summary className='summary-background'>Core</summary>
                 <div>
-                <OcdTextProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={config} rootResource={rootResource} attribute={displayName} />
-                <OcdLookupProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={config} rootResource={rootResource} attribute={compartmentId} />
+                <OcdTextProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={configs.find((c) => c.id === 'display_name')} rootResource={rootResource} attribute={displayName} />
+                <OcdLookupProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={configs.find((c) => c.id === 'compartment_id')} rootResource={rootResource} attribute={compartmentId} />
                 </div>
             </details>
         </div>
@@ -46,22 +52,34 @@ const OciCommonResourceProperties = ({ocdDocument, setOcdDocument, resource, roo
 }
 
 const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
+    // @ts-ignore
+    const {ocdCache, setOcdCache} = useContext(CacheContext)
+    console.debug('OcdProperties: OcdResourceProperties: OCD Cache:', ocdCache)
     const selectedResource: OcdResource = ocdDocument.getSelectedResource()
+    const resourceProxyName = selectedResource ? `${OcdUtils.toTitleCase(selectedResource.provider)}${selectedResource.resourceType}Proxy` : ''
+    // @ts-ignore 
+    const selectedResourceProxy: Proxy<any> = Object.hasOwn(ociResources, resourceProxyName) ? ociResources[resourceProxyName].proxyResource(ocdDocument, selectedResource, ocdCache) : selectedResource
     const resourceJSXMethod = selectedResource ? `${OcdUtils.toTitleCase(selectedResource.provider)}${selectedResource.resourceType}` : ''
     // @ts-ignore 
     const ResourceProperties = ociResources[resourceJSXMethod]
+    const variables = selectedResource && selectedResource.provider === 'oci' ? ocdDocument.getOciVariables() : []
     return (
         <div className={`ocd-properties-panel ocd-properties-panel-theme`}>
+            <datalist id='variables'>
+                {variables.map((v) => 
+                <option value={`var.${v.name}`}/>
+                )}
+            </datalist>
             {selectedResource && selectedResource.provider === 'oci' && <OciCommonResourceProperties 
                 ocdDocument={ocdDocument} 
                 setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} 
-                resource={selectedResource}
-                rootResource={selectedResource}
+                resource={selectedResourceProxy}
+                rootResource={selectedResourceProxy}
             />}
             {selectedResource && ResourceProperties && <ResourceProperties 
                 ocdDocument={ocdDocument} 
                 setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} 
-                resource={selectedResource}
+                resource={selectedResourceProxy}
             />}
         </div>
     )
@@ -80,7 +98,7 @@ const OcdResourceDocumentation = ({ocdDocument, setOcdDocument}: DesignerResourc
     return (
         <div className={`ocd-properties-panel ocd-properties-panel-theme ocd-properties-documentation-panel`}>
             <div className='ocd-properties-documentation-preview-bar'><input id='documentation_preview_checkbox' type='checkbox' checked={preview} onChange={onPreviewChanged}></input><label htmlFor='documentation_preview_checkbox'>Preview</label></div>
-            {!preview && <textarea onChange={onChange} value={selectedResource ? selectedResource.documentation : activePage.documentation}></textarea>}
+            {!preview && <textarea id='ocd_resource_documentation' onChange={onChange} value={selectedResource ? selectedResource.documentation : activePage.documentation}></textarea>}
             {preview && <div className='ocd-properties-documentation-preview'><Markdown>{selectedResource ? selectedResource.documentation : activePage.documentation}</Markdown></div>}
         </div>
     )
@@ -171,11 +189,11 @@ const OcdResourceStyle = ({ocdDocument, setOcdDocument}: DesignerResourcePropert
     // style.fill
     const coordsFill = (coordsStyle !== undefined && coordsStyle.fill !== undefined) ? coordsStyle.fill : undefined
     const fillChecked = (coordsFill !== undefined) as boolean
-    const fill = coordsFill !== undefined ? coordsFill : '#aabbcc'
+    const fill = coordsFill !== undefined ? coordsFill : 'rgba(170, 187, 204, 0.5)' //'#aabbcc'
     // style.stroke
     const coordsStroke = (coordsStyle !== undefined && coordsStyle.stroke !== undefined) ? coordsStyle.stroke : undefined
     const strokeChecked = (coordsStroke !== undefined) as boolean
-    const stroke = coordsStroke !== undefined ? coordsStroke : '#aabbcc'
+    const stroke = coordsStroke !== undefined ? coordsStroke : 'rgba(170, 187, 204, 1)' //'#aabbcc'
     // style.strokeDasharray
     const coordsStrokeDasharray = (coordsStyle !== undefined && coordsStyle.strokeDasharray !== undefined) ? coordsStyle.strokeDasharray : undefined
     const strokeDasharray = coordsStrokeDasharray !== undefined ? coordsStrokeDasharray : 'default'
@@ -201,7 +219,7 @@ const OcdResourceStyle = ({ocdDocument, setOcdDocument}: DesignerResourcePropert
         // const style = coords !== undefined && coords.style !== undefined ? JSON.parse(JSON.stringify(coords.style)) : {} as OcdViewCoordsStyle
         const style = coordsStyle !== undefined ? JSON.parse(JSON.stringify(coordsStyle)) : {} as OcdViewCoordsStyle
         style.fill = colour
-        console.debug('OcdProperties: Set Fill Colour', coords)
+        console.debug('OcdProperties: Colour - Fill', coords)
         if (coords) {ocdDocument.updateCoords({...coords, style: style}, page.id)}
         const clone = OcdDocument.clone(ocdDocument)
         setOcdDocument(clone)
@@ -227,7 +245,7 @@ const OcdResourceStyle = ({ocdDocument, setOcdDocument}: DesignerResourcePropert
         // const style = coords !== undefined && coords.style !== undefined ? JSON.parse(JSON.stringify(coords.style)) : {} as OcdViewCoordsStyle
         const style = coordsStyle !== undefined ? JSON.parse(JSON.stringify(coordsStyle)) : {} as OcdViewCoordsStyle
         style.stroke = colour
-        console.debug('OcdProperties: Set Stroke Colour', coords)
+        console.debug('OcdProperties: Colour - Stroke', coords)
         if (coords) {ocdDocument.updateCoords({...coords, style: style}, page.id)}
         const clone = OcdDocument.clone(ocdDocument)
         setOcdDocument(clone)
@@ -301,7 +319,7 @@ const OcdLayerStyle = ({ocdDocument, setOcdDocument}: DesignerResourceProperties
     const layerStyle = (layer !== undefined && layer.style !== undefined) ? layer.style : undefined
     const layerFill = (layerStyle !== undefined && layerStyle.fill !== undefined) ? layerStyle.fill : undefined
     const fillChecked = (layerFill !== undefined) as boolean
-    const fill = layerFill !== undefined ? layerFill : '#aabbcc'
+    const fill = layerFill !== undefined ? layerFill : 'rgba(170, 187, 204, 1)' //'#aabbcc'
 
     const fillCheckedChanged = () => {
         console.debug('OcdProperties: fillCheckedChanged', fillChecked, layer)
@@ -320,7 +338,7 @@ const OcdLayerStyle = ({ocdDocument, setOcdDocument}: DesignerResourceProperties
     const setFillColour = (colour: string) => {
         const style = layerStyle !== undefined ? JSON.parse(JSON.stringify(layerStyle)) : {} as OcdViewCoordsStyle
         style.fill = colour
-        console.debug('OcdProperties: Set Fill Colour', layer)
+        console.debug('OcdProperties: Colour - Layer', layer)
         ocdDocument.updateLayerStyle(layer.id, style)
         const clone = OcdDocument.clone(ocdDocument)
         setOcdDocument(clone)
@@ -338,6 +356,7 @@ const OcdLayerStyle = ({ocdDocument, setOcdDocument}: DesignerResourceProperties
 }
 const OcdColourPicker = ({colour, setColour}: DesignerColourPicker): JSX.Element => {
     console.debug('OcdProperties: Colour', colour)
+    // const [rgbaColor, setRgbaColor] = useState({ r: 200, g: 150, b: 35, a: 0.5 })
     const [pickerOpen, setPickerOpen] = useState(false)
     const colourChanged = (colour: string) => {
         console.debug('OcdProperties: Colour Changed', colour)
@@ -351,8 +370,10 @@ const OcdColourPicker = ({colour, setColour}: DesignerColourPicker): JSX.Element
                 onClick={() => setPickerOpen(!pickerOpen)}
             ></div>
             {pickerOpen && <div className='ocd-colour-picker-popup'>
-                <div><HexColorPicker color={colour} onChange={colourChanged} /></div>
-                <div><HexColorInput color={colour} onChange={colourChanged} /></div>
+                {/* <div><RgbaColorPicker color={rgbaColor} onChange={setRgbaColor} /></div> */}
+                <div><RgbaStringColorPicker color={colour} onChange={colourChanged} /></div>
+                {/* <div><HexColorPicker color={colour} onChange={colourChanged} /></div> */}
+                {/* <div><HexColorInput color={colour} onChange={colourChanged} /></div> */}
             </div>}
         </div>
     )

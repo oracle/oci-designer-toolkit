@@ -338,10 +338,11 @@ const OcdResizePoint = ({resource, cx, cy, position, setDimensions, onResize, on
 
 const OcdForeignObject = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resource, hidden }: ResourceForeignObjectProps) => {
     const id = `${resource.id}-fo`
-    const backgroundColourClass = `${resource.class}-background-colour`
+    const inputId = `${id}-input`
     const containerLayout = (resource.container && (!resource.detailsStyle || resource.detailsStyle === 'default'))
     const detailedLayout = ((resource.detailsStyle && resource.detailsStyle === 'detailed') || ((!resource.detailsStyle || resource.detailsStyle === 'default') && ocdConsoleConfig.config.detailedResource))
     // const detailedLayout = (ocdConsoleConfig.config.detailedResource || (resource.detailsStyle && resource.detailsStyle === 'detailed'))
+    const backgroundColourClass = `${resource.class}-background-colour ${containerLayout ? 'ocd-svg-container-icon-background' : detailedLayout ? 'ocd-svg-detailed-icon-background' : 'ocd-svg-simple-icon-background'}`
     const foreignObjectClass = `ocd-svg-foreign-object ${containerLayout ? 'ocd-svg-resource-container' : detailedLayout ? 'ocd-svg-resource-detailed' : 'ocd-svg-resource-simple'}`
     const gX = 0
     const gY = 0
@@ -353,6 +354,7 @@ const OcdForeignObject = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
         // Stop Bubbling when name input click to disable SVG Drag functionality
         e.stopPropagation()
     }
+    const getTitle = () => `${resource.title} ${ocdDocument.getAdditionalTitleInfo(resource.ocid)}`
     const style = resource.style ? resource.style : {} as React.CSSProperties
     if (hidden) {
         style.opacity = 0
@@ -369,8 +371,8 @@ const OcdForeignObject = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
                     <div className={`${resource.class} ocd-svg-icon`}></div>
                 </div>
                 <div className='ocd-svg-foreign-object-display-name'>
-                    <span>{resource.title}</span>
-                    <input type='text' value={ocdDocument.getDisplayName(resource.ocid)} 
+                    <span>{getTitle()}</span>
+                    <input id={inputId} type='text' value={ocdDocument.getDisplayName(resource.ocid)} 
                         onChange={onChange} 
                         onMouseMove={onMouseMove} 
                         onMouseDown={onMouseMove} 
@@ -416,43 +418,6 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
         // else console.info('OcdResourceSvg: Resource Drag Start - Currently Dragging Child', resource.ocid)
         e.preventDefault()
     }
-    // const onResourceDrag = (e: React.MouseEvent<SVGElement>) => {
-    //     // e.stopPropagation()
-    //     if (dragging) {
-    //         // Set state for the change in coordinates.
-    //         setCoordinates({
-    //           x: e.clientX - origin.x,
-    //           y: e.clientY - origin.y,
-    //         })
-    //     }
-    // }
-    // const onResourceDragEnd = (e: React.MouseEvent<SVGElement>) => {
-    //     // e.stopPropagation()
-    //     if (dragging) {
-    //         setDragging(false)
-    //         const page: OcdViewPage = ocdDocument.getActivePage()
-    //         const coords: OcdViewCoords = {
-    //             id: resource.id,
-    //             pgid: '',
-    //             ocid: '',
-    //             pocid: '',
-    //             x: resource.x + coordinates.x,
-    //             y: resource.y + coordinates.y,
-    //             w: resource.w,
-    //             h: resource.h,
-    //             title: '',
-    //             class: ''
-    //         }
-    //         setCoordinates({ x: 0, y: 0 })
-    //         ocdDocument.updateCoords(coords, page.id)
-    //         // Remove Drag Resource
-    //         ocdDocument.dragResource = ocdDocument.newDragResource()
-    //     // Redraw
-    //         console.info('Design:', ocdDocument)
-    //         // setViewPage(structuredClone(ocdDocument.getPage(viewPage.id)))
-    //         setOcdDocument(OcdDocument.clone(ocdDocument))
-    //     }
-    // }
     const onResourceClick = (e: React.MouseEvent<SVGElement>) => {
         console.info('OcdResourceSvg: Resource Clicked', resource.ocid, e.clientX, e.clientY, e.currentTarget.id, ocdDocument.getCoords(e.currentTarget.id))
         e.stopPropagation()
@@ -485,19 +450,18 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
         console.info('x:', x, 'y:', y)
 
         const contextPosition = {show: true, x: x, y: y, resource: resource}
-        // const contextPosition = {show: true, x: relativeXY.x, y: relativeXY.y, resource: resource}
-        // const contextPosition = {show: true, x: e.clientX, y: e.clientY, resource: resource }
-        // console.info('OcdResourceSvg: Right Click', contextPosition)
-        // // @ts-ignore 
         setContextMenu(contextPosition)
     }
     const onResourceMouseUp = (e: React.MouseEvent<SVGElement>) => {
         e.preventDefault()
         console.info('OcdResourceSvg: Resource Mouse Up', resource.ocid, e.clientX, e.clientY)
         if (!contextMenu.show) {
-            if (resource.container && resource.id !== ocdDocument.dragResource.resource.id && !ocdDocument.dragResource.parent) {
-                console.info('>>>OcdResourceSvg: Mouse Up -> Container', resource.id, ocdDocument.dragResource.parent)
-                ocdDocument.dragResource.parent = resource
+            if (resource.container) {
+                const childCoordIds = ocdDocument.getChildCoords([ocdDocument.dragResource.resource]).map((c) => c.id)
+                if (resource.id !== ocdDocument.dragResource.resource.id && !childCoordIds.includes(resource.id) && !ocdDocument.dragResource.parent) {
+                    console.info('>>>OcdResourceSvg: Mouse Up -> Container', resource.id, ocdDocument.dragResource.parent)
+                    ocdDocument.dragResource.parent = resource
+                }
             }
         }
     }
@@ -515,19 +479,8 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
             data-ocid={resource.ocid} 
             data-pocid={resource.pocid}
             transform={`translate(${gX}, ${gY})`}
-            // onMouseDown={svgDragDropEvents.onSVGDragStart}
-            // onMouseMove={svgDragDropEvents.onSVGDrag}
-            // onMouseUp={svgDragDropEvents.onSVGDragEnd}
             onMouseDown={!hidden ? onResourceDragStart : onNooPEvent}
             onMouseUp={!hidden ? onResourceMouseUp : onNooPEvent}
-
-            // onMouseMove={onResourceMouseMove}
-            // onMouseMove={onResourceDrag}
-            // onMouseUp={onResourceDragEnd}
-            // onMouseEnter={onResourceMouseEnter}
-            // onMouseLeave={onResourceMouseLeave}
-            // onMouseLeave={onResourceDragEnd}
-
             onClick={!hidden ? onResourceClick : onNooPEvent}
             onContextMenu={!hidden ? onResourceRightClick : onNooPEvent}
             >
@@ -557,14 +510,6 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
                                 key={`${r.pgid}-${r.id}`}
                                 />
                                 })}
-                {/* {contextMenu.show && <OcdSvgContextMenu 
-                                        contextMenu={contextMenu} 
-                                        setContextMenu={setContextMenu}
-                                        ocdDocument={ocdDocument}
-                                        setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)}
-                                        resource={resource}
-                                        />
-                                        } */}
         </g>
     )
 }
@@ -619,7 +564,7 @@ export const OcdDragResourceGhostSvg = ({ ocdConsoleConfig, ocdDocument, setOcdD
 
 export const OcdConnector = ({ocdConsoleConfig, ocdDocument, connector, parentConnector}: ConnectorSvgProps): JSX.Element => {
     const simpleWidth = 40
-    const detailedWidth = 150
+    const detailedWidth = 170
     const simpleHeight = 40
     const controlPoint = 100
     // Start Coords Dimensions

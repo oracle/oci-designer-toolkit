@@ -4,12 +4,20 @@
 */
 
 import { OcdOKITImporter } from '@ocd/import'
-import { OcdOKITExporter, OcdTerraformExporter } from '@ocd/export'
+import { OcdMarkdownExporter, OcdOKITExporter, OcdSVGExporter, OcdTerraformExporter, OutputDataString } from '@ocd/export'
 import OcdConsoleConfig from './OcdConsoleConfiguration'
 import OcdDocument from './OcdDocument'
 import { OcdDesignFacade } from '../facade/OcdDesignFacade'
 import { OcdConfigFacade } from '../facade/OcdConfigFacade'
 import { OcdViewLayer, OcdViewPage } from '@ocd/model'
+
+// Import css as text
+// @ts-ignore
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import svgThemeCss from '!!css-loader?{"sourceMap":false,"exportType":"string"}!../css/oci-theme.css'
+// @ts-ignore
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import svgSvgCss from '!!css-loader?{"sourceMap":false,"exportType":"string"}!../css/ocd-svg.css'
 
 export interface MenuItem {
     label: string
@@ -121,11 +129,22 @@ export const menuItems = [
             },
             {
                 label: 'Query',
-                click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
-                    const clone = OcdDocument.clone(ocdDocument)
-                    clone.query = !ocdDocument.query
-                    console.debug('Menu: Setting Query', ocdDocument, clone)
-                    setOcdDocument(clone)
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
+                    if (activeFile.modified) {
+                        OcdDesignFacade.discardConfirmation().then((discard) => {
+                            if (discard) {
+                                const clone = OcdDocument.clone(ocdDocument)
+                                clone.query = !ocdDocument.query
+                                console.debug('Menu: Setting Query', ocdDocument, clone)
+                                setOcdDocument(clone)
+                            }
+                        }).catch((resp) => {console.warn('Discard Failed with', resp)})
+                    } else {
+                        const clone = OcdDocument.clone(ocdDocument)
+                        clone.query = !ocdDocument.query
+                        console.debug('Menu: Setting Query', ocdDocument, clone)
+                        setOcdDocument(clone)
+                    }
                 }
             },
             {
@@ -206,7 +225,27 @@ export const menuItems = [
                             {
                                 label: 'SVG',
                                 click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
-                                    alert('Currently not implemented.')
+                                    const writeTerraformFile = async (dirHandle: FileSystemDirectoryHandle, filename: string, contents: string) => {
+                                        const fileHandle: FileSystemFileHandle = await dirHandle.getFileHandle(filename, {create: true})
+                                        // @ts-ignore 
+                                        const writable = await fileHandle.createWritable()
+                                        await writable.write(contents)
+                                        await writable.close()
+                                        return writable
+                                    }
+                                    const saveFile = async (ocdDocument: OcdDocument) => {
+                                        try {
+                                            // @ts-ignore 
+                                            const handle = await showDirectoryPicker()
+                                            const exporter = new OcdSVGExporter([svgThemeCss, svgSvgCss])
+                                            const svg: OutputDataString = exporter.export(ocdDocument.design)
+                                            const fileWriters = Object.entries(svg).map(([k, v]) => writeTerraformFile(handle, `${k.replaceAll(' ', '_')}.svg`, v))
+                                            return Promise.all(fileWriters)
+                                        } catch (err: any) {
+                                            console.error(err.name, err.message);
+                                        }
+                                    }
+                                    saveFile(ocdDocument).then((resp) => console.info('Saved', resp))             
                                 }
                             }
                         ]
@@ -241,7 +280,31 @@ export const menuItems = [
                     {
                         label: 'Markdown',
                         click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
-                            alert('Currently not implemented.')
+                            const saveFile = async (ocdDocument: OcdDocument) => {
+                                try {
+                                    const options = {
+                                        types: [
+                                            {
+                                                description: 'Markdown Files',
+                                                accept: {
+                                                    'text/markdown': ['.md'],
+                                                },
+                                            },
+                                        ],
+                                    }
+                                    // @ts-ignore 
+                                    const handle = await window.showSaveFilePicker(options)
+                                    const writable = await handle.createWritable()
+                                    const exporter = new OcdMarkdownExporter([svgThemeCss, svgSvgCss])
+                                    const output = exporter.export(ocdDocument.design)
+                                    await writable.write(output)
+                                    await writable.close()
+                                    return handle
+                                } catch (err: any) {
+                                    console.error(err.name, err.message);
+                                }
+                            }
+                            saveFile(ocdDocument).then((resp) => console.info('Saved', resp))             
                         }
                     },
                     {
@@ -330,14 +393,14 @@ export const menuItems = [
                     ocdConsoleConfig.config.displayPage = 'terraform'
                     setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
                 }
-            // },
+            }
             // {
             //     label: 'Validation Results',
             //     click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
             //         ocdConsoleConfig.config.displayPage = 'validation'
             //         setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
             //     }
-            }
+            // }
         ]
     },
     {
