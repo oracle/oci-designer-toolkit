@@ -107,13 +107,13 @@ export const ${this.reactResourceGeneratedName(resource)} = ({ ocdDocument, setO
         // @ts-ignore
         if (typeof summaryTitle === 'function') setTitle(summaryTitle(resource, e.target.open))
     }
-    ${Object.entries(schema.attributes).filter(([k, v]) => !this.ignoreAttributes.includes(v.id) && this.objectTypes.includes(v.type)).map(([k, a]) => this.attributeToObjectUndefinedTest(resource, k, a)).join('\n    ')}
+    ${Object.entries(schema.attributes).filter(([k, v]) => !this.ignoreAttributes.includes(v.id) && this.objectTypes.includes(v.type)).map(([k, a]) => this.attributeToObjectUndefinedTest(resource, a)).join('\n    ')}
     return (
         <div>
             <details open={true} onToggle={onToggle}>
                 <summary className={className}><div>{title}</div><div className={deleteClassName} onClick={onDeleteClick}></div></summary>
                 <div className='ocd-resource-properties'>
-                    ${Object.entries(schema.attributes).filter(([k, v]) => !this.ignoreAttributes.includes(v.id)).map(([k, a]) => this.attributeToReactElement(resource, k, a)).join('\n                    ')}
+                    ${Object.entries(schema.attributes).filter(([k, v]) => !this.ignoreAttributes.includes(v.id)).map(([k, a]) => this.attributeToReactElement(resource, a)).join('\n                    ')}
                 </div>
             </details>
         </div>
@@ -122,7 +122,7 @@ export const ${this.reactResourceGeneratedName(resource)} = ({ ocdDocument, setO
 
 ${schemaObjects.map(i => this.reactComplextElement(resource, i)).filter(i => i.trim() !== '').join('')}
 
-${schemaAttributes.filter(a => !this.ignoreAttributes.includes(a.name)).map(i => this.reactSimpleElement(resource, i)).filter(i => i.trim() !== '').join('')}
+${schemaAttributes.filter(a => !this.ignoreAttributes.includes(a.id)).map(i => this.reactSimpleElement(resource, i)).filter(i => i.trim() !== '').join('')}
 `
         return content
     }
@@ -198,27 +198,27 @@ ${resources.sort().map((r) => `export { ${this.proxyNamespace(r)} } from './${th
             return contents
     }
 
-    attributeToObjectUndefinedTest =  (resource, name, attribute): string => {
+    attributeToObjectUndefinedTest =  (resource, attribute): string => {
         let undefinedTest = ''
-        if (attribute.type === 'object') undefinedTest = `resource['${attribute.key}'] = resource['${attribute.key}'] ? resource['${attribute.key}'] : Model.${this.namespaceName(resource)}.${this.namespaceFunctionName(attribute.name)}()`
+        if (attribute.type === 'object') undefinedTest = `resource['${attribute.key}'] = resource['${attribute.key}'] ? resource['${attribute.key}'] : Model.${this.idToNamespaceName(resource)}.${this.generateHierarchicalNewFunctionCall(attribute.id)}()`
         return undefinedTest
     }
 
-    attributeToReactElement = (resource, name, attribute) => {
+    attributeToReactElement = (resource, attribute) => {
         const configFind = `configs.find((c) => c.id === '${attribute.id}')`
-        const additionalElement = `{additionalElements && additionalElements.find((a) => a.afterElement === '${attribute.name}') && additionalElements.find((a) => a.afterElement === '${attribute.name}')?.jsxElement({ocdDocument, setOcdDocument, resource, configs, rootResource})}`
+        const additionalElement = `{additionalElements && additionalElements.find((a) => a.afterElement === '${attribute.id}') && additionalElements.find((a) => a.afterElement === '${attribute.id}')?.jsxElement({ocdDocument, setOcdDocument, resource, configs, rootResource})}`
         let elementJSX = ''
-        if (attribute.type === 'string' && attribute.lookup)                  elementJSX =  `<${this.reactSimpleName(attribute.name)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} configs={configs} rootResource={rootResource} />`
-        else if (attribute.type === 'string')                                 elementJSX =  `<${this.reactSimpleName(attribute.name)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} configs={configs} rootResource={rootResource} />`
-        else if (attribute.type === 'bool')                                   elementJSX =  `<${this.reactSimpleName(attribute.name)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} configs={configs} rootResource={rootResource} />`
-        else if (attribute.type === 'number')                                 elementJSX =  `<${this.reactSimpleName(attribute.name)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} configs={configs} rootResource={rootResource} />`
-        else if (attribute.type === 'object')                                 elementJSX =  `{isPropertyDisplayConditionTrue(${attribute.conditional}, ${JSON.stringify(attribute.condition)}, resource, rootResource) && <${this.reactObjectName(attribute.name)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource['${attribute.key}']} configs={configs} rootResource={rootResource} additionalElements={additionalElements} />}`
-        else if (attribute.type === 'object')                                 elementJSX =  `<${this.reactObjectName(attribute.name)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource['${attribute.key}']} configs={configs} rootResource={rootResource} additionalElements={additionalElements} />`
-        else if (attribute.type === 'list' && attribute.subtype === 'object') elementJSX =  `<${this.reactObjectListName(attribute.name)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource['${attribute.key}']} configs={configs} rootResource={rootResource} additionalElements={additionalElements} />`
-        else if (attribute.type === 'list' && attribute.subtype === 'string') elementJSX =  `<${this.reactSimpleName(attribute.name)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} configs={configs} rootResource={rootResource} />`
+        if (attribute.type === 'string' && attribute.lookup)                  elementJSX =  `<${this.reactSimpleName(attribute.id)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} configs={configs} rootResource={rootResource} />`
+        else if (attribute.type === 'string')                                 elementJSX =  `<${this.reactSimpleName(attribute.id)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} configs={configs} rootResource={rootResource} />`
+        else if (attribute.type === 'bool')                                   elementJSX =  `<${this.reactSimpleName(attribute.id)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} configs={configs} rootResource={rootResource} />`
+        else if (attribute.type === 'number')                                 elementJSX =  `<${this.reactSimpleName(attribute.id)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} configs={configs} rootResource={rootResource} />`
+        else if (attribute.type === 'object')                                 elementJSX =  `{isPropertyDisplayConditionTrue(${attribute.conditional}, ${JSON.stringify(attribute.condition)}, resource, rootResource) && <${this.reactObjectName(attribute.id)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource['${attribute.key}']} configs={configs} rootResource={rootResource} additionalElements={additionalElements} />}`
+        else if (attribute.type === 'object')                                 elementJSX =  `<${this.reactObjectName(attribute.id)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource['${attribute.key}']} configs={configs} rootResource={rootResource} additionalElements={additionalElements} />`
+        else if (attribute.type === 'list' && attribute.subtype === 'object') elementJSX =  `<${this.reactObjectListName(attribute.id)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource['${attribute.key}']} configs={configs} rootResource={rootResource} additionalElements={additionalElements} />`
+        else if (attribute.type === 'list' && attribute.subtype === 'string') elementJSX =  `<${this.reactSimpleName(attribute.id)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} configs={configs} rootResource={rootResource} />`
         // else if (attribute.type === 'list' && attribute.subtype === 'string') return `<OcdStringListProperty ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} />`
         else if (attribute.type === 'list')                                   elementJSX =  `<OcdListProperty       ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} rootResource={rootResource} />`
-        else if (attribute.type === 'set')                                    elementJSX =  `<${this.reactSimpleName(attribute.name)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} configs={configs} rootResource={rootResource} />`
+        else if (attribute.type === 'set')                                    elementJSX =  `<${this.reactSimpleName(attribute.id)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} configs={configs} rootResource={rootResource} />`
         // else if (attribute.type === 'set')                                    return `<OcdSetProperty        ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} />`
         else if (attribute.type === 'set' && attribute.lookup)                elementJSX =  `<OcdSetLookupProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} rootResource={rootResource} />`
         else if (attribute.type === 'map')                                    elementJSX =  `<OcdMapProperty        ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} rootResource={rootResource} />`
@@ -247,7 +247,7 @@ ${resources.sort().map((r) => `export { ${this.proxyNamespace(r)} } from './${th
         const groupTypes = ['list', 'set']
         if (simpleTypes.includes(attribute.type) || (groupTypes.includes(attribute.type) && simpleTypes.includes(attribute.subtype))) {
             return `
-export const ${this.reactSimpleName(attribute.name)} = ({ ocdDocument, setOcdDocument, resource, configs, rootResource }: GeneratedResourceProperties): JSX.Element => {
+export const ${this.reactSimpleName(attribute.id)} = ({ ocdDocument, setOcdDocument, resource, configs, rootResource }: GeneratedResourceProperties): JSX.Element => {
     return (
         ${this.reactSimpleElementType(resource, attribute.name, attribute)}
     )
@@ -264,14 +264,14 @@ export const ${this.reactSimpleName(attribute.name)} = ({ ocdDocument, setOcdDoc
 
     reactObjectElement = (resource, attribute) => {
         return `
-export const ${this.reactObjectName(attribute.name)} = ({ ocdDocument, setOcdDocument, resource, configs, rootResource, additionalElements = [] }: GeneratedResourceProperties): JSX.Element => {
-    ${Object.entries(attribute.attributes).filter(([k, v]) => !this.ignoreAttributes.includes(v.id) && this.objectTypes.includes(v.type)).map(([k, a]) => this.attributeToObjectUndefinedTest(resource, k, a)).join('\n    ')}
+export const ${this.reactObjectName(attribute.id)} = ({ ocdDocument, setOcdDocument, resource, configs, rootResource, additionalElements = [] }: GeneratedResourceProperties): JSX.Element => {
+    ${Object.entries(attribute.attributes).filter(([k, v]) => !this.ignoreAttributes.includes(v.id) && this.objectTypes.includes(v.type)).map(([k, a]) => this.attributeToObjectUndefinedTest(resource, a)).join('\n    ')}
     return (
         <div className='ocd-property-row ocd-object-property-row'>
             <details open={true}>
                 <summary className='summary-background'>${attribute.label}</summary>
                 <div className='ocd-resource-properties'>
-                    ${Object.entries(attribute.attributes).filter(([k, v]) => !this.ignoreAttributes.includes(v.id)).map(([k, a]) => this.attributeToReactElement(resource, k, a)).join('\n                    ')}
+                    ${Object.entries(attribute.attributes).filter(([k, v]) => !this.ignoreAttributes.includes(v.id)).map(([k, a]) => this.attributeToReactElement(resource, a)).join('\n                    ')}
                 </div>
             </details>
         </div>
@@ -285,7 +285,7 @@ export const ${this.reactObjectName(attribute.name)} = ({ ocdDocument, setOcdDoc
         let objectLabel = attribute.label.split(' ').at(-1)
         objectLabel = objectLabel.endsWith('s') ? objectLabel.slice(0, -1) : objectLabel
         return `
-export const ${this.reactObjectName(attribute.name)} = ({ ocdDocument, setOcdDocument, resource, configs, rootResource, onDelete, additionalElements = [] }: GeneratedResourceProperties): JSX.Element => {
+export const ${this.reactObjectName(attribute.id)} = ({ ocdDocument, setOcdDocument, resource, configs, rootResource, onDelete, additionalElements = [] }: GeneratedResourceProperties): JSX.Element => {
     const onClick = (e: React.MouseEvent<HTMLElement>) => {
         e.stopPropagation()
         e.preventDefault()
@@ -296,32 +296,32 @@ export const ${this.reactObjectName(attribute.name)} = ({ ocdDocument, setOcdDoc
             <details open={true}>
                 <summary className='summary-background ocd-summary-row'><div>${objectLabel}</div><div className='delete-property action-button-background action-button-column action-button' onClick={onClick}></div></summary>
                 <div className='ocd-resource-properties'>
-                    ${Object.entries(attribute.attributes).filter(([k, v]) => !this.ignoreAttributes.includes(v.id)).map(([k, a]) => this.attributeToReactElement(resource, k, a)).join('\n                    ')}
+                    ${Object.entries(attribute.attributes).filter(([k, v]) => !this.ignoreAttributes.includes(v.id)).map(([k, a]) => this.attributeToReactElement(resource, a)).join('\n                    ')}
                 </div>
             </details>
         </div>
     )
 }
         
-export const ${this.reactObjectListName(attribute.name)} = ({ ocdDocument, setOcdDocument, resource, configs, rootResource, additionalElements = [] }: GeneratedResourceProperties): JSX.Element => {
+export const ${this.reactObjectListName(attribute.id)} = ({ ocdDocument, setOcdDocument, resource, configs, rootResource, additionalElements = [] }: GeneratedResourceProperties): JSX.Element => {
     const onClick = (e: React.MouseEvent<HTMLElement>) => {
         e.stopPropagation()
         e.preventDefault()
-        resource.push(Model.${this.namespaceName(resource)}.${this.namespaceFunctionName(attribute.name)}())
+        resource.push(Model.${this.namespaceName(resource)}.${this.generateHierarchicalNewFunctionCall(attribute.id)}())
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
-    const onDelete = (child: Model.${this.namespaceName(resource)}.${this.interfaceName(attribute.name)}) => {
+    const onDelete = (child: ${this.generateModelHierarchyReference(resource, attribute.id)}) => {
         resource.splice(resource.indexOf(child), 1)
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
     // @ts-ignore 
-    resource.forEach((r: Model.${this.namespaceName(resource)}.${this.interfaceName(attribute.name)}) => {if (!r.key) r.key = uuidv4()})
+    resource.forEach((r: ${this.generateModelHierarchyReference(resource, attribute.id)}) => {if (!r.key) r.key = uuidv4()})
     return (
         <div className='ocd-property-row'>
             <details open={true}>
                 <summary className='summary-background ocd-summary-row'><div>${attribute.label}</div><div className='add-property action-button-background action-button-column action-button' onClick={onClick}></div></summary>
                 <div className='ocd-resource-properties'>
-                    {resource.map((r: Model.${this.interfaceName(resource)}) => {return <${this.reactObjectName(attribute.name)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={r} configs={configs} rootResource={rootResource} onDelete={onDelete} key={r.key}/>})}
+                    {resource.map((r: Model.${this.interfaceName(resource)}) => {return <${this.reactObjectName(attribute.id)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={r} configs={configs} rootResource={rootResource} onDelete={onDelete} key={r.key}/>})}
                 </div>
             </details>
         </div>
@@ -329,9 +329,13 @@ export const ${this.reactObjectListName(attribute.name)} = ({ ocdDocument, setOc
 }`
     }
 
-    reactSimpleName = (name) => `${this.resourceName(name.replaceAll('.', '_'))}`
-    reactObjectName = (name) => `${this.resourceName(name)}Object`
-    reactObjectListName = (name) => `${this.resourceName(name)}ObjectList`
+    reactSimpleName = (name) => `${this.idToName(name)}`
+    reactObjectName = (name) => `${this.idToName(name)}Object`
+    reactObjectListName = (name) => `${this.idToName(name)}ObjectList`
+
+    // reactSimpleName = (name) => `${this.resourceName(name.replaceAll('.', '_'))}`
+    // reactObjectName = (name) => `${this.resourceName(name)}Object`
+    // reactObjectListName = (name) => `${this.resourceName(name)}ObjectList`
 
     reactResourceName = (resource) => this.resourceName(resource)
     reactResourceGeneratedName = (resource) => this.autoGeneratedResourceName(resource)
