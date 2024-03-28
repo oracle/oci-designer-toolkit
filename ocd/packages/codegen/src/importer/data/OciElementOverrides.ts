@@ -140,7 +140,8 @@ export const elementOverrides: OcdElementOverrides = {
     "staticLookups": {
         "common": [
             "availability_domain",
-            "fault_domain"
+            "fault_domain",
+            "license_model"
         ],
         "oci_core_dhcp_options": [
             "options.type",
@@ -172,8 +173,7 @@ export const elementOverrides: OcdElementOverrides = {
             "compute_model",
             "data_safe_status",
             "database_edition",
-            "db_workload",
-            "license_model"
+            "db_workload"
         ],
         "oci_kms_key": [
             "key_shape.algorithm",

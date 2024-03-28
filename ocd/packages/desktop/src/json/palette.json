@@ -154,7 +154,7 @@
                             "class": "oci-local-peering-gateway"
                         },
                         {
-                            "container": false,
+                            "container": true,
                             "title": "Dynamic Routing Gateway",
                             "class": "oci-drg"
                         },

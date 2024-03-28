@@ -30,8 +30,8 @@ locals {
     }
     // Overrides
     // User Data (userData)
-    userData = (resource: Record<string, any>, rootResource: OciResource, level=0): string => {return this.isAssignUserData(resource, rootResource) ? this.generateBase64EncodedTextAttribute("user_data", resource.userData, false, level) : ''}
-    isAssignUserData = (resource: Record<string, any>, rootResource: OciResource): boolean => {return this.isPropertyAssignConditionTrue(false, {}, resource, rootResource) ? this.isGenerateAttribute("user_data", resource.userData, false) : false}
+    metadataUserData = (resource: Record<string, any>, rootResource: OciResource, level=0): string => {return this.isAssignMetadataUserData(resource, rootResource) ? this.generateBase64EncodedTextAttribute("user_data", resource.userData, false, level) : ''}
+    isAssignMetadataUserData = (resource: Record<string, any>, rootResource: OciResource): boolean => {return this.isPropertyAssignConditionTrue(false, {}, resource, rootResource) ? this.isGenerateAttribute("user_data", resource.userData, false) : false}
 }
 
 export default OciInstance
