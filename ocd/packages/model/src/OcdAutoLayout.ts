@@ -9,6 +9,8 @@ import { OcdResource } from './OcdResource'
 import { OciResource } from './provider/oci/OciResource'
 import { OcdUtils } from '@ocd/core'
 import { OciCompartment } from './provider/oci/resources/OciCompartment'
+import { OcdTwoColumnLayoutEngine } from './layout/OcdTwoColumnLayoutEngine'
+import { OcdSingleColumnLayoutEngine } from './layout/OcdSingleColumnLayoutEngine'
 
 export class OcdAutoLayout {
     coords: OcdViewCoords[]
@@ -21,8 +23,8 @@ export class OcdAutoLayout {
     containerWidth = 200
     containerHeight = 200
     // Specify Contains and their hierarchy. i.e. compartment -> vcn -> subnet
-    containers: string[] = ['vcn', 'subnet', 'load_balancer', 'drg']
-    ignore: string[] = ['compartment', 'boot_volume_attachment', 'network_security_group_security_rule', 'volume_attachment', 'vnic_attachment', ]
+    containers: string[] = ['vcn', 'subnet', 'load_balancer', 'drg', 'vault']
+    ignore: string[] = ['compartment', 'boot_volume_attachment', 'network_security_group_security_rule', 'volume_attachment', 'vnic_attachment', 'oci_identity_user_group_membership', ]
     containerResources: OcdResources = {}
     simpleResources: OcdResources = {}
     uuid = () => `gid-${uuidv4()}`
@@ -90,7 +92,130 @@ export class OcdAutoLayout {
 
     getChildren = (pocid: string) => this.coords.filter((c) => c.pocid === pocid)
 
-    layout(detailed: boolean = true): OcdViewCoords[] {
+    leftSimple = [['oci-internet-gateway', 'oci-nat-gateway'], ['oci-dhcp-options', 'oci-policy', 'oci-route-table', 'oci-security-list']]
+    rightSimple = [['oci-instance'], ['oci-boot-volume', 'oci-mount-target', 'oci-volume'], ['oci-ipsec', 'oci-file-system'], ['oci-cpe']]
+    allSimple = [...this.leftSimple.flat(), ...this.rightSimple.flat()]
+    leftContainers = [['oci-vcn', 'oci-subnet', 'oci-load-balancer'], ['oci-drg']]
+    rightContainers = []
+    allContainers = [...this.leftContainers.flat(), ...this.rightContainers.flat()]
+
+    layoutSimple = (detailed: boolean = true, coords: OcdViewCoords, childX: number = this.spacing, types: string[], children: OcdViewCoords[]): number => {
+        let childCount = 0
+        let childY = this.spacing + this.simpleHeight
+        children.filter((c) => !c.container && types.includes(c.class)).forEach((child) => {
+            childCount += 1
+            if (childCount > this.maxColumns) {
+                childX = this.spacing
+                childY += (this.spacing + this.simpleHeight)
+                childCount = 0
+            }
+            child.x = childX
+            child.y = childY
+            // Add Spacing
+            childX += (this.spacing + (detailed ? this.detailedWidth : this.simpleWidth) as number)
+            // Size Container
+            coords.w = Math.max(coords.w, (childX + this.spacing))
+            coords.h = childY + this.spacing + this.simpleHeight
+        })
+    return childCount
+    }
+
+    layout(detailed: boolean = true, style: string = 'two-column'): OcdViewCoords[] {
+        if (style === 'dynamic-columns') {
+        } else if (style === 'two-column') {
+            const layoutEngine = new OcdTwoColumnLayoutEngine(this.coords)
+            return layoutEngine.layout(detailed, this.coords)
+        } else {
+            const layoutEngine = new OcdSingleColumnLayoutEngine(this.coords)
+            return layoutEngine.layout(detailed, this.coords)
+        }
+        return this.coords
+    }
+    layoutV2(detailed: boolean = true, style: string = 'two-column'): OcdViewCoords[] {
+        // Position Children in Container
+        this.coords.filter((c) => c.container).reverse().forEach((coords) => {
+            const children = this.getChildren(coords.ocid)
+            let childX = this.spacing
+            let childY = this.spacing + this.simpleHeight
+            let childCount = 0
+            children.filter((c) => !c.container).forEach((child) => {
+                childCount += 1
+                if (childCount > this.maxColumns) {
+                    childX = this.spacing
+                    childY += (this.spacing + this.simpleHeight)
+                    childCount = 0
+                }
+                child.x = childX
+                child.y = childY
+                // Add Spacing
+                childX += (this.spacing + (detailed ? this.detailedWidth : this.simpleWidth) as number)
+                // Size Container
+                coords.w = Math.max(coords.w, (childX + this.spacing))
+                coords.h = childY + this.spacing + this.simpleHeight
+            })
+            childX = this.spacing
+            childY += (this.spacing + this.simpleHeight)
+            children.filter((c) => c.container).forEach((child) => {
+                child.x = childX
+                child.y = childY
+                // Add Spacing
+                childY += (this.spacing + child.h)
+                // Size Container
+                coords.w = Math.max(coords.w, (child.w + (2 * this.spacing)))
+                coords.h += (this.spacing + child.h)
+            })
+        })
+        // Add Children to Parent Coords
+        // console.debug('OcdAutoLayout: Coords', this.coords)
+        this.coords.filter((c) => c.container).forEach((parent) => {
+            const children = this.getChildren(parent.ocid)
+            children.forEach((child) => {
+                child.pgid = parent.id
+                parent.coords ? parent.coords.push(child) : parent.coords = [child]
+            })
+        })
+        // console.debug('OcdAutoLayout: Coords - Post Child Shuffle', this.coords)
+        this.coords = this.coords.filter(c => c.pgid === '')
+        // console.debug('OcdAutoLayout: Coords - Post Filter', this.coords)
+        // Position Root Containers
+        let childX = this.spacing
+        let childY = this.spacing
+        if (style === 'dynamic-columns') {
+            // this.leftSimple.forEach((types) => {
+            //     this.layoutSimple(detailed, coords, childX, types, children)
+            // })
+        } else if (style === 'two-column') {
+            // Top Level Simple to the left Containers to the right
+            this.coords.filter((c) => !c.container).forEach((child) => {
+                child.x = childX
+                child.y = childY
+                // Add Spacing
+                childY += (this.spacing + child.h)
+            })
+            childX += ((this.spacing * 2) + (detailed ? this.detailedWidth : this.simpleWidth) as number)
+            childY = this.spacing
+            this.coords.filter((c) => c.container).forEach((child) => {
+                child.x = childX
+                child.y = childY
+                // Add Spacing
+                childY += (this.spacing + child.h)
+            })
+        } else {
+            // Default Vertical Layout
+            this.coords.reverse().forEach((child) => {
+                child.x = childX
+                child.y = childY
+                // Add Spacing
+                childY += (this.spacing + child.h)
+            })
+        }
+        // console.debug('OcdAutoLayout: Coords - Post Filter', this.coords)
+
+        return this.coords
+    }
+
+    // TODO: Delete when new version working
+    layoutOriginal(detailed: boolean = true): OcdViewCoords[] {
         // Position Children in Container
         this.coords.filter((c) => c.container).reverse().forEach((coords) => {
             const children = this.getChildren(coords.ocid)
@@ -165,4 +290,5 @@ export class OcdAutoLayout {
             } 
             p.layers.push(layer)
         })
-    }}
+    }
+}
