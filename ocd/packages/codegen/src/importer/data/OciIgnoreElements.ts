@@ -276,6 +276,9 @@ export const ignoreElements: OcdIgnoreElements = {
         "ldap_idmap",
         "private_ip"
     ],
+    "oci_identity_user": [
+        "capabilities"
+    ],
     "oci_kms_key": [
         "current_key_version",
         "desired_state",
