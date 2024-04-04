@@ -18,11 +18,11 @@ export namespace OcdValidator {
         const resources = design.model.oci.resources
         Object.entries(resources).forEach(([k, v]) => {
             const validatorName = OcdUtils.toResourceNamespaceName('Oci', k)
-            console.debug('OcdValidator: Validator Name', validatorName)
+            // console.debug('OcdValidator: Validator Name', validatorName)
             // @ts-ignore
             v.forEach((r) => results = [...results, ...ociResourceValidators[validatorName].validateResource(r, resources)])
         })
-        console.debug('OcdValidator: Results', JSON.stringify(results, null, 4))
+        // console.debug('OcdValidator: Results', JSON.stringify(results, null, 4))
         return results
     }
 }
