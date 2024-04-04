@@ -10,6 +10,8 @@ import { OcdDesign, OciModelResources, OciResources } from '@ocd/model'
 import { analytics, bastion, common, core, database, filestorage, identity, keymanagement, loadbalancer, mysql, networkloadbalancer, nosql, objectstorage, vault } from 'oci-sdk'
 import { OciCommonQuery } from './OciQueryCommon'
 import { OcdUtils } from '@ocd/core'
+import { OciLoadBalancerBackend } from '@ocd/model/src/provider/oci/resources/generated/OciLoadBalancerBackend'
+import { OciLoadBalancerBackendSet } from '@ocd/model/src/provider/oci/resources'
 
 export class OciQuery extends OciCommonQuery {
     // Clients
@@ -254,6 +256,12 @@ export class OciQuery extends OciCommonQuery {
                 // Load Balancers
                 // @ts-ignore
                 if (results[queries.indexOf(listLoadBalancers)].status === 'fulfilled' && results[queries.indexOf(listLoadBalancers)].value.length > 0) design.model.oci.resources.load_balancer = results[queries.indexOf(listLoadBalancers)].value
+                if (design.model.oci.resources.load_balancer && design.model.oci.resources.load_balancer.length > 0) {
+                    // Create Backend Sets
+                    design.model.oci.resources.load_balancer_backend_set = design.model.oci.resources.load_balancer.map((l) => Object.values(l.backendSets).map((b) => {return {...b as OciLoadBalancerBackendSet, compartmentId: l.compartmentId, displayName: (b as OciLoadBalancerBackendSet).name, loadBalancerId: l.id, lifecycleState: l.lifecycleState}})).flat()
+                    design.model.oci.resources.load_balancer.forEach((l) => {delete l.backendSets})
+                    console.debug(design.model.oci.resources.load_balancer_backend_set)
+                }
                 // Network Load Balancers
                 // @ts-ignore
                 if (results[queries.indexOf(listNetworkLoadBalancers)].status === 'fulfilled' && results[queries.indexOf(listNetworkLoadBalancers)].value.length > 0) design.model.oci.resources.network_load_balancer = results[queries.indexOf(listNetworkLoadBalancers)].value
