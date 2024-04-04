@@ -4,14 +4,15 @@
 */
 
 import { OcdViewCoords } from "../OcdDesign"
-import { OcdCommonlayoutEngine } from "./OcdCommonLayoutEngine"
+import { OcdCommonLayoutEngine } from "./OcdCommonLayoutEngine"
 
-export class OcdSingleColumnLayoutEngine extends OcdCommonlayoutEngine {
+export class OcdSingleColumnLayoutEngine extends OcdCommonLayoutEngine {
     layout(detailed: boolean = true, coords: OcdViewCoords[]): OcdViewCoords[] {
         let layedOutCoords = coords ? coords : this.coords
         // Layout and filter top level
         layedOutCoords = this.layoutContainerChildren(detailed, layedOutCoords).filter(c => c.pgid === '')
-        layedOutCoords = this.layoutRoot(detailed, layedOutCoords)
+        const rootCoords = layedOutCoords.filter(c => c.pgid === '') // Root Elements have pgid === ''
+        layedOutCoords = this.layoutRoot(detailed, rootCoords)
         return layedOutCoords
     }
 
@@ -60,17 +61,17 @@ export class OcdSingleColumnLayoutEngine extends OcdCommonlayoutEngine {
         return coords
     }
 
-    layoutRoot(detailed: boolean = true, coords: OcdViewCoords[]): OcdViewCoords[] {
+    layoutRoot(detailed: boolean = true, children: OcdViewCoords[]): OcdViewCoords[] {
         // Position Root Containers
         let childX = this.spacing
         let childY = this.spacing
-        coords.reverse().forEach((child) => {
+        children.reverse().forEach((child) => {
             child.x = childX
             child.y = childY
             // Add Spacing
             childY += (this.spacing + child.h)
         })
-        return coords
+        return children
     }
 }
 
