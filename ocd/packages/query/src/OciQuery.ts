@@ -6,10 +6,12 @@
 // import * as common from 'oci-common'
 // import * as core from "oci-core"
 // import * as identity from "oci-identity"
-import { OcdDesign, OciModelResources } from '@ocd/model'
+import { OcdDesign, OciModelResources, OciResources } from '@ocd/model'
 import { analytics, bastion, common, core, database, filestorage, identity, keymanagement, loadbalancer, mysql, networkloadbalancer, nosql, objectstorage, vault } from 'oci-sdk'
 import { OciCommonQuery } from './OciQueryCommon'
 import { OcdUtils } from '@ocd/core'
+import { OciLoadBalancerBackend } from '@ocd/model/src/provider/oci/resources/generated/OciLoadBalancerBackend'
+import { OciLoadBalancerBackendSet } from '@ocd/model/src/provider/oci/resources'
 
 export class OciQuery extends OciCommonQuery {
     // Clients
@@ -100,6 +102,8 @@ export class OciQuery extends OciCommonQuery {
             const listVaults = this.listVaults(compartmentIds)
             const listKeys = this.listKeys(compartmentIds)
             const listSecrets = this.listSecrets(compartmentIds)
+            const listDynamicGroups = this.listDynamicGroups([this.provider.getTenantId()])
+            const listPolicies = this.listPolicies([...compartmentIds, this.provider.getTenantId()])
             // Wait for all queries to be settled
             const queries = [
                 getCompartments, 
@@ -137,7 +141,9 @@ export class OciQuery extends OciCommonQuery {
                 listBastions, 
                 listVaults, 
                 listKeys, 
-                listSecrets
+                listSecrets,
+                listDynamicGroups,
+                listPolicies
             ]
             Promise.allSettled(queries).then((results) => {
                 console.debug('OciQuery: queryTenancy: All Settled')
@@ -250,6 +256,12 @@ export class OciQuery extends OciCommonQuery {
                 // Load Balancers
                 // @ts-ignore
                 if (results[queries.indexOf(listLoadBalancers)].status === 'fulfilled' && results[queries.indexOf(listLoadBalancers)].value.length > 0) design.model.oci.resources.load_balancer = results[queries.indexOf(listLoadBalancers)].value
+                if (design.model.oci.resources.load_balancer && design.model.oci.resources.load_balancer.length > 0) {
+                    // Create Backend Sets
+                    design.model.oci.resources.load_balancer_backend_set = design.model.oci.resources.load_balancer.map((l) => Object.values(l.backendSets).map((b) => {return {...b as OciLoadBalancerBackendSet, compartmentId: l.compartmentId, displayName: (b as OciLoadBalancerBackendSet).name, loadBalancerId: l.id, lifecycleState: l.lifecycleState}})).flat()
+                    design.model.oci.resources.load_balancer.forEach((l) => {delete l.backendSets})
+                    console.debug(design.model.oci.resources.load_balancer_backend_set)
+                }
                 // Network Load Balancers
                 // @ts-ignore
                 if (results[queries.indexOf(listNetworkLoadBalancers)].status === 'fulfilled' && results[queries.indexOf(listNetworkLoadBalancers)].value.length > 0) design.model.oci.resources.network_load_balancer = results[queries.indexOf(listNetworkLoadBalancers)].value
@@ -290,8 +302,17 @@ export class OciQuery extends OciCommonQuery {
                 // Secret
                 // @ts-ignore
                 if (results[queries.indexOf(listSecrets)].status === 'fulfilled' && results[queries.indexOf(listSecrets)].value.length > 0) design.model.oci.resources.secret = results[queries.indexOf(listSecrets)].value
+                // Dynamic Group
+                // @ts-ignore
+                if (results[queries.indexOf(listDynamicGroups)].status === 'fulfilled' && results[queries.indexOf(listDynamicGroups)].value.length > 0) design.model.oci.resources.dynamic_group = results[queries.indexOf(listDynamicGroups)].value
+                // Policy
+                // @ts-ignore
+                if (results[queries.indexOf(listPolicies)].status === 'fulfilled' && results[queries.indexOf(listPolicies)].value.length > 0) design.model.oci.resources.policy = results[queries.indexOf(listPolicies)].value
 
                 // console.debug('OciQuery: queryTenancy:', JSON.stringify(design, null, 4))
+                const filteredResources: OciResources = {}
+                Object.keys(design.model.oci.resources).forEach((k) => filteredResources[k] = design.model.oci.resources[k].filter((r) => this.lifecycleStates.includes(r.lifecycleState)))
+                design.model.oci.resources = filteredResources
                 resolve(design)
             }).catch((reason) => {
                 console.error(reason)
@@ -480,6 +501,74 @@ export class OciQuery extends OciCommonQuery {
                 resolve(resources)
             }).catch((reason) => {
                 console.error('OciQuery: listDrgAttachments:', reason)
+                reject(reason)
+            })
+        })
+    }
+
+    listDynamicGroups(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const requests: identity.requests.ListDynamicGroupsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
+            const queries = requests.map((r) => this.identityClient.listDynamicGroups(r))
+            Promise.allSettled(queries).then((results) => {
+                console.debug('OciQuery: listDynamicGroups: All Settled')
+                //@ts-ignore
+                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
+                resolve(resources)
+            }).catch((reason) => {
+                console.error(reason)
+                reject(reason)
+            })
+        })
+    }
+
+    iterateDynamicGroups(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const requests: identity.requests.ListDynamicGroupsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
+            const iterators = requests.map((r) => this.identityClient.listDynamicGroupsResponseIterator(r))
+            const queries = iterators.map((i) => this.getAllResponseData(i))
+            // const queries = requests.map((r) => this.identityClient.listDynamicGroups(r))
+            Promise.allSettled(queries).then((results) => {
+                console.debug('OciQuery: iterateDynamicGroups: All Settled')
+                //@ts-ignore
+                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
+                resolve(resources)
+            }).catch((reason) => {
+                console.error(reason)
+                reject(reason)
+            })
+        })
+    }
+
+    listPolicies(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const requests: identity.requests.ListPoliciesRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
+            const queries = requests.map((r) => this.identityClient.listPolicies(r))
+            Promise.allSettled(queries).then((results) => {
+                console.debug('OciQuery: listPolicies: All Settled')
+                //@ts-ignore
+                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
+                resolve(resources)
+            }).catch((reason) => {
+                console.error(reason)
+                reject(reason)
+            })
+        })
+    }
+
+    iteratePolicies(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const requests: identity.requests.ListPoliciesRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
+            const iterators = requests.map((r) => this.identityClient.listPoliciesResponseIterator(r))
+            const queries = iterators.map((i) => this.getAllResponseData(i))
+            // const queries = requests.map((r) => this.identityClient.listDynamicGroups(r))
+            Promise.allSettled(queries).then((results) => {
+                console.debug('OciQuery: iteratePolicies: All Settled')
+                //@ts-ignore
+                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
+                resolve(resources)
+            }).catch((reason) => {
+                console.error(reason)
                 reject(reason)
             })
         })
