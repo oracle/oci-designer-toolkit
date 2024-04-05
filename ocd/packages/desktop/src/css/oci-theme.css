@@ -283,11 +283,18 @@
 
 /* Identity & Security */
 .oci-key-background-colour,
-.oci-vault-background-colour {
+.oci-vault-background-colour,
+.oci-policy-background-colour {
     background-color: var(--svg-identity-resources-background-colour);
 }
 
 /* Analytics */
 .oci-analytics-instance-background-colour {
     background-color: var(--svg-analytics-resources-background-colour);
+}
+
+/* Tenancy */
+.oci-dynamic-group-background-colour,
+.oci-group-background-colour {
+    background-color: var(--svg-tenancy-resources-background-colour);
 }

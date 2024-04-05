@@ -32,6 +32,8 @@ export namespace OciIpsec {
     export function getConnectionIds(resource: OciIpsec, allResources: OcdResources): string[] {
         // This List of Ids does not include the Parent Id or Compartment Id
         let associationIds: string[] = []
+        if (resource.drgId && resource.drgId !== '') associationIds = [...associationIds, resource.drgId]
+        if (resource.cpeId && resource.cpeId !== '') associationIds = [...associationIds, resource.cpeId]
         return associationIds
     }
 }

@@ -11,7 +11,7 @@ import { analytics, bastion, common, core, database, filestorage, identity, keym
 import { OciCommonQuery } from './OciQueryCommon'
 import { OcdUtils } from '@ocd/core'
 import { OciLoadBalancerBackend } from '@ocd/model/src/provider/oci/resources/generated/OciLoadBalancerBackend'
-import { OciLoadBalancerBackendSet } from '@ocd/model/src/provider/oci/resources'
+import { OciLoadBalancerBackendSet, OciLoadBalancerListener } from '@ocd/model/src/provider/oci/resources'
 
 export class OciQuery extends OciCommonQuery {
     // Clients
@@ -258,8 +258,30 @@ export class OciQuery extends OciCommonQuery {
                 if (results[queries.indexOf(listLoadBalancers)].status === 'fulfilled' && results[queries.indexOf(listLoadBalancers)].value.length > 0) design.model.oci.resources.load_balancer = results[queries.indexOf(listLoadBalancers)].value
                 if (design.model.oci.resources.load_balancer && design.model.oci.resources.load_balancer.length > 0) {
                     // Create Backend Sets
-                    design.model.oci.resources.load_balancer_backend_set = design.model.oci.resources.load_balancer.map((l) => Object.values(l.backendSets).map((b) => {return {...b as OciLoadBalancerBackendSet, compartmentId: l.compartmentId, displayName: (b as OciLoadBalancerBackendSet).name, loadBalancerId: l.id, lifecycleState: l.lifecycleState}})).flat()
-                    design.model.oci.resources.load_balancer.forEach((l) => {delete l.backendSets})
+                    design.model.oci.resources.load_balancer_backend_set = design.model.oci.resources.load_balancer.map((l) => Object.values(l.backendSets as OciLoadBalancerBackendSet[]).map((b) => {
+                        return {...b, 
+                            id: l.id.replace('loadbalancer', 'load_balancer_backend_set'), 
+                            compartmentId: l.compartmentId, 
+                            displayName: b.name, 
+                            loadBalancerId: l.id, 
+                            lifecycleState: l.lifecycleState
+                        }
+                    })).flat()
+                    // Create Listeners
+                    design.model.oci.resources.load_balancer_listener = design.model.oci.resources.load_balancer.map((l) => (Object.values(l.listeners) as OciLoadBalancerListener[]).map((listener) => {
+                        return {...listener, 
+                            id: l.id.replace('loadbalancer', 'load_balancer_listener'), 
+                            compartmentId: l.compartmentId, 
+                            displayName: listener.name, 
+                            defaultBackendSetName: design.model.oci.resources.load_balancer_backend_set.find((b) => b.loadBalancerId === l.id && b.displayName === listener.defaultBackendSetName)?.id,
+                            loadBalancerId: l.id, 
+                            lifecycleState: l.lifecycleState
+                        }
+                    })).flat()
+                    design.model.oci.resources.load_balancer.forEach((l) => {
+                        delete l.backendSets
+                        delete l.Listeners
+                    })
                     console.debug(design.model.oci.resources.load_balancer_backend_set)
                 }
                 // Network Load Balancers
@@ -869,6 +891,22 @@ export class OciQuery extends OciCommonQuery {
         })
     }
 
+    listPrivateIps(vnicIds: string[], retryCount: number = 0): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const requests: core.requests.ListPrivateIpsRequest[] = vnicIds.map((id) => {return {vnicId: id}})
+            const queries = requests.map((r) => this.vcnClient.listPrivateIps(r))
+            Promise.allSettled(queries).then((results) => {
+                console.debug('OciQuery: listPrivateIps: All Settled')
+                //@ts-ignore
+                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
+                resolve(resources)
+            }).catch((reason) => {
+                console.error(reason)
+                reject(reason)
+            })
+        })
+    }
+
     listRouteTables(compartmentIds: string[], retryCount: number = 0): Promise<any> {
         return new Promise((resolve, reject) => {
             const requests: core.requests.ListRouteTablesRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
@@ -990,9 +1028,20 @@ export class OciQuery extends OciCommonQuery {
                 //@ts-ignore
                 const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], []) as Record<string, any>[]
                 const vnicIds = resources.map(r => r.vnicId)
-                this.getVnics(vnicIds).then((response) => {
+                const getVnics = this.getVnics(vnicIds)
+                const listPrivateIps = this.listPrivateIps(vnicIds)
+                const queries = [getVnics, listPrivateIps]
+                // this.getVnics(vnicIds).then((response) => {
+                //     //@ts-ignore
+                //     resources.forEach((r) => r.vnic = response.find((v) => v.id === r.vnicId))
+                //     resolve(resources)
+                // })
+                Promise.allSettled(queries).then((response) => {
                     //@ts-ignore
-                    resources.forEach((r) => r.vnic = response.find((v) => v.id === r.vnicId))
+                    if (response[queries.indexOf(getVnics)].status === 'fulfilled' && response[queries.indexOf(getVnics)].value.length > 0) resources.forEach((r) => r.vnic = response[queries.indexOf(getVnics)].value.find((v) => v.id === r.vnicId))
+                    //@ts-ignore
+                    if (response[queries.indexOf(listPrivateIps)].status === 'fulfilled' && response[queries.indexOf(listPrivateIps)].value.length > 0) resources.forEach((r) => r.privateIp = response[queries.indexOf(listPrivateIps)].value.find((v) => v.vnicId === r.vnicId))
+                    console.debug('OciQuery: listVnicAttachments: All Settled', resources)
                     resolve(resources)
                 })
                 // resolve(resources)
