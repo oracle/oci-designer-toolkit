@@ -101,9 +101,9 @@ export class OcdCommonLayoutEngine {
     layoutAsColumn = (detailed: boolean = true, coords: OcdViewCoords, childX: number = this.spacing, types: string[], children: OcdViewCoords[]): number => {
         let childY = this.spacing
         let columnWidth = 0
-        console.debug('OcdCommonLayoutEngine: childX:', childX, 'Types:', types, 'Children:', children)
+        // console.debug('OcdCommonLayoutEngine: childX:', childX, 'Types:', types, 'Children:', children)
         children.filter((c) => types.includes(c.class)).forEach((child) => {
-            console.debug('OcdCommonLayoutEngine: Processing:', child)
+            // console.debug('OcdCommonLayoutEngine: Processing:', child)
             child.x = childX
             child.y = childY
             // Add Spacing
@@ -114,7 +114,7 @@ export class OcdCommonLayoutEngine {
             coords.w = Math.max(coords.w, (childX + this.spacing))
             coords.h = childY + this.spacing + this.simpleHeight
         })
-        console.debug('OcdCommonLayoutEngine: Column Width:', columnWidth)
+        // console.debug('OcdCommonLayoutEngine: Column Width:', columnWidth)
         columnWidth += columnWidth !== 0 ? this.spacing : 0
         return columnWidth
     }

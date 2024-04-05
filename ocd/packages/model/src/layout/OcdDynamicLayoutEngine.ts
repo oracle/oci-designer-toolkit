@@ -16,8 +16,8 @@ export class OcdDynamicLayoutEngine extends OcdCommonLayoutEngine {
             ['oci-dhcp-options', 'oci-policy', 'oci-route-table', 'oci-security-list'],
             ['oci-vcn', 'oci-subnet', 'oci-load-balancer'],
             ['oci-instance'], 
-            ['oci-boot-volume', 'oci-mount-target', 'oci-volume'], 
-            ['oci-ipsec', 'oci-file-system', 'drg'], 
+            ['oci-boot-volume', 'oci-mount-target', 'oci-volume', 'oci-drg'], 
+            ['oci-ipsec', 'oci-file-system'], 
             ['oci-cpe']
         ]
         // All Specified Resources
