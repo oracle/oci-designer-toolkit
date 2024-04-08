@@ -186,7 +186,7 @@ export class OcdDocument {
     }
     getResourceParentId(id: string): string {
         const resource = this.getResource(id)
-        const parentId: string = (resource.provider === 'oci') ? OciResource.getParentId(resource) : ''
+        const parentId: string = (resource.provider === 'oci') ? OciResource.getParentId(resource, this.getResourceLists()) : ''
         return parentId
     }
     getResourceAssociationIds(id: string): string[] {

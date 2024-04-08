@@ -6,6 +6,7 @@
 export const layoutEngineConfig = {
     "containers": [
         "drg", 
+        "group",
         "load_balancer", 
         "subnet", 
         "vault",

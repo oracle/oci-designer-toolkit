@@ -47,10 +47,10 @@ export namespace OciResource {
             Resources[namespace].setParentId(child, parent.id)
         }
     }
-    export function getParentId(resource: OciResource): string {
+    export function getParentId(resource: OciResource, allResources?: OcdResources): string {
         const namespace = `Oci${resource.resourceType}`
         // @ts-ignore 
-        const parentId = Resources[namespace].getParentId(resource)
+        const parentId = Resources[namespace].getParentId(resource, allResources)
         return parentId
     }
     export function getAssociationIds(resource: OciResource, allResources: OcdResources): string[] {
