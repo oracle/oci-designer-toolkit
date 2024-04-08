@@ -267,6 +267,20 @@ export class OciQuery extends OciCommonQuery {
                             lifecycleState: l.lifecycleState
                         }
                     })).flat()
+                    // Create Backends
+                    design.model.oci.resources.load_balancer_backend = design.model.oci.resources.load_balancer_backend_set.map((bs) => Object.values(bs.backends as OciLoadBalancerBackend[]).map((b) => {
+                        return {...b,
+
+                            id: bs.id.replace('load_balancer_backend_set', 'load_balancer_backend'), 
+                            compartmentId: bs.compartmentId, 
+                            displayName: b.name, 
+                            backendSetId: bs.id,
+                            backendsetName: bs.name,
+                            loadBalancerId: bs.loadBalancerId, 
+                            instanceId: design.model.oci.resources.vnic_attachment.find((v) => v.privateIp.ipAddress === b.ipAddress).instanceId,
+                            lifecycleState: bs.lifecycleState
+                        }
+                    })).flat()
                     // Create Listeners
                     design.model.oci.resources.load_balancer_listener = design.model.oci.resources.load_balancer.map((l) => (Object.values(l.listeners) as OciLoadBalancerListener[]).map((listener) => {
                         return {...listener, 

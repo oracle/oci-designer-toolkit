@@ -219,6 +219,21 @@
                             "container": false,
                             "title": "Key",
                             "class": "oci-key"
+                        },
+                        {
+                            "container": false,
+                            "title": "Dynamic Group",
+                            "class": "oci-dynamic-group"
+                        },
+                        {
+                            "container": true,
+                            "title": "Group",
+                            "class": "oci-group"
+                        },
+                        {
+                            "container": false,
+                            "title": "User",
+                            "class": "oci-user"
                         }
                     ]
                 }
