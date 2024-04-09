@@ -75,6 +75,7 @@ export class OciQuery extends OciCommonQuery {
             const listDrgs = this.listDrgs(compartmentIds)
             const listDrgAttachments = this.listDrgAttachments(compartmentIds)
             const listServiceGateways = this.listServiceGateways(compartmentIds)
+            const listLocalPeeringGateways = this.listLocalPeeringGateways(compartmentIds)
             const listRemotePeeringConnections = this.listRemotePeeringConnections(compartmentIds)
             const listCpes = this.listCpes(compartmentIds)
             // Storage
@@ -103,7 +104,8 @@ export class OciQuery extends OciCommonQuery {
             const listKeys = this.listKeys(compartmentIds)
             const listSecrets = this.listSecrets(compartmentIds)
             const listDynamicGroups = this.listDynamicGroups([this.provider.getTenantId()])
-            const listPolicies = this.listPolicies([...compartmentIds, this.provider.getTenantId()])
+            const listPolicies = this.listPolicies([...compartmentIds])
+            // const listPolicies = this.listPolicies([...compartmentIds, this.provider.getTenantId()])
             // Wait for all queries to be settled
             const queries = [
                 getCompartments, 
@@ -136,6 +138,7 @@ export class OciQuery extends OciCommonQuery {
                 listDrgs, 
                 listDrgAttachments, 
                 listServiceGateways, 
+                listLocalPeeringGateways,
                 listRemotePeeringConnections, 
                 listCpes, 
                 listBastions, 
@@ -196,6 +199,9 @@ export class OciQuery extends OciCommonQuery {
                 // Service Gateway
                 // @ts-ignore
                 if (results[queries.indexOf(listServiceGateways)].status === 'fulfilled' && results[queries.indexOf(listServiceGateways)].value.length > 0) design.model.oci.resources.service_gateway = results[queries.indexOf(listServiceGateways)].value
+                // Local Peering Gateway
+                // @ts-ignore
+                if (results[queries.indexOf(listLocalPeeringGateways)].status === 'fulfilled' && results[queries.indexOf(listLocalPeeringGateways)].value.length > 0) design.model.oci.resources.local_peering_gateway = results[queries.indexOf(listLocalPeeringGateways)].value
                 // Remote Peering Connection
                 // @ts-ignore
                 if (results[queries.indexOf(listRemotePeeringConnections)].status === 'fulfilled' && results[queries.indexOf(listRemotePeeringConnections)].value.length > 0) design.model.oci.resources.remote_peering_connection = results[queries.indexOf(listRemotePeeringConnections)].value
@@ -296,7 +302,7 @@ export class OciQuery extends OciCommonQuery {
                         delete l.backendSets
                         delete l.Listeners
                     })
-                    console.debug(design.model.oci.resources.load_balancer_backend_set)
+                    // console.debug(design.model.oci.resources.load_balancer_backend_set)
                 }
                 // Network Load Balancers
                 // @ts-ignore
@@ -340,14 +346,14 @@ export class OciQuery extends OciCommonQuery {
                 if (results[queries.indexOf(listSecrets)].status === 'fulfilled' && results[queries.indexOf(listSecrets)].value.length > 0) design.model.oci.resources.secret = results[queries.indexOf(listSecrets)].value
                 // Dynamic Group
                 // @ts-ignore
-                if (results[queries.indexOf(listDynamicGroups)].status === 'fulfilled' && results[queries.indexOf(listDynamicGroups)].value.length > 0) design.model.oci.resources.dynamic_group = results[queries.indexOf(listDynamicGroups)].value
+                if (results[queries.indexOf(listDynamicGroups)].status === 'fulfilled' && results[queries.indexOf(listDynamicGroups)].value.length > 0) design.model.oci.resources.dynamic_group = results[queries.indexOf(listDynamicGroups)].value.map((r) => {return {...r, displayName: r.name}})
                 // Policy
                 // @ts-ignore
                 if (results[queries.indexOf(listPolicies)].status === 'fulfilled' && results[queries.indexOf(listPolicies)].value.length > 0) design.model.oci.resources.policy = results[queries.indexOf(listPolicies)].value
 
                 // console.debug('OciQuery: queryTenancy:', JSON.stringify(design, null, 4))
                 const filteredResources: OciResources = {}
-                Object.keys(design.model.oci.resources).forEach((k) => filteredResources[k] = design.model.oci.resources[k].filter((r) => this.lifecycleStates.includes(r.lifecycleState)))
+                Object.keys(design.model.oci.resources).forEach((k) => filteredResources[k] = design.model.oci.resources[k].filter((r) => this.lifecycleStates.includes(r.lifecycleState) || r.lifecycleState === undefined))
                 design.model.oci.resources = filteredResources
                 resolve(design)
             }).catch((reason) => {
@@ -576,40 +582,6 @@ export class OciQuery extends OciCommonQuery {
         })
     }
 
-    listPolicies(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: identity.requests.ListPoliciesRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.identityClient.listPolicies(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listPolicies: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
-                resolve(resources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
-        })
-    }
-
-    iteratePolicies(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: identity.requests.ListPoliciesRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const iterators = requests.map((r) => this.identityClient.listPoliciesResponseIterator(r))
-            const queries = iterators.map((i) => this.getAllResponseData(i))
-            // const queries = requests.map((r) => this.identityClient.listDynamicGroups(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: iteratePolicies: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
-                resolve(resources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
-        })
-    }
-
     listFileSystems(compartmentIds: string[], retryCount: number = 0): Promise<any> {
         return new Promise((resolve, reject) => {
             this.listAvailabilityDomains(compartmentIds.slice(0,1)).then((ads) => {
@@ -694,6 +666,42 @@ export class OciQuery extends OciCommonQuery {
         })
     }
 
+    // Local Peering Gateways
+    iterateLocalPeeringGateways(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const requests: core.requests.ListLocalPeeringGatewaysRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
+            const iterators = requests.map((r) => this.vcnClient.listLocalPeeringGatewaysResponseIterator(r))
+            const queries = iterators.map((i) => this.getAllResponseData(i))
+            // const queries = requests.map((r) => this.identityClient.listDynamicGroups(r))
+            Promise.allSettled(queries).then((results) => {
+                console.debug('OciQuery: iterateLocalPeeringGateways: All Settled')
+                //@ts-ignore
+                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
+                resolve(resources)
+            }).catch((reason) => {
+                console.error(reason)
+                reject(reason)
+            })
+        })
+    }
+
+    listLocalPeeringGateways(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const requests: core.requests.ListLocalPeeringGatewaysRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
+            const queries = requests.map((r) => this.vcnClient.listLocalPeeringGateways(r))
+            Promise.allSettled(queries).then((results) => {
+                console.debug('OciQuery: listLocalPeeringGateways: All Settled', JSON.stringify(results, null, 2))
+                //@ts-ignore
+                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
+                resolve(resources)
+            }).catch((reason) => {
+                console.error(reason)
+                reject(reason)
+            })
+        })
+    }
+
+    // Keys
     listKeys(compartmentIds: string[], retryCount: number = 0): Promise<any> {
         return new Promise((resolve, reject) => {
             const requests: keymanagement.requests.ListKeysRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
@@ -849,22 +857,6 @@ export class OciQuery extends OciCommonQuery {
         })
     }
 
-    listRemotePeeringConnections(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: core.requests.ListRemotePeeringConnectionsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.vcnClient.listRemotePeeringConnections(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listRemotePeeringConnections: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
-                resolve(resources)
-            }).catch((reason) => {
-                console.error('OciQuery: listRemotePeeringConnections:', reason)
-                reject(reason)
-            })
-        })
-    }
-
     listNoSqlIndexes(tableIds: string[], retryCount: number = 0): Promise<any> {
         return new Promise((resolve, reject) => {
             const requests: nosql.requests.ListIndexesRequest[] = tableIds.map((id) => {return {tableNameOrId: id}})
@@ -905,6 +897,42 @@ export class OciQuery extends OciCommonQuery {
         })
     }
 
+    // Policies
+    listPolicies(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const requests: identity.requests.ListPoliciesRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
+            const queries = requests.map((r) => this.identityClient.listPolicies(r))
+            Promise.allSettled(queries).then((results) => {
+                console.debug('OciQuery: listPolicies: All Settled')
+                //@ts-ignore
+                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
+                resolve(resources)
+            }).catch((reason) => {
+                console.error(reason)
+                reject(reason)
+            })
+        })
+    }
+
+    iteratePolicies(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const requests: identity.requests.ListPoliciesRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
+            const iterators = requests.map((r) => this.identityClient.listPoliciesResponseIterator(r))
+            const queries = iterators.map((i) => this.getAllResponseData(i))
+            // const queries = requests.map((r) => this.identityClient.listDynamicGroups(r))
+            Promise.allSettled(queries).then((results) => {
+                console.debug('OciQuery: iteratePolicies: All Settled')
+                //@ts-ignore
+                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
+                resolve(resources)
+            }).catch((reason) => {
+                console.error(reason)
+                reject(reason)
+            })
+        })
+    }
+
+    // Private IPs
     listPrivateIps(vnicIds: string[], retryCount: number = 0): Promise<any> {
         return new Promise((resolve, reject) => {
             const requests: core.requests.ListPrivateIpsRequest[] = vnicIds.map((id) => {return {vnicId: id}})
@@ -916,6 +944,22 @@ export class OciQuery extends OciCommonQuery {
                 resolve(resources)
             }).catch((reason) => {
                 console.error(reason)
+                reject(reason)
+            })
+        })
+    }
+
+    listRemotePeeringConnections(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const requests: core.requests.ListRemotePeeringConnectionsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
+            const queries = requests.map((r) => this.vcnClient.listRemotePeeringConnections(r))
+            Promise.allSettled(queries).then((results) => {
+                console.debug('OciQuery: listRemotePeeringConnections: All Settled')
+                //@ts-ignore
+                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
+                resolve(resources)
+            }).catch((reason) => {
+                console.error('OciQuery: listRemotePeeringConnections:', reason)
                 reject(reason)
             })
         })
@@ -1055,7 +1099,7 @@ export class OciQuery extends OciCommonQuery {
                     if (response[queries.indexOf(getVnics)].status === 'fulfilled' && response[queries.indexOf(getVnics)].value.length > 0) resources.forEach((r) => r.vnic = response[queries.indexOf(getVnics)].value.find((v) => v.id === r.vnicId))
                     //@ts-ignore
                     if (response[queries.indexOf(listPrivateIps)].status === 'fulfilled' && response[queries.indexOf(listPrivateIps)].value.length > 0) resources.forEach((r) => r.privateIp = response[queries.indexOf(listPrivateIps)].value.find((v) => v.vnicId === r.vnicId))
-                    console.debug('OciQuery: listVnicAttachments: All Settled', resources)
+                    // console.debug('OciQuery: listVnicAttachments: All Settled', resources)
                     resolve(resources)
                 })
                 // resolve(resources)

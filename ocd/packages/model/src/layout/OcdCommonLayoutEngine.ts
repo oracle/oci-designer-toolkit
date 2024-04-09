@@ -114,9 +114,9 @@ export class OcdCommonLayoutEngine {
             coords.w = Math.max(coords.w, (childX + this.spacing))
             coords.h = childY + this.spacing + this.simpleHeight
         })
-        console.debug('OcdCommonLayoutEngine: Column Width:', columnWidth)
+        // console.debug('OcdCommonLayoutEngine: Column Width:', columnWidth)
         columnWidth += columnWidth !== 0 ? (this.spacing * 2) : 0
-        console.debug('OcdCommonLayoutEngine: Column Width:', columnWidth)
+        // console.debug('OcdCommonLayoutEngine: Column Width:', columnWidth)
         return columnWidth
     }
 
