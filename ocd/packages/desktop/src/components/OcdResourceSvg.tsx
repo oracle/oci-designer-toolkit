@@ -7,7 +7,7 @@
 import { useContext, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { OcdDocument, OcdDragResource, OcdSelectedResource } from './OcdDocument'
-import { OcdViewPage, OcdViewConnector, OcdViewCoords, OcdViewLayer } from '@ocd/model'
+import { OcdViewPage, OcdViewConnector, OcdViewCoords, OcdViewLayer, OcdResource } from '@ocd/model'
 import { ResourceRectProps, ResourceForeignObjectProps, ResourceSvgProps, ResourceSvgContextMenuProps, ResourceSvgGhostProps, OcdMouseEvents, ConnectorSvgProps } from '../types/ReactComponentProperties'
 import { OcdContextMenu } from './OcdCanvas'
 import { ActiveFileContext } from '../pages/OcdConsole'
@@ -386,8 +386,10 @@ const OcdForeignObject = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
 
 export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, contextMenu, setContextMenu, svgDragDropEvents, resource }: ResourceSvgProps): JSX.Element => {
     const page: OcdViewPage = ocdDocument.getActivePage()
-    const layers = page.layers.filter((l: OcdViewLayer) => l.visible).map((l: OcdViewLayer) => l.id)
-    const visibleResourceIds = ocdDocument.getResources().filter((r: any) => layers.includes(r.compartmentId)).map((r: any) => r.id)
+    const allCompartmentIds = ocdDocument.getOciResourceList('comparment').map((r) => r.id)
+    const visibleLayers = page.layers.filter((l: OcdViewLayer) => l.visible).map((l: OcdViewLayer) => l.id)
+    const visibleResourceIds = ocdDocument.getResources().filter((r: OcdResource) => visibleLayers.includes(r.compartmentId) || (!allCompartmentIds.includes(r.compartmentId) && r.resourceType !== 'Compartment')).map((r: any) => r.id)
+    // const visibleResourceIds = ocdDocument.getResources().filter((r: any) => visibleLayers.includes(r.compartmentId)).map((r: any) => r.id)
     const hidden = !visibleResourceIds.includes(resource.ocid)
     // const [contextMenu, setContextMenu] = useState({show: false, x: 0, y: 0})
     // console.info('OcdResourceSvg: Resource', resource)
@@ -516,8 +518,10 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
 
 export const OcdDragResourceGhostSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resource }: ResourceSvgGhostProps): JSX.Element => {
     const page: OcdViewPage = ocdDocument.getActivePage()
-    const layers = page.layers.filter((l: OcdViewLayer) => l.visible).map((l: OcdViewLayer) => l.id)
-    const visibleResourceIds = ocdDocument.getResources().filter((r: any) => layers.includes(r.compartmentId)).map((r: any) => r.id)
+    const allCompartmentIds = ocdDocument.getOciResourceList('comparment').map((r) => r.id)
+    const visibleLayers = page.layers.filter((l: OcdViewLayer) => l.visible).map((l: OcdViewLayer) => l.id)
+    const visibleResourceIds = ocdDocument.getResources().filter((r: OcdResource) => visibleLayers.includes(r.compartmentId) || (!allCompartmentIds.includes(r.compartmentId) && r.resourceType !== 'Compartment')).map((r: any) => r.id)
+    // const visibleResourceIds = ocdDocument.getResources().filter((r: any) => visibleLayers.includes(r.compartmentId)).map((r: any) => r.id)
     const hidden = !visibleResourceIds.includes(resource.ocid)
     const containerLayout = (resource.container && (!resource.detailsStyle || resource.detailsStyle === 'default'))
     const SvgRect = containerLayout ? OcdContainerRect : OcdSimpleRect
