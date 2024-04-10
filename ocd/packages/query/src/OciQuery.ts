@@ -103,8 +103,9 @@ export class OciQuery extends OciCommonQuery {
             const listVaults = this.listVaults(compartmentIds)
             const listKeys = this.listKeys(compartmentIds)
             const listSecrets = this.listSecrets(compartmentIds)
-            const listDynamicGroups = this.listDynamicGroups([this.provider.getTenantId()])
-            const listPolicies = this.listPolicies([...compartmentIds])
+            const listDynamicGroups = this.listDynamicGroups(compartmentIds)
+            // const listDynamicGroups = this.listDynamicGroups([this.provider.getTenantId()])
+            const listPolicies = this.listPolicies(compartmentIds)
             // const listPolicies = this.listPolicies([...compartmentIds, this.provider.getTenantId()])
             // Wait for all queries to be settled
             const queries = [
@@ -275,6 +276,7 @@ export class OciQuery extends OciCommonQuery {
                     })).flat()
                     // Create Backends
                     design.model.oci.resources.load_balancer_backend = design.model.oci.resources.load_balancer_backend_set.map((bs) => Object.values(bs.backends as OciLoadBalancerBackend[]).map((b) => {
+                        const instanceId = design.model.oci.resources.vnic_attachment ? design.model.oci.resources.vnic_attachment.find((v) => v.privateIp && v.privateIp.ipAddress === b.ipAddress).instanceId : ''
                         return {...b,
 
                             id: bs.id.replace('load_balancer_backend_set', 'load_balancer_backend'), 
@@ -283,7 +285,7 @@ export class OciQuery extends OciCommonQuery {
                             backendSetId: bs.id,
                             backendsetName: bs.name,
                             loadBalancerId: bs.loadBalancerId, 
-                            instanceId: design.model.oci.resources.vnic_attachment.find((v) => v.privateIp.ipAddress === b.ipAddress).instanceId,
+                            instanceId: instanceId,
                             lifecycleState: bs.lifecycleState
                         }
                     })).flat()
@@ -302,7 +304,8 @@ export class OciQuery extends OciCommonQuery {
                         delete l.backendSets
                         delete l.Listeners
                     })
-                    // console.debug(design.model.oci.resources.load_balancer_backend_set)
+                    console.debug('OciQuery: Load Balancer Backend Sets:', design.model.oci.resources.load_balancer_backend_set)
+                    console.debug('OciQuery: Load Balancer Backends:', design.model.oci.resources.load_balancer_backend)
                 }
                 // Network Load Balancers
                 // @ts-ignore
@@ -690,7 +693,7 @@ export class OciQuery extends OciCommonQuery {
             const requests: core.requests.ListLocalPeeringGatewaysRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
             const queries = requests.map((r) => this.vcnClient.listLocalPeeringGateways(r))
             Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listLocalPeeringGateways: All Settled', JSON.stringify(results, null, 2))
+                console.debug('OciQuery: listLocalPeeringGateways: All Settled')
                 //@ts-ignore
                 const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
                 resolve(resources)
@@ -1099,7 +1102,7 @@ export class OciQuery extends OciCommonQuery {
                     if (response[queries.indexOf(getVnics)].status === 'fulfilled' && response[queries.indexOf(getVnics)].value.length > 0) resources.forEach((r) => r.vnic = response[queries.indexOf(getVnics)].value.find((v) => v.id === r.vnicId))
                     //@ts-ignore
                     if (response[queries.indexOf(listPrivateIps)].status === 'fulfilled' && response[queries.indexOf(listPrivateIps)].value.length > 0) resources.forEach((r) => r.privateIp = response[queries.indexOf(listPrivateIps)].value.find((v) => v.vnicId === r.vnicId))
-                    // console.debug('OciQuery: listVnicAttachments: All Settled', resources)
+                    console.debug('OciQuery: listVnicAttachments: All Settled', resources)
                     resolve(resources)
                 })
                 // resolve(resources)

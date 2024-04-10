@@ -295,6 +295,7 @@
 
 /* Tenancy */
 .oci-dynamic-group-background-colour,
-.oci-group-background-colour {
+.oci-group-background-colour,
+.oci-user-background-colour {
     background-color: var(--svg-tenancy-resources-background-colour);
 }
