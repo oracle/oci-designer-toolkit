@@ -16,6 +16,7 @@ export class OcdTerraformExporter extends OcdExporter {
     resourceFileMap: ResourceMap = {
         bastion: "oci_identity.tf",
         compartment: "oci_identity.tf",
+        dynamic_group: "oci_identity.tf",
         group: "oci_identity.tf",
         key: "oci_identity.tf",
         user: "oci_identity.tf",
@@ -65,7 +66,7 @@ export class OcdTerraformExporter extends OcdExporter {
         nosql_table: "oci_database.tf",
 
         cpe: "oci_customer.tf",
-        ipsec_connection: "oci_customer.tf",
+        ipsec: "oci_customer.tf",
 
         oke_cluster: "oci_container.tf",
         node_pool: "oci_container.tf",
