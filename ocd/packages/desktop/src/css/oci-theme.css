@@ -282,20 +282,16 @@
 }
 
 /* Identity & Security */
+.oci-dynamic-group-background-colour,
+.oci-group-background-colour,
 .oci-key-background-colour,
-.oci-vault-background-colour,
-.oci-policy-background-colour {
+.oci-policy-background-colour,
+.oci-user-background-colour,
+.oci-vault-background-colour {
     background-color: var(--svg-identity-resources-background-colour);
 }
 
 /* Analytics */
 .oci-analytics-instance-background-colour {
     background-color: var(--svg-analytics-resources-background-colour);
-}
-
-/* Tenancy */
-.oci-dynamic-group-background-colour,
-.oci-group-background-colour,
-.oci-user-background-colour {
-    background-color: var(--svg-tenancy-resources-background-colour);
 }
