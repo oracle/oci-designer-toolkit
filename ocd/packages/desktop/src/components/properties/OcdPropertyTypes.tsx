@@ -149,23 +149,22 @@ export const OcdTextProperty = ({ ocdDocument, setOcdDocument, resource, config,
     const properties = config && config.properties ? config.properties : {}
     const id = `${rootResource.id.replace(/\W+/g, "")}_${attribute.id.replace(/\W+/g, "")}`
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        e.stopPropagation()
-        e.preventDefault()
+        // e.stopPropagation()
+        // e.preventDefault()
         resource[attribute.key] = e.target.value
         setOcdDocument(OcdDocument.clone(ocdDocument))
         if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     const onBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.target.reportValidity()
-        resource[attribute.key] = e.target.value
-        setOcdDocument(OcdDocument.clone(ocdDocument))
-        if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
+        // resource[attribute.key] = e.target.value
+        // setOcdDocument(OcdDocument.clone(ocdDocument))
+        // if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     const className = isPropertyDisplayConditionTrue(attribute.conditional, attribute.condition, resource, rootResource) ? `ocd-property-row ocd-simple-property-row` : `collapsed hidden`
     return (
         <div className={className}>
             <div><label htmlFor={id}>{attribute.label}</label></div>
-            {/* <div><input type='text' id={id} defaultValue={resource[attribute.key]} {...properties} list='variables' onBlur={onBlur}></input></div> */}
             {/* <div><input type='text' id={id} defaultValue={resource[attribute.key]} {...properties} list='variables' onChange={onChange} onBlur={onBlur}></input></div> */}
             <div><input type='text' id={id} value={resource[attribute.key]} {...properties} list='variables' onChange={onChange} onBlur={onBlur}></input></div>
         </div>
@@ -178,23 +177,22 @@ export const OcdNumberProperty = ({ ocdDocument, setOcdDocument, resource, confi
     const properties = config && config.properties ? config.properties : {}
     const id = `${rootResource.id.replace(/\W+/g, "")}_${attribute.id.replace(/\W+/g, "")}`
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        e.stopPropagation()
-        e.preventDefault()
+        // e.stopPropagation()
+        // e.preventDefault()
         resource[attribute.key] = e.target.value
         setOcdDocument(OcdDocument.clone(ocdDocument))
         if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     const onBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.target.reportValidity()
-        resource[attribute.key] = e.target.value
-        setOcdDocument(OcdDocument.clone(ocdDocument))
-        if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
+        // resource[attribute.key] = e.target.value
+        // setOcdDocument(OcdDocument.clone(ocdDocument))
+        // if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     const className = isPropertyDisplayConditionTrue(attribute.conditional, attribute.condition, resource, rootResource) ? `ocd-property-row ocd-simple-property-row` : `collapsed hidden`
     return (
         <div className={className}>
             <div><label htmlFor={id}>{attribute.label}</label></div>
-            {/* <div><input type='number' id={id} defaultValue={resource[attribute.key]} {...properties} onBlur={onBlur}></input></div> */}
             {/* <div><input type='number' id={id} defaultValue={resource[attribute.key]} {...properties} onChange={onChange} onBlur={onBlur}></input></div> */}
             <div><input type='number' id={id} value={resource[attribute.key]} {...properties} onChange={onChange} onBlur={onBlur}></input></div>
         </div>
@@ -227,23 +225,22 @@ export const OcdCodeProperty = ({ ocdDocument, setOcdDocument, resource, config,
     const properties = config && config.properties ? config.properties : {}
     const id = `${rootResource.id.replace(/\W+/g, "")}_${attribute.id.replace(/\W+/g, "")}`
     const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        e.stopPropagation()
-        e.preventDefault()
+        // e.stopPropagation()
+        // e.preventDefault()
         resource[attribute.key] = e.target.value
         setOcdDocument(OcdDocument.clone(ocdDocument))
         if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     const onBlur = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         e.target.reportValidity()
-        resource[attribute.key] = e.target.value
-        setOcdDocument(OcdDocument.clone(ocdDocument))
-        if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
+        // resource[attribute.key] = e.target.value
+        // setOcdDocument(OcdDocument.clone(ocdDocument))
+        // if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     const className = isPropertyDisplayConditionTrue(attribute.conditional, attribute.condition, resource, rootResource) ? `ocd-property-row ocd-simple-property-row` : `collapsed hidden`
     return (
         <div className={className}>
             <div><label htmlFor={id}>{attribute.label}</label></div>
-            {/* <div><textarea id={id} defaultValue={resource[attribute.key]} {...properties} onBlur={onBlur}></textarea></div> */}
             {/* <div><textarea id={id} defaultValue={resource[attribute.key]} {...properties} onChange={onChange} onBlur={onBlur}></textarea></div> */}
             <div><textarea id={id} value={resource[attribute.key]} {...properties} onChange={onChange} onBlur={onBlur}></textarea></div>
         </div>
@@ -415,17 +412,17 @@ export const OcdStringListProperty = ({ ocdDocument, setOcdDocument, resource, c
     const properties = config && config.properties ? config.properties : {}
     const id = `${rootResource.id.replace(/\W+/g, "")}_${attribute.id.replace(/\W+/g, "")}`
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        e.stopPropagation()
-        e.preventDefault()
+        // e.stopPropagation()
+        // e.preventDefault()
         resource[attribute.key] = e.target.value.split(',').filter((v) => v !== '')
         setOcdDocument(OcdDocument.clone(ocdDocument))
         if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     const onBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.target.reportValidity()
-        resource[attribute.key] = e.target.value.split(',').filter((v) => v !== '')
-        setOcdDocument(OcdDocument.clone(ocdDocument))
-        if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
+        // resource[attribute.key] = e.target.value.split(',').filter((v) => v !== '')
+        // setOcdDocument(OcdDocument.clone(ocdDocument))
+        // if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     const className = isPropertyDisplayConditionTrue(attribute.conditional, attribute.condition, resource, rootResource) ? `ocd-property-row ocd-simple-property-row` : `collapsed hidden`
     return (
@@ -435,12 +432,6 @@ export const OcdStringListProperty = ({ ocdDocument, setOcdDocument, resource, c
             <div><input type='text' id={id} value={resource[attribute.key].join(',')} {...properties} list='variables' onChange={onChange} onBlur={onBlur}></input></div>
         </div>
     )
-    // return (
-    //     <div className='ocd-property-row ocd-simple-property-row'>
-    //         <div><label>{attribute.label}</label></div>
-    //         <div><input type='text' value={resource[attribute.key].join(',')} {...properties} onChange={onChange} onBlur={onBlur}></input></div>
-    //     </div>
-    // )
 }
 
 export const OcdNumberListProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute, rootResource }: ResourceProperty): JSX.Element => {
@@ -449,17 +440,17 @@ export const OcdNumberListProperty = ({ ocdDocument, setOcdDocument, resource, c
     const properties = config && config.properties ? config.properties : {}
     const id = `${rootResource.id.replace(/\W+/g, "")}_${attribute.id.replace(/\W+/g, "")}`
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        e.stopPropagation()
-        e.preventDefault()
+        // e.stopPropagation()
+        // e.preventDefault()
         resource[attribute.key] = e.target.value.split(',')
         setOcdDocument(OcdDocument.clone(ocdDocument))
         if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     const onBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.target.reportValidity()
-        resource[attribute.key] = e.target.value.split(',')
-        setOcdDocument(OcdDocument.clone(ocdDocument))
-        if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
+        // resource[attribute.key] = e.target.value.split(',')
+        // setOcdDocument(OcdDocument.clone(ocdDocument))
+        // if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     const className = isPropertyDisplayConditionTrue(attribute.conditional, attribute.condition, resource, rootResource) ? `ocd-property-row ocd-simple-property-row` : `collapsed hidden`
     return (
