@@ -435,7 +435,8 @@ summary {
     margin-left: 5px;
 }
 
-.ocd-footer-left > div > div > label {
+.ocd-footer-left > div > div > label,
+.ocd-footer-left > div > div > span {
     margin: auto;
 }
 
@@ -474,7 +475,8 @@ summary {
     height: 100%;
 }
 
-.ocd-footer-right > div > label {
+.ocd-footer-right > div > label,
+.ocd-footer-right > div > span {
     margin: auto;
 }
 
@@ -817,7 +819,8 @@ summary {
     padding-left: 24px;
 }
 
-.ocd-designer-palette-provider>details>summary>div>label {
+.ocd-designer-palette-provider>details>summary>div>label,
+.ocd-designer-palette-provider>details>summary>div>span {
     margin: auto;
 }
 
@@ -875,7 +878,8 @@ summary {
     padding-left: 24px;
 }
 
-.ocd-designer-palette-group>details>summary>div>label {
+.ocd-designer-palette-group>details>summary>div>label,
+.ocd-designer-palette-group>details>summary>div>span {
     margin: auto;
 }
 

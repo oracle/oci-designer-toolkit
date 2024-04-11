@@ -293,13 +293,13 @@ const OcdConsoleFooter = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, 
         <div className='ocd-console-footer ocd-console-footer-theme'>
             <div className='ocd-footer-left'>
                 <div>
-                    <div className={filenameClass} title='Design Modified'><label>{activeFile.name}</label></div>
+                    <div className={filenameClass} title='Design Modified'><span>{activeFile.name}</span></div>
                 </div>
             </div>
             <div className='ocd-footer-centre'></div>
             <div className='ocd-footer-right'>
                 <div>
-                <label>Version: {buildDetails.version} Build Date: {buildDetails.utc}</label>
+                    <span>Version: {buildDetails.version} Build Date: {buildDetails.utc}</span>
                 </div>
             </div>
         </div>
