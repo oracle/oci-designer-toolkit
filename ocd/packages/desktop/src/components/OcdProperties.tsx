@@ -46,7 +46,7 @@ const OciCommonResourceProperties = ({ocdDocument, setOcdDocument, resource, roo
                 <OcdDisplayNameProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={configs.find((c) => c.id === 'display_name')} rootResource={rootResource} attribute={displayName} key={`${resource.id}-displayName`}/>
                 {/* <OcdTextProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={configs.find((c) => c.id === 'display_name')} rootResource={rootResource} attribute={displayName} key={`${resource.id}-displayName`}/> */}
                 {/* <OcdTextProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={configs.find((c) => c.id === 'display_name')} rootResource={rootResource} attribute={displayName}/> */}
-                <OcdLookupProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={configs.find((c) => c.id === 'compartment_id')} rootResource={rootResource} attribute={compartmentId} />
+                <OcdLookupProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={configs.find((c) => c.id === 'compartment_id')} rootResource={rootResource} attribute={compartmentId}  key={`${resource.id}-compartmentId`}/>
                 </div>
             </details>
         </div>
@@ -77,11 +77,13 @@ const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourcePr
                 setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} 
                 resource={selectedResourceProxy}
                 rootResource={selectedResourceProxy}
+                key={`${selectedResourceProxy.id}.CommonProperties`}
             />}
             {selectedResource && ResourceProperties && <ResourceProperties 
                 ocdDocument={ocdDocument} 
                 setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} 
                 resource={selectedResourceProxy}
+                key={`${selectedResourceProxy.id}.Properties`}
             />}
         </div>
     )
@@ -514,10 +516,12 @@ const OcdProperties = ({ocdDocument, setOcdDocument}: DesignerResourceProperties
             <OcdResourcePropertiesHeader
                 ocdDocument={ocdDocument} 
                 setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} 
+                key={`ResourcePropertiesHeader`}
             />
             <ActiveTab
                 ocdDocument={ocdDocument} 
                 setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} 
+                key={`ResourceActiveTab`}
             />
         </div>
     )
