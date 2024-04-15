@@ -179,9 +179,6 @@ export const OcdTextProperty = ({ ocdDocument, setOcdDocument, resource, config,
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         console.debug(`OcdTextProperty: ${attribute.id} onChange(${e.target.value})`)
         setValue(e.target.value)
-        // resource[attribute.key] = e.target.value
-        // setOcdDocument(OcdDocument.clone(ocdDocument))
-        // if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     const onBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
         console.debug(`OcdTextProperty: ${attribute.id} onBlur(${e.target.value})`)
@@ -196,9 +193,6 @@ export const OcdTextProperty = ({ ocdDocument, setOcdDocument, resource, config,
         <div className={className}>
             <div><span>{attribute.label}</span></div>
             <div><input type='text' id={id} value={value} {...properties} list='variables' onChange={onChange} onBlur={onBlur}></input></div>
-            {/* <div><label htmlFor={id}>{attribute.label}</label></div> */}
-            {/* <div><input type='text' id={id} defaultValue={resource[attribute.key]} {...properties} list='variables' onChange={onChange} onBlur={onBlur}></input></div> */}
-            {/* <div><input type='text' id={id} value={resource[attribute.key]} {...properties} list='variables' onChange={onChange} onBlur={onBlur}></input></div> */}
         </div>
     )
 }
@@ -212,11 +206,6 @@ export const OcdNumberProperty = ({ ocdDocument, setOcdDocument, resource, confi
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         console.debug(`OcdNumberProperty: ${attribute.id} onChange(${e.target.value})`)
         setValue(e.target.value)
-        // e.stopPropagation()
-        // e.preventDefault()
-        // resource[attribute.key] = e.target.value
-        // setOcdDocument(OcdDocument.clone(ocdDocument))
-        // if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     const onBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
         console.debug(`OcdNumberProperty: ${attribute.id} onBlur(${e.target.value})`)
@@ -231,9 +220,6 @@ export const OcdNumberProperty = ({ ocdDocument, setOcdDocument, resource, confi
         <div className={className}>
             <div><span>{attribute.label}</span></div>
             <div><input type='number' id={id} value={value} {...properties} list='variables' onChange={onChange} onBlur={onBlur}></input></div>
-            {/* <div><label htmlFor={id}>{attribute.label}</label></div> */}
-            {/* <div><input type='number' id={id} defaultValue={resource[attribute.key]} {...properties} onChange={onChange} onBlur={onBlur}></input></div> */}
-            {/* <div><input type='number' id={id} value={resource[attribute.key]} {...properties} onChange={onChange} onBlur={onBlur}></input></div> */}
         </div>
     )
 }
@@ -271,11 +257,6 @@ export const OcdCodeProperty = ({ ocdDocument, setOcdDocument, resource, config,
     const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         console.debug(`OcdCodeProperty: ${attribute.id} onChange(${e.target.value})`)
         setValue(e.target.value)
-        // e.stopPropagation()
-        // e.preventDefault()
-        // resource[attribute.key] = e.target.value
-        // setOcdDocument(OcdDocument.clone(ocdDocument))
-        // if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     const onBlur = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         console.debug(`OcdCodeProperty: ${attribute.id} onBlur(${e.target.value})`)
@@ -290,9 +271,6 @@ export const OcdCodeProperty = ({ ocdDocument, setOcdDocument, resource, config,
         <div className={className}>
             <div><span>{attribute.label}</span></div>
             <div><textarea id={id} value={value} {...properties} onChange={onChange} onBlur={onBlur}></textarea></div>
-            {/* <div><label htmlFor={id}>{attribute.label}</label></div> */}
-            {/* <div><textarea id={id} defaultValue={resource[attribute.key]} {...properties} onChange={onChange} onBlur={onBlur}></textarea></div> */}
-            {/* <div><textarea id={id} value={resource[attribute.key]} {...properties} onChange={onChange} onBlur={onBlur}></textarea></div> */}
         </div>
     )
 }
@@ -473,11 +451,6 @@ export const OcdStringListProperty = ({ ocdDocument, setOcdDocument, resource, c
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         console.debug(`OcdStringListProperty: ${attribute.id} onChange(${e.target.value})`)
         setValue(e.target.value)
-        // e.stopPropagation()
-        // e.preventDefault()
-        // resource[attribute.key] = e.target.value.split(',').filter((v) => v !== '')
-        // setOcdDocument(OcdDocument.clone(ocdDocument))
-        // if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     const onBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
         console.debug(`OcdDisplayNameProperty: ${attribute.id} onBlur(${e.target.value})`)
@@ -492,9 +465,6 @@ export const OcdStringListProperty = ({ ocdDocument, setOcdDocument, resource, c
         <div className={className}>
             <div><span>{attribute.label}</span></div>
             <div><input type='text' id={id} value={value} {...properties} list='variables' onChange={onChange} onBlur={onBlur}></input></div>
-            {/* <div><label htmlFor={id}>{attribute.label}</label></div> */}
-            {/* <div><input type='text' id={id} defaultValue={resource[attribute.key].join(',')} {...properties} list='variables' onBlur={onBlur}></input></div> */}
-            {/* <div><input type='text' id={id} value={resource[attribute.key].join(',')} {...properties} list='variables' onChange={onChange} onBlur={onBlur}></input></div> */}
         </div>
     )
 }
@@ -508,11 +478,6 @@ export const OcdNumberListProperty = ({ ocdDocument, setOcdDocument, resource, c
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         console.debug(`OcdNumberListProperty: ${attribute.id} onChange(${e.target.value})`)
         setValue(e.target.value)
-        // e.stopPropagation()
-        // e.preventDefault()
-        // resource[attribute.key] = e.target.value.split(',')
-        // setOcdDocument(OcdDocument.clone(ocdDocument))
-        // if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     const onBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
         console.debug(`OcdNumberListProperty: ${attribute.id} onBlur(${e.target.value})`)
@@ -527,9 +492,6 @@ export const OcdNumberListProperty = ({ ocdDocument, setOcdDocument, resource, c
         <div className={className}>
             <div><span>{attribute.label}</span></div>
             <div><input type='text' id={id} value={value} {...properties} list='variables' onChange={onChange} onBlur={onBlur}></input></div>
-            {/* <div><label htmlFor={id}>{attribute.label}</label></div> */}
-            {/* <div><input type='text' id={id} defaultValue={resource[attribute.key].join(',')} {...properties} list='variables' onBlur={onBlur}></input></div> */}
-            {/* <div><input type='text' id={id} value={resource[attribute.key].join(',')} {...properties} list='variables' onChange={onChange} onBlur={onBlur}></input></div> */}
         </div>
     )
 }
