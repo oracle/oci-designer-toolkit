@@ -8,7 +8,7 @@ import { OcdResource, OcdViewCoordsStyle, OcdViewPage, OciResourceValidation, Oc
 import { DesignerColourPicker, DesignerResourceProperties, DesignerResourceValidationResult } from '../types/DesignerResourceProperties'
 import { OcdUtils } from '@ocd/core'
 import { OcdDocument } from './OcdDocument'
-import { OcdLookupProperty, OcdTextProperty, ResourceElementConfig, ResourceProperties } from './properties/OcdPropertyTypes'
+import { OcdDisplayNameProperty, OcdLookupProperty, OcdTextProperty, ResourceElementConfig, ResourceProperties } from './properties/OcdPropertyTypes'
 import * as ociResources from './properties/provider/oci/resources'
 import { HexColorPicker, HexColorInput, RgbaColorPicker, RgbaStringColorPicker } from 'react-colorful'
 import Markdown from 'react-markdown'
@@ -43,7 +43,8 @@ const OciCommonResourceProperties = ({ocdDocument, setOcdDocument, resource, roo
             <details open={true}>
                 <summary className='summary-background'>Core</summary>
                 <div>
-                <OcdTextProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={configs.find((c) => c.id === 'display_name')} rootResource={rootResource} attribute={displayName} key={`${resource.id}-displayName`}/>
+                <OcdDisplayNameProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={configs.find((c) => c.id === 'display_name')} rootResource={rootResource} attribute={displayName} key={`${resource.id}-displayName`}/>
+                {/* <OcdTextProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={configs.find((c) => c.id === 'display_name')} rootResource={rootResource} attribute={displayName} key={`${resource.id}-displayName`}/> */}
                 {/* <OcdTextProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={configs.find((c) => c.id === 'display_name')} rootResource={rootResource} attribute={displayName}/> */}
                 <OcdLookupProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={configs.find((c) => c.id === 'compartment_id')} rootResource={rootResource} attribute={compartmentId} />
                 </div>

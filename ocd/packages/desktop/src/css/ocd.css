@@ -623,7 +623,8 @@ summary {
     box-sizing: border-box;
 }
 
-.ocd-palette-select > div > label {
+.ocd-palette-select > div > label,
+.ocd-palette-select > div > span {
     margin: auto;
 }
 
@@ -744,7 +745,8 @@ summary {
     border: 1px dashed red;
 }
 
-.simple-list-element > div > label {
+.simple-list-element > div > label,
+.simple-list-element > div > span {
     clear: both;
     /* margin-left: 2.5em; */
     margin-left: 5px;
@@ -756,7 +758,8 @@ summary {
     font-size: small;
 }
 
-.collapsible-list-element > div > label {
+.collapsible-list-element > div > label,
+.collapsible-list-element > div > span {
     clear: both;
     margin-left: 0.5em;
     text-wrap: none;
@@ -989,7 +992,8 @@ summary {
     max-height: var(--console-layers-bar-height);
 }
 
-.ocd-designer-canvas-layer > label {
+.ocd-designer-canvas-layer > label,
+.ocd-designer-canvas-layer > span {
     padding: 0 5px;
     font-weight: bolder;
     text-wrap: nowrap;
@@ -1986,7 +1990,8 @@ table {
     border: 1px solid lightgray;
 }
 
-.ocd-property-row label {
+.ocd-property-row label,
+.ocd-property-row span {
     font-size: smaller;
 }
 
@@ -2006,7 +2011,8 @@ table {
     text-overflow: ellipsis;
 }
 
-.ocd-property-row > div:first-child > label {
+.ocd-property-row > div:first-child > label,
+.ocd-property-row > div:first-child > span {
     font-weight: bolder;
 }
 
@@ -2185,12 +2191,14 @@ table {
     padding-left: 1em;
 }
 
-.ocd-compartment-picker li > label {
+.ocd-compartment-picker li > label,
+.ocd-compartment-picker li > span {
     font-family: var(--dialog-input-font-family);
     font-size: var(--dialog-input-font-size);
 }
 
-.ocd-compartment-picker li > label:hover {
+.ocd-compartment-picker li > label:hover,
+.ocd-compartment-picker li > span:hover {
     /* background-color: var(--dialog-highlight-colour); */
     font-weight: bolder;
 }
