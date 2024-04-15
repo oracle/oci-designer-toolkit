@@ -57,6 +57,17 @@ export namespace OciSecurityListConfigs {
                     {id: 'SERVICE_CIDR_BLOCK', displayName: 'Service CIDR Block'}
                 ]
             },
+            {
+                id: 'ingress_security_rules.protocol',
+                properties: {},
+                configs: [],
+                options: [
+                    {id: 'all', displayName: 'All'},
+                    {id: '6', displayName: 'TCP'},
+                    {id: '1', displayName: 'ICMP'},
+                    {id: '17', displayName: 'UDP'},
+                ]
+            },
         ]
     }
 }

@@ -336,9 +336,9 @@ const OcdResizePoint = ({resource, cx, cy, position, setDimensions, onResize, on
     )
 }
 
-const OcdForeignObject = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resource, hidden }: ResourceForeignObjectProps) => {
+const OcdForeignObject = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resource, hidden, ghost }: ResourceForeignObjectProps) => {
     const id = `${resource.id}-fo`
-    const inputId = `${id}-input`
+    const inputId = `${id}-input${ghost ? '-ghost' : ''}`
     const containerLayout = (resource.container && (!resource.detailsStyle || resource.detailsStyle === 'default'))
     const detailedLayout = ((resource.detailsStyle && resource.detailsStyle === 'detailed') || ((!resource.detailsStyle || resource.detailsStyle === 'default') && ocdConsoleConfig.config.detailedResource))
     // const detailedLayout = (ocdConsoleConfig.config.detailedResource || (resource.detailsStyle && resource.detailsStyle === 'detailed'))
@@ -384,7 +384,7 @@ const OcdForeignObject = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
     )
 }
 
-export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, contextMenu, setContextMenu, svgDragDropEvents, resource }: ResourceSvgProps): JSX.Element => {
+export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, contextMenu, setContextMenu, svgDragDropEvents, resource, ghost }: ResourceSvgProps): JSX.Element => {
     const page: OcdViewPage = ocdDocument.getActivePage()
     const allCompartmentIds = ocdDocument.getOciResourceList('comparment').map((r) => r.id)
     const visibleLayers = page.layers.filter((l: OcdViewLayer) => l.visible).map((l: OcdViewLayer) => l.id)
@@ -499,6 +499,7 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
                     setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)}
                     resource={resource}
                     hidden={hidden}
+                    ghost={ghost}
                     />
                 {resource.coords && resource.coords.map((r:any) => {
                     return <OcdResourceSvg
@@ -549,6 +550,7 @@ export const OcdDragResourceGhostSvg = ({ ocdConsoleConfig, ocdDocument, setOcdD
                 setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)}
                 resource={resource}
                 hidden={hidden}
+                ghost={true}
                 />
             {resource.coords && resource.coords.map((r:any) => {
                 return <OcdResourceSvg

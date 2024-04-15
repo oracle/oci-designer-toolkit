@@ -304,8 +304,8 @@ export class OciQuery extends OciCommonQuery {
                         delete l.backendSets
                         delete l.Listeners
                     })
-                    console.debug('OciQuery: Load Balancer Backend Sets:', design.model.oci.resources.load_balancer_backend_set)
-                    console.debug('OciQuery: Load Balancer Backends:', design.model.oci.resources.load_balancer_backend)
+                    // console.debug('OciQuery: Load Balancer Backend Sets:', design.model.oci.resources.load_balancer_backend_set)
+                    // console.debug('OciQuery: Load Balancer Backends:', design.model.oci.resources.load_balancer_backend)
                 }
                 // Network Load Balancers
                 // @ts-ignore
