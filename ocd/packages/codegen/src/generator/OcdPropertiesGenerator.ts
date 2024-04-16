@@ -232,8 +232,8 @@ ${resources.sort().map((r) => `export { ${this.proxyNamespace(r)} } from './${th
         else if (attribute.type === 'string' && attribute.cacheLookup)        return `<OcdCacheLookupProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} rootResource={rootResource} />`
         else if (attribute.type === 'string' && attribute.lookup)             return `<OcdLookupProperty       ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} rootResource={rootResource} />`
         else if (attribute.type === 'string' && attribute.subtype === 'code') return `<OcdCodeProperty         ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} rootResource={rootResource} />`
-        else if (attribute.type === 'string')                                 return `<OcdTextProperty         ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} rootResource={rootResource} />`
-        else if (attribute.type === 'string')                                 return `<OcdTextProperty         ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} rootResource={rootResource} key={\`\${rootResource.id}-${attribute.id}\`} />`
+        // else if (attribute.type === 'string')                                 return `<OcdTextProperty         ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} rootResource={rootResource} />`
+        else if (attribute.type === 'string')                                 return `<OcdTextProperty         ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} rootResource={rootResource} key={\`OcdTextProperty-\${rootResource.id}-${attribute.id}\`} />`
         else if (attribute.type === 'bool')                                   return `<OcdBooleanProperty      ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} rootResource={rootResource} />`
         else if (attribute.type === 'number')                                 return `<OcdNumberProperty       ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} rootResource={rootResource} />`
         else if (attribute.type === 'list' && attribute.lookup)               return `<OcdLookupListProperty   ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={${configFind}} attribute={${JSON.stringify(attribute)}} rootResource={rootResource} />`
@@ -287,15 +287,28 @@ export const ${this.reactObjectName(attribute.id)} = ({ ocdDocument, setOcdDocum
         objectLabel = objectLabel.endsWith('s') ? objectLabel.slice(0, -1) : objectLabel
         return `
 export const ${this.reactObjectName(attribute.id)} = ({ ocdDocument, setOcdDocument, resource, configs, rootResource, onDelete, additionalElements = [] }: GeneratedResourceProperties): JSX.Element => {
+    const [myConfig] = useState(configs.find((c) => c.id === '${attribute.id}'))
+    const [open, setOpen] = useState(true)
+    const summaryTitle = (open: boolean): string => {
+        // const myConfig = configs.find((c) => c.id === 'ingress_security_rules')
+        return myConfig === undefined || myConfig.summary === undefined ? '${objectLabel}' : myConfig?.summary(open, resource, '${objectLabel}')
+    }
+    const [summary, setSummary] = useState(summaryTitle(open))
     const onClick = (e: React.MouseEvent<HTMLElement>) => {
         e.stopPropagation()
         e.preventDefault()
         if (onDelete) onDelete(resource)
     }
+    const onToggle = (e: React.ChangeEvent<HTMLDetailsElement>) => {
+        const open = e.currentTarget.open
+        const summary = summaryTitle(open)
+        setOpen(open)
+        setSummary(summary)
+    }
     return (
         <div className='ocd-property-row'>
-            <details open={true}>
-                <summary className='summary-background ocd-summary-row'><div>${objectLabel}</div><div className='delete-property action-button-background action-button-column action-button' onClick={onClick}></div></summary>
+            <details open={open} onToggle={onToggle}>
+                <summary className='summary-background ocd-summary-row'><div>{summary}</div><div className='delete-property action-button-background action-button-column action-button' onClick={onClick}></div></summary>
                 <div className='ocd-resource-properties'>
                     ${Object.entries(attribute.attributes).filter(([k, v]) => !this.ignoreAttributes.includes(v.id)).map(([k, a]) => this.attributeToReactElement(resource, a)).join('\n                    ')}
                 </div>

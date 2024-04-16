@@ -6,8 +6,9 @@
 import { OcdResource } from '@ocd/model'
 import { OcdUtils } from '@ocd/core'
 import { OcdDocument } from '../OcdDocument'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useId, useState } from 'react'
 import { ActiveFileContext, CacheContext } from '../../pages/OcdConsole'
+import { v4 as uuidv4 } from 'uuid'
 
 export interface ResourcePropertyCondition extends OcdUtils.ResourcePropertyCondition {}
 // export interface ResourcePropertyCondition {
@@ -35,6 +36,7 @@ export interface ResourcePropertyAttributes {
     conditional: boolean,
     condition: ResourcePropertyCondition | ResourcePropertyCondition[],
     default?: string | number | boolean
+    row?: number
 }
 
 export type SimpleFilterType = (r: any) => boolean
@@ -59,6 +61,7 @@ export interface ResourceElementConfig extends Record<string, any> {
     configs: ResourceElementConfig[]
     options?: ResourceElementConfigOption[]
     lookupGroups?: ResourceElementConfigLookupGroup[]
+    summary?: Function
 }
 export interface ResourceElementConfigOption {
     id: string
@@ -101,6 +104,7 @@ export interface GeneratedResourceProperties extends ResourceProperties {
     configs: ResourceElementConfig[]
     onDelete?(child: any): void
     additionalElements?: ResourceAdditionElements[]
+    row?: number
 }
 
 export interface ResourceProperty extends ResourceProperties {
@@ -144,11 +148,11 @@ export const isPropertyDisplayConditionTrue = (conditional: boolean, condition: 
 }
 
 export const OcdDisplayNameProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute, rootResource }: ResourceProperty): JSX.Element => {
+    const id = useId()
     // @ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
-    const [value, setValue]= useState(resource[attribute.key])
+    const [value, setValue] = useState(resource[attribute.key])
     const properties = config && config.properties ? config.properties : {}
-    const id = `${rootResource.id.replace(/\W+/g, "")}_${attribute.id.replace(/\W+/g, "")}`
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         console.debug(`OcdDisplayNameProperty: ${attribute.id} onChange(${e.target.value})`)
         setValue(e.target.value)
@@ -164,18 +168,18 @@ export const OcdDisplayNameProperty = ({ ocdDocument, setOcdDocument, resource, 
     console.debug(`OcdDisplayNameProperty: ${attribute.id} render(${value})`)
     return (
         <div className={className}>
-            <div><span>{attribute.label}</span></div>
+            <div><label htmlFor={id}>{attribute.label}</label></div>
             <div><input type='text' id={id} value={value} {...properties} list='variables' onChange={onChange} onBlur={onBlur}></input></div>
         </div>
     )
 }
 
 export const OcdTextProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute, rootResource }: ResourceProperty): JSX.Element => {
+    const id = useId()
     // @ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const [value, setValue]= useState(resource[attribute.key])
     const properties = config && config.properties ? config.properties : {}
-    const id = `${rootResource.id.replace(/\W+/g, "")}_${attribute.id.replace(/\W+/g, "")}`
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         console.debug(`OcdTextProperty: ${attribute.id} onChange(${e.target.value})`)
         setValue(e.target.value)
@@ -191,18 +195,18 @@ export const OcdTextProperty = ({ ocdDocument, setOcdDocument, resource, config,
     console.debug(`OcdTextProperty: ${attribute.id} render(${value})`)
     return (
         <div className={className}>
-            <div><span>{attribute.label}</span></div>
+            <div><label htmlFor={id}>{attribute.label}</label></div>
             <div><input type='text' id={id} value={value} {...properties} list='variables' onChange={onChange} onBlur={onBlur}></input></div>
         </div>
     )
 }
 
 export const OcdNumberProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute, rootResource }: ResourceProperty): JSX.Element => {
+    const id = useId()
     // @ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const [value, setValue]= useState(resource[attribute.key])
     const properties = config && config.properties ? config.properties : {}
-    const id = `${rootResource.id.replace(/\W+/g, "")}_${attribute.id.replace(/\W+/g, "")}`
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         console.debug(`OcdNumberProperty: ${attribute.id} onChange(${e.target.value})`)
         setValue(e.target.value)
@@ -218,19 +222,18 @@ export const OcdNumberProperty = ({ ocdDocument, setOcdDocument, resource, confi
     console.debug(`OcdNumberProperty: ${attribute.id} render(${value})`)
     return (
         <div className={className}>
-            <div><span>{attribute.label}</span></div>
+            <div><label htmlFor={id}>{attribute.label}</label></div>
             <div><input type='number' id={id} value={value} {...properties} list='variables' onChange={onChange} onBlur={onBlur}></input></div>
         </div>
     )
 }
 
 export const OcdBooleanProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute, rootResource }: ResourceProperty): JSX.Element => {
+    const id = useId()
     // @ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const [value, setValue]= useState(resource[attribute.key])
     const properties = config && config.properties ? config.properties : {}
-    // const id = `${resource[attribute.key]}_${resource.id}`
-    const id = `${rootResource.id.replace(/\W+/g, "")}_${attribute.id.replace(/\W+/g, "")}`
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         console.debug(`OcdBooleanProperty: ${attribute.id} onChange(${e.target.checked})`)
         setValue(e.target.checked)
@@ -249,11 +252,11 @@ export const OcdBooleanProperty = ({ ocdDocument, setOcdDocument, resource, conf
 }
 
 export const OcdCodeProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute, rootResource }: ResourceProperty): JSX.Element => {
+    const id = useId()
     // @ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const [value, setValue]= useState(resource[attribute.key])
     const properties = config && config.properties ? config.properties : {}
-    const id = `${rootResource.id.replace(/\W+/g, "")}_${attribute.id.replace(/\W+/g, "")}`
     const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         console.debug(`OcdCodeProperty: ${attribute.id} onChange(${e.target.value})`)
         setValue(e.target.value)
@@ -269,7 +272,7 @@ export const OcdCodeProperty = ({ ocdDocument, setOcdDocument, resource, config,
     console.debug(`OcdCodeProperty: ${attribute.id} render(${value})`)
     return (
         <div className={className}>
-            <div><span>{attribute.label}</span></div>
+            <div><label htmlFor={id}>{attribute.label}</label></div>
             <div><textarea id={id} value={value} {...properties} onChange={onChange} onBlur={onBlur}></textarea></div>
         </div>
     )
@@ -277,11 +280,11 @@ export const OcdCodeProperty = ({ ocdDocument, setOcdDocument, resource, config,
 
 export const OcdLookupProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute, rootResource }: ResourceProperty): JSX.Element => {
     console.debug('OcdPropertyTypes: OcdLookupProperty', config, attribute, resource)
+    const id = useId()
     // @ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const [value, setValue]= useState(resource[attribute.key])
     const properties = config && config.properties ? config.properties : {}
-    const id = `${rootResource.id.replace(/\W+/g, "")}_${attribute.id.replace(/\W+/g, "")}`
     const lookupGroups = config && config.lookupGroups ? config.lookupGroups : []
     const resourceType = OcdUtils.toResourceType(attribute.lookupResource)
     const baseFilter = (r: any) => r.resourceType !== resourceType || r.id !== resource.id
@@ -345,7 +348,7 @@ export const OcdLookupListProperty = ({ ocdDocument, setOcdDocument, resource, c
     console.debug(`OcdLookupListProperty: ${attribute.id} render(${value})`)
     return (
         <div className={className}>
-            <div><label>{attribute.label}</label></div>
+            <div><span>{attribute.label}</span></div>
             <div>
                 <div className='ocd-set-lookup'>
                     {resources.map((r: OcdResource) => {
@@ -358,11 +361,12 @@ export const OcdLookupListProperty = ({ ocdDocument, setOcdDocument, resource, c
 }
 
 export const OcdStaticLookupProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute, rootResource }: ResourceProperty): JSX.Element => {
+    const id = useId()
     // @ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const [value, setValue]= useState(resource[attribute.key])
     const properties = config && config.properties ? config.properties : {}
-    const id = `${rootResource.id.replace(/\W+/g, "")}_${attribute.id.replace(/\W+/g, "")}`
+    // const id = `${rootResource.id.replace(/\W+/g, "")}_${attribute.id.replace(/\W+/g, "")}`
     const resources = config && config.options ? config.options : []
     // console.info('Resources', resources)
     const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -403,7 +407,7 @@ export const OcdCacheLookupProperty = ({ ocdDocument, setOcdDocument, resource, 
     const {ocdCache, setOcdCache} = useContext(CacheContext)
     const [value, setValue]= useState(resource[attribute.key])
     const properties = config && config.properties ? config.properties : {}
-    const id = `${rootResource.id.replace(/\W+/g, "")}_${attribute.id.replace(/\W+/g, "")}`
+    // const id = `${rootResource.id.replace(/\W+/g, "")}_${attribute.id.replace(/\W+/g, "")}`
     const lookupGroups = config && config.lookupGroups ? config.lookupGroups : []
     const resourceType = OcdUtils.toResourceType(attribute.lookupResource)
     const baseFilter = (r: any) => r.resourceType !== resourceType || r.id !== resource.id
@@ -428,9 +432,10 @@ export const OcdCacheLookupProperty = ({ ocdDocument, setOcdDocument, resource, 
     console.debug(`OcdCacheLookupProperty: ${attribute.id} render(${value})`)
     return (
         <div className={className}>
-            <div><label htmlFor={id}>{attribute.label}</label></div>
+            <div><span>{attribute.label}</span></div>
             <div>
-                <select id={id} value={resource[attribute.key]} {...properties} onChange={onChange}>
+                {/* <select id={id} value={resource[attribute.key]} {...properties} onChange={onChange}> */}
+                <select value={resource[attribute.key]} {...properties} onChange={onChange}>
                     {/* {!attribute.required && <option defaultValue='' key={`${attribute.lookupResource}-empty-option`}></option> } */}
                     <option value='' key={`${attribute.lookupResource}-empty-option`}></option>
                     {lookupGroups.length === 0 ? resources.map((r: OcdResource) => {
@@ -443,11 +448,11 @@ export const OcdCacheLookupProperty = ({ ocdDocument, setOcdDocument, resource, 
 }
 
 export const OcdStringListProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute, rootResource }: ResourceProperty): JSX.Element => {
+    const id = useId()
     // @ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const [value, setValue]= useState(resource[attribute.key].join(','))
     const properties = config && config.properties ? config.properties : {}
-    const id = `${rootResource.id.replace(/\W+/g, "")}_${attribute.id.replace(/\W+/g, "")}`
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         console.debug(`OcdStringListProperty: ${attribute.id} onChange(${e.target.value})`)
         setValue(e.target.value)
@@ -463,18 +468,18 @@ export const OcdStringListProperty = ({ ocdDocument, setOcdDocument, resource, c
     console.debug(`OcdStringListProperty: ${attribute.id} render(${value})`)
     return (
         <div className={className}>
-            <div><span>{attribute.label}</span></div>
+            <div><label htmlFor={id}>{attribute.label}</label></div>
             <div><input type='text' id={id} value={value} {...properties} list='variables' onChange={onChange} onBlur={onBlur}></input></div>
         </div>
     )
 }
 
 export const OcdNumberListProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute, rootResource }: ResourceProperty): JSX.Element => {
+    const id = useId()
     // @ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const [value, setValue]= useState(resource[attribute.key].join(','))
     const properties = config && config.properties ? config.properties : {}
-    const id = `${rootResource.id.replace(/\W+/g, "")}_${attribute.id.replace(/\W+/g, "")}`
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         console.debug(`OcdNumberListProperty: ${attribute.id} onChange(${e.target.value})`)
         setValue(e.target.value)
@@ -490,7 +495,7 @@ export const OcdNumberListProperty = ({ ocdDocument, setOcdDocument, resource, c
     console.debug(`OcdNumberListProperty: ${attribute.id} render(${value})`)
     return (
         <div className={className}>
-            <div><span>{attribute.label}</span></div>
+            <div><label htmlFor={id}>{attribute.label}</label></div>
             <div><input type='text' id={id} value={value} {...properties} list='variables' onChange={onChange} onBlur={onBlur}></input></div>
         </div>
     )
@@ -501,12 +506,12 @@ export const OcdListProperty = ({ ocdDocument, setOcdDocument, resource, config,
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const [value, setValue]= useState(resource[attribute.key])
     const className = isPropertyDisplayConditionTrue(attribute.conditional, attribute.condition, resource, rootResource) ? `ocd-property-row ocd-simple-property-row` : `collapsed hidden`
-    const id = `${rootResource.id.replace(/\W+/g, "")}_${attribute.id.replace(/\W+/g, "")}`
+    // const id = `${rootResource.id.replace(/\W+/g, "")}_${attribute.id.replace(/\W+/g, "")}`
     console.debug(`OcdListProperty: ${attribute.id} render(${value})`)
     return (
         <div className={className}>
-            <div><label>{attribute.label}</label></div>
-            <div><label>List Property</label></div>
+            <div><span>{attribute.label}</span></div>
+            <div><span>List Property</span></div>
         </div>
     )
 }
@@ -516,12 +521,12 @@ export const OcdSetProperty = ({ ocdDocument, setOcdDocument, resource, config, 
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const [value, setValue]= useState(resource[attribute.key])
     const className = isPropertyDisplayConditionTrue(attribute.conditional, attribute.condition, resource, rootResource) ? `ocd-property-row ocd-simple-property-row` : `collapsed hidden`
-    const id = `${rootResource.id.replace(/\W+/g, "")}_${attribute.id.replace(/\W+/g, "")}`
+    // const id = `${rootResource.id.replace(/\W+/g, "")}_${attribute.id.replace(/\W+/g, "")}`
     console.debug(`OcdSetProperty: ${attribute.id} render(${value})`)
     return (
         <div className={className}>
-            <div><label>{attribute.label}</label></div>
-            <div><label>Set Property</label></div>
+            <div><span>{attribute.label}</span></div>
+            <div><span>Set Property</span></div>
         </div>
     )
 }
@@ -531,7 +536,6 @@ export const OcdSetLookupProperty = ({ ocdDocument, setOcdDocument, resource, co
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const [value, setValue]= useState(resource[attribute.key])
     const properties = config && config.properties ? config.properties : {}
-    const id = `${rootResource.id.replace(/\W+/g, "")}_${attribute.id.replace(/\W+/g, "")}`
     const resourceType = OcdUtils.toResourceType(attribute.lookupResource)
     const baseFilter = (r: any) => r.resourceType !== resourceType || r.id !== resource.id
     const customFilter = config && config.resourceFilter ? (r: any) => config.resourceFilter  && config.resourceFilter(r, resource, rootResource) : config && config.simpleFilter ? config.simpleFilter : () => true
@@ -548,7 +552,7 @@ export const OcdSetLookupProperty = ({ ocdDocument, setOcdDocument, resource, co
     console.debug(`OcdSetLookupProperty: ${attribute.id} render(${value})`)
     return (
         <div className={className}>
-            <div><label>{attribute.label}</label></div>
+            <div><span>{attribute.label}</span></div>
             <div>
                 <div className='ocd-set-lookup'>
                     {resources.map((r: OcdResource) => {
@@ -565,12 +569,11 @@ export const OcdMapProperty = ({ ocdDocument, setOcdDocument, resource, config, 
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const [value, setValue]= useState(resource[attribute.key])
     const className = isPropertyDisplayConditionTrue(attribute.conditional, attribute.condition, resource, rootResource) ? `ocd-property-row ocd-simple-property-row` : `collapsed hidden`
-    const id = `${rootResource.id.replace(/\W+/g, "")}_${attribute.id.replace(/\W+/g, "")}`
     console.debug(`OcdMapProperty: ${attribute.id} render(${value})`)
     return (
         <div className={className}>
-            <div><label>{attribute.label}</label></div>
-            <div><label>Map Property</label></div>
+            <div><span>{attribute.label}</span></div>
+            <div><span>Map Property</span></div>
         </div>
     )
 }
