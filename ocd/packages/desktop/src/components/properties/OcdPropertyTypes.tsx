@@ -61,6 +61,7 @@ export interface ResourceElementConfig extends Record<string, any> {
     configs: ResourceElementConfig[]
     options?: ResourceElementConfigOption[]
     lookupGroups?: ResourceElementConfigLookupGroup[]
+    summary?: Function
 }
 export interface ResourceElementConfigOption {
     id: string

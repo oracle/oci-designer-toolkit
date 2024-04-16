@@ -3,6 +3,7 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
+import { OcdResource } from "@ocd/model"
 import { ResourceElementConfig } from "../../../../OcdPropertyTypes"
 import { OciCommonConfigs } from "../../OciCommonConfigs"
 
@@ -38,6 +39,12 @@ export namespace OciSecurityListConfigs {
                     {id: '1', displayName: 'ICMP'},
                     {id: '17', displayName: 'UDP'},
                 ]
+            },
+            {
+                id: 'ingress_security_rules',
+                properties: {},
+                configs: [],
+                summary: (open: boolean, resource: OcdResource, openValue: string) => open ? openValue : resource && resource.description.trim().length > 0 ? resource.description : openValue
             },
             {
                 id: 'ingress_security_rules.source',
