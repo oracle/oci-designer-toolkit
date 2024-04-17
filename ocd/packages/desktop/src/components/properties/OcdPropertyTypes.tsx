@@ -282,7 +282,7 @@ export const OcdLookupProperty = ({ ocdDocument, setOcdDocument, resource, confi
     })
     const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         resource[attribute.key] = e.target.value
-        setOcdDocument(OcdDocument.clone(ocdDocument))
+        // setOcdDocument(OcdDocument.clone(ocdDocument))
         if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     const className = isPropertyDisplayConditionTrue(attribute.conditional, attribute.condition, resource, rootResource) ? `ocd-property-row ocd-simple-property-row` : `collapsed hidden`
@@ -327,7 +327,7 @@ export const OcdLookupListProperty = ({ ocdDocument, setOcdDocument, resource, c
         const checked = e.target.checked
         if (checked) resource[attribute.key].push(securityListId)
         else resource[attribute.key] = resource[attribute.key].filter((s: string) => s !== securityListId)
-        setOcdDocument(OcdDocument.clone(ocdDocument))
+        // setOcdDocument(OcdDocument.clone(ocdDocument))
         if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     const className = isPropertyDisplayConditionTrue(attribute.conditional, attribute.condition, resource, rootResource) ? `ocd-property-row ocd-simple-property-row` : `collapsed hidden`
@@ -357,7 +357,7 @@ export const OcdStaticLookupProperty = ({ ocdDocument, setOcdDocument, resource,
     // console.info('Resources', resources)
     const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         resource[attribute.key] = e.target.value
-        setOcdDocument(OcdDocument.clone(ocdDocument))
+        // setOcdDocument(OcdDocument.clone(ocdDocument))
         if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     useEffect(() => {
@@ -410,7 +410,7 @@ export const OcdCacheLookupProperty = ({ ocdDocument, setOcdDocument, resource, 
     })
     const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         resource[attribute.key] = e.target.value
-        setOcdDocument(OcdDocument.clone(ocdDocument))
+        // setOcdDocument(OcdDocument.clone(ocdDocument))
         if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     const className = isPropertyDisplayConditionTrue(attribute.conditional, attribute.condition, resource, rootResource) ? `ocd-property-row ocd-simple-property-row` : `collapsed hidden`
@@ -447,7 +447,7 @@ export const OcdStringListProperty = ({ ocdDocument, setOcdDocument, resource, c
         console.debug(`OcdDisplayNameProperty: ${attribute.id} onBlur(${e.target.value})`)
         e.target.reportValidity()
         resource[attribute.key] = e.target.value.split(',').filter((v) => v !== '')
-        setOcdDocument(OcdDocument.clone(ocdDocument))
+        // setOcdDocument(OcdDocument.clone(ocdDocument))
         if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     const className = isPropertyDisplayConditionTrue(attribute.conditional, attribute.condition, resource, rootResource) ? `ocd-property-row ocd-simple-property-row` : `collapsed hidden`
@@ -474,7 +474,7 @@ export const OcdNumberListProperty = ({ ocdDocument, setOcdDocument, resource, c
         console.debug(`OcdNumberListProperty: ${attribute.id} onBlur(${e.target.value})`)
         e.target.reportValidity()
         resource[attribute.key] = e.target.value.split(',')
-        setOcdDocument(OcdDocument.clone(ocdDocument))
+        // setOcdDocument(OcdDocument.clone(ocdDocument))
         if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     const className = isPropertyDisplayConditionTrue(attribute.conditional, attribute.condition, resource, rootResource) ? `ocd-property-row ocd-simple-property-row` : `collapsed hidden`
@@ -531,7 +531,7 @@ export const OcdSetLookupProperty = ({ ocdDocument, setOcdDocument, resource, co
         const checked = e.target.checked
         if (checked) resource[attribute.key].push(securityListId)
         else resource[attribute.key] = resource[attribute.key].filter((s: string) => s !== securityListId)
-        setOcdDocument(OcdDocument.clone(ocdDocument))
+        // setOcdDocument(OcdDocument.clone(ocdDocument))
         if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     const className = isPropertyDisplayConditionTrue(attribute.conditional, attribute.condition, resource, rootResource) ? `ocd-property-row ocd-simple-property-row` : `collapsed hidden`
