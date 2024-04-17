@@ -18,6 +18,6 @@ export const OciSecurityList = ({ ocdDocument, setOcdDocument, resource }: Resou
 
 export const OciVcnDefault = ({ ocdDocument, setOcdDocument, resource, configs, rootResource }: GeneratedResourceProperties): JSX.Element => {
     return (
-        <OcdBooleanProperty      ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={configs.find((c) => c.id === 'vcn_default')} attribute={{"provider":"oci","key":"vcnDefault","name":"vcn_default","type":"bool","subtype":"","required":false,"label":"VCN Default","id":"vcn_default","staticLookup":false,"lookup":false,"lookupResource":"","conditional":false,"condition":{}}} rootResource={rootResource} />
+        <OcdBooleanProperty      ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={configs.find((c) => c.id === 'vcn_default')} attribute={{"provider":"oci","key":"vcnDefault","name":"vcn_default","type":"bool","subtype":"","required":false,"label":"VCN Default","id":"vcn_default","staticLookup":false,"lookup":false,"lookupResource":"","conditional":false,"condition":{}}} rootResource={rootResource} key={`OcdProperty-${resource.id ? resource.id : resource.key ? resource.key : rootResource.id}-vcn_default`} />
     )
 }

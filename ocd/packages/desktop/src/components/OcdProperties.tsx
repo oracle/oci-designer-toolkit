@@ -67,9 +67,9 @@ const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourcePr
     const variables = selectedResource && selectedResource.provider === 'oci' ? ocdDocument.getOciVariables() : []
     return (
         <div className={`ocd-properties-panel ocd-properties-panel-theme`}>
-            <datalist id='variables'>
+            <datalist id='variables' key={`${selectedResourceProxy.id}.DataList`}>
                 {variables.map((v) => 
-                <option value={`var.${v.name}`}/>
+                    <option value={`var.${v.name}`} key={`${selectedResourceProxy.id}.DataList.${v.name}`}/>
                 )}
             </datalist>
             {selectedResource && selectedResource.provider === 'oci' && <OciCommonResourceProperties 
