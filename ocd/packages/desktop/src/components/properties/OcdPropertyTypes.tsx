@@ -131,20 +131,6 @@ export namespace OcdResourceProperties {
 
 export const isPropertyDisplayConditionTrue = (conditional: boolean, condition: ResourcePropertyCondition | ResourcePropertyCondition[], resource: OcdResource, rootResource: OcdResource): boolean => {
     return OcdUtils.isPropertyConditionTrue(conditional, condition, resource, resource)
-    // // If not conditional then we will always display
-    // if (!conditional) return true
-    // // Check condition
-    // let display = false
-    // if (!Array.isArray(condition)){
-    //     const element = condition.element ? condition.element.indexOf('_') ? OcdUtils.toCamelCase(condition.element)  : condition.element : ''
-    //     display = OcdUtils.isCondition(resource[element], condition.operator, condition.value)
-    // } else {
-    //     condition.forEach((c) => {
-    //         const isTrue = isPropertyDisplayConditionTrue(conditional, c, resource, rootResource)
-    //         display = !c.logic_operator ? isTrue : c.logic_operator === 'and' ? display && isTrue : display || isTrue
-    //     })
-    // }
-    // return display
 }
 
 export const OcdDisplayNameProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute, rootResource }: ResourceProperty): JSX.Element => {
@@ -188,7 +174,7 @@ export const OcdTextProperty = ({ ocdDocument, setOcdDocument, resource, config,
         console.debug(`OcdTextProperty: ${attribute.id} onBlur(${e.target.value})`)
         e.target.reportValidity()
         resource[attribute.key] = e.target.value
-        setOcdDocument(OcdDocument.clone(ocdDocument))
+        // setOcdDocument(OcdDocument.clone(ocdDocument))
         if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     const className = isPropertyDisplayConditionTrue(attribute.conditional, attribute.condition, resource, rootResource) ? `ocd-property-row ocd-simple-property-row` : `collapsed hidden`
@@ -215,7 +201,7 @@ export const OcdNumberProperty = ({ ocdDocument, setOcdDocument, resource, confi
         console.debug(`OcdNumberProperty: ${attribute.id} onBlur(${e.target.value})`)
         e.target.reportValidity()
         resource[attribute.key] = e.target.value
-        setOcdDocument(OcdDocument.clone(ocdDocument))
+        // setOcdDocument(OcdDocument.clone(ocdDocument))
         if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     const className = isPropertyDisplayConditionTrue(attribute.conditional, attribute.condition, resource, rootResource) ? `ocd-property-row ocd-simple-property-row` : `collapsed hidden`
@@ -238,7 +224,7 @@ export const OcdBooleanProperty = ({ ocdDocument, setOcdDocument, resource, conf
         console.debug(`OcdBooleanProperty: ${attribute.id} onChange(${e.target.checked})`)
         setValue(e.target.checked)
         resource[attribute.key] = e.target.checked
-        setOcdDocument(OcdDocument.clone(ocdDocument))
+        // setOcdDocument(OcdDocument.clone(ocdDocument))
         if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     const className = isPropertyDisplayConditionTrue(attribute.conditional, attribute.condition, resource, rootResource) ? `ocd-property-row ocd-simple-property-row` : `collapsed hidden`
@@ -265,7 +251,7 @@ export const OcdCodeProperty = ({ ocdDocument, setOcdDocument, resource, config,
         console.debug(`OcdCodeProperty: ${attribute.id} onBlur(${e.target.value})`)
         e.target.reportValidity()
         resource[attribute.key] = e.target.value
-        setOcdDocument(OcdDocument.clone(ocdDocument))
+        // setOcdDocument(OcdDocument.clone(ocdDocument))
         if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     const className = isPropertyDisplayConditionTrue(attribute.conditional, attribute.condition, resource, rootResource) ? `ocd-property-row ocd-simple-property-row` : `collapsed hidden`
