@@ -84,6 +84,8 @@ locals {
     \${resource.terraformResourceName}_id = ${schema.tf_resource}.\${resource.terraformResourceName}.id
     \${this.generateAdditionalResourceLocals(resource)}
 }
+
+\${this.generateAdditionalResource(resource)}
 \`
     return content
     }
