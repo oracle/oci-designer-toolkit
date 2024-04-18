@@ -232,7 +232,7 @@ export const OcdBooleanProperty = ({ ocdDocument, setOcdDocument, resource, conf
     return (
         <div className={className}>
             <div></div>
-            <div><input type='checkbox' id={id} checked={resource[attribute.key]} {...properties} onChange={onChange}></input><label htmlFor={id}>{attribute.label}</label></div>
+            <div><input type='checkbox' id={id} checked={value} {...properties} onChange={onChange}></input><label htmlFor={id}>{attribute.label}</label></div>
         </div>
     )
 }
