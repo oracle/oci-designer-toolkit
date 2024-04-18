@@ -277,7 +277,13 @@ export const ignoreElements: OcdIgnoreElements = {
         "private_ip"
     ],
     "oci_identity_user": [
-        "capabilities"
+        "capabilities",
+        "db_user_name",
+        "email_verified",
+        "external_identifier",
+        "identity_provider_id",
+        "last_successful_login_time",
+        "previous_successful_login_time"
     ],
     "oci_kms_key": [
         "current_key_version",

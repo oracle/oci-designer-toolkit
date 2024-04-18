@@ -11,7 +11,8 @@ export class OciTerraformResource extends OcdTerraformResource {
         Compartment: 'name',
         DynamicGroup: 'name',
         LoadBalancerBackendSet: 'name',
-        LoadBalancerListener: 'name'
+        LoadBalancerListener: 'name',
+        User: 'name'
     }
     isIgnoreCompartmentId: boolean
     isHomeRegion: boolean
@@ -39,6 +40,9 @@ export class OciTerraformResource extends OcdTerraformResource {
 `
     }
     generateAdditionalResourceLocals(resource: OciResource) {
+        return ''
+    }
+    generateAdditionalResource(resource: OciResource) {
         return ''
     }
     homeRegion = (): string => this.isHomeRegion ? 'provider       = oci.home_region' : ''
