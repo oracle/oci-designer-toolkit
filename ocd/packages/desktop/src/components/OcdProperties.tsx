@@ -115,30 +115,38 @@ const OcdResourceArrangement = ({ocdDocument, setOcdDocument}: DesignerResourceP
     // @ts-ignore
     // const coords = ocdDocument.design.view.pages.find((p => p.selected)).coords.find(c => c.id === selectedResource.coordsId)
     const coords = ocdDocument.getCoords(selectedResource.coordsId)
-    const width = coords ? coords.w : 0
-    const height = coords ? coords.h : 0
-    const left = coords ? coords.x : 0
-    const top = coords ? coords.y : 0
-    const container = coords ? coords.container : false
-    const onWidthChange = (value: string) => {
+    const [width, setWidth] = useState(coords ? coords.w : 0)
+    const [height, setHeight] = useState(coords ? coords.h : 0)
+    const [left, setLeft] = useState(coords ? coords.x : 0)
+    const [top, setTop] = useState(coords ? coords.y : 0)
+    const [container, setContainer] = useState(coords ? coords.container : false)
+    const onWidthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         // ocdDocument.design.view.pages.find((p => p.selected)).coords.find(c => c.id === coordsId).w = parseInt(value)
-        if (coords) {ocdDocument.updateCoords({...coords, w: parseInt(value)}, page.id)}
+        const width = parseInt(e.currentTarget.value)
+        setWidth(width)
+        if (coords) {ocdDocument.updateCoords({...coords, w: width}, page.id)}
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
-    const onHeightChange = (value: string) => {
+    const onHeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         // ocdDocument.design.view.pages.find((p => p.selected)).coords.find(c => c.id === coordsId).h = parseInt(value)
-        if (coords) {ocdDocument.updateCoords({...coords, h: parseInt(value)}, page.id)}
+        const height = parseInt(e.currentTarget.value)
+        setHeight(height)
+        if (coords) {ocdDocument.updateCoords({...coords, h: height}, page.id)}
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
-    const onLeftChange = (value: string) => {
+    const onLeftChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         // ocdDocument.design.view.pages.find((p => p.selected)).coords.find(c => c.id === coordsId).x = parseInt(value)
-        if (coords) {ocdDocument.updateCoords({...coords, x: parseInt(value)}, page.id)}
+        const left = parseInt(e.currentTarget.value)
+        setLeft(left)
+        if (coords) {ocdDocument.updateCoords({...coords, x: left}, page.id)}
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
-    const onTopChange = (value: string) => {
+    const onTopChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         // @ts-ignore 
         // ocdDocument.design.view.pages.find((p => p.selected)).coords.find(c => c.id === coordsId).y = parseInt(value)
-        if (coords) {ocdDocument.updateCoords({...coords, y: parseInt(value)}, page.id)}
+        const top = parseInt(e.currentTarget.value)
+        setTop(top)
+        if (coords) {ocdDocument.updateCoords({...coords, y: top}, page.id)}
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
     const toFrontClick = () => {
@@ -167,16 +175,16 @@ const OcdResourceArrangement = ({ocdDocument, setOcdDocument}: DesignerResourceP
             </div>
             <div className={`ocd-arrangement-size ${!container ? 'hidden' : ''}`}>
                 <div><span>Size</span></div>
-                <div><input type={'number'} min={40} value={width} onChange={(e) => onWidthChange(e.target.value)}></input></div>
-                <div><input type={'number'} min={40} value={height} onChange={(e) => onHeightChange(e.target.value)}></input></div>
+                <div><input type={'number'} min={40} value={width} onChange={onWidthChange}></input></div>
+                <div><input type={'number'} min={40} value={height} onChange={onHeightChange}></input></div>
                 <div></div>
                 <div><span>Width</span></div>
                 <div><span>Height</span></div>
             </div>
             <div className={`ocd-arrangement-xy-positioning`}>
                 <div><span>Position</span></div>
-                <div><input type={'number'} min={0} value={left} onChange={(e) => onLeftChange(e.target.value)}></input></div>
-                <div><input type={'number'} min={0} value={top} onChange={(e) => onTopChange(e.target.value)}></input></div>
+                <div><input type={'number'} min={0} value={left} onChange={onLeftChange}></input></div>
+                <div><input type={'number'} min={0} value={top} onChange={onTopChange}></input></div>
                 <div></div>
                 <div><span>Left</span></div>
                 <div><span>Top</span></div>

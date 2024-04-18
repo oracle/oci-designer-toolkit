@@ -364,8 +364,8 @@ export const OcdStaticLookupProperty = ({ ocdDocument, setOcdDocument, resource,
         if (!resource[attribute.key] || resource[attribute.key] === '') {
             if (resources.length > 0) {
                 resource[attribute.key] = resources[0].id
-                setOcdDocument(OcdDocument.clone(ocdDocument))
-                // if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
+                // setOcdDocument(OcdDocument.clone(ocdDocument))
+                if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
             }
         }
     }, [])
