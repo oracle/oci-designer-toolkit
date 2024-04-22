@@ -10,6 +10,7 @@ export class OciTerraformResource extends OcdTerraformResource {
     typeDisplayNameMap: Record<string, string> = {
         Compartment: 'name',
         DynamicGroup: 'name',
+        Group: 'name',
         LoadBalancerBackendSet: 'name',
         LoadBalancerListener: 'name',
         User: 'name'

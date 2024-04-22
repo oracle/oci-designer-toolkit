@@ -282,6 +282,7 @@ export const OcdLookupProperty = ({ ocdDocument, setOcdDocument, resource, confi
     })
     const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         resource[attribute.key] = e.target.value
+        setValue(e.target.value)
         // setOcdDocument(OcdDocument.clone(ocdDocument))
         if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
@@ -291,7 +292,8 @@ export const OcdLookupProperty = ({ ocdDocument, setOcdDocument, resource, confi
         <div className={className}>
             <div><label htmlFor={id}>{attribute.label}</label></div>
             <div>
-                <select id={id} value={resource[attribute.key]} {...properties} onChange={onChange}>
+                {/* <select id={id} value={resource[attribute.key]} {...properties} onChange={onChange}> */}
+                <select id={id} value={value} {...properties} onChange={onChange}>
                     {/* {!attribute.required && <option defaultValue='' key={`${attribute.lookupResource}-empty-option`}></option> } */}
                     <option value='' key={`${attribute.lookupResource}-empty-option`}></option>
                     {lookupGroups.length === 0 ? resources.map((r: OcdResource) => {

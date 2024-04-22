@@ -62,7 +62,7 @@ export namespace OciInstanceConfigs {
                     {displayName: 'Windows', simpleFilter: (r) => r.id.startsWith('Windows')},
                     {displayName: 'Canonical', simpleFilter: (r) => !r.id.startsWith('Canonical')},
                     {displayName: 'CentOS', simpleFilter: (r) => r.id.startsWith('CentOS')},
-                    {displayName: 'Others', simpleFilter: (r) => ! r.id.startsWith('Oracle') &&  r.id.startsWith('Windows') &&  r.id.startsWith('Canonical') &&  r.id.startsWith('CentOS')}
+                    {displayName: 'Others', simpleFilter: (r) => ! r.id.startsWith('Oracle') && r.id.startsWith('Windows') && r.id.startsWith('Canonical') && r.id.startsWith('CentOS')}
                 ]
             },
             {
