@@ -11,12 +11,6 @@ import { ActiveFileContext, CacheContext } from '../../pages/OcdConsole'
 import { v4 as uuidv4 } from 'uuid'
 
 export interface ResourcePropertyCondition extends OcdUtils.ResourcePropertyCondition {}
-// export interface ResourcePropertyCondition {
-//     logic_operator?: 'and' | 'or'
-//     element?: string
-//     operator?: 'eq' | 'lt' | 'gt' | 'ne' | 'le' | 'ge' | 'in'
-//     value?: boolean | string | number | Function
-// }
 
 export interface ResourcePropertyAttributes {
     provider: string
@@ -359,6 +353,7 @@ export const OcdStaticLookupProperty = ({ ocdDocument, setOcdDocument, resource,
     // console.info('Resources', resources)
     const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         resource[attribute.key] = e.target.value
+        setValue(e.target.value)
         // setOcdDocument(OcdDocument.clone(ocdDocument))
         if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
@@ -377,7 +372,8 @@ export const OcdStaticLookupProperty = ({ ocdDocument, setOcdDocument, resource,
         <div className={className}>
             <div><label htmlFor={id}>{attribute.label}</label></div>
             <div>
-                <select id={id} value={resource[attribute.key]} {...properties} onChange={onChange}>
+                {/* <select id={id} value={resource[attribute.key]} {...properties} onChange={onChange}> */}
+                <select id={id} value={value} {...properties} onChange={onChange}>
                     {resources.map((r: ResourceElementConfigOption) => {
                         return <option value={r.id} key={r.id}>{r.displayName}</option>
                     })}
@@ -412,6 +408,7 @@ export const OcdCacheLookupProperty = ({ ocdDocument, setOcdDocument, resource, 
     })
     const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         resource[attribute.key] = e.target.value
+        setValue(e.target.value)
         // setOcdDocument(OcdDocument.clone(ocdDocument))
         if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
@@ -423,7 +420,8 @@ export const OcdCacheLookupProperty = ({ ocdDocument, setOcdDocument, resource, 
             <div><span>{attribute.label}</span></div>
             <div>
                 {/* <select id={id} value={resource[attribute.key]} {...properties} onChange={onChange}> */}
-                <select value={resource[attribute.key]} {...properties} onChange={onChange}>
+                {/* <select value={resource[attribute.key]} {...properties} onChange={onChange}> */}
+                <select value={value} {...properties} onChange={onChange}>
                     {/* {!attribute.required && <option defaultValue='' key={`${attribute.lookupResource}-empty-option`}></option> } */}
                     <option value='' key={`${attribute.lookupResource}-empty-option`}></option>
                     {lookupGroups.length === 0 ? resources.map((r: OcdResource) => {
