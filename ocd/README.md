@@ -51,9 +51,9 @@ regularly.
 | OKE Cluser & Node Pool         |            |           |            |         |            |
 | Analytics Instance             |            |           |            |         |            |
 | Policy                         |            |           |            | &check; |            |
-| Dynamic Groups                 |            |           |            | &check; |            |
-| Groups                         |            |           |            |         |            |
-| Users                          |            |           |            |         |            |
+| Dynamic Groups                 | &check;    | &check;   |            | &check; |            |
+| Groups                         | &check;    | &check;   |            |         |            |
+| Users                          | &check;    | &check;   |            |         |            |
 
 Not all menu options are currently available and if selected will display a message saying they are currently not availble,
 again these will be added over time.

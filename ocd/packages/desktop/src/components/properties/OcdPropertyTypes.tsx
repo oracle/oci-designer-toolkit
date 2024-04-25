@@ -258,6 +258,21 @@ export const OcdCodeProperty = ({ ocdDocument, setOcdDocument, resource, config,
     )
 }
 
+export const OcdLookupOption = ({id, displayName}: {id: string, displayName: string}): JSX.Element => {
+    return <option value={id} key={id}>{displayName}</option>
+} 
+
+export const OcdLookupGroupOption = ({group}: {group: ResourceElementConfigLookupGroup}): JSX.Element => {
+    return (
+        <optgroup label={group.displayName}>
+            {group.resources && group.resources.map((r: OcdResource) => <OcdLookupOption id={r.id} displayName={r.displayName} key={r.id} />)}
+            {/* {group.resources && group.resources.map((r: OcdResource) => {
+                return <option value={r.id} key={r.id}>{r.displayName}</option>
+            })} */}
+        </optgroup>
+    )
+}
+
 export const OcdLookupProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute, rootResource }: ResourceProperty): JSX.Element => {
     console.debug('OcdPropertyTypes: OcdLookupProperty', config, attribute, resource)
     const id = useId()
@@ -290,22 +305,13 @@ export const OcdLookupProperty = ({ ocdDocument, setOcdDocument, resource, confi
                 <select id={id} value={value} {...properties} onChange={onChange}>
                     {/* {!attribute.required && <option defaultValue='' key={`${attribute.lookupResource}-empty-option`}></option> } */}
                     <option value='' key={`${attribute.lookupResource}-empty-option`}></option>
-                    {lookupGroups.length === 0 ? resources.map((r: OcdResource) => {
-                        return <option value={r.id} key={r.id}>{r.displayName}</option>
-                    }) : lookupGroups.map((g: ResourceElementConfigLookupGroup) => {return <OcdLookupGroupOption group={g} key={g.displayName}/>})}
+                    {/* {lookupGroups.length === 0 ? resources.map((r: OcdResource) => {
+                        return <option value={r.id} key={r.id}>{r.displayName}</option> */}
+                    {lookupGroups.length === 0 ? resources.map((r: OcdResource) => <OcdLookupOption id={r.id} displayName={r.displayName} key={r.id} />) 
+                                               : lookupGroups.map((g: ResourceElementConfigLookupGroup) => <OcdLookupGroupOption group={g} key={g.displayName}/>)}
                 </select>
             </div>
         </div>
-    )
-}
-
-export const OcdLookupGroupOption = ({group}: {group: ResourceElementConfigLookupGroup}): JSX.Element => {
-    return (
-        <optgroup label={group.displayName}>
-            {group.resources && group.resources.map((r: OcdResource) => {
-                return <option value={r.id} key={r.id}>{r.displayName}</option>
-            })}
-        </optgroup>
     )
 }
 
@@ -374,9 +380,7 @@ export const OcdStaticLookupProperty = ({ ocdDocument, setOcdDocument, resource,
             <div>
                 {/* <select id={id} value={resource[attribute.key]} {...properties} onChange={onChange}> */}
                 <select id={id} value={value} {...properties} onChange={onChange}>
-                    {resources.map((r: ResourceElementConfigOption) => {
-                        return <option value={r.id} key={r.id}>{r.displayName}</option>
-                    })}
+                    {resources.map((r: ResourceElementConfigOption) => <OcdLookupOption id={r.id} displayName={r.displayName} key={r.id} />)}
                 </select>
             </div>
         </div>
@@ -424,9 +428,7 @@ export const OcdCacheLookupProperty = ({ ocdDocument, setOcdDocument, resource, 
                 <select value={value} {...properties} onChange={onChange}>
                     {/* {!attribute.required && <option defaultValue='' key={`${attribute.lookupResource}-empty-option`}></option> } */}
                     <option value='' key={`${attribute.lookupResource}-empty-option`}></option>
-                    {lookupGroups.length === 0 ? resources.map((r: OcdResource) => {
-                        return <option value={r.id} key={r.id}>{r.displayName}</option>
-                    }) : lookupGroups.map((g: ResourceElementConfigLookupGroup) => {return <OcdLookupGroupOption group={g} key={g.displayName}/>})}
+                    {lookupGroups.length === 0 ? resources.map((r: OcdResource) => <OcdLookupOption id={r.id} displayName={r.displayName} key={r.id} />) : lookupGroups.map((g: ResourceElementConfigLookupGroup) => {return <OcdLookupGroupOption group={g} key={g.displayName}/>})}
                 </select>
             </div>
         </div>

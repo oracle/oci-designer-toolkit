@@ -32,7 +32,7 @@ export const OcdCanvasGrid = (): JSX.Element => {
 }
 
 export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument, setOcdDocument }: CanvasProps): JSX.Element => {
-    console.info('OcdCanvas: OCD Document:', ocdDocument)
+    // console.info('OcdCanvas: OCD Document:', ocdDocument)
     console.info('OcdCanvas: OCD Design:', ocdDocument.design)
     // @ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
@@ -43,7 +43,7 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
     // const visibleResourceIds = ocdDocument.getResources().filter((r: OcdResource) => visibleLayers.includes(r.compartmentId) || (!allCompartmentIds.includes(r.compartmentId) && r.resourceType !== 'Compartment')).map((r: any) => r.id)
     const visibleResourceIds = ocdDocument.getResources().filter((r: any) => visibleLayers.includes(r.compartmentId)).map((r: any) => r.id)
     // const visibleResourceIds = ocdDocument.getResources().map((r: any) => r.id)
-    console.debug('OcdCanvas: Visible Resource Ids', visibleResourceIds)
+    // console.debug('OcdCanvas: Visible Resource Ids', visibleResourceIds)
     const [dragResource, setDragResource] = useState(ocdDocument.newDragResource(false))
     const [contextMenu, setContextMenu] = useState<OcdContextMenu>({show: false, x: 0, y: 0})
     const [dragging, setDragging] = useState(false)
@@ -158,7 +158,7 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
             // Clear Drag Data Information
             setDragData(newDragData())
             // Redraw
-            console.info('OcdCanvas: Design:', ocdDocument)
+            console.info('OcdCanvas: Design:', ocdDocument.design)
             setOcdDocument(OcdDocument.clone(ocdDocument))
             if (!activeFile.modified) setActiveFile({name: activeFile.name, modified: true})
         }
@@ -382,12 +382,12 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
     const parentConnectors = parentMap.reduce((a, c) => {return [...a, ...allVisibleCoords.filter(coords => coords.ocid === c.parentId).filter(p => p.id !== c.pgid).map(p => {return {startCoordsId: p.id, endCoordsId: c.childCoordsId}})]}, [] as OcdViewConnector[])
     const associationMap = allVisibleCoords.filter(c => c.showConnections).map((r: OcdViewCoords) => {return ocdDocument.getResourceAssociationIds(r.ocid).map(aId => {return {startCoordsId: r.id, associationId: aId}})}).reduce((a, c) => [...a, ...c], [])
     const associationConnectors = associationMap.reduce((a, c) => {return [...a, ...allVisibleCoords.filter(coords => coords.ocid === c.associationId).filter(p => p.pgid !== c.startCoordsId).map(p => {return {startCoordsId: c.startCoordsId, endCoordsId: p.id}})]}, [] as OcdViewConnector[])
-    console.debug('OcdCanvas: Page Coords', page.coords)
-    console.debug('OcdCanvas: All Page Coords', allPageCoords)
-    console.debug('OcdCanvas: Parent Map', parentMap)
-    console.debug('OcdCanvas: Parent Connectors', parentConnectors)
-    console.debug('OcdCanvas: Association Map', associationMap)
-    console.debug('OcdCanvas: Association Connectors', associationConnectors)
+    // console.debug('OcdCanvas: Page Coords', page.coords)
+    // console.debug('OcdCanvas: All Page Coords', allPageCoords)
+    // console.debug('OcdCanvas: Parent Map', parentMap)
+    // console.debug('OcdCanvas: Parent Connectors', parentConnectors)
+    // console.debug('OcdCanvas: Association Map', associationMap)
+    // console.debug('OcdCanvas: Association Connectors', associationConnectors)
 
     return (
         <div className='ocd-designer-canvas ocd-background' 
