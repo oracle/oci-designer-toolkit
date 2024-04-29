@@ -99,7 +99,8 @@ export class OciTerraformSchemaImporter extends OcdSchemaImporter {
         }, {} as OcdSchemaEntry) : {}
         // Block / Object Attributes
         if (block.block_types) {
-            attributes = Object.entries(block.block_types).filter(([k, v]) => !ignore_attributes.includes(k)).reduce((r, [k, v]) => {
+            // attributes = Object.entries(block.block_types).filter(([k, v]) => !ignore_attributes.includes(k)).reduce((r, [k, v]) => {
+            attributes = Object.entries(block.block_types).filter(([k, v]) => !ignore_attributes.includes(this.genId(k, hierarchy))).reduce((r, [k, v]) => {
                 const id = [...hierarchy, k].join('.')
                 r[k] = {
                     provider: 'oci',

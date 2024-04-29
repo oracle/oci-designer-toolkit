@@ -58,7 +58,8 @@ export class OcdCacheData {
     }
 
     saveCache(): Promise<any> {
-        return OcdCacheFacade.saveCache(this.cache).then((results) => {console.debug('OcdCacheData: Saved Cache')}).catch((response) => console.debug('OcdCacheData:', response))
+        return OcdCacheFacade.saveCache(this.cache).then((results) => {}).catch((response) => console.debug('OcdCacheData:', response))
+        // return OcdCacheFacade.saveCache(this.cache).then((results) => {console.debug('OcdCacheData: Saved Cache')}).catch((response) => console.debug('OcdCacheData:', response))
     }
 
     getOciReferenceDataList(resource: string, profile?: string , region?: string) {
@@ -71,8 +72,8 @@ export class OcdCacheData {
             profile = 'shipped'
             region = 'all'
         }
-        console.debug('OcdCacheData: getOciReferenceDataList:', resource, profile, region)
-        console.debug('OcdCacheData: getOciReferenceDataList:', resource, profile, region, this.cache.dropdownData[profile][region])
+        // console.debug('OcdCacheData: getOciReferenceDataList:', resource, profile, region)
+        // console.debug('OcdCacheData: getOciReferenceDataList:', resource, profile, region, this.cache.dropdownData[profile][region])
         return Object.hasOwn(this.cache.dropdownData[profile][region], resource) ? this.cache.dropdownData[profile][region][resource] : []
     }
 }

@@ -292,7 +292,8 @@ export const OcdLookupProperty = ({ ocdDocument, setOcdDocument, resource, confi
     const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         resource[attribute.key] = e.target.value
         setValue(e.target.value)
-        // setOcdDocument(OcdDocument.clone(ocdDocument))
+        // TODO: Replace with a performant Solution
+        setOcdDocument(OcdDocument.clone(ocdDocument))
         if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     const className = isPropertyDisplayConditionTrue(attribute.conditional, attribute.condition, resource, rootResource) ? `ocd-property-row ocd-simple-property-row` : `collapsed hidden`
@@ -329,7 +330,8 @@ export const OcdLookupListProperty = ({ ocdDocument, setOcdDocument, resource, c
         const checked = e.target.checked
         if (checked) resource[attribute.key].push(securityListId)
         else resource[attribute.key] = resource[attribute.key].filter((s: string) => s !== securityListId)
-        // setOcdDocument(OcdDocument.clone(ocdDocument))
+        // TODO: Replace with a performant Solution
+        setOcdDocument(OcdDocument.clone(ocdDocument))
         if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     const className = isPropertyDisplayConditionTrue(attribute.conditional, attribute.condition, resource, rootResource) ? `ocd-property-row ocd-simple-property-row` : `collapsed hidden`
@@ -360,13 +362,15 @@ export const OcdStaticLookupProperty = ({ ocdDocument, setOcdDocument, resource,
     const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         resource[attribute.key] = e.target.value
         setValue(e.target.value)
-        // setOcdDocument(OcdDocument.clone(ocdDocument))
+        // TODO: Replace with a performant Solution
+        setOcdDocument(OcdDocument.clone(ocdDocument))
         if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     useEffect(() => {
         if (!resource[attribute.key] || resource[attribute.key] === '') {
             if (resources.length > 0) {
                 resource[attribute.key] = resources[0].id
+                // TODO: Replace with a performant Solution
                 // setOcdDocument(OcdDocument.clone(ocdDocument))
                 if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
             }
@@ -413,7 +417,8 @@ export const OcdCacheLookupProperty = ({ ocdDocument, setOcdDocument, resource, 
     const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         resource[attribute.key] = e.target.value
         setValue(e.target.value)
-        // setOcdDocument(OcdDocument.clone(ocdDocument))
+        // TODO: Replace with a performant Solution
+        setOcdDocument(OcdDocument.clone(ocdDocument))
         if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     const className = isPropertyDisplayConditionTrue(attribute.conditional, attribute.condition, resource, rootResource) ? `ocd-property-row ocd-simple-property-row` : `collapsed hidden`
