@@ -18,7 +18,6 @@ OCI environments through a graphical web based interface.
     Once completed the design can be enhanced to add key property information allowing the designed infrastructure to
     be exported to a number of DevOps frameworks or Markdown for documentation.
     
-    - Ansible
     - Terraform
     - OCI Resource Manager
     - Markdown

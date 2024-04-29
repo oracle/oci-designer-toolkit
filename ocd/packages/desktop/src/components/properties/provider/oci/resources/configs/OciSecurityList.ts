@@ -77,4 +77,5 @@ export namespace OciSecurityListConfigs {
             },
         ]
     }
+    export const layout = []
 }
