@@ -29,7 +29,7 @@ __all__ = [
   "ExtendedPreauthenticatedRequestSummary",
   "ExtendedRRSet",
   "ExtendedSecurityRule",
-  "ExtendedSourceApplicationSummary",
+  # "ExtendedSourceApplicationSummary",
   "ExtendedTagSummary",
   "ExtendedVirtualCircuitBandwidthShape",
 ]
