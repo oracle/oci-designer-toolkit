@@ -1,18 +1,13 @@
 # Release Notes
 
 
-## Version 0.59.1
-**Release Date**: 30th April 2024
-### Features
-### Bug Fixes
-1. Resolve issue with oci.application_migration being missing from the latest oci sdk
-2. Remove Ansible references from documentation.
-
 ## Version 0.59.0
-**Release Date**: 28th March 2024
+**Release Date**: 30th April 2024
 ### Features
 1. Add Compute Cloud@Customer as deployment platform with associated resources.
 ### Bug Fixes
+1. Resolve issue with oci.application_migration being missing from the latest oci sdk
+2. Remove Ansible references from documentation.
 
 
 ## Version 0.58.0
