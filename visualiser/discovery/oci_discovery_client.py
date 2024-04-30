@@ -9,7 +9,8 @@ from concurrent.futures import ThreadPoolExecutor
 
 from .models import ExtendedTagSummary, ExtendedDrgRouteDistributionStatement, ExtendedDrgRouteRule, ExtendedAutoScalingPolicySummary
 from .models import ExtendedDbNodeSummary, ExtendedNetworkSecurityGroupVnic, ExtendedPreauthenticatedRequestSummary, ExtendedSecurityRule
-from .models import ExtendedSourceApplicationSummary, ExtendedExportSummary, ExtendedMySQLBackup, ExtendedMySQLBackupSummary
+from .models import ExtendedExportSummary, ExtendedMySQLBackup, ExtendedMySQLBackupSummary
+# from .models import ExtendedSourceApplicationSummary, ExtendedExportSummary, ExtendedMySQLBackup, ExtendedMySQLBackupSummary
 from .models import ExtendedVirtualCircuitBandwidthShape, ExtendedNoSQLIndexSummary
 from .models import ExtendedRRSet
 from .models import ExtendedAvailablePluginSummary, ExtendedInstanceAgentPluginSummary
@@ -1463,11 +1464,11 @@ class OciResourceDiscoveryClient(object):
                     if resource_type not in results[region]:
                         results[region][resource_type] = []
 
-                    if resource_type == "AmsSourceApplication":
-                        # map Source Applications into extended verison a unique id
-                        new_result = [ExtendedSourceApplicationSummary(f"{future[3]}/{application.type}/{application.name}", application) for application in result]
-                        result = new_result
-                    elif resource_type == "AutoScalingPolicy":
+                    # if resource_type == "AmsSourceApplication":
+                    #     # map Source Applications into extended verison a unique id
+                    #     new_result = [ExtendedSourceApplicationSummary(f"{future[3]}/{application.type}/{application.name}", application) for application in result]
+                    #     result = new_result
+                    if resource_type == "AutoScalingPolicy":
                         # map Auto Scaling Policy into extended verison parent id
                         new_result = [ExtendedAutoScalingPolicySummary(future[3],policy) for policy in result]
                         result = new_result
