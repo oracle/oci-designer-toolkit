@@ -118,9 +118,9 @@ class OciResourceDiscoveryClient(object):
         # oci.apm_control_plane.ApmDomainClient
         "ApmDomain": ( oci.apm_control_plane.ApmDomainClient, "list_apm_domains"),
         # oci.application_migration.ApplicationMigrationClient
-        "AmsMigration": (oci.application_migration.ApplicationMigrationClient ,"list_migrations"),
-        "AmsSource": (oci.application_migration.ApplicationMigrationClient ,"list_sources"),
-        "AmsSourceApplication": (oci.application_migration.ApplicationMigrationClient ,"list_source_applications"),
+        # "AmsMigration": (oci.application_migration.ApplicationMigrationClient ,"list_migrations"),
+        # "AmsSource": (oci.application_migration.ApplicationMigrationClient ,"list_sources"),
+        # "AmsSourceApplication": (oci.application_migration.ApplicationMigrationClient ,"list_source_applications"),
         # oci.artifacts.ArtifactsClient
         "ContainerImage": (oci.artifacts.ArtifactsClient, "list_container_images"),
         "ContainerRepo": (oci.artifacts.ArtifactsClient, "list_container_repositories"),
