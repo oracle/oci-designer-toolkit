@@ -33,6 +33,7 @@ export interface ResourceForeignObjectProps {
     setOcdDocument: React.Dispatch<any>
     resource: OcdViewCoords
     hidden: boolean
+    ghost?: boolean
 }
 
 export interface ResourceSvgGhostProps {
@@ -50,6 +51,7 @@ export interface ResourceSvgProps {
     setContextMenu: React.Dispatch<any>
     svgDragDropEvents: OcdMouseEvents
     resource: OcdViewCoords
+    ghost?: boolean
 }
 
 export interface ResourceSvgContextMenuProps {

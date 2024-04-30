@@ -12,48 +12,48 @@ This Alpha release is to show the new desktop functionality available in the OKI
 guarenteed to be 100% functional. At present the following resources and features are availble but we will be releasing updates 
 regularly.
 
-| Resource                       | Properties | Terraform | Validation | Query Only |
-| ------------------------------ | :--------: | :-------: | :--------: | :--------: |
-| VCN                            | &check;    | &check;   |            |            |
-| Subnet                         | &check;    | &check;   |            |            |
-| Security List                  | &check;    | &check;   |            |            |
-| Route Table                    | &check;    | &check;   |            |            |
-| DHCP Options                   | &check;    | &check;   |            |            |
-| Internet Gateway               | &check;    | &check;   |            |            |
-| NAT Gateway                    | &check;    | &check;   |            |            |
-| Instance                       | &check;    | &check;   |            |            |
-| Autonomous Database            | &check;    | &check;   |            |            |
-| Load Balancer                  | &check;    | &check;   |            |            |
-| Load Balancer Backend Set      | &check;    | &check;   |            |            |
-| Load Balancer Backend          | &check;    | &check;   |            |            |
-| Load Balancer Backend Listener | &check;    | &check;   |            |            |
-| Block Volume                   | &check;    | &check;   |            |            |
-| Volume Attachment              | &check;    | &check;   |            |            |
-| Boot Volumes                   | &check;    | &check;   |            | &check;    |
-| Boot Volumes Attachment        | &cross;    | &check;   |            | &check;    |
-| Customer Premises Equipment    | &check;    | &check;   |            |            |
-| Database System                |            |           |            |            |
-| Service Gateway                | &check;    | &check;   |            |            |
-| DRG                            | &check;    | &check;   |            |            |
-| DRG Attachment                 |            |           |            |            |
-| DRG Route Table                |            |           |            |            |
-| DRG Distribution               |            |           |            |            |
-| Local Peering                  | &check;    | &check;   |            |            |
-| IPSec VPN                      |            |           |            |            |
-| Remote Peering                 |            |           |            |            |
-| NoSQL Database                 |            |           |            |            |
-| MySQL (with Heatwave)          |            |           |            |            |
-| Vault                          |            |           |            |            |
-| Key                            |            |           |            |            |
-| Secret                         |            |           |            |            |
-| File System                    |            |           |            |            |
-| Mount Target                   |            |           |            |            |
-| OKE Cluser & Node Pool         |            |           |            |            |
-| Analytics Instance             |            |           |            |            |
-| Policy                         |            |           |            |            |
-| Dynamic Groups                 |            |           |            |            |
-| Groups                         |            |           |            |            |
-| Users                          |            |           |            |            |
+| Resource                       | Properties | Terraform | Validation | Query   | Query Only |
+| ------------------------------ | :--------: | :-------: | :--------: | :-----: | :--------: |
+| VCN                            | &check;    | &check;   |            | &check; |            |
+| Subnet                         | &check;    | &check;   |            | &check; |            |
+| Security List                  | &check;    | &check;   |            | &check; |            |
+| Route Table                    | &check;    | &check;   |            | &check; |            |
+| DHCP Options                   | &check;    | &check;   |            | &check; |            |
+| Internet Gateway               | &check;    | &check;   |            | &check; |            |
+| NAT Gateway                    | &check;    | &check;   |            | &check; |            |
+| Instance                       | &check;    | &check;   |            | &check; |            |
+| Autonomous Database            | &check;    | &check;   |            | &check; |            |
+| Load Balancer                  | &check;    | &check;   |            | &check; |            |
+| Load Balancer Backend Set      | &check;    | &check;   |            | &check; |            |
+| Load Balancer Backend          | &check;    | &check;   |            | &check; |            |
+| Load Balancer Backend Listener | &check;    | &check;   |            | &check; |            |
+| Block Volume                   | &check;    | &check;   |            | &check; |            |
+| Volume Attachment              | &check;    | &check;   |            | &check; |            |
+| Boot Volumes                   | &check;    | &check;   |            | &check; | &check;    |
+| Boot Volumes Attachment        | &cross;    | &check;   |            | &check; | &check;    |
+| Customer Premises Equipment    | &check;    | &check;   |            | &check; |            |
+| Database System                |            |           |            |         |            |
+| Service Gateway                | &check;    | &check;   |            | &check; |            |
+| DRG                            | &check;    | &check;   |            | &check; |            |
+| DRG Attachment                 |            |           |            |         |            |
+| DRG Route Table                |            |           |            |         |            |
+| DRG Distribution               |            |           |            |         |            |
+| Local Peering                  | &check;    | &check;   |            | &check; |            |
+| IPSec VPN                      |            |           |            | &check; |            |
+| Remote Peering                 |            |           |            |         |            |
+| NoSQL Database                 |            |           |            |         |            |
+| MySQL (with Heatwave)          |            |           |            |         |            |
+| Vault                          |            |           |            |         |            |
+| Key                            |            |           |            |         |            |
+| Secret                         |            |           |            |         |            |
+| File System                    |            |           |            |         |            |
+| Mount Target                   |            |           |            |         |            |
+| OKE Cluser & Node Pool         |            |           |            |         |            |
+| Analytics Instance             |            |           |            |         |            |
+| Policy                         |            |           |            | &check; |            |
+| Dynamic Groups                 | &check;    | &check;   |            | &check; |            |
+| Groups                         | &check;    | &check;   |            |         |            |
+| Users                          | &check;    | &check;   |            |         |            |
 
 Not all menu options are currently available and if selected will display a message saying they are currently not availble,
 again these will be added over time.

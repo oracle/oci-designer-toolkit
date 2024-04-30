@@ -32,16 +32,18 @@ export const OcdCanvasGrid = (): JSX.Element => {
 }
 
 export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument, setOcdDocument }: CanvasProps): JSX.Element => {
-    console.info('OcdCanvas: OCD Document:', ocdDocument)
+    // console.info('OcdCanvas: OCD Document:', ocdDocument)
     console.info('OcdCanvas: OCD Design:', ocdDocument.design)
     // @ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const uuid = () => `gid-${uuidv4()}`
     const page: OcdViewPage = ocdDocument.getActivePage()
-    const layers = page.layers.filter((l: OcdViewLayer) => l.visible).map((l: OcdViewLayer) => l.id)
-    const visibleResourceIds = ocdDocument.getResources().filter((r: any) => layers.includes(r.compartmentId)).map((r: any) => r.id)
+    const allCompartmentIds = ocdDocument.getOciResourceList('comparment').map((r) => r.id)
+    const visibleLayers = page.layers.filter((l: OcdViewLayer) => l.visible).map((l: OcdViewLayer) => l.id)
+    // const visibleResourceIds = ocdDocument.getResources().filter((r: OcdResource) => visibleLayers.includes(r.compartmentId) || (!allCompartmentIds.includes(r.compartmentId) && r.resourceType !== 'Compartment')).map((r: any) => r.id)
+    const visibleResourceIds = ocdDocument.getResources().filter((r: any) => visibleLayers.includes(r.compartmentId)).map((r: any) => r.id)
     // const visibleResourceIds = ocdDocument.getResources().map((r: any) => r.id)
-    console.debug('OcdCanvas: Visible Resource Ids', visibleResourceIds)
+    // console.debug('OcdCanvas: Visible Resource Ids', visibleResourceIds)
     const [dragResource, setDragResource] = useState(ocdDocument.newDragResource(false))
     const [contextMenu, setContextMenu] = useState<OcdContextMenu>({show: false, x: 0, y: 0})
     const [dragging, setDragging] = useState(false)
@@ -156,7 +158,7 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
             // Clear Drag Data Information
             setDragData(newDragData())
             // Redraw
-            console.info('OcdCanvas: Design:', ocdDocument)
+            console.info('OcdCanvas: Design:', ocdDocument.design)
             setOcdDocument(OcdDocument.clone(ocdDocument))
             if (!activeFile.modified) setActiveFile({name: activeFile.name, modified: true})
         }

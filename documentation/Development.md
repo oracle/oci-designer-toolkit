@@ -45,7 +45,6 @@ skeleton files for the new Artefacts. The developer can then simply updated thes
 ### Backend Files
 - [Artefact Python Facade](#artefact-python-facade)
 - [Terraform Jinja2 Template](#terraform-jinja2-template)
-- [Ansible Jinja2 Template](#ansible-jinja2-template)
 
 ### Generating Skeletons
 ```bash
@@ -733,52 +732,6 @@ resource "oci_core_volume_backup_policy_assignment" "{{ resource_name }}BackupPo
     policy_id = data.template_file.{{ resource_name }}VolumeBackupPolicyIds.*.rendered[index(data.template_file.{{ resource_name }}VolumeBackupPolicyNames.*.rendered, {{ backup_policy | safe }})]
 }
 ```
-### Ansible Jinja2 Template
-_Note:_ This file is currently not generated and will need to be created.
-
-The ansible jinja2 template consists of all the ansible modules / actions the need to occur to create the artifact using
-an ansible playbook. In consists of a number of ansible module statement (note the indentation) that are modified using
-jinja2. Because ansible uses jinja2 as its templating language we will see escape sequences for {{ and }} and examples of
-this can be found in the various, existing, ansible templates.
-```jinja2
-
-# ------ Get List Volume Backup Policies
-    - name: Get information of all available volume backup policies
-      oci_volume_backup_policy_facts:
-        region: "{{ region }}"
-      register: {{ resource_name }}VolumeBackupPolicyIds
-
-# ------ Create Block Storage Volume {{ output_name }}
-    - name: Create Block Storage Volume {{ output_name }}
-      oci_volume:
-        region: "{{ region }}"
-        state: "present"
-        # Required
-        compartment_id: "{{ compartment_id }}"
-        availability_domain: "{{ '{{' }} (AvailabilityDomains.availability_domains | sort(attribute='name') | map(attribute='name') | list)[{{ availability_domain | safe | replace('{{', '') | replace('}}', '') }} | default(1) | int - 1] {{ '}}' }}"
-        # Optional
-        display_name: "{{ display_name | safe }}"
-        size_in_gbs: "{{ size_in_gbs | safe }}"
-{% if defined_tags is defined %}
-        defined_tags: "{{ defined_tags | safe }}"
-{% endif %}
-{% if freeform_tags is defined %}
-        freeform_tags: "{{ freeform_tags | safe }}"
-{% endif %}
-      register: {{ resource_name }}
-
-    - set_fact:
-        {{ resource_name }}_id: "{{ '{{' }} {{ resource_name }}.volume.id {{ '}}' }}"
-        {{ resource_name }}_ocid: "{{ '{{' }} {{ resource_name }}.volume.id {{ '}}' }}"
-
-# ------ Create Block Storage Backup Policy For {{ output_name }}
-    - name: Create Volume Backup Policy Assignment {{ output_name }}
-      oci_volume_backup_policy_assignment:
-        region: "{{ region }}"
-        asset_id: "{{ '{{' }} {{ resource_name }}_id {{ '}}' }}"
-        policy_id: "{{ '{{' }} ({{ resource_name }}VolumeBackupPolicyIds.volume_backup_policies | selectattr('display_name', 'equalto', {{ backup_policy | safe | replace('{{', '') | replace('}}', '') }}) | map(attribute='id') | list)[0] {{ '}}' }}"
-      register: {{ resource_name }}BackupPolicy
-```
 
 ## Updated Files
 Once the core files for the new Resource (Artefact) have been created the developer will need to integrate these into the
@@ -812,7 +765,7 @@ The **generate()** needs to be modified to loop through the list of new artefact
 ```
 #### Create Render Method
 The render method will take the new artefact definition and generated / store the variables required for the jinja2 templates
-[Terraform Jinja2 Template](#terraform-jinja2-template) and [Ansible Jinja2 Template](#ansible-jinja2-template) before rednering the
+[Terraform Jinja2 Template](#terraform-jinja2-template) before rednering the
 templates and storing the result in the **self.create_sequence** list.
 ```python
     def renderBlockStorageVolume(self, artefact):

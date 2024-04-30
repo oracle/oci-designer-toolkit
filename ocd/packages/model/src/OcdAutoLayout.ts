@@ -9,6 +9,10 @@ import { OcdResource } from './OcdResource'
 import { OciResource } from './provider/oci/OciResource'
 import { OcdUtils } from '@ocd/core'
 import { OciCompartment } from './provider/oci/resources/OciCompartment'
+import { OcdTwoColumnLayoutEngine } from './layout/OcdTwoColumnLayoutEngine'
+import { OcdSingleColumnLayoutEngine } from './layout/OcdSingleColumnLayoutEngine'
+import { OcdDynamicLayoutEngine } from './layout/OcdDynamicLayoutEngine'
+import { layoutEngineConfig } from './layout/OcdLayoutEngineConfig'
 
 export class OcdAutoLayout {
     coords: OcdViewCoords[]
@@ -21,8 +25,8 @@ export class OcdAutoLayout {
     containerWidth = 200
     containerHeight = 200
     // Specify Contains and their hierarchy. i.e. compartment -> vcn -> subnet
-    containers: string[] = ['vcn', 'subnet', 'load_balancer', 'drg']
-    ignore: string[] = ['compartment', 'boot_volume_attachment', 'network_security_group_security_rule', 'volume_attachment', 'vnic_attachment', ]
+    containers: string[] = layoutEngineConfig.containers
+    ignore: string[] = layoutEngineConfig.ignore
     containerResources: OcdResources = {}
     simpleResources: OcdResources = {}
     uuid = () => `gid-${uuidv4()}`
@@ -90,7 +94,20 @@ export class OcdAutoLayout {
 
     getChildren = (pocid: string) => this.coords.filter((c) => c.pocid === pocid)
 
-    layout(detailed: boolean = true): OcdViewCoords[] {
+    layout(detailed: boolean = true, style: string = 'dynamic-columns'): OcdViewCoords[] {
+        if (style === 'dynamic-columns') {
+            const layoutEngine = new OcdDynamicLayoutEngine(this.coords)
+            return layoutEngine.layout(detailed, this.coords)
+        } else if (style === 'two-column') {
+            const layoutEngine = new OcdTwoColumnLayoutEngine(this.coords)
+            return layoutEngine.layout(detailed, this.coords)
+        } else {
+            const layoutEngine = new OcdSingleColumnLayoutEngine(this.coords)
+            return layoutEngine.layout(detailed, this.coords)
+        }
+        return this.coords
+    }
+    layoutV2(detailed: boolean = true, style: string = 'two-column'): OcdViewCoords[] {
         // Position Children in Container
         this.coords.filter((c) => c.container).reverse().forEach((coords) => {
             const children = this.getChildren(coords.ocid)
@@ -139,12 +156,35 @@ export class OcdAutoLayout {
         // Position Root Containers
         let childX = this.spacing
         let childY = this.spacing
-        this.coords.reverse().forEach((child) => {
-            child.x = childX
-            child.y = childY
-            // Add Spacing
-            childY += (this.spacing + child.h)
-        })
+        if (style === 'dynamic-columns') {
+            // this.leftSimple.forEach((types) => {
+            //     this.layoutSimple(detailed, coords, childX, types, children)
+            // })
+        } else if (style === 'two-column') {
+            // Top Level Simple to the left Containers to the right
+            this.coords.filter((c) => !c.container).forEach((child) => {
+                child.x = childX
+                child.y = childY
+                // Add Spacing
+                childY += (this.spacing + child.h)
+            })
+            childX += ((this.spacing * 2) + (detailed ? this.detailedWidth : this.simpleWidth) as number)
+            childY = this.spacing
+            this.coords.filter((c) => c.container).forEach((child) => {
+                child.x = childX
+                child.y = childY
+                // Add Spacing
+                childY += (this.spacing + child.h)
+            })
+        } else {
+            // Default Vertical Layout
+            this.coords.reverse().forEach((child) => {
+                child.x = childX
+                child.y = childY
+                // Add Spacing
+                childY += (this.spacing + child.h)
+            })
+        }
         // console.debug('OcdAutoLayout: Coords - Post Filter', this.coords)
 
         return this.coords
@@ -165,4 +205,5 @@ export class OcdAutoLayout {
             } 
             p.layers.push(layer)
         })
-    }}
+    }
+}

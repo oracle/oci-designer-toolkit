@@ -143,7 +143,6 @@ The hamburger menu in the top left will display a slide out menu with all availa
         - jpeg
         - svg
     - Terraform
-    - Ansible
     - Resource Manager
 
 ##### Canvas/New
@@ -161,8 +160,6 @@ Redraws the existing canvas this will have the effect of grouping similar assets
 This is a dynamic menu that represents the available templates that can be loaded as a starting point for system development.
 #### Export/Terraform
 Generate a set of Terraform that can be used to build the designed OCI infrastructure currently loaded and return as a zip file.
-#### Export/Ansible
-Generate a set of Ansible that can be used to build the designed OCI infrastructure currently loaded  and return as a zip file.
 ##### Export/Image/png
 Will export the current diagram as a png image that can be distributed.
 ##### Export/Image/jpeg
@@ -187,7 +184,7 @@ The following short tutorial will take you through a worked example for creating
 implementation. The results of the worked example can be seen in the template (Simple Load Balancer).
 
 This worked example will take you step-by-step through the process of building a visual representation of our application 
-and then ultimately generate Ansible 7 Terraform scripts that can be executed to build the solution. The Designer BUI is 
+and then ultimately generate Terraform scripts that can be executed to build the solution. The Designer BUI is 
 built using simple HTML / JavaScript and provides an intuative Drag & Drop interface for placing artifacts on the canvas.
 Appropriate drop locations for an Artifact will be indicated by the addition of a green ***"+"*** over the Drag Icon.
 
@@ -363,11 +360,6 @@ oci_core_vcn.Okit-Vcn001: Creating...
 oci_core_volume.Okit-Bsv001: Creating...
 ..........
 ```
-
-## Ansible Generation & Execution
-For the diagram you are able to select the menu option Generate->Ansible and this will generate a oci_ansible.zip 
-that can be saved and extracted to produce 2 files that can be used by ansible. If we assume that the export have been
-generated from the 'Load Balanced Nginx Instances' Template then the infrastructure can be created as follows.
 
 ### Unzip Generated File
 ```bash

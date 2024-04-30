@@ -1,6 +1,6 @@
 # Copyright © 2021, Oracle and/or its affiliates. All rights reserved.
 # __init__.py
-from .application_migration import ExtendedSourceApplicationSummary
+# from .application_migration import ExtendedSourceApplicationSummary
 from .autoscaling import ExtendedAutoScalingPolicySummary
 from .core import ExtendedSecurityRule, ExtendedNetworkSecurityGroupVnic
 from .dns import ExtendedRRSet
@@ -29,7 +29,7 @@ __all__ = [
   "ExtendedPreauthenticatedRequestSummary",
   "ExtendedRRSet",
   "ExtendedSecurityRule",
-  "ExtendedSourceApplicationSummary",
+  # "ExtendedSourceApplicationSummary",
   "ExtendedTagSummary",
   "ExtendedVirtualCircuitBandwidthShape",
 ]

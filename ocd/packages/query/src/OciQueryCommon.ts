@@ -13,6 +13,8 @@ export class OciCommonQuery {
     authenticationConfiguration: common.AuthParams
     // Clients
     identityClient: identity.IdentityClient
+    // Lifecycle States
+    lifecycleStates: string[] = ['ACTIVE', 'ALLOCATED', 'ATTACHED', 'AVAILABLE', 'CREATING', 'ENABLED', 'INACTIVE', 'PROVISIONING', 'RUNNING', 'STARTING', 'STOPPED', 'STOPPING', 'UPDATING']
 
     constructor(profile: string='DEFAULT', region?: string) {
         this.profile = profile
@@ -95,7 +97,7 @@ export class OciCommonQuery {
 
     listTenancyCompartments(): Promise<any> {
         return new Promise((resolve, reject) => {
-            const listCompartmentsReq: identity.requests.ListCompartmentsRequest = {compartmentId: this.provider.getTenantId(), compartmentIdInSubtree: true, limit: 10000}
+            const listCompartmentsReq: identity.requests.ListCompartmentsRequest = {compartmentId: this.provider.getTenantId(), compartmentIdInSubtree: true, limit: 10000, lifecycleState: "ACTIVE"}
             const compartmentResponseIterator = this.identityClient.listCompartmentsResponseIterator(listCompartmentsReq)
             const compartmentQuery = this.getAllResponseData(compartmentResponseIterator)
             const getTenancy = this.getCompartments([this.provider.getTenantId()])

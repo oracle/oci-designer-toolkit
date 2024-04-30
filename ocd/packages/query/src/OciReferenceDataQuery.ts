@@ -368,21 +368,25 @@ export class OciReferenceDataQuery extends OciCommonQuery {
                 console.debug('OciReferenceDataQuery: listImages: All Settled', results)
                 //@ts-ignore
                 const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value], []).map((r) => {return {
-                        id: r.displayName,
+                        id: `${r.operatingSystem}-${r.operatingSystemVersion}`,
+                        // id: r.displayName,
                         ocid: r.id,
-                        displayName: r.displayName,
+                        displayName: `${r.operatingSystem} ${r.operatingSystemVersion}`,
+                        sourceDisplayName: r.displayName,
                         platform: r.compartmentId === null,
                         operatingSystem: r.operatingSystem,
                         operatingSystemVersion: r.operatingSystemVersion,
                         billableSizeInGBs: r.billableSizeInGBs,
                         lifecycleState: r.lifecycleState
                     }
-                }).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
+                }).sort((a: OciResource, b: OciResource) => (a.id.localeCompare(b.id) * -1))
                 // @ts-ignore
-                const uniqueResources = Array.from(new Set(resources.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
-                const imageIds = uniqueResources.map((r) => r.ocid)
+                // const uniqueResources = Array.from(new Set(resources.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
+                const uniqueResources = resources.filter((r, i) => resources.findIndex((v) => r.id === v.id) === i).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
+                const imageIds = uniqueResources.map((r: Record<string, string>) => r.ocid)
                 this.listImageShapeCompatabilities(imageIds).then((compatibilities) => {
-                    uniqueResources.forEach((r) => r.shapes = compatibilities.filter((c: Record<string, string>) => c.imageId === r.ocid).map((c: Record<string, string>) => c.shape))
+                    uniqueResources.forEach((r: Record<string, string>) => r.shapes = compatibilities.filter((c: Record<string, string>) => c.imageId === r.ocid).map((c: Record<string, string>) => c.shape))
+                    // const sortedResources = [...uniqueResources.filter((r: Record<string, string>) => r.id.startsWith('Oracle')), ...uniqueResources.filter((r: Record<string, string>) => !r.id.startsWith('Oracle'))]
                     resolve(uniqueResources)
                 }).catch((reason) => {
                     console.error('OciReferenceDataQuery: listImages: Error', reason)
