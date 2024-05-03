@@ -82,6 +82,16 @@ export const elementOverrides: OcdElementOverrides = {
         "oci_core_volume": {
             "vpus_per_gb": "VPUs/Gbs"
         },
+        "oci_database_db_system": {
+            "data_storage_percentage": "Storage Percentage",
+            "data_storage_size_in_gb": "Storage (Gbs)",
+            "memory_size_in_gbs": "Memory (Gbs)",
+            "db_home.db_version": "Version",
+            "db_home.database.db_domain": "DB Domain",
+            "db_home.database.db_name": "DB Name",
+            "db_home.database.db_unique_name": "Unique Name",
+            "db_home.database.pdb_name": "PDB Name"
+        },
         "oci_file_storage_file_system": {
             "filesystem_snapshot_policy_id": "Snapshot Policy"
         },
@@ -126,6 +136,10 @@ export const elementOverrides: OcdElementOverrides = {
         },
         "oci_database_autonomous_database": {
             "db_version": "autonomousDbVersions"
+        },
+        "oci_database_db_system": {
+            "shape": "dbSystemShapes",
+            "db_home.db_version": "dbVersions",
         },
         "oci_file_storage_file_system": {
             "filesystem_snapshot_policy_id": "snapshotPolicies"
@@ -205,6 +219,9 @@ export const elementOverrides: OcdElementOverrides = {
         },
         "oci_database_autonomous_database": {
             "whitelisted_ips": ["list", "string"]
+        },
+        "oci_database_db_system": {
+            "ssh_public_keys": ["list", "string"]
         },
         "oci_load_balancer_listener": {
             "hostname_names": ["list", "string"]

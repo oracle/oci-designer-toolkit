@@ -74,7 +74,7 @@ export class OciTerraformSchemaImporter extends OcdSchemaImporter {
                 subtype: type_overrides[k] && type_overrides[k].length > 1 ? type_overrides[k][1] : Array.isArray(v.type) ? v.type[1] : '',
                 // @ts-ignore
                 required: v.required ? v.required : false,
-                label: this.toLabel(k, labels),
+                label: this.toLabel(k, labels, hierarchy),
                 // label: this.toLabel(k),
                 id: id,
                 staticLookup: this.isStaticLookup(id, key),
@@ -112,7 +112,7 @@ export class OciTerraformSchemaImporter extends OcdSchemaImporter {
                     subtype: v.nesting_mode === 'set' ? 'object' : '',
                     // @ts-ignore
                     required: v.required ? v.required : false,
-                    label: this.toLabel(k, labels),
+                    label: this.toLabel(k, labels, hierarchy),
                     // label: this.toLabel(k),
                     id: id,
                     conditional: this.isConditional(key, k),
@@ -138,7 +138,7 @@ export class OciTerraformSchemaImporter extends OcdSchemaImporter {
     // lookupResource = (key: string) => Object.hasOwn(elementOverrides.resourceLookupOverrides.common, key) ? elementOverrides.resourceLookupOverrides.common[key] : key.split('_').slice(0, -1).join('_').toLowerCase()
     cacheLookupResource = (key: string, resource: string = 'common') => (Object.hasOwn(elementOverrides.cacheLookups, resource) && Object.hasOwn(elementOverrides.cacheLookups[resource], key)) ? elementOverrides.cacheLookups[resource][key] : elementOverrides.cacheLookups.common[key]
     // toLabel = (key: string) => Object.hasOwn(attributeMap, key) ? attributeMap[key].label : key.endsWith('_id') || key.endsWith('_ids') ? OcdUtils.toTitleCase(key.split('_').slice(0, -1).join(' ')) : OcdUtils.toTitleCase(key.split('_').join(' '))
-    toLabel = (key: string, labels: Record<string,any>) => Object.hasOwn(labels, key) ? labels[key] : key.endsWith('_id') || key.endsWith('_ids') ? OcdUtils.toTitleCase(key.split('_').slice(0, -1).join(' ')) : OcdUtils.toTitleCase(key.split('_').join(' '))
+    toLabel = (key: string, labels: Record<string,any>, hierarchy=[]) => Object.hasOwn(labels, this.genId(key, hierarchy)) ? labels[this.genId(key, hierarchy)] : key.endsWith('_id') || key.endsWith('_ids') ? OcdUtils.toTitleCase(key.split('_').slice(0, -1).join(' ')) : OcdUtils.toTitleCase(key.split('_').join(' '))
     isConditional = (key: string, element: string) => Object.hasOwn(conditionalElements, key) && Object.hasOwn(conditionalElements[key], element)
 }
 
