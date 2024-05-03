@@ -1,6 +1,13 @@
 # Release Notes
 
 
+## Version 0.60.0
+**Release Date**: 30th April 2024
+### Features
+### Bug Fixes
+1. Modify OCI Import View CSS to allow the view to scroll to the bottom of the list and display the last element.
+
+
 ## Version 0.59.0
 **Release Date**: 30th April 2024
 ### Features

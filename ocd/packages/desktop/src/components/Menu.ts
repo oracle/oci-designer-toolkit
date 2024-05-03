@@ -251,7 +251,7 @@ export const menuItems = [
                         ]
                     },
                     {
-                        label: 'Terraform',
+                        label: 'OpenTofu (Terraform)',
                         click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
                             const writeTerraformFile = async (dirHandle: FileSystemDirectoryHandle, filename: string, contents: string[]) => {
                                 const fileHandle: FileSystemFileHandle = await dirHandle.getFileHandle(filename, {create: true})
@@ -388,7 +388,7 @@ export const menuItems = [
                 }
             },
             {
-                label: 'Terraform',
+                label: 'OpenTofu (Terraform)',
                 click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
                     ocdConsoleConfig.config.displayPage = 'terraform'
                     setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))

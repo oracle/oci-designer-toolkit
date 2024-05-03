@@ -148,6 +148,7 @@ const OcdSimpleRect = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resource
         style.opacity = 0
         style.strokeOpacity = 0
     }
+    console.debug(`>> OcdResourceSvg: OcdSimpleRect: Render(${resource.id})`)
     return (
         <rect className={rectClass} style={style}
             id={id} 
@@ -233,6 +234,7 @@ const OcdContainerRect = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
         style.opacity = 0
         style.strokeOpacity = 0
     }
+    console.debug(`>> OcdResourceSvg: OcdContainerRect: Render(${resource.id})`)
     return (
         <g>
             <rect className={rectClass} style={style}
@@ -360,6 +362,7 @@ const OcdForeignObject = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
         style.opacity = 0
         style.strokeOpacity = 0
     }
+    console.debug(`>> OcdResourceSvg: OcdForeignObject: Render(${resource.id})`)
     return (
         <foreignObject id={id} className={foreignObjectClass} style={style}
             transform={`translate(${gX}, ${gY})`}
@@ -471,6 +474,7 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
     const onResourceMouseEnter = (e: React.MouseEvent<SVGElement>) => {}
     const onResourceMouseMove = (e: React.MouseEvent<SVGElement>) => {}
     const onResourceMouseLeave = (e: React.MouseEvent<SVGElement>) => {}
+    console.debug(`>> OcdResourceSvg: OcdResourceSvg: Render(${resource.id})`)
     return (
         <g className='ocd-designer-resource' 
             id={resource.id} 
@@ -533,6 +537,7 @@ export const OcdDragResourceGhostSvg = ({ ocdConsoleConfig, ocdDocument, setOcdD
         'onSVGDrag': () => {},
         'onSVGDragEnd': () => {},
     }
+    console.debug(`>> OcdResourceSvg: OcdDragResourceGhostSvg: Render(${resource.id})`)
     return (
         <g className='ocd-svg-drag-ghost'
             transform={`translate(0, 0)`}
@@ -622,6 +627,7 @@ export const OcdConnector = ({ocdConsoleConfig, ocdDocument, connector, parentCo
     // console.debug('OcdResourceSvg: Connector Path', path)
     // console.debug('OcdResourceSvg: Connector Path as String', path.join(' '))
     const className = parentConnector ? 'ocd-svg-parent-connector' : 'ocd-svg-association-connector'
+    console.debug(`>> OcdResourceSvg: OcdConnector: Render()`)
     return (
         <path className={className} d={path.join(' ')}></path>
     )
