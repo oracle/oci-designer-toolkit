@@ -68,7 +68,7 @@
   },
   "build": {
     "appId": "com.oracle.okit-ocd",
-    "artifactName": "${productName}-${version}.${ext}",
+    "artifactName": "${productName}-${version}-${arch}.${ext}",
     "files": [
       "build/**/*",
       "node_modules/**/*"
@@ -95,7 +95,7 @@
       "target": [
         {
           "target": "dmg",
-          "arch": "universal"
+          "arch": ["arm64", "x64", "universal"]
         }
       ]
     },
