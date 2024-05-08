@@ -74,7 +74,7 @@ jobs:
       - name: Upload Windows Artifact to Release
         if: matrix.os == 'windows-latest'
         run: |
-          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/win/ocd-${{ env.OCD_VERSION }}-*.exe --clobber
+          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/win/ocd-${{ env.OCD_VERSION }}-x64.exe --clobber
       - name: Upload Linux Artifact to Release
         if: matrix.os == 'ubuntu-latest'
         run: |
