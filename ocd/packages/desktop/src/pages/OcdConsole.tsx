@@ -5,7 +5,7 @@
 
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react'
 import OcdDesigner from './OcdDesigner'
-import OcdDocument from '../components/OcdDocument'
+import OcdDocument, { OcdSelectedResource } from '../components/OcdDocument'
 import OcdConsoleMenuBar from '../components/OcdConsoleMenuBar'
 import { OcdConsoleConfig } from '../components/OcdConsoleConfiguration'
 import { ConsoleHeaderProps, ConsolePageProps, ConsoleToolbarProps } from '../types/Console'
@@ -34,6 +34,7 @@ export const ActiveFileContext = createContext({})
 export const ConsoleConfigContext = createContext({})
 export const CacheContext = createContext({})
 export const OcdDocumentContext = createContext({})
+export const SelectedResourceContext = createContext({})
 
 const OcdConsole = (): JSX.Element => {
     // console.debug('OcdConsole: CSS', svgThemeCss)
@@ -42,6 +43,7 @@ const OcdConsole = (): JSX.Element => {
     const [ocdCache, setOcdCache] = useState(OcdCacheData.new())
     // const [ocdCache, setOcdCache]: [OcdCacheData | undefined, any] = useState()
     const [activeFile, setActiveFile] = useState({name: '', modified: false})
+    const [selectedResource, setSelectedResource] = useState({} as OcdSelectedResource)
     useEffect(() => {
         // @ts-ignore
         if (window.ocdAPI) window.ocdAPI.onOpenFile((event, filePath) => { // Running as an Electron App
@@ -103,12 +105,14 @@ const OcdConsole = (): JSX.Element => {
             <ActiveFileContext.Provider value={{activeFile, setActiveFile}}>
                 <CacheContext.Provider value={{ocdCache, setOcdCache}}>
                     <OcdDocumentContext.Provider value={{ocdDocument, setOcdDocument}}>
-                        <div className='ocd-console'>
-                            <OcdConsoleHeader ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
-                            <OcdConsoleToolbar ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
-                            <OcdConsoleBody ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
-                            <OcdConsoleFooter ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
-                        </div>
+                        <SelectedResourceContext.Provider value={{selectedResource, setSelectedResource}}>
+                            <div className='ocd-console'>
+                                <OcdConsoleHeader ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
+                                <OcdConsoleToolbar ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
+                                <OcdConsoleBody ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
+                                <OcdConsoleFooter ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
+                            </div>
+                        </SelectedResourceContext.Provider>
                     </OcdDocumentContext.Provider>
                 </CacheContext.Provider>
             </ActiveFileContext.Provider>
