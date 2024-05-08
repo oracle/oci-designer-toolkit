@@ -70,7 +70,7 @@ jobs:
       - name: Upload Mac Artifact to Release
         if: matrix.os == 'macos-latest'
         run: |
-          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/mac/ocd-${{ env.OCD_VERSION }}.dmg --clobber
+          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/mac/ocd-${{ env.OCD_VERSION }}-*.dmg --clobber
       - name: Upload Windows Artifact to Release
         if: matrix.os == 'windows-latest'
         run: |
