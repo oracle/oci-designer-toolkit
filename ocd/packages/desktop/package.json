@@ -91,7 +91,13 @@
     ],
     "mac": {
       "icon": "build/assets/icon.icns",
-      "category": "public.app-category.developer-tools"
+      "category": "public.app-category.developer-tools",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": "universal"
+        }
+      ]
     },
     "dmg": {
       "icon": "build/assets/icon.icns",
