@@ -428,13 +428,13 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
     const onResourceClick = (e: React.MouseEvent<SVGElement>) => {
         console.info('OcdResourceSvg: Resource Clicked', resource.ocid, e.clientX, e.clientY, e.currentTarget.id, ocdDocument.getCoords(e.currentTarget.id))
         e.stopPropagation()
-        const clickedResource: OcdSelectedResource = {
-            modelId: resource.ocid,
-            pageId: ocdDocument.getActivePage().id,
-            coordsId: resource.id,
-            class: resource.class
-        }
         if (selectedResource.coordsId !== resource.id) {
+            const clickedResource: OcdSelectedResource = {
+                modelId: resource.ocid,
+                pageId: ocdDocument.getActivePage().id,
+                coordsId: resource.id,
+                class: resource.class
+            }
             setSelectedResource(clickedResource)
             // TODO: Delete next 3 lines
             const clone = OcdDocument.clone(ocdDocument)
