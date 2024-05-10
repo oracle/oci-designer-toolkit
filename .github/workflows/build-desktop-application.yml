@@ -12,6 +12,7 @@ env:
   MAC_ARTEFACT: ocd-mac
   WIN_ARTEFACT: ocd-win
   RELEASE_ARTEFACTS_DIR: ./release-artefacts
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }} 
 
 jobs:
   update-or-create-release: 
@@ -35,6 +36,7 @@ jobs:
         id: create_release
         run: |
           gh release create ${{ env.RELEASE_TAG }} --title "OCD Alpha Nightly Release" --notes-file ./ocd/README.md --target nightly --latest --prerelease
+      - run: echo ${{ env.BRANCH_NAME}}
     
   build-and-release:
     needs: [update-or-create-release]
