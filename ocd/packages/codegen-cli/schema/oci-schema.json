@@ -8257,7 +8257,8 @@
         "lookupResource": "",
         "lookupResourceElement": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": 1
       },
       "data_storage_percentage": {
         "provider": "oci",
@@ -8274,7 +8275,8 @@
         "lookupResource": "",
         "lookupResourceElement": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": 80
       },
       "data_storage_size_in_gb": {
         "provider": "oci",
@@ -8291,7 +8293,8 @@
         "lookupResource": "",
         "lookupResourceElement": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": 256
       },
       "database_edition": {
         "provider": "oci",
@@ -8302,13 +8305,14 @@
         "required": false,
         "label": "Database Edition",
         "id": "database_edition",
-        "staticLookup": false,
+        "staticLookup": true,
         "cacheLookup": false,
-        "lookup": false,
-        "lookupResource": "",
-        "lookupResourceElement": "",
+        "lookup": true,
+        "lookupResource": "database",
+        "lookupResourceElement": "id",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "STANDARD_EDITION"
       },
       "defined_tags": {
         "provider": "oci",
@@ -8447,22 +8451,23 @@
         "condition": {},
         "default": "LICENSE_INCLUDED"
       },
-      "memory_size_in_gbs": {
+      "node_count": {
         "provider": "oci",
-        "key": "memorySizeInGbs",
-        "name": "memory_size_in_gbs",
+        "key": "nodeCount",
+        "name": "node_count",
         "type": "number",
         "subtype": "",
         "required": false,
-        "label": "Memory (Gbs)",
-        "id": "memory_size_in_gbs",
+        "label": "Node Count",
+        "id": "node_count",
         "staticLookup": false,
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
         "lookupResourceElement": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": 1
       },
       "nsg_ids": {
         "provider": "oci",

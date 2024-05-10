@@ -36,6 +36,13 @@ export const elementOverrides: OcdElementOverrides = {
             "db_workload": "OLTP",
             "is_auto_scaling_enabled": true
         },
+        "oci_database_db_system": {
+            "cpu_core_count": 1,
+            "database_edition": "STANDARD_EDITION",
+            "data_storage_percentage": 80,
+            "data_storage_size_in_gb": 256,
+            "node_count": 1
+        },
         "oci_load_balancer_load_balancer": {
             "shape": "flexible",
             "ip_mode": "IPV4"
@@ -188,6 +195,9 @@ export const elementOverrides: OcdElementOverrides = {
             "data_safe_status",
             "database_edition",
             "db_workload"
+        ],
+        "oci_database_db_system": [
+            "database_edition"
         ],
         "oci_kms_key": [
             "key_shape.algorithm",

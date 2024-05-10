@@ -1644,9 +1644,9 @@ export const defaultCache: OcdCache = {
                     },
                     {
                         "id": "Windows-Server 2016 Datacenter",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaakhvptkwgvqwutlufumcc6wekfkf2rk7hoih4ptuw5jirycqislrq",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaai2gxptopbuul4pxe55zlw2deavyjir3454tev6iwvr2rb2qwun6q",
                         "displayName": "Windows Server 2016 Datacenter",
-                        "sourceDisplayName": "Windows-Server-2016-Datacenter-Edition-BM-X9-2024.03.15-0",
+                        "sourceDisplayName": "Windows-Server-2016-Datacenter-Edition-BM-X9-2024.04.18-0",
                         "platform": true,
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2016 Datacenter",
@@ -1684,9 +1684,9 @@ export const defaultCache: OcdCache = {
                     },
                     {
                         "id": "Windows-Server 2016 Standard Core",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaamthym5ydwjsore46dlou6bikbr5s45zyh2s5bm63o3vegvxmb5vq",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaawc3nh65ksbtzu4q3hy7bmfomzsyobjod67f6hclowytbezwqsueq",
                         "displayName": "Windows Server 2016 Standard Core",
-                        "sourceDisplayName": "Windows-Server-2016-Standard-Core-VM-2024.03.14-0",
+                        "sourceDisplayName": "Windows-Server-2016-Standard-Core-VM-2024.04.18-0",
                         "platform": true,
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2016 Standard Core",
@@ -1748,13 +1748,13 @@ export const defaultCache: OcdCache = {
                     },
                     {
                         "id": "Windows-Server 2019 Datacenter",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaap75sq5jcedlkio36qjbr4dhvccvgvh3ocsxiamab7qbnefkg2c4q",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaaz7dwpw2djdgvvqtvtw4yg6lm6tr2enbkevhgajyqnvhr5twygfpq",
                         "displayName": "Windows Server 2019 Datacenter",
-                        "sourceDisplayName": "Windows-Server-2019-Datacenter-Edition-BM-X9-2024.03.15-0",
+                        "sourceDisplayName": "Windows-Server-2019-Datacenter-Edition-BM-X9-2024.04.18-0",
                         "platform": true,
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2019 Datacenter",
-                        "billableSizeInGBs": 15,
+                        "billableSizeInGBs": 16,
                         "lifecycleState": "AVAILABLE",
                         "shapes": [
                             "VM.Standard2.Flex",
@@ -1771,9 +1771,9 @@ export const defaultCache: OcdCache = {
                     },
                     {
                         "id": "Windows-Server 2019 Standard",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaanpht3i6566lbocxcqmin3ehn4jvjmdgjqbzh3xu2os3tarmm7mda",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaaeu7ui4qd2qxebqzp3nw6qyqexom2hhyvlyl3wgfjposb256qqfgq",
                         "displayName": "Windows Server 2019 Standard",
-                        "sourceDisplayName": "Windows-Server-2019-Standard-Edition-VM-Gen2-2024.03.15-0",
+                        "sourceDisplayName": "Windows-Server-2019-Standard-Edition-VM-Gen2-2024.04.18-0",
                         "platform": true,
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2019 Standard",
@@ -1804,9 +1804,9 @@ export const defaultCache: OcdCache = {
                     },
                     {
                         "id": "Windows-Server 2019 Standard Core",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaa2sgcq5x3m7n54p3m2hpkf4entpwqf2knnjkxh4xrxpre4rofmskq",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaa6rgd4kl5px2iipsrwmpfso6ysxil22y3baxazgn2dkdgqk5xdkva",
                         "displayName": "Windows Server 2019 Standard Core",
-                        "sourceDisplayName": "Windows-Server-2019-Standard-Core-VM-2024.03.15-0",
+                        "sourceDisplayName": "Windows-Server-2019-Standard-Core-VM-2024.04.18-0",
                         "platform": true,
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2019 Standard Core",
@@ -1868,9 +1868,9 @@ export const defaultCache: OcdCache = {
                     },
                     {
                         "id": "Windows-Server 2022 Datacenter",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaaxge2x7sf75ku5izul5ted4mtze4zqrwnk6dzwci75e7glcdwym3a",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaa3jrj2wmvr237avixrfzul44z36gpxjwujx5roumb7tn6jcyegvxa",
                         "displayName": "Windows Server 2022 Datacenter",
-                        "sourceDisplayName": "Windows-Server-2022-Datacenter-Edition-BM-X9-2024.03.15-0",
+                        "sourceDisplayName": "Windows-Server-2022-Datacenter-Edition-BM-X9-2024.04.18-0",
                         "platform": true,
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2022 Datacenter",
@@ -1891,9 +1891,9 @@ export const defaultCache: OcdCache = {
                     },
                     {
                         "id": "Windows-Server 2022 Standard",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaa4o6mfspgsnvxllhvlywrdzos5zky32vxxqcm5lala5lcprsbkghq",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaabekmj7ameikzlxiyknmoesy7ql4kch6nlj4mogp5ukr2b3mtzoia",
                         "displayName": "Windows Server 2022 Standard",
-                        "sourceDisplayName": "Windows-Server-2022-Standard-Edition-VM-PV-2024.03.15-0",
+                        "sourceDisplayName": "Windows-Server-2022-Standard-Edition-VM-PV-2024.04.18-0",
                         "platform": true,
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2022 Standard",
@@ -1922,9 +1922,9 @@ export const defaultCache: OcdCache = {
                     },
                     {
                         "id": "Windows-Server 2022 Standard Core",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaaq5iswbpff7mcogsq2ztv4f4ygsucdrokxus2wbwctc72ynbnzrlq",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaazj6e74yugqsioeufj22nj7uoz5ppp5ackovj3e7muw2bbmzn7xjq",
                         "displayName": "Windows Server 2022 Standard Core",
-                        "sourceDisplayName": "Windows-Server-2022-Standard-Core-VM-2024.03.15-0",
+                        "sourceDisplayName": "Windows-Server-2022-Standard-Core-VM-2024.04.18-0",
                         "platform": true,
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2022 Standard Core",
@@ -4125,10 +4125,25 @@ export const defaultCache: OcdCache = {
                             {
                                 "version": "8.0.36",
                                 "description": "8.0.36"
+                            },
+                            {
+                                "version": "8.0.37",
+                                "description": "8.0.37"
                             }
                         ],
                         "id": "8.0",
                         "displayName": "8.0"
+                    },
+                    {
+                        "versionFamily": "8.4 - LTS",
+                        "versions": [
+                            {
+                                "version": "8.4.0",
+                                "description": "8.4.0"
+                            }
+                        ],
+                        "id": "8.4 - LTS",
+                        "displayName": "8.4 - LTS"
                     },
                     {
                         "versionFamily": "9 - Innovation",
@@ -5473,10 +5488,34 @@ export const defaultCache: OcdCache = {
                 ],
                 "autonomousDbVersions": [
                     {
+                        "dbWorkload": "APEX",
+                        "details": "www.oracle.com/apex",
+                        "isDedicated": false,
+                        "isDefaultForFree": false,
+                        "isDefaultForPaid": true,
+                        "isFreeTierEnabled": true,
+                        "isPaidEnabled": true,
+                        "version": "19c",
+                        "id": "19c",
+                        "displayName": "19c"
+                    },
+                    {
+                        "dbWorkload": "DW",
+                        "details": "www.oracle.com/atp",
+                        "isDedicated": false,
+                        "isDefaultForFree": false,
+                        "isDefaultForPaid": true,
+                        "isFreeTierEnabled": true,
+                        "isPaidEnabled": true,
+                        "version": "19c",
+                        "id": "19c",
+                        "displayName": "19c"
+                    },
+                    {
                         "dbWorkload": "AJD",
                         "details": "www.oracle.com/ajd",
                         "isDedicated": false,
-                        "isDefaultForFree": true,
+                        "isDefaultForFree": false,
                         "isDefaultForPaid": true,
                         "isFreeTierEnabled": true,
                         "isPaidEnabled": true,
@@ -5488,7 +5527,7 @@ export const defaultCache: OcdCache = {
                         "dbWorkload": "OLTP",
                         "details": "www.oracle.com/atp",
                         "isDedicated": false,
-                        "isDefaultForFree": true,
+                        "isDefaultForFree": false,
                         "isDefaultForPaid": true,
                         "isFreeTierEnabled": true,
                         "isPaidEnabled": true,
@@ -5501,72 +5540,48 @@ export const defaultCache: OcdCache = {
                         "details": "www.oracle.com/apex",
                         "isDedicated": false,
                         "isDefaultForFree": true,
-                        "isDefaultForPaid": true,
+                        "isDefaultForPaid": false,
                         "isFreeTierEnabled": true,
-                        "isPaidEnabled": true,
-                        "version": "19c",
-                        "id": "19c",
-                        "displayName": "19c"
+                        "isPaidEnabled": false,
+                        "version": "23ai",
+                        "id": "23ai",
+                        "displayName": "23ai"
                     },
                     {
                         "dbWorkload": "DW",
-                        "details": "www.oracle.com/atp",
+                        "details": "www.oracle.com/adw",
                         "isDedicated": false,
                         "isDefaultForFree": true,
-                        "isDefaultForPaid": true,
-                        "isFreeTierEnabled": true,
-                        "isPaidEnabled": true,
-                        "version": "19c",
-                        "id": "19c",
-                        "displayName": "19c"
-                    },
-                    {
-                        "dbWorkload": "APEX",
-                        "details": "www.oracle.com/apex",
-                        "isDedicated": false,
-                        "isDefaultForFree": false,
                         "isDefaultForPaid": false,
                         "isFreeTierEnabled": true,
                         "isPaidEnabled": false,
-                        "version": "21c",
-                        "id": "21c",
-                        "displayName": "21c"
-                    },
-                    {
-                        "dbWorkload": "DW",
-                        "details": null,
-                        "isDedicated": false,
-                        "isDefaultForFree": false,
-                        "isDefaultForPaid": false,
-                        "isFreeTierEnabled": true,
-                        "isPaidEnabled": false,
-                        "version": "21c",
-                        "id": "21c",
-                        "displayName": "21c"
+                        "version": "23ai",
+                        "id": "23ai",
+                        "displayName": "23ai"
                     },
                     {
                         "dbWorkload": "OLTP",
-                        "details": null,
+                        "details": "www.oracle.com/atp",
                         "isDedicated": false,
-                        "isDefaultForFree": false,
+                        "isDefaultForFree": true,
                         "isDefaultForPaid": false,
                         "isFreeTierEnabled": true,
                         "isPaidEnabled": false,
-                        "version": "21c",
-                        "id": "21c",
-                        "displayName": "21c"
+                        "version": "23ai",
+                        "id": "23ai",
+                        "displayName": "23ai"
                     },
                     {
                         "dbWorkload": "AJD",
                         "details": "www.oracle.com/ajd",
                         "isDedicated": false,
-                        "isDefaultForFree": false,
+                        "isDefaultForFree": true,
                         "isDefaultForPaid": false,
                         "isFreeTierEnabled": true,
                         "isPaidEnabled": false,
-                        "version": "21c",
-                        "id": "21c",
-                        "displayName": "21c"
+                        "version": "23ai",
+                        "id": "23ai",
+                        "displayName": "23ai"
                     }
                 ],
                 "cpeDeviceShapes": [
@@ -5851,6 +5866,12 @@ export const defaultCache: OcdCache = {
                         "description": "Application Dependency Management",
                         "id": "adm",
                         "displayName": "Application Dependency Management"
+                    },
+                    {
+                        "name": "agcs",
+                        "description": "Access Governance",
+                        "id": "agcs",
+                        "displayName": "Access Governance"
                     },
                     {
                         "name": "ai-anomaly-detection",
