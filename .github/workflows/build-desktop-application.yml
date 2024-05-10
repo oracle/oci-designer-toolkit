@@ -13,6 +13,7 @@ env:
   WIN_ARTEFACT: ocd-win
   RELEASE_ARTEFACTS_DIR: ./release-artefacts
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }} 
+  BRANCH_RELEASE_TAG: v0.1.0-alpha.ocd.$BRANCH_NAME
 
 jobs:
   update-or-create-release: 
@@ -36,7 +37,7 @@ jobs:
         id: create_release
         run: |
           gh release create ${{ env.RELEASE_TAG }} --title "OCD Alpha Nightly Release" --notes-file ./ocd/README.md --target nightly --latest --prerelease
-      - run: echo ${{ env.BRANCH_NAME}}
+      - run: echo "Branch - ${{ env.BRANCH_NAME }} Tag - ${{ env.BRANCH_RELEASE_TAG }}"
     
   build-and-release:
     needs: [update-or-create-release]
