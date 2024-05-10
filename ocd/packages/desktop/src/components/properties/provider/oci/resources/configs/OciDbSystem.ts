@@ -11,10 +11,28 @@ export namespace OciDbSystemConfigs {
         return [
             ...OciCommonConfigs.configs(),
             {
+                id: 'database_edition',
+                properties: {},
+                configs: [],
+                options: [
+                    {id: 'STANDARD_EDITION', displayName: 'Standard'},
+                    {id: 'ENTERPRISE_EDITION', displayName: 'Enterprise'},
+                    {id: 'ENTERPRISE_EDITION_HIGH_PERFORMANCE', displayName: 'High Performance'},
+                    {id: 'ENTERPRISE_EDITION_EXTREME_PERFORMANCE', displayName: 'Extreme Performance'}
+                ]
+            },
+            {
                 id: 'db_home.database.admin_password',
                 properties: {
                     pattern: '^var\.+$',
                     title: 'Password fields only support Variables.'
+                },
+                configs: []
+            },
+            {
+                id: 'db_home.database.db_name',
+                properties: {
+                    maxLength: 8
                 },
                 configs: []
             },

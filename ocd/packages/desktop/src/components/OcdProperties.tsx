@@ -122,8 +122,8 @@ const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourcePr
     const modelId = selectedResource ? selectedResource.id : ''
     // Memos
     const variablesDatalist = useMemo(() => <OcdPropertiesDataList variables={variables}/>, [variables])
-    const commonProperties = useMemo(() => <OciCommonResourceProperties ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={selectedResourceProxy} rootResource={selectedResourceProxy} key={`${selectedResourceProxy.id}.CommonProperties`}/>, [modelId])
-    const resourceProperties = useMemo(() => <ResourceProperties ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={selectedResourceProxy} key={`${selectedResourceProxy.id}.Properties`}/>, [modelId])
+    const commonProperties = useMemo(() => <OciCommonResourceProperties ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={selectedResourceProxy} rootResource={selectedResourceProxy} key={`${selectedResourceProxy ? selectedResourceProxy.id : ''}.CommonProperties`}/>, [modelId])
+    const resourceProperties = useMemo(() => <ResourceProperties ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={selectedResourceProxy} key={`${selectedResourceProxy ? selectedResourceProxy.id : ''}.Properties`}/>, [modelId])
     console.debug(`>>> OcdProperies: OcdResourceProperties: Render()`)
     return (
         <div className={`ocd-properties-panel ocd-properties-panel-theme`}>
