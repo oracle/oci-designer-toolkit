@@ -68,12 +68,22 @@
                     "class": "oci-network",
                     "resources": [
                         {
-                            "container": false,
+                            "container": true,
                             "title": "Load Balancer",
                             "class": "oci-load-balancer"
                         },
                         {
                             "container": false,
+                            "title": "Load Balancer Backend Set",
+                            "class": "oci-load-balancer-backend-set"
+                        },
+                        {
+                            "container": false,
+                            "title": "Load Balancer Listener",
+                            "class": "oci-load-balancer-listener"
+                        },
+                        {
+                            "container": true,
                             "title": "Network Load Balancer",
                             "class": "oci-network-load-balancer"
                         },
@@ -144,7 +154,7 @@
                             "class": "oci-local-peering-gateway"
                         },
                         {
-                            "container": false,
+                            "container": true,
                             "title": "Dynamic Routing Gateway",
                             "class": "oci-drg"
                         },
@@ -209,6 +219,21 @@
                             "container": false,
                             "title": "Key",
                             "class": "oci-key"
+                        },
+                        {
+                            "container": false,
+                            "title": "Dynamic Group",
+                            "class": "oci-dynamic-group"
+                        },
+                        {
+                            "container": true,
+                            "title": "Group",
+                            "class": "oci-group"
+                        },
+                        {
+                            "container": false,
+                            "title": "User",
+                            "class": "oci-user"
                         }
                     ]
                 }

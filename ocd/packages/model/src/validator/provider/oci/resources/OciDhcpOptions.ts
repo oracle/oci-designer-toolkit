@@ -25,7 +25,10 @@ export namespace OciDhcpOptions {
         return (validateResource(resource, resources).filter((v: OcdValidationResult) => v.type === 'information').length > 0)
     }
     function customValidation(resource: Model.OciDhcpOptions, resources: OciResources): OcdValidationResult[] {
-        const results: OcdValidationResult[] = []
+        const results: OcdValidationResult[] = [
+            ...options(resource, resources)
+        ]
         return results
     }
+    const options = (resource: OcdValidatorResource, resources: OciResources): OcdValidationResult[] => {return [OcdResourceValidator.validateRequiredList(resource.displayName, "options", resource.options, 'Options', 'oci-vcn', resources)]}
 }

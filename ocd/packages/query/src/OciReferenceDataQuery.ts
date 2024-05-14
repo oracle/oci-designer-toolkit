@@ -7,13 +7,9 @@ import { common, containerengine, core, database, datascience, limits, loadbalan
 import { OciQuery } from "./OciQuery"
 import { OciResource } from "@ocd/model"
 import { OcdUtils } from "@ocd/core"
+import { OciCommonQuery } from './OciQueryCommon'
 
-export class OciReferenceDataQuery {
-    profile: string
-    provider: common.ConfigFileAuthenticationDetailsProvider
-    clientConfiguration: common.ClientConfiguration
-    authenticationConfiguration: common.AuthParams
-    ociQuery: OciQuery
+export class OciReferenceDataQuery extends OciCommonQuery {
     // Clients
     blockstorageClient: core.BlockstorageClient
     computeClient: core.ComputeClient
@@ -25,19 +21,8 @@ export class OciReferenceDataQuery {
     mysqlClient: mysql.MysqlaasClient
     vcnClient: core.VirtualNetworkClient
     constructor(profile: string='DEFAULT', region?: string) {
-        this.profile = profile
-        this.provider = new common.ConfigFileAuthenticationDetailsProvider(undefined, profile)
-        this.ociQuery = new OciQuery(profile, region)
+        super(profile, region)
         console.debug('OciReferenceDataQuery: Region', region)
-        if (region) this.provider.setRegion(region)
-        // Define Retry Configuration
-        const retryConfiguration: common.RetryConfiguration = {
-            // terminationStrategy : new common.MaxAttemptsTerminationStrategy(10)
-        }
-        this.clientConfiguration = { retryConfiguration: retryConfiguration }
-        this.authenticationConfiguration = { authenticationDetailsProvider: this.provider }
-        // Initialise All Clients
-        // this.identityClient = new identity.IdentityClient(this.authenticationConfiguration, this.clientConfiguration)
         this.blockstorageClient = new core.BlockstorageClient(this.authenticationConfiguration, this.clientConfiguration)
         this.computeClient = new core.ComputeClient(this.authenticationConfiguration, this.clientConfiguration)
         this.containerengineClient = new containerengine.ContainerEngineClient(this.authenticationConfiguration, this.clientConfiguration)
@@ -53,22 +38,28 @@ export class OciReferenceDataQuery {
         console.debug('OciReferenceDataQuery: query')
         return new Promise((resolve, reject) => {
             const referenceData: Record<string, any[]> = {}
-            this.ociQuery.listTenancyCompartments().then((compartments) => {
+            this.listTenancyCompartments().then((compartments) => {
                 console.debug('OciReferenceDataQuery: Query: Compartments')
                 const compartmentIds = compartments.map((c: OciResource) => c.id)
                 const tenancyId = [this.provider.getTenantId()]
+                // Top Level
+                const listRegions = this.listAllRegions()
                 // Compute
                 const listShapes = this.listShapes()
                 const listImages = this.listImages(compartmentIds)
                 const listDataScienceNotebookSessionShapes = this.listDataScienceNotebookSessionShapes(compartmentIds)
                 // Networking
                 const listLoadbalancerShapes = this.listLoadbalancerShapes(compartmentIds)
+                const listLoadbalancerPolicies = this.listLoadbalancerPolicies(compartmentIds)
+                const listLoadbalancerProtocols = this.listLoadbalancerProtocols(compartmentIds)
+                const listServiceGatewayServices = this.listServiceGatewayServices()
                 // Database
                 const listMySQLShapes = this.listMySQLShapes(compartmentIds)
                 const listMySQLVersions = this.listMySQLVersions(compartmentIds)
                 const listMySQLConfigurations = this.listMySQLConfigurations(compartmentIds)
                 const listDbSystemShapes = this.listDbSystemShapes(compartmentIds)
                 const listDbSystemVersions = this.listDbSystemVersions(compartmentIds)
+                const listAutonomousDbVersions = this.listAutonomousDbVersions(compartmentIds)
                 // Customer
                 const listCpeDeviceShapes = this.listCpeDeviceShapes()
                 // Limits
@@ -82,17 +73,22 @@ export class OciReferenceDataQuery {
 
                 // Query Promise Array
                 const queries = [
+                    listRegions,
                     listShapes,
                     listImages,
                     listLoadbalancerShapes,
+                    listLoadbalancerPolicies,
+                    listLoadbalancerProtocols,
                     listMySQLShapes,
                     listMySQLVersions,
                     listMySQLConfigurations,
                     listDbSystemShapes,
                     listDbSystemVersions,
+                    listAutonomousDbVersions,
                     listCpeDeviceShapes,
                     listDataScienceNotebookSessionShapes,
                     listServices,
+                    listServiceGatewayServices,
                     listPodShapes,
                     getClusterOptions,
                     getNodePoolOptions,
@@ -100,6 +96,12 @@ export class OciReferenceDataQuery {
                 ]
                 Promise.allSettled(queries).then((results) => {
                     console.debug('OciReferenceDataQuery: query: All Settled')
+                    /*
+                    ** OCI Top Level
+                    */
+                    // All Regions
+                    // @ts-ignore
+                    if (results[queries.indexOf(listRegions)].status === 'fulfilled') referenceData.regions = results[queries.indexOf(listRegions)].value
                     /*
                     ** Compute
                     */
@@ -115,6 +117,12 @@ export class OciReferenceDataQuery {
                     // Loadbalancer Shapes
                     // @ts-ignore
                     if (results[queries.indexOf(listLoadbalancerShapes)].status === 'fulfilled') referenceData.loadbalancerShapes = results[queries.indexOf(listLoadbalancerShapes)].value
+                    // Loadbalancer Listener Policies
+                    // @ts-ignore
+                    if (results[queries.indexOf(listLoadbalancerPolicies)].status === 'fulfilled') referenceData.loadbalancerPolicies = results[queries.indexOf(listLoadbalancerPolicies)].value
+                    // Loadbalancer Listener Protocols
+                    // @ts-ignore
+                    if (results[queries.indexOf(listLoadbalancerProtocols)].status === 'fulfilled') referenceData.loadbalancerProtocols = results[queries.indexOf(listLoadbalancerProtocols)].value
                     /*
                     ** MySQL
                     */
@@ -128,6 +136,12 @@ export class OciReferenceDataQuery {
                     // @ts-ignore
                     if (results[queries.indexOf(listMySQLVersions)].status === 'fulfilled') referenceData.mysqlVersions = results[queries.indexOf(listMySQLVersions)].value
                     /*
+                    ** Network
+                    */
+                    // Service gateway Services
+                    // @ts-ignore
+                    if (results[queries.indexOf(listServiceGatewayServices)].status === 'fulfilled') referenceData.serviceGatewayServices = results[queries.indexOf(listServiceGatewayServices)].value
+                    /*
                     ** Database
                     */
                     // DB System Shape
@@ -136,12 +150,15 @@ export class OciReferenceDataQuery {
                     // DB System Version
                     // @ts-ignore
                     if (results[queries.indexOf(listDbSystemVersions)].status === 'fulfilled') referenceData.dbVersions = results[queries.indexOf(listDbSystemVersions)].value
+                    // Autonomous DB Version
+                    // @ts-ignore
+                    if (results[queries.indexOf(listAutonomousDbVersions)].status === 'fulfilled') referenceData.autonomousDbVersions = results[queries.indexOf(listAutonomousDbVersions)].value
                     /*
                     ** CPE
                     */
                     // CPE Device Shape
                     // @ts-ignore
-                    if (results[queries.indexOf(listCpeDeviceShapes)].status === 'fulfilled') referenceData.cpeDeviceShape = results[queries.indexOf(listCpeDeviceShapes)].value
+                    if (results[queries.indexOf(listCpeDeviceShapes)].status === 'fulfilled') referenceData.cpeDeviceShapes = results[queries.indexOf(listCpeDeviceShapes)].value
                     /*
                     ** DataScience
                     */
@@ -221,6 +238,29 @@ export class OciReferenceDataQuery {
                     images: results.nodePoolOptions.sources?.map((s) => {return {id: s.sourceName, displayName: s.sourceName}})
                 }
                 resolve(resources)
+            }).catch((reason) => {
+                console.error(reason)
+                reject(reason)
+            })
+        })
+    }
+
+    listAutonomousDbVersions(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const requests: database.requests.ListAutonomousDbVersionsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
+            const queries = requests.map((r) => this.databaseClient.listAutonomousDbVersions(r))
+            Promise.allSettled(queries).then((results) => {
+                console.debug('OciReferenceDataQuery: listAutonomousDbVersions: All Settled')
+                //@ts-ignore
+                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], []).map((r) => {return {
+                        ...r,
+                        id: r.version,
+                        displayName: r.version
+                    }
+                }).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
+                // @ts-ignore
+                const uniqueResources = Array.from(new Set(resources.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
+                resolve(uniqueResources)
             }).catch((reason) => {
                 console.error(reason)
                 reject(reason)
@@ -320,6 +360,48 @@ export class OciReferenceDataQuery {
 
     listImages(compartmentIds: string[], retryCount: number = 0): Promise<any> {
         return new Promise((resolve, reject) => {
+            const requests: core.requests.ListImagesRequest[] = compartmentIds.map((id) => {return {compartmentId: id, limit: 10000}})
+            const responseIterators = requests.map((r) => this.computeClient.listImagesResponseIterator(r))
+            const queries = responseIterators.map((r) => this.getAllResponseData(r))
+            // const queries = requests.map((r) => this.computeClient.listImages(r))
+            Promise.allSettled(queries).then((results) => {
+                console.debug('OciReferenceDataQuery: listImages: All Settled', results)
+                //@ts-ignore
+                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value], []).map((r) => {return {
+                        id: `${r.operatingSystem}-${r.operatingSystemVersion}`,
+                        // id: r.displayName,
+                        ocid: r.id,
+                        displayName: `${r.operatingSystem} ${r.operatingSystemVersion}`,
+                        sourceDisplayName: r.displayName,
+                        platform: r.compartmentId === null,
+                        operatingSystem: r.operatingSystem,
+                        operatingSystemVersion: r.operatingSystemVersion,
+                        billableSizeInGBs: r.billableSizeInGBs,
+                        lifecycleState: r.lifecycleState
+                    }
+                }).sort((a: OciResource, b: OciResource) => (a.id.localeCompare(b.id) * -1))
+                // @ts-ignore
+                // const uniqueResources = Array.from(new Set(resources.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
+                const uniqueResources = resources.filter((r, i) => resources.findIndex((v) => r.id === v.id) === i).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
+                const imageIds = uniqueResources.map((r: Record<string, string>) => r.ocid)
+                this.listImageShapeCompatabilities(imageIds).then((compatibilities) => {
+                    uniqueResources.forEach((r: Record<string, string>) => r.shapes = compatibilities.filter((c: Record<string, string>) => c.imageId === r.ocid).map((c: Record<string, string>) => c.shape))
+                    // const sortedResources = [...uniqueResources.filter((r: Record<string, string>) => r.id.startsWith('Oracle')), ...uniqueResources.filter((r: Record<string, string>) => !r.id.startsWith('Oracle'))]
+                    resolve(uniqueResources)
+                }).catch((reason) => {
+                    console.error('OciReferenceDataQuery: listImages: Error', reason)
+                    reject(reason)
+                })
+                // resolve(resources)
+            }).catch((reason) => {
+                console.error('OciReferenceDataQuery: listImages: Error', reason)
+                reject(reason)
+            })
+        })
+    }
+
+    listImagesOrig(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+        return new Promise((resolve, reject) => {
             const requests: core.requests.ListImagesRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
             const queries = requests.map((r) => this.computeClient.listImages(r))
             Promise.allSettled(queries).then((results) => {
@@ -338,8 +420,81 @@ export class OciReferenceDataQuery {
                 }).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
                 // @ts-ignore
                 const uniqueResources = Array.from(new Set(resources.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
+                const imageIds = uniqueResources.map((r) => r.ocid)
+                this.listImageShapeCompatabilities(imageIds).then((compatibilities) => {
+                    uniqueResources.forEach((r) => r.shapes = compatibilities.filter((c: Record<string, string>) => c.imageId === r.ocid).map((c: Record<string, string>) => c.shape))
+                    resolve(uniqueResources)
+                }).catch((reason) => {
+                    console.error(reason)
+                    reject(reason)
+                })
+                // resolve(resources)
+            }).catch((reason) => {
+                console.error(reason)
+                reject(reason)
+            })
+        })
+    }
+
+    listImageShapeCompatabilities(imageIds: string[], retryCount: number = 0): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const requests: core.requests.ListImageShapeCompatibilityEntriesRequest[] = imageIds.map((id) => {return {imageId: id, limit: 10000}})
+            const queries = requests.map((r) => this.computeClient.listImageShapeCompatibilityEntries(r))
+            Promise.allSettled(queries).then((results) => {
+                console.debug('OciReferenceDataQuery: listImageShapeCompatabilities: All Settled')
+                //@ts-ignore
+                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], []).map((r) => {return {
+                        ...r
+                    }
+                }).sort((a: OciResource, b: OciResource) => a.imageId.localeCompare(b.imageId))
+                // @ts-ignore
+                const uniqueResources = Array.from(new Set(resources.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
                 resolve(uniqueResources)
                 // resolve(resources)
+            }).catch((reason) => {
+                console.error(reason)
+                reject(reason)
+            })
+        })
+    }
+
+    listLoadbalancerPolicies(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const requests: loadbalancer.requests.ListPoliciesRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
+            const queries = requests.map((r) => this.loadbalancerClient.listPolicies(r))
+            Promise.allSettled(queries).then((results) => {
+                console.debug('OciReferenceDataQuery: listLoadbalancerPolicies: All Settled')
+                //@ts-ignore
+                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], []).map((r) => {return {
+                        id: r.name,
+                        displayName: OcdUtils.toTitle(r.name)
+                    }
+                }).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
+                // @ts-ignore
+                const uniqueResources = Array.from(new Set(resources.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
+                resolve(uniqueResources)
+            }).catch((reason) => {
+                console.error(reason)
+                reject(reason)
+            })
+        })
+    }
+
+    listLoadbalancerProtocols(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const requests: loadbalancer.requests.ListProtocolsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
+            const queries = requests.map((r) => this.loadbalancerClient.listProtocols(r))
+            Promise.allSettled(queries).then((results) => {
+                console.debug('OciReferenceDataQuery: listLoadbalancerProtocols: All Settled')
+                //@ts-ignore
+                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], []).map((r) => {return {
+                        id: r.name,
+                        displayName: r.name
+                    }
+                }).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
+                // @ts-ignore
+                const uniqueResources = Array.from(new Set(resources.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
+                resolve(uniqueResources)
             }).catch((reason) => {
                 console.error(reason)
                 reject(reason)
@@ -471,12 +626,33 @@ export class OciReferenceDataQuery {
                 const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], []).map((r) => {return {
                         ...r,
                         id: r.name,
-                        displayName: r.name
+                        displayName: r.description
                     }
                 }).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
                 // @ts-ignore
                 const uniqueResources = Array.from(new Set(resources.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
                 resolve(uniqueResources)
+            }).catch((reason) => {
+                console.error(reason)
+                reject(reason)
+            })
+        })
+    }
+
+    listServiceGatewayServices(): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const request: core.requests.ListServicesRequest = {}
+            const shapeQuery = this.vcnClient.listServices(request)
+            shapeQuery.then((results) => {
+                console.debug('OciReferenceDataQuery: listShapes: All Settled')
+                //@ts-ignore
+                const resources = results.items.map((s) => {return {
+                        ...s, 
+                        id: s.name.startsWith('All ') ? 'All' : 'Object Storage',
+                        displayName: `${s.name.split(' ')[0]} ${s.name.split(' ').slice(2).join(' ')}`,
+                    }
+                }).sort((a, b) => a.displayName.localeCompare(b.displayName)).filter((resource, idx, self) => idx === self.findIndex((r) => r.id === resource.id)) // De-duplicated
+                resolve(resources)
             }).catch((reason) => {
                 console.error(reason)
                 reject(reason)
@@ -491,7 +667,6 @@ export class OciReferenceDataQuery {
             shapeQuery.then((results) => {
                 console.debug('OciReferenceDataQuery: listShapes: All Settled')
                 //@ts-ignore
-                // const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
                 const resources = results.items.map((s) => {return {
                         id: s.shape, 
                         displayName: s.shape, 
@@ -502,7 +677,7 @@ export class OciReferenceDataQuery {
                         memoryOptions: s.memoryOptions, 
                         isFlexible: s.isFlexible
                     }
-                })
+                }).sort((a, b) => a.displayName.localeCompare(b.displayName)).filter((resource, idx, self) => idx === self.findIndex((r) => r.id === resource.id)) // De-duplicated
                 resolve(resources)
             }).catch((reason) => {
                 console.error(reason)

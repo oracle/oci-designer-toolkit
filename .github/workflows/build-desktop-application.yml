@@ -7,29 +7,57 @@ on:
 
 env:
   CI: false
+  OCD_VERSION: 0.1.0-alpha
+  RELEASE_TAG: v0.1.0-alpha.ocd.nightly
+  MAC_ARTEFACT: ocd-mac
+  WIN_ARTEFACT: ocd-win
+  RELEASE_ARTEFACTS_DIR: ./release-artefacts
 
 jobs:
-  release:
+  update-or-create-release: 
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+      # matrix:
+      #   os: [macos-latest]
+      #   version: [latest]
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update Alpha Release
+        id: update_release
+        run: |
+          gh release edit ${{ env.RELEASE_TAG }} --title "OCD Alpha Nightly Release" --notes-file ./ocd/README.md --target nightly --latest --prerelease
+      - name: Create Alpha Release if Update fails
+        if: failure()
+        id: create_release
+        run: |
+          gh release create ${{ env.RELEASE_TAG }} --title "OCD Alpha Nightly Release" --notes-file ./ocd/README.md --target nightly --latest --prerelease
+    
+  build-and-release:
+    needs: [update-or-create-release]
     runs-on: ${{ matrix.os }}
-
     strategy:
       fail-fast: false
       matrix:
-        # os: [macos-latest, ubuntu-latest, windows-latest]
-        os: [macos-latest, windows-latest]
+        os: [macos-latest, windows-latest, ubuntu-latest]
         version: [latest]
-
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      DEBUG1: "electron-*"
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.version }}
       - run: node --version
       - run: npm --version
-      # - run: npm run install
-      # - run: npm run compile
-      # - run: npm run generate
-      # - run: npm run build
+      # - name: Install Snapcraft on Ubuntu
+      #   if: startsWith(matrix.os, 'ubuntu')
+      #   run: sudo snap install snapcraft --classic
       - run: npm run github-action-install
       - run: npm run github-action-compile-for-codegen
       - run: npm run github-action-generate
@@ -37,8 +65,20 @@ jobs:
       - run: npm run github-action-pack
       - run: npm run github-action-build-react
       - run: npm run github-action-build-electron
-      # - run: npm run desktop
-      # - run: npm run electron
-      - run: ls ./ocd/dist
+      - run: ls -R ./ocd/dist
         if: always()
-
+      - name: Upload Mac Artifact to Release
+        if: matrix.os == 'macos-latest'
+        run: |
+          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/mac/ocd-${{ env.OCD_VERSION }}.dmg --clobber
+      - name: Upload Windows Artifact to Release
+        if: matrix.os == 'windows-latest'
+        run: |
+          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/win/ocd-${{ env.OCD_VERSION }}.exe --clobber
+      - name: Upload Linux Artifact to Release
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          # gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}.rpm --clobber
+          # gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}.deb --clobber
+          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}.snap --clobber
+          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}.AppImage --clobber

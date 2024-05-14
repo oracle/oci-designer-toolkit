@@ -1,13 +1,29 @@
 # Release Notes
 
 
+## Version 0.59.0
+**Release Date**: 30th April 2024
+### Features
+1. Add Compute Cloud@Customer as deployment platform with associated resources.
+### Bug Fixes
+1. Resolve issue with oci.application_migration being missing from the latest oci sdk
+2. Remove Ansible references from documentation.
+
+
+## Version 0.58.0
+**Release Date**: 6th December 2023
+### Features
+1. Add Public IP to tabular display for Instance
+### Bug Fixes
+1. Fix name miss match error for Load Balancer Heath Checker interval.
+
+
 ## Version 0.57.0
 **Release Date**: 6th December 2023
 ### Features
 1. Force Mount Target exports to have AUTOSELECT path for none OCI targets.
 2. Force Instance volumes attachment type to Paravirtualized for none OCI targets.
 3. Modify Block Storage Volume for PCA to allow specification of High Performance.
-
 ### Bug Fixes
 1. Change Validation so that missing hostname does not report failure for this warning.
 2. Change PCA Volume Attachment query to convert AD Correctly.

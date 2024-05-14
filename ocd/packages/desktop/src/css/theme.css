@@ -4,34 +4,6 @@
 :root {
     --console-background-colour: #ffffff;
 
-    --svg-container-resource-stroke: #312D2A;
-    --svg-container-resource-stroke-width: 1;
-    --svg-container-resource-stroke-dasharray: 3, 2;
-    --svg-container-resource-stroke-opacitiy: 1;
-    --svg-container-resource-stroke-corner-rx: 5;
-
-    --svg-simple-resource-stroke: #161513;
-    --svg-simple-resource-stroke-width: 0.5;
-    --svg-simple-resource-stroke-dasharray: none;
-    --svg-simple-resource-stroke-opacitiy: 0.5;
-    --svg-simple-resource-stroke-corner-rx: 5;
-
-    --svg-selected-resource-stroke: #161513;
-    --svg-selected-resource-stroke-width: 1.5;
-    --svg-selected-resource-stroke-dasharray: none;
-    --svg-selected-resource-stroke-opacitiy: 1;
-    --svg-selected-resource-stroke-corner-rx: 5;
-
-    --svg-resource-parent-connector-stroke: #161513;
-    --svg-resource-parent-connector-stroke-width: 1.5;
-    --svg-resource-parent-connector-stroke-dasharray: none;
-    --svg-resource-parent-connector-stroke-opacitiy: 1;
-
-    --svg-resource-association-connector-stroke: #161513;
-    --svg-resource-association-connector-stroke-width: 1.5;
-    --svg-resource-association-connector-stroke-dasharray: 3, 2;
-    --svg-resource-association-connector-stroke-opacitiy: 1;
-
     --dialog-background-colour: #ffffff;
     --dialog-border-colour: #131243;
     --dialog-title-background-colour: #ffffff;
@@ -43,6 +15,7 @@
     --dialog-input-border-colour: #131243;
     --dialog-input-font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
     --dialog-input-font-size: smaller;
+    --dialog-highlight-colour: #e6e8f4;
 }
 
 /*

@@ -1,0 +1,180 @@
+:root {
+
+    --svg-icon-height: 40px;
+    --svg-icon-width: 40px;
+    --svg-resource-simple-width: 40px;
+    --svg-resource-detailed-width: 170px;
+    --svg-resource-container-width: 200px;
+
+    --svg-container-resource-stroke: #312D2A;
+    --svg-container-resource-stroke-width: 1;
+    --svg-container-resource-stroke-dasharray: 3, 2;
+    --svg-container-resource-stroke-opacitiy: 1;
+    --svg-container-resource-stroke-corner-rx: 5;
+
+    --svg-simple-resource-stroke: #161513;
+    --svg-simple-resource-stroke-width: 0.5;
+    --svg-simple-resource-stroke-dasharray: none;
+    --svg-simple-resource-stroke-opacitiy: 0.5;
+    --svg-simple-resource-stroke-corner-rx: 5;
+
+    --svg-selected-resource-stroke: #161513;
+    --svg-selected-resource-stroke-width: 1.5;
+    --svg-selected-resource-stroke-dasharray: none;
+    --svg-selected-resource-stroke-opacitiy: 1;
+    --svg-selected-resource-stroke-corner-rx: 5;
+
+    --svg-resource-parent-connector-stroke: #161513;
+    --svg-resource-parent-connector-stroke-width: 1.5;
+    --svg-resource-parent-connector-stroke-dasharray: none;
+    --svg-resource-parent-connector-stroke-opacitiy: 1;
+
+    --svg-resource-association-connector-stroke: #161513;
+    --svg-resource-association-connector-stroke-width: 1.5;
+    --svg-resource-association-connector-stroke-dasharray: 3, 2;
+    --svg-resource-association-connector-stroke-opacitiy: 1;
+
+    --svg-analytics-resources-background-colour: rgba(59, 112, 135, 0.9);
+    --svg-database-resources-background-colour: rgba(59, 112, 135, 0.9);
+    --svg-gateway-resources-background-colour: rgba(59, 112, 135, 0.9);
+    --svg-identity-resources-background-colour: rgba(199, 59, 89, 0.9);
+    --svg-infrastructure-resources-background-colour: rgba(59, 112, 135, 0.9);
+    --svg-network-resources-background-colour: rgba(121, 96, 135, 0.9);
+    --svg-storage-resources-background-colour: rgba(146, 88, 101, 0.9);
+    --svg-tenancy-resources-background-colour: rgba(240, 193, 84, 0.9);
+
+}
+
+svg {
+    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+}
+
+.ocd-svg-icon {
+    width: var(--svg-icon-width);
+    height: var(--svg-icon-height);
+    background-repeat: no-repeat;
+    background-position-x: center;
+    background-position-y: center;
+    background-size: 30px 30px;
+}
+
+.ocd-svg-parent-connector {
+    stroke: var(--svg-resource-parent-connector-stroke);
+    stroke-width: var(--svg-resource-parent-connector-stroke-width);
+    stroke-dasharray: var(--svg-resource-parent-connector-stroke-dasharray);
+    stroke-opacity: var(--svg-resource-parent-connector-stroke-opacitiy);
+    fill-opacity: 0;
+}
+
+.ocd-svg-association-connector {
+    stroke: var(--svg-resource-association-connector-stroke);
+    stroke-width: var(--svg-resource-association-connector-stroke-width);
+    stroke-dasharray: var(--svg-resource-association-connector-stroke-dasharray);
+    stroke-opacity: var(--svg-resource-association-connector-stroke-opacitiy);
+    fill-opacity: 0;
+}
+
+.ocd-svg-container {
+    stroke: var(--svg-container-resource-stroke);
+    stroke-width: var(--svg-container-resource-stroke-width);
+    stroke-dasharray: var(--svg-container-resource-stroke-dasharray);
+    stroke-opacity: var(--svg-container-resource-stroke-opacitiy);
+    rx: var(--svg-container-resource-stroke-corner-rx);
+}
+
+.ocd-svg-simple {
+    width: var(--svg-icon-width);
+    height: var(--svg-icon-height);
+    stroke: var(--svg-simple-resource-stroke);
+    stroke-width: var(--svg-simple-resource-stroke-width);
+    stroke-dasharray: var(--svg-simple-resource-stroke-dasharray);
+    stroke-opacity: var(--svg-simple-resource-stroke-opacitiy);
+    rx: var(--svg-simple-resource-stroke-corner-rx);
+}
+
+.ocd-svg-resource-selected {
+    stroke-width: var(--svg-selected-resource-stroke-width);
+    stroke-dasharray: var(--svg-selected-resource-stroke-dasharray);
+    stroke-opacity: var(--svg-selected-resource-stroke-opacitiy);
+}
+
+.ocd-svg-resource-simple {
+    width: var(--svg-resource-simple-width);
+}
+
+.ocd-svg-resource-detailed {
+    width: var(--svg-resource-detailed-width);
+}
+
+.ocd-svg-resource-container {
+    width: var(--svg-resource-container-width);
+}
+
+.ocd-svg-foreign-object {
+    height: var(--svg-icon-height);
+}
+
+.ocd-svg-foreign-object > div {
+    display: grid;
+    grid-template-columns: var(--svg-icon-width) auto;
+    width: 100%;
+}
+
+.ocd-svg-foreign-object-display-name {
+    display: block;
+    padding: 0 0 0 5px;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.ocd-svg-foreign-object-display-name > span {
+    display: block;
+    width: 100%;
+    opacity: 0.8;
+    margin: 0;
+    padding: 0;
+    border: none;
+    box-sizing: border-box;
+    font-size: smaller;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    user-select: none;
+}
+
+.ocd-svg-foreign-object-display-name > input {
+    display: block;
+    width: 100%;
+    text-overflow: ellipsis;
+    margin: 0;
+    padding: 0;
+    border: none;
+    box-sizing: border-box;
+    font-weight: bolder;
+    background: transparent;
+}
+
+.ocd-svg-foreign-object-name {
+    font-weight: bolder;
+}
+
+.ocd-svg-container-icon-background {
+    border-color: var(--svg-simple-resource-stroke);
+    border-width: var(--svg-simple-resource-stroke-width);
+    border-top-left-radius: 5px 5px;
+    border-bottom-right-radius: 5px 5px;
+}
+
+.ocd-svg-detailed-icon-background {
+    border-color: var(--svg-simple-resource-stroke);
+    border-width: var(--svg-simple-resource-stroke-width);
+    border-top-left-radius: 5px 5px;
+    border-bottom-left-radius: 5px 5px;
+}
+
+.ocd-svg-simple-icon-background {
+    border-color: var(--svg-simple-resource-stroke);
+    border-width: var(--svg-simple-resource-stroke-width);
+    border-radius: 5px 5px;
+}
+
