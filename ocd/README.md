@@ -60,6 +60,21 @@ again these will be added over time.
 
 If you have any comments please leave them on the GitHub issues marked as ___OCD Alpha:___
 
+## Native Installs
+The [OCD Alpha Nightly Release](https://github.com/oracle/oci-designer-toolkit/releases/tag/v0.1.0-alpha.ocd.nightly) contains a number of native install artefacts which can be used to install OCD on you machine.
+At present we do not have any certificates associated with these and hence you may see some security warnings during execution. If you are happy to accept that the installation files built by GitHub are okey then
+you will need to acknowledge in the appropriate dialog for your system.
+
+### MacOS
+#### Error
+![Security Acknowledgement](https://github.com/oracle/oci-designer-toolkit/blob/nightly/ocd/images/MacosError.png)
+#### Solution
+System Settings -> Security
+
+![Security Acknowledgement](https://github.com/oracle/oci-designer-toolkit/blob/nightly/ocd/images/MacosSecurityOverride.png)
+
+Select "Open Anyway"
+
 # OCD Desktop Features 
 
 The OCD Desktop / Web interface is composed of a number of section similar to those provided in the original OKIT BUI. These 
