@@ -9,7 +9,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 from .models import ExtendedTagSummary, ExtendedDrgRouteDistributionStatement, ExtendedDrgRouteRule, ExtendedAutoScalingPolicySummary
 from .models import ExtendedDbNodeSummary, ExtendedNetworkSecurityGroupVnic, ExtendedPreauthenticatedRequestSummary, ExtendedSecurityRule
-from .models import ExtendedSourceApplicationSummary, ExtendedExportSummary, ExtendedMySQLBackup, ExtendedMySQLBackupSummary
+from .models import ExtendedExportSummary, ExtendedMySQLBackup, ExtendedMySQLBackupSummary
 from .models import ExtendedVirtualCircuitBandwidthShape, ExtendedNoSQLIndexSummary
 from .models import ExtendedRRSet
 from .models import ExtendedAvailablePluginSummary, ExtendedInstanceAgentPluginSummary
@@ -25,18 +25,18 @@ agent_plugin_os_versions = [
     ("CentOS", "7"), ("CentOS", "8 Stream"),
     ("Oracle Autonomous Linux", "7.9"),
     ("Oracle Linux", "6.10"), ("Oracle Linux", "7.9"), ("Oracle Linux", "8"), ("Oracle Linux", "9"),
-    ("Oracle Linux Cloud Developer", "8"),    
+    ("Oracle Linux Cloud Developer", "8"),
     ("Windows", "2012ServerR2"),  ("Windows", "2016Server"), ("Windows", "2019Server"), ("Windows", "2022Server"),
 ]
 
 class OciResourceDiscoveryClient(object):
 
-    # map suppoted resources types to the OCI SDK client type and its "get" 
+    # map suppoted resources types to the OCI SDK client type and its "get"
     # methods. Creates a map of:
     #     { resource_name -> (Client, list_method) }
     get_resource_client_methods = {
         # oci.apigateway.UsagePlansClient
-        "ApiGatewayUsagePlanDetails": (oci.apigateway.UsagePlansClient, "get_usage_plan"), # used to get full details 
+        "ApiGatewayUsagePlanDetails": (oci.apigateway.UsagePlansClient, "get_usage_plan"), # used to get full details
         # oci.autoscaling.AutoScalingClient
         "AutoScalingConfigurationDetails": (oci.autoscaling.AutoScalingClient, "get_auto_scaling_configuration"),
         # oci.bastion.BastionClient
@@ -113,13 +113,9 @@ class OciResourceDiscoveryClient(object):
         # oci.apigateway.SubscribersClient
         "ApiGatewaySubscriber": (oci.apigateway.SubscribersClient, "list_subscribers"),
         #  oci.apigateway.UsagePlansClient
-        "ApiGatewayUsagePlan": ( oci.apigateway.UsagePlansClient, "list_usage_plans"), 
+        "ApiGatewayUsagePlan": ( oci.apigateway.UsagePlansClient, "list_usage_plans"),
         # oci.apm_control_plane.ApmDomainClient
         "ApmDomain": ( oci.apm_control_plane.ApmDomainClient, "list_apm_domains"),
-        # oci.application_migration.ApplicationMigrationClient
-        "AmsMigration": (oci.application_migration.ApplicationMigrationClient ,"list_migrations"),
-        "AmsSource": (oci.application_migration.ApplicationMigrationClient ,"list_sources"),
-        "AmsSourceApplication": (oci.application_migration.ApplicationMigrationClient ,"list_source_applications"),
         # oci.artifacts.ArtifactsClient
         "ContainerImage": (oci.artifacts.ArtifactsClient, "list_container_images"),
         "ContainerRepo": (oci.artifacts.ArtifactsClient, "list_container_repositories"),
@@ -133,7 +129,7 @@ class OciResourceDiscoveryClient(object):
         "BastionSession": (oci.bastion.BastionClient, "list_sessions"),
         # oci.bds.BdsClient
         "BigDataAutoScalingConfiguration": (oci.bds.BdsClient, "list_auto_scaling_configurations"),
-        "BigDataService": (oci.bds.BdsClient, "list_bds_instances"), 
+        "BigDataService": (oci.bds.BdsClient, "list_bds_instances"),
         "BigDataServiceApiKey": (oci.bds.BdsClient, "list_bds_api_keys"),
         "BigDataServiceMetastoreConfig": (oci.bds.BdsClient, "list_bds_metastore_configurations"),
         # oci.blockchain.BlockchainPlatformClient
@@ -141,7 +137,7 @@ class OciResourceDiscoveryClient(object):
         "BlockchainOsn": (oci.blockchain.BlockchainPlatformClient, "list_osns"), # TODO by blockchain_platform - check resource name
         "BlockchainPeer": (oci.blockchain.BlockchainPlatformClient, "list_peers"), # TODO by blockchain_platform - check resource name
         # oci.budget.BudgetClient
-        "Budget": (oci.budget.BudgetClient, "list_budgets"), 
+        "Budget": (oci.budget.BudgetClient, "list_budgets"),
         "AlertRule": (oci.budget.BudgetClient, "list_alert_rules"),
         # - oci.certificates.CertificatesClient # TODO
         # - "?": (oci.certificates.CertificatesClient, "list_certificate_authority_bundle_versions"),
@@ -165,7 +161,7 @@ class OciResourceDiscoveryClient(object):
         # "OcbOracleDbAsset": (oci.cloud_bridge.InventoryClient, "list_assets"), # TODO remove? subset of OcbInventoryAsset
         # "OcbVmAsset": (oci.cloud_bridge.InventoryClient, "list_assets"), # TODO remove? subset of OcbInventoryAsset
         # "OcbVmwareVmAsset": (oci.cloud_bridge.InventoryClient, "list_assets"), # TODO remove? subset of OcbInventoryAsset
-        # "": (oci.cloud_bridge.InventoryClient, "list_historical_metrics"), # TODO 
+        # "": (oci.cloud_bridge.InventoryClient, "list_historical_metrics"), # TODO
         "OcbInventory": (oci.cloud_bridge.InventoryClient, "list_inventories"),
         # oci.cloud_bridge.OcbAgentSvcClient
         "OcbAgentDependency": (oci.cloud_bridge.OcbAgentSvcClient, "list_agent_dependencies"),
@@ -185,7 +181,7 @@ class OciResourceDiscoveryClient(object):
         "MigrationAsset": (oci.cloud_migrations.MigrationClient, "list_migration_assets"),
         "MigrationPlan": (oci.cloud_migrations.MigrationClient, "list_migration_plans"),
         "ReplicationSchedule": (oci.cloud_migrations.MigrationClient, "list_replication_schedules"),
-        "TargetAsset": (oci.cloud_migrations.MigrationClient, "list_target_assets"), 
+        "TargetAsset": (oci.cloud_migrations.MigrationClient, "list_target_assets"),
         # oci.compute_instance_agent.PluginClient
         "InstanceAgentPlugin": (oci.compute_instance_agent.PluginClient, "list_instance_agent_plugins"),
         # oci.compute_instance_agent.PluginconfigClient
@@ -280,7 +276,7 @@ class OciResourceDiscoveryClient(object):
         "DataSafeLibraryMaskingFormat": (oci.data_safe.DataSafeClient, "list_library_masking_formats"),
         "DataSafeMaskingPolicy": (oci.data_safe.DataSafeClient, "list_masking_policies"),
         "DataSafeMaskingReport": (oci.data_safe.DataSafeClient, "list_masking_reports"),
-        "DataSafeOnpremConnector": (oci.data_safe.DataSafeClient, "list_on_prem_connectors"), 
+        "DataSafeOnpremConnector": (oci.data_safe.DataSafeClient, "list_on_prem_connectors"),
         "DataSafePrivateEndpoint": (oci.data_safe.DataSafeClient, "list_data_safe_private_endpoints"),
         "DataSafeReport": (oci.data_safe.DataSafeClient, "list_reports"),
         "DataSafeReportDefinition": (oci.data_safe.DataSafeClient, "list_report_definitions"),
@@ -291,8 +287,8 @@ class OciResourceDiscoveryClient(object):
         "DataSafeTargetDatabase": (oci.data_safe.DataSafeClient, "list_target_databases"),
         "DataSafeUserAssessment": (oci.data_safe.DataSafeClient, "list_user_assessments"),
         # oci.data_connectivity.DataConnectivityManagementClient
-        # "DCMSEndpoint": (oci.data_connectivity.DataConnectivityManagementClient, "list_endpoints"),
-        # "DCMSRegistry": (oci.data_connectivity.DataConnectivityManagementClient, "list_registries"),
+        #"DCMSEndpoint": (oci.data_connectivity.DataConnectivityManagementClient, "list_endpoints"),
+        #"DCMSRegistry": (oci.data_connectivity.DataConnectivityManagementClient, "list_registries"),
         # oci.data_science.DataScienceClient
         "DataScienceJob": (oci.data_science.DataScienceClient, "list_jobs"),
         "DataScienceJobRun": (oci.data_science.DataScienceClient, "list_job_runs"),
@@ -360,9 +356,9 @@ class OciResourceDiscoveryClient(object):
         "DevOpsTrigger": (oci.devops.DevopsClient, "list_trigger"),
         # oci.dns.DnsClient
         "CustomerDnsZone": (oci.dns.DnsClient, "list_zones"),
-        "DnsResolver": (oci.dns.DnsClient, "list_resolvers"), 
+        "DnsResolver": (oci.dns.DnsClient, "list_resolvers"),
         "DnsResolverEndpoint": (oci.dns.DnsClient, "list_resolver_endpoints"),
-        "DnsPolicy": (oci.dns.DnsClient, "list_steering_policies"), 
+        "DnsPolicy": (oci.dns.DnsClient, "list_steering_policies"),
         "DnsPolicyAttachment": (oci.dns.DnsClient, "list_steering_policy_attachments"),
         "DnsTsigKey": (oci.dns.DnsClient, "list_tsig_keys"),
         "DnsView": (oci.dns.DnsClient, "list_views"),
@@ -394,7 +390,7 @@ class OciResourceDiscoveryClient(object):
         "FssReplication": (oci.file_storage.FileStorageClient, "list_replications"),
         "FssReplicationTarget": (oci.file_storage.FileStorageClient, "list_replication_targets"),
         # oci.functions.FunctionsManagementClient
-        "FunctionsApplication": (oci.functions.FunctionsManagementClient, "list_applications"), 
+        "FunctionsApplication": (oci.functions.FunctionsManagementClient, "list_applications"),
         "FunctionsFunction": (oci.functions.FunctionsManagementClient, "list_functions"),
         # oci.fusion_apps.FusionApplicationsClient
         "FusionEnvironment": (oci.fusion_apps.FusionApplicationsClient, "list_fusion_environments"),
@@ -477,7 +473,7 @@ class OciResourceDiscoveryClient(object):
         # oci.mysql.ChannelsClient
         "MySQLChannel": (oci.mysql.ChannelsClient, "list_channels"),
         # oci.mysql.DbBackupsClient
-        "MySQLBackup": (oci.mysql.DbBackupsClient, "list_backups"), 
+        "MySQLBackup": (oci.mysql.DbBackupsClient, "list_backups"),
         # oci.mysql.DbSystemClient
         "MySQLDbSystem": (oci.mysql.DbSystemClient, "list_db_systems"), # note: use get_db_system to get additional resource details
         # oci.mysql.MysqlaasClient
@@ -518,7 +514,7 @@ class OciResourceDiscoveryClient(object):
         # "SQLSearch": (oci.opsi.OperationsInsightsClient, "list_sql_searches"), # TODO TypeError("list_sql_searches() missing 1 required positional argument: 'sql_identifier'")
         # "SQLText": (oci.opsi.OperationsInsightsClient, "list_sql_texts"), # TODO TypeError("list_sql_texts() missing 1 required positional argument: 'sql_identifier'")
         # oci.os_management.OsManagementClient
-        # "OsmsManagedInstance": (oci.os_management.OsManagementClient, "list_managed_instances"),  # use get by instance id instead of list by compartment id  
+        # "OsmsManagedInstance": (oci.os_management.OsManagementClient, "list_managed_instances"),  # use get by instance id instead of list by compartment id
         "OsmsManagedInstanceGroup": (oci.os_management.OsManagementClient, "list_managed_instance_groups"),
         "OsmsScheduledJob": (oci.os_management.OsManagementClient, "list_scheduled_jobs"),
         "OsmsSoftwareSource": (oci.os_management.OsManagementClient, "list_software_sources"),
@@ -539,7 +535,7 @@ class OciResourceDiscoveryClient(object):
         # oci.rover.RoverClusterClient
         "RoverCluster": (oci.rover.RoverClusterClient, "list_rover_clusters"),
         # oci.rover.RoverEntitlementClient
-        "RoverEntitlement": (oci.rover.RoverEntitlementClient, "list_rover_entitlements"), 
+        "RoverEntitlement": (oci.rover.RoverEntitlementClient, "list_rover_entitlements"),
         # oci.rover.RoverNodeClient
         "RoverNode": (oci.rover.RoverNodeClient, "list_rover_nodes"),
         # oci.sch.ServiceConnectorClient
@@ -554,7 +550,7 @@ class OciResourceDiscoveryClient(object):
         "VirtualService": (oci.service_mesh.ServiceMeshClient, "list_virtual_services"),
         # oci.streaming.StreamAdminClient
         "ConnectHarness": (oci.streaming.StreamAdminClient, "list_connect_harnesses"),
-        "Stream": (oci.streaming.StreamAdminClient, "list_streams"), 
+        "Stream": (oci.streaming.StreamAdminClient, "list_streams"),
         "StreamPool": (oci.streaming.StreamAdminClient, "list_stream_pools"),
         # oci.vault.VaultsClient
         "VaultSecret": (oci.vault.VaultsClient, "list_secrets"),
@@ -606,7 +602,7 @@ class OciResourceDiscoveryClient(object):
         "ImageShapeCompatibility": (oci.core.ComputeClient, "list_image_shape_compatibility_entries"),
         "Shape": (oci.core.ComputeClient, "list_shapes"),
         # oci.core.VirtualNetworkClient
-        "CpeDeviceShape": (oci.core.VirtualNetworkClient, "list_cpe_device_shapes"),   
+        "CpeDeviceShape": (oci.core.VirtualNetworkClient, "list_cpe_device_shapes"),
         "FastConnectProviderService": (oci.core.VirtualNetworkClient, "list_fast_connect_provider_services"),
         "VirtualCircuitBandwidthShape": (oci.core.VirtualNetworkClient, "list_fast_connect_provider_virtual_circuit_bandwidth_shapes"),
         # oci.database.DatabaseClient
@@ -621,7 +617,7 @@ class OciResourceDiscoveryClient(object):
         "LoadBalancerShape": (oci.load_balancer.LoadBalancerClient, "list_shapes"),
         # oci.mysql.MysqlaasClient
         "MySQLShape": (oci.mysql.MysqlaasClient, "list_shapes"),
-        "MySQLVersion": (oci.mysql.MysqlaasClient, "list_versions"),   
+        "MySQLVersion": (oci.mysql.MysqlaasClient, "list_versions"),
         "MySQLConfiguration": (oci.mysql.MysqlaasClient, "list_configurations"),  # use type="DEFAULT"
     }
 
@@ -660,7 +656,7 @@ class OciResourceDiscoveryClient(object):
             self.signer = signer
         elif "delegation_token_file" in self.config:
             logger.debug("Creating OCI API signer with delegation token")
-            delegation_token = open(config["delegation_token_file"], 'r').read() 
+            delegation_token = open(config["delegation_token_file"], 'r').read()
             self.signer = oci.auth.signers.InstancePrincipalsDelegationTokenSigner(
                 delegation_token=delegation_token
             )
@@ -702,7 +698,7 @@ class OciResourceDiscoveryClient(object):
             self.regions = [oci.identity.models.region_subscription.RegionSubscription(is_home_region=True, region_key=config['region'], region_name=config['region'], status="READY")]
             self.home_region = config['region']
             logger.warning(e)
-        
+
         # get availability_domains
         self.availability_domains = self.get_availability_domains(self.regions)
 
@@ -756,16 +752,16 @@ class OciResourceDiscoveryClient(object):
                 results.extend(result)
         else:
             # copy the config and update the region
-            region_config = self.config.copy()  
+            region_config = self.config.copy()
             region_config["region"] = region_name
-            
+
             conditions = ""
             if compartments:
                 conditions = "where compartmentId == '" +  "' || compartmentId == '".join(compartments) + "'"
 
             query=f"""
-                query 
-                    {",".join(resource_types)} resources 
+                query
+                    {",".join(resource_types)} resources
                 {conditions}
             """
             logger.debug(query)
@@ -859,7 +855,7 @@ class OciResourceDiscoveryClient(object):
         # list of all supported resource types that can be queried through search
         searchable_resource_types = self.searchable_resource_types_by_region(self.regions)
         ignore_resource_types = [
-            # don't search for resources that are fetched as children of a parent resource 
+            # don't search for resources that are fetched as children of a parent resource
             "ApiGatewaySdk",
             "BigDataServiceMetastoreConfig",
         ]
@@ -869,7 +865,7 @@ class OciResourceDiscoveryClient(object):
             supported_searchable_resource_types.extend(["Vnic"])
             # FIXME replace supported type InventoryAsset with OcbInventoryAsset
             if "InventoryAsset" in searchable_resource_types[region]:
-                searchable_resource_types[region].remove("InventoryAsset") 
+                searchable_resource_types[region].remove("InventoryAsset")
                 searchable_resource_types[region].append("OcbInventoryAsset")
             logger.debug("Skipping unsupported resources types " + ", ".join(sorted(list(set(searchable_resource_types[region]) - set(supported_searchable_resource_types) - set(ignore_resource_types)))))
 
@@ -905,7 +901,7 @@ class OciResourceDiscoveryClient(object):
                     processed_count += 1
                 except Exception as e:
                     logger.error(("search_resources_for_all_regions()", region, e))
-                    
+
             logger.info(f"processed {processed_count} search responses")
 
         return results
@@ -915,13 +911,13 @@ class OciResourceDiscoveryClient(object):
     # - `method_name` - resource specific the "list" resources method name
     # - `region` - the region name to override in the config file
     # - `compartment_id` - the compartment ocid to list resource in
-    # - `**kwargs` - any extra ags to pass to the list method  
+    # - `**kwargs` - any extra ags to pass to the list method
     def list_resources(self, klass, method_name, region, back_off=0.1, service_endpoint=None, **kwargs):
-        try: 
+        try:
             region_config = self.config.copy()
             region_config["region"] = region
             if not service_endpoint:
-                service_endpoint = f"https://iaas.{region}.oraclecloud.com" 
+                service_endpoint = f"https://iaas.{region}.oraclecloud.com"
             if klass == oci.key_management.KmsManagementClient:
                 client = klass(config=region_config, service_endpoint=service_endpoint, signer=self.signer)
             else:
@@ -939,7 +935,7 @@ class OciResourceDiscoveryClient(object):
                 # exponential back off and retry
                 logger.warn(f"Too Many Requests for {method_name}, retry in {back_off} seconds")
                 time.sleep(back_off)
-                return self.list_resources(klass, method_name, region, back_off=back_off*2, **kwargs)            
+                return self.list_resources(klass, method_name, region, back_off=back_off*2, **kwargs)
 
     def submit_list_resource_worker_requests(self, executor, regional_resources_compartments):
 
@@ -952,7 +948,7 @@ class OciResourceDiscoveryClient(object):
 
                 if resource_type not in (list(self.get_resource_client_methods.keys()) + list(self.list_resource_client_methods.keys()) + list(self.static_resource_client_methods.keys())):
                     # special case for OcbVmwareVmAsset (sub-type of OcbInventoryAsset)
-                    if resource_type not in ["OcbVmwareVmAsset"]:                        
+                    if resource_type not in ["OcbVmwareVmAsset"]:
                         logger.warn(f"unsupported resource type {resource_type}")
                         continue
 
@@ -962,7 +958,7 @@ class OciResourceDiscoveryClient(object):
                     if resource_type == "ApiGatewayUsagePlanDetails" and method_name == "get_usage_plan":
                         usage_plan_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, usage_plan_id=usage_plan_id)
-                        futures_list.update({(region, resource_type, compartment_id, usage_plan_id):future})                    
+                        futures_list.update({(region, resource_type, compartment_id, usage_plan_id):future})
                     elif resource_type == "AutoScalingConfigurationDetails" and method_name == "get_auto_scaling_configuration":
                         auto_scaling_configuration_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, auto_scaling_configuration_id=auto_scaling_configuration_id)
@@ -983,7 +979,7 @@ class OciResourceDiscoveryClient(object):
                         application_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, application_id=application_id)
                         futures_list.update({(region, resource_type, compartment_id, application_id):future})
-                    elif resource_type == "DataFlowRunDetails" and method_name == "get_run": # 
+                    elif resource_type == "DataFlowRunDetails" and method_name == "get_run": #
                         run_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, run_id=run_id)
                         futures_list.update({(region, resource_type, compartment_id, run_id):future})
@@ -1023,7 +1019,7 @@ class OciResourceDiscoveryClient(object):
                     elif resource_type == "NetworkFirewallDetails" and method_name == "get_network_firewall":
                         network_firewall_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, network_firewall_id=network_firewall_id)
-                        futures_list.update({(region, resource_type, compartment_id, network_firewall_id):future})                    
+                        futures_list.update({(region, resource_type, compartment_id, network_firewall_id):future})
                     elif resource_type == "NetworkFirewallPolicyDetails" and method_name == "get_network_firewall_policy":
                         network_firewall_policy_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, network_firewall_policy_id=network_firewall_policy_id)
@@ -1031,16 +1027,16 @@ class OciResourceDiscoveryClient(object):
                     elif resource_type == "NodePoolOptions" and method_name == "get_node_pool_options":
                         node_pool_option_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, node_pool_option_id=node_pool_option_id)
-                        futures_list.update({(region, resource_type, None, node_pool_option_id):future})                
+                        futures_list.update({(region, resource_type, None, node_pool_option_id):future})
                     elif resource_type == "NoSQLIndexDetails" and method_name == "get_index":
                         table_id = item[2][0]
                         index_name = item[2][1]
                         future = executor.submit(self.list_resources, klass, method_name, region, table_name_or_id=table_id, index_name=index_name)
-                        futures_list.update({(region, resource_type, compartment_id, (table_id, index_name)):future})                    
+                        futures_list.update({(region, resource_type, compartment_id, (table_id, index_name)):future})
                     elif resource_type == "NoSQLTableDetails" and method_name == "get_table":
                         table_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, table_name_or_id=table_id)
-                        futures_list.update({(region, resource_type, compartment_id, table_id):future})                    
+                        futures_list.update({(region, resource_type, compartment_id, table_id):future})
                     elif resource_type == "OsmsManagedInstance" and method_name == "get_managed_instance":
                         managed_instance_id=item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, managed_instance_id=managed_instance_id)
@@ -1091,8 +1087,8 @@ class OciResourceDiscoveryClient(object):
                 if resource_type in self.list_resource_client_methods:
                     klass, method_name = self.list_resource_client_methods[resource_type]
                     # the majority of the list methods only need the compartment
-                    # id, methods that have additional required attributes are 
-                    # handled specifically below: 
+                    # id, methods that have additional required attributes are
+                    # handled specifically below:
                     if resource_type == "AlertRule" and method_name == "list_alert_rules":
                         # list alert rules by budget
                         budget_id = item[2]
@@ -1135,15 +1131,15 @@ class OciResourceDiscoveryClient(object):
                     elif resource_type == "BigDataAutoScalingConfiguration" and method_name == "list_auto_scaling_configurations":
                         bds_instance_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, bds_instance_id=bds_instance_id)
-                        futures_list.update({(region, resource_type, compartment_id, bds_instance_id):future})                    
+                        futures_list.update({(region, resource_type, compartment_id, bds_instance_id):future})
                     elif resource_type == "BigDataServiceApiKey" and method_name == "list_bds_api_keys":
                         bds_instance_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, bds_instance_id=bds_instance_id)
-                        futures_list.update({(region, resource_type, compartment_id, bds_instance_id):future})                    
+                        futures_list.update({(region, resource_type, compartment_id, bds_instance_id):future})
                     elif resource_type == "BigDataServiceMetastoreConfig" and method_name == "list_bds_metastore_configurations":
                         bds_instance_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, bds_instance_id=bds_instance_id)
-                        futures_list.update({(region, resource_type, None, bds_instance_id):future})                    
+                        futures_list.update({(region, resource_type, None, bds_instance_id):future})
                     elif resource_type == "Bucket" and method_name == "list_buckets":
                         namespace_name = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, namespace_name=namespace_name)
@@ -1291,7 +1287,7 @@ class OciResourceDiscoveryClient(object):
                         service_endpoint = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, service_endpoint=service_endpoint, compartment_id=compartment_id)
                         futures_list.update({(region, resource_type, compartment_id, service_endpoint):future})
-                    elif resource_type == "ListenerRule" and method_name == "list_listener_rules": 
+                    elif resource_type == "ListenerRule" and method_name == "list_listener_rules":
                         load_balancer_id, listener_name = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, load_balancer_id=load_balancer_id, listener_name=listener_name)
                         futures_list.update({(region, resource_type, compartment_id, load_balancer_id):future})
@@ -1421,7 +1417,7 @@ class OciResourceDiscoveryClient(object):
                         futures_list.update({(region, resource_type, compartment_id, sddc_id):future})
                     elif method_name in [
                         "list_block_volume_replicas",
-                        "list_boot_volumes", 
+                        "list_boot_volumes",
                         "list_boot_volume_attachments",
                         "list_boot_volume_replicas",
                         "list_export_sets",
@@ -1431,7 +1427,7 @@ class OciResourceDiscoveryClient(object):
                         "list_volume_group_replicas",
                     ]:
                         # need to provide the availability domain when listing instances,
-                        # boot volumes, file systems, ... 
+                        # boot volumes, file systems, ...
                         # availability_domain = item[2]
                         availability_domain = None # using `None` will get resource across all ADs which is more efficient (note the query executor will remove duplicates requests)
                         future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, availability_domain=availability_domain)
@@ -1440,7 +1436,7 @@ class OciResourceDiscoveryClient(object):
                         # all other resources
                         future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id)
                         futures_list.update({(region, resource_type, compartment_id, None):future})
-        
+
         logger.info(f"submitted {len(futures_list)} list resources requests")
         return futures_list
 
@@ -1463,11 +1459,7 @@ class OciResourceDiscoveryClient(object):
                     if resource_type not in results[region]:
                         results[region][resource_type] = []
 
-                    if resource_type == "AmsSourceApplication":
-                        # map Source Applications into extended verison a unique id
-                        new_result = [ExtendedSourceApplicationSummary(f"{future[3]}/{application.type}/{application.name}", application) for application in result]
-                        result = new_result
-                    elif resource_type == "AutoScalingPolicy":
+                    if resource_type == "AutoScalingPolicy":
                         # map Auto Scaling Policy into extended verison parent id
                         new_result = [ExtendedAutoScalingPolicySummary(future[3],policy) for policy in result]
                         result = new_result
@@ -1563,7 +1555,7 @@ class OciResourceDiscoveryClient(object):
 
                 processed_count += 1
                 if processed_count % 100 == 0:
-                    percent = int(processed_count / len(futures_list) * 100) 
+                    percent = int(processed_count / len(futures_list) * 100)
                     logger.debug(f"processed {processed_count} list resource responses {percent}% complete")
 
             except AttributeError as ae:
@@ -1596,7 +1588,7 @@ class OciResourceDiscoveryClient(object):
             for fr in failed_requests:
                 if fr[0] not in retry_tasks:
                     retry_tasks[fr[0]] = []
-                retry_tasks[fr[0]].append((fr[1], fr[2], fr[3])) 
+                retry_tasks[fr[0]].append((fr[1], fr[2], fr[3]))
 
             logger.warn(f"Retrying {len(failed_requests)} failed requests")
             retry_results = self.get_resources(retry_tasks)
@@ -1608,7 +1600,7 @@ class OciResourceDiscoveryClient(object):
                         results[region][resource_type].extend(retry_results[region][resource_type])
                     else:
                         results[region][resource_type] = retry_results[region][resource_type]
-        
+
         return results
 
 
@@ -1616,11 +1608,11 @@ class OciResourceDiscoveryClient(object):
         # parallel search query for resources across all regions
         search_resource_types = self.get_searchable_resource_types()
         resources = self.search_resources_for_all_regions(self.regions, search_resource_types, self.compartments)
-        
+
         # resource details are fetched per compartment, to efficiently query the api
-        # we'll generate a set of compartments that have the resources to be fetched 
-        # i.e. for each region generate a set of (resource_type, compartment_id, 
-        # availability_domain) tuples 
+        # we'll generate a set of compartments that have the resources to be fetched
+        # i.e. for each region generate a set of (resource_type, compartment_id,
+        # availability_domain) tuples
         resource_requests = dict()
 
         # cache compartments that have KMS keys
@@ -1647,12 +1639,12 @@ class OciResourceDiscoveryClient(object):
                 # not included in the per compartment results.
                 regional_resource_requests.add(("MySQLConfiguration", self.tenancy.id, "DEFAULT"))
 
-            # get static/read-only resources 
+            # get static/read-only resources
             for ro_resource_type in OciResourceDiscoveryClient.static_resource_client_methods:
                 if self.include_resource_types and ro_resource_type in self.include_resource_types and ro_resource_type not in ["VirtualCircuitBandwidthShape"]:
                     # always add search for these resources in the root compartment
                     regional_resource_requests.add((ro_resource_type, self.tenancy.id, None))
-                
+
             for resource in resources[region]:
                 # special case for Vnic which doesn't have a list method
                 if resource.resource_type == "Vnic":
@@ -1673,7 +1665,7 @@ class OciResourceDiscoveryClient(object):
                     # KMS vault keys need special handling. Keys have to be fetched using the Vault specific service endpoint,
                     # but the RQS results have the key id and compartment but no details of the vault it is contained in.
                     # To ensure we find all keys we need to `list_keys` for each vault that is found across compartments that
-                    # contain keys. 
+                    # contain keys.
                     # Build up a list of compartments containing keys here for use later
                     kms_key_compartments_by_region[region].add(resource.compartment_id)
                 else:
@@ -1691,7 +1683,7 @@ class OciResourceDiscoveryClient(object):
                     regional_resource_requests.add(("AmsSourceApplication", resource.compartment_id, resource.identifier))
                 elif resource.resource_type == "ApiGatewayApi" and (self.include_resource_types == None or "ApiGatewaySdk" in self.include_resource_types):
                     regional_resource_requests.add(("ApiGatewaySdk", resource.compartment_id, resource.identifier))
-                elif resource.resource_type == "AutonomousContainerDatabase" and (self.include_resource_types == None or "AutonomousContainerDatabaseDataguardAssociation" in self.include_resource_types): 
+                elif resource.resource_type == "AutonomousContainerDatabase" and (self.include_resource_types == None or "AutonomousContainerDatabaseDataguardAssociation" in self.include_resource_types):
                     regional_resource_requests.add(("AutonomousContainerDatabaseDataguardAssociation", resource.compartment_id, resource.identifier))
                 elif resource.resource_type == "AutonomousDatabase":
                     if self.include_resource_types == None or "AutonomousDatabaseBackup" in self.include_resource_types:
@@ -1746,7 +1738,7 @@ class OciResourceDiscoveryClient(object):
                 elif resource.resource_type in ["ExternalContainerDatabase", "ExternalNonContainerDatabase", "ExternalPluggableDatabase"]:
                     if self.include_resource_types == None or "ExternalDatabaseConnector" in self.include_resource_types:
                         regional_resource_requests.add(("ExternalDatabaseConnector", resource.compartment_id, resource.identifier))
-                elif resource.resource_type == "FileSystem": 
+                elif resource.resource_type == "FileSystem":
                     if self.include_resource_types == None or "Export" in self.include_resource_types:
                         regional_resource_requests.add(("Export", resource.compartment_id, resource.identifier))
                     if self.include_resource_types == None or "ExportSet" in self.include_resource_types:
@@ -1835,7 +1827,7 @@ class OciResourceDiscoveryClient(object):
             resource_requests.update({region:regional_resource_requests})
 
         # for each resource not supported by search, perform a brute force iteration
-        # over all compartments in all regions - this can take a long time for 
+        # over all compartments in all regions - this can take a long time for
         # tenancies with lots of compartments so we limit to only fetch resources
         # types that are specifically requested
         for region in self.regions:
@@ -1843,10 +1835,10 @@ class OciResourceDiscoveryClient(object):
 
             resource_types = {
                 "AlarmStatus",
-                "AmsMigration", "AmsSource", "AmsSourceApplication", # Force a search across all compartments 
+                "AmsMigration", "AmsSource", "AmsSourceApplication", # Force a search across all compartments
                 "Backup", # Database Backups. Force a search across all compartments to find unattached backups.
                 "Cluster", "NodePool", # OKE
-                "DataFlowPrivateEndpoint", # Data Flow 
+                "DataFlowPrivateEndpoint", # Data Flow
                 "DataSafeOnPremConnector", # Data Safe
                 "DnsView", # BUG? not getting DnsView results returned from RQS, so need to manually query all compartments
                 "EmailSuppression", # Email
@@ -1865,12 +1857,12 @@ class OciResourceDiscoveryClient(object):
             resource_types = resource_types.intersection(set(self.include_resource_types)) if self.include_resource_types else []
             for resource_type in resource_types:
                 # search in the root compartment
-                brute_force_requests.add((resource_type, self.tenancy.id, None)) 
+                brute_force_requests.add((resource_type, self.tenancy.id, None))
                 # search all child compartments
                 for compartment_id in self.compartments if self.compartments else [compartment.id for compartment in self.all_compartments]:
                     brute_force_requests.add((resource_type, compartment_id, None))
 
-            # TODO temp fix for region missing 
+            # TODO temp fix for region missing
             if region.region_name not in resource_requests:
                 resource_requests[region.region_name] = {}
 
@@ -2010,7 +2002,7 @@ class OciResourceDiscoveryClient(object):
             if "DbHome" in resources_by_region[region]:
                 for db_home in resources_by_region[region]["DbHome"] if (self.include_resource_types == None or "Database" in self.include_resource_types) else []:
                     third_pass_resources_by_region.add(("Database", db_home.compartment_id, db_home.id))
-            # if requested, get ImageShapeCompatibility for Images 
+            # if requested, get ImageShapeCompatibility for Images
             if "Image" in resources_by_region[region] and (self.include_resource_types != None and "ImageShapeCompatibility" in self.include_resource_types):
                 for image in resources_by_region[region]["Image"]:
                     third_pass_resources_by_region.add(("ImageShapeCompatibility", None, image.id))
@@ -2063,7 +2055,7 @@ class OciResourceDiscoveryClient(object):
                 resources_by_region[region]["Shape"] = list(unique_shapes.values())
 
         # remove duplicate platform images
-        # For every compartment that has a custom image the list_images method also returns the full list of platform 
+        # For every compartment that has a custom image the list_images method also returns the full list of platform
         # images, resulting in duplicate entries in the conbined result set.
         # Reduce to a unique set of images for the region.
         for region in resources_by_region:

@@ -6,6 +6,8 @@
 const { contextBridge, ipcRenderer } = require('electron')
 
 contextBridge.exposeInMainWorld('ocdAPI', {
+  // Build Information
+  getVersion: () => ipcRenderer.invoke('ocdBuild:getVersion'),
 	// OCI API Calls / Query
   loadOCIConfigProfiles: () => ipcRenderer.invoke('ociConfig:loadProfiles'),
   listRegions: (profile) => ipcRenderer.invoke('ociQuery:listRegions', profile),

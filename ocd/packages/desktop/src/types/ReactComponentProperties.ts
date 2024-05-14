@@ -9,6 +9,7 @@ import OcdDocument from '../components/OcdDocument'
 import { OcdResource, OcdResources, OcdViewConnector, OcdViewCoords, OciResource } from '@ocd/model'
 import { DragData } from './DragData'
 import { OcdContextMenu } from '../components/OcdCanvas'
+import { OcdVariable } from '@ocd/model/src/OcdDesign'
 
 export interface CanvasProps {
     dragData: DragData
@@ -32,6 +33,7 @@ export interface ResourceForeignObjectProps {
     setOcdDocument: React.Dispatch<any>
     resource: OcdViewCoords
     hidden: boolean
+    ghost?: boolean
 }
 
 export interface ResourceSvgGhostProps {
@@ -49,6 +51,7 @@ export interface ResourceSvgProps {
     setContextMenu: React.Dispatch<any>
     svgDragDropEvents: OcdMouseEvents
     resource: OcdViewCoords
+    ghost?: boolean
 }
 
 export interface ResourceSvgContextMenuProps {
@@ -104,4 +107,19 @@ export interface OciTabularRowProps {
     index: number
     resource: OcdResource
     resourceElements: string[]
+}
+
+export interface OcdVariableRowPropsNew {
+    variable: OcdVariable
+    onNameChange: React.Dispatch<any>
+    onDefaultChange: React.Dispatch<any>
+    onDescriptionChange: React.Dispatch<any>
+    onDeleteClick: React.Dispatch<any>
+}
+export interface OcdVariableRowProps {
+    ocdDocument: OcdDocument
+    setOcdDocument: React.Dispatch<any>
+    variable: OcdVariable
+    // row: number
+    onDeleteClick: React.Dispatch<any>
 }

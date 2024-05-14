@@ -7,6 +7,8 @@ export { OciTerraformSchemaImporter } from "./importer/OciTerraformSchemaImporte
 export { OciTerraformGenerator } from "./generator/OciTerraformGenerator"
 export { OcdCodeGenerator } from "./generator/OcdCodeGenerator"
 export { OcdPropertiesGenerator } from "./generator/OcdPropertiesGenerator"
+export { OcdMarkdownGenerator } from "./generator/OcdMarkdownGenerator"
 export { OcdModelGenerator } from "./generator/OcdModelGenerator"
 export { OcdTabularGenerator } from "./generator/OcdTabularPageGenerator"
 export { OcdValidatorGenerator } from "./generator/OcdValidatorGenerator"
+export { OcdBuildDateGenerator } from "./generator/OcdBuildDateGenerator"

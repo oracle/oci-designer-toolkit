@@ -3,7 +3,7 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-const { app, dialog, BrowserWindow, ipcMain, screen } = require("electron")
+const { app, dialog, BrowserWindow, ipcMain, screen, Menu } = require("electron")
 const path = require("path")
 const url = require("url")
 const fs = require("fs")
@@ -43,6 +43,115 @@ let activeFile = undefined
 let filePath = undefined
 let ready = false
 
+const isMac = process.platform === 'darwin'
+
+// Add Menu
+const template = [
+	// { role: 'appMenu' }
+	...(isMac
+	  ? [{
+		  label: app.name,
+		  submenu: [
+			{ role: 'about' },
+			{ type: 'separator' },
+			{ role: 'services' },
+			{ type: 'separator' },
+			{ role: 'hide' },
+			{ role: 'hideOthers' },
+			{ role: 'unhide' },
+			{ type: 'separator' },
+			{ role: 'quit' }
+		  ]
+		}]
+	  : []),
+	// { role: 'fileMenu' }
+	{
+	  label: 'File',
+	  submenu: [
+		isMac ? { role: 'close' } : { role: 'quit' }
+	  ]
+	},
+	// { role: 'editMenu' }
+	{
+	  label: 'Edit',
+	  submenu: [
+		{ role: 'undo' },
+		{ role: 'redo' },
+		{ type: 'separator' },
+		{ role: 'cut' },
+		{ role: 'copy' },
+		{ role: 'paste' },
+		...(isMac
+		  ? [
+			  { role: 'pasteAndMatchStyle' },
+			  { role: 'delete' },
+			  { role: 'selectAll' },
+			  { type: 'separator' },
+			  {
+				label: 'Speech',
+				submenu: [
+				  { role: 'startSpeaking' },
+				  { role: 'stopSpeaking' }
+				]
+			  }
+			]
+		  : [
+			  { role: 'delete' },
+			  { type: 'separator' },
+			  { role: 'selectAll' }
+			])
+	  ]
+	},
+	// { role: 'viewMenu' }
+	{
+	  label: 'View',
+	  submenu: [
+		{ role: 'reload' },
+		{ role: 'forceReload' },
+		{ role: 'toggleDevTools' },
+		{ type: 'separator' },
+		{ role: 'resetZoom' },
+		{ role: 'zoomIn' },
+		{ role: 'zoomOut' },
+		{ type: 'separator' },
+		{ role: 'togglefullscreen' }
+	  ]
+	},
+	// { role: 'windowMenu' }
+	{
+	  label: 'Window',
+	  submenu: [
+		{ role: 'minimize' },
+		{ role: 'zoom' },
+		...(isMac
+		  ? [
+			  { type: 'separator' },
+			  { role: 'front' },
+			  { type: 'separator' },
+			  { role: 'window' }
+			]
+		  : [
+			  { role: 'close' }
+			])
+	  ]
+	},
+	{
+	  role: 'help',
+	  submenu: [
+		{
+		  label: 'Learn More',
+		  click: async () => {
+			const { shell } = require('electron')
+			await shell.openExternal('https://github.com/oracle/oci-designer-toolkit/tree/master/ocd')
+		  }
+		}
+	  ]
+	}
+  ]
+  
+const menu = Menu.buildFromTemplate(template)
+
+// Create OCD Window
 const createWindow = () => {
 	let desktopState = loadDesktopState()
 	// Create the browser window.
@@ -95,6 +204,8 @@ const createWindow = () => {
 }
 
 app.whenReady().then(() => {
+	// Build Information
+	ipcMain.handle('ocdBuild:getVersion', handleGetVersion)
 	// OCI API Calls / Query
 	ipcMain.handle('ociConfig:loadProfiles', handleLoadOciConfigProfiles)
 	ipcMain.handle('ociQuery:listRegions', handleListRegions)
@@ -122,6 +233,7 @@ app.whenReady().then(() => {
             filePath = null
         }
     });
+	Menu.setApplicationMenu(menu)
 	ready = true
   })
   
@@ -163,6 +275,16 @@ console.debug(app.getPath('userData'))
 /*
 ** Electron IPC Handlers required for the OCD Desktop.
 */
+
+async function handleGetVersion() {
+	console.debug('Electron Main: handleGetVersion')
+	return new Promise((resolve, reject) => {
+		const buildInformation = {
+			version: app.getVersion()
+		}
+		resolve(buildInformation)
+	})
+}
 
 async function handleLoadOciConfigProfiles() {
 	console.debug('Electron Main: handleLoadOciConfigProfiles')
@@ -226,7 +348,8 @@ async function handleLoadDesign(event, filename) {
 }
 
 async function handleSaveDesign(event, design, filename, suggestedFilename='') {
-	console.debug('Electron Main: handleSaveDesign')
+	design = typeof design === 'string' ? JSON.parse(design) : design
+	console.debug('Electron Main: handleSaveDesign', filename, JSON.stringify(design, null, 2))
 	return new Promise((resolve, reject) => {
 		try {
 			if (!filename || !fs.existsSync(filename) || !fs.statSync(filename).isFile()) {
@@ -269,6 +392,7 @@ async function handleDiscardConfirmation(event) {
 }
 
 async function handleExportTerraform(event, design, directory) {
+	design = typeof design === 'string' ? JSON.parse(design) : design
 	console.debug('Electron Main: handleExportTerraform')
 	return new Promise((resolve, reject) => {reject('Currently Not Implemented')})
 }
@@ -303,6 +427,7 @@ async function handleSaveConsoleConfig(event, config) {
 	console.debug('Electron Main: handleSaveConfig')
 	return new Promise((resolve, reject) => {
 		try {
+			if (!config.showPreviousViewOnStart) config.displayPage = 'designer' // If we do not want to display previous page then default to designer.
 			fs.writeFileSync(ocdConsoleConfigFilename, JSON.stringify(config, null, 4))
 			resolve(config)
 		} catch (err) {

@@ -27,6 +27,15 @@ export namespace OcdCommonConfigs {
                 configs: []
             },
             {
+                id: 'ip_address',
+                properties: {
+                    placeholder: '0.0.0.0',
+                    pattern: "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$)+|^var\.+$",
+                    title: 'IPv4 Address'
+                },
+                configs: []
+            },
+            {
                 id: 'ipv6cidr_block',
                 properties: {
                     placeholder: '2001:0db8:0123:45::/56',

@@ -1404,6 +1404,43 @@ function loadPCACompartments() {
     }
 }
 /*
+** Query C3
+*/
+function handleQueryC3(e) {
+    hideNavMenu();
+    $("#toolbar_view_select").val('designer');
+    handleSwitchToCompartmentView();
+    // Display Dialog
+    displayQueryDialog('Query C3', 'Query', () => {queryPCA(showQueryPCAResults)}, loadPCACompartments, false);
+    // Set Query Config Profile
+    okitSettings.home_region_key = '';
+    okitSettings.home_region = '';
+    ociRegions = [];
+    // Load Previous Profile
+    $(jqId('config_profile')).val($(`#console_header_config_select`).val());
+    // Load Compartment Select
+    loadPCACompartments();
+    // Load Region Select
+    loadRegions(selectQueryLastUsedRegion);
+}
+function handleImportFromC3(e) {
+    hideNavMenu();
+    $("#toolbar_view_select").val('designer');
+    handleSwitchToCompartmentView();
+    // Display Dialog
+    displayQueryDialog('Import From C3', 'Introspect', () => {queryPCA(showImportResults)}, loadPCACompartments, false);
+    // Set Query Config Profile
+    okitSettings.home_region_key = '';
+    okitSettings.home_region = '';
+    ociRegions = [];
+    // Load Previous Profile
+    $(jqId('config_profile')).val($(`#console_header_config_select`).val());
+    // Load Compartment Select
+    loadPCACompartments();
+    // Load Region Select
+    loadRegions(selectQueryLastUsedRegion);
+}
+/*
 ** Query PCA-X9
 */
 function handleQueryPCA(e) {

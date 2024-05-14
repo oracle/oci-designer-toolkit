@@ -3,6 +3,7 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
+import { OcdResource } from "@ocd/model"
 import { ResourceElementConfig } from "../../../../OcdPropertyTypes"
 import { OciCommonConfigs } from "../../OciCommonConfigs"
 
@@ -40,6 +41,12 @@ export namespace OciSecurityListConfigs {
                 ]
             },
             {
+                id: 'ingress_security_rules',
+                properties: {},
+                configs: [],
+                summary: (open: boolean, resource: OcdResource, openValue: string) => open ? openValue : resource && resource.description.trim().length > 0 ? resource.description : openValue
+            },
+            {
                 id: 'ingress_security_rules.source',
                 properties: {
                     placeholder: '0.0.0.0/0',
@@ -57,6 +64,18 @@ export namespace OciSecurityListConfigs {
                     {id: 'SERVICE_CIDR_BLOCK', displayName: 'Service CIDR Block'}
                 ]
             },
+            {
+                id: 'ingress_security_rules.protocol',
+                properties: {},
+                configs: [],
+                options: [
+                    {id: 'all', displayName: 'All'},
+                    {id: '6', displayName: 'TCP'},
+                    {id: '1', displayName: 'ICMP'},
+                    {id: '17', displayName: 'UDP'},
+                ]
+            },
         ]
     }
+    export const layout = []
 }

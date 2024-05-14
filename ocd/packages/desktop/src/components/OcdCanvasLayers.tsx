@@ -8,10 +8,12 @@ import { OcdViewLayer, OcdViewPage } from '@ocd/model'
 import { OciModelResources } from '@ocd/model'
 import { LayerBarMenuProps, LayerBarLayerProps, LayerBarLayersProps } from '../types/Console'
 import { useState } from 'react'
+import { OcdUtils } from '@ocd/core'
 
 const OcdCanvasLayer = ({ ocdDocument, setOcdDocument, layer } : LayerBarLayerProps): JSX.Element => {
     const style: React.CSSProperties = {}
-    if (layer.style !== undefined && layer.style.fill !== undefined) style.backgroundColor = `${layer.style.fill}${style.opacity = layer.selected ? 'ff' : '33'}`
+    if (layer.style !== undefined && layer.style.fill !== undefined) style.backgroundColor = `${OcdUtils.rgbaToHex(layer.style.fill, true)}${style.opacity = layer.selected ? 'ff' : '33'}`
+    // if (layer.style !== undefined && layer.style.fill !== undefined) style.backgroundColor = `${layer.style.fill}${style.opacity = layer.selected ? 'ff' : '33'}`
     const onVisibilityClick = () => {
         const page: OcdViewPage = ocdDocument.getActivePage()
         // @ts-ignore 
@@ -52,7 +54,7 @@ const OcdCanvasLayer = ({ ocdDocument, setOcdDocument, layer } : LayerBarLayerPr
         setOcdDocument(clone)
     }
     const onChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-        ocdDocument.setDisplayName(layer.id, e.target.value)
+        ocdDocument.setDisplayName(layer.id, e.target.value.trim())
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
     const title = ocdDocument.getLayerName(layer.id)
@@ -63,7 +65,7 @@ const OcdCanvasLayer = ({ ocdDocument, setOcdDocument, layer } : LayerBarLayerPr
                 onClick={() => onVisibilityClick()}
             ></div>
             <div className={`ocd-canvas-layer-name ${layer.class}`} onClick={() => onLayerSelectedClick()}>
-                <input type='text' value={title} onChange={onChange} tabIndex={-1}></input>
+                <input id={layer.id.replace(/\W+/g, "")} type='text' value={title} onChange={onChange} tabIndex={-1}></input>
             </div>
             {page.layers.length > 1 && <div className={`ocd-layer-visiblity-icon delete-layer`}
                 onClick={onDeleteClick}

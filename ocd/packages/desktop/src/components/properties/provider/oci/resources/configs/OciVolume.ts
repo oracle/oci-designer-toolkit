@@ -7,5 +7,25 @@ import { ResourceElementConfig } from "../../../../OcdPropertyTypes"
 import { OciCommonConfigs } from "../../OciCommonConfigs"
 
 export namespace OciVolumeConfigs {
-    export function configs(): ResourceElementConfig[] {return [...OciCommonConfigs.configs()]}
+    export function configs(): ResourceElementConfig[] {
+        return [
+            ...OciCommonConfigs.configs(),
+            {
+                id: 'size_in_gbs',
+                properties: {
+                    min: 50
+                },
+                configs: []
+            },
+            {
+                id: 'vpus_per_gb',
+                properties: {
+                    min: 0,
+                    max: 120,
+                    step: 10
+                },
+                configs: []
+            },
+        ]
+    }
 }
