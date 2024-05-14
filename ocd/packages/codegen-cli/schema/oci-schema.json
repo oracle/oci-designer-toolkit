@@ -10456,27 +10456,6 @@
         "conditional": false,
         "condition": {}
       },
-      "ip_address": {
-        "provider": "oci",
-        "key": "ipAddress",
-        "name": "ip_address",
-        "type": "string",
-        "subtype": "",
-        "required": true,
-        "label": "IP Address",
-        "id": "ip_address",
-        "staticLookup": false,
-        "cacheLookup": false,
-        "lookup": false,
-        "lookupResource": "",
-        "lookupResourceElement": "",
-        "conditional": true,
-        "condition": {
-          "element": "ip_address",
-          "operator": "ne",
-          "value": ""
-        }
-      },
       "load_balancer_id": {
         "provider": "oci",
         "key": "loadBalancerId",

@@ -353,6 +353,7 @@ export const ignoreElements: OcdIgnoreElements = {
         "reserved_ips"
     ],
     "oci_load_balancer_backend": [
+        "ip_address"
     ],
     "oci_load_balancer_backend_set": [
         "backend",

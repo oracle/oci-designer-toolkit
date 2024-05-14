@@ -11,7 +11,7 @@
 */
 
 export const buildDetails: Record<string, string> = {
-    version: '0.1.0-alpha',
+    version: '0.1.0',
     date: '07/02/2024',
     time: '14:26:21',
     datetime: '07/02/2024, 14:26:21',
