@@ -73,7 +73,8 @@ export class OciTerraformSchemaImporter extends OcdSchemaImporter {
                 // @ts-ignore
                 subtype: type_overrides[k] && type_overrides[k].length > 1 ? type_overrides[k][1] : Array.isArray(v.type) ? v.type[1] : '',
                 // @ts-ignore
-                required: v.required ? v.required : false,
+                required: this.isRequired(id, key, v.required ? v.required : false),
+                // required: v.required ? v.required : false,
                 label: this.toLabel(k, labels, hierarchy),
                 // label: this.toLabel(k),
                 id: id,
@@ -111,7 +112,8 @@ export class OciTerraformSchemaImporter extends OcdSchemaImporter {
                     // @ts-ignore
                     subtype: v.nesting_mode === 'set' ? 'object' : '',
                     // @ts-ignore
-                    required: v.required ? v.required : false,
+                    required: this.isRequired(id, key, v.required ? v.required : false),
+                    // required: v.required ? v.required : false,
                     label: this.toLabel(k, labels, hierarchy),
                     // label: this.toLabel(k),
                     id: id,
@@ -128,6 +130,7 @@ export class OciTerraformSchemaImporter extends OcdSchemaImporter {
 
     // titleCase = (str) => str.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase())
 
+    isRequired = (key: string, resource: string, defaultValue: boolean): boolean => (Object.hasOwn(elementOverrides.required, resource) && Object.hasOwn(elementOverrides.required[resource], key)) ? elementOverrides.required[resource][key] : Object.hasOwn(elementOverrides.required.common, key) ? elementOverrides.required.common[key] : defaultValue
     isReference = (key: string) => key && key.endsWith('_id')
     isMultiReference = (key: string) => key && key.endsWith('_ids')
     isLookupOverride = (key: string, resource: string = 'common') => elementOverrides.lookups.common.includes(key) || (Object.hasOwn(elementOverrides.lookups, resource) && elementOverrides.lookups[resource].includes(key)) || this.isStaticLookup(key, resource)
