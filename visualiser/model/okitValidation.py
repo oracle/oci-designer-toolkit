@@ -48,6 +48,7 @@ class OCIJsonValidator(object):
         self.validateCustomerPremiseEquipments()
         self.validateDhcpOptions()
         self.validateDatabaseSystems()
+        self.validateDynamicGroups()
         self.validateDynamicRoutingGateways()
         self.validateExadataCloudInfrastructure()
         self.validateFastConnects()
@@ -312,6 +313,33 @@ class OCIJsonValidator(object):
                     'element': 'default'
                 }
                 self.results['errors'].append(error)              
+
+    # Dynamic Groups
+    def validateDynamicGroups(self):
+        for resource in self.okit_json.get('dynamic_groups', []):
+            logger.info('Validating {!s}'.format(resource['display_name']))
+            # Check Name
+            if resource['description'] == '':
+                self.valid = False
+                error = {
+                    'id': resource['id'],
+                    'type': 'Dynamic Group',
+                    'artefact': resource['display_name'],
+                    'message': 'Dynamic Group description can not be empty.',
+                    'element': 'description'
+                }
+                self.results['errors'].append(error)
+            # Check Matching Rule
+            if resource['matching_rule'] == '':
+                self.valid = False
+                error = {
+                    'id': resource['id'],
+                    'type': 'Dynamic Group',
+                    'artefact': resource['matching_rule'],
+                    'message': 'Dynamic Group Matching Rule can not be empty.',
+                    'element': 'matching_rule'
+                }
+                self.results['errors'].append(error)
 
     # Dynamic Routing Gateway
     def validateDynamicRoutingGateways(self):

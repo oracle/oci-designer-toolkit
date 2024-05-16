@@ -16,15 +16,11 @@ class DynamicGroup extends OkitArtifact {
         // Configure default values
         // this.display_name = this.generateDefaultName(okitjson.dynamic_groups.length + 1);
         this.compartment_id = data.parent_id;
-        /*
-        ** TODO: Add Resource / Artefact specific parameters and default
-        */
+        this.description = this.display_name;
+        this.matching_rule = '';
         // Update with any passed data
         this.merge(data);
         this.convert();
-        // TODO: If the Resource is within a Subnet but the subnet_iss is not at the top level then raise it with the following functions if not required delete them.
-        // Expose subnet_id at the top level
-        Object.defineProperty(this, 'subnet_id', {get: function() {return this.primary_mount_target.subnet_id;}, set: function(id) {this.primary_mount_target.subnet_id = id;}, enumerable: false });
     }
     /*
     ** Name Generation
