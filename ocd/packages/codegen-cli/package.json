@@ -27,6 +27,8 @@
     "build": "npm run compile && npm run pack",
 
     "generate-ocd-build-date": "node lib/esm/ocd-set-build-date.js -d ../desktop/src/data -p ../desktop/package.json",
+
+    "generate-terraform-provider-schema": "cd schema && terraform init && terraform providers schema -json > tf-schema.json",
   
     "import-oci-terraform-schema": "node lib/esm/ocd-codegen.js import terraform-schema -i ./schema/tf-schema.json -o ./schema/oci-schema.json",
     "import": "npm run import-oci-terraform-schema",
