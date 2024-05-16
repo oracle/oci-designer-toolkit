@@ -106,6 +106,12 @@ export const elementOverrides: OcdElementOverrides = {
             "default_backend_set_name": "Backend Set"
         }
     },
+    "required": {
+        "common": {},
+        "oci_database_db_system": {
+            "db_home.database.db_name": true
+        }
+    },
     "lookupOverrides": {
         "common": {
             "nsg_ids": {"list": "network_security_group", "element": "id"}

@@ -175,6 +175,7 @@ class OCIGenerator(object):
 
         "bastions": "identity",
         "compartments": "identity",
+        "dynamic_groups": "identity",
         "groups": "identity",
         "keys": "identity",
         "users": "identity",

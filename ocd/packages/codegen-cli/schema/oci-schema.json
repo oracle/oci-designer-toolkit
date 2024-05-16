@@ -8717,7 +8717,7 @@
                 "name": "db_name",
                 "type": "string",
                 "subtype": "",
-                "required": false,
+                "required": true,
                 "label": "DB Name",
                 "id": "db_home.database.db_name",
                 "staticLookup": false,
