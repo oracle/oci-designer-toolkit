@@ -7,7 +7,8 @@
 
 import fs from 'fs'
 import path from 'path'
-import { OcdMarkdownGenerator, OcdModelGenerator, OcdPropertiesGenerator, OcdTabularGenerator, OciTerraformGenerator, OciTerraformSchemaImporter, AzureTerraformSchemaImporter, OcdValidatorGenerator } from '@ocd/codegen'
+import { OcdMarkdownGenerator, OciModelGenerator, OcdPropertiesGenerator, OcdTabularGenerator, OciTerraformGenerator, OciTerraformSchemaImporter, OcdValidatorGenerator } from '@ocd/codegen'
+import { AzureModelGenerator, AzureAzTerraformSchemaImporter } from '@ocd/codegen'
 import { parseArgs } from "node:util"
 
 const options = {
@@ -48,6 +49,7 @@ if (command.toLocaleLowerCase() === 'generate') {
         || subcommand.toLocaleLowerCase() === 'oci-tabular-js'
         || subcommand.toLocaleLowerCase() === 'oci-terraform-js'
         || subcommand.toLocaleLowerCase() === 'oci-validator-js'
+        || subcommand.toLocaleLowerCase() === 'azureaz-model-js'
         ) {
         // Source Schema file will be first in the list after command
         const input_filename = args.values.schema
@@ -55,24 +57,32 @@ if (command.toLocaleLowerCase() === 'generate') {
         // Generated root directory will be second in the list after command
         const outputDirectory = args.values.destination
         const schema = JSON.parse(input_data)
+        console.debug('Schema', schema)
         const force_resource_file = args.values.force
         let generator = undefined
-        if (subcommand.toLocaleLowerCase() === 'oci-model-js') generator = new OcdModelGenerator()
+        if (subcommand.toLocaleLowerCase() === 'oci-model-js') generator = new OciModelGenerator()
         else if (subcommand.toLocaleLowerCase() === 'oci-markdown-js') generator = new OcdMarkdownGenerator()
         else if (subcommand.toLocaleLowerCase() === 'oci-properties-js') generator = new OcdPropertiesGenerator()
         else if (subcommand.toLocaleLowerCase() === 'oci-terraform-js') generator = new OciTerraformGenerator()
         else if (subcommand.toLocaleLowerCase() === 'oci-tabular-js') generator = new OcdTabularGenerator()
         else if (subcommand.toLocaleLowerCase() === 'oci-validator-js') generator = new OcdValidatorGenerator()
-        Object.entries(schema).forEach(([key, value]) => {
-            generator.generate(key, value)
-            generator.writeFiles(outputDirectory, key, force_resource_file)
-        })
-        if (generator.resources.length > 0) {
-            // console.info(generator.resourceFile)
-            const resource_file_name = path.join(outputDirectory, 'resources.ts')
-            fs.writeFileSync(resource_file_name, generator.resourceFile)
+        else if (subcommand.toLocaleLowerCase() === 'azureaz-model-js') generator = new AzureModelGenerator()
+        if (generator !== undefined) {
+            Object.entries(schema).forEach(([key, value]) => {
+                generator.generate(key, value)
+                generator.writeFiles(outputDirectory, key, force_resource_file)
+            })
+            if (generator.resources.length > 0) {
+                // console.info(generator.resourceFile)
+                const resource_file_name = path.join(outputDirectory, 'resources.ts')
+                fs.writeFileSync(resource_file_name, generator.resourceFile)
+            }
+        } else {
+            console.debug(`ocd-codegen: generate sub-command ${subcommand} does not exist.`)
         }
-    } 
+    } else {
+        console.debug(`ocd-codegen: generate sub-command ${subcommand} does not exist.`)
+    }
 } else if (command.toLocaleLowerCase() === 'import') {
         // Source Schema file will be first in the list after command
         const input_filename = args.values.input
@@ -82,7 +92,13 @@ if (command.toLocaleLowerCase() === 'generate') {
         const source_schema = JSON.parse(input_data)
         let importer = undefined
         if (subcommand.toLocaleLowerCase() === 'oci-terraform-schema') importer = new OciTerraformSchemaImporter()
-        else if (subcommand.toLocaleLowerCase() === 'azure-terraform-schema') importer = new AzureTerraformSchemaImporter()
-        importer.convert(source_schema)
-        fs.writeFileSync(output_filename, JSON.stringify(importer.ocd_schema, null, 2))
+        else if (subcommand.toLocaleLowerCase() === 'azureaz-terraform-schema') importer = new AzureAzTerraformSchemaImporter()
+        if (importer !== undefined) {
+            importer.convert(source_schema)
+            fs.writeFileSync(output_filename, JSON.stringify(importer.ocd_schema, null, 2))
+        } else {
+            console.debug(`ocd-codegen: import sub-command ${subcommand} does not exist.`)
+        }
+} else {
+    console.debug(`ocd-codegen: command ${command} does not exist.`)
 }
