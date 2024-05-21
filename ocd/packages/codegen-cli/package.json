@@ -30,8 +30,9 @@
 
     "generate-terraform-provider-schema": "cd schema && terraform init && terraform providers schema -json > tf-schema.json",
   
-    "import-oci-terraform-schema": "node lib/esm/ocd-codegen.js import terraform-schema -i ./schema/tf-schema.json -o ./schema/oci-schema.json",
-    "import": "npm run import-oci-terraform-schema",
+    "import-oci-terraform-schema":   "node lib/esm/ocd-codegen.js import oci-terraform-schema   -i ./schema/tf-schema.json -o ./schema/oci-schema.json",
+    "import-azure-terraform-schema": "node lib/esm/ocd-codegen.js import azure-terraform-schema -i ./schema/tf-schema.json -o ./schema/azure-schema.json",
+    "import": "npm run import-oci-terraform-schema && npm run import-azure-terraform-schema",
 
     "generate-oci-markdown":       "node lib/esm/ocd-codegen.js generate oci-markdown-js   -s ./schema/oci-schema.json -d ../export/src/markdown/provider/oci",
     "generate-oci-model":          "node lib/esm/ocd-codegen.js generate oci-model-js      -s ./schema/oci-schema.json -d ../model/src/provider/oci",
@@ -40,6 +41,14 @@
     "generate-oci-terraform":      "node lib/esm/ocd-codegen.js generate oci-terraform-js  -s ./schema/oci-schema.json -d ../export/src/terraform/provider/oci",
     "generate-oci-validator":      "node lib/esm/ocd-codegen.js generate oci-validator-js  -s ./schema/oci-schema.json -d ../model/src/validator/provider/oci",
     "generate-oci":                "npm run generate-oci-model && npm run generate-oci-markdown && npm run generate-oci-properties && npm run generate-oci-terraform && npm run generate-oci-tabular && npm run generate-oci-validator",
+
+    "generate-azure-markdown":     "node lib/esm/ocd-codegen.js generate azure-markdown-js   -s ./schema/azure-schema.json -d ../export/src/markdown/provider/azure",
+    "generate-azure-model":        "node lib/esm/ocd-codegen.js generate azure-model-js      -s ./schema/azure-schema.json -d ../model/src/provider/azure",
+    "generate-azure-properties":   "node lib/esm/ocd-codegen.js generate azure-properties-js -s ./schema/azure-schema.json -d ../desktop/src/components/properties/provider/azure",
+    "generate-azure-tabular":      "node lib/esm/ocd-codegen.js generate azure-tabular-js    -s ./schema/azure-schema.json -d ../desktop/src/components/tabular/provider/azure",
+    "generate-azure-terraform":    "node lib/esm/ocd-codegen.js generate azure-terraform-js  -s ./schema/azure-schema.json -d ../export/src/terraform/provider/azure",
+    "generate-azure-validator":    "node lib/esm/ocd-codegen.js generate azure-validator-js  -s ./schema/azure-schema.json -d ../model/src/validator/provider/azure",
+    "generate-azure":              "npm run generate-azure-model && npm run generate-azure-markdown && npm run generate-azure-properties && npm run generate-azure-terraform && npm run generate-azure-tabular && npm run generate-azure-validator",
 
     "generate": "npm run generate-oci",
 

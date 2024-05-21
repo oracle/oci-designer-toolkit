@@ -6,5 +6,14 @@
 import { OcdIgnoreElements } from "../../types/OcdImporterData";
 
 export const ignoreElements: OcdIgnoreElements = {
-    "common": []
+    "common": [
+        "id",
+        "tags"
+    ],
+    "azapi_resource": [
+        "ignore_body_changes",
+        "locks",
+        "output",
+        "response_export_values"
+    ]
 }

@@ -29,6 +29,9 @@ export const elementOverrides: OcdElementOverrides = {
     },
     "types": {
         "common": {},
+        "azapi_resource": {
+            "body": ["string", "code"]
+        }
     },
     "maps": {
         "common": {},
