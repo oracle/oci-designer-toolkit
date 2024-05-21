@@ -28,6 +28,9 @@ okit.wpr
 **/lib/
 # **/package-lock.json
 
+# Terraform
+**/.terraform*
+
 # Containers
 .vagrant
 containers/.oci

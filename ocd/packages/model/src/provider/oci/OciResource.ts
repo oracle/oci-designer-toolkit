@@ -59,15 +59,15 @@ export namespace OciResource {
         const associationIds = Resources[namespace].getConnectionIds(resource, allResources)
         return associationIds
     }
-    export function assignParentIdOrig(child: OciResource, parent: OciResource) {
-        const childTypes: Record<string, string[]> = {
-            Vcn: ['Subnet'],
-            Subnet: ['Instance']
-        }
-        if (Object.hasOwn(childTypes, parent.resourceType) && childTypes[parent.resourceType].includes(child.resourceType)) {
-            const namespace = `Oci${child.resourceType}`
-            // @ts-ignore 
-            Resources[namespace].setParentId(child, parent.id)
-        }
-    }
+    // export function assignParentIdOrig(child: OciResource, parent: OciResource) {
+    //     const childTypes: Record<string, string[]> = {
+    //         Vcn: ['Subnet'],
+    //         Subnet: ['Instance']
+    //     }
+    //     if (Object.hasOwn(childTypes, parent.resourceType) && childTypes[parent.resourceType].includes(child.resourceType)) {
+    //         const namespace = `Oci${child.resourceType}`
+    //         // @ts-ignore 
+    //         Resources[namespace].setParentId(child, parent.id)
+    //     }
+    // }
 }

@@ -13,19 +13,25 @@ import { TerrafomSchemaEntry, TerraformSchema } from '../types/TerraformSchema'
 import{ OcdSchemaEntry } from '../types/OcdSchema'
 // import { OcdResourceMap } from '../types/OcdImporterData'
 import { OcdUtils } from '@ocd/core'
+import { OcdTerraformSchemaImporter } from './OcdTerraformSchemaImporter'
 
-export class OciTerraformSchemaImporter extends OcdSchemaImporter {
+export class OciTerraformSchemaImporter extends OcdTerraformSchemaImporter {
+    constructor() {
+        super(ignoreElements, elementOverrides, conditionalElements)
+        this.tfProvider = 'registry.terraform.io/hashicorp/oci'
+        this.provider = 'oci'
+    }
 
     convert(source_schema: TerraformSchema) {
-        console.debug('Resource Map', JSON.stringify(resourceMap, null, 4))
+        console.debug('OciTerraformSchemaImporter: Resource Map', JSON.stringify(resourceMap, null, 4))
         const resourceKeys = Object.keys(resourceMap)
         const dataKeys = Object.keys(dataMap)
-        console.debug('Resource Keys', resourceKeys)
+        console.debug('OciTerraformSchemaImporter: Resource Keys', resourceKeys)
         // const self = this
         // console.info('Processing', Object.entries(source_schema.provider_schemas["registry.terraform.io/hashicorp/oci"].resource_schemas).filter(([k, v]) => Object.keys(self.resource_map).indexOf(k) >= 0))
         // Check Resource Schema
         Object.entries(source_schema.provider_schemas["registry.terraform.io/hashicorp/oci"].resource_schemas).filter(([k, v]) => resourceKeys.includes(k)).forEach(([key, value]) => {
-            console.debug('OcdTerraformSchemaImporter: Processing Resource', key)
+            console.debug('OciTerraformSchemaImporter: Processing Resource', key)
             this.ocd_schema[resourceMap[key]] = {
                 'tf_resource': key,
                 'type': 'object',
@@ -36,7 +42,7 @@ export class OciTerraformSchemaImporter extends OcdSchemaImporter {
         })
         // Check Data Schema
         Object.entries(source_schema.provider_schemas["registry.terraform.io/hashicorp/oci"].data_source_schemas).filter(([k, v]) => dataKeys.includes(k)).forEach(([key, value]) => {
-            console.debug('OcdTerraformSchemaImporter: Processing data', key)
+            console.debug('OciTerraformSchemaImporter: Processing data', key)
             this.ocd_schema[dataMap[key]] = {
                 'tf_resource': key.endsWith('s') ? dataMap[key] : key,
                 'type': 'object',
