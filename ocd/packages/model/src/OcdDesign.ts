@@ -122,6 +122,10 @@ export interface OciResources {
     [key: string]: any[]
 }
 
+export interface AzureResources {
+    [key: string]: any[]
+}
+
 export interface OcdBaseModel {
     vars: OcdVariable[]
     resources: OcdResources
