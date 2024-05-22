@@ -62,6 +62,7 @@ export const ignoreElements: OcdIgnoreElements = {
         "is_cross_numa_node",
         "launch_mode",
         "launch_options",
+        "launch_volume_attachments",
         "platform_config",
         "plugins_config",
         "preemptible_instance_config",
@@ -329,8 +330,12 @@ export const ignoreElements: OcdIgnoreElements = {
         "previous_successful_login_time"
     ],
     "oci_kms_key": [
+        "auto_key_rotation_details",
         "current_key_version",
         "desired_state",
+        "external_key_reference",
+        "external_key_reference_details",
+        "is_auto_rotation_enabled",
         "replica_details",
         "restore_trigger",
         "restored_from_key_id",
@@ -340,6 +345,8 @@ export const ignoreElements: OcdIgnoreElements = {
     ],
     "oci_kms_vault": [
         "crypto_endpoint",
+        "external_key_manager_metadata",
+        "external_key_manager_metadata_summary",
         "replica_details",
         "management_endpoint",
         "restore_trigger",
@@ -371,7 +378,8 @@ export const ignoreElements: OcdIgnoreElements = {
         "current_placement",
         "endpoints",
         "heat_wave_cluster",
-        "point_in_time_recovery_details"
+        "point_in_time_recovery_details",
+        "secure_connections"
     ],
     "oci_network_load_balancer_network_load_balancer": [
         "ip_addresses",
@@ -383,6 +391,7 @@ export const ignoreElements: OcdIgnoreElements = {
         "backend"
     ],
     "oci_nosql_table": [
+        "replicas",
         "schema"
     ],
     "oci_objectstorage_bucket": [
@@ -393,6 +402,7 @@ export const ignoreElements: OcdIgnoreElements = {
     "oci_vault_secret": [
         "current_version_number",
         "metadata",
+        "rotation_config",
         "secret_content.stage",
         "secret_rules",
         "time_of_current_version_expiry",
