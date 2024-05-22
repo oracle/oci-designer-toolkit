@@ -117,6 +117,7 @@ export const ignoreElements: OcdIgnoreElements = {
     ],
     "oci_core_subnet": [
         "ipv6virtual_router_ip",
+        "prohibit_internet_ingress",
         "subnet_domain_name",
         "virtual_router_ip",
         "virtual_router_mac"
@@ -360,7 +361,6 @@ export const ignoreElements: OcdIgnoreElements = {
         "reserved_ips"
     ],
     "oci_load_balancer_backend": [
-        "ip_address"
     ],
     "oci_load_balancer_backend_set": [
         "backend",

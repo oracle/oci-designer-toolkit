@@ -108,8 +108,21 @@ export const elementOverrides: OcdElementOverrides = {
     },
     "required": {
         "common": {},
+        "oci_core_security_list": {
+            "egress_security_rules.tcp_options.source_port_range.min": false,
+            "egress_security_rules.tcp_options.source_port_range.max": false,
+            "egress_security_rules.udp_options.source_port_range.min": false,
+            "egress_security_rules.udp_options.source_port_range.max": false,
+            "ingress_security_rules.tcp_options.source_port_range.min": false,
+            "ingress_security_rules.tcp_options.source_port_range.max": false,
+            "ingress_security_rules.udp_options.source_port_range.min": false,
+            "ingress_security_rules.udp_options.source_port_range.max": false,
+        },
         "oci_database_db_system": {
             "db_home.database.db_name": true
+        },
+        "oci_load_balancer_backend": {
+            "ip_address": false
         }
     },
     "lookupOverrides": {
