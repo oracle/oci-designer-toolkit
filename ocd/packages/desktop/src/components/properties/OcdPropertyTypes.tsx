@@ -448,7 +448,7 @@ export const OcdStringListProperty = ({ ocdDocument, setOcdDocument, resource, c
     const id = useId()
     // @ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
-    const [value, setValue]= useState(resource[attribute.key].join(','))
+    const [value, setValue]= useState(resource[attribute.key] ? resource[attribute.key].join(',') : '')
     const properties = config && config.properties ? config.properties : {}
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         console.debug(`OcdPropertyTypes: OcdStringListProperty: ${attribute.id} onChange(${e.target.value})`)
