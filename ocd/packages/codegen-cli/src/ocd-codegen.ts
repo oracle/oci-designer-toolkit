@@ -58,7 +58,7 @@ if (command.toLocaleLowerCase() === 'generate') {
         // Generated root directory will be second in the list after command
         const outputDirectory = args.values.destination
         const schema = JSON.parse(input_data)
-        console.debug('Schema', schema)
+        // console.debug('Schema', schema)
         const force_resource_file = args.values.force
         let generator = undefined
         if (subcommand.toLocaleLowerCase() === 'oci-model-js') generator = new OciModelGenerator()
