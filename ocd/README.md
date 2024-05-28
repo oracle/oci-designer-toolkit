@@ -32,14 +32,14 @@ regularly.
 | Boot Volumes                   | &check;    | &check;   |            | &check; | &check;    |
 | Boot Volumes Attachment        | &cross;    | &check;   |            | &check; | &check;    |
 | Customer Premises Equipment    | &check;    | &check;   |            | &check; |            |
-| Database System                |            |           |            |         |            |
+| Database System                | &check;    | &check;   |            | &check; |            |
 | Service Gateway                | &check;    | &check;   |            | &check; |            |
 | DRG                            | &check;    | &check;   |            | &check; |            |
 | DRG Attachment                 |            |           |            |         |            |
 | DRG Route Table                |            |           |            |         |            |
 | DRG Distribution               |            |           |            |         |            |
 | Local Peering                  | &check;    | &check;   |            | &check; |            |
-| IPSec VPN                      |            |           |            | &check; |            |
+| IPSec VPN                      | &check;    | &check;   |            | &check; |            |
 | Remote Peering                 |            |           |            |         |            |
 | NoSQL Database                 |            |           |            |         |            |
 | MySQL (with Heatwave)          |            |           |            |         |            |

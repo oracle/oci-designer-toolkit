@@ -4,7 +4,7 @@
 */
 
 import { OcdUtils } from "@ocd/core";
-import { OcdConditionalElements, OcdElementOverrides, OcdIgnoreElements } from "../types/OcdImporterData";
+import { OcdConditionalElements, OcdElementOverrides, OcdIgnoreElements, OcdIncludedElements } from "../types/OcdImporterData";
 import { OcdSchemaEntry } from "../types/OcdSchema";
 import { TerrafomSchemaEntry, TerraformSchema, TerraformSchemaDataMap, TerraformSchemaResourceMap } from "../types/TerraformSchema";
 import { OcdSchemaImporter } from "./OcdSchemaImporter";
@@ -15,12 +15,14 @@ export class OcdTerraformSchemaImporter extends OcdSchemaImporter {
     ignoreElements: OcdIgnoreElements
     elementOverrides: OcdElementOverrides
     conditionalElements: OcdConditionalElements
+    includedElements: OcdIncludedElements
 
-    constructor(ignoreElements: OcdIgnoreElements, elementOverrides: OcdElementOverrides, conditionalElements: OcdConditionalElements) {
+    constructor(ignoreElements: OcdIgnoreElements, elementOverrides: OcdElementOverrides, conditionalElements: OcdConditionalElements, includedElements: OcdIncludedElements) {
         super()
         this.ignoreElements = ignoreElements
         this.elementOverrides = elementOverrides
         this.conditionalElements = conditionalElements
+        this.includedElements = includedElements
     }
 
     convert(source_schema: TerraformSchema, resourceMap: TerraformSchemaResourceMap = {}, dataMap: TerraformSchemaDataMap = {}) {
@@ -64,6 +66,7 @@ export class OcdTerraformSchemaImporter extends OcdSchemaImporter {
     getAttributes(key: string, block: TerrafomSchemaEntry, hierarchy=[]) {
         const ignore_block_types = ['timeouts']
         const ignore_attributes = this.ignoreElements[key] ? [...this.ignoreElements.common, ...this.ignoreElements[key]] : this.ignoreElements.common
+        const includeAttributes = this.includedElements[key] ? [...this.includedElements.common, ...this.includedElements[key]] : this.includedElements.common
         const type_overrides = this.elementOverrides.types[key] ? {...this.elementOverrides.types.common, ...this.elementOverrides.types[key]} : this.elementOverrides.types.common
         const maps = {...this.elementOverrides.maps.common, ...this.elementOverrides.maps[key] !== undefined ? this.elementOverrides.maps[key] : {}}
         const defaults = {...this.elementOverrides.defaults.common, ...this.elementOverrides.defaults[key] !== undefined ? this.elementOverrides.defaults[key] : {}}
@@ -72,7 +75,8 @@ export class OcdTerraformSchemaImporter extends OcdSchemaImporter {
         // console.debug('OcdTerraformSchemaImporter: Resource', key, type_overrides)
         // Simple attributes
         // @ts-ignore
-        let attributes = block.attributes ? Object.entries(block.attributes).filter(([k, v]) => !ignore_attributes.includes(this.genId(k, hierarchy)) && !v.deprecated).reduce((r, [k, v]) => {
+        // let attributes = block.attributes ? Object.entries(block.attributes).filter(([k, v]) => !ignore_attributes.includes(this.genId(k, hierarchy)) && !v.deprecated).reduce((r, [k, v]) => {
+        let attributes = block.attributes ? Object.entries(block.attributes).filter(([k, v]) => includeAttributes.includes(this.genId(k, hierarchy)) && !v.deprecated).reduce((r, [k, v]) => {
             const id = this.genId(k, hierarchy)
             r[k] = {
                 provider: this.provider,
@@ -105,7 +109,8 @@ export class OcdTerraformSchemaImporter extends OcdSchemaImporter {
         }, {} as OcdSchemaEntry) : {}
         // Block / Object Attributes
         if (block.block_types) {
-            attributes = Object.entries(block.block_types).filter(([k, v]) => !ignore_attributes.includes(this.genId(k, hierarchy))).reduce((r, [k, v]) => {
+            // attributes = Object.entries(block.block_types).filter(([k, v]) => !ignore_attributes.includes(this.genId(k, hierarchy))).reduce((r, [k, v]) => {
+            attributes = Object.entries(block.block_types).filter(([k, v]) => includeAttributes.includes(this.genId(k, hierarchy))).reduce((r, [k, v]) => {
                 const id = [...hierarchy, k].join('.')
                 r[k] = {
                     provider: 'oci',

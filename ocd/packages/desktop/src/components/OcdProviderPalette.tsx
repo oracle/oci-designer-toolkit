@@ -3,7 +3,8 @@
 ** Licensed under the GNU GENERAL PUBLIC LICENSE v 3.0 as shown at https://www.gnu.org/licenses/.
 */
 
-import palette from '../json/palette.json'
+// import palette from '../json/palette.json'
+import { palette } from '../data/OcdPalette'
 import { PaletteGroup, PaletteResource } from '@ocd/model'
 import { DragData, Point } from '../types/DragData'
 import { PaletteProps } from '../types/ReactComponentProperties'
