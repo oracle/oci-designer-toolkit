@@ -7,7 +7,7 @@
 
 import fs from 'fs'
 import path from 'path'
-import { OcdMarkdownGenerator, OciModelGenerator, OcdPropertiesGenerator, OcdTabularGenerator, OciTerraformGenerator, OciTerraformSchemaImporter, OciValidatorGenerator } from '@ocd/codegen'
+import { OcdMarkdownGenerator, OciModelGenerator, OcdPropertiesGenerator, OcdTabularGenerator, OciTerraformGenerator, OciTerraformSchemaImporter, OciValidatorGenerator, OcdTerraformSchemaResourceAttributesGenerator } from '@ocd/codegen'
 import { AzureModelGenerator, AzureAzTerraformSchemaImporter, AzureValidatorGenerator } from '@ocd/codegen'
 import { parseArgs } from "node:util"
 
@@ -95,6 +95,7 @@ if (command.toLocaleLowerCase() === 'generate') {
         let importer = undefined
         if (subcommand.toLocaleLowerCase() === 'oci-terraform-schema') importer = new OciTerraformSchemaImporter()
         else if (subcommand.toLocaleLowerCase() === 'azureaz-terraform-schema') importer = new AzureAzTerraformSchemaImporter()
+        else if (subcommand.toLocaleLowerCase() === 'terraform-schema-resource-attributes') importer = new OcdTerraformSchemaResourceAttributesGenerator()
         if (importer !== undefined) {
             importer.convert(source_schema)
             fs.writeFileSync(output_filename, JSON.stringify(importer.ocd_schema, null, 2))

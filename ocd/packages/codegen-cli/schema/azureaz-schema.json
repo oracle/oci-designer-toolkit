@@ -123,6 +123,23 @@
         "conditional": false,
         "condition": {}
       },
+      "tags": {
+        "provider": "azure",
+        "key": "tags",
+        "name": "tags",
+        "type": "map",
+        "subtype": "string",
+        "required": false,
+        "label": "Tags",
+        "id": "tags",
+        "staticLookup": false,
+        "cacheLookup": false,
+        "lookup": false,
+        "lookupResource": "",
+        "lookupResourceElement": "",
+        "conditional": false,
+        "condition": {}
+      },
       "type": {
         "provider": "azure",
         "key": "type",
@@ -233,59 +250,7 @@
         "id": "timeouts",
         "conditional": false,
         "condition": {},
-        "attributes": {
-          "create": {
-            "provider": "azure",
-            "key": "create",
-            "name": "create",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Create",
-            "id": "timeouts.create",
-            "staticLookup": false,
-            "cacheLookup": false,
-            "lookup": false,
-            "lookupResource": "",
-            "lookupResourceElement": "",
-            "conditional": false,
-            "condition": {}
-          },
-          "delete": {
-            "provider": "azure",
-            "key": "delete",
-            "name": "delete",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Delete",
-            "id": "timeouts.delete",
-            "staticLookup": false,
-            "cacheLookup": false,
-            "lookup": false,
-            "lookupResource": "",
-            "lookupResourceElement": "",
-            "conditional": false,
-            "condition": {}
-          },
-          "read": {
-            "provider": "azure",
-            "key": "read",
-            "name": "read",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Read",
-            "id": "timeouts.read",
-            "staticLookup": false,
-            "cacheLookup": false,
-            "lookup": false,
-            "lookupResource": "",
-            "lookupResourceElement": "",
-            "conditional": false,
-            "condition": {}
-          }
-        }
+        "attributes": {}
       }
     }
   }
