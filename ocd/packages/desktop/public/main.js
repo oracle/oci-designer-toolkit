@@ -3,7 +3,7 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-const { app, dialog, BrowserWindow, ipcMain, screen, Menu } = require("electron")
+const { app, dialog, BrowserWindow, ipcMain, screen, Menu, shell } = require("electron")
 const path = require("path")
 const url = require("url")
 const fs = require("fs")
@@ -223,6 +223,8 @@ app.whenReady().then(() => {
 	// OCD Cache
 	ipcMain.handle('ocdCache:loadCache', handleLoadCache)
 	ipcMain.handle('ocdCache:saveCache', handleSaveCache)
+	// External URLs
+	ipcMain.handle('ocdExternal:openExternalUrl', handleOpenExternalUrl)
 	createWindow()
 	app.on('activate', function () {
 	  if (BrowserWindow.getAllWindows().length === 0) createWindow()
@@ -470,6 +472,18 @@ async function handleLoadCacheProfile(event, profile) {
 			if (!fs.existsSync(ocdCacheFilename)) reject('Cache does not exist')
 			const config = fs.readFileSync(ocdCacheFilename, 'utf-8')
 			resolve(JSON.parse(config))
+		} catch (err) {
+			reject(err)
+		}
+	})
+}
+
+async function handleOpenExternalUrl(event, href) {
+	console.debug('Electron Main: handleOpenExternalUrl')
+	return new Promise((resolve, reject) => {
+		try {
+			shell.openExternal(href)
+			resolve()
 		} catch (err) {
 			reject(err)
 		}

@@ -18,6 +18,7 @@ import svgThemeCss from '!!css-loader?{"sourceMap":false,"exportType":"string"}!
 // @ts-ignore
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import svgSvgCss from '!!css-loader?{"sourceMap":false,"exportType":"string"}!../css/ocd-svg.css'
+import { OcdExternalFacade } from '../facade/OcdExternalFacade'
 
 export interface MenuItem {
     label: string
@@ -525,6 +526,18 @@ export const menuItems = [
                     ocdConsoleConfig.config.displayPage = 'help'
                     ocdConsoleConfig.config.helpPage = 'userguide'
                     setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+                }
+            },
+            {
+                label: 'Web Site',
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
+                    OcdExternalFacade.openExternalUrl('https://github.com/oracle/oci-designer-toolkit').then((resp) => {console.warn('Open Succeeded with', resp)}).catch((resp) => {console.warn('Open Failed with', resp)})
+                }
+            },
+            {
+                label: 'Report Issue',
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
+                    OcdExternalFacade.openExternalUrl('https://github.com/oracle/oci-designer-toolkit/issues/new').then((resp) => {console.warn('Open Succeeded with', resp)}).catch((resp) => {console.warn('Open Failed with', resp)})
                 }
             },
         ]
