@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - 'nightly'
+      - 'master'
 
 env:
   CI: false
@@ -29,15 +30,15 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
-      - name: Update Nightly Release
+      - name: Update Release
         id: update_release
         run: |
-          gh release edit ${{ env.BRANCH_RELEASE_TAG }} --title "OCD Nightly Release" --notes-file ./ocd/README.md --target nightly --latest
-      - name: Create Nightly Release if Update fails
+          gh release edit ${{ env.BRANCH_RELEASE_TAG }} --title "OCD ${{ env.BRANCH_NAME }} Release" --notes-file ./ocd/releasenotes/${{ env.BRANCH_NAME }}/README.md --target ${{ env.BRANCH_NAME }} --latest
+      - name: Create Release if Update fails
         if: failure()
         id: create_release
         run: |
-          gh release create ${{ env.BRANCH_RELEASE_TAG }} --title "OCD Nightly Release" --notes-file ./ocd/README.md --target nightly --latest
+          gh release create ${{ env.BRANCH_RELEASE_TAG }} --title "OCD ${{ env.BRANCH_NAME }} Release" --notes-file ./ocd/releasenotes/${{ env.BRANCH_NAME }}/README.md --target ${{ env.BRANCH_NAME }} --latest
     
   build-and-release:
     needs: [update-or-create-release]
