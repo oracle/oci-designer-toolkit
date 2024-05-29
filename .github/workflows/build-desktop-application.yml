@@ -18,7 +18,16 @@ env:
   BRANCH_OCD_VERSION: 0.1.0-${{ github.head_ref || github.ref_name }}
 
 jobs:
+  generate-variables:
+    runs-on: ubuntu-latest
+    outputs:
+      ocd_version: ${{ steps.version.outputs.ocd_version }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: version
+        run: echo "ocd_version=$(jq -r '.version' ocd/package.json)"  >> "$GITHUB_OUTPUT"
   update-or-create-release: 
+    needs: [generate-variables]
     runs-on: ubuntu-latest
     continue-on-error: true
     strategy:
@@ -28,6 +37,8 @@ jobs:
       #   version: [latest]
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      BRANCH_OCD_VERSION: ${{ needs.generate-variables.outputs.ocd_version }}-${{ github.head_ref || github.ref_name }}
+      BRANCH_RELEASE_TAG: v${{ needs.generate-variables.outputs.ocd_version }}.ocd.${{ github.head_ref || github.ref_name }}
     steps:
       - uses: actions/checkout@v4
       - name: Update Release
@@ -41,7 +52,7 @@ jobs:
           gh release create ${{ env.BRANCH_RELEASE_TAG }} --title "OCD ${{ env.BRANCH_NAME }} Release" --notes-file ./ocd/releasenotes/${{ env.BRANCH_NAME }}/README.md --target ${{ env.BRANCH_NAME }} --latest
     
   build-and-release:
-    needs: [update-or-create-release]
+    needs: [update-or-create-release, generate-variables]
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -52,6 +63,8 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       DEBUG1: "electron-*"
+      BRANCH_OCD_VERSION: ${{ needs.generate-variables.outputs.ocd_version }}-${{ github.head_ref || github.ref_name }}
+      BRANCH_RELEASE_TAG: v${{ needs.generate-variables.outputs.ocd_version }}.ocd.${{ github.head_ref || github.ref_name }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
