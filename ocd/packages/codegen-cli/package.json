@@ -35,6 +35,8 @@
 
     "import": "npm run import-oci-terraform-schema && npm run import-azureaz-terraform-schema",
 
+    "generate-terraform-schema-resource-attributes": "node lib/esm/ocd-codegen.js import terraform-schema-resource-attributes -i ./schema/tf-schema.json -o ./schema/schema-resource-attributes.json",
+
     "generate-oci-markdown":       "node lib/esm/ocd-codegen.js generate oci-markdown-js   -s ./schema/oci-schema.json -d ../export/src/markdown/provider/oci",
     "generate-oci-model":          "node lib/esm/ocd-codegen.js generate oci-model-js      -s ./schema/oci-schema.json -d ../model/src/provider/oci",
     "generate-oci-properties":     "node lib/esm/ocd-codegen.js generate oci-properties-js -s ./schema/oci-schema.json -d ../desktop/src/components/properties/provider/oci",

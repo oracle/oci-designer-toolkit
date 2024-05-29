@@ -1,7 +1,7 @@
 {
   "name": "@ocd/desktop",
   "productName": "ocd",
-  "version": "0.1.0-alpha",
+  "version": "0.1.0",
   "description": "OKIT Open Cloud Designer Desktop",
   "title": "OKIT Open Cloud Designer Desktop",
   "author": {
@@ -68,7 +68,7 @@
   },
   "build": {
     "appId": "com.oracle.okit-ocd",
-    "artifactName": "${productName}-${version}-${arch}.${ext}",
+    "artifactName": "${productName}-${version}-${env.BRANCH_NAME}-${arch}.${ext}",
     "files": [
       "build/**/*",
       "node_modules/**/*"

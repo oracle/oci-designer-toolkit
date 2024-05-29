@@ -16,4 +16,6 @@ export { OcdCodeGenerator } from "./generator/OcdCodeGenerator"
 export { OcdPropertiesGenerator } from "./generator/OcdPropertiesGenerator"
 export { OcdMarkdownGenerator } from "./generator/OcdMarkdownGenerator"
 export { OcdTabularGenerator } from "./generator/OcdTabularPageGenerator"
+
 export { OcdBuildDateGenerator } from "./generator/OcdBuildDateGenerator"
+export { OcdTerraformSchemaResourceAttributesGenerator } from "./importer/OcdTerraformSchemaResourceAttributesGenerator"

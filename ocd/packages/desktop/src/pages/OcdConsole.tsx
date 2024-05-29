@@ -23,6 +23,7 @@ import { loadDesign } from '../components/Menu'
 import { OcdValidationResult, OcdValidator } from '@ocd/model'
 import OcdValidation from './OcdValidation'
 import { buildDetails } from '../data/OcdBuildDetails'
+import OcdHelp from './OcdHelp'
 
 // Import css as text
 // @ts-ignore
@@ -274,6 +275,7 @@ const OcdConsoleBody = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, se
                         ocdConsoleConfig.config.displayPage === 'terraform' ? OcdTerraform : 
                         ocdConsoleConfig.config.displayPage === 'variables' ? OcdVariables : 
                         ocdConsoleConfig.config.displayPage === 'validation' ? OcdValidation : 
+                        ocdConsoleConfig.config.displayPage === 'help' ? OcdHelp : 
                         OcdDesigner
     // console.debug('OcdConsole: Show Query Dialog', showQueryDialog)
     return (

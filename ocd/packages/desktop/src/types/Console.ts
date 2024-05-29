@@ -44,3 +44,7 @@ export interface LayerBarLayerProps extends LayerBarLayersProps {
 }
 
 export interface LayerBarMenuProps extends LayerBarLayersProps {}
+
+export interface HelpPageProps {
+    helpText: string
+}
