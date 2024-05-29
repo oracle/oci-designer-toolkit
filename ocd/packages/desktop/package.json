@@ -115,7 +115,7 @@
     },
     "linux": {
       "icon": "build/assets/icon.png",
-      "executableName": "${productName}-${version}.${ext}",
+      "executableName": "${productName}-${version}-${env.BRANCH_NAME}.${ext}",
       "target": [
         "AppImage",
         "snap"
@@ -180,7 +180,7 @@
     "preelectron-release-pack": "npm run build",
     "electron-release-pack": "electron-builder build --x64 --macos --win --linux -c.extraMetadata.main=build/main.js",
     "electron-pack": "electron-builder build -c.extraMetadata.main=build/main.js",
-    "build": "npm run build-react-scripts && npm run electron-pack",
+    "build": "npm run build-react-scripts && BRANCH_NAME='local' npm run electron-pack",
     "desktop": "npm run build-react-scripts && electron-forge start",
     "web": "npm run start"
   },
