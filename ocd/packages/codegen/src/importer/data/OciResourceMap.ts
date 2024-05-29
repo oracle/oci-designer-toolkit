@@ -528,7 +528,6 @@ export const resourceAttributes: OcdIncludedElements = {
         "is_auto_scaling_for_storage_enabled",
         "is_data_guard_enabled",
         "is_dedicated",
-        "is_dev_tier",
         "is_free_tier",
         "is_local_data_guard_enabled",
         "is_mtls_connection_required",

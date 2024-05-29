@@ -506,6 +506,28 @@ export const menuItems = [
                 }
             }
         ]
+    },
+    {
+        label: 'Help',
+        click: undefined,
+        submenu: [
+            {
+                label: 'Release Notes',
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
+                    ocdConsoleConfig.config.displayPage = 'help'
+                    ocdConsoleConfig.config.helpPage = 'releasenotes'
+                    setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+                }
+            },
+            {
+                label: 'User Guide',
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
+                    ocdConsoleConfig.config.displayPage = 'help'
+                    ocdConsoleConfig.config.helpPage = 'userguide'
+                    setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+                }
+            },
+        ]
     }
 ]
 
