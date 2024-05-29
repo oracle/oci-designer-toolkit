@@ -25,7 +25,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - id: version
-        run: echo "ocd_version=$(jq -r '.version' ocd/package.json)"  >> "$GITHUB_OUTPUT"
+        run: echo "ocd_version=$(jq -r '.version' ocd/packages/desktop/package.json)"  >> "$GITHUB_OUTPUT"
   update-or-create-release: 
     needs: [generate-variables]
     runs-on: ubuntu-latest
