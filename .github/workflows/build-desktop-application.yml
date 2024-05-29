@@ -29,15 +29,15 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
-      - name: Update Alpha Release
+      - name: Update Nightly Release
         id: update_release
         run: |
-          gh release edit ${{ env.RELEASE_TAG }} --title "OCD Alpha Nightly Release" --notes-file ./ocd/README.md --target nightly --latest --prerelease
-      - name: Create Alpha Release if Update fails
+          gh release edit ${{ env.BRANCH_RELEASE_TAG }} --title "OCD Nightly Release" --notes-file ./ocd/README.md --target nightly --latest
+      - name: Create Nightly Release if Update fails
         if: failure()
         id: create_release
         run: |
-          gh release create ${{ env.RELEASE_TAG }} --title "OCD Alpha Nightly Release" --notes-file ./ocd/README.md --target nightly --latest --prerelease
+          gh release create ${{ env.BRANCH_RELEASE_TAG }} --title "OCD Nightly Release" --notes-file ./ocd/README.md --target nightly --latest
     
   build-and-release:
     needs: [update-or-create-release]
@@ -73,15 +73,15 @@ jobs:
       - name: Upload Mac Artifact to Release
         if: matrix.os == 'macos-latest'
         run: |
-          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/mac/ocd-${{ env.OCD_VERSION }}-*.dmg --clobber
+          gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/mac/ocd-${{ env.BRANCH_OCD_VERSION }}-*.dmg --clobber
       - name: Upload Windows Artifact to Release
         if: matrix.os == 'windows-latest'
         run: |
-          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/win/ocd-${{ env.OCD_VERSION }}-x64.exe --clobber
+          gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/win/ocd-${{ env.BRANCH_OCD_VERSION }}-x64.exe --clobber
       - name: Upload Linux Artifact to Release
         if: matrix.os == 'ubuntu-latest'
         run: |
-          # gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}.rpm --clobber
-          # gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}.deb --clobber
-          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}-*.snap --clobber
-          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}-*.AppImage --clobber
+          # gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.BRANCH_OCD_VERSION }}.rpm --clobber
+          # gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.BRANCH_OCD_VERSION }}.deb --clobber
+          gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.BRANCH_OCD_VERSION }}-*.snap --clobber
+          gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.BRANCH_OCD_VERSION }}-*.AppImage --clobber
