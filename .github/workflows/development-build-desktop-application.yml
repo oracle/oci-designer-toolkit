@@ -1,9 +1,9 @@
-name: Build/Release
+name: Development Build/Release
 
 on: 
   push:
     branches:
-      - 'master'
+      - 'nightly'
 
 env:
   CI: false
