@@ -7,14 +7,7 @@ on:
 
 env:
   CI: false
-  OCD_VERSION: 0.1.0-alpha
-  RELEASE_TAG: v0.1.0-alpha.ocd.nightly
-  MAC_ARTEFACT: ocd-mac
-  WIN_ARTEFACT: ocd-win
-  RELEASE_ARTEFACTS_DIR: ./release-artefacts
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }} 
-  BRANCH_RELEASE_TAG: v0.1.0.ocd.${{ github.head_ref || github.ref_name }}
-  BRANCH_OCD_VERSION: 0.1.0-${{ github.head_ref || github.ref_name }}
 
 jobs:
   generate-variables:
@@ -31,9 +24,6 @@ jobs:
     continue-on-error: true
     strategy:
       fail-fast: false
-      # matrix:
-      #   os: [macos-latest]
-      #   version: [latest]
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       BRANCH_OCD_VERSION: ${{ needs.generate-variables.outputs.ocd_version }}-${{ github.head_ref || github.ref_name }}
