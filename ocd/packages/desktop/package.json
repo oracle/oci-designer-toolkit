@@ -1,7 +1,7 @@
 {
   "name": "@ocd/desktop",
   "productName": "ocd",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "OKIT Open Cloud Designer Desktop",
   "title": "OKIT Open Cloud Designer Desktop",
   "author": {
@@ -123,11 +123,11 @@
     }
   },
   "dependencies": {
-    "@ocd/core": "^1.0.0",
-    "@ocd/export": "^1.0.0",
-    "@ocd/import": "^1.0.0",
-    "@ocd/model": "^1.0.0",
-    "@ocd/query": "^1.0.0",
+    "@ocd/core": "^0.2.0",
+    "@ocd/export": "^0.2.0",
+    "@ocd/import": "^0.2.0",
+    "@ocd/model": "^0.2.0",
+    "@ocd/query": "^0.2.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -180,7 +180,7 @@
     "preelectron-release-pack": "npm run build",
     "electron-release-pack": "electron-builder build --x64 --macos --win --linux -c.extraMetadata.main=build/main.js",
     "electron-pack": "electron-builder build -c.extraMetadata.main=build/main.js",
-    "build": "npm run build-react-scripts && BRANCH_NAME='-local' npm run electron-pack",
+    "build": "npm run build-react-scripts && BRANCH_NAME='' npm run electron-pack",
     "desktop": "npm run build-react-scripts && electron-forge start",
     "web": "npm run start"
   },

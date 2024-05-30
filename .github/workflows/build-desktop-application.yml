@@ -55,7 +55,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       RELEASE_TAG: ${{ needs.generate-variables.outputs.okit_release_tag }}
-      BRANCH_OCD_VERSION: ${{ needs.generate-variables.outputs.ocd_version }}-${{ github.head_ref || github.ref_name }}
+      OCD_VERSION: ${{ needs.generate-variables.outputs.ocd_version }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
