@@ -1,7 +1,9 @@
 name: Build/Release
 
 on: 
-  push:
+  pull_request:
+    types:
+      - closed
     branches:
       - 'master'
 
@@ -12,6 +14,7 @@ env:
 
 jobs:
   generate-variables:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     outputs:
       ocd_version: ${{ steps.version.outputs.ocd_version }}
@@ -28,6 +31,7 @@ jobs:
           echo "okit_release_title=$(jq -r '.title' okitweb/static/okit/json/release.json)"  >> "$GITHUB_OUTPUT"
   create-release: 
     needs: [generate-variables]
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     continue-on-error: true
     strategy:
@@ -45,6 +49,7 @@ jobs:
     
   build-and-release:
     needs: [create-release, generate-variables]
+    if: github.event.pull_request.merged == true
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
