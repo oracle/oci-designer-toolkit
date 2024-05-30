@@ -14,11 +14,14 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       ocd_version: ${{ steps.version.outputs.ocd_version }}
+      okit_version: ${{ steps.version.outputs.okit_version }}
     steps:
       - uses: actions/checkout@v4
       - id: version
-        run: echo "ocd_version=$(jq -r '.version' ocd/packages/desktop/package.json)"  >> "$GITHUB_OUTPUT"
-  update-or-create-release: 
+        run: |
+          echo "ocd_version=$(jq -r '.version' ocd/packages/desktop/package.json)"  >> "$GITHUB_OUTPUT"
+          echo "okit_version=$(jq -r '.version' package.json)"  >> "$GITHUB_OUTPUT"
+  create-release: 
     needs: [generate-variables]
     runs-on: ubuntu-latest
     continue-on-error: true
@@ -28,20 +31,16 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       BRANCH_OCD_VERSION: ${{ needs.generate-variables.outputs.ocd_version }}-${{ github.head_ref || github.ref_name }}
       BRANCH_RELEASE_TAG: v${{ needs.generate-variables.outputs.ocd_version }}.ocd.${{ github.head_ref || github.ref_name }}
+      RELEASE_TAG: v${{ needs.generate-variables.outputs.okit_version }}.ocd.${{ github.head_ref || github.ref_name }}
     steps:
       - uses: actions/checkout@v4
-      - name: Update Release
-        id: update_release
-        run: |
-          gh release edit ${{ env.BRANCH_RELEASE_TAG }} --title "OCD ${{ env.BRANCH_NAME }} Release" --notes-file ./ocd/releasenotes/${{ env.BRANCH_NAME }}/README.md --target ${{ env.BRANCH_NAME }} --latest
-      - name: Create Release if Update fails
-        if: failure()
+      - name: Create Release 
         id: create_release
         run: |
           gh release create ${{ env.BRANCH_RELEASE_TAG }} --title "OCD ${{ env.BRANCH_NAME }} Release" --notes-file ./ocd/releasenotes/${{ env.BRANCH_NAME }}/README.md --target ${{ env.BRANCH_NAME }} --latest
     
   build-and-release:
-    needs: [update-or-create-release, generate-variables]
+    needs: [create-release, generate-variables]
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
