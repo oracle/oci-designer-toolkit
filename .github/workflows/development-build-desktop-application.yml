@@ -21,10 +21,13 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       ocd_version: ${{ steps.version.outputs.ocd_version }}
+      okit_version: ${{ steps.version.outputs.okit_version }}
     steps:
       - uses: actions/checkout@v4
       - id: version
-        run: echo "ocd_version=$(jq -r '.version' ocd/packages/desktop/package.json)"  >> "$GITHUB_OUTPUT"
+        run: |
+          echo "ocd_version=$(jq -r '.version' ocd/packages/desktop/package.json)"  >> "$GITHUB_OUTPUT"
+          echo "okit_version=$(jq -r '.version' package.json)"  >> "$GITHUB_OUTPUT"
   update-or-create-release: 
     needs: [generate-variables]
     runs-on: ubuntu-latest
