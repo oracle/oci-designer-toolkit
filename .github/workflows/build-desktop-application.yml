@@ -7,20 +7,25 @@ on:
 
 env:
   CI: false
-  BRANCH_NAME: ${{ github.head_ref || github.ref_name }} 
+  BRANCH: ${{ github.head_ref || github.ref_name }} 
+  BRANCH_NAME: '' 
 
 jobs:
   generate-variables:
     runs-on: ubuntu-latest
     outputs:
       ocd_version: ${{ steps.version.outputs.ocd_version }}
-      okit_version: ${{ steps.version.outputs.okit_version }}
+      okit_release_version: ${{ steps.version.outputs.okit_release_version }}
+      okit_release_tag: ${{ steps.version.outputs.okit_release_tag }}
+      okit_release_title: ${{ steps.version.outputs.okit_release_title }}
     steps:
       - uses: actions/checkout@v4
       - id: version
         run: |
           echo "ocd_version=$(jq -r '.version' ocd/packages/desktop/package.json)"  >> "$GITHUB_OUTPUT"
-          echo "okit_version=$(jq -r '.version' package.json)"  >> "$GITHUB_OUTPUT"
+          echo "okit_release_version=$(jq -r '.release' okitweb/static/okit/json/release.json)"  >> "$GITHUB_OUTPUT"
+          echo "okit_release_tag=$(jq -r '.tag' okitweb/static/okit/json/release.json)"  >> "$GITHUB_OUTPUT"
+          echo "okit_release_title=$(jq -r '.title' okitweb/static/okit/json/release.json)"  >> "$GITHUB_OUTPUT"
   create-release: 
     needs: [generate-variables]
     runs-on: ubuntu-latest
@@ -29,15 +34,14 @@ jobs:
       fail-fast: false
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      BRANCH_OCD_VERSION: ${{ needs.generate-variables.outputs.ocd_version }}-${{ github.head_ref || github.ref_name }}
-      BRANCH_RELEASE_TAG: v${{ needs.generate-variables.outputs.ocd_version }}.ocd.${{ github.head_ref || github.ref_name }}
-      RELEASE_TAG: v${{ needs.generate-variables.outputs.okit_version }}.ocd.${{ github.head_ref || github.ref_name }}
+      RELEASE_TAG: ${{ needs.generate-variables.outputs.okit_release_tag }}
+      RELEASE_TITLE: ${{ needs.generate-variables.outputs.okit_release_title }}
     steps:
       - uses: actions/checkout@v4
       - name: Create Release 
         id: create_release
         run: |
-          gh release create ${{ env.BRANCH_RELEASE_TAG }} --title "OCD ${{ env.BRANCH_NAME }} Release" --notes-file ./ocd/releasenotes/${{ env.BRANCH_NAME }}/README.md --target ${{ env.BRANCH_NAME }} --latest
+          gh release create ${{ env.RELEASE_TAG }} --title "${{ env.RELEASE_TITLE }}" --notes-file ./RELEASE_NOTES.md --target master --latest
     
   build-and-release:
     needs: [create-release, generate-variables]
@@ -50,9 +54,8 @@ jobs:
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      DEBUG1: "electron-*"
+      RELEASE_TAG: ${{ needs.generate-variables.outputs.okit_release_tag }}
       BRANCH_OCD_VERSION: ${{ needs.generate-variables.outputs.ocd_version }}-${{ github.head_ref || github.ref_name }}
-      BRANCH_RELEASE_TAG: v${{ needs.generate-variables.outputs.ocd_version }}.ocd.${{ github.head_ref || github.ref_name }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -75,15 +78,15 @@ jobs:
       - name: Upload Mac Artifact to Release
         if: matrix.os == 'macos-latest'
         run: |
-          gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/mac/ocd-${{ env.BRANCH_OCD_VERSION }}-*.dmg --clobber
+          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/mac/ocd-${{ env.BRANCH_OCD_VERSION }}-*.dmg --clobber
       - name: Upload Windows Artifact to Release
         if: matrix.os == 'windows-latest'
         run: |
-          gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/win/ocd-${{ env.BRANCH_OCD_VERSION }}-x64.exe --clobber
+          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/win/ocd-${{ env.BRANCH_OCD_VERSION }}-x64.exe --clobber
       - name: Upload Linux Artifact to Release
         if: matrix.os == 'ubuntu-latest'
         run: |
-          # gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.BRANCH_OCD_VERSION }}.rpm --clobber
-          # gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.BRANCH_OCD_VERSION }}.deb --clobber
-          gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.BRANCH_OCD_VERSION }}-*.snap --clobber
-          gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.BRANCH_OCD_VERSION }}-*.AppImage --clobber
+          # gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.BRANCH_OCD_VERSION }}.rpm --clobber
+          # gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.BRANCH_OCD_VERSION }}.deb --clobber
+          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.BRANCH_OCD_VERSION }}-*.snap --clobber
+          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.BRANCH_OCD_VERSION }}-*.AppImage --clobber

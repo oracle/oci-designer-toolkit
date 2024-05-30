@@ -12,7 +12,8 @@ env:
   MAC_ARTEFACT: ocd-mac
   WIN_ARTEFACT: ocd-win
   RELEASE_ARTEFACTS_DIR: ./release-artefacts
-  BRANCH_NAME: ${{ github.head_ref || github.ref_name }} 
+  BRANCH: ${{ github.head_ref || github.ref_name }} 
+  BRANCH_NAME: -${{ github.head_ref || github.ref_name }} 
   BRANCH_RELEASE_TAG: v0.1.0.ocd.${{ github.head_ref || github.ref_name }}
   BRANCH_OCD_VERSION: 0.1.0-${{ github.head_ref || github.ref_name }}
 
@@ -48,12 +49,12 @@ jobs:
       - name: Update Release
         id: update_release
         run: |
-          gh release edit ${{ env.BRANCH_RELEASE_TAG }} --title "OCD ${{ env.BRANCH_NAME }} Release" --notes-file ./ocd/releasenotes/${{ env.BRANCH_NAME }}/README.md --target ${{ env.BRANCH_NAME }} --latest
+          gh release edit ${{ env.BRANCH_RELEASE_TAG }} --title "OCD ${{ env.BRANCH }} Release" --notes-file ./ocd/releasenotes/${{ env.BRANCH }}/README.md --target ${{ env.BRANCH }} --latest
       - name: Create Release if Update fails
         if: failure()
         id: create_release
         run: |
-          gh release create ${{ env.BRANCH_RELEASE_TAG }} --title "OCD ${{ env.BRANCH_NAME }} Release" --notes-file ./ocd/releasenotes/${{ env.BRANCH_NAME }}/README.md --target ${{ env.BRANCH_NAME }} --latest
+          gh release create ${{ env.BRANCH_RELEASE_TAG }} --title "OCD ${{ env.BRANCH }} Release" --notes-file ./ocd/releasenotes/${{ env.BRANCH }}/README.md --target ${{ env.BRANCH }} --latest
     
   build-and-release:
     needs: [update-or-create-release, generate-variables]
