@@ -1,8 +1,8 @@
 {
   "name": "@ocd/codegen-cli",
-  "version": "1.0.0",
-  "description": "OKIT Open Cloud Designer Command-line",
-  "title": "OKIT Open Cloud Designer DeskCommand-linetop",
+  "version": "0.2.0",
+  "description": "OKIT Open Cloud DesignerCodegen Command-line",
+  "title": "OKIT Open Cloud Designer Codegen Command-linetop",
   "author": {
     "name": "Andrew Hopkinson",
     "email": "andrew.hopkinson@oracle.com",
@@ -61,6 +61,6 @@
     "import-and-generate": "npm run import-and-generate-oci && npm run import-and-generate-azureaz"
   },
   "dependencies": {
-    "@ocd/codegen": "^1.0.0"
+    "@ocd/codegen": "^0.2.0"
   }
 }

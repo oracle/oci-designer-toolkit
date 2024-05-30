@@ -1,5 +1,5 @@
 ```diff
-- BETA Code: This is experimental and work in progress. Therefore does not provide all the functionality in OKIT.
+- Beta Code: This is experimental and work in progress. Therefore does not provide all the functionality in OKIT.
 ```
 
 # Getting Started OKIT Open Cloud Designer

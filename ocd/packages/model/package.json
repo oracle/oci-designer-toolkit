@@ -1,6 +1,6 @@
 {
   "name": "@ocd/model",
-  "version": "1.0.0",
+  "version": "0.2.0",
   "description": "OKIT Open Cloud Designer Model Definition Module",
   "title": "OKIT Open Cloud Designer Model Definition Module",
   "author": {
@@ -26,6 +26,6 @@
     "build": "npm run compile && npm run pack"
   },
   "dependencies": {
-    "@ocd/core": "^1.0.0"
+    "@ocd/core": "^0.2.0"
   }
 }
