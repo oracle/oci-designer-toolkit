@@ -36,6 +36,13 @@ export const elementOverrides: OcdElementOverrides = {
             "db_workload": "OLTP",
             "is_auto_scaling_enabled": true
         },
+        "oci_database_db_system": {
+            "cpu_core_count": 1,
+            "database_edition": "STANDARD_EDITION",
+            "data_storage_percentage": 80,
+            "data_storage_size_in_gb": 256,
+            "node_count": 1
+        },
         "oci_load_balancer_load_balancer": {
             "shape": "flexible",
             "ip_mode": "IPV4"
@@ -82,11 +89,40 @@ export const elementOverrides: OcdElementOverrides = {
         "oci_core_volume": {
             "vpus_per_gb": "VPUs/Gbs"
         },
+        "oci_database_db_system": {
+            "data_storage_percentage": "Storage Percentage",
+            "data_storage_size_in_gb": "Storage (Gbs)",
+            "memory_size_in_gbs": "Memory (Gbs)",
+            "db_home.db_version": "Version",
+            "db_home.database.db_domain": "DB Domain",
+            "db_home.database.db_name": "DB Name",
+            "db_home.database.db_unique_name": "Unique Name",
+            "db_home.database.pdb_name": "PDB Name"
+        },
         "oci_file_storage_file_system": {
             "filesystem_snapshot_policy_id": "Snapshot Policy"
         },
         "oci_load_balancer_listener": {
             "default_backend_set_name": "Backend Set"
+        }
+    },
+    "required": {
+        "common": {},
+        "oci_core_security_list": {
+            "egress_security_rules.tcp_options.source_port_range.min": false,
+            "egress_security_rules.tcp_options.source_port_range.max": false,
+            "egress_security_rules.udp_options.source_port_range.min": false,
+            "egress_security_rules.udp_options.source_port_range.max": false,
+            "ingress_security_rules.tcp_options.source_port_range.min": false,
+            "ingress_security_rules.tcp_options.source_port_range.max": false,
+            "ingress_security_rules.udp_options.source_port_range.min": false,
+            "ingress_security_rules.udp_options.source_port_range.max": false,
+        },
+        "oci_database_db_system": {
+            "db_home.database.db_name": true
+        },
+        "oci_load_balancer_backend": {
+            "ip_address": false
         }
     },
     "lookupOverrides": {
@@ -126,6 +162,10 @@ export const elementOverrides: OcdElementOverrides = {
         },
         "oci_database_autonomous_database": {
             "db_version": "autonomousDbVersions"
+        },
+        "oci_database_db_system": {
+            "shape": "dbSystemShapes",
+            "db_home.db_version": "dbVersions",
         },
         "oci_file_storage_file_system": {
             "filesystem_snapshot_policy_id": "snapshotPolicies"
@@ -175,6 +215,9 @@ export const elementOverrides: OcdElementOverrides = {
             "database_edition",
             "db_workload"
         ],
+        "oci_database_db_system": [
+            "database_edition"
+        ],
         "oci_kms_key": [
             "key_shape.algorithm",
             "key_shape.length"
@@ -205,6 +248,9 @@ export const elementOverrides: OcdElementOverrides = {
         },
         "oci_database_autonomous_database": {
             "whitelisted_ips": ["list", "string"]
+        },
+        "oci_database_db_system": {
+            "ssh_public_keys": ["list", "string"]
         },
         "oci_load_balancer_listener": {
             "hostname_names": ["list", "string"]

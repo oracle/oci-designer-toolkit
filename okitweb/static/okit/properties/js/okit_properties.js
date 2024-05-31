@@ -96,6 +96,7 @@ class OkitResourceProperties {
     // Build Sheet
     build() {
         if (this.resource) {
+            console.debug('OkitResourceProperties: Building Propereties for', this.resource.getArtifactReference())
             this.buildBaseSheet()
             this.buildCore()
             this.buildResource()

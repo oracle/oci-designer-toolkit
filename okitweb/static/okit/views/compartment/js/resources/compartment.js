@@ -91,7 +91,7 @@ class CompartmentView extends OkitContainerCompartmentArtefactView {
         return [Policy.getArtifactReference(), Vault.getArtifactReference(), Bastion.getArtifactReference(), 
             BlockStorageVolume.getArtifactReference(), FileSystem.getArtifactReference(), DnsZone.getArtifactReference(), 
             OkeCluster.getArtifactReference(), DataScienceProject.getArtifactReference(),
-            InstanceConfiguration.getArtifactReference(), AutoscalingConfiguration.getArtifactReference()];
+            InstanceConfiguration.getArtifactReference(), AutoscalingConfiguration.getArtifactReference(), DynamicGroup.getArtifactReference()];
     }
 
     getRightArtifacts() {

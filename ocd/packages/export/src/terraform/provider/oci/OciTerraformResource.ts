@@ -19,6 +19,8 @@ export class OciTerraformResource extends OcdTerraformResource {
     isHomeRegion: boolean
     simpleCacheAttributes = [
         'autonomousDbVersions', 
+        'dbSystemShapes',
+        'dbVersions',
         'loadbalancerShapes', 
         'listLoadbalancerProtocols',
         'shapes'
@@ -72,6 +74,8 @@ export class OciTerraformResource extends OcdTerraformResource {
     // Metadata / Cache - Dropdown Data Generation
     // Simple Text Replace Reference
     retrieveAutonomousDbVersionId = (): string => '' // Simple Text Replace Reference
+    retrieveDbSystemShapeId = (): string => '' // Simple Text Replace Reference
+    retrieveDbVersionId = (): string => '' // Simple Text Replace Reference
     retrieveListLoadbalancerProtocolId = (): string => '' // Simple Text Replace Reference
     retrieveLoadbalancerShapeId = (): string => '' // Simple Text Replace Reference
     retrieveRegionId = (): string => '' // Simple Text Replace Reference

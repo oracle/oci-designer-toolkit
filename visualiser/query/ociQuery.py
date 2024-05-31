@@ -50,6 +50,7 @@ class OCIQuery(OCIConnection):
         "Cpe",
         "CustomerDnsZone",
         "Database",
+        "DynamicResourceGroup",
         "DataScienceNotebookSession",
         "DataScienceProject",
         "DbHome",
@@ -136,6 +137,7 @@ class OCIQuery(OCIConnection):
         # "Drg": "dynamic_routing_gateways",
         "Drg": "drgs",
         "DrgAttachment": "drg_attachments",
+        "DynamicResourceGroup": "dynamic_groups",
         "ExadataInfrastructure": "exadata_infrastructures",
         "FileSystem": "file_systems",
         "Group": "groups",
@@ -226,8 +228,8 @@ class OCIQuery(OCIConnection):
         # # simple hack to convert to json
         # return str(results).replace("'",'"')
         # more robust hack to convert to json
-        json_str = re.sub("'([0-9a-zA-Z-\.]*)':", '"\g<1>":', str(data))
-        json_str = re.sub("'([0-9a-zA-Z-_\.]*)': '([0-9a-zA-Z-_\.]*)'", '"\g<1>": "\g<2>"', json_str)
+        json_str = re.sub("'([0-9a-zA-Z-\\.]*)':", '"\\g<1>":', str(data))
+        json_str = re.sub("'([0-9a-zA-Z-_\\.]*)': '([0-9a-zA-Z-_\\.]*)'", '"\\g<1>": "\\g<2>"', json_str)
         #return json.dumps(json.loads(json_str), indent=2)
         return json.loads(json_str)
 

@@ -27,6 +27,8 @@ export interface OcdElectronAPI {
 	// OCD Cache
     loadCache: () => Promise<void>
     saveCache: (cache: OcdCache) => Promise<void>
+    // External URLs
+    openExternalUrl: (href: string) => Promise<void>
 }
   
 declare global {

@@ -122,6 +122,10 @@ export interface OciResources {
     [key: string]: any[]
 }
 
+export interface AzureResources {
+    [key: string]: any[]
+}
+
 export interface OcdBaseModel {
     vars: OcdVariable[]
     resources: OcdResources
@@ -162,7 +166,7 @@ export namespace OcdDesign {
                 ocdSchemaVersion: schemaVersion,
                 ocdModelId: `ocd-model-${uuidv4()}`,
                 platform: 'oci',
-                title: 'Open Cloud Architecture',
+                title: 'Untitled - Open Cloud Design',
                 documentation: '',
                 created: `${date} ${time}`,
                 updated: ''

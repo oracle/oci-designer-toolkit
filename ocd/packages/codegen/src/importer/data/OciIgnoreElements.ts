@@ -62,6 +62,7 @@ export const ignoreElements: OcdIgnoreElements = {
         "is_cross_numa_node",
         "launch_mode",
         "launch_options",
+        "launch_volume_attachments",
         "platform_config",
         "plugins_config",
         "preemptible_instance_config",
@@ -116,6 +117,7 @@ export const ignoreElements: OcdIgnoreElements = {
     ],
     "oci_core_subnet": [
         "ipv6virtual_router_ip",
+        "prohibit_internet_ingress",
         "subnet_domain_name",
         "virtual_router_ip",
         "virtual_router_mac"
@@ -160,6 +162,8 @@ export const ignoreElements: OcdIgnoreElements = {
         "actual_used_data_storage_size_in_tbs",
         "allocated_storage_size_in_tbs",
         "are_primary_whitelisted_ips_used",
+        "auto_refresh_frequency_in_seconds",
+        "auto_refresh_point_lag_in_seconds",
         "autonomous_container_database_id",
         "autonomous_database_backup_id",
         "autonomous_database_id",
@@ -179,6 +183,7 @@ export const ignoreElements: OcdIgnoreElements = {
         "dataguard_region_type",
         "data_safe_status",
         "data_storage_size_in_gb",
+        "db_tools_details",
         "disaster_recovery_region_type",
         "failed_data_recovery_in_seconds",
         "infrastructure_type",
@@ -214,6 +219,7 @@ export const ignoreElements: OcdIgnoreElements = {
         "refreshable_status",
         "remote_disaster_recovery_configuration",
         "remote_disaster_recovery_type",
+        "resource_pool_summary",
         "role",
         "rotate_key_trigger",
         "source_id",
@@ -244,11 +250,30 @@ export const ignoreElements: OcdIgnoreElements = {
         "scheduled_operations"
     ],
     "oci_database_db_system": [
+        "backup_network_nsg_ids",
+        "backup_subnet_id",
+
+        "db_home.database.backup_id",
+        "db_home.database.backup_tde_password",
+        "db_home.database.character_set",
         "db_home.database.connection_strings",
+        "db_home.database.database_id",
         "db_home.database.db_backup_config",
+        "db_home.database.db_unique_name",
+        "db_home.database.db_workload",
+        "db_home.database.defined_tags",
+        "db_home.database.freeform_tags",
+        "db_home.database.id",
+        "db_home.database.kms_key_version_id",
+        "db_home.database.ncharacter_set",
         "db_home.database.lifecycle_details",
+        "db_home.database.software_image_id",
         "db_home.database.state",
         "db_home.database.time_created",
+        "db_home.database.time_stamp_for_point_in_time_recovery",
+
+        "db_home.create_async",
+        "db_home.db_home_location",
         "db_home.defined_tags",
         "db_home.freeform_tags",
         "db_home.id",
@@ -256,17 +281,8 @@ export const ignoreElements: OcdIgnoreElements = {
         "db_home.lifecycle_details",
         "db_home.state",
         "db_home.time_created",
-        "db_home.database.backup_id",
-        "db_home.database.backup_tde_password",
-        "db_home.database.character_set",
-        "db_home.database.db_backup_config",
-        "db_home.database.database_id",
-        "db_home.database.defined_tags",
-        "db_home.database.freeform_tags",
-        "db_home.database.id",
-        "db_home.database.kms_key_version_id",
-        "db_home.database.ncharacter_set",
-        "db_home.database.time_stamp_for_point_in_time_recovery",
+
+        "db_system_options",
         "disk_redundancy",
         "iorm_config_cache",
         "kms_key_version_id",
@@ -275,9 +291,10 @@ export const ignoreElements: OcdIgnoreElements = {
         "listener_port",
         "maintenance_window",
         "maintenance_window_details",
+        "memory_size_in_gbs",
         "next_maintenance_run_id",
-        "node_count",
         "os_version",
+        "private_ip",
         "point_in_time_data_disk_clone_timestamp",
         "reco_storage_size_in_gb",
         "scan_dns_name",
@@ -285,6 +302,7 @@ export const ignoreElements: OcdIgnoreElements = {
         "scan_ip_ids",
         "source",
         "source_db_system_id",
+        "sparse_diskgroup",
         "storage_volume_performance_mode",
         "time_zone",
         "version",
@@ -317,8 +335,12 @@ export const ignoreElements: OcdIgnoreElements = {
         "previous_successful_login_time"
     ],
     "oci_kms_key": [
+        "auto_key_rotation_details",
         "current_key_version",
         "desired_state",
+        "external_key_reference",
+        "external_key_reference_details",
+        "is_auto_rotation_enabled",
         "replica_details",
         "restore_trigger",
         "restored_from_key_id",
@@ -328,6 +350,8 @@ export const ignoreElements: OcdIgnoreElements = {
     ],
     "oci_kms_vault": [
         "crypto_endpoint",
+        "external_key_manager_metadata",
+        "external_key_manager_metadata_summary",
         "replica_details",
         "management_endpoint",
         "restore_trigger",
@@ -358,7 +382,8 @@ export const ignoreElements: OcdIgnoreElements = {
         "current_placement",
         "endpoints",
         "heat_wave_cluster",
-        "point_in_time_recovery_details"
+        "point_in_time_recovery_details",
+        "secure_connections"
     ],
     "oci_network_load_balancer_network_load_balancer": [
         "ip_addresses",
@@ -370,6 +395,7 @@ export const ignoreElements: OcdIgnoreElements = {
         "backend"
     ],
     "oci_nosql_table": [
+        "replicas",
         "schema"
     ],
     "oci_objectstorage_bucket": [
@@ -380,6 +406,7 @@ export const ignoreElements: OcdIgnoreElements = {
     "oci_vault_secret": [
         "current_version_number",
         "metadata",
+        "rotation_config",
         "secret_content.stage",
         "secret_rules",
         "time_of_current_version_expiry",

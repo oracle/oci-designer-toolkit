@@ -20,15 +20,8 @@ class DynamicGroupView extends OkitCompartmentArtefactView {
     /*
     ** Property Sheet Load function
     */
-    loadProperties() {
-        const self = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/dynamic_group.html", () => {loadPropertiesSheet(self.artefact);});
-    }
-    /*
-    ** Load and display Value Proposition
-    */
-    loadValueProposition() {
-        $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/dynamic_group.html");
+    newPropertiesSheet() {
+        this.properties_sheet = new DynamicGroupProperties(this.artefact)
     }
     /*
     ** Static Functionality

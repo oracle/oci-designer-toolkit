@@ -6,6 +6,7 @@
 export interface OcdAttributeMap extends Record<string, any> {}
 export interface OcdResourceMap extends Record<string, any> {}
 export interface OcdElementOverrides extends Record<string, any> {}
+export interface OcdIncludedElements extends Record<string, any> {}
 export interface OcdIgnoreElements extends Record<string, any> {}
 export interface OcdConditionalElements extends Record<string, any> {}
 export interface OcdAdditionalElements extends Record<string, any> {}

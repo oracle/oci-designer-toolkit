@@ -1,6 +1,15 @@
 # Release Notes
 
 
+## Version 0.60.0
+**Release Date**: 31st May 2024
+### Features
+1. Add Dynamic Group Resource.
+2. Release of the Beta version of the Okit Open Cloud Designer.
+### Bug Fixes
+1. Modify OCI Import View CSS to allow the view to scroll to the bottom of the list and display the last element.
+
+
 ## Version 0.59.0
 **Release Date**: 30th April 2024
 ### Features

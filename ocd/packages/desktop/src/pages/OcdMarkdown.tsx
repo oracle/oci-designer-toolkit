@@ -14,7 +14,6 @@ const OcdMarkdown = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOc
     const markdown = markdownExporter.export(ocdDocument.design)
     return (
         <div className={`ocd-markdown-view`}>
-            {/* {<div className='ocd-documentation-preview'><Markdown>{ocdDocument.design.metadata.documentation}</Markdown></div>} */}
             {<div className='ocd-documentation-preview'><Markdown rehypePlugins={[rehypeRaw, remarkGfm]}>{markdown}</Markdown></div>}
         </div>
     )

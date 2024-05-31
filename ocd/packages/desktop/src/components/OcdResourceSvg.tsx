@@ -10,7 +10,7 @@ import { OcdDocument, OcdDragResource, OcdSelectedResource } from './OcdDocument
 import { OcdViewPage, OcdViewConnector, OcdViewCoords, OcdViewLayer, OcdResource } from '@ocd/model'
 import { ResourceRectProps, ResourceForeignObjectProps, ResourceSvgProps, ResourceSvgContextMenuProps, ResourceSvgGhostProps, OcdMouseEvents, ConnectorSvgProps } from '../types/ReactComponentProperties'
 import { OcdContextMenu } from './OcdCanvas'
-import { ActiveFileContext } from '../pages/OcdConsole'
+import { ActiveFileContext, SelectedResourceContext } from '../pages/OcdConsole'
 
 export const OcdSvgContextMenu = ({ contextMenu, setContextMenu, ocdDocument, setOcdDocument, resource }: ResourceSvgContextMenuProps): JSX.Element => {
     console.info('OcdResourceSvg: OcdSvgContextMenu')
@@ -148,6 +148,7 @@ const OcdSimpleRect = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resource
         style.opacity = 0
         style.strokeOpacity = 0
     }
+    console.debug(`>> OcdResourceSvg: OcdSimpleRect:    Render(${resource.id})`)
     return (
         <rect className={rectClass} style={style}
             id={id} 
@@ -233,6 +234,7 @@ const OcdContainerRect = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
         style.opacity = 0
         style.strokeOpacity = 0
     }
+    console.debug(`>> OcdResourceSvg: OcdContainerRect: Render(${resource.id})`)
     return (
         <g>
             <rect className={rectClass} style={style}
@@ -360,6 +362,7 @@ const OcdForeignObject = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
         style.opacity = 0
         style.strokeOpacity = 0
     }
+    console.debug(`>> OcdResourceSvg: OcdForeignObject: Render(${resource.id})`)
     return (
         <foreignObject id={id} className={foreignObjectClass} style={style}
             transform={`translate(${gX}, ${gY})`}
@@ -385,6 +388,8 @@ const OcdForeignObject = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
 }
 
 export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, contextMenu, setContextMenu, svgDragDropEvents, resource, ghost }: ResourceSvgProps): JSX.Element => {
+    //@ts-ignore
+    const {selectedResource, setSelectedResource} = useContext(SelectedResourceContext)
     const page: OcdViewPage = ocdDocument.getActivePage()
     const allCompartmentIds = ocdDocument.getOciResourceList('comparment').map((r) => r.id)
     const visibleLayers = page.layers.filter((l: OcdViewLayer) => l.visible).map((l: OcdViewLayer) => l.id)
@@ -423,15 +428,19 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
     const onResourceClick = (e: React.MouseEvent<SVGElement>) => {
         console.info('OcdResourceSvg: Resource Clicked', resource.ocid, e.clientX, e.clientY, e.currentTarget.id, ocdDocument.getCoords(e.currentTarget.id))
         e.stopPropagation()
-        const clone = OcdDocument.clone(ocdDocument)
-        const selectedResource: OcdSelectedResource = {
-            modelId: resource.ocid,
-            pageId: ocdDocument.getActivePage().id,
-            coordsId: resource.id,
-            class: resource.class
+        if (selectedResource.coordsId !== resource.id) {
+            const clickedResource: OcdSelectedResource = {
+                modelId: resource.ocid,
+                pageId: ocdDocument.getActivePage().id,
+                coordsId: resource.id,
+                class: resource.class
+            }
+            setSelectedResource(clickedResource)
+            // TODO: Delete next 3 lines
+            const clone = OcdDocument.clone(ocdDocument)
+            clone.selectedResource = clickedResource
+            setOcdDocument(clone)
         }
-        clone.selectedResource = selectedResource
-        setOcdDocument(clone)
     }
     const onResourceRightClick = (e: React.MouseEvent<SVGElement>) => {
         // console.info('OcdResourceSvg: Resource Right Click', resource)
@@ -471,6 +480,7 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
     const onResourceMouseEnter = (e: React.MouseEvent<SVGElement>) => {}
     const onResourceMouseMove = (e: React.MouseEvent<SVGElement>) => {}
     const onResourceMouseLeave = (e: React.MouseEvent<SVGElement>) => {}
+    console.debug(`>> OcdResourceSvg: OcdResourceSvg:   Render(${resource.id})`)
     return (
         <g className='ocd-designer-resource' 
             id={resource.id} 
@@ -533,6 +543,7 @@ export const OcdDragResourceGhostSvg = ({ ocdConsoleConfig, ocdDocument, setOcdD
         'onSVGDrag': () => {},
         'onSVGDragEnd': () => {},
     }
+    console.debug(`>> OcdResourceSvg: OcdDragResourceGhostSvg: Render(${resource.id})`)
     return (
         <g className='ocd-svg-drag-ghost'
             transform={`translate(0, 0)`}
@@ -622,6 +633,7 @@ export const OcdConnector = ({ocdConsoleConfig, ocdDocument, connector, parentCo
     // console.debug('OcdResourceSvg: Connector Path', path)
     // console.debug('OcdResourceSvg: Connector Path as String', path.join(' '))
     const className = parentConnector ? 'ocd-svg-parent-connector' : 'ocd-svg-association-connector'
+    console.debug(`>> OcdResourceSvg: OcdConnector: Render()`)
     return (
         <path className={className} d={path.join(' ')}></path>
     )

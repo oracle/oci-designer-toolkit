@@ -9,3 +9,11 @@ export interface TerraformSchema extends Record<string, any> {
     format_version: string
     provider_schemas: TerrafomSchemaEntry
 }
+
+export type TerraformSchemaResourceMap = {
+    [key: string]: string;
+}
+
+export type TerraformSchemaDataMap = {
+    [key: string]: string;
+}

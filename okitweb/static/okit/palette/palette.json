@@ -309,6 +309,11 @@
                     "svg": "Policies.svg"
                 },
                 {
+                    "title": "Dynamic Group",
+                    "targets": ["oci", "pca", "c3"],
+                    "svg": "DynamicGroup.svg"
+                },
+                {
                     "title": "User",
                     "targets": ["hidden"],
                     "svg": "User.svg"

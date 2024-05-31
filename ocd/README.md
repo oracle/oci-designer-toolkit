@@ -1,5 +1,5 @@
 ```diff
-- ALPHA Code: This is experimental and work in progress. Therefore does not provide all the functionality in OKIT.
+- Beta Code: This is experimental and work in progress. Therefore does not provide all the functionality in OKIT.
 ```
 
 # Getting Started OKIT Open Cloud Designer
@@ -8,7 +8,7 @@ The OCD project is a refactoring of the original OKIT implementation and TypeScr
 based implementation using React to build the interface and provide the WebServer. In addition
 Electron is used to generate native installers for simplicity of installation and use.
 
-This Alpha release is to show the new desktop functionality available in the OKIT OCD (OKIT Cloud Desktop) release and is not
+This Beta release is to show the new desktop functionality available in the OKIT - Open Cloud Desktop release and is not
 guarenteed to be 100% functional. At present the following resources and features are availble but we will be releasing updates 
 regularly.
 
@@ -32,14 +32,14 @@ regularly.
 | Boot Volumes                   | &check;    | &check;   |            | &check; | &check;    |
 | Boot Volumes Attachment        | &cross;    | &check;   |            | &check; | &check;    |
 | Customer Premises Equipment    | &check;    | &check;   |            | &check; |            |
-| Database System                |            |           |            |         |            |
+| Database System                | &check;    | &check;   |            | &check; |            |
 | Service Gateway                | &check;    | &check;   |            | &check; |            |
 | DRG                            | &check;    | &check;   |            | &check; |            |
 | DRG Attachment                 |            |           |            |         |            |
 | DRG Route Table                |            |           |            |         |            |
 | DRG Distribution               |            |           |            |         |            |
 | Local Peering                  | &check;    | &check;   |            | &check; |            |
-| IPSec VPN                      |            |           |            | &check; |            |
+| IPSec VPN                      | &check;    | &check;   |            | &check; |            |
 | Remote Peering                 |            |           |            |         |            |
 | NoSQL Database                 |            |           |            |         |            |
 | MySQL (with Heatwave)          |            |           |            |         |            |
@@ -58,7 +58,22 @@ regularly.
 Not all menu options are currently available and if selected will display a message saying they are currently not availble,
 again these will be added over time.
 
-If you have any comments please leave them on the GitHub issues marked as ___OCD Alpha:___
+If you have any comments please leave them on the GitHub issues marked as ___OCD Beta:___
+
+## Native Installs
+The [OCD Beta Nightly Release](https://github.com/oracle/oci-designer-toolkit/releases/tag/ocd.nightly) contains a number of native install artefacts which can be used to install OCD on you machine.
+At present we do not have any certificates associated with these and hence you may see some security warnings during execution. If you are happy to accept that the installation files built by GitHub are okey then
+you will need to acknowledge in the appropriate dialog for your system.
+
+### MacOS
+#### Error
+![Security Acknowledgement](https://github.com/oracle/oci-designer-toolkit/blob/nightly/ocd/images/MacosError.png)
+#### Solution
+System Settings -> Security
+
+![Security Acknowledgement](https://github.com/oracle/oci-designer-toolkit/blob/nightly/ocd/images/MacosSecurityOverride.png)
+
+Select "Open Anyway"
 
 # OCD Desktop Features 
 

@@ -6,14 +6,20 @@
  .okit-oci-import-options {
     border-bottom: 2px black solid;
     padding-bottom: 5px;
+    height: 25px;
 }
 
 .okit-oci-import-view {
     font-size: small;
     overflow: scroll;
     width: 100%;
-    height: 100%;
+    height: calc(100% - 25px);
     white-space: nowrap;
+}
+
+.okit-oci-import-view > ul {
+    margin-bottom: 20px;
+    padding-bottom: 20px !important;
 }
 
 .okit-oci-import-view ul {

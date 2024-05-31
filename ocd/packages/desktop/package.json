@@ -1,7 +1,7 @@
 {
   "name": "@ocd/desktop",
   "productName": "ocd",
-  "version": "0.1.0-alpha",
+  "version": "0.2.0",
   "description": "OKIT Open Cloud Designer Desktop",
   "title": "OKIT Open Cloud Designer Desktop",
   "author": {
@@ -68,7 +68,7 @@
   },
   "build": {
     "appId": "com.oracle.okit-ocd",
-    "artifactName": "${productName}-${version}.${ext}",
+    "artifactName": "${productName}-${version}${env.BRANCH_NAME}-${arch}.${ext}",
     "files": [
       "build/**/*",
       "node_modules/**/*"
@@ -91,7 +91,13 @@
     ],
     "mac": {
       "icon": "build/assets/icon.icns",
-      "category": "public.app-category.developer-tools"
+      "category": "public.app-category.developer-tools",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["arm64", "x64", "universal"]
+        }
+      ]
     },
     "dmg": {
       "icon": "build/assets/icon.icns",
@@ -109,7 +115,7 @@
     },
     "linux": {
       "icon": "build/assets/icon.png",
-      "executableName": "${productName}-${version}.${ext}",
+      "executableName": "${productName}-${version}${env.BRANCH_NAME}.${ext}",
       "target": [
         "AppImage",
         "snap"
@@ -117,11 +123,11 @@
     }
   },
   "dependencies": {
-    "@ocd/core": "^1.0.0",
-    "@ocd/export": "^1.0.0",
-    "@ocd/import": "^1.0.0",
-    "@ocd/model": "^1.0.0",
-    "@ocd/query": "^1.0.0",
+    "@ocd/core": "^0.2.0",
+    "@ocd/export": "^0.2.0",
+    "@ocd/import": "^0.2.0",
+    "@ocd/model": "^0.2.0",
+    "@ocd/query": "^0.2.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -174,7 +180,7 @@
     "preelectron-release-pack": "npm run build",
     "electron-release-pack": "electron-builder build --x64 --macos --win --linux -c.extraMetadata.main=build/main.js",
     "electron-pack": "electron-builder build -c.extraMetadata.main=build/main.js",
-    "build": "npm run build-react-scripts && npm run electron-pack",
+    "build": "npm run build-react-scripts && BRANCH_NAME='' npm run electron-pack",
     "desktop": "npm run build-react-scripts && electron-forge start",
     "web": "npm run start"
   },
