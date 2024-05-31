@@ -83,15 +83,15 @@ jobs:
       - name: Upload Mac Artifact to Release
         if: matrix.os == 'macos-latest'
         run: |
-          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/mac/ocd-${{ env.BRANCH_OCD_VERSION }}-*.dmg --clobber
+          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/mac/ocd-${{ env.OCD_VERSION }}-*.dmg --clobber
       - name: Upload Windows Artifact to Release
         if: matrix.os == 'windows-latest'
         run: |
-          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/win/ocd-${{ env.BRANCH_OCD_VERSION }}-x64.exe --clobber
+          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/win/ocd-${{ env.OCD_VERSION }}-x64.exe --clobber
       - name: Upload Linux Artifact to Release
         if: matrix.os == 'ubuntu-latest'
         run: |
-          # gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.BRANCH_OCD_VERSION }}.rpm --clobber
-          # gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.BRANCH_OCD_VERSION }}.deb --clobber
-          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.BRANCH_OCD_VERSION }}-*.snap --clobber
-          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.BRANCH_OCD_VERSION }}-*.AppImage --clobber
+          # gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}.rpm --clobber
+          # gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}.deb --clobber
+          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}-*.snap --clobber
+          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}-*.AppImage --clobber

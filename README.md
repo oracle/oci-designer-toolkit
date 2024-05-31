@@ -1,5 +1,10 @@
 # Oracle Cloud Infrastructure Designer and Visualisation Toolkit [0.60.0](CHANGELOG.md#version-0.60.0)
 
+Full Release Details Can Found [0.60.0 Release](https://github.com/oracle/oci-designer-toolkit/releases/tag/v0.60.0).
+
+**OKIT - Open Cloud Designer** Public Beta is now Available see [0.60.0 Release](https://github.com/oracle/oci-designer-toolkit/releases/tag/v0.60.0) for details.
+_____
+
 OCI designer and visualisation toolKIT (OKIT) is a browser based tool that allows the user to [design](https://www.ateam-oracle.com/introduction-to-okit-the-oci-designer-toolkit), 
 [deploy](https://www.ateam-oracle.com/introduction-to-okit-the-oci-designer-toolkit) and visualise ([introspect/query](https://www.ateam-oracle.com/the-oci-designer-toolkit-query-feature)) 
 OCI environments through a graphical web based interface. 
