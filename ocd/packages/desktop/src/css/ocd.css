@@ -684,6 +684,7 @@ summary {
     width: 100%;
     min-height: 100%;
     /* border-right: #555555 1px solid; */
+    padding-bottom: 30px;
 }
 
 .ocd-model-palette {
@@ -819,7 +820,7 @@ summary {
     background-position-y: center;
     height: 100%;
     width: fit-content;
-    padding-left: 24px;
+    /* padding-left: 24px; */
 }
 
 .ocd-designer-palette-provider>details>summary>div>label,
@@ -853,6 +854,7 @@ summary {
 .ocd-designer-palette-group>details {
     display: block;
     width: 100%;
+    padding-left: 15px;
 }
 
 .ocd-designer-palette-group>details>summary {
