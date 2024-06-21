@@ -3,6 +3,9 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
+import fs from 'fs'
+import path from 'path'
+import os from 'os'
 import { OcdUtils } from "@ocd/core"
 import { common, identity } from "oci-sdk"
 
@@ -20,15 +23,42 @@ export class OciCommonQuery {
         this.profile = profile
         this.provider = new common.ConfigFileAuthenticationDetailsProvider(undefined, profile)
         if (region) this.provider.setRegion(region)
+            console.debug('OciCommonQuery Profile:', profile)
+        console.debug('OciCommonQuery Provider:', this.provider)
+        const certBundle = this.getCertBundle(profile)
+        console.debug('OciCommonQuery Cert Bundle:', certBundle)
+        // console.debug('OciCommonQuery Config File:', configFile)
         // Define Retry Configuration
         const retryConfiguration: common.RetryConfiguration = {
             // terminationStrategy : new common.MaxAttemptsTerminationStrategy(10)
         }
-        this.clientConfiguration = { retryConfiguration: retryConfiguration }
+        const httpOptions = certBundle ? {ca: certBundle} : undefined
+        this.clientConfiguration = { retryConfiguration: retryConfiguration, httpOptions: httpOptions }
         this.authenticationConfiguration = { authenticationDetailsProvider: this.provider }
+        console.debug('OciCommonQuery Client Configuration:', this.clientConfiguration)
         this.identityClient = new identity.IdentityClient(this.authenticationConfiguration, this.clientConfiguration)
     }
 
+    getCertBundle = (profile: string): string | undefined => {
+        const certBundleFile = this.provider.getProfileCredentials()?.configurationsByProfile.get(profile)?.get('cert-bundle')
+        const absolutePath = path.resolve(certBundleFile ? certBundleFile : '~')
+        const homeDirPath = this.getHomeDirPath(certBundleFile ? certBundleFile : '~')
+        console.debug('OciCommonQuery Config Credentials:', this.provider.getProfileCredentials())
+        console.debug('OciCommonQuery Config By Profile:', this.provider.getProfileCredentials()?.configurationsByProfile)
+        console.debug('OciCommonQuery Config Profile:', profile, this.provider.getProfileCredentials()?.configurationsByProfile.get(profile))
+        console.debug('OciCommonQuery Cert Bundle File:', certBundleFile)
+        console.debug('OciCommonQuery Absolute Cert Bundle File:', absolutePath)
+        console.debug('OciCommonQuery Home Dir Cert Bundle File:', homeDirPath)
+        if (certBundleFile === undefined) return undefined
+        else {
+            const certBundle: string = fs.readFileSync(homeDirPath, 'utf-8')
+            // console.debug('OciCommonQuery Cert Bundle:', certBundle)
+            return certBundle
+        }
+    }
+
+    getHomeDirPath = (filePath: string): string => filePath.startsWith('~') ? path.join(os.homedir(), filePath.slice(1).replace(/\\/g, "/")) : filePath
+ 
     regionNameToDisplayName = (name: string) => {
         const nameParts = name.split('-')
         const region = nameParts[0].toUpperCase()
