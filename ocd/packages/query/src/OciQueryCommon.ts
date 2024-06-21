@@ -32,7 +32,8 @@ export class OciCommonQuery {
         const retryConfiguration: common.RetryConfiguration = {
             // terminationStrategy : new common.MaxAttemptsTerminationStrategy(10)
         }
-        const httpOptions = certBundle ? {ca: certBundle} : undefined
+        // const httpOptions = certBundle ? {cert: certBundle} : undefined
+        const httpOptions = undefined
         this.clientConfiguration = { retryConfiguration: retryConfiguration, httpOptions: httpOptions }
         this.authenticationConfiguration = { authenticationDetailsProvider: this.provider }
         console.debug('OciCommonQuery Client Configuration:', this.clientConfiguration)
