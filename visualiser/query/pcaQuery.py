@@ -348,8 +348,8 @@ class PCAQuery(OCIConnection):
         # self.all_compartments = self.toJson(results)
         self.all_compartments.extend(self.toJson(results))
         self.all_compartment_ids = [c['id'] for c in self.all_compartments]
-        logger.info(f'>> PCADQuery - Getting Tenancy Compartments')
-        logger.info(f'>>>>         - Found {len(self.all_compartment_ids)} Tenancy Compartments')
+        logger.info(f'>> PCAQuery - Getting Tenancy Compartments')
+        logger.info(f'>>>>        - Found {len(self.all_compartment_ids)} Tenancy Compartments')
         return 
     
     def availability_domains(self):
@@ -771,7 +771,6 @@ class PCAQuery(OCIConnection):
         self.dropdown_json[array] = []
         for compartment_id in self.query_compartments:
             results = oci.pagination.list_call_get_all_results(client.list_network_load_balancers, compartment_id=compartment_id).data
-            logger.info(results)
             # Convert to Json object
             resources = self.toJson(results)
             self.dropdown_json[array].extend(resources)
