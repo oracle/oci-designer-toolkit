@@ -368,6 +368,13 @@ export const menuItems = [
                 }
             },
             {
+                label: 'Common Tags',
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
+                    ocdConsoleConfig.config.displayPage = 'tags'
+                    setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+                }
+            },
+            {
                 label: 'BoM',
                 click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
                     ocdConsoleConfig.config.displayPage = 'bom'
