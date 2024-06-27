@@ -59,7 +59,7 @@ jobs:
         if: failure() || success()
         id: create_release
         run: |
-          gh release create ${{ env.BRANCH_RELEASE_TAG }} --title "OCD ${{ env.BRANCH }} Release ${{ env.OCD_VERSION }}" --notes-file ./ocd/README.md --target ${{ env.BRANCH }} --latest
+          gh release create ${{ env.BRANCH_RELEASE_TAG }} --title "OCD ${{ env.BRANCH }} Release ${{ env.OCD_VERSION }}" --notes-file ./ocd/README.md --target ${{ env.BRANCH }} --latest --prerelease
     
   build-and-release:
     needs: [update-or-create-release, generate-variables]
