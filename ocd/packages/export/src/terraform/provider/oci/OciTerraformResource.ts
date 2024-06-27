@@ -4,7 +4,7 @@
 */
 
 import OcdTerraformResource from "../../OcdTerraformResource"
-import { OciModelResources as Model, OciResource } from '@ocd/model'
+import { OciModelResources as Model, OcdDesign, OciDefinedTag, OciFreeformTag, OciResource } from '@ocd/model'
 
 export class OciTerraformResource extends OcdTerraformResource {
     typeDisplayNameMap: Record<string, string> = {
@@ -42,6 +42,33 @@ export class OciTerraformResource extends OcdTerraformResource {
     ${this.displayName(resource)}
 `
     }
+    tags = (resource: OciResource, design: OcdDesign): string => {
+        const freeform = [
+            ...this.ocdTags,
+            ...design.model.oci.tags.freeform ? design.model.oci.tags.freeform : [],
+            ...resource.freeformTags ? resource.freeformTags : []
+        ]
+        const defined = [
+            ...design.model.oci.tags.defined ? design.model.oci.tags.defined : [],
+            ...resource.definedTags ? resource.definedTags : []
+        ]
+        return `# Tags
+    ${this.freeformTags(freeform)}
+    ${this.definedTags(defined)}
+`
+    }
+    definedTags = (tags: OciDefinedTag[]): string => {
+        if (tags.length === 0) return ''
+        else return `defined_tags = {
+        ${tags.map((t: OciDefinedTag) => `"${t.namespace}.${t.key}" : "${t.value}"`).join(',\n        ')}
+    }`
+    } 
+    freeformTags = (tags: OciFreeformTag[]): string => {
+        if (tags.length === 0) return ''
+        else return `freeform_tags = {
+        ${tags.map((t: OciFreeformTag) => `"${t.key}" : "${t.value}"`).join(',\n        ')}
+    }`
+    } 
     generateAdditionalResourceLocals(resource: OciResource) {
         return ''
     }

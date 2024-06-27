@@ -5,6 +5,8 @@
 
 import { OcdUtils } from "@ocd/core"
 import { OcdResource } from "@ocd/model"
+import { OcdTag } from "@ocd/model/src/OcdDesign"
+import { buildDetails } from '../data/OcdBuildDetails'
 
 interface ResourcePropertyCondition extends OcdUtils.ResourcePropertyCondition {}
 // interface ResourcePropertyCondition {
@@ -17,6 +19,13 @@ export class OcdTerraformResource {
     indentation = ['', '    ', '        ', '            ', '                ']
     idTFResourceMap: Record<string, string> = {}
     terraformResourceName: string = ''
+    ocdTags: OcdTag[] = [
+        {
+            id: "",
+            key: "ocd_version",
+            value: buildDetails.version
+        }
+    ]
     constructor(idTFResourceMap={}) {
         this.idTFResourceMap = idTFResourceMap
     }

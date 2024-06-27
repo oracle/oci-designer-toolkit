@@ -21,13 +21,20 @@ export interface OcdMetadata {
 }
 
 export interface OcdTag {
-    [key: string]: string
+    id: string
+    key: string
+    value: string
 }
 
+export interface OciFreeformTag extends OcdTag {}
+
+export interface OciDefinedTag extends OcdTag {
+    namespace: string
+}
 
 export interface OciTags {
-    freeform?: OcdTag[],
-    defined?: {[key: string]: OcdTag[]}[]
+    freeform?: OciFreeformTag[],
+    defined?: OciDefinedTag[]
 }
 
 export interface OcdView {
@@ -173,7 +180,10 @@ export namespace OcdDesign {
             },
             model: {
                 oci: {
-                    tags: {},
+                    tags: {
+                        freeform: [],
+                        defined: []
+                    },
                     vars: [],
                     resources: {
                         compartment: [compartment]
@@ -259,6 +269,21 @@ export namespace OcdDesign {
             name: '',
             default: '',
             description: ''
+        }
+    }
+
+    // Tag Methods
+    export function newOciFreeformTag(): OciFreeformTag {
+        return {
+            id: uuidv4(),
+            key: '',
+            value: ''
+        }
+    }
+    export function newOciDefinedTag(): OciDefinedTag {
+        return {
+            ...newOciFreeformTag(),
+            namespace: ''
         }
     }
 }

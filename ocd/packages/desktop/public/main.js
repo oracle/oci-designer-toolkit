@@ -72,36 +72,36 @@ const template = [
 	  ]
 	},
 	// { role: 'editMenu' }
-	{
-	  label: 'Edit',
-	  submenu: [
-		{ role: 'undo' },
-		{ role: 'redo' },
-		{ type: 'separator' },
-		{ role: 'cut' },
-		{ role: 'copy' },
-		{ role: 'paste' },
-		...(isMac
-		  ? [
-			  { role: 'pasteAndMatchStyle' },
-			  { role: 'delete' },
-			  { role: 'selectAll' },
-			  { type: 'separator' },
-			  {
-				label: 'Speech',
-				submenu: [
-				  { role: 'startSpeaking' },
-				  { role: 'stopSpeaking' }
-				]
-			  }
-			]
-		  : [
-			  { role: 'delete' },
-			  { type: 'separator' },
-			  { role: 'selectAll' }
-			])
-	  ]
-	},
+	// {
+	//   label: 'Edit',
+	//   submenu: [
+	// 	{ role: 'undo' },
+	// 	{ role: 'redo' },
+	// 	{ type: 'separator' },
+	// 	{ role: 'cut' },
+	// 	{ role: 'copy' },
+	// 	{ role: 'paste' },
+	// 	...(isMac
+	// 	  ? [
+	// 		  { role: 'pasteAndMatchStyle' },
+	// 		  { role: 'delete' },
+	// 		  { role: 'selectAll' },
+	// 		  { type: 'separator' },
+	// 		  {
+	// 			label: 'Speech',
+	// 			submenu: [
+	// 			  { role: 'startSpeaking' },
+	// 			  { role: 'stopSpeaking' }
+	// 			]
+	// 		  }
+	// 		]
+	// 	  : [
+	// 		  { role: 'delete' },
+	// 		  { type: 'separator' },
+	// 		  { role: 'selectAll' }
+	// 		])
+	//   ]
+	// },
 	// { role: 'viewMenu' }
 	{
 	  label: 'View',
@@ -135,18 +135,18 @@ const template = [
 			])
 	  ]
 	},
-	{
-	  role: 'help',
-	  submenu: [
-		{
-		  label: 'Learn More',
-		  click: async () => {
-			const { shell } = require('electron')
-			await shell.openExternal('https://github.com/oracle/oci-designer-toolkit/tree/master/ocd')
-		  }
-		}
-	  ]
-	}
+	// {
+	//   role: 'help',
+	//   submenu: [
+	// 	{
+	// 	  label: 'Learn More',
+	// 	  click: async () => {
+	// 		const { shell } = require('electron')
+	// 		await shell.openExternal('https://github.com/oracle/oci-designer-toolkit/tree/master/ocd')
+	// 	  }
+	// 	}
+	//   ]
+	// }
   ]
   
 const menu = Menu.buildFromTemplate(template)
