@@ -51,15 +51,15 @@ jobs:
         id: delete_release
         run: |
           gh release delete ${{ env.BRANCH_RELEASE_TAG }} --yes
-      - name: Update Release
-        id: update_release
-        run: |
-          gh release edit ${{ env.BRANCH_RELEASE_TAG }} --title "OCD ${{ env.BRANCH }} Release ${{ env.OCD_VERSION }}" --notes-file ./ocd/README.md --target ${{ env.BRANCH }} --latest
+      # - name: Update Release
+      #   id: update_release
+      #   run: |
+      #     gh release edit ${{ env.BRANCH_RELEASE_TAG }} --title "OCD ${{ env.BRANCH }} Release ${{ env.OCD_VERSION }}" --notes-file ./ocd/README.md --target ${{ env.BRANCH }} --latest
       - name: Create Release if Update fails
-        if: failure()
+        if: failure() || success()
         id: create_release
         run: |
-          gh release create ${{ env.BRANCH_RELEASE_TAG }} --title "OCD ${{ env.BRANCH }} Release ${{ env.OCD_VERSION }}" --notes-file ./ocd/README.md --target ${{ env.BRANCH }} --latest
+          gh release create ${{ env.BRANCH_RELEASE_TAG }} --title "OCD ${{ env.BRANCH }} Release ${{ env.OCD_VERSION }}" --notes-file ./ocd/README.md --target ${{ env.BRANCH }} --latest --prerelease
     
   build-and-release:
     needs: [update-or-create-release, generate-variables]
