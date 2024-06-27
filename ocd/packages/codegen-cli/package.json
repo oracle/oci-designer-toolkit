@@ -26,7 +26,9 @@
     "compile": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
     "build": "npm run compile && npm run pack",
 
-    "generate-ocd-build-date": "node lib/esm/ocd-set-build-date.js -d ../desktop/src/data -p ../desktop/package.json",
+    "generate-ocd-build-date-desktop": "node lib/esm/ocd-set-build-date.js -d ../desktop/src/data -p ../desktop/package.json",
+    "generate-ocd-build-date-export": "node lib/esm/ocd-set-build-date.js -d ../export/src/data -p ../desktop/package.json",
+    "generate-ocd-build-date": "npm run generate-ocd-build-date-desktop && npm run generate-ocd-build-date-export",
 
     "generate-terraform-provider-schema": "cd schema && terraform init && terraform providers schema -json > tf-schema.json",
   
