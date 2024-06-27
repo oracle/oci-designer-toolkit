@@ -47,6 +47,10 @@ jobs:
       BRANCH_RELEASE_TAG: ocd.${{ github.head_ref || github.ref_name }}
     steps:
       - uses: actions/checkout@v4
+      - name: Delete Release
+        id: delete_release
+        run: |
+          gh release delete ${{ env.BRANCH_RELEASE_TAG }} --cleanup-tag --yes
       - name: Update Release
         id: update_release
         run: |
