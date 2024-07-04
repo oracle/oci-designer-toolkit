@@ -117,8 +117,7 @@
       "icon": "build/assets/icon.png",
       "executableName": "${productName}-${version}${env.BRANCH_NAME}.${ext}",
       "target": [
-        "AppImage",
-        "snap"
+        "rpm"
       ]
     }
   },
