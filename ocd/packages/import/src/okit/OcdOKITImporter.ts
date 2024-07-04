@@ -32,8 +32,8 @@ class OcdOKITImporter extends OcdImporter {
     }
 
     importTags = () => {
-        if (this.okitDesign.freeform_tags) this.design.model.oci.tags.freeform = this.okitDesign.freeform_tags
-        if (this.okitDesign.defined_tags) this.design.model.oci.tags.defined = this.okitDesign.defined_tags
+        if (this.okitDesign.freeform_tags) this.design.model.oci.tags.freeformTags = this.okitDesign.freeform_tags
+        if (this.okitDesign.defined_tags) this.design.model.oci.tags.definedTags = this.okitDesign.defined_tags
 
     }
 

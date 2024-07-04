@@ -64,6 +64,7 @@ class PCAQuery(OCIConnection):
         "LocalPeeringGateway",
         "MountTarget",
         "NatGateway", 
+        "NetworkLoadBalancer",
         "NetworkSecurityGroup", 
         "Policy", 
         "RouteTable", 
@@ -189,6 +190,11 @@ class PCAQuery(OCIConnection):
                 "client": "network", 
                 "array": "nat_gateways"
                 }, 
+            "NetworkLoadBalancer": {
+                "method": self.network_load_balancers, 
+                "client": "network_loadbalancer", 
+                "array": "network_load_balancers"
+                }, 
             "NetworkSecurityGroup": {
                 "method": self.network_security_groups, 
                 "client": "network", 
@@ -275,7 +281,8 @@ class PCAQuery(OCIConnection):
             "loadbalancer": oci.load_balancer.LoadBalancerClient(config=self.config, signer=self.signer),
             # "mysqlaas": oci.mysql.MysqlaasClient(config=self.config, signer=self.signer),
             # "mysqldb": oci.mysql.DbSystemClient(config=self.config, signer=self.signer),
-            "network": oci.core.VirtualNetworkClient(config=self.config, signer=self.signer)
+            "network": oci.core.VirtualNetworkClient(config=self.config, signer=self.signer),
+            "network_loadbalancer": oci.network_load_balancer.NetworkLoadBalancerClient(config=self.config, signer=self.signer)
         }
         if self.cert_bundle is not None:
             for client in self.clients.values():
@@ -341,8 +348,8 @@ class PCAQuery(OCIConnection):
         # self.all_compartments = self.toJson(results)
         self.all_compartments.extend(self.toJson(results))
         self.all_compartment_ids = [c['id'] for c in self.all_compartments]
-        logger.info(f'>> PCADQuery - Getting Tenancy Compartments')
-        logger.info(f'>>>>         - Found {len(self.all_compartment_ids)} Tenancy Compartments')
+        logger.info(f'>> PCAQuery - Getting Tenancy Compartments')
+        logger.info(f'>>>>        - Found {len(self.all_compartment_ids)} Tenancy Compartments')
         return 
     
     def availability_domains(self):
@@ -754,6 +761,32 @@ class PCAQuery(OCIConnection):
             # Convert to Json object
             resources = self.toJson(results)
             self.dropdown_json[array].extend(resources)
+        return self.dropdown_json[array]
+
+    def network_load_balancers(self):
+        resource_map = self.resource_map["NetworkLoadBalancer"]
+        client = self.clients[resource_map["client"]]
+        array = resource_map["array"]
+        resources = []
+        self.dropdown_json[array] = []
+        for compartment_id in self.query_compartments:
+            results = oci.pagination.list_call_get_all_results(client.list_network_load_balancers, compartment_id=compartment_id).data
+            # Convert to Json object
+            resources = self.toJson(results)
+            self.dropdown_json[array].extend(resources)
+        known_instances = [instance['id'] for instance in self.dropdown_json['instances']]
+        for load_balancer in self.dropdown_json[array]:
+            private_ips = []
+            for subnet_id in load_balancer['subnet_ids']:
+                private_ips.extend(self.private_ips(subnet_id))
+            for subnet in self.dropdown_json['subnets']:
+                private_ips.extend(self.private_ips(subnet['id']))
+            for backend_set in load_balancer['backend_sets']:
+                for backend in load_balancer['backend_sets'][backend_set]['backends']:
+                    for ip_address in [ip for ip in private_ips if ip['ip_address'] == backend['ip_address']]:
+                        for vnic_attachment in [va for va in self.ancillary_resources['vnic_attachments'] if va['vnic_id'] == ip_address['vnic_id']]:
+                            if vnic_attachment['instance_id'] in known_instances:
+                                backend['target_id'] = vnic_attachment['instance_id']
         return self.dropdown_json[array]
 
     def network_security_groups(self):

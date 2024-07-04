@@ -43,13 +43,17 @@ export const menuItems = [
                                 const document: OcdDocument = OcdDocument.new()
                                 setOcdDocument(document)
                                 setActiveFile({name: '', modified: false})
-                            }
+                                ocdConsoleConfig.config.displayPage = 'designer'
+                                setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+                                        }
                         }).catch((resp) => {console.warn('Discard Failed with', resp)})
                     } else {
                         const document: OcdDocument = OcdDocument.new()
                         setOcdDocument(document)
                         setActiveFile({name: '', modified: false})
-                    }
+                        ocdConsoleConfig.config.displayPage = 'designer'
+                        setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+                        }
                 }
             },
             {
@@ -368,6 +372,13 @@ export const menuItems = [
                 }
             },
             {
+                label: 'Common Tags',
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
+                    ocdConsoleConfig.config.displayPage = 'tags'
+                    setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+                }
+            },
+            {
                 label: 'BoM',
                 click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
                     ocdConsoleConfig.config.displayPage = 'bom'
@@ -563,7 +574,9 @@ export const loadDesign = (filename: string, setOcdDocument: Function, ocdConsol
             setOcdDocument(ocdDocument)
             setActiveFile({name: results.filename, modified: false})
             updateRecentFiles(results.filename, ocdConsoleConfig, setOcdConsoleConfig)
-        }
+            ocdConsoleConfig.config.displayPage = 'designer'
+            setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+}
     }).catch((resp) => {console.warn('Load Design Failed with', resp)})
 }
 

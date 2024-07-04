@@ -9,7 +9,7 @@ import OcdDocument from '../components/OcdDocument'
 import { OcdResource, OcdResources, OcdViewConnector, OcdViewCoords, OciResource } from '@ocd/model'
 import { DragData } from './DragData'
 import { OcdContextMenu } from '../components/OcdCanvas'
-import { OcdVariable } from '@ocd/model/src/OcdDesign'
+import { OcdVariable, OciDefinedTag, OciFreeformTag } from '@ocd/model/src/OcdDesign'
 
 export interface CanvasProps {
     dragData: DragData
@@ -116,10 +116,29 @@ export interface OcdVariableRowPropsNew {
     onDescriptionChange: React.Dispatch<any>
     onDeleteClick: React.Dispatch<any>
 }
+
 export interface OcdVariableRowProps {
     ocdDocument: OcdDocument
     setOcdDocument: React.Dispatch<any>
     variable: OcdVariable
     // row: number
     onDeleteClick: React.Dispatch<any>
+}
+
+export interface OciDefinedTagRowProps {
+    ocdDocument: OcdDocument
+    setOcdDocument: React.Dispatch<any>
+    tag: OciDefinedTag
+    // row: number
+    onDeleteClick: React.Dispatch<any>
+}
+
+export interface OciFreeformTagRowProps {
+    ocdDocument: OcdDocument
+    setOcdDocument: React.Dispatch<any>
+    tag: OciFreeformTag
+    // row: number
+    onDeleteClick: React.Dispatch<any>
+    onFreeformKeyChange: (oldKey: string, newKey: string) => any
+    onFreeformValueChange: (key: string, value: string) => any
 }

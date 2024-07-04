@@ -47,15 +47,19 @@ jobs:
       BRANCH_RELEASE_TAG: ocd.${{ github.head_ref || github.ref_name }}
     steps:
       - uses: actions/checkout@v4
-      - name: Update Release
-        id: update_release
+      - name: Delete Release
+        id: delete_release
         run: |
-          gh release edit ${{ env.BRANCH_RELEASE_TAG }} --title "OCD ${{ env.BRANCH }} Release ${{ env.OCD_VERSION }}" --notes-file ./ocd/README.md --target ${{ env.BRANCH }} --latest
+          gh release delete ${{ env.BRANCH_RELEASE_TAG }} --yes
+      # - name: Update Release
+      #   id: update_release
+      #   run: |
+      #     gh release edit ${{ env.BRANCH_RELEASE_TAG }} --title "OCD ${{ env.BRANCH }} Release ${{ env.OCD_VERSION }}" --notes-file ./ocd/README.md --target ${{ env.BRANCH }} --latest
       - name: Create Release if Update fails
-        if: failure()
+        if: failure() || success()
         id: create_release
         run: |
-          gh release create ${{ env.BRANCH_RELEASE_TAG }} --title "OCD ${{ env.BRANCH }} Release ${{ env.OCD_VERSION }}" --notes-file ./ocd/README.md --target ${{ env.BRANCH }} --latest
+          gh release create ${{ env.BRANCH_RELEASE_TAG }} --title "OCD ${{ env.BRANCH }} Release ${{ env.OCD_VERSION }}" --notes-file ./ocd/README.md --target ${{ env.BRANCH }} --latest --prerelease
     
   build-and-release:
     needs: [update-or-create-release, generate-variables]

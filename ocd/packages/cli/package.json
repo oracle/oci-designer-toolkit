@@ -1,6 +1,6 @@
 {
   "name": "@ocd/cli",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "OKIT Open Cloud Designer Command-line",
   "title": "OKIT Open Cloud Designer Command-linetop",
   "author": {
@@ -31,11 +31,11 @@
     "test-query":         "node lib/esm/ocd.js query  oci       -d ../../test/query.okit -p DEFAULT -c OKIT -c infrastructure -c network"
   },
   "dependencies": {
-    "@ocd/codegen": "^0.2.0",
-    "@ocd/core": "^0.2.0",
-    "@ocd/export": "^0.2.0",
-    "@ocd/import": "^0.2.0",
-    "@ocd/model": "^0.2.0",
-    "@ocd/query": "^0.2.0"
+    "@ocd/codegen": "^0.2.1",
+    "@ocd/core": "^0.2.1",
+    "@ocd/export": "^0.2.1",
+    "@ocd/import": "^0.2.1",
+    "@ocd/model": "^0.2.1",
+    "@ocd/query": "^0.2.1"
   }
 }

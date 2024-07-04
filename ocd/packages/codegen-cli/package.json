@@ -1,6 +1,6 @@
 {
   "name": "@ocd/codegen-cli",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "OKIT Open Cloud DesignerCodegen Command-line",
   "title": "OKIT Open Cloud Designer Codegen Command-linetop",
   "author": {
@@ -26,7 +26,9 @@
     "compile": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
     "build": "npm run compile && npm run pack",
 
-    "generate-ocd-build-date": "node lib/esm/ocd-set-build-date.js -d ../desktop/src/data -p ../desktop/package.json",
+    "generate-ocd-build-date-desktop": "node lib/esm/ocd-set-build-date.js -d ../desktop/src/data -p ../desktop/package.json",
+    "generate-ocd-build-date-export": "node lib/esm/ocd-set-build-date.js -d ../export/src/data -p ../desktop/package.json",
+    "generate-ocd-build-date": "npm run generate-ocd-build-date-desktop && npm run generate-ocd-build-date-export",
 
     "generate-terraform-provider-schema": "cd schema && terraform init && terraform providers schema -json > tf-schema.json",
   
@@ -61,6 +63,6 @@
     "import-and-generate": "npm run import-and-generate-oci && npm run import-and-generate-azureaz"
   },
   "dependencies": {
-    "@ocd/codegen": "^0.2.0"
+    "@ocd/codegen": "^0.2.1"
   }
 }

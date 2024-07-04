@@ -19,7 +19,7 @@ python modules are installed and in addition provide a simple flask server that 
     2. [Lima (MacOS)](#lima-macos)
     3. [Vagrant / VirtualBox](#vagrant--virtualbox)
 5. [Native](#native)
-    1. [Oracle Linux](#oracle-linux)
+    1. [Oracle Linux](#oracle-linux-ol8)
     2. [MacOS](#macos)
     3. [Windows 10 / WSL (Ubuntu)](#windows-10--wsl-ubuntu)
 3. [Build From Source](#build-from-source)
@@ -267,7 +267,7 @@ is downloaded from github. Once the VM is built the vagrant up should just take 
 
 ## Native
 
-### Oracle Linux
+### Oracle Linux (OL8)
 
 If you have a Linux machine and would like to install OKIT directly without the need for Docker or Vagrant then 
 this can be achieved using the following simple instructions. We assume that you have already created the appropriate OCI SDK config

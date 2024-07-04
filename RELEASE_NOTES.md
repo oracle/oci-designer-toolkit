@@ -1,15 +1,20 @@
-# May 2024 Release (Version 0.60.0)
+# June 2024 Release (Version 0.61.0)
 ____
-**Update 0.60.0**: This update addresses the following issues.
-1. Modify OCI Import View CSS to allow the view to scroll to the bottom of the list and display the last element.
+**Update 0.61.0**: This update addresses the following issues.
+1. Resolve Dynamic Group Resource Terraform Validation issue where it erroniously states they are not supported for PCA.
 ____
-Welcome to the May 2024 release of OKIT. There is only a single update in this version for the original OKIT (Web) but core to this release is the first public Beta of the new OKIT - Open Cloud Designer or OCD.
+Welcome to the June 2024 release of OKIT. There is only a single update in this version for the original OKIT (Web) but core to this release is the first public Beta of the new OKIT - Open Cloud Designer or OCD.
 
 ## OKIT (Web) Features
-1. Dynamic Groups: A new Dynamic groups resource has been added to the palette; allowing users to define this resource in addition to the existing Identity Groups.
+1. Add Query support for Network load Balancers on PCA.
+2. Add PCA Template to define OKE networking infrastructure. 
 
 ## OKIT - Open Cloud Designer
-The public Beta version of the OKIT - Open Cloud Designer is now available for user testing and the native desktop installs are attached to this release.
+1. Add the ability to create common Freeform Tags that will be used across all reasorces created by OCD.
+
+### Beta Overview
+
+The public Beta native desktop installs are attached to this release.
 
 This Beta release shows the new desktop functionality that will be available in the next iteration of OKIT providing Native Installers rather than the current Web Based solution. In addtion to a native installation the designer provides a true Drag-&-Drop interface allowing the user to define the layout of there design without any of the previous restrictions.
 
@@ -48,39 +53,39 @@ ___**Available Resources**___
 | Groups                         | &check;    | &check;   |            |         |            |
 | Users                          | &check;    | &check;   |            |         |            |
 
-### Native Installs
+#### Native Installs
 ___At present we do not have any certificates associated with these and hence you may see some security warnings during execution. If you are happy to accept that the installation files built by GitHub are okey then
 you will need to acknowledge in the appropriate dialog for your system.___
 
-### OCD Desktop Features 
+#### OCD Desktop Features 
 
 The OCD Desktop / Web interface is composed of a number of section similar to those provided in the original OKIT BUI. These provide similar functionality but with some key difference that will be document below.
 
 ![OCD Desktop](https://github.com/oracle/oci-designer-toolkit/blob/master/ocd/images/OcdDesktop.png)
 
-#### Palette
+##### Palette
 
 Location of all resources that can be used within OCD. These are split into two tabs.
 
-##### Provider
+###### Provider
 
 The Provider tab contains a set of provider (currently only OCI) Resources that are available within the OCD Desktop to design your architecture. These resources can be displayed in either a simple, icon only, or a verbose format, icon and name. When you want to add a resource to your architecture simply drag it from the palette onto the canvas.
 
-##### Model
+###### Model
 
 The Model tab contains a list of all Resource that have already been added to the design allowing the user to drag a second copy of the resource onto the canvas, either the 
 same [Page/View](#pagesviews) or a new [Page/View](#pagesviews).
 
-#### Canvas
+##### Canvas
 
 Freeform location where your design can be created. Once a Resource has been dragged from the palete and dropped on the canvas it can subsequently be moved as required by the user. In addition container style Resource (Vcn / Subnet) will also allow resize and can contain other resources. It should be noted that Compartments are not represented on the
 canvas as a Resource but rather created as Layers using the top tab bar. These compartment layers can subsequently be shown/hidden and the Resources within the Compartment layer will be shown/hidden on the canvas. In addition Compartment Layers can be coloured (Style in properties) and if the "Highlight Compartment Resources" is selected from the designer menu (above the palette) 
 then the borders of resource will be coloured to match the compartment.
 
-#### Pages/Views
+##### Pages/Views
 
 The Page/View Tabs (at base of canvas) allow the user to create multiple visual representations of the same design/model by selecting resources from the "Model" palette.
 
-#### Properties
+##### Properties
 
 The properties panel provides access to the edittable properties available for the selected Resource. In addition the User can provide Resource specific documentation that will be included in any generated Markdown.

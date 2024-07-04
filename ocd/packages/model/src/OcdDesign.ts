@@ -21,13 +21,30 @@ export interface OcdMetadata {
 }
 
 export interface OcdTag {
+    id?: string
+    key: string
+    value: string
+}
+
+export interface OciFreeformTag extends OcdTag {}
+
+export interface OciDefinedTag extends OcdTag {
+    namespace: string
+}
+
+export interface OcdTags {
     [key: string]: string
 }
 
+export interface OciFreeformTags extends OcdTags {}
+
+export interface OciDefinedTags  {
+    [key: string]: OcdTags
+}
 
 export interface OciTags {
-    freeform?: OcdTag[],
-    defined?: {[key: string]: OcdTag[]}[]
+    freeformTags?: OciFreeformTags,
+    definedTags?: OciDefinedTags
 }
 
 export interface OcdView {
@@ -173,7 +190,10 @@ export namespace OcdDesign {
             },
             model: {
                 oci: {
-                    tags: {},
+                    tags: {
+                        freeformTags: {},
+                        definedTags: {}
+                    },
                     vars: [],
                     resources: {
                         compartment: [compartment]
@@ -260,6 +280,30 @@ export namespace OcdDesign {
             default: '',
             description: ''
         }
+    }
+
+    // Tag Methods
+    export function newOciFreeformTag(): OciFreeformTag {
+        return {
+            // id: uuidv4(),
+            key: `TAG Key ${uuidv4().slice(-4)}`,
+            value: ''
+        }
+    }
+    // export function newOciDefinedTag(): OciDefinedTag {
+    //     return {
+    //         ...newOciFreeformTag(),
+    //         namespace: ''
+    //     }
+    // }
+    export function ociFreeformTagsToArray(freeformTags: OciFreeformTags | undefined): OciFreeformTag[] {
+        return freeformTags ? Object.entries(freeformTags).map(([k, v]) => {return {key: k, value: v}}) : [] 
+    }
+    export function ociDefinedTagsToArray(definedTags: OciDefinedTags | undefined): OciDefinedTag[] {
+        return definedTags ? Object.entries(definedTags).reduce((a, [nk, nv]) => {return [...a, ...Object.entries(nv).map(([k, v]) => {return {namespace: nk, key: k, value: v}})]}, [] as OciDefinedTag[]) : []
+    }
+    export function ociFreeformTagArrayToTags(freeformTags: OciFreeformTag[]): OciFreeformTags {
+        return freeformTags.reduce((a, c) => {a[c.key] = c.value; return a}, {} as OciFreeformTags)
     }
 }
 
