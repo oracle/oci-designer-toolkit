@@ -10,7 +10,7 @@ Welcome to the June 2024 release of OKIT. There is only a single update in this 
 2. Add PCA Template to define OKE networking infrastructure. 
 
 ## OKIT - Open Cloud Designer
-1. Add the ability to create common Tags that will be used across all reasorces created by OCD.
+1. Add the ability to create common Freeform Tags that will be used across all reasorces created by OCD.
 
 ### Beta Overview
 
