@@ -54,7 +54,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-latest, windows-latest, ubuntu-latest]
+        os: [macos-latest, windows-latest]
         version: [latest]
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
