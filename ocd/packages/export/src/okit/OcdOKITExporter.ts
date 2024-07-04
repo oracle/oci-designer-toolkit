@@ -33,8 +33,8 @@ class OcdOKITExporter extends OcdExporter {
     }
 
     exportTags = () => {
-        if (this.design.model.oci.tags.freeform) this.okitDesign.freeform_tags = this.design.model.oci.tags.freeform
-        if (this.design.model.oci.tags.defined) this.okitDesign.defined_tags = this.design.model.oci.tags.defined
+        if (this.design.model.oci.tags.freeformTags) this.okitDesign.freeform_tags = this.design.model.oci.tags.freeformTags
+        if (this.design.model.oci.tags.definedTags) this.okitDesign.defined_tags = this.design.model.oci.tags.definedTags
 
     }
 

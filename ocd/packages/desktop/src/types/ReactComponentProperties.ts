@@ -139,4 +139,6 @@ export interface OciFreeformTagRowProps {
     tag: OciFreeformTag
     // row: number
     onDeleteClick: React.Dispatch<any>
+    onFreeformKeyChange: (oldKey: string, newKey: string) => any
+    onFreeformValueChange: (key: string, value: string) => any
 }

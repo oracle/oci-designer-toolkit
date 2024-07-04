@@ -11,11 +11,11 @@
 */
 
 export const buildDetails: Record<string, string> = {
-    version: '0.2.0',
-    date: '6/27/2024',
-    time: '1:28:53 PM',
-    datetime: '6/27/2024, 1:28:53 PM',
-    utc: 'Thu, 27 Jun 2024 12:28:53 GMT'
+    version: '0.2.1',
+    date: '7/4/2024',
+    time: '3:12:50 PM',
+    datetime: '7/4/2024, 3:12:50 PM',
+    utc: 'Thu, 04 Jul 2024 14:12:50 GMT'
 }
 
 export default buildDetails

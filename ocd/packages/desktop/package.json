@@ -1,7 +1,7 @@
 {
   "name": "@ocd/desktop",
   "productName": "ocd",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "OKIT Open Cloud Designer Desktop",
   "title": "OKIT Open Cloud Designer Desktop",
   "author": {
@@ -123,11 +123,11 @@
     }
   },
   "dependencies": {
-    "@ocd/core": "^0.2.0",
-    "@ocd/export": "^0.2.0",
-    "@ocd/import": "^0.2.0",
-    "@ocd/model": "^0.2.0",
-    "@ocd/query": "^0.2.0",
+    "@ocd/core": "^0.2.1",
+    "@ocd/export": "^0.2.1",
+    "@ocd/import": "^0.2.1",
+    "@ocd/model": "^0.2.1",
+    "@ocd/query": "^0.2.1",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",

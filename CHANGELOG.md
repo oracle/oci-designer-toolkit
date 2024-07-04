@@ -1,6 +1,16 @@
 # Release Notes
 
 
+## Version 0.61.0
+**Release Date**: 30th June 2024
+### Features
+1. OKIT-Web: Add Query support for Network load Balancers on PCA.
+2. OKIT-Web: Add PCA Template to define OKE networking infrastructure. 
+3. OKIT-Ocd: Add the ability to create common Freeform Tags that will be used across all reasorces created by OCD.
+### Bug Fixes
+1. Resolve Dynamic Group Resource Terraform Validation issue where it erroniously states they are not supported for PCA.
+
+
 ## Version 0.60.0
 **Release Date**: 31st May 2024
 ### Features
