@@ -7,12 +7,14 @@ import { v4 as uuidv4 } from 'uuid'
 import { OcdUtils } from '@ocd/core'
 import { OcdResource } from "../../OcdResource"
 import * as Resources from './resources'
-import { OcdResources } from '../../OcdDesign'
+import { OcdResources, OciDefinedTags, OciFreeformTags } from '../../OcdDesign'
 
 export interface OciResource extends OcdResource {
     region: string
     compartmentId: string
     displayName?: string
+    freeformTags?: OciFreeformTags
+    definedTags?: OciDefinedTags
 }
 
 

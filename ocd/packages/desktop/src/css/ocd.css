@@ -1707,7 +1707,7 @@ table {
 .ocd-tags-list-header .th:first-child {
     padding-left: 0;
     border-left: var(--tabular-line-colour) solid 1px;
-    width: 20rem;
+    width: 10rem;
 }
 
 .ocd-tags-list-body {

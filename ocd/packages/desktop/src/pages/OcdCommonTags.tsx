@@ -7,34 +7,62 @@ import { OcdDesign, OciDefinedTag, OciFreeformTag } from "@ocd/model"
 import { ConsolePageProps } from "../types/Console"
 import { OcdVariableRowProps, OciDefinedTagRowProps, OciFreeformTagRowProps } from "../types/ReactComponentProperties"
 import { OcdDocument } from "../components/OcdDocument"
+import { useState } from "react"
 
-const OcdCommonTags = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument}: ConsolePageProps): JSX.Element => {
-    const onOciDefinedTagDeleteClick = ((key: string) => {
-        console.debug('OcdCommonTags: Deleting Defined Row', key, ocdDocument)
-        const clone = OcdDocument.clone(ocdDocument)
-        if (clone.design.model.oci.tags.defined) {
-            clone.design.model.oci.tags.defined = clone.design.model.oci.tags.defined.filter((v) => v.key !== key)
-            setOcdDocument(clone)
-        }
-    })
-    const onOciDefinedTagAddClick = (() => {
-        const clone = OcdDocument.clone(ocdDocument)
-        clone.design.model.oci.tags.defined ? clone.design.model.oci.tags.defined.push(OcdDesign.newOciDefinedTag()) : clone.design.model.oci.tags.defined = [OcdDesign.newOciDefinedTag()]
-        setOcdDocument(clone)
-    })
+export const OcdCommonTags = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument}: ConsolePageProps): JSX.Element => {
+    const [freeformTags, setFreeformTags] = useState(OcdDesign.ociFreeformTagsToArray(ocdDocument.design.model.oci.tags.freeformTags))
+    const [definedTags, setDefinedTags] = useState(OcdDesign.ociDefinedTagsToArray(ocdDocument.design.model.oci.tags.definedTags))
+    // const onOciDefinedTagDeleteClick = ((key: string) => {
+    //     console.debug('OcdCommonTags: Deleting Defined Row', key, ocdDocument)
+    //     const clone = OcdDocument.clone(ocdDocument)
+    //     if (clone.design.model.oci.tags.defined) {
+    //         clone.design.model.oci.tags.defined = clone.design.model.oci.tags.defined.filter((v) => v.key !== key)
+    //         setOcdDocument(clone)
+    //     }
+    // })
+    // const onOciDefinedTagAddClick = (() => {
+    //     const clone = OcdDocument.clone(ocdDocument)
+    //     clone.design.model.oci.tags.defined ? clone.design.model.oci.tags.defined.push(OcdDesign.newOciDefinedTag()) : clone.design.model.oci.tags.defined = [OcdDesign.newOciDefinedTag()]
+    //     setOcdDocument(clone)
+    // })
     const onOciFreeformTagDeleteClick = ((key: string) => {
         console.debug('OcdCommonTags: Deleting Freeform Row', key, ocdDocument)
-        const clone = OcdDocument.clone(ocdDocument)
-        if (clone.design.model.oci.tags.freeform) {
-            clone.design.model.oci.tags.freeform = clone.design.model.oci.tags.freeform.filter((v) => v.key !== key)
-            setOcdDocument(clone)
-        }
+        const updatedTags = freeformTags.filter((v) => v.key !== key)
+        setFreeformTags(updatedTags)
+        updateFreeformTags(updatedTags)
+        // const clone = OcdDocument.clone(ocdDocument)
+        // if (clone.design.model.oci.tags.freeform) {
+        //     clone.design.model.oci.tags.freeform = clone.design.model.oci.tags.freeform.filter((v) => v.key !== key)
+        //     setOcdDocument(clone)
+        // }
     })
     const onOciFreeformTagAddClick = (() => {
-        const clone = OcdDocument.clone(ocdDocument)
-        clone.design.model.oci.tags.freeform ? clone.design.model.oci.tags.freeform.push(OcdDesign.newOciFreeformTag()) : clone.design.model.oci.tags.freeform = [OcdDesign.newOciFreeformTag()]
-        setOcdDocument(clone)
+        const newTag = OcdDesign.newOciFreeformTag()
+        const updatedTags = [...freeformTags, newTag]
+        console.debug('OcdCommonTags: Adding Tag', newTag, updatedTags)
+        updateFreeformTags(updatedTags)
+        setFreeformTags(updatedTags)
+        // const clone = OcdDocument.clone(ocdDocument)
+        // clone.design.model.oci.tags.freeform ? clone.design.model.oci.tags.freeform.push(OcdDesign.newOciFreeformTag()) : clone.design.model.oci.tags.freeform = [OcdDesign.newOciFreeformTag()]
+        // setOcdDocument(clone)
     })
+    const onFreeformKeyChange = ((oldKey: string, newKey: string) => {
+        const tag = freeformTags.find((t) => t.key === oldKey)
+        if (tag) {
+            tag.key = newKey
+            setFreeformTags(freeformTags)
+            updateFreeformTags(freeformTags)
+        }
+    })
+    const onFreeformValueChange = ((key: string, value: string) => {
+        const tag = freeformTags.find((t) => t.key === key)
+        if (tag) {
+            tag.value = value
+            setFreeformTags(freeformTags)
+            updateFreeformTags(freeformTags)
+        }
+    })
+    const updateFreeformTags = (tags: OciFreeformTag[]) => ocdDocument.design.model.oci.tags.freeformTags = OcdDesign.ociFreeformTagArrayToTags(tags)
     return (
         <div className='ocd-common-tags-view'>
             <details className='ocd-details' open={true}>
@@ -52,20 +80,22 @@ const OcdCommonTags = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, set
                                     </div>
                                 </div>
                                 <div className='tbody ocd-tags-list-body'>
-                                    {ocdDocument.design.model.oci.tags.freeform && ocdDocument.design.model.oci.tags.freeform.sort((a, b) => a.key.localeCompare(b.key)).map((v: OciFreeformTag, i) => {
+                                    {freeformTags.sort((a, b) => a.key.localeCompare(b.key)).map((v: OciFreeformTag, i) => {
                                         return <OciFreeformTagRow 
                                             ocdDocument={ocdDocument}
                                             setOcdDocument={setOcdDocument}
                                             tag={v}
                                             onDeleteClick={() => onOciFreeformTagDeleteClick(v.key)}
-                                            key={`${v.id}`}
+                                            onFreeformKeyChange={onFreeformKeyChange}
+                                            onFreeformValueChange={onFreeformValueChange}
+                                            key={`freeform.${v.key}`}
                                         />
                                     })}
                                 </div>
                             </div>
                         </div>
                     </details>
-                    <details className='ocd-details' open={true}>
+                    {/* <details className='ocd-details' open={true}>
                         <summary className='summary-background'><label>Defined Tags</label></summary>
                         <div className='ocd-details-body'>
                             <div className='table ocd-tags-table'>
@@ -90,56 +120,62 @@ const OcdCommonTags = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, set
                                 </div>
                             </div>
                         </div>
-                    </details>
+                    </details> */}
                 </div>
             </details>
         </div>
     )
 }
 
-const OciDefinedTagRow = ({ocdDocument, setOcdDocument, tag, onDeleteClick}: OciDefinedTagRowProps): JSX.Element => {
-    const onBlur = (e: React.ChangeEvent<HTMLInputElement>) => {tag.key = e.target.value}
-    const onNamespaceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        tag.namespace = e.target.value
-        const clone = OcdDocument.clone(ocdDocument)
-        setOcdDocument(clone)
-    }
-    const onKeyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        tag.key = e.target.value
-        const clone = OcdDocument.clone(ocdDocument)
-        setOcdDocument(clone)
-    }
-    const onValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        tag.value = e.target.value
-        const clone = OcdDocument.clone(ocdDocument)
-        setOcdDocument(clone)
-    }
-    return (
-        <div className='ocd-tag-row tr'>
-            <div className='td'><input type='text' placeholder='Namespace' value={tag.namespace} onChange={onNamespaceChange}></input></div>
-            <div className='td'><input type='text' placeholder='Key' value={tag.key} onChange={onKeyChange}></input></div>
-            <div className='td'><input type='text' placeholder='Value' value={tag.value} onChange={onValueChange}></input></div>
-            <div className='td action-button-background delete-property' onClick={onDeleteClick}></div>
-        </div>
-    )
-}
+// export const OciDefinedTagRow = ({ocdDocument, setOcdDocument, tag, onDeleteClick}: OciDefinedTagRowProps): JSX.Element => {
+//     const onBlur = (e: React.ChangeEvent<HTMLInputElement>) => {tag.key = e.target.value}
+//     const onNamespaceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//         tag.namespace = e.target.value
+//         const clone = OcdDocument.clone(ocdDocument)
+//         setOcdDocument(clone)
+//     }
+//     const onKeyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//         tag.key = e.target.value
+//         const clone = OcdDocument.clone(ocdDocument)
+//         setOcdDocument(clone)
+//     }
+//     const onValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//         tag.value = e.target.value
+//         const clone = OcdDocument.clone(ocdDocument)
+//         setOcdDocument(clone)
+//     }
+//     return (
+//         <div className='ocd-tag-row tr'>
+//             <div className='td'><input type='text' placeholder='Namespace' value={tag.namespace} onChange={onNamespaceChange}></input></div>
+//             <div className='td'><input type='text' placeholder='Key' value={tag.key} onChange={onKeyChange}></input></div>
+//             <div className='td'><input type='text' placeholder='Value' value={tag.value} onChange={onValueChange}></input></div>
+//             <div className='td action-button-background delete-property' onClick={onDeleteClick}></div>
+//         </div>
+//     )
+// }
 
-const OciFreeformTagRow = ({ocdDocument, setOcdDocument, tag, onDeleteClick}: OciFreeformTagRowProps): JSX.Element => {
+export const OciFreeformTagRow = ({ocdDocument, setOcdDocument, tag, onDeleteClick, onFreeformKeyChange, onFreeformValueChange}: OciFreeformTagRowProps): JSX.Element => {
+    const [key, setKey] = useState(tag.key)
+    const [value, setValue] = useState(tag.value)
     const onBlur = (e: React.ChangeEvent<HTMLInputElement>) => {tag.key = e.target.value}
     const onKeyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        tag.key = e.target.value
-        const clone = OcdDocument.clone(ocdDocument)
-        setOcdDocument(clone)
+        onFreeformKeyChange(key, e.target.value)
+        // tag.key = e.target.value
+        setKey(e.target.value)
+        // const clone = OcdDocument.clone(ocdDocument)
+        // setOcdDocument(clone)
     }
     const onValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        tag.value = e.target.value
-        const clone = OcdDocument.clone(ocdDocument)
-        setOcdDocument(clone)
+        onFreeformValueChange(key, e.target.value)
+        // tag.value = e.target.value
+        setValue(e.target.value)
+        // const clone = OcdDocument.clone(ocdDocument)
+        // setOcdDocument(clone)
     }
     return (
         <div className='ocd-tag-row tr'>
-            <div className='td'><input type='text' placeholder='Name' value={tag.key} onChange={onKeyChange}></input></div>
-            <div className='td'><input type='text' placeholder='Value' value={tag.value} onChange={onValueChange}></input></div>
+            <div className='td'><input type='text' placeholder='Name' value={key} onChange={onKeyChange}></input></div>
+            <div className='td'><input type='text' placeholder='Value' value={value} onChange={onValueChange}></input></div>
             <div className='td action-button-background delete-property' onClick={onDeleteClick}></div>
         </div>
     )

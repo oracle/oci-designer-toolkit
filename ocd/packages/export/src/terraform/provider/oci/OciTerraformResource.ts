@@ -3,6 +3,7 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
+import { OcdTag } from "@ocd/model/src/OcdDesign"
 import OcdTerraformResource from "../../OcdTerraformResource"
 import { OciModelResources as Model, OcdDesign, OciDefinedTag, OciFreeformTag, OciResource } from '@ocd/model'
 
@@ -45,18 +46,29 @@ export class OciTerraformResource extends OcdTerraformResource {
     tags = (resource: OciResource, design: OcdDesign): string => {
         const freeform = [
             ...this.ocdTags,
-            ...design.model.oci.tags.freeform ? design.model.oci.tags.freeform : [],
-            ...resource.freeformTags ? resource.freeformTags : []
+            ...design.model.oci.tags.freeformTags ? Object.entries(design.model.oci.tags.freeformTags).map(([k, v]) => {return {key: k, value: v}}) : [],
+            ...resource.freeformTags ? Object.entries(resource.freeformTags).map(([k, v]) => {return {key: k, value: v}}) : []
         ]
+        console.debug('OciTerraformResource: Freeform', freeform)
         const defined = [
-            ...design.model.oci.tags.defined ? design.model.oci.tags.defined : [],
-            ...resource.definedTags ? resource.definedTags : []
+            ...design.model.oci.tags.definedTags ? Object.entries(design.model.oci.tags.definedTags).reduce((a, [nk, nv]) => {return [...a, ...Object.entries(nv).map(([k, v]) => {return {namespace: nk, key: k, value: v}})]}, [] as OciDefinedTag[]) : [],
+            ...resource.definedTags ? Object.entries(resource.definedTags).reduce((a, [nk, nv]) => {return [...a, ...Object.entries(nv).map(([k, v]) => {return {namespace: nk, key: k, value: v}})]}, [] as OciDefinedTag[]) : []
         ]
+        console.debug('OciTerraformResource: Defined', defined)
+        // const freeform = [
+        //     ...this.ocdTags,
+        //     ...design.model.oci.tags.freeformTags ? design.model.oci.tags.freeformTags : [],
+        //     ...resource.freeformTags ? resource.freeformTags : []
+        // ]
+        // const defined = [
+        //     ...design.model.oci.tags.definedTags ? design.model.oci.tags.definedTags : [],
+        //     ...resource.definedTags ? resource.definedTags : []
+        // ]
         return `# Tags
     ${this.freeformTags(freeform)}
     ${this.definedTags(defined)}
 `
-    }
+}
     definedTags = (tags: OciDefinedTag[]): string => {
         if (tags.length === 0) return ''
         else return `defined_tags = {
