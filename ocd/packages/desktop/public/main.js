@@ -4,6 +4,8 @@
 */
 
 const { app, dialog, BrowserWindow, ipcMain, screen, Menu, shell } = require("electron")
+app.commandLine.appendSwitch('ignore-certificate-errors') // Temporary work around for not being able to add additional certificates
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0' // Temporary work around for not being able to add additional certificates
 const path = require("path")
 const url = require("url")
 const fs = require("fs")

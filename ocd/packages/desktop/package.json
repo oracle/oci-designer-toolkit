@@ -68,7 +68,7 @@
   },
   "build": {
     "appId": "com.oracle.okit-ocd",
-    "artifactName": "${productName}-${version}${env.BRANCH_NAME}-${arch}.${ext}",
+    "artifactName": "${productName}-${version}-${arch}.${ext}",
     "files": [
       "build/**/*",
       "node_modules/**/*"
@@ -114,12 +114,19 @@
       "perMachine": true
     },
     "linux": {
+      "desktop": {
+        "Name": "OKIT - Open Cloud designer",
+        "StartupNotify": "true",
+        "Terminal": "false",
+        "Type": "Application"        
+      },
       "icon": "build/assets/icon.png",
-      "executableName": "${productName}-${version}${env.BRANCH_NAME}.${ext}",
+      "executableName": "${productName}-${version}.${ext}",
       "target": [
-        "rpm"
+        "snap"
       ]
-    }
+    },
+    "rpm": {}
   },
   "dependencies": {
     "@ocd/core": "^0.2.1",
