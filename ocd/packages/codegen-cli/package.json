@@ -30,7 +30,7 @@
     "generate-ocd-build-date-export": "node lib/esm/ocd-set-build-date.js -d ../export/src/data -p ../desktop/package.json",
     "generate-ocd-build-date": "npm run generate-ocd-build-date-desktop && npm run generate-ocd-build-date-export",
 
-    "generate-terraform-provider-schema": "cd schema && terraform init && terraform providers schema -json > tf-schema.json",
+    "generate-terraform-provider-schema": "cd schema && terraform init -upgrade && terraform providers schema -json > tf-schema.json",
   
     "import-oci-terraform-schema":   "node lib/esm/ocd-codegen.js import oci-terraform-schema   -i ./schema/tf-schema.json -o ./schema/oci-schema.json",
     "import-azureaz-terraform-schema": "node lib/esm/ocd-codegen.js import azureaz-terraform-schema -i ./schema/tf-schema.json -o ./schema/azureaz-schema.json",

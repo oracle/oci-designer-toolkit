@@ -380,15 +380,16 @@ export class OciQuery extends OciCommonQuery {
                 // @ts-ignore 
                 const sorter = (a, b) => a.displayName.localeCompare(b.displayName)
                 if (results[0].status === 'fulfilled') {
-                    console.debug('OciQuery: listRegions: Tenancy has List Region Subscriptions')
+                    console.debug('OciQuery: listRegions: Tenancy has List Region Subscriptions', JSON.stringify(results[0].value, null, 2))
                     const resources = results[0].value.items.map((r) => {return {id: r.regionName, displayName: this.regionNameToDisplayName(r.regionName as string), ...r}}).sort(sorter).reverse()
                     resolve(resources)
-                } else if (results[1].status === 'fulfilled') {
-                    console.debug('OciQuery: listRegions: Tenancy does not have List Region Subscriptions')
-                    const resources = results[1].value.items.map((r) => {return {id: r.key, displayName: this.regionNameToDisplayName(r.key as string), ...r}}).sort(sorter).reverse()
-                    resolve(resources)
+                // } else if (results[1].status === 'fulfilled') {
+                //     console.debug('OciQuery: listRegions: Tenancy does not have List Region Subscriptions', JSON.stringify(results[1].value, null, 2))
+                //     const resources = results[1].value.items.map((r) => {return {id: r.key, displayName: this.regionNameToDisplayName(r.key as string), ...r}}).sort(sorter).reverse()
+                //     resolve(resources)
                 } else {
                     console.debug('OciQuery: listRegions: Tenancy has neither List Region Subscriptions or List Regions')
+                    if (results[1].status === 'fulfilled') console.debug('OciQuery: listRegions: Tenancy does not have List Region Subscriptions', JSON.stringify(results[1].value, null, 2))
                     const resources = [{id: this.provider.getRegion().regionId, displayName: this.provider.getRegion().regionId}]
                     resolve(resources)
                     // reject('Regions Query Failed')

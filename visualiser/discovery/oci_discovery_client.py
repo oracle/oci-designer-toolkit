@@ -730,11 +730,11 @@ class OciResourceDiscoveryClient(object):
         self.object_storage_namespace = object_storage.get_namespace().data
 
         # log analytics namespace
-        log_analytics = oci.log_analytics.LogAnalyticsClient(config=self.config, signer=self.signer)
-        if self.cert_bundle:
-            log_analytics.base_client.session.verify = self.cert_bundle
-        log_analytics_namespaces = log_analytics.list_namespaces(self.tenancy.id).data
-        self.log_analytics_namespace = log_analytics_namespaces.items[0].namespace_name if len(log_analytics_namespaces.items) > 0 else None
+        # log_analytics = oci.log_analytics.LogAnalyticsClient(config=self.config, signer=self.signer)
+        # if self.cert_bundle:
+        #     log_analytics.base_client.session.verify = self.cert_bundle
+        # log_analytics_namespaces = log_analytics.list_namespaces(self.tenancy.id).data
+        # self.log_analytics_namespace = log_analytics_namespaces.items[0].namespace_name if len(log_analytics_namespaces.items) > 0 else None
 
     # use search to find all resources in the region
     def search_resources_for_region(self, region_name, resource_types, compartments=None):

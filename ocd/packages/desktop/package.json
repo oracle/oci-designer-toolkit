@@ -123,7 +123,7 @@
       "icon": "build/assets/icon.png",
       "executableName": "${productName}-${version}.${ext}",
       "target": [
-        "rpm"
+        "snap"
       ]
     },
     "rpm": {}

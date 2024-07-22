@@ -4,7 +4,10 @@ terraform {
       source = "Azure/azapi"
     }
     azurerm = {
-      source  = "hashicorp/azurerm"
+      source = "hashicorp/azurerm"
+    }
+    google = {
+      source = "hashicorp/google"
     }
     oci = {
         source = "hashicorp/oci"
