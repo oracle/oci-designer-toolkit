@@ -8,6 +8,7 @@ import path from 'path'
 import os from 'os'
 import { rootCertificates } from "tls"
 import { Agent as httpsAgent } from "https"
+import https from "https"
 import { OcdUtils } from "@ocd/core"
 import { common, identity } from "oci-sdk"
 
@@ -25,25 +26,19 @@ export class OciCommonQuery {
         this.profile = profile
         this.provider = new common.ConfigFileAuthenticationDetailsProvider(undefined, profile)
         if (region) this.provider.setRegion(region)
-        else console.debug('OciCommonQuery: Using Region', this.provider.getRegion())
-        // console.debug('OciCommonQuery Profile:', profile)
-        // console.debug('OciCommonQuery Provider:', this.provider)
-        const certBundle = this.getCertBundle(profile)
-        console.debug('OciCommonQuery Cert Bundle:', certBundle)
-        // console.debug('OciCommonQuery Config File:', configFile)
+        else console.debug('OciCommonQuery: Using Region', this.provider.getRegion().regionId)
+        const certBundle: string | undefined = this.getCertBundle(profile)
         // Define Retry Configuration
         const retryConfiguration: common.RetryConfiguration = {
-            // terminationStrategy : new common.MaxAttemptsTerminationStrategy(10)
+            terminationStrategy : new common.MaxAttemptsTerminationStrategy(3)
         }
-        // const httpOptions = certBundle ? {cert: certBundle} : undefined
-        // const httpOptions = undefined
         let httpOptions: { [key: string]: any } | undefined = undefined
         // if (certBundle) {
-        //     // console.debug('OciCommonQuery Root Certs:', rootCertificates)
-        //     // console.debug('OciCommonQuery Cert Bundle:', this.certBundleToArray(certBundle))
-        //     const ca = [...rootCertificates, ...this.certBundleToArray(certBundle)]
-        //     // console.debug('OciCommonQuery Cert Bundle:', ca)
+        //     const ca = [...rootCertificates, certBundle]
+        //     // const ca = [...rootCertificates, ...this.certBundleToArray(certBundle)]
+        //     httpOptions = {agent: new httpsAgent({ca: ca, rejectUnauthorized: false}), rejectUnauthorized: false}
         //     httpOptions = {agent: new httpsAgent({ca: ca})}
+        //     // https.globalAgent.options.ca = ca
         // }
         this.clientConfiguration = { retryConfiguration: retryConfiguration, httpOptions: httpOptions }
         this.authenticationConfiguration = { authenticationDetailsProvider: this.provider }
@@ -53,18 +48,10 @@ export class OciCommonQuery {
 
     getCertBundle = (profile: string): string | undefined => {
         const certBundleFile = this.provider.getProfileCredentials()?.configurationsByProfile.get(profile)?.get('cert-bundle')
-        const absolutePath = path.resolve(certBundleFile ? certBundleFile : '~')
-        const homeDirPath = this.getHomeDirPath(certBundleFile ? certBundleFile : '~')
-        // console.debug('OciCommonQuery Config Credentials:', this.provider.getProfileCredentials())
-        // console.debug('OciCommonQuery Config By Profile:', this.provider.getProfileCredentials()?.configurationsByProfile)
-        // console.debug('OciCommonQuery Config Profile:', profile, this.provider.getProfileCredentials()?.configurationsByProfile.get(profile))
-        // console.debug('OciCommonQuery Cert Bundle File:', certBundleFile)
-        // console.debug('OciCommonQuery Absolute Cert Bundle File:', absolutePath)
-        // console.debug('OciCommonQuery Home Dir Cert Bundle File:', homeDirPath)
         if (certBundleFile === undefined) return undefined
         else {
-            const certBundle: string = fs.readFileSync(homeDirPath, 'utf-8')
-            // console.debug('OciCommonQuery Cert Bundle:', certBundle)
+            const homeDirPath = this.getHomeDirPath(certBundleFile ? certBundleFile : '~')
+            const certBundle: string = fs.readFileSync(homeDirPath, 'ascii')
             return certBundle
         }
     }
@@ -87,11 +74,11 @@ export class OciCommonQuery {
     getHomeDirPath = (filePath: string): string => filePath.startsWith('~') ? path.join(os.homedir(), filePath.slice(1).replace(/\\/g, "/")) : filePath
  
     regionNameToDisplayName = (name: string) => {
-        const nameParts = name.split('-')
-        const region = nameParts[0].toUpperCase()
-        const city = `${nameParts[1].charAt(0).toUpperCase()}${nameParts[1].substring(1).toLowerCase()}`
-        // const displayName = `${region} ${city}`
-        const displayName = nameParts.slice(0, -1).map((p, i) => i === 0 ? p.toUpperCase() : OcdUtils.capitaliseFirstCharacter(p)).join(' ')
+        const nameParts = name.split('-') // oci region names are in the format uk-london-1
+        const displayName = nameParts.length > 2 ? nameParts.slice(0, -1).map((p, i) => i === 0 ? p.toUpperCase() : OcdUtils.capitaliseFirstCharacter(p)).join(' ') : name
+        // if (nameParts.length > 2) {
+        //     displayName = nameParts.slice(0, -1).map((p, i) => i === 0 ? p.toUpperCase() : OcdUtils.capitaliseFirstCharacter(p)).join(' ')
+        // }
         return displayName
     }
 

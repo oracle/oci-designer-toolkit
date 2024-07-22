@@ -246,7 +246,7 @@ export class OciQuery extends OciCommonQuery {
                 // Set Primaty Vnic
                 if (design.model.oci.resources.vnic_attachment) {
                     design.model.oci.resources.instance.forEach((i) => {
-                        const primaryVnicAttachment: OciModelResources.OciVnicAttachment = design.model.oci.resources.vnic_attachment.find((v: OciModelResources.OciVnicAttachment) => v.instanceId === i.id && v.lifecycleState === 'ATTACHED' && v.vnic.isPrimary)
+                        const primaryVnicAttachment: OciModelResources.OciVnicAttachment = design.model.oci.resources.vnic_attachment.find((v: OciModelResources.OciVnicAttachment) => v.instanceId === i.id && v.lifecycleState === 'ATTACHED' && v.vnic && v.vnic.isPrimary)
                         //.map((v: OciModelResources.OciVnicAttachment) => v.vnic)
                         if (primaryVnicAttachment ) {
                             const primaryVnic = primaryVnicAttachment.vnic
@@ -276,7 +276,10 @@ export class OciQuery extends OciCommonQuery {
                     })).flat()
                     // Create Backends
                     design.model.oci.resources.load_balancer_backend = design.model.oci.resources.load_balancer_backend_set.map((bs) => Object.values(bs.backends as OciLoadBalancerBackend[]).map((b) => {
-                        const instanceId = design.model.oci.resources.vnic_attachment ? design.model.oci.resources.vnic_attachment.find((v) => v.privateIp && v.privateIp.ipAddress === b.ipAddress).instanceId : ''
+                        const vnicAttachments = design.model.oci.resources.vnic_attachment ? design.model.oci.resources.vnic_attachment : []
+                        const vnicAttachment = vnicAttachments.find((v) => v.privateIp && v.privateIp.ipAddress === b.ipAddress)
+                        const instanceId = vnicAttachment ? vnicAttachment.instanceId : ''
+                        // const instanceId = design.model.oci.resources.vnic_attachment ? design.model.oci.resources.vnic_attachment.find((v) => v.privateIp && v.privateIp.ipAddress === b.ipAddress).instanceId : ''
                         return {...b,
 
                             id: bs.id.replace('load_balancer_backend_set', 'load_balancer_backend'), 
@@ -369,16 +372,26 @@ export class OciQuery extends OciCommonQuery {
     listRegions(): Promise<any> {
         return new Promise((resolve, reject) => {
             // if (!this.identityClient) this.identityClient = new identity.IdentityClient({ authenticationDetailsProvider: this.provider })
-            const listRegionsRequest: identity.requests.ListRegionSubscriptionsRequest = {tenancyId: this.provider.getTenantId()}
-            const regionsQuery = this.identityClient.listRegionSubscriptions(listRegionsRequest)
-            Promise.allSettled([regionsQuery]).then((results) => {
+            const listRegionSubscriptionsRequest: identity.requests.ListRegionSubscriptionsRequest = {tenancyId: this.provider.getTenantId()}
+            const listRegionsRequest: identity.requests.ListRegionsRequest = {}
+            const regionSubscriptionsQuery = this.identityClient.listRegionSubscriptions(listRegionSubscriptionsRequest)
+            const regionsQuery = this.identityClient.listRegions(listRegionsRequest)
+            Promise.allSettled([regionSubscriptionsQuery, regionsQuery]).then((results) => {
                 // @ts-ignore 
                 const sorter = (a, b) => a.displayName.localeCompare(b.displayName)
                 if (results[0].status === 'fulfilled') {
+                    console.debug('OciQuery: listRegions: Tenancy has List Region Subscriptions')
                     const resources = results[0].value.items.map((r) => {return {id: r.regionName, displayName: this.regionNameToDisplayName(r.regionName as string), ...r}}).sort(sorter).reverse()
                     resolve(resources)
+                } else if (results[1].status === 'fulfilled') {
+                    console.debug('OciQuery: listRegions: Tenancy does not have List Region Subscriptions')
+                    const resources = results[1].value.items.map((r) => {return {id: r.key, displayName: this.regionNameToDisplayName(r.key as string), ...r}}).sort(sorter).reverse()
+                    resolve(resources)
                 } else {
-                    reject('Regions Query Failed')
+                    console.debug('OciQuery: listRegions: Tenancy has neither List Region Subscriptions or List Regions')
+                    const resources = [{id: this.provider.getRegion().regionId, displayName: this.provider.getRegion().regionId}]
+                    resolve(resources)
+                    // reject('Regions Query Failed')
                 }
             })
         })
