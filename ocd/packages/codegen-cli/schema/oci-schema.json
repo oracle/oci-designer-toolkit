@@ -191,23 +191,6 @@
         "conditional": false,
         "condition": {}
       },
-      "time_updated": {
-        "provider": "oci",
-        "key": "timeUpdated",
-        "name": "time_updated",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Time Updated",
-        "id": "time_updated",
-        "staticLookup": false,
-        "cacheLookup": false,
-        "lookup": false,
-        "lookupResource": "",
-        "lookupResourceElement": "",
-        "conditional": false,
-        "condition": {}
-      },
       "capacity": {
         "provider": "oci",
         "key": "capacity",
@@ -546,23 +529,6 @@
         "conditional": false,
         "condition": {}
       },
-      "max_sessions_allowed": {
-        "provider": "oci",
-        "key": "maxSessionsAllowed",
-        "name": "max_sessions_allowed",
-        "type": "number",
-        "subtype": "",
-        "required": false,
-        "label": "Max Sessions Allowed",
-        "id": "max_sessions_allowed",
-        "staticLookup": false,
-        "cacheLookup": false,
-        "lookup": false,
-        "lookupResource": "",
-        "lookupResourceElement": "",
-        "conditional": false,
-        "condition": {}
-      },
       "name": {
         "provider": "oci",
         "key": "name",
@@ -662,23 +628,6 @@
         "lookup": true,
         "lookupResource": "target_vcn",
         "lookupResourceElement": "id",
-        "conditional": false,
-        "condition": {}
-      },
-      "time_updated": {
-        "provider": "oci",
-        "key": "timeUpdated",
-        "name": "time_updated",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Time Updated",
-        "id": "time_updated",
-        "staticLookup": false,
-        "cacheLookup": false,
-        "lookup": false,
-        "lookupResource": "",
-        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       }
@@ -1167,42 +1116,7 @@
             "id": "options.persistent_volume_config",
             "conditional": false,
             "condition": {},
-            "attributes": {
-              "defined_tags": {
-                "provider": "oci",
-                "key": "definedTags",
-                "name": "defined_tags",
-                "type": "map",
-                "subtype": "string",
-                "required": false,
-                "label": "Defined Tags",
-                "id": "options.persistent_volume_config.defined_tags",
-                "staticLookup": false,
-                "cacheLookup": false,
-                "lookup": false,
-                "lookupResource": "",
-                "lookupResourceElement": "",
-                "conditional": false,
-                "condition": {}
-              },
-              "freeform_tags": {
-                "provider": "oci",
-                "key": "freeformTags",
-                "name": "freeform_tags",
-                "type": "map",
-                "subtype": "string",
-                "required": false,
-                "label": "Freeform Tags",
-                "id": "options.persistent_volume_config.freeform_tags",
-                "staticLookup": false,
-                "cacheLookup": false,
-                "lookup": false,
-                "lookupResource": "",
-                "lookupResourceElement": "",
-                "conditional": false,
-                "condition": {}
-              }
-            }
+            "attributes": {}
           },
           "service_lb_config": {
             "provider": "oci",
@@ -1215,42 +1129,7 @@
             "id": "options.service_lb_config",
             "conditional": false,
             "condition": {},
-            "attributes": {
-              "defined_tags": {
-                "provider": "oci",
-                "key": "definedTags",
-                "name": "defined_tags",
-                "type": "map",
-                "subtype": "string",
-                "required": false,
-                "label": "Defined Tags",
-                "id": "options.service_lb_config.defined_tags",
-                "staticLookup": false,
-                "cacheLookup": false,
-                "lookup": false,
-                "lookupResource": "",
-                "lookupResourceElement": "",
-                "conditional": false,
-                "condition": {}
-              },
-              "freeform_tags": {
-                "provider": "oci",
-                "key": "freeformTags",
-                "name": "freeform_tags",
-                "type": "map",
-                "subtype": "string",
-                "required": false,
-                "label": "Freeform Tags",
-                "id": "options.service_lb_config.freeform_tags",
-                "staticLookup": false,
-                "cacheLookup": false,
-                "lookup": false,
-                "lookupResource": "",
-                "lookupResourceElement": "",
-                "conditional": false,
-                "condition": {}
-              }
-            }
+            "attributes": {}
           }
         }
       }
@@ -1508,40 +1387,6 @@
         "conditional": false,
         "condition": {},
         "attributes": {
-          "defined_tags": {
-            "provider": "oci",
-            "key": "definedTags",
-            "name": "defined_tags",
-            "type": "map",
-            "subtype": "string",
-            "required": false,
-            "label": "Defined Tags",
-            "id": "node_config_details.defined_tags",
-            "staticLookup": false,
-            "cacheLookup": false,
-            "lookup": false,
-            "lookupResource": "",
-            "lookupResourceElement": "",
-            "conditional": false,
-            "condition": {}
-          },
-          "freeform_tags": {
-            "provider": "oci",
-            "key": "freeformTags",
-            "name": "freeform_tags",
-            "type": "map",
-            "subtype": "string",
-            "required": false,
-            "label": "Freeform Tags",
-            "id": "node_config_details.freeform_tags",
-            "staticLookup": false,
-            "cacheLookup": false,
-            "lookup": false,
-            "lookupResource": "",
-            "lookupResourceElement": "",
-            "conditional": false,
-            "condition": {}
-          },
           "is_pv_encryption_in_transit_enabled": {
             "provider": "oci",
             "key": "isPvEncryptionInTransitEnabled",
@@ -2469,23 +2314,6 @@
         "conditional": false,
         "condition": {},
         "attributes": {
-          "id": {
-            "provider": "oci",
-            "key": "id",
-            "name": "id",
-            "type": "string",
-            "subtype": "",
-            "required": true,
-            "label": "Id",
-            "id": "source_details.id",
-            "staticLookup": false,
-            "cacheLookup": false,
-            "lookup": false,
-            "lookupResource": "",
-            "lookupResourceElement": "",
-            "conditional": false,
-            "condition": {}
-          },
           "type": {
             "provider": "oci",
             "key": "type",
@@ -3043,6 +2871,23 @@
         "conditional": false,
         "condition": {}
       },
+      "id": {
+        "provider": "oci",
+        "key": "id",
+        "name": "id",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Id",
+        "id": "id",
+        "staticLookup": false,
+        "cacheLookup": false,
+        "lookup": false,
+        "lookupResource": "",
+        "lookupResourceElement": "",
+        "conditional": false,
+        "condition": {}
+      },
       "is_cross_tenancy": {
         "provider": "oci",
         "key": "isCrossTenancy",
@@ -3089,23 +2934,6 @@
         "conditional": false,
         "condition": {},
         "attributes": {
-          "id": {
-            "provider": "oci",
-            "key": "id",
-            "name": "id",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Id",
-            "id": "network_details.id",
-            "staticLookup": false,
-            "cacheLookup": false,
-            "lookup": false,
-            "lookupResource": "",
-            "lookupResourceElement": "",
-            "conditional": false,
-            "condition": {}
-          },
           "ids": {
             "provider": "oci",
             "key": "ids",
@@ -3770,23 +3598,6 @@
         "condition": {},
         "default": "1"
       },
-      "cluster_placement_group_id": {
-        "provider": "oci",
-        "key": "clusterPlacementGroupId",
-        "name": "cluster_placement_group_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Cluster Placement Group",
-        "id": "cluster_placement_group_id",
-        "staticLookup": false,
-        "cacheLookup": false,
-        "lookup": true,
-        "lookupResource": "cluster_placement_group",
-        "lookupResourceElement": "id",
-        "conditional": false,
-        "condition": {}
-      },
       "compartment_id": {
         "provider": "oci",
         "key": "compartmentId",
@@ -4169,23 +3980,6 @@
             "conditional": false,
             "condition": {}
           },
-          "defined_tags": {
-            "provider": "oci",
-            "key": "definedTags",
-            "name": "defined_tags",
-            "type": "map",
-            "subtype": "string",
-            "required": false,
-            "label": "Defined Tags",
-            "id": "create_vnic_details.defined_tags",
-            "staticLookup": false,
-            "cacheLookup": false,
-            "lookup": false,
-            "lookupResource": "",
-            "lookupResourceElement": "",
-            "conditional": false,
-            "condition": {}
-          },
           "display_name": {
             "provider": "oci",
             "key": "displayName",
@@ -4195,23 +3989,6 @@
             "required": false,
             "label": "Display Name",
             "id": "create_vnic_details.display_name",
-            "staticLookup": false,
-            "cacheLookup": false,
-            "lookup": false,
-            "lookupResource": "",
-            "lookupResourceElement": "",
-            "conditional": false,
-            "condition": {}
-          },
-          "freeform_tags": {
-            "provider": "oci",
-            "key": "freeformTags",
-            "name": "freeform_tags",
-            "type": "map",
-            "subtype": "string",
-            "required": false,
-            "label": "Freeform Tags",
-            "id": "create_vnic_details.freeform_tags",
             "staticLookup": false,
             "cacheLookup": false,
             "lookup": false,
@@ -4287,54 +4064,6 @@
             "lookupResourceElement": "id",
             "conditional": false,
             "condition": {}
-          },
-          "ipv6address_ipv6subnet_cidr_pair_details": {
-            "provider": "oci",
-            "key": "ipv6addressIpv6subnetCidrPairDetails",
-            "name": "ipv6address_ipv6subnet_cidr_pair_details",
-            "type": "list",
-            "subtype": "",
-            "required": false,
-            "label": "Ipv6address Ipv6subnet Cidr Pair Details",
-            "id": "create_vnic_details.ipv6address_ipv6subnet_cidr_pair_details",
-            "conditional": false,
-            "condition": {},
-            "attributes": {
-              "ipv6address": {
-                "provider": "oci",
-                "key": "ipv6address",
-                "name": "ipv6address",
-                "type": "string",
-                "subtype": "",
-                "required": false,
-                "label": "Ipv6address",
-                "id": "create_vnic_details.ipv6address_ipv6subnet_cidr_pair_details.ipv6address",
-                "staticLookup": false,
-                "cacheLookup": false,
-                "lookup": false,
-                "lookupResource": "",
-                "lookupResourceElement": "",
-                "conditional": false,
-                "condition": {}
-              },
-              "ipv6subnet_cidr": {
-                "provider": "oci",
-                "key": "ipv6subnetCidr",
-                "name": "ipv6subnet_cidr",
-                "type": "string",
-                "subtype": "",
-                "required": false,
-                "label": "Ipv6subnet Cidr",
-                "id": "create_vnic_details.ipv6address_ipv6subnet_cidr_pair_details.ipv6subnet_cidr",
-                "staticLookup": false,
-                "cacheLookup": false,
-                "lookup": false,
-                "lookupResource": "",
-                "lookupResourceElement": "",
-                "conditional": false,
-                "condition": {}
-              }
-            }
           }
         }
       },
@@ -4583,6 +4312,23 @@
         "lookup": false,
         "lookupResource": "",
         "lookupResourceElement": "",
+        "conditional": false,
+        "condition": {}
+      },
+      "route_table_id": {
+        "provider": "oci",
+        "key": "routeTableId",
+        "name": "route_table_id",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Route Table",
+        "id": "route_table_id",
+        "staticLookup": false,
+        "cacheLookup": false,
+        "lookup": true,
+        "lookupResource": "route_table",
+        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -7145,26 +6891,22 @@
         "conditional": false,
         "condition": {}
       },
-      "ipv6private_cidr_blocks": {
+      "ipv6cidr_blocks": {
         "provider": "oci",
-        "key": "ipv6privateCidrBlocks",
-        "name": "ipv6private_cidr_blocks",
+        "key": "ipv6cidrBlocks",
+        "name": "ipv6cidr_blocks",
         "type": "list",
         "subtype": "string",
         "required": false,
-        "label": "IPV6 Private CIDRs",
-        "id": "ipv6private_cidr_blocks",
+        "label": "Ipv6cidr Blocks",
+        "id": "ipv6cidr_blocks",
         "staticLookup": false,
         "cacheLookup": false,
         "lookup": false,
         "lookupResource": "",
         "lookupResourceElement": "",
-        "conditional": true,
-        "condition": {
-          "element": "is_ipv6enabled",
-          "operator": "eq",
-          "value": true
-        }
+        "conditional": false,
+        "condition": {}
       },
       "is_ipv6enabled": {
         "provider": "oci",
@@ -7407,23 +7149,6 @@
             "conditional": false,
             "condition": {}
           },
-          "defined_tags": {
-            "provider": "oci",
-            "key": "definedTags",
-            "name": "defined_tags",
-            "type": "map",
-            "subtype": "string",
-            "required": false,
-            "label": "Defined Tags",
-            "id": "create_vnic_details.defined_tags",
-            "staticLookup": false,
-            "cacheLookup": false,
-            "lookup": false,
-            "lookupResource": "",
-            "lookupResourceElement": "",
-            "conditional": false,
-            "condition": {}
-          },
           "display_name": {
             "provider": "oci",
             "key": "displayName",
@@ -7433,23 +7158,6 @@
             "required": false,
             "label": "Display Name",
             "id": "create_vnic_details.display_name",
-            "staticLookup": false,
-            "cacheLookup": false,
-            "lookup": false,
-            "lookupResource": "",
-            "lookupResourceElement": "",
-            "conditional": false,
-            "condition": {}
-          },
-          "freeform_tags": {
-            "provider": "oci",
-            "key": "freeformTags",
-            "name": "freeform_tags",
-            "type": "map",
-            "subtype": "string",
-            "required": false,
-            "label": "Freeform Tags",
-            "id": "create_vnic_details.freeform_tags",
             "staticLookup": false,
             "cacheLookup": false,
             "lookup": false,
@@ -7942,27 +7650,6 @@
         "conditional": false,
         "condition": {}
       },
-      "use_chap": {
-        "provider": "oci",
-        "key": "useChap",
-        "name": "use_chap",
-        "type": "bool",
-        "subtype": "",
-        "required": false,
-        "label": "Use Chap",
-        "id": "use_chap",
-        "staticLookup": false,
-        "cacheLookup": false,
-        "lookup": false,
-        "lookupResource": "",
-        "lookupResourceElement": "",
-        "conditional": true,
-        "condition": {
-          "element": "attachment_type",
-          "operator": "eq",
-          "value": "iscsi"
-        }
-      },
       "volume_id": {
         "provider": "oci",
         "key": "volumeId",
@@ -8278,23 +7965,6 @@
         "conditional": false,
         "condition": {}
       },
-      "is_dev_tier": {
-        "provider": "oci",
-        "key": "isDevTier",
-        "name": "is_dev_tier",
-        "type": "bool",
-        "subtype": "",
-        "required": false,
-        "label": "Is Dev Tier",
-        "id": "is_dev_tier",
-        "staticLookup": false,
-        "cacheLookup": false,
-        "lookup": false,
-        "lookupResource": "",
-        "lookupResourceElement": "",
-        "conditional": false,
-        "condition": {}
-      },
       "is_free_tier": {
         "provider": "oci",
         "key": "isFreeTier",
@@ -8346,40 +8016,6 @@
         "conditional": false,
         "condition": {}
       },
-      "is_preview_version_with_service_terms_accepted": {
-        "provider": "oci",
-        "key": "isPreviewVersionWithServiceTermsAccepted",
-        "name": "is_preview_version_with_service_terms_accepted",
-        "type": "bool",
-        "subtype": "",
-        "required": false,
-        "label": "Is Preview Version With Service Terms Accepted",
-        "id": "is_preview_version_with_service_terms_accepted",
-        "staticLookup": false,
-        "cacheLookup": false,
-        "lookup": false,
-        "lookupResource": "",
-        "lookupResourceElement": "",
-        "conditional": false,
-        "condition": {}
-      },
-      "is_replicate_automatic_backups": {
-        "provider": "oci",
-        "key": "isReplicateAutomaticBackups",
-        "name": "is_replicate_automatic_backups",
-        "type": "bool",
-        "subtype": "",
-        "required": false,
-        "label": "Is Replicate Automatic Backups",
-        "id": "is_replicate_automatic_backups",
-        "staticLookup": false,
-        "cacheLookup": false,
-        "lookup": false,
-        "lookupResource": "",
-        "lookupResourceElement": "",
-        "conditional": false,
-        "condition": {}
-      },
       "kms_key_id": {
         "provider": "oci",
         "key": "kmsKeyId",
@@ -8415,23 +8051,6 @@
         "condition": {},
         "default": "LICENSE_INCLUDED"
       },
-      "net_services_architecture": {
-        "provider": "oci",
-        "key": "netServicesArchitecture",
-        "name": "net_services_architecture",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Net Services Architecture",
-        "id": "net_services_architecture",
-        "staticLookup": false,
-        "cacheLookup": false,
-        "lookup": false,
-        "lookupResource": "",
-        "lookupResourceElement": "",
-        "conditional": false,
-        "condition": {}
-      },
       "nsg_ids": {
         "provider": "oci",
         "key": "nsgIds",
@@ -8463,23 +8082,6 @@
         "lookup": false,
         "lookupResource": "",
         "lookupResourceElement": "",
-        "conditional": false,
-        "condition": {}
-      },
-      "resource_pool_leader_id": {
-        "provider": "oci",
-        "key": "resourcePoolLeaderId",
-        "name": "resource_pool_leader_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Resource Pool Leader",
-        "id": "resource_pool_leader_id",
-        "staticLookup": false,
-        "cacheLookup": false,
-        "lookup": true,
-        "lookupResource": "resource_pool_leader",
-        "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
       },
@@ -8534,23 +8136,6 @@
         "conditional": false,
         "condition": {}
       },
-      "shrink_adb_trigger": {
-        "provider": "oci",
-        "key": "shrinkAdbTrigger",
-        "name": "shrink_adb_trigger",
-        "type": "number",
-        "subtype": "",
-        "required": false,
-        "label": "Shrink Adb Trigger",
-        "id": "shrink_adb_trigger",
-        "staticLookup": false,
-        "cacheLookup": false,
-        "lookup": false,
-        "lookupResource": "",
-        "lookupResourceElement": "",
-        "conditional": false,
-        "condition": {}
-      },
       "subnet_id": {
         "provider": "oci",
         "key": "subnetId",
@@ -8565,40 +8150,6 @@
         "lookup": true,
         "lookupResource": "subnet",
         "lookupResourceElement": "id",
-        "conditional": false,
-        "condition": {}
-      },
-      "time_of_auto_refresh_start": {
-        "provider": "oci",
-        "key": "timeOfAutoRefreshStart",
-        "name": "time_of_auto_refresh_start",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Time Of Auto Refresh Start",
-        "id": "time_of_auto_refresh_start",
-        "staticLookup": false,
-        "cacheLookup": false,
-        "lookup": false,
-        "lookupResource": "",
-        "lookupResourceElement": "",
-        "conditional": false,
-        "condition": {}
-      },
-      "time_of_joining_resource_pool": {
-        "provider": "oci",
-        "key": "timeOfJoiningResourcePool",
-        "name": "time_of_joining_resource_pool",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Time Of Joining Resource Pool",
-        "id": "time_of_joining_resource_pool",
-        "staticLookup": false,
-        "cacheLookup": false,
-        "lookup": false,
-        "lookupResource": "",
-        "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
       },
@@ -9067,6 +8618,23 @@
         "conditional": false,
         "condition": {},
         "attributes": {
+          "create_async": {
+            "provider": "oci",
+            "key": "createAsync",
+            "name": "create_async",
+            "type": "bool",
+            "subtype": "",
+            "required": false,
+            "label": "Create Async",
+            "id": "db_home.create_async",
+            "staticLookup": false,
+            "cacheLookup": false,
+            "lookup": false,
+            "lookupResource": "",
+            "lookupResourceElement": "",
+            "conditional": false,
+            "condition": {}
+          },
           "database_software_image_id": {
             "provider": "oci",
             "key": "databaseSoftwareImageId",
@@ -9712,23 +9280,6 @@
         "lookup": false,
         "lookupResource": "",
         "lookupResourceElement": "",
-        "conditional": false,
-        "condition": {}
-      },
-      "filesystem_snapshot_policy_id": {
-        "provider": "oci",
-        "key": "filesystemSnapshotPolicyId",
-        "name": "filesystem_snapshot_policy_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Snapshot Policy",
-        "id": "filesystem_snapshot_policy_id",
-        "staticLookup": false,
-        "cacheLookup": true,
-        "lookup": true,
-        "lookupResource": "snapshotPolicies",
-        "lookupResourceElement": "snapshotPolicies",
         "conditional": false,
         "condition": {}
       },
@@ -12115,23 +11666,6 @@
         "conditional": false,
         "condition": {}
       },
-      "time_updated": {
-        "provider": "oci",
-        "key": "timeUpdated",
-        "name": "time_updated",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Time Updated",
-        "id": "time_updated",
-        "staticLookup": false,
-        "cacheLookup": false,
-        "lookup": false,
-        "lookupResource": "",
-        "lookupResourceElement": "",
-        "conditional": false,
-        "condition": {}
-      },
       "backup_policy": {
         "provider": "oci",
         "key": "backupPolicy",
@@ -12144,40 +11678,6 @@
         "conditional": false,
         "condition": {},
         "attributes": {
-          "defined_tags": {
-            "provider": "oci",
-            "key": "definedTags",
-            "name": "defined_tags",
-            "type": "map",
-            "subtype": "string",
-            "required": false,
-            "label": "Defined Tags",
-            "id": "backup_policy.defined_tags",
-            "staticLookup": false,
-            "cacheLookup": false,
-            "lookup": false,
-            "lookupResource": "",
-            "lookupResourceElement": "",
-            "conditional": false,
-            "condition": {}
-          },
-          "freeform_tags": {
-            "provider": "oci",
-            "key": "freeformTags",
-            "name": "freeform_tags",
-            "type": "map",
-            "subtype": "string",
-            "required": false,
-            "label": "Freeform Tags",
-            "id": "backup_policy.freeform_tags",
-            "staticLookup": false,
-            "cacheLookup": false,
-            "lookup": false,
-            "lookupResource": "",
-            "lookupResourceElement": "",
-            "conditional": false,
-            "condition": {}
-          },
           "is_enabled": {
             "provider": "oci",
             "key": "isEnabled",
@@ -12684,23 +12184,6 @@
         "lookupResourceElement": "",
         "conditional": false,
         "condition": {}
-      },
-      "time_updated": {
-        "provider": "oci",
-        "key": "timeUpdated",
-        "name": "time_updated",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Time Updated",
-        "id": "time_updated",
-        "staticLookup": false,
-        "cacheLookup": false,
-        "lookup": false,
-        "lookupResource": "",
-        "lookupResourceElement": "",
-        "conditional": false,
-        "condition": {}
       }
     }
   },
@@ -13019,23 +12502,6 @@
         "conditional": false,
         "condition": {}
       },
-      "schema_state": {
-        "provider": "oci",
-        "key": "schemaState",
-        "name": "schema_state",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Schema State",
-        "id": "schema_state",
-        "staticLookup": false,
-        "cacheLookup": false,
-        "lookup": false,
-        "lookupResource": "",
-        "lookupResourceElement": "",
-        "conditional": false,
-        "condition": {}
-      },
       "time_of_expiration": {
         "provider": "oci",
         "key": "timeOfExpiration",
@@ -13045,23 +12511,6 @@
         "required": false,
         "label": "Time Of Expiration",
         "id": "time_of_expiration",
-        "staticLookup": false,
-        "cacheLookup": false,
-        "lookup": false,
-        "lookupResource": "",
-        "lookupResourceElement": "",
-        "conditional": false,
-        "condition": {}
-      },
-      "time_updated": {
-        "provider": "oci",
-        "key": "timeUpdated",
-        "name": "time_updated",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Time Updated",
-        "id": "time_updated",
         "staticLookup": false,
         "cacheLookup": false,
         "lookup": false,

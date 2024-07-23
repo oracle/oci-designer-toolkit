@@ -72,6 +72,7 @@ export class OcdTerraformSchemaImporter extends OcdSchemaImporter {
         const defaults = {...this.elementOverrides.defaults.common, ...this.elementOverrides.defaults[key] !== undefined ? this.elementOverrides.defaults[key] : {}}
         const labels = {...this.elementOverrides.labels.common, ...this.elementOverrides.labels[key] !== undefined ? this.elementOverrides.labels[key] : {}}
         const lookupOverrides = {...this.elementOverrides.lookupOverrides.common, ...this.elementOverrides.lookupOverrides[key] !== undefined ? this.elementOverrides.lookupOverrides[key] : {}}
+        // console.debug('OcdTerraformSchemaImporter: Resource', key, includeAttributes)
         // console.debug('OcdTerraformSchemaImporter: Resource', key, type_overrides)
         // Simple attributes
         // @ts-ignore

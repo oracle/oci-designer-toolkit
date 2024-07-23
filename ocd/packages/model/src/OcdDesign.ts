@@ -290,20 +290,23 @@ export namespace OcdDesign {
             value: ''
         }
     }
-    // export function newOciDefinedTag(): OciDefinedTag {
-    //     return {
-    //         ...newOciFreeformTag(),
-    //         namespace: ''
-    //     }
-    // }
+    export function newOciDefinedTag(): OciDefinedTag {
+        return {
+            ...newOciFreeformTag(),
+            namespace: 'Namespace'
+        }
+    }
     export function ociFreeformTagsToArray(freeformTags: OciFreeformTags | undefined): OciFreeformTag[] {
         return freeformTags ? Object.entries(freeformTags).map(([k, v]) => {return {key: k, value: v}}) : [] 
+    }
+    export function ociFreeformTagArrayToTags(freeformTags: OciFreeformTag[]): OciFreeformTags {
+        return freeformTags.reduce((a, c) => {a[c.key] = c.value; return a}, {} as OciFreeformTags)
     }
     export function ociDefinedTagsToArray(definedTags: OciDefinedTags | undefined): OciDefinedTag[] {
         return definedTags ? Object.entries(definedTags).reduce((a, [nk, nv]) => {return [...a, ...Object.entries(nv).map(([k, v]) => {return {namespace: nk, key: k, value: v}})]}, [] as OciDefinedTag[]) : []
     }
-    export function ociFreeformTagArrayToTags(freeformTags: OciFreeformTag[]): OciFreeformTags {
-        return freeformTags.reduce((a, c) => {a[c.key] = c.value; return a}, {} as OciFreeformTags)
+    export function ociDefinedTagArrayToTags(definedTags: OciDefinedTag[]): OciDefinedTags {
+        return definedTags.reduce((a, c) => {a[c.namespace] ? a[c.namespace][c.key] = c.value : a[c.namespace] = {[c.key]: c.value}; return a}, {} as OciDefinedTags)
     }
 }
 
