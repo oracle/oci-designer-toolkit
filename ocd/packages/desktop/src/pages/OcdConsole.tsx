@@ -186,7 +186,7 @@ const OcdConsoleConfigEditor = ({ ocdConsoleConfig, setOcdConsoleConfig }: any):
         setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
     }
     return (
-        <div className='ocd-console-toolbar-dropdown ocd-console-toolbar-dropdown-theme'>
+        <div className='ocd-console-toolbar-dropdown ocd-console-toolbar-dropdown-theme ocd-toolbar-separator-right'>
             <ul>
                 <li className='ocd-console-toolbar-dropdown-item' onClick={toggleDropdown}>
                     <div className='left-palette ocd-console-toolbar-icon'></div>
@@ -211,7 +211,15 @@ const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument,
     const onValidateClick = () => {
         ocdConsoleConfig.config.displayPage = 'validation'
         setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
-}
+    }
+    const onPanelLeftCollapseExpandClick = () => {
+        ocdConsoleConfig.config.showPalette = !ocdConsoleConfig.config.showPalette
+        setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+    }
+    const onPanelRightCollapseExpandClick = () => {
+        ocdConsoleConfig.config.showProperties = !ocdConsoleConfig.config.showProperties
+        setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+    }
     const onEstimateClick = () => {
         console.info('Estimate Clicked')
     }
@@ -236,6 +244,10 @@ const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument,
     const hasWarnings = validationResults.filter((v: OcdValidationResult) => v.type === 'warning').length > 0
     const validateClassName = `ocd-console-toolbar-icon ${hasErrors ? 'ocd-validation-error' : hasWarnings ? 'ocd-validation-warning' : 'ocd-validation-ok'}`
     const validateTitle = hasErrors ? 'Design has validation errors' : hasWarnings ? 'Design has validation warnings' : 'Design validated'
+    const panelLeftClassName = `ocd-console-toolbar-icon ${ocdConsoleConfig.config.showPalette ? 'ocd-panel-collapse-left' : 'ocd-panel-expand-left'}`
+    const panelLeftTitle = ocdConsoleConfig.config.showPalette ? 'Collapse Palette' : 'Show Palette'
+    const panelRightClassName = `ocd-console-toolbar-icon ${ocdConsoleConfig.config.showProperties ? 'ocd-panel-collapse-right' : 'ocd-panel-expand-right'}`
+    const panelRightTitle = ocdConsoleConfig.config.showProperties ? 'Collapse Properties' : 'Show Properties'
     return (
         <div className='ocd-console-toolbar ocd-console-toolbar-theme'>
             <div className='ocd-toolbar-left'>
@@ -245,6 +257,7 @@ const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument,
                         ocdConsoleConfig={ocdConsoleConfig} 
                         setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} 
                         />
+                    <div className={panelLeftClassName} title={panelLeftTitle} onClick={onPanelLeftCollapseExpandClick}></div>
                 </div>
             </div>
             <div className='ocd-toolbar-centre'>
@@ -257,6 +270,7 @@ const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument,
             <div className='ocd-toolbar-right'>
                 <div>
                     {/* <div className='validate ocd-console-toolbar-icon' onClick={onValidateClick}></div> */}
+                    <div className={panelRightClassName} title={panelRightTitle} onClick={onPanelRightCollapseExpandClick}></div>
                     <div className={validateClassName} title={validateTitle} onClick={onValidateClick}></div>
                     {/* <OcdPropertiesToolbarButton ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} /> */}
                     {/* <div className='cost-estimate ocd-console-toolbar-icon' onClick={onEstimateClick}></div> */}

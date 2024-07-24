@@ -274,6 +274,11 @@ summary {
     grid-auto-flow: column;
 }
 
+.ocd-toolbar-separator-right {
+    padding-right: 5px !important;
+    border-right: #d0d7de solid 1px;
+}
+
 .ocd-toolbar-left {
     display: inline-block;
     margin-right: auto;

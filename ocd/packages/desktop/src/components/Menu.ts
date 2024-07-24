@@ -26,10 +26,11 @@ export interface MenuItem {
     trueClass?: string
     falseClass?: string
     click?: Function | undefined
+    view?: string | undefined
     submenu?: MenuItem[] | Function
 }
 
-export const menuItems = [
+export const menuItems: MenuItem[] = [
     {
         label: 'File',
         click: undefined,
@@ -418,6 +419,7 @@ export const menuItems = [
     {
         label: 'Layout',
         click: undefined,
+        view: 'designer',
         submenu: [
             {
                 label: 'Layers',
@@ -469,6 +471,7 @@ export const menuItems = [
     {
         label: 'Arrange',
         click: undefined,
+        view: 'designer',
         submenu: [
             {
                 label: 'To Front',
