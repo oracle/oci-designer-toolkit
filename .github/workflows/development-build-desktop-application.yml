@@ -95,19 +95,20 @@ jobs:
       - run: npm run github-action-pack
       - run: npm run github-action-build-react
       - run: npm run github-action-build-electron
-      - run: ls -lash ./ocd/dist/{mac,win,linux}
-        if: always()
       - name: Upload Mac Artifact to Release
         if: matrix.os == 'macos-latest'
         run: |
+          ls -lash ./ocd/dist/mac
           gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/mac/ocd-${{ env.OCD_VERSION }}-*.dmg --clobber
       - name: Upload Windows Artifact to Release
         if: matrix.os == 'windows-latest'
         run: |
+          ls -lash ./ocd/dist/win
           gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/win/ocd-${{ env.OCD_VERSION }}-x64.exe --clobber
       - name: Upload Linux Artifact to Release
         if: matrix.os == 'ubuntu-latest'
         run: |
+          ls -lash ./ocd/dist/linux
           # gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}-*.rpm --clobber
           # gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}-*.deb --clobber
           gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}-*.snap --clobber
