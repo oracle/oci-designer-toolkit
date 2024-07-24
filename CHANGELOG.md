@@ -1,6 +1,13 @@
 # Release Notes
 
 
+## Version 0.62.0
+**Release Date**: 31st July 2024
+### Features
+1. OKIT-Ocd: Add the ability to create common Defined Tags that will be used across all reasorces created by OCD.
+### Bug Fixes
+
+
 ## Version 0.61.0
 **Release Date**: 30th June 2024
 ### Features
