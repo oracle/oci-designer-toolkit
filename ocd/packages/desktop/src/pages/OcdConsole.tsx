@@ -208,6 +208,7 @@ const OcdConsoleConfigEditor = ({ ocdConsoleConfig, setOcdConsoleConfig }: any):
 }
 
 const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument }: ConsoleToolbarProps): JSX.Element => {
+    const [bothCollapsed, setBothCollapsed] = useState(false)
     const onValidateClick = () => {
         ocdConsoleConfig.config.displayPage = 'validation'
         setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
@@ -219,6 +220,12 @@ const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument,
     const onPanelRightCollapseExpandClick = () => {
         ocdConsoleConfig.config.showProperties = !ocdConsoleConfig.config.showProperties
         setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+    }
+    const onPanelBothCollapseExpandClick = (state: boolean) => {
+        ocdConsoleConfig.config.showProperties = state
+        ocdConsoleConfig.config.showPalette = state
+        setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+        setBothCollapsed(!state)
     }
     const onEstimateClick = () => {
         console.info('Estimate Clicked')
@@ -248,6 +255,8 @@ const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument,
     const panelLeftTitle = ocdConsoleConfig.config.showPalette ? 'Collapse Palette' : 'Show Palette'
     const panelRightClassName = `ocd-console-toolbar-icon ${ocdConsoleConfig.config.showProperties ? 'ocd-panel-collapse-right' : 'ocd-panel-expand-right'}`
     const panelRightTitle = ocdConsoleConfig.config.showProperties ? 'Collapse Properties' : 'Show Properties'
+    const panelBothClassName = `ocd-console-toolbar-icon ${bothCollapsed ? 'ocd-panel-expand-both' : 'ocd-panel-collapse-both'}`
+    const panelBothTitle = bothCollapsed ? 'Show side panels' : 'Hide side panels'
     return (
         <div className='ocd-console-toolbar ocd-console-toolbar-theme'>
             <div className='ocd-toolbar-left'>
@@ -270,6 +279,7 @@ const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument,
             <div className='ocd-toolbar-right'>
                 <div>
                     {/* <div className='validate ocd-console-toolbar-icon' onClick={onValidateClick}></div> */}
+                    <div className={panelBothClassName} title={panelBothTitle} onClick={() => onPanelBothCollapseExpandClick(bothCollapsed)}></div>
                     <div className={panelRightClassName} title={panelRightTitle} onClick={onPanelRightCollapseExpandClick}></div>
                     <div className={validateClassName} title={validateTitle} onClick={onValidateClick}></div>
                     {/* <OcdPropertiesToolbarButton ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} /> */}
