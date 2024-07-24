@@ -59,7 +59,7 @@ export class OciTerraformSchemaImporter extends OcdTerraformSchemaImporter {
 
     genId = (k: string, hierarchy: string[]=[]) => [...hierarchy, k].join('.')
 
-    getAttributes(key: string, block: TerrafomSchemaEntry, hierarchy=[]) {
+    getAttributesOrig(key: string, block: TerrafomSchemaEntry, hierarchy=[]) {
         const ignore_block_types = ['timeouts']
         const ignore_attributes = ignoreElements[key] ? [...ignoreElements.common, ...ignoreElements[key]] : ignoreElements.common
         const type_overrides = elementOverrides.types[key] ? {...elementOverrides.types.common, ...elementOverrides.types[key]} : elementOverrides.types.common

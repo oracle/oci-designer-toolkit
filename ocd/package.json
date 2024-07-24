@@ -45,6 +45,7 @@
   "workspaces": [
     "packages/core",
     "packages/codegen",
+    "packages/codegen-cli",
     "packages/model",
     "packages/query",
     "packages/import",
@@ -52,8 +53,7 @@
     "packages/react",
     "packages/web",
     "packages/desktop",
-    "packages/cli",
-    "packages/codegen-cli"
+    "packages/cli"
   ],
   "devDependencies": {
     "@types/uuid": "^9.0.2",

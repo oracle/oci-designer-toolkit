@@ -131,6 +131,9 @@ export interface OciDefinedTagRowProps {
     tag: OciDefinedTag
     // row: number
     onDeleteClick: React.Dispatch<any>
+    onDefinedNamespaceChange: (oldNamespace: string, newNamespace: string, key: string) => any
+    onDefinedKeyChange: (namespace: string, oldKey: string, newKey: string) => any
+    onDefinedValueChange: (namespace: string, key: string, value: string) => any
 }
 
 export interface OciFreeformTagRowProps {
