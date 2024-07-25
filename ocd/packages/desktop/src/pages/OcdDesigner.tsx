@@ -78,10 +78,6 @@ const OcdDesignerViewConfigEditor = ({ ocdConsoleConfig, setOcdConsoleConfig }: 
         ocdConsoleConfig.config.verboseProviderPalette = !ocdConsoleConfig.config.verboseProviderPalette
         setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
     }
-    // const showModelPaletteOnChange = () => {
-    //     ocdConsoleConfig.config.showModelPalette = !ocdConsoleConfig.config.showModelPalette
-    //     setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
-    // }
     const highlightCompartmentResourcesOnChange = () => {
         ocdConsoleConfig.config.highlightCompartmentResources = !ocdConsoleConfig.config.highlightCompartmentResources
         setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
