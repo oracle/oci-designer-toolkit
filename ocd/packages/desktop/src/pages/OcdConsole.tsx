@@ -4,7 +4,7 @@
 */
 
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react'
-import OcdDesigner from './OcdDesigner'
+import { OcdDesigner, OcdDesignerLeftToolbar, OcdDesignerRightToolbar } from './OcdDesigner'
 import OcdDocument, { OcdSelectedResource } from '../components/OcdDocument'
 import OcdConsoleMenuBar from '../components/OcdConsoleMenuBar'
 import { OcdConsoleConfig } from '../components/OcdConsoleConfiguration'
@@ -146,7 +146,38 @@ const OcdConsoleHeader = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, 
     )
 }
 
-const OcdConsoleConfigEditor = ({ ocdConsoleConfig, setOcdConsoleConfig }: any): JSX.Element => {
+const OcdConsoleSettingsEditor = ({ ocdConsoleConfig, setOcdConsoleConfig }: any): JSX.Element => {
+    const [dropdown, setDropdown] = useState(false)
+    // const onMouseEnter = () => {setDropdown(true)}
+    // const onMouseLeave = () => {setDropdown(false)}
+    // const closeDropdown = () => {setDropdown(!dropdown)}
+    const toggleDropdown = () => {setDropdown(!dropdown)}
+    const cbRef = useRef<HTMLInputElement>(null)
+    const showPreviousViewOnStartOnChange = () => {
+        ocdConsoleConfig.config.showPreviousViewOnStart = !ocdConsoleConfig.config.showPreviousViewOnStart
+        setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+    }
+    const zoomOnWheelOnChange = () => {
+        ocdConsoleConfig.config.zoomOnWheel = !ocdConsoleConfig.config.zoomOnWheel
+        setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+    }
+    return (
+        <div className='ocd-console-toolbar-dropdown ocd-console-toolbar-dropdown-theme ocd-toolbar-separator-right'>
+            <ul>
+                <li className='ocd-console-toolbar-dropdown-item' onClick={toggleDropdown}>
+                    <div className='settings ocd-console-toolbar-icon'></div>
+                    <ul className={`${dropdown ? 'show' : 'hidden'}`}>
+                        <li className='ocd-dropdown-menu-item'><div><label><input id='showPreviousViewOnStart' type='checkbox' onChange={showPreviousViewOnStartOnChange} ref={cbRef} checked={ocdConsoleConfig.config.showPreviousViewOnStart}/>Show Previous View On Start</label></div></li>
+                        <li className='ocd-dropdown-menu-item'><div>--------------------------------</div></li>
+                        <li className='ocd-dropdown-menu-item'><div><label><input id='zoomOnWheel' type='checkbox' onChange={zoomOnWheelOnChange} ref={cbRef} checked={ocdConsoleConfig.config.zoomOnWheel}/>Allow Zoom Mouse Wheel</label></div></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    )
+}
+
+const OcdDesignerViewConfigEditor = ({ ocdConsoleConfig, setOcdConsoleConfig }: any): JSX.Element => {
     const [dropdown, setDropdown] = useState(false)
     // const onMouseEnter = () => {setDropdown(true)}
     // const onMouseLeave = () => {setDropdown(false)}
@@ -165,24 +196,8 @@ const OcdConsoleConfigEditor = ({ ocdConsoleConfig, setOcdConsoleConfig }: any):
     //     ocdConsoleConfig.config.showModelPalette = !ocdConsoleConfig.config.showModelPalette
     //     setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
     // }
-    const showPaletteOnChange = () => {
-        ocdConsoleConfig.config.showPalette = !ocdConsoleConfig.config.showPalette
-        setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
-    }
-    const showPropertiesOnChange = () => {
-        ocdConsoleConfig.config.showProperties = !ocdConsoleConfig.config.showProperties
-        setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
-    }
-    const showPreviousViewOnStartOnChange = () => {
-        ocdConsoleConfig.config.showPreviousViewOnStart = !ocdConsoleConfig.config.showPreviousViewOnStart
-        setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
-    }
     const highlightCompartmentResourcesOnChange = () => {
         ocdConsoleConfig.config.highlightCompartmentResources = !ocdConsoleConfig.config.highlightCompartmentResources
-        setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
-    }
-    const zoomOnWheelOnChange = () => {
-        ocdConsoleConfig.config.zoomOnWheel = !ocdConsoleConfig.config.zoomOnWheel
         setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
     }
     return (
@@ -191,15 +206,10 @@ const OcdConsoleConfigEditor = ({ ocdConsoleConfig, setOcdConsoleConfig }: any):
                 <li className='ocd-console-toolbar-dropdown-item' onClick={toggleDropdown}>
                     <div className='left-palette ocd-console-toolbar-icon'></div>
                     <ul className={`${dropdown ? 'show' : 'hidden'}`}>
-                        <li className='ocd-dropdown-menu-item'><div><label><input id='showMPalette' type='checkbox' onChange={showPaletteOnChange} ref={cbRef} checked={ocdConsoleConfig.config.showPalette}/>Display Palette</label></div></li>
                         <li className='ocd-dropdown-menu-item'><div><label><input id='verboseProviderPalette' type='checkbox' onChange={verboseProviderPaletteOnChange} ref={cbRef} checked={ocdConsoleConfig.config.verboseProviderPalette}/>Verbose Palette</label></div></li>
-                        <li className='ocd-dropdown-menu-item'><div><label><input id='showProperties' type='checkbox' onChange={showPropertiesOnChange} ref={cbRef} checked={ocdConsoleConfig.config.showProperties}/>Display Properties</label></div></li>
-                        <li className='ocd-dropdown-menu-item'><div><label><input id='showPreviousViewOnStart' type='checkbox' onChange={showPreviousViewOnStartOnChange} ref={cbRef} checked={ocdConsoleConfig.config.showPreviousViewOnStart}/>Show Previous View On Start</label></div></li>
                         <li className='ocd-dropdown-menu-item'><div>--------------------------------</div></li>
                         <li className='ocd-dropdown-menu-item'><div><label><input id='detailedResource' type='checkbox' onChange={detailedResourceOnChange} ref={cbRef} checked={ocdConsoleConfig.config.detailedResource}/>Resource Details</label></div></li>
                         <li className='ocd-dropdown-menu-item'><div><label><input id='highlightCompartmentResources' type='checkbox' onChange={highlightCompartmentResourcesOnChange} ref={cbRef} checked={ocdConsoleConfig.config.highlightCompartmentResources}/>Highlight Compartment Resources</label></div></li>
-                        <li className='ocd-dropdown-menu-item'><div>--------------------------------</div></li>
-                        <li className='ocd-dropdown-menu-item'><div><label><input id='zoomOnWheel' type='checkbox' onChange={zoomOnWheelOnChange} ref={cbRef} checked={ocdConsoleConfig.config.zoomOnWheel}/>Allow Zoom Mouse Wheel</label></div></li>
                     </ul>
                 </li>
             </ul>
@@ -207,8 +217,54 @@ const OcdConsoleConfigEditor = ({ ocdConsoleConfig, setOcdConsoleConfig }: any):
     )
 }
 
+const OcdConsoleZoomControls = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument }: ConsoleToolbarProps): JSX.Element => {
+    const [zoomTo, setZoomTo] = useState('100')
+    const onZoomOutClick = () => {
+        const clone = OcdDocument.clone(ocdDocument)
+        clone.zoomOut()
+        setOcdDocument(clone)
+    }
+    const onZoom121Click = () => {
+        const clone = OcdDocument.clone(ocdDocument)
+        clone.resetPanZoom()
+        setOcdDocument(clone)
+    }
+    const onZoomInClick = () => {
+        const clone = OcdDocument.clone(ocdDocument)
+        clone.zoomIn()
+        setOcdDocument(clone)
+    }
+    const onZoomToChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const clone = OcdDocument.clone(ocdDocument)
+        clone.zoomTo(Number(e.target.value))
+        setZoomTo(e.target.value)
+        setOcdDocument(clone)
+    }
+    return (
+        <div>
+            <div>
+                <select value={zoomTo} onChange={onZoomToChange}>
+                    <option value={25}>25%</option>
+                    <option value={50}>50%</option>
+                    <option value={75}>75%</option>
+                    <option value={100}>100%</option>
+                    <option value={125}>125%</option>
+                    <option value={150}>150%</option>
+                    <option value={200}>200%</option>
+                    <option value={250}>250%</option>
+                    <option value={300}>300%</option>
+                </select>
+            </div>
+            <div className={`zoom-out ocd-console-toolbar-icon`} onClick={onZoomOutClick}></div>
+            <div className={`zoom-121 ocd-console-toolbar-icon`} onClick={onZoom121Click}></div>
+            <div className={`zoom-in ocd-console-toolbar-icon`}  onClick={onZoomInClick}></div>
+        </div>
+    )
+}
+
 const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument }: ConsoleToolbarProps): JSX.Element => {
-    const [bothCollapsed, setBothCollapsed] = useState(false)
+    const [bothCollapsed, setBothCollapsed] = useState(!ocdConsoleConfig.config.showPalette && !ocdConsoleConfig.config.showProperties)
+    const [zoomTo, setZoomTo] = useState('100')
     const onValidateClick = () => {
         ocdConsoleConfig.config.displayPage = 'validation'
         setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
@@ -245,6 +301,12 @@ const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument,
         clone.zoomIn()
         setOcdDocument(clone)
     }
+    const onZoomToChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const clone = OcdDocument.clone(ocdDocument)
+        clone.zoomTo(Number(e.target.value))
+        setZoomTo(e.target.value)
+        setOcdDocument(clone)
+    }
     const hideZoomClassName = ocdConsoleConfig.config.displayPage === 'designer' ? '' : 'hidden'
     const validationResults = OcdValidator.validate(ocdDocument.design)
     const hasErrors = validationResults.filter((v: OcdValidationResult) => v.type === 'error').length > 0
@@ -262,25 +324,54 @@ const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument,
             <div className='ocd-toolbar-left'>
                 <div>
                     {/* <div className='left-palette ocd-console-toolbar-icon' onClick={onLeftPaletteClick} ref={leftPaletteRef}></div> */}
-                    <OcdConsoleConfigEditor 
+                    <OcdConsoleSettingsEditor 
                         ocdConsoleConfig={ocdConsoleConfig} 
                         setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} 
                         />
-                    <div className={panelLeftClassName} title={panelLeftTitle} onClick={onPanelLeftCollapseExpandClick}></div>
+                    {!hideZoomClassName && <OcdDesignerLeftToolbar 
+                        ocdConsoleConfig={ocdConsoleConfig} 
+                        setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} 
+                        ocdDocument={ocdDocument} 
+                        setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} 
+                        />}
+                    {/* <OcdDesignerViewConfigEditor 
+                        ocdConsoleConfig={ocdConsoleConfig} 
+                        setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} 
+                        />
+                    <div className={panelLeftClassName} title={panelLeftTitle} onClick={onPanelLeftCollapseExpandClick}></div> */}
                 </div>
             </div>
             <div className='ocd-toolbar-centre'>
                 <div>
+                    {/* <div>
+                        <select value={zoomTo} onChange={onZoomToChange}>
+                            <option value={25}>25%</option>
+                            <option value={50}>50%</option>
+                            <option value={75}>75%</option>
+                            <option value={100}>100%</option>
+                            <option value={125}>125%</option>
+                            <option value={150}>150%</option>
+                            <option value={200}>200%</option>
+                            <option value={250}>250%</option>
+                            <option value={300}>300%</option>
+                        </select>
+                    </div>
                     <div className={`zoom-out ocd-console-toolbar-icon ${hideZoomClassName}`} onClick={onZoomOutClick}></div>
                     <div className={`zoom-121 ocd-console-toolbar-icon ${hideZoomClassName}`} onClick={onZoom121Click}></div>
-                    <div className={`zoom-in ocd-console-toolbar-icon ${hideZoomClassName}`}  onClick={onZoomInClick}></div>
+                    <div className={`zoom-in ocd-console-toolbar-icon ${hideZoomClassName}`}  onClick={onZoomInClick}></div> */}
                 </div>
             </div>
             <div className='ocd-toolbar-right'>
                 <div>
+                    {!hideZoomClassName && <OcdDesignerRightToolbar 
+                        ocdConsoleConfig={ocdConsoleConfig} 
+                        setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} 
+                        ocdDocument={ocdDocument} 
+                        setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} 
+                        />}
                     {/* <div className='validate ocd-console-toolbar-icon' onClick={onValidateClick}></div> */}
-                    <div className={panelBothClassName} title={panelBothTitle} onClick={() => onPanelBothCollapseExpandClick(bothCollapsed)}></div>
-                    <div className={panelRightClassName} title={panelRightTitle} onClick={onPanelRightCollapseExpandClick}></div>
+                    {/* <div className={panelBothClassName} title={panelBothTitle} onClick={() => onPanelBothCollapseExpandClick(bothCollapsed)}></div> */}
+                    {/* <div className={panelRightClassName} title={panelRightTitle} onClick={onPanelRightCollapseExpandClick}></div> */}
                     <div className={validateClassName} title={validateTitle} onClick={onValidateClick}></div>
                     {/* <OcdPropertiesToolbarButton ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} /> */}
                     {/* <div className='cost-estimate ocd-console-toolbar-icon' onClick={onEstimateClick}></div> */}
