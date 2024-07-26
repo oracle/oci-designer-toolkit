@@ -274,6 +274,12 @@ summary {
     grid-auto-flow: column;
 }
 
+.ocd-toolbar-separator-right {
+    padding-right: 2px !important;
+    margin-right: 2px !important;
+    border-right: #d0d7de solid 1px !important;
+}
+
 .ocd-toolbar-left {
     display: inline-block;
     margin-right: auto;
@@ -636,6 +642,25 @@ summary {
 /*
 ** Designer View
 */
+
+.ocd-designer-toolbar {
+    display: grid;
+    grid-auto-flow: column;
+}
+
+.ocd-designer-toolbar-zoom-controls {
+    margin-left: 2px;
+    display: grid;
+    grid-auto-flow: column;
+}
+
+.ocd-designer-toolbar-zoom-controls > div {
+    margin: auto;
+}
+
+.ocd-designer-toolbar-zoom-controls select {
+    border: none;
+}
 
 .ocd-designer {
     display: grid;

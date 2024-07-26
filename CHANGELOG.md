@@ -5,6 +5,8 @@
 **Release Date**: 31st July 2024
 ### Features
 1. OKIT-Ocd: Add the ability to create common Defined Tags that will be used across all reasorces created by OCD.
+2. OKIT-Ocd: Add single button collapse and expand for Palette.
+3. OKIT-Ocd: Add single button collapse and expand for Properties.
 ### Bug Fixes
 
 

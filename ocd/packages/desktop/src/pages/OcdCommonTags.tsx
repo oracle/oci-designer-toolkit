@@ -37,14 +37,6 @@ export const OcdCommonTags = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocume
             setDefinedTags(definedTags)
             updateDefinedTags(definedTags)
         }
-        // const oldNamespaceTags = definedTags.filter((t) => t.namespace === oldNamespace).map((t) => {return {namespace: newNamespace, key: t.key, value: t.value}})
-        // const otherTags = definedTags.filter((t) => t.namespace !== oldNamespace)
-        // if (oldNamespaceTags.length > 0) {
-        //     // definedTags.forEach((t) => t.namespace = t.namespace === oldNamespace ? newNamespace : oldNamespace)
-        //     const updatedTags = [...oldNamespaceTags, ...otherTags]
-        //     setDefinedTags(updatedTags)
-        //     updateDefinedTags(updatedTags)
-        // }
     })
     const onOciDefinedKeyChange = ((namespace: string, oldKey: string, newKey: string) => {
         const tag = definedTags.find((t) => t.namespace === namespace && t.key === oldKey)
@@ -175,23 +167,14 @@ export const OciDefinedTagRow = ({ocdDocument, setOcdDocument, tag, onDeleteClic
     const onNamespaceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         onDefinedNamespaceChange(namespace, e.target.value, key)
         setNamespace(e.target.value)
-        // tag.namespace = e.target.value
-        // const clone = OcdDocument.clone(ocdDocument)
-        // setOcdDocument(clone)
     }
     const onKeyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         onDefinedKeyChange(namespace, key, e.target.value)
         setKey(e.target.value)
-        // tag.key = e.target.value
-        // const clone = OcdDocument.clone(ocdDocument)
-        // setOcdDocument(clone)
     }
     const onValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         onDefinedValueChange(namespace, key, e.target.value)
         setValue(e.target.value)
-        // tag.value = e.target.value
-        // const clone = OcdDocument.clone(ocdDocument)
-        // setOcdDocument(clone)
     }
     return (
         <div className='ocd-tag-row tr'>
@@ -208,17 +191,11 @@ export const OciFreeformTagRow = ({ocdDocument, setOcdDocument, tag, onDeleteCli
     const [value, setValue] = useState(tag.value)
     const onKeyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         onFreeformKeyChange(key, e.target.value)
-        // tag.key = e.target.value
         setKey(e.target.value)
-        // const clone = OcdDocument.clone(ocdDocument)
-        // setOcdDocument(clone)
     }
     const onValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         onFreeformValueChange(key, e.target.value)
-        // tag.value = e.target.value
         setValue(e.target.value)
-        // const clone = OcdDocument.clone(ocdDocument)
-        // setOcdDocument(clone)
     }
     return (
         <div className='ocd-tag-row tr'>

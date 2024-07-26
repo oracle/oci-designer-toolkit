@@ -83,9 +83,11 @@ const OcdConsoleSubMenu = ({ submenus, dropdown, depth, ocdDocument, setOcdDocum
 }
 
 const OcdConsoleMenu = ({ ocdDocument, setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig }: ConsoleMenuProps): JSX.Element => {
+    // @ts-ignore
+    // const {ocdConsoleConfig, setOcdConsoleConfig} = useContext(ConsoleConfigContext)
     return (
         <ul className='ocd-console-main-menu'>
-            {menuItems.map((menuItem: MenuItem, idx: number): any => {
+            {menuItems.filter((menuItem: MenuItem, idx: number) => !menuItem.view || menuItem.view === ocdConsoleConfig.config.displayPage).map((menuItem: MenuItem, idx: number): any => {
                 const depth = 0
                 return (
                     <OcdConsoleMenuItem 
