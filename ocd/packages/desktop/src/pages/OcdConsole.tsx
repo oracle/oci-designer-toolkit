@@ -47,21 +47,21 @@ const OcdConsole = (): JSX.Element => {
     const [activeFile, setActiveFile] = useState({name: '', modified: false})
     const [selectedResource, setSelectedResource] = useState({} as OcdSelectedResource)
     useEffect(() => {
-        // @ts-ignore
-        if (window.ocdAPI) window.ocdAPI.onOpenFile((event, filePath) => { // Running as an Electron App
-            // console.debug('OcdDesignFacade: onOpenFile', filePath)
-            loadDesign(filePath, setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig, setActiveFile)
-        })
-    }, []) // Empty Array to only run on initial render
-    useEffect(() => {
         OcdConfigFacade.loadConsoleConfig().then((results) => {
-            // console.debug('OcdConsole: Load Console Config', results)
+            console.debug('OcdConsole: Load Console Config', results)
             const consoleConfig = new OcdConsoleConfig(results)
             setOcdConsoleConfig(consoleConfig)
         }).catch((response) => {
             console.debug('OcdConsole: Load Console Config', response)
             OcdConfigFacade.saveConsoleConfig(ocdConsoleConfig.config).then((results) => {}).catch((response) => console.debug('OcdConsole:', response))
             // OcdConfigFacade.saveConsoleConfig(ocdConsoleConfig.config).then((results) => {console.debug('OcdConsole: Saved Console Config')}).catch((response) => console.debug('OcdConsole:', response))
+        })
+    }, []) // Empty Array to only run on initial render
+    useEffect(() => {
+        // @ts-ignore
+        if (window.ocdAPI) window.ocdAPI.onOpenFile((event, filePath) => { // Running as an Electron App
+            console.debug('OcdConsole: onOpenFile', filePath)
+            loadDesign(filePath, setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig, setActiveFile)
         })
     }, []) // Empty Array to only run on initial render
     // useEffect(() => {
