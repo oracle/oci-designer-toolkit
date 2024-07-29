@@ -8,6 +8,8 @@
 2. OKIT-Ocd: Add single button collapse and expand for Palette.
 3. OKIT-Ocd: Add single button collapse and expand for Properties.
 ### Bug Fixes
+1. OKIT-Web: Resolve Code Scanning Warnings: Issues #652-#672
+2. OKIT-Ocd: resolve Code scanning Warnings: Issues #673-#680
 
 
 ## Version 0.61.0
