@@ -32,6 +32,7 @@ from flask import request
 from flask import send_from_directory
 from flask import session
 from flask import url_for
+from markupsafe import escape
 
 import json
 from common.okitCommon import jsonToFormattedString
@@ -634,7 +635,7 @@ def generate(language, destination):
                 shutil.rmtree(destination_dir)
                 filename = os.path.split(zipname)
                 logger.info('Split Zipfile : {0:s}'.format(str(filename)))
-                return zipname
+                return escape(zipname)
         except Exception as e:
             logger.exception(e)
             return 'Failed to generate file', 500
@@ -663,7 +664,7 @@ def saveas(savetype):
                 logger.info('Template File Name : {0!s:s}'.format(filename))
                 logger.info('>>>>>> Path to file {0!s:s}'.format(fullpath))
                 writeJsonFile(request.json, fullpath)
-                return filename
+                return escape(filename)
             elif savetype == 'git':
                 git_url, git_branch = request.json['git_repository'].split('*')
                 git_commit_msg = request.json['git_repository_commitmsg']
@@ -694,7 +695,7 @@ def saveas(savetype):
                 repo.index.add(fullpath)
                 repo.index.commit("commit changes from okit:" + git_commit_msg)
                 repo.remotes.origin.push(git_branch)
-                return filename
+                return escape(filename)
         except Exception as e:
             logger.exception(e)
             return 'Failed to Save file', 500
