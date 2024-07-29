@@ -637,7 +637,7 @@ def generate(language, destination):
                 return zipname
         except Exception as e:
             logger.exception(e)
-            return str(e), 500
+            return 'Failed to generate file', 500
     else:
         logger.info(f'Returning /tmp/okit-{language}.zip')
         return send_from_directory('/tmp', "okit-{0:s}.zip".format(str(language)), mimetype='application/zip', as_attachment=True)
@@ -697,7 +697,7 @@ def saveas(savetype):
                 return filename
         except Exception as e:
             logger.exception(e)
-            return str(e), 500
+            return 'Failed to Save file', 500
 
 
 @bp.route('/dropdown/data/<string:profile>/<string:region>', methods=(['GET', 'POST']))
@@ -849,5 +849,5 @@ def loadfromgit():
             return json.dumps(result)
         except Exception as e:
             logger.exception(e)
-            return str(e), 500
+            return 'Failed to load from Git', 500
 

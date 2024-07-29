@@ -46,7 +46,6 @@ class OCICompartmentQuery(OCIConnection):
         #     cert_bundle = self.config["cert-bundle"]
         # else:
         #     cert_bundle = None
-        logger.info(f'cert_bundle={self.cert_bundle}')
 
         discovery_client = OciResourceDiscoveryClient(self.config, signer=self.signer, cert_bundle=self.cert_bundle, include_resource_types=self.SUPPORTED_RESOURCES)
         compartments = self.response_to_json(discovery_client.all_compartments)

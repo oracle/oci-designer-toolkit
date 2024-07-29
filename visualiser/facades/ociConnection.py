@@ -108,7 +108,6 @@ class OCIConnection(object):
                     self.region = os.getenv('OKIT_VM_REGION', 'uk-london-1')
             # Get Signer from From Cert
             cert_path = oci.config.get_config_value_or_default(self.config, "cert-bundle")
-            logger.info(f'Cert Path {cert_path}')
             self.signerFromConfig()
             self.instance_principal = False
         except Exception as e:
