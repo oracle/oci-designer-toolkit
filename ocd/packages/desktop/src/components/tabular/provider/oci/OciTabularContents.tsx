@@ -5,10 +5,12 @@
 
 import { OciResource } from "@ocd/model"
 import { OciTabularContentsProps, OciTabularHeaderProps, OciTabularResourceProps, OciTabularRowProps } from "../../../../types/ReactComponentProperties"
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { OcdUtils } from "@ocd/core"
+import { ConsoleConfigContext } from "../../../../pages/OcdConsole"
 
 export const OciDefault = ({ ocdDocument, ociResources, selected }: OciTabularResourceProps): JSX.Element => {
+    console.debug('OciTabularContents: OciDefault')
     return (
         <div id='ocd_resource_grid' className='table ocd-tabular-content'>
             <div className='thead ocd-tabular-list-header'><div className='tr'><div className='th'>{ociResources[selected].length}</div><div className='th'>Name</div><div className='th'>Compartment</div></div></div>
@@ -22,6 +24,9 @@ export const OciDefault = ({ ocdDocument, ociResources, selected }: OciTabularRe
 }
 
 export const OcdTabularContents = ({ ocdDocument, ociResources, selected, columnTitles, resourceElements }: OciTabularContentsProps): JSX.Element => {
+    // @ts-ignore
+    const {ocdConsoleConfig, setOcdConsoleConfig} = useContext(ConsoleConfigContext)
+    const [displayColumns, setDisplayColumns] = useState(ocdConsoleConfig.config.displayColumns ? ocdConsoleConfig.config.displayColumns[selected] ? ocdConsoleConfig.config.displayColumns[selected] : columnTitles : columnTitles)
     const [sortColumn, setSortColumn] = useState('')
     const [sortAscending, setSortAscending] = useState(true)
     const onSortClick = (element: string) => {
@@ -50,6 +55,7 @@ export const OcdTabularContents = ({ ocdDocument, ociResources, selected, column
     }
     const isElementId = (name: string) => name ? name.endsWith('Id') : false
     const isElementIdList = (name: string) => name ? name.endsWith('Ids') : false
+    console.debug('OcdTabularContents: Selected', selected)
     return (
         <div id='ocd_resource_grid' className='table ocd-tabular-content'>
             <div className='thead ocd-tabular-list-header'>
@@ -61,6 +67,8 @@ export const OcdTabularContents = ({ ocdDocument, ociResources, selected, column
                     sortColumn={sortColumn}
                     sortAscending={sortAscending}
                     onSortClick={onSortClick}
+                    displayColumns={displayColumns}
+                    setDisplayColumns={setDisplayColumns}
                     key={`${selected}-tabular-header-row`}
                 />
             </div>
@@ -69,9 +77,11 @@ export const OcdTabularContents = ({ ocdDocument, ociResources, selected, column
                     return <OcdTabularRow 
                         ocdDocument={ocdDocument}
                         ociResources={ociResources}
+                        selected={selected}
                         index={i}
                         resource={r}
-                        resourceElements={resourceElements}
+                        // resourceElements={resourceElements}
+                        resourceElements={displayColumns.map((c: string) => resourceElements[columnTitles.indexOf(c)])}
                         key={`${selected}-tabular-${r.id}`}
                     />
                 })}
@@ -80,20 +90,51 @@ export const OcdTabularContents = ({ ocdDocument, ociResources, selected, column
     )
 }
 
-export const OcdTabularHeader = ({columnTitles, ociResources, resourceElements, selected, sortColumn, sortAscending, onSortClick}: OciTabularHeaderProps): JSX.Element => {
+export const OcdTabularHeader = ({columnTitles, ociResources, resourceElements, selected, sortColumn, sortAscending, onSortClick, displayColumns, setDisplayColumns}: OciTabularHeaderProps): JSX.Element => {
+    // @ts-ignore
+    const {ocdConsoleConfig, setOcdConsoleConfig} = useContext(ConsoleConfigContext)
+    const [menuVisible, setMenuVisible] = useState(false)
+    const onToggleMenuClick = () => {setMenuVisible(!menuVisible && columnTitles.length > 0)}
     const ascClasses = 'ocd-sort-background-icon sort-ascending'
     const dscClasses = 'ocd-sort-background-icon sort-descending'
+    const onToggleColumnClick = (e: React.MouseEvent<HTMLLabelElement>) => {e.stopPropagation()}
+    const onToggleColumnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.stopPropagation()
+        // const newDisplayColumns = e.target.checked ? [...displayColumns, e.target.id] : displayColumns.filter((c) => c !== e.target.id)
+        const newDisplayColumns = e.target.checked ? columnTitles.filter((t) => [...displayColumns, e.target.id].includes(t)) : displayColumns.filter((c) => c !== e.target.id)
+        console.debug('OcdTabularContents:', e)
+        if (!ocdConsoleConfig.config.displayColumns) ocdConsoleConfig.config.displayColumns = {}
+        ocdConsoleConfig.config.displayColumns[selected] = newDisplayColumns
+        setDisplayColumns(newDisplayColumns)
+        // setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+    }
+    console.debug('OcdTabularHeader: Selected', selected, displayColumns)
     return (
         <div className='tr' key={`${selected}-tabular-header-row`}>
             <div className='th'>{ociResources[selected].length}</div>
             <div className={`th ocd-sortable-column ${sortColumn === 'displayName' ? sortAscending ? ascClasses : dscClasses : ''}`} onClick={() => onSortClick('displayName')} key={`${selected}-tabular-header-row-displayName`}>Name</div>
             <div className={`th ocd-sortable-column ${sortColumn === 'compartmentId' ? sortAscending ? ascClasses : dscClasses : ''}`} onClick={() => onSortClick('compartmentId')} key={`${selected}-tabular-header-row-compartmentId`}>Compartment</div>
-            {columnTitles.map((title: string, i: number) => {return <div className={`th ocd-sortable-column ${sortColumn === resourceElements[i] ? sortAscending ? ascClasses : dscClasses : ''}`} onClick={() => onSortClick(resourceElements[i])} key={`${selected}-tabular-header-row-${OcdUtils.toUnderscoreCase(title)}`}>{title}</div>})}
+            {displayColumns.map((title: string, i: number) => {return <div className={`th ocd-sortable-column ${sortColumn === resourceElements[i] ? sortAscending ? ascClasses : dscClasses : ''}`} onClick={() => onSortClick(resourceElements[i])} key={`${selected}-tabular-header-row-${OcdUtils.toUnderscoreCase(title)}`}>{title}</div>})}
+            <div className={`th-menu ocd-console-three-dot-menu-icon`}>
+                <div className='ocd-console-toolbar-dropdown ocd-console-toolbar-dropdown-theme'>
+                    <ul>
+                        <li className='ocd-console-toolbar-dropdown-item' onClick={onToggleMenuClick}>
+                            <div className='three-dot-menu ocd-console-three-dot-menu-icon'></div>
+                            {menuVisible && <ul className={'show slide-down slide-right'}>
+                                {/* <li className='ocd-dropdown-menu-item ocd-mouseover-highlight'><label onClick={onToggleColumnClick}><input type="checkbox" onChange={onToggleColumnChange}/>Name</label></li> */}
+                                {columnTitles.map((title: string, i: number) => {return <li className='ocd-dropdown-menu-item ocd-mouseover-highlight' key={`${selected}-${title.split(' ').join('')}`}><label onClick={onToggleColumnClick}><input id={title} type="checkbox" onChange={onToggleColumnChange} checked={displayColumns.includes(title)}/>{title}</label></li>})}
+                            </ul>}
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
     )
 }
 
-export const OcdTabularRow = ({ocdDocument, ociResources, index, resource, resourceElements}: OciTabularRowProps): JSX.Element => {
+export const OcdTabularRow = ({ocdDocument, ociResources, index, resource, resourceElements, selected}: OciTabularRowProps): JSX.Element => {
+    // @ts-ignore
+    const {ocdConsoleConfig, setOcdConsoleConfig} = useContext(ConsoleConfigContext)
     const getReferenceDisplayName = (id: string) => {
         const resource = ocdDocument.getResource(id)
         return resource ? resource.displayName : 'Unknown'
@@ -103,12 +144,14 @@ export const OcdTabularRow = ({ocdDocument, ociResources, index, resource, resou
     }
     const isElementId = (name: string) => name ? name.endsWith('Id') : false
     const isElementIdList = (name: string) => name ? name.endsWith('Ids') : false
+    console.debug('OcdTabularRow: Selected', selected)
     return (
         <div className='tr' key={`tabular-${resource.id}`}>
             <div className='td'>{index + 1}</div><div className='td'>{resource.displayName}</div>
             <div className='td'>{getReferenceDisplayName(resource.compartmentId)}</div>
             {/* <div className='td'>{ocdDocument.getResource(r.compartmentId) ? ocdDocument.getResource(r.compartmentId).displayName : ''}</div> */}
-            {resourceElements.map((element) => {return <div className='td'>{isElementId(element) ? getReferenceDisplayName(resource[element]) : isElementIdList(element) ? getReferenceListDisplayNames(resource[element]) : String(resource[element])}</div>})}
+            {resourceElements.map((element) => {return <div className='td' key={`tabular-${resource.id}-${element}`}>{isElementId(element) ? getReferenceDisplayName(resource[element]) : isElementIdList(element) ? getReferenceListDisplayNames(resource[element]) : String(resource[element])}</div>})}
+            <div className="td"></div>
         </div>
     )
 }

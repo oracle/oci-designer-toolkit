@@ -17,6 +17,7 @@ export interface OcdConsoleConfiguration {
     zoomOnWheel: boolean
     recentDesigns: string[]
     maxRecent: number
+    displayColumns?: Record<string, string[]>
 }
 
 export class OcdConsoleConfig {
@@ -44,6 +45,7 @@ export class OcdConsoleConfig {
             zoomOnWheel: false,
             recentDesigns: [],
             maxRecent: 10,
+            displayColumns: {}
         }
     }
 }

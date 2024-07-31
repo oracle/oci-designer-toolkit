@@ -267,7 +267,6 @@ class PCAQuery(OCIConnection):
         self.sub_compartments = False
 
     def connect(self):
-        logger.info(f'<<< Connecting PCA Clients >>> {self.cert_bundle}')
         self.clients = {
             "volume": oci.core.BlockstorageClient(config=self.config, signer=self.signer),
             "compute": oci.core.ComputeClient(config=self.config, signer=self.signer),
@@ -300,7 +299,6 @@ class PCAQuery(OCIConnection):
             cert_bundle = self.config["cert-bundle"]
         else:
             cert_bundle = None
-        logger.info(f'cert_bundle={cert_bundle}')
         self.sub_compartments = include_sub_compartments
         self.query_compartments = compartments
         self.top_level_compartments = compartments

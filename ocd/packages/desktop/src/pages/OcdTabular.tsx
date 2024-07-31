@@ -13,16 +13,16 @@ import * as ociTabularResources from '../components/tabular/provider/oci/resourc
 const OcdTabular = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument}: ConsolePageProps): JSX.Element => {
     const [selected, setSelected] = useState('compartment')
     const ociResources = ocdDocument.getOciResourcesObject()
-    const resourceJSXMethod = `${OcdUtils.toTitleCase('Oci')}${OcdUtils.toTitleCase(selected)}`
+    const resourceJSXMethod = `${OcdUtils.toTitleCase('Oci')}${OcdUtils.toTitleCase(selected.split('_').join(' ')).split(' ').join('')}`
     // @ts-ignore 
-    let ResourceTabularContents = ociTabularResources[resourceJSXMethod] ? ociTabularResources[resourceJSXMethod] : OciDefault
+    const ResourceTabularContents = ociTabularResources[resourceJSXMethod] ? ociTabularResources[resourceJSXMethod] : OciDefault
     console.debug('OcdTabular: JMXMethod', resourceJSXMethod)
     console.debug('OcdTabular: ResourceTabularContents', ResourceTabularContents)
     console.debug('OcdTabular: ociTabularResources', ociTabularResources)
     console.debug('OcdTabular: ociResources', ociResources)
     console.debug('OcdTabular: ociResources Keys', Object.keys(ociResources))
     if (Object.keys(ociResources).length === 1 && selected !== 'compartment') {
-        ResourceTabularContents = OciDefault
+        // ResourceTabularContents = OciDefault
         setSelected('compartment')
     }
     const onClick = (e: React.MouseEvent<HTMLElement>) => {
@@ -35,12 +35,12 @@ const OcdTabular = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcd
     return (
         <div className='ocd-tabular-view'>
             <div id='ocd_resources_bar' className='ocd-designer-canvas-layers'>
-                {Object.keys(ociResources).map((k: string) => {
+                {Object.keys(ociResources).sort().map((k: string) => {
                     return <div className={`ocd-designer-canvas-layer ${k === selected ? 'ocd-layer-selected' : ''}`} key={k}><label id={k} onClick={onClick}>{`${OcdUtils.toTitle(k)} (${ociResources[k].length})`}</label></div>
                 })}
             </div>
             <div id='selected_resource_tab' className='ocd-selected-tabular-content'>
-                <ResourceTabularContents ocdDocument={ocdDocument} ociResources={ociResources} selected={selected}/>
+                <ResourceTabularContents ocdDocument={ocdDocument} ociResources={ociResources} selected={selected} key={`${selected}-tabular-contents`}/>
             </div>
         </div>
     )

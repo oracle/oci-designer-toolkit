@@ -32,6 +32,7 @@ from flask import request
 from flask import send_from_directory
 from flask import session
 from flask import url_for
+from markupsafe import escape
 
 import json
 from common.okitCommon import jsonToFormattedString
@@ -634,10 +635,10 @@ def generate(language, destination):
                 shutil.rmtree(destination_dir)
                 filename = os.path.split(zipname)
                 logger.info('Split Zipfile : {0:s}'.format(str(filename)))
-                return zipname
+                return escape(zipname)
         except Exception as e:
             logger.exception(e)
-            return str(e), 500
+            return 'Failed to generate file', 500
     else:
         logger.info(f'Returning /tmp/okit-{language}.zip')
         return send_from_directory('/tmp', "okit-{0:s}.zip".format(str(language)), mimetype='application/zip', as_attachment=True)
@@ -663,7 +664,7 @@ def saveas(savetype):
                 logger.info('Template File Name : {0!s:s}'.format(filename))
                 logger.info('>>>>>> Path to file {0!s:s}'.format(fullpath))
                 writeJsonFile(request.json, fullpath)
-                return filename
+                return escape(filename)
             elif savetype == 'git':
                 git_url, git_branch = request.json['git_repository'].split('*')
                 git_commit_msg = request.json['git_repository_commitmsg']
@@ -694,10 +695,10 @@ def saveas(savetype):
                 repo.index.add(fullpath)
                 repo.index.commit("commit changes from okit:" + git_commit_msg)
                 repo.remotes.origin.push(git_branch)
-                return filename
+                return escape(filename)
         except Exception as e:
             logger.exception(e)
-            return str(e), 500
+            return 'Failed to Save file', 500
 
 
 @bp.route('/dropdown/data/<string:profile>/<string:region>', methods=(['GET', 'POST']))
@@ -849,5 +850,5 @@ def loadfromgit():
             return json.dumps(result)
         except Exception as e:
             logger.exception(e)
-            return str(e), 500
+            return 'Failed to load from Git', 500
 

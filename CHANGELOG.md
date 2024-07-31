@@ -4,10 +4,14 @@
 ## Version 0.62.0
 **Release Date**: 31st July 2024
 ### Features
-1. OKIT-Ocd: Add the ability to create common Defined Tags that will be used across all reasorces created by OCD.
+1. OKIT-Ocd: Add the ability to create common Defined Tags that will be used across all reasorces created by OCD. (#OKIT-269)
 2. OKIT-Ocd: Add single button collapse and expand for Palette.
 3. OKIT-Ocd: Add single button collapse and expand for Properties.
+4. OKIT-Ocd: Add Freeform and Defined Tags to each resource. (#OKIT-270)
+5. OKIT-Ocd: Extend Tabular view to allow for column display selection where additional columns are specified. (#OKIT-295)
 ### Bug Fixes
+1. OKIT-Web: Resolve Code Scanning Warnings: Issues #652-#672
+2. OKIT-Ocd: resolve Code scanning Warnings: Issues #673-#680
 
 
 ## Version 0.61.0

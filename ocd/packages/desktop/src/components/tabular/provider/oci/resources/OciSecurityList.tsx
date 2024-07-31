@@ -7,8 +7,8 @@ import { OciTabularResourceProps } from "../../../../../types/ReactComponentProp
 import { OcdTabularContents } from "../OciTabularContents"
 
 export const OciSecurityList = ({ ocdDocument, ociResources, selected }: OciTabularResourceProps): JSX.Element => {
-    const columnTitles: string[] = []
-    const resourceElements: string[] = []
+    const columnTitles: string[] = ['VCN']
+    const resourceElements: string[] = ['vcnId']
     return (
         <OcdTabularContents 
             ocdDocument={ocdDocument}
