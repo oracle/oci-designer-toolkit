@@ -24,6 +24,11 @@ export class OcdTerraformResource {
             id: "",
             key: "ocd_version",
             value: buildDetails.version
+        },
+        {
+            id: "",
+            key: "OKIT-Open-Cloud-Designer-Version",
+            value: buildDetails.version
         }
     ]
     constructor(idTFResourceMap={}) {

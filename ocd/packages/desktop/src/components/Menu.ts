@@ -26,10 +26,11 @@ export interface MenuItem {
     trueClass?: string
     falseClass?: string
     click?: Function | undefined
+    view?: string | undefined
     submenu?: MenuItem[] | Function
 }
 
-export const menuItems = [
+export const menuItems: MenuItem[] = [
     {
         label: 'File',
         click: undefined,
@@ -108,6 +109,7 @@ export const menuItems = [
                     OcdDesignFacade.saveDesign(ocdDocument.design, activeFile.name).then((results) => {
                         if (!results.canceled) {
                             setActiveFile({name: results.filename, modified: false})
+                            updateRecentFiles(results.filename, ocdConsoleConfig, setOcdConsoleConfig)
                         }
                     }).catch((resp) => {console.warn('Save Design Failed with', resp)})
                 }
@@ -418,6 +420,7 @@ export const menuItems = [
     {
         label: 'Layout',
         click: undefined,
+        view: 'designer',
         submenu: [
             {
                 label: 'Layers',
@@ -469,6 +472,7 @@ export const menuItems = [
     {
         label: 'Arrange',
         click: undefined,
+        view: 'designer',
         submenu: [
             {
                 label: 'To Front',
@@ -557,12 +561,28 @@ export const menuItems = [
 
 export const updateRecentFiles = (filename: string, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
     if (filename && filename !== '') {
-        const clone = OcdConsoleConfig.clone(ocdConsoleConfig)
-        const recentDesigns: string[] = ocdConsoleConfig.config.recentDesigns ? ocdConsoleConfig.config.recentDesigns.filter((f) => f !== filename) : []
-        clone.config.recentDesigns = [filename, ...recentDesigns].slice(0, ocdConsoleConfig.config.maxRecent)
-        setOcdConsoleConfig(clone)
-        console.debug('Menu: Load: Config', clone)
-        OcdConfigFacade.saveConsoleConfig(clone.config).catch((resp) => {console.warn(resp)})
+
+        OcdConfigFacade.loadConsoleConfig().then((results) => {
+            console.debug('Menu: Load Console Config', results)
+            const consoleConfig = new OcdConsoleConfig(results)
+            const recentDesigns: string[] = consoleConfig.config.recentDesigns ? consoleConfig.config.recentDesigns.filter((f) => f !== filename) : []
+            consoleConfig.config.recentDesigns = [filename, ...recentDesigns].slice(0, consoleConfig.config.maxRecent)
+            console.debug('Menu: Load: Config', consoleConfig)
+            OcdConfigFacade.saveConsoleConfig(consoleConfig.config).catch((resp) => {console.warn(resp)})
+            setOcdConsoleConfig(consoleConfig)
+        }).catch((response) => {
+            console.debug('Menu: Load Console Config', response)
+            OcdConfigFacade.saveConsoleConfig(ocdConsoleConfig.config).then((results) => {}).catch((response) => console.debug('Menu:', response))
+            // OcdConfigFacade.saveConsoleConfig(ocdConsoleConfig.config).then((results) => {console.debug('OcdConsole: Saved Console Config')}).catch((response) => console.debug('OcdConsole:', response))
+        })
+
+
+        // const clone = OcdConsoleConfig.clone(ocdConsoleConfig)
+        // const recentDesigns: string[] = ocdConsoleConfig.config.recentDesigns ? ocdConsoleConfig.config.recentDesigns.filter((f) => f !== filename) : []
+        // clone.config.recentDesigns = [filename, ...recentDesigns].slice(0, ocdConsoleConfig.config.maxRecent)
+        // setOcdConsoleConfig(clone)
+        // console.debug('Menu: Load: Config', clone)
+        // OcdConfigFacade.saveConsoleConfig(clone.config).catch((resp) => {console.warn(resp)})
     }
 }
 

@@ -108,6 +108,7 @@ summary {
 .tr {display: table-row;}
 .th {display: table-cell; color: black; overflow: hidden;}
 .td {display: table-cell; color: black; overflow: hidden;}
+.th-menu {display: table-cell; color: black; overflow: visible}
 
 .hidden {
     display: none !important;
@@ -274,6 +275,12 @@ summary {
     grid-auto-flow: column;
 }
 
+.ocd-toolbar-separator-right {
+    padding-right: 2px !important;
+    margin-right: 2px !important;
+    border-right: #d0d7de solid 1px !important;
+}
+
 .ocd-toolbar-left {
     display: inline-block;
     margin-right: auto;
@@ -308,7 +315,7 @@ summary {
     grid-auto-flow: column;
 }
 
-.ocd-console-toolbar-icon {
+.ocd-console-toolbar-icon, .ocd-console-three-dot-menu-icon {
     background-repeat: no-repeat;
     background-position: center;
     background-size: 15px;
@@ -354,7 +361,7 @@ summary {
     box-shadow: 0 10px 15px -3px rgba(46, 41, 51, 0.08),
         0 4px 6px -2px rgba(71, 63, 79, 0.16);
     font-size: 0.875rem;
-    z-index: 9999;
+    z-index: 99999;
     min-width: 10rem;
     padding: 0.5rem 0;
     list-style: none;
@@ -371,6 +378,10 @@ summary {
 
 .ocd-console-toolbar-dropdown-item > ul.slide-down {
     top: var(--console-layers-bar-height);
+}
+
+.ocd-console-toolbar-dropdown-item > ul.slide-right {
+    right: 0
 }
 
 .ocd-console-toolbar-dropdown-item > ul.slide-up {
@@ -636,6 +647,25 @@ summary {
 /*
 ** Designer View
 */
+
+.ocd-designer-toolbar {
+    display: grid;
+    grid-auto-flow: column;
+}
+
+.ocd-designer-toolbar-zoom-controls {
+    margin-left: 2px;
+    display: grid;
+    grid-auto-flow: column;
+}
+
+.ocd-designer-toolbar-zoom-controls > div {
+    margin: auto;
+}
+
+.ocd-designer-toolbar-zoom-controls select {
+    border: none;
+}
 
 .ocd-designer {
     display: grid;
@@ -1555,6 +1585,7 @@ table {
     border-right: var(--tabular-line-colour) solid 1px;
     padding: 2px;
     text-align: center;
+    vertical-align: middle;
 }
 
 .ocd-tabular-list-header .th:first-child {

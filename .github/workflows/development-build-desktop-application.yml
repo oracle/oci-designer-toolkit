@@ -43,7 +43,7 @@ jobs:
       RELEASE_TAG: ${{ needs.generate-variables.outputs.okit_release_tag }}
       RELEASE_TITLE: ${{ needs.generate-variables.outputs.okit_release_title }}
       OCD_VERSION: ${{ needs.generate-variables.outputs.ocd_version }}
-      BRANCH_OCD_VERSION: ${{ needs.generate-variables.outputs.ocd_version }}-${{ github.head_ref || github.ref_name }}
+      # BRANCH_OCD_VERSION: ${{ needs.generate-variables.outputs.ocd_version }}-${{ github.head_ref || github.ref_name }}
       BRANCH_RELEASE_TAG: ocd.${{ github.head_ref || github.ref_name }}
     steps:
       - uses: actions/checkout@v4
@@ -75,7 +75,8 @@ jobs:
       DEBUG1: "electron-*"
       RELEASE_TAG: ${{ needs.generate-variables.outputs.okit_release_tag }}
       RELEASE_TITLE: ${{ needs.generate-variables.outputs.okit_release_title }}
-      BRANCH_OCD_VERSION: ${{ needs.generate-variables.outputs.ocd_version }}-${{ github.head_ref || github.ref_name }}
+      OCD_VERSION: ${{ needs.generate-variables.outputs.ocd_version }}
+      # BRANCH_OCD_VERSION: ${{ needs.generate-variables.outputs.ocd_version }}-${{ github.head_ref || github.ref_name }}
       BRANCH_RELEASE_TAG: ocd.${{ github.head_ref || github.ref_name }}
     steps:
       - uses: actions/checkout@v4
@@ -94,20 +95,21 @@ jobs:
       - run: npm run github-action-pack
       - run: npm run github-action-build-react
       - run: npm run github-action-build-electron
-      - run: ls -R ./ocd/dist
-        if: always()
       - name: Upload Mac Artifact to Release
         if: matrix.os == 'macos-latest'
         run: |
-          gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/mac/ocd-${{ env.BRANCH_OCD_VERSION }}-*.dmg --clobber
+          ls -lash ./ocd/dist/mac
+          gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/mac/ocd-${{ env.OCD_VERSION }}-*.dmg --clobber
       - name: Upload Windows Artifact to Release
         if: matrix.os == 'windows-latest'
         run: |
-          gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/win/ocd-${{ env.BRANCH_OCD_VERSION }}-x64.exe --clobber
+          ls ./ocd/dist/win
+          gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/win/ocd-${{ env.OCD_VERSION }}-x64.exe --clobber
       - name: Upload Linux Artifact to Release
         if: matrix.os == 'ubuntu-latest'
         run: |
-          # gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.BRANCH_OCD_VERSION }}.rpm --clobber
-          # gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.BRANCH_OCD_VERSION }}.deb --clobber
-          gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.BRANCH_OCD_VERSION }}-*.snap --clobber
-          gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.BRANCH_OCD_VERSION }}-*.AppImage --clobber
+          ls -lash ./ocd/dist/linux
+          # gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}-*.rpm --clobber
+          # gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}-*.deb --clobber
+          gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}-*.snap --clobber
+          # gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}-*.AppImage --clobber

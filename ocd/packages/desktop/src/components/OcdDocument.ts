@@ -264,6 +264,14 @@ export class OcdDocument {
         if (newMatrix[0] >= 0.3 && newMatrix[0] <= 3) page.transform = newMatrix
         return page.transform
     }
+    zoomTo = (percentage: number = 100) => {
+        const page = this.getActivePage()
+        const newMatrix = OcdDesign.resetPanZoom().slice()
+        newMatrix[0] *= percentage/100
+        newMatrix[3] *= percentage/100
+        if (newMatrix[0] >= 0.25 && newMatrix[0] <= 3) page.transform = newMatrix
+        return page.transform
+    }
 
     // @ts-ignore 
     // getLayer = (id: string): OcdViewLayer => this.design.model.oci.resources.compartment.find((c) => c.id === id)

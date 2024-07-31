@@ -54,7 +54,7 @@ class PCACompartmentQuery(OCIConnection):
         self.parents = {}
 
     def connect(self):
-        logger.info(f'<<< Connecting PCA Clients >>> {self.cert_bundle}')
+        logger.info(f'<<< Connecting PCA Clients >>> ')
         self.clients = {
             "identity": oci.identity.IdentityClient(config=self.config, signer=self.signer)
         }
@@ -74,7 +74,6 @@ class PCACompartmentQuery(OCIConnection):
             cert_bundle = self.config["cert-bundle"]
         else:
             cert_bundle = None
-        logger.info(f'cert_bundle={cert_bundle}')
         self.sub_compartments = include_sub_compartments
         self.query_compartments = compartments
         response_json = {}

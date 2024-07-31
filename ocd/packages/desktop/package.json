@@ -1,7 +1,7 @@
 {
   "name": "@ocd/desktop",
   "productName": "ocd",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "OKIT Open Cloud Designer Desktop",
   "title": "OKIT Open Cloud Designer Desktop",
   "author": {
@@ -68,7 +68,7 @@
   },
   "build": {
     "appId": "com.oracle.okit-ocd",
-    "artifactName": "${productName}-${version}${env.BRANCH_NAME}-${arch}.${ext}",
+    "artifactName": "${productName}-${version}-${arch}.${ext}",
     "files": [
       "build/**/*",
       "node_modules/**/*"
@@ -114,20 +114,26 @@
       "perMachine": true
     },
     "linux": {
+      "desktop": {
+        "Name": "OKIT - Open Cloud designer",
+        "StartupNotify": "true",
+        "Terminal": "false",
+        "Type": "Application"        
+      },
       "icon": "build/assets/icon.png",
-      "executableName": "${productName}-${version}${env.BRANCH_NAME}.${ext}",
+      "executableName": "${productName}-${version}.${ext}",
       "target": [
-        "AppImage",
         "snap"
       ]
-    }
+    },
+    "rpm": {}
   },
   "dependencies": {
-    "@ocd/core": "^0.2.1",
-    "@ocd/export": "^0.2.1",
-    "@ocd/import": "^0.2.1",
-    "@ocd/model": "^0.2.1",
-    "@ocd/query": "^0.2.1",
+    "@ocd/core": "^0.2.2",
+    "@ocd/export": "^0.2.2",
+    "@ocd/import": "^0.2.2",
+    "@ocd/model": "^0.2.2",
+    "@ocd/query": "^0.2.2",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",

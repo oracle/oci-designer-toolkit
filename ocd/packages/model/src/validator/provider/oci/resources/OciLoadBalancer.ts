@@ -41,7 +41,7 @@ export namespace OciLoadBalancer {
             class: 'oci-load-balancer'
         }
     ] : []}
-    const shapeDetailsMaximumBandwidthInMbps = (resource: OcdValidatorResource, resources: OciResources): OcdValidationResult[] => {return resource.shape === 'flexible' && resource.shapeDetails.minimumBandwithInMbps > resource.shapeDetails.maximumBandwithInMbps ? [
+    const shapeDetailsMaximumBandwidthInMbps = (resource: OcdValidatorResource, resources: OciResources): OcdValidationResult[] => {return resource.shape === 'flexible' && resource.shapeDetails && resource.shapeDetails.minimumBandwithInMbps > resource.shapeDetails.maximumBandwithInMbps ? [
         {
             valid: false,
             type: 'error',

@@ -39,7 +39,8 @@ export namespace OciDrgAttachment {
         let associationIds: string[] = []
         if (resource.routeTableId && resource.routeTableId !== '') associationIds = [...associationIds, resource.routeTableId]
         if (resource.vcnId && resource.vcnId !== '') associationIds = [...associationIds, resource.vcnId]
-        if (resource.networkDetails?.id && resource.networkDetails?.id !== '') associationIds = [...associationIds, resource.networkDetails?.id]
+        // if (resource.networkDetails?.id && resource.networkDetails?.id !== '') associationIds = [...associationIds, resource.networkDetails?.id]
+        if (resource.networkDetails?.ids) associationIds = [...associationIds, ...resource.networkDetails?.ids]
         return associationIds
     }
 }

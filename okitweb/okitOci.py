@@ -22,6 +22,7 @@ import urllib
 from flask import Blueprint
 from flask import request
 from flask import jsonify
+from markupsafe import escape
 
 import json
 from common.okitCommon import logJson
@@ -161,7 +162,7 @@ def ociResourceManger():
             return json.dumps(stacks, sort_keys=False, indent=2, separators=(',', ': '))
         except Exception as e:
             logger.exception(e)
-            return str(e), 500
+            return 'Failed to connect to Resource Manager', 500
     elif request.method == 'POST':
         logger.debug('JSON     : {0:s}'.format(str(request.json)))
         okit_model_id = request.json.get('okit_model_id', '')
@@ -206,10 +207,10 @@ def ociResourceManger():
             return_code = 200
             resource_manager.list()
             shutil.rmtree(destination_dir)
-            return stack['display_name'], return_code
+            return escape(stack['display_name']), return_code
         except Exception as e:
             logger.exception(e)
-            return str(e), 500
+            return 'Failed to connect to Resource Manager', 500
     return
 
 

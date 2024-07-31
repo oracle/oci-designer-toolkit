@@ -54,7 +54,6 @@ class PCARegionQuery(OCIConnection):
         self.parents = {}
 
     def connect(self):
-        logger.info(f'<<< PCARegionQuery Connecting PCA Clients >>> {self.cert_bundle}')
         self.clients = {
             "identity": oci.identity.IdentityClient(config=self.config, signer=self.signer)
         }
@@ -72,7 +71,6 @@ class PCARegionQuery(OCIConnection):
             cert_bundle = self.config["cert-bundle"]
         else:
             cert_bundle = None
-        logger.info(f'cert_bundle={cert_bundle}')
         response_json = {}
         regions = self.regions()
         logger.info('>>>>> PCA Regions ' + jsonToFormattedString(regions))

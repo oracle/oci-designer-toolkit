@@ -99,6 +99,8 @@ export interface OciTabularHeaderProps {
     sortColumn: string
     sortAscending: boolean
     onSortClick: React.Dispatch<any>
+    displayColumns: string[]
+    setDisplayColumns: React.Dispatch<any>
 }
 
 export interface OciTabularRowProps {
@@ -107,6 +109,7 @@ export interface OciTabularRowProps {
     index: number
     resource: OcdResource
     resourceElements: string[]
+    selected: string
 }
 
 export interface OcdVariableRowPropsNew {
@@ -131,6 +134,9 @@ export interface OciDefinedTagRowProps {
     tag: OciDefinedTag
     // row: number
     onDeleteClick: React.Dispatch<any>
+    onDefinedNamespaceChange: (oldNamespace: string, newNamespace: string, key: string) => any
+    onDefinedKeyChange: (namespace: string, oldKey: string, newKey: string) => any
+    onDefinedValueChange: (namespace: string, key: string, value: string) => any
 }
 
 export interface OciFreeformTagRowProps {

@@ -25,7 +25,7 @@ logger = getLogger()
 
 class OCIConnection(object):
     PAGINATION_LIMIT = 1000
-    OKIT_VERSION = 'v0.61.0'
+    OKIT_VERSION = 'v0.62.0'
 
     def __init__(self, config=None, configfile=None, profile=None, region=None, signer=None):
         self.tenancy_ocid = ''
@@ -108,7 +108,6 @@ class OCIConnection(object):
                     self.region = os.getenv('OKIT_VM_REGION', 'uk-london-1')
             # Get Signer from From Cert
             cert_path = oci.config.get_config_value_or_default(self.config, "cert-bundle")
-            logger.info(f'Cert Path {cert_path}')
             self.signerFromConfig()
             self.instance_principal = False
         except Exception as e:
