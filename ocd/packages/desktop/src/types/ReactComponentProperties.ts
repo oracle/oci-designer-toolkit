@@ -99,6 +99,8 @@ export interface OciTabularHeaderProps {
     sortColumn: string
     sortAscending: boolean
     onSortClick: React.Dispatch<any>
+    displayColumns: string[]
+    setDisplayColumns: React.Dispatch<any>
 }
 
 export interface OciTabularRowProps {
@@ -107,6 +109,7 @@ export interface OciTabularRowProps {
     index: number
     resource: OcdResource
     resourceElements: string[]
+    selected: string
 }
 
 export interface OcdVariableRowPropsNew {
