@@ -1,3 +1,5 @@
+# Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 # Define Local CNE Types
 # If VMs are added to the design add their Private IP reference to the appropriate list.
 locals {

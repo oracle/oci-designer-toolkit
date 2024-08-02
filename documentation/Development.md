@@ -67,7 +67,7 @@ INFO: Writing File: ../visualiser/facade/ociBlockStorageVolume.py
 Following generation a model file will be created in the **okitweb/static/okit/model/js/artefacts** directory as shown below.
 ```javascript
 /*
-** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
+** Copyright (c) 2020, 2024, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded Block Storage Volume Javascript');
@@ -159,7 +159,7 @@ any reference to it on delete. This is done by adding the deleteChildren() funct
 Following the update the model JavaScript will be modified as below:
 ```javascript
 /*
-** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
+** Copyright (c) 2020, 2024, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded Block Storage Volume Javascript');
@@ -258,7 +258,7 @@ OkitJson.prototype.deleteBlockStorageVolume = function(id) {
 Following generation a view file will be created in the **okitweb/static/okit/view/designer/js/artefacts** directory as shown below.
 ```javascript
 /*
-** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
+** Copyright (c) 2020, 2024, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded Block Storage Volume View Javascript');
@@ -366,7 +366,7 @@ Instance it is attached to) by creating the following functions:
 Following the update the model JavaScript will be modified as below:
 ```javascript
 /*
-** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
+** Copyright (c) 2020, 2024, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded Block Storage Volume View Javascript');
@@ -511,7 +511,7 @@ Following the update the model JavaScript will be modified as below:
 Following generation a property sheet HTML file will be created in the **okitweb/templates/okit/propertysheets** directory as shown below.
 ```jinja2
 <!--
-** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
+** Copyright (c) 2020, 2024, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 -->
 {% extends "okit/propertysheets/base_property_sheet.html" %}
@@ -531,7 +531,7 @@ worked example we will need add the following fields:
 
 ```jinja2
 <!--
-** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
+** Copyright (c) 2020, 2024, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 -->
 {% extends "okit/propertysheets/base_property_sheet.html" %}
@@ -565,7 +565,7 @@ Following generation a Python Facade file will be created in the **visualiser/fa
 ```python
 #!/usr/bin/python
 
-# Copyright (c) 2020, 2022, Oracle and/or its affiliates.
+# Copyright (c) 2020, 2024, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 """Provide Module Description
@@ -627,7 +627,7 @@ to the correct name **self.client.list_volumes** which will result in the follow
 ```python
 #!/usr/bin/python
 
-# Copyright (c) 2020, 2022, Oracle and/or its affiliates.
+# Copyright (c) 2020, 2024, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 """Provide Module Description
