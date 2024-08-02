@@ -16,6 +16,7 @@ export class OcdCommonLayoutEngine {
     containerHeight = 200
     columnLayout: string[][] = []
     allSpecifiedResources: string[] = []
+    edgeLayout?: Record<string, Record<string, string[]>> = {}
 
     constructor(coords: OcdViewCoords[]) {
         this.coords = coords

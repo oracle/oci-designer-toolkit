@@ -13,6 +13,7 @@ import { OcdTwoColumnLayoutEngine } from './layout/OcdTwoColumnLayoutEngine'
 import { OcdSingleColumnLayoutEngine } from './layout/OcdSingleColumnLayoutEngine'
 import { OcdDynamicLayoutEngine } from './layout/OcdDynamicLayoutEngine'
 import { layoutEngineConfig } from './layout/OcdLayoutEngineConfig'
+import { OcdOkitWebLayoutEngine } from './layout/OcdOkitWebLayoutEngine'
 
 export class OcdAutoLayout {
     coords: OcdViewCoords[]
@@ -101,8 +102,14 @@ export class OcdAutoLayout {
         } else if (style === 'two-column') {
             const layoutEngine = new OcdTwoColumnLayoutEngine(this.coords)
             return layoutEngine.layout(detailed, this.coords)
-        } else {
+        } else if (style === 'single-column') {
             const layoutEngine = new OcdSingleColumnLayoutEngine(this.coords)
+            return layoutEngine.layout(detailed, this.coords)
+        } else if (style === 'okit-web') {
+            const layoutEngine = new OcdOkitWebLayoutEngine(this.coords)
+            return layoutEngine.layout(detailed, this.coords)
+        } else {
+            const layoutEngine = new OcdDynamicLayoutEngine(this.coords)
             return layoutEngine.layout(detailed, this.coords)
         }
         return this.coords

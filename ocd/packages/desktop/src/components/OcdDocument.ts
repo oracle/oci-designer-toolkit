@@ -452,10 +452,10 @@ export class OcdDocument {
         }
     }
 
-    autoLayout = (viewId: string) => {
+    autoLayout = (viewId: string, detailed: boolean = true, style: string = 'dynamic-columns') => {
         const autoArranger = new OcdAutoLayout(this.design)
         const page = this.getPage(viewId)
-        page.coords = autoArranger.layout()
+        page.coords = autoArranger.layout(detailed, style)
     }
 
 }

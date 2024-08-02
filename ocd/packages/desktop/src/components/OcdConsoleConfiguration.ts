@@ -18,6 +18,7 @@ export interface OcdConsoleConfiguration {
     recentDesigns: string[]
     maxRecent: number
     displayColumns?: Record<string, string[]>
+    defaultAutoArrangeStyle?: string
 }
 
 export class OcdConsoleConfig {
@@ -45,7 +46,8 @@ export class OcdConsoleConfig {
             zoomOnWheel: false,
             recentDesigns: [],
             maxRecent: 10,
-            displayColumns: {}
+            displayColumns: {},
+            defaultAutoArrangeStyle: 'dynamic-columns'
         }
     }
 }

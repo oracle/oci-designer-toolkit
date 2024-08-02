@@ -72,21 +72,6 @@ export const palette = {
                     "title": "Networking",
                     "class": "oci-network",
                     "resources": [
-                        {
-                            "container": true,
-                            "title": "Load Balancer",
-                            "class": "oci-load-balancer"
-                        },
-                        {
-                            "container": false,
-                            "title": "Load Balancer Backend Set",
-                            "class": "oci-load-balancer-backend-set"
-                        },
-                        {
-                            "container": false,
-                            "title": "Load Balancer Listener",
-                            "class": "oci-load-balancer-listener"
-                        },
                         // {
                         //     "container": true,
                         //     "title": "Network Load Balancer",
@@ -114,18 +99,33 @@ export const palette = {
                         },
                         {
                             "container": false,
-                            "title": "Network Security Group",
-                            "class": "oci-network-security-group"
-                        },
-                        {
-                            "container": false,
                             "title": "DHCP Options",
                             "class": "oci-dhcp-options"
                         },
                         {
                             "container": false,
+                            "title": "Network Security Group",
+                            "class": "oci-network-security-group"
+                        },
+                        {
+                            "container": false,
                             "title": "IPSec Connection",
                             "class": "oci-ipsec"
+                        },
+                        {
+                            "container": true,
+                            "title": "Load Balancer",
+                            "class": "oci-load-balancer"
+                        },
+                        {
+                            "container": false,
+                            "title": "Load Balancer Backend Set",
+                            "class": "oci-load-balancer-backend-set"
+                        },
+                        {
+                            "container": false,
+                            "title": "Load Balancer Listener",
+                            "class": "oci-load-balancer-listener"
                         },
                         // {
                         //     "container": false,

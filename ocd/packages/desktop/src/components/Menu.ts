@@ -5,8 +5,8 @@
 
 import { OcdOKITImporter } from '@ocd/import'
 import { OcdMarkdownExporter, OcdOKITExporter, OcdSVGExporter, OcdTerraformExporter, OutputDataString } from '@ocd/export'
-import OcdConsoleConfig from './OcdConsoleConfiguration'
-import OcdDocument from './OcdDocument'
+import { OcdConsoleConfig } from './OcdConsoleConfiguration'
+import { OcdDocument } from './OcdDocument'
 import { OcdDesignFacade } from '../facade/OcdDesignFacade'
 import { OcdConfigFacade } from '../facade/OcdConfigFacade'
 import { OcdViewLayer, OcdViewPage } from '@ocd/model'
@@ -516,10 +516,44 @@ export const menuItems: MenuItem[] = [
             },
             {
                 label: 'Auto Arrange',
-                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
-                    ocdDocument.autoLayout(ocdDocument.getActivePage().id)
-                    setOcdDocument(OcdDocument.clone(ocdDocument))            
-                }
+                click: undefined,
+                submenu: [
+                    {
+                        label: 'Default',
+                        click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
+                            ocdDocument.autoLayout(ocdDocument.getActivePage().id, true, ocdConsoleConfig.config.defaultAutoArrangeStyle ? ocdConsoleConfig.config.defaultAutoArrangeStyle : 'dynamic-columns')
+                            setOcdDocument(OcdDocument.clone(ocdDocument))            
+                        }
+                    },
+                    {
+                        label: 'Dynamic',
+                        click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
+                            ocdDocument.autoLayout(ocdDocument.getActivePage().id, true, 'dynamic-columns')
+                            setOcdDocument(OcdDocument.clone(ocdDocument))            
+                        }
+                    },
+                    {
+                        label: 'Two Column',
+                        click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
+                            ocdDocument.autoLayout(ocdDocument.getActivePage().id, true, 'two-column')
+                            setOcdDocument(OcdDocument.clone(ocdDocument))            
+                        }
+                    },
+                    {
+                        label: 'Single Column',
+                        click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
+                            ocdDocument.autoLayout(ocdDocument.getActivePage().id, true, 'single-column')
+                            setOcdDocument(OcdDocument.clone(ocdDocument))            
+                        }
+                    },
+                    {
+                        label: 'OKIT Web',
+                        click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
+                            ocdDocument.autoLayout(ocdDocument.getActivePage().id, true, 'okit-web')
+                            setOcdDocument(OcdDocument.clone(ocdDocument))            
+                        }
+                    }
+                ]
             }
         ]
     },

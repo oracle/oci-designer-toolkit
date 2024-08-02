@@ -22,7 +22,6 @@ const OcdPropertiesTabbar = ({modelId, coordsId, activeTab, setActiveTab, additi
     const tabs: string[] = useMemo(() => {
         const tabs = [
             ...modelId && modelId !== '' ? ['Properties', 'Tags'] : [],
-            // ...modelId && modelId !== '' ? ['Tags'] : [],
             'Documentation',
             ...modelId && modelId !== '' ? ['Style'] : [],
             ...coordsId && coordsId !== '' ? ['Arrange'] : [],
@@ -125,8 +124,9 @@ const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourcePr
     // Memos
     const variablesDatalist = useMemo(() => <OcdPropertiesDataList variables={variables}/>, [variables])
     const commonProperties = useMemo(() => <OciCommonResourceProperties ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={selectedResourceProxy} rootResource={selectedResourceProxy} key={`${selectedResourceProxy ? selectedResourceProxy.id : ''}.CommonProperties`}/>, [modelId])
-    const resourceProperties = useMemo(() => <ResourceProperties ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={selectedResourceProxy} key={`${selectedResourceProxy ? selectedResourceProxy.id : ''}.Properties`}/>, [modelId])
-    console.debug(`>>> OcdProperies: OcdResourceProperties: Render()`)
+    // const resourceProperties = useMemo(() => <ResourceProperties ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={selectedResourceProxy} key={`${selectedResourceProxy ? selectedResourceProxy.id : ''}.Properties`}/>, [modelId])
+    const resourceProperties = <ResourceProperties ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={selectedResourceProxy} key={`${selectedResourceProxy ? selectedResourceProxy.id : ''}.Properties`}/>
+    console.debug(`>>> OcdProperies: OcdResourceProperties: Render()`, selectedResource, ResourceProperties)
     return (
         <div className={`ocd-properties-panel ocd-properties-panel-theme`}>
             {selectedResource && selectedResourceProxy && variablesDatalist}
@@ -658,37 +658,37 @@ const OcdResourceValidationResult = ({result, resource}: DesignerResourceValidat
         </div>
     )
 }
-const OcdResourceValidationError = ({result, resource}: DesignerResourceValidationResult): JSX.Element => {
-    console.debug('OcdProperties: Validation Error', result, resource)
-    return (
-        <div className='ocd-validation-result'>
-            <div className='ocd-validation-error-result'>
-                <div className={`ocd-validation-result-title ${result.class}`}>{result.title}</div>
-                <div className='ocd-validation-message'>{result.message}</div>
-            </div>
-        </div>
-    )
-}
-const OcdResourceValidationWarning = ({result, resource}: DesignerResourceValidationResult): JSX.Element => {
-    return (
-        <div className='ocd-validation-result'>
-            <div className='ocd-validation-warning-result'>
-            <div className={`ocd-validation-result-title ${result.class}`}>{result.title}</div>
-                <div className='ocd-validation-message'>{result.message}</div>
-            </div>
-        </div>
-    )
-}
-const OcdResourceValidationInformation = ({result, resource}: DesignerResourceValidationResult): JSX.Element => {
-    return (
-        <div className='ocd-validation-result'>
-            <div className='ocd-validation-information-result'>
-            <div className={`ocd-validation-result-title ${result.class}`}>{result.title}</div>
-                <div className='ocd-validation-message'>{result.message}</div>
-            </div>
-        </div>
-    )
-}
+// const OcdResourceValidationError = ({result, resource}: DesignerResourceValidationResult): JSX.Element => {
+//     console.debug('OcdProperties: Validation Error', result, resource)
+//     return (
+//         <div className='ocd-validation-result'>
+//             <div className='ocd-validation-error-result'>
+//                 <div className={`ocd-validation-result-title ${result.class}`}>{result.title}</div>
+//                 <div className='ocd-validation-message'>{result.message}</div>
+//             </div>
+//         </div>
+//     )
+// }
+// const OcdResourceValidationWarning = ({result, resource}: DesignerResourceValidationResult): JSX.Element => {
+//     return (
+//         <div className='ocd-validation-result'>
+//             <div className='ocd-validation-warning-result'>
+//             <div className={`ocd-validation-result-title ${result.class}`}>{result.title}</div>
+//                 <div className='ocd-validation-message'>{result.message}</div>
+//             </div>
+//         </div>
+//     )
+// }
+// const OcdResourceValidationInformation = ({result, resource}: DesignerResourceValidationResult): JSX.Element => {
+//     return (
+//         <div className='ocd-validation-result'>
+//             <div className='ocd-validation-information-result'>
+//             <div className={`ocd-validation-result-title ${result.class}`}>{result.title}</div>
+//                 <div className='ocd-validation-message'>{result.message}</div>
+//             </div>
+//         </div>
+//     )
+// }
 
 const OcdProperties = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
     const ociResources: OciResources = ocdDocument.getOciResourcesObject()
@@ -705,14 +705,14 @@ const OcdProperties = ({ocdDocument, setOcdDocument}: DesignerResourceProperties
     const onPropertiesTabClick = (tab: string) => {
         setActiveTab(tab.toLowerCase())
     }
-    const ActiveTab = activeTab === 'properties' ? OcdResourceProperties :
-                      activeTab === 'tags' ? OcdResourceTags :
-                      activeTab === 'documentation' ? OcdResourceDocumentation :
-                      activeTab === 'arrange' ? OcdResourceArrangement :
-                      activeTab === 'style' && selectedResource.coordsId !== '' ? OcdResourceStyle :
-                      activeTab === 'style' ? OcdLayerStyle :
-                      activeTab === 'validation' ? OcdResourceValidation :
-                      OcdResourceDocumentation
+    // const ActiveTab = activeTab === 'properties' ? OcdResourceProperties :
+    //                   activeTab === 'tags' ? OcdResourceTags :
+    //                   activeTab === 'documentation' ? OcdResourceDocumentation :
+    //                   activeTab === 'arrange' ? OcdResourceArrangement :
+    //                   activeTab === 'style' && selectedResource.coordsId !== '' ? OcdResourceStyle :
+    //                   activeTab === 'style' ? OcdLayerStyle :
+    //                   activeTab === 'validation' ? OcdResourceValidation :
+    //                   OcdResourceDocumentation
     const modelId = ocdDocument.selectedResource.modelId
     const coordsId = ocdDocument.selectedResource.coordsId
     const additionalCss = {validation: validationTabClass}

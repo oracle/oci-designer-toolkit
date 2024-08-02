@@ -8,6 +8,7 @@ export const layoutEngineConfig = {
         "drg", 
         "group",
         "load_balancer", 
+        "network_load_balancer", 
         "subnet", 
         "vault",
         "vcn"
