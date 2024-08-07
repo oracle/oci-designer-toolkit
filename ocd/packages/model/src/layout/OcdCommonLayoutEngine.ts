@@ -6,23 +6,29 @@
 import { OcdDesign, OcdViewCoords } from "../OcdDesign"
 
 export class OcdCommonLayoutEngine {
+    design: OcdDesign
     coords: OcdViewCoords[]
     maxColumns = 5
     spacing = 32
     detailedWidth = 150
     simpleWidth = 32
     simpleHeight = 32
+    edgeAdjustment = 5
     containerWidth = 200
     containerHeight = 200
     columnLayout: string[][] = []
     allSpecifiedResources: string[] = []
-    edgeLayout?: Record<string, Record<string, string[]>> = {}
+    edgeLayout: Record<string, Record<string, string[]>> = {}
+    hideAssociationConnections?: string[]
+    hideParentConnections?: string[]
 
-    constructor(coords: OcdViewCoords[]) {
+    constructor(coords: OcdViewCoords[], design: OcdDesign) {
         this.coords = coords
+        this.design = design
     }
 
     createCoordsHierarchy(coords: OcdViewCoords[]): OcdViewCoords[] {
+        console.debug('OcdCommonLayoutEngine: createCoordsHierarchy')
         // Add Children to Parent Coords
         coords.filter((c) => c.container).forEach((parent) => {
             const children = this.getChildren(parent.ocid)
@@ -105,12 +111,13 @@ export class OcdCommonLayoutEngine {
         // console.debug('OcdCommonLayoutEngine: childX:', childX, 'Types:', types, 'Children:', children)
         children.filter((c) => types.includes(c.class)).forEach((child) => {
             // console.debug('OcdCommonLayoutEngine: Processing:', child)
+            const rightEdgeAdjustment = Object.keys(this.edgeLayout).includes(child.class) && this.edgeLayout[child.class].right.length > 0 ? (this.detailedWidth - this.simpleHeight - this.edgeAdjustment) : 0
             child.x = childX
             child.y = childY
             // Add Spacing
             childY += (this.spacing + (child.container ? child.h : this.simpleHeight) as number)
             // Set Column Width
-            columnWidth = Math.max(columnWidth, (child.container ? child.w : (detailed ? this.detailedWidth : this.simpleWidth) as number))
+            columnWidth = Math.max(columnWidth, (child.container ? child.w + rightEdgeAdjustment : (detailed ? this.detailedWidth : this.simpleWidth) as number))
             // Size Container
             coords.w = Math.max(coords.w, (childX + this.spacing))
             coords.h = childY + this.spacing + this.simpleHeight

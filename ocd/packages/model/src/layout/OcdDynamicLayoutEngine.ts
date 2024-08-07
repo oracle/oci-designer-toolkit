@@ -8,8 +8,8 @@ import { OcdCommonLayoutEngine } from "./OcdCommonLayoutEngine"
 
 export class OcdDynamicLayoutEngine extends OcdCommonLayoutEngine {
 
-    constructor(coords: OcdViewCoords[]) {
-        super(coords)
+    constructor(coords: OcdViewCoords[], design: OcdDesign) {
+        super(coords, design)
         // Column Layouts
         this.columnLayout = [
             ['oci-internet-gateway', 'oci-nat-gateway'], 

@@ -533,6 +533,13 @@ export const menuItems: MenuItem[] = [
                         }
                     },
                     {
+                        label: 'Classic',
+                        click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
+                            ocdDocument.autoLayout(ocdDocument.getActivePage().id, true, 'okit-web')
+                            setOcdDocument(OcdDocument.clone(ocdDocument))            
+                        }
+                    },
+                    {
                         label: 'Two Column',
                         click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
                             ocdDocument.autoLayout(ocdDocument.getActivePage().id, true, 'two-column')
@@ -543,13 +550,6 @@ export const menuItems: MenuItem[] = [
                         label: 'Single Column',
                         click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
                             ocdDocument.autoLayout(ocdDocument.getActivePage().id, true, 'single-column')
-                            setOcdDocument(OcdDocument.clone(ocdDocument))            
-                        }
-                    },
-                    {
-                        label: 'OKIT Web',
-                        click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
-                            ocdDocument.autoLayout(ocdDocument.getActivePage().id, true, 'okit-web')
                             setOcdDocument(OcdDocument.clone(ocdDocument))            
                         }
                     }

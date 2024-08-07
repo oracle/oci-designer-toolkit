@@ -97,19 +97,19 @@ export class OcdAutoLayout {
 
     layout(detailed: boolean = true, style: string = 'dynamic-columns'): OcdViewCoords[] {
         if (style === 'dynamic-columns') {
-            const layoutEngine = new OcdDynamicLayoutEngine(this.coords)
+            const layoutEngine = new OcdDynamicLayoutEngine(this.coords, this.design)
             return layoutEngine.layout(detailed, this.coords)
         } else if (style === 'two-column') {
-            const layoutEngine = new OcdTwoColumnLayoutEngine(this.coords)
+            const layoutEngine = new OcdTwoColumnLayoutEngine(this.coords, this.design)
             return layoutEngine.layout(detailed, this.coords)
         } else if (style === 'single-column') {
-            const layoutEngine = new OcdSingleColumnLayoutEngine(this.coords)
+            const layoutEngine = new OcdSingleColumnLayoutEngine(this.coords, this.design)
             return layoutEngine.layout(detailed, this.coords)
         } else if (style === 'okit-web') {
-            const layoutEngine = new OcdOkitWebLayoutEngine(this.coords)
+            const layoutEngine = new OcdOkitWebLayoutEngine(this.coords, this.design)
             return layoutEngine.layout(detailed, this.coords)
         } else {
-            const layoutEngine = new OcdDynamicLayoutEngine(this.coords)
+            const layoutEngine = new OcdDynamicLayoutEngine(this.coords, this.design)
             return layoutEngine.layout(detailed, this.coords)
         }
         return this.coords
