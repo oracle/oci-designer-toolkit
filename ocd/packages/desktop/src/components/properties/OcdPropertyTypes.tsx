@@ -398,7 +398,6 @@ export const OcdCacheLookupProperty = ({ ocdDocument, setOcdDocument, resource, 
     console.debug('OcdPropertyTypes: OcdCacheLookupProperty', config, attribute, resource)
     // @ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
-    // @ts-ignore
     const {ocdCache, setOcdCache} = useContext(CacheContext)
     const [value, setValue]= useState(resource[attribute.key])
     const properties = config && config.properties ? config.properties : {}

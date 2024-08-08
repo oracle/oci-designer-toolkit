@@ -209,7 +209,8 @@ app.whenReady().then(() => {
 	// Build Information
 	ipcMain.handle('ocdBuild:getVersion', handleGetVersion)
 	// OCI API Calls / Query
-	ipcMain.handle('ociConfig:loadProfiles', handleLoadOciConfigProfiles)
+	ipcMain.handle('ociConfig:loadProfileNames', handleLoadOciConfigProfileNames)
+	ipcMain.handle('ociConfig:loadProfile', handleLoadOciConfigProfile)
 	ipcMain.handle('ociQuery:listRegions', handleListRegions)
 	ipcMain.handle('ociQuery:listTenancyCompartments', handleListTenancyCompartments)
 	ipcMain.handle('ociQuery:queryTenancy', handleQueryTenancy)
@@ -290,14 +291,26 @@ async function handleGetVersion() {
 	})
 }
 
-async function handleLoadOciConfigProfiles() {
-	console.debug('Electron Main: handleLoadOciConfigProfiles')
+async function handleLoadOciConfigProfileNames() {
+	console.debug('Electron Main: handleLoadOciConfigProfileNames')
 	return new Promise((resolve, reject) => {
 		const parsed = common.ConfigFileReader.parseDefault(null)
-		// console.debug('Electron Main: handleLoadOciConfigProfiles', parsed)
-		// console.debug('Electron Main: handleLoadOciConfigProfiles', parsed.accumulator.configurationsByProfile)
-		// console.debug('Electron Main: handleLoadOciConfigProfiles', Array.from(parsed.accumulator.configurationsByProfile.keys()))
+		console.debug('Electron Main: handleLoadOciConfigProfileNames', parsed)
+		console.debug('Electron Main: handleLoadOciConfigProfileNames', parsed.accumulator.configurationsByProfile)
+		console.debug('Electron Main: handleLoadOciConfigProfileNames', Array.from(parsed.accumulator.configurationsByProfile.keys()))
         const profiles = Array.from(parsed.accumulator.configurationsByProfile.keys())
+		resolve(profiles)
+	})
+}
+
+async function handleLoadOciConfigProfile(event, profile) {
+	console.debug('Electron Main: handleLoadOciConfigProfile')
+	return new Promise((resolve, reject) => {
+		const parsed = common.ConfigFileReader.parseDefault(null)
+		console.debug('Electron Main: handleLoadOciConfigProfileNames Parsed:', parsed)
+		console.debug('Electron Main: handleLoadOciConfigProfileNames Config By Profile:', parsed.accumulator.configurationsByProfile)
+		console.debug('Electron Main: handleLoadOciConfigProfileNames Keys:', Array.from(parsed.accumulator.configurationsByProfile.keys()))
+        const profile = Array.from(parsed.accumulator.configurationsByProfile[profile])
 		resolve(profiles)
 	})
 }

@@ -345,6 +345,15 @@ export const menuItems: MenuItem[] = [
                         }
                     }
                 ]
+            },
+            {
+                label: 'Load Reference Data',
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
+                    const clone = OcdConsoleConfig.clone(ocdConsoleConfig)
+                    clone.queryReferenceData = !ocdConsoleConfig.queryReferenceData
+                    console.debug('Menu: Setting Reference Data Query', ocdDocument, clone)
+                    setOcdConsoleConfig(clone)
+                }
             }
         ]
     },

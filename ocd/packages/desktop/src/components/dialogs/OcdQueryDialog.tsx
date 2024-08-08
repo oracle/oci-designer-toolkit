@@ -31,7 +31,7 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
         acc[value.hierarchy] = React.createRef();
         return acc;
       }, {} as Record<string, React.RefObject<any>>);
-    if (!profilesLoaded) OciApiFacade.loadOCIConfigProfiles().then((results) => {
+    if (!profilesLoaded) OciApiFacade.loadOCIConfigProfileNames().then((results) => {
         setProfilesLoaded(true)
         setProfiles(results)
         loadRegions(results.length ? results[0] : [regionsLoading])

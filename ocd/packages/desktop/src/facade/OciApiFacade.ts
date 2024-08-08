@@ -11,8 +11,11 @@ export namespace OciApiFacade {
     export const getVersion = (): Promise<any> => {
         return window.ocdAPI ? window.ocdAPI.getVersion() : new Promise((resolve, reject) => {reject('Currently Not Implemented')})
     }
-    export const loadOCIConfigProfiles = (): Promise<any> => {
-        return window.ocdAPI ? window.ocdAPI.loadOCIConfigProfiles() : new Promise((resolve, reject) => {reject('Currently Not Implemented')})
+    export const loadOCIConfigProfileNames = (): Promise<any> => {
+        return window.ocdAPI ? window.ocdAPI.loadOCIConfigProfileNames() : new Promise((resolve, reject) => {reject('Currently Not Implemented')})
+    }
+    export const loadOCIConfigProfile = (profile: string = 'shipped'): Promise<any> => {
+        return window.ocdAPI ? window.ocdAPI.loadOCIConfigProfile(profile) : new Promise((resolve, reject) => {reject('Currently Not Implemented')})
     }
     export const listRegions = (profile: string = 'DEFAULT'): Promise<any> => {
         return window.ocdAPI ? window.ocdAPI.listRegions(profile) : new Promise((resolve, reject) => {reject('Currently Not Implemented')})

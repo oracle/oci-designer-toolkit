@@ -22,8 +22,9 @@ export interface OcdConsoleConfiguration {
 }
 
 export class OcdConsoleConfig {
+    queryReferenceData: boolean = false
     config: OcdConsoleConfiguration
-    constructor (config: any = undefined) {
+    constructor (config: string | OcdConsoleConfiguration | undefined = undefined) {
         if (typeof config === 'string' && config.length > 0) this.config = JSON.parse(config)
         else if (config instanceof Object) this.config = config
         else this.config = this.newConsoleConfiguration()

@@ -11,7 +11,8 @@ export interface OcdElectronAPI {
     // Build Information
     getVersion: () => Promise<void>
     // OCI API Calls / Query
-    loadOCIConfigProfiles: () => Promise<void>
+    loadOCIConfigProfileNames: () => Promise<void>
+    loadOCIConfigProfile: (profile: string) => Promise<void>
     listRegions: (profile: string) => Promise<void>
     listTenancyCompartments: (profile: string) => Promise<void>
     queryTenancy: (profile: string, compartmentIds: string[], region: string) => Promise<void>

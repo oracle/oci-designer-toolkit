@@ -8,3 +8,4 @@
 */
 
 export async function handleLoadOciConfigProfiles() {}
+export async function handleLoadOciConfigProfile() {}

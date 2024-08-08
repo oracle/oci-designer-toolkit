@@ -25,6 +25,8 @@ import OcdValidation from './OcdValidation'
 import { buildDetails } from '../data/OcdBuildDetails'
 import OcdHelp from './OcdHelp'
 import OcdCommonTags from './OcdCommonTags'
+import { OcdReferenceDataQueryDialog } from '../components/dialogs/OcdReferenceDataQueryDialog'
+import { OcdCacheContext } from './OcdConsoleContext'
 
 // Import css as text
 // @ts-ignore
@@ -34,7 +36,7 @@ import OcdCommonTags from './OcdCommonTags'
 export const ThemeContext = createContext('')
 export const ActiveFileContext = createContext({})
 export const ConsoleConfigContext = createContext({})
-export const CacheContext = createContext({})
+export const CacheContext = createContext<OcdCacheContext>({ocdCache: OcdCacheData.new(), setOcdCache: () => {}})
 export const OcdDocumentContext = createContext({})
 export const SelectedResourceContext = createContext({})
 
@@ -43,7 +45,6 @@ const OcdConsole = (): JSX.Element => {
     const [ocdDocument, setOcdDocument] = useState(OcdDocument.new())
     const [ocdConsoleConfig, setOcdConsoleConfig] = useState(OcdConsoleConfig.new())
     const [ocdCache, setOcdCache] = useState(OcdCacheData.new())
-    // const [ocdCache, setOcdCache]: [OcdCacheData | undefined, any] = useState()
     const [activeFile, setActiveFile] = useState({name: '', modified: false})
     const [selectedResource, setSelectedResource] = useState({} as OcdSelectedResource)
     useEffect(() => {
@@ -231,6 +232,7 @@ const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument,
 
 const OcdConsoleBody = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument }: ConsolePageProps): JSX.Element => {
     const showQueryDialog = ocdDocument.query
+    const showReferenceDataQueryDialog = ocdConsoleConfig.queryReferenceData
     const DisplayPage = ocdConsoleConfig.config.displayPage === 'bom' ? OcdBom : 
                         ocdConsoleConfig.config.displayPage === 'designer' ? OcdDesigner : 
                         ocdConsoleConfig.config.displayPage === 'documentation' ? OcdDocumentation : 
@@ -258,6 +260,10 @@ const OcdConsoleBody = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, se
                 ocdDocument={ocdDocument} 
                 setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} 
             />}
+            {showReferenceDataQueryDialog && <OcdReferenceDataQueryDialog 
+                ocdDocument={ocdDocument} 
+                setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} 
+            />}
         </div>
     )
 }
@@ -265,6 +271,7 @@ const OcdConsoleBody = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, se
 const OcdConsoleFooter = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument }: ConsolePageProps): JSX.Element => {
     // @ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
+    const {ocdCache, setOcdCache} = useContext(CacheContext)
     const filenameClass = `${activeFile.modified ? 'ocd-design-modified ocd-active-file-modified-icon' : ''}`
     return (
         <div className='ocd-console-footer ocd-console-footer-theme'>
@@ -273,7 +280,9 @@ const OcdConsoleFooter = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, 
                     <div className={filenameClass} title='Design Modified'><span>{activeFile.name}</span></div>
                 </div>
             </div>
-            <div className='ocd-footer-centre'></div>
+            <div className='ocd-footer-centre'>
+                <div><span>Reference Data Profile {ocdCache.cache.profile}</span></div>
+            </div>
             <div className='ocd-footer-right'>
                 <div>
                     <span>Version: {buildDetails.version} Build Date: {buildDetails.utc}</span>
