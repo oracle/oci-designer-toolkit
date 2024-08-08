@@ -497,6 +497,19 @@ summary {
     margin: auto;
 }
 
+.ocd-cache-picker {
+    display: grid;
+    grid-auto-flow: column;
+}
+
+.ocd-cache-picker > div {
+    margin: auto;
+}
+
+.ocd-cache-picker > div > span {
+    padding-right: 5px;
+}
+
 
 
 
