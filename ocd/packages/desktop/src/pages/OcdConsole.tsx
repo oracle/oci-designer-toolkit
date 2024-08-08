@@ -281,12 +281,32 @@ const OcdConsoleFooter = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, 
                 </div>
             </div>
             <div className='ocd-footer-centre'>
-                <div><span>Reference Data Profile {ocdCache.cache.profile}</span></div>
+                <div><OcdCachePicker></OcdCachePicker></div>
+                {/* <div><span>Reference Data Profile {ocdCache.cache.profile}</span></div> */}
             </div>
             <div className='ocd-footer-right'>
                 <div>
                     <span>Version: {buildDetails.version} Build Date: {buildDetails.utc}</span>
                 </div>
+            </div>
+        </div>
+    )
+}
+
+const OcdCachePicker = (): JSX.Element => {
+    const {ocdCache, setOcdCache} = useContext(CacheContext)
+    const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        ocdCache.cache.profile = e.target.value
+        setOcdCache(OcdCacheData.clone(ocdCache))
+        ocdCache.saveCache()
+    }
+    return (
+        <div className='ocd-cache-picker'>
+            <div><span>Reference Data Profile </span></div>
+            <div>
+                <select value={ocdCache.cache.profile} onChange={onChange}>
+                    {Object.keys(ocdCache.cache.dropdownData).map((k) => <option value={k} key={k}>{k}</option>)}
+                </select>
             </div>
         </div>
     )

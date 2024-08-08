@@ -101,7 +101,6 @@ const OcdPropertiesDataList = ({variables}: {variables: OcdVariable[]}): JSX.Ele
 }
 
 const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
-    // @ts-ignore
     const {ocdCache, setOcdCache} = useContext(CacheContext)
     // console.debug('OcdProperties: OcdResourceProperties: OCD Cache:', ocdCache)
     const selectedResource: OcdResource = ocdDocument.getSelectedResource()
