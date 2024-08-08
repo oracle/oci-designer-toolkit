@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2020, 2023, Oracle and/or its affiliates.
+** Copyright (c) 2020, 2024, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
@@ -9,7 +9,8 @@ contextBridge.exposeInMainWorld('ocdAPI', {
   // Build Information
   getVersion: () => ipcRenderer.invoke('ocdBuild:getVersion'),
   // OCI API Calls / Query
-  loadOCIConfigProfiles: () => ipcRenderer.invoke('ociConfig:loadProfiles'),
+  loadOCIConfigProfileNames: () => ipcRenderer.invoke('ociConfig:loadProfileNames'),
+  loadOCIConfigProfile: (profile) => ipcRenderer.invoke('ociConfig:loadProfile'),
   listRegions: (profile) => ipcRenderer.invoke('ociQuery:listRegions', profile),
   listTenancyCompartments: (profile) => ipcRenderer.invoke('ociQuery:listTenancyCompartments', profile),
   queryTenancy: (profile, compartmentIds, region) => ipcRenderer.invoke('ociQuery:queryTenancy', profile, compartmentIds, region),

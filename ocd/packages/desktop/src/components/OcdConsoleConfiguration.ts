@@ -18,11 +18,13 @@ export interface OcdConsoleConfiguration {
     recentDesigns: string[]
     maxRecent: number
     displayColumns?: Record<string, string[]>
+    defaultAutoArrangeStyle?: string
 }
 
 export class OcdConsoleConfig {
+    queryReferenceData: boolean = false
     config: OcdConsoleConfiguration
-    constructor (config: any = undefined) {
+    constructor (config: string | OcdConsoleConfiguration | undefined = undefined) {
         if (typeof config === 'string' && config.length > 0) this.config = JSON.parse(config)
         else if (config instanceof Object) this.config = config
         else this.config = this.newConsoleConfiguration()
@@ -45,7 +47,8 @@ export class OcdConsoleConfig {
             zoomOnWheel: false,
             recentDesigns: [],
             maxRecent: 10,
-            displayColumns: {}
+            displayColumns: {},
+            defaultAutoArrangeStyle: 'dynamic-columns'
         }
     }
 }

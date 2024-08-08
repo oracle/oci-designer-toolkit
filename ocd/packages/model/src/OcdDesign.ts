@@ -257,6 +257,22 @@ export namespace OcdDesign {
             showConnections: true
         }
     }
+    export function duplicateCoords(coords: OcdViewCoords): OcdViewCoords {
+        return {
+            id: `gid-${uuidv4()}`,
+            pgid: coords.pgid,
+            ocid: coords.ocid,
+            pocid: coords.pocid,
+            x: coords.x,
+            y: coords.y,
+            w: coords.w,
+            h: coords.h,
+            title: coords.title,
+            class: coords.class,
+            showParentConnection: coords.showParentConnection,
+            showConnections: coords.showConnections
+        }
+    }
     export function getAllCoords(design: OcdDesign): OcdViewCoords[] {return design.view.pages.map(p => [...p.coords, ...getChildCoords(p.coords)]).reduce((a, c) => [...a, ...c], [])}
     export function getAllPageCoords (page: OcdViewPage) {return getChildCoords(page.coords)}
     export function getCoords(design: OcdDesign, id: string) {return getAllCoords(design).find(c => c.id === id)}

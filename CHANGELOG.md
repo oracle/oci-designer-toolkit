@@ -1,6 +1,16 @@
 # Release Notes
 
 
+## Version 0.63.0
+**Release Date**: 31st August 2024
+### Features
+1. OKIT-Ocd: Build OKIT-Web style auto arranger. (#OKIT-299)
+2. OKIT-Ocd: Generated example connection.tfvars file during OpenTofu export. (#OKIT-297)
+
+### Bug Fixes
+
+
+
 ## Version 0.62.0
 **Release Date**: 31st July 2024
 ### Features

@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2020, 2023, Oracle and/or its affiliates.
+** Copyright (c) 2020, 2024, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 /*
@@ -13,8 +13,8 @@
 import { OcdCache } from "../components/OcdCache";
 
 export const defaultCache: OcdCache = {
-    profile: 'DEFAULT',
-    region: '',
+    profile: 'shipped',
+    region: 'all',
     dropdownData: {
         shipped: {
             all: {
@@ -96,6 +96,12 @@ export const defaultCache: OcdCache = {
                         "displayName": "MX Monterrey",
                         "key": "MTY",
                         "name": "mx-monterrey-1"
+                    },
+                    {
+                        "id": "me-riyadh-1",
+                        "displayName": "ME Riyadh",
+                        "key": "RUH",
+                        "name": "me-riyadh-1"
                     },
                     {
                         "id": "me-jeddah-1",
@@ -668,9 +674,9 @@ export const defaultCache: OcdCache = {
                 "images": [
                     {
                         "id": "Canonical Ubuntu-20.04",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaasonac2w5itqk36fl5cmakfmxoe7mj27sqycz43cq6pdfnjuw7piq",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaawcpxpssluoxqg5cellqumomzvs66ffrkzed5u34ga42lj2zjojba",
                         "displayName": "Canonical Ubuntu 20.04",
-                        "sourceDisplayName": "Canonical-Ubuntu-20.04-aarch64-2024.05.31-0",
+                        "sourceDisplayName": "Canonical-Ubuntu-20.04-aarch64-2024.06.18-0",
                         "platform": true,
                         "operatingSystem": "Canonical Ubuntu",
                         "operatingSystemVersion": "20.04",
@@ -684,9 +690,9 @@ export const defaultCache: OcdCache = {
                     },
                     {
                         "id": "Canonical Ubuntu-20.04 Minimal",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaawr4ry2b4k2vjgs7236e737zzm7jfnwbeaxo4w7pto5sk2qy6ipgq",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaadupbpvi6qyszvctqqdla6kruy6b3tr54lvmq6lnqskjaagyjw7pq",
                         "displayName": "Canonical Ubuntu 20.04 Minimal",
-                        "sourceDisplayName": "Canonical-Ubuntu-20.04-Minimal-2024.05.31-0",
+                        "sourceDisplayName": "Canonical-Ubuntu-20.04-Minimal-2024.06.26-0",
                         "platform": true,
                         "operatingSystem": "Canonical Ubuntu",
                         "operatingSystemVersion": "20.04 Minimal",
@@ -767,9 +773,9 @@ export const defaultCache: OcdCache = {
                     },
                     {
                         "id": "Canonical Ubuntu-22.04",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaaui3azlgt3detmyiiackaxwsbkw2nrrotjkdyj7wfxzlyunr34mpq",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaavehem6scohtwwfpxj576isnczlujphlbnk5ynzmhra2irryqwt4q",
                         "displayName": "Canonical Ubuntu 22.04",
-                        "sourceDisplayName": "Canonical-Ubuntu-22.04-aarch64-2024.05.31-0",
+                        "sourceDisplayName": "Canonical-Ubuntu-22.04-aarch64-2024.06.26-0",
                         "platform": true,
                         "operatingSystem": "Canonical Ubuntu",
                         "operatingSystemVersion": "22.04",
@@ -866,9 +872,9 @@ export const defaultCache: OcdCache = {
                     },
                     {
                         "id": "Canonical Ubuntu-22.04 Minimal aarch64",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaa6rf374zefu2xizx5jwwddbqhykfm7w2r6l5fvwbatryx6cc5my6q",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaantzj7ujtr5wcojxtgc76oveoq5xcz7egczd56x67wivib3hfak3q",
                         "displayName": "Canonical Ubuntu 22.04 Minimal aarch64",
-                        "sourceDisplayName": "Canonical-Ubuntu-22.04-Minimal-aarch64-2024.05.31-0",
+                        "sourceDisplayName": "Canonical-Ubuntu-22.04-Minimal-aarch64-2024.06.24-0",
                         "platform": true,
                         "operatingSystem": "Canonical Ubuntu",
                         "operatingSystemVersion": "22.04 Minimal aarch64",
@@ -881,10 +887,93 @@ export const defaultCache: OcdCache = {
                         ]
                     },
                     {
+                        "id": "Canonical Ubuntu-24.04",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaalmz2f3ryfakc4fd5r4uteua3az3dfvcxr6q77b2nvddzevscjk5q",
+                        "displayName": "Canonical Ubuntu 24.04",
+                        "sourceDisplayName": "Canonical-Ubuntu-24.04-2024.06.26-0",
+                        "platform": true,
+                        "operatingSystem": "Canonical Ubuntu",
+                        "operatingSystemVersion": "24.04",
+                        "billableSizeInGBs": 2,
+                        "lifecycleState": "AVAILABLE",
+                        "shapes": [
+                            "VM.DenseIO.E4.Flex",
+                            "VM.DenseIO.E5.Flex",
+                            "VM.DenseIO1.16",
+                            "VM.DenseIO1.4",
+                            "VM.DenseIO1.8",
+                            "VM.DenseIO2.16",
+                            "VM.DenseIO2.24",
+                            "VM.DenseIO2.8",
+                            "VM.GPU.A10.1",
+                            "VM.GPU.A10.2",
+                            "VM.GPU.GU1.1",
+                            "VM.GPU.GU1.2",
+                            "VM.GPU2.1",
+                            "VM.GPU3.1",
+                            "VM.GPU3.2",
+                            "VM.GPU3.4",
+                            "VM.Optimized3.Flex",
+                            "VM.Standard.AMD.Generic",
+                            "VM.Standard.B1.1",
+                            "VM.Standard.B1.16",
+                            "VM.Standard.B1.2",
+                            "VM.Standard.B1.4",
+                            "VM.Standard.B1.8",
+                            "VM.Standard.E2.1",
+                            "VM.Standard.E2.1.Micro",
+                            "VM.Standard.E2.2",
+                            "VM.Standard.E2.4",
+                            "VM.Standard.E2.8",
+                            "VM.Standard.E3.Flex",
+                            "VM.Standard.E4.Flex",
+                            "VM.Standard.E5.Flex",
+                            "VM.Standard.Intel.Generic",
+                            "VM.Standard.x86.Generic",
+                            "VM.Standard1.1",
+                            "VM.Standard1.16",
+                            "VM.Standard1.2",
+                            "VM.Standard1.4",
+                            "VM.Standard1.8",
+                            "VM.Standard2.1",
+                            "VM.Standard2.16",
+                            "VM.Standard2.2",
+                            "VM.Standard2.24",
+                            "VM.Standard2.4",
+                            "VM.Standard2.8",
+                            "VM.Standard2.Flex",
+                            "VM.Standard3.Flex",
+                            "BM.Standard.E2.64",
+                            "BM.Standard.E3.128",
+                            "BM.GPU4.8",
+                            "BM.Standard.E4.128",
+                            "BM.GPU.A100-v2.8",
+                            "BM.DenseIO.E4.128",
+                            "BM.DenseIO.E5.128",
+                            "BM.Standard.E5.192",
+                            "BM.GPU.L40S.4",
+                            "BM.GPU.H100.8",
+                            "BM.GPU.MI300X.8",
+                            "BM.Standard1.36",
+                            "BM.HighIO1.36",
+                            "BM.DenseIO1.36",
+                            "BM.Standard.B1.44",
+                            "BM.GPU2.2",
+                            "BM.HPC2.36",
+                            "BM.Standard2.52",
+                            "BM.GPU3.8",
+                            "BM.DenseIO2.52",
+                            "BM.GPU.T1.2",
+                            "BM.Optimized3.36",
+                            "BM.Standard3.64",
+                            "BM.GPU.A10.4"
+                        ]
+                    },
+                    {
                         "id": "CentOS-7",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaadlwpzizbp6wmjz6p3yoqotlmu2p52tsdf6ffowbizxtknmbgx6wq",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaalca3q2hk4rtxabdadu4o2w63tb7bufdoy66xcju5fwhtew6n44rq",
                         "displayName": "CentOS 7",
-                        "sourceDisplayName": "CentOS-7-2024.04.25-0",
+                        "sourceDisplayName": "CentOS-7-2024.05.31-0",
                         "platform": true,
                         "operatingSystem": "CentOS",
                         "operatingSystemVersion": "7",
@@ -1028,9 +1117,9 @@ export const defaultCache: OcdCache = {
                     },
                     {
                         "id": "Oracle Autonomous Linux-7.9",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaagfl5zt522c347cv7hkxtgeb66gaxvrmwhc4kbh2w2gk6jaczpgqa",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaak4bizyqyrs4ukojklrbvjrywtz7hbwgfjv26gtv6nosxnkt432ba",
                         "displayName": "Oracle Autonomous Linux 7.9",
-                        "sourceDisplayName": "Oracle-Autonomous-Linux-7.9-2024.05.30-0",
+                        "sourceDisplayName": "Oracle-Autonomous-Linux-7.9-2024.06.30-0",
                         "platform": true,
                         "operatingSystem": "Oracle Autonomous Linux",
                         "operatingSystemVersion": "7.9",
@@ -1247,9 +1336,9 @@ export const defaultCache: OcdCache = {
                     },
                     {
                         "id": "Oracle Linux-7.9",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaamr74zfqmvwjnriorge2a2dlpba3uw4uasvoatddfcshkul53yvya",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaai34ranlhfhny2gypfwnxmlnedymcj3sd7llgjjnzroezgk7s6qka",
                         "displayName": "Oracle Linux 7.9",
-                        "sourceDisplayName": "Oracle-Linux-7.9-aarch64-2024.05.29-0",
+                        "sourceDisplayName": "Oracle-Linux-7.9-aarch64-2024.06.30-0",
                         "platform": true,
                         "operatingSystem": "Oracle Linux",
                         "operatingSystemVersion": "7.9",
@@ -1279,9 +1368,9 @@ export const defaultCache: OcdCache = {
                     },
                     {
                         "id": "Oracle Linux-9",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaaj6todkfjowsxvbts363f5zcsrh3jipzqpqnh3fxqsbeswarbgtaq",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaanwdbxr34bgzsrvw4ki5cjioua2qvnopfxngufy2cfq5xpjukkciq",
                         "displayName": "Oracle Linux 9",
-                        "sourceDisplayName": "Oracle-Linux-9.4-aarch64-2024.05.29-0",
+                        "sourceDisplayName": "Oracle-Linux-9.4-aarch64-2024.06.30-0",
                         "platform": true,
                         "operatingSystem": "Oracle Linux",
                         "operatingSystemVersion": "9",
@@ -1289,15 +1378,16 @@ export const defaultCache: OcdCache = {
                         "lifecycleState": "AVAILABLE",
                         "shapes": [
                             "VM.Standard.A1.Flex",
+                            "VM.Standard.A2.Flex",
                             "VM.Standard.Ampere.Generic",
                             "BM.Standard.A1.160"
                         ]
                     },
                     {
                         "id": "Oracle Linux-9 Minimal",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaayttv2tbzfao3rn5xqjdcjgq5kvcu7engiqywm2uwhqpucmg5im7a",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaaz47evluzqj3jlyas2smmznw5kphl3xfif2bn6kr4nynakgfe4yea",
                         "displayName": "Oracle Linux 9 Minimal",
-                        "sourceDisplayName": "Oracle-Linux-9.3-Minimal-2024.02.29-0",
+                        "sourceDisplayName": "Oracle-Linux-9.4-Minimal-2024.07.29-0",
                         "platform": true,
                         "operatingSystem": "Oracle Linux",
                         "operatingSystemVersion": "9 Minimal",
@@ -1351,80 +1441,10 @@ export const defaultCache: OcdCache = {
                         ]
                     },
                     {
-                        "id": "Windows-Server 2012 R2 Datacenter",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaa2rv6dvadz6r4qjbaimbl5k3n3vucingizaqwtc6jffn4yxspjzgq",
-                        "displayName": "Windows Server 2012 R2 Datacenter",
-                        "sourceDisplayName": "Windows-Server-2012-R2-Datacenter-Edition-BM-Gen2-E2-2023.10.10-0",
-                        "platform": true,
-                        "operatingSystem": "Windows",
-                        "operatingSystemVersion": "Server 2012 R2 Datacenter",
-                        "billableSizeInGBs": 17,
-                        "lifecycleState": "AVAILABLE",
-                        "shapes": [
-                            "BM.Standard.E2.64"
-                        ]
-                    },
-                    {
-                        "id": "Windows-Server 2012 R2 Standard",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaa373hvvmkqwe6d4rgjeyw53xbnqjiynxtgtnnguvazouvqdiyhlia",
-                        "displayName": "Windows Server 2012 R2 Standard",
-                        "sourceDisplayName": "Windows-Server-2012-R2-Standard-Edition-VM-2023.10.10-0",
-                        "platform": true,
-                        "operatingSystem": "Windows",
-                        "operatingSystemVersion": "Server 2012 R2 Standard",
-                        "billableSizeInGBs": 16,
-                        "lifecycleState": "AVAILABLE",
-                        "shapes": [
-                            "VM.DenseIO1.16",
-                            "VM.DenseIO1.4",
-                            "VM.DenseIO1.8",
-                            "VM.DenseIO2.16",
-                            "VM.DenseIO2.24",
-                            "VM.DenseIO2.8",
-                            "VM.GPU.A10.1",
-                            "VM.GPU.A10.2",
-                            "VM.GPU.GU1.1",
-                            "VM.GPU.GU1.2",
-                            "VM.GPU2.1",
-                            "VM.GPU3.1",
-                            "VM.GPU3.2",
-                            "VM.GPU3.4",
-                            "VM.Optimized3.Flex",
-                            "VM.Standard.AMD.Generic",
-                            "VM.Standard.B1.1",
-                            "VM.Standard.B1.16",
-                            "VM.Standard.B1.2",
-                            "VM.Standard.B1.4",
-                            "VM.Standard.B1.8",
-                            "VM.Standard.E2.1",
-                            "VM.Standard.E2.2",
-                            "VM.Standard.E2.4",
-                            "VM.Standard.E2.8",
-                            "VM.Standard.E3.Flex",
-                            "VM.Standard.E4.Flex",
-                            "VM.Standard.E5.Flex",
-                            "VM.Standard.Intel.Generic",
-                            "VM.Standard.x86.Generic",
-                            "VM.Standard1.1",
-                            "VM.Standard1.16",
-                            "VM.Standard1.2",
-                            "VM.Standard1.4",
-                            "VM.Standard1.8",
-                            "VM.Standard2.1",
-                            "VM.Standard2.16",
-                            "VM.Standard2.2",
-                            "VM.Standard2.24",
-                            "VM.Standard2.4",
-                            "VM.Standard2.8",
-                            "VM.Standard2.Flex",
-                            "VM.Standard3.Flex"
-                        ]
-                    },
-                    {
                         "id": "Windows-Server 2016 Datacenter",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaarvv5aqwdb6giapmnpbtoo6e2fo6ezt2fqnfevzh2ha3reid3ykyq",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaapzi4uzl7nal5onjmnsifjtmzz7jzwpxao2xc4bli2sjntdoroe3a",
                         "displayName": "Windows Server 2016 Datacenter",
-                        "sourceDisplayName": "Windows-Server-2016-Datacenter-Edition-BM-X9-2024.06.12-0",
+                        "sourceDisplayName": "Windows-Server-2016-Datacenter-Edition-BM-X9-2024.07.09-0",
                         "platform": true,
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2016 Datacenter",
@@ -1462,9 +1482,9 @@ export const defaultCache: OcdCache = {
                     },
                     {
                         "id": "Windows-Server 2016 Standard Core",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaa6zgdfsktvxwj46uovtqc4hlukdggzv4min6oxzeuksekcyyutjfa",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaajvdre4yptr7vrmltlkdordo2o3wvjkpum4poiglltulji3mksm6a",
                         "displayName": "Windows Server 2016 Standard Core",
-                        "sourceDisplayName": "Windows-Server-2016-Standard-Core-VM-2024.06.11-0",
+                        "sourceDisplayName": "Windows-Server-2016-Standard-Core-VM-2024.07.09-0",
                         "platform": true,
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2016 Standard Core",
@@ -1526,9 +1546,9 @@ export const defaultCache: OcdCache = {
                     },
                     {
                         "id": "Windows-Server 2019 Datacenter",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaayvonx4r3w2lynnyeuqlu7dsekkfvv3dv3a2i5hkz7glyrixcqx4a",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaaudyox575nfwn7lrdaebvcj6h36piqjknibod2ogf24f6tc3huula",
                         "displayName": "Windows Server 2019 Datacenter",
-                        "sourceDisplayName": "Windows-Server-2019-Datacenter-Edition-BM-X9-2024.06.11-0",
+                        "sourceDisplayName": "Windows-Server-2019-Datacenter-Edition-BM-X9-2024.07.09-0",
                         "platform": true,
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2019 Datacenter",
@@ -1549,13 +1569,13 @@ export const defaultCache: OcdCache = {
                     },
                     {
                         "id": "Windows-Server 2019 Standard",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaa2t5hvkpvhsqpx35pv4np66zjs6fag45obfi6e7kjewkwhyr6gf7q",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaaice6jhlce7sfm3zf3uncut5s76ufd2i4h7bdmsxa5krs6m2d44eq",
                         "displayName": "Windows Server 2019 Standard",
-                        "sourceDisplayName": "Windows-Server-2019-Standard-Edition-VM-Gen2-2024.06.11-0",
+                        "sourceDisplayName": "Windows-Server-2019-Standard-Edition-VM-Gen2-2024.07.09-0",
                         "platform": true,
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2019 Standard",
-                        "billableSizeInGBs": 18,
+                        "billableSizeInGBs": 17,
                         "lifecycleState": "AVAILABLE",
                         "shapes": [
                             "VM.DenseIO2.16",
@@ -1582,9 +1602,9 @@ export const defaultCache: OcdCache = {
                     },
                     {
                         "id": "Windows-Server 2019 Standard Core",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaahm33dhfd2epukoygunex46u6tf4tzwelar64w3hkxkmyaeaygnxq",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaaewt4enw2pxkbwaydj5gwqqeswwlyshzkhqvzfcateymr6prpac2a",
                         "displayName": "Windows Server 2019 Standard Core",
-                        "sourceDisplayName": "Windows-Server-2019-Standard-Core-VM-2024.06.11-0",
+                        "sourceDisplayName": "Windows-Server-2019-Standard-Core-VM-2024.07.09-0",
                         "platform": true,
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2019 Standard Core",
@@ -1646,13 +1666,13 @@ export const defaultCache: OcdCache = {
                     },
                     {
                         "id": "Windows-Server 2022 Datacenter",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaaftrvkhkyjbqmuvyobcijm4rrywzbingrzac6qb5grfszg4igngta",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaaxs6szwd75ydm2gtgdp2sroij3vdjjldj2273wih4rzg6ars3ac5q",
                         "displayName": "Windows Server 2022 Datacenter",
-                        "sourceDisplayName": "Windows-Server-2022-Datacenter-Edition-BM-X9-2024.06.11-0",
+                        "sourceDisplayName": "Windows-Server-2022-Datacenter-Edition-BM-X9-2024.07.09-0",
                         "platform": true,
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2022 Datacenter",
-                        "billableSizeInGBs": 16,
+                        "billableSizeInGBs": 17,
                         "lifecycleState": "AVAILABLE",
                         "shapes": [
                             "VM.Standard2.Flex",
@@ -1669,9 +1689,9 @@ export const defaultCache: OcdCache = {
                     },
                     {
                         "id": "Windows-Server 2022 Standard",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaaiwhvotpbzhmemntpqwwgfyoj3ema5dwndghaxsxynlkdtwkljbjq",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaatojjphicl3dmuf4sfsuk2v2kssvjbfd5dt62lel4xmgvofdo6yza",
                         "displayName": "Windows Server 2022 Standard",
-                        "sourceDisplayName": "Windows-Server-2022-Standard-Edition-VM-PV-2024.06.11-0",
+                        "sourceDisplayName": "Windows-Server-2022-Standard-Edition-VM-PV-2024.07.09-0",
                         "platform": true,
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2022 Standard",
@@ -1700,9 +1720,9 @@ export const defaultCache: OcdCache = {
                     },
                     {
                         "id": "Windows-Server 2022 Standard Core",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaaxlb5mxxivlrsawejhbbsa5hloct2oavvuvfvb7iyvvrekc5mc77a",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaau7p2iaikbzudc3ivmckmty3agevbmop56bd5fszy3o3rv7pq2p2q",
                         "displayName": "Windows Server 2022 Standard Core",
-                        "sourceDisplayName": "Windows-Server-2022-Standard-Core-VM-2024.06.11-0",
+                        "sourceDisplayName": "Windows-Server-2022-Standard-Core-VM-2024.07.09-0",
                         "platform": true,
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2022 Standard Core",
@@ -1999,6 +2019,25 @@ export const defaultCache: OcdCache = {
                         "freeformTags": null,
                         "definedTags": null,
                         "systemTags": {}
+                    },
+                    {
+                        "id": "ocid1.mysqlconfiguration.oc1..aaaaaaaa5a33g5cxy33cwd2egvmmyhnx5lsf5frueox3mgrnfqabdqdwio7a",
+                        "compartmentId": null,
+                        "description": "Default standalone configuration for the MySQL.Free MySQL shape",
+                        "displayName": "MySQL.Free.Standalone",
+                        "shapeName": "MySQL.Free",
+                        "type": "DEFAULT",
+                        "lifecycleState": "ACTIVE",
+                        "applicationProgress": null,
+                        "timeCreated": "2018-09-21T10:00:00.000Z",
+                        "timeUpdated": null,
+                        "freeformTags": null,
+                        "definedTags": null,
+                        "systemTags": {
+                            "orcl-cloud": {
+                                "free-tier-retained": "true"
+                            }
+                        }
                     },
                     {
                         "id": "ocid1.mysqlconfiguration.oc1..aaaaaaaa5gotw2a2dhp4d6oi5xpuooaayaovn5wtg45wdn5dblbvlal26uaq",
@@ -3996,10 +4035,6 @@ export const defaultCache: OcdCache = {
                         "versionFamily": "8.0",
                         "versions": [
                             {
-                                "version": "8.0.33",
-                                "description": "8.0.33"
-                            },
-                            {
                                 "version": "8.0.34",
                                 "description": "8.0.34"
                             },
@@ -4018,6 +4053,10 @@ export const defaultCache: OcdCache = {
                             {
                                 "version": "8.0.38",
                                 "description": "8.0.38"
+                            },
+                            {
+                                "version": "8.0.39",
+                                "description": "8.0.39"
                             }
                         ],
                         "id": "8.0",
@@ -4033,6 +4072,10 @@ export const defaultCache: OcdCache = {
                             {
                                 "version": "8.4.1",
                                 "description": "8.4.1"
+                            },
+                            {
+                                "version": "8.4.2",
+                                "description": "8.4.2"
                             }
                         ],
                         "id": "8.4 - LTS",
@@ -4044,6 +4087,10 @@ export const defaultCache: OcdCache = {
                             {
                                 "version": "9.0.0",
                                 "description": "9.0.0"
+                            },
+                            {
+                                "version": "9.0.1",
+                                "description": "9.0.1"
                             }
                         ],
                         "id": "9 - Innovation",
@@ -5413,6 +5460,18 @@ export const defaultCache: OcdCache = {
                 ],
                 "autonomousDbVersions": [
                     {
+                        "dbWorkload": "AJD",
+                        "details": "www.oracle.com/ajd",
+                        "isDedicated": false,
+                        "isDefaultForFree": false,
+                        "isDefaultForPaid": true,
+                        "isFreeTierEnabled": true,
+                        "isPaidEnabled": true,
+                        "version": "19c",
+                        "id": "19c",
+                        "displayName": "19c"
+                    },
+                    {
                         "dbWorkload": "APEX",
                         "details": "www.oracle.com/apex",
                         "isDedicated": false,
@@ -5437,18 +5496,6 @@ export const defaultCache: OcdCache = {
                         "displayName": "19c"
                     },
                     {
-                        "dbWorkload": "AJD",
-                        "details": "www.oracle.com/ajd",
-                        "isDedicated": false,
-                        "isDefaultForFree": false,
-                        "isDefaultForPaid": true,
-                        "isFreeTierEnabled": true,
-                        "isPaidEnabled": true,
-                        "version": "19c",
-                        "id": "19c",
-                        "displayName": "19c"
-                    },
-                    {
                         "dbWorkload": "OLTP",
                         "details": "www.oracle.com/atp",
                         "isDedicated": false,
@@ -5459,6 +5506,30 @@ export const defaultCache: OcdCache = {
                         "version": "19c",
                         "id": "19c",
                         "displayName": "19c"
+                    },
+                    {
+                        "dbWorkload": "AJD",
+                        "details": "www.oracle.com/ajd",
+                        "isDedicated": false,
+                        "isDefaultForFree": true,
+                        "isDefaultForPaid": false,
+                        "isFreeTierEnabled": true,
+                        "isPaidEnabled": false,
+                        "version": "23ai",
+                        "id": "23ai",
+                        "displayName": "23ai"
+                    },
+                    {
+                        "dbWorkload": "OLTP",
+                        "details": "www.oracle.com/atp",
+                        "isDedicated": false,
+                        "isDefaultForFree": true,
+                        "isDefaultForPaid": false,
+                        "isFreeTierEnabled": true,
+                        "isPaidEnabled": false,
+                        "version": "23ai",
+                        "id": "23ai",
+                        "displayName": "23ai"
                     },
                     {
                         "dbWorkload": "APEX",
@@ -5475,30 +5546,6 @@ export const defaultCache: OcdCache = {
                     {
                         "dbWorkload": "DW",
                         "details": "www.oracle.com/adw",
-                        "isDedicated": false,
-                        "isDefaultForFree": true,
-                        "isDefaultForPaid": false,
-                        "isFreeTierEnabled": true,
-                        "isPaidEnabled": false,
-                        "version": "23ai",
-                        "id": "23ai",
-                        "displayName": "23ai"
-                    },
-                    {
-                        "dbWorkload": "OLTP",
-                        "details": "www.oracle.com/atp",
-                        "isDedicated": false,
-                        "isDefaultForFree": true,
-                        "isDefaultForPaid": false,
-                        "isFreeTierEnabled": true,
-                        "isPaidEnabled": false,
-                        "version": "23ai",
-                        "id": "23ai",
-                        "displayName": "23ai"
-                    },
-                    {
-                        "dbWorkload": "AJD",
-                        "details": "www.oracle.com/ajd",
                         "isDedicated": false,
                         "isDefaultForFree": true,
                         "isDefaultForPaid": false,
@@ -5838,6 +5885,13 @@ export const defaultCache: OcdCache = {
                         "supportedSubscriptions": null,
                         "id": "ai-anomaly-detection",
                         "displayName": "AI Anomaly Detection"
+                    },
+                    {
+                        "name": "ai-document",
+                        "description": "AI Document",
+                        "supportedSubscriptions": null,
+                        "id": "ai-document",
+                        "displayName": "AI Document"
                     },
                     {
                         "name": "ai-forecasting",
@@ -6274,6 +6328,13 @@ export const defaultCache: OcdCache = {
                         "displayName": "Marketplace Publisher"
                     },
                     {
+                        "name": "multicloud",
+                        "description": "Multicloud",
+                        "supportedSubscriptions": null,
+                        "id": "multicloud",
+                        "displayName": "Multicloud"
+                    },
+                    {
                         "name": "mysql",
                         "description": "MySQL HeatWave",
                         "supportedSubscriptions": null,
@@ -6489,20 +6550,6 @@ export const defaultCache: OcdCache = {
                         "supportedSubscriptions": null,
                         "id": "vulnerability-scanning",
                         "displayName": "Vulnerability Scanning"
-                    },
-                    {
-                        "name": "waa",
-                        "description": "Web Application Acceleration",
-                        "supportedSubscriptions": null,
-                        "id": "waa",
-                        "displayName": "Web Application Acceleration"
-                    },
-                    {
-                        "name": "waas",
-                        "description": "WaaS",
-                        "supportedSubscriptions": null,
-                        "id": "waas",
-                        "displayName": "WaaS"
                     }
                 ],
                 "podShapes": [
@@ -6539,6 +6586,11 @@ export const defaultCache: OcdCache = {
                         "id": "v1.29.1",
                         "displayName": "v1.29.1",
                         "version": "v1.29.1"
+                    },
+                    {
+                        "id": "v1.30.1",
+                        "displayName": "v1.30.1",
+                        "version": "v1.30.1"
                     }
                 ],
                 "clusterPodNetworkOptions": [
@@ -6574,6 +6626,11 @@ export const defaultCache: OcdCache = {
                             "id": "v1.29.1",
                             "displayName": "v1.29.1",
                             "version": "v1.29.1"
+                        },
+                        {
+                            "id": "v1.30.1",
+                            "displayName": "v1.30.1",
+                            "version": "v1.30.1"
                         }
                     ],
                     "shapes": [
@@ -6716,6 +6773,10 @@ export const defaultCache: OcdCache = {
                     ],
                     "images": [
                         {
+                            "id": "Oracle-Linux-8.9-aarch64-2024.05.29-0-OKE-1.30.1-707",
+                            "displayName": "Oracle-Linux-8.9-aarch64-2024.05.29-0-OKE-1.30.1-707"
+                        },
+                        {
                             "id": "Oracle-Linux-8.9-aarch64-2024.05.29-0-OKE-1.29.1-707",
                             "displayName": "Oracle-Linux-8.9-aarch64-2024.05.29-0-OKE-1.29.1-707"
                         },
@@ -6744,10 +6805,6 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-8.9-aarch64-2024.04.19-0-OKE-1.27.10-693"
                         },
                         {
-                            "id": "Oracle-Linux-8.9-aarch64-2024.01.26-0-OKE-1.29.1-679",
-                            "displayName": "Oracle-Linux-8.9-aarch64-2024.01.26-0-OKE-1.29.1-679"
-                        },
-                        {
                             "id": "Oracle-Linux-8.9-aarch64-2024.01.26-0-OKE-1.28.2-679",
                             "displayName": "Oracle-Linux-8.9-aarch64-2024.01.26-0-OKE-1.28.2-679"
                         },
@@ -6756,8 +6813,8 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-8.9-aarch64-2024.01.26-0-OKE-1.27.2-679"
                         },
                         {
-                            "id": "Oracle-Linux-8.9-aarch64-2024.01.26-0-OKE-1.27.10-679",
-                            "displayName": "Oracle-Linux-8.9-aarch64-2024.01.26-0-OKE-1.27.10-679"
+                            "id": "Oracle-Linux-8.9-Gen2-GPU-2024.05.29-0-OKE-1.30.1-707",
+                            "displayName": "Oracle-Linux-8.9-Gen2-GPU-2024.05.29-0-OKE-1.30.1-707"
                         },
                         {
                             "id": "Oracle-Linux-8.9-Gen2-GPU-2024.05.29-0-OKE-1.29.1-707",
@@ -6788,10 +6845,6 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-8.9-Gen2-GPU-2024.04.19-0-OKE-1.27.10-693"
                         },
                         {
-                            "id": "Oracle-Linux-8.9-Gen2-GPU-2024.01.26-0-OKE-1.29.1-679",
-                            "displayName": "Oracle-Linux-8.9-Gen2-GPU-2024.01.26-0-OKE-1.29.1-679"
-                        },
-                        {
                             "id": "Oracle-Linux-8.9-Gen2-GPU-2024.01.26-0-OKE-1.28.2-679",
                             "displayName": "Oracle-Linux-8.9-Gen2-GPU-2024.01.26-0-OKE-1.28.2-679"
                         },
@@ -6800,8 +6853,8 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-8.9-Gen2-GPU-2024.01.26-0-OKE-1.27.2-679"
                         },
                         {
-                            "id": "Oracle-Linux-8.9-Gen2-GPU-2024.01.26-0-OKE-1.27.10-679",
-                            "displayName": "Oracle-Linux-8.9-Gen2-GPU-2024.01.26-0-OKE-1.27.10-679"
+                            "id": "Oracle-Linux-8.9-2024.05.29-0-OKE-1.30.1-707",
+                            "displayName": "Oracle-Linux-8.9-2024.05.29-0-OKE-1.30.1-707"
                         },
                         {
                             "id": "Oracle-Linux-8.9-2024.05.29-0-OKE-1.29.1-707",
@@ -6832,20 +6885,12 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-8.9-2024.04.19-0-OKE-1.27.10-693"
                         },
                         {
-                            "id": "Oracle-Linux-8.9-2024.01.26-0-OKE-1.29.1-679",
-                            "displayName": "Oracle-Linux-8.9-2024.01.26-0-OKE-1.29.1-679"
-                        },
-                        {
                             "id": "Oracle-Linux-8.9-2024.01.26-0-OKE-1.28.2-679",
                             "displayName": "Oracle-Linux-8.9-2024.01.26-0-OKE-1.28.2-679"
                         },
                         {
                             "id": "Oracle-Linux-8.9-2024.01.26-0-OKE-1.27.2-679",
                             "displayName": "Oracle-Linux-8.9-2024.01.26-0-OKE-1.27.2-679"
-                        },
-                        {
-                            "id": "Oracle-Linux-8.9-2024.01.26-0-OKE-1.27.10-679",
-                            "displayName": "Oracle-Linux-8.9-2024.01.26-0-OKE-1.27.10-679"
                         },
                         {
                             "id": "Oracle-Linux-8.8-aarch64-2023.12.13-0-OKE-1.27.2-668",
@@ -6858,6 +6903,58 @@ export const defaultCache: OcdCache = {
                         {
                             "id": "Oracle-Linux-8.8-2023.12.13-0-OKE-1.27.2-668",
                             "displayName": "Oracle-Linux-8.8-2023.12.13-0-OKE-1.27.2-668"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.10-aarch64-2024.06.30-0-OKE-1.30.1-716",
+                            "displayName": "Oracle-Linux-8.10-aarch64-2024.06.30-0-OKE-1.30.1-716"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.10-aarch64-2024.06.30-0-OKE-1.29.1-716",
+                            "displayName": "Oracle-Linux-8.10-aarch64-2024.06.30-0-OKE-1.29.1-716"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.10-aarch64-2024.06.30-0-OKE-1.27.10-716",
+                            "displayName": "Oracle-Linux-8.10-aarch64-2024.06.30-0-OKE-1.27.10-716"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.10-Gen2-GPU-2024.06.30-0-OKE-1.30.1-716",
+                            "displayName": "Oracle-Linux-8.10-Gen2-GPU-2024.06.30-0-OKE-1.30.1-716"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.10-Gen2-GPU-2024.06.30-0-OKE-1.29.1-716",
+                            "displayName": "Oracle-Linux-8.10-Gen2-GPU-2024.06.30-0-OKE-1.29.1-716"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.10-Gen2-GPU-2024.06.30-0-OKE-1.27.10-716",
+                            "displayName": "Oracle-Linux-8.10-Gen2-GPU-2024.06.30-0-OKE-1.27.10-716"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.10-2024.06.30-0-OKE-1.30.1-716",
+                            "displayName": "Oracle-Linux-8.10-2024.06.30-0-OKE-1.30.1-716"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.10-2024.06.30-0-OKE-1.29.1-716",
+                            "displayName": "Oracle-Linux-8.10-2024.06.30-0-OKE-1.29.1-716"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.10-2024.06.30-0-OKE-1.27.10-716",
+                            "displayName": "Oracle-Linux-8.10-2024.06.30-0-OKE-1.27.10-716"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-aarch64-2024.06.30-0-OKE-1.30.1-716",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2024.06.30-0-OKE-1.30.1-716"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-aarch64-2024.06.30-0-OKE-1.29.1-716",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2024.06.30-0-OKE-1.29.1-716"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-aarch64-2024.06.30-0-OKE-1.27.10-716",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2024.06.30-0-OKE-1.27.10-716"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-aarch64-2024.05.29-0-OKE-1.30.1-707",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2024.05.29-0-OKE-1.30.1-707"
                         },
                         {
                             "id": "Oracle-Linux-7.9-aarch64-2024.05.29-0-OKE-1.29.1-707",
@@ -6888,10 +6985,6 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-7.9-aarch64-2024.04.19-0-OKE-1.27.10-693"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-aarch64-2024.01.23-0-OKE-1.29.1-679",
-                            "displayName": "Oracle-Linux-7.9-aarch64-2024.01.23-0-OKE-1.29.1-679"
-                        },
-                        {
                             "id": "Oracle-Linux-7.9-aarch64-2024.01.23-0-OKE-1.28.2-679",
                             "displayName": "Oracle-Linux-7.9-aarch64-2024.01.23-0-OKE-1.28.2-679"
                         },
@@ -6900,12 +6993,24 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-7.9-aarch64-2024.01.23-0-OKE-1.27.2-679"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-aarch64-2024.01.23-0-OKE-1.27.10-679",
-                            "displayName": "Oracle-Linux-7.9-aarch64-2024.01.23-0-OKE-1.27.10-679"
-                        },
-                        {
                             "id": "Oracle-Linux-7.9-aarch64-2023.12.08-0-OKE-1.27.2-668",
                             "displayName": "Oracle-Linux-7.9-aarch64-2023.12.08-0-OKE-1.27.2-668"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2024.06.30-0-OKE-1.30.1-716",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2024.06.30-0-OKE-1.30.1-716"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2024.06.30-0-OKE-1.29.1-716",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2024.06.30-0-OKE-1.29.1-716"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2024.06.30-0-OKE-1.27.10-716",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2024.06.30-0-OKE-1.27.10-716"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2024.05.29-0-OKE-1.30.1-707",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2024.05.29-0-OKE-1.30.1-707"
                         },
                         {
                             "id": "Oracle-Linux-7.9-Gen2-GPU-2024.05.29-0-OKE-1.29.1-707",
@@ -6936,10 +7041,6 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-7.9-Gen2-GPU-2024.04.19-0-OKE-1.27.10-693"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-Gen2-GPU-2024.01.23-0-OKE-1.29.1-679",
-                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2024.01.23-0-OKE-1.29.1-679"
-                        },
-                        {
                             "id": "Oracle-Linux-7.9-Gen2-GPU-2024.01.23-0-OKE-1.28.2-679",
                             "displayName": "Oracle-Linux-7.9-Gen2-GPU-2024.01.23-0-OKE-1.28.2-679"
                         },
@@ -6948,12 +7049,24 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-7.9-Gen2-GPU-2024.01.23-0-OKE-1.27.2-679"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-Gen2-GPU-2024.01.23-0-OKE-1.27.10-679",
-                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2024.01.23-0-OKE-1.27.10-679"
-                        },
-                        {
                             "id": "Oracle-Linux-7.9-Gen2-GPU-2023.12.08-0-OKE-1.27.2-668",
                             "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.12.08-0-OKE-1.27.2-668"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-2024.06.30-0-OKE-1.30.1-716",
+                            "displayName": "Oracle-Linux-7.9-2024.06.30-0-OKE-1.30.1-716"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-2024.06.30-0-OKE-1.29.1-716",
+                            "displayName": "Oracle-Linux-7.9-2024.06.30-0-OKE-1.29.1-716"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-2024.06.30-0-OKE-1.27.10-716",
+                            "displayName": "Oracle-Linux-7.9-2024.06.30-0-OKE-1.27.10-716"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-2024.05.29-0-OKE-1.30.1-707",
+                            "displayName": "Oracle-Linux-7.9-2024.05.29-0-OKE-1.30.1-707"
                         },
                         {
                             "id": "Oracle-Linux-7.9-2024.05.29-0-OKE-1.29.1-707",
@@ -6984,20 +7097,12 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-7.9-2024.04.19-0-OKE-1.27.10-693"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-2024.01.23-0-OKE-1.29.1-679",
-                            "displayName": "Oracle-Linux-7.9-2024.01.23-0-OKE-1.29.1-679"
-                        },
-                        {
                             "id": "Oracle-Linux-7.9-2024.01.23-0-OKE-1.28.2-679",
                             "displayName": "Oracle-Linux-7.9-2024.01.23-0-OKE-1.28.2-679"
                         },
                         {
                             "id": "Oracle-Linux-7.9-2024.01.23-0-OKE-1.27.2-679",
                             "displayName": "Oracle-Linux-7.9-2024.01.23-0-OKE-1.27.2-679"
-                        },
-                        {
-                            "id": "Oracle-Linux-7.9-2024.01.23-0-OKE-1.27.10-679",
-                            "displayName": "Oracle-Linux-7.9-2024.01.23-0-OKE-1.27.10-679"
                         },
                         {
                             "id": "Oracle-Linux-7.9-2023.12.08-0-OKE-1.27.2-668",
@@ -7012,20 +7117,12 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-8.9-aarch64-2024.04.19-0"
                         },
                         {
-                            "id": "Oracle-Linux-8.9-aarch64-2024.03.28-0",
-                            "displayName": "Oracle-Linux-8.9-aarch64-2024.03.28-0"
-                        },
-                        {
                             "id": "Oracle-Linux-8.9-Gen2-GPU-2024.05.29-0",
                             "displayName": "Oracle-Linux-8.9-Gen2-GPU-2024.05.29-0"
                         },
                         {
                             "id": "Oracle-Linux-8.9-Gen2-GPU-2024.04.19-0",
                             "displayName": "Oracle-Linux-8.9-Gen2-GPU-2024.04.19-0"
-                        },
-                        {
-                            "id": "Oracle-Linux-8.9-Gen2-GPU-2024.03.25-0",
-                            "displayName": "Oracle-Linux-8.9-Gen2-GPU-2024.03.25-0"
                         },
                         {
                             "id": "Oracle-Linux-8.9-2024.05.29-0",
@@ -7036,8 +7133,20 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-8.9-2024.04.19-0"
                         },
                         {
-                            "id": "Oracle-Linux-8.9-2024.03.25-0",
-                            "displayName": "Oracle-Linux-8.9-2024.03.25-0"
+                            "id": "Oracle-Linux-8.10-aarch64-2024.06.30-0",
+                            "displayName": "Oracle-Linux-8.10-aarch64-2024.06.30-0"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.10-Gen2-GPU-2024.06.30-0",
+                            "displayName": "Oracle-Linux-8.10-Gen2-GPU-2024.06.30-0"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.10-2024.06.30-0",
+                            "displayName": "Oracle-Linux-8.10-2024.06.30-0"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-aarch64-2024.06.30-0",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2024.06.30-0"
                         },
                         {
                             "id": "Oracle-Linux-7.9-aarch64-2024.05.29-0",
@@ -7048,8 +7157,8 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-7.9-aarch64-2024.04.19-0"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-aarch64-2024.03.28-0",
-                            "displayName": "Oracle-Linux-7.9-aarch64-2024.03.28-0"
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2024.06.30-0",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2024.06.30-0"
                         },
                         {
                             "id": "Oracle-Linux-7.9-Gen2-GPU-2024.05.29-0",
@@ -7060,8 +7169,8 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-7.9-Gen2-GPU-2024.04.19-0"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-Gen2-GPU-2024.03.28-0",
-                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2024.03.28-0"
+                            "id": "Oracle-Linux-7.9-2024.06.30-0",
+                            "displayName": "Oracle-Linux-7.9-2024.06.30-0"
                         },
                         {
                             "id": "Oracle-Linux-7.9-2024.05.29-0",
@@ -7070,10 +7179,6 @@ export const defaultCache: OcdCache = {
                         {
                             "id": "Oracle-Linux-7.9-2024.04.19-0",
                             "displayName": "Oracle-Linux-7.9-2024.04.19-0"
-                        },
-                        {
-                            "id": "Oracle-Linux-7.9-2024.03.28-0",
-                            "displayName": "Oracle-Linux-7.9-2024.03.28-0"
                         },
                         {
                             "id": "Oracle-Linux-7.6",
