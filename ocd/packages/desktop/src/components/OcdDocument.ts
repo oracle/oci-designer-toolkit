@@ -453,6 +453,7 @@ export class OcdDocument {
     }
 
     autoLayout = (viewId: string, detailed: boolean = true, style: string = 'dynamic-columns') => {
+        console.debug('OcdDocument: autoLayout', style)
         const autoArranger = new OcdAutoLayout(this.design)
         const page = this.getPage(viewId)
         page.coords = autoArranger.layout(detailed, style)

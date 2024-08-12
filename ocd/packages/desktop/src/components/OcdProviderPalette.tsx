@@ -12,7 +12,7 @@ import { PaletteProps } from '../types/ReactComponentProperties'
 const OcdProviderPalette = ({ ocdConsoleConfig, setDragData, ocdDocument }: PaletteProps): JSX.Element => {
     return (
         <div className='ocd-designer-palette'>
-            {palette.providers.map((provider) => {
+            {palette.providers.filter((p) => ocdConsoleConfig.config.visibleProviderPalettes.includes(p.title)).map((provider) => {
                 return <OcdProviderPaletteProviders 
                             provider={provider} 
                             ocdConsoleConfig={ocdConsoleConfig}

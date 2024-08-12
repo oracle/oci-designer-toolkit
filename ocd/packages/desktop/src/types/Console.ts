@@ -49,7 +49,7 @@ export interface HelpPageProps {
     helpText: string
 }
 
-export type OcdActiveFile {
+export type OcdActiveFile = {
     name: string
     modified: boolean
 }

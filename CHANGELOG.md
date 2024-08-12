@@ -6,6 +6,9 @@
 ### Features
 1. OKIT-Ocd: Build OKIT-Web style auto arranger. (#OKIT-299)
 2. OKIT-Ocd: Generated example connection.tfvars file during OpenTofu export. (#OKIT-297)
+3. OKIT-Ocd: Add Palette for Compute Cloud@Customer. (#OKIT-298) 
+4. OKIT-Ocd: Add Palette for PCA-X9. (#OKIT-298)
+5. OKIT-Ocd: Allow quering of cache data from specified Config Profiles and then switch. (#OKIT-296)
 
 ### Bug Fixes
 

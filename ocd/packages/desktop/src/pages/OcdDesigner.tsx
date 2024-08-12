@@ -4,6 +4,7 @@
 */
 
 import React, { useRef, useState } from 'react'
+import { palette } from '../data/OcdPalette'
 import OcdPalette from '../components/OcdPalette'
 import OcdProperties from '../components/OcdProperties'
 import OcdCanvas from '../components/OcdCanvas'
@@ -14,6 +15,7 @@ import { CanvasProps } from '../types/ReactComponentProperties'
 import { ConsolePageProps, ConsoleToolbarProps } from '../types/Console'
 import { DragData, newDragData } from '../types/DragData'
 import { OcdConsoleConfig } from '../components/OcdConsoleConfiguration'
+import { autoLayoutOptions } from '../data/OcdAutoLayoutOptions'
 
 const OcdCanvasView = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument, setOcdDocument }: CanvasProps): JSX.Element => {
     return (
@@ -82,6 +84,19 @@ const OcdDesignerViewConfigEditor = ({ ocdConsoleConfig, setOcdConsoleConfig }: 
         ocdConsoleConfig.config.highlightCompartmentResources = !ocdConsoleConfig.config.highlightCompartmentResources
         setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
     }
+    const showProviderPaletteOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.checked) ocdConsoleConfig.config.visibleProviderPalettes.push(e.target.id)
+        else ocdConsoleConfig.config.visibleProviderPalettes = ocdConsoleConfig.config.visibleProviderPalettes.filter((p: string) => p !== e.target.id)
+        setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+    }
+    const onDefaultAutoLayoutChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        ocdConsoleConfig.config.defaultAutoArrangeStyle = e.target.value
+        setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+        setDropdown(!dropdown)
+    }
+    const selectClicked = (e: React.MouseEvent<HTMLSelectElement>) => {
+        e.stopPropagation()
+    }
     return (
         <div className='ocd-console-toolbar-dropdown ocd-console-toolbar-dropdown-theme ocd-toolbar-separator-right'>
             <ul>
@@ -90,8 +105,14 @@ const OcdDesignerViewConfigEditor = ({ ocdConsoleConfig, setOcdConsoleConfig }: 
                     <ul className={`${dropdown ? 'show' : 'hidden'}`}>
                         <li className='ocd-dropdown-menu-item'><div><label><input id='verboseProviderPalette' type='checkbox' onChange={verboseProviderPaletteOnChange} ref={cbRef} checked={ocdConsoleConfig.config.verboseProviderPalette}/>Verbose Palette</label></div></li>
                         <li className='ocd-dropdown-menu-item'><div>--------------------------------</div></li>
+                        {palette.providers.map((provider) => {return <li className='ocd-dropdown-menu-item' key={provider.title} ><div><label><input id={provider.title} type='checkbox' onChange={showProviderPaletteOnChange} ref={cbRef} checked={ocdConsoleConfig.config.visibleProviderPalettes.includes(provider.title)}/>Show {provider.title} Palette</label></div></li>})}
+                        <li className='ocd-dropdown-menu-item'><div>--------------------------------</div></li>
                         <li className='ocd-dropdown-menu-item'><div><label><input id='detailedResource' type='checkbox' onChange={detailedResourceOnChange} ref={cbRef} checked={ocdConsoleConfig.config.detailedResource}/>Resource Details</label></div></li>
                         <li className='ocd-dropdown-menu-item'><div><label><input id='highlightCompartmentResources' type='checkbox' onChange={highlightCompartmentResourcesOnChange} ref={cbRef} checked={ocdConsoleConfig.config.highlightCompartmentResources}/>Highlight Compartment Resources</label></div></li>
+                        <li className='ocd-dropdown-menu-item'><div>--------------------------------</div></li>
+                        <li className='ocd-dropdown-menu-item'><div>Set Default Auto Layout</div></li>
+                        <li className='ocd-dropdown-menu-item'><div><select value={ocdConsoleConfig.config.defaultAutoArrangeStyle} onChange={onDefaultAutoLayoutChange} onClick={selectClicked}>{Object.entries(autoLayoutOptions).filter(([k, v]) => k !== 'default').map(([k, v]) => {return <option value={k} key={k}>{v}</option>})}</select></div></li>
+                        <li className='ocd-dropdown-menu-item'><div>--------------------------------</div></li>
                     </ul>
                 </li>
             </ul>
