@@ -11,7 +11,6 @@ import OcdConsoleConfig from './OcdConsoleConfiguration'
 import { ActiveFileContext, ConsoleConfigContext } from '../pages/OcdConsole'
 
 const OcdConsoleMenuItem = ({ menuItem, depth, ocdDocument, setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig }: any): JSX.Element => {
-    // @ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const [dropdown, setDropdown] = useState(false)
     const onMouseEnter = () => {setDropdown(true)}
@@ -83,7 +82,6 @@ const OcdConsoleSubMenu = ({ submenus, dropdown, depth, ocdDocument, setOcdDocum
 }
 
 const OcdConsoleMenu = ({ ocdDocument, setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig }: ConsoleMenuProps): JSX.Element => {
-    // @ts-ignore
     // const {ocdConsoleConfig, setOcdConsoleConfig} = useContext(ConsoleConfigContext)
     return (
         <ul className='ocd-console-main-menu'>

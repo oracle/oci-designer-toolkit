@@ -14,7 +14,6 @@ import { OciVolumeAttachment } from './OciVolumeAttachment'
 
 export const OciInstance = ({ ocdDocument, setOcdDocument, resource }: ResourceProperties): JSX.Element => {
     const configs: ResourceElementConfig[] = OciInstanceConfigs.configs()
-    // @ts-ignore
     const {ocdCache, setOcdCache} = useContext(CacheContext)
     const shape = ocdCache.getOciReferenceDataList('shapes').find((r: Record<string, any>) => r.id === resource.shape)
     // For flexible shapes add min / max values based on Cache information for Memory and OCPU

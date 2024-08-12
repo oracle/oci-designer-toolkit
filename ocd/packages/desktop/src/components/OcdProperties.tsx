@@ -149,7 +149,6 @@ const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourcePr
 }
 
 const OcdResourceTags = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
-    // @ts-ignore
     const {ocdCache, setOcdCache} = useContext(CacheContext)
     const selectedResource: OcdResource = ocdDocument.getSelectedResource()
     // const resourceProxyName = useMemo(() => selectedResource ? `${OcdUtils.toTitleCase(selectedResource.provider)}${selectedResource.resourceType}Proxy` : '', [selectedResource])

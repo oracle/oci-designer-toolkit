@@ -41,7 +41,7 @@ export class OcdDocument {
         if (typeof design === 'string' && design.length > 0) this.design = JSON.parse(design)
         else if (design instanceof Object) this.design = design
         else this.design = this.newDesign()
-        this.selectedResource = resource ? resource : this.newSelectedResource()
+        this.selectedResource = resource ? resource : OcdDocument.newSelectedResource()
         this.dragResource = dragResource ? dragResource : this.newDragResource()
         this.query = false
     }
@@ -52,7 +52,7 @@ export class OcdDocument {
 
     newDesign = (): OcdDesign => OcdDesign.newDesign()
 
-    newSelectedResource(): OcdSelectedResource {
+    static newSelectedResource(): OcdSelectedResource {
         return {
             modelId: '',
             pageId: '',

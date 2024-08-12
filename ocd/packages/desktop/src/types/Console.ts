@@ -48,3 +48,8 @@ export interface LayerBarMenuProps extends LayerBarLayersProps {}
 export interface HelpPageProps {
     helpText: string
 }
+
+export type OcdActiveFile {
+    name: string
+    modified: boolean
+}

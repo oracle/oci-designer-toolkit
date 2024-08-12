@@ -258,7 +258,6 @@ const OcdContainerRect = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
 }
 
 const OcdResizePoint = ({resource, cx, cy, position, setDimensions, onResize, onResizeEnd}: any): JSX.Element => {
-    //@ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const [mouseOver, setMouseOver] = useState(false)
     const [dragging, setDragging] = useState(false)
@@ -388,7 +387,6 @@ const OcdForeignObject = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
 }
 
 export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, contextMenu, setContextMenu, svgDragDropEvents, resource, ghost }: ResourceSvgProps): JSX.Element => {
-    //@ts-ignore
     const {selectedResource, setSelectedResource} = useContext(SelectedResourceContext)
     const page: OcdViewPage = ocdDocument.getActivePage()
     const allCompartmentIds = ocdDocument.getOciResourceList('comparment').map((r) => r.id)
