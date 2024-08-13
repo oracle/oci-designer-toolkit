@@ -7,7 +7,7 @@ import { OcdCodeGenerator } from "./OcdCodeGenerator";
 
 export class OciCodeGenerator extends OcdCodeGenerator {
     constructor (prefix: string='Oci') {
-        super('Oci')
+        super(prefix)
         this.commonElements = [
             'compartment_id', // Common Element
             'defined_tags',   // Common Element
