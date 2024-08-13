@@ -129,7 +129,6 @@ export const isPropertyDisplayConditionTrue = (conditional: boolean, condition: 
 
 export const OcdDisplayNameProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute, rootResource }: ResourceProperty): JSX.Element => {
     const id = useId()
-    // @ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const [value, setValue] = useState(resource[attribute.key])
     const properties = config && config.properties ? config.properties : {}
@@ -156,7 +155,6 @@ export const OcdDisplayNameProperty = ({ ocdDocument, setOcdDocument, resource, 
 
 export const OcdTextProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute, rootResource }: ResourceProperty): JSX.Element => {
     const id = useId()
-    // @ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const [value, setValue]= useState(resource[attribute.key])
     const properties = config && config.properties ? config.properties : {}
@@ -183,7 +181,6 @@ export const OcdTextProperty = ({ ocdDocument, setOcdDocument, resource, config,
 
 export const OcdNumberProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute, rootResource }: ResourceProperty): JSX.Element => {
     const id = useId()
-    // @ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const [value, setValue]= useState(resource[attribute.key])
     const properties = config && config.properties ? config.properties : {}
@@ -210,7 +207,6 @@ export const OcdNumberProperty = ({ ocdDocument, setOcdDocument, resource, confi
 
 export const OcdBooleanProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute, rootResource }: ResourceProperty): JSX.Element => {
     const id = useId()
-    // @ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const [value, setValue]= useState(resource[attribute.key])
     const properties = config && config.properties ? config.properties : {}
@@ -233,7 +229,6 @@ export const OcdBooleanProperty = ({ ocdDocument, setOcdDocument, resource, conf
 
 export const OcdCodeProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute, rootResource }: ResourceProperty): JSX.Element => {
     const id = useId()
-    // @ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const [value, setValue]= useState(resource[attribute.key])
     const properties = config && config.properties ? config.properties : {}
@@ -276,7 +271,6 @@ export const OcdLookupGroupOption = ({group}: {group: ResourceElementConfigLooku
 export const OcdLookupProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute, rootResource }: ResourceProperty): JSX.Element => {
     console.debug('OcdPropertyTypes: OcdLookupProperty', config, attribute, resource)
     const id = useId()
-    // @ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const [value, setValue]= useState(resource[attribute.key])
     const properties = config && config.properties ? config.properties : {}
@@ -318,7 +312,6 @@ export const OcdLookupProperty = ({ ocdDocument, setOcdDocument, resource, confi
 }
 
 export const OcdLookupListProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute, rootResource }: ResourceProperty): JSX.Element => {
-    // @ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const [value, setValue]= useState(resource[attribute.key])
     const properties = config && config.properties ? config.properties : {}
@@ -354,7 +347,6 @@ export const OcdLookupListProperty = ({ ocdDocument, setOcdDocument, resource, c
 
 export const OcdStaticLookupProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute, rootResource }: ResourceProperty): JSX.Element => {
     const id = useId()
-    // @ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const [value, setValue] = useState(resource[attribute.key])
     const properties = config && config.properties ? config.properties : {}
@@ -396,7 +388,6 @@ export const OcdStaticLookupProperty = ({ ocdDocument, setOcdDocument, resource,
 
 export const OcdCacheLookupProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute, rootResource }: ResourceProperty): JSX.Element => {
     console.debug('OcdPropertyTypes: OcdCacheLookupProperty', config, attribute, resource)
-    // @ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const {ocdCache, setOcdCache} = useContext(CacheContext)
     const [value, setValue]= useState(resource[attribute.key])
@@ -445,7 +436,6 @@ export const OcdCacheLookupProperty = ({ ocdDocument, setOcdDocument, resource, 
 
 export const OcdStringListProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute, rootResource }: ResourceProperty): JSX.Element => {
     const id = useId()
-    // @ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const [value, setValue]= useState(resource[attribute.key] ? resource[attribute.key].join(',') : '')
     const properties = config && config.properties ? config.properties : {}
@@ -472,7 +462,6 @@ export const OcdStringListProperty = ({ ocdDocument, setOcdDocument, resource, c
 
 export const OcdNumberListProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute, rootResource }: ResourceProperty): JSX.Element => {
     const id = useId()
-    // @ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const [value, setValue]= useState(resource[attribute.key].join(','))
     const properties = config && config.properties ? config.properties : {}
@@ -498,7 +487,6 @@ export const OcdNumberListProperty = ({ ocdDocument, setOcdDocument, resource, c
 }
 
 export const OcdListProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute, rootResource }: ResourceProperty): JSX.Element => {
-    // @ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const [value, setValue]= useState(resource[attribute.key])
     const className = isPropertyDisplayConditionTrue(attribute.conditional, attribute.condition, resource, rootResource) ? `ocd-property-row ocd-simple-property-row` : `collapsed hidden`
@@ -513,7 +501,6 @@ export const OcdListProperty = ({ ocdDocument, setOcdDocument, resource, config,
 }
 
 export const OcdSetProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute, rootResource }: ResourceProperty): JSX.Element => {
-    // @ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const [value, setValue]= useState(resource[attribute.key])
     const className = isPropertyDisplayConditionTrue(attribute.conditional, attribute.condition, resource, rootResource) ? `ocd-property-row ocd-simple-property-row` : `collapsed hidden`
@@ -528,7 +515,6 @@ export const OcdSetProperty = ({ ocdDocument, setOcdDocument, resource, config, 
 }
 
 export const OcdSetLookupProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute, rootResource }: ResourceProperty): JSX.Element => {
-    // @ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const [value, setValue]= useState(resource[attribute.key])
     const properties = config && config.properties ? config.properties : {}
@@ -561,7 +547,6 @@ export const OcdSetLookupProperty = ({ ocdDocument, setOcdDocument, resource, co
 }
 
 export const OcdMapProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute, rootResource }: ResourceProperty): JSX.Element => {
-    // @ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const [value, setValue]= useState(resource[attribute.key])
     const className = isPropertyDisplayConditionTrue(attribute.conditional, attribute.condition, resource, rootResource) ? `ocd-property-row ocd-simple-property-row` : `collapsed hidden`

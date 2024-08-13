@@ -10,12 +10,12 @@ import { useContext, useState } from "react"
 import { OciModelResources } from '@ocd/model'
 import { OcdDocument } from "../OcdDocument"
 import { OcdUtils } from '@ocd/core'
-import { ActiveFileContext } from "../../pages/OcdConsole"
+import { ActiveFileContext, ConsoleConfigContext } from "../../pages/OcdConsole"
 import React from "react"
 
 export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps): JSX.Element => {
-    // @ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
+    const {ocdConsoleConfig, setOcdConsoleConfig} = useContext(ConsoleConfigContext)
     const loadingState = '......Reading OCI Config'
     const regionsLoading = {id: 'Select Valid Profile', displayName: 'Select Valid Profile'}
     const className = `ocd-query-dialog`
@@ -107,7 +107,7 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
             resultsOciResources.compartment.forEach((c: OciModelResources.OciCompartment, i: number) => clone.addLayer(c.id, i === 0))
             clone.query = !ocdDocument.query
             // Auto Arrange
-            clone.autoLayout(clone.getActivePage().id)
+            clone.autoLayout(clone.getActivePage().id, true, ocdConsoleConfig.config.defaultAutoArrangeStyle)
             setOcdDocument(clone)
             setActiveFile({name: '', modified: false})
         })

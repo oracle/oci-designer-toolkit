@@ -3,7 +3,6 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import { OcdSchemaImporter } from './OcdSchemaImporter'
 import { ignoreElements } from './data/OciIgnoreElements'
 import { resourceMap, dataMap, resourceAttributes } from './data/OciResourceMap'
 import { elementOverrides } from './data/OciElementOverrides' 

@@ -24,7 +24,6 @@ export const OciDefault = ({ ocdDocument, ociResources, selected }: OciTabularRe
 }
 
 export const OcdTabularContents = ({ ocdDocument, ociResources, selected, columnTitles, resourceElements }: OciTabularContentsProps): JSX.Element => {
-    // @ts-ignore
     const {ocdConsoleConfig, setOcdConsoleConfig} = useContext(ConsoleConfigContext)
     const [displayColumns, setDisplayColumns] = useState(ocdConsoleConfig.config.displayColumns ? ocdConsoleConfig.config.displayColumns[selected] ? ocdConsoleConfig.config.displayColumns[selected] : columnTitles : columnTitles)
     const [sortColumn, setSortColumn] = useState('')
@@ -91,7 +90,6 @@ export const OcdTabularContents = ({ ocdDocument, ociResources, selected, column
 }
 
 export const OcdTabularHeader = ({columnTitles, ociResources, resourceElements, selected, sortColumn, sortAscending, onSortClick, displayColumns, setDisplayColumns}: OciTabularHeaderProps): JSX.Element => {
-    // @ts-ignore
     const {ocdConsoleConfig, setOcdConsoleConfig} = useContext(ConsoleConfigContext)
     const [menuVisible, setMenuVisible] = useState(false)
     const onToggleMenuClick = () => {setMenuVisible(!menuVisible && columnTitles.length > 0)}
@@ -133,7 +131,6 @@ export const OcdTabularHeader = ({columnTitles, ociResources, resourceElements, 
 }
 
 export const OcdTabularRow = ({ocdDocument, ociResources, index, resource, resourceElements, selected}: OciTabularRowProps): JSX.Element => {
-    // @ts-ignore
     const {ocdConsoleConfig, setOcdConsoleConfig} = useContext(ConsoleConfigContext)
     const getReferenceDisplayName = (id: string) => {
         const resource = ocdDocument.getResource(id)

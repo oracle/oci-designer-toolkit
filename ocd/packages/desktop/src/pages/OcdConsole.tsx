@@ -5,10 +5,10 @@
 
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { OcdDesigner, OcdDesignerLeftToolbar, OcdDesignerRightToolbar } from './OcdDesigner'
-import OcdDocument, { OcdSelectedResource } from '../components/OcdDocument'
+import { OcdDocument } from '../components/OcdDocument'
 import OcdConsoleMenuBar from '../components/OcdConsoleMenuBar'
 import { OcdConsoleConfig } from '../components/OcdConsoleConfiguration'
-import { ConsoleHeaderProps, ConsolePageProps, ConsoleToolbarProps } from '../types/Console'
+import { ConsoleHeaderProps, ConsolePageProps, ConsoleToolbarProps, OcdSelectedResource } from '../types/Console'
 import OcdBom from './OcdBom'
 import OcdMarkdown from './OcdMarkdown'
 import OcdTabular from './OcdTabular'
@@ -20,25 +20,25 @@ import OcdDocumentation from './OcdDocumentation'
 import { OcdCacheData } from '../components/OcdCache'
 import { OcdCacheFacade } from '../facade/OcdCacheFacade'
 import { loadDesign } from '../components/Menu'
-import { OcdValidationResult, OcdValidator } from '@ocd/model'
+import { OcdResource, OcdValidationResult, OcdValidator } from '@ocd/model'
 import OcdValidation from './OcdValidation'
 import { buildDetails } from '../data/OcdBuildDetails'
 import OcdHelp from './OcdHelp'
 import OcdCommonTags from './OcdCommonTags'
 import { OcdReferenceDataQueryDialog } from '../components/dialogs/OcdReferenceDataQueryDialog'
-import { OcdCacheContext } from './OcdConsoleContext'
+import { OcdActiveFileContext, OcdCacheContext, OcdConsoleConfigContext, OcdDocumentContext, OcdSelectedResourceContext } from './OcdConsoleContext'
 
 // Import css as text
 // @ts-ignore
 // eslint-disable-next-line import/no-webpack-loader-syntax
 // import svgThemeCss from '!!css-loader?{"sourceMap":false,"exportType":"string"}!../css/oci-theme.css'
 
-export const ThemeContext = createContext('')
-export const ActiveFileContext = createContext({})
-export const ConsoleConfigContext = createContext({})
+export const ThemeContext = createContext<string>('')
+export const ActiveFileContext = createContext<OcdActiveFileContext>({activeFile: {name: '', modified: false}, setActiveFile: () => {}})
+export const ConsoleConfigContext = createContext<OcdConsoleConfigContext>({ocdConsoleConfig: OcdConsoleConfig.new(), setOcdConsoleConfig: () => {}})
 export const CacheContext = createContext<OcdCacheContext>({ocdCache: OcdCacheData.new(), setOcdCache: () => {}})
-export const OcdDocumentContext = createContext({})
-export const SelectedResourceContext = createContext({})
+export const DocumentContext = createContext<OcdDocumentContext>({ocdDocument: OcdDocument.new(), setOcdDocument: () => {}})
+export const SelectedResourceContext = createContext<OcdSelectedResourceContext>({selectedResource: OcdDocument.newSelectedResource(), setSelectedResource: () => {}})
 
 const OcdConsole = (): JSX.Element => {
     // console.debug('OcdConsole: CSS', svgThemeCss)
@@ -107,7 +107,7 @@ const OcdConsole = (): JSX.Element => {
         <ConsoleConfigContext.Provider value={{ocdConsoleConfig, setOcdConsoleConfig}}>
             <ActiveFileContext.Provider value={{activeFile, setActiveFile}}>
                 <CacheContext.Provider value={{ocdCache, setOcdCache}}>
-                    <OcdDocumentContext.Provider value={{ocdDocument, setOcdDocument}}>
+                    <DocumentContext.Provider value={{ocdDocument, setOcdDocument}}>
                         <SelectedResourceContext.Provider value={{selectedResource, setSelectedResource}}>
                             <div className='ocd-console'>
                                 <OcdConsoleHeader ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
@@ -116,7 +116,7 @@ const OcdConsole = (): JSX.Element => {
                                 <OcdConsoleFooter ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
                             </div>
                         </SelectedResourceContext.Provider>
-                    </OcdDocumentContext.Provider>
+                    </DocumentContext.Provider>
                 </CacheContext.Provider>
             </ActiveFileContext.Provider>
         </ConsoleConfigContext.Provider>
@@ -269,7 +269,6 @@ const OcdConsoleBody = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, se
 }
 
 const OcdConsoleFooter = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument }: ConsolePageProps): JSX.Element => {
-    // @ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const {ocdCache, setOcdCache} = useContext(CacheContext)
     const filenameClass = `${activeFile.modified ? 'ocd-design-modified ocd-active-file-modified-icon' : ''}`
