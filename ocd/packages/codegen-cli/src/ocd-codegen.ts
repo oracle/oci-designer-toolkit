@@ -94,6 +94,7 @@ if (command.toLocaleLowerCase() === 'generate') {
         const source_schema = JSON.parse(input_data)
         let importer = undefined
         if (subcommand.toLocaleLowerCase() === 'oci-terraform-schema') importer = new OciTerraformSchemaImporter()
+        else if (subcommand.toLocaleLowerCase() === 'azurerm-terraform-schema') importer = new AzureTerraformSchemaImporter()
         else if (subcommand.toLocaleLowerCase() === 'azureaz-terraform-schema') importer = new AzureAzTerraformSchemaImporter()
         else if (subcommand.toLocaleLowerCase() === 'terraform-schema-resource-attributes') importer = new OcdTerraformSchemaResourceAttributesGenerator()
         if (importer !== undefined) {

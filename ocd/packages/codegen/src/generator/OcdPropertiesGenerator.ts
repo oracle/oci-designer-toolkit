@@ -8,8 +8,9 @@
 import fs from 'fs'
 import path from 'path'
 import { OcdCodeGenerator } from './OcdCodeGenerator.js'
+import { OciCodeGenerator } from './OciCodeGenerator.js'
 
-export class OcdPropertiesGenerator extends OcdCodeGenerator {
+export class OcdPropertiesGenerator extends OciCodeGenerator {
     objectTypes = ['object']
     constructor () {
         super()

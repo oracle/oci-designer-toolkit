@@ -6,9 +6,10 @@
 // @ts-nocheck
 
 import { OcdCodeGenerator } from './OcdCodeGenerator.js'
+import { OciCodeGenerator } from './OciCodeGenerator.js'
 import { OcdUtils } from '@ocd/core'
 
-export class OcdMarkdownGenerator extends OcdCodeGenerator {
+export class OcdMarkdownGenerator extends OciCodeGenerator {
     simpleTypes = ['string', 'bool', 'number']
     constructor () {
         super()
