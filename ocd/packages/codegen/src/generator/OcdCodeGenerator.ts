@@ -11,8 +11,8 @@ import { OcdUtils } from '@ocd/core'
 import { OcdSchema, OcdSchemaResource } from '../types/OcdSchema'
 
 export class OcdCodeGenerator {
-    commonElements = []
-    commonIgnoreElements = []
+    commonElements: string[] = []
+    commonIgnoreElements: string[] = []
     prefix: string = 'Oci'
     resources: string[] = []
     ignoreAttributes = [...this.commonElements, ...this.commonIgnoreElements]

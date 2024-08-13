@@ -3,8 +3,10 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
+export type OcdProvider = 'oci' | 'azure' | 'google'
+
 export type OcdSchemaAttribute = {
-    provider: 'oci' | 'azure' | 'google'
+    provider: string
     key: string
     name: string
     type: string
@@ -19,6 +21,7 @@ export type OcdSchemaAttribute = {
     lookupResourceElement: string
     conditional: boolean
     condition: Record<string, any>
+    default: string | number | boolean
     attributes?: OcdSchemaAttributes
 }
 
@@ -31,6 +34,6 @@ export type OcdSchemaResource = {
     attributes: OcdSchemaAttributes
 }
 
-export interface OcdSchemaEntry extends Record<string, string | boolean | number | OcdSchemaEntry> {}
+export interface OcdSchemaEntry extends Record<string, OcdSchemaResource | OcdSchemaAttribute> {}
 
 export interface OcdSchema extends Record<string, OcdSchemaResource> {}

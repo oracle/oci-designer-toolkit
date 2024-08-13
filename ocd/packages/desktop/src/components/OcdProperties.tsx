@@ -292,12 +292,13 @@ const OcdResourceTags = ({ocdDocument, setOcdDocument}: DesignerResourceProperti
 }
 
 const OcdResourceDocumentation = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
+    const {selectedResource, setSelectedResource} = useContext(SelectedResourceContext)
     const [preview, setPreview] = useState(false)
-    const selectedResource = ocdDocument.getSelectedResource()
+    const selectedModelResource = ocdDocument.getSelectedResource()
     const activePage = ocdDocument.getActivePage()
     const [documentation, setDocumentation] = useState(ocdDocument.getSelectedResource() ? ocdDocument.getSelectedResource().documentation : ocdDocument.getActivePage().documentation)
     const onChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-        if (selectedResource) selectedResource.documentation = e.target.value
+        if (selectedModelResource) selectedModelResource.documentation = e.target.value
         else activePage.documentation = e.target.value
         setDocumentation(e.target.value)
         setOcdDocument(OcdDocument.clone(ocdDocument))
@@ -308,8 +309,8 @@ const OcdResourceDocumentation = ({ocdDocument, setOcdDocument}: DesignerResourc
             <div className='ocd-properties-documentation-preview-bar'><input id='documentation_preview_checkbox' type='checkbox' checked={preview} onChange={onPreviewChanged}></input><label htmlFor='documentation_preview_checkbox'>Preview</label></div>
             {!preview && <textarea id='ocd_resource_documentation' onChange={onChange} value={documentation}></textarea>}
             {preview && <div className='ocd-properties-documentation-preview'><Markdown>{documentation}</Markdown></div>}
-            {/* {!preview && <textarea id='ocd_resource_documentation' onChange={onChange} value={selectedResource ? selectedResource.documentation : activePage.documentation}></textarea>}
-            {preview && <div className='ocd-properties-documentation-preview'><Markdown>{selectedResource ? selectedResource.documentation : activePage.documentation}</Markdown></div>} */}
+            {/* {!preview && <textarea id='ocd_resource_documentation' onChange={onChange} value={selectedModelResource ? selectedModelResource.documentation : activePage.documentation}></textarea>}
+            {preview && <div className='ocd-properties-documentation-preview'><Markdown>{selectedModelResource ? selectedModelResource.documentation : activePage.documentation}</Markdown></div>} */}
         </div>
     )
 }
