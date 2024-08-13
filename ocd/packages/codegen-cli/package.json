@@ -58,9 +58,11 @@
     "generate": "npm run generate-oci && npm run generate-azureaz",
 
     "import-and-generate-oci": "npm run import-oci-terraform-schema && npm run generate-oci",
+    "import-and-generate-azure": "npm run import-azureaz-terraform-schema && npm run generate-azure",
     "import-and-generate-azureaz": "npm run import-azureaz-terraform-schema && npm run generate-azureaz",
     
-    "import-and-generate": "npm run import-and-generate-oci && npm run import-and-generate-azureaz"
+    "import-and-generate": "npm run import-and-generate-oci",
+    "import-and-generate1": "npm run import-and-generate-oci && npm run import-and-generate-azureaz"
   },
   "dependencies": {
     "@ocd/codegen": "^0.2.2"
