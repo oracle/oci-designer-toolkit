@@ -6,9 +6,8 @@
 // @ts-nocheck
 
 import { OcdCodeGenerator } from './OcdCodeGenerator.js'
-import { OciCodeGenerator } from './OciCodeGenerator.js'
 
-export class OcdModelGenerator extends OciCodeGenerator {
+export class OcdModelGenerator extends OcdCodeGenerator {
     constructor (prefix: string='Oci') {
         super(prefix)
         this.ignoreAttributes = [...this.commonElements, ...this.commonIgnoreElements]
