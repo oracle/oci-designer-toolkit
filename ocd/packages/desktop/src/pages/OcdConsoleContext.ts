@@ -6,8 +6,8 @@
 import { OcdResource } from "@ocd/model"
 import { OcdCacheData } from "../components/OcdCache"
 import { OcdConsoleConfig } from "../components/OcdConsoleConfiguration"
-import { OcdDocument, OcdSelectedResource } from "../components/OcdDocument"
-import { OcdActiveFile } from "../types/Console"
+import { OcdDocument } from "../components/OcdDocument"
+import { OcdActiveFile, OcdSelectedResource } from "../types/Console"
 
 export type OcdActiveFileContext = {
     activeFile: OcdActiveFile

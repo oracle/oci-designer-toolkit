@@ -3,17 +3,16 @@
 ** Licensed under the GNU GENERAL PUBLIC LICENSE v 3.0 as shown at https://www.gnu.org/licenses/.
 */
 
-import OcdDocument, { OcdSelectedResource } from './OcdDocument'
+import { OcdDocument } from './OcdDocument'
 import { OcdViewLayer, OcdViewPage } from '@ocd/model'
 import { OciModelResources } from '@ocd/model'
-import { LayerBarMenuProps, LayerBarLayerProps, LayerBarLayersProps } from '../types/Console'
+import { LayerBarMenuProps, LayerBarLayerProps, LayerBarLayersProps, OcdSelectedResource } from '../types/Console'
 import { useState } from 'react'
 import { OcdUtils } from '@ocd/core'
 
 const OcdCanvasLayer = ({ ocdDocument, setOcdDocument, layer } : LayerBarLayerProps): JSX.Element => {
     const style: React.CSSProperties = {}
     if (layer.style !== undefined && layer.style.fill !== undefined) style.backgroundColor = `${OcdUtils.rgbaToHex(layer.style.fill, true)}${style.opacity = layer.selected ? 'ff' : '33'}`
-    // if (layer.style !== undefined && layer.style.fill !== undefined) style.backgroundColor = `${layer.style.fill}${style.opacity = layer.selected ? 'ff' : '33'}`
     const onVisibilityClick = () => {
         const page: OcdViewPage = ocdDocument.getActivePage()
         // @ts-ignore 

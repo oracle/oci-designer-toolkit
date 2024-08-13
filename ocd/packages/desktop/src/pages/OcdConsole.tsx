@@ -5,10 +5,10 @@
 
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { OcdDesigner, OcdDesignerLeftToolbar, OcdDesignerRightToolbar } from './OcdDesigner'
-import OcdDocument, { OcdSelectedResource } from '../components/OcdDocument'
+import { OcdDocument } from '../components/OcdDocument'
 import OcdConsoleMenuBar from '../components/OcdConsoleMenuBar'
 import { OcdConsoleConfig } from '../components/OcdConsoleConfiguration'
-import { ConsoleHeaderProps, ConsolePageProps, ConsoleToolbarProps } from '../types/Console'
+import { ConsoleHeaderProps, ConsolePageProps, ConsoleToolbarProps, OcdSelectedResource } from '../types/Console'
 import OcdBom from './OcdBom'
 import OcdMarkdown from './OcdMarkdown'
 import OcdTabular from './OcdTabular'

@@ -8,24 +8,25 @@ import { OciModelResources } from '@ocd/model'
 import { OcdDesign, OcdViewPage, OcdViewCoords, OcdViewLayer, OcdBaseModel, OcdViewPoint, OcdViewCoordsStyle, OcdResource, OciResource, PaletteResource } from '@ocd/model'
 import { OcdAutoLayout } from '@ocd/model'
 import { OcdUtils } from '@ocd/core'
-import additionTitleInfo from '../data/OcdAdditionTitleInfo'
+import { additionTitleInfo } from '../data/OcdAdditionTitleInfo'
+import { OcdDragResource, OcdSelectedResource } from '../types/Console'
 
-export interface OcdSelectedResource {
-    modelId: string
-    pageId: string
-    coordsId: string
-    class: string
-}
+// export interface OcdSelectedResource {
+//     modelId: string
+//     pageId: string
+//     coordsId: string
+//     class: string
+// }
 
-export interface OcdDragResource {
-    dragging: boolean
-    modelId: string
-    pageId: string
-    coordsId: string
-    class: string
-    resource: OcdViewCoords
-    parent?: OcdViewCoords
-}
+// export interface OcdDragResource {
+//     dragging: boolean
+//     modelId: string
+//     pageId: string
+//     coordsId: string
+//     class: string
+//     resource: OcdViewCoords
+//     parent?: OcdViewCoords
+// }
 
 export interface OcdAddResourceResponse {
     modelResource: OcdResource | undefined
