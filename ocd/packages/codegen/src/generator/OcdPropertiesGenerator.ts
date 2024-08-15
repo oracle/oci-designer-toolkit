@@ -11,8 +11,8 @@ import { OcdCodeGenerator } from './OcdCodeGenerator.js'
 
 export class OcdPropertiesGenerator extends OcdCodeGenerator {
     objectTypes = ['object']
-    constructor () {
-        super()
+    constructor (prefix: string='Oci') {
+        super(prefix)
         this.ignoreAttributes = [...this.commonElements, ...this.commonIgnoreElements]
     }
 

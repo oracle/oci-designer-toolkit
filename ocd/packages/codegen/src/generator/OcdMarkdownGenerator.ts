@@ -11,8 +11,8 @@ import { OcdUtils } from '@ocd/core'
 
 export class OcdMarkdownGenerator extends OcdCodeGenerator {
     simpleTypes = ['string', 'bool', 'number']
-    constructor () {
-        super()
+    constructor (prefix: string='Oci') {
+        super(prefix)
         this.ignoreAttributes = [...this.commonElements, ...this.commonIgnoreElements]
     }
 

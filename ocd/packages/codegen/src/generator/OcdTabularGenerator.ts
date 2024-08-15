@@ -10,8 +10,8 @@ import path from 'path'
 import { OcdCodeGenerator } from './OcdCodeGenerator.js'
 
 export class OcdTabularGenerator extends OcdCodeGenerator {
-    constructor () {
-        super()
+    constructor (prefix: string='Oci') {
+        super(prefix)
         this.ignoreAttributes = [...this.commonElements, ...this.commonIgnoreElements]
     }
 
