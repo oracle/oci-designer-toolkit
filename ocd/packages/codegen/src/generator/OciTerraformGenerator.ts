@@ -8,11 +8,12 @@
 import { OcdCodeGenerator } from './OcdCodeGenerator.js'
 import { OcdUtils } from '@ocd/core'
 import { terraformMetadataOverrides } from './data/OcdMetadataOverrides.js'
+import { commonElements, commonIgnoreElements } from './data/OciCommonResourceProperties.js'
 
 export class OciTerraformGenerator extends OcdCodeGenerator {
     constructor () {
         super()
-        this.ignoreAttributes = [...this.commonElements, ...this.commonIgnoreElements]
+        this.ignoreAttributes = [...commonElements, ...commonIgnoreElements]
     }
 
     /*

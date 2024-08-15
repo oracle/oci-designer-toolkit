@@ -22,6 +22,7 @@ export const OcdReferenceDataQueryDialog = ({ocdDocument, setOcdDocument}: Query
     const loadingState = '......Reading OCI Config'
     const regionsLoading = {id: 'Select Valid Profile', displayName: 'Select Valid Profile'}
     const [className, setClassName] = useState(`ocd-reference-data-query-dialog`)
+    const [workingClassName, setWorkingClassName] = useState(`ocd-query-wrapper hidden`)
     const [cursor, setCursor] = useState('default')
     const [profiles, setProfiles] = useState([loadingState])
     const [profilesLoaded, setProfilesLoaded] = useState(false)
@@ -69,6 +70,7 @@ export const OcdReferenceDataQueryDialog = ({ocdDocument, setOcdDocument}: Query
         setOcdConsoleConfig(clone)
     }
     const onClickQuery = (e: React.MouseEvent<HTMLButtonElement>) => {
+        setWorkingClassName('ocd-query-wrapper')
         setCursor('progress')
         console.debug('OcdReferenceDataQueryDialog: Delete', selectedProfile, ocdCache.cache.dropdownData)
         delete ocdCache.cache.dropdownData[selectedProfile]
@@ -121,6 +123,7 @@ export const OcdReferenceDataQueryDialog = ({ocdDocument, setOcdDocument}: Query
                     </div>
                 </div>
             </div>
+            <div className={workingClassName}><div id='misshapen-doughnut'></div></div>
         </div>
     )
 }

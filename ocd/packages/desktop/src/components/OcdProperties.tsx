@@ -3,7 +3,7 @@
 ** Licensed under the GNU GENERAL PUBLIC LICENSE v 3.0 as shown at https://www.gnu.org/licenses/.
 */
 
-import { useContext, useMemo, useRef, useState } from 'react'
+import { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { OcdDesign, OcdResource, OcdVariable, OcdViewCoordsStyle, OcdViewPage, OciDefinedTag, OciFreeformTag, OciResourceValidation, OciResources } from '@ocd/model'
 import { DesignerColourPicker, DesignerResourceProperties, DesignerResourceValidationResult } from '../types/DesignerResourceProperties'
 import { OcdUtils } from '@ocd/core'
@@ -150,12 +150,13 @@ const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourcePr
 }
 
 const OcdResourceTags = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
+    const {selectedResource, setSelectedResource} = useContext(SelectedResourceContext)
     const {ocdCache, setOcdCache} = useContext(CacheContext)
-    const selectedResource: OcdResource = ocdDocument.getSelectedResource()
+    const selectedModelResource: OcdResource = ocdDocument.getSelectedResource()
     // const resourceProxyName = useMemo(() => selectedResource ? `${OcdUtils.toTitleCase(selectedResource.provider)}${selectedResource.resourceType}Proxy` : '', [selectedResource])
-    const resourceProxyName = selectedResource ? `${OcdUtils.toTitleCase(selectedResource.provider)}${selectedResource.resourceType}Proxy` : ''
+    const resourceProxyName = selectedModelResource ? `${OcdUtils.toTitleCase(selectedModelResource.provider)}${selectedModelResource.resourceType}Proxy` : ''
     // @ts-ignore
-    const selectedResourceProxy = Object.hasOwn(ociResources, resourceProxyName) ? ociResources[resourceProxyName].proxyResource(ocdDocument, selectedResource, ocdCache) : selectedResource
+    const selectedResourceProxy = Object.hasOwn(ociResources, resourceProxyName) ? ociResources[resourceProxyName].proxyResource(ocdDocument, selectedModelResource, ocdCache) : selectedModelResource
     // const selectedResourceProxy: OcdResource = useMemo(() => {
     //     const resourceProxyName = selectedResource ? `${OcdUtils.toTitleCase(selectedResource.provider)}${selectedResource.resourceType}Proxy` : ''
     //     console.debug(`> OcdProperies: OcdResourceProperties: Render(Proxy(${resourceProxyName}))`, selectedResource)
@@ -164,6 +165,10 @@ const OcdResourceTags = ({ocdDocument, setOcdDocument}: DesignerResourceProperti
     // }, [selectedResource])
     const [freeformTags, setFreeformTags] = useState(OcdDesign.ociFreeformTagsToArray(selectedResourceProxy.freeformTags))
     const [definedTags, setDefinedTags] = useState(OcdDesign.ociDefinedTagsToArray(selectedResourceProxy.definedTags))
+    useEffect(() => {
+        setFreeformTags(OcdDesign.ociFreeformTagsToArray(selectedResourceProxy.freeformTags))
+        setDefinedTags(OcdDesign.ociDefinedTagsToArray(selectedResourceProxy.definedTags))
+    }, [selectedResource])
     const onOciFreeformTagDeleteClick = ((key: string) => {
         console.debug('OcdProperies: Deleting Freeform Row', key, ocdDocument)
         const updatedTags = freeformTags.filter((v) => v.key !== key)
@@ -292,30 +297,41 @@ const OcdResourceTags = ({ocdDocument, setOcdDocument}: DesignerResourceProperti
 }
 
 const OcdResourceDocumentation = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
+    const {selectedResource, setSelectedResource} = useContext(SelectedResourceContext)
     const [preview, setPreview] = useState(false)
-    const selectedResource = ocdDocument.getSelectedResource()
+    const selectedModelResource = ocdDocument.getSelectedResource()
     const activePage = ocdDocument.getActivePage()
-    const [documentation, setDocumentation] = useState(ocdDocument.getSelectedResource() ? ocdDocument.getSelectedResource().documentation : ocdDocument.getActivePage().documentation)
+    const [documentation, setDocumentation] = useState('')
+    // const [documentation, setDocumentation] = useState(ocdDocument.getSelectedResource() ? ocdDocument.getSelectedResource().documentation : ocdDocument.getActivePage().documentation)
+    // const documentation = ocdDocument.getSelectedResource() ? ocdDocument.getSelectedResource().documentation : ocdDocument.getActivePage().documentation
     const onChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-        if (selectedResource) selectedResource.documentation = e.target.value
+        if (selectedModelResource) selectedModelResource.documentation = e.target.value
         else activePage.documentation = e.target.value
         setDocumentation(e.target.value)
+        // setOcdDocument(OcdDocument.clone(ocdDocument))
+    }
+    const onBlur = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
     const onPreviewChanged = () => setPreview(!preview)
+    useEffect(() => setDocumentation(ocdDocument.getSelectedResource() ? ocdDocument.getSelectedResource().documentation : ocdDocument.getActivePage().documentation), [selectedResource])
+    console.debug('OcdProperties: OcdResourceDocumentation: selectedResource', selectedResource)
+    console.debug('OcdProperties: OcdResourceDocumentation: selectedModelResource', selectedModelResource)
+    console.debug('OcdProperties: OcdResourceDocumentation: documentation', documentation)
     return (
         <div className={`ocd-properties-panel ocd-properties-panel-theme ocd-properties-documentation-panel`}>
             <div className='ocd-properties-documentation-preview-bar'><input id='documentation_preview_checkbox' type='checkbox' checked={preview} onChange={onPreviewChanged}></input><label htmlFor='documentation_preview_checkbox'>Preview</label></div>
-            {!preview && <textarea id='ocd_resource_documentation' onChange={onChange} value={documentation}></textarea>}
+            {!preview && <textarea id='ocd_resource_documentation' onChange={onChange} onBlur={onBlur} value={documentation}></textarea>}
             {preview && <div className='ocd-properties-documentation-preview'><Markdown>{documentation}</Markdown></div>}
-            {/* {!preview && <textarea id='ocd_resource_documentation' onChange={onChange} value={selectedResource ? selectedResource.documentation : activePage.documentation}></textarea>}
-            {preview && <div className='ocd-properties-documentation-preview'><Markdown>{selectedResource ? selectedResource.documentation : activePage.documentation}</Markdown></div>} */}
+            {/* {!preview && <textarea id='ocd_resource_documentation' onChange={onChange} value={selectedModelResource ? selectedModelResource.documentation : activePage.documentation}></textarea>}
+            {preview && <div className='ocd-properties-documentation-preview'><Markdown>{selectedModelResource ? selectedModelResource.documentation : activePage.documentation}</Markdown></div>} */}
         </div>
     )
 }
 
 const OcdResourceArrangement = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
-    const selectedResource = ocdDocument.selectedResource
+    const {selectedResource, setSelectedResource} = useContext(SelectedResourceContext)
+    // const selectedResource = ocdDocument.selectedResource
     const page: OcdViewPage = ocdDocument.getActivePage()
     // console.info('Selected Resource', selectedResource)
     // @ts-ignore
@@ -326,6 +342,13 @@ const OcdResourceArrangement = ({ocdDocument, setOcdDocument}: DesignerResourceP
     const [left, setLeft] = useState(coords ? coords.x : 0)
     const [top, setTop] = useState(coords ? coords.y : 0)
     const [container, setContainer] = useState(coords ? coords.container : false)
+    useEffect(() => {
+        setWidth(coords ? coords.w : 0)
+        setHeight(coords ? coords.h : 0)
+        setLeft(coords ? coords.x : 0)
+        setTop(coords ? coords.y : 0)
+        setContainer(coords ? coords.container : false)
+    }, [selectedResource])
     const onWidthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         // ocdDocument.design.view.pages.find((p => p.selected)).coords.find(c => c.id === coordsId).w = parseInt(value)
         const width = parseInt(e.currentTarget.value)
@@ -353,6 +376,9 @@ const OcdResourceArrangement = ({ocdDocument, setOcdDocument}: DesignerResourceP
         const top = parseInt(e.currentTarget.value)
         setTop(top)
         if (coords) {ocdDocument.updateCoords({...coords, y: top}, page.id)}
+        setOcdDocument(OcdDocument.clone(ocdDocument))
+    }
+    const onBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
     const toFrontClick = () => {
@@ -567,8 +593,8 @@ const OcdLayerStyle = ({ocdDocument, setOcdDocument}: DesignerResourceProperties
                 <div><input id='resourceStyleFill' type='checkbox' onChange={fillCheckedChanged} checked={fillChecked}/><span>Fill</span></div>
                 {fillChecked && <div><OcdColourPicker colour={fill} setColour={setFillColour} /></div>}
             </div>
-            <div className={`ocd-style-stroke`}></div>
-            <div className={`ocd-style-opacity`}></div>
+            {/* <div className={`ocd-style-stroke`}></div>
+            <div className={`ocd-style-opacity`}></div> */}
         </div>
     )
 }
@@ -598,12 +624,12 @@ const OcdColourPicker = ({colour, setColour}: DesignerColourPicker): JSX.Element
 }
 
 const OcdResourceValidation =  ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
-    const selectedResource: OcdResource = ocdDocument.getSelectedResource()
+    const selectedModelResource: OcdResource = ocdDocument.getSelectedResource()
     const ociResources: OciResources = ocdDocument.getOciResourcesObject()
-    const resourceValidationMethod = selectedResource ? `${OcdUtils.toTitleCase(selectedResource.provider)}${selectedResource.resourceType}` : ''
+    const resourceValidationMethod = selectedModelResource ? `${OcdUtils.toTitleCase(selectedModelResource.provider)}${selectedModelResource.resourceType}` : ''
     // @ts-ignore 
     const ResourceValidation = OciResourceValidation[resourceValidationMethod]
-    const validationResults = ResourceValidation ? ResourceValidation.validateResource(selectedResource, ociResources) : []
+    const validationResults = ResourceValidation ? ResourceValidation.validateResource(selectedModelResource, ociResources) : []
     const errors = validationResults.filter((v: OcdValidationResult) => v.type === 'error')
     const warnings = validationResults.filter((v: OcdValidationResult) => v.type === 'warning')
     const information = validationResults.filter((v: OcdValidationResult) => v.type === 'information')
@@ -616,7 +642,7 @@ const OcdResourceValidation =  ({ocdDocument, setOcdDocument}: DesignerResourceP
                     {errors.map((r: OcdValidationResult) => {
                         return <OcdResourceValidationResult
                                     result={r}
-                                    resource={selectedResource}
+                                    resource={selectedModelResource}
                                     key={`${r.element}-${r.message.toLowerCase().replace(' ', '_')}`}
                         />
                     })}
@@ -628,7 +654,7 @@ const OcdResourceValidation =  ({ocdDocument, setOcdDocument}: DesignerResourceP
                     {warnings.map((r: OcdValidationResult) => {
                             return <OcdResourceValidationResult
                                         result={r}
-                                        resource={selectedResource}
+                                        resource={selectedModelResource}
                                         key={`${r.element}-${r.message.toLowerCase().replace(' ', '_')}`}
                             />
                         })}
@@ -640,7 +666,7 @@ const OcdResourceValidation =  ({ocdDocument, setOcdDocument}: DesignerResourceP
                     {information.map((r: OcdValidationResult) => {
                             return <OcdResourceValidationResult
                                         result={r}
-                                        resource={selectedResource}
+                                        resource={selectedModelResource}
                                         key={`${r.element}-${r.message.toLowerCase().replace(' ', '_')}`}
                             />
                         })}
@@ -666,6 +692,7 @@ const OcdResourceValidationResult = ({result, resource}: DesignerResourceValidat
 }
 
 const OcdProperties = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
+    const {selectedResource, setSelectedResource} = useContext(SelectedResourceContext)
     const ociResources: OciResources = ocdDocument.getOciResourcesObject()
     const resourceValidationMethod = ocdDocument.getSelectedResource() ? `${OcdUtils.toTitleCase(ocdDocument.getSelectedResource().provider)}${ocdDocument.getSelectedResource().resourceType}` : ''
     // @ts-ignore 
@@ -674,7 +701,7 @@ const OcdProperties = ({ocdDocument, setOcdDocument}: DesignerResourceProperties
     const hasErrors = validationResults.filter((v: OcdValidationResult) => v.type === 'error').length > 0
     const hasWarnings = validationResults.filter((v: OcdValidationResult) => v.type === 'warning').length > 0
     const validationTabClass = `ocd-validation-tab ${hasErrors ? 'ocd-validation-error' : hasWarnings ? 'ocd-validation-warning' : 'ocd-validation-ok'}`
-    const selectedResource = ocdDocument.selectedResource
+    // const selectedResource = ocdDocument.selectedResource
     console.debug('\n================================\nOcdProperties: Selected Resource', ocdDocument.selectedResource, ocdDocument.getSelectedResource())
     const [activeTab, setActiveTab] = useState(ocdDocument.selectedResource.modelId !== '' ? 'properties' : 'documentation')
     const onPropertiesTabClick = (tab: string) => {

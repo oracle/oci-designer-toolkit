@@ -19,6 +19,7 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
     const loadingState = '......Reading OCI Config'
     const regionsLoading = {id: 'Select Valid Profile', displayName: 'Select Valid Profile'}
     const className = `ocd-query-dialog`
+    const [workingClassName, setWorkingClassName] = useState(`ocd-query-wrapper hidden`)
     const [profiles, setProfiles] = useState([loadingState])
     const [profilesLoaded, setProfilesLoaded] = useState(false)
     const [regions, setRegions] = useState([regionsLoading])
@@ -83,6 +84,7 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
         setOcdDocument(clone)
     }
     const onClickQuery = (e: React.MouseEvent<HTMLButtonElement>) => {
+        setWorkingClassName('ocd-query-wrapper')
         console.debug('OcdQueryDialog: Selected Compartments', selectedCompartmentIds)
         OciApiFacade.queryTenancy(selectedProfile, selectedCompartmentIds, selectedRegion).then((results) => {
             // @ts-ignore
@@ -161,6 +163,7 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
                     </div>
                 </div>
             </div>
+            <div className={workingClassName}><div id='misshapen-doughnut'></div></div>
         </div>
     )
 }

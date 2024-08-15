@@ -7,7 +7,7 @@
 
 import fs from 'fs'
 import path from 'path'
-import { OcdMarkdownGenerator, OciModelGenerator, OcdPropertiesGenerator, OcdTabularGenerator, OciTerraformGenerator, OciTerraformSchemaImporter, OciValidatorGenerator, OcdTerraformSchemaResourceAttributesGenerator } from '@ocd/codegen'
+import { OciModelGenerator, OciTerraformGenerator, OciTerraformSchemaImporter, OciValidatorGenerator, OcdTerraformSchemaResourceAttributesGenerator, OciMarkdownGenerator, OciPropertiesGenerator, OciTabularGenerator, AzureTerraformSchemaImporter } from '@ocd/codegen'
 import { AzureModelGenerator, AzureAzTerraformSchemaImporter, AzureValidatorGenerator } from '@ocd/codegen'
 import { parseArgs } from "node:util"
 
@@ -62,10 +62,10 @@ if (command.toLocaleLowerCase() === 'generate') {
         const force_resource_file = args.values.force
         let generator = undefined
         if (subcommand.toLocaleLowerCase() === 'oci-model-js') generator = new OciModelGenerator()
-        else if (subcommand.toLocaleLowerCase() === 'oci-markdown-js') generator = new OcdMarkdownGenerator()
-        else if (subcommand.toLocaleLowerCase() === 'oci-properties-js') generator = new OcdPropertiesGenerator()
+        else if (subcommand.toLocaleLowerCase() === 'oci-markdown-js') generator = new OciMarkdownGenerator()
+        else if (subcommand.toLocaleLowerCase() === 'oci-properties-js') generator = new OciPropertiesGenerator()
         else if (subcommand.toLocaleLowerCase() === 'oci-terraform-js') generator = new OciTerraformGenerator()
-        else if (subcommand.toLocaleLowerCase() === 'oci-tabular-js') generator = new OcdTabularGenerator()
+        else if (subcommand.toLocaleLowerCase() === 'oci-tabular-js') generator = new OciTabularGenerator()
         else if (subcommand.toLocaleLowerCase() === 'oci-validator-js') generator = new OciValidatorGenerator()
         else if (subcommand.toLocaleLowerCase() === 'azureaz-model-js') generator = new AzureModelGenerator()
         else if (subcommand.toLocaleLowerCase() === 'azureaz-validator-js') generator = new AzureValidatorGenerator()

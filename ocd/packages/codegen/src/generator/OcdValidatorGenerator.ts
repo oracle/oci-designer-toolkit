@@ -8,9 +8,8 @@
 import fs from 'fs'
 import path from 'path'
 import { OcdCodeGenerator } from './OcdCodeGenerator.js'
-import { OciCodeGenerator } from './OciCodeGenerator.js'
 
-export class OcdValidatorGenerator extends OciCodeGenerator {
+export class OcdValidatorGenerator extends OcdCodeGenerator {
     constructor (prefix: string='${this.prefix}') {
         super(prefix)
         this.ignoreAttributes = [...this.commonElements, ...this.commonIgnoreElements]
