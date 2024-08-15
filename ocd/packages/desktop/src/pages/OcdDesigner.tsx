@@ -97,6 +97,7 @@ const OcdDesignerViewConfigEditor = ({ ocdConsoleConfig, setOcdConsoleConfig }: 
     const selectClicked = (e: React.MouseEvent<HTMLSelectElement>) => {
         e.stopPropagation()
     }
+    if (ocdConsoleConfig.config.visibleProviderPalettes === undefined) ocdConsoleConfig.config.visibleProviderPalettes = ['OCI']
     return (
         <div className='ocd-console-toolbar-dropdown ocd-console-toolbar-dropdown-theme ocd-toolbar-separator-right'>
             <ul>
