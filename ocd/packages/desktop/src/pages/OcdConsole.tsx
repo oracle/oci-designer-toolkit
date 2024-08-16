@@ -124,13 +124,16 @@ const OcdConsole = (): JSX.Element => {
 }
 
 const OcdConsoleTitleBar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument }: ConsolePageProps): JSX.Element => {
+    const [title, setTitle] = useState(ocdDocument.design.metadata.title)
     const onChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         ocdDocument.design.metadata.title = e.target.value
-        setOcdDocument(OcdDocument.clone(ocdDocument))
+        setTitle(ocdDocument.design.metadata.title)
+        // setOcdDocument(OcdDocument.clone(ocdDocument))
     }
+    useEffect(() => setTitle(ocdDocument.design.metadata.title), [ocdDocument])
     return (
         <div className='ocd-console-title-bar'>
-            <input id='ocd_document_title' type='text' value={ocdDocument.design.metadata.title} onChange={onChange}></input>
+            <input id='ocd_document_title' type='text' value={title} onChange={onChange}></input>
         </div>
     )
 }
