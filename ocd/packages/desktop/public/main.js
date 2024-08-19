@@ -153,6 +153,25 @@ const template = [
   
 const menu = Menu.buildFromTemplate(template)
 
+// Context Menu
+
+const selectionMenu = Menu.buildFromTemplate([
+    {role: 'copy'},
+    {type: 'separator'},
+    {role: 'selectall'},
+  ])
+
+  const inputMenu = Menu.buildFromTemplate([
+    {role: 'undo'},
+    {role: 'redo'},
+    {type: 'separator'},
+    {role: 'cut'},
+    {role: 'copy'},
+    {role: 'paste'},
+    {type: 'separator'},
+    {role: 'selectall'},
+  ])
+
 // Create OCD Window
 const createWindow = () => {
 	let desktopState = loadDesktopState()
@@ -239,6 +258,16 @@ app.whenReady().then(() => {
         }
     });
 	Menu.setApplicationMenu(menu)
+	// Context Menu
+	mainWindow.webContents.on('context-menu', (e, props) => {
+		const { selectionText, isEditable } = props;
+		if (isEditable) {
+		  inputMenu.popup(mainWindow);
+		} else if (selectionText && selectionText.trim() !== '') {
+		  selectionMenu.popup(mainWindow);
+		}
+	  })
+	
 	ready = true
   })
   

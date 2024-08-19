@@ -130,6 +130,11 @@ const OcdConsoleTitleBar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument
         setTitle(ocdDocument.design.metadata.title)
         // setOcdDocument(OcdDocument.clone(ocdDocument))
     }
+    const onPaste = (e: React.ClipboardEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+        console.debug('OcdConsole: OcdConsoleTitleBar: onPaste:', e.clipboardData)
+        ocdDocument.design.metadata.title = e.clipboardData.getData('Text')
+        setTitle(ocdDocument.design.metadata.title)
+    }
     useEffect(() => setTitle(ocdDocument.design.metadata.title), [ocdDocument])
     return (
         <div className='ocd-console-title-bar'>
