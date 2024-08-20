@@ -1243,12 +1243,12 @@ function loadQueryCompartmentsSelect() {
          console.warn('No Compartments Found')
      }
 }
-function loadRegions(callback) {
+function loadRegions(callback, oci=true) {
     // Clear Select
     let select = $(jqId('query_region_id'));
     $(select).empty();
     let region_select = d3.select(d3Id('query_region_id'));
-    for(let region of okitRegions.getRegions() ){
+    for(let region of okitRegions.getRegions(oci) ){
         region_select.append('option')
             .attr('value', region['name'])
             .text(region['display_name']);
