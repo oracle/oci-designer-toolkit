@@ -25,7 +25,7 @@ logger = getLogger()
 
 class OCIConnection(object):
     PAGINATION_LIMIT = 1000
-    OKIT_VERSION = 'v0.62.0'
+    OKIT_VERSION = 'v0.62.1'
 
     def __init__(self, config=None, configfile=None, profile=None, region=None, signer=None):
         self.tenancy_ocid = ''

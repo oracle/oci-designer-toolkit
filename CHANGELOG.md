@@ -1,6 +1,13 @@
 # Release Notes
 
 
+## Version 0.62.1
+**Release Date**: 20th August 2024
+### Features
+### Bug Fixes
+1. OKIT-Web: Resolve issue caused by PCA patching where the wrong region information is returned.
+
+
 ## Version 0.63.0
 **Release Date**: 31st August 2024
 ### Features
