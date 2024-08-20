@@ -276,7 +276,7 @@ def ociRegionSubscription():
 @bp.route('/regions/<string:profile>', methods=(['GET']))
 def ociRegions(profile):
     if request.method == 'GET':
-        logger.info(f'>>>>>>>>> Getting Regions for {profile}')
+        logger.info(f'>>>>>>>>> Getting OCI Regions for {profile}')
         # profile = request.args.get('profile', default=profile)
         config = json.loads(request.args.get('config', default='{}', type=str))
         oci_region_query = OCIRegionQuery(config=config, profile=profile)

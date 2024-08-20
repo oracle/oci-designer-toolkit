@@ -775,6 +775,17 @@ def configSections():
     else:
         return 'Unknown Method', 500
 
+@bp.route('config/section_regions', methods=(['GET']))
+def configSectionRegions():
+    if request.method == 'GET':
+        config_sections = {"sections": readConfigFileSections(), "regions": {}}
+        for section in config_sections["sections"]:
+            config_sections["regions"][section] = getConfigFileValue(section, 'region')
+        logger.info('Config Regions Sections {0!s:s}'.format(config_sections))
+        return config_sections
+    else:
+        return 'Unknown Method', 500
+
 @bp.route('config/validated_sections', methods=(['GET']))
 def configValidatedSections():
     if request.method == 'GET':
