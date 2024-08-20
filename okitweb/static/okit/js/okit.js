@@ -668,6 +668,7 @@ class OkitRegions {
                     }).done((resp) => {
                         const end = new Date().getTime()
                         console.info('Load Regions took', end - start, 'ms')
+                        console.info('Load Region', typeof(response), response)
                         self.regions = resp
                         self.storeLocal(profile);
                         if (self.loaded_callback) self.loaded_callback();

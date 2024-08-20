@@ -84,6 +84,8 @@ class PCARegionQuery(OCIConnection):
             # region["name"] = region["region_name"]
             # region["key"] = region["region_key"]
         logger.info('>>>>> PCA Regions ' + jsonToFormattedString(regions))
+        if len([r for r in regions if r['id'] == self.config['region']]) > 0:
+            logger.info(f'>>>>> PCA Regions Found Config Region {self.config}')
         return regions
 
     def regions(self):

@@ -55,6 +55,8 @@ class OCIRegionQuery(OCIConnection):
             else:
                 name_parts = region['name'].split('-')
                 region['display_name'] = '{0!s:s} {1!s:s}'.format(name_parts[0].upper(), name_parts[1].capitalize())
+        if len([r for r in regions if r['id'] == self.config['region']]) > 0:
+            logger.info(f'>>>>> Queried Regions Found Config Region {self.config}')
         return regions
 
     def response_to_json(self, data):
