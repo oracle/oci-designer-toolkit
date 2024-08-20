@@ -635,7 +635,7 @@ class OkitRegions {
                     console.info('Region Subscription for', profile, 'took', end - start, 'ms')
                     console.info('Region Subscriptions', typeof(response), Array.isArray(response), response)
                     if (response.length === 1 && response[0].region_key !== profile_region) {
-                        console.info('OkitRegions: Querying PCA data for', profile, region);
+                        console.info('OkitRegions: Querying PCA data for', profile, profile_region);
                         $.getJSON(`pca/regions`, {
                             profile: profile,
                             cache: false
