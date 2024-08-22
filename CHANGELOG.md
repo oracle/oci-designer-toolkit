@@ -1,6 +1,13 @@
 # Release Notes
 
 
+## Version 0.62.2
+**Release Date**: 22nd August 2024
+### Features
+### Bug Fixes
+1. OKIT-Web: Resolve issue where region subscription call was hanging on PCA.
+
+
 ## Version 0.62.1
 **Release Date**: 20th August 2024
 ### Features
