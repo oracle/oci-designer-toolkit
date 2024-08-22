@@ -648,13 +648,26 @@ class OkitRegions {
                             resolve(this)
                         }).fail((xhr, status, error) => {reject(error)})
                     } else {
-                        console.info('OkitRegions: Querying OCI data for', profile, region);
+                        console.info('OkitRegions: Querying OCI data for', profile, profile_region);
                         self.regions = resp
                         // if (self.regions.length === 1 && self.regions[0].region_key !== profile_region) self.regions = [{is_home_region: true, region_key: profile_region, region_name: profile_region, status: 'READY'}]
                         self.storeLocal(profile);
                         if (self.loaded_callback) self.loaded_callback();
+                        resolve(this)
+                        // $.getJSON(`oci/regions/${profile}`, {
+                        //     profile: profile,
+                        //     config: JSON.stringify(config),
+                        //     cache: false
+                        // }).done((resp) => {
+                        //     const end = new Date().getTime()
+                        //     console.info('Load Regions took', end - start, 'ms')
+                        //     console.info('Load Region', typeof(response), Array.isArray(response), response)
+                        //     self.regions = resp
+                        //     self.storeLocal(profile);
+                        //     if (self.loaded_callback) self.loaded_callback();
+                        //     resolve(this)
+                        // }).fail((xhr, status, error) => {reject(error)})
                     }
-                    resolve(this)
                     // $.getJSON(`oci/regions/${profile}`, {
                     //     profile: profile,
                     //     config: JSON.stringify(config),
