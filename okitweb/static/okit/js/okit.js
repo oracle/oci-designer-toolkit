@@ -648,7 +648,7 @@ class OkitRegions {
                             resolve(this)
                         }).fail((xhr, status, error) => {reject(error)})
                     } else {
-                        console.info('OkitRegions: Querying OCI data for', profile, region);
+                        console.info('OkitRegions: Querying OCI data for', profile, profile_region);
                         self.regions = resp
                         // if (self.regions.length === 1 && self.regions[0].region_key !== profile_region) self.regions = [{is_home_region: true, region_key: profile_region, region_name: profile_region, status: 'READY'}]
                         self.storeLocal(profile);
