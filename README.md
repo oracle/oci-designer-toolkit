@@ -1,3 +1,4 @@
+[![License: UPL](https://img.shields.io/badge/license-UPL-green)](https://img.shields.io/badge/license-UPL-green) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=oracle_oci-designer-toolkit&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=oracle_oci-designer-toolkit)
 # Oracle Cloud Infrastructure Designer and Visualisation Toolkit [0.62.2](CHANGELOG.md#version-0.62.2)
 
 Full Release Details Can Found [0.62.2 Release](https://github.com/oracle/oci-designer-toolkit/releases/tag/v0.62.2).
