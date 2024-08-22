@@ -1,6 +1,6 @@
-# July 2024 Release (Version 0.62.1)
+# July 2024 Release (Version 0.62.2)
 ____
-**Update 0.62.1**: This update addresses the following issues.
+**Update 0.62.2**: This update addresses the following issues.
 1. OKIT-Web: Resolve Code Scanning Warnings: Issues #652-#672
 2. OKIT-Ocd: resolve Code scanning Warnings: Issues #673-#680
 ____
