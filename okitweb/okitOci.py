@@ -255,9 +255,6 @@ def ociRegionSubscription():
     if request.method == 'GET':
         profile = request.args.get('profile', default='DEFAULT')
         config = json.loads(request.args.get('config', default='{}', type=str))
-        # config = request.args.get('config', default={}, type=str)
-        # if type(config) == str:
-        #     config = json.loads(request.args.get('config', default={}, type=str))
         logger.info('Subscriptions Query Using Profile : {0!s:s}'.format(profile))
         logger.info(f'ociRegionSubscription: Passed Config: {type(config)} {config}')
         # try:

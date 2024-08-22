@@ -118,7 +118,7 @@ def pcaRegions():
     logger.info('>>>>>>> PCA Region Query Endpoint')
     if request.method == 'GET':
         config_profile = request.args.get('profile', default='DEFAULT')
-        logger.info('Using Profile : {0!s:s}'.format(config_profile))
+        logger.info(f'>>>>>>>>> Getting PCA Regions for {config_profile}')
         query = PCARegionQuery(config={}, profile=config_profile)
         regions = query.executeQuery()
         response = jsonToFormattedString(regions)
