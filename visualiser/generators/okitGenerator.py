@@ -102,10 +102,10 @@ class OCIGenerator(object):
 
     def getCheckOutputDirectory(self):
         if not os.path.exists(self.output_dir):
-            logger.warn('Output directory {0:s} does not exist; will create.'.format(self.output_dir))
+            logger.warn('Output directory does not exist; will create.')
             os.makedirs(self.output_dir)
         elif not os.path.isdir(self.output_dir):
-            logger.error('Output directory {0:s} is not a directory'.format(self.output_dir))
+            logger.error('Output directory is not a directory')
 
     def getProvider(self):
         return self.connection_provider
@@ -454,7 +454,6 @@ class OCIGenerator(object):
         return standardised_name
 
     def createZipArchive(self, dir, archivename):
-        logger.info(f'Creating Zip Archive for directory : {dir} {archivename}')
         shutil.make_archive(archivename, 'zip', dir)
         zipname = '{0:s}.zip'.format(str(archivename))
         return zipname
