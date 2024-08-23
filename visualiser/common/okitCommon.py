@@ -53,8 +53,6 @@ def parseJsonString(jsonstring):
 # Read JSON file
 def readJsonFile(filename, varsyaml=None, templates='/pcma/templates'):
     jsonData = None
-    logger.info('Reading Json File : {0!s:s}'.format(filename))
-    logger.debug('Templates : {0!s:s}'.format(templates))
     try:
         if varsyaml is not None:
             varsyaml = expandNestedVars(varsyaml)
@@ -82,7 +80,6 @@ def readJsonFile(filename, varsyaml=None, templates='/pcma/templates'):
 
 
 def writeJsonFile(jsonData, filename, sortKeys=True):
-    logger.info('Writing Json File : {0!s:s}'.format(filename))
     dir = os.path.dirname(filename)
     if len(dir) > 0 and not os.path.exists(dir):
         os.makedirs(dir)
