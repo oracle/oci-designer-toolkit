@@ -735,7 +735,7 @@ class OCIJsonValidator(object):
                 self.results['errors'].append(error)
 
             for listener in resource.get('listeners', []):
-                if listener['default_backend_set_name'] == '':
+                if listener.get('default_backend_set_name', '') == '':
                     error = {
                         'id': resource['id'],
                         'type': 'Network Load Balancer',

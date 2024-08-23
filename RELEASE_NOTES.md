@@ -1,8 +1,7 @@
-# July 2024 Release (Version 0.62.0)
+# July 2024 Release (Version 0.62.2)
 ____
-**Update 0.62.0**: This update addresses the following issues.
-1. OKIT-Web: Resolve Code Scanning Warnings: Issues #652-#672
-2. OKIT-Ocd: resolve Code scanning Warnings: Issues #673-#680
+**Update 0.62.2**: This update addresses the following issues.
+1. OKIT-Web: 
 ____
 Welcome to the July 2024 release of OKIT. This release is aim primarily at the desktop OKIT OCD Beta extending the current functionality and improving 
 it's useability. We have now simplified the process of hiding/showing the palette and properties panes whilst extending the functionlity within the 
@@ -12,11 +11,7 @@ tabular view to allow the user to choose the columns to be displayed.
 No new features
 
 ## OKIT - Open Cloud Designer
-1. OKIT-Ocd: Add the ability to create common Defined Tags that will be used across all reasorces created by OCD. (#OKIT-269)
-2. OKIT-Ocd: Add single button collapse and expand for Palette.
-3. OKIT-Ocd: Add single button collapse and expand for Properties.
-4. OKIT-Ocd: Add Freeform and Defined Tags to each resource. (#OKIT-270)
-5. OKIT-Ocd: Extend Tabular view to allow for column display selection where additional columns are specified. (#OKIT-295)
+1. OKIT-Ocd: 
 
 ### Beta Overview
 

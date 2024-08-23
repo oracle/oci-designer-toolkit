@@ -22,6 +22,8 @@ import base64, secrets, socket, urllib
 
 from common.okitCommon import getOkitHome
 from common.okitLogging import getLogger
+
+from config import SECRET_KEY
 # Configure logging
 logger = getLogger()
 
@@ -94,7 +96,8 @@ def create_authenticated_app(test_config=None):
     app.config['UPLOADS_FOLDER'] = f'{getOkitHome()}/uploads'
 
     # The secret key must be static to be the same for all gunicorn workers
-    app.secret_key = '8980ffsd675747jjjh'
+    # app.secret_key = SECRET_KEY
+    app.secret_key = os.getenv('SECRET_KEY', SECRET_KEY)
     idcs_metadata_url = app.config['IDCS_API_BASE_URL'] + '/.well-known/openid-configuration'
     oauth = OAuth(app)
     idcs = oauth.register(name='idcs', server_metadata_url=idcs_metadata_url, client_kwargs={'scope':'openid email profile'})
