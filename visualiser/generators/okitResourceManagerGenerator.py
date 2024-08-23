@@ -27,15 +27,12 @@ class OCIResourceManagerGenerator(OCITerraformGenerator):
         DIRECTORY_SUFFIX = 'resource-manager'
         super(OCIResourceManagerGenerator, self).__init__(template_root, output_root, visualiser_json, use_vars, add_provider=False)
         self.output_dir = os.path.join(output_root, DIRECTORY_SUFFIX)
-        logger.info('OCIResourceManagerGenerator : Template Directory {0!s:s}'.format(template_root))
-        logger.info('OCIResourceManagerGenerator : Output Directory {0!s:s}'.format(output_root))
         # Check output directory
         self.getCheckOutputDirectory()
         self.resource_manager_keys = {}
         self.resource_manager_keys['tenancy_ocid'] = tenancy_ocid
         self.resource_manager_keys['region'] = region
         self.resource_manager_keys['compartment_ocid'] = compartment_ocid
-        logger.info('Resource Manager Keys : {0!s:s}'.format(self.resource_manager_keys))
 
     def initialiseJinja2Variables(self):
         super(OCIResourceManagerGenerator, self).initialiseJinja2Variables()
