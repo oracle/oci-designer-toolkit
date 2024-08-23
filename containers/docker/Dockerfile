@@ -44,7 +44,6 @@ RUN yum install -y \
 # Create Workspace
  && mkdir -p /okit/{config,git,instance/git,instance/local,instance/templates/user,local,log,ssl,visualiser,okitweb,workspace,skeletons} \
 #  && mkdir -p /okit/okitweb/static/okit/templates \
- && openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /okit/ssl/okit.key -out /okit/ssl/okit.crt -subj "/C=GB/ST=Berkshire/L=Reading/O=Oracle/OU=OKIT/CN=www.oci_okit.com" 
 #  && ln -s /okit/templates /okit/okitweb/static/okit/templates/user \
 #  && ln -s /okit/git /okit/okitweb/static/okit/templates/git \
 #  && ln -s /okit/git /okit/okitweb/static/okit/git
