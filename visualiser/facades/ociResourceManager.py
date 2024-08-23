@@ -57,8 +57,6 @@ class OCIResourceManagers(OCIResourceManagerConnection):
 
     def getState(self, stack_id):
         logger.info('Getting State for Stack Id')
-        logger.info(stack_id)
-        logger.info(self.config)
         result = self.client.get_stack_tf_state(stack_id=stack_id)
         state = io.BytesIO()
         for chunk in result.data.raw.stream(self.MEBIBYTE, decode_content=True):
