@@ -11,6 +11,7 @@
 5. OKIT-Ocd: Allow quering of cache data from specified Config Profiles and then switch. (#OKIT-296)
 
 ### Bug Fixes
+1. OKIT-Web: Resolve Code Scanning Issues #688 - #712
 
 ## Version 0.62.2
 **Release Date**: 22nd August 2024
