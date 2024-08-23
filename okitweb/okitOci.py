@@ -106,7 +106,6 @@ def loadDropdownFile(profile, region):
         dropdown_json = readJsonFile(dropdown_file)
     else:
         dropdown_file = shipped_dropdown_file
-        logger.info(f'Loading Dropdown file {dropdown_file}')
         dropdown_json = readJsonFile(dropdown_file)
         dropdown_json["shipped"] = True
         dropdown_json["default"] = True
@@ -255,12 +254,12 @@ def ociRegionSubscription():
     if request.method == 'GET':
         profile = request.args.get('profile', default='DEFAULT')
         config = json.loads(request.args.get('config', default='{}', type=str))
-        logger.info('Subscriptions Query Using Profile : {0!s:s}'.format(profile))
-        logger.info(f'ociRegionSubscription: Passed Config: {type(config)} {config}')
+        # logger.info(f'Subscriptions Query Using Profile : {profile}')
+        # logger.info(f'ociRegionSubscription: Passed Config: {type(config)} {config}')
         # try:
         oci_regions = OCIRegionSubscriptions(config=config, profile=profile)
         regions = oci_regions.list()
-        logger.debug(">>>>>>>>> Region Subscriptions: {0!s:s}".format(regions))
+        # logger.debug(f">>>>>>>>> Region Subscriptions: {regions}")
         response = jsonToFormattedString(regions)
         logJson(response)
         return response
@@ -273,7 +272,7 @@ def ociRegionSubscription():
 @bp.route('/regions/<string:profile>', methods=(['GET']))
 def ociRegions(profile):
     if request.method == 'GET':
-        logger.info(f'>>>>>>>>> Getting OCI Regions for {profile}')
+        logger.info(f'>>>>>>>>> Getting OCI Regions')
         # profile = request.args.get('profile', default=profile)
         config = json.loads(request.args.get('config', default='{}', type=str))
         oci_region_query = OCIRegionQuery(config=config, profile=profile)
@@ -293,7 +292,7 @@ def ociQuery():
         regions = request.args.get('region')
         region = request.args.get('region')
         sub_compartments = request.args.get('sub_compartments', default=False).lower() == 'true'
-        logger.info('Using Profile : {0!s:s}'.format(config_profile))
+        # logger.info(f'Using Profile : {config_profile}')
         # config = request.args.get('config', {}, dict)
         config = json.loads(request.args.get('config', default='{}', type=str))
         config.update({'region': region})
@@ -332,8 +331,8 @@ def dropdownQuery():
         config = json.loads(request.args.get('config', default='{}', type=str))
         config.update({'region': region})
         try:
-            logger.info(f'Dropdown Query Profile {profile}')
-            logger.info(f'Dropdown Query Region {region}')
+            # logger.info(f'Dropdown Query Profile {profile}')
+            # logger.info(f'Dropdown Query Region {region}')
             dropdown_query = OCIDropdownQuery(config=config, profile=profile)
             dropdown_json = dropdown_query.executeQuery([region])
         except Exception as e:
