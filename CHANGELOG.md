@@ -12,6 +12,7 @@
 
 ### Bug Fixes
 1. OKIT-Web: Resolve Code Scanning Issues #688 - #712
+2. OKIT-Web: Convert Queried Network Load Balancer Listeners set to list.
 
 ## Version 0.62.2
 **Release Date**: 22nd August 2024
