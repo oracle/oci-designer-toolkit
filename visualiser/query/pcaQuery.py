@@ -773,14 +773,15 @@ class PCAQuery(OCIConnection):
             resources = self.toJson(results)
             self.dropdown_json[array].extend(resources)
         known_instances = [instance['id'] for instance in self.dropdown_json['instances']]
-        for load_balancer in self.dropdown_json[array]:
+        for nlb in self.dropdown_json[array]:
+            nlb["listeners"] = list(nlb["listeners"].values())
             private_ips = []
-            for subnet_id in load_balancer['subnet_ids']:
+            for subnet_id in nlb['subnet_ids']:
                 private_ips.extend(self.private_ips(subnet_id))
             for subnet in self.dropdown_json['subnets']:
                 private_ips.extend(self.private_ips(subnet['id']))
-            for backend_set in load_balancer['backend_sets']:
-                for backend in load_balancer['backend_sets'][backend_set]['backends']:
+            for backend_set in nlb['backend_sets']:
+                for backend in nlb['backend_sets'][backend_set]['backends']:
                     for ip_address in [ip for ip in private_ips if ip['ip_address'] == backend['ip_address']]:
                         for vnic_attachment in [va for va in self.ancillary_resources['vnic_attachments'] if va['vnic_id'] == ip_address['vnic_id']]:
                             if vnic_attachment['instance_id'] in known_instances:

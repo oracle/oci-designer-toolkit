@@ -104,10 +104,8 @@ class RouteTableProperties extends OkitResourceProperties {
             ['NAT Gateway', 'nat_gateway'],
             ['Local Peering Gateway', 'local_peering_gateway'],
             // ['Dynamic Routing Gateway', this.resource.getOkitJson().metadata.platform === 'pca' ? 'dynamic_routing_gateways' : 'drg_attachment'],
-            // ['Dynamic Routing Gateway', this.resource.getOkitJson().metadata.platform === 'pca' ? 'dynamic_routing_gateway_attachment' : 'drg_attachment'],
-            ['Dynamic Routing Gateway', this.resource.isPCA() || this.resource.isC3() ? 'dynamic_routing_gateway_attachment' : 'drg_attachment'],
-            // ['Dynamic Routing Gateway', 'drg_attachment'],
-            // ['Dynamic Routing Gateway', 'dynamic_routing_gateways'], // Needed when PCA is available
+            ['Dynamic Routing Gateway', this.resource.isPCA() || this.resource.isC3() ? 'dynamic_routing_gateways' : 'drg_attachment'],
+            // ['Dynamic Routing Gateway', this.resource.isPCA() || this.resource.isC3() ? 'dynamic_routing_gateway_attachment' : 'drg_attachment'],
             ['Private IP', 'private_ip'],
             ['Service Gateway', 'service_gateway'],
         ]);
@@ -129,7 +127,7 @@ class RouteTableProperties extends OkitResourceProperties {
     }
     loadNetworkEntitySelect(rule, id, idx) {
         const select = d3.select(`#${this.inputId(id, idx)}`)
-        const selected_id = this.loadSelect(select, rule.target_type, false, this.vcn_filter, '', rule.target_type === 'drg_attachment' ? 'drg_id' : 'id')
+        const selected_id = this.loadSelect(select, rule.target_type, false, rule.target_type === 'dynamic_routing_gateways' ? () => true : this.vcn_filter, '', rule.target_type === 'drg_attachment' ? 'drg_id' : 'id')
         if (rule.target_type !== 'local_peering_gateway' && (rule.network_entity_id === '' || !rule.network_entity_id)) rule.network_entity_id = selected_id
     }
     showRuleRows(rule, id, idx) {

@@ -548,14 +548,15 @@ sudo bash -c "yum install -y oci-utils"
 sudo bash -c "yum install -y python-oci-cli"
 # Update
 sudo bash -c "yum update -y"
-# Install Required Python Modules
+# Update Python Modules
 sudo bash -c "python3 -m pip install -U pip"
 sudo bash -c "python3 -m pip install -U setuptools"
-sudo bash -c "python3 -m pip install --no-cache-dir authlib flask gitpython git-url-parse gunicorn oci openpyxl python-magic pyyaml requests "
 # Clone OKIT
 sudo bash -c "mkdir -p /github"
 sudo bash -c "git clone -b master https://github.com/oracle/oci-designer-toolkit.git /github/oci-designer-toolkit"
 sudo bash -c "mkdir -p /okit/{git,local,log,instance/git,instance/local,instance/templates/user,workspace,ssl}"
+# Install OKIT Required python modules
+sudo bash -c "python3 -m pip install --no-cache-dir -r /github/oci-designer-toolkit/requirements.txt"
 # Link Directories
 sudo bash -c "ln -sv /github/oci-designer-toolkit/config /okit/config"
 sudo bash -c "ln -sv /github/oci-designer-toolkit/okitweb /okit/okitweb"
@@ -636,6 +637,7 @@ The OKIT configuration file is located in the directory 'instance'.
 
 ### Dynamic Group
 A Tenancy level Dynamic Group will need to be created to enable Instance Principal access for the instance.
+
 #### OKITInstanceGroup
 Create the OKITInstanceGroup Dynamic Group and add a single Rule relating to the OKIT Instance.
 ![OKIT Dynamic Group](images/DynamicGroup.png?raw=true "OKIT Dynamic Group")

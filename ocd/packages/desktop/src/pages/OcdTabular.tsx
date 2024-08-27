@@ -35,7 +35,7 @@ const OcdTabular = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcd
     return (
         <div className='ocd-tabular-view'>
             <div id='ocd_resources_bar' className='ocd-designer-canvas-layers'>
-                {Object.keys(ociResources).sort().map((k: string) => {
+                {Object.keys(ociResources).sort(OcdUtils.simpleSort).map((k: string) => {
                     return <div className={`ocd-designer-canvas-layer ${k === selected ? 'ocd-layer-selected' : ''}`} key={k}><label id={k} onClick={onClick}>{`${OcdUtils.toTitle(k)} (${ociResources[k].length})`}</label></div>
                 })}
             </div>
