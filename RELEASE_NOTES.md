@@ -1,17 +1,25 @@
-# July 2024 Release (Version 0.62.2)
+[![License: UPL](https://img.shields.io/badge/license-UPL-green)](https://img.shields.io/badge/license-UPL-green) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=oracle_oci-designer-toolkit&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=oracle_oci-designer-toolkit)
+# August 2024 Release (Version 0.63.0)
 ____
-**Update 0.62.2**: This update addresses the following issues.
-1. OKIT-Web: 
+**Update 0.63.0**: This update addresses the following issues.
+1. OKIT-Web: Resolve Code Scanning Issues #688 - #712
+2. OKIT-Web: Convert Queried Network Load Balancer Listeners set to list.
+3. OKIT-Web: Revert DRG Attachment fix for PCA DRGv1+ feature
 ____
-Welcome to the July 2024 release of OKIT. This release is aim primarily at the desktop OKIT OCD Beta extending the current functionality and improving 
-it's useability. We have now simplified the process of hiding/showing the palette and properties panes whilst extending the functionlity within the 
-tabular view to allow the user to choose the columns to be displayed.
+Welcome to the August 2024 release of OKIT. This release is aim primarily at the desktop OKIT OCD Beta extending the current functionality and improving 
+it's useability. We have now added a number of Auto Layout options, including OKIT-Web Style, and allow the user to specify the default Auto Layout option.
+In addition we have extended the Desktop to allow Compute Cloud@Customer and Private Cloud Appliance users to create designs and generate download cache 
+information from their machine.
 
 ## OKIT (Web) Features
 No new features
 
 ## OKIT - Open Cloud Designer
-1. OKIT-Ocd: 
+1. OKIT-Ocd: Build OKIT-Web style auto arranger. (#OKIT-299)
+2. OKIT-Ocd: Generated example connection.tfvars file during OpenTofu export. (#OKIT-297)
+3. OKIT-Ocd: Add Palette for Compute Cloud@Customer. (#OKIT-298) 
+4. OKIT-Ocd: Add Palette for PCA-X9. (#OKIT-298)
+5. OKIT-Ocd: Allow quering of cache data from specified Config Profiles and then switch. (#OKIT-296)
 
 ### Beta Overview
 
