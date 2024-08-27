@@ -246,7 +246,7 @@
                 },
                 {
                     "title": "Dynamic Routing Gateway Attachment",
-                    "targets": ["pca", "c3", "hidden"],
+                    "targets": ["hidden"],
                     "svg": "DRGAttachment.svg"
                 },
                 {
