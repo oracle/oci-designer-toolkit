@@ -848,8 +848,8 @@ class PCAQuery(OCIConnection):
                          'nat':'nat_gateway',
                          'localpeeringgateway': 'local_peering_gateway',
                          'dynamicroutinggateway': 'dynamic_routing_gateway',
-                         'drg': 'drg_attachment',
-                        #  'drg': 'dynamic_routing_gateway',
+                        #  'drg': 'drg_attachment',
+                         'drg': 'dynamic_routing_gateway', # Reverted DRG
                          'privateip':'private_ip',
                          'servicegateway': 'service_gateway',
                          'vcn': 'vcn'}

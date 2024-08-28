@@ -92,6 +92,7 @@
     "mac": {
       "icon": "build/assets/icon.icns",
       "category": "public.app-category.developer-tools",
+      "mergeASARs": false,
       "target": [
         {
           "target": "dmg",

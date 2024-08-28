@@ -104,7 +104,7 @@ class RouteTableProperties extends OkitResourceProperties {
             ['NAT Gateway', 'nat_gateway'],
             ['Local Peering Gateway', 'local_peering_gateway'],
             // ['Dynamic Routing Gateway', this.resource.getOkitJson().metadata.platform === 'pca' ? 'dynamic_routing_gateways' : 'drg_attachment'],
-            ['Dynamic Routing Gateway', this.resource.isPCA() || this.resource.isC3() ? 'dynamic_routing_gateways' : 'drg_attachment'],
+            ['Dynamic Routing Gateway', this.resource.isPCA() || this.resource.isC3() ? 'dynamic_routing_gateways' : 'drg_attachment'], // Reverted DRG
             // ['Dynamic Routing Gateway', this.resource.isPCA() || this.resource.isC3() ? 'dynamic_routing_gateway_attachment' : 'drg_attachment'],
             ['Private IP', 'private_ip'],
             ['Service Gateway', 'service_gateway'],

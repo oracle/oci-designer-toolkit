@@ -15,7 +15,7 @@ export class OcdTabularGenerator extends OcdCodeGenerator {
         this.ignoreAttributes = [...this.commonElements, ...this.commonIgnoreElements]
     }
 
-    writeGeneratedResourceFiles(outputDirectory: string, resource: string, force = false) {}
+    writeGeneratedResourceFiles(outputDirectory: string, resource: string, force = false) {return}
     /*
     ** Content for the top level file. This will only be created if it does not exists.
     */
