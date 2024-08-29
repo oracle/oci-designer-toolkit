@@ -72,7 +72,7 @@ if (command.toLocaleLowerCase() === 'generate') {
         // else if (subcommand.toLocaleLowerCase() === 'azureaz-model-js') generator = new AzureModelGenerator()
         // else if (subcommand.toLocaleLowerCase() === 'azureaz-validator-js') generator = new AzureValidatorGenerator()
         else if (subcommand.toLocaleLowerCase() === 'azurerm-model-js') generator = new AzureModelGenerator()
-        // else if (subcommand.toLocaleLowerCase() === 'azurerm-validator-js') generator = new AzureValidatorGenerator()
+        else if (subcommand.toLocaleLowerCase() === 'azurerm-validator-js') generator = new AzureValidatorGenerator()
         if (generator !== undefined) {
             Object.entries(schema).forEach(([key, value]) => {
                 generator.generate(key, value)
