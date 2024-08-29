@@ -10,5 +10,6 @@
 **
 */
 
-export { AzureAzapiResource, AzureAzapiResourceClient } from './resources/AzureAzapiResource'
+export { AzureSubnet, AzureSubnetClient } from './resources/AzureSubnet'
+export { AzureVirtualNetwork, AzureVirtualNetworkClient } from './resources/AzureVirtualNetwork'
     

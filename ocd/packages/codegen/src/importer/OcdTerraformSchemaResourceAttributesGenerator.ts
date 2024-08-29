@@ -5,7 +5,7 @@
 
 import { TerraformSchema } from "../types/TerraformSchema"
 import { resourceMap as ociResourceMap, dataMap as ociDataMap } from './data/OciResourceMap'
-import { resourceMap as azureAzResourceMap } from './data/AzureResourceMap'
+import { resourceMap as azureAzResourceMap } from './data/AzureRmResourceMap'
 import { OcdUtils } from "@ocd/core"
 
 export class OcdTerraformSchemaResourceAttributesGenerator {
