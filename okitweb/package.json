@@ -7,7 +7,7 @@
   "license": "UPL-1.0",
   "private": true,
   "dependencies": {
-    "d3": "5.15",
+    "d3": "7.9",
     "jquery": "3.6.0"
   }
 }
