@@ -628,20 +628,36 @@ export const palette = {
         // },
         // {
         //     "title": "Azure",
-        //     "provider": "aws",
+        //     "provider": "azure",
         //     "class": "azure-provider",
         //     "groups": [
-        //         // {
-        //         //     "title": "Compute",
-        //         //     "class": "azure-compute",
-        //         //     "resources": [
-        //         //         {
-        //         //             "container": false,
-        //         //             "title": "Auto Managed VM",
-        //         //             "class": "azure-instance"
-        //         //         }
-        //         //     ]
-        //         // }
+        //         {
+        //             "title": "Compute",
+        //             "class": "azure-compute",
+        //             "resources": [
+        //                 {
+        //                     "container": false,
+        //                     "title": "Auto Managed VM",
+        //                     "class": "azure-instance"
+        //                 }
+        //             ]
+        //         },
+        //         {
+        //             "title": "Networking",
+        //             "class": "azure-network",
+        //             "resources": [
+        //                 {
+        //                     "container": true,
+        //                     "title": "Virtual Network",
+        //                     "class": "azure-virtual-network"
+        //                 },
+        //                 {
+        //                     "container": true,
+        //                     "title": "Subnet",
+        //                     "class": "azure-subnet"
+        //                 },
+        //             ]
+        //         }
         //     ]
         // },
         // {

@@ -3,7 +3,7 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-export { AzureTerraformSchemaImporter } from "./importer/AzureTerraformSchemaImporter"
+export { AzureRmTerraformSchemaImporter } from "./importer/AzureRmTerraformSchemaImporter"
 export { AzureAzTerraformSchemaImporter } from "./importer/AzureAzTerraformSchemaImporter"
 export { AzureModelGenerator } from "./generator/AzureModelGenerator"
 export { AzureValidatorGenerator } from "./generator/AzureValidatorGenerator"

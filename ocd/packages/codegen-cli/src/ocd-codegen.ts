@@ -8,7 +8,7 @@
 import fs from 'fs'
 import path from 'path'
 import { OciModelGenerator, OciTerraformGenerator, OciTerraformSchemaImporter, OciValidatorGenerator, OcdTerraformSchemaResourceAttributesGenerator, OciMarkdownGenerator, OciPropertiesGenerator, OciTabularGenerator, AzureTerraformSchemaImporter } from '@ocd/codegen'
-import { AzureModelGenerator, AzureAzTerraformSchemaImporter, AzureValidatorGenerator } from '@ocd/codegen'
+import { AzureModelGenerator, AzureAzTerraformSchemaImporter, AzureRmTerraformSchemaImporter, AzureValidatorGenerator } from '@ocd/codegen'
 import { parseArgs } from "node:util"
 
 const options = {
@@ -36,22 +36,24 @@ const options = {
 }
 const args = parseArgs({options: options, allowPositionals: true})
 
-// console.info(args)
+console.info(args)
 console.info('')
 
 // Read command as first argument
 const command = args.positionals[0]
 const subcommand = args.positionals[1]
 if (command.toLocaleLowerCase() === 'generate') {
-    if (subcommand.toLocaleLowerCase() === 'oci-model-js' 
-        || subcommand.toLocaleLowerCase() === 'oci-markdown-js' 
-        || subcommand.toLocaleLowerCase() === 'oci-properties-js' 
-        || subcommand.toLocaleLowerCase() === 'oci-tabular-js'
-        || subcommand.toLocaleLowerCase() === 'oci-terraform-js'
-        || subcommand.toLocaleLowerCase() === 'oci-validator-js'
-        || subcommand.toLocaleLowerCase() === 'azureaz-model-js'
-        || subcommand.toLocaleLowerCase() === 'azureaz-validator-js'
-        ) {
+    // if (subcommand.toLocaleLowerCase() === 'oci-model-js' 
+    //     || subcommand.toLocaleLowerCase() === 'oci-markdown-js' 
+    //     || subcommand.toLocaleLowerCase() === 'oci-properties-js' 
+    //     || subcommand.toLocaleLowerCase() === 'oci-tabular-js'
+    //     || subcommand.toLocaleLowerCase() === 'oci-terraform-js'
+    //     || subcommand.toLocaleLowerCase() === 'oci-validator-js'
+    //     || subcommand.toLocaleLowerCase() === 'azureaz-model-js'
+    //     || subcommand.toLocaleLowerCase() === 'azureaz-validator-js'
+    //     || subcommand.toLocaleLowerCase() === 'azurerm-model-js'
+    //     || subcommand.toLocaleLowerCase() === 'azurerm-validator-js'
+    //     ) {
         // Source Schema file will be first in the list after command
         const input_filename = args.values.schema
         const input_data = fs.readFileSync(input_filename, 'utf-8')
@@ -67,8 +69,10 @@ if (command.toLocaleLowerCase() === 'generate') {
         else if (subcommand.toLocaleLowerCase() === 'oci-terraform-js') generator = new OciTerraformGenerator()
         else if (subcommand.toLocaleLowerCase() === 'oci-tabular-js') generator = new OciTabularGenerator()
         else if (subcommand.toLocaleLowerCase() === 'oci-validator-js') generator = new OciValidatorGenerator()
-        else if (subcommand.toLocaleLowerCase() === 'azureaz-model-js') generator = new AzureModelGenerator()
-        else if (subcommand.toLocaleLowerCase() === 'azureaz-validator-js') generator = new AzureValidatorGenerator()
+        // else if (subcommand.toLocaleLowerCase() === 'azureaz-model-js') generator = new AzureModelGenerator()
+        // else if (subcommand.toLocaleLowerCase() === 'azureaz-validator-js') generator = new AzureValidatorGenerator()
+        else if (subcommand.toLocaleLowerCase() === 'azurerm-model-js') generator = new AzureModelGenerator()
+        else if (subcommand.toLocaleLowerCase() === 'azurerm-validator-js') generator = new AzureValidatorGenerator()
         if (generator !== undefined) {
             Object.entries(schema).forEach(([key, value]) => {
                 generator.generate(key, value)
@@ -82,9 +86,9 @@ if (command.toLocaleLowerCase() === 'generate') {
         } else {
             console.debug(`ocd-codegen: generate sub-command ${subcommand} does not exist.`)
         }
-    } else {
-        console.debug(`ocd-codegen: generate sub-command ${subcommand} does not exist.`)
-    }
+    // } else {
+    //     console.debug(`ocd-codegen: generate sub-command ${subcommand} does not exist.`)
+    // }
 } else if (command.toLocaleLowerCase() === 'import') {
         // Source Schema file will be first in the list after command
         const input_filename = args.values.input
@@ -94,7 +98,7 @@ if (command.toLocaleLowerCase() === 'generate') {
         const source_schema = JSON.parse(input_data)
         let importer = undefined
         if (subcommand.toLocaleLowerCase() === 'oci-terraform-schema') importer = new OciTerraformSchemaImporter()
-        else if (subcommand.toLocaleLowerCase() === 'azurerm-terraform-schema') importer = new AzureTerraformSchemaImporter()
+        else if (subcommand.toLocaleLowerCase() === 'azurerm-terraform-schema') importer = new AzureRmTerraformSchemaImporter()
         else if (subcommand.toLocaleLowerCase() === 'azureaz-terraform-schema') importer = new AzureAzTerraformSchemaImporter()
         else if (subcommand.toLocaleLowerCase() === 'terraform-schema-resource-attributes') importer = new OcdTerraformSchemaResourceAttributesGenerator()
         if (importer !== undefined) {
