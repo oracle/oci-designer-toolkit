@@ -206,8 +206,6 @@ export class OcdDocument {
             alert(`Azure Resource ${resourceClass} has not yet been implemented.`)
             return {modelResource: undefined, additionalResources: []}
         }
-        alert(`Azure Provider has not yet been implemented.`)
-        return {modelResource: undefined, additionalResources: []}
     }
     removeResource(id: string) {
         // Delete from Model
