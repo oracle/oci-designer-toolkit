@@ -70,7 +70,7 @@
     "import-and-generate-azurerm": "npm run import-azurerm-terraform-schema && npm run generate-azurerm",
     "import-and-generate-azureaz": "npm run import-azureaz-terraform-schema && npm run generate-azureaz",
     
-    "import-and-generate": "npm run import-and-generate-oci"
+    "import-and-generate": "npm run import-and-generate-oci && npm run import-and-generate-azurerm"
   },
   "dependencies": {
     "@ocd/codegen": "^0.2.3"
