@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2020, 2023, Oracle and/or its affiliates.
+** Copyright (c) 2020, 2024, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
@@ -153,6 +153,25 @@ const template = [
   
 const menu = Menu.buildFromTemplate(template)
 
+// Context Menu
+
+const selectionMenu = Menu.buildFromTemplate([
+    {role: 'copy'},
+    {type: 'separator'},
+    {role: 'selectall'},
+  ])
+
+  const inputMenu = Menu.buildFromTemplate([
+    {role: 'undo'},
+    {role: 'redo'},
+    {type: 'separator'},
+    {role: 'cut'},
+    {role: 'copy'},
+    {role: 'paste'},
+    {type: 'separator'},
+    {role: 'selectall'},
+  ])
+
 // Create OCD Window
 const createWindow = () => {
 	let desktopState = loadDesktopState()
@@ -209,7 +228,8 @@ app.whenReady().then(() => {
 	// Build Information
 	ipcMain.handle('ocdBuild:getVersion', handleGetVersion)
 	// OCI API Calls / Query
-	ipcMain.handle('ociConfig:loadProfiles', handleLoadOciConfigProfiles)
+	ipcMain.handle('ociConfig:loadProfileNames', handleLoadOciConfigProfileNames)
+	ipcMain.handle('ociConfig:loadProfile', handleLoadOciConfigProfile)
 	ipcMain.handle('ociQuery:listRegions', handleListRegions)
 	ipcMain.handle('ociQuery:listTenancyCompartments', handleListTenancyCompartments)
 	ipcMain.handle('ociQuery:queryTenancy', handleQueryTenancy)
@@ -238,6 +258,16 @@ app.whenReady().then(() => {
         }
     });
 	Menu.setApplicationMenu(menu)
+	// Context Menu
+	mainWindow.webContents.on('context-menu', (e, props) => {
+		const { selectionText, isEditable } = props;
+		if (isEditable) {
+		  inputMenu.popup(mainWindow);
+		} else if (selectionText && selectionText.trim() !== '') {
+		  selectionMenu.popup(mainWindow);
+		}
+	  })
+	
 	ready = true
   })
   
@@ -290,14 +320,26 @@ async function handleGetVersion() {
 	})
 }
 
-async function handleLoadOciConfigProfiles() {
-	console.debug('Electron Main: handleLoadOciConfigProfiles')
+async function handleLoadOciConfigProfileNames() {
+	console.debug('Electron Main: handleLoadOciConfigProfileNames')
 	return new Promise((resolve, reject) => {
 		const parsed = common.ConfigFileReader.parseDefault(null)
-		// console.debug('Electron Main: handleLoadOciConfigProfiles', parsed)
-		// console.debug('Electron Main: handleLoadOciConfigProfiles', parsed.accumulator.configurationsByProfile)
-		// console.debug('Electron Main: handleLoadOciConfigProfiles', Array.from(parsed.accumulator.configurationsByProfile.keys()))
+		console.debug('Electron Main: handleLoadOciConfigProfileNames', parsed)
+		console.debug('Electron Main: handleLoadOciConfigProfileNames', parsed.accumulator.configurationsByProfile)
+		console.debug('Electron Main: handleLoadOciConfigProfileNames', Array.from(parsed.accumulator.configurationsByProfile.keys()))
         const profiles = Array.from(parsed.accumulator.configurationsByProfile.keys())
+		resolve(profiles)
+	})
+}
+
+async function handleLoadOciConfigProfile(event, profile) {
+	console.debug('Electron Main: handleLoadOciConfigProfile')
+	return new Promise((resolve, reject) => {
+		const parsed = common.ConfigFileReader.parseDefault(null)
+		console.debug('Electron Main: handleLoadOciConfigProfileNames Parsed:', parsed)
+		console.debug('Electron Main: handleLoadOciConfigProfileNames Config By Profile:', parsed.accumulator.configurationsByProfile)
+		console.debug('Electron Main: handleLoadOciConfigProfileNames Keys:', Array.from(parsed.accumulator.configurationsByProfile.keys()))
+        const profile = Array.from(parsed.accumulator.configurationsByProfile[profile])
 		resolve(profiles)
 	})
 }

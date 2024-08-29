@@ -6,18 +6,17 @@
 import { useContext, useState } from 'react'
 import { menuItems, MenuItem } from './Menu'
 import OcdDocument from './OcdDocument'
-import { ConsoleMenuProps, ConsolePageProps } from '../types/Console'
+import { ConsoleMenuProps, ConsolePageProps, OcdActiveFile } from '../types/Console'
 import OcdConsoleConfig from './OcdConsoleConfiguration'
 import { ActiveFileContext, ConsoleConfigContext } from '../pages/OcdConsole'
 
 const OcdConsoleMenuItem = ({ menuItem, depth, ocdDocument, setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig }: any): JSX.Element => {
-    // @ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const [dropdown, setDropdown] = useState(false)
     const onMouseEnter = () => {setDropdown(true)}
     const onMouseLeave = () => {setDropdown(false)}
     const closeDropdown = () => {setDropdown(!dropdown)}
-    const onClick = () => {menuItem.click(ocdDocument, (ocdDocument: OcdDocument) => setOcdDocument(ocdDocument), ocdConsoleConfig, (ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig), activeFile, (activeFile: Record<string, any>) => setActiveFile(activeFile))}
+    const onClick = () => {menuItem.click(ocdDocument, (ocdDocument: OcdDocument) => setOcdDocument(ocdDocument), ocdConsoleConfig, (ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig), activeFile, (activeFile: OcdActiveFile) => setActiveFile(activeFile))}
     // console.debug('OcdConsoleMenuItem:', menuItem.label, menuItem.click)
     return (
         <li
@@ -83,7 +82,6 @@ const OcdConsoleSubMenu = ({ submenus, dropdown, depth, ocdDocument, setOcdDocum
 }
 
 const OcdConsoleMenu = ({ ocdDocument, setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig }: ConsoleMenuProps): JSX.Element => {
-    // @ts-ignore
     // const {ocdConsoleConfig, setOcdConsoleConfig} = useContext(ConsoleConfigContext)
     return (
         <ul className='ocd-console-main-menu'>

@@ -3,17 +3,18 @@
 ** Licensed under the GNU GENERAL PUBLIC LICENSE v 3.0 as shown at https://www.gnu.org/licenses/.
 */
 
-import OcdDocument, { OcdSelectedResource } from './OcdDocument'
+import { OcdDocument } from './OcdDocument'
 import { OcdViewLayer, OcdViewPage } from '@ocd/model'
 import { OciModelResources } from '@ocd/model'
-import { LayerBarMenuProps, LayerBarLayerProps, LayerBarLayersProps } from '../types/Console'
-import { useState } from 'react'
+import { LayerBarMenuProps, LayerBarLayerProps, LayerBarLayersProps, OcdSelectedResource } from '../types/Console'
+import { useContext, useState } from 'react'
 import { OcdUtils } from '@ocd/core'
+import { SelectedResourceContext } from '../pages/OcdConsole'
 
 const OcdCanvasLayer = ({ ocdDocument, setOcdDocument, layer } : LayerBarLayerProps): JSX.Element => {
+    const {selectedResource, setSelectedResource} = useContext(SelectedResourceContext)
     const style: React.CSSProperties = {}
     if (layer.style !== undefined && layer.style.fill !== undefined) style.backgroundColor = `${OcdUtils.rgbaToHex(layer.style.fill, true)}${style.opacity = layer.selected ? 'ff' : '33'}`
-    // if (layer.style !== undefined && layer.style.fill !== undefined) style.backgroundColor = `${layer.style.fill}${style.opacity = layer.selected ? 'ff' : '33'}`
     const onVisibilityClick = () => {
         const page: OcdViewPage = ocdDocument.getActivePage()
         // @ts-ignore 
@@ -25,14 +26,27 @@ const OcdCanvasLayer = ({ ocdDocument, setOcdDocument, layer } : LayerBarLayerPr
     const onLayerSelectedClick = () => {
         const page: OcdViewPage = ocdDocument.getActivePage()
         page.layers.forEach((l: OcdViewLayer) => l.selected = l.id === layer.id)
-        const clone = OcdDocument.clone(ocdDocument)
-        const selectedResource: OcdSelectedResource = {
+        // const clone = OcdDocument.clone(ocdDocument)
+        // const selectedResource: OcdSelectedResource = {
+        //     modelId: layer.id,
+        //     pageId: ocdDocument.getActivePage().id,
+        //     coordsId: '',
+        //     class: layer.class
+        // }
+        // clone.selectedResource = selectedResource
+        // setOcdDocument(clone)
+        const clickedResource: OcdSelectedResource = {
             modelId: layer.id,
             pageId: ocdDocument.getActivePage().id,
             coordsId: '',
-            class: layer.class
+            class: layer.class,
+            model: ocdDocument.getResource(layer.id),
+            page: ocdDocument.getActivePage(),
         }
-        clone.selectedResource = selectedResource
+        setSelectedResource(clickedResource)
+        // TODO: Delete next 3 lines
+        const clone = OcdDocument.clone(ocdDocument)
+        clone.selectedResource = clickedResource
         setOcdDocument(clone)
     }
     const onDeleteClick = (e: React.MouseEvent<HTMLElement>) => {

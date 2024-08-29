@@ -4,14 +4,15 @@
 */
 
 import { v4 as uuidv4 } from 'uuid'
-import { OcdAddResourceResponse, OcdDocument, OcdDragResource, OcdSelectedResource } from './OcdDocument'
+import { OcdAddResourceResponse, OcdDocument } from './OcdDocument'
 import { OcdResourceSvg, OcdConnector, OcdDragResourceGhostSvg, OcdSvgContextMenu } from './OcdResourceSvg'
 import { OcdResource, OcdViewConnector, OcdViewCoords, OcdViewLayer, OcdViewPage } from '@ocd/model'
 import { CanvasProps, OcdMouseEvents } from '../types/ReactComponentProperties'
 import { useContext, useState } from 'react'
 import { newDragData } from '../types/DragData'
-import { ActiveFileContext } from '../pages/OcdConsole'
+import { ActiveFileContext, SelectedResourceContext } from '../pages/OcdConsole'
 import { OcdUtils } from '@ocd/core'
+import { OcdDragResource, OcdSelectedResource } from '../types/Console'
 
 export interface OcdContextMenu {
     show: boolean
@@ -34,7 +35,7 @@ export const OcdCanvasGrid = (): JSX.Element => {
 export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument, setOcdDocument }: CanvasProps): JSX.Element => {
     // console.info('OcdCanvas: OCD Document:', ocdDocument)
     console.info('OcdCanvas: OCD Design:', ocdDocument.design)
-    // @ts-ignore
+    const {selectedResource, setSelectedResource} = useContext(SelectedResourceContext)
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const uuid = () => `gid-${uuidv4()}`
     const page: OcdViewPage = ocdDocument.getActivePage()
@@ -59,15 +60,28 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
     // Click Event to Reset Selected
     const onClick = (e: React.MouseEvent<SVGElement>) => {
         e.stopPropagation()
-        const clone = OcdDocument.clone(ocdDocument)
-        const selectedResource: OcdSelectedResource = {
+        // const clone = OcdDocument.clone(ocdDocument)
+        // const selectedResource: OcdSelectedResource = {
+        //     modelId: '',
+        //     pageId: ocdDocument.getActivePage().id,
+        //     coordsId: '',
+        //     class: ''
+        // }
+        // clone.selectedResource = selectedResource
+        // setOcdDocument(clone)
+        const clickedResource: OcdSelectedResource = {
             modelId: '',
             pageId: ocdDocument.getActivePage().id,
             coordsId: '',
-            class: ''
+            class: '',
+            page: ocdDocument.getActivePage(),
         }
-        clone.selectedResource = selectedResource
+        setSelectedResource(clickedResource)
+        // TODO: Delete next 3 lines
+        const clone = OcdDocument.clone(ocdDocument)
+        clone.selectedResource = clickedResource
         setOcdDocument(clone)
+
     }
 
     // HTML Drag & Drop Events

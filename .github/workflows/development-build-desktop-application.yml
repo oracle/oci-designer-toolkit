@@ -50,7 +50,7 @@ jobs:
       - name: Delete Release
         id: delete_release
         run: |
-          gh release delete ${{ env.BRANCH_RELEASE_TAG }} --yes
+          gh release delete ${{ env.BRANCH_RELEASE_TAG }} --yes --cleanup-tag
       # - name: Update Release
       #   id: update_release
       #   run: |

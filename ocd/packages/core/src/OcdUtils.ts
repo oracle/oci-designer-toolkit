@@ -20,6 +20,7 @@ export namespace OcdUtils {
         b: number
         a: number
     }
+    export const simpleSort = (a: string, b: string) => a.localeCompare(b)
     export function toTitle(str: string): string {
         let key = str as keyof typeof resourceMap
         return Object.hasOwn(resourceMap, key) ? resourceMap[key].title : OcdUtils.toTitleCase(str.split('_').join(' '))

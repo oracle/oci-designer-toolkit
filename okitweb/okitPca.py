@@ -1,5 +1,5 @@
 
-# Copyright (c) 2020, 2022, Oracle and/or its affiliates.
+# Copyright (c) 2020, 2024, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 """Provide Module Description
@@ -102,7 +102,7 @@ def pcaQuery():
         regions = request.args.get('region')
         region = request.args.get('region')
         sub_compartments = request.args.get('sub_compartments', default=False).lower() == 'true'
-        logger.info('Using Profile : {0!s:s}'.format(config_profile))
+        # logger.info(f'Using Profile : {config_profile}')
         config = {'region': region}
         query = PCAQuery(config=config, profile=config_profile)
         response = query.executeQuery(regions=[regions] if regions else [], compartments=[compartments] if compartments else [], include_sub_compartments=sub_compartments)
@@ -118,7 +118,7 @@ def pcaRegions():
     logger.info('>>>>>>> PCA Region Query Endpoint')
     if request.method == 'GET':
         config_profile = request.args.get('profile', default='DEFAULT')
-        logger.info('Using Profile : {0!s:s}'.format(config_profile))
+        # logger.info(f'>>>>>>>>> Getting PCA Regions for {config_profile}')
         query = PCARegionQuery(config={}, profile=config_profile)
         regions = query.executeQuery()
         response = jsonToFormattedString(regions)
@@ -130,7 +130,7 @@ def pcaRegions():
 
 @bp.route('/compartments/<string:profile>', methods=(['GET']))
 def pcaCompartments(profile):
-    logger.debug(">>>>>>>>> Compartments: {0!s:s}".format(profile))
+    # logger.debug(">>>>>>>>> Compartments: {0!s:s}".format(profile))
     if request.method == 'GET':
         query = PCACompartmentQuery(profile=profile)
         compartments = query.executeQuery()

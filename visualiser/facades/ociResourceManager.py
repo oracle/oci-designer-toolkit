@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# Copyright (c) 2020, 2022, Oracle and/or its affiliates.
+# Copyright (c) 2020, 2024, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 """Provide Module Description
@@ -57,8 +57,6 @@ class OCIResourceManagers(OCIResourceManagerConnection):
 
     def getState(self, stack_id):
         logger.info('Getting State for Stack Id')
-        logger.info(stack_id)
-        logger.info(self.config)
         result = self.client.get_stack_tf_state(stack_id=stack_id)
         state = io.BytesIO()
         for chunk in result.data.raw.stream(self.MEBIBYTE, decode_content=True):

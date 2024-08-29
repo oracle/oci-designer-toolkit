@@ -5,11 +5,12 @@
 
 import { OcdOKITImporter } from '@ocd/import'
 import { OcdMarkdownExporter, OcdOKITExporter, OcdSVGExporter, OcdTerraformExporter, OutputDataString } from '@ocd/export'
-import OcdConsoleConfig from './OcdConsoleConfiguration'
-import OcdDocument from './OcdDocument'
+import { OcdConsoleConfig } from './OcdConsoleConfiguration'
+import { OcdDocument } from './OcdDocument'
 import { OcdDesignFacade } from '../facade/OcdDesignFacade'
 import { OcdConfigFacade } from '../facade/OcdConfigFacade'
 import { OcdViewLayer, OcdViewPage } from '@ocd/model'
+import { autoLayoutOptions } from '../data/OcdAutoLayoutOptions'
 
 // Import css as text
 // @ts-ignore
@@ -345,6 +346,15 @@ export const menuItems: MenuItem[] = [
                         }
                     }
                 ]
+            },
+            {
+                label: 'Load Reference Data',
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
+                    const clone = OcdConsoleConfig.clone(ocdConsoleConfig)
+                    clone.queryReferenceData = !ocdConsoleConfig.queryReferenceData
+                    console.debug('Menu: Setting Reference Data Query', ocdDocument, clone)
+                    setOcdConsoleConfig(clone)
+                }
             }
         ]
     },
@@ -516,10 +526,53 @@ export const menuItems: MenuItem[] = [
             },
             {
                 label: 'Auto Arrange',
-                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
-                    ocdDocument.autoLayout(ocdDocument.getActivePage().id)
-                    setOcdDocument(OcdDocument.clone(ocdDocument))            
+                click: undefined,
+                submenu: () => {
+                    return Object.entries(autoLayoutOptions).map(([k, v]) => {return {
+                        label: v,
+                        click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
+                            ocdDocument.autoLayout(ocdDocument.getActivePage().id, true, k === 'default' ? ocdConsoleConfig.config.defaultAutoArrangeStyle : k)
+                            setOcdDocument(OcdDocument.clone(ocdDocument))            
+                        }
+                    }})
                 }
+                // submenu: [
+                //     {
+                //         label: 'Default',
+                //         click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
+                //             ocdDocument.autoLayout(ocdDocument.getActivePage().id, true, ocdConsoleConfig.config.defaultAutoArrangeStyle ? ocdConsoleConfig.config.defaultAutoArrangeStyle : 'dynamic-columns')
+                //             setOcdDocument(OcdDocument.clone(ocdDocument))            
+                //         }
+                //     },
+                //     {
+                //         label: 'Dynamic',
+                //         click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
+                //             ocdDocument.autoLayout(ocdDocument.getActivePage().id, true, 'dynamic-columns')
+                //             setOcdDocument(OcdDocument.clone(ocdDocument))            
+                //         }
+                //     },
+                //     {
+                //         label: 'Classic',
+                //         click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
+                //             ocdDocument.autoLayout(ocdDocument.getActivePage().id, true, 'okit-web')
+                //             setOcdDocument(OcdDocument.clone(ocdDocument))            
+                //         }
+                //     },
+                //     {
+                //         label: 'Two Column',
+                //         click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
+                //             ocdDocument.autoLayout(ocdDocument.getActivePage().id, true, 'two-column')
+                //             setOcdDocument(OcdDocument.clone(ocdDocument))            
+                //         }
+                //     },
+                //     {
+                //         label: 'Single Column',
+                //         click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
+                //             ocdDocument.autoLayout(ocdDocument.getActivePage().id, true, 'single-column')
+                //             setOcdDocument(OcdDocument.clone(ocdDocument))            
+                //         }
+                //     }
+                // ]
             }
         ]
     },

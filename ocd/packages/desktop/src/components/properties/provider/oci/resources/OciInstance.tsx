@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2020, 2023, Oracle and/or its affiliates.
+** Copyright (c) 2020, 2024, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
@@ -14,7 +14,6 @@ import { OciVolumeAttachment } from './OciVolumeAttachment'
 
 export const OciInstance = ({ ocdDocument, setOcdDocument, resource }: ResourceProperties): JSX.Element => {
     const configs: ResourceElementConfig[] = OciInstanceConfigs.configs()
-    // @ts-ignore
     const {ocdCache, setOcdCache} = useContext(CacheContext)
     const shape = ocdCache.getOciReferenceDataList('shapes').find((r: Record<string, any>) => r.id === resource.shape)
     // For flexible shapes add min / max values based on Cache information for Memory and OCPU

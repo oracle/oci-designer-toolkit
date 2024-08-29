@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2020, 2023, Oracle and/or its affiliates.
+** Copyright (c) 2020, 2024, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
@@ -34,13 +34,34 @@ export class OcdCacheData {
 
     newCache = (): OcdCache => defaultCache
 
-    loadProfileRegionCache(profile: string, region: string): Promise<OcdCacheRegionData> {
+    loadProfileRegionCache(profile: string, region: string = 'all'): Promise<OcdCacheRegionData> {
         return new Promise((resolve, reject) => {
-            if (Object.hasOwn(this.cache.dropdownData, profile) && Object.hasOwn(this.cache.dropdownData[profile], region)) {
+            if (profile === 'shipped') {
+                this.cache.profile = profile
+                resolve(this.cache.dropdownData.shipped.all)
+            } else if (Object.hasOwn(this.cache.dropdownData, profile) && Object.hasOwn(this.cache.dropdownData[profile], region)) {
+                this.cache.profile = profile
                 resolve(this.cache.dropdownData[profile][region])
+            } else if (Object.hasOwn(this.cache.dropdownData, profile) && Object.hasOwn(this.cache.dropdownData[profile], 'all')) {
+                this.cache.profile = profile
+                resolve(this.cache.dropdownData[profile]['all'])
+            } else if (region === 'all') {
+                OciApiFacade.loadOCIConfigProfile(profile).then((results) => {
+                    region = results.region
+                    OciApiFacade.queryDropdown(profile, region).then((results) => {
+                        this.cache.dropdownData[profile] = {all: results}
+                        this.cache.profile = profile
+                        this.saveCache()
+                        resolve(this.cache.dropdownData[profile]['all'])
+                        // resolve(this.cache.dropdownData[profile][region])
+                    })
+                })
             } else {
                 OciApiFacade.queryDropdown(profile, region).then((results) => {
-
+                    this.cache.dropdownData[profile] = {all: results}
+                    this.cache.profile = profile
+                    this.saveCache()
+                    resolve(this.cache.dropdownData[profile]['all'])
                 })
             }
         })
@@ -64,6 +85,9 @@ export class OcdCacheData {
 
     getOciReferenceDataList(resource: string, profile?: string , region?: string) {
         console.debug('OcdCacheData: getOciReferenceDataList:', resource, profile, region)
+        profile = profile ? profile : this.cache.profile
+        region = region ? region : this.cache.region
+        console.debug('OcdCacheData: getOciReferenceDataList:', resource, profile, region)
         if (profile === undefined || !Object.hasOwn(this.cache.dropdownData, profile)) {
             profile = 'shipped'
             region = 'all'
@@ -73,7 +97,7 @@ export class OcdCacheData {
             region = 'all'
         }
         // console.debug('OcdCacheData: getOciReferenceDataList:', resource, profile, region)
-        // console.debug('OcdCacheData: getOciReferenceDataList:', resource, profile, region, this.cache.dropdownData[profile][region])
+        console.debug('OcdCacheData: getOciReferenceDataList:', resource, profile, region, this.cache.dropdownData[profile][region])
         return Object.hasOwn(this.cache.dropdownData[profile][region], resource) ? this.cache.dropdownData[profile][region][resource] : []
     }
 }

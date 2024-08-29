@@ -5,10 +5,10 @@
 
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { OcdDesigner, OcdDesignerLeftToolbar, OcdDesignerRightToolbar } from './OcdDesigner'
-import OcdDocument, { OcdSelectedResource } from '../components/OcdDocument'
+import { OcdDocument } from '../components/OcdDocument'
 import OcdConsoleMenuBar from '../components/OcdConsoleMenuBar'
 import { OcdConsoleConfig } from '../components/OcdConsoleConfiguration'
-import { ConsoleHeaderProps, ConsolePageProps, ConsoleToolbarProps } from '../types/Console'
+import { ConsoleHeaderProps, ConsolePageProps, ConsoleToolbarProps, OcdSelectedResource } from '../types/Console'
 import OcdBom from './OcdBom'
 import OcdMarkdown from './OcdMarkdown'
 import OcdTabular from './OcdTabular'
@@ -20,30 +20,31 @@ import OcdDocumentation from './OcdDocumentation'
 import { OcdCacheData } from '../components/OcdCache'
 import { OcdCacheFacade } from '../facade/OcdCacheFacade'
 import { loadDesign } from '../components/Menu'
-import { OcdValidationResult, OcdValidator } from '@ocd/model'
+import { OcdResource, OcdValidationResult, OcdValidator } from '@ocd/model'
 import OcdValidation from './OcdValidation'
 import { buildDetails } from '../data/OcdBuildDetails'
 import OcdHelp from './OcdHelp'
 import OcdCommonTags from './OcdCommonTags'
+import { OcdReferenceDataQueryDialog } from '../components/dialogs/OcdReferenceDataQueryDialog'
+import { OcdActiveFileContext, OcdCacheContext, OcdConsoleConfigContext, OcdDocumentContext, OcdSelectedResourceContext } from './OcdConsoleContext'
 
 // Import css as text
 // @ts-ignore
 // eslint-disable-next-line import/no-webpack-loader-syntax
 // import svgThemeCss from '!!css-loader?{"sourceMap":false,"exportType":"string"}!../css/oci-theme.css'
 
-export const ThemeContext = createContext('')
-export const ActiveFileContext = createContext({})
-export const ConsoleConfigContext = createContext({})
-export const CacheContext = createContext({})
-export const OcdDocumentContext = createContext({})
-export const SelectedResourceContext = createContext({})
+export const ThemeContext = createContext<string>('')
+export const ActiveFileContext = createContext<OcdActiveFileContext>({activeFile: {name: '', modified: false}, setActiveFile: () => {}})
+export const ConsoleConfigContext = createContext<OcdConsoleConfigContext>({ocdConsoleConfig: OcdConsoleConfig.new(), setOcdConsoleConfig: () => {}})
+export const CacheContext = createContext<OcdCacheContext>({ocdCache: OcdCacheData.new(), setOcdCache: () => {}})
+export const DocumentContext = createContext<OcdDocumentContext>({ocdDocument: OcdDocument.new(), setOcdDocument: () => {}})
+export const SelectedResourceContext = createContext<OcdSelectedResourceContext>({selectedResource: OcdDocument.newSelectedResource(), setSelectedResource: () => {}})
 
 const OcdConsole = (): JSX.Element => {
     // console.debug('OcdConsole: CSS', svgThemeCss)
     const [ocdDocument, setOcdDocument] = useState(OcdDocument.new())
     const [ocdConsoleConfig, setOcdConsoleConfig] = useState(OcdConsoleConfig.new())
     const [ocdCache, setOcdCache] = useState(OcdCacheData.new())
-    // const [ocdCache, setOcdCache]: [OcdCacheData | undefined, any] = useState()
     const [activeFile, setActiveFile] = useState({name: '', modified: false})
     const [selectedResource, setSelectedResource] = useState({} as OcdSelectedResource)
     useEffect(() => {
@@ -106,7 +107,7 @@ const OcdConsole = (): JSX.Element => {
         <ConsoleConfigContext.Provider value={{ocdConsoleConfig, setOcdConsoleConfig}}>
             <ActiveFileContext.Provider value={{activeFile, setActiveFile}}>
                 <CacheContext.Provider value={{ocdCache, setOcdCache}}>
-                    <OcdDocumentContext.Provider value={{ocdDocument, setOcdDocument}}>
+                    <DocumentContext.Provider value={{ocdDocument, setOcdDocument}}>
                         <SelectedResourceContext.Provider value={{selectedResource, setSelectedResource}}>
                             <div className='ocd-console'>
                                 <OcdConsoleHeader ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
@@ -115,7 +116,7 @@ const OcdConsole = (): JSX.Element => {
                                 <OcdConsoleFooter ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
                             </div>
                         </SelectedResourceContext.Provider>
-                    </OcdDocumentContext.Provider>
+                    </DocumentContext.Provider>
                 </CacheContext.Provider>
             </ActiveFileContext.Provider>
         </ConsoleConfigContext.Provider>
@@ -123,13 +124,21 @@ const OcdConsole = (): JSX.Element => {
 }
 
 const OcdConsoleTitleBar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument }: ConsolePageProps): JSX.Element => {
+    const [title, setTitle] = useState(ocdDocument.design.metadata.title)
     const onChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         ocdDocument.design.metadata.title = e.target.value
-        setOcdDocument(OcdDocument.clone(ocdDocument))
+        setTitle(ocdDocument.design.metadata.title)
+        // setOcdDocument(OcdDocument.clone(ocdDocument))
     }
+    const onPaste = (e: React.ClipboardEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+        console.debug('OcdConsole: OcdConsoleTitleBar: onPaste:', e.clipboardData)
+        ocdDocument.design.metadata.title = e.clipboardData.getData('Text')
+        setTitle(ocdDocument.design.metadata.title)
+    }
+    useEffect(() => setTitle(ocdDocument.design.metadata.title), [ocdDocument])
     return (
         <div className='ocd-console-title-bar'>
-            <input id='ocd_document_title' type='text' value={ocdDocument.design.metadata.title} onChange={onChange}></input>
+            <input id='ocd_document_title' type='text' value={title} onChange={onChange}></input>
         </div>
     )
 }
@@ -231,6 +240,7 @@ const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument,
 
 const OcdConsoleBody = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument }: ConsolePageProps): JSX.Element => {
     const showQueryDialog = ocdDocument.query
+    const showReferenceDataQueryDialog = ocdConsoleConfig.queryReferenceData
     const DisplayPage = ocdConsoleConfig.config.displayPage === 'bom' ? OcdBom : 
                         ocdConsoleConfig.config.displayPage === 'designer' ? OcdDesigner : 
                         ocdConsoleConfig.config.displayPage === 'documentation' ? OcdDocumentation : 
@@ -258,13 +268,17 @@ const OcdConsoleBody = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, se
                 ocdDocument={ocdDocument} 
                 setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} 
             />}
+            {showReferenceDataQueryDialog && <OcdReferenceDataQueryDialog 
+                ocdDocument={ocdDocument} 
+                setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} 
+            />}
         </div>
     )
 }
 
 const OcdConsoleFooter = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument }: ConsolePageProps): JSX.Element => {
-    // @ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
+    const {ocdCache, setOcdCache} = useContext(CacheContext)
     const filenameClass = `${activeFile.modified ? 'ocd-design-modified ocd-active-file-modified-icon' : ''}`
     return (
         <div className='ocd-console-footer ocd-console-footer-theme'>
@@ -273,11 +287,33 @@ const OcdConsoleFooter = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, 
                     <div className={filenameClass} title='Design Modified'><span>{activeFile.name}</span></div>
                 </div>
             </div>
-            <div className='ocd-footer-centre'></div>
+            <div className='ocd-footer-centre'>
+                <div><OcdCachePicker></OcdCachePicker></div>
+                {/* <div><span>Reference Data Profile {ocdCache.cache.profile}</span></div> */}
+            </div>
             <div className='ocd-footer-right'>
                 <div>
                     <span>Version: {buildDetails.version} Build Date: {buildDetails.utc}</span>
                 </div>
+            </div>
+        </div>
+    )
+}
+
+const OcdCachePicker = (): JSX.Element => {
+    const {ocdCache, setOcdCache} = useContext(CacheContext)
+    const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        ocdCache.cache.profile = e.target.value
+        setOcdCache(OcdCacheData.clone(ocdCache))
+        ocdCache.saveCache()
+    }
+    return (
+        <div className='ocd-cache-picker'>
+            <div><span>Reference Data Profile </span></div>
+            <div>
+                <select value={ocdCache.cache.profile} onChange={onChange}>
+                    {Object.keys(ocdCache.cache.dropdownData).map((k) => <option value={k} key={k}>{k}</option>)}
+                </select>
             </div>
         </div>
     )

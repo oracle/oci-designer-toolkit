@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2020, 2022, Oracle and/or its affiliates.
+** Copyright (c) 2020, 2024, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.debug('Loaded Network Load Balancer Javascript');
@@ -25,6 +25,15 @@ class NetworkLoadBalancer extends OkitArtifact {
         // Update with any passed data
         this.merge(data);
         this.convert();
+    }
+
+        /*
+    ** Conversion Routine allowing loading of old json
+     */
+    convert() {
+        super.convert()
+        if (this.backend_sets && !Array.isArray(this.backend_sets) && typeof this.backend_sets === 'object') this.backend_sets = Object.values(this.backend_sets)
+        if (this.listeners && !Array.isArray(this.listeners) && typeof this.listeners === 'object') this.listeners = Object.values(this.listeners)
     }
 
     newHealthChecker() {

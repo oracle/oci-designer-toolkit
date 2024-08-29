@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2020, 2023, Oracle and/or its affiliates.
+** Copyright (c) 2020, 2024, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
@@ -13,6 +13,7 @@ import { OcdTwoColumnLayoutEngine } from './layout/OcdTwoColumnLayoutEngine'
 import { OcdSingleColumnLayoutEngine } from './layout/OcdSingleColumnLayoutEngine'
 import { OcdDynamicLayoutEngine } from './layout/OcdDynamicLayoutEngine'
 import { layoutEngineConfig } from './layout/OcdLayoutEngineConfig'
+import { OcdOkitWebLayoutEngine } from './layout/OcdOkitWebLayoutEngine'
 
 export class OcdAutoLayout {
     coords: OcdViewCoords[]
@@ -96,13 +97,19 @@ export class OcdAutoLayout {
 
     layout(detailed: boolean = true, style: string = 'dynamic-columns'): OcdViewCoords[] {
         if (style === 'dynamic-columns') {
-            const layoutEngine = new OcdDynamicLayoutEngine(this.coords)
+            const layoutEngine = new OcdDynamicLayoutEngine(this.coords, this.design)
             return layoutEngine.layout(detailed, this.coords)
         } else if (style === 'two-column') {
-            const layoutEngine = new OcdTwoColumnLayoutEngine(this.coords)
+            const layoutEngine = new OcdTwoColumnLayoutEngine(this.coords, this.design)
+            return layoutEngine.layout(detailed, this.coords)
+        } else if (style === 'single-column') {
+            const layoutEngine = new OcdSingleColumnLayoutEngine(this.coords, this.design)
+            return layoutEngine.layout(detailed, this.coords)
+        } else if (style === 'okit-web') {
+            const layoutEngine = new OcdOkitWebLayoutEngine(this.coords, this.design)
             return layoutEngine.layout(detailed, this.coords)
         } else {
-            const layoutEngine = new OcdSingleColumnLayoutEngine(this.coords)
+            const layoutEngine = new OcdDynamicLayoutEngine(this.coords, this.design)
             return layoutEngine.layout(detailed, this.coords)
         }
         return this.coords

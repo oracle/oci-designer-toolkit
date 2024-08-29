@@ -1,13 +1,13 @@
 
-# Copyright (c) 2020, 2022, Oracle and/or its affiliates.
+# Copyright (c) 2020, 2024, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 FROM oraclelinux:8
 LABEL "provider"="Oracle" \
       "issues"="https://github.com/oracle/oci-designer-toolkit/issues" \
-      "version"="0.62.2" \
+      "version"="0.63.0" \
       "description"="OKIT Web Server Container." \
-      "copyright"="Copyright (c) 2020, 2022, Oracle and/or its affiliates."
+      "copyright"="Copyright (c) 2020, 2024, Oracle and/or its affiliates."
 # SHELL ["/bin/bash", "-c"]
 ENV PYTHONIOENCODING=utf8 \
     PYTHONPATH=":/okit/visualiser:/okit/okitweb:/okit" \
@@ -44,7 +44,6 @@ RUN yum install -y \
 # Create Workspace
  && mkdir -p /okit/{config,git,instance/git,instance/local,instance/templates/user,local,log,ssl,visualiser,okitweb,workspace,skeletons} \
 #  && mkdir -p /okit/okitweb/static/okit/templates \
- && openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /okit/ssl/okit.key -out /okit/ssl/okit.crt -subj "/C=GB/ST=Berkshire/L=Reading/O=Oracle/OU=OKIT/CN=www.oci_okit.com" 
 #  && ln -s /okit/templates /okit/okitweb/static/okit/templates/user \
 #  && ln -s /okit/git /okit/okitweb/static/okit/templates/git \
 #  && ln -s /okit/git /okit/okitweb/static/okit/git

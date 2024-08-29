@@ -6,11 +6,12 @@
 
 import { useContext, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
-import { OcdDocument, OcdDragResource, OcdSelectedResource } from './OcdDocument'
+import { OcdDocument } from './OcdDocument'
 import { OcdViewPage, OcdViewConnector, OcdViewCoords, OcdViewLayer, OcdResource } from '@ocd/model'
 import { ResourceRectProps, ResourceForeignObjectProps, ResourceSvgProps, ResourceSvgContextMenuProps, ResourceSvgGhostProps, OcdMouseEvents, ConnectorSvgProps } from '../types/ReactComponentProperties'
 import { OcdContextMenu } from './OcdCanvas'
 import { ActiveFileContext, SelectedResourceContext } from '../pages/OcdConsole'
+import { OcdDragResource, OcdSelectedResource } from '../types/Console'
 
 export const OcdSvgContextMenu = ({ contextMenu, setContextMenu, ocdDocument, setOcdDocument, resource }: ResourceSvgContextMenuProps): JSX.Element => {
     console.info('OcdResourceSvg: OcdSvgContextMenu')
@@ -258,7 +259,6 @@ const OcdContainerRect = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
 }
 
 const OcdResizePoint = ({resource, cx, cy, position, setDimensions, onResize, onResizeEnd}: any): JSX.Element => {
-    //@ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const [mouseOver, setMouseOver] = useState(false)
     const [dragging, setDragging] = useState(false)
@@ -388,7 +388,6 @@ const OcdForeignObject = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
 }
 
 export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, contextMenu, setContextMenu, svgDragDropEvents, resource, ghost }: ResourceSvgProps): JSX.Element => {
-    //@ts-ignore
     const {selectedResource, setSelectedResource} = useContext(SelectedResourceContext)
     const page: OcdViewPage = ocdDocument.getActivePage()
     const allCompartmentIds = ocdDocument.getOciResourceList('comparment').map((r) => r.id)
@@ -433,7 +432,10 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
                 modelId: resource.ocid,
                 pageId: ocdDocument.getActivePage().id,
                 coordsId: resource.id,
-                class: resource.class
+                class: resource.class,
+                model: ocdDocument.getResource(resource.ocid),
+                page: ocdDocument.getActivePage(),
+                coords: ocdDocument.getCoords(resource.id)
             }
             setSelectedResource(clickedResource)
             // TODO: Delete next 3 lines
@@ -484,12 +486,12 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
     return (
         <g className='ocd-designer-resource' 
             id={resource.id} 
-            data-ox={resource.x} 
-            data-oy={resource.y} 
-            data-gid={resource.id} 
-            data-pgid={resource.pgid} 
-            data-ocid={resource.ocid} 
-            data-pocid={resource.pocid}
+            // data-ox={resource.x} 
+            // data-oy={resource.y} 
+            // data-gid={resource.id} 
+            // data-pgid={resource.pgid} 
+            // data-ocid={resource.ocid} 
+            // data-pocid={resource.pocid}
             transform={`translate(${gX}, ${gY})`}
             onMouseDown={!hidden ? onResourceDragStart : onNooPEvent}
             onMouseUp={!hidden ? onResourceMouseUp : onNooPEvent}

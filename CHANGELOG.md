@@ -1,6 +1,20 @@
 # Release Notes
 
 
+## Version 0.63.0
+**Release Date**: 31st August 2024
+### Features
+1. OKIT-Ocd: Build OKIT-Web style auto arranger. (#OKIT-299)
+2. OKIT-Ocd: Generated example connection.tfvars file during OpenTofu export. (#OKIT-297)
+3. OKIT-Ocd: Add Palette for Compute Cloud@Customer. (#OKIT-298) 
+4. OKIT-Ocd: Add Palette for PCA-X9. (#OKIT-298)
+5. OKIT-Ocd: Allow quering of cache data from specified Config Profiles and then switch. (#OKIT-296)
+
+### Bug Fixes
+1. OKIT-Web: Resolve Code Scanning Issues #688 - #712
+2. OKIT-Web: Convert Queried Network Load Balancer Listeners set to list.
+3. OKIT-Web: Revert DRG Attachment fix for PCA DRGv1+ feature
+
 ## Version 0.62.2
 **Release Date**: 22nd August 2024
 ### Features

@@ -1,11 +1,12 @@
 /*
-** Copyright (c) 2020, 2023, Oracle and/or its affiliates.
+** Copyright (c) 2020, 2024, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
 import { TerraformSchema } from "../types/TerraformSchema"
 import { resourceMap as ociResourceMap, dataMap as ociDataMap } from './data/OciResourceMap'
-import { resourceMap as azureAzResourceMap } from './data/AzureResourceMap'
+import { resourceMap as azureAzResourceMap } from './data/AzureRmResourceMap'
+import { OcdUtils } from "@ocd/core"
 
 export class OcdTerraformSchemaResourceAttributesGenerator {
     ocd_schema: Record<string, any> = {}
@@ -24,8 +25,8 @@ export class OcdTerraformSchemaResourceAttributesGenerator {
         "time_updated",
         "timeouts",
     ]
-    resourceKeys = [...Object.keys(ociResourceMap), ...Object.keys(ociDataMap), ...Object.keys(azureAzResourceMap)].sort()
-    dataKeys = [...Object.keys(ociDataMap)].sort()
+    resourceKeys = [...Object.keys(ociResourceMap), ...Object.keys(ociDataMap), ...Object.keys(azureAzResourceMap)].sort(OcdUtils.simpleSort)
+    dataKeys = [...Object.keys(ociDataMap)].sort(OcdUtils.simpleSort)
     convert(source_schema: TerraformSchema) {return this.generate(source_schema)}
     generate(source_schema: TerraformSchema) {
         console.debug('OCI Resources:', JSON.stringify(ociResourceMap, null, 2))
@@ -64,7 +65,7 @@ export class OcdTerraformSchemaResourceAttributesGenerator {
                 attributes = [...attributes, this.genId(key, hierarchy), ...this.getAttributes(value.block, [...hierarchy, key])]
             })
         }
-        return attributes.sort()
+        return attributes.sort(OcdUtils.simpleSort)
     }
 
     genId = (k: string, hierarchy: string[]=[]) => [...hierarchy, k].join('.')

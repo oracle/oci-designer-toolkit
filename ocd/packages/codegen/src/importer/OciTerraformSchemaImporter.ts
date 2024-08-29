@@ -1,9 +1,8 @@
 /*
-** Copyright (c) 2020, 2023, Oracle and/or its affiliates.
+** Copyright (c) 2020, 2024, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import { OcdSchemaImporter } from './OcdSchemaImporter'
 import { ignoreElements } from './data/OciIgnoreElements'
 import { resourceMap, dataMap, resourceAttributes } from './data/OciResourceMap'
 import { elementOverrides } from './data/OciElementOverrides' 

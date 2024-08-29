@@ -1,5 +1,5 @@
 
-# Copyright (c) 2020, 2022, Oracle and/or its affiliates.
+# Copyright (c) 2020, 2024, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 """Provide Module Description
@@ -7,7 +7,7 @@
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 __author__ = "Andrew Hopkinson (Oracle Cloud Solutions A-Team)"
-__copyright__ = "Copyright (c) 2020, 2022, Oracle and/or its affiliates."
+__copyright__ = "Copyright (c) 2020, 2024, Oracle and/or its affiliates."
 __version__ = "1.0.0"
 __module__ = "ociGenerator"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
@@ -27,7 +27,7 @@ from model.okitValidation import OCIJsonValidator
 logger = getLogger()
 
 class OCIGenerator(object):
-    OKIT_VERSION = "0.62.2"
+    OKIT_VERSION = "0.63.0"
     def __init__(self, template_dir, output_dir, visualiser_json, use_vars=False, add_provider=True):
         # Initialise generator output data variables
         self.rendered_resources = {}
@@ -102,10 +102,10 @@ class OCIGenerator(object):
 
     def getCheckOutputDirectory(self):
         if not os.path.exists(self.output_dir):
-            logger.warn('Output directory {0:s} does not exist; will create.'.format(self.output_dir))
+            logger.warn('Output directory does not exist; will create.')
             os.makedirs(self.output_dir)
         elif not os.path.isdir(self.output_dir):
-            logger.error('Output directory {0:s} is not a directory'.format(self.output_dir))
+            logger.error('Output directory is not a directory')
 
     def getProvider(self):
         return self.connection_provider
@@ -454,7 +454,6 @@ class OCIGenerator(object):
         return standardised_name
 
     def createZipArchive(self, dir, archivename):
-        logger.info(f'Creating Zip Archive for directory : {dir} {archivename}')
         shutil.make_archive(archivename, 'zip', dir)
         zipname = '{0:s}.zip'.format(str(archivename))
         return zipname

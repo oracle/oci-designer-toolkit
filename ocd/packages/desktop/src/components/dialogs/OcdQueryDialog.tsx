@@ -1,24 +1,23 @@
 /*
-** Copyright (c) 2020, 2023, Oracle and/or its affiliates.
+** Copyright (c) 2020, 2024, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
 import { CompartmentPickerProps, QueryDialogProps } from "../../types/Dialogs"
 import { OciApiFacade } from "../../facade/OciApiFacade"
-import { useContext, useState } from "react"
-// import { OciCompartment } from "../../model/provider/oci/resources"
+import React, { useContext, useState } from "react"
 import { OciModelResources } from '@ocd/model'
 import { OcdDocument } from "../OcdDocument"
 import { OcdUtils } from '@ocd/core'
-import { ActiveFileContext } from "../../pages/OcdConsole"
-import React from "react"
+import { ActiveFileContext, ConsoleConfigContext } from "../../pages/OcdConsole"
 
 export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps): JSX.Element => {
-    // @ts-ignore
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
+    const {ocdConsoleConfig, setOcdConsoleConfig} = useContext(ConsoleConfigContext)
     const loadingState = '......Reading OCI Config'
     const regionsLoading = {id: 'Select Valid Profile', displayName: 'Select Valid Profile'}
     const className = `ocd-query-dialog`
+    const [workingClassName, setWorkingClassName] = useState(`ocd-query-wrapper hidden`)
     const [profiles, setProfiles] = useState([loadingState])
     const [profilesLoaded, setProfilesLoaded] = useState(false)
     const [regions, setRegions] = useState([regionsLoading])
@@ -31,7 +30,7 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
         acc[value.hierarchy] = React.createRef();
         return acc;
       }, {} as Record<string, React.RefObject<any>>);
-    if (!profilesLoaded) OciApiFacade.loadOCIConfigProfiles().then((results) => {
+    if (!profilesLoaded) OciApiFacade.loadOCIConfigProfileNames().then((results) => {
         setProfilesLoaded(true)
         setProfiles(results)
         loadRegions(results.length ? results[0] : [regionsLoading])
@@ -83,6 +82,7 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
         setOcdDocument(clone)
     }
     const onClickQuery = (e: React.MouseEvent<HTMLButtonElement>) => {
+        setWorkingClassName('ocd-query-wrapper')
         console.debug('OcdQueryDialog: Selected Compartments', selectedCompartmentIds)
         OciApiFacade.queryTenancy(selectedProfile, selectedCompartmentIds, selectedRegion).then((results) => {
             // @ts-ignore
@@ -107,7 +107,7 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
             resultsOciResources.compartment.forEach((c: OciModelResources.OciCompartment, i: number) => clone.addLayer(c.id, i === 0))
             clone.query = !ocdDocument.query
             // Auto Arrange
-            clone.autoLayout(clone.getActivePage().id)
+            clone.autoLayout(clone.getActivePage().id, true, ocdConsoleConfig.config.defaultAutoArrangeStyle)
             setOcdDocument(clone)
             setActiveFile({name: '', modified: false})
         })
@@ -161,6 +161,7 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
                     </div>
                 </div>
             </div>
+            <div className={workingClassName}><div id='misshapen-doughnut'></div></div>
         </div>
     )
 }

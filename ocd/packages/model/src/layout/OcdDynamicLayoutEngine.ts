@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2020, 2023, Oracle and/or its affiliates.
+** Copyright (c) 2020, 2024, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
@@ -8,8 +8,8 @@ import { OcdCommonLayoutEngine } from "./OcdCommonLayoutEngine"
 
 export class OcdDynamicLayoutEngine extends OcdCommonLayoutEngine {
 
-    constructor(coords: OcdViewCoords[]) {
-        super(coords)
+    constructor(coords: OcdViewCoords[], design: OcdDesign) {
+        super(coords, design)
         // Column Layouts
         this.columnLayout = [
             ['oci-internet-gateway', 'oci-nat-gateway'], 

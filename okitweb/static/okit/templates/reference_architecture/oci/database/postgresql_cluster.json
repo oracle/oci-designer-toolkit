@@ -34,7 +34,7 @@
       "id": "okit.instance.01e6cf88-d6fd-446f-b11e-dfaaed4a7142",
       "is_pv_encryption_in_transit_enabled": false,
       "metadata": {
-        "ssh_authorized_keys": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDI9j/nnep+4EQhrFLBCgxw2zv8ocZ00n99As7MWQhHeE9VSi5czQcRJlNXllis0M3PzwjUOaK3edaLBR7m7i4xZXofPgK20bfEbUqdZh6hGFwmr5VYCVwta7XjBotuc5fGFYbZtSbPg9Tw3GfxTwjCm9khZle82J2wOR+n0tSxGyDrQgNgtgSI+MzZ+vcsGR0hE4f+Mp0XZM+Qo4w6Of0xIn/rIpzzA/DUUOBRlW7DQrow7JeCxTz0ixurlBLTF5B66zj3DMQT+vGX0ZJusHgH+dk9xEu8yuu+JY5qRIGCBwVQYWeTSNAbbKzj+HZceNw+CW5z/iyPHf3DlpMF5C7B claus-ulrich.dustmann@oracle.com",
+        "ssh_authorized_keys": "",
         "user_data": ""
       },
       "name": "master-in",
@@ -81,7 +81,7 @@
       "id": "okit.instance.dc8fe894-ff09-438a-b8ed-b4fc463fa97d",
       "is_pv_encryption_in_transit_enabled": false,
       "metadata": {
-        "ssh_authorized_keys": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDI9j/nnep+4EQhrFLBCgxw2zv8ocZ00n99As7MWQhHeE9VSi5czQcRJlNXllis0M3PzwjUOaK3edaLBR7m7i4xZXofPgK20bfEbUqdZh6hGFwmr5VYCVwta7XjBotuc5fGFYbZtSbPg9Tw3GfxTwjCm9khZle82J2wOR+n0tSxGyDrQgNgtgSI+MzZ+vcsGR0hE4f+Mp0XZM+Qo4w6Of0xIn/rIpzzA/DUUOBRlW7DQrow7JeCxTz0ixurlBLTF5B66zj3DMQT+vGX0ZJusHgH+dk9xEu8yuu+JY5qRIGCBwVQYWeTSNAbbKzj+HZceNw+CW5z/iyPHf3DlpMF5C7B claus-ulrich.dustmann@oracle.com",
+        "ssh_authorized_keys": "",
         "user_data": ""
       },
       "name": "stb1-in",
@@ -128,7 +128,7 @@
       "id": "okit.instance.d6d80f8a-2920-4c2f-b6b7-0871df9615b9",
       "is_pv_encryption_in_transit_enabled": false,
       "metadata": {
-        "ssh_authorized_keys": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDI9j/nnep+4EQhrFLBCgxw2zv8ocZ00n99As7MWQhHeE9VSi5czQcRJlNXllis0M3PzwjUOaK3edaLBR7m7i4xZXofPgK20bfEbUqdZh6hGFwmr5VYCVwta7XjBotuc5fGFYbZtSbPg9Tw3GfxTwjCm9khZle82J2wOR+n0tSxGyDrQgNgtgSI+MzZ+vcsGR0hE4f+Mp0XZM+Qo4w6Of0xIn/rIpzzA/DUUOBRlW7DQrow7JeCxTz0ixurlBLTF5B66zj3DMQT+vGX0ZJusHgH+dk9xEu8yuu+JY5qRIGCBwVQYWeTSNAbbKzj+HZceNw+CW5z/iyPHf3DlpMF5C7B claus-ulrich.dustmann@oracle.com",
+        "ssh_authorized_keys": "",
         "user_data": ""
       },
       "name": "stb2-in",

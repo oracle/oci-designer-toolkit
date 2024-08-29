@@ -3,9 +3,9 @@
 ** Licensed under the GNU GENERAL PUBLIC LICENSE v 3.0 as shown at https://www.gnu.org/licenses/.
 */
 
-import { OcdViewLayer, OcdViewPage } from "@ocd/model"
-import OcdConsoleConfig from "../components/OcdConsoleConfiguration"
-import OcdDocument from "../components/OcdDocument"
+import { OcdResource, OcdViewCoords, OcdViewLayer, OcdViewPage } from "@ocd/model"
+import { OcdConsoleConfig } from "../components/OcdConsoleConfiguration"
+import { OcdDocument } from "../components/OcdDocument"
 
 export interface ConsolePageProps {
     ocdDocument: OcdDocument
@@ -47,4 +47,29 @@ export interface LayerBarMenuProps extends LayerBarLayersProps {}
 
 export interface HelpPageProps {
     helpText: string
+}
+
+export type OcdActiveFile = {
+    name: string
+    modified: boolean
+}
+
+export interface OcdSelectedResource {
+    modelId: string
+    pageId: string
+    coordsId: string
+    class: string
+    model?: OcdResource
+    page?: OcdViewPage
+    coords?: OcdViewCoords
+}
+
+export interface OcdDragResource {
+    dragging: boolean
+    modelId: string
+    pageId: string
+    coordsId: string
+    class: string
+    resource: OcdViewCoords
+    parent?: OcdViewCoords
 }

@@ -4,28 +4,29 @@
 */
 
 import { v4 as uuidv4 } from 'uuid'
-import { OciModelResources } from '@ocd/model'
+import { AzureModelResources, AzureResource, OciModelResources } from '@ocd/model'
 import { OcdDesign, OcdViewPage, OcdViewCoords, OcdViewLayer, OcdBaseModel, OcdViewPoint, OcdViewCoordsStyle, OcdResource, OciResource, PaletteResource } from '@ocd/model'
 import { OcdAutoLayout } from '@ocd/model'
 import { OcdUtils } from '@ocd/core'
-import additionTitleInfo from '../data/OcdAdditionTitleInfo'
+import { additionTitleInfo } from '../data/OcdAdditionTitleInfo'
+import { OcdDragResource, OcdSelectedResource } from '../types/Console'
 
-export interface OcdSelectedResource {
-    modelId: string
-    pageId: string
-    coordsId: string
-    class: string
-}
+// export interface OcdSelectedResource {
+//     modelId: string
+//     pageId: string
+//     coordsId: string
+//     class: string
+// }
 
-export interface OcdDragResource {
-    dragging: boolean
-    modelId: string
-    pageId: string
-    coordsId: string
-    class: string
-    resource: OcdViewCoords
-    parent?: OcdViewCoords
-}
+// export interface OcdDragResource {
+//     dragging: boolean
+//     modelId: string
+//     pageId: string
+//     coordsId: string
+//     class: string
+//     resource: OcdViewCoords
+//     parent?: OcdViewCoords
+// }
 
 export interface OcdAddResourceResponse {
     modelResource: OcdResource | undefined
@@ -41,7 +42,7 @@ export class OcdDocument {
         if (typeof design === 'string' && design.length > 0) this.design = JSON.parse(design)
         else if (design instanceof Object) this.design = design
         else this.design = this.newDesign()
-        this.selectedResource = resource ? resource : this.newSelectedResource()
+        this.selectedResource = resource ? resource : OcdDocument.newSelectedResource()
         this.dragResource = dragResource ? dragResource : this.newDragResource()
         this.query = false
     }
@@ -52,7 +53,7 @@ export class OcdDocument {
 
     newDesign = (): OcdDesign => OcdDesign.newDesign()
 
-    newSelectedResource(): OcdSelectedResource {
+    static newSelectedResource(): OcdSelectedResource {
         return {
             modelId: '',
             pageId: '',
@@ -89,7 +90,20 @@ export class OcdDocument {
     // getResource(id='') {return this.getResources().find((r: OcdResource) => r.id === id)}
     getResource(id='') {return OcdDesign.getResource(this.design, id)}
     addOciReasourceToList(key: string, modelResource: OciResource) {this.design.model.oci.resources[key] ? this.design.model.oci.resources[key].push(modelResource) : this.design.model.oci.resources[key] = [modelResource]}
-    addResource(paletteResource: PaletteResource, compartmentId: string) {
+    addAzureReasourceToList(key: string, modelResource: AzureResource) {this.design.model.azure.resources[key] ? this.design.model.azure.resources[key].push(modelResource) : this.design.model.azure.resources[key] = [modelResource]}
+    // addGcpReasourceToList(key: string, modelResource: GcpResource) {this.design.model.gcp.resources[key] ? this.design.model.gcp.resources[key].push(modelResource) : this.design.model.gcp.resources[key] = [modelResource]}
+    addResource(paletteResource: PaletteResource, compartmentId: string): OcdAddResourceResponse {
+        switch(paletteResource.provider) {
+            case 'oci':
+                return this.addOciResource(paletteResource, compartmentId)
+            case 'azure':
+                return this.addAzureResource(paletteResource, compartmentId)
+            default:
+                alert(`Provider ${paletteResource.provider} has not yet been implemented.`)
+                return {modelResource: undefined, additionalResources: []}
+        }
+    }
+    addResource1(paletteResource: PaletteResource, compartmentId: string) {
         const resourceList = paletteResource.class.split('-').slice(1).join('_')
         const resourceClass = paletteResource.class.toLowerCase().split('-').map((w) => `${w.charAt(0).toUpperCase()}${w.slice(1)}`).join('')
         const resourceNamespace: string = `${resourceClass}`
@@ -130,6 +144,68 @@ export class OcdDocument {
         // console.debug('OcdDocument: Added Resource:', modelResource)
         // return modelResource
         return response
+    }
+    addOciResource(paletteResource: PaletteResource, compartmentId: string): OcdAddResourceResponse {
+        const resourceList = paletteResource.class.split('-').slice(1).join('_')
+        const resourceClass = paletteResource.class.toLowerCase().split('-').map((w) => `${w.charAt(0).toUpperCase()}${w.slice(1)}`).join('')
+        const resourceNamespace: string = `${resourceClass}`
+        // @ts-ignore 
+        const client = OciModelResources[resourceNamespace]
+        console.debug('OcdDocument: Namespace',resourceNamespace , client)
+        if (client) {
+            const modelResource = client.newResource()
+            modelResource.compartmentId = compartmentId
+            console.debug('OcdDocument:', modelResource)
+            this.addOciReasourceToList(resourceList, modelResource)
+            const response: OcdAddResourceResponse = {modelResource: modelResource, additionalResources: []}
+            const additionalResources = client.getAdditionalResources?.() // Use Optional Chaining to test if function exists
+            if (additionalResources) {
+                console.debug('OcdDocument: Creating Additional Resources', additionalResources)
+                additionalResources.forEach((r: PaletteResource) => {
+                    const additionalResource = this.addOciResource(r, compartmentId).modelResource
+                    if (additionalResource) {
+                        response.additionalResources.push(additionalResource)
+                        this.setResourceParent(additionalResource.id, modelResource.id)
+                        client.setAdditionalResourceValues?.(modelResource, additionalResource)
+                    }
+                })
+            }
+            return response
+        } else {
+            alert(`Oci Resource ${resourceClass} has not yet been implemented.`)
+            return {modelResource: undefined, additionalResources: []}
+        }
+    }
+    addAzureResource(paletteResource: PaletteResource, compartmentId: string): OcdAddResourceResponse {
+        const resourceList = paletteResource.class.split('-').slice(1).join('_')
+        const resourceClass = paletteResource.class.toLowerCase().split('-').map((w) => `${w.charAt(0).toUpperCase()}${w.slice(1)}`).join('')
+        const resourceNamespace: string = `${resourceClass}`
+        // @ts-ignore 
+        const client = AzureModelResources[resourceNamespace]
+        console.debug('OcdDocument: Namespace',resourceNamespace , client)
+        if (client) {
+            const modelResource = client.newResource()
+            modelResource.compartmentId = compartmentId
+            console.debug('OcdDocument:', modelResource)
+            this.addAzureReasourceToList(resourceList, modelResource)
+            const response: OcdAddResourceResponse = {modelResource: modelResource, additionalResources: []}
+            const additionalResources = client.getAdditionalResources?.() // Use Optional Chaining to test if function exists
+            if (additionalResources) {
+                console.debug('OcdDocument: Creating Additional Resources', additionalResources)
+                additionalResources.forEach((r: PaletteResource) => {
+                    const additionalResource = this.addAzureResource(r, compartmentId).modelResource
+                    if (additionalResource) {
+                        response.additionalResources.push(additionalResource)
+                        this.setResourceParent(additionalResource.id, modelResource.id)
+                        client.setAdditionalResourceValues?.(modelResource, additionalResource)
+                    }
+                })
+            }
+            return response
+        } else {
+            alert(`Azure Resource ${resourceClass} has not yet been implemented.`)
+            return {modelResource: undefined, additionalResources: []}
+        }
     }
     removeResource(id: string) {
         // Delete from Model
@@ -452,10 +528,11 @@ export class OcdDocument {
         }
     }
 
-    autoLayout = (viewId: string) => {
+    autoLayout = (viewId: string, detailed: boolean = true, style: string = 'dynamic-columns') => {
+        console.debug('OcdDocument: autoLayout', style)
         const autoArranger = new OcdAutoLayout(this.design)
         const page = this.getPage(viewId)
-        page.coords = autoArranger.layout()
+        page.coords = autoArranger.layout(detailed, style)
     }
 
 }
