@@ -40,14 +40,14 @@ export class OcdCommonLayoutEngine {
         return coords.filter(c => c.pgid === '') // Only Coords Without Parent
     }
 
-    layout(detailed: boolean = true, coords: OcdViewCoords[]): OcdViewCoords[] {
+    layout(detailed: boolean, coords: OcdViewCoords[]): OcdViewCoords[] {
         const rootCoords = coords ? this.createCoordsHierarchy(coords) : this.createCoordsHierarchy(this.coords)
         rootCoords.filter((c) => c.container).forEach((p) => this.layoutChildren(detailed, p))
         this.layoutRoot(detailed, rootCoords)
         return rootCoords
     }
 
-    layoutChildren(detailed: boolean = true, parent: OcdViewCoords): OcdViewCoords {
+    layoutChildren(detailed: boolean, parent: OcdViewCoords): OcdViewCoords {
         if (parent.coords) {
             // Reset Width & Height
             parent.w = this.spacing

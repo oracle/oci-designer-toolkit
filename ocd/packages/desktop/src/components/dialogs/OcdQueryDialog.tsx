@@ -5,13 +5,11 @@
 
 import { CompartmentPickerProps, QueryDialogProps } from "../../types/Dialogs"
 import { OciApiFacade } from "../../facade/OciApiFacade"
-import { useContext, useState } from "react"
-// import { OciCompartment } from "../../model/provider/oci/resources"
+import React, { useContext, useState } from "react"
 import { OciModelResources } from '@ocd/model'
 import { OcdDocument } from "../OcdDocument"
 import { OcdUtils } from '@ocd/core'
 import { ActiveFileContext, ConsoleConfigContext } from "../../pages/OcdConsole"
-import React from "react"
 
 export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps): JSX.Element => {
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
