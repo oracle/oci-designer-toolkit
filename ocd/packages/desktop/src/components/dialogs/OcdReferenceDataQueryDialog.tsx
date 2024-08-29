@@ -3,39 +3,26 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import { CompartmentPickerProps, QueryDialogProps } from "../../types/Dialogs"
+import { QueryDialogProps } from "../../types/Dialogs"
 import { OciApiFacade } from "../../facade/OciApiFacade"
-import { useContext, useState } from "react"
-// import { OciCompartment } from "../../model/provider/oci/resources"
-import { OciModelResources } from '@ocd/model'
-import { OcdDocument } from "../OcdDocument"
-import { OcdUtils } from '@ocd/core'
-import { ActiveFileContext, CacheContext, ConsoleConfigContext } from "../../pages/OcdConsole"
-import React from "react"
+import React, { useContext, useState } from "react"
+import { CacheContext, ConsoleConfigContext } from "../../pages/OcdConsole"
 import OcdConsoleConfig from "../OcdConsoleConfiguration"
-import { OcdCacheData } from "../OcdCache"
 
 export const OcdReferenceDataQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps): JSX.Element => {
-    const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const {ocdConsoleConfig, setOcdConsoleConfig} = useContext(ConsoleConfigContext)
     const {ocdCache, setOcdCache} = useContext(CacheContext)
     const loadingState = '......Reading OCI Config'
     const regionsLoading = {id: 'Select Valid Profile', displayName: 'Select Valid Profile'}
-    const [className, setClassName] = useState(`ocd-reference-data-query-dialog`)
+    const className = `ocd-reference-data-query-dialog`
     const [workingClassName, setWorkingClassName] = useState(`ocd-query-wrapper hidden`)
     const [cursor, setCursor] = useState('default')
     const [profiles, setProfiles] = useState([loadingState])
     const [profilesLoaded, setProfilesLoaded] = useState(false)
     const [regions, setRegions] = useState([regionsLoading])
-    const [compartments, setCompartments] = useState([] as OciModelResources.OciCompartment[])
     const [selectedProfile, setSelectedProfile] = useState('DEFAULT')
     const [selectedRegion, setSelectedRegion] = useState('')
-    const [selectedCompartmentIds, setSelectedCompartmentIds] = useState([])
-    const [hierarchy, setHierarchy] = useState('')
-    const refs: Record<string, React.RefObject<any>> = compartments.reduce((acc, value: OciModelResources.OciCompartment) => {
-        acc[value.hierarchy] = React.createRef();
-        return acc;
-      }, {} as Record<string, React.RefObject<any>>);
+
     if (!profilesLoaded) OciApiFacade.loadOCIConfigProfileNames().then((results) => {
         setProfilesLoaded(true)
         setProfiles(results)
@@ -82,20 +69,6 @@ export const OcdReferenceDataQueryDialog = ({ocdDocument, setOcdDocument}: Query
             setCursor('default')
             console.debug('OcdReferenceDataQueryDialog: Cache', ocdCache)
         })
-        // // setClassName(`${className} ocd-busy-cursor`)
-        // OciApiFacade.queryDropdown(selectedProfile, selectedRegion).then((results) => {
-        //     // @ts-ignore
-        //     console.debug('OcdReferenceDataQueryDialog: Query Dropdown', JSON.stringify(results, null, 2))
-        //     const clone = OcdConsoleConfig.clone(ocdConsoleConfig)
-        //     console.debug('OcdReferenceDataQueryDialog: Cache', ocdCache)
-        //     ocdCache.cache.dropdownData[selectedProfile] = {all: results}
-        //     ocdCache.cache.profile = selectedProfile
-        //     console.debug('OcdReferenceDataQueryDialog: Cache', ocdCache)
-        //     clone.queryReferenceData = !ocdConsoleConfig.queryReferenceData
-        //     setOcdConsoleConfig(clone)
-        //     setAndSaveOcdCache(OcdCacheData.clone(ocdCache))
-        //     setCursor('default')
-        // })
     }
    
     return (

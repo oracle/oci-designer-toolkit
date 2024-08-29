@@ -5,7 +5,7 @@
 
 import { OcdDesign, OcdViewCoords } from "../OcdDesign"
 import { OcdCommonLayoutEngine } from "./OcdCommonLayoutEngine"
-import { OciResource, OciModelResources } from "../index"
+import { OciResource } from "../index"
 
 export class OcdOkitWebLayoutEngine extends OcdCommonLayoutEngine {
     moveToChild: Record<string, string[]> = {'oci-subnet': ['oci-dhcp-option', 'oci-route-table', 'oci-security-list']}
@@ -78,7 +78,7 @@ export class OcdOkitWebLayoutEngine extends OcdCommonLayoutEngine {
         return rootCoords
     }
 
-    layoutChildren(detailed: boolean = true, parent: OcdViewCoords): OcdViewCoords {
+    layoutChildren(detailed: boolean, parent: OcdViewCoords): OcdViewCoords {
         if (parent.coords) {
             // Reset Width & Height
             parent.w = this.spacing
@@ -104,7 +104,7 @@ export class OcdOkitWebLayoutEngine extends OcdCommonLayoutEngine {
                 child.x = childX
                 child.y = childY
                 // Add Spacing
-                childX += (this.spacing + (detailed ? this.detailedWidth : this.simpleWidth) as number)
+                childX += (this.spacing + (detailed ? this.detailedWidth : this.simpleWidth))
                 // Size Container
                 parent.w = Math.max(parent.w, (childX + this.spacing))
                 parent.h = childY + this.spacing + this.simpleHeight
@@ -131,7 +131,7 @@ export class OcdOkitWebLayoutEngine extends OcdCommonLayoutEngine {
         return parent
     }
 
-    layoutTopEdgeChildren(detailed: boolean = true, parent: OcdViewCoords, edge: string[]): OcdViewCoords {
+    layoutTopEdgeChildren(detailed: boolean, parent: OcdViewCoords, edge: string[]): OcdViewCoords {
         console.debug('OcdOkitWebLayoutEngine: layoutTopEdgeChildren:', parent.class, edge)
         let childX = this.spacing + this.detailedWidth
         let childY = ((this.simpleHeight/2) * -1) - this.edgeAdjustment
@@ -140,7 +140,7 @@ export class OcdOkitWebLayoutEngine extends OcdCommonLayoutEngine {
             child.x = childX
             child.y = childY
             // Add Spacing
-            childX += (this.spacing + (detailed ? this.detailedWidth : this.simpleWidth) as number)
+            childX += (this.spacing + (detailed ? this.detailedWidth : this.simpleWidth))
             // Size Container
             parent.w = Math.max(parent.w, (childX + this.spacing))
         })
@@ -148,7 +148,7 @@ export class OcdOkitWebLayoutEngine extends OcdCommonLayoutEngine {
         return parent
     }
 
-    layoutRightEdgeChildren(detailed: boolean = true, parent: OcdViewCoords, edge: string[]): OcdViewCoords {
+    layoutRightEdgeChildren(detailed: boolean, parent: OcdViewCoords, edge: string[]): OcdViewCoords {
         console.debug('OcdOkitWebLayoutEngine: layoutRightEdgeChildren:', parent.class, edge)
         let childX = parent.w - this.simpleWidth - this.edgeAdjustment
         let childY = this.spacing + this.simpleHeight
