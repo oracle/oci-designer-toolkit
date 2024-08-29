@@ -1,0 +1,11 @@
+paths:
+  - ocd
+paths-ignore:
+  - cloudinit
+  - containers
+  - custom
+  - documentation
+  - instance
+  - okitweb
+  - skeletons
+  - visualiser
