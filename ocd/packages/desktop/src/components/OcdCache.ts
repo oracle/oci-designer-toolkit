@@ -29,8 +29,8 @@ export class OcdCacheData {
         else this.loadCache()
     }
 
-    static new = () => new OcdCacheData()
-    static clone = (ocdConsoleState: OcdCacheData) => new OcdCacheData(ocdConsoleState.cache)
+    static readonly new = () => new OcdCacheData()
+    static readonly clone = (ocdConsoleState: OcdCacheData) => new OcdCacheData(ocdConsoleState.cache)
 
     newCache = (): OcdCache => defaultCache
 
@@ -80,13 +80,12 @@ export class OcdCacheData {
 
     saveCache(): Promise<any> {
         return OcdCacheFacade.saveCache(this.cache).then((results) => {}).catch((response) => console.debug('OcdCacheData:', response))
-        // return OcdCacheFacade.saveCache(this.cache).then((results) => {console.debug('OcdCacheData: Saved Cache')}).catch((response) => console.debug('OcdCacheData:', response))
     }
 
     getOciReferenceDataList(resource: string, profile?: string , region?: string) {
         console.debug('OcdCacheData: getOciReferenceDataList:', resource, profile, region)
-        profile = profile ? profile : this.cache.profile
-        region = region ? region : this.cache.region
+        if (profile === undefined) profile = this.cache.profile
+        if (region === undefined) region = this.cache.region
         console.debug('OcdCacheData: getOciReferenceDataList:', resource, profile, region)
         if (profile === undefined || !Object.hasOwn(this.cache.dropdownData, profile)) {
             profile = 'shipped'
