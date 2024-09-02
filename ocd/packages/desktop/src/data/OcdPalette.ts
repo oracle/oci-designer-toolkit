@@ -626,40 +626,40 @@ export const palette = {
         //     "class": "aws-provider",
         //     "groups": []
         // },
-        // {
-        //     "title": "Azure",
-        //     "provider": "azure",
-        //     "class": "azure-provider",
-        //     "groups": [
-        //         {
-        //             "title": "Compute",
-        //             "class": "azure-compute",
-        //             "resources": [
-        //                 {
-        //                     "container": false,
-        //                     "title": "Auto Managed VM",
-        //                     "class": "azure-instance"
-        //                 }
-        //             ]
-        //         },
-        //         {
-        //             "title": "Networking",
-        //             "class": "azure-network",
-        //             "resources": [
-        //                 {
-        //                     "container": true,
-        //                     "title": "Virtual Network",
-        //                     "class": "azure-virtual-network"
-        //                 },
-        //                 {
-        //                     "container": true,
-        //                     "title": "Subnet",
-        //                     "class": "azure-subnet"
-        //                 },
-        //             ]
-        //         }
-        //     ]
-        // },
+        {
+            "title": "Azure",
+            "provider": "azure",
+            "class": "azure-provider",
+            "groups": [
+                {
+                    "title": "Compute",
+                    "class": "azure-compute",
+                    "resources": [
+                        {
+                            "container": false,
+                            "title": "Auto Managed VM",
+                            "class": "azure-instance"
+                        }
+                    ]
+                },
+                {
+                    "title": "Networking",
+                    "class": "azure-network",
+                    "resources": [
+                        {
+                            "container": true,
+                            "title": "Virtual Network",
+                            "class": "azure-virtual-network"
+                        },
+                        {
+                            "container": true,
+                            "title": "Subnet",
+                            "class": "azure-subnet"
+                        },
+                    ]
+                }
+            ]
+        },
         // {
         //     "title": "Google",
         //     "provider": "google",
