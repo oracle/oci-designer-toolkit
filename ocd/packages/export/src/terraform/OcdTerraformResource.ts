@@ -4,16 +4,10 @@
 */
 
 import { OcdUtils } from "@ocd/core"
-import { OcdResource } from "@ocd/model"
-import { OcdTag } from "@ocd/model/src/OcdDesign"
+import { OcdResource, OcdTag } from "@ocd/model"
 import { buildDetails } from '../data/OcdBuildDetails'
 
 interface ResourcePropertyCondition extends OcdUtils.ResourcePropertyCondition {}
-// interface ResourcePropertyCondition {
-//     element?: string,
-//     operator?: 'eq' | 'lt' | 'gt' | 'ne' | 'le' | 'ge' | 'in'
-//     value?: boolean | string | number | Function
-// }
 
 export class OcdTerraformResource {
     indentation = ['', '    ', '        ', '            ', '                ']
@@ -37,7 +31,6 @@ export class OcdTerraformResource {
     isVariable = (data: string | undefined): boolean => data !== undefined && data.startsWith('var.')
     formatVariable = (data: string | undefined): string | undefined => data
     isGenerateAttribute = (name: string, value: string | number | boolean | undefined, required: boolean) => {
-        // console.debug('OcdTerraformResource: isGenerateNumberAttribute:', value, typeof value)
         if (required) return true
         else if (Array.isArray(value) && value.length > 0) return true
         else if (typeof value === 'string' && this.isVariable(value)) return true
@@ -59,14 +52,12 @@ export class OcdTerraformResource {
         else return `${this.indentation[level]}# ${name} = "${value}"`
     }
     generateTextAttribute = (name: string, value: string | undefined, required: boolean, level=0) => {
-        // console.debug('OcdTerraformResource: generateTextAttribute:', name, 'Level:', level, `(${this.indentation[level]})`)
         if (this.isVariable(value)) return `${this.indentation[level]}${name} = ${this.formatVariable(value)}`
         else if (required) return `${this.indentation[level]}${name} = "${value}"`
         else if (value && value.trim() !== '') return `${this.indentation[level]}${name} = "${value}"`
         else return `${this.indentation[level]}# ${name} = "${value}"`
     }
     generateBase64EncodedTextAttribute = (name: string, value: string | undefined, required: boolean, level=0) => {
-        // console.debug('OcdTerraformResource: generateTextAttribute:', name, 'Level:', level, `(${this.indentation[level]})`)
         const data = value ? value.replaceAll('\n', '\\n').replaceAll('"', '\\"') : ''
         if (this.isVariable(value)) return `${this.indentation[level]}${name} = ${this.formatVariable(value)}`
         else if (required) return `${this.indentation[level]}${name} = base64encode("${data}")`
@@ -80,7 +71,6 @@ export class OcdTerraformResource {
         else return `${this.indentation[level]}# ${name} = ${value}`
     }
     generateNumberAttribute = (name: string, value: string | number | undefined, required: boolean, level=0) => {
-        // console.debug('OcdTerraformResource: generateNumberAttribute:', value, typeof value)
         if (typeof value === 'string' && this.isVariable(value)) return `${this.indentation[level]}${name} = ${this.formatVariable(value)}`
         else if (required) return `${this.indentation[level]}${name} = ${value}`
         // else if (value !== undefined && typeof value === 'number') return `${this.indentation[level]}${name} = ${value}`
@@ -89,14 +79,12 @@ export class OcdTerraformResource {
         else return `${this.indentation[level]}# ${name} = ${value}`
     }
     generateReferenceListAttribute = (name: string, value: string | string[] | undefined, required: boolean, level=0) => {
-        // console.debug('OcdTerraformResource: generateReferenceListAttribute:', value, typeof value)
         if (!Array.isArray(value) && this.isVariable(value)) return `${this.indentation[level]}${name} = ${this.formatVariable(value as string)}`
         else if (required && Array.isArray(value)) return `${this.indentation[level]}${name} = [${value.map((v: string) => `local.${this.idTFResourceMap[v]}_id`)}]`
         else if (Array.isArray(value) && value.length > 0) return `${this.indentation[level]}${name} = [${value.map((v: string) => `local.${this.idTFResourceMap[v]}_id`)}]`
         else return `${this.indentation[level]}# ${name} = "${value}"`
     }
     generateStringListAttribute = (name: string, value: string | string[] | undefined, required: boolean, level=0) => {
-        // console.debug('OcdTerraformResource: generateStringListAttribute:', value, typeof value)
         if (!Array.isArray(value) && this.isVariable(value)) return `${this.indentation[level]}${name} = ${this.formatVariable(value as string)}`
         else if (required && Array.isArray(value)) return `${this.indentation[level]}${name} = [${value.map((v: string) => `"${v}"`)}]`
         else if (Array.isArray(value) && value.length > 0) return `${this.indentation[level]}${name} = [${value.map((v: string) => `"${v}"`)}]`
@@ -105,12 +93,6 @@ export class OcdTerraformResource {
 
     isPropertyAssignConditionTrue = (conditional: boolean, condition: ResourcePropertyCondition | ResourcePropertyCondition[], resource: Record<string, any>, rootResource: OcdResource): boolean => {
         return OcdUtils.isPropertyConditionTrue(conditional, condition, resource, rootResource)
-        // // If not conditional then we will always display
-        // if (!conditional) return true
-        // // Check condition
-        // const element = condition.element ? condition.element.indexOf('_') ? OcdUtils.toCamelCase(condition.element)  : condition.element : ''
-        // const display = OcdUtils.isCondition(resource[element], condition.operator, condition.value)
-        // return display
     }
 }
 
