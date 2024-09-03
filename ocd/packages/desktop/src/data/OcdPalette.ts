@@ -43,28 +43,28 @@ export const palette = {
                     ]
                 },
                 {
-                    "title": "Database",
-                    "class": "oci-database",
+                    "title": "Storage",
+                    "class": "oci-storage",
                     "resources": [
                         {
                             "container": false,
-                            "title": "Autonomous Database",
-                            "class": "oci-autonomous-database"
+                            "title": "Volume",
+                            "class": "oci-volume"
                         },
                         {
                             "container": false,
-                            "title": "Database System",
-                            "class": "oci-db-system"
+                            "title": "Bucket",
+                            "class": "oci-bucket"
                         },
                         // {
                         //     "container": false,
-                        //     "title": "MySQL Database System",
-                        //     "class": "oci-mysql-db-system"
+                        //     "title": "File System",
+                        //     "class": "oci-file-system"
                         // },
                         // {
                         //     "container": false,
-                        //     "title": "NoSQL Database",
-                        //     "class": "oci-nosql-table"
+                        //     "title": "Mount Target",
+                        //     "class": "oci-mount-target"
                         // }
                     ]
                 },
@@ -176,28 +176,28 @@ export const palette = {
                     ]
                 },
                 {
-                    "title": "Storage",
-                    "class": "oci-storage",
+                    "title": "Database",
+                    "class": "oci-database",
                     "resources": [
                         {
                             "container": false,
-                            "title": "Volume",
-                            "class": "oci-volume"
+                            "title": "Autonomous Database",
+                            "class": "oci-autonomous-database"
                         },
                         {
                             "container": false,
-                            "title": "Bucket",
-                            "class": "oci-bucket"
+                            "title": "Database System",
+                            "class": "oci-db-system"
                         },
                         // {
                         //     "container": false,
-                        //     "title": "File System",
-                        //     "class": "oci-file-system"
+                        //     "title": "MySQL Database System",
+                        //     "class": "oci-mysql-db-system"
                         // },
                         // {
                         //     "container": false,
-                        //     "title": "Mount Target",
-                        //     "class": "oci-mount-target"
+                        //     "title": "NoSQL Database",
+                        //     "class": "oci-nosql-table"
                         // }
                     ]
                 },
@@ -637,8 +637,8 @@ export const palette = {
                     "resources": [
                         {
                             "container": false,
-                            "title": "Auto Managed VM",
-                            "class": "azure-instance"
+                            "title": "Virtual Machine",
+                            "class": "azure-virtual-machine"
                         }
                     ]
                 },
@@ -656,8 +656,34 @@ export const palette = {
                             "title": "Subnet",
                             "class": "azure-subnet"
                         },
+                        {
+                            "container": false,
+                            "title": "Load Balancer",
+                            "class": "azure-load-balancer"
+                        },
+                        {
+                            "container": false,
+                            "title": "DNS Zone",
+                            "class": "azure-dns-zone"
+                        },
                     ]
-                }
+                },
+                {
+                    "title": "Containers",
+                    "class": "azure-containers",
+                    "resources": [
+                        {
+                            "container": false,
+                            "title": "Container Registry",
+                            "class": "azure-container-registry"
+                        },
+                        {
+                            "container": false,
+                            "title": "Kubernetes Service",
+                            "class": "azure-kubernetes-cluster"
+                        },
+                    ]
+                },
             ]
         },
         // {

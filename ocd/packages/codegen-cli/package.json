@@ -56,12 +56,12 @@
     "generate-azureaz-validator":    "node lib/esm/ocd-codegen.js generate azureaz-validator-js  -s ./schema/azureaz-schema.json -d ../model/src/validator/provider/azure",
     "generate-azureaz":              "npm run generate-azureaz-model && npm run generate-azureaz-markdown && npm run generate-azureaz-properties && npm run generate-azureaz-terraform && npm run generate-azureaz-tabular && npm run generate-azureaz-validator",
 
-    "generate-azurerm-markdown":     "node lib/esm/ocd-codegen.js generate azurerm-markdown-js   -s ./schema/azurerm-schema.json -d ../export/src/markdown/provider/azure",
-    "generate-azurerm-model":        "node lib/esm/ocd-codegen.js generate azurerm-model-js      -s ./schema/azurerm-schema.json -d ../model/src/provider/azure",
-    "generate-azurerm-properties":   "node lib/esm/ocd-codegen.js generate azurerm-properties-js -s ./schema/azurerm-schema.json -d ../desktop/src/components/properties/provider/azure",
-    "generate-azurerm-tabular":      "node lib/esm/ocd-codegen.js generate azurerm-tabular-js    -s ./schema/azurerm-schema.json -d ../desktop/src/components/tabular/provider/azure",
-    "generate-azurerm-terraform":    "node lib/esm/ocd-codegen.js generate azurerm-terraform-js  -s ./schema/azurerm-schema.json -d ../export/src/terraform/provider/azure",
-    "generate-azurerm-validator":    "node lib/esm/ocd-codegen.js generate azurerm-validator-js  -s ./schema/azurerm-schema.json -d ../model/src/validator/provider/azure",
+    "generate-azurerm-markdown":     "node lib/esm/ocd-codegen.js generate azurerm-markdown-js   -f -s ./schema/azurerm-schema.json -d ../export/src/markdown/provider/azure",
+    "generate-azurerm-model":        "node lib/esm/ocd-codegen.js generate azurerm-model-js      -f -s ./schema/azurerm-schema.json -d ../model/src/provider/azure",
+    "generate-azurerm-properties":   "node lib/esm/ocd-codegen.js generate azurerm-properties-js -f -s ./schema/azurerm-schema.json -d ../desktop/src/components/properties/provider/azure",
+    "generate-azurerm-tabular":      "node lib/esm/ocd-codegen.js generate azurerm-tabular-js    -f -s ./schema/azurerm-schema.json -d ../desktop/src/components/tabular/provider/azure",
+    "generate-azurerm-terraform":    "node lib/esm/ocd-codegen.js generate azurerm-terraform-js  -f -s ./schema/azurerm-schema.json -d ../export/src/terraform/provider/azure",
+    "generate-azurerm-validator":    "node lib/esm/ocd-codegen.js generate azurerm-validator-js  -f -s ./schema/azurerm-schema.json -d ../model/src/validator/provider/azure",
     "generate-azurerm":              "npm run generate-azurerm-model && npm run generate-azurerm-markdown && npm run generate-azurerm-properties && npm run generate-azurerm-terraform && npm run generate-azurerm-tabular && npm run generate-azurerm-validator",
 
     "generate": "npm run generate-oci",

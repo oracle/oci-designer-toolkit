@@ -7,8 +7,7 @@
 
 import fs from 'fs'
 import path from 'path'
-import { OciModelGenerator, OciTerraformGenerator, OciTerraformSchemaImporter, OciValidatorGenerator, OcdTerraformSchemaResourceAttributesGenerator, OciMarkdownGenerator, OciPropertiesGenerator, OciTabularGenerator, AzureTerraformSchemaImporter } from '@ocd/codegen'
-import { AzureModelGenerator, AzureAzTerraformSchemaImporter, AzureRmTerraformSchemaImporter, AzureValidatorGenerator } from '@ocd/codegen'
+import { OciModelGenerator, OciTerraformGenerator, OciTerraformSchemaImporter, OciValidatorGenerator, OcdTerraformSchemaResourceAttributesGenerator, OciMarkdownGenerator, OciPropertiesGenerator, OciTabularGenerator, AzureTerraformSchemaImporter, AzureMarkdownGenerator, AzurePropertiesGenerator, AzureTabularGenerator, AzureTerraformGenerator, AzureModelGenerator, AzureAzTerraformSchemaImporter, AzureRmTerraformSchemaImporter, AzureValidatorGenerator } from '@ocd/codegen'
 import { parseArgs } from "node:util"
 
 const options = {
@@ -58,10 +57,10 @@ if (command.toLocaleLowerCase() === 'generate') {
         const input_filename = args.values.schema
         const input_data = fs.readFileSync(input_filename, 'utf-8')
         // Generated root directory will be second in the list after command
-        const outputDirectory = args.values.destination
+        const outputDirectory = args.values.destination as string
         const schema = JSON.parse(input_data)
         // console.debug('Schema', schema)
-        const force_resource_file = args.values.force
+        const force_resource_file = args.values.force as boolean
         let generator = undefined
         if (subcommand.toLocaleLowerCase() === 'oci-model-js') generator = new OciModelGenerator()
         else if (subcommand.toLocaleLowerCase() === 'oci-markdown-js') generator = new OciMarkdownGenerator()
@@ -72,6 +71,10 @@ if (command.toLocaleLowerCase() === 'generate') {
         // else if (subcommand.toLocaleLowerCase() === 'azureaz-model-js') generator = new AzureModelGenerator()
         // else if (subcommand.toLocaleLowerCase() === 'azureaz-validator-js') generator = new AzureValidatorGenerator()
         else if (subcommand.toLocaleLowerCase() === 'azurerm-model-js') generator = new AzureModelGenerator()
+        else if (subcommand.toLocaleLowerCase() === 'azurerm-markdown-js') generator = new AzureMarkdownGenerator()
+        else if (subcommand.toLocaleLowerCase() === 'azurerm-properties-js') generator = new AzurePropertiesGenerator()
+        else if (subcommand.toLocaleLowerCase() === 'azurerm-terraform-js') generator = new AzureTerraformGenerator()
+        else if (subcommand.toLocaleLowerCase() === 'azurerm-tabular-js') generator = new AzureTabularGenerator()
         else if (subcommand.toLocaleLowerCase() === 'azurerm-validator-js') generator = new AzureValidatorGenerator()
         if (generator !== undefined) {
             Object.entries(schema).forEach(([key, value]) => {

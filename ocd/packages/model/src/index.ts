@@ -5,7 +5,7 @@
 
 export { OcdDesign, OcdViewPage, OcdViewCoords, OcdViewLayer, OcdBaseModel, OcdViewPoint, OcdViewConnector, OcdViewCoordsStyle } from './OcdDesign'
 export { OcdResources, OciResources, OcdVariable } from './OcdDesign'
-export { OciDefinedTag, OciFreeformTag } from './OcdDesign'
+export { OciDefinedTag, OciFreeformTag, OcdTag } from './OcdDesign'
 export { OcdResource } from './OcdResource'
 
 export { PaletteGroup, PaletteResource } from './OcdPalette'

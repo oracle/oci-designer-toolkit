@@ -23,9 +23,10 @@ export class OcdCodeGenerator {
     indentation = ['', '    ', '        ', '            ', '                ']
     simpleSort = OcdUtils.simpleSort
 
-    constructor(prefix: string='Oci') {
+    constructor(prefix: string='Oci', commonElements: string[]=[], commonIgnoreElements: string[]=[]) {
         this.prefix = prefix
         this.resources = []
+        this.ignoreAttributes = [...commonElements, ...commonIgnoreElements]
     }
 
     generate(resource: string, schema: OcdSchema) {

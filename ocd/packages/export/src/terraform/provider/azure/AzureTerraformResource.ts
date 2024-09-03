@@ -6,12 +6,27 @@
 import OcdTerraformResource from "../../OcdTerraformResource"
 import { OcdDesign, AzureResource } from '@ocd/model'
 
-export class OciTerraformResource extends OcdTerraformResource {
+export class AzureTerraformResource extends OcdTerraformResource {
     isHomeRegion: boolean
     simpleCacheAttributes = []
     lookupCacheAttributes = []
     constructor(idTFResourceMap={}, isHomeRegion: boolean = false) {
         super(idTFResourceMap)
         this.isHomeRegion = isHomeRegion
+    }
+
+    commonAssignments = (resource: AzureResource) => {
+        return ``
+    }
+
+    tags = (resource: AzureResource, design: OcdDesign): string => {
+        return `# Tags`
+    }
+
+    generateAdditionalResourceLocals(resource: AzureResource) {
+        return ''
+    }
+    generateAdditionalResource(resource: AzureResource) {
+        return ''
     }
 }
