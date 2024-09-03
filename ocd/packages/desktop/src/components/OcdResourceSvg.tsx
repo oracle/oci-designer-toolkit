@@ -390,8 +390,8 @@ const OcdForeignObject = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
 export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, contextMenu, setContextMenu, svgDragDropEvents, resource, ghost }: ResourceSvgProps): JSX.Element => {
     const {selectedResource, setSelectedResource} = useContext(SelectedResourceContext)
     const page: OcdViewPage = ocdDocument.getActivePage()
-    const allCompartmentIds = ocdDocument.getOciResourceList('comparment').map((r) => r.id)
     const visibleLayers = page.layers.filter((l: OcdViewLayer) => l.visible).map((l: OcdViewLayer) => l.id)
+    // const allCompartmentIds = ocdDocument.getOciResourceList('comparment').map((r) => r.id)
     // const visibleResourceIds = ocdDocument.getResources().filter((r: OcdResource) => visibleLayers.includes(r.compartmentId) || (!allCompartmentIds.includes(r.compartmentId) && r.resourceType !== 'Compartment')).map((r: any) => r.id)
     const visibleResourceIds = ocdDocument.getResources().filter((r: any) => visibleLayers.includes(r.compartmentId)).map((r: any) => r.id)
     const hidden = !visibleResourceIds.includes(resource.ocid)
@@ -531,8 +531,8 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
 
 export const OcdDragResourceGhostSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resource }: ResourceSvgGhostProps): JSX.Element => {
     const page: OcdViewPage = ocdDocument.getActivePage()
-    const allCompartmentIds = ocdDocument.getOciResourceList('comparment').map((r) => r.id)
     const visibleLayers = page.layers.filter((l: OcdViewLayer) => l.visible).map((l: OcdViewLayer) => l.id)
+    // const allCompartmentIds = ocdDocument.getOciResourceList('comparment').map((r) => r.id)
     // const visibleResourceIds = ocdDocument.getResources().filter((r: OcdResource) => visibleLayers.includes(r.compartmentId) || (!allCompartmentIds.includes(r.compartmentId) && r.resourceType !== 'Compartment')).map((r: any) => r.id)
     const visibleResourceIds = ocdDocument.getResources().filter((r: any) => visibleLayers.includes(r.compartmentId)).map((r: any) => r.id)
     const hidden = !visibleResourceIds.includes(resource.ocid)

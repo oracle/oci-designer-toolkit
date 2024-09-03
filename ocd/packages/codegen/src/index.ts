@@ -6,6 +6,10 @@
 export { AzureRmTerraformSchemaImporter } from "./importer/AzureRmTerraformSchemaImporter"
 export { AzureAzTerraformSchemaImporter } from "./importer/AzureAzTerraformSchemaImporter"
 export { AzureModelGenerator } from "./generator/AzureModelGenerator"
+export { AzureMarkdownGenerator } from "./generator/AzureMarkdownGenerator"
+export { AzurePropertiesGenerator } from "./generator/AzurePropertiesGenerator"
+export { AzureTabularGenerator } from "./generator/AzureTabularGenerator"
+export { AzureTerraformGenerator } from "./generator/AzureTerraformGenerator"
 export { AzureValidatorGenerator } from "./generator/AzureValidatorGenerator"
 
 export { OciTerraformSchemaImporter } from "./importer/OciTerraformSchemaImporter"

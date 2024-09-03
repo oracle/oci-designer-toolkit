@@ -5,104 +5,133 @@
 
 import { OcdDesign, OcdVariable, OciResource } from "@ocd/model"
 import { OcdExporter, OutputDataStringArray } from "../OcdExporter"
-import { OciModelResources as Model } from '@ocd/model'
 import * as OciTerraformResources  from './provider/oci/resources'
+import * as AzureTerraformResources  from './provider/azure/resources'
 import { OcdUtils } from "@ocd/core";
 
-interface ResourceMap extends Record<string, string> {}
+interface ResourceMap extends Record<string, Record<string, string>> {}
 
 export class OcdTerraformExporter extends OcdExporter {
     terraform: string = ''
     resourceFileMap: ResourceMap = {
-        bastion: "oci_identity.tf",
-        compartment: "oci_identity.tf",
-        dynamic_group: "oci_identity.tf",
-        group: "oci_identity.tf",
-        key: "oci_identity.tf",
-        user: "oci_identity.tf",
-        vault: "oci_identity.tf",
-        vault_secret: "oci_identity.tf",
+        oci: {
+            bastion: "oci_identity.tf",
+            compartment: "oci_identity.tf",
+            dynamic_group: "oci_identity.tf",
+            group: "oci_identity.tf",
+            key: "oci_identity.tf",
+            user: "oci_identity.tf",
+            vault: "oci_identity.tf",
+            vault_secret: "oci_identity.tf",
 
-        dhcp_options: "oci_networking.tf",
-        drg: "oci_networking.tf",
-        drg_attachment: "oci_networking.tf",
-        internet_gateway: "oci_networking.tf",
-        load_balancer: "oci_networking.tf",
-        load_balancer_backend: "oci_networking.tf",
-        load_balancer_backend_set: "oci_networking.tf",
-        load_balancer_listener: "oci_networking.tf",
-        local_peering_gateway: "oci_networking.tf",
-        nat_gateway: "oci_networking.tf",
-        network_firewall: "oci_networking.tf",
-        network_load_balancer: "oci_networking.tf",
-        network_security_group: "oci_networking.tf",
-        network_security_group_security_rule: "oci_networking.tf",
-        remote_peering_connection: "oci_networking.tf",
-        route_table: "oci_networking.tf",
-        security_list: "oci_networking.tf",
-        service_gateway: "oci_networking.tf",
-        subnet: "oci_networking.tf",
-        vcn: "oci_networking.tf",
+            dhcp_options: "oci_networking.tf",
+            drg: "oci_networking.tf",
+            drg_attachment: "oci_networking.tf",
+            internet_gateway: "oci_networking.tf",
+            load_balancer: "oci_networking.tf",
+            load_balancer_backend: "oci_networking.tf",
+            load_balancer_backend_set: "oci_networking.tf",
+            load_balancer_listener: "oci_networking.tf",
+            local_peering_gateway: "oci_networking.tf",
+            nat_gateway: "oci_networking.tf",
+            network_firewall: "oci_networking.tf",
+            network_load_balancer: "oci_networking.tf",
+            network_security_group: "oci_networking.tf",
+            network_security_group_security_rule: "oci_networking.tf",
+            remote_peering_connection: "oci_networking.tf",
+            route_table: "oci_networking.tf",
+            security_list: "oci_networking.tf",
+            service_gateway: "oci_networking.tf",
+            subnet: "oci_networking.tf",
+            vcn: "oci_networking.tf",
 
-        bucket: "oci_storage.tf",
-        file_system: "oci_storage.tf",
-        mount_target: "oci_storage.tf",
-        volume: "oci_storage.tf",
-        volume_attachment: "oci_storage.tf",
+            bucket: "oci_storage.tf",
+            file_system: "oci_storage.tf",
+            mount_target: "oci_storage.tf",
+            volume: "oci_storage.tf",
+            volume_attachment: "oci_storage.tf",
 
-        analytics_instance: "oci_compute.tf",
-        autoscaling_configuration: "oci_compute.tf",
-        data_science_project: "oci_compute.tf",
-        instance: "oci_compute.tf",
-        instance_configuration: "oci_compute.tf",
-        instance_pool: "oci_compute.tf",
-        oracle_digital_assistant: "oci_compute.tf",
-        visual_builder_instance: "oci_compute.tf",
+            analytics_instance: "oci_compute.tf",
+            autoscaling_configuration: "oci_compute.tf",
+            data_science_project: "oci_compute.tf",
+            instance: "oci_compute.tf",
+            instance_configuration: "oci_compute.tf",
+            instance_pool: "oci_compute.tf",
+            oracle_digital_assistant: "oci_compute.tf",
+            visual_builder_instance: "oci_compute.tf",
 
-        autonomous_database: "oci_database.tf",
-        db_system: "oci_database.tf",
-        exadata_cloud_infrastructure: "oci_database.tf",
-        mysql_db_system: "oci_database.tf",
-        nosql_table: "oci_database.tf",
+            autonomous_database: "oci_database.tf",
+            db_system: "oci_database.tf",
+            exadata_cloud_infrastructure: "oci_database.tf",
+            mysql_db_system: "oci_database.tf",
+            nosql_table: "oci_database.tf",
 
-        cpe: "oci_customer.tf",
-        ipsec: "oci_customer.tf",
+            cpe: "oci_customer.tf",
+            ipsec: "oci_customer.tf",
 
-        oke_cluster: "oci_container.tf",
-        node_pool: "oci_container.tf",
+            oke_cluster: "oci_container.tf",
+            node_pool: "oci_container.tf",
 
-        unknown: "oci_unspecified.tf"
+            unknown: "oci_unspecified.tf"
+        },
+        azure: {
+            dns_zone: "azure_networking.tf",
+            load_balancer: "azure_networking.tf",
+            subnet: "azure_networking.tf",
+            virtual_network: "azure_networking.tf",
+
+            virtual_machine: "azure_compute.tf",
+
+            container_registry: "azure_container.tf",
+            kubernetes_cluster: "azure_container.tf",
+
+            unknown: "azure_unspecified.tf"
+        }
     }
     export = (design: OcdDesign): OutputDataStringArray => {
         this.design = design
-        const uniqueFilenames = [...new Set(Object.values(this.resourceFileMap))]
-        let outputData: OutputDataStringArray = {
-            "oci_provider.tf": [this.ociProvider()],
-            "oci_metadata.tf": [this.ociMetadata()],
-            ...uniqueFilenames.sort(OcdUtils.simpleSort).reduce((a, c) => {a[c] = [this.autoGeneratedNotice()]; return a}, {} as Record<string, string[]>),
-            "oci_provider_variables.tf": [this.ociProviderVariables()],
-            "oci_user_variables.tf": [this.ociUserVariables()],
-            "oci_connection.tfvars": [this.ociProviderTFVars()],
+        const outputData: OutputDataStringArray = {
+            ...this.exportOci(design),
+            ...this.exportAzure(design)
         }
-        // Id to Terraform Resource Name Map
-        const idTFResourceMap: Record<string, string> = this.getResources().reduce((a, c) => {a[c.id] = c.terraformResourceName; return a}, {} as Record<string, string>)
-        // Generate OCI Terraform
-        Object.entries(design.model.oci.resources).forEach(([k, v]) => {
-            const className = OcdUtils.toClassName('Oci', k)
-            const filename = this.resourceFileMap.hasOwnProperty(k) ? this.resourceFileMap[k] : this.resourceFileMap['unknown']
-            // @ts-ignore
-            v.forEach((r: OciResource) => {
-                // @ts-ignore 
-                const tfResource = new OciTerraformResources[className](r, idTFResourceMap)
-                if (!outputData.hasOwnProperty(filename)) outputData[filename] = [this.autoGeneratedNotice()]
-                outputData[filename].push(tfResource.generate(r, design))
-            })
-        })
-        // console.debug('OcdTerraformExporter: Output Data', outputData)
         const allResources: string[] = Object.values(outputData).reduce((a, c) => [...a, ...c], [])
-        // console.debug('OcdTerraformExporter: All Resources', allResources)
         this.terraform = allResources.join('\n')
-        // console.debug('OcdTerraformExporter: Terraform', this.terraform)
+        return outputData
+    }
+    // Oci Methods
+    exportOci = (design: OcdDesign): OutputDataStringArray => {
+        // this.design = design
+        // Id to Terraform Resource Name Map
+        const idTFResourceMap: Record<string, string> = this.getOciResources().reduce((a, c) => {a[c.id] = c.terraformResourceName; return a}, {} as Record<string, string>)
+        console.debug('OcdTerraformExporter: ociExport: idTFResourceMap:', idTFResourceMap)
+        let outputData: OutputDataStringArray = {}
+        if (Object.keys(idTFResourceMap).length > 0) {
+            const uniqueFilenames = [...new Set(Object.values(this.resourceFileMap.oci))]
+            outputData = {
+                "oci_provider.tf": [this.ociProvider()],
+                "oci_provider_variables.tf": [this.ociProviderVariables()],
+                "oci_connection.tfvars": [this.ociProviderTFVars()],
+                "oci_metadata.tf": [this.ociMetadata()],
+                ...uniqueFilenames.sort(OcdUtils.simpleSort).reduce((a, c) => {a[c] = [this.autoGeneratedNotice()]; return a}, {} as Record<string, string[]>),
+                "oci_user_variables.tf": [this.ociUserVariables()],
+            }
+            // Id to Terraform Resource Name Map
+            // const idTFResourceMap: Record<string, string> = this.getResources().reduce((a, c) => {a[c.id] = c.terraformResourceName; return a}, {} as Record<string, string>)
+            // Generate OCI Terraform
+            Object.entries(design.model.oci.resources).forEach(([k, v]) => {
+                const className = OcdUtils.toClassName('Oci', k)
+                const filename = this.resourceFileMap.oci.hasOwnProperty(k) ? this.resourceFileMap.oci[k] : this.resourceFileMap.oci['unknown']
+                // @ts-ignore
+                v.forEach((r: OciResource) => {
+                    // @ts-ignore 
+                    const tfResource = new OciTerraformResources[className](r, idTFResourceMap)
+                    if (!outputData.hasOwnProperty(filename)) outputData[filename] = [this.autoGeneratedNotice()]
+                    outputData[filename].push(tfResource.generate(r, design))
+                })
+            })
+            // const allResources: string[] = Object.values(outputData).reduce((a, c) => [...a, ...c], [])
+            // this.terraform = allResources.join('\n')
+        }
         return outputData
     }
     ociProvider = () => {return `${this.autoGeneratedNotice()}
@@ -226,6 +255,51 @@ locals {
     ociUserVariables = () => {return `${this.autoGeneratedNotice()}
 ${this.design.model.oci.vars.map((v) => this.variableStatement(v)).join('')}
     `}
+    // Azure Methods
+    exportAzure = (design: OcdDesign): OutputDataStringArray => {
+        // Id to Terraform Resource Name Map
+        const idTFResourceMap: Record<string, string> = this.getAzureResources().reduce((a, c) => {a[c.id] = c.terraformResourceName; return a}, {} as Record<string, string>)
+        console.debug('OcdTerraformExporter: azureExport: idTFResourceMap:', idTFResourceMap)
+        let outputData: OutputDataStringArray = {}
+        if (Object.keys(idTFResourceMap).length > 0) {
+            const uniqueFilenames = [...new Set(Object.values(this.resourceFileMap.azure))]
+            outputData = {
+                "azure_provider.tf": [this.azureProvider()],
+                // "azure_provider_variables.tf": [this.azureProviderVariables()],
+                // "azure_connection.tfvars": [this.azureProviderTFVars()],
+                "azure_metadata.tf": [this.azureMetadata()],
+                ...uniqueFilenames.sort(OcdUtils.simpleSort).reduce((a, c) => {a[c] = [this.autoGeneratedNotice()]; return a}, {} as Record<string, string[]>),
+                // "azure_user_variables.tf": [this.azureUserVariables()],
+            }
+            // Generate OCI Terraform
+            Object.entries(design.model.azure.resources).forEach(([k, v]) => {
+                const className = OcdUtils.toClassName('Azure', k)
+                const filename = this.resourceFileMap.azure.hasOwnProperty(k) ? this.resourceFileMap.azure[k] : this.resourceFileMap.azure['unknown']
+                // @ts-ignore
+                v.forEach((r: OciResource) => {
+                    // @ts-ignore 
+                    const tfResource = new AzureTerraformResources[className](r, idTFResourceMap)
+                    if (!outputData.hasOwnProperty(filename)) outputData[filename] = [this.autoGeneratedNotice()]
+                    outputData[filename].push(tfResource.generate(r, design))
+                })
+            })
+        }
+        return outputData
+    }
+    azureProvider = () => {return `${this.autoGeneratedNotice()}
+terraform {
+    required_version = ">= 1.5.0"
+}
+
+# ------ Connect to Provider
+provider "azurerm" {
+}
+`
+    }
+    azureMetadata = () => {return `${this.autoGeneratedNotice()}
+`
+    }
+    // Common
     variableStatement = (v: OcdVariable) => {
         return `variable "${v.name}" {
     ${v.default !== '' ? `default = "${v.default}"` : ''}

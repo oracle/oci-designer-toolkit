@@ -22,16 +22,16 @@ export class OcdTabularGenerator extends OcdCodeGenerator {
     content = (resource, schema) => {
         const contents = `${this.copyright()}
 
-import { OciTabularResourceProps } from "../../../../../types/ReactComponentProperties"
-import { OcdTabularContents } from "../OciTabularContents"
+import { ${this.prefix}TabularResourceProps } from "../../../../../types/ReactComponentProperties"
+import { OcdTabularContents } from "../${this.prefix}TabularContents"
 
-export const ${this.reactResourceName(resource)} = ({ ocdDocument, ociResources, selected }: OciTabularResourceProps): JSX.Element => {
+export const ${this.reactResourceName(resource)} = ({ ocdDocument, ${this.prefix.toLowerCase()}Resources, selected }: ${this.prefix}TabularResourceProps): JSX.Element => {
     const columnTitles: string[] = []
     const resourceElements: string[] = []
     return (
         <OcdTabularContents 
             ocdDocument={ocdDocument}
-            ociResources={ociResources}
+            ${this.prefix.toLowerCase()}Resources={${this.prefix.toLowerCase()}Resources}
             selected={selected}
             columnTitles={columnTitles}
             resourceElements={resourceElements}

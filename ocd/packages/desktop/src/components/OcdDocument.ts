@@ -86,7 +86,7 @@ export class OcdDocument {
     // getResourceLists() {return {...this.getOciResourceLists()}}
     getResourceLists() {return OcdDesign.getResourceLists(this.design)}
     // getResources() {return this.getOciResources()}
-    getResources() {return OcdDesign.getOciResources(this.design)}
+    getResources() {return OcdDesign.getResources(this.design)}
     // getResource(id='') {return this.getResources().find((r: OcdResource) => r.id === id)}
     getResource(id='') {return OcdDesign.getResource(this.design, id)}
     addOciReasourceToList(key: string, modelResource: OciResource) {this.design.model.oci.resources[key] ? this.design.model.oci.resources[key].push(modelResource) : this.design.model.oci.resources[key] = [modelResource]}

@@ -80,10 +80,23 @@ export interface OcdMouseEvents extends Record<string, MouseEventHandler<SVGGEle
 //     [key: string]: Function   
 // }
 
-export interface OciTabularResourceProps {
+export interface OcdTabularResourceProps {
     ocdDocument: OcdDocument
-    ociResources: OcdResources
+    ocdResources?: OcdResources
     selected: string
+}
+
+export interface OciTabularResourceProps extends OcdTabularResourceProps {
+    ociResources: OcdResources
+}
+
+export interface AzureTabularResourceProps extends OcdTabularResourceProps {
+    azureResources: OcdResources
+}
+
+export interface OcdTabularContentsProps extends OcdTabularResourceProps {
+    columnTitles: string[]
+    resourceElements: string[]
 }
 
 export interface OciTabularContentsProps extends OciTabularResourceProps {
@@ -91,9 +104,14 @@ export interface OciTabularContentsProps extends OciTabularResourceProps {
     resourceElements: string[]
 }
 
-export interface OciTabularHeaderProps {
+export interface AzureTabularContentsProps extends AzureTabularResourceProps {
     columnTitles: string[]
-    ociResources: OcdResources
+    resourceElements: string[]
+}
+
+export interface OcdTabularHeaderProps {
+    columnTitles: string[]
+    ocdResources?: OcdResources
     resourceElements: string[]
     selected: string
     sortColumn: string
@@ -103,13 +121,29 @@ export interface OciTabularHeaderProps {
     setDisplayColumns: React.Dispatch<any>
 }
 
-export interface OciTabularRowProps {
-    ocdDocument: OcdDocument
+export interface OciTabularHeaderProps extends OcdTabularHeaderProps {
     ociResources: OcdResources
+}
+
+export interface AzureTabularHeaderProps extends OcdTabularHeaderProps {
+    azureResources: OcdResources
+}
+
+export interface OcdTabularRowProps {
+    ocdDocument: OcdDocument
+    ocdResources?: OcdResources
     index: number
     resource: OcdResource
     resourceElements: string[]
     selected: string
+}
+
+export interface OciTabularRowProps extends OcdTabularRowProps {
+    ociResources: OcdResources
+}
+
+export interface AzureTabularRowProps extends OcdTabularRowProps {
+    azureResources: OcdResources
 }
 
 export interface OcdVariableRowPropsNew {
