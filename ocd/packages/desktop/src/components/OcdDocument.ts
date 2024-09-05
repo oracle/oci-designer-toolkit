@@ -4,9 +4,11 @@
 */
 
 import { v4 as uuidv4 } from 'uuid'
-import { AzureModelResources, AzureResource, OciModelResources } from '@ocd/model'
-import { OcdDesign, OcdViewPage, OcdViewCoords, OcdViewLayer, OcdBaseModel, OcdViewPoint, OcdViewCoordsStyle, OcdResource, OciResource, PaletteResource } from '@ocd/model'
-import { OcdAutoLayout } from '@ocd/model'
+import { OcdAutoLayout, OcdDesign, OcdViewPage, OcdViewCoords, OcdViewLayer, OcdBaseModel, OcdViewPoint, OcdViewCoordsStyle, OcdResource, PaletteResource, 
+    OciModelResources, OciResource,
+    AzureModelResources, AzureResource, 
+    GcpResource,
+    GeneralModelResources, GeneralResource } from '@ocd/model'
 import { OcdUtils } from '@ocd/core'
 import { additionTitleInfo } from '../data/OcdAdditionTitleInfo'
 import { OcdDragResource, OcdSelectedResource } from '../types/Console'
@@ -42,14 +44,14 @@ export class OcdDocument {
         if (typeof design === 'string' && design.length > 0) this.design = JSON.parse(design)
         else if (design instanceof Object) this.design = design
         else this.design = this.newDesign()
-        this.selectedResource = resource ? resource : OcdDocument.newSelectedResource()
-        this.dragResource = dragResource ? dragResource : this.newDragResource()
+        this.selectedResource = resource || OcdDocument.newSelectedResource()
+        this.dragResource = dragResource || this.newDragResource()
         this.query = false
     }
 
-    static new = () => new OcdDocument()
+    static readonly new = () => new OcdDocument()
 
-    static clone = (ocdDocument:OcdDocument) => new OcdDocument(ocdDocument.design, ocdDocument.selectedResource, ocdDocument.dragResource)
+    static readonly clone = (ocdDocument:OcdDocument) => new OcdDocument(ocdDocument.design, ocdDocument.selectedResource, ocdDocument.dragResource)
 
     newDesign = (): OcdDesign => OcdDesign.newDesign()
 
@@ -77,74 +79,89 @@ export class OcdDocument {
     getParentResource = () => this.getResource(this.dragResource.modelId)
     getParentResourceCoords = () => this.getCoords(this.dragResource.coordsId)
 
-    isOciResourceList(key: string): boolean {return this.design.model.oci.resources[key] ? true : false}
-    // getOciResourceList(key: string) {return this.design.model.oci.resources[key] ? this.design.model.oci.resources[key] : []}
+    isOciResourceList(key: string): boolean {return Object.hasOwn(this.design.model.oci.resources, key)}
     getOciResourceList(key: string) {return OcdDesign.getOciResourceList(this.design, key)}
-    // getOciResourceLists() {return this.design.model.oci.resources}
-    // getOciResources() {return Object.values(this.design.model.oci.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], [])}
     getOciResourcesObject() {return this.design.model.oci.resources}
-    // getResourceLists() {return {...this.getOciResourceLists()}}
     getResourceLists() {return OcdDesign.getResourceLists(this.design)}
-    // getResources() {return this.getOciResources()}
     getResources() {return OcdDesign.getResources(this.design)}
-    // getResource(id='') {return this.getResources().find((r: OcdResource) => r.id === id)}
     getResource(id='') {return OcdDesign.getResource(this.design, id)}
-    addOciReasourceToList(key: string, modelResource: OciResource) {this.design.model.oci.resources[key] ? this.design.model.oci.resources[key].push(modelResource) : this.design.model.oci.resources[key] = [modelResource]}
-    addAzureReasourceToList(key: string, modelResource: AzureResource) {this.design.model.azure.resources[key] ? this.design.model.azure.resources[key].push(modelResource) : this.design.model.azure.resources[key] = [modelResource]}
-    // addGcpReasourceToList(key: string, modelResource: GcpResource) {this.design.model.gcp.resources[key] ? this.design.model.gcp.resources[key].push(modelResource) : this.design.model.gcp.resources[key] = [modelResource]}
+    addOciReasourceToList(key: string, modelResource: OciResource) {
+        if (!Object.hasOwn(this.design.model, 'oci')) this.design.model.oci = {resources: {}, vars: [], tags: {}}
+        if (!Object.hasOwn(this.design.model.oci.resources, key)) this.design.model.oci.resources[key] = []
+        this.design.model.oci.resources[key].push(modelResource)
+    }
+    addAzureReasourceToList(key: string, modelResource: AzureResource) {
+        if (!Object.hasOwn(this.design.model, 'azure')) this.design.model.azure = {resources: {}, vars: []}
+        if (!Object.hasOwn(this.design.model.azure.resources, key)) this.design.model.azure.resources[key] = []
+        this.design.model.azure.resources[key].push(modelResource)
+    }
+    addGcpReasourceToList(key: string, modelResource: GcpResource) {
+        if (!Object.hasOwn(this.design.model, 'gcp')) this.design.model.gcp = {resources: {}, vars: []}
+        if (!Object.hasOwn(this.design.model.gcp.resources, key)) this.design.model.gcp.resources[key] = []
+        this.design.model.gcp.resources[key].push(modelResource)
+    }
+    addGeneralReasourceToList(key: string, modelResource: GeneralResource) {
+        if (!Object.hasOwn(this.design.model, 'general')) this.design.model.general = {resources: {}, vars: []}
+        if (!Object.hasOwn(this.design.model.general.resources, key)) this.design.model.general.resources[key] = []
+        this.design.model.general.resources[key].push(modelResource)
+    }
     addResource(paletteResource: PaletteResource, compartmentId: string): OcdAddResourceResponse {
         switch(paletteResource.provider) {
             case 'oci':
                 return this.addOciResource(paletteResource, compartmentId)
             case 'azure':
                 return this.addAzureResource(paletteResource, compartmentId)
+            case 'gcp':
+                return this.addGcpResource(paletteResource, compartmentId)
+            case 'general':
+                return this.addGeneralResource(paletteResource, compartmentId)
             default:
                 alert(`Provider ${paletteResource.provider} has not yet been implemented.`)
                 return {modelResource: undefined, additionalResources: []}
         }
     }
-    addResource1(paletteResource: PaletteResource, compartmentId: string) {
-        const resourceList = paletteResource.class.split('-').slice(1).join('_')
-        const resourceClass = paletteResource.class.toLowerCase().split('-').map((w) => `${w.charAt(0).toUpperCase()}${w.slice(1)}`).join('')
-        const resourceNamespace: string = `${resourceClass}`
-        // const resourceClient: string = `${resourceClass}Client`
-        // @ts-ignore
-        let modelResource = undefined
-        let response: OcdAddResourceResponse = {modelResource: undefined, additionalResources: []}
-        if (paletteResource.provider === 'oci') {
-            // @ts-ignore 
-            const client = OciModelResources[resourceNamespace]
-            console.debug('OcdDocument: Namespace',resourceNamespace , client)
-            if (client) {
-                modelResource = client.newResource()
-                modelResource.compartmentId = compartmentId
-                response.modelResource = modelResource
-                console.debug('OcdDocument:', modelResource)
-                this.addOciReasourceToList(resourceList, modelResource)
-                // this.design.model.oci.resources[resourceList] ? this.design.model.oci.resources[resourceList].push(modelResource) : this.design.model.oci.resources[resourceList] = [modelResource]
-                const additionalResources = client.getAdditionalResources?.() // Use Optional Chaining to test if function exists
-                if (additionalResources) {
-                    console.debug('OcdDocument: Creating Additional Resources', additionalResources)
-                    additionalResources.forEach((r: PaletteResource) => {
-                        const additionalResource = this.addResource(r, compartmentId).modelResource
-                        //@ts-ignore
-                        response.additionalResources.push(additionalResource)
-                        // @ts-ignore
-                        this.setResourceParent(additionalResource.id, modelResource.id)
-                        // @ts-ignore
-                        client.setAdditionalResourceValues?.(modelResource, additionalResource)
-                    })
-                }
-            } else {
-                alert(`Resource ${resourceClass} has not yet been implemented.`)
-            }
-        } else {
-            alert(`Provider ${paletteResource.provider} has not yet been implemented.`)
-        }
-        // console.debug('OcdDocument: Added Resource:', modelResource)
-        // return modelResource
-        return response
-    }
+    // addResource1(paletteResource: PaletteResource, compartmentId: string) {
+    //     const resourceList = paletteResource.class.split('-').slice(1).join('_')
+    //     const resourceClass = paletteResource.class.toLowerCase().split('-').map((w) => `${w.charAt(0).toUpperCase()}${w.slice(1)}`).join('')
+    //     const resourceNamespace: string = `${resourceClass}`
+    //     // const resourceClient: string = `${resourceClass}Client`
+    //     // @ts-ignore
+    //     let modelResource = undefined
+    //     let response: OcdAddResourceResponse = {modelResource: undefined, additionalResources: []}
+    //     if (paletteResource.provider === 'oci') {
+    //         // @ts-ignore 
+    //         const client = OciModelResources[resourceNamespace]
+    //         console.debug('OcdDocument: Namespace',resourceNamespace , client)
+    //         if (client) {
+    //             modelResource = client.newResource()
+    //             modelResource.compartmentId = compartmentId
+    //             response.modelResource = modelResource
+    //             console.debug('OcdDocument:', modelResource)
+    //             this.addOciReasourceToList(resourceList, modelResource)
+    //             // this.design.model.oci.resources[resourceList] ? this.design.model.oci.resources[resourceList].push(modelResource) : this.design.model.oci.resources[resourceList] = [modelResource]
+    //             const additionalResources = client.getAdditionalResources?.() // Use Optional Chaining to test if function exists
+    //             if (additionalResources) {
+    //                 console.debug('OcdDocument: Creating Additional Resources', additionalResources)
+    //                 additionalResources.forEach((r: PaletteResource) => {
+    //                     const additionalResource = this.addResource(r, compartmentId).modelResource
+    //                     //@ts-ignore
+    //                     response.additionalResources.push(additionalResource)
+    //                     // @ts-ignore
+    //                     this.setResourceParent(additionalResource.id, modelResource.id)
+    //                     // @ts-ignore
+    //                     client.setAdditionalResourceValues?.(modelResource, additionalResource)
+    //                 })
+    //             }
+    //         } else {
+    //             alert(`Resource ${resourceClass} has not yet been implemented.`)
+    //         }
+    //     } else {
+    //         alert(`Provider ${paletteResource.provider} has not yet been implemented.`)
+    //     }
+    //     // console.debug('OcdDocument: Added Resource:', modelResource)
+    //     // return modelResource
+    //     return response
+    // }
     addOciResource(paletteResource: PaletteResource, compartmentId: string): OcdAddResourceResponse {
         const resourceList = paletteResource.class.split('-').slice(1).join('_')
         const resourceClass = paletteResource.class.toLowerCase().split('-').map((w) => `${w.charAt(0).toUpperCase()}${w.slice(1)}`).join('')
@@ -204,6 +221,68 @@ export class OcdDocument {
             return response
         } else {
             alert(`Azure Resource ${resourceClass} has not yet been implemented.`)
+            return {modelResource: undefined, additionalResources: []}
+        }
+    }
+    addGcpResource(paletteResource: PaletteResource, compartmentId: string): OcdAddResourceResponse {
+        const resourceList = paletteResource.class.split('-').slice(1).join('_')
+        const resourceClass = paletteResource.class.toLowerCase().split('-').map((w) => `${w.charAt(0).toUpperCase()}${w.slice(1)}`).join('')
+        const resourceNamespace: string = `${resourceClass}`
+        // @ts-ignore 
+        const client = GcpModelResources[resourceNamespace]
+        console.debug('OcdDocument: Namespace',resourceNamespace , client)
+        if (client) {
+            const modelResource = client.newResource()
+            modelResource.compartmentId = compartmentId
+            console.debug('OcdDocument:', modelResource)
+            this.addGcpReasourceToList(resourceList, modelResource)
+            const response: OcdAddResourceResponse = {modelResource: modelResource, additionalResources: []}
+            const additionalResources = client.getAdditionalResources?.() // Use Optional Chaining to test if function exists
+            if (additionalResources) {
+                console.debug('OcdDocument: Creating Gcp Additional Resources', additionalResources)
+                additionalResources.forEach((r: PaletteResource) => {
+                    const additionalResource = this.addGcpResource(r, compartmentId).modelResource
+                    if (additionalResource) {
+                        response.additionalResources.push(additionalResource)
+                        this.setResourceParent(additionalResource.id, modelResource.id)
+                        client.setAdditionalResourceValues?.(modelResource, additionalResource)
+                    }
+                })
+            }
+            return response
+        } else {
+            alert(`Gcp Resource ${resourceClass} has not yet been implemented.`)
+            return {modelResource: undefined, additionalResources: []}
+        }
+    }
+    addGeneralResource(paletteResource: PaletteResource, compartmentId: string): OcdAddResourceResponse {
+        const resourceList = paletteResource.class.split('-').slice(1).join('_')
+        const resourceClass = paletteResource.class.toLowerCase().split('-').map((w) => `${w.charAt(0).toUpperCase()}${w.slice(1)}`).join('')
+        const resourceNamespace: string = `${resourceClass}`
+        // @ts-ignore 
+        const client = GeneralModelResources[resourceNamespace]
+        console.debug('OcdDocument: Namespace',resourceNamespace , client)
+        if (client) {
+            const modelResource = client.newResource()
+            modelResource.compartmentId = compartmentId
+            console.debug('OcdDocument:', modelResource)
+            this.addGeneralReasourceToList(resourceList, modelResource)
+            const response: OcdAddResourceResponse = {modelResource: modelResource, additionalResources: []}
+            const additionalResources = client.getAdditionalResources?.() // Use Optional Chaining to test if function exists
+            if (additionalResources) {
+                console.debug('OcdDocument: Creating General Additional Resources', additionalResources)
+                additionalResources.forEach((r: PaletteResource) => {
+                    const additionalResource = this.addGeneralResource(r, compartmentId).modelResource
+                    if (additionalResource) {
+                        response.additionalResources.push(additionalResource)
+                        this.setResourceParent(additionalResource.id, modelResource.id)
+                        client.setAdditionalResourceValues?.(modelResource, additionalResource)
+                    }
+                })
+            }
+            return response
+        } else {
+            alert(`General Resource ${resourceClass} has not yet been implemented.`)
             return {modelResource: undefined, additionalResources: []}
         }
     }

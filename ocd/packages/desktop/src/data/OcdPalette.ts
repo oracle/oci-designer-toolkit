@@ -691,6 +691,24 @@ export const palette = {
         //     "provider": "google",
         //     "class": "google-provider",
         //     "groups": []
-        // }
+        // },
+        {
+            "title": "General",
+            "provider": "general",
+            "class": "general-provider",
+            "groups": [
+                {
+                    "title": "Shapes",
+                    "class": "general-shapes",
+                    "resources": [
+                        {
+                            "container": true,
+                            "title": "Rectangle",
+                            "class": "general-rectangle"
+                        }
+                    ]
+                },
+            ]
+        },
     ]
 }

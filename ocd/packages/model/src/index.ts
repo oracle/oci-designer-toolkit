@@ -19,3 +19,8 @@ export * as OciResourceValidation from './validator/provider/oci/resources'
 
 export { AzureResource } from './provider/azure/AzureResource'
 export * as AzureModelResources from './provider/azure/resources'
+
+export { GcpResource } from './provider/gcp/GcpResource'
+
+export { GeneralResource } from './provider/general/GeneralResource'
+export * as GeneralModelResources from './provider/general/resources'
