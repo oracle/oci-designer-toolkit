@@ -112,7 +112,6 @@ export class OcdAutoLayout {
             const layoutEngine = new OcdDynamicLayoutEngine(this.coords, this.design)
             return layoutEngine.layout(detailed, this.coords)
         }
-        return this.coords
     }
     layoutV2(detailed: boolean = true, style: string = 'two-column'): OcdViewCoords[] {
         // Position Children in Container

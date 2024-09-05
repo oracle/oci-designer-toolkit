@@ -669,6 +669,27 @@ export const palette = {
                     ]
                 },
                 {
+                    "title": "Database",
+                    "class": "azure-database",
+                    "resources": [
+                        {
+                            "container": false,
+                            "title": "SQL Database",
+                            "class": "azure-sql-database"
+                        },
+                        {
+                            "container": false,
+                            "title": "Oracle Exadata Database@Azure",
+                            "class": "azure-oracle-exadata-database"
+                        },
+                        {
+                            "container": false,
+                            "title": "Oracle Autonomous Database@Azure",
+                            "class": "azure-oracle-autonomous-database"
+                        },
+                    ]
+                },
+                {
                     "title": "Containers",
                     "class": "azure-containers",
                     "resources": [
@@ -691,6 +712,24 @@ export const palette = {
         //     "provider": "google",
         //     "class": "google-provider",
         //     "groups": []
-        // }
+        // },
+        {
+            "title": "General",
+            "provider": "general",
+            "class": "general-provider",
+            "groups": [
+                {
+                    "title": "Shapes",
+                    "class": "general-shapes",
+                    "resources": [
+                        {
+                            "container": true,
+                            "title": "Rectangle",
+                            "class": "general-rectangle"
+                        }
+                    ]
+                },
+            ]
+        },
     ]
 }

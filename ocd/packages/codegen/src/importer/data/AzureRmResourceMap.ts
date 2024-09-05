@@ -10,6 +10,10 @@ export const resourceMap: OcdResourceMap = {
     "azurerm_container_registry": "container_registry",
     "azurerm_dns_zone": "dns_zone",
     "azurerm_kubernetes_cluster": "kubernetes_cluster",
+    "azurerm_resource_group": "resource_group",
+    "azurerm_sql_database": "sql_database",
+    "azurerm_oracle_exadata_database": "oracle_exadata_database",
+    "azurerm_oracle_autonomous_database": "oracle_autonomous_database",
     "azurerm_subnet": "subnet",
     "azurerm_virtual_machine": "virtual_machine",
     "azurerm_virtual_network": "virtual_network",
@@ -39,6 +43,24 @@ export const resourceAttributes: OcdIncludedElements = {
     "azurerm_kubernetes_cluster":[
         "kubernetes_version",
         "private_dns_zone_id"
+    ],
+    "azurerm_resource_group": [
+        "managed_by"
+    ],
+    "azurerm_sql_database": [
+        "edition",
+        "elastic_pool_name",
+        "server_name"
+    ],
+    "azurerm_oracle_exadata_database": [
+        "edition",
+        "elastic_pool_name",
+        "server_name"
+    ],
+    "azurerm_oracle_autonomous_database": [
+        "edition",
+        "elastic_pool_name",
+        "server_name"
     ],
     "azurerm_subnet": [
         "virtual_network_name"
