@@ -350,7 +350,9 @@ export const OcdStaticLookupProperty = ({ ocdDocument, setOcdDocument, resource,
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const [value, setValue] = useState(resource[attribute.key])
     const properties = config && config.properties ? config.properties : {}
-    const resources = useMemo(() => config && config.options ? config.options : [], config?.options)
+    const configOptions = config && config.options ? config.options : []
+    const resources = useMemo(() => config && config.options ? config.options : [], configOptions)
+    // const resources = useMemo(() => config && config.options ? config.options : [], config?.options)
     // const resources = config && config.options ? config.options : []
     // console.info('Resources', resources)
     const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
