@@ -680,12 +680,17 @@ export const palette = {
                         {
                             "container": false,
                             "title": "Oracle Exadata Database@Azure",
-                            "class": "azure-oracle-exadata-database"
+                            "class": "azure-oracledatabase-exadata-infrastructure"
                         },
                         {
                             "container": false,
                             "title": "Oracle Autonomous Database@Azure",
-                            "class": "azure-oracle-autonomous-database"
+                            "class": "azure-oracledatabase-autonomous-database-regular"
+                        },
+                        {
+                            "container": false,
+                            "title": "Oracle VM Cluster Database@Azure",
+                            "class": "azure-oracledatabase-cloud-vm-cluster"
                         },
                     ]
                 },
