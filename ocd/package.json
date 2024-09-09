@@ -21,7 +21,7 @@
   "license": "UPL-1.0",
   "main": "index.js",
   "scripts": {
-    "github-action-install": "npm install",
+    "github-action-install": "npm install --legacy-peer-deps ",
     "github-action-compile-for-codegen": "npm run compile --workspace=packages/core --workspace=packages/codegen --workspace=packages/codegen-cli",
     "github-action-generate": "npm run import-and-generate --workspace=packages/codegen-cli && npm run generate-ocd-build-date --workspace=packages/codegen-cli",
     "github-action-compile": "npm run compile --workspaces --if-present",
