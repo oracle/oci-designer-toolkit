@@ -9,6 +9,7 @@
 
 import fs from 'fs'
 import path from 'path'
+//@ts-ignore
 import { parseArgs } from "node:util"
 import { OcdMarkdownExporter, OcdSVGExporter, OcdTerraformExporter } from '@ocd/export'
 import { OciQuery } from "@ocd/query"
