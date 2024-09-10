@@ -4,7 +4,7 @@
 */
 
 import { useContext, useEffect, useMemo, useRef, useState } from 'react'
-import { OcdDesign, OcdResource, OcdVariable, OcdViewCoordsStyle, OcdViewPage, OciDefinedTag, OciFreeformTag, OciResourceValidation, OciResources } from '@ocd/model'
+import { AzureResources, OcdDesign, OcdResource, OcdVariable, OcdViewCoordsStyle, OcdViewPage, OciDefinedTag, OciFreeformTag, OciResourceValidation, OciResources } from '@ocd/model'
 import { DesignerColourPicker, DesignerResourceProperties, DesignerResourceValidationResult } from '../types/DesignerResourceProperties'
 import { OcdUtils } from '@ocd/core'
 import { OcdDocument } from './OcdDocument'
@@ -16,6 +16,7 @@ import Markdown from 'react-markdown'
 import { OcdValidationResult } from '@ocd/model'
 import { CacheContext, SelectedResourceContext } from '../pages/OcdConsole'
 import { OciDefinedTagRow, OciFreeformTagRow } from '../pages/OcdCommonTags'
+import { OcdCache, OcdCacheData } from './OcdCache'
 
 const OcdPropertiesTabbar = ({modelId, coordsId, activeTab, setActiveTab, additionalCss}:{modelId: string, coordsId: string, activeTab: string, setActiveTab: (title: string) => void, additionalCss: Record<string, string>}): JSX.Element => {
     console.debug('OcdPropertiesTabbar: Render', activeTab)
@@ -101,6 +102,54 @@ const OcdPropertiesDataList = ({variables}: {variables: OcdVariable[]}): JSX.Ele
     return (<datalist id='variables' key={`VariablesDataList`}>{variables.map((v) => <OcdDataListOption value={`var.${v.name}`} key={v.key}/>)}</datalist>)
 }
 
+const getSelectedResourceProxy = (ocdDocument: OcdDocument, selectedModelResource: OcdResource, ocdCache: OcdCacheData) => {    
+    const provider = selectedModelResource ? selectedModelResource.provider : ''
+    console.debug('OcdProperties: getSelectedResourceProxy:', selectedModelResource)
+    switch (provider) {
+        case 'azure':
+            return getAzureResourceProxy(ocdDocument, selectedModelResource, ocdCache)
+        case 'oci':
+            return getOciResourceProxy(ocdDocument, selectedModelResource, ocdCache)
+        default:
+            return selectedModelResource
+    }
+}
+
+const getOciResourceProxy = (ocdDocument: OcdDocument, selectedModelResource: OcdResource, ocdCache: OcdCacheData) => {
+    const provider = selectedModelResource.provider
+    const resourceType = selectedModelResource.resourceType
+    const resourceProxyName = `${OcdUtils.toTitleCase(provider)}${resourceType}Proxy`
+    console.debug(`> OcdProperies: OcdResourceProperties: Render(Oci Proxy(${resourceProxyName}))`, selectedModelResource)
+    //@ts-ignore
+    return Object.hasOwn(ociResources, resourceProxyName) ? ociResources[resourceProxyName].proxyResource(ocdDocument, selectedModelResource, ocdCache) : selectedModelResource
+}
+
+const getAzureResourceProxy = (ocdDocument: OcdDocument, selectedModelResource: OcdResource, ocdCache: OcdCacheData) => {
+    const provider = selectedModelResource.provider
+    const resourceType = selectedModelResource.resourceType
+    const resourceProxyName = `${OcdUtils.toTitleCase(provider)}${resourceType}Proxy`
+    console.debug(`> OcdProperies: OcdResourceProperties: Render(AzurevProxy(${resourceProxyName}))`, selectedModelResource)
+    //@ts-ignore
+    return Object.hasOwn(azureResources, resourceProxyName) ? azureResources[resourceProxyName].proxyResource(ocdDocument, selectedModelResource, ocdCache) : selectedModelResource
+}
+
+const getResourceProperties = (selectedModelResource: OcdResource) => {
+    const provider = selectedModelResource ? selectedModelResource.provider : ''
+    const resourceType = selectedModelResource ? selectedModelResource.resourceType : ''
+    const resourceJSXMethod = `${OcdUtils.toTitleCase(provider)}${resourceType}`
+    console.debug(`> OcdProperies: OcdResourceProperties: Render(JMX(${resourceJSXMethod}))`)
+    switch (provider) {
+        case 'azure':
+            // @ts-ignore 
+            return azureResources[resourceJSXMethod]
+        case 'oci':
+            // @ts-ignore 
+            return ociResources[resourceJSXMethod]
+        default:
+            return undefined
+    }
+}
+
 const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
     const {ocdCache, setOcdCache} = useContext(CacheContext)
     const {selectedResource, setSelectedResource} = useContext(SelectedResourceContext)
@@ -108,17 +157,39 @@ const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourcePr
     const selectedModelResource: OcdResource = ocdDocument.getSelectedResource()
     // const resourceProxyName = useMemo(() => selectedResource ? `${OcdUtils.toTitleCase(selectedResource.provider)}${selectedResource.resourceType}Proxy` : '', [selectedResource])
     const selectedModelResourceProxy: OcdResource = useMemo(() => {
-        const resourceProxyName = selectedModelResource ? `${OcdUtils.toTitleCase(selectedModelResource.provider)}${selectedModelResource.resourceType}Proxy` : ''
-        console.debug(`> OcdProperies: OcdResourceProperties: Render(Proxy(${resourceProxyName}))`, selectedModelResource)
-        // @ts-ignore 
-        return Object.hasOwn(ociResources, resourceProxyName) ? ociResources[resourceProxyName].proxyResource(ocdDocument, selectedModelResource, ocdCache) : selectedModelResource
+        // const resourceProxyName = selectedModelResource ? `${OcdUtils.toTitleCase(selectedModelResource.provider)}${selectedModelResource.resourceType}Proxy` : ''
+        // console.debug(`> OcdProperies: OcdResourceProperties: Render(Proxy(${resourceProxyName}))`, selectedModelResource)
+        // // @ts-ignore 
+        // return Object.hasOwn(ociResources, resourceProxyName) ? ociResources[resourceProxyName].proxyResource(ocdDocument, selectedModelResource, ocdCache) : selectedModelResource
+        // const provider = selectedModelResource ? selectedModelResource.provider : ''
+        // switch (provider) {
+        //     case 'azure':
+        //         return getAzureResourceProxy(ocdDocument, selectedModelResource, ocdCache)
+        //     case 'oci':
+        //         return getOciResourceProxy(ocdDocument, selectedModelResource, ocdCache)
+        //     default:
+        //         return selectedModelResource
+        // }
+        return getSelectedResourceProxy(ocdDocument, selectedModelResource, ocdCache)
     }, [selectedModelResource])
     // const resourceJSXMethod = selectedResource ? `${OcdUtils.toTitleCase(selectedResource.provider)}${selectedResource.resourceType}` : ''
     const ResourceProperties = useMemo(() => {
-        const resourceJSXMethod = selectedModelResource ? `${OcdUtils.toTitleCase(selectedModelResource.provider)}${selectedModelResource.resourceType}` : ''
-        console.debug(`> OcdProperies: OcdResourceProperties: Render(JMX(${resourceJSXMethod}))`)
-        // @ts-ignore 
-        return ociResources[resourceJSXMethod]
+        // const resourceJSXMethod = selectedModelResource ? `${OcdUtils.toTitleCase(selectedModelResource.provider)}${selectedModelResource.resourceType}` : ''
+        // console.debug(`> OcdProperies: OcdResourceProperties: Render(JMX(${resourceJSXMethod}))`)
+        // // @ts-ignore 
+        // // return ociResources[resourceJSXMethod]
+        // const provider = selectedModelResource ? selectedModelResource.provider : ''
+        // switch (provider) {
+        //     case 'azure':
+        //         // @ts-ignore 
+        //         return azureResources[resourceJSXMethod]
+        //     case 'oci':
+        //         // @ts-ignore 
+        //         return ociResources[resourceJSXMethod]
+        //     default:
+        //         return undefined
+        // }
+        return getResourceProperties(selectedModelResource)
     }, [selectedModelResource])
     const variables = selectedModelResource && selectedModelResource.provider === 'oci' ? ocdDocument.getOciVariables() : []
     const modelId = selectedModelResource ? selectedModelResource.id : ''
@@ -155,9 +226,10 @@ const OcdResourceTags = ({ocdDocument, setOcdDocument}: DesignerResourceProperti
     const {ocdCache, setOcdCache} = useContext(CacheContext)
     const selectedModelResource: OcdResource = ocdDocument.getSelectedResource()
     // const resourceProxyName = useMemo(() => selectedResource ? `${OcdUtils.toTitleCase(selectedResource.provider)}${selectedResource.resourceType}Proxy` : '', [selectedResource])
-    const resourceProxyName = selectedModelResource ? `${OcdUtils.toTitleCase(selectedModelResource.provider)}${selectedModelResource.resourceType}Proxy` : ''
-    // @ts-ignore
-    const selectedResourceProxy = Object.hasOwn(ociResources, resourceProxyName) ? ociResources[resourceProxyName].proxyResource(ocdDocument, selectedModelResource, ocdCache) : selectedModelResource
+    // const resourceProxyName = selectedModelResource ? `${OcdUtils.toTitleCase(selectedModelResource.provider)}${selectedModelResource.resourceType}Proxy` : ''
+    // @ ts-ignore
+    // const selectedResourceProxy = Object.hasOwn(ociResources, resourceProxyName) ? ociResources[resourceProxyName].proxyResource(ocdDocument, selectedModelResource, ocdCache) : selectedModelResource
+    const selectedResourceProxy = getSelectedResourceProxy(ocdDocument, selectedModelResource, ocdCache)
     // const selectedResourceProxy: OcdResource = useMemo(() => {
     //     const resourceProxyName = selectedResource ? `${OcdUtils.toTitleCase(selectedResource.provider)}${selectedResource.resourceType}Proxy` : ''
     //     console.debug(`> OcdProperies: OcdResourceProperties: Render(Proxy(${resourceProxyName}))`, selectedResource)
@@ -624,13 +696,44 @@ const OcdColourPicker = ({colour, setColour}: DesignerColourPicker): JSX.Element
     )
 }
 
+const getResourceValidationResults = (ocdDocument: OcdDocument, selectedModelResource: OcdResource): OcdValidationResult[] => {
+    const provider = selectedModelResource ? selectedModelResource.provider : ''
+    switch (provider) {
+        case 'azure': 
+            return getAzureResourceValidationResults(ocdDocument, selectedModelResource)
+        case 'oci': 
+            return getOciResourceValidationResults(ocdDocument, selectedModelResource)
+        default:
+            return []
+    }
+}
+
+const resourceValidationMethod = (selectedModelResource: OcdResource) => selectedModelResource ? `${OcdUtils.toTitleCase(selectedModelResource.provider)}${selectedModelResource.resourceType}` : ''
+
+const getAzureResourceValidationResults = (ocdDocument: OcdDocument, selectedModelResource: OcdResource): OcdValidationResult[] => {
+    const azureResources: AzureResources = ocdDocument.getAzureResourcesObject()
+    // @ts-ignore 
+    const ResourceValidation = AzureResourceValidation[resourceValidationMethod(selectedModelResource)]
+    const validationResults = ResourceValidation ? ResourceValidation.validateResource(selectedModelResource, azureResources) : []
+    return validationResults
+}
+
+const getOciResourceValidationResults = (ocdDocument: OcdDocument, selectedModelResource: OcdResource): OcdValidationResult[] => {
+    const ociResources: OciResources = ocdDocument.getOciResourcesObject()
+    // @ts-ignore 
+    const ResourceValidation = OciResourceValidation[resourceValidationMethod(selectedModelResource)]
+    const validationResults = ResourceValidation ? ResourceValidation.validateResource(selectedModelResource, ociResources) : []
+    return validationResults
+}
+
 const OcdResourceValidation =  ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
     const selectedModelResource: OcdResource = ocdDocument.getSelectedResource()
-    const ociResources: OciResources = ocdDocument.getOciResourcesObject()
-    const resourceValidationMethod = selectedModelResource ? `${OcdUtils.toTitleCase(selectedModelResource.provider)}${selectedModelResource.resourceType}` : ''
+    // const ociResources: OciResources = ocdDocument.getOciResourcesObject()
+    // const resourceValidationMethod = selectedModelResource ? `${OcdUtils.toTitleCase(selectedModelResource.provider)}${selectedModelResource.resourceType}` : ''
     // @ts-ignore 
-    const ResourceValidation = OciResourceValidation[resourceValidationMethod]
-    const validationResults = ResourceValidation ? ResourceValidation.validateResource(selectedModelResource, ociResources) : []
+    // const ResourceValidation = OciResourceValidation[resourceValidationMethod]
+    // const validationResults = ResourceValidation ? ResourceValidation.validateResource(selectedModelResource, ociResources) : []
+    const validationResults = getResourceValidationResults(ocdDocument, selectedModelResource)
     const errors = validationResults.filter((v: OcdValidationResult) => v.type === 'error')
     const warnings = validationResults.filter((v: OcdValidationResult) => v.type === 'warning')
     const information = validationResults.filter((v: OcdValidationResult) => v.type === 'information')

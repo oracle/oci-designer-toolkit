@@ -82,6 +82,7 @@ export class OcdDocument {
     isOciResourceList(key: string): boolean {return Object.hasOwn(this.design.model.oci.resources, key)}
     getOciResourceList(key: string) {return OcdDesign.getOciResourceList(this.design, key)}
     getOciResourcesObject() {return this.design.model.oci.resources}
+    getAzureResourcesObject() {return this.design.model.azure.resources}
     getResourceLists() {return OcdDesign.getResourceLists(this.design)}
     getResources() {return OcdDesign.getResources(this.design)}
     getResource(id='') {return OcdDesign.getResource(this.design, id)}
