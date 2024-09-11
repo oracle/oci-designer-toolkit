@@ -6,7 +6,7 @@
 import { CompartmentPickerProps, QueryDialogProps } from "../../types/Dialogs"
 import { OciApiFacade } from "../../facade/OciApiFacade"
 import React, { useContext, useState } from "react"
-import { OciModelResources } from '@ocd/model'
+import { OcdDesign, OciModelResources } from '@ocd/model'
 import { OcdDocument } from "../OcdDocument"
 import { OcdUtils } from '@ocd/core'
 import { ActiveFileContext, ConsoleConfigContext } from "../../pages/OcdConsole"
@@ -88,7 +88,7 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
             // @ts-ignore
             console.debug('OcdQueryDialog: Query Tenancy', JSON.stringify(results, null, 2))
             const clone = OcdDocument.clone(ocdDocument)
-            const design = clone.newDesign()
+            const design = OcdDesign.newDesign()
             design.metadata.title = 'Queried Cloud Design'
             design.view.pages[0].title = selectedRegion
             // Copy Result information Across to design

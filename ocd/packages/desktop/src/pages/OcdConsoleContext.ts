@@ -3,11 +3,10 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import { OcdResource } from "@ocd/model"
 import { OcdCacheData } from "../components/OcdCache"
 import { OcdConsoleConfig } from "../components/OcdConsoleConfiguration"
 import { OcdDocument } from "../components/OcdDocument"
-import { OcdActiveFile, OcdSelectedResource } from "../types/Console"
+import { OcdActiveFile, OcdDragResource, OcdSelectedResource } from "../types/Console"
 
 export type OcdActiveFileContext = {
     activeFile: OcdActiveFile
@@ -32,5 +31,10 @@ export type OcdDocumentContext = {
 export type OcdSelectedResourceContext = {
     selectedResource: OcdSelectedResource
     setSelectedResource: (c: OcdSelectedResource) => void
+}
+
+export type OcdDragResourceContext = {
+    dragResource: OcdDragResource
+    setDragResource: (c: OcdDragResource) => void
 }
 

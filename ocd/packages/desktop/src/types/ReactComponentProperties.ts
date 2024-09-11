@@ -25,7 +25,10 @@ export interface ResourceRectProps {
     setOcdDocument: React.Dispatch<any>
     resource: OcdViewCoords
     hidden: boolean
+    setOrigin: React.Dispatch<any>
 }
+
+export type point = {x: number, y: number}
 
 export interface ResourceForeignObjectProps {
     ocdConsoleConfig: OcdConsoleConfig
@@ -34,6 +37,7 @@ export interface ResourceForeignObjectProps {
     resource: OcdViewCoords
     hidden: boolean
     ghost?: boolean
+    origin: point
 }
 
 export interface ResourceSvgGhostProps {

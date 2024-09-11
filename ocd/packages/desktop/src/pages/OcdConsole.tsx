@@ -20,13 +20,13 @@ import OcdDocumentation from './OcdDocumentation'
 import { OcdCacheData } from '../components/OcdCache'
 import { OcdCacheFacade } from '../facade/OcdCacheFacade'
 import { loadDesign } from '../components/Menu'
-import { OcdResource, OcdValidationResult, OcdValidator } from '@ocd/model'
+import { OcdValidationResult, OcdValidator } from '@ocd/model'
 import OcdValidation from './OcdValidation'
 import { buildDetails } from '../data/OcdBuildDetails'
 import OcdHelp from './OcdHelp'
 import OcdCommonTags from './OcdCommonTags'
 import { OcdReferenceDataQueryDialog } from '../components/dialogs/OcdReferenceDataQueryDialog'
-import { OcdActiveFileContext, OcdCacheContext, OcdConsoleConfigContext, OcdDocumentContext, OcdSelectedResourceContext } from './OcdConsoleContext'
+import { OcdActiveFileContext, OcdCacheContext, OcdConsoleConfigContext, OcdDocumentContext, OcdDragResourceContext, OcdSelectedResourceContext } from './OcdConsoleContext'
 
 // Import css as text
 // @ts-ignore
@@ -39,6 +39,7 @@ export const ConsoleConfigContext = createContext<OcdConsoleConfigContext>({ocdC
 export const CacheContext = createContext<OcdCacheContext>({ocdCache: OcdCacheData.new(), setOcdCache: () => {}})
 export const DocumentContext = createContext<OcdDocumentContext>({ocdDocument: OcdDocument.new(), setOcdDocument: () => {}})
 export const SelectedResourceContext = createContext<OcdSelectedResourceContext>({selectedResource: OcdDocument.newSelectedResource(), setSelectedResource: () => {}})
+export const DragResourceContext = createContext<OcdDragResourceContext>({dragResource: OcdDocument.newDragResource(), setDragResource: () => {}})
 
 const OcdConsole = (): JSX.Element => {
     // console.debug('OcdConsole: CSS', svgThemeCss)
@@ -157,9 +158,6 @@ const OcdConsoleHeader = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, 
 
 const OcdConsoleSettingsEditor = ({ ocdConsoleConfig, setOcdConsoleConfig }: any): JSX.Element => {
     const [dropdown, setDropdown] = useState(false)
-    // const onMouseEnter = () => {setDropdown(true)}
-    // const onMouseLeave = () => {setDropdown(false)}
-    // const closeDropdown = () => {setDropdown(!dropdown)}
     const toggleDropdown = () => {setDropdown(!dropdown)}
     const cbRef = useRef<HTMLInputElement>(null)
     const showPreviousViewOnStartOnChange = () => {

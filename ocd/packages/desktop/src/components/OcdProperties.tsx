@@ -153,44 +153,9 @@ const getResourceProperties = (selectedModelResource: OcdResource) => {
 const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
     const {ocdCache, setOcdCache} = useContext(CacheContext)
     const {selectedResource, setSelectedResource} = useContext(SelectedResourceContext)
-    // console.debug('OcdProperties: OcdResourceProperties: OCD Cache:', ocdCache)
     const selectedModelResource: OcdResource = ocdDocument.getSelectedResource()
-    // const resourceProxyName = useMemo(() => selectedResource ? `${OcdUtils.toTitleCase(selectedResource.provider)}${selectedResource.resourceType}Proxy` : '', [selectedResource])
-    const selectedModelResourceProxy: OcdResource = useMemo(() => {
-        // const resourceProxyName = selectedModelResource ? `${OcdUtils.toTitleCase(selectedModelResource.provider)}${selectedModelResource.resourceType}Proxy` : ''
-        // console.debug(`> OcdProperies: OcdResourceProperties: Render(Proxy(${resourceProxyName}))`, selectedModelResource)
-        // // @ts-ignore 
-        // return Object.hasOwn(ociResources, resourceProxyName) ? ociResources[resourceProxyName].proxyResource(ocdDocument, selectedModelResource, ocdCache) : selectedModelResource
-        // const provider = selectedModelResource ? selectedModelResource.provider : ''
-        // switch (provider) {
-        //     case 'azure':
-        //         return getAzureResourceProxy(ocdDocument, selectedModelResource, ocdCache)
-        //     case 'oci':
-        //         return getOciResourceProxy(ocdDocument, selectedModelResource, ocdCache)
-        //     default:
-        //         return selectedModelResource
-        // }
-        return getSelectedResourceProxy(ocdDocument, selectedModelResource, ocdCache)
-    }, [selectedModelResource])
-    // const resourceJSXMethod = selectedResource ? `${OcdUtils.toTitleCase(selectedResource.provider)}${selectedResource.resourceType}` : ''
-    const ResourceProperties = useMemo(() => {
-        // const resourceJSXMethod = selectedModelResource ? `${OcdUtils.toTitleCase(selectedModelResource.provider)}${selectedModelResource.resourceType}` : ''
-        // console.debug(`> OcdProperies: OcdResourceProperties: Render(JMX(${resourceJSXMethod}))`)
-        // // @ts-ignore 
-        // // return ociResources[resourceJSXMethod]
-        // const provider = selectedModelResource ? selectedModelResource.provider : ''
-        // switch (provider) {
-        //     case 'azure':
-        //         // @ts-ignore 
-        //         return azureResources[resourceJSXMethod]
-        //     case 'oci':
-        //         // @ts-ignore 
-        //         return ociResources[resourceJSXMethod]
-        //     default:
-        //         return undefined
-        // }
-        return getResourceProperties(selectedModelResource)
-    }, [selectedModelResource])
+    const selectedModelResourceProxy: OcdResource = useMemo(() => getSelectedResourceProxy(ocdDocument, selectedModelResource, ocdCache), [selectedModelResource])
+    const ResourceProperties = useMemo(() => getResourceProperties(selectedModelResource), [selectedModelResource])
     const variables = selectedModelResource && selectedModelResource.provider === 'oci' ? ocdDocument.getOciVariables() : []
     const modelId = selectedModelResource ? selectedModelResource.id : ''
     // Memos
@@ -204,19 +169,6 @@ const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourcePr
             {selectedModelResource && selectedModelResourceProxy && variablesDatalist}
             {selectedModelResource && selectedModelResource.provider === 'oci' && commonProperties} 
             {selectedModelResource && ResourceProperties && resourceProperties} 
-            {/* {selectedResource && selectedResource.provider === 'oci' && <OciCommonResourceProperties 
-                ocdDocument={ocdDocument} 
-                setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} 
-                resource={selectedResourceProxy}
-                rootResource={selectedResourceProxy}
-                key={`${selectedResourceProxy.id}.CommonProperties`}
-            />}
-            {selectedResource && ResourceProperties && <ResourceProperties 
-                ocdDocument={ocdDocument} 
-                setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} 
-                resource={selectedResourceProxy}
-                key={`${selectedResourceProxy.id}.Properties`}
-            />} */}
         </div>
     )
 }
@@ -224,18 +176,11 @@ const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourcePr
 const OcdResourceTags = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
     const {selectedResource, setSelectedResource} = useContext(SelectedResourceContext)
     const {ocdCache, setOcdCache} = useContext(CacheContext)
-    const selectedModelResource: OcdResource = ocdDocument.getSelectedResource()
-    // const resourceProxyName = useMemo(() => selectedResource ? `${OcdUtils.toTitleCase(selectedResource.provider)}${selectedResource.resourceType}Proxy` : '', [selectedResource])
-    // const resourceProxyName = selectedModelResource ? `${OcdUtils.toTitleCase(selectedModelResource.provider)}${selectedModelResource.resourceType}Proxy` : ''
-    // @ ts-ignore
-    // const selectedResourceProxy = Object.hasOwn(ociResources, resourceProxyName) ? ociResources[resourceProxyName].proxyResource(ocdDocument, selectedModelResource, ocdCache) : selectedModelResource
-    const selectedResourceProxy = getSelectedResourceProxy(ocdDocument, selectedModelResource, ocdCache)
-    // const selectedResourceProxy: OcdResource = useMemo(() => {
-    //     const resourceProxyName = selectedResource ? `${OcdUtils.toTitleCase(selectedResource.provider)}${selectedResource.resourceType}Proxy` : ''
-    //     console.debug(`> OcdProperies: OcdResourceProperties: Render(Proxy(${resourceProxyName}))`, selectedResource)
-    //     // @ts-ignore 
-    //     return Object.hasOwn(ociResources, resourceProxyName) ? ociResources[resourceProxyName].proxyResource(ocdDocument, selectedResource, ocdCache) : selectedResource
-    // }, [selectedResource])
+    // const selectedModelResource: OcdResource = ocdDocument.getSelectedResource()
+    const selectedModelResource: OcdResource = ocdDocument.getResource(selectedResource.modelId)
+    console.debug('OcdProperties: OcdResourceTags: selectedResource', selectedResource, '\nselectedModelResource', selectedModelResource)
+    // const selectedResourceProxy = getSelectedResourceProxy(ocdDocument, selectedModelResource, ocdCache)
+    const selectedResourceProxy: OcdResource = useMemo(() => getSelectedResourceProxy(ocdDocument, selectedModelResource, ocdCache), [selectedResource])
     const [freeformTags, setFreeformTags] = useState(OcdDesign.ociFreeformTagsToArray(selectedResourceProxy.freeformTags))
     const [definedTags, setDefinedTags] = useState(OcdDesign.ociDefinedTagsToArray(selectedResourceProxy.definedTags))
     useEffect(() => {
@@ -728,11 +673,6 @@ const getOciResourceValidationResults = (ocdDocument: OcdDocument, selectedModel
 
 const OcdResourceValidation =  ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
     const selectedModelResource: OcdResource = ocdDocument.getSelectedResource()
-    // const ociResources: OciResources = ocdDocument.getOciResourcesObject()
-    // const resourceValidationMethod = selectedModelResource ? `${OcdUtils.toTitleCase(selectedModelResource.provider)}${selectedModelResource.resourceType}` : ''
-    // @ts-ignore 
-    // const ResourceValidation = OciResourceValidation[resourceValidationMethod]
-    // const validationResults = ResourceValidation ? ResourceValidation.validateResource(selectedModelResource, ociResources) : []
     const validationResults = getResourceValidationResults(ocdDocument, selectedModelResource)
     const errors = validationResults.filter((v: OcdValidationResult) => v.type === 'error')
     const warnings = validationResults.filter((v: OcdValidationResult) => v.type === 'warning')
