@@ -5,8 +5,8 @@
 // TODO: Remove Following
 // @ts-nocheck
 
-import { OcdSchema } from '../types/OcdSchema.js'
-import { OcdCodeGenerator } from './OcdCodeGenerator.js'
+import { OcdSchema } from '../types/OcdSchema'
+import { OcdCodeGenerator } from './OcdCodeGenerator'
 import { OcdUtils } from '@ocd/core'
 
 export class OcdMarkdownGenerator extends OcdCodeGenerator {

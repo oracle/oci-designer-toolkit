@@ -22,6 +22,7 @@ export * as AzureModelResources from './provider/azure/resources'
 export * as AzureResourceValidation from './validator/provider/azure/resources'
 // Google
 export { GcpResource } from './provider/gcp/GcpResource'
+export * as GcpModelResources from './provider/gcp/resources'
 
 export { GeneralResource } from './provider/general/GeneralResource'
 export * as GeneralModelResources from './provider/general/resources'
