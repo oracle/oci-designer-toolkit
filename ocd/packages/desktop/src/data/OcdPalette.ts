@@ -674,8 +674,8 @@ export const palette = {
                     "resources": [
                         {
                             "container": false,
-                            "title": "SQL Database",
-                            "class": "azure-sql-database"
+                            "title": "Sql Server",
+                            "class": "azure-mssql-server"
                         },
                         {
                             "container": false,

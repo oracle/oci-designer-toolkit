@@ -112,7 +112,7 @@
         "name": "idcs_access_token",
         "type": "string",
         "subtype": "",
-        "required": true,
+        "required": false,
         "label": "Idcs Access Token",
         "id": "idcs_access_token",
         "staticLookup": false,
