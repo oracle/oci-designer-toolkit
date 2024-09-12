@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { OcdAutoLayout, OcdDesign, OcdViewPage, OcdViewCoords, OcdViewLayer, OcdBaseModel, OcdViewPoint, OcdViewCoordsStyle, OcdResource, PaletteResource, 
     OciModelResources, OciResource,
     AzureModelResources, AzureResource, 
-    GcpResource,
+    GcpModelResources, GcpResource,
     GeneralModelResources, GeneralResource } from '@ocd/model'
 import { OcdUtils } from '@ocd/core'
 import { additionTitleInfo } from '../data/OcdAdditionTitleInfo'

@@ -139,7 +139,15 @@ export interface OciResources {
     [key: string]: any[]
 }
 
+export interface AwsResources {
+    [key: string]: any[]
+}
+
 export interface AzureResources {
+    [key: string]: any[]
+}
+
+export interface GcpResources {
     [key: string]: any[]
 }
 

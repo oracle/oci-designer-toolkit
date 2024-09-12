@@ -712,12 +712,39 @@ export const palette = {
                 },
             ]
         },
-        // {
-        //     "title": "Google",
-        //     "provider": "google",
-        //     "class": "google-provider",
-        //     "groups": []
-        // },
+        {
+            "title": "GCP",
+            "provider": "gcp",
+            "class": "gcp-provider",
+            "groups": [
+                {
+                    "title": "Networking",
+                    "class": "gcp-network",
+                    "resources": [
+                        {
+                            "container": true,
+                            "title": "Virtual Private Cloud",
+                            "class": "gcp-compute-network"
+                        },
+                        // {
+                        //     "container": true,
+                        //     "title": "Subnet",
+                        //     "class": "azure-subnet"
+                        // },
+                        // {
+                        //     "container": false,
+                        //     "title": "Load Balancer",
+                        //     "class": "azure-load-balancer"
+                        // },
+                        // {
+                        //     "container": false,
+                        //     "title": "DNS Zone",
+                        //     "class": "azure-dns-zone"
+                        // },
+                    ]
+                },
+            ]
+        },
         {
             "title": "General",
             "provider": "general",
