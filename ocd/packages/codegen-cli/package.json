@@ -35,6 +35,7 @@
     "import-oci-terraform-schema":   "node lib/esm/ocd-codegen.js import oci-terraform-schema   -i ./schema/tf-schema.json -o ./schema/oci-schema.json",
     "import-azureaz-terraform-schema": "node lib/esm/ocd-codegen.js import azureaz-terraform-schema -i ./schema/tf-schema.json -o ./schema/azureaz-schema.json",
     "import-azurerm-terraform-schema": "node lib/esm/ocd-codegen.js import azurerm-terraform-schema -i ./schema/tf-schema.json -o ./schema/azurerm-schema.json",
+    "import-gcp-terraform-schema": "node lib/esm/ocd-codegen.js import gcp-terraform-schema -i ./schema/tf-schema.json -o ./schema/gcp-schema.json",
 
     "import": "npm run import-oci-terraform-schema && npm run import-azureaz-terraform-schema && npm run import-azurerm-terraform-schema",
 
@@ -64,10 +65,19 @@
     "generate-azurerm-validator":    "node lib/esm/ocd-codegen.js generate azurerm-validator-js  -s ./schema/azurerm-schema.json -d ../model/src/validator/provider/azure",
     "generate-azurerm":              "npm run generate-azurerm-model && npm run generate-azurerm-markdown && npm run generate-azurerm-properties && npm run generate-azurerm-terraform && npm run generate-azurerm-tabular && npm run generate-azurerm-validator",
 
-    "generate": "npm run generate-oci",
+    "generate-gcp-markdown":     "node lib/esm/ocd-codegen.js generate gcp-markdown-js   -s ./schema/gcp-schema.json -d ../export/src/markdown/provider/gcp",
+    "generate-gcp-model":        "node lib/esm/ocd-codegen.js generate gcp-model-js      -s ./schema/gcp-schema.json -d ../model/src/provider/gcp",
+    "generate-gcp-properties":   "node lib/esm/ocd-codegen.js generate gcp-properties-js -s ./schema/gcp-schema.json -d ../desktop/src/components/properties/provider/gcp",
+    "generate-gcp-tabular":      "node lib/esm/ocd-codegen.js generate gcp-tabular-js    -s ./schema/gcp-schema.json -d ../desktop/src/components/tabular/provider/gcp",
+    "generate-gcp-terraform":    "node lib/esm/ocd-codegen.js generate gcp-terraform-js  -s ./schema/gcp-schema.json -d ../export/src/terraform/provider/gcp",
+    "generate-gcp-validator":    "node lib/esm/ocd-codegen.js generate gcp-validator-js  -s ./schema/gcp-schema.json -d ../model/src/validator/provider/gcp",
+    "generate-gcp":              "npm run generate-gcp-model && npm run generate-gcp-markdown && npm run generate-gcp-properties && npm run generate-gcp-terraform && npm run generate-gcp-tabular && npm run generate-gcp-validator",
+
+    "generate": "npm run generate-oci && npm run generate-azurerm",
 
     "import-and-generate-oci": "npm run import-oci-terraform-schema && npm run generate-oci",
     "import-and-generate-azurerm": "npm run import-azurerm-terraform-schema && npm run generate-azurerm",
+    "import-and-generate-gcp": "npm run import-gcp-terraform-schema && npm run generate-gcp",
     "import-and-generate-azureaz": "npm run import-azureaz-terraform-schema && npm run generate-azureaz",
     
     "import-and-generate": "npm run import-and-generate-oci && npm run import-and-generate-azurerm"
