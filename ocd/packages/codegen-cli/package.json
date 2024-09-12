@@ -73,7 +73,7 @@
     "generate-gcp-validator":    "node lib/esm/ocd-codegen.js generate gcp-validator-js  -s ./schema/gcp-schema.json -d ../model/src/validator/provider/gcp",
     "generate-gcp":              "npm run generate-gcp-model && npm run generate-gcp-markdown && npm run generate-gcp-properties && npm run generate-gcp-terraform && npm run generate-gcp-tabular && npm run generate-gcp-validator",
 
-    "generate": "npm run generate-oci && npm run generate-azurerm",
+    "generate": "npm run generate-oci && npm run generate-azurerm && npm run generate-gcp",
 
     "import-and-generate-oci": "npm run import-oci-terraform-schema && npm run generate-oci",
     "import-and-generate-azurerm": "npm run import-azurerm-terraform-schema && npm run generate-azurerm",
