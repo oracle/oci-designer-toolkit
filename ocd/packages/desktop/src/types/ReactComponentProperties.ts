@@ -25,7 +25,10 @@ export interface ResourceRectProps {
     setOcdDocument: React.Dispatch<any>
     resource: OcdViewCoords
     hidden: boolean
+    setOrigin: React.Dispatch<any>
 }
+
+export type point = {x: number, y: number}
 
 export interface ResourceForeignObjectProps {
     ocdConsoleConfig: OcdConsoleConfig
@@ -34,6 +37,7 @@ export interface ResourceForeignObjectProps {
     resource: OcdViewCoords
     hidden: boolean
     ghost?: boolean
+    origin: point
 }
 
 export interface ResourceSvgGhostProps {
@@ -94,6 +98,10 @@ export interface AzureTabularResourceProps extends OcdTabularResourceProps {
     azureResources: OcdResources
 }
 
+export interface GcpTabularResourceProps extends OcdTabularResourceProps {
+    gcpResources: OcdResources
+}
+
 export interface OcdTabularContentsProps extends OcdTabularResourceProps {
     columnTitles: string[]
     resourceElements: string[]
@@ -105,6 +113,11 @@ export interface OciTabularContentsProps extends OciTabularResourceProps {
 }
 
 export interface AzureTabularContentsProps extends AzureTabularResourceProps {
+    columnTitles: string[]
+    resourceElements: string[]
+}
+
+export interface GcpTabularContentsProps extends GcpTabularResourceProps {
     columnTitles: string[]
     resourceElements: string[]
 }
@@ -129,6 +142,10 @@ export interface AzureTabularHeaderProps extends OcdTabularHeaderProps {
     azureResources: OcdResources
 }
 
+export interface GcpTabularHeaderProps extends OcdTabularHeaderProps {
+    gcpResources: OcdResources
+}
+
 export interface OcdTabularRowProps {
     ocdDocument: OcdDocument
     ocdResources?: OcdResources
@@ -144,6 +161,10 @@ export interface OciTabularRowProps extends OcdTabularRowProps {
 
 export interface AzureTabularRowProps extends OcdTabularRowProps {
     azureResources: OcdResources
+}
+
+export interface GcpTabularRowProps extends OcdTabularRowProps {
+    gcpResources: OcdResources
 }
 
 export interface OcdVariableRowPropsNew {

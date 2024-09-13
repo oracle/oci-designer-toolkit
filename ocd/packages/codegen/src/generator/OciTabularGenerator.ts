@@ -3,8 +3,8 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import { OcdTabularGenerator } from './OcdTabularGenerator.js'
-import { commonElements, commonIgnoreElements } from './data/OciCommonResourceProperties.js'
+import { OcdTabularGenerator } from './OcdTabularGenerator'
+import { commonElements, commonIgnoreElements } from './data/OciCommonResourceProperties'
 
 export class OciTabularGenerator extends OcdTabularGenerator {
     constructor () {

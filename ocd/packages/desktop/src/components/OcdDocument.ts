@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { OcdAutoLayout, OcdDesign, OcdViewPage, OcdViewCoords, OcdViewLayer, OcdBaseModel, OcdViewPoint, OcdViewCoordsStyle, OcdResource, PaletteResource, 
     OciModelResources, OciResource,
     AzureModelResources, AzureResource, 
-    GcpResource,
+    GcpModelResources, GcpResource,
     GeneralModelResources, GeneralResource } from '@ocd/model'
 import { OcdUtils } from '@ocd/core'
 import { additionTitleInfo } from '../data/OcdAdditionTitleInfo'
@@ -43,9 +43,9 @@ export class OcdDocument {
     constructor(design?: string | OcdDesign, resource?: OcdSelectedResource, dragResource?: OcdDragResource) {
         if (typeof design === 'string' && design.length > 0) this.design = JSON.parse(design)
         else if (design instanceof Object) this.design = design
-        else this.design = this.newDesign()
+        else this.design = OcdDesign.newDesign()
         this.selectedResource = resource || OcdDocument.newSelectedResource()
-        this.dragResource = dragResource || this.newDragResource()
+        this.dragResource = dragResource || OcdDocument.newDragResource()
         this.query = false
     }
 
@@ -53,9 +53,9 @@ export class OcdDocument {
 
     static readonly clone = (ocdDocument:OcdDocument) => new OcdDocument(ocdDocument.design, ocdDocument.selectedResource, ocdDocument.dragResource)
 
-    newDesign = (): OcdDesign => OcdDesign.newDesign()
+    static readonly newDesign = (): OcdDesign => OcdDesign.newDesign()
 
-    static newSelectedResource(): OcdSelectedResource {
+    static readonly newSelectedResource = (): OcdSelectedResource => {
         return {
             modelId: '',
             pageId: '',
@@ -63,14 +63,14 @@ export class OcdDocument {
             class: 'ocd-image'
         }
     }
-    newDragResource(dragging:boolean=false): OcdDragResource {
+    static readonly newDragResource = (dragging:boolean=false): OcdDragResource => {
         return {
             dragging: dragging,
             modelId: '',
             pageId: '',
             coordsId: '',
             class: 'ocd-image',
-            resource: this.newCoords()
+            resource: OcdDesign.newCoords()
         }
     }
     getSelectedResource = () => this.getResource(this.selectedResource.modelId)
@@ -82,6 +82,7 @@ export class OcdDocument {
     isOciResourceList(key: string): boolean {return Object.hasOwn(this.design.model.oci.resources, key)}
     getOciResourceList(key: string) {return OcdDesign.getOciResourceList(this.design, key)}
     getOciResourcesObject() {return this.design.model.oci.resources}
+    getAzureResourcesObject() {return this.design.model.azure.resources}
     getResourceLists() {return OcdDesign.getResourceLists(this.design)}
     getResources() {return OcdDesign.getResources(this.design)}
     getResource(id='') {return OcdDesign.getResource(this.design, id)}
