@@ -53,29 +53,29 @@
     "generate-oci-validator":      "node lib/esm/ocd-codegen.js generate oci-validator-js  -s ./schema/oci-schema.json -d ../model/src/validator/provider/oci",
     "generate-oci":                "npm run generate-oci-model && npm run generate-oci-markdown && npm run generate-oci-properties && npm run generate-oci-terraform && npm run generate-oci-tabular && npm run generate-oci-validator",
 
-    "generate-azurerm-markdown":     "node lib/esm/ocd-codegen.js generate azurerm-markdown-js   -s ./schema/azurerm-schema.json -d ../export/src/markdown/provider/azure",
-    "generate-azurerm-model":        "node lib/esm/ocd-codegen.js generate azurerm-model-js      -s ./schema/azurerm-schema.json -d ../model/src/provider/azure",
-    "generate-azurerm-properties":   "node lib/esm/ocd-codegen.js generate azurerm-properties-js -s ./schema/azurerm-schema.json -d ../desktop/src/components/properties/provider/azure",
-    "generate-azurerm-tabular":      "node lib/esm/ocd-codegen.js generate azurerm-tabular-js    -s ./schema/azurerm-schema.json -d ../desktop/src/components/tabular/provider/azure",
-    "generate-azurerm-terraform":    "node lib/esm/ocd-codegen.js generate azurerm-terraform-js  -s ./schema/azurerm-schema.json -d ../export/src/terraform/provider/azure",
-    "generate-azurerm-validator":    "node lib/esm/ocd-codegen.js generate azurerm-validator-js  -s ./schema/azurerm-schema.json -d ../model/src/validator/provider/azure",
-    "generate-azurerm":              "npm run generate-azurerm-model && npm run generate-azurerm-markdown && npm run generate-azurerm-properties && npm run generate-azurerm-terraform && npm run generate-azurerm-tabular && npm run generate-azurerm-validator",
+    "generate-azurerm-markdown":   "node lib/esm/ocd-codegen.js generate azurerm-markdown-js   -s ./schema/azurerm-schema.json -d ../export/src/markdown/provider/azure",
+    "generate-azurerm-model":      "node lib/esm/ocd-codegen.js generate azurerm-model-js      -s ./schema/azurerm-schema.json -d ../model/src/provider/azure",
+    "generate-azurerm-properties": "node lib/esm/ocd-codegen.js generate azurerm-properties-js -s ./schema/azurerm-schema.json -d ../desktop/src/components/properties/provider/azure",
+    "generate-azurerm-tabular":    "node lib/esm/ocd-codegen.js generate azurerm-tabular-js    -s ./schema/azurerm-schema.json -d ../desktop/src/components/tabular/provider/azure",
+    "generate-azurerm-terraform":  "node lib/esm/ocd-codegen.js generate azurerm-terraform-js  -s ./schema/azurerm-schema.json -d ../export/src/terraform/provider/azure",
+    "generate-azurerm-validator":  "node lib/esm/ocd-codegen.js generate azurerm-validator-js  -s ./schema/azurerm-schema.json -d ../model/src/validator/provider/azure",
+    "generate-azurerm":            "npm run generate-azurerm-model && npm run generate-azurerm-markdown && npm run generate-azurerm-properties && npm run generate-azurerm-terraform && npm run generate-azurerm-tabular && npm run generate-azurerm-validator",
 
-    "generate-gcp-markdown":     "node lib/esm/ocd-codegen.js generate gcp-markdown-js   -s ./schema/gcp-schema.json -d ../export/src/markdown/provider/gcp",
-    "generate-gcp-model":        "node lib/esm/ocd-codegen.js generate gcp-model-js      -s ./schema/gcp-schema.json -d ../model/src/provider/gcp",
-    "generate-gcp-properties":   "node lib/esm/ocd-codegen.js generate gcp-properties-js -s ./schema/gcp-schema.json -d ../desktop/src/components/properties/provider/gcp",
-    "generate-gcp-tabular":      "node lib/esm/ocd-codegen.js generate gcp-tabular-js    -s ./schema/gcp-schema.json -d ../desktop/src/components/tabular/provider/gcp",
-    "generate-gcp-terraform":    "node lib/esm/ocd-codegen.js generate gcp-terraform-js  -s ./schema/gcp-schema.json -d ../export/src/terraform/provider/gcp",
-    "generate-gcp-validator":    "node lib/esm/ocd-codegen.js generate gcp-validator-js  -s ./schema/gcp-schema.json -d ../model/src/validator/provider/gcp",
-    "generate-gcp":              "npm run generate-gcp-model && npm run generate-gcp-markdown && npm run generate-gcp-properties && npm run generate-gcp-terraform && npm run generate-gcp-tabular && npm run generate-gcp-validator",
+    "generate-gcp-markdown":       "node lib/esm/ocd-codegen.js generate gcp-markdown-js   -s ./schema/gcp-schema.json -d ../export/src/markdown/provider/gcp",
+    "generate-gcp-model":          "node lib/esm/ocd-codegen.js generate gcp-model-js      -s ./schema/gcp-schema.json -d ../model/src/provider/gcp",
+    "generate-gcp-properties":     "node lib/esm/ocd-codegen.js generate gcp-properties-js -s ./schema/gcp-schema.json -d ../desktop/src/components/properties/provider/gcp",
+    "generate-gcp-tabular":        "node lib/esm/ocd-codegen.js generate gcp-tabular-js    -s ./schema/gcp-schema.json -d ../desktop/src/components/tabular/provider/gcp",
+    "generate-gcp-terraform":      "node lib/esm/ocd-codegen.js generate gcp-terraform-js  -s ./schema/gcp-schema.json -d ../export/src/terraform/provider/gcp",
+    "generate-gcp-validator":      "node lib/esm/ocd-codegen.js generate gcp-validator-js  -s ./schema/gcp-schema.json -d ../model/src/validator/provider/gcp",
+    "generate-gcp":                "npm run generate-gcp-model && npm run generate-gcp-markdown && npm run generate-gcp-properties && npm run generate-gcp-terraform && npm run generate-gcp-tabular && npm run generate-gcp-validator",
 
     "generate": "npm run generate-oci && npm run generate-azurerm && npm run generate-gcp",
 
-    "import-and-generate-oci": "npm run import-oci-terraform-schema && npm run generate-oci",
+    "import-and-generate-oci":     "npm run import-oci-terraform-schema && npm run generate-oci",
     "import-and-generate-azurerm": "npm run import-azurerm-terraform-schema && npm run generate-azurerm",
-    "import-and-generate-gcp": "npm run import-gcp-terraform-schema && npm run generate-gcp",
+    "import-and-generate-gcp":     "npm run import-gcp-terraform-schema && npm run generate-gcp",
     
-    "import-and-generate": "npm run import-and-generate-oci && npm run import-and-generate-azurerm"
+    "import-and-generate": "npm run import-and-generate-oci && npm run import-and-generate-azurerm && npm run import-and-generate-gcp"
   },
   "dependencies": {
     "@ocd/codegen": "^0.2.3"
