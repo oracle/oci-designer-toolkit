@@ -212,10 +212,11 @@ const OcdContainerRect = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
                 y={rY} 
                 width={width} 
                 height={height} 
-                // data-gid={resource.id} 
-                // data-pgid={resource.pgid} 
-                // data-ocid={resource.ocid} 
-                // data-pocid={resource.pocid}
+                // The following data attributes are used in Drop Functionality
+                data-gid={resource.id} 
+                data-pgid={resource.pgid} 
+                data-ocid={resource.ocid} 
+                data-pocid={resource.pocid}
                 >
             </rect>
             {!hidden && ocdDocument.selectedResource.coordsId === resource.id && <OcdResizePoint cx={(width / 2) + rX} cy={rY} position={'north'} setDimensions={setDimensionsAndOrigin} onResizeEnd={onResizeEnd}/>}
