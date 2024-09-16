@@ -20,9 +20,11 @@ export { AzureResources } from './OcdDesign'
 export { AzureResource } from './provider/azure/AzureResource'
 export * as AzureModelResources from './provider/azure/resources'
 export * as AzureResourceValidation from './validator/provider/azure/resources'
-// Google
+// Gcp
+export { GcpResources } from './OcdDesign'
 export { GcpResource } from './provider/gcp/GcpResource'
 export * as GcpModelResources from './provider/gcp/resources'
+export * as GcpResourceValidation from './validator/provider/gcp/resources'
 
 export { GeneralResource } from './provider/general/GeneralResource'
 export * as GeneralModelResources from './provider/general/resources'

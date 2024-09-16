@@ -11,4 +11,7 @@
 */
 
 export { GcpComputeNetwork, GcpComputeNetworkClient } from './resources/GcpComputeNetwork'
+export { GcpOracledatabaseAutonomousDatabaseRegular, GcpOracledatabaseAutonomousDatabaseRegularClient } from './resources/GcpOracledatabaseAutonomousDatabaseRegular'
+export { GcpOracledatabaseCloudVmCluster, GcpOracledatabaseCloudVmClusterClient } from './resources/GcpOracledatabaseCloudVmCluster'
+export { GcpOracledatabaseExadataInfrastructure, GcpOracledatabaseExadataInfrastructureClient } from './resources/GcpOracledatabaseExadataInfrastructure'
     

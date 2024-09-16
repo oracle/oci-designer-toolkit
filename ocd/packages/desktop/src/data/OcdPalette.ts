@@ -743,6 +743,27 @@ export const palette = {
                         // },
                     ]
                 },
+                {
+                    "title": "Database",
+                    "class": "gcp-database",
+                    "resources": [
+                        {
+                            "container": false,
+                            "title": "Oracle Exadata Database@GCP",
+                            "class": "gcp-oracledatabase-exadata-infrastructure"
+                        },
+                        {
+                            "container": false,
+                            "title": "Oracle Autonomous Database@GCP",
+                            "class": "gcp-oracledatabase-autonomous-database-regular"
+                        },
+                        {
+                            "container": false,
+                            "title": "Oracle VM Cluster Database@GCP",
+                            "class": "gcp-oracledatabase-cloud-vm-cluster"
+                        },
+                    ]
+                },
             ]
         },
         {
