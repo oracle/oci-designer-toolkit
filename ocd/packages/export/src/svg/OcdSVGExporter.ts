@@ -56,7 +56,7 @@ ${this.css.join('')}
         const detailedLayout = (coords.detailsStyle && coords.detailsStyle === 'detailed') || ((!coords.detailsStyle || coords.detailsStyle === 'default') && !coords.container)
         const backgroundColourClass = `${coords.class}-background-colour ${containerLayout ? 'ocd-svg-container-icon-background' : detailedLayout ? 'ocd-svg-detailed-icon-background' : 'ocd-svg-simple-icon-background'}`
         const foreignObjectClass = `ocd-svg-foreign-object ${containerLayout ? 'ocd-svg-resource-container' : detailedLayout ? 'ocd-svg-resource-detailed' : 'ocd-svg-resource-simple'}`
-            const svg = `<g class="ocd-designer-resource" transform="translate(${coords.x},${coords.y})">
+        const svg = `<g class="ocd-designer-resource" transform="translate(${coords.x},${coords.y})">
 <rect class="${coords.container ? 'ocd-svg-container' : 'ocd-svg-simple'} ${coords.detailsStyle === 'simple' ? 'ocd-svg-resource-simple' : coords.detailsStyle === 'detailed' ? 'ocd-svg-resource-detailed' : !coords.container && !coords.detailsStyle ? 'ocd-svg-resource-detailed' : ''}" x="0" y="0" width="${coords.w}" height="${coords.h}"></rect>
 <foreignObject class="${foreignObjectClass}" transform="translate(0, 0)">
 <div xmlns="http://www.w3.org/1999/xhtml">

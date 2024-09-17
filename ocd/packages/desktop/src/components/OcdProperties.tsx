@@ -3,20 +3,20 @@
 ** Licensed under the GNU GENERAL PUBLIC LICENSE v 3.0 as shown at https://www.gnu.org/licenses/.
 */
 
-import { useContext, useEffect, useMemo, useRef, useState } from 'react'
-import { AzureResources, OcdDesign, OcdResource, OcdVariable, OcdViewCoordsStyle, OcdViewPage, OciDefinedTag, OciFreeformTag, OciResourceValidation, OciResources } from '@ocd/model'
+import { useContext, useEffect, useMemo, useState } from 'react'
+import { AzureResources, OcdDesign, OcdResource, OcdVariable, OcdViewCoordsStyle, OcdViewPage, OciDefinedTag, OciFreeformTag, OciResourceValidation, OciResources, OcdValidationResult, GcpResources } from '@ocd/model'
 import { DesignerColourPicker, DesignerResourceProperties, DesignerResourceValidationResult } from '../types/DesignerResourceProperties'
 import { OcdUtils } from '@ocd/core'
 import { OcdDocument } from './OcdDocument'
-import { OcdDisplayNameProperty, OcdLookupProperty, OcdTextProperty, ResourceElementConfig, ResourceProperties } from './properties/OcdPropertyTypes'
+import { OcdDisplayNameProperty, OcdLookupProperty, ResourceElementConfig, ResourceProperties } from './properties/OcdPropertyTypes'
 import * as ociResources from './properties/provider/oci/resources'
 import * as azureResources from './properties/provider/azure/resources'
-import { HexColorPicker, HexColorInput, RgbaColorPicker, RgbaStringColorPicker } from 'react-colorful'
+import * as gcpResources from './properties/provider/gcp/resources'
+import { RgbaStringColorPicker } from 'react-colorful'
 import Markdown from 'react-markdown'
-import { OcdValidationResult } from '@ocd/model'
 import { CacheContext, SelectedResourceContext } from '../pages/OcdConsole'
 import { OciDefinedTagRow, OciFreeformTagRow } from '../pages/OcdCommonTags'
-import { OcdCache, OcdCacheData } from './OcdCache'
+import { OcdCacheData } from './OcdCache'
 
 const OcdPropertiesTabbar = ({modelId, coordsId, activeTab, setActiveTab, additionalCss}:{modelId: string, coordsId: string, activeTab: string, setActiveTab: (title: string) => void, additionalCss: Record<string, string>}): JSX.Element => {
     console.debug('OcdPropertiesTabbar: Render', activeTab)
@@ -108,11 +108,31 @@ const getSelectedResourceProxy = (ocdDocument: OcdDocument, selectedModelResourc
     switch (provider) {
         case 'azure':
             return getAzureResourceProxy(ocdDocument, selectedModelResource, ocdCache)
+        case 'gcp':
+            return getGcpResourceProxy(ocdDocument, selectedModelResource, ocdCache)
         case 'oci':
             return getOciResourceProxy(ocdDocument, selectedModelResource, ocdCache)
         default:
             return selectedModelResource
     }
+}
+
+const getAzureResourceProxy = (ocdDocument: OcdDocument, selectedModelResource: OcdResource, ocdCache: OcdCacheData) => {
+    const provider = selectedModelResource.provider
+    const resourceType = selectedModelResource.resourceType
+    const resourceProxyName = `${OcdUtils.toTitleCase(provider)}${resourceType}Proxy`
+    console.debug(`> OcdProperies: OcdResourceProperties: Render(AzureProxy(${resourceProxyName}))`, selectedModelResource)
+    //@ts-ignore
+    return Object.hasOwn(azureResources, resourceProxyName) ? azureResources[resourceProxyName].proxyResource(ocdDocument, selectedModelResource, ocdCache) : selectedModelResource
+}
+
+const getGcpResourceProxy = (ocdDocument: OcdDocument, selectedModelResource: OcdResource, ocdCache: OcdCacheData) => {
+    const provider = selectedModelResource.provider
+    const resourceType = selectedModelResource.resourceType
+    const resourceProxyName = `${OcdUtils.toTitleCase(provider)}${resourceType}Proxy`
+    console.debug(`> OcdProperies: OcdResourceProperties: Render(GcpProxy(${resourceProxyName}))`, selectedModelResource)
+    //@ts-ignore
+    return Object.hasOwn(gcpResources, resourceProxyName) ? gcpResources[resourceProxyName].proxyResource(ocdDocument, selectedModelResource, ocdCache) : selectedModelResource
 }
 
 const getOciResourceProxy = (ocdDocument: OcdDocument, selectedModelResource: OcdResource, ocdCache: OcdCacheData) => {
@@ -124,15 +144,6 @@ const getOciResourceProxy = (ocdDocument: OcdDocument, selectedModelResource: Oc
     return Object.hasOwn(ociResources, resourceProxyName) ? ociResources[resourceProxyName].proxyResource(ocdDocument, selectedModelResource, ocdCache) : selectedModelResource
 }
 
-const getAzureResourceProxy = (ocdDocument: OcdDocument, selectedModelResource: OcdResource, ocdCache: OcdCacheData) => {
-    const provider = selectedModelResource.provider
-    const resourceType = selectedModelResource.resourceType
-    const resourceProxyName = `${OcdUtils.toTitleCase(provider)}${resourceType}Proxy`
-    console.debug(`> OcdProperies: OcdResourceProperties: Render(AzurevProxy(${resourceProxyName}))`, selectedModelResource)
-    //@ts-ignore
-    return Object.hasOwn(azureResources, resourceProxyName) ? azureResources[resourceProxyName].proxyResource(ocdDocument, selectedModelResource, ocdCache) : selectedModelResource
-}
-
 const getResourceProperties = (selectedModelResource: OcdResource) => {
     const provider = selectedModelResource ? selectedModelResource.provider : ''
     const resourceType = selectedModelResource ? selectedModelResource.resourceType : ''
@@ -142,6 +153,9 @@ const getResourceProperties = (selectedModelResource: OcdResource) => {
         case 'azure':
             // @ts-ignore 
             return azureResources[resourceJSXMethod]
+        case 'gcp':
+            // @ts-ignore 
+            return gcpResources[resourceJSXMethod]
         case 'oci':
             // @ts-ignore 
             return ociResources[resourceJSXMethod]
@@ -646,6 +660,8 @@ const getResourceValidationResults = (ocdDocument: OcdDocument, selectedModelRes
     switch (provider) {
         case 'azure': 
             return getAzureResourceValidationResults(ocdDocument, selectedModelResource)
+        case 'gcp': 
+            return getGcpResourceValidationResults(ocdDocument, selectedModelResource)
         case 'oci': 
             return getOciResourceValidationResults(ocdDocument, selectedModelResource)
         default:
@@ -659,6 +675,14 @@ const getAzureResourceValidationResults = (ocdDocument: OcdDocument, selectedMod
     const azureResources: AzureResources = ocdDocument.getAzureResourcesObject()
     // @ts-ignore 
     const ResourceValidation = AzureResourceValidation[resourceValidationMethod(selectedModelResource)]
+    const validationResults = ResourceValidation ? ResourceValidation.validateResource(selectedModelResource, azureResources) : []
+    return validationResults
+}
+
+const getGcpResourceValidationResults = (ocdDocument: OcdDocument, selectedModelResource: OcdResource): OcdValidationResult[] => {
+    const azureResources: GcpResources = ocdDocument.getGcpResourcesObject()
+    // @ts-ignore 
+    const ResourceValidation = GcpResourceValidation[resourceValidationMethod(selectedModelResource)]
     const validationResults = ResourceValidation ? ResourceValidation.validateResource(selectedModelResource, azureResources) : []
     return validationResults
 }

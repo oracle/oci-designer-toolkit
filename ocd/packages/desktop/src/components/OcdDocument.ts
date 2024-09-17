@@ -13,23 +13,6 @@ import { OcdUtils } from '@ocd/core'
 import { additionTitleInfo } from '../data/OcdAdditionTitleInfo'
 import { OcdDragResource, OcdSelectedResource } from '../types/Console'
 
-// export interface OcdSelectedResource {
-//     modelId: string
-//     pageId: string
-//     coordsId: string
-//     class: string
-// }
-
-// export interface OcdDragResource {
-//     dragging: boolean
-//     modelId: string
-//     pageId: string
-//     coordsId: string
-//     class: string
-//     resource: OcdViewCoords
-//     parent?: OcdViewCoords
-// }
-
 export interface OcdAddResourceResponse {
     modelResource: OcdResource | undefined
     additionalResources: OcdResource[]
@@ -83,6 +66,7 @@ export class OcdDocument {
     getOciResourceList(key: string) {return OcdDesign.getOciResourceList(this.design, key)}
     getOciResourcesObject() {return this.design.model.oci.resources}
     getAzureResourcesObject() {return this.design.model.azure.resources}
+    getGcpResourcesObject() {return this.design.model.gcp.resources}
     getResourceLists() {return OcdDesign.getResourceLists(this.design)}
     getResources() {return OcdDesign.getResources(this.design)}
     getResource(id='') {return OcdDesign.getResource(this.design, id)}
@@ -121,48 +105,6 @@ export class OcdDocument {
                 return {modelResource: undefined, additionalResources: []}
         }
     }
-    // addResource1(paletteResource: PaletteResource, compartmentId: string) {
-    //     const resourceList = paletteResource.class.split('-').slice(1).join('_')
-    //     const resourceClass = paletteResource.class.toLowerCase().split('-').map((w) => `${w.charAt(0).toUpperCase()}${w.slice(1)}`).join('')
-    //     const resourceNamespace: string = `${resourceClass}`
-    //     // const resourceClient: string = `${resourceClass}Client`
-    //     // @ts-ignore
-    //     let modelResource = undefined
-    //     let response: OcdAddResourceResponse = {modelResource: undefined, additionalResources: []}
-    //     if (paletteResource.provider === 'oci') {
-    //         // @ts-ignore 
-    //         const client = OciModelResources[resourceNamespace]
-    //         console.debug('OcdDocument: Namespace',resourceNamespace , client)
-    //         if (client) {
-    //             modelResource = client.newResource()
-    //             modelResource.compartmentId = compartmentId
-    //             response.modelResource = modelResource
-    //             console.debug('OcdDocument:', modelResource)
-    //             this.addOciReasourceToList(resourceList, modelResource)
-    //             // this.design.model.oci.resources[resourceList] ? this.design.model.oci.resources[resourceList].push(modelResource) : this.design.model.oci.resources[resourceList] = [modelResource]
-    //             const additionalResources = client.getAdditionalResources?.() // Use Optional Chaining to test if function exists
-    //             if (additionalResources) {
-    //                 console.debug('OcdDocument: Creating Additional Resources', additionalResources)
-    //                 additionalResources.forEach((r: PaletteResource) => {
-    //                     const additionalResource = this.addResource(r, compartmentId).modelResource
-    //                     //@ts-ignore
-    //                     response.additionalResources.push(additionalResource)
-    //                     // @ts-ignore
-    //                     this.setResourceParent(additionalResource.id, modelResource.id)
-    //                     // @ts-ignore
-    //                     client.setAdditionalResourceValues?.(modelResource, additionalResource)
-    //                 })
-    //             }
-    //         } else {
-    //             alert(`Resource ${resourceClass} has not yet been implemented.`)
-    //         }
-    //     } else {
-    //         alert(`Provider ${paletteResource.provider} has not yet been implemented.`)
-    //     }
-    //     // console.debug('OcdDocument: Added Resource:', modelResource)
-    //     // return modelResource
-    //     return response
-    // }
     addOciResource(paletteResource: PaletteResource, compartmentId: string): OcdAddResourceResponse {
         const resourceList = paletteResource.class.split('-').slice(1).join('_')
         const resourceClass = paletteResource.class.toLowerCase().split('-').map((w) => `${w.charAt(0).toUpperCase()}${w.slice(1)}`).join('')
