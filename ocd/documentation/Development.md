@@ -8,27 +8,33 @@ As a working example we will implement Google (GCP) as a new Cloud Provider. Thi
 ## Naming Convention
 All code generated and manual created witin the OKIT-Ocd packages must conform to the following naming standards. This allow for the simple runtime generation of Namespace names, Class names etc.
 
-- Namespace Names: 
+- **Interface Names**: Names must start with the provider name with an initial Capital; e.g. export interface **Google**ComputeNetwork
+- **Namespace Names**: Names must start with the provider name with an initial Capital; e.g. export namespace **Google**ComputeNetwork
+- **Class Names**:     Names must start with the provider name with an initial Capital; e.g. export class **Google**ComputeNetworkClient
+- **File Names**:      Names must start with the provider name with an initial Capital; e.g. **Google**ComputeNetwork.ts
+- **Function Names**:  Names must contain the provider name with an initial Capital; e.g. export function get**Google**Resources(design: OcdDesign)
+- **Directory Names**: Names must be the provider name; e.g. **google**
+- **JSON Elements**:   Names must be the provider name; e.g. **google**
 
 ## Code Generation
 
 ### ocd/packages/codegen
-#### src/importer/GcpTerraformSchemaImporter.ts
+#### src/importer/GoogleTerraformSchemaImporter.ts
 
-#### src/importer/data/GcpConditionalElements.ts
-#### src/importer/data/GcpElementOverrides.ts
-#### src/importer/data/GcpIgnoreElements.ts
-#### src/importer/data/GcpResourceMap.ts
+#### src/importer/data/GoogleConditionalElements.ts
+#### src/importer/data/GoogleElementOverrides.ts
+#### src/importer/data/GoogleIgnoreElements.ts
+#### src/importer/data/GoogleResourceMap.ts
 
-#### src/generator/GcpMarkdownGenerator.ts
-#### src/generator/GcpModelGenerator.ts
-#### src/generator/GcpPropertiesGenerator.ts
-#### src/generator/GcpTabularGenerator.ts
-#### src/generator/GcpTerraformGenerator.ts
-#### src/generator/GcpValidatorGenerator.ts
+#### src/generator/GoogleMarkdownGenerator.ts
+#### src/generator/GoogleModelGenerator.ts
+#### src/generator/GooglePropertiesGenerator.ts
+#### src/generator/GoogleTabularGenerator.ts
+#### src/generator/GoogleTerraformGenerator.ts
+#### src/generator/GoogleValidatorGenerator.ts
 
-#### src/generator/data/GcpCommonResourceProperties.ts
-#### src/generator/data/GcpMetadataOverrides.ts
+#### src/generator/data/GoogleCommonResourceProperties.ts
+#### src/generator/data/GoogleMetadataOverrides.ts
 
 ### ocd/packages/codegen-cli
 #### src/ocd-codegen.ts
@@ -37,15 +43,15 @@ All code generated and manual created witin the OKIT-Ocd packages must conform t
 ## Provider Specific Code
 Although the Code Generation will create the majority of the code required for implementing a new Provider some additional modifications and code will need to be written. The following shows the additional functionaly required to implement the new (GCP) provider/
 ### ocd/packages/model
-#### src/provider/gcp/GcpResource.ts
+#### src/provider/google/GoogleResource.ts
 #### src/OcdDesign.ts
 ```typescript
-export interface GcpResources {
+export interface GoogleResources {
     [key: string]: any[]
 }
 ```
 ```typescript
-export interface GcpModel extends OcdBaseModel {}
+export interface GoogleModel extends OcdBaseModel {}
 ```
 ```typescript
 export interface OcdDesign {
@@ -54,7 +60,7 @@ export interface OcdDesign {
         oci: OciModel
         aws?: AwsModel
         azure: AzureModel
-        gcp: GcpModel
+        google: GoogleModel
         general: GeneralModel
     },
     view: OcdView,
@@ -63,22 +69,22 @@ export interface OcdDesign {
 ```
 ```typescript
 // Model Methods
-export function getResourceLists(design: OcdDesign) {return {...getOciResourceLists(design), ...getAzureResourceLists(design), ...getGcpResourceLists(design), ...getGeneralResourceLists(design)}}
-export function getResources(design: OcdDesign) {return [...getOciResources(design), ...getAzureResources(design), ...getGcpResources(design), ...getGeneralResources(design)]}
+export function getResourceLists(design: OcdDesign) {return {...getOciResourceLists(design), ...getAzureResourceLists(design), ...getGoogleResourceLists(design), ...getGeneralResourceLists(design)}}
+export function getResources(design: OcdDesign) {return [...getOciResources(design), ...getAzureResources(design), ...getGoogleResources(design), ...getGeneralResources(design)]}
 ```
 ```typescript
-// Gcp
-export function getGcpResourceLists(design: OcdDesign) {return Object.hasOwn(design.model, 'gcp') ? design.model.gcp.resources : {}}
-export function getGcpResourceList(design: OcdDesign, key: string) {return Object.hasOwn(design.model, 'gcp') && Object.hasOwn(design.model.gcp.resources, key) ? design.model.gcp.resources[key] : []}
-export function getGcpResources(design: OcdDesign) {return Object.hasOwn(design.model, 'gcp') ? Object.values(design.model.gcp.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []) : []}
+// Google
+export function getGoogleResourceLists(design: OcdDesign) {return Object.hasOwn(design.model, 'google') ? design.model.google.resources : {}}
+export function getGoogleResourceList(design: OcdDesign, key: string) {return Object.hasOwn(design.model, 'google') && Object.hasOwn(design.model.google.resources, key) ? design.model.google.resources[key] : []}
+export function getGoogleResources(design: OcdDesign) {return Object.hasOwn(design.model, 'google') ? Object.values(design.model.google.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []) : []}
 ```
 #### src/index.js
 ```typescript
-// Gcp
-export { GcpResources } from './OcdDesign'
-export { GcpResource } from './provider/gcp/GcpResource'
-export * as GcpModelResources from './provider/gcp/resources'
-export * as GcpResourceValidation from './validator/provider/gcp/resources'
+// Google
+export { GoogleResources } from './OcdDesign'
+export { GoogleResource } from './provider/google/GoogleResource'
+export * as GoogleModelResources from './provider/google/resources'
+export * as GoogleResourceValidation from './validator/provider/google/resources'
 ```
 
 ### ocd/packages/desktop
@@ -88,37 +94,37 @@ export * as GcpResourceValidation from './validator/provider/gcp/resources'
 import { OcdAutoLayout, OcdDesign, OcdViewPage, OcdViewCoords, OcdViewLayer, OcdBaseModel, OcdViewPoint, OcdViewCoordsStyle, OcdResource, PaletteResource, 
     OciModelResources, OciResource,
     AzureModelResources, AzureResource, 
-    GcpModelResources, GcpResource,
+    GoogleModelResources, GoogleResource,
     GeneralModelResources, GeneralResource } from '@ocd/model'
 ```
 
 ```typescript
-getGcpResourcesObject() {return this.design.model.gcp.resources}
+getGoogleResourcesObject() {return this.design.model.google.resources}
 
-addGcpReasourceToList(key: string, modelResource: GcpResource) {
-    if (!Object.hasOwn(this.design.model, 'gcp')) this.design.model.gcp = {resources: {}, vars: []}
-    if (!Object.hasOwn(this.design.model.gcp.resources, key)) this.design.model.gcp.resources[key] = []
-    this.design.model.gcp.resources[key].push(modelResource)
+addGoogleReasourceToList(key: string, modelResource: GoogleResource) {
+    if (!Object.hasOwn(this.design.model, 'google')) this.design.model.google = {resources: {}, vars: []}
+    if (!Object.hasOwn(this.design.model.google.resources, key)) this.design.model.google.resources[key] = []
+    this.design.model.google.resources[key].push(modelResource)
 }
 
-addGcpResource(paletteResource: PaletteResource, compartmentId: string): OcdAddResourceResponse {
+addGoogleResource(paletteResource: PaletteResource, compartmentId: string): OcdAddResourceResponse {
     const resourceList = paletteResource.class.split('-').slice(1).join('_')
     const resourceClass = paletteResource.class.toLowerCase().split('-').map((w) => `${w.charAt(0).toUpperCase()}${w.slice(1)}`).join('')
     const resourceNamespace: string = `${resourceClass}`
     // @ts-ignore 
-    const client = GcpModelResources[resourceNamespace]
+    const client = GoogleModelResources[resourceNamespace]
     console.debug('OcdDocument: Namespace',resourceNamespace , client)
     if (client) {
         const modelResource = client.newResource()
         modelResource.compartmentId = compartmentId
         console.debug('OcdDocument:', modelResource)
-        this.addGcpReasourceToList(resourceList, modelResource)
+        this.addGoogleReasourceToList(resourceList, modelResource)
         const response: OcdAddResourceResponse = {modelResource: modelResource, additionalResources: []}
         const additionalResources = client.getAdditionalResources?.() // Use Optional Chaining to test if function exists
         if (additionalResources) {
-            console.debug('OcdDocument: Creating Gcp Additional Resources', additionalResources)
+            console.debug('OcdDocument: Creating Google Additional Resources', additionalResources)
             additionalResources.forEach((r: PaletteResource) => {
-                const additionalResource = this.addGcpResource(r, compartmentId).modelResource
+                const additionalResource = this.addGoogleResource(r, compartmentId).modelResource
                 if (additionalResource) {
                     response.additionalResources.push(additionalResource)
                     this.setResourceParent(additionalResource.id, modelResource.id)
@@ -128,7 +134,7 @@ addGcpResource(paletteResource: PaletteResource, compartmentId: string): OcdAddR
         }
         return response
     } else {
-        alert(`Gcp Resource ${resourceClass} has not yet been implemented.`)
+        alert(`Google Resource ${resourceClass} has not yet been implemented.`)
         return {modelResource: undefined, additionalResources: []}
     }
 }
@@ -141,8 +147,8 @@ addResource(paletteResource: PaletteResource, compartmentId: string): OcdAddReso
             return this.addOciResource(paletteResource, compartmentId)
         case 'azure':
             return this.addAzureResource(paletteResource, compartmentId)
-        case 'gcp':
-            return this.addGcpResource(paletteResource, compartmentId)
+        case 'google':
+            return this.addGoogleResource(paletteResource, compartmentId)
         case 'general':
             return this.addGeneralResource(paletteResource, compartmentId)
         default:
@@ -155,24 +161,24 @@ addResource(paletteResource: PaletteResource, compartmentId: string): OcdAddReso
 #### src/components/OcdProperties.tsx
 ##### imports
 ```typescript
-import { AzureResources, OcdDesign, OcdResource, OcdVariable, OcdViewCoordsStyle, OcdViewPage, OciDefinedTag, OciFreeformTag, OciResourceValidation, OciResources, OcdValidationResult, GcpResources } from '@ocd/model'
-import * as gcpResources from './properties/provider/gcp/resources'
+import { AzureResources, OcdDesign, OcdResource, OcdVariable, OcdViewCoordsStyle, OcdViewPage, OciDefinedTag, OciFreeformTag, OciResourceValidation, OciResources, OcdValidationResult, GoogleResources } from '@ocd/model'
+import * as googleResources from './properties/provider/google/resources'
 ```
 
 ##### Resource Proxy 
-Add Provider (Gcp) specific function to get the Resources proxy from the generated set of proxies.
+Add Provider (Google) specific function to get the Resources proxy from the generated set of proxies.
 ```typescript
-const getGcpResourceProxy = (ocdDocument: OcdDocument, selectedModelResource: OcdResource, ocdCache: OcdCacheData) => {
+const getGoogleResourceProxy = (ocdDocument: OcdDocument, selectedModelResource: OcdResource, ocdCache: OcdCacheData) => {
     const provider = selectedModelResource.provider
     const resourceType = selectedModelResource.resourceType
     const resourceProxyName = `${OcdUtils.toTitleCase(provider)}${resourceType}Proxy`
-    console.debug(`> OcdProperies: OcdResourceProperties: Render(GcpProxy(${resourceProxyName}))`, selectedModelResource)
+    console.debug(`> OcdProperies: OcdResourceProperties: Render(GoogleProxy(${resourceProxyName}))`, selectedModelResource)
     //@ts-ignore
-    return Object.hasOwn(gcpResources, resourceProxyName) ? gcpResources[resourceProxyName].proxyResource(ocdDocument, selectedModelResource, ocdCache) : selectedModelResource
+    return Object.hasOwn(googleResources, resourceProxyName) ? googleResources[resourceProxyName].proxyResource(ocdDocument, selectedModelResource, ocdCache) : selectedModelResource
 }
 ```
 
-Update the common **getSelectedResourceProxy** to check for the new provider(gcp) and call the provider specific function.
+Update the common **getSelectedResourceProxy** to check for the new provider(google) and call the provider specific function.
 ```typescript
 const getSelectedResourceProxy = (ocdDocument: OcdDocument, selectedModelResource: OcdResource, ocdCache: OcdCacheData) => {    
     const provider = selectedModelResource ? selectedModelResource.provider : ''
@@ -180,8 +186,8 @@ const getSelectedResourceProxy = (ocdDocument: OcdDocument, selectedModelResourc
     switch (provider) {
         case 'azure':
             return getAzureResourceProxy(ocdDocument, selectedModelResource, ocdCache)
-        case 'gcp':
-            return getGcpResourceProxy(ocdDocument, selectedModelResource, ocdCache)
+        case 'google':
+            return getGoogleResourceProxy(ocdDocument, selectedModelResource, ocdCache)
         case 'oci':
             return getOciResourceProxy(ocdDocument, selectedModelResource, ocdCache)
         default:
@@ -191,7 +197,7 @@ const getSelectedResourceProxy = (ocdDocument: OcdDocument, selectedModelResourc
 ```
 
 ##### Resource Properties
-Update the **getResourceProperties** to check for the new provider (gcp) and return the Resource Namespace for the appropriate imported resources.
+Update the **getResourceProperties** to check for the new provider (google) and return the Resource Namespace for the appropriate imported resources.
 ```typescript
 const getResourceProperties = (selectedModelResource: OcdResource) => {
     const provider = selectedModelResource ? selectedModelResource.provider : ''
@@ -202,9 +208,9 @@ const getResourceProperties = (selectedModelResource: OcdResource) => {
         case 'azure':
             // @ts-ignore 
             return azureResources[resourceJSXMethod]
-        case 'gcp':
+        case 'google':
             // @ts-ignore 
-            return gcpResources[resourceJSXMethod]
+            return googleResources[resourceJSXMethod]
         case 'oci':
             // @ts-ignore 
             return ociResources[resourceJSXMethod]
@@ -215,27 +221,27 @@ const getResourceProperties = (selectedModelResource: OcdResource) => {
 ```
 
 ##### Resource Validation
-Add Provider (Gcp) specific function to get the Resources Validation class from the generated set of validation classes.
+Add Provider (Google) specific function to get the Resources Validation class from the generated set of validation classes.
 ```typescript
-const getGcpResourceValidationResults = (ocdDocument: OcdDocument, selectedModelResource: OcdResource): OcdValidationResult[] => {
-    const azureResources: GcpResources = ocdDocument.getGcpResourcesObject()
+const getGoogleResourceValidationResults = (ocdDocument: OcdDocument, selectedModelResource: OcdResource): OcdValidationResult[] => {
+    const azureResources: GoogleResources = ocdDocument.getGoogleResourcesObject()
     // @ts-ignore 
-    const ResourceValidation = GcpResourceValidation[resourceValidationMethod(selectedModelResource)]
+    const ResourceValidation = GoogleResourceValidation[resourceValidationMethod(selectedModelResource)]
     const validationResults = ResourceValidation ? ResourceValidation.validateResource(selectedModelResource, azureResources) : []
     return validationResults
 }
 
 ```
 
-Update the **getResourceValidationResults** to check for the new provider (gcp) and return the Resource specific function.
+Update the **getResourceValidationResults** to check for the new provider (google) and return the Resource specific function.
 ```typescript
 const getResourceValidationResults = (ocdDocument: OcdDocument, selectedModelResource: OcdResource): OcdValidationResult[] => {
     const provider = selectedModelResource ? selectedModelResource.provider : ''
     switch (provider) {
         case 'azure': 
             return getAzureResourceValidationResults(ocdDocument, selectedModelResource)
-        case 'gcp': 
-            return getGcpResourceValidationResults(ocdDocument, selectedModelResource)
+        case 'google': 
+            return getGoogleResourceValidationResults(ocdDocument, selectedModelResource)
         case 'oci': 
             return getOciResourceValidationResults(ocdDocument, selectedModelResource)
         default:
@@ -244,11 +250,11 @@ const getResourceValidationResults = (ocdDocument: OcdDocument, selectedModelRes
 }
 ```
 
-#### src/css/gcp-theme.css
+#### src/css/google-theme.css
 
 ### ocd/packages/export
 #### src/OcdExporter.ts
-#### src/markdown/provider/gcp/GcpMarkdownResource.ts
-#### src/terraform/provider/gcp/GcpTerraformResource.ts
-#### src/terraform/GcpExporter.ts
+#### src/markdown/provider/google/GoogleMarkdownResource.ts
+#### src/terraform/provider/google/GoogleTerraformResource.ts
+#### src/terraform/GoogleExporter.ts
 #### src/terraform/OcdTerraformExporter.ts
