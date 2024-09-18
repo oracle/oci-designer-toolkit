@@ -5,7 +5,7 @@
 
 import fs from 'fs'
 import path from 'path'
-import { OciModelGenerator, OciTerraformGenerator, OciTerraformSchemaImporter, OciValidatorGenerator, OcdTerraformSchemaResourceAttributesGenerator, OciMarkdownGenerator, OciPropertiesGenerator, OciTabularGenerator, AzureMarkdownGenerator, AzurePropertiesGenerator, AzureTabularGenerator, AzureTerraformGenerator, AzureModelGenerator, AzureAzTerraformSchemaImporter, AzureRmTerraformSchemaImporter, AzureValidatorGenerator, GcpTerraformSchemaImporter, GcpModelGenerator, GcpMarkdownGenerator, GcpPropertiesGenerator, GcpTerraformGenerator, GcpTabularGenerator, GcpValidatorGenerator } from '@ocd/codegen'
+import { OciModelGenerator, OciTerraformGenerator, OciTerraformSchemaImporter, OciValidatorGenerator, OcdTerraformSchemaResourceAttributesGenerator, OciMarkdownGenerator, OciPropertiesGenerator, OciTabularGenerator, AzureMarkdownGenerator, AzurePropertiesGenerator, AzureTabularGenerator, AzureTerraformGenerator, AzureModelGenerator, AzureAzTerraformSchemaImporter, AzureRmTerraformSchemaImporter, AzureValidatorGenerator, GoogleTerraformSchemaImporter, GoogleModelGenerator, GoogleMarkdownGenerator, GooglePropertiesGenerator, GoogleTerraformGenerator, GoogleTabularGenerator, GoogleValidatorGenerator } from '@ocd/codegen'
 import { parseArgs } from "node:util"
 import { OcdSchema } from '@ocd/codegen/src/types/OcdSchema'
 
@@ -64,12 +64,12 @@ if (command.toLocaleLowerCase() === 'generate') {
     else if (subcommand.toLocaleLowerCase() === 'azurerm-terraform-js') generator = new AzureTerraformGenerator()
     else if (subcommand.toLocaleLowerCase() === 'azurerm-tabular-js') generator = new AzureTabularGenerator()
     else if (subcommand.toLocaleLowerCase() === 'azurerm-validator-js') generator = new AzureValidatorGenerator()
-    else if (subcommand.toLocaleLowerCase() === 'gcp-model-js') generator = new GcpModelGenerator()
-    else if (subcommand.toLocaleLowerCase() === 'gcp-markdown-js') generator = new GcpMarkdownGenerator()
-    else if (subcommand.toLocaleLowerCase() === 'gcp-properties-js') generator = new GcpPropertiesGenerator()
-    else if (subcommand.toLocaleLowerCase() === 'gcp-terraform-js') generator = new GcpTerraformGenerator()
-    else if (subcommand.toLocaleLowerCase() === 'gcp-tabular-js') generator = new GcpTabularGenerator()
-    else if (subcommand.toLocaleLowerCase() === 'gcp-validator-js') generator = new GcpValidatorGenerator()
+    else if (subcommand.toLocaleLowerCase() === 'google-model-js') generator = new GoogleModelGenerator()
+    else if (subcommand.toLocaleLowerCase() === 'google-markdown-js') generator = new GoogleMarkdownGenerator()
+    else if (subcommand.toLocaleLowerCase() === 'google-properties-js') generator = new GooglePropertiesGenerator()
+    else if (subcommand.toLocaleLowerCase() === 'google-terraform-js') generator = new GoogleTerraformGenerator()
+    else if (subcommand.toLocaleLowerCase() === 'google-tabular-js') generator = new GoogleTabularGenerator()
+    else if (subcommand.toLocaleLowerCase() === 'google-validator-js') generator = new GoogleValidatorGenerator()
     if (generator !== undefined) {
         Object.entries(schema).forEach(([key, value]) => {
             generator.generate(key, value as OcdSchema)
@@ -94,7 +94,7 @@ if (command.toLocaleLowerCase() === 'generate') {
     if (subcommand.toLocaleLowerCase() === 'oci-terraform-schema') importer = new OciTerraformSchemaImporter()
     else if (subcommand.toLocaleLowerCase() === 'azurerm-terraform-schema') importer = new AzureRmTerraformSchemaImporter()
     else if (subcommand.toLocaleLowerCase() === 'azureaz-terraform-schema') importer = new AzureAzTerraformSchemaImporter()
-    else if (subcommand.toLocaleLowerCase() === 'gcp-terraform-schema') importer = new GcpTerraformSchemaImporter()
+    else if (subcommand.toLocaleLowerCase() === 'google-terraform-schema') importer = new GoogleTerraformSchemaImporter()
     else if (subcommand.toLocaleLowerCase() === 'terraform-schema-resource-attributes') importer = new OcdTerraformSchemaResourceAttributesGenerator()
     if (importer !== undefined) {
         importer.convert(source_schema)

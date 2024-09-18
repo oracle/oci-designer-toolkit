@@ -10,7 +10,7 @@ import { OcdExporter, OutputDataStringArray } from "../OcdExporter"
 // import { OcdUtils } from "@ocd/core"
 import { OciExporter } from "./OciExporter"
 import { AzureExporter } from "./AzureExporter"
-import { GcpExporter } from "./GcpExporter"
+import { GoogleExporter } from "./GoogleExporter"
 
 interface ResourceMap extends Record<string, Record<string, string>> {}
 
@@ -95,11 +95,11 @@ export class OcdTerraformExporter extends OcdExporter {
         this.design = design
         const ociExporter = new OciExporter()
         const azureExporter = new AzureExporter()
-        const gcpExporter = new GcpExporter()
+        const googleExporter = new GoogleExporter()
         const outputData: OutputDataStringArray = {
             ...ociExporter.export(design),
             ...azureExporter.export(design),
-            ...gcpExporter.export(design),
+            ...googleExporter.export(design),
             // ...this.exportOci(design),
             // ...this.exportAzure(design)
         }

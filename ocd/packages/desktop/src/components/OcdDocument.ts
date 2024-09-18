@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { OcdAutoLayout, OcdDesign, OcdViewPage, OcdViewCoords, OcdViewLayer, OcdBaseModel, OcdViewPoint, OcdViewCoordsStyle, OcdResource, PaletteResource, 
     OciModelResources, OciResource,
     AzureModelResources, AzureResource, 
-    GcpModelResources, GcpResource,
+    GoogleModelResources, GoogleResource,
     GeneralModelResources, GeneralResource } from '@ocd/model'
 import { OcdUtils } from '@ocd/core'
 import { additionTitleInfo } from '../data/OcdAdditionTitleInfo'
@@ -66,7 +66,7 @@ export class OcdDocument {
     getOciResourceList(key: string) {return OcdDesign.getOciResourceList(this.design, key)}
     getOciResourcesObject() {return this.design.model.oci.resources}
     getAzureResourcesObject() {return this.design.model.azure.resources}
-    getGcpResourcesObject() {return this.design.model.gcp.resources}
+    getGoogleResourcesObject() {return this.design.model.google.resources}
     getResourceLists() {return OcdDesign.getResourceLists(this.design)}
     getResources() {return OcdDesign.getResources(this.design)}
     getResource(id='') {return OcdDesign.getResource(this.design, id)}
@@ -80,10 +80,10 @@ export class OcdDocument {
         if (!Object.hasOwn(this.design.model.azure.resources, key)) this.design.model.azure.resources[key] = []
         this.design.model.azure.resources[key].push(modelResource)
     }
-    addGcpReasourceToList(key: string, modelResource: GcpResource) {
-        if (!Object.hasOwn(this.design.model, 'gcp')) this.design.model.gcp = {resources: {}, vars: []}
-        if (!Object.hasOwn(this.design.model.gcp.resources, key)) this.design.model.gcp.resources[key] = []
-        this.design.model.gcp.resources[key].push(modelResource)
+    addGoogleReasourceToList(key: string, modelResource: GoogleResource) {
+        if (!Object.hasOwn(this.design.model, 'google')) this.design.model.google = {resources: {}, vars: []}
+        if (!Object.hasOwn(this.design.model.google.resources, key)) this.design.model.google.resources[key] = []
+        this.design.model.google.resources[key].push(modelResource)
     }
     addGeneralReasourceToList(key: string, modelResource: GeneralResource) {
         if (!Object.hasOwn(this.design.model, 'general')) this.design.model.general = {resources: {}, vars: []}
@@ -96,8 +96,8 @@ export class OcdDocument {
                 return this.addOciResource(paletteResource, compartmentId)
             case 'azure':
                 return this.addAzureResource(paletteResource, compartmentId)
-            case 'gcp':
-                return this.addGcpResource(paletteResource, compartmentId)
+            case 'google':
+                return this.addGoogleResource(paletteResource, compartmentId)
             case 'general':
                 return this.addGeneralResource(paletteResource, compartmentId)
             default:
@@ -167,24 +167,24 @@ export class OcdDocument {
             return {modelResource: undefined, additionalResources: []}
         }
     }
-    addGcpResource(paletteResource: PaletteResource, compartmentId: string): OcdAddResourceResponse {
+    addGoogleResource(paletteResource: PaletteResource, compartmentId: string): OcdAddResourceResponse {
         const resourceList = paletteResource.class.split('-').slice(1).join('_')
         const resourceClass = paletteResource.class.toLowerCase().split('-').map((w) => `${w.charAt(0).toUpperCase()}${w.slice(1)}`).join('')
         const resourceNamespace: string = `${resourceClass}`
         // @ts-ignore 
-        const client = GcpModelResources[resourceNamespace]
+        const client = GoogleModelResources[resourceNamespace]
         console.debug('OcdDocument: Namespace',resourceNamespace , client)
         if (client) {
             const modelResource = client.newResource()
             modelResource.compartmentId = compartmentId
             console.debug('OcdDocument:', modelResource)
-            this.addGcpReasourceToList(resourceList, modelResource)
+            this.addGoogleReasourceToList(resourceList, modelResource)
             const response: OcdAddResourceResponse = {modelResource: modelResource, additionalResources: []}
             const additionalResources = client.getAdditionalResources?.() // Use Optional Chaining to test if function exists
             if (additionalResources) {
-                console.debug('OcdDocument: Creating Gcp Additional Resources', additionalResources)
+                console.debug('OcdDocument: Creating Google Additional Resources', additionalResources)
                 additionalResources.forEach((r: PaletteResource) => {
-                    const additionalResource = this.addGcpResource(r, compartmentId).modelResource
+                    const additionalResource = this.addGoogleResource(r, compartmentId).modelResource
                     if (additionalResource) {
                         response.additionalResources.push(additionalResource)
                         this.setResourceParent(additionalResource.id, modelResource.id)
@@ -194,7 +194,7 @@ export class OcdDocument {
             }
             return response
         } else {
-            alert(`Gcp Resource ${resourceClass} has not yet been implemented.`)
+            alert(`Google Resource ${resourceClass} has not yet been implemented.`)
             return {modelResource: undefined, additionalResources: []}
         }
     }

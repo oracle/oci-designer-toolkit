@@ -713,18 +713,18 @@ export const palette = {
             ]
         },
         {
-            "title": "GCP",
-            "provider": "gcp",
-            "class": "gcp-provider",
+            "title": "Google",
+            "provider": "google",
+            "class": "google-provider",
             "groups": [
                 {
                     "title": "Networking",
-                    "class": "gcp-network",
+                    "class": "google-network",
                     "resources": [
                         {
                             "container": true,
                             "title": "Virtual Private Cloud",
-                            "class": "gcp-compute-network"
+                            "class": "google-compute-network"
                         },
                         // {
                         //     "container": true,
@@ -745,22 +745,22 @@ export const palette = {
                 },
                 {
                     "title": "Database",
-                    "class": "gcp-database",
+                    "class": "google-database",
                     "resources": [
                         {
                             "container": false,
-                            "title": "Oracle Exadata Database@GCP",
-                            "class": "gcp-oracledatabase-exadata-infrastructure"
+                            "title": "Oracle Exadata Database@Google",
+                            "class": "google-oracledatabase-exadata-infrastructure"
                         },
                         {
                             "container": false,
-                            "title": "Oracle Autonomous Database@GCP",
-                            "class": "gcp-oracledatabase-autonomous-database-regular"
+                            "title": "Oracle Autonomous Database@Google",
+                            "class": "google-oracledatabase-autonomous-database-regular"
                         },
                         {
                             "container": false,
-                            "title": "Oracle VM Cluster Database@GCP",
-                            "class": "gcp-oracledatabase-cloud-vm-cluster"
+                            "title": "Oracle VM Cluster Database@Google",
+                            "class": "google-oracledatabase-cloud-vm-cluster"
                         },
                     ]
                 },

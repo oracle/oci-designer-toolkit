@@ -17,7 +17,7 @@ class OcdExporter {
 
     getOciResources() {return OcdDesign.getOciResources(this.design)}
     getAzureResources() {return OcdDesign.getAzureResources(this.design)}
-    getGcpResources() {return OcdDesign.getGcpResources(this.design)}
+    getGoogleResources() {return OcdDesign.getGoogleResources(this.design)}
     getResources() {return OcdDesign.getResources(this.design)}
 
     export = (design: OcdDesign): string | OutputDataStringArray | OutputDataString => ''

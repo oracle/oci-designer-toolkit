@@ -4,14 +4,14 @@
 */
 
 import { useContext, useEffect, useMemo, useState } from 'react'
-import { AzureResources, OcdDesign, OcdResource, OcdVariable, OcdViewCoordsStyle, OcdViewPage, OciDefinedTag, OciFreeformTag, OciResourceValidation, OciResources, OcdValidationResult, GcpResources } from '@ocd/model'
+import { AzureResources, OcdDesign, OcdResource, OcdVariable, OcdViewCoordsStyle, OcdViewPage, OciDefinedTag, OciFreeformTag, OciResourceValidation, OciResources, OcdValidationResult, GoogleResources } from '@ocd/model'
 import { DesignerColourPicker, DesignerResourceProperties, DesignerResourceValidationResult } from '../types/DesignerResourceProperties'
 import { OcdUtils } from '@ocd/core'
 import { OcdDocument } from './OcdDocument'
 import { OcdDisplayNameProperty, OcdLookupProperty, ResourceElementConfig, ResourceProperties } from './properties/OcdPropertyTypes'
 import * as ociResources from './properties/provider/oci/resources'
 import * as azureResources from './properties/provider/azure/resources'
-import * as gcpResources from './properties/provider/gcp/resources'
+import * as googleResources from './properties/provider/google/resources'
 import { RgbaStringColorPicker } from 'react-colorful'
 import Markdown from 'react-markdown'
 import { CacheContext, SelectedResourceContext } from '../pages/OcdConsole'
@@ -108,8 +108,8 @@ const getSelectedResourceProxy = (ocdDocument: OcdDocument, selectedModelResourc
     switch (provider) {
         case 'azure':
             return getAzureResourceProxy(ocdDocument, selectedModelResource, ocdCache)
-        case 'gcp':
-            return getGcpResourceProxy(ocdDocument, selectedModelResource, ocdCache)
+        case 'google':
+            return getGoogleResourceProxy(ocdDocument, selectedModelResource, ocdCache)
         case 'oci':
             return getOciResourceProxy(ocdDocument, selectedModelResource, ocdCache)
         default:
@@ -126,13 +126,13 @@ const getAzureResourceProxy = (ocdDocument: OcdDocument, selectedModelResource: 
     return Object.hasOwn(azureResources, resourceProxyName) ? azureResources[resourceProxyName].proxyResource(ocdDocument, selectedModelResource, ocdCache) : selectedModelResource
 }
 
-const getGcpResourceProxy = (ocdDocument: OcdDocument, selectedModelResource: OcdResource, ocdCache: OcdCacheData) => {
+const getGoogleResourceProxy = (ocdDocument: OcdDocument, selectedModelResource: OcdResource, ocdCache: OcdCacheData) => {
     const provider = selectedModelResource.provider
     const resourceType = selectedModelResource.resourceType
     const resourceProxyName = `${OcdUtils.toTitleCase(provider)}${resourceType}Proxy`
-    console.debug(`> OcdProperies: OcdResourceProperties: Render(GcpProxy(${resourceProxyName}))`, selectedModelResource)
+    console.debug(`> OcdProperies: OcdResourceProperties: Render(GoogleProxy(${resourceProxyName}))`, selectedModelResource)
     //@ts-ignore
-    return Object.hasOwn(gcpResources, resourceProxyName) ? gcpResources[resourceProxyName].proxyResource(ocdDocument, selectedModelResource, ocdCache) : selectedModelResource
+    return Object.hasOwn(googleResources, resourceProxyName) ? googleResources[resourceProxyName].proxyResource(ocdDocument, selectedModelResource, ocdCache) : selectedModelResource
 }
 
 const getOciResourceProxy = (ocdDocument: OcdDocument, selectedModelResource: OcdResource, ocdCache: OcdCacheData) => {
@@ -153,9 +153,9 @@ const getResourceProperties = (selectedModelResource: OcdResource) => {
         case 'azure':
             // @ts-ignore 
             return azureResources[resourceJSXMethod]
-        case 'gcp':
+        case 'google':
             // @ts-ignore 
-            return gcpResources[resourceJSXMethod]
+            return googleResources[resourceJSXMethod]
         case 'oci':
             // @ts-ignore 
             return ociResources[resourceJSXMethod]
@@ -660,8 +660,8 @@ const getResourceValidationResults = (ocdDocument: OcdDocument, selectedModelRes
     switch (provider) {
         case 'azure': 
             return getAzureResourceValidationResults(ocdDocument, selectedModelResource)
-        case 'gcp': 
-            return getGcpResourceValidationResults(ocdDocument, selectedModelResource)
+        case 'google': 
+            return getGoogleResourceValidationResults(ocdDocument, selectedModelResource)
         case 'oci': 
             return getOciResourceValidationResults(ocdDocument, selectedModelResource)
         default:
@@ -679,10 +679,10 @@ const getAzureResourceValidationResults = (ocdDocument: OcdDocument, selectedMod
     return validationResults
 }
 
-const getGcpResourceValidationResults = (ocdDocument: OcdDocument, selectedModelResource: OcdResource): OcdValidationResult[] => {
-    const azureResources: GcpResources = ocdDocument.getGcpResourcesObject()
+const getGoogleResourceValidationResults = (ocdDocument: OcdDocument, selectedModelResource: OcdResource): OcdValidationResult[] => {
+    const azureResources: GoogleResources = ocdDocument.getGoogleResourcesObject()
     // @ts-ignore 
-    const ResourceValidation = GcpResourceValidation[resourceValidationMethod(selectedModelResource)]
+    const ResourceValidation = GoogleResourceValidation[resourceValidationMethod(selectedModelResource)]
     const validationResults = ResourceValidation ? ResourceValidation.validateResource(selectedModelResource, azureResources) : []
     return validationResults
 }

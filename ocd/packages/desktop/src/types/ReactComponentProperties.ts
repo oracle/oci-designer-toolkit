@@ -98,8 +98,8 @@ export interface AzureTabularResourceProps extends OcdTabularResourceProps {
     azureResources: OcdResources
 }
 
-export interface GcpTabularResourceProps extends OcdTabularResourceProps {
-    gcpResources: OcdResources
+export interface GoogleTabularResourceProps extends OcdTabularResourceProps {
+    googleResources: OcdResources
 }
 
 export interface OcdTabularContentsProps extends OcdTabularResourceProps {
@@ -117,7 +117,7 @@ export interface AzureTabularContentsProps extends AzureTabularResourceProps {
     resourceElements: string[]
 }
 
-export interface GcpTabularContentsProps extends GcpTabularResourceProps {
+export interface GoogleTabularContentsProps extends GoogleTabularResourceProps {
     columnTitles: string[]
     resourceElements: string[]
 }
@@ -142,8 +142,8 @@ export interface AzureTabularHeaderProps extends OcdTabularHeaderProps {
     azureResources: OcdResources
 }
 
-export interface GcpTabularHeaderProps extends OcdTabularHeaderProps {
-    gcpResources: OcdResources
+export interface GoogleTabularHeaderProps extends OcdTabularHeaderProps {
+    googleResources: OcdResources
 }
 
 export interface OcdTabularRowProps {
@@ -163,8 +163,8 @@ export interface AzureTabularRowProps extends OcdTabularRowProps {
     azureResources: OcdResources
 }
 
-export interface GcpTabularRowProps extends OcdTabularRowProps {
-    gcpResources: OcdResources
+export interface GoogleTabularRowProps extends OcdTabularRowProps {
+    googleResources: OcdResources
 }
 
 export interface OcdVariableRowPropsNew {

@@ -11277,7 +11277,7 @@
       "description": "Default HA configuration for the MySQL.VM.Standard.E3.8.128GB MySQL Shape",
       "display_name": "MySQL.VM.Standard.E3.8.128GB.HA",
       "freeform_tags": null,
-      "id": "ocid1.mysqlconfiguration.oc1..aaaaaaaalhjbtt5tffdk64tb477gcpwlgbxse54qga7brjfuwpneleizutva",
+      "id": "ocid1.mysqlconfiguration.oc1..aaaaaaaalhjbtt5tffdk64tb477googlewlgbxse54qga7brjfuwpneleizutva",
       "lifecycle_state": "ACTIVE",
       "shape_name": "MySQL.VM.Standard.E3.8.128GB",
       "time_created": "2018-09-21T10:00:00+00:00",

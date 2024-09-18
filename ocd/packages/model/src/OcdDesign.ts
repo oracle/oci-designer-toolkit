@@ -147,7 +147,7 @@ export interface AzureResources {
     [key: string]: any[]
 }
 
-export interface GcpResources {
+export interface GoogleResources {
     [key: string]: any[]
 }
 
@@ -161,7 +161,7 @@ export interface OciModel extends OcdBaseModel {
 }
 export interface AwsModel extends OcdBaseModel {}
 export interface AzureModel extends OcdBaseModel {}
-export interface GcpModel extends OcdBaseModel {}
+export interface GoogleModel extends OcdBaseModel {}
 export interface GeneralModel extends OcdBaseModel {}
 
 export interface OcdDesign {
@@ -170,7 +170,7 @@ export interface OcdDesign {
         oci: OciModel
         aws?: AwsModel
         azure: AzureModel
-        gcp: GcpModel
+        google: GoogleModel
         general: GeneralModel
     },
     view: OcdView,
@@ -215,7 +215,7 @@ export namespace OcdDesign {
                     vars: [],
                     resources: {}
                 },
-                gcp: {
+                google: {
                     vars: [],
                     resources: {}
                 },
@@ -244,8 +244,8 @@ export namespace OcdDesign {
         }
     }
     // Model Methods
-    export function getResourceLists(design: OcdDesign) {return {...getOciResourceLists(design), ...getAzureResourceLists(design), ...getGcpResourceLists(design), ...getGeneralResourceLists(design)}}
-    export function getResources(design: OcdDesign) {return [...getOciResources(design), ...getAzureResources(design), ...getGcpResources(design), ...getGeneralResources(design)]}
+    export function getResourceLists(design: OcdDesign) {return {...getOciResourceLists(design), ...getAzureResourceLists(design), ...getGoogleResourceLists(design), ...getGeneralResourceLists(design)}}
+    export function getResources(design: OcdDesign) {return [...getOciResources(design), ...getAzureResources(design), ...getGoogleResources(design), ...getGeneralResources(design)]}
     export function getResource(design: OcdDesign, id='') {return getResources(design).find((r: OcdResource) => r.id === id)}
     export function getResourceParentId(design: OcdDesign, id: string): string {
         const resource = getResource(design, id)
@@ -265,10 +265,10 @@ export namespace OcdDesign {
     export function getAzureResourceLists(design: OcdDesign) {return Object.hasOwn(design.model, 'azure') ? design.model.azure.resources : {}}
     export function getAzureResourceList(design: OcdDesign, key: string) {return Object.hasOwn(design.model, 'azure') && Object.hasOwn(design.model.azure.resources, key) ? design.model.azure.resources[key] : []}
     export function getAzureResources(design: OcdDesign) {return Object.hasOwn(design.model, 'azure') ? Object.values(design.model.azure.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []) : []}
-    // Gcp
-    export function getGcpResourceLists(design: OcdDesign) {return Object.hasOwn(design.model, 'gcp') ? design.model.gcp.resources : {}}
-    export function getGcpResourceList(design: OcdDesign, key: string) {return Object.hasOwn(design.model, 'gcp') && Object.hasOwn(design.model.gcp.resources, key) ? design.model.gcp.resources[key] : []}
-    export function getGcpResources(design: OcdDesign) {return Object.hasOwn(design.model, 'gcp') ? Object.values(design.model.gcp.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []) : []}
+    // Google
+    export function getGoogleResourceLists(design: OcdDesign) {return Object.hasOwn(design.model, 'google') ? design.model.google.resources : {}}
+    export function getGoogleResourceList(design: OcdDesign, key: string) {return Object.hasOwn(design.model, 'google') && Object.hasOwn(design.model.google.resources, key) ? design.model.google.resources[key] : []}
+    export function getGoogleResources(design: OcdDesign) {return Object.hasOwn(design.model, 'google') ? Object.values(design.model.google.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []) : []}
     // Shapes (General)
     export function getGeneralResourceLists(design: OcdDesign) {return Object.hasOwn(design.model, 'general') ? design.model.general.resources : {}}
     export function getGeneralResourceList(design: OcdDesign, key: string) {return Object.hasOwn(design.model, 'general') && Object.hasOwn(design.model.general.resources, key) ? design.model.general.resources[key] : []}
