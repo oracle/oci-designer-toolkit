@@ -680,10 +680,10 @@ const getAzureResourceValidationResults = (ocdDocument: OcdDocument, selectedMod
 }
 
 const getGoogleResourceValidationResults = (ocdDocument: OcdDocument, selectedModelResource: OcdResource): OcdValidationResult[] => {
-    const azureResources: GoogleResources = ocdDocument.getGoogleResourcesObject()
+    const googleResources: GoogleResources = ocdDocument.getGoogleResourcesObject()
     // @ts-ignore 
     const ResourceValidation = GoogleResourceValidation[resourceValidationMethod(selectedModelResource)]
-    const validationResults = ResourceValidation ? ResourceValidation.validateResource(selectedModelResource, azureResources) : []
+    const validationResults = ResourceValidation ? ResourceValidation.validateResource(selectedModelResource, googleResources) : []
     return validationResults
 }
 

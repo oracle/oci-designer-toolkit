@@ -9,11 +9,5 @@ export const ignoreElements: OcdIgnoreElements = {
     "common": [
         "id",
         "tags"
-    ],
-    "azapi_resource": [
-        "ignore_body_changes",
-        "locks",
-        "output",
-        "response_export_values"
     ]
 }
