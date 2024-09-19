@@ -3,9 +3,9 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import { resourceMap, dataMap, resourceAttributes } from './data/GoogleResourceMap'
 import { TerraformSchema } from "../types/TerraformSchema";
 import { OcdTerraformSchemaImporter } from "./OcdTerraformSchemaImporter";
+import { resourceMap, dataMap, resourceAttributes } from './data/GoogleResourceMap'
 import { ignoreElements } from './data/GoogleIgnoreElements';
 import { elementOverrides } from './data/GoogleElementOverrides';
 import { conditionalElements } from './data/GoogleConditionalElements';

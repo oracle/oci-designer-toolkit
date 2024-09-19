@@ -8,7 +8,6 @@ import { OcdUtils } from '@ocd/core'
 import { OcdDocument } from '../OcdDocument'
 import { useContext, useEffect, useId, useMemo, useState } from 'react'
 import { ActiveFileContext, CacheContext } from '../../pages/OcdConsole'
-import { v4 as uuidv4 } from 'uuid'
 
 export interface ResourcePropertyCondition extends OcdUtils.ResourcePropertyCondition {}
 
@@ -48,7 +47,7 @@ export interface ResourceElementProperties extends Record<string, any> {
 
 export interface ResourceElementConfig extends Record<string, any> {
     id: string
-    properties: ResourceElementProperties
+    properties: ResourceElementProperties // HTML input field properties
     resourceFilter?: ResourceFilterType // Filter function for Resource Selects. Checks Resource attributes against array element attributes
     simpleFilter?: SimpleFilterType     // Filter function for Reference Selects. Simple test of array element attribute against constant
     displayCondition?(): boolean        // Function to identify if conditional elements should be displayed
