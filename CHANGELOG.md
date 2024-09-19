@@ -1,6 +1,14 @@
 # Release Notes
 
 
+## Version 0.64.0
+**Release Date**: 30th September 2024
+### Features
+
+### Bug Fixes
+1. OKIT-Web: Resolve issue where save dialog did not display existing content (#717)
+
+
 ## Version 0.63.0
 **Release Date**: 31st August 2024
 ### Features
