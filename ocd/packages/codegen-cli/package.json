@@ -1,6 +1,6 @@
 {
   "name": "@ocd/codegen-cli",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "OKIT Open Cloud DesignerCodegen Command-line",
   "title": "OKIT Open Cloud Designer Codegen Command-linetop",
   "author": {
@@ -78,6 +78,6 @@
     "import-and-generate": "npm run import-and-generate-oci && npm run import-and-generate-azurerm && npm run import-and-generate-google"
   },
   "dependencies": {
-    "@ocd/codegen": "^0.2.3"
+    "@ocd/codegen": "^0.2.4"
   }
 }
