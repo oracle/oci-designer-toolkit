@@ -1,6 +1,27 @@
 # Release Notes
 
 
+## Version 0.64.0
+**Release Date**: 30th September 2024
+### Features
+1. Parse AzuraRM Terraform schema and generate OCD Resource Schema entries. (#OKIT-272)
+3. Write AzureRM Model Generator. (#OKIT-273)
+4. Write AzureRM Properties Generator. (#OKIT-274)
+5. Write AzureRM Terraform Generator. (#OKIT-275)
+6. Write AzureRM Markdown Generator. (#OKIT-276)
+7. Write AzureRM Validator Generator. (#OKIT-277)
+8. Write AzureRM Tabular Generator. (#OKIT-278)
+9. Parse Google Terraform schema and generate OCD Resource Schema entries. (#OKIT-284)
+10. Write Google Model Generator. (#OKIT-285)
+11. Write Google Properties Generator. (#OKIT-286)
+12. Write Google Terraform Generator. (#OKIT-287)
+13. Write Google Markdown Generator. (#OKIT-288)
+14. Write Google Validator Generator. (#OKIT-289)
+15. Write Google Tabular Generator. (#OKIT-290)
+### Bug Fixes
+1. OKIT-Web: Resolve issue where save dialog did not display existing content (#717)
+
+
 ## Version 0.63.0
 **Release Date**: 31st August 2024
 ### Features

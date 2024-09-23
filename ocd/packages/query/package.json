@@ -1,6 +1,6 @@
 {
   "name": "@ocd/query",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "OKIT Open Cloud Designer Query Module",
   "title": "OKIT Open Cloud Designer Query Module",
   "author": {
@@ -26,8 +26,8 @@
     "build": "npm run compile && npm run pack"
   },
   "dependencies": {
-    "@ocd/core": "^0.2.3",
-    "@ocd/model": "^0.2.3",
+    "@ocd/core": "^0.2.4",
+    "@ocd/model": "^0.2.4",
     "oci-sdk": "^2.69.0"
   }
 }
