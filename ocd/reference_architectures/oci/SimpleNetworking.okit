@@ -1,0 +1,365 @@
+{
+    "metadata": {
+        "ocdVersion": "0.1.0",
+        "ocdSchemaVersion": "0.1.0",
+        "ocdModelId": "ocd-model-a0701410-1264-4be9-b22e-6f1190d194a0",
+        "platform": "oci",
+        "title": "Untitled - Open Cloud Design",
+        "documentation": "",
+        "created": "2024-9-24 17:1:24",
+        "updated": ""
+    },
+    "model": {
+        "oci": {
+            "tags": {
+                "freeformTags": {},
+                "definedTags": {}
+            },
+            "vars": [],
+            "resources": {
+                "compartment": [
+                    {
+                        "provider": "oci",
+                        "locked": false,
+                        "terraformResourceName": "OkitCompartment1727193684952",
+                        "okitReference": "okit-804c370f-46ba-4978-a0f1-3c6e2577798d",
+                        "resourceType": "Compartment",
+                        "resourceTypeName": "Compartment",
+                        "id": "okit.compartment.1ee4893a-c85b-4abe-99b7-23e45ced78fd",
+                        "region": "",
+                        "compartmentId": "",
+                        "displayName": "networking",
+                        "documentation": "",
+                        "description": "",
+                        "enableDelete": true,
+                        "name": "networking"
+                    }
+                ],
+                "vcn": [
+                    {
+                        "provider": "oci",
+                        "locked": false,
+                        "terraformResourceName": "OkitVcn1727193689477",
+                        "okitReference": "okit-516b4682-0ad1-48e1-8f3c-6227627dadf7",
+                        "resourceType": "Vcn",
+                        "resourceTypeName": "Vcn",
+                        "id": "okit.vcn.46ab2682-8ddf-46e5-8f53-a2567872e652",
+                        "region": "",
+                        "compartmentId": "okit.compartment.1ee4893a-c85b-4abe-99b7-23e45ced78fd",
+                        "displayName": "Reference Network",
+                        "documentation": "",
+                        "cidrBlocks": [
+                            "10.0.0.0/16"
+                        ],
+                        "dnsLabel": "vcna",
+                        "ipv6cidrBlocks": [],
+                        "isIpv6enabled": false
+                    }
+                ],
+                "route_table": [
+                    {
+                        "provider": "oci",
+                        "locked": false,
+                        "terraformResourceName": "OkitRouteTable1727193689477",
+                        "okitReference": "okit-487c6be0-15f6-4cff-8a7f-4b69c1e16975",
+                        "resourceType": "RouteTable",
+                        "resourceTypeName": "Route Table",
+                        "id": "okit.route_table.7dfd4aea-25ae-437f-b9e3-98169448c2d7",
+                        "region": "",
+                        "compartmentId": "okit.compartment.1ee4893a-c85b-4abe-99b7-23e45ced78fd",
+                        "displayName": "Route Table 6062",
+                        "documentation": "",
+                        "vcnId": "okit.vcn.46ab2682-8ddf-46e5-8f53-a2567872e652",
+                        "routeRules": [
+                            {
+                                "description": "Outside",
+                                "destination": "0.0.0.0/0",
+                                "destinationType": "CIDR_BLOCK",
+                                "networkEntityId": "okit.internet_gateway.e3bb1e0f-5932-4e4e-846a-a133f12d83ec",
+                                "key": "5f59a043-b005-4e6e-be85-3b9e590cac7c"
+                            }
+                        ],
+                        "vcnDefault": true
+                    }
+                ],
+                "security_list": [
+                    {
+                        "provider": "oci",
+                        "locked": false,
+                        "terraformResourceName": "OkitSecurityList1727193689478",
+                        "okitReference": "okit-5410de2f-a3ec-4de2-a371-b5b60c92fbce",
+                        "resourceType": "SecurityList",
+                        "resourceTypeName": "Security List",
+                        "id": "okit.security_list.0da3f006-eff2-4791-b831-5af3023f8972",
+                        "region": "",
+                        "compartmentId": "okit.compartment.1ee4893a-c85b-4abe-99b7-23e45ced78fd",
+                        "displayName": "Security List 4d17",
+                        "documentation": "",
+                        "vcnId": "okit.vcn.46ab2682-8ddf-46e5-8f53-a2567872e652",
+                        "egressSecurityRules": [
+                            {
+                                "destination": "0.0.0.0/0",
+                                "destinationType": "CIDR_BLOCK",
+                                "stateless": false,
+                                "protocol": "all",
+                                "description": "Default All Egress Rule",
+                                "key": "1aec3004-de4f-4398-b95f-cf7ccec0e894"
+                            }
+                        ],
+                        "ingressSecurityRules": [
+                            {
+                                "stateless": false,
+                                "protocol": "6",
+                                "source": "0.0.0.0/0",
+                                "sourceType": "CIDR_BLOCK",
+                                "tcpOptions": {
+                                    "max": 22,
+                                    "min": 22,
+                                    "sourcePortRange": {
+                                        "min": 0,
+                                        "max": 0
+                                    }
+                                },
+                                "description": " Default SSH Ingress Rule",
+                                "key": "f42a9710-ae96-410a-a28f-804efdc1d98c"
+                            },
+                            {
+                                "icmpOptions": {
+                                    "code": 4,
+                                    "type": 3
+                                },
+                                "stateless": false,
+                                "protocol": "1",
+                                "source": "0.0.0.0/0",
+                                "sourceType": "CIDR_BLOCK",
+                                "description": "Default Ingress Rule",
+                                "key": "1bed90ab-6dc5-413e-a541-ad74bc638931"
+                            },
+                            {
+                                "icmpOptions": {
+                                    "type": 3
+                                },
+                                "stateless": false,
+                                "protocol": "1",
+                                "source": "10.0.0.0/16",
+                                "sourceType": "CIDR_BLOCK",
+                                "description": "Default VCN Access Ingress Rule",
+                                "key": "bf0dacb3-8228-406f-9489-37c54bbaeb00"
+                            }
+                        ],
+                        "vcnDefault": true
+                    }
+                ],
+                "dhcp_options": [
+                    {
+                        "provider": "oci",
+                        "locked": false,
+                        "terraformResourceName": "OkitDhcpOptions1727193689478",
+                        "okitReference": "okit-652d0516-289e-487d-bc8a-2535699a9d64",
+                        "resourceType": "DhcpOptions",
+                        "resourceTypeName": "Dhcp Options",
+                        "id": "okit.dhcp_options.f51c868f-6b1d-4e19-958e-3e2b747f0feb",
+                        "region": "",
+                        "compartmentId": "okit.compartment.1ee4893a-c85b-4abe-99b7-23e45ced78fd",
+                        "displayName": "Dhcp Options eacb",
+                        "documentation": "",
+                        "domainNameType": "",
+                        "vcnId": "okit.vcn.46ab2682-8ddf-46e5-8f53-a2567872e652",
+                        "options": [
+                            {
+                                "type": "SearchDomain",
+                                "serverType": "",
+                                "searchDomainNames": [
+                                    "vcna.oraclevcn.com"
+                                ],
+                                "customDnsServers": []
+                            }
+                        ],
+                        "vcnDefault": true
+                    }
+                ],
+                "internet_gateway": [
+                    {
+                        "provider": "oci",
+                        "locked": false,
+                        "terraformResourceName": "OkitInternetGateway1727193736781",
+                        "okitReference": "okit-ed3c0c0c-383c-4095-ad46-81d1f3df82d8",
+                        "resourceType": "InternetGateway",
+                        "resourceTypeName": "Internet Gateway",
+                        "id": "okit.internet_gateway.e3bb1e0f-5932-4e4e-846a-a133f12d83ec",
+                        "region": "",
+                        "compartmentId": "okit.compartment.1ee4893a-c85b-4abe-99b7-23e45ced78fd",
+                        "displayName": "Internet Gateway 52aa",
+                        "documentation": "",
+                        "enabled": false,
+                        "routeTableId": "",
+                        "vcnId": "okit.vcn.46ab2682-8ddf-46e5-8f53-a2567872e652"
+                    }
+                ],
+                "subnet": [
+                    {
+                        "provider": "oci",
+                        "locked": false,
+                        "terraformResourceName": "OkitSubnet1727193790889",
+                        "okitReference": "okit-5d315ed5-e9ce-450b-b7d2-45148c068224",
+                        "resourceType": "Subnet",
+                        "resourceTypeName": "Subnet",
+                        "id": "okit.subnet.72a045e9-2174-4773-80bb-ad56401f1d11",
+                        "region": "",
+                        "compartmentId": "okit.compartment.1ee4893a-c85b-4abe-99b7-23e45ced78fd",
+                        "displayName": "publicSN",
+                        "documentation": "",
+                        "availabilityDomain": "1",
+                        "cidrBlock": "10.0.0.0/24",
+                        "dhcpOptionsId": "",
+                        "dnsLabel": "publicsn",
+                        "ipv6cidrBlock": "",
+                        "ipv6cidrBlocks": [],
+                        "prohibitPublicIpOnVnic": false,
+                        "routeTableId": "okit.route_table.7dfd4aea-25ae-437f-b9e3-98169448c2d7",
+                        "securityListIds": [
+                            "okit.security_list.0da3f006-eff2-4791-b831-5af3023f8972"
+                        ],
+                        "vcnId": "okit.vcn.46ab2682-8ddf-46e5-8f53-a2567872e652"
+                    }
+                ]
+            }
+        },
+        "azure": {
+            "vars": [],
+            "resources": {}
+        },
+        "google": {
+            "vars": [],
+            "resources": {}
+        },
+        "general": {
+            "vars": [],
+            "resources": {}
+        }
+    },
+    "view": {
+        "id": "view-94ee3d20-70c6-4d8b-9e67-da513c245fc6",
+        "pages": [
+            {
+                "id": "page-5f3ed44c-ed96-4711-9a10-f4491f522da2",
+                "title": "Open Cloud Design",
+                "documentation": "",
+                "layers": [
+                    {
+                        "id": "okit.compartment.1ee4893a-c85b-4abe-99b7-23e45ced78fd",
+                        "class": "oci-compartment",
+                        "visible": true,
+                        "selected": true
+                    }
+                ],
+                "coords": [
+                    {
+                        "id": "gid-f4e489f3-79ba-46a5-a852-8c4ae4dd8117",
+                        "pgid": "",
+                        "ocid": "okit.vcn.46ab2682-8ddf-46e5-8f53-a2567872e652",
+                        "pocid": "",
+                        "x": 54,
+                        "y": 48,
+                        "w": 542,
+                        "h": 300,
+                        "title": "Vcn",
+                        "class": "oci-vcn",
+                        "showParentConnection": true,
+                        "showConnections": true,
+                        "container": true,
+                        "coords": [
+                            {
+                                "id": "gid-d1886def-6df9-4178-a136-c3b4c60edf2d",
+                                "pgid": "gid-f4e489f3-79ba-46a5-a852-8c4ae4dd8117",
+                                "ocid": "okit.route_table.7dfd4aea-25ae-437f-b9e3-98169448c2d7",
+                                "pocid": "okit.vcn.46ab2682-8ddf-46e5-8f53-a2567872e652",
+                                "x": 15,
+                                "y": 60,
+                                "w": 32,
+                                "h": 32,
+                                "title": "Route Table",
+                                "class": "oci-route-table",
+                                "showParentConnection": true,
+                                "showConnections": true,
+                                "container": false
+                            },
+                            {
+                                "id": "gid-9371fd6f-c9d0-48ed-9e9a-6933468d545e",
+                                "pgid": "gid-f4e489f3-79ba-46a5-a852-8c4ae4dd8117",
+                                "ocid": "okit.security_list.0da3f006-eff2-4791-b831-5af3023f8972",
+                                "pocid": "okit.vcn.46ab2682-8ddf-46e5-8f53-a2567872e652",
+                                "x": 15,
+                                "y": 120,
+                                "w": 32,
+                                "h": 32,
+                                "title": "Security List",
+                                "class": "oci-security-list",
+                                "showParentConnection": true,
+                                "showConnections": true,
+                                "container": false
+                            },
+                            {
+                                "id": "gid-5f43b932-c487-4457-8733-401e901df893",
+                                "pgid": "gid-f4e489f3-79ba-46a5-a852-8c4ae4dd8117",
+                                "ocid": "okit.dhcp_options.f51c868f-6b1d-4e19-958e-3e2b747f0feb",
+                                "pocid": "okit.vcn.46ab2682-8ddf-46e5-8f53-a2567872e652",
+                                "x": 15,
+                                "y": 180,
+                                "w": 32,
+                                "h": 32,
+                                "title": "Dhcp Options",
+                                "class": "oci-dhcp-options",
+                                "showParentConnection": true,
+                                "showConnections": true,
+                                "container": false
+                            },
+                            {
+                                "id": "gid-667d81bd-3d43-4f40-b07e-a2413f4b1da8",
+                                "pgid": "gid-f4e489f3-79ba-46a5-a852-8c4ae4dd8117",
+                                "ocid": "okit.internet_gateway.e3bb1e0f-5932-4e4e-846a-a133f12d83ec",
+                                "pocid": "okit.vcn.46ab2682-8ddf-46e5-8f53-a2567872e652",
+                                "x": 279,
+                                "y": -21,
+                                "w": 32,
+                                "h": 32,
+                                "title": "Internet Gateway",
+                                "class": "oci-internet-gateway",
+                                "showParentConnection": true,
+                                "showConnections": true,
+                                "container": false
+                            },
+                            {
+                                "id": "gid-d2b704ea-9869-476c-8d9a-6b331d9e30a4",
+                                "pgid": "gid-f4e489f3-79ba-46a5-a852-8c4ae4dd8117",
+                                "ocid": "okit.subnet.72a045e9-2174-4773-80bb-ad56401f1d11",
+                                "pocid": "okit.vcn.46ab2682-8ddf-46e5-8f53-a2567872e652",
+                                "x": 281,
+                                "y": 45,
+                                "w": 211,
+                                "h": 206,
+                                "title": "Subnet",
+                                "class": "oci-subnet",
+                                "showParentConnection": true,
+                                "showConnections": true,
+                                "container": true
+                            }
+                        ]
+                    }
+                ],
+                "connectors": [],
+                "selected": true,
+                "grid": false,
+                "transform": [
+                    1,
+                    0,
+                    0,
+                    1,
+                    0,
+                    0
+                ]
+            }
+        ]
+    },
+    "userDefined": {}
+}

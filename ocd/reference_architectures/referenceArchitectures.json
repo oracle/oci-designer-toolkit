@@ -1,0 +1,14 @@
+{
+    "oci": [
+        {
+            "title": "Simple Networking",
+            "description": "Simple Networking example which will create a vcn and subnet.",
+            "fileName": "SimpleNetworking.okit"
+        }
+    ],
+    "multicloud": {
+        "azure": {},
+        "google": {},
+        "aws": {}
+    }
+}
