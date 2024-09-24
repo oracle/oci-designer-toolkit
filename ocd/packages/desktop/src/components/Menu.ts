@@ -64,18 +64,6 @@ export const menuItems: MenuItem[] = [
                     if (activeFile.modified) {
                         OcdDesignFacade.discardConfirmation().then((discard) => {
                             if (discard) loadDesign('', setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig, setActiveFile)
-                            // if (discard) {
-                            //     OcdDesignFacade.loadDesign('').then((results) => {
-                            //         if (!results.canceled) {
-                            //             const ocdDocument = OcdDocument.new()
-                            //             ocdDocument.design = results.design
-                            //             setOcdDocument(ocdDocument)
-                            //             setActiveFile({name: results.filename, modified: false})
-                            //             updateRecentFiles(results.filename, ocdConsoleConfig, setOcdConsoleConfig)
-                            //         }
-                            //     }).catch((resp) => {console.warn('Load Design Failed with', resp)})
-        
-                            // }
                         }).catch((resp) => {console.warn('Discard Failed with', resp)})
                     } else {
                         loadDesign('', setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig, setActiveFile)
@@ -123,14 +111,6 @@ export const menuItems: MenuItem[] = [
                         if (!results.canceled) {
                             setActiveFile({name: results.filename, modified: false})
                             updateRecentFiles(results.filename, ocdConsoleConfig, setOcdConsoleConfig)
-                            // const clone = OcdConsoleConfig.clone(ocdConsoleConfig)
-                            // if (results.filename && results.filename !== '') {
-                            //     const recentDesigns: string[] = ocdConsoleConfig.config.recentDesigns ? ocdConsoleConfig.config.recentDesigns.filter((f) => f !== results.filename) : []
-                            //     clone.config.recentDesigns = [results.filename, ...recentDesigns].slice(0, ocdConsoleConfig.config.maxRecent)
-                            // }
-                            // setOcdConsoleConfig(clone)
-                            // console.debug('Menu: Load: Config', clone)
-                            // OcdConfigFacade.saveConsoleConfig(clone.config).catch((resp) => {console.warn(resp)})
                         }
                     }).catch((resp) => {console.warn('Load Design Failed with', resp)})
                 }
@@ -490,7 +470,6 @@ export const menuItems: MenuItem[] = [
                     const coords = ocdDocument.getCoords(ocdDocument.selectedResource.coordsId)
                     const page = ocdDocument.getPage(ocdDocument.selectedResource.pageId)
                     if (coords) {ocdDocument.toFront(coords, page.id)}
-                    // ocdDocument.toFront(ocdDocument.selectedResource.pageId, ocdDocument.selectedResource.coordsId)
                     setOcdDocument(OcdDocument.clone(ocdDocument))            
                 }
             },
@@ -500,7 +479,6 @@ export const menuItems: MenuItem[] = [
                     const coords = ocdDocument.getCoords(ocdDocument.selectedResource.coordsId)
                     const page = ocdDocument.getPage(ocdDocument.selectedResource.pageId)
                     if (coords) {ocdDocument.toBack(coords, page.id)}
-                    // ocdDocument.toBack(ocdDocument.selectedResource.pageId, ocdDocument.selectedResource.coordsId)
                     setOcdDocument(OcdDocument.clone(ocdDocument))            
                 }
             },
@@ -510,7 +488,6 @@ export const menuItems: MenuItem[] = [
                     const coords = ocdDocument.getCoords(ocdDocument.selectedResource.coordsId)
                     const page = ocdDocument.getPage(ocdDocument.selectedResource.pageId)
                     if (coords) {ocdDocument.bringForward(coords, page.id)}
-                    // ocdDocument.bringForward(ocdDocument.selectedResource.pageId, ocdDocument.selectedResource.coordsId)
                     setOcdDocument(OcdDocument.clone(ocdDocument))            
                 }
             },
@@ -520,7 +497,6 @@ export const menuItems: MenuItem[] = [
                     const coords = ocdDocument.getCoords(ocdDocument.selectedResource.coordsId)
                     const page = ocdDocument.getPage(ocdDocument.selectedResource.pageId)
                     if (coords) {ocdDocument.sendBackward(coords, page.id)}
-                    // ocdDocument.sendBackward(ocdDocument.selectedResource.pageId, ocdDocument.selectedResource.coordsId)
                     setOcdDocument(OcdDocument.clone(ocdDocument))            
                 }
             },
@@ -536,43 +512,6 @@ export const menuItems: MenuItem[] = [
                         }
                     }})
                 }
-                // submenu: [
-                //     {
-                //         label: 'Default',
-                //         click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
-                //             ocdDocument.autoLayout(ocdDocument.getActivePage().id, true, ocdConsoleConfig.config.defaultAutoArrangeStyle ? ocdConsoleConfig.config.defaultAutoArrangeStyle : 'dynamic-columns')
-                //             setOcdDocument(OcdDocument.clone(ocdDocument))            
-                //         }
-                //     },
-                //     {
-                //         label: 'Dynamic',
-                //         click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
-                //             ocdDocument.autoLayout(ocdDocument.getActivePage().id, true, 'dynamic-columns')
-                //             setOcdDocument(OcdDocument.clone(ocdDocument))            
-                //         }
-                //     },
-                //     {
-                //         label: 'Classic',
-                //         click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
-                //             ocdDocument.autoLayout(ocdDocument.getActivePage().id, true, 'okit-web')
-                //             setOcdDocument(OcdDocument.clone(ocdDocument))            
-                //         }
-                //     },
-                //     {
-                //         label: 'Two Column',
-                //         click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
-                //             ocdDocument.autoLayout(ocdDocument.getActivePage().id, true, 'two-column')
-                //             setOcdDocument(OcdDocument.clone(ocdDocument))            
-                //         }
-                //     },
-                //     {
-                //         label: 'Single Column',
-                //         click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
-                //             ocdDocument.autoLayout(ocdDocument.getActivePage().id, true, 'single-column')
-                //             setOcdDocument(OcdDocument.clone(ocdDocument))            
-                //         }
-                //     }
-                // ]
             }
         ]
     },
@@ -614,7 +553,6 @@ export const menuItems: MenuItem[] = [
 
 export const updateRecentFiles = (filename: string, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
     if (filename && filename !== '') {
-
         OcdConfigFacade.loadConsoleConfig().then((results) => {
             console.debug('Menu: Load Console Config', results)
             const consoleConfig = new OcdConsoleConfig(results)
@@ -628,14 +566,6 @@ export const updateRecentFiles = (filename: string, ocdConsoleConfig: OcdConsole
             OcdConfigFacade.saveConsoleConfig(ocdConsoleConfig.config).then((results) => {}).catch((response) => console.debug('Menu:', response))
             // OcdConfigFacade.saveConsoleConfig(ocdConsoleConfig.config).then((results) => {console.debug('OcdConsole: Saved Console Config')}).catch((response) => console.debug('OcdConsole:', response))
         })
-
-
-        // const clone = OcdConsoleConfig.clone(ocdConsoleConfig)
-        // const recentDesigns: string[] = ocdConsoleConfig.config.recentDesigns ? ocdConsoleConfig.config.recentDesigns.filter((f) => f !== filename) : []
-        // clone.config.recentDesigns = [filename, ...recentDesigns].slice(0, ocdConsoleConfig.config.maxRecent)
-        // setOcdConsoleConfig(clone)
-        // console.debug('Menu: Load: Config', clone)
-        // OcdConfigFacade.saveConsoleConfig(clone.config).catch((resp) => {console.warn(resp)})
     }
 }
 
