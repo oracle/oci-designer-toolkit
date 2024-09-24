@@ -745,10 +745,18 @@ const OcdResourceValidation =  ({ocdDocument, setOcdDocument}: DesignerResourceP
 }
 const OcdResourceValidationResult = ({result, resource}: DesignerResourceValidationResult): JSX.Element => {
     console.debug('OcdProperties: Validation Error', result, resource)
-    const resultClassName = result.type === 'error' ? 'ocd-validation-error-result' :
-                                            'warning' ? 'ocd-validation-warning-result' :
-                                            'information' ? 'ocd-validation-information-result' :
-                                            ''
+    let resultClassName = ''
+    switch (result.type) {
+        case 'error':
+            resultClassName = 'ocd-validation-error-result'
+            break;
+        case 'warning':
+            resultClassName = 'ocd-validation-warning-result'
+            break;
+        case 'information':
+            resultClassName = 'ocd-validation-information-result'
+            break;
+    }
     return (
         <div className='ocd-validation-result'>
             <div className={resultClassName}>
