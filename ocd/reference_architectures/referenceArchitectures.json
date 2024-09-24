@@ -3,7 +3,8 @@
         {
             "title": "Simple Networking",
             "description": "Simple Networking example which will create a vcn and subnet.",
-            "fileName": "SimpleNetworking.okit"
+            "okitFile": "SimpleNetworking.okit",
+            "svgFile": "SimpleNetworking.svg"
         }
     ],
     "multicloud": {
