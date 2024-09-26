@@ -68,7 +68,7 @@ const OcdLibraryDesign = ({section, architecture, ocdDocument, setOcdDocument}: 
             // })
         }
     }
-    const style: React.CSSProperties = {backgroundImage: `url("${architecture.dataUri}")`}
+    const style: React.CSSProperties = {backgroundImage: `url("${architecture.dataUri}")`, userSelect: 'none'}
     return (
         <div className='ocd-library-design' style={style} onDoubleClick={onDoubleClick}>
             <div className='ocd-library-design-title'><span>{architecture.title}</span></div>
