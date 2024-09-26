@@ -516,6 +516,13 @@ export const menuItems: MenuItem[] = [
         ]
     },
     {
+        label: 'Library',
+        click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
+            ocdConsoleConfig.config.displayPage = 'library'
+            setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+        }
+    },
+    {
         label: 'Help',
         click: undefined,
         submenu: [
@@ -579,7 +586,7 @@ export const loadDesign = (filename: string, setOcdDocument: Function, ocdConsol
             updateRecentFiles(results.filename, ocdConsoleConfig, setOcdConsoleConfig)
             ocdConsoleConfig.config.displayPage = 'designer'
             setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
-}
+        }
     }).catch((resp) => {console.warn('Load Design Failed with', resp)})
 }
 

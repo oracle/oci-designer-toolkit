@@ -7,9 +7,9 @@
             "svgFile": "SimpleNetworking.svg"
         }
     ],
-    "multicloud": {
-        "azure": {},
-        "google": {},
-        "aws": {}
-    }
+    "azure": [],
+    "google": [],
+    "aws": [],
+    "pca": [],
+    "c3": []
 }

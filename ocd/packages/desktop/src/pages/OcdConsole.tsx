@@ -14,6 +14,7 @@ import OcdMarkdown from './OcdMarkdown'
 import OcdTabular from './OcdTabular'
 import OcdTerraform from './OcdTerraform'
 import OcdVariables from './OcdVariables'
+import OcdLibrary from './OcdLibrary'
 import { OcdQueryDialog } from '../components/dialogs/OcdQueryDialog'
 import { OcdConfigFacade } from '../facade/OcdConfigFacade'
 import OcdDocumentation from './OcdDocumentation'
@@ -239,17 +240,54 @@ const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument,
 const OcdConsoleBody = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument }: ConsolePageProps): JSX.Element => {
     const showQueryDialog = ocdDocument.query
     const showReferenceDataQueryDialog = ocdConsoleConfig.queryReferenceData
-    const DisplayPage = ocdConsoleConfig.config.displayPage === 'bom' ? OcdBom : 
-                        ocdConsoleConfig.config.displayPage === 'designer' ? OcdDesigner : 
-                        ocdConsoleConfig.config.displayPage === 'documentation' ? OcdDocumentation : 
-                        ocdConsoleConfig.config.displayPage === 'markdown' ? OcdMarkdown : 
-                        ocdConsoleConfig.config.displayPage === 'tabular' ? OcdTabular : 
-                        ocdConsoleConfig.config.displayPage === 'tags' ? OcdCommonTags : 
-                        ocdConsoleConfig.config.displayPage === 'terraform' ? OcdTerraform : 
-                        ocdConsoleConfig.config.displayPage === 'variables' ? OcdVariables : 
-                        ocdConsoleConfig.config.displayPage === 'validation' ? OcdValidation : 
-                        ocdConsoleConfig.config.displayPage === 'help' ? OcdHelp : 
-                        OcdDesigner
+    // const DisplayPage = ocdConsoleConfig.config.displayPage === 'bom' ? OcdBom : 
+    //                     ocdConsoleConfig.config.displayPage === 'designer' ? OcdDesigner : 
+    //                     ocdConsoleConfig.config.displayPage === 'documentation' ? OcdDocumentation : 
+    //                     ocdConsoleConfig.config.displayPage === 'markdown' ? OcdMarkdown : 
+    //                     ocdConsoleConfig.config.displayPage === 'tabular' ? OcdTabular : 
+    //                     ocdConsoleConfig.config.displayPage === 'tags' ? OcdCommonTags : 
+    //                     ocdConsoleConfig.config.displayPage === 'terraform' ? OcdTerraform : 
+    //                     ocdConsoleConfig.config.displayPage === 'variables' ? OcdVariables : 
+    //                     ocdConsoleConfig.config.displayPage === 'validation' ? OcdValidation : 
+    //                     ocdConsoleConfig.config.displayPage === 'help' ? OcdHelp : 
+    //                     ocdConsoleConfig.config.displayPage === 'library' ? OcdLibrary : 
+    //                     OcdDesigner
+    let DisplayPage = OcdDesigner
+    switch (ocdConsoleConfig.config.displayPage) {
+        case 'bom':
+            DisplayPage = OcdBom
+            break;
+        case 'designer':
+            DisplayPage = OcdDesigner
+            break;
+        case 'documentation':
+            DisplayPage = OcdDocumentation
+            break;
+        case 'markdown':
+            DisplayPage = OcdMarkdown
+            break;
+        case 'tabular':
+            DisplayPage = OcdTabular
+            break;
+        case 'tags':
+            DisplayPage = OcdCommonTags
+            break;
+        case 'terraform':
+            DisplayPage = OcdTerraform
+            break;
+        case 'variables':
+            DisplayPage = OcdVariables
+            break;
+        case 'validation':
+            DisplayPage = OcdValidation
+            break;
+        case 'help':
+            DisplayPage = OcdHelp
+            break;
+        case 'library':
+            DisplayPage = OcdLibrary
+            break;
+    }
     // console.debug('OcdConsole: Show Query Dialog', showQueryDialog)
     return (
         <div className='ocd-console-body ocd-console-body-theme'>
