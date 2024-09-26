@@ -20,6 +20,8 @@ contextBridge.exposeInMainWorld('ocdAPI', {
   saveDesign: (design, filename) => ipcRenderer.invoke('ocdDesign:saveDesign', design, filename),
   discardConfirmation: () => ipcRenderer.invoke('ocdDesign:discardConfirmation'),
   exportTerraform: (design, directory) => ipcRenderer.invoke('ocdDesign:exportTerraform', design, directory),
+  loadLibraryIndex: () => ipcRenderer.invoke('ocdDesign:loadLibraryIndex'),
+  loadLibraryDesign: (section, filename) => ipcRenderer.invoke('ocdDesign:loadLibraryDesign', section, filename),
   // OCD Configuration
   loadConsoleConfig: () => ipcRenderer.invoke('ocdConfig:loadConsoleConfig'),
   saveConsoleConfig: (config) => ipcRenderer.invoke('ocdConfig:saveConsoleConfig', config),
