@@ -20,6 +20,7 @@
 15. Write Google Tabular Generator. (#OKIT-290)
 ### Bug Fixes
 1. OKIT-Web: Resolve issue where save dialog did not display existing content (#717)
+2. OKIT-Web: Fix for underlying AuthLib api change.
 
 
 ## Version 0.63.0

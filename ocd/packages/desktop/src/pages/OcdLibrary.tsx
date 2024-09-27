@@ -74,7 +74,7 @@ const OcdLibraryDesign = ({section, architecture, ocdDocument, setOcdDocument}: 
     const onMouseEnter = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault()
         e.stopPropagation()
-        setDesignStyle({...style, backgroundSize: "contain"})
+        setDesignStyle({...style, backgroundSize: "100%"})
         setDescriptionStyle({opacity: 0.2})
         // setDesignStyle({...style, backgroundSize: "var(--library-design-width)"})
     }

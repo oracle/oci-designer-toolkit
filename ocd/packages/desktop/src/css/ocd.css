@@ -28,7 +28,7 @@
     --variables-body-even-background-colour: #9ec2c9;
 
     --library-design-height: 200px;
-    --library-design-width: 200px;
+    --library-design-width: 300px;
     --library-design-background-size: 100px;
     --library-design-background-colour: #8ebaaa;
 }
@@ -1766,14 +1766,14 @@ table {
     border: 1px solid black;
     border-radius: 5px;
     margin: 15px;
-    padding-left: var(--library-design-background-size);
+    /* padding-left: var(--library-design-background-size); */
     height: var(--library-design-height);
     width: var(--library-design-width);
     max-height: var(--library-design-height);
     max-width: var(--library-design-width);
-    background-position: 2px 2px;
+    background-origin: padding-box;
     background-repeat: no-repeat;
-    background-clip: border-box;
+    background-clip: padding-box;
     background-size: var(--library-design-background-size);
     background-color: var(--library-design-background-colour);
 }
@@ -1781,6 +1781,8 @@ table {
 .ocd-library-design-title {
     font-weight: bolder;
     margin: 2px;
+    padding-left: var(--library-design-background-size);
+    height: var(--library-design-background-size);
 }
 
 .ocd-library-design-description {
