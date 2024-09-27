@@ -1769,6 +1769,8 @@ table {
     padding-left: var(--library-design-background-size);
     height: var(--library-design-height);
     width: var(--library-design-width);
+    max-height: var(--library-design-height);
+    max-width: var(--library-design-width);
     background-position: 2px 2px;
     background-repeat: no-repeat;
     background-clip: border-box;
