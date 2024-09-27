@@ -46,6 +46,8 @@ interface LibraryDesignProps {
 const OcdLibraryDesign = ({section, architecture, ocdDocument, setOcdDocument}: LibraryDesignProps): JSX.Element => {
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const {ocdConsoleConfig, setOcdConsoleConfig} = useContext(ConsoleConfigContext)
+    const style: React.CSSProperties = {backgroundImage: `url("${architecture.dataUri}")`, userSelect: 'none'}
+    const [designStyle, setDesignStyle] = useState(style)
     const onDoubleClick = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault()
         e.stopPropagation()
@@ -68,9 +70,18 @@ const OcdLibraryDesign = ({section, architecture, ocdDocument, setOcdDocument}: 
             // })
         }
     }
-    const style: React.CSSProperties = {backgroundImage: `url("${architecture.dataUri}")`}
+    const onMouseEnter = (e: React.MouseEvent<HTMLElement>) => {
+        e.preventDefault()
+        e.stopPropagation()
+        setDesignStyle({...style, backgroundSize: "var(--library-design-width)"})
+    }
+    const onMouseLeave = (e: React.MouseEvent<HTMLElement>) => {
+        e.preventDefault()
+        e.stopPropagation()
+        setDesignStyle(style)
+    }
     return (
-        <div className='ocd-library-design' style={style} onDoubleClick={onDoubleClick}>
+        <div className='ocd-library-design' style={designStyle} onDoubleClick={onDoubleClick} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
             <div className='ocd-library-design-title'><span>{architecture.title}</span></div>
             <div className='ocd-library-design-description'><span>{architecture.description}</span></div>
         </div>
