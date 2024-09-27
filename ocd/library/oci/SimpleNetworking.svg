@@ -393,7 +393,7 @@ svg {
 }
 </style>
 <g transform="matrix(1 0 0 1 0 0)">
-<g title="Resources"><g class="ocd-designer-resource" transform="translate(0,0)">
+<g title="Resources"><g class="ocd-designer-resource" transform="translate(54,48)">
 <rect class="ocd-svg-container " x="0" y="0" width="542" height="300"></rect>
 <foreignObject class="ocd-svg-foreign-object ocd-svg-resource-container" transform="translate(0, 0)">
 <div xmlns="http://www.w3.org/1999/xhtml">
