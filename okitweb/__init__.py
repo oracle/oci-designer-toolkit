@@ -119,7 +119,7 @@ def create_authenticated_app(test_config=None):
     @okitWebDesigner.bp.route('/postlogin', methods=(['GET', 'POST']))
     def postlogin():
         token = idcs.authorize_access_token()
-        userinfo = idcs.parse_id_token(token)
+        userinfo = idcs.parse_id_token(token, None)
         session['username'] = userinfo['user_displayname']
         session['home_region'] = app.config['OCI_HOME_REGION']
         session['tenant'] = app.config['OCI_TENANT']
