@@ -1,0 +1,15 @@
+{
+    "oci": [
+        {
+            "title": "Simple Networking",
+            "description": "Simple Networking example which will create a vcn and subnet.",
+            "okitFile": "SimpleNetworking.okit",
+            "svgFile": "SimpleNetworking.svg"
+        }
+    ],
+    "azure": [],
+    "google": [],
+    "aws": [],
+    "pca": [],
+    "c3": []
+}

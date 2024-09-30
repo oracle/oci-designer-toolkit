@@ -45,7 +45,7 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
     const visibleResourceIds = ocdDocument.getResources().filter((r: any) => visibleLayers.includes(r.compartmentId)).map((r: any) => r.id)
     // const visibleResourceIds = ocdDocument.getResources().map((r: any) => r.id)
     // console.debug('OcdCanvas: Visible Resource Ids', visibleResourceIds)
-    const [dragResource, setDragResource] = useState(ocdDocument.newDragResource(false))
+    const [dragResource, setDragResource] = useState(OcdDocument.newDragResource(false))
     const [contextMenu, setContextMenu] = useState<OcdContextMenu>({show: false, x: 0, y: 0})
     const [dragging, setDragging] = useState(false)
     const [coordinates, setCoordinates] = useState<Point>({ x: 0, y: 0 });
@@ -60,15 +60,6 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
     // Click Event to Reset Selected
     const onClick = (e: React.MouseEvent<SVGElement>) => {
         e.stopPropagation()
-        // const clone = OcdDocument.clone(ocdDocument)
-        // const selectedResource: OcdSelectedResource = {
-        //     modelId: '',
-        //     pageId: ocdDocument.getActivePage().id,
-        //     coordsId: '',
-        //     class: ''
-        // }
-        // clone.selectedResource = selectedResource
-        // setOcdDocument(clone)
         const clickedResource: OcdSelectedResource = {
             modelId: '',
             pageId: ocdDocument.getActivePage().id,
@@ -140,6 +131,13 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
                 coords.container = container
                 ocdDocument.addCoords(coords, page.id, pgid)
                 // Set as selected
+                const selectedResource = {
+                    modelId: modelResource.id,
+                    pageId: ocdDocument.getActivePage().id,
+                    coordsId: coords.id,
+                    class: dragData.dragObject.class
+                }
+                setSelectedResource(selectedResource)
                 ocdDocument.selectedResource = {
                     modelId: modelResource.id,
                     pageId: ocdDocument.getActivePage().id,
@@ -252,7 +250,7 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
             setCoordinates({ x: 0, y: 0 })
             setGhostTranslate({ x: 0, y: 0 })
             ocdDocument.updateCoords(coords, page.id)
-            ocdDocument.dragResource = ocdDocument.newDragResource()
+            ocdDocument.dragResource = OcdDocument.newDragResource()
             // Redraw
             setOcdDocument(OcdDocument.clone(ocdDocument))
             if (!activeFile.modified && hasMoved) setActiveFile({name: activeFile.name, modified: true})
@@ -290,7 +288,7 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
         const coordsId = e.currentTarget.id
         const resource = ocdDocument.getCoords(coordsId)
         if (resource) {
-            const dragResource: OcdDragResource = ocdDocument.newDragResource(true)
+            const dragResource: OcdDragResource = OcdDocument.newDragResource(true)
             dragResource.modelId = resource.ocid
             dragResource.pageId = ocdDocument.getActivePage().id
             dragResource.coordsId = resource.id
@@ -354,7 +352,7 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
             setCoordinates({ x: 0, y: 0 })
             setGhostTranslate({ x: 0, y: 0 })
             ocdDocument.updateCoords(coords, page.id)
-            setDragResource(ocdDocument.newDragResource())
+            setDragResource(OcdDocument.newDragResource())
             // Redraw
             setOcdDocument(OcdDocument.clone(ocdDocument))
             if (!activeFile.modified) setActiveFile({name: activeFile.name, modified: true})

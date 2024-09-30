@@ -3,8 +3,8 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import { OcdModelGenerator } from './OcdModelGenerator.js'
-import { commonElements, commonIgnoreElements } from './data/AzureCommonResourceProperties.js'
+import { OcdModelGenerator } from './OcdModelGenerator'
+import { commonElements, commonIgnoreElements } from './data/AzureCommonResourceProperties'
 
 export class AzureModelGenerator extends OcdModelGenerator {
     constructor () {

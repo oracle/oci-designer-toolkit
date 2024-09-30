@@ -10,6 +10,16 @@
 **
 */
 
+export { AzureContainerRegistry } from './resources/AzureContainerRegistry'
+export { AzureDnsZone } from './resources/AzureDnsZone'
+export { AzureKubernetesCluster } from './resources/AzureKubernetesCluster'
+export { AzureLoadBalancer } from './resources/AzureLoadBalancer'
+export { AzureMssqlServer } from './resources/AzureMssqlServer'
+export { AzureOracledatabaseAutonomousDatabaseRegular } from './resources/AzureOracledatabaseAutonomousDatabaseRegular'
+export { AzureOracledatabaseCloudVmCluster } from './resources/AzureOracledatabaseCloudVmCluster'
+export { AzureOracledatabaseExadataInfrastructure } from './resources/AzureOracledatabaseExadataInfrastructure'
+export { AzureResourceGroup } from './resources/AzureResourceGroup'
 export { AzureSubnet } from './resources/AzureSubnet'
+export { AzureVirtualMachine } from './resources/AzureVirtualMachine'
 export { AzureVirtualNetwork } from './resources/AzureVirtualNetwork'
     

@@ -1,0 +1,44 @@
+{
+  "oracledatabase_autonomous_database_regular": {
+    "tf_resource": "google_oracledatabase_autonomous_database_regular",
+    "type": "object",
+    "subtype": "",
+    "attributes": {}
+  },
+  "oracledatabase_exadata_infrastructure": {
+    "tf_resource": "google_oracledatabase_exadata_infrastructure",
+    "type": "object",
+    "subtype": "",
+    "attributes": {}
+  },
+  "oracledatabase_cloud_vm_cluster": {
+    "tf_resource": "google_oracledatabase_cloud_vm_cluster",
+    "type": "object",
+    "subtype": "",
+    "attributes": {}
+  },
+  "compute_network": {
+    "tf_resource": "google_compute_network",
+    "type": "object",
+    "subtype": "",
+    "attributes": {
+      "gateway_ipv4": {
+        "provider": "google",
+        "key": "gatewayIpv4",
+        "name": "gateway_ipv4",
+        "type": "string",
+        "subtype": "",
+        "required": false,
+        "label": "Gateway Ipv4",
+        "id": "gateway_ipv4",
+        "staticLookup": false,
+        "cacheLookup": false,
+        "lookup": false,
+        "lookupResource": "",
+        "lookupResourceElement": "",
+        "conditional": false,
+        "condition": {}
+      }
+    }
+  }
+}

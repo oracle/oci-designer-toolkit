@@ -6,29 +6,20 @@
 import { OcdIncludedElements, OcdResourceMap } from "../../types/OcdImporterData";
 
 export const resourceMap: OcdResourceMap = {
-    "azapi_resource": "azapi_resource"
+    "google_compute_network": "compute_network",
+    "google_oracledatabase_autonomous_database_regular": "oracledatabase_autonomous_database_regular",
+    "google_oracledatabase_exadata_infrastructure": "oracledatabase_exadata_infrastructure",
+    "google_oracledatabase_cloud_vm_cluster": "oracledatabase_cloud_vm_cluster",
 }
 
 export const dataMap: OcdResourceMap = {}
 
 export const resourceAttributes: OcdIncludedElements = {
     "common": [],
-    "azapi_resource": [
-        "body",
-        "identity",
-        "identity.identity_ids",
-        "identity.principal_id",
-        "identity.tenant_id",
-        "identity.type",
-        "ignore_casing",
-        "ignore_missing_property",
-        "location",
-        "name",
-        "parent_id",
-        "removing_special_chars",
-        "schema_validation_enabled",
-        "tags",
-        "timeouts",
-        "type"
-      ]
+    "google_compute_network": [
+        "gateway_ipv4"
+      ],
+    "google_oracledatabase_autonomous_database_regular": [],
+    "google_oracledatabase_exadata_infrastructure": [],
+    "google_oracledatabase_cloud_vm_cluster": [],
 }

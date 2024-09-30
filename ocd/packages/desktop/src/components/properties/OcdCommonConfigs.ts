@@ -38,7 +38,7 @@ export namespace OcdCommonConfigs {
             {
                 id: 'ipv6cidr_block',
                 properties: {
-                    placeholder: '2001:0db8:0123:45::/56',
+                    placeholder: '0000:0000:0000:00::/00',
                     pattern: "^((((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*|((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4})){7})(,\s?|$))+|^(var\.+(,\s?|$))",
                     title: 'IPv6 CIDR block'
                 },
@@ -47,7 +47,7 @@ export namespace OcdCommonConfigs {
             {
                 id: 'ipv6cidr_blocks',
                 properties: {
-                    placeholder: '2001:0db8:0123:45::/56',
+                    placeholder: '0000:0000:0000:00::/00,0000:0000:0000:00::/00',
                     pattern: "^((((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*|((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4})){7})(,\s?|$))+|^(var\.+(,\s?|$))",
                     title: 'Comma separated IPv6 CIDR blocks'
                 },

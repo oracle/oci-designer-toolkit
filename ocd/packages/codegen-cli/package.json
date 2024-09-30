@@ -1,6 +1,6 @@
 {
   "name": "@ocd/codegen-cli",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "OKIT Open Cloud DesignerCodegen Command-line",
   "title": "OKIT Open Cloud Designer Codegen Command-linetop",
   "author": {
@@ -30,11 +30,16 @@
     "generate-ocd-build-date-export": "node lib/esm/ocd-set-build-date.js -d ../export/src/data -p ../desktop/package.json",
     "generate-ocd-build-date": "npm run generate-ocd-build-date-desktop && npm run generate-ocd-build-date-export",
 
-    "generate-terraform-provider-schema": "cd schema && terraform init -upgrade && terraform providers schema -json > tf-schema.json",
+    "generate-oci-terraform-provider-schema": "cd schema/oci && terraform init -upgrade && terraform providers schema -json > tf-schema.json",
+    "generate-azurerm-terraform-provider-schema": "cd schema/azure && terraform init -upgrade && terraform providers schema -json > tf-schema.json",
+    "generate-google-terraform-provider-schema": "cd schema/google && terraform init -upgrade && terraform providers schema -json > tf-schema.json",
+    "generate-aws-terraform-provider-schema": "cd schema/aws && terraform init -upgrade && terraform providers schema -json > tf-schema.json",
+    "generate-terraform-provider-schema": "npm run generate-oci-terraform-provider-schema && npm run generate-azurerm-terraform-provider-schema && npm run generate-google-terraform-provider-schema && npm run generate-aws-terraform-provider-schema",
   
-    "import-oci-terraform-schema":   "node lib/esm/ocd-codegen.js import oci-terraform-schema   -i ./schema/tf-schema.json -o ./schema/oci-schema.json",
-    "import-azureaz-terraform-schema": "node lib/esm/ocd-codegen.js import azureaz-terraform-schema -i ./schema/tf-schema.json -o ./schema/azureaz-schema.json",
-    "import-azurerm-terraform-schema": "node lib/esm/ocd-codegen.js import azurerm-terraform-schema -i ./schema/tf-schema.json -o ./schema/azurerm-schema.json",
+    "import-oci-terraform-schema":   "node lib/esm/ocd-codegen.js import oci-terraform-schema   -i ./schema/oci/tf-schema.json -o ./schema/oci-schema.json",
+    "import-azurerm-terraform-schema": "node lib/esm/ocd-codegen.js import azurerm-terraform-schema -i ./schema/azure/tf-schema.json -o ./schema/azurerm-schema.json",
+    "import-google-terraform-schema": "node lib/esm/ocd-codegen.js import google-terraform-schema -i ./schema/google/tf-schema.json -o ./schema/google-schema.json",
+    "import-aws-terraform-schema": "node lib/esm/ocd-codegen.js import aws-terraform-schema -i ./schema/aws/tf-schema.json -o ./schema/aws-schema.json",
 
     "import": "npm run import-oci-terraform-schema && npm run import-azureaz-terraform-schema && npm run import-azurerm-terraform-schema",
 
@@ -48,31 +53,31 @@
     "generate-oci-validator":      "node lib/esm/ocd-codegen.js generate oci-validator-js  -s ./schema/oci-schema.json -d ../model/src/validator/provider/oci",
     "generate-oci":                "npm run generate-oci-model && npm run generate-oci-markdown && npm run generate-oci-properties && npm run generate-oci-terraform && npm run generate-oci-tabular && npm run generate-oci-validator",
 
-    "generate-azureaz-markdown":     "node lib/esm/ocd-codegen.js generate azureaz-markdown-js   -s ./schema/azureaz-schema.json -d ../export/src/markdown/provider/azure",
-    "generate-azureaz-model":        "node lib/esm/ocd-codegen.js generate azureaz-model-js      -s ./schema/azureaz-schema.json -d ../model/src/provider/azure",
-    "generate-azureaz-properties":   "node lib/esm/ocd-codegen.js generate azureaz-properties-js -s ./schema/azureaz-schema.json -d ../desktop/src/components/properties/provider/azure",
-    "generate-azureaz-tabular":      "node lib/esm/ocd-codegen.js generate azureaz-tabular-js    -s ./schema/azureaz-schema.json -d ../desktop/src/components/tabular/provider/azure",
-    "generate-azureaz-terraform":    "node lib/esm/ocd-codegen.js generate azureaz-terraform-js  -s ./schema/azureaz-schema.json -d ../export/src/terraform/provider/azure",
-    "generate-azureaz-validator":    "node lib/esm/ocd-codegen.js generate azureaz-validator-js  -s ./schema/azureaz-schema.json -d ../model/src/validator/provider/azure",
-    "generate-azureaz":              "npm run generate-azureaz-model && npm run generate-azureaz-markdown && npm run generate-azureaz-properties && npm run generate-azureaz-terraform && npm run generate-azureaz-tabular && npm run generate-azureaz-validator",
+    "generate-azurerm-markdown":   "node lib/esm/ocd-codegen.js generate azurerm-markdown-js   -s ./schema/azurerm-schema.json -d ../export/src/markdown/provider/azure",
+    "generate-azurerm-model":      "node lib/esm/ocd-codegen.js generate azurerm-model-js      -s ./schema/azurerm-schema.json -d ../model/src/provider/azure",
+    "generate-azurerm-properties": "node lib/esm/ocd-codegen.js generate azurerm-properties-js -s ./schema/azurerm-schema.json -d ../desktop/src/components/properties/provider/azure",
+    "generate-azurerm-tabular":    "node lib/esm/ocd-codegen.js generate azurerm-tabular-js    -s ./schema/azurerm-schema.json -d ../desktop/src/components/tabular/provider/azure",
+    "generate-azurerm-terraform":  "node lib/esm/ocd-codegen.js generate azurerm-terraform-js  -s ./schema/azurerm-schema.json -d ../export/src/terraform/provider/azure",
+    "generate-azurerm-validator":  "node lib/esm/ocd-codegen.js generate azurerm-validator-js  -s ./schema/azurerm-schema.json -d ../model/src/validator/provider/azure",
+    "generate-azurerm":            "npm run generate-azurerm-model && npm run generate-azurerm-markdown && npm run generate-azurerm-properties && npm run generate-azurerm-terraform && npm run generate-azurerm-tabular && npm run generate-azurerm-validator",
 
-    "generate-azurerm-markdown":     "node lib/esm/ocd-codegen.js generate azurerm-markdown-js   -s ./schema/azurerm-schema.json -d ../export/src/markdown/provider/azure",
-    "generate-azurerm-model":        "node lib/esm/ocd-codegen.js generate azurerm-model-js      -s ./schema/azurerm-schema.json -d ../model/src/provider/azure",
-    "generate-azurerm-properties":   "node lib/esm/ocd-codegen.js generate azurerm-properties-js -s ./schema/azurerm-schema.json -d ../desktop/src/components/properties/provider/azure",
-    "generate-azurerm-tabular":      "node lib/esm/ocd-codegen.js generate azurerm-tabular-js    -s ./schema/azurerm-schema.json -d ../desktop/src/components/tabular/provider/azure",
-    "generate-azurerm-terraform":    "node lib/esm/ocd-codegen.js generate azurerm-terraform-js  -s ./schema/azurerm-schema.json -d ../export/src/terraform/provider/azure",
-    "generate-azurerm-validator":    "node lib/esm/ocd-codegen.js generate azurerm-validator-js  -s ./schema/azurerm-schema.json -d ../model/src/validator/provider/azure",
-    "generate-azurerm":              "npm run generate-azurerm-model && npm run generate-azurerm-markdown && npm run generate-azurerm-properties && npm run generate-azurerm-terraform && npm run generate-azurerm-tabular && npm run generate-azurerm-validator",
+    "generate-google-markdown":       "node lib/esm/ocd-codegen.js generate google-markdown-js   -s ./schema/google-schema.json -d ../export/src/markdown/provider/google",
+    "generate-google-model":          "node lib/esm/ocd-codegen.js generate google-model-js      -s ./schema/google-schema.json -d ../model/src/provider/google",
+    "generate-google-properties":     "node lib/esm/ocd-codegen.js generate google-properties-js -s ./schema/google-schema.json -d ../desktop/src/components/properties/provider/google",
+    "generate-google-tabular":        "node lib/esm/ocd-codegen.js generate google-tabular-js    -s ./schema/google-schema.json -d ../desktop/src/components/tabular/provider/google",
+    "generate-google-terraform":      "node lib/esm/ocd-codegen.js generate google-terraform-js  -s ./schema/google-schema.json -d ../export/src/terraform/provider/google",
+    "generate-google-validator":      "node lib/esm/ocd-codegen.js generate google-validator-js  -s ./schema/google-schema.json -d ../model/src/validator/provider/google",
+    "generate-google":                "npm run generate-google-model && npm run generate-google-markdown && npm run generate-google-properties && npm run generate-google-terraform && npm run generate-google-tabular && npm run generate-google-validator",
 
-    "generate": "npm run generate-oci",
+    "generate": "npm run generate-oci && npm run generate-azurerm && npm run generate-google",
 
-    "import-and-generate-oci": "npm run import-oci-terraform-schema && npm run generate-oci",
+    "import-and-generate-oci":     "npm run import-oci-terraform-schema && npm run generate-oci",
     "import-and-generate-azurerm": "npm run import-azurerm-terraform-schema && npm run generate-azurerm",
-    "import-and-generate-azureaz": "npm run import-azureaz-terraform-schema && npm run generate-azureaz",
+    "import-and-generate-google":     "npm run import-google-terraform-schema && npm run generate-google",
     
-    "import-and-generate": "npm run import-and-generate-oci && npm run import-and-generate-azurerm"
+    "import-and-generate": "npm run import-and-generate-oci && npm run import-and-generate-azurerm && npm run import-and-generate-google"
   },
   "dependencies": {
-    "@ocd/codegen": "^0.2.3"
+    "@ocd/codegen": "^0.2.4"
   }
 }

@@ -5,7 +5,7 @@
 // TODO: Remove Following
 // @ts-nocheck
 
-import { OcdCodeGenerator } from './OcdCodeGenerator.js'
+import { OcdCodeGenerator } from './OcdCodeGenerator'
 
 export class OcdModelGenerator extends OcdCodeGenerator {
     constructor (prefix: string='Oci') {

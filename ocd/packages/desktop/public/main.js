@@ -13,6 +13,7 @@ const fs = require("fs")
 // const { ConfigFileReader } = require ('oci-common')
 const common = require ('oci-common')
 const { OciQuery, OciReferenceDataQuery } = require('@ocd/query')
+const { unescape } = require("querystring")
 
 // if (require('electron-squirrel-startup')) app.quit()
 const ocdConfigDirectory = path.join(app.getPath('home'), '.ocd')
@@ -239,6 +240,8 @@ app.whenReady().then(() => {
 	ipcMain.handle('ocdDesign:saveDesign', handleSaveDesign)
 	ipcMain.handle('ocdDesign:discardConfirmation', handleDiscardConfirmation)
 	ipcMain.handle('ocdDesign:exportTerraform', handleExportTerraform)
+	ipcMain.handle('ocdDesign:loadLibraryIndex', handleLoadLibraryIndex)
+	ipcMain.handle('ocdDesign:loadLibraryDesign', handleLoadLibraryDesign)
 	// OCD Configuration
 	ipcMain.handle('ocdConfig:loadConsoleConfig', handleLoadConsoleConfig)
 	ipcMain.handle('ocdConfig:saveConsoleConfig', handleSaveConsoleConfig)
@@ -269,7 +272,7 @@ app.whenReady().then(() => {
 	  })
 	
 	ready = true
-  })
+})
   
   
 // app.on("ready", createWindow)
@@ -531,5 +534,82 @@ async function handleOpenExternalUrl(event, href) {
 		} catch (err) {
 			reject(err)
 		}
+	})
+}
+
+// Library / Reference Architecture Functions
+const libraryUrl = 'https://raw.githubusercontent.com/oracle/oci-designer-toolkit/refs/heads/master/ocd/library'
+// const libraryUrl = 'https://raw.githubusercontent.com/oracle/oci-designer-toolkit/refs/heads/toxophilist/sprint-dev/ocd/library'
+const libraryFile = 'referenceArchitectures.json'
+
+async function handleLoadLibraryIndex(event) {
+	console.debug('Electron Main: handleLoadLibraryIndex')
+	return new Promise((resolve, reject) => {
+        // Build Library JSON File URL
+        const libraryJsonUrl = `${libraryUrl}/${libraryFile}`
+        const request = new Request(libraryJsonUrl)
+        // console.debug('Electron Main: handleLoadLibraryIndex: URL', libraryJsonUrl, request)
+        // Get Library File
+        const libraryFetchPromise = fetch(request)
+		libraryFetchPromise.then((response) => {
+            // console.debug('Electron Main: handleLoadLibraryIndex: Fetch Response', response)
+            // console.debug('Electron Main: handleLoadLibraryIndex: Fetch Response', response.headers.get("content-type"))
+			return response.text()
+		}).then((data) => {
+            // console.debug('Electron Main: handleLoadLibraryIndex: Fetch Data', data)
+			const libraryIndex = JSON.parse(data)
+			const sectionQueries = [getLibrarySectionSvg(libraryIndex, 'oci')]
+			Promise.allSettled(sectionQueries).then((results) => {
+				// console.debug('Electron Main: handleLoadLibraryIndex: Section Query Results', results)
+				resolve(libraryIndex)
+			})
+			// resolve(libraryIndex)
+		}).catch((err) => {
+            console.debug('Electron Main: handleLoadLibraryIndex: Fetch Error Response', err)
+			reject(err)
+		})
+	})
+}
+
+function getLibrarySectionSvg(libraryIndex, section) {
+	return new Promise((resolve, reject) => {
+		const librarySection = libraryIndex[section]
+		const svgRequests = librarySection.map((design) => new Request(`${libraryUrl}/${section}/${design.svgFile}`))
+		const svgUrls = svgRequests.map((request) => fetch(request))
+		Promise.allSettled(svgUrls).then((results) => Promise.allSettled(results.map((r) => r.value.text()))).then((svg) => {
+			svg.forEach((r, i) => {
+				console.debug('Electron Main: getLibrarySectionSvg: Svg Query Results', r.status)
+				// console.debug('Electron Main: getLibrarySectionSvg: Svg Query Results', r.value)
+				librarySection[i].dataUri = `data:image/svg+xml,${encodeURIComponent(r.value)}`
+				// librarySection[i].dataUri = `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(r.value)))}`
+			})
+			resolve(librarySection)
+		}).catch((err) => {
+            console.debug('Electron Main: getLibrarySectionSvg: Fetch Error Response', err)
+			reject(err)
+		})
+	})
+}
+
+async function handleLoadLibraryDesign(event, section, filename) {
+	console.debug('Electron Main: handleLoadLibraryDesign')
+	return new Promise((resolve, reject) => {
+        // Build Design JSON File URL
+        const libraryJsonUrl = `${libraryUrl}/${section}/${filename}`
+        const request = new Request(libraryJsonUrl)
+        // console.debug('Electron Main: handleLoadLibraryDesign: URL', libraryJsonUrl, request)
+        // Get Library File
+        const libraryFetchPromise = fetch(request)
+		libraryFetchPromise.then((response) => {
+            // console.debug('Electron Main: handleLoadLibraryDesign: Fetch Response', response)
+            // console.debug('Electron Main: handleLoadLibraryDesign: Fetch Response', response.headers.get("content-type"))
+			return response.text()
+		}).then((design) => {
+            // console.debug('Electron Main: handleLoadLibraryDesign: Fetch Data', design)
+			resolve({canceled: false, filename: filename, design: JSON.parse(design)})
+		}).catch((err) => {
+            console.debug('Electron Main: handleLoadLibraryIndex: Fetch Error Response', err)
+			reject(err)
+		})
 	})
 }

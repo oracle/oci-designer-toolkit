@@ -674,25 +674,26 @@ export const defaultCache: OcdCache = {
                 "images": [
                     {
                         "id": "Canonical Ubuntu-20.04",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaawcpxpssluoxqg5cellqumomzvs66ffrkzed5u34ga42lj2zjojba",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaafalfet52pc4h4ji6ywqfo5vzclb65ffikxbgm2o3cwo7p2r4asma",
                         "displayName": "Canonical Ubuntu 20.04",
-                        "sourceDisplayName": "Canonical-Ubuntu-20.04-aarch64-2024.06.18-0",
+                        "sourceDisplayName": "Canonical-Ubuntu-20.04-aarch64-2024.08.26-0",
                         "platform": true,
                         "operatingSystem": "Canonical Ubuntu",
                         "operatingSystemVersion": "20.04",
-                        "billableSizeInGBs": 2,
+                        "billableSizeInGBs": 3,
                         "lifecycleState": "AVAILABLE",
                         "shapes": [
                             "VM.Standard.A1.Flex",
+                            "VM.Standard.A2.Flex",
                             "VM.Standard.Ampere.Generic",
                             "BM.Standard.A1.160"
                         ]
                     },
                     {
                         "id": "Canonical Ubuntu-20.04 Minimal",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaadupbpvi6qyszvctqqdla6kruy6b3tr54lvmq6lnqskjaagyjw7pq",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaaogif6dqmbng6ry7yb3hrntskrbl7tqsxcq5lpddwycn5lyogdjga",
                         "displayName": "Canonical Ubuntu 20.04 Minimal",
-                        "sourceDisplayName": "Canonical-Ubuntu-20.04-Minimal-2024.06.26-0",
+                        "sourceDisplayName": "Canonical-Ubuntu-20.04-Minimal-2024.08.28-0",
                         "platform": true,
                         "operatingSystem": "Canonical Ubuntu",
                         "operatingSystemVersion": "20.04 Minimal",
@@ -754,7 +755,9 @@ export const defaultCache: OcdCache = {
                             "BM.DenseIO.E5.128",
                             "BM.Standard.E5.192",
                             "BM.GPU.L40S.4",
+                            "BM.GPU.L40S-NC.4",
                             "BM.GPU.H100.8",
+                            "BM.GPU.H100-NC.8",
                             "BM.GPU.MI300X.8",
                             "BM.Standard1.36",
                             "BM.HighIO1.36",
@@ -773,9 +776,9 @@ export const defaultCache: OcdCache = {
                     },
                     {
                         "id": "Canonical Ubuntu-22.04",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaavehem6scohtwwfpxj576isnczlujphlbnk5ynzmhra2irryqwt4q",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaav4stru5vb74on5fuaarsosnxual3uis27s3jmgafu5q5jdp5b2qq",
                         "displayName": "Canonical Ubuntu 22.04",
-                        "sourceDisplayName": "Canonical-Ubuntu-22.04-aarch64-2024.06.26-0",
+                        "sourceDisplayName": "Canonical-Ubuntu-22.04-aarch64-2024.08.23-0",
                         "platform": true,
                         "operatingSystem": "Canonical Ubuntu",
                         "operatingSystemVersion": "22.04",
@@ -783,15 +786,16 @@ export const defaultCache: OcdCache = {
                         "lifecycleState": "AVAILABLE",
                         "shapes": [
                             "VM.Standard.A1.Flex",
+                            "VM.Standard.A2.Flex",
                             "VM.Standard.Ampere.Generic",
                             "BM.Standard.A1.160"
                         ]
                     },
                     {
                         "id": "Canonical Ubuntu-22.04 Minimal",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaahklpex67wauy3w6whtyryur53b6fvlzqd3y7fk2tcmkl3gul6kja",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaarwrasc6lbima2td23fykimelcxgrrpgkj24z7wmnswiklmawsq6q",
                         "displayName": "Canonical Ubuntu 22.04 Minimal",
-                        "sourceDisplayName": "Canonical-Ubuntu-22.04-Minimal-2024.05.31-0",
+                        "sourceDisplayName": "Canonical-Ubuntu-22.04-Minimal-2024.08.27-0",
                         "platform": true,
                         "operatingSystem": "Canonical Ubuntu",
                         "operatingSystemVersion": "22.04 Minimal",
@@ -853,7 +857,9 @@ export const defaultCache: OcdCache = {
                             "BM.DenseIO.E5.128",
                             "BM.Standard.E5.192",
                             "BM.GPU.L40S.4",
+                            "BM.GPU.L40S-NC.4",
                             "BM.GPU.H100.8",
+                            "BM.GPU.H100-NC.8",
                             "BM.GPU.MI300X.8",
                             "BM.Standard1.36",
                             "BM.HighIO1.36",
@@ -872,9 +878,9 @@ export const defaultCache: OcdCache = {
                     },
                     {
                         "id": "Canonical Ubuntu-22.04 Minimal aarch64",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaantzj7ujtr5wcojxtgc76oveoq5xcz7egczd56x67wivib3hfak3q",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaarj4okf6onxmje2nxgsgwkulpnbppvl54yjhdrigt6atjm6xuqmga",
                         "displayName": "Canonical Ubuntu 22.04 Minimal aarch64",
-                        "sourceDisplayName": "Canonical-Ubuntu-22.04-Minimal-aarch64-2024.06.24-0",
+                        "sourceDisplayName": "Canonical-Ubuntu-22.04-Minimal-aarch64-2024.08.27-0",
                         "platform": true,
                         "operatingSystem": "Canonical Ubuntu",
                         "operatingSystemVersion": "22.04 Minimal aarch64",
@@ -882,15 +888,16 @@ export const defaultCache: OcdCache = {
                         "lifecycleState": "AVAILABLE",
                         "shapes": [
                             "VM.Standard.A1.Flex",
+                            "VM.Standard.A2.Flex",
                             "VM.Standard.Ampere.Generic",
                             "BM.Standard.A1.160"
                         ]
                     },
                     {
                         "id": "Canonical Ubuntu-24.04",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaalmz2f3ryfakc4fd5r4uteua3az3dfvcxr6q77b2nvddzevscjk5q",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaa4mxqemnfi7qzr2hdda4vhx5hznl7krjwypu2vb4ghaart3k6ovsq",
                         "displayName": "Canonical Ubuntu 24.04",
-                        "sourceDisplayName": "Canonical-Ubuntu-24.04-2024.06.26-0",
+                        "sourceDisplayName": "Canonical-Ubuntu-24.04-2024.08.28-0",
                         "platform": true,
                         "operatingSystem": "Canonical Ubuntu",
                         "operatingSystemVersion": "24.04",
@@ -907,6 +914,9 @@ export const defaultCache: OcdCache = {
                             "VM.DenseIO2.8",
                             "VM.GPU.A10.1",
                             "VM.GPU.A10.2",
+                            "VM.GPU.A100.40G.1",
+                            "VM.GPU.A100.80G.1",
+                            "VM.GPU.A100.B40G.1",
                             "VM.GPU.GU1.1",
                             "VM.GPU.GU1.2",
                             "VM.GPU2.1",
@@ -952,7 +962,9 @@ export const defaultCache: OcdCache = {
                             "BM.DenseIO.E5.128",
                             "BM.Standard.E5.192",
                             "BM.GPU.L40S.4",
+                            "BM.GPU.L40S-NC.4",
                             "BM.GPU.H100.8",
+                            "BM.GPU.H100-NC.8",
                             "BM.GPU.MI300X.8",
                             "BM.Standard1.36",
                             "BM.HighIO1.36",
@@ -1117,9 +1129,9 @@ export const defaultCache: OcdCache = {
                     },
                     {
                         "id": "Oracle Autonomous Linux-7.9",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaak4bizyqyrs4ukojklrbvjrywtz7hbwgfjv26gtv6nosxnkt432ba",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaawh6z4qj73repwsre7yu5bbuaga4k6t2vmihqtpdc5rharopnbqua",
                         "displayName": "Oracle Autonomous Linux 7.9",
-                        "sourceDisplayName": "Oracle-Autonomous-Linux-7.9-2024.06.30-0",
+                        "sourceDisplayName": "Oracle-Autonomous-Linux-7.9-2024.08.29-0",
                         "platform": true,
                         "operatingSystem": "Oracle Autonomous Linux",
                         "operatingSystemVersion": "7.9",
@@ -1176,6 +1188,7 @@ export const defaultCache: OcdCache = {
                             "BM.DenseIO.E5.128",
                             "BM.Standard.E5.192",
                             "BM.GPU.H100.8",
+                            "BM.GPU.H100-NC.8",
                             "BM.Standard1.36",
                             "BM.HighIO1.36",
                             "BM.DenseIO1.36",
@@ -1336,9 +1349,9 @@ export const defaultCache: OcdCache = {
                     },
                     {
                         "id": "Oracle Linux-7.9",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaai34ranlhfhny2gypfwnxmlnedymcj3sd7llgjjnzroezgk7s6qka",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaavituehbhsxrniuqxf3tfaeixu5aurzkwjfbljymueg3gebdj47rq",
                         "displayName": "Oracle Linux 7.9",
-                        "sourceDisplayName": "Oracle-Linux-7.9-aarch64-2024.06.30-0",
+                        "sourceDisplayName": "Oracle-Linux-7.9-aarch64-2024.08.29-0",
                         "platform": true,
                         "operatingSystem": "Oracle Linux",
                         "operatingSystemVersion": "7.9",
@@ -1352,9 +1365,9 @@ export const defaultCache: OcdCache = {
                     },
                     {
                         "id": "Oracle Linux-8",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaa5ncqrmyrksapujuu3rlyq67wimq3pbu25hpkma5i6g7v67s7ewwa",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaabsw6zkc6cmgrpz2ackeauvi6prpnsrtqpdhmsc3iko5buzgyhuea",
                         "displayName": "Oracle Linux 8",
-                        "sourceDisplayName": "Oracle-Linux-8.9-aarch64-2024.05.29-0",
+                        "sourceDisplayName": "Oracle-Linux-8.10-aarch64-2024.08.29-0",
                         "platform": true,
                         "operatingSystem": "Oracle Linux",
                         "operatingSystemVersion": "8",
@@ -1362,15 +1375,16 @@ export const defaultCache: OcdCache = {
                         "lifecycleState": "AVAILABLE",
                         "shapes": [
                             "VM.Standard.A1.Flex",
+                            "VM.Standard.A2.Flex",
                             "VM.Standard.Ampere.Generic",
                             "BM.Standard.A1.160"
                         ]
                     },
                     {
                         "id": "Oracle Linux-9",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaanwdbxr34bgzsrvw4ki5cjioua2qvnopfxngufy2cfq5xpjukkciq",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaasrycgzqrsvq3u5bl2lckkmrxzjvswrsphwqc3b7b6z2cxoro2ppq",
                         "displayName": "Oracle Linux 9",
-                        "sourceDisplayName": "Oracle-Linux-9.4-aarch64-2024.06.30-0",
+                        "sourceDisplayName": "Oracle-Linux-9.4-aarch64-2024.08.29-0",
                         "platform": true,
                         "operatingSystem": "Oracle Linux",
                         "operatingSystemVersion": "9",
@@ -1442,9 +1456,9 @@ export const defaultCache: OcdCache = {
                     },
                     {
                         "id": "Windows-Server 2016 Datacenter",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaapzi4uzl7nal5onjmnsifjtmzz7jzwpxao2xc4bli2sjntdoroe3a",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaaewxtmenebcxsnoy4zsruf7f3r7pjm6xvgysjzf7gotxfprsltata",
                         "displayName": "Windows Server 2016 Datacenter",
-                        "sourceDisplayName": "Windows-Server-2016-Datacenter-Edition-BM-X9-2024.07.09-0",
+                        "sourceDisplayName": "Windows-Server-2016-Datacenter-Edition-BM-X9-2024.08.13-0",
                         "platform": true,
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2016 Datacenter",
@@ -1482,9 +1496,9 @@ export const defaultCache: OcdCache = {
                     },
                     {
                         "id": "Windows-Server 2016 Standard Core",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaajvdre4yptr7vrmltlkdordo2o3wvjkpum4poiglltulji3mksm6a",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaadir63upta3zriqjm4e2dyzwmkh7u5a5cba4i3wopbefx3rg6rxqq",
                         "displayName": "Windows Server 2016 Standard Core",
-                        "sourceDisplayName": "Windows-Server-2016-Standard-Core-VM-2024.07.09-0",
+                        "sourceDisplayName": "Windows-Server-2016-Standard-Core-VM-2024.08.13-0",
                         "platform": true,
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2016 Standard Core",
@@ -1501,6 +1515,9 @@ export const defaultCache: OcdCache = {
                             "VM.DenseIO2.8",
                             "VM.GPU.A10.1",
                             "VM.GPU.A10.2",
+                            "VM.GPU.A100.40G.1",
+                            "VM.GPU.A100.80G.1",
+                            "VM.GPU.A100.B40G.1",
                             "VM.GPU.GU1.1",
                             "VM.GPU.GU1.2",
                             "VM.GPU2.1",
@@ -1546,9 +1563,9 @@ export const defaultCache: OcdCache = {
                     },
                     {
                         "id": "Windows-Server 2019 Datacenter",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaaudyox575nfwn7lrdaebvcj6h36piqjknibod2ogf24f6tc3huula",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaah4of5dfpjcnecml7z3z7xre7btacajid4fpe6win77kijgd25c6a",
                         "displayName": "Windows Server 2019 Datacenter",
-                        "sourceDisplayName": "Windows-Server-2019-Datacenter-Edition-BM-X9-2024.07.09-0",
+                        "sourceDisplayName": "Windows-Server-2019-Datacenter-Edition-BM-X9-2024.08.13-0",
                         "platform": true,
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2019 Datacenter",
@@ -1569,13 +1586,13 @@ export const defaultCache: OcdCache = {
                     },
                     {
                         "id": "Windows-Server 2019 Standard",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaaice6jhlce7sfm3zf3uncut5s76ufd2i4h7bdmsxa5krs6m2d44eq",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaagx4hq6czar7zahz4ammeqf4drlhku7oqfkjriwdtbh4oehu7zhcq",
                         "displayName": "Windows Server 2019 Standard",
-                        "sourceDisplayName": "Windows-Server-2019-Standard-Edition-VM-Gen2-2024.07.09-0",
+                        "sourceDisplayName": "Windows-Server-2019-Standard-Edition-VM-Gen2-2024.08.13-0",
                         "platform": true,
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2019 Standard",
-                        "billableSizeInGBs": 17,
+                        "billableSizeInGBs": 18,
                         "lifecycleState": "AVAILABLE",
                         "shapes": [
                             "VM.DenseIO2.16",
@@ -1602,13 +1619,13 @@ export const defaultCache: OcdCache = {
                     },
                     {
                         "id": "Windows-Server 2019 Standard Core",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaaewt4enw2pxkbwaydj5gwqqeswwlyshzkhqvzfcateymr6prpac2a",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaatf6xnu2tirf6wxrbog4qufasgxz6qqfgabd24bo42fup2qmmidjq",
                         "displayName": "Windows Server 2019 Standard Core",
-                        "sourceDisplayName": "Windows-Server-2019-Standard-Core-VM-2024.07.09-0",
+                        "sourceDisplayName": "Windows-Server-2019-Standard-Core-VM-2024.08.13-0",
                         "platform": true,
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2019 Standard Core",
-                        "billableSizeInGBs": 14,
+                        "billableSizeInGBs": 13,
                         "lifecycleState": "AVAILABLE",
                         "shapes": [
                             "VM.DenseIO.E4.Flex",
@@ -1621,6 +1638,9 @@ export const defaultCache: OcdCache = {
                             "VM.DenseIO2.8",
                             "VM.GPU.A10.1",
                             "VM.GPU.A10.2",
+                            "VM.GPU.A100.40G.1",
+                            "VM.GPU.A100.80G.1",
+                            "VM.GPU.A100.B40G.1",
                             "VM.GPU.GU1.1",
                             "VM.GPU.GU1.2",
                             "VM.GPU2.1",
@@ -1666,13 +1686,13 @@ export const defaultCache: OcdCache = {
                     },
                     {
                         "id": "Windows-Server 2022 Datacenter",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaaxs6szwd75ydm2gtgdp2sroij3vdjjldj2273wih4rzg6ars3ac5q",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaaclafcnfxtzpody23ye2gwahgvac4iyhl2amcn3zmylm5ivavon2a",
                         "displayName": "Windows Server 2022 Datacenter",
-                        "sourceDisplayName": "Windows-Server-2022-Datacenter-Edition-BM-X9-2024.07.09-0",
+                        "sourceDisplayName": "Windows-Server-2022-Datacenter-Edition-BM-X9-2024.08.13-0",
                         "platform": true,
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2022 Datacenter",
-                        "billableSizeInGBs": 17,
+                        "billableSizeInGBs": 18,
                         "lifecycleState": "AVAILABLE",
                         "shapes": [
                             "VM.Standard2.Flex",
@@ -1689,9 +1709,9 @@ export const defaultCache: OcdCache = {
                     },
                     {
                         "id": "Windows-Server 2022 Standard",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaatojjphicl3dmuf4sfsuk2v2kssvjbfd5dt62lel4xmgvofdo6yza",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaay35ofib6bwptw53f22xfk6c3cg7hgeedspmnizng5pudtvehs2hq",
                         "displayName": "Windows Server 2022 Standard",
-                        "sourceDisplayName": "Windows-Server-2022-Standard-Edition-VM-PV-2024.07.09-0",
+                        "sourceDisplayName": "Windows-Server-2022-Standard-Edition-VM-PV-2024.08.13-0",
                         "platform": true,
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2022 Standard",
@@ -1720,9 +1740,9 @@ export const defaultCache: OcdCache = {
                     },
                     {
                         "id": "Windows-Server 2022 Standard Core",
-                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaau7p2iaikbzudc3ivmckmty3agevbmop56bd5fszy3o3rv7pq2p2q",
+                        "ocid": "ocid1.image.oc1.uk-london-1.aaaaaaaapl2kk7eehg3ogdzdmwdeumqjpo7jntlkdpaqvpd2rkabk4p3n6ta",
                         "displayName": "Windows Server 2022 Standard Core",
-                        "sourceDisplayName": "Windows-Server-2022-Standard-Core-VM-2024.07.09-0",
+                        "sourceDisplayName": "Windows-Server-2022-Standard-Core-VM-2024.08.13-0",
                         "platform": true,
                         "operatingSystem": "Windows",
                         "operatingSystemVersion": "Server 2022 Standard Core",
@@ -1739,6 +1759,9 @@ export const defaultCache: OcdCache = {
                             "VM.DenseIO2.8",
                             "VM.GPU.A10.1",
                             "VM.GPU.A10.2",
+                            "VM.GPU.A100.40G.1",
+                            "VM.GPU.A100.80G.1",
+                            "VM.GPU.A100.B40G.1",
                             "VM.GPU.GU1.1",
                             "VM.GPU.GU1.2",
                             "VM.GPU2.1",
@@ -4313,13 +4336,13 @@ export const defaultCache: OcdCache = {
                         "availableMemoryInGBs": null,
                         "availableMemoryPerNodeInGBs": 1390,
                         "coreCountIncrement": null,
-                        "maxStorageCount": null,
+                        "maxStorageCount": 64,
                         "maximumNodeCount": 32,
                         "minCoreCountPerNode": 0,
                         "minDataStorageInTBs": 2,
                         "minDbNodeStoragePerNodeInGBs": 60,
                         "minMemoryPerNodeInGBs": 30,
-                        "minStorageCount": null,
+                        "minStorageCount": 3,
                         "minimumCoreCount": 0,
                         "minimumNodeCount": 2,
                         "name": "Exadata.X8M",
@@ -4340,13 +4363,13 @@ export const defaultCache: OcdCache = {
                         "availableMemoryInGBs": null,
                         "availableMemoryPerNodeInGBs": 1390,
                         "coreCountIncrement": null,
-                        "maxStorageCount": null,
+                        "maxStorageCount": 64,
                         "maximumNodeCount": 32,
                         "minCoreCountPerNode": 0,
                         "minDataStorageInTBs": 2,
                         "minDbNodeStoragePerNodeInGBs": 60,
                         "minMemoryPerNodeInGBs": 30,
-                        "minStorageCount": null,
+                        "minStorageCount": 3,
                         "minimumCoreCount": 0,
                         "minimumNodeCount": 2,
                         "name": "Exadata.X9M",
@@ -5464,7 +5487,7 @@ export const defaultCache: OcdCache = {
                         "details": "www.oracle.com/ajd",
                         "isDedicated": false,
                         "isDefaultForFree": false,
-                        "isDefaultForPaid": true,
+                        "isDefaultForPaid": false,
                         "isFreeTierEnabled": true,
                         "isPaidEnabled": true,
                         "version": "19c",
@@ -5472,11 +5495,11 @@ export const defaultCache: OcdCache = {
                         "displayName": "19c"
                     },
                     {
-                        "dbWorkload": "APEX",
-                        "details": "www.oracle.com/apex",
+                        "dbWorkload": "OLTP",
+                        "details": "www.oracle.com/atp",
                         "isDedicated": false,
                         "isDefaultForFree": false,
-                        "isDefaultForPaid": true,
+                        "isDefaultForPaid": false,
                         "isFreeTierEnabled": true,
                         "isPaidEnabled": true,
                         "version": "19c",
@@ -5488,69 +5511,69 @@ export const defaultCache: OcdCache = {
                         "details": "www.oracle.com/atp",
                         "isDedicated": false,
                         "isDefaultForFree": false,
-                        "isDefaultForPaid": true,
+                        "isDefaultForPaid": false,
                         "isFreeTierEnabled": true,
                         "isPaidEnabled": true,
                         "version": "19c",
                         "id": "19c",
                         "displayName": "19c"
-                    },
-                    {
-                        "dbWorkload": "OLTP",
-                        "details": "www.oracle.com/atp",
-                        "isDedicated": false,
-                        "isDefaultForFree": false,
-                        "isDefaultForPaid": true,
-                        "isFreeTierEnabled": true,
-                        "isPaidEnabled": true,
-                        "version": "19c",
-                        "id": "19c",
-                        "displayName": "19c"
-                    },
-                    {
-                        "dbWorkload": "AJD",
-                        "details": "www.oracle.com/ajd",
-                        "isDedicated": false,
-                        "isDefaultForFree": true,
-                        "isDefaultForPaid": false,
-                        "isFreeTierEnabled": true,
-                        "isPaidEnabled": false,
-                        "version": "23ai",
-                        "id": "23ai",
-                        "displayName": "23ai"
-                    },
-                    {
-                        "dbWorkload": "OLTP",
-                        "details": "www.oracle.com/atp",
-                        "isDedicated": false,
-                        "isDefaultForFree": true,
-                        "isDefaultForPaid": false,
-                        "isFreeTierEnabled": true,
-                        "isPaidEnabled": false,
-                        "version": "23ai",
-                        "id": "23ai",
-                        "displayName": "23ai"
                     },
                     {
                         "dbWorkload": "APEX",
                         "details": "www.oracle.com/apex",
                         "isDedicated": false,
-                        "isDefaultForFree": true,
+                        "isDefaultForFree": false,
                         "isDefaultForPaid": false,
                         "isFreeTierEnabled": true,
-                        "isPaidEnabled": false,
-                        "version": "23ai",
-                        "id": "23ai",
-                        "displayName": "23ai"
+                        "isPaidEnabled": true,
+                        "version": "19c",
+                        "id": "19c",
+                        "displayName": "19c"
                     },
                     {
                         "dbWorkload": "DW",
                         "details": "www.oracle.com/adw",
                         "isDedicated": false,
                         "isDefaultForFree": true,
-                        "isDefaultForPaid": false,
+                        "isDefaultForPaid": true,
                         "isFreeTierEnabled": true,
-                        "isPaidEnabled": false,
+                        "isPaidEnabled": true,
+                        "version": "23ai",
+                        "id": "23ai",
+                        "displayName": "23ai"
+                    },
+                    {
+                        "dbWorkload": "APEX",
+                        "details": "www.oracle.com/apex",
+                        "isDedicated": false,
+                        "isDefaultForFree": true,
+                        "isDefaultForPaid": true,
+                        "isFreeTierEnabled": true,
+                        "isPaidEnabled": true,
+                        "version": "23ai",
+                        "id": "23ai",
+                        "displayName": "23ai"
+                    },
+                    {
+                        "dbWorkload": "OLTP",
+                        "details": "www.oracle.com/atp",
+                        "isDedicated": false,
+                        "isDefaultForFree": true,
+                        "isDefaultForPaid": true,
+                        "isFreeTierEnabled": true,
+                        "isPaidEnabled": true,
+                        "version": "23ai",
+                        "id": "23ai",
+                        "displayName": "23ai"
+                    },
+                    {
+                        "dbWorkload": "AJD",
+                        "details": "www.oracle.com/ajd",
+                        "isDedicated": false,
+                        "isDefaultForFree": true,
+                        "isDefaultForPaid": true,
+                        "isFreeTierEnabled": true,
+                        "isPaidEnabled": true,
                         "version": "23ai",
                         "id": "23ai",
                         "displayName": "23ai"
@@ -5868,688 +5891,695 @@ export const defaultCache: OcdCache = {
                     {
                         "name": "adm",
                         "description": "Application Dependency Management",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "adm",
                         "displayName": "Application Dependency Management"
                     },
                     {
                         "name": "agcs",
                         "description": "Access Governance",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "agcs",
                         "displayName": "Access Governance"
                     },
                     {
                         "name": "ai-anomaly-detection",
                         "description": "AI Anomaly Detection",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "ai-anomaly-detection",
                         "displayName": "AI Anomaly Detection"
                     },
                     {
                         "name": "ai-document",
                         "description": "AI Document",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "ai-document",
                         "displayName": "AI Document"
                     },
                     {
                         "name": "ai-forecasting",
                         "description": "AI Forecasting",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "ai-forecasting",
                         "displayName": "AI Forecasting"
                     },
                     {
                         "name": "ai-generative",
                         "description": "Generative AI",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "ai-generative",
                         "displayName": "Generative AI"
                     },
                     {
                         "name": "ai-language",
                         "description": "AI Language",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "ai-language",
                         "displayName": "AI Language"
                     },
                     {
                         "name": "ai-speech",
                         "description": "AI Speech",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "ai-speech",
                         "displayName": "AI Speech"
                     },
                     {
                         "name": "ai-vision",
                         "description": "AI Vision",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "ai-vision",
                         "displayName": "AI Vision"
                     },
                     {
                         "name": "analytics",
                         "description": "Analytics",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "analytics",
                         "displayName": "Analytics"
                     },
                     {
                         "name": "api-gateway",
                         "description": "API Gateway",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "api-gateway",
                         "displayName": "API Gateway"
                     },
                     {
                         "name": "apm",
                         "description": "Application Performance Monitoring",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "apm",
                         "displayName": "Application Performance Monitoring"
                     },
                     {
                         "name": "app-configuration",
                         "description": "Application Configuration",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "app-configuration",
                         "displayName": "Application Configuration"
                     },
                     {
                         "name": "atat",
                         "description": "Account Tracking and Automation Tools",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "atat",
                         "displayName": "Account Tracking and Automation Tools"
                     },
                     {
                         "name": "auto-scaling",
                         "description": "Auto Scaling",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "auto-scaling",
                         "displayName": "Auto Scaling"
                     },
                     {
                         "name": "autonomous-recovery-service",
                         "description": "Autonomous Recovery Service",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "autonomous-recovery-service",
                         "displayName": "Autonomous Recovery Service"
                     },
                     {
                         "name": "big-data",
                         "description": "Big Data",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "big-data",
                         "displayName": "Big Data"
                     },
                     {
                         "name": "block-storage",
                         "description": "Block Volume",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "block-storage",
                         "displayName": "Block Volume"
                     },
                     {
                         "name": "blockchain",
                         "description": "Blockchain",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "blockchain",
                         "displayName": "Blockchain"
                     },
                     {
                         "name": "ccatc",
                         "description": "Compute Cloud at Customer",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "ccatc",
                         "displayName": "Compute Cloud at Customer"
                     },
                     {
                         "name": "cds",
                         "description": "Cross Domain Solution",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "cds",
                         "displayName": "Cross Domain Solution"
                     },
                     {
                         "name": "cloud-bridge",
                         "description": "Oracle Cloud Bridge",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "cloud-bridge",
                         "displayName": "Oracle Cloud Bridge"
                     },
                     {
                         "name": "cloud-shell",
                         "description": "Cloud Shell",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "cloud-shell",
                         "displayName": "Cloud Shell"
                     },
                     {
                         "name": "cloudguard",
                         "description": "Cloud Guard",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "cloudguard",
                         "displayName": "Cloud Guard"
                     },
                     {
                         "name": "cluster-placement-groups",
                         "description": "Cluster Placement Groups",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "cluster-placement-groups",
                         "displayName": "Cluster Placement Groups"
                     },
                     {
                         "name": "compartments",
                         "description": "Compartments",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "compartments",
                         "displayName": "Compartments"
                     },
                     {
                         "name": "compute",
                         "description": "Compute",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "compute",
                         "displayName": "Compute"
                     },
                     {
                         "name": "compute-management",
                         "description": "Compute Management",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "compute-management",
                         "displayName": "Compute Management"
                     },
                     {
                         "name": "container-engine",
                         "description": "Container Engine",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "container-engine",
                         "displayName": "Container Engine"
                     },
                     {
                         "name": "cost-management",
                         "description": "Cost Management",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "cost-management",
                         "displayName": "Cost Management"
                     },
                     {
                         "name": "dashboard",
                         "description": "Dashboard",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "dashboard",
                         "displayName": "Dashboard"
                     },
                     {
                         "name": "data-catalog",
                         "description": "Data Catalog",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "data-catalog",
                         "displayName": "Data Catalog"
                     },
                     {
                         "name": "data-flow",
                         "description": "Data Flow",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "data-flow",
                         "displayName": "Data Flow"
                     },
                     {
                         "name": "data-integration",
                         "description": "Data Integration",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "data-integration",
                         "displayName": "Data Integration"
                     },
                     {
                         "name": "data-labeling",
                         "description": "Data Labeling",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "data-labeling",
                         "displayName": "Data Labeling"
                     },
                     {
                         "name": "data-science",
                         "description": "Data Science",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "data-science",
                         "displayName": "Data Science"
                     },
                     {
                         "name": "data-transfer",
                         "description": "Data Transfer",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "data-transfer",
                         "displayName": "Data Transfer"
                     },
                     {
                         "name": "database",
                         "description": "Database",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "database",
                         "displayName": "Database"
                     },
                     {
                         "name": "database-migration",
                         "description": "Database Migration",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "database-migration",
                         "displayName": "Database Migration"
                     },
                     {
                         "name": "dbtools",
                         "description": "Database Tools",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "dbtools",
                         "displayName": "Database Tools"
                     },
                     {
                         "name": "devops",
                         "description": "DevOps",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "devops",
                         "displayName": "DevOps"
                     },
                     {
                         "name": "digital-assistant",
                         "description": "Digital Assistant",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "digital-assistant",
                         "displayName": "Digital Assistant"
                     },
                     {
                         "name": "digital-media",
                         "description": "Digital Media Services",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "digital-media",
                         "displayName": "Digital Media Services"
                     },
                     {
                         "name": "disaster-recovery",
                         "description": "Full Stack Disaster Recovery",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "disaster-recovery",
                         "displayName": "Full Stack Disaster Recovery"
                     },
                     {
                         "name": "dns",
                         "description": "DNS",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "dns",
                         "displayName": "DNS"
                     },
                     {
                         "name": "email-delivery",
                         "description": "Email Delivery",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "email-delivery",
                         "displayName": "Email Delivery"
                     },
                     {
                         "name": "events",
                         "description": "Events",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "events",
                         "displayName": "Events"
                     },
                     {
                         "name": "exadata-fleet-update",
                         "description": "Exadata Fleet Update",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "exadata-fleet-update",
                         "displayName": "Exadata Fleet Update"
                     },
                     {
                         "name": "faas",
                         "description": "Functions",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "faas",
                         "displayName": "Functions"
                     },
                     {
                         "name": "fams",
                         "description": "Fleet Application Management",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "fams",
                         "displayName": "Fleet Application Management"
                     },
                     {
                         "name": "fast-connect",
                         "description": "Fast Connect",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "fast-connect",
                         "displayName": "Fast Connect"
                     },
                     {
                         "name": "filesystem",
                         "description": "File Storage",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "filesystem",
                         "displayName": "File Storage"
                     },
                     {
                         "name": "gdp",
                         "description": "Guarded Data Pipelines",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "gdp",
                         "displayName": "Guarded Data Pipelines"
                     },
                     {
+                        "name": "generative-ai-agent",
+                        "description": "Generative AI Agent",
+                        "supportedSubscriptions": [],
+                        "id": "generative-ai-agent",
+                        "displayName": "Generative AI Agent"
+                    },
+                    {
                         "name": "goldengate",
                         "description": "GoldenGate",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "goldengate",
                         "displayName": "GoldenGate"
                     },
                     {
                         "name": "health-checks",
                         "description": "Health Check",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "health-checks",
                         "displayName": "Health Check"
                     },
                     {
                         "name": "integration",
                         "description": "Integration",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "integration",
                         "displayName": "Integration"
                     },
                     {
                         "name": "java-management",
                         "description": "Java Management",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "java-management",
                         "displayName": "Java Management"
                     },
                     {
                         "name": "kms",
                         "description": "Key Management",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "kms",
                         "displayName": "Key Management"
                     },
                     {
                         "name": "licensemanager",
                         "description": "License Manager",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "licensemanager",
                         "displayName": "License Manager"
                     },
                     {
                         "name": "limits",
                         "description": "Limits",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "limits",
                         "displayName": "Limits"
                     },
                     {
                         "name": "load-balancer",
                         "description": "LbaaS",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "load-balancer",
                         "displayName": "LbaaS"
                     },
                     {
                         "name": "logging",
                         "description": "Logging",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "logging",
                         "displayName": "Logging"
                     },
                     {
                         "name": "logging-analytics",
                         "description": "Logging Analytics",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "logging-analytics",
                         "displayName": "Logging Analytics"
                     },
                     {
                         "name": "management-agent",
                         "description": "Management Agent",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "management-agent",
                         "displayName": "Management Agent"
                     },
                     {
                         "name": "management-dashboard",
                         "description": "Management Dashboard",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "management-dashboard",
                         "displayName": "Management Dashboard"
                     },
                     {
                         "name": "marketplace-publisher",
                         "description": "Marketplace Publisher",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "marketplace-publisher",
                         "displayName": "Marketplace Publisher"
                     },
                     {
                         "name": "multicloud",
                         "description": "Multicloud",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "multicloud",
                         "displayName": "Multicloud"
                     },
                     {
                         "name": "mysql",
                         "description": "MySQL HeatWave",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "mysql",
                         "displayName": "MySQL HeatWave"
                     },
                     {
                         "name": "mysql-heatwave-on-aws",
                         "description": "MySQL HeatWave on AWS",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "mysql-heatwave-on-aws",
                         "displayName": "MySQL HeatWave on AWS"
                     },
                     {
                         "name": "network-firewall",
                         "description": "Network Firewall",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "network-firewall",
                         "displayName": "Network Firewall"
                     },
                     {
                         "name": "network-load-balancer-api",
                         "description": "Network Load Balancer",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "network-load-balancer-api",
                         "displayName": "Network Load Balancer"
                     },
                     {
                         "name": "network-path-analyzer",
                         "description": "Network Path Analyzer",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "network-path-analyzer",
                         "displayName": "Network Path Analyzer"
                     },
                     {
                         "name": "nosql",
                         "description": "NoSQL",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "nosql",
                         "displayName": "NoSQL"
                     },
                     {
                         "name": "notifications",
                         "description": "Notifications",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "notifications",
                         "displayName": "Notifications"
                     },
                     {
                         "name": "object-storage",
                         "description": "Object Storage",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "object-storage",
                         "displayName": "Object Storage"
                     },
                     {
                         "name": "ocm-migration",
                         "description": "Oracle Cloud Migration",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "ocm-migration",
                         "displayName": "Oracle Cloud Migration"
                     },
                     {
                         "name": "ocvp",
                         "description": "VMware Solution",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "ocvp",
                         "displayName": "VMware Solution"
                     },
                     {
                         "name": "open-search",
                         "description": "OpenSearch",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "open-search",
                         "displayName": "OpenSearch"
                     },
                     {
+                        "name": "operations-insights",
+                        "description": "Operations Insights",
+                        "supportedSubscriptions": [],
+                        "id": "operations-insights",
+                        "displayName": "Operations Insights"
+                    },
+                    {
                         "name": "organizations",
                         "description": "Organizations",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "organizations",
                         "displayName": "Organizations"
                     },
                     {
                         "name": "osd",
                         "description": "Globally Distributed Database",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "osd",
                         "displayName": "Globally Distributed Database"
                     },
                     {
                         "name": "osmh",
                         "description": "OS Management Hub",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "osmh",
                         "displayName": "OS Management Hub"
                     },
                     {
                         "name": "postgresql",
                         "description": "PostgreSQL",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "postgresql",
                         "displayName": "PostgreSQL"
                     },
                     {
                         "name": "queue",
                         "description": "Queue",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "queue",
                         "displayName": "Queue"
                     },
                     {
                         "name": "redis",
                         "description": "OCI Cache",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "redis",
                         "displayName": "OCI Cache"
                     },
                     {
                         "name": "regions",
                         "description": "Regions",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "regions",
                         "displayName": "Regions"
                     },
                     {
                         "name": "resource-manager",
                         "description": "Resource Manager",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "resource-manager",
                         "displayName": "Resource Manager"
                     },
                     {
                         "name": "resource-scheduler",
                         "description": "Resource Scheduler",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "resource-scheduler",
                         "displayName": "Resource Scheduler"
                     },
                     {
                         "name": "secure-desktops",
                         "description": "Secure Desktops",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "secure-desktops",
                         "displayName": "Secure Desktops"
                     },
                     {
                         "name": "service-connector-hub",
                         "description": "Service Connector Hub",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "service-connector-hub",
                         "displayName": "Service Connector Hub"
                     },
                     {
                         "name": "service-mesh",
                         "description": "Service Mesh",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "service-mesh",
                         "displayName": "Service Mesh"
                     },
                     {
                         "name": "stack-monitoring",
                         "description": "Stack Monitoring",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "stack-monitoring",
                         "displayName": "Stack Monitoring"
                     },
                     {
                         "name": "streaming",
                         "description": "Streaming",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "streaming",
                         "displayName": "Streaming"
                     },
                     {
                         "name": "subscription-pricing",
                         "description": "Subscription Pricing",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "subscription-pricing",
                         "displayName": "Subscription Pricing"
                     },
                     {
                         "name": "vcn",
                         "description": "Virtual Cloud Network",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "vcn",
                         "displayName": "Virtual Cloud Network"
                     },
                     {
                         "name": "vcnip",
                         "description": "IP Management",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "vcnip",
                         "displayName": "IP Management"
                     },
                     {
                         "name": "visualbuilder",
                         "description": "Visual Builder",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "visualbuilder",
                         "displayName": "Visual Builder"
                     },
                     {
                         "name": "vpn",
                         "description": "VPN",
-                        "supportedSubscriptions": null,
+                        "supportedSubscriptions": [],
                         "id": "vpn",
                         "displayName": "VPN"
-                    },
-                    {
-                        "name": "vulnerability-scanning",
-                        "description": "Vulnerability Scanning",
-                        "supportedSubscriptions": null,
-                        "id": "vulnerability-scanning",
-                        "displayName": "Vulnerability Scanning"
                     }
                 ],
                 "podShapes": [
@@ -6568,19 +6598,14 @@ export const defaultCache: OcdCache = {
                 ],
                 "kubernetesVersions": [
                     {
-                        "id": "v1.27.2",
-                        "displayName": "v1.27.2",
-                        "version": "v1.27.2"
-                    },
-                    {
-                        "id": "v1.27.10",
-                        "displayName": "v1.27.10",
-                        "version": "v1.27.10"
-                    },
-                    {
                         "id": "v1.28.2",
                         "displayName": "v1.28.2",
                         "version": "v1.28.2"
+                    },
+                    {
+                        "id": "v1.28.10",
+                        "displayName": "v1.28.10",
+                        "version": "v1.28.10"
                     },
                     {
                         "id": "v1.29.1",
@@ -6608,19 +6633,14 @@ export const defaultCache: OcdCache = {
                 "nodePoolOptions": {
                     "kubernetesVersions": [
                         {
-                            "id": "v1.27.2",
-                            "displayName": "v1.27.2",
-                            "version": "v1.27.2"
-                        },
-                        {
-                            "id": "v1.27.10",
-                            "displayName": "v1.27.10",
-                            "version": "v1.27.10"
-                        },
-                        {
                             "id": "v1.28.2",
                             "displayName": "v1.28.2",
                             "version": "v1.28.2"
+                        },
+                        {
+                            "id": "v1.28.10",
+                            "displayName": "v1.28.10",
+                            "version": "v1.28.10"
                         },
                         {
                             "id": "v1.29.1",
@@ -6785,8 +6805,8 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-8.9-aarch64-2024.05.29-0-OKE-1.28.2-707"
                         },
                         {
-                            "id": "Oracle-Linux-8.9-aarch64-2024.05.29-0-OKE-1.27.10-707",
-                            "displayName": "Oracle-Linux-8.9-aarch64-2024.05.29-0-OKE-1.27.10-707"
+                            "id": "Oracle-Linux-8.9-aarch64-2024.05.29-0-OKE-1.28.10-707",
+                            "displayName": "Oracle-Linux-8.9-aarch64-2024.05.29-0-OKE-1.28.10-707"
                         },
                         {
                             "id": "Oracle-Linux-8.9-aarch64-2024.04.19-0-OKE-1.29.1-693",
@@ -6797,20 +6817,8 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-8.9-aarch64-2024.04.19-0-OKE-1.28.2-693"
                         },
                         {
-                            "id": "Oracle-Linux-8.9-aarch64-2024.04.19-0-OKE-1.27.2-693",
-                            "displayName": "Oracle-Linux-8.9-aarch64-2024.04.19-0-OKE-1.27.2-693"
-                        },
-                        {
-                            "id": "Oracle-Linux-8.9-aarch64-2024.04.19-0-OKE-1.27.10-693",
-                            "displayName": "Oracle-Linux-8.9-aarch64-2024.04.19-0-OKE-1.27.10-693"
-                        },
-                        {
                             "id": "Oracle-Linux-8.9-aarch64-2024.01.26-0-OKE-1.28.2-679",
                             "displayName": "Oracle-Linux-8.9-aarch64-2024.01.26-0-OKE-1.28.2-679"
-                        },
-                        {
-                            "id": "Oracle-Linux-8.9-aarch64-2024.01.26-0-OKE-1.27.2-679",
-                            "displayName": "Oracle-Linux-8.9-aarch64-2024.01.26-0-OKE-1.27.2-679"
                         },
                         {
                             "id": "Oracle-Linux-8.9-Gen2-GPU-2024.05.29-0-OKE-1.30.1-707",
@@ -6825,8 +6833,8 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-8.9-Gen2-GPU-2024.05.29-0-OKE-1.28.2-707"
                         },
                         {
-                            "id": "Oracle-Linux-8.9-Gen2-GPU-2024.05.29-0-OKE-1.27.10-707",
-                            "displayName": "Oracle-Linux-8.9-Gen2-GPU-2024.05.29-0-OKE-1.27.10-707"
+                            "id": "Oracle-Linux-8.9-Gen2-GPU-2024.05.29-0-OKE-1.28.10-707",
+                            "displayName": "Oracle-Linux-8.9-Gen2-GPU-2024.05.29-0-OKE-1.28.10-707"
                         },
                         {
                             "id": "Oracle-Linux-8.9-Gen2-GPU-2024.04.19-0-OKE-1.29.1-693",
@@ -6837,20 +6845,8 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-8.9-Gen2-GPU-2024.04.19-0-OKE-1.28.2-693"
                         },
                         {
-                            "id": "Oracle-Linux-8.9-Gen2-GPU-2024.04.19-0-OKE-1.27.2-693",
-                            "displayName": "Oracle-Linux-8.9-Gen2-GPU-2024.04.19-0-OKE-1.27.2-693"
-                        },
-                        {
-                            "id": "Oracle-Linux-8.9-Gen2-GPU-2024.04.19-0-OKE-1.27.10-693",
-                            "displayName": "Oracle-Linux-8.9-Gen2-GPU-2024.04.19-0-OKE-1.27.10-693"
-                        },
-                        {
                             "id": "Oracle-Linux-8.9-Gen2-GPU-2024.01.26-0-OKE-1.28.2-679",
                             "displayName": "Oracle-Linux-8.9-Gen2-GPU-2024.01.26-0-OKE-1.28.2-679"
-                        },
-                        {
-                            "id": "Oracle-Linux-8.9-Gen2-GPU-2024.01.26-0-OKE-1.27.2-679",
-                            "displayName": "Oracle-Linux-8.9-Gen2-GPU-2024.01.26-0-OKE-1.27.2-679"
                         },
                         {
                             "id": "Oracle-Linux-8.9-2024.05.29-0-OKE-1.30.1-707",
@@ -6865,8 +6861,8 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-8.9-2024.05.29-0-OKE-1.28.2-707"
                         },
                         {
-                            "id": "Oracle-Linux-8.9-2024.05.29-0-OKE-1.27.10-707",
-                            "displayName": "Oracle-Linux-8.9-2024.05.29-0-OKE-1.27.10-707"
+                            "id": "Oracle-Linux-8.9-2024.05.29-0-OKE-1.28.10-707",
+                            "displayName": "Oracle-Linux-8.9-2024.05.29-0-OKE-1.28.10-707"
                         },
                         {
                             "id": "Oracle-Linux-8.9-2024.04.19-0-OKE-1.29.1-693",
@@ -6877,32 +6873,8 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-8.9-2024.04.19-0-OKE-1.28.2-693"
                         },
                         {
-                            "id": "Oracle-Linux-8.9-2024.04.19-0-OKE-1.27.2-693",
-                            "displayName": "Oracle-Linux-8.9-2024.04.19-0-OKE-1.27.2-693"
-                        },
-                        {
-                            "id": "Oracle-Linux-8.9-2024.04.19-0-OKE-1.27.10-693",
-                            "displayName": "Oracle-Linux-8.9-2024.04.19-0-OKE-1.27.10-693"
-                        },
-                        {
                             "id": "Oracle-Linux-8.9-2024.01.26-0-OKE-1.28.2-679",
                             "displayName": "Oracle-Linux-8.9-2024.01.26-0-OKE-1.28.2-679"
-                        },
-                        {
-                            "id": "Oracle-Linux-8.9-2024.01.26-0-OKE-1.27.2-679",
-                            "displayName": "Oracle-Linux-8.9-2024.01.26-0-OKE-1.27.2-679"
-                        },
-                        {
-                            "id": "Oracle-Linux-8.8-aarch64-2023.12.13-0-OKE-1.27.2-668",
-                            "displayName": "Oracle-Linux-8.8-aarch64-2023.12.13-0-OKE-1.27.2-668"
-                        },
-                        {
-                            "id": "Oracle-Linux-8.8-Gen2-GPU-2023.12.13-0-OKE-1.27.2-668",
-                            "displayName": "Oracle-Linux-8.8-Gen2-GPU-2023.12.13-0-OKE-1.27.2-668"
-                        },
-                        {
-                            "id": "Oracle-Linux-8.8-2023.12.13-0-OKE-1.27.2-668",
-                            "displayName": "Oracle-Linux-8.8-2023.12.13-0-OKE-1.27.2-668"
                         },
                         {
                             "id": "Oracle-Linux-8.10-aarch64-2024.06.30-0-OKE-1.30.1-716",
@@ -6913,8 +6885,8 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-8.10-aarch64-2024.06.30-0-OKE-1.29.1-716"
                         },
                         {
-                            "id": "Oracle-Linux-8.10-aarch64-2024.06.30-0-OKE-1.27.10-716",
-                            "displayName": "Oracle-Linux-8.10-aarch64-2024.06.30-0-OKE-1.27.10-716"
+                            "id": "Oracle-Linux-8.10-aarch64-2024.06.30-0-OKE-1.28.10-716",
+                            "displayName": "Oracle-Linux-8.10-aarch64-2024.06.30-0-OKE-1.28.10-716"
                         },
                         {
                             "id": "Oracle-Linux-8.10-Gen2-GPU-2024.06.30-0-OKE-1.30.1-716",
@@ -6925,8 +6897,8 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-8.10-Gen2-GPU-2024.06.30-0-OKE-1.29.1-716"
                         },
                         {
-                            "id": "Oracle-Linux-8.10-Gen2-GPU-2024.06.30-0-OKE-1.27.10-716",
-                            "displayName": "Oracle-Linux-8.10-Gen2-GPU-2024.06.30-0-OKE-1.27.10-716"
+                            "id": "Oracle-Linux-8.10-Gen2-GPU-2024.06.30-0-OKE-1.28.10-716",
+                            "displayName": "Oracle-Linux-8.10-Gen2-GPU-2024.06.30-0-OKE-1.28.10-716"
                         },
                         {
                             "id": "Oracle-Linux-8.10-2024.06.30-0-OKE-1.30.1-716",
@@ -6937,8 +6909,8 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-8.10-2024.06.30-0-OKE-1.29.1-716"
                         },
                         {
-                            "id": "Oracle-Linux-8.10-2024.06.30-0-OKE-1.27.10-716",
-                            "displayName": "Oracle-Linux-8.10-2024.06.30-0-OKE-1.27.10-716"
+                            "id": "Oracle-Linux-8.10-2024.06.30-0-OKE-1.28.10-716",
+                            "displayName": "Oracle-Linux-8.10-2024.06.30-0-OKE-1.28.10-716"
                         },
                         {
                             "id": "Oracle-Linux-7.9-aarch64-2024.06.30-0-OKE-1.30.1-716",
@@ -6949,8 +6921,8 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-7.9-aarch64-2024.06.30-0-OKE-1.29.1-716"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-aarch64-2024.06.30-0-OKE-1.27.10-716",
-                            "displayName": "Oracle-Linux-7.9-aarch64-2024.06.30-0-OKE-1.27.10-716"
+                            "id": "Oracle-Linux-7.9-aarch64-2024.06.30-0-OKE-1.28.10-716",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2024.06.30-0-OKE-1.28.10-716"
                         },
                         {
                             "id": "Oracle-Linux-7.9-aarch64-2024.05.29-0-OKE-1.30.1-707",
@@ -6965,8 +6937,8 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-7.9-aarch64-2024.05.29-0-OKE-1.28.2-707"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-aarch64-2024.05.29-0-OKE-1.27.10-707",
-                            "displayName": "Oracle-Linux-7.9-aarch64-2024.05.29-0-OKE-1.27.10-707"
+                            "id": "Oracle-Linux-7.9-aarch64-2024.05.29-0-OKE-1.28.10-707",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2024.05.29-0-OKE-1.28.10-707"
                         },
                         {
                             "id": "Oracle-Linux-7.9-aarch64-2024.04.19-0-OKE-1.29.1-693",
@@ -6977,24 +6949,8 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-7.9-aarch64-2024.04.19-0-OKE-1.28.2-693"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-aarch64-2024.04.19-0-OKE-1.27.2-693",
-                            "displayName": "Oracle-Linux-7.9-aarch64-2024.04.19-0-OKE-1.27.2-693"
-                        },
-                        {
-                            "id": "Oracle-Linux-7.9-aarch64-2024.04.19-0-OKE-1.27.10-693",
-                            "displayName": "Oracle-Linux-7.9-aarch64-2024.04.19-0-OKE-1.27.10-693"
-                        },
-                        {
                             "id": "Oracle-Linux-7.9-aarch64-2024.01.23-0-OKE-1.28.2-679",
                             "displayName": "Oracle-Linux-7.9-aarch64-2024.01.23-0-OKE-1.28.2-679"
-                        },
-                        {
-                            "id": "Oracle-Linux-7.9-aarch64-2024.01.23-0-OKE-1.27.2-679",
-                            "displayName": "Oracle-Linux-7.9-aarch64-2024.01.23-0-OKE-1.27.2-679"
-                        },
-                        {
-                            "id": "Oracle-Linux-7.9-aarch64-2023.12.08-0-OKE-1.27.2-668",
-                            "displayName": "Oracle-Linux-7.9-aarch64-2023.12.08-0-OKE-1.27.2-668"
                         },
                         {
                             "id": "Oracle-Linux-7.9-Gen2-GPU-2024.06.30-0-OKE-1.30.1-716",
@@ -7005,8 +6961,8 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-7.9-Gen2-GPU-2024.06.30-0-OKE-1.29.1-716"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-Gen2-GPU-2024.06.30-0-OKE-1.27.10-716",
-                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2024.06.30-0-OKE-1.27.10-716"
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2024.06.30-0-OKE-1.28.10-716",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2024.06.30-0-OKE-1.28.10-716"
                         },
                         {
                             "id": "Oracle-Linux-7.9-Gen2-GPU-2024.05.29-0-OKE-1.30.1-707",
@@ -7021,8 +6977,8 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-7.9-Gen2-GPU-2024.05.29-0-OKE-1.28.2-707"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-Gen2-GPU-2024.05.29-0-OKE-1.27.10-707",
-                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2024.05.29-0-OKE-1.27.10-707"
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2024.05.29-0-OKE-1.28.10-707",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2024.05.29-0-OKE-1.28.10-707"
                         },
                         {
                             "id": "Oracle-Linux-7.9-Gen2-GPU-2024.04.19-0-OKE-1.29.1-693",
@@ -7033,24 +6989,8 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-7.9-Gen2-GPU-2024.04.19-0-OKE-1.28.2-693"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-Gen2-GPU-2024.04.19-0-OKE-1.27.2-693",
-                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2024.04.19-0-OKE-1.27.2-693"
-                        },
-                        {
-                            "id": "Oracle-Linux-7.9-Gen2-GPU-2024.04.19-0-OKE-1.27.10-693",
-                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2024.04.19-0-OKE-1.27.10-693"
-                        },
-                        {
                             "id": "Oracle-Linux-7.9-Gen2-GPU-2024.01.23-0-OKE-1.28.2-679",
                             "displayName": "Oracle-Linux-7.9-Gen2-GPU-2024.01.23-0-OKE-1.28.2-679"
-                        },
-                        {
-                            "id": "Oracle-Linux-7.9-Gen2-GPU-2024.01.23-0-OKE-1.27.2-679",
-                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2024.01.23-0-OKE-1.27.2-679"
-                        },
-                        {
-                            "id": "Oracle-Linux-7.9-Gen2-GPU-2023.12.08-0-OKE-1.27.2-668",
-                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2023.12.08-0-OKE-1.27.2-668"
                         },
                         {
                             "id": "Oracle-Linux-7.9-2024.06.30-0-OKE-1.30.1-716",
@@ -7061,8 +7001,8 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-7.9-2024.06.30-0-OKE-1.29.1-716"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-2024.06.30-0-OKE-1.27.10-716",
-                            "displayName": "Oracle-Linux-7.9-2024.06.30-0-OKE-1.27.10-716"
+                            "id": "Oracle-Linux-7.9-2024.06.30-0-OKE-1.28.10-716",
+                            "displayName": "Oracle-Linux-7.9-2024.06.30-0-OKE-1.28.10-716"
                         },
                         {
                             "id": "Oracle-Linux-7.9-2024.05.29-0-OKE-1.30.1-707",
@@ -7077,8 +7017,8 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-7.9-2024.05.29-0-OKE-1.28.2-707"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-2024.05.29-0-OKE-1.27.10-707",
-                            "displayName": "Oracle-Linux-7.9-2024.05.29-0-OKE-1.27.10-707"
+                            "id": "Oracle-Linux-7.9-2024.05.29-0-OKE-1.28.10-707",
+                            "displayName": "Oracle-Linux-7.9-2024.05.29-0-OKE-1.28.10-707"
                         },
                         {
                             "id": "Oracle-Linux-7.9-2024.04.19-0-OKE-1.29.1-693",
@@ -7089,96 +7029,80 @@ export const defaultCache: OcdCache = {
                             "displayName": "Oracle-Linux-7.9-2024.04.19-0-OKE-1.28.2-693"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-2024.04.19-0-OKE-1.27.2-693",
-                            "displayName": "Oracle-Linux-7.9-2024.04.19-0-OKE-1.27.2-693"
-                        },
-                        {
-                            "id": "Oracle-Linux-7.9-2024.04.19-0-OKE-1.27.10-693",
-                            "displayName": "Oracle-Linux-7.9-2024.04.19-0-OKE-1.27.10-693"
-                        },
-                        {
                             "id": "Oracle-Linux-7.9-2024.01.23-0-OKE-1.28.2-679",
                             "displayName": "Oracle-Linux-7.9-2024.01.23-0-OKE-1.28.2-679"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-2024.01.23-0-OKE-1.27.2-679",
-                            "displayName": "Oracle-Linux-7.9-2024.01.23-0-OKE-1.27.2-679"
+                            "id": "Oracle-Linux-8.10-aarch64-2024.08.29-0",
+                            "displayName": "Oracle-Linux-8.10-aarch64-2024.08.29-0"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-2023.12.08-0-OKE-1.27.2-668",
-                            "displayName": "Oracle-Linux-7.9-2023.12.08-0-OKE-1.27.2-668"
-                        },
-                        {
-                            "id": "Oracle-Linux-8.9-aarch64-2024.05.29-0",
-                            "displayName": "Oracle-Linux-8.9-aarch64-2024.05.29-0"
-                        },
-                        {
-                            "id": "Oracle-Linux-8.9-aarch64-2024.04.19-0",
-                            "displayName": "Oracle-Linux-8.9-aarch64-2024.04.19-0"
-                        },
-                        {
-                            "id": "Oracle-Linux-8.9-Gen2-GPU-2024.05.29-0",
-                            "displayName": "Oracle-Linux-8.9-Gen2-GPU-2024.05.29-0"
-                        },
-                        {
-                            "id": "Oracle-Linux-8.9-Gen2-GPU-2024.04.19-0",
-                            "displayName": "Oracle-Linux-8.9-Gen2-GPU-2024.04.19-0"
-                        },
-                        {
-                            "id": "Oracle-Linux-8.9-2024.05.29-0",
-                            "displayName": "Oracle-Linux-8.9-2024.05.29-0"
-                        },
-                        {
-                            "id": "Oracle-Linux-8.9-2024.04.19-0",
-                            "displayName": "Oracle-Linux-8.9-2024.04.19-0"
+                            "id": "Oracle-Linux-8.10-aarch64-2024.07.31-0",
+                            "displayName": "Oracle-Linux-8.10-aarch64-2024.07.31-0"
                         },
                         {
                             "id": "Oracle-Linux-8.10-aarch64-2024.06.30-0",
                             "displayName": "Oracle-Linux-8.10-aarch64-2024.06.30-0"
                         },
                         {
+                            "id": "Oracle-Linux-8.10-Gen2-GPU-2024.08.29-0",
+                            "displayName": "Oracle-Linux-8.10-Gen2-GPU-2024.08.29-0"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.10-Gen2-GPU-2024.07.31-0",
+                            "displayName": "Oracle-Linux-8.10-Gen2-GPU-2024.07.31-0"
+                        },
+                        {
                             "id": "Oracle-Linux-8.10-Gen2-GPU-2024.06.30-0",
                             "displayName": "Oracle-Linux-8.10-Gen2-GPU-2024.06.30-0"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.10-2024.08.29-0",
+                            "displayName": "Oracle-Linux-8.10-2024.08.29-0"
+                        },
+                        {
+                            "id": "Oracle-Linux-8.10-2024.07.31-0",
+                            "displayName": "Oracle-Linux-8.10-2024.07.31-0"
                         },
                         {
                             "id": "Oracle-Linux-8.10-2024.06.30-0",
                             "displayName": "Oracle-Linux-8.10-2024.06.30-0"
                         },
                         {
+                            "id": "Oracle-Linux-7.9-aarch64-2024.08.29-0",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2024.08.29-0"
+                        },
+                        {
+                            "id": "Oracle-Linux-7.9-aarch64-2024.07.31-0",
+                            "displayName": "Oracle-Linux-7.9-aarch64-2024.07.31-0"
+                        },
+                        {
                             "id": "Oracle-Linux-7.9-aarch64-2024.06.30-0",
                             "displayName": "Oracle-Linux-7.9-aarch64-2024.06.30-0"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-aarch64-2024.05.29-0",
-                            "displayName": "Oracle-Linux-7.9-aarch64-2024.05.29-0"
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2024.08.29-0",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2024.08.29-0"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-aarch64-2024.04.19-0",
-                            "displayName": "Oracle-Linux-7.9-aarch64-2024.04.19-0"
+                            "id": "Oracle-Linux-7.9-Gen2-GPU-2024.07.31-0",
+                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2024.07.31-0"
                         },
                         {
                             "id": "Oracle-Linux-7.9-Gen2-GPU-2024.06.30-0",
                             "displayName": "Oracle-Linux-7.9-Gen2-GPU-2024.06.30-0"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-Gen2-GPU-2024.05.29-0",
-                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2024.05.29-0"
+                            "id": "Oracle-Linux-7.9-2024.08.29-0",
+                            "displayName": "Oracle-Linux-7.9-2024.08.29-0"
                         },
                         {
-                            "id": "Oracle-Linux-7.9-Gen2-GPU-2024.04.19-0",
-                            "displayName": "Oracle-Linux-7.9-Gen2-GPU-2024.04.19-0"
+                            "id": "Oracle-Linux-7.9-2024.07.31-0",
+                            "displayName": "Oracle-Linux-7.9-2024.07.31-0"
                         },
                         {
                             "id": "Oracle-Linux-7.9-2024.06.30-0",
                             "displayName": "Oracle-Linux-7.9-2024.06.30-0"
-                        },
-                        {
-                            "id": "Oracle-Linux-7.9-2024.05.29-0",
-                            "displayName": "Oracle-Linux-7.9-2024.05.29-0"
-                        },
-                        {
-                            "id": "Oracle-Linux-7.9-2024.04.19-0",
-                            "displayName": "Oracle-Linux-7.9-2024.04.19-0"
                         },
                         {
                             "id": "Oracle-Linux-7.6",

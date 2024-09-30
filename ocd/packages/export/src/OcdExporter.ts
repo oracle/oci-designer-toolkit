@@ -15,8 +15,10 @@ class OcdExporter {
         this.design = OcdDesign.newDesign()
     }
 
-    getOciResources() {return Object.values(this.design.model.oci.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], [])}
-    getResources() {return this.getOciResources()}
+    getOciResources() {return OcdDesign.getOciResources(this.design)}
+    getAzureResources() {return OcdDesign.getAzureResources(this.design)}
+    getGoogleResources() {return OcdDesign.getGoogleResources(this.design)}
+    getResources() {return OcdDesign.getResources(this.design)}
 
     export = (design: OcdDesign): string | OutputDataStringArray | OutputDataString => ''
 

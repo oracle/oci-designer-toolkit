@@ -43,28 +43,28 @@ export const palette = {
                     ]
                 },
                 {
-                    "title": "Database",
-                    "class": "oci-database",
+                    "title": "Storage",
+                    "class": "oci-storage",
                     "resources": [
                         {
                             "container": false,
-                            "title": "Autonomous Database",
-                            "class": "oci-autonomous-database"
+                            "title": "Volume",
+                            "class": "oci-volume"
                         },
                         {
                             "container": false,
-                            "title": "Database System",
-                            "class": "oci-db-system"
+                            "title": "Bucket",
+                            "class": "oci-bucket"
                         },
                         // {
                         //     "container": false,
-                        //     "title": "MySQL Database System",
-                        //     "class": "oci-mysql-db-system"
+                        //     "title": "File System",
+                        //     "class": "oci-file-system"
                         // },
                         // {
                         //     "container": false,
-                        //     "title": "NoSQL Database",
-                        //     "class": "oci-nosql-table"
+                        //     "title": "Mount Target",
+                        //     "class": "oci-mount-target"
                         // }
                     ]
                 },
@@ -176,28 +176,28 @@ export const palette = {
                     ]
                 },
                 {
-                    "title": "Storage",
-                    "class": "oci-storage",
+                    "title": "Database",
+                    "class": "oci-database",
                     "resources": [
                         {
                             "container": false,
-                            "title": "Volume",
-                            "class": "oci-volume"
+                            "title": "Autonomous Database",
+                            "class": "oci-autonomous-database"
                         },
                         {
                             "container": false,
-                            "title": "Bucket",
-                            "class": "oci-bucket"
+                            "title": "Database System",
+                            "class": "oci-db-system"
                         },
                         // {
                         //     "container": false,
-                        //     "title": "File System",
-                        //     "class": "oci-file-system"
+                        //     "title": "MySQL Database System",
+                        //     "class": "oci-mysql-db-system"
                         // },
                         // {
                         //     "container": false,
-                        //     "title": "Mount Target",
-                        //     "class": "oci-mount-target"
+                        //     "title": "NoSQL Database",
+                        //     "class": "oci-nosql-table"
                         // }
                     ]
                 },
@@ -626,45 +626,163 @@ export const palette = {
         //     "class": "aws-provider",
         //     "groups": []
         // },
-        // {
-        //     "title": "Azure",
-        //     "provider": "azure",
-        //     "class": "azure-provider",
-        //     "groups": [
-        //         {
-        //             "title": "Compute",
-        //             "class": "azure-compute",
-        //             "resources": [
-        //                 {
-        //                     "container": false,
-        //                     "title": "Auto Managed VM",
-        //                     "class": "azure-instance"
-        //                 }
-        //             ]
-        //         },
-        //         {
-        //             "title": "Networking",
-        //             "class": "azure-network",
-        //             "resources": [
-        //                 {
-        //                     "container": true,
-        //                     "title": "Virtual Network",
-        //                     "class": "azure-virtual-network"
-        //                 },
-        //                 {
-        //                     "container": true,
-        //                     "title": "Subnet",
-        //                     "class": "azure-subnet"
-        //                 },
-        //             ]
-        //         }
-        //     ]
-        // },
-        // {
-        //     "title": "Google",
-        //     "provider": "google",
-        //     "class": "google-provider",
-        //     "groups": []
-        // }
+        {
+            "title": "Azure",
+            "provider": "azure",
+            "class": "azure-provider",
+            "groups": [
+                {
+                    "title": "Compute",
+                    "class": "azure-compute",
+                    "resources": [
+                        {
+                            "container": false,
+                            "title": "Virtual Machine",
+                            "class": "azure-virtual-machine"
+                        }
+                    ]
+                },
+                {
+                    "title": "Networking",
+                    "class": "azure-network",
+                    "resources": [
+                        {
+                            "container": true,
+                            "title": "Virtual Network",
+                            "class": "azure-virtual-network"
+                        },
+                        {
+                            "container": true,
+                            "title": "Subnet",
+                            "class": "azure-subnet"
+                        },
+                        {
+                            "container": false,
+                            "title": "Load Balancer",
+                            "class": "azure-load-balancer"
+                        },
+                        {
+                            "container": false,
+                            "title": "DNS Zone",
+                            "class": "azure-dns-zone"
+                        },
+                    ]
+                },
+                {
+                    "title": "Database",
+                    "class": "azure-database",
+                    "resources": [
+                        {
+                            "container": false,
+                            "title": "Sql Server",
+                            "class": "azure-mssql-server"
+                        },
+                        {
+                            "container": false,
+                            "title": "Oracle Exadata Database@Azure",
+                            "class": "azure-oracledatabase-exadata-infrastructure"
+                        },
+                        {
+                            "container": false,
+                            "title": "Oracle Autonomous Database@Azure",
+                            "class": "azure-oracledatabase-autonomous-database-regular"
+                        },
+                        {
+                            "container": false,
+                            "title": "Oracle VM Cluster Database@Azure",
+                            "class": "azure-oracledatabase-cloud-vm-cluster"
+                        },
+                    ]
+                },
+                {
+                    "title": "Containers",
+                    "class": "azure-containers",
+                    "resources": [
+                        {
+                            "container": false,
+                            "title": "Container Registry",
+                            "class": "azure-container-registry"
+                        },
+                        {
+                            "container": false,
+                            "title": "Kubernetes Service",
+                            "class": "azure-kubernetes-cluster"
+                        },
+                    ]
+                },
+            ]
+        },
+        {
+            "title": "Google",
+            "provider": "google",
+            "class": "google-provider",
+            "groups": [
+                {
+                    "title": "Networking",
+                    "class": "google-network",
+                    "resources": [
+                        {
+                            "container": true,
+                            "title": "Virtual Private Cloud",
+                            "class": "google-compute-network"
+                        },
+                        // {
+                        //     "container": true,
+                        //     "title": "Subnet",
+                        //     "class": "azure-subnet"
+                        // },
+                        // {
+                        //     "container": false,
+                        //     "title": "Load Balancer",
+                        //     "class": "azure-load-balancer"
+                        // },
+                        // {
+                        //     "container": false,
+                        //     "title": "DNS Zone",
+                        //     "class": "azure-dns-zone"
+                        // },
+                    ]
+                },
+                {
+                    "title": "Database",
+                    "class": "google-database",
+                    "resources": [
+                        {
+                            "container": false,
+                            "title": "Oracle Exadata Database@Google",
+                            "class": "google-oracledatabase-exadata-infrastructure"
+                        },
+                        {
+                            "container": false,
+                            "title": "Oracle Autonomous Database@Google",
+                            "class": "google-oracledatabase-autonomous-database-regular"
+                        },
+                        {
+                            "container": false,
+                            "title": "Oracle VM Cluster Database@Google",
+                            "class": "google-oracledatabase-cloud-vm-cluster"
+                        },
+                    ]
+                },
+            ]
+        },
+        {
+            "title": "General",
+            "provider": "general",
+            "class": "general-provider",
+            "groups": [
+                {
+                    "title": "Shapes",
+                    "class": "general-shapes",
+                    "resources": [
+                        {
+                            "container": true,
+                            "title": "Rectangle",
+                            "class": "general-rectangle"
+                        }
+                    ]
+                },
+            ]
+        },
     ]
 }

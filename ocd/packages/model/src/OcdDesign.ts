@@ -139,7 +139,15 @@ export interface OciResources {
     [key: string]: any[]
 }
 
+export interface AwsResources {
+    [key: string]: any[]
+}
+
 export interface AzureResources {
+    [key: string]: any[]
+}
+
+export interface GoogleResources {
     [key: string]: any[]
 }
 
@@ -153,7 +161,8 @@ export interface OciModel extends OcdBaseModel {
 }
 export interface AwsModel extends OcdBaseModel {}
 export interface AzureModel extends OcdBaseModel {}
-export interface GcpModel extends OcdBaseModel {}
+export interface GoogleModel extends OcdBaseModel {}
+export interface GeneralModel extends OcdBaseModel {}
 
 export interface OcdDesign {
     metadata: OcdMetadata
@@ -161,7 +170,8 @@ export interface OcdDesign {
         oci: OciModel
         aws?: AwsModel
         azure: AzureModel
-        gcp: GcpModel
+        google: GoogleModel
+        general: GeneralModel
     },
     view: OcdView,
     userDefined: OcdUserDefined
@@ -205,7 +215,11 @@ export namespace OcdDesign {
                     vars: [],
                     resources: {}
                 },
-                gcp: {
+                google: {
+                    vars: [],
+                    resources: {}
+                },
+                general: {
                     vars: [],
                     resources: {}
                 }
@@ -230,14 +244,8 @@ export namespace OcdDesign {
         }
     }
     // Model Methods
-    export function getOciResourceLists(design: OcdDesign) {return design.model.oci.resources}
-    export function getOciResourceList(design: OcdDesign, key: string) {return Object.hasOwn(design.model.oci.resources, key) ? design.model.oci.resources[key] : []}
-    export function getOciResources(design: OcdDesign) {return Object.values(design.model.oci.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], [])}
-    export function getAzureResourceLists(design: OcdDesign) {return design.model.azure.resources}
-    export function getAzureResourceList(design: OcdDesign, key: string) {return Object.hasOwn(design.model.azure.resources, key) ? design.model.azure.resources[key] : []}
-    export function getAzureResources(design: OcdDesign) {return design.model.azure ? Object.values(design.model.azure.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []) : []}
-    export function getResourceLists(design: OcdDesign) {return {...getOciResourceLists(design)}}
-    export function getResources(design: OcdDesign) {return [...getOciResources(design), ...getAzureResources(design)]}
+    export function getResourceLists(design: OcdDesign) {return {...getOciResourceLists(design), ...getAzureResourceLists(design), ...getGoogleResourceLists(design), ...getGeneralResourceLists(design)}}
+    export function getResources(design: OcdDesign) {return [...getOciResources(design), ...getAzureResources(design), ...getGoogleResources(design), ...getGeneralResources(design)]}
     export function getResource(design: OcdDesign, id='') {return getResources(design).find((r: OcdResource) => r.id === id)}
     export function getResourceParentId(design: OcdDesign, id: string): string {
         const resource = getResource(design, id)
@@ -249,6 +257,22 @@ export namespace OcdDesign {
         const associationIds: string[] = (resource.provider === 'oci') ? OciResource.getAssociationIds(resource, getResourceLists(design)) : []
         return associationIds
     }
+    // Oci
+    export function getOciResourceLists(design: OcdDesign) {return Object.hasOwn(design.model, 'oci') ? design.model.oci.resources : {}}
+    export function getOciResourceList(design: OcdDesign, key: string) {return Object.hasOwn(design.model, 'oci') && Object.hasOwn(design.model.oci.resources, key) ? design.model.oci.resources[key] : []}
+    export function getOciResources(design: OcdDesign) {return Object.hasOwn(design.model, 'oci') ? Object.values(design.model.oci.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []) : []}
+    // Azure
+    export function getAzureResourceLists(design: OcdDesign) {return Object.hasOwn(design.model, 'azure') ? design.model.azure.resources : {}}
+    export function getAzureResourceList(design: OcdDesign, key: string) {return Object.hasOwn(design.model, 'azure') && Object.hasOwn(design.model.azure.resources, key) ? design.model.azure.resources[key] : []}
+    export function getAzureResources(design: OcdDesign) {return Object.hasOwn(design.model, 'azure') ? Object.values(design.model.azure.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []) : []}
+    // Google
+    export function getGoogleResourceLists(design: OcdDesign) {return Object.hasOwn(design.model, 'google') ? design.model.google.resources : {}}
+    export function getGoogleResourceList(design: OcdDesign, key: string) {return Object.hasOwn(design.model, 'google') && Object.hasOwn(design.model.google.resources, key) ? design.model.google.resources[key] : []}
+    export function getGoogleResources(design: OcdDesign) {return Object.hasOwn(design.model, 'google') ? Object.values(design.model.google.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []) : []}
+    // Shapes (General)
+    export function getGeneralResourceLists(design: OcdDesign) {return Object.hasOwn(design.model, 'general') ? design.model.general.resources : {}}
+    export function getGeneralResourceList(design: OcdDesign, key: string) {return Object.hasOwn(design.model, 'general') && Object.hasOwn(design.model.general.resources, key) ? design.model.general.resources[key] : []}
+    export function getGeneralResources(design: OcdDesign) {return Object.hasOwn(design.model, 'general') ? Object.values(design.model.general.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []) : []}
 
     // View Methods
     export function resetPanZoom(): number[] {

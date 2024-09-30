@@ -479,13 +479,13 @@ def get_template_entry(root, path, json_file):
     return okit_template
 
 
-# @bp.route('/templates/load', methods=(['GET']))
-# def templates():
-#     if request.method == 'GET':
-#         templates_root = os.path.join(current_app.instance_path, request.args['root_dir'].strip('/'))
-#         templates = dir_to_json(templates_root, current_app.instance_path)
-#         logger.info(f'Templates : {jsonToFormattedString(templates)}')
-#         return templates
+@bp.route('/templates/load', methods=(['GET']))
+def templates():
+    if request.method == 'GET':
+        templates_root = os.path.join(current_app.instance_path, request.args['root_dir'].strip('/'))
+        templates = dir_to_json(templates_root, current_app.instance_path)
+        logger.info(f'Templates : {jsonToFormattedString(templates)}')
+        return templates
 
 
 @bp.route('/template/load', methods=(['GET']))
