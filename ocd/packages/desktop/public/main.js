@@ -591,29 +591,6 @@ function getLibrarySectionSvg(libraryIndex, section) {
 	})
 }
 
-function getLibrarySectionSvgOrig(libraryIndex, section) {
-	return new Promise((resolve, reject) => {
-		const librarySection = libraryIndex[section]
-		const svgRequests = librarySection.map((design) => new Request(`${libraryUrl}/${section}/${design.svgFile}`))
-		const svgUrls = svgRequests.map((request) => fetch(request))
-		Promise.allSettled(svgUrls).then((results) => {
-			const responseTexts = results.map((r) => r.value.text())
-			Promise.allSettled(responseTexts).then((svg) => {
-				svg.forEach((r, i) => {
-					console.debug('Electron Main: getLibrarySectionSvg: Svg Query Results', r.status)
-					// console.debug('Electron Main: getLibrarySectionSvg: Svg Query Results', r.value)
-					librarySection[i].dataUri = `data:image/svg+xml,${encodeURIComponent(r.value)}`
-					// librarySection[i].dataUri = `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(r.value)))}`
-				})
-				resolve(librarySection)
-			})
-		}).catch((err) => {
-            console.debug('Electron Main: getLibrarySectionSvg: Fetch Error Response', err)
-			reject(err)
-		})
-	})
-}
-
 async function handleLoadLibraryDesign(event, section, filename) {
 	console.debug('Electron Main: handleLoadLibraryDesign')
 	return new Promise((resolve, reject) => {
