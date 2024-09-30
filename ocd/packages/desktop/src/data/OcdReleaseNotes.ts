@@ -28,6 +28,7 @@ it's useability. We have now added some basic resources for Azure and Google to 
 13. Write Google Markdown Generator. (#OKIT-288)
 14. Write Google Validator Generator. (#OKIT-289)
 15. Write Google Tabular Generator. (#OKIT-290)
+16. Create Library View which will allow users to select pre-defined Reference Architectures. (#OKIT-304)
 
 ___**Available Resources**___
 

@@ -25,6 +25,7 @@ No new features
 13. Write Google Markdown Generator. (#OKIT-288)
 14. Write Google Validator Generator. (#OKIT-289)
 15. Write Google Tabular Generator. (#OKIT-290)
+16. Create Library View which will allow users to select pre-defined Reference Architectures. (#OKIT-304)
 
 ### Beta Overview
 
