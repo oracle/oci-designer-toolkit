@@ -151,7 +151,7 @@ export const OcdLibrary = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument,
         <div className='ocd-library-view'>
             <div id='ocd_resources_bar' className='ocd-designer-canvas-layers'>
                 {tabs.map((k: string) => {
-                    return <div className={`ocd-designer-canvas-layer ${k === selected ? 'ocd-layer-selected' : ''}`} key={k}><label id={k} onClick={onClick}>{`${k}`}</label></div>
+                    return <div className={`ocd-designer-canvas-layer ${k === selected ? 'ocd-layer-selected' : ''}`} key={k}><label id={k} onClick={onClick} onKeyUp={() => {}}>{`${k}`}</label></div>
                 })}
             </div>
             <div id='selected_resource_tab' className='ocd-selected-tabular-content'>

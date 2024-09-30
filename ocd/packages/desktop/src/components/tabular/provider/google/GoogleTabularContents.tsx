@@ -24,7 +24,7 @@ export const GoogleDefault = ({ ocdDocument, googleResources, selected }: Google
 }
 
 export const OcdTabularContents = ({ ocdDocument, googleResources, selected, columnTitles, resourceElements }: GoogleTabularContentsProps): JSX.Element => {
-    const {ocdConsoleConfig, setOcdConsoleConfig} = useContext(ConsoleConfigContext)
+    const {ocdConsoleConfig} = useContext(ConsoleConfigContext)
     const [displayColumns, setDisplayColumns] = useState(ocdConsoleConfig.config.displayColumns ? ocdConsoleConfig.config.displayColumns[selected] ? ocdConsoleConfig.config.displayColumns[selected] : columnTitles : columnTitles)
     const [sortColumn, setSortColumn] = useState('')
     const [sortAscending, setSortAscending] = useState(true)
@@ -95,7 +95,7 @@ export const OcdTabularHeader = ({columnTitles, googleResources, resourceElement
     const onToggleMenuClick = () => {setMenuVisible(!menuVisible && columnTitles.length > 0)}
     const ascClasses = 'ocd-sort-background-icon sort-ascending'
     const dscClasses = 'ocd-sort-background-icon sort-descending'
-    const onToggleColumnClick = (e: React.MouseEvent<HTMLLabelElement>) => {e.stopPropagation()}
+    const onToggleColumnClick = (e: React.MouseEvent<HTMLElement>) => {e.stopPropagation()}
     const onToggleColumnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.stopPropagation()
         // const newDisplayColumns = e.target.checked ? [...displayColumns, e.target.id] : displayColumns.filter((c) => c !== e.target.id)
@@ -110,17 +110,17 @@ export const OcdTabularHeader = ({columnTitles, googleResources, resourceElement
     return (
         <div className='tr' key={`${selected}-tabular-header-row`}>
             <div className='th'>{googleResources[selected].length}</div>
-            <div className={`th ocd-sortable-column ${sortColumn === 'displayName' ? sortAscending ? ascClasses : dscClasses : ''}`} onClick={() => onSortClick('displayName')} key={`${selected}-tabular-header-row-displayName`}>Name</div>
-            <div className={`th ocd-sortable-column ${sortColumn === 'compartmentId' ? sortAscending ? ascClasses : dscClasses : ''}`} onClick={() => onSortClick('compartmentId')} key={`${selected}-tabular-header-row-compartmentId`}>Compartment</div>
-            {displayColumns.map((title: string, i: number) => {return <div className={`th ocd-sortable-column ${sortColumn === resourceElements[i] ? sortAscending ? ascClasses : dscClasses : ''}`} onClick={() => onSortClick(resourceElements[i])} key={`${selected}-tabular-header-row-${OcdUtils.toUnderscoreCase(title)}`}>{title}</div>})}
+            <div className={`th ocd-sortable-column ${sortColumn === 'displayName' ? sortAscending ? ascClasses : dscClasses : ''}`} onClick={() => onSortClick('displayName')} onKeyUp={() => {}} key={`${selected}-tabular-header-row-displayName`}>Name</div>
+            <div className={`th ocd-sortable-column ${sortColumn === 'compartmentId' ? sortAscending ? ascClasses : dscClasses : ''}`} onClick={() => onSortClick('compartmentId')} onKeyUp={() => {}} key={`${selected}-tabular-header-row-compartmentId`}>Compartment</div>
+            {displayColumns.map((title: string, i: number) => {return <div className={`th ocd-sortable-column ${sortColumn === resourceElements[i] ? sortAscending ? ascClasses : dscClasses : ''}`} onClick={() => onSortClick(resourceElements[i])} onKeyUp={() => {}} key={`${selected}-tabular-header-row-${OcdUtils.toUnderscoreCase(title)}`}>{title}</div>})}
             <div className={`th-menu ocd-console-three-dot-menu-icon`}>
                 <div className='ocd-console-toolbar-dropdown ocd-console-toolbar-dropdown-theme'>
                     <ul>
-                        <li className='ocd-console-toolbar-dropdown-item' onClick={onToggleMenuClick}>
+                        <li className='ocd-console-toolbar-dropdown-item' onClick={onToggleMenuClick} onKeyUp={() => {}}>
                             <div className='three-dot-menu ocd-console-three-dot-menu-icon'></div>
                             {menuVisible && <ul className={'show slide-down slide-right'}>
                                 {/* <li className='ocd-dropdown-menu-item ocd-mouseover-highlight'><label onClick={onToggleColumnClick}><input type="checkbox" onChange={onToggleColumnChange}/>Name</label></li> */}
-                                {columnTitles.map((title: string, i: number) => {return <li className='ocd-dropdown-menu-item ocd-mouseover-highlight' key={`${selected}-${title.split(' ').join('')}`}><label onClick={onToggleColumnClick}><input id={title} type="checkbox" onChange={onToggleColumnChange} checked={displayColumns.includes(title)}/>{title}</label></li>})}
+                                {columnTitles.map((title: string, i: number) => {return <li className='ocd-dropdown-menu-item ocd-mouseover-highlight' key={`${selected}-${title.split(' ').join('')}`} onClick={onToggleColumnClick} onKeyUp={() => {}}><label><input id={title} type="checkbox" onChange={onToggleColumnChange} checked={displayColumns.includes(title)}/>{title}</label></li>})}
                             </ul>}
                         </li>
                     </ul>
