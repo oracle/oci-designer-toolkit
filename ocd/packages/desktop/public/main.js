@@ -538,7 +538,8 @@ async function handleOpenExternalUrl(event, href) {
 }
 
 // Library / Reference Architecture Functions
-const libraryUrl = 'https://raw.githubusercontent.com/oracle/oci-designer-toolkit/refs/heads/master/ocd/library'
+// const libraryUrl = 'https://raw.githubusercontent.com/oracle/oci-designer-toolkit/refs/heads/master/ocd/library'
+const libraryUrl = 'https://raw.githubusercontent.com/oracle/oci-designer-toolkit/refs/heads/toxophilist/sprint-dev/ocd/library'
 const libraryFile = 'referenceArchitectures.json'
 
 async function handleLoadLibraryIndex(event) {
@@ -575,10 +576,27 @@ function getLibrarySectionSvg(libraryIndex, section) {
 		const librarySection = libraryIndex[section]
 		const svgRequests = librarySection.map((design) => new Request(`${libraryUrl}/${section}/${design.svgFile}`))
 		const svgUrls = svgRequests.map((request) => fetch(request))
+		Promise.allSettled(svgUrls).then((results) => Promise.allSettled(results.map((r) => r.value.text()))).then((svg) => {
+			svg.forEach((r, i) => {
+				console.debug('Electron Main: getLibrarySectionSvg: Svg Query Results', r.status)
+				// console.debug('Electron Main: getLibrarySectionSvg: Svg Query Results', r.value)
+				librarySection[i].dataUri = `data:image/svg+xml,${encodeURIComponent(r.value)}`
+				// librarySection[i].dataUri = `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(r.value)))}`
+			})
+			resolve(librarySection)
+		}).catch((err) => {
+            console.debug('Electron Main: getLibrarySectionSvg: Fetch Error Response', err)
+			reject(err)
+		})
+	})
+}
+
+function getLibrarySectionSvgOrig(libraryIndex, section) {
+	return new Promise((resolve, reject) => {
+		const librarySection = libraryIndex[section]
+		const svgRequests = librarySection.map((design) => new Request(`${libraryUrl}/${section}/${design.svgFile}`))
+		const svgUrls = svgRequests.map((request) => fetch(request))
 		Promise.allSettled(svgUrls).then((results) => {
-			// results.forEach((r) => {
-			// 	console.debug('Electron Main: getLibrarySectionSvg: Section SVG Query Results Headers', r.value.headers.get("content-type"))
-			// })
 			const responseTexts = results.map((r) => r.value.text())
 			Promise.allSettled(responseTexts).then((svg) => {
 				svg.forEach((r, i) => {
