@@ -24,8 +24,9 @@ export const AzureDefault = ({ ocdDocument, azureResources, selected }: AzureTab
 }
 
 export const OcdTabularContents = ({ ocdDocument, azureResources, selected, columnTitles, resourceElements }: AzureTabularContentsProps): JSX.Element => {
-    const {ocdConsoleConfig, setOcdConsoleConfig} = useContext(ConsoleConfigContext)
-    const [displayColumns, setDisplayColumns] = useState(ocdConsoleConfig.config.displayColumns ? ocdConsoleConfig.config.displayColumns[selected] ? ocdConsoleConfig.config.displayColumns[selected] : columnTitles : columnTitles)
+    const {ocdConsoleConfig} = useContext(ConsoleConfigContext)
+    const [displayColumns, setDisplayColumns] = useState(ocdConsoleConfig.config.displayColumns?[selected] : columnTitles)
+    // const [displayColumns, setDisplayColumns] = useState(ocdConsoleConfig.config.displayColumns ? ocdConsoleConfig.config.displayColumns[selected] ? ocdConsoleConfig.config.displayColumns[selected] : columnTitles : columnTitles)
     const [sortColumn, setSortColumn] = useState('')
     const [sortAscending, setSortAscending] = useState(true)
     const onSortClick = (element: string) => {
@@ -35,7 +36,7 @@ export const OcdTabularContents = ({ ocdDocument, azureResources, selected, colu
         setSortAscending(!sortAscending)
     }
     const sortFunction = (a: Record<string, any>, b: Record<string, any>): number => {
-        let result = 0
+        let result
         if (!sortColumn || sortColumn === '') result = 0
         else if (Array.isArray(a[sortColumn])) result = a[sortColumn].join(',').localeCompare(b[sortColumn].join(','))
         else if (isElementId(sortColumn)) result = getReferenceDisplayName(a[sortColumn]).localeCompare(getReferenceDisplayName(b[sortColumn]))
@@ -90,12 +91,12 @@ export const OcdTabularContents = ({ ocdDocument, azureResources, selected, colu
 }
 
 export const OcdTabularHeader = ({columnTitles, azureResources, resourceElements, selected, sortColumn, sortAscending, onSortClick, displayColumns, setDisplayColumns}: AzureTabularHeaderProps): JSX.Element => {
-    const {ocdConsoleConfig, setOcdConsoleConfig} = useContext(ConsoleConfigContext)
+    const {ocdConsoleConfig} = useContext(ConsoleConfigContext)
     const [menuVisible, setMenuVisible] = useState(false)
     const onToggleMenuClick = () => {setMenuVisible(!menuVisible && columnTitles.length > 0)}
     const ascClasses = 'ocd-sort-background-icon sort-ascending'
     const dscClasses = 'ocd-sort-background-icon sort-descending'
-    const onToggleColumnClick = (e: React.MouseEvent<HTMLLabelElement>) => {e.stopPropagation()}
+    const onToggleColumnClick = (e: React.MouseEvent<HTMLElement>) => {e.stopPropagation()}
     const onToggleColumnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.stopPropagation()
         // const newDisplayColumns = e.target.checked ? [...displayColumns, e.target.id] : displayColumns.filter((c) => c !== e.target.id)
@@ -120,7 +121,7 @@ export const OcdTabularHeader = ({columnTitles, azureResources, resourceElements
                             <div className='three-dot-menu ocd-console-three-dot-menu-icon'></div>
                             {menuVisible && <ul className={'show slide-down slide-right'}>
                                 {/* <li className='ocd-dropdown-menu-item ocd-mouseover-highlight'><label onClick={onToggleColumnClick}><input type="checkbox" onChange={onToggleColumnChange}/>Name</label></li> */}
-                                {columnTitles.map((title: string, i: number) => {return <li className='ocd-dropdown-menu-item ocd-mouseover-highlight' key={`${selected}-${title.split(' ').join('')}`}><label onClick={onToggleColumnClick}><input id={title} type="checkbox" onChange={onToggleColumnChange} checked={displayColumns.includes(title)}/>{title}</label></li>})}
+                                {columnTitles.map((title: string, i: number) => {return <li className='ocd-dropdown-menu-item ocd-mouseover-highlight' key={`${selected}-${title.split(' ').join('')}`} onClick={onToggleColumnClick}><label><input id={title} type="checkbox" onChange={onToggleColumnChange} checked={displayColumns.includes(title)}/>{title}</label></li>})}
                             </ul>}
                         </li>
                     </ul>
