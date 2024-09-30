@@ -25,7 +25,8 @@ export const GoogleDefault = ({ ocdDocument, googleResources, selected }: Google
 
 export const OcdTabularContents = ({ ocdDocument, googleResources, selected, columnTitles, resourceElements }: GoogleTabularContentsProps): JSX.Element => {
     const {ocdConsoleConfig} = useContext(ConsoleConfigContext)
-    const [displayColumns, setDisplayColumns] = useState(ocdConsoleConfig.config.displayColumns ? ocdConsoleConfig.config.displayColumns[selected] ? ocdConsoleConfig.config.displayColumns[selected] : columnTitles : columnTitles)
+    const [displayColumns, setDisplayColumns] = useState(ocdConsoleConfig.config.displayColumns?[selected] : columnTitles)
+    // const [displayColumns, setDisplayColumns] = useState(ocdConsoleConfig.config.displayColumns ? ocdConsoleConfig.config.displayColumns[selected] ? ocdConsoleConfig.config.displayColumns[selected] : columnTitles : columnTitles)
     const [sortColumn, setSortColumn] = useState('')
     const [sortAscending, setSortAscending] = useState(true)
     const onSortClick = (element: string) => {
@@ -90,7 +91,7 @@ export const OcdTabularContents = ({ ocdDocument, googleResources, selected, col
 }
 
 export const OcdTabularHeader = ({columnTitles, googleResources, resourceElements, selected, sortColumn, sortAscending, onSortClick, displayColumns, setDisplayColumns}: GoogleTabularHeaderProps): JSX.Element => {
-    const {ocdConsoleConfig, setOcdConsoleConfig} = useContext(ConsoleConfigContext)
+    const {ocdConsoleConfig} = useContext(ConsoleConfigContext)
     const [menuVisible, setMenuVisible] = useState(false)
     const onToggleMenuClick = () => {setMenuVisible(!menuVisible && columnTitles.length > 0)}
     const ascClasses = 'ocd-sort-background-icon sort-ascending'
