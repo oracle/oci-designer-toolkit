@@ -538,8 +538,8 @@ async function handleOpenExternalUrl(event, href) {
 }
 
 // Library / Reference Architecture Functions
-// const libraryUrl = 'https://raw.githubusercontent.com/oracle/oci-designer-toolkit/refs/heads/master/ocd/library'
-const libraryUrl = 'https://raw.githubusercontent.com/oracle/oci-designer-toolkit/refs/heads/toxophilist/sprint-dev/ocd/library'
+const libraryUrl = 'https://raw.githubusercontent.com/oracle/oci-designer-toolkit/refs/heads/master/ocd/library'
+// const libraryUrl = 'https://raw.githubusercontent.com/oracle/oci-designer-toolkit/refs/heads/toxophilist/sprint-dev/ocd/library'
 const libraryFile = 'referenceArchitectures.json'
 
 async function handleLoadLibraryIndex(event) {
