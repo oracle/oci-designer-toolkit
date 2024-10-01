@@ -24,8 +24,9 @@ export const AzureDefault = ({ ocdDocument, azureResources, selected }: AzureTab
 }
 
 export const OcdTabularContents = ({ ocdDocument, azureResources, selected, columnTitles, resourceElements }: AzureTabularContentsProps): JSX.Element => {
-    const {ocdConsoleConfig, setOcdConsoleConfig} = useContext(ConsoleConfigContext)
-    const [displayColumns, setDisplayColumns] = useState(ocdConsoleConfig.config.displayColumns ? ocdConsoleConfig.config.displayColumns[selected] ? ocdConsoleConfig.config.displayColumns[selected] : columnTitles : columnTitles)
+    const {ocdConsoleConfig} = useContext(ConsoleConfigContext)
+    const [displayColumns, setDisplayColumns] = useState(ocdConsoleConfig.config.displayColumns?[selected] : columnTitles)
+    // const [displayColumns, setDisplayColumns] = useState(ocdConsoleConfig.config.displayColumns ? ocdConsoleConfig.config.displayColumns[selected] ? ocdConsoleConfig.config.displayColumns[selected] : columnTitles : columnTitles)
     const [sortColumn, setSortColumn] = useState('')
     const [sortAscending, setSortAscending] = useState(true)
     const onSortClick = (element: string) => {
@@ -35,7 +36,7 @@ export const OcdTabularContents = ({ ocdDocument, azureResources, selected, colu
         setSortAscending(!sortAscending)
     }
     const sortFunction = (a: Record<string, any>, b: Record<string, any>): number => {
-        let result = 0
+        let result
         if (!sortColumn || sortColumn === '') result = 0
         else if (Array.isArray(a[sortColumn])) result = a[sortColumn].join(',').localeCompare(b[sortColumn].join(','))
         else if (isElementId(sortColumn)) result = getReferenceDisplayName(a[sortColumn]).localeCompare(getReferenceDisplayName(b[sortColumn]))
@@ -90,12 +91,12 @@ export const OcdTabularContents = ({ ocdDocument, azureResources, selected, colu
 }
 
 export const OcdTabularHeader = ({columnTitles, azureResources, resourceElements, selected, sortColumn, sortAscending, onSortClick, displayColumns, setDisplayColumns}: AzureTabularHeaderProps): JSX.Element => {
-    const {ocdConsoleConfig, setOcdConsoleConfig} = useContext(ConsoleConfigContext)
+    const {ocdConsoleConfig} = useContext(ConsoleConfigContext)
     const [menuVisible, setMenuVisible] = useState(false)
     const onToggleMenuClick = () => {setMenuVisible(!menuVisible && columnTitles.length > 0)}
     const ascClasses = 'ocd-sort-background-icon sort-ascending'
     const dscClasses = 'ocd-sort-background-icon sort-descending'
-    const onToggleColumnClick = (e: React.MouseEvent<HTMLLabelElement>) => {e.stopPropagation()}
+    const onToggleColumnClick = (e: React.MouseEvent<HTMLElement>) => {e.stopPropagation()}
     const onToggleColumnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.stopPropagation()
         // const newDisplayColumns = e.target.checked ? [...displayColumns, e.target.id] : displayColumns.filter((c) => c !== e.target.id)
@@ -107,20 +108,25 @@ export const OcdTabularHeader = ({columnTitles, azureResources, resourceElements
         // setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
     }
     console.debug('OcdTabularHeader: Selected', selected, displayColumns)
+    const sortHeaderClass = (name: string): string => {
+        if (sortColumn !== name) return ''
+        else if (sortAscending) return ascClasses 
+        else return dscClasses
+    }
     return (
         <div className='tr' key={`${selected}-tabular-header-row`}>
             <div className='th'>{azureResources[selected].length}</div>
-            <div className={`th ocd-sortable-column ${sortColumn === 'displayName' ? sortAscending ? ascClasses : dscClasses : ''}`} onClick={() => onSortClick('displayName')} key={`${selected}-tabular-header-row-displayName`}>Name</div>
-            <div className={`th ocd-sortable-column ${sortColumn === 'compartmentId' ? sortAscending ? ascClasses : dscClasses : ''}`} onClick={() => onSortClick('compartmentId')} key={`${selected}-tabular-header-row-compartmentId`}>Compartment</div>
-            {displayColumns.map((title: string, i: number) => {return <div className={`th ocd-sortable-column ${sortColumn === resourceElements[i] ? sortAscending ? ascClasses : dscClasses : ''}`} onClick={() => onSortClick(resourceElements[i])} key={`${selected}-tabular-header-row-${OcdUtils.toUnderscoreCase(title)}`}>{title}</div>})}
+            <div className={`th ocd-sortable-column ${sortHeaderClass('displayName')}`} onClick={() => onSortClick('displayName')} aria-hidden key={`${selected}-tabular-header-row-displayName`}>Name</div>
+            <div className={`th ocd-sortable-column ${sortHeaderClass('compartmentId')}`} onClick={() => onSortClick('compartmentId')} aria-hidden key={`${selected}-tabular-header-row-compartmentId`}>Compartment</div>
+            {displayColumns.map((title: string, i: number) => {return <div className={`th ocd-sortable-column ${sortHeaderClass(resourceElements[i])}`} onClick={() => onSortClick(resourceElements[i])} aria-hidden key={`${selected}-tabular-header-row-${OcdUtils.toUnderscoreCase(title)}`}>{title}</div>})}
             <div className={`th-menu ocd-console-three-dot-menu-icon`}>
                 <div className='ocd-console-toolbar-dropdown ocd-console-toolbar-dropdown-theme'>
                     <ul>
-                        <li className='ocd-console-toolbar-dropdown-item' onClick={onToggleMenuClick}>
+                        <li className='ocd-console-toolbar-dropdown-item' onClick={onToggleMenuClick} aria-hidden>
                             <div className='three-dot-menu ocd-console-three-dot-menu-icon'></div>
                             {menuVisible && <ul className={'show slide-down slide-right'}>
                                 {/* <li className='ocd-dropdown-menu-item ocd-mouseover-highlight'><label onClick={onToggleColumnClick}><input type="checkbox" onChange={onToggleColumnChange}/>Name</label></li> */}
-                                {columnTitles.map((title: string, i: number) => {return <li className='ocd-dropdown-menu-item ocd-mouseover-highlight' key={`${selected}-${title.split(' ').join('')}`}><label onClick={onToggleColumnClick}><input id={title} type="checkbox" onChange={onToggleColumnChange} checked={displayColumns.includes(title)}/>{title}</label></li>})}
+                                {columnTitles.map((title: string, i: number) => {return <li className='ocd-dropdown-menu-item ocd-mouseover-highlight' key={`${selected}-${title.split(' ').join('')}`} onClick={onToggleColumnClick} aria-hidden><label><input id={title} type="checkbox" onChange={onToggleColumnChange} checked={displayColumns.includes(title)}/>{title}</label></li>})}
                             </ul>}
                         </li>
                     </ul>
@@ -141,12 +147,17 @@ export const OcdTabularRow = ({ocdDocument, azureResources, index, resource, res
     const isElementId = (name: string) => name ? name.endsWith('Id') : false
     const isElementIdList = (name: string) => name ? name.endsWith('Ids') : false
     console.debug('OcdTabularRow: Selected', selected)
+    const cellData = (element: string): string => {
+        if (isElementId(element)) return getReferenceDisplayName(resource[element])
+        else if (isElementIdList(element)) return getReferenceListDisplayNames(resource[element])
+        else return String(resource[element])
+    }
     return (
         <div className='tr' key={`tabular-${resource.id}`}>
             <div className='td'>{index + 1}</div><div className='td'>{resource.displayName}</div>
             <div className='td'>{getReferenceDisplayName(resource.compartmentId)}</div>
             {/* <div className='td'>{ocdDocument.getResource(r.compartmentId) ? ocdDocument.getResource(r.compartmentId).displayName : ''}</div> */}
-            {resourceElements.map((element) => {return <div className='td' key={`tabular-${resource.id}-${element}`}>{isElementId(element) ? getReferenceDisplayName(resource[element]) : isElementIdList(element) ? getReferenceListDisplayNames(resource[element]) : String(resource[element])}</div>})}
+            {resourceElements.map((element) => {return <div className='td' key={`tabular-${resource.id}-${element}`}>{cellData(element)}</div>})}
             <div className="td"></div>
         </div>
     )

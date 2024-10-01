@@ -140,7 +140,8 @@ export const OcdDisplayNameProperty = ({ ocdDocument, setOcdDocument, resource, 
         e.target.reportValidity()
         resource[attribute.key] = e.target.value
         setOcdDocument(OcdDocument.clone(ocdDocument))
-        if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
+        if (!activeFile.modified) activeFile.modified = true
+        // if (!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     const className = isPropertyDisplayConditionTrue(attribute.conditional, attribute.condition, resource, rootResource) ? `ocd-property-row ocd-simple-property-row` : `collapsed hidden`
     console.debug(`>>>> OcdPropertyTypes: OcdDisplayNameProperty: ${attribute.id} Render(${value})`)
@@ -166,7 +167,8 @@ export const OcdTextProperty = ({ ocdDocument, setOcdDocument, resource, config,
         e.target.reportValidity()
         resource[attribute.key] = e.target.value
         // setOcdDocument(OcdDocument.clone(ocdDocument))
-        if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
+        if (!activeFile.modified) activeFile.modified = true
+        // if (!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     const className = isPropertyDisplayConditionTrue(attribute.conditional, attribute.condition, resource, rootResource) ? `ocd-property-row ocd-simple-property-row` : `collapsed hidden`
     console.debug(`>>>> OcdPropertyTypes: OcdTextProperty: ${attribute.id} Render(${value})`)
@@ -192,7 +194,8 @@ export const OcdNumberProperty = ({ ocdDocument, setOcdDocument, resource, confi
         e.target.reportValidity()
         resource[attribute.key] = e.target.value
         // setOcdDocument(OcdDocument.clone(ocdDocument))
-        if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
+        if (!activeFile.modified) activeFile.modified = true
+        // if (!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     const className = isPropertyDisplayConditionTrue(attribute.conditional, attribute.condition, resource, rootResource) ? `ocd-property-row ocd-simple-property-row` : `collapsed hidden`
     console.debug(`>>>> OcdPropertyTypes: OcdNumberProperty: ${attribute.id} Render(${value})`)
@@ -214,7 +217,8 @@ export const OcdBooleanProperty = ({ ocdDocument, setOcdDocument, resource, conf
         setValue(e.target.checked)
         resource[attribute.key] = e.target.checked
         // setOcdDocument(OcdDocument.clone(ocdDocument))
-        if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
+        if (!activeFile.modified) activeFile.modified = true
+        // if (!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     const className = isPropertyDisplayConditionTrue(attribute.conditional, attribute.condition, resource, rootResource) ? `ocd-property-row ocd-simple-property-row` : `collapsed hidden`
     console.debug(`>>>> OcdPropertyTypes: OcdBooleanProperty: ${attribute.id} Render(${value})`)
@@ -240,7 +244,8 @@ export const OcdCodeProperty = ({ ocdDocument, setOcdDocument, resource, config,
         e.target.reportValidity()
         resource[attribute.key] = e.target.value
         // setOcdDocument(OcdDocument.clone(ocdDocument))
-        if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
+        if (!activeFile.modified) activeFile.modified = true
+        // if (!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     const className = isPropertyDisplayConditionTrue(attribute.conditional, attribute.condition, resource, rootResource) ? `ocd-property-row ocd-simple-property-row` : `collapsed hidden`
     console.debug(`>>>> OcdPropertyTypes: OcdCodeProperty: ${attribute.id} Render(${value})`)
@@ -288,7 +293,8 @@ export const OcdLookupProperty = ({ ocdDocument, setOcdDocument, resource, confi
         setValue(e.target.value)
         // TODO: Replace with a performant Solution
         setOcdDocument(OcdDocument.clone(ocdDocument))
-        if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
+        if (!activeFile.modified) activeFile.modified = true
+        // if (!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     const className = isPropertyDisplayConditionTrue(attribute.conditional, attribute.condition, resource, rootResource) ? `ocd-property-row ocd-simple-property-row` : `collapsed hidden`
     console.debug(`>>>> OcdPropertyTypes: OcdLookupProperty: ${attribute.id} Render(${value})`)
@@ -326,7 +332,8 @@ export const OcdLookupListProperty = ({ ocdDocument, setOcdDocument, resource, c
         else resource[attribute.key] = resource[attribute.key].filter((s: string) => s !== id)
         // TODO: Replace with a performant Solution
         setOcdDocument(OcdDocument.clone(ocdDocument))
-        if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
+        if (!activeFile.modified) activeFile.modified = true
+        // if (!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     const className = isPropertyDisplayConditionTrue(attribute.conditional, attribute.condition, resource, rootResource) ? `ocd-property-row ocd-simple-property-row` : `collapsed hidden`
     console.debug(`>>>> OcdPropertyTypes: OcdLookupListProperty: ${attribute.id} Render(${value})`)
@@ -348,9 +355,9 @@ export const OcdStaticLookupProperty = ({ ocdDocument, setOcdDocument, resource,
     const id = useId()
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const [value, setValue] = useState(resource[attribute.key])
-    const properties = config && config.properties ? config.properties : {}
-    const configOptions = config && config.options ? config.options : []
-    const resources = useMemo(() => config && config.options ? config.options : [], configOptions)
+    const properties = config?.properties ? config.properties : {}
+    const configOptions = config?.options ? config.options : []
+    const resources = useMemo(() => config?.options ? config.options : [], configOptions)
     // const resources = useMemo(() => config && config.options ? config.options : [], config?.options)
     // const resources = config && config.options ? config.options : []
     // console.info('Resources', resources)
@@ -360,7 +367,8 @@ export const OcdStaticLookupProperty = ({ ocdDocument, setOcdDocument, resource,
         setValue(e.target.value)
         // TODO: Replace with a performant Solution
         setOcdDocument(OcdDocument.clone(ocdDocument))
-        if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
+        if (!activeFile.modified) activeFile.modified = true
+        // if (!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     useEffect(() => {
         if (!resource[attribute.key] || resource[attribute.key] === '') {
@@ -368,7 +376,8 @@ export const OcdStaticLookupProperty = ({ ocdDocument, setOcdDocument, resource,
                 resource[attribute.key] = resources[0].id
                 // TODO: Replace with a performant Solution
                 // setOcdDocument(OcdDocument.clone(ocdDocument))
-                if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
+                if (!activeFile.modified) activeFile.modified = true
+                // if (!activeFile.modified) setActiveFile({...activeFile, modified: true})
             }
         }
     }, [])
@@ -414,7 +423,8 @@ export const OcdCacheLookupProperty = ({ ocdDocument, setOcdDocument, resource, 
         setValue(e.target.value)
         // TODO: Replace with a performant Solution
         setOcdDocument(OcdDocument.clone(ocdDocument))
-        if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
+        if (!activeFile.modified) activeFile.modified = true
+        // if (!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     const className = isPropertyDisplayConditionTrue(attribute.conditional, attribute.condition, resource, rootResource) ? `ocd-property-row ocd-simple-property-row` : `collapsed hidden`
     console.debug('OcdPropertyTypes: OcdCacheLookupProperty', config, attribute, resource, resources)
@@ -449,7 +459,8 @@ export const OcdStringListProperty = ({ ocdDocument, setOcdDocument, resource, c
         e.target.reportValidity()
         resource[attribute.key] = e.target.value.split(',').filter((v) => v !== '')
         // setOcdDocument(OcdDocument.clone(ocdDocument))
-        if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
+        if (!activeFile.modified) activeFile.modified = true
+        // if (!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     const className = isPropertyDisplayConditionTrue(attribute.conditional, attribute.condition, resource, rootResource) ? `ocd-property-row ocd-simple-property-row` : `collapsed hidden`
     console.debug(`>>>> OcdPropertyTypes: OcdStringListProperty: ${attribute.id} Render(${value})`)
@@ -475,7 +486,8 @@ export const OcdNumberListProperty = ({ ocdDocument, setOcdDocument, resource, c
         e.target.reportValidity()
         resource[attribute.key] = e.target.value.split(',')
         // setOcdDocument(OcdDocument.clone(ocdDocument))
-        if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
+        if (!activeFile.modified) activeFile.modified = true
+        // if (!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     const className = isPropertyDisplayConditionTrue(attribute.conditional, attribute.condition, resource, rootResource) ? `ocd-property-row ocd-simple-property-row` : `collapsed hidden`
     console.debug(`>>>> OcdPropertyTypes: OcdNumberListProperty: ${attribute.id} Render(${value})`)
@@ -529,7 +541,8 @@ export const OcdSetLookupProperty = ({ ocdDocument, setOcdDocument, resource, co
         if (checked) resource[attribute.key].push(securityListId)
         else resource[attribute.key] = resource[attribute.key].filter((s: string) => s !== securityListId)
         // setOcdDocument(OcdDocument.clone(ocdDocument))
-        if(!activeFile.modified) setActiveFile({...activeFile, modified: true})
+        if (!activeFile.modified) activeFile.modified = true
+        // if (!activeFile.modified) setActiveFile({...activeFile, modified: true})
     }
     const className = isPropertyDisplayConditionTrue(attribute.conditional, attribute.condition, resource, rootResource) ? `ocd-property-row ocd-simple-property-row` : `collapsed hidden`
     console.debug(`>>>> OcdPropertyTypes: OcdSetLookupProperty: ${attribute.id} Render(${value})`)

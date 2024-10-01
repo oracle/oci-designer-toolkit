@@ -3,9 +3,9 @@
 ____
 **Update 0.64.0**: This update addresses the following issues.
 1. OKIT-Web: Resolve issue where save dialog did not display existing content (#717)
+2. OKIT-Web: Fix for underlying AuthLib api change.
 ____
-Welcome to the September 2024 release of OKIT. This release is aim primarily at the desktop OKIT OCD Beta extending the current functionality and improving 
-it's useability. We have now added some basic resources for Azure and Google to allow for the design of Multi Cloud solutions. The current resources will be expaned onces the appropriate Terraform provider is available.
+Welcome to the September 2024 release of OKIT. This release is aim primarily at the desktop OKIT OCD Beta extending the current functionality and improving it's useability. We have now added some basic resources for Azure and Google to allow for the design of Multi Cloud solutions. The current resources will be expaned onces the appropriate Terraform provider is available.
 
 ## OKIT (Web) Features
 No new features
@@ -25,6 +25,7 @@ No new features
 13. Write Google Markdown Generator. (#OKIT-288)
 14. Write Google Validator Generator. (#OKIT-289)
 15. Write Google Tabular Generator. (#OKIT-290)
+16. Create Library View which will allow users to select pre-defined Reference Architectures. (#OKIT-304)
 
 ### Beta Overview
 

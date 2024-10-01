@@ -287,7 +287,8 @@ const OcdResizePoint = ({cx, cy, position, setDimensions, onResizeEnd}: any): JS
                 break
         }
         onResizeEnd(dimensions)
-        if (!activeFile.modified && hasMoved) setActiveFile({name: activeFile.name, modified: true})
+        if (!activeFile.modified && hasMoved) activeFile.modified = true
+        // if (!activeFile.modified && hasMoved) setActiveFile({name: activeFile.name, modified: true})
     }
     const onMouseOver = (e: React.MouseEvent<SVGElement>) => {
         e.stopPropagation()

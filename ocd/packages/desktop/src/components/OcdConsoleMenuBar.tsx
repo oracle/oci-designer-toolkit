@@ -24,10 +24,11 @@ const OcdConsoleMenuItem = ({ menuItem, depth, ocdDocument, setOcdDocument, ocdC
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
         onClick={closeDropdown}
+        aria-hidden
         >
             {menuItem.submenu && Array.isArray(menuItem.submenu) ? (
                 <>
-                <a href='#' className={`${menuItem.submenu && depth > 0 ? 'ocd-submenu-item-has-submenu' : ''}`} onClick={() => console.info(`Clicked ${menuItem.label}`)}>{menuItem.label}</a>
+                <a href='#' className={`${menuItem.submenu && depth > 0 ? 'ocd-submenu-item-has-submenu' : ''}`} onClick={() => console.info(`Clicked ${menuItem.label}`)} aria-hidden>{menuItem.label}</a>
                 <OcdConsoleSubMenu
                     submenus={menuItem.submenu}
                     dropdown={dropdown}

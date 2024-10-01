@@ -1,0 +1,1381 @@
+{
+    "metadata": {
+        "ocdVersion": "0.1.0",
+        "ocdSchemaVersion": "0.1.0",
+        "ocdModelId": "ocd-model-b229c12b-895f-4317-aae0-9b9c2a7d8232",
+        "platform": "oci",
+        "title": "OKE Networking for PCA",
+        "documentation": "",
+        "created": "2024-3-20 15:17:4",
+        "updated": ""
+    },
+    "model": {
+        "oci": {
+            "tags": {},
+            "vars": [
+                {
+                    "key": "1e33f753-c4a9-48d4-9b11-5e48bce70e22",
+                    "name": "vcn_cidr",
+                    "default": "172.31.252.0/23",
+                    "description": "VCN CIDR Range"
+                },
+                {
+                    "key": "c00fdc98-bd12-442c-81ea-08f969b397e3",
+                    "name": "worker_cidr",
+                    "default": "172.31.253.0/24",
+                    "description": "Worker Subnet CIDR"
+                },
+                {
+                    "key": "57516fab-d616-4c41-a3c0-e08aeb2474df",
+                    "name": "workerlb_cidr",
+                    "default": "172.31.252.0/25",
+                    "description": "Worker load balancer subnet CIDR"
+                },
+                {
+                    "key": "716793dc-3d77-42fd-859c-9ce7da918e5d",
+                    "name": "kmi_cidr",
+                    "default": "172.31.252.224/28",
+                    "description": "OKE control plane subnet CIDR"
+                },
+                {
+                    "key": "d2186923-fd37-4e6d-99d1-6d7d4046daea",
+                    "name": "kmilb_cidr",
+                    "default": "172.31.252.240/28",
+                    "description": "OKE control plane load balancer subnet CIDR"
+                },
+                {
+                    "key": "d5134fbf-4068-41d0-96f7-1df33da4b6c0",
+                    "name": "kube_client_cidr",
+                    "default": "0.0.0.0/0",
+                    "description": "CIDR for clients that are allowed to contact the Kubernetes API server"
+                },
+                {
+                    "key": "1ce085b8-4869-411f-92db-ae37ed08aeb9",
+                    "name": "kubernetes_api_port",
+                    "default": "6443",
+                    "description": "Kubernetes API Port"
+                },
+                {
+                    "key": "f51fb8ee-a901-4827-82f7-c408a5e124bf",
+                    "name": "kube_internal_cidr",
+                    "default": "",
+                    "description": "Kubernetes Internal CIDR"
+                }
+            ],
+            "resources": {
+                "compartment": [
+                    {
+                        "provider": "oci",
+                        "locked": false,
+                        "terraformResourceName": "OkitCompartment1710947824201",
+                        "okitReference": "okit-b77f0b12-5fa2-4e47-bdce-1bec8df8e06e",
+                        "resourceType": "Compartment",
+                        "resourceTypeName": "Compartment",
+                        "id": "okit.compartment.c373a27c-dc58-4cde-9dce-db3de0ca8056",
+                        "region": "",
+                        "compartmentId": "",
+                        "displayName": "network",
+                        "documentation": "",
+                        "description": "OCI Compartment",
+                        "enableDelete": false,
+                        "name": "network"
+                    }
+                ],
+                "vcn": [
+                    {
+                        "provider": "oci",
+                        "locked": false,
+                        "terraformResourceName": "OkitVcn1710947839505",
+                        "okitReference": "okit-051a4a99-9d86-4ab3-b7f1-b2bca1f11d6f",
+                        "resourceType": "Vcn",
+                        "resourceTypeName": "Vcn",
+                        "id": "okit.vcn.81346ca4-8738-446a-861e-76a66333e15f",
+                        "region": "",
+                        "compartmentId": "okit.compartment.c373a27c-dc58-4cde-9dce-db3de0ca8056",
+                        "displayName": "oke-vcn",
+                        "documentation": "",
+                        "cidrBlocks": [
+                            "var.vcn_cidr"
+                        ],
+                        "dnsLabel": "oketest",
+                        "ipv6privateCidrBlocks": [],
+                        "isIpv6enabled": false
+                    }
+                ],
+                "route_table": [
+                    {
+                        "provider": "oci",
+                        "locked": false,
+                        "terraformResourceName": "OkitRouteTable1710947839505",
+                        "okitReference": "okit-5d7d82f3-757b-4dac-8476-acd6e21d81af",
+                        "resourceType": "RouteTable",
+                        "resourceTypeName": "Route Table",
+                        "id": "okit.route_table.72c432b5-408f-4ec2-b5e8-d1fa7f35de15",
+                        "region": "",
+                        "compartmentId": "okit.compartment.c373a27c-dc58-4cde-9dce-db3de0ca8056",
+                        "displayName": "public",
+                        "documentation": "",
+                        "vcnId": "okit.vcn.81346ca4-8738-446a-861e-76a66333e15f",
+                        "routeRules": [
+                            {
+                                "description": "OKE Public Route Rule",
+                                "destination": "0.0.0.0/0",
+                                "destinationType": "CIDR_BLOCK",
+                                "networkEntityId": "okit.internet_gateway.8dedbfe4-b80c-4975-80d8-f8229ed6b8b0",
+                                "key": "f55a753a-38e2-481d-865d-da9a11ea9bae"
+                            }
+                        ],
+                        "vcnDefault": false
+                    },
+                    {
+                        "provider": "oci",
+                        "locked": false,
+                        "terraformResourceName": "OkitRouteTable1710950544397",
+                        "okitReference": "okit-ba2cee58-2a6f-4130-8d58-d3d5278e51ad",
+                        "resourceType": "RouteTable",
+                        "resourceTypeName": "Route Table",
+                        "id": "okit.route_table.e3052a9f-6a9e-4f6c-9a85-2f0ee613f521",
+                        "region": "",
+                        "compartmentId": "okit.compartment.c373a27c-dc58-4cde-9dce-db3de0ca8056",
+                        "displayName": "Default - private",
+                        "documentation": "",
+                        "vcnId": "okit.vcn.81346ca4-8738-446a-861e-76a66333e15f",
+                        "routeRules": [
+                            {
+                                "description": "OKE Private Route Table",
+                                "destination": "0.0.0.0/0",
+                                "destinationType": "CIDR_BLOCK",
+                                "networkEntityId": "okit.nat_gateway.25c19fe1-d06d-4fe8-ad8e-3d166a95ed1e",
+                                "key": "0c6cb6cf-01d2-4109-986a-62e73c734d10"
+                            }
+                        ],
+                        "vcnDefault": true
+                    }
+                ],
+                "security_list": [
+                    {
+                        "provider": "oci",
+                        "locked": false,
+                        "terraformResourceName": "OkitSecurityList1710947839506",
+                        "okitReference": "okit-4cd3c689-5920-4fc2-b743-915d3dbca648",
+                        "resourceType": "SecurityList",
+                        "resourceTypeName": "Security List",
+                        "id": "okit.security_list.b1d9b9e4-4b0d-40b4-aee9-f6e2d370be3c",
+                        "region": "",
+                        "compartmentId": "okit.compartment.c373a27c-dc58-4cde-9dce-db3de0ca8056",
+                        "displayName": "Default Security List",
+                        "documentation": "",
+                        "vcnId": "okit.vcn.81346ca4-8738-446a-861e-76a66333e15f",
+                        "egressSecurityRules": [
+                            {
+                                "destination": "0.0.0.0/0",
+                                "destinationType": "CIDR_BLOCK",
+                                "stateless": false,
+                                "protocol": "all",
+                                "description": "Default All Egress Rule",
+                                "key": "43c34197-7e72-4e54-b8b0-689dc4e7eaac"
+                            }
+                        ],
+                        "ingressSecurityRules": [
+                            {
+                                "stateless": false,
+                                "protocol": "6",
+                                "source": "0.0.0.0/0",
+                                "sourceType": "CIDR_BLOCK",
+                                "tcpOptions": {
+                                    "max": 22,
+                                    "min": 22,
+                                    "sourcePortRange": {
+                                        "min": 0,
+                                        "max": 0
+                                    }
+                                },
+                                "description": " Default SSH Ingress Rule",
+                                "key": "3256b008-f0bd-48cc-8fa0-199183ec6a14"
+                            },
+                            {
+                                "icmpOptions": {
+                                    "code": 4,
+                                    "type": 3
+                                },
+                                "stateless": false,
+                                "protocol": "1",
+                                "source": "0.0.0.0/0",
+                                "sourceType": "CIDR_BLOCK",
+                                "description": "Default Ingress Rule",
+                                "key": "bb8d780f-ab99-4024-80b6-c641fd274aa9"
+                            },
+                            {
+                                "icmpOptions": {
+                                    "type": 3
+                                },
+                                "stateless": false,
+                                "protocol": "1",
+                                "source": "10.0.0.0/16",
+                                "sourceType": "CIDR_BLOCK",
+                                "description": "Default VCN Access Ingress Rule",
+                                "key": "73444067-fd20-4031-8f2f-c4f5ee9ffa7a"
+                            }
+                        ],
+                        "vcnDefault": true
+                    },
+                    {
+                        "provider": "oci",
+                        "locked": false,
+                        "terraformResourceName": "OkitSecurityList1712841004037",
+                        "okitReference": "okit-8a14df44-2ea5-4661-a438-60823bd05dd2",
+                        "resourceType": "SecurityList",
+                        "resourceTypeName": "Security List",
+                        "id": "okit.security_list.99258699-cf5f-429d-b8f2-7d68c094d53e",
+                        "region": "",
+                        "compartmentId": "okit.compartment.c373a27c-dc58-4cde-9dce-db3de0ca8056",
+                        "displayName": "worker-seclist",
+                        "documentation": "",
+                        "vcnId": "okit.vcn.81346ca4-8738-446a-861e-76a66333e15f",
+                        "egressSecurityRules": [],
+                        "ingressSecurityRules": [
+                            {
+                                "description": "Allow external ssh",
+                                "protocol": "6",
+                                "source": "var.vcn_cidr",
+                                "sourceType": "CIDR_BLOCK",
+                                "stateless": false,
+                                "icmpOptions": {
+                                    "code": 0,
+                                    "type": 0
+                                },
+                                "tcpOptions": {
+                                    "max": "22",
+                                    "min": "22",
+                                    "sourcePortRange": {
+                                        "max": "",
+                                        "min": ""
+                                    }
+                                },
+                                "udpOptions": {
+                                    "max": 0,
+                                    "min": 0,
+                                    "sourcePortRange": {
+                                        "max": 0,
+                                        "min": 0
+                                    }
+                                },
+                                "key": "35ac2adf-6729-44a8-a170-67531ab32e48"
+                            },
+                            {
+                                "description": "Allow Kubernetes clients to contact the default node port range",
+                                "protocol": "6",
+                                "source": "var.kube_client_cidr",
+                                "sourceType": "CIDR_BLOCK",
+                                "stateless": false,
+                                "icmpOptions": {
+                                    "code": 0,
+                                    "type": 0
+                                },
+                                "tcpOptions": {
+                                    "max": "32767",
+                                    "min": "30000",
+                                    "sourcePortRange": {
+                                        "max": "",
+                                        "min": ""
+                                    }
+                                },
+                                "udpOptions": {
+                                    "max": 0,
+                                    "min": 0,
+                                    "sourcePortRange": {
+                                        "max": 0,
+                                        "min": 0
+                                    }
+                                },
+                                "key": "bfb2f617-6a07-4c40-8cc0-c2efc54d1a3f"
+                            },
+                            {
+                                "description": "Allow the worker load balancer to contact the worker nodes.",
+                                "protocol": "6",
+                                "source": "var.workerlb_cidr",
+                                "sourceType": "CIDR_BLOCK",
+                                "stateless": false,
+                                "icmpOptions": {
+                                    "code": 0,
+                                    "type": 0
+                                },
+                                "tcpOptions": {
+                                    "max": "32767",
+                                    "min": "30000",
+                                    "sourcePortRange": {
+                                        "max": "",
+                                        "min": ""
+                                    }
+                                },
+                                "udpOptions": {
+                                    "max": 0,
+                                    "min": 0,
+                                    "sourcePortRange": {
+                                        "max": 0,
+                                        "min": 0
+                                    }
+                                },
+                                "key": "c281c8f4-5163-4166-abdc-2d42df9cec36"
+                            },
+                            {
+                                "description": "Allow the worker load balancer to contact the worker nodes.",
+                                "protocol": "6",
+                                "source": "var.workerlb_cidr",
+                                "sourceType": "CIDR_BLOCK",
+                                "stateless": false,
+                                "icmpOptions": {
+                                    "code": 0,
+                                    "type": 0
+                                },
+                                "tcpOptions": {
+                                    "max": "10256",
+                                    "min": "10256",
+                                    "sourcePortRange": {
+                                        "max": "",
+                                        "min": ""
+                                    }
+                                },
+                                "udpOptions": {
+                                    "max": 0,
+                                    "min": 0,
+                                    "sourcePortRange": {
+                                        "max": 0,
+                                        "min": 0
+                                    }
+                                },
+                                "key": "72fecf65-8432-4899-a15d-5037d92b614d"
+                            },
+                            {
+                                "description": "Allow the control plane to contact the worker nodes.",
+                                "protocol": "6",
+                                "source": "var.kmi_cidr",
+                                "sourceType": "CIDR_BLOCK",
+                                "stateless": false,
+                                "icmpOptions": {
+                                    "code": 0,
+                                    "type": 0
+                                },
+                                "tcpOptions": {
+                                    "max": "65535",
+                                    "min": "22",
+                                    "sourcePortRange": {
+                                        "max": "",
+                                        "min": ""
+                                    }
+                                },
+                                "udpOptions": {
+                                    "max": 0,
+                                    "min": 0,
+                                    "sourcePortRange": {
+                                        "max": 0,
+                                        "min": 0
+                                    }
+                                },
+                                "key": "837a2064-7bf3-4386-b6a2-1405d031b677"
+                            },
+                            {
+                                "description": "Allow the worker nodes to contact the other worker nodes in the subnet.",
+                                "protocol": "17",
+                                "source": "var.worker_cidr",
+                                "sourceType": "CIDR_BLOCK",
+                                "stateless": false,
+                                "icmpOptions": {
+                                    "code": 0,
+                                    "type": 0
+                                },
+                                "tcpOptions": {
+                                    "max": 0,
+                                    "min": 0,
+                                    "sourcePortRange": {
+                                        "max": 0,
+                                        "min": 0
+                                    }
+                                },
+                                "udpOptions": {
+                                    "max": "8472",
+                                    "min": "8285",
+                                    "sourcePortRange": {
+                                        "max": "",
+                                        "min": ""
+                                    }
+                                },
+                                "key": "c4c676b9-73c6-499a-962e-f9627182ffb1"
+                            },
+                            {
+                                "description": "Allow the control plane to contact the worker nodes.",
+                                "protocol": "17",
+                                "source": "var.kmi_cidr",
+                                "sourceType": "CIDR_BLOCK",
+                                "stateless": false,
+                                "icmpOptions": {
+                                    "code": 0,
+                                    "type": 0
+                                },
+                                "tcpOptions": {
+                                    "max": 0,
+                                    "min": 0,
+                                    "sourcePortRange": {
+                                        "max": 0,
+                                        "min": 0
+                                    }
+                                },
+                                "udpOptions": {
+                                    "max": "8472",
+                                    "min": "8285",
+                                    "sourcePortRange": {
+                                        "max": "",
+                                        "min": ""
+                                    }
+                                },
+                                "key": "68aa1a49-607e-435e-8b6c-e888cdc8c06f"
+                            }
+                        ]
+                    },
+                    {
+                        "provider": "oci",
+                        "locked": false,
+                        "terraformResourceName": "OkitSecurityList1713198200042",
+                        "okitReference": "okit-fb3ae43b-dac0-4479-a4a1-2f1bf2d12f34",
+                        "resourceType": "SecurityList",
+                        "resourceTypeName": "Security List",
+                        "id": "okit.security_list.9cf44b7c-5587-412d-9bf9-c8d04430d909",
+                        "region": "",
+                        "compartmentId": "okit.compartment.c373a27c-dc58-4cde-9dce-db3de0ca8056",
+                        "displayName": "workerlb-seclist",
+                        "documentation": "",
+                        "vcnId": "okit.vcn.81346ca4-8738-446a-861e-76a66333e15f",
+                        "egressSecurityRules": [],
+                        "ingressSecurityRules": [
+                            {
+                                "description": "Allow inbound traffic for applications.",
+                                "protocol": "6",
+                                "source": "var.kube_client_cidr",
+                                "sourceType": "CIDR_BLOCK",
+                                "stateless": false,
+                                "icmpOptions": {
+                                    "code": 0,
+                                    "type": 0
+                                },
+                                "tcpOptions": {
+                                    "max": "80",
+                                    "min": "80",
+                                    "sourcePortRange": {
+                                        "max": "",
+                                        "min": ""
+                                    }
+                                },
+                                "udpOptions": {
+                                    "max": 0,
+                                    "min": 0,
+                                    "sourcePortRange": {
+                                        "max": 0,
+                                        "min": 0
+                                    }
+                                },
+                                "key": "a2520f71-ac10-4c3f-866b-0cbf9a7e9cfe"
+                            },
+                            {
+                                "description": "Allow inbound traffic for applications.",
+                                "protocol": "6",
+                                "source": "var.kube_client_cidr",
+                                "sourceType": "CIDR_BLOCK",
+                                "stateless": false,
+                                "icmpOptions": {
+                                    "code": 0,
+                                    "type": 0
+                                },
+                                "tcpOptions": {
+                                    "max": "443",
+                                    "min": "443",
+                                    "sourcePortRange": {
+                                        "max": "",
+                                        "min": ""
+                                    }
+                                },
+                                "udpOptions": {
+                                    "max": 0,
+                                    "min": 0,
+                                    "sourcePortRange": {
+                                        "max": 0,
+                                        "min": 0
+                                    }
+                                },
+                                "key": "53675f54-9367-4118-8b01-9760622ec915"
+                            }
+                        ]
+                    },
+                    {
+                        "provider": "oci",
+                        "locked": false,
+                        "terraformResourceName": "OkitSecurityList1713260583878",
+                        "okitReference": "okit-e9de9027-e83b-4a9c-a01f-c813db665f9e",
+                        "resourceType": "SecurityList",
+                        "resourceTypeName": "Security List",
+                        "id": "okit.security_list.bcec8ab1-11a5-4b64-b7b7-36c4528a910d",
+                        "region": "",
+                        "compartmentId": "okit.compartment.c373a27c-dc58-4cde-9dce-db3de0ca8056",
+                        "displayName": "kmi-seclist",
+                        "documentation": "",
+                        "vcnId": "okit.vcn.81346ca4-8738-446a-861e-76a66333e15f",
+                        "egressSecurityRules": [],
+                        "ingressSecurityRules": [
+                            {
+                                "description": "Allow inbound connections to the Kubernetes API server.",
+                                "protocol": "6",
+                                "source": "var.kube_client_cidr",
+                                "sourceType": "CIDR_BLOCK",
+                                "stateless": false,
+                                "icmpOptions": {
+                                    "code": 0,
+                                    "type": 0
+                                },
+                                "tcpOptions": {
+                                    "max": "6443",
+                                    "min": "6443",
+                                    "sourcePortRange": {
+                                        "max": "",
+                                        "min": ""
+                                    }
+                                },
+                                "udpOptions": {
+                                    "max": 0,
+                                    "min": 0,
+                                    "sourcePortRange": {
+                                        "max": 0,
+                                        "min": 0
+                                    }
+                                },
+                                "key": "5c2d81a6-d682-4700-afb7-44192b7ea6a8"
+                            },
+                            {
+                                "description": "Allow inbound connections from the control plane load balancer.",
+                                "protocol": "6",
+                                "source": "var.kmilb_cidr",
+                                "sourceType": "CIDR_BLOCK",
+                                "stateless": false,
+                                "icmpOptions": {
+                                    "code": 0,
+                                    "type": 0
+                                },
+                                "tcpOptions": {
+                                    "max": "6443",
+                                    "min": "6443",
+                                    "sourcePortRange": {
+                                        "max": "",
+                                        "min": ""
+                                    }
+                                },
+                                "udpOptions": {
+                                    "max": 0,
+                                    "min": 0,
+                                    "sourcePortRange": {
+                                        "max": 0,
+                                        "min": 0
+                                    }
+                                },
+                                "key": "3bc3e16c-ab97-4935-82ef-513aee393362"
+                            },
+                            {
+                                "description": "Allow inbound connections from worker nodes to the control plane.",
+                                "protocol": "6",
+                                "source": "var.worker_cidr",
+                                "sourceType": "CIDR_BLOCK",
+                                "stateless": false,
+                                "icmpOptions": {
+                                    "code": 0,
+                                    "type": 0
+                                },
+                                "tcpOptions": {
+                                    "max": "65535",
+                                    "min": "1024",
+                                    "sourcePortRange": {
+                                        "max": "",
+                                        "min": ""
+                                    }
+                                },
+                                "udpOptions": {
+                                    "max": 0,
+                                    "min": 0,
+                                    "sourcePortRange": {
+                                        "max": 0,
+                                        "min": 0
+                                    }
+                                },
+                                "key": "9eb492f7-0f98-4ec6-83b2-93ba1e0e420c"
+                            },
+                            {
+                                "description": "Allow inbound connections within the control plane.",
+                                "protocol": "6",
+                                "source": "var.kmi_cidr",
+                                "sourceType": "CIDR_BLOCK",
+                                "stateless": false,
+                                "icmpOptions": {
+                                    "code": 0,
+                                    "type": 0
+                                },
+                                "tcpOptions": {
+                                    "max": "65535",
+                                    "min": "1024",
+                                    "sourcePortRange": {
+                                        "max": "",
+                                        "min": ""
+                                    }
+                                },
+                                "udpOptions": {
+                                    "max": 0,
+                                    "min": 0,
+                                    "sourcePortRange": {
+                                        "max": 0,
+                                        "min": 0
+                                    }
+                                },
+                                "key": "eeee6681-08cf-4599-8f40-55354e5c3119"
+                            },
+                            {
+                                "description": "Allow inbound connections within the control plane subnet.",
+                                "protocol": "17",
+                                "source": "var.worker_cidr",
+                                "sourceType": "CIDR_BLOCK",
+                                "stateless": false,
+                                "icmpOptions": {
+                                    "code": 0,
+                                    "type": 0
+                                },
+                                "tcpOptions": {
+                                    "max": 0,
+                                    "min": 0,
+                                    "sourcePortRange": {
+                                        "max": 0,
+                                        "min": 0
+                                    }
+                                },
+                                "udpOptions": {
+                                    "max": "8472",
+                                    "min": "8285",
+                                    "sourcePortRange": {
+                                        "max": "",
+                                        "min": ""
+                                    }
+                                },
+                                "key": "05addd1e-83ac-4c04-8433-e89ba044c1cc"
+                            },
+                            {
+                                "description": "",
+                                "protocol": "17",
+                                "source": "var.kmi_cidr",
+                                "sourceType": "CIDR_BLOCK",
+                                "stateless": false,
+                                "icmpOptions": {
+                                    "code": 0,
+                                    "type": 0
+                                },
+                                "tcpOptions": {
+                                    "max": 0,
+                                    "min": 0,
+                                    "sourcePortRange": {
+                                        "max": 0,
+                                        "min": 0
+                                    }
+                                },
+                                "udpOptions": {
+                                    "max": "8472",
+                                    "min": "8285",
+                                    "sourcePortRange": {
+                                        "max": "",
+                                        "min": ""
+                                    }
+                                },
+                                "key": "7ee656de-d939-4bf3-b454-a2d6abd5e067"
+                            }
+                        ]
+                    },
+                    {
+                        "provider": "oci",
+                        "locked": false,
+                        "terraformResourceName": "OkitSecurityList1713281661978",
+                        "okitReference": "okit-d5d11eb3-9750-4b10-b4f3-a1c19d01adca",
+                        "resourceType": "SecurityList",
+                        "resourceTypeName": "Security List",
+                        "id": "okit.security_list.8b1cde33-93eb-4f69-afd8-a6f87c79d1a5",
+                        "region": "",
+                        "compartmentId": "okit.compartment.c373a27c-dc58-4cde-9dce-db3de0ca8056",
+                        "displayName": "kmilb-seclist",
+                        "documentation": "",
+                        "vcnId": "okit.vcn.81346ca4-8738-446a-861e-76a66333e15f",
+                        "egressSecurityRules": [],
+                        "ingressSecurityRules": [
+                            {
+                                "description": "Allow inbound connections to the control plane load balancer.",
+                                "protocol": "6",
+                                "source": "var.kube_internal_cidr",
+                                "sourceType": "CIDR_BLOCK",
+                                "stateless": false,
+                                "icmpOptions": {
+                                    "code": 0,
+                                    "type": 0
+                                },
+                                "tcpOptions": {
+                                    "max": "6443",
+                                    "min": "6443",
+                                    "sourcePortRange": {
+                                        "max": "",
+                                        "min": ""
+                                    }
+                                },
+                                "udpOptions": {
+                                    "max": 0,
+                                    "min": 0,
+                                    "sourcePortRange": {
+                                        "max": 0,
+                                        "min": 0
+                                    }
+                                },
+                                "key": "27f0ad38-aae1-46ca-848d-00432abed440"
+                            },
+                            {
+                                "description": "Allow inbound connections to the control plane load balancer.",
+                                "protocol": "6",
+                                "source": "var.kube_client_cidr",
+                                "sourceType": "CIDR_BLOCK",
+                                "stateless": false,
+                                "icmpOptions": {
+                                    "code": 0,
+                                    "type": 0
+                                },
+                                "tcpOptions": {
+                                    "max": "6443",
+                                    "min": "6443",
+                                    "sourcePortRange": {
+                                        "max": "",
+                                        "min": ""
+                                    }
+                                },
+                                "udpOptions": {
+                                    "max": 0,
+                                    "min": 0,
+                                    "sourcePortRange": {
+                                        "max": 0,
+                                        "min": 0
+                                    }
+                                },
+                                "key": "9a65a235-0b2c-4547-b412-0bca9d58121a"
+                            },
+                            {
+                                "description": "Allow inbound connections to the control plane load balancer.",
+                                "protocol": "6",
+                                "source": "var.vcn_cidr",
+                                "sourceType": "CIDR_BLOCK",
+                                "stateless": false,
+                                "icmpOptions": {
+                                    "code": 0,
+                                    "type": 0
+                                },
+                                "tcpOptions": {
+                                    "max": "6443",
+                                    "min": "6443",
+                                    "sourcePortRange": {
+                                        "max": "",
+                                        "min": ""
+                                    }
+                                },
+                                "udpOptions": {
+                                    "max": 0,
+                                    "min": 0,
+                                    "sourcePortRange": {
+                                        "max": 0,
+                                        "min": 0
+                                    }
+                                },
+                                "key": "9d3ae5bf-b7d5-49bf-8682-6035ec831ce0"
+                            }
+                        ]
+                    }
+                ],
+                "dhcp_options": [],
+                "subnet": [
+                    {
+                        "provider": "oci",
+                        "locked": false,
+                        "terraformResourceName": "OkitSubnet1710948311499",
+                        "okitReference": "okit-ef14aad8-07ed-4579-b701-0301772c4d18",
+                        "resourceType": "Subnet",
+                        "resourceTypeName": "Subnet",
+                        "id": "okit.subnet.7aed5d41-d55c-475c-8341-a73d81bec49e",
+                        "region": "",
+                        "compartmentId": "okit.compartment.c373a27c-dc58-4cde-9dce-db3de0ca8056",
+                        "displayName": "worker",
+                        "documentation": "",
+                        "availabilityDomain": "1",
+                        "cidrBlock": "var.worker_cidr",
+                        "dhcpOptionsId": "",
+                        "dnsLabel": "worker",
+                        "ipv6cidrBlock": "",
+                        "ipv6cidrBlocks": [],
+                        "prohibitInternetIngress": false,
+                        "prohibitPublicIpOnVnic": true,
+                        "routeTableId": "okit.route_table.e3052a9f-6a9e-4f6c-9a85-2f0ee613f521",
+                        "securityListIds": [
+                            "okit.security_list.99258699-cf5f-429d-b8f2-7d68c094d53e",
+                            "okit.security_list.b1d9b9e4-4b0d-40b4-aee9-f6e2d370be3c"
+                        ],
+                        "vcnId": "okit.vcn.81346ca4-8738-446a-861e-76a66333e15f"
+                    },
+                    {
+                        "provider": "oci",
+                        "locked": false,
+                        "terraformResourceName": "OkitSubnet1710948805387",
+                        "okitReference": "okit-111777cd-4080-4866-b7cc-13666f5733e6",
+                        "resourceType": "Subnet",
+                        "resourceTypeName": "Subnet",
+                        "id": "okit.subnet.a99cad89-a4f6-48bc-891f-6b95467f1e19",
+                        "region": "",
+                        "compartmentId": "okit.compartment.c373a27c-dc58-4cde-9dce-db3de0ca8056",
+                        "displayName": "service-lb",
+                        "documentation": "",
+                        "availabilityDomain": "1",
+                        "cidrBlock": "var.workerlb_cidr",
+                        "dhcpOptionsId": "",
+                        "dnsLabel": "servicelb",
+                        "ipv6cidrBlock": "",
+                        "ipv6cidrBlocks": [],
+                        "prohibitInternetIngress": false,
+                        "prohibitPublicIpOnVnic": false,
+                        "routeTableId": "okit.route_table.72c432b5-408f-4ec2-b5e8-d1fa7f35de15",
+                        "securityListIds": [
+                            "okit.security_list.9cf44b7c-5587-412d-9bf9-c8d04430d909",
+                            "okit.security_list.b1d9b9e4-4b0d-40b4-aee9-f6e2d370be3c"
+                        ],
+                        "vcnId": "okit.vcn.81346ca4-8738-446a-861e-76a66333e15f"
+                    },
+                    {
+                        "provider": "oci",
+                        "locked": false,
+                        "terraformResourceName": "OkitSubnet1710948971616",
+                        "okitReference": "okit-64c515a7-49b6-4ee2-b6c1-0d772a5203e8",
+                        "resourceType": "Subnet",
+                        "resourceTypeName": "Subnet",
+                        "id": "okit.subnet.1b83d3ef-9bd9-4616-a9eb-dc01e5189205",
+                        "region": "",
+                        "compartmentId": "okit.compartment.c373a27c-dc58-4cde-9dce-db3de0ca8056",
+                        "displayName": "control-plane-endpoint",
+                        "documentation": "",
+                        "availabilityDomain": "1",
+                        "cidrBlock": "var.kmilb_cidr",
+                        "dhcpOptionsId": "",
+                        "dnsLabel": "kmilb",
+                        "ipv6cidrBlock": "",
+                        "ipv6cidrBlocks": [],
+                        "prohibitInternetIngress": false,
+                        "prohibitPublicIpOnVnic": false,
+                        "routeTableId": "okit.route_table.72c432b5-408f-4ec2-b5e8-d1fa7f35de15",
+                        "securityListIds": [
+                            "okit.security_list.b1d9b9e4-4b0d-40b4-aee9-f6e2d370be3c",
+                            "okit.security_list.8b1cde33-93eb-4f69-afd8-a6f87c79d1a5"
+                        ],
+                        "vcnId": "okit.vcn.81346ca4-8738-446a-861e-76a66333e15f"
+                    },
+                    {
+                        "provider": "oci",
+                        "locked": false,
+                        "terraformResourceName": "OkitSubnet1710949292204",
+                        "okitReference": "okit-54649cbc-f187-4db4-bb8a-becff4534b58",
+                        "resourceType": "Subnet",
+                        "resourceTypeName": "Subnet",
+                        "id": "okit.subnet.4687def4-a360-4ac8-a3a6-2e1e48f23288",
+                        "region": "",
+                        "compartmentId": "okit.compartment.c373a27c-dc58-4cde-9dce-db3de0ca8056",
+                        "displayName": "control-plane",
+                        "documentation": "",
+                        "availabilityDomain": "1",
+                        "cidrBlock": "var.kmi_cidr",
+                        "dhcpOptionsId": "",
+                        "dnsLabel": "kmi",
+                        "ipv6cidrBlock": "",
+                        "ipv6cidrBlocks": [],
+                        "prohibitInternetIngress": false,
+                        "prohibitPublicIpOnVnic": true,
+                        "routeTableId": "okit.route_table.e3052a9f-6a9e-4f6c-9a85-2f0ee613f521",
+                        "securityListIds": [
+                            "okit.security_list.bcec8ab1-11a5-4b64-b7b7-36c4528a910d",
+                            "okit.security_list.b1d9b9e4-4b0d-40b4-aee9-f6e2d370be3c"
+                        ],
+                        "vcnId": "okit.vcn.81346ca4-8738-446a-861e-76a66333e15f"
+                    }
+                ],
+                "internet_gateway": [
+                    {
+                        "provider": "oci",
+                        "locked": false,
+                        "terraformResourceName": "OkitInternetGateway1710950473668",
+                        "okitReference": "okit-e9526f7c-e8da-4714-adac-3cbb0cd7c052",
+                        "resourceType": "InternetGateway",
+                        "resourceTypeName": "Internet Gateway",
+                        "id": "okit.internet_gateway.8dedbfe4-b80c-4975-80d8-f8229ed6b8b0",
+                        "region": "",
+                        "compartmentId": "okit.compartment.c373a27c-dc58-4cde-9dce-db3de0ca8056",
+                        "displayName": "Internet Gateway cf4a",
+                        "documentation": "",
+                        "enabled": false,
+                        "vcnId": "okit.vcn.81346ca4-8738-446a-861e-76a66333e15f"
+                    }
+                ],
+                "nat_gateway": [
+                    {
+                        "provider": "oci",
+                        "locked": false,
+                        "terraformResourceName": "OkitNatGateway1710950510108",
+                        "okitReference": "okit-7af4f296-f61e-4c73-accf-d663b293dadf",
+                        "resourceType": "NatGateway",
+                        "resourceTypeName": "NAT Gateway",
+                        "id": "okit.nat_gateway.25c19fe1-d06d-4fe8-ad8e-3d166a95ed1e",
+                        "region": "",
+                        "compartmentId": "okit.compartment.c373a27c-dc58-4cde-9dce-db3de0ca8056",
+                        "displayName": "Nat Gateway 8390",
+                        "documentation": "",
+                        "blockTraffic": false,
+                        "vcnId": "okit.vcn.81346ca4-8738-446a-861e-76a66333e15f"
+                    }
+                ],
+                "dynamic_group": [
+                    {
+                        "provider": "oci",
+                        "locked": false,
+                        "terraformResourceName": "OkitDynamicGroup1713431305858",
+                        "okitReference": "okit-6166659f-5cd6-4e4b-8b6a-4470d96de17a",
+                        "resourceType": "DynamicGroup",
+                        "resourceTypeName": "Dynamic Group",
+                        "id": "okit.dynamic_group.be91810e-d732-4ac0-ae6e-f1b700b2677b",
+                        "region": "",
+                        "compartmentId": "okit.compartment.c373a27c-dc58-4cde-9dce-db3de0ca8056",
+                        "displayName": "Dynamic Group bed0",
+                        "documentation": "",
+                        "description": "",
+                        "matchingRule": ""
+                    }
+                ]
+            }
+        }
+    },
+    "view": {
+        "id": "view-a75a9288-50c5-42f0-81b8-37f33120e408",
+        "pages": [
+            {
+                "id": "page-fabb010c-9586-4cbf-928f-e015865988be",
+                "title": "Open Cloud Design",
+                "documentation": "",
+                "layers": [
+                    {
+                        "id": "okit.compartment.c373a27c-dc58-4cde-9dce-db3de0ca8056",
+                        "class": "oci-compartment",
+                        "visible": true,
+                        "selected": true
+                    }
+                ],
+                "coords": [
+                    {
+                        "id": "gid-f5895766-73e7-4e0b-a6a1-b81abcff38c8",
+                        "pgid": "",
+                        "ocid": "okit.vcn.81346ca4-8738-446a-861e-76a66333e15f",
+                        "pocid": "",
+                        "x": 35,
+                        "y": 66,
+                        "w": 1000,
+                        "h": 780,
+                        "title": "Vcn",
+                        "class": "oci-vcn",
+                        "showParentConnection": true,
+                        "showConnections": true,
+                        "container": true,
+                        "coords": [
+                            {
+                                "id": "gid-943dff8a-2342-409b-b7fa-58eb4f9e152d",
+                                "pgid": "gid-f5895766-73e7-4e0b-a6a1-b81abcff38c8",
+                                "ocid": "okit.route_table.72c432b5-408f-4ec2-b5e8-d1fa7f35de15",
+                                "pocid": "okit.vcn.81346ca4-8738-446a-861e-76a66333e15f",
+                                "x": 15,
+                                "y": 176,
+                                "w": 32,
+                                "h": 32,
+                                "title": "Route Table",
+                                "class": "oci-route-table",
+                                "showParentConnection": true,
+                                "showConnections": true,
+                                "container": false
+                            },
+                            {
+                                "id": "gid-2d13ffb1-fa2b-4f88-9db5-3940f97f9d1b",
+                                "pgid": "gid-f5895766-73e7-4e0b-a6a1-b81abcff38c8",
+                                "ocid": "okit.security_list.b1d9b9e4-4b0d-40b4-aee9-f6e2d370be3c",
+                                "pocid": "okit.vcn.81346ca4-8738-446a-861e-76a66333e15f",
+                                "x": 15,
+                                "y": 284,
+                                "w": 32,
+                                "h": 32,
+                                "title": "Security List",
+                                "class": "oci-security-list",
+                                "showParentConnection": true,
+                                "showConnections": true,
+                                "container": false
+                            },
+                            {
+                                "id": "gid-66932511-97e3-4b4d-b402-70d19e5c5528",
+                                "pgid": "gid-f5895766-73e7-4e0b-a6a1-b81abcff38c8",
+                                "ocid": "okit.subnet.7aed5d41-d55c-475c-8341-a73d81bec49e",
+                                "pocid": "okit.vcn.81346ca4-8738-446a-861e-76a66333e15f",
+                                "x": 600,
+                                "y": 410,
+                                "w": 300,
+                                "h": 130,
+                                "title": "Subnet",
+                                "class": "oci-subnet",
+                                "showParentConnection": true,
+                                "showConnections": true,
+                                "container": true
+                            },
+                            {
+                                "id": "gid-5c3300e4-afeb-40eb-ac9e-a79d20c43ff3",
+                                "pgid": "gid-f5895766-73e7-4e0b-a6a1-b81abcff38c8",
+                                "ocid": "okit.subnet.a99cad89-a4f6-48bc-891f-6b95467f1e19",
+                                "pocid": "okit.vcn.81346ca4-8738-446a-861e-76a66333e15f",
+                                "x": 601,
+                                "y": 69,
+                                "w": 300,
+                                "h": 130,
+                                "title": "Subnet",
+                                "class": "oci-subnet",
+                                "showParentConnection": true,
+                                "showConnections": true,
+                                "container": true
+                            },
+                            {
+                                "id": "gid-6bf29949-3f85-4922-a3a7-b04e09adc0ec",
+                                "pgid": "gid-f5895766-73e7-4e0b-a6a1-b81abcff38c8",
+                                "ocid": "okit.subnet.1b83d3ef-9bd9-4616-a9eb-dc01e5189205",
+                                "pocid": "okit.vcn.81346ca4-8738-446a-861e-76a66333e15f",
+                                "x": 600,
+                                "y": 240,
+                                "w": 300,
+                                "h": 130,
+                                "title": "Subnet",
+                                "class": "oci-subnet",
+                                "showParentConnection": true,
+                                "showConnections": true,
+                                "container": true
+                            },
+                            {
+                                "id": "gid-34d7e085-3ca0-4608-8abe-e88b170ba2f1",
+                                "pgid": "gid-f5895766-73e7-4e0b-a6a1-b81abcff38c8",
+                                "ocid": "okit.subnet.4687def4-a360-4ac8-a3a6-2e1e48f23288",
+                                "pocid": "okit.vcn.81346ca4-8738-446a-861e-76a66333e15f",
+                                "x": 600,
+                                "y": 580,
+                                "w": 300,
+                                "h": 130,
+                                "title": "Subnet",
+                                "class": "oci-subnet",
+                                "showParentConnection": true,
+                                "showConnections": true,
+                                "container": true
+                            },
+                            {
+                                "id": "gid-7139517e-8d24-47e9-81e8-aca50e0aec22",
+                                "pgid": "gid-f5895766-73e7-4e0b-a6a1-b81abcff38c8",
+                                "ocid": "okit.internet_gateway.8dedbfe4-b80c-4975-80d8-f8229ed6b8b0",
+                                "pocid": "okit.vcn.81346ca4-8738-446a-861e-76a66333e15f",
+                                "x": 600,
+                                "y": -21,
+                                "w": 32,
+                                "h": 32,
+                                "title": "Internet Gateway",
+                                "class": "oci-internet-gateway",
+                                "showParentConnection": true,
+                                "showConnections": true,
+                                "container": false
+                            },
+                            {
+                                "id": "gid-5e0e3b70-cd99-4142-9ac5-69e49fe57a5a",
+                                "pgid": "gid-f5895766-73e7-4e0b-a6a1-b81abcff38c8",
+                                "ocid": "okit.route_table.e3052a9f-6a9e-4f6c-9a85-2f0ee613f521",
+                                "pocid": "okit.vcn.81346ca4-8738-446a-861e-76a66333e15f",
+                                "x": 15,
+                                "y": 396,
+                                "w": 32,
+                                "h": 32,
+                                "title": "Route Table",
+                                "class": "oci-route-table",
+                                "showParentConnection": true,
+                                "showConnections": true,
+                                "container": false
+                            },
+                            {
+                                "id": "gid-de9b9eb8-236a-454e-86d9-2dcad2ccb5ad",
+                                "pgid": "gid-f5895766-73e7-4e0b-a6a1-b81abcff38c8",
+                                "ocid": "okit.security_list.99258699-cf5f-429d-b8f2-7d68c094d53e",
+                                "pocid": "okit.vcn.81346ca4-8738-446a-861e-76a66333e15f",
+                                "x": 15,
+                                "y": 602,
+                                "w": 32,
+                                "h": 32,
+                                "title": "Security List",
+                                "class": "oci-security-list",
+                                "showParentConnection": true,
+                                "showConnections": true,
+                                "container": false
+                            },
+                            {
+                                "id": "gid-3a049ac0-813b-43a7-b71a-4518d41c630b",
+                                "pgid": "gid-f5895766-73e7-4e0b-a6a1-b81abcff38c8",
+                                "ocid": "okit.nat_gateway.25c19fe1-d06d-4fe8-ad8e-3d166a95ed1e",
+                                "pocid": "okit.vcn.81346ca4-8738-446a-861e-76a66333e15f",
+                                "x": 600,
+                                "y": 759,
+                                "w": 32,
+                                "h": 32,
+                                "title": "NAT Gateway",
+                                "class": "oci-nat-gateway",
+                                "showParentConnection": true,
+                                "showConnections": true,
+                                "container": false
+                            },
+                            {
+                                "id": "gid-74fd4589-4c4f-4d96-bddc-d2ef8f2e5710",
+                                "pgid": "gid-f5895766-73e7-4e0b-a6a1-b81abcff38c8",
+                                "ocid": "okit.security_list.9cf44b7c-5587-412d-9bf9-c8d04430d909",
+                                "pocid": "okit.vcn.81346ca4-8738-446a-861e-76a66333e15f",
+                                "x": 15,
+                                "y": 70,
+                                "w": 32,
+                                "h": 32,
+                                "title": "Security List",
+                                "class": "oci-security-list",
+                                "showParentConnection": true,
+                                "showConnections": true,
+                                "container": false
+                            },
+                            {
+                                "id": "gid-fe064e09-f867-44bf-8f57-188864600d85",
+                                "pgid": "gid-f5895766-73e7-4e0b-a6a1-b81abcff38c8",
+                                "ocid": "okit.security_list.bcec8ab1-11a5-4b64-b7b7-36c4528a910d",
+                                "pocid": "okit.vcn.81346ca4-8738-446a-861e-76a66333e15f",
+                                "x": 15,
+                                "y": 690,
+                                "w": 32,
+                                "h": 32,
+                                "title": "Security List",
+                                "class": "oci-security-list",
+                                "showParentConnection": true,
+                                "showConnections": true,
+                                "container": false
+                            },
+                            {
+                                "id": "gid-7eaa96db-6c96-4ebb-8480-b6d6fba8009d",
+                                "pgid": "gid-f5895766-73e7-4e0b-a6a1-b81abcff38c8",
+                                "ocid": "okit.security_list.8b1cde33-93eb-4f69-afd8-a6f87c79d1a5",
+                                "pocid": "okit.vcn.81346ca4-8738-446a-861e-76a66333e15f",
+                                "x": 15,
+                                "y": 515,
+                                "w": 32,
+                                "h": 32,
+                                "title": "Security List",
+                                "class": "oci-security-list",
+                                "showParentConnection": true,
+                                "showConnections": true,
+                                "container": false
+                            }
+                        ]
+                    }
+                ],
+                "connectors": [],
+                "selected": true,
+                "grid": false,
+                "transform": [
+                    1,
+                    0,
+                    0,
+                    1,
+                    0,
+                    0
+                ]
+            },
+            {
+                "id": "page-5eb2e280-b64d-4bb8-8eba-25da30cba7d0",
+                "title": "Connections",
+                "documentation": "",
+                "layers": [
+                    {
+                        "id": "okit.compartment.c373a27c-dc58-4cde-9dce-db3de0ca8056",
+                        "class": "oci-compartment",
+                        "visible": true,
+                        "selected": true
+                    }
+                ],
+                "coords": [
+                    {
+                        "id": "gid-17609578-1d73-4a4b-af72-eeae53c156eb",
+                        "pgid": "",
+                        "ocid": "okit.vcn.81346ca4-8738-446a-861e-76a66333e15f",
+                        "pocid": "",
+                        "x": 65,
+                        "y": 400,
+                        "w": 300,
+                        "h": 300,
+                        "title": "Vcn",
+                        "class": "oci-vcn",
+                        "showParentConnection": true,
+                        "showConnections": true,
+                        "container": true,
+                        "detailsStyle": "detailed"
+                    },
+                    {
+                        "id": "gid-1e2bcd1e-6023-4875-bc99-597b932eb981",
+                        "pgid": "",
+                        "ocid": "okit.subnet.a99cad89-a4f6-48bc-891f-6b95467f1e19",
+                        "pocid": "",
+                        "x": 854,
+                        "y": 161,
+                        "w": 300,
+                        "h": 300,
+                        "title": "Subnet",
+                        "class": "oci-subnet",
+                        "showParentConnection": true,
+                        "showConnections": true,
+                        "container": true,
+                        "detailsStyle": "detailed"
+                    },
+                    {
+                        "id": "gid-a8681d82-ad48-46ac-b307-fc53147800fb",
+                        "pgid": "",
+                        "ocid": "okit.subnet.7aed5d41-d55c-475c-8341-a73d81bec49e",
+                        "pocid": "",
+                        "x": 849,
+                        "y": 606,
+                        "w": 300,
+                        "h": 300,
+                        "title": "Subnet",
+                        "class": "oci-subnet",
+                        "showParentConnection": true,
+                        "showConnections": true,
+                        "container": true,
+                        "detailsStyle": "detailed"
+                    },
+                    {
+                        "id": "gid-bc238a23-fe71-45b1-bdd5-170a6a05af6c",
+                        "pgid": "",
+                        "ocid": "okit.subnet.1b83d3ef-9bd9-4616-a9eb-dc01e5189205",
+                        "pocid": "",
+                        "x": 856,
+                        "y": 318,
+                        "w": 300,
+                        "h": 300,
+                        "title": "Subnet",
+                        "class": "oci-subnet",
+                        "showParentConnection": true,
+                        "showConnections": true,
+                        "container": true,
+                        "detailsStyle": "detailed"
+                    },
+                    {
+                        "id": "gid-223438ed-cdde-45f1-9a0a-6e099b96f676",
+                        "pgid": "",
+                        "ocid": "okit.subnet.4687def4-a360-4ac8-a3a6-2e1e48f23288",
+                        "pocid": "",
+                        "x": 854,
+                        "y": 455,
+                        "w": 300,
+                        "h": 300,
+                        "title": "Subnet",
+                        "class": "oci-subnet",
+                        "showParentConnection": true,
+                        "showConnections": true,
+                        "container": true,
+                        "detailsStyle": "detailed"
+                    },
+                    {
+                        "id": "gid-fd755419-9ced-4f41-b5ad-30717ac2f6f6",
+                        "pgid": "",
+                        "ocid": "okit.route_table.72c432b5-408f-4ec2-b5e8-d1fa7f35de15",
+                        "pocid": "",
+                        "x": 414,
+                        "y": 109,
+                        "w": 32,
+                        "h": 32,
+                        "title": "Route Table",
+                        "class": "oci-route-table",
+                        "showParentConnection": true,
+                        "showConnections": true,
+                        "container": false
+                    },
+                    {
+                        "id": "gid-121fa94d-8629-40f2-ba4a-9a87ce25ca91",
+                        "pgid": "",
+                        "ocid": "okit.route_table.e3052a9f-6a9e-4f6c-9a85-2f0ee613f521",
+                        "pocid": "",
+                        "x": 396,
+                        "y": 663,
+                        "w": 32,
+                        "h": 32,
+                        "title": "Route Table",
+                        "class": "oci-route-table",
+                        "showParentConnection": true,
+                        "showConnections": true,
+                        "container": false
+                    }
+                ],
+                "connectors": [],
+                "selected": false,
+                "grid": false,
+                "transform": [
+                    1,
+                    0,
+                    0,
+                    1,
+                    0,
+                    0
+                ]
+            },
+            {
+                "id": "page-3151e201-155b-4114-b477-fb8e9b79a173",
+                "title": "Identity",
+                "documentation": "",
+                "layers": [
+                    {
+                        "id": "okit.compartment.c373a27c-dc58-4cde-9dce-db3de0ca8056",
+                        "class": "oci-compartment",
+                        "visible": true,
+                        "selected": true
+                    }
+                ],
+                "coords": [
+                    {
+                        "id": "gid-83e4c609-bee0-4aff-836b-892759d60f5d",
+                        "pgid": "",
+                        "ocid": "okit.dynamic_group.be91810e-d732-4ac0-ae6e-f1b700b2677b",
+                        "pocid": "",
+                        "x": 52,
+                        "y": 45,
+                        "w": 32,
+                        "h": 32,
+                        "title": "Dynamic Group",
+                        "class": "oci-dynamic-group",
+                        "showParentConnection": true,
+                        "showConnections": true,
+                        "container": false
+                    }
+                ],
+                "connectors": [],
+                "selected": false,
+                "grid": false,
+                "transform": [
+                    1,
+                    0,
+                    0,
+                    1,
+                    0,
+                    0
+                ]
+            }
+        ]
+    },
+    "userDefined": {}
+}

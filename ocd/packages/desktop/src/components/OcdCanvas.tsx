@@ -172,7 +172,8 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
             // Redraw
             console.info('OcdCanvas: Design:', ocdDocument.design)
             setOcdDocument(OcdDocument.clone(ocdDocument))
-            if (!activeFile.modified) setActiveFile({name: activeFile.name, modified: true})
+            if (!activeFile.modified) activeFile.modified = true
+            // if (!activeFile.modified) setActiveFile({name: activeFile.name, modified: true})
         }
         return false
     }

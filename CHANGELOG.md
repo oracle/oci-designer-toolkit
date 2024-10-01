@@ -18,6 +18,7 @@
 13. Write Google Markdown Generator. (#OKIT-288)
 14. Write Google Validator Generator. (#OKIT-289)
 15. Write Google Tabular Generator. (#OKIT-290)
+16. Create Library View which will allow users to select pre-defined Reference Architectures. (#OKIT-304)
 ### Bug Fixes
 1. OKIT-Web: Resolve issue where save dialog did not display existing content (#717)
 2. OKIT-Web: Fix for underlying AuthLib api change.

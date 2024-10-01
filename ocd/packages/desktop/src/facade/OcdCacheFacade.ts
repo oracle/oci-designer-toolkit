@@ -11,9 +11,9 @@ import { OcdCache } from "../components/OcdCache"
 
 export namespace OcdCacheFacade {
     export const loadCache = (): Promise<any> => {
-        return window.ocdAPI ? window.ocdAPI.loadCache() : new Promise((resolve, reject) => {reject('Load Cache Config: Currently Not Implemented')})
+        return window.ocdAPI ? window.ocdAPI.loadCache() : Promise.reject(new Error('Currently Not Implemented'))
     }
     export const saveCache = (cache: OcdCache): Promise<any> => {
-        return window.ocdAPI ? window.ocdAPI.saveCache(cache) : new Promise((resolve, reject) => {reject('Save Cache Config: Currently Not Implemented')})
+        return window.ocdAPI ? window.ocdAPI.saveCache(cache) : Promise.reject(new Error('Currently Not Implemented'))
     }
 }

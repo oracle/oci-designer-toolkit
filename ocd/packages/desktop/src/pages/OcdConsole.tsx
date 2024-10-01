@@ -3,7 +3,7 @@
 ** Licensed under the GNU GENERAL PUBLIC LICENSE v 3.0 as shown at https://www.gnu.org/licenses/.
 */
 
-import React, { createContext, useContext, useEffect, useRef, useState } from 'react'
+import React, { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { OcdDesigner, OcdDesignerLeftToolbar, OcdDesignerRightToolbar } from './OcdDesigner'
 import { OcdDocument } from '../components/OcdDocument'
 import OcdConsoleMenuBar from '../components/OcdConsoleMenuBar'
@@ -44,11 +44,19 @@ export const DragResourceContext = createContext<OcdDragResourceContext>({dragRe
 
 const OcdConsole = (): JSX.Element => {
     // console.debug('OcdConsole: CSS', svgThemeCss)
+    // State Variables
     const [ocdDocument, setOcdDocument] = useState(OcdDocument.new())
     const [ocdConsoleConfig, setOcdConsoleConfig] = useState(OcdConsoleConfig.new())
     const [ocdCache, setOcdCache] = useState(OcdCacheData.new())
     const [activeFile, setActiveFile] = useState({name: '', modified: false})
     const [selectedResource, setSelectedResource] = useState({} as OcdSelectedResource)
+    // Memo Hooks
+    const activeFileContext = useMemo(() => ({activeFile, setActiveFile}), [activeFile])
+    const cacheContext = useMemo(() => ({ocdCache, setOcdCache}), [ocdCache])
+    const consoleConfigContext = useMemo(() => ({ocdConsoleConfig, setOcdConsoleConfig}), [ocdConsoleConfig])
+    const documentContext = useMemo(() => ({ocdDocument, setOcdDocument}), [ocdDocument])
+    const selectedResourceContext = useMemo(() => ({selectedResource, setSelectedResource}), [selectedResource])
+    // Effect Hooks
     useEffect(() => {
         OcdConfigFacade.loadConsoleConfig().then((results) => {
             console.debug('OcdConsole: Load Console Config', results)
@@ -106,11 +114,11 @@ const OcdConsole = (): JSX.Element => {
         setOcdCache(cacheData)
     }
     return (
-        <ConsoleConfigContext.Provider value={{ocdConsoleConfig, setOcdConsoleConfig}}>
-            <ActiveFileContext.Provider value={{activeFile, setActiveFile}}>
-                <CacheContext.Provider value={{ocdCache, setOcdCache}}>
-                    <DocumentContext.Provider value={{ocdDocument, setOcdDocument}}>
-                        <SelectedResourceContext.Provider value={{selectedResource, setSelectedResource}}>
+        <ConsoleConfigContext.Provider value={consoleConfigContext}>
+            <ActiveFileContext.Provider value={activeFileContext}>
+                <CacheContext.Provider value={cacheContext}>
+                    <DocumentContext.Provider value={documentContext}>
+                        <SelectedResourceContext.Provider value={selectedResourceContext}>
                             <div className='ocd-console'>
                                 <OcdConsoleHeader ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
                                 <OcdConsoleToolbar ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
@@ -172,7 +180,7 @@ const OcdConsoleSettingsEditor = ({ ocdConsoleConfig, setOcdConsoleConfig }: any
     return (
         <div className='ocd-console-toolbar-dropdown ocd-console-toolbar-dropdown-theme ocd-toolbar-separator-right'>
             <ul>
-                <li className='ocd-console-toolbar-dropdown-item' onClick={toggleDropdown}>
+                <li className='ocd-console-toolbar-dropdown-item' onClick={toggleDropdown} aria-hidden>
                     <div className='settings ocd-console-toolbar-icon'></div>
                     <ul className={`${dropdown ? 'show' : 'hidden'}`}>
                         <li className='ocd-dropdown-menu-item'><div><label><input id='showPreviousViewOnStart' type='checkbox' onChange={showPreviousViewOnStartOnChange} ref={cbRef} checked={ocdConsoleConfig.config.showPreviousViewOnStart}/>Show Previous View On Start</label></div></li>
@@ -229,7 +237,7 @@ const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument,
                         ocdDocument={ocdDocument} 
                         setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} 
                         />}
-                    <div className={validateClassName} title={validateTitle} onClick={onValidateClick}></div>
+                    <div className={validateClassName} title={validateTitle} onClick={onValidateClick} aria-hidden></div>
                     {/* <div className='cost-estimate ocd-console-toolbar-icon' onClick={onEstimateClick}></div> */}
                 </div>
             </div>

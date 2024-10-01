@@ -11,9 +11,9 @@ import { OcdConsoleConfiguration } from "../components/OcdConsoleConfiguration"
 
 export namespace OcdConfigFacade {
     export const loadConsoleConfig = (): Promise<any> => {
-        return window.ocdAPI ? window.ocdAPI.loadConsoleConfig() : new Promise((resolve, reject) => {reject('Load Console Config: Currently Not Implemented')})
+        return window.ocdAPI ? window.ocdAPI.loadConsoleConfig() : Promise.reject(new Error('Currently Not Implemented'))
     }
     export const saveConsoleConfig = (config: OcdConsoleConfiguration): Promise<any> => {
-        return window.ocdAPI ? window.ocdAPI.saveConsoleConfig(config) : new Promise((resolve, reject) => {reject('Save Console Config: Currently Not Implemented')})
+        return window.ocdAPI ? window.ocdAPI.saveConsoleConfig(config) : Promise.reject(new Error('Currently Not Implemented'))
     }
 }
