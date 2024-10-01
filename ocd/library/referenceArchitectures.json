@@ -10,6 +10,13 @@
     "azure": [],
     "google": [],
     "aws": [],
-    "pca": [],
+    "pca": [
+        {
+            "title": "OKE Networking",
+            "description": "OKE networking infrastructure for the PCA.",
+            "okitFile": "OKENetworkInfrastructure.okit",
+            "svgFile": "OKENetworkInfrastructure.svg"
+        }
+    ],
     "c3": []
 }
