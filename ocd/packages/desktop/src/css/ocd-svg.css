@@ -85,8 +85,8 @@ svg {
 }
 
 .ocd-svg-simple {
-    width: var(--svg-icon-width);
-    height: var(--svg-icon-height);
+    /* width: var(--svg-icon-width);
+    height: var(--svg-icon-height); */
     stroke: var(--svg-simple-resource-stroke);
     stroke-width: var(--svg-simple-resource-stroke-width);
     stroke-dasharray: var(--svg-simple-resource-stroke-dasharray);
@@ -102,10 +102,12 @@ svg {
 
 .ocd-svg-resource-simple {
     width: var(--svg-resource-simple-width);
+    height: var(--svg-icon-height);
 }
 
 .ocd-svg-resource-detailed {
     width: var(--svg-resource-detailed-width);
+    height: var(--svg-icon-height);
 }
 
 .ocd-svg-resource-container {
