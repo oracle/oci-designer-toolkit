@@ -9,24 +9,24 @@
 
 export namespace OciApiFacade {
     export const getVersion = (): Promise<any> => {
-        return window.ocdAPI ? window.ocdAPI.getVersion() : new Promise((resolve, reject) => {reject('Currently Not Implemented')})
+        return window.ocdAPI ? window.ocdAPI.getVersion() : Promise.reject('Currently Not Implemented')
     }
     export const loadOCIConfigProfileNames = (): Promise<any> => {
-        return window.ocdAPI ? window.ocdAPI.loadOCIConfigProfileNames() : new Promise((resolve, reject) => {reject('Currently Not Implemented')})
+        return window.ocdAPI ? window.ocdAPI.loadOCIConfigProfileNames() : Promise.reject('Currently Not Implemented')
     }
     export const loadOCIConfigProfile = (profile: string = 'shipped'): Promise<any> => {
-        return window.ocdAPI ? window.ocdAPI.loadOCIConfigProfile(profile) : new Promise((resolve, reject) => {reject('Currently Not Implemented')})
+        return window.ocdAPI ? window.ocdAPI.loadOCIConfigProfile(profile) : Promise.reject('Currently Not Implemented')
     }
     export const listRegions = (profile: string = 'DEFAULT'): Promise<any> => {
-        return window.ocdAPI ? window.ocdAPI.listRegions(profile) : new Promise((resolve, reject) => {reject('Currently Not Implemented')})
+        return window.ocdAPI ? window.ocdAPI.listRegions(profile) : Promise.reject('Currently Not Implemented')
     }
     export const listTenancyCompartments = (profile: string = 'DEFAULT'): Promise<any> => {
-        return window.ocdAPI ? window.ocdAPI.listTenancyCompartments(profile) : new Promise((resolve, reject) => {reject('Currently Not Implemented')})
+        return window.ocdAPI ? window.ocdAPI.listTenancyCompartments(profile) : Promise.reject('Currently Not Implemented')
     }
     export const queryTenancy = (profile: string = 'DEFAULT', compartmentIds: string[] = [], region: string): Promise<any> => {
-        return window.ocdAPI ? window.ocdAPI.queryTenancy(profile, compartmentIds, region) : new Promise((resolve, reject) => {reject('Currently Not Implemented')})
+        return window.ocdAPI ? window.ocdAPI.queryTenancy(profile, compartmentIds, region) : Promise.reject('Currently Not Implemented')
     }
     export const queryDropdown = (profile: string = 'DEFAULT', region: string): Promise<any> => {
-        return window.ocdAPI ? window.ocdAPI.queryDropdown(profile, region) : new Promise((resolve, reject) => {reject('Currently Not Implemented')})
+        return window.ocdAPI ? window.ocdAPI.queryDropdown(profile, region) : Promise.reject('Currently Not Implemented')
     }
 }

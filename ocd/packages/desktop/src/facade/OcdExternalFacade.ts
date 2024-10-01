@@ -5,6 +5,6 @@
 
 export namespace OcdExternalFacade {
     export const openExternalUrl = (href: string): Promise<any> => {
-        return window.ocdAPI ? window.ocdAPI.openExternalUrl(href) : new Promise((resolve, reject) => {reject('Currently Not Implemented')})
+        return window.ocdAPI ? window.ocdAPI.openExternalUrl(href) : Promise.reject('Currently Not Implemented')
     }
 }
