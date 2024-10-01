@@ -85,8 +85,6 @@ svg {
 }
 
 .ocd-svg-simple {
-    /* width: var(--svg-icon-width);
-    height: var(--svg-icon-height); */
     stroke: var(--svg-simple-resource-stroke);
     stroke-width: var(--svg-simple-resource-stroke-width);
     stroke-dasharray: var(--svg-simple-resource-stroke-dasharray);
