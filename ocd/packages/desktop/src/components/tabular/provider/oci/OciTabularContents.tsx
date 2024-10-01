@@ -110,17 +110,17 @@ export const OcdTabularHeader = ({columnTitles, ociResources, resourceElements, 
     return (
         <div className='tr' key={`${selected}-tabular-header-row`}>
             <div className='th'>{ociResources[selected].length}</div>
-            <div className={`th ocd-sortable-column ${sortColumn === 'displayName' ? sortAscending ? ascClasses : dscClasses : ''}`} onClick={() => onSortClick('displayName')} key={`${selected}-tabular-header-row-displayName`}>Name</div>
-            <div className={`th ocd-sortable-column ${sortColumn === 'compartmentId' ? sortAscending ? ascClasses : dscClasses : ''}`} onClick={() => onSortClick('compartmentId')} key={`${selected}-tabular-header-row-compartmentId`}>Compartment</div>
+            <div className={`th ocd-sortable-column ${sortColumn === 'displayName' ? sortAscending ? ascClasses : dscClasses : ''}`} onClick={() => onSortClick('displayName')} aria-hidden key={`${selected}-tabular-header-row-displayName`}>Name</div>
+            <div className={`th ocd-sortable-column ${sortColumn === 'compartmentId' ? sortAscending ? ascClasses : dscClasses : ''}`} onClick={() => onSortClick('compartmentId')} aria-hidden key={`${selected}-tabular-header-row-compartmentId`}>Compartment</div>
             {displayColumns.map((title: string, i: number) => {return <div className={`th ocd-sortable-column ${sortColumn === resourceElements[i] ? sortAscending ? ascClasses : dscClasses : ''}`} onClick={() => onSortClick(resourceElements[i])} key={`${selected}-tabular-header-row-${OcdUtils.toUnderscoreCase(title)}`}>{title}</div>})}
             <div className={`th-menu ocd-console-three-dot-menu-icon`}>
                 <div className='ocd-console-toolbar-dropdown ocd-console-toolbar-dropdown-theme'>
                     <ul>
-                        <li className='ocd-console-toolbar-dropdown-item' onClick={onToggleMenuClick}>
+                        <li className='ocd-console-toolbar-dropdown-item' onClick={onToggleMenuClick} aria-hidden>
                             <div className='three-dot-menu ocd-console-three-dot-menu-icon'></div>
                             {menuVisible && <ul className={'show slide-down slide-right'}>
                                 {/* <li className='ocd-dropdown-menu-item ocd-mouseover-highlight'><label onClick={onToggleColumnClick}><input type="checkbox" onChange={onToggleColumnChange}/>Name</label></li> */}
-                                {columnTitles.map((title: string, i: number) => {return <li className='ocd-dropdown-menu-item ocd-mouseover-highlight' key={`${selected}-${title.split(' ').join('')}`} onClick={onToggleColumnClick}><label><input id={title} type="checkbox" onChange={onToggleColumnChange} checked={displayColumns.includes(title)}/>{title}</label></li>})}
+                                {columnTitles.map((title: string, i: number) => {return <li className='ocd-dropdown-menu-item ocd-mouseover-highlight' key={`${selected}-${title.split(' ').join('')}`} onClick={onToggleColumnClick} aria-hidden><label><input id={title} type="checkbox" onChange={onToggleColumnChange} checked={displayColumns.includes(title)}/>{title}</label></li>})}
                             </ul>}
                         </li>
                     </ul>
