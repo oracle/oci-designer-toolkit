@@ -147,12 +147,17 @@ export const OcdTabularRow = ({ocdDocument, ociResources, index, resource, resou
     const isElementId = (name: string) => name ? name.endsWith('Id') : false
     const isElementIdList = (name: string) => name ? name.endsWith('Ids') : false
     console.debug('OcdTabularRow: Selected', selected)
+    const cellData = (element: string): string => {
+        if (isElementId(element)) return getReferenceDisplayName(resource[element])
+        else if (isElementIdList(element)) return getReferenceListDisplayNames(resource[element])
+        else return String(resource[element])
+    }
     return (
         <div className='tr' key={`tabular-${resource.id}`}>
             <div className='td'>{index + 1}</div><div className='td'>{resource.displayName}</div>
             <div className='td'>{getReferenceDisplayName(resource.compartmentId)}</div>
             {/* <div className='td'>{ocdDocument.getResource(r.compartmentId) ? ocdDocument.getResource(r.compartmentId).displayName : ''}</div> */}
-            {resourceElements.map((element) => {return <div className='td' key={`tabular-${resource.id}-${element}`}>{isElementId(element) ? getReferenceDisplayName(resource[element]) : isElementIdList(element) ? getReferenceListDisplayNames(resource[element]) : String(resource[element])}</div>})}
+            {resourceElements.map((element) => {return <div className='td' key={`tabular-${resource.id}-${element}`}>{cellData(element)}</div>})}
             <div className="td"></div>
         </div>
     )
