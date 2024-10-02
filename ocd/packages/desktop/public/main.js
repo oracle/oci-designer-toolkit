@@ -538,8 +538,9 @@ async function handleOpenExternalUrl(event, href) {
 }
 
 // Library / Reference Architecture Functions
-const libraryUrl = 'https://raw.githubusercontent.com/oracle/oci-designer-toolkit/refs/heads/master/ocd/library'
-// const libraryUrl = 'https://raw.githubusercontent.com/oracle/oci-designer-toolkit/refs/heads/toxophilist/sprint-dev/ocd/library'
+const prodLibraryUrl = 'https://raw.githubusercontent.com/oracle/oci-designer-toolkit/refs/heads/master/ocd/library'
+const devLibraryUrl = 'https://raw.githubusercontent.com/oracle/oci-designer-toolkit/refs/heads/toxophilist/sprint-dev/ocd/library'
+const libraryUrl = process.env.OCD_DEV ? devLibraryUrl : prodLibraryUrl
 const libraryFile = 'referenceArchitectures.json'
 
 async function handleLoadLibraryIndex(event) {
@@ -558,7 +559,8 @@ async function handleLoadLibraryIndex(event) {
 		}).then((data) => {
             // console.debug('Electron Main: handleLoadLibraryIndex: Fetch Data', data)
 			const libraryIndex = JSON.parse(data)
-			const sectionQueries = [getLibrarySectionSvg(libraryIndex, 'oci')]
+			// const sectionQueries = [getLibrarySectionSvg(libraryIndex, 'oci')]
+			const sectionQueries = Object.keys(libraryIndex).map((k) => getLibrarySectionSvg(libraryIndex, k))
 			Promise.allSettled(sectionQueries).then((results) => {
 				// console.debug('Electron Main: handleLoadLibraryIndex: Section Query Results', results)
 				resolve(libraryIndex)
@@ -578,7 +580,7 @@ function getLibrarySectionSvg(libraryIndex, section) {
 		const svgUrls = svgRequests.map((request) => fetch(request))
 		Promise.allSettled(svgUrls).then((results) => Promise.allSettled(results.map((r) => r.value.text()))).then((svg) => {
 			svg.forEach((r, i) => {
-				console.debug('Electron Main: getLibrarySectionSvg: Svg Query Results', r.status)
+				console.debug('Electron Main: getLibrarySectionSvg: Svg Query Results', section, r.status)
 				// console.debug('Electron Main: getLibrarySectionSvg: Svg Query Results', r.value)
 				librarySection[i].dataUri = `data:image/svg+xml,${encodeURIComponent(r.value)}`
 				// librarySection[i].dataUri = `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(r.value)))}`
