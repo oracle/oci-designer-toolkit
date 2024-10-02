@@ -15,6 +15,9 @@ const common = require ('oci-common')
 const { OciQuery, OciReferenceDataQuery } = require('@ocd/query')
 const { unescape } = require("querystring")
 
+const isDev = process.env.OCD_DEV != undefined;
+const isPreview = process.env.OCD_PREVIEW != undefined;
+
 // if (require('electron-squirrel-startup')) app.quit()
 const ocdConfigDirectory = path.join(app.getPath('home'), '.ocd')
 const ocdConsoleConfigFilename = path.join(ocdConfigDirectory, 'console_config.json')
@@ -540,7 +543,7 @@ async function handleOpenExternalUrl(event, href) {
 // Library / Reference Architecture Functions
 const prodLibraryUrl = 'https://raw.githubusercontent.com/oracle/oci-designer-toolkit/refs/heads/master/ocd/library'
 const devLibraryUrl = 'https://raw.githubusercontent.com/oracle/oci-designer-toolkit/refs/heads/toxophilist/sprint-dev/ocd/library'
-const libraryUrl = process.env.OCD_DEV ? devLibraryUrl : prodLibraryUrl
+const libraryUrl = isDev || isPreview ? devLibraryUrl : prodLibraryUrl
 const libraryFile = 'referenceArchitectures.json'
 
 async function handleLoadLibraryIndex(event) {
