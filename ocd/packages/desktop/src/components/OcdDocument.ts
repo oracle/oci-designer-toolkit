@@ -241,7 +241,7 @@ export class OcdDocument {
         const allCoords = this.getAllCoords()
         allCoords.filter(c => c.ocid === id).forEach((c) => {
             const parent = this.getCoords(c.pgid)
-            if (parent && parent.coords) parent.coords = parent.coords.filter(c => c.ocid !== id)
+            if (parent?.coords) parent.coords = parent.coords.filter(c => c.ocid !== id)
         })
     }
     cloneResource(id: string) {
