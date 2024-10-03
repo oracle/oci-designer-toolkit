@@ -76,9 +76,9 @@ const OcdCanvasLayer = ({ ocdDocument, setOcdDocument, layer } : LayerBarLayerPr
     return (
         <div className={`ocd-designer-canvas-layer ${layer.selected ? 'ocd-layer-selected' : ''}`} style={style}>
             <div className={`ocd-layer-visiblity-icon ${layer.visible ? 'eye-show' : 'eye-hide'}`}
-                onClick={() => onVisibilityClick()}
+                onClick={() => onVisibilityClick()} aria-hidden
             ></div>
-            <div className={`ocd-canvas-layer-name ${layer.class}`} onClick={() => onLayerSelectedClick()}>
+            <div className={`ocd-canvas-layer-name ${layer.class}`} onClick={() => onLayerSelectedClick()} aria-hidden>
                 <input id={layer.id.replace(/\W+/g, "")} type='text' value={title} onChange={onChange} tabIndex={-1}></input>
             </div>
             {page.layers.length > 1 && <div className={`ocd-layer-visiblity-icon delete-layer`}
@@ -127,7 +127,7 @@ const OcdCanvasLayers = ({ ocdDocument, setOcdDocument }: LayerBarLayersProps): 
                     })}
                 </div>
                 <div className='ocd-add-layer ocd-layer-icon add-plus'
-                    onClick={() => onClickAddLayer()}
+                    onClick={() => onClickAddLayer()} aria-hidden
                 ></div>
         </div>
     )
@@ -183,11 +183,11 @@ const OcdLayersThreeDotMenu = ({ocdDocument, setOcdDocument}: LayerBarMenuProps)
     return (
         <div className='ocd-console-toolbar-dropdown ocd-console-toolbar-dropdown-theme'>
             <ul>
-                <li className='ocd-console-toolbar-dropdown-item' onClick={onToggleMenuClick}>
+                <li className='ocd-console-toolbar-dropdown-item' onClick={onToggleMenuClick} aria-hidden>
                     <div className='three-dot-menu ocd-console-toolbar-icon'></div>
                     <ul className={`${menuVisible ? 'show slide-down' : 'hidden'}`}>
-                        {page.layers.length > 1 && <li className='ocd-dropdown-menu-item ocd-mouseover-highlight'><div  onClick={onDeleteLayerClick}>Delete "{selectedLayerName}"</div></li>}
-                        <li className='ocd-dropdown-menu-item ocd-mouseover-highlight'><div  onClick={onAddLayerClick}>Add Layer</div></li>
+                        {page.layers.length > 1 && <li className='ocd-dropdown-menu-item ocd-mouseover-highlight'><div onClick={onDeleteLayerClick} aria-hidden>Delete "{selectedLayerName}"</div></li>}
+                        <li className='ocd-dropdown-menu-item ocd-mouseover-highlight'><div onClick={onAddLayerClick} aria-hidden>Add Layer</div></li>
                     </ul>
                 </li>
             </ul>

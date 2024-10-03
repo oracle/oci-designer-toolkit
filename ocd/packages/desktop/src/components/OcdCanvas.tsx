@@ -408,6 +408,7 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
             onDrop={(e) => onDrop(e)}
             onDragLeave={(e) => onDragLeave()}
             onDragOver={(e) => onDragOver(e)}
+            aria-hidden
             >
             <svg className='ocd-designer-canvas-svg'
                 id='canvas_root_svg' 
