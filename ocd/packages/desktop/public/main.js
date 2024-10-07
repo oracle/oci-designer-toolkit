@@ -15,8 +15,8 @@ const common = require ('oci-common')
 const { OciQuery, OciReferenceDataQuery } = require('@ocd/query')
 const { unescape } = require("querystring")
 
-const isDev = process.env.OCD_DEV != undefined;
-const isPreview = process.env.OCD_PREVIEW != undefined;
+const isDev = process.env.OCD_DEV === 'true';
+const isPreview = process.env.OCD_PREVIEW === 'true';
 
 // if (require('electron-squirrel-startup')) app.quit()
 const ocdConfigDirectory = path.join(app.getPath('home'), '.ocd')
