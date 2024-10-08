@@ -4,7 +4,7 @@
 */
 
 import { parseArgs } from "node:util"
-import { OcdBuildDateGenerator } from '@ocd/codegen'
+import { OcdSvgCssGenerator } from '@ocd/codegen'
 
 const options: Record<string, any> = {
     schema: {
@@ -40,7 +40,7 @@ console.info('')
 
 // Read command as first argument
 const outputDirectory = args.values.destination as string
-const packageJsonFilename = args.values.package as string
+const inputDirectory = args.values.input as string
 const force = true
-const generator = new OcdBuildDateGenerator()
-generator.writeFiles(outputDirectory, packageJsonFilename, force)
+const generator = new OcdSvgCssGenerator()
+generator.writeFiles(outputDirectory, inputDirectory, force)

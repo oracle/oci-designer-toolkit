@@ -34,4 +34,5 @@ export { OcdCodeGenerator } from "./generator/OcdCodeGenerator"
 // export { OcdTabularGenerator } from "./generator/OcdTabularPageGenerator"
 
 export { OcdBuildDateGenerator } from "./generator/OcdBuildDateGenerator"
+export { OcdSvgCssGenerator } from "./generator/OcdSvgCssGenerator"
 export { OcdTerraformSchemaResourceAttributesGenerator } from "./importer/OcdTerraformSchemaResourceAttributesGenerator"
