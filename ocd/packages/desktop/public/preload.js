@@ -22,6 +22,7 @@ contextBridge.exposeInMainWorld('ocdAPI', {
   exportTerraform: (design, directory) => ipcRenderer.invoke('ocdDesign:exportTerraform', design, directory),
   loadLibraryIndex: () => ipcRenderer.invoke('ocdDesign:loadLibraryIndex'),
   loadLibraryDesign: (section, filename) => ipcRenderer.invoke('ocdDesign:loadLibraryDesign', section, filename),
+  loadSvgCssFiles: () => ipcRenderer.invoke('ocdDesign:loadSvgCssFiles'),
   // OCD Configuration
   loadConsoleConfig: () => ipcRenderer.invoke('ocdConfig:loadConsoleConfig'),
   saveConsoleConfig: (config) => ipcRenderer.invoke('ocdConfig:saveConsoleConfig', config),

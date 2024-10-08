@@ -15,8 +15,10 @@ const common = require ('oci-common')
 const { OciQuery, OciReferenceDataQuery } = require('@ocd/query')
 const { unescape } = require("querystring")
 
+// Get Environment information
 const isDev = process.env.OCD_DEV === 'true';
 const isPreview = process.env.OCD_PREVIEW === 'true';
+const isMac = process.platform === 'darwin'
 
 // if (require('electron-squirrel-startup')) app.quit()
 const ocdConfigDirectory = path.join(app.getPath('home'), '.ocd')
@@ -48,8 +50,6 @@ let mainWindow = undefined
 let activeFile = undefined
 let filePath = undefined
 let ready = false
-
-const isMac = process.platform === 'darwin'
 
 // Add Menu
 const template = [
@@ -245,6 +245,7 @@ app.whenReady().then(() => {
 	ipcMain.handle('ocdDesign:exportTerraform', handleExportTerraform)
 	ipcMain.handle('ocdDesign:loadLibraryIndex', handleLoadLibraryIndex)
 	ipcMain.handle('ocdDesign:loadLibraryDesign', handleLoadLibraryDesign)
+	ipcMain.handle('ocdDesign:loadSvgCssFiles', handleLoadSvgCssFiles)
 	// OCD Configuration
 	ipcMain.handle('ocdConfig:loadConsoleConfig', handleLoadConsoleConfig)
 	ipcMain.handle('ocdConfig:saveConsoleConfig', handleSaveConsoleConfig)
@@ -617,4 +618,8 @@ async function handleLoadLibraryDesign(event, section, filename) {
 			reject(err)
 		})
 	})
+}
+
+async function handleLoadSvgCssFiles() {
+	return Promise.reject(new Error('Not Implemented'))
 }

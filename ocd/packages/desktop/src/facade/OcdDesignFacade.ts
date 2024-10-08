@@ -30,4 +30,7 @@ export namespace OcdDesignFacade {
     export const loadLibraryDesign = (section: string, filename: string): Promise<any> => {
         return window.ocdAPI ? window.ocdAPI.loadLibraryDesign(section, filename) : Promise.reject(new Error('Currently Not Implemented'))
     }
+    export const loadSvgCssFiles = (): Promise<any> => {
+        return window.ocdAPI ? window.ocdAPI.loadSvgCssFiles() : Promise.reject(new Error('Currently Not Implemented'))
+    }
 }

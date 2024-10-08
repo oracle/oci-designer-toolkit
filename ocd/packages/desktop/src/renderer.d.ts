@@ -24,6 +24,7 @@ export interface OcdElectronAPI {
     exportTerraform: (design: OcdDesign | string, directory: string) => Promise<void>
     loadLibraryIndex: () => Promise<void>
     loadLibraryDesign: (section: string, filename: string) => Promise<void>
+    loadSvgCssFiles: () => Promise<void>
 	// OCD Configuration
     loadConsoleConfig: () => Promise<void>
     saveConsoleConfig: (config: OcdConsoleConfiguration) => Promise<void>
