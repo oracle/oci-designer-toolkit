@@ -14,9 +14,9 @@ export namespace OcdDesignFacade {
     export const loadDesign = (filename: string): Promise<any> => {
         return window.ocdAPI ? window.ocdAPI.loadDesign(filename) : OcdDesignerBrowserActions.loadDesign(filename)
     }
-    export const saveDesign = (design: OcdDesign, filename: string): Promise<any> => {
+    export const saveDesign = (design: OcdDesign, filename: string, suggestedFilename: string = ''): Promise<any> => {
         console.debug('OcdDesignFacade: saveDesign', filename, JSON.stringify(design, null, 2))
-        return window.ocdAPI ? window.ocdAPI.saveDesign(JSON.stringify(design, null, 2), filename) : OcdDesignerBrowserActions.saveDesign(design, filename)
+        return window.ocdAPI ? window.ocdAPI.saveDesign(JSON.stringify(design, null, 2), filename, suggestedFilename) : OcdDesignerBrowserActions.saveDesign(design, filename)
     }
     export const discardConfirmation = (): Promise<any> => {
         return window.ocdAPI ? window.ocdAPI.discardConfirmation() : OcdDesignerBrowserActions.discardConfirmation()

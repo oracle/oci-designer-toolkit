@@ -22,8 +22,8 @@ export interface MenuItem {
     class?: string
     trueClass?: string
     falseClass?: string
-    click?: Function | undefined
-    view?: string | undefined
+    click?: Function
+    view?: string
     submenu?: MenuItem[] | Function
 }
 
@@ -102,8 +102,8 @@ export const menuItems: MenuItem[] = [
             {
                 label: 'Save As',
                 click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
-                    const suggestedName = activeFile && activeFile.name && activeFile.name !== '' ? `${activeFile.name.split('.')[0]}_Copy.okit` : ''    
-                    OcdDesignFacade.saveDesign(ocdDocument.design, '').then((results) => {
+                    const suggestedName = activeFile?.name && activeFile.name !== '' ? `${activeFile.name.split('.')[0]}_Copy.okit` : ''    
+                    OcdDesignFacade.saveDesign(ocdDocument.design, '', suggestedName).then((results) => {
                         if (!results.canceled) {
                             setActiveFile({name: results.filename, modified: false})
                             updateRecentFiles(results.filename, ocdConsoleConfig, setOcdConsoleConfig)
