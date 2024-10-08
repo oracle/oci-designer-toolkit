@@ -12,14 +12,6 @@ import { OcdConfigFacade } from '../facade/OcdConfigFacade'
 import { OcdViewLayer, OcdViewPage } from '@ocd/model'
 import { autoLayoutOptions } from '../data/OcdAutoLayoutOptions'
 import { svgCssData } from '../data/OcdSvgCssData'
-
-// Import css as text
-// @ts-ignore
-// eslint-disable-next-line import/no-webpack-loader-syntax
-// import svgThemeCss from '!!css-loader?{"sourceMap":false,"exportType":"string"}!../css/oci-theme.css'
-// @ts-ignore
-// eslint-disable-next-line import/no-webpack-loader-syntax
-// import svgSvgCss from '!!css-loader?{"sourceMap":false,"exportType":"string"}!../css/ocd-svg.css'
 import { OcdExternalFacade } from '../facade/OcdExternalFacade'
 
 const svgThemeCss = svgCssData['oci-theme.css']
