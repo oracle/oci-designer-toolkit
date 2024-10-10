@@ -551,7 +551,10 @@ summary {
     text-align: left;
 }
 
-.ocd-menu-item>a:hover {}
+.ocd-menu-item>a:hover {
+    background-color: #f2f7f7;
+    border-radius: 0.5rem;
+}
 
 .ocd-submenu-item {
     position: relative;

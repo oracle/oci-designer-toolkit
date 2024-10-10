@@ -293,9 +293,8 @@ app.on("open-file", function(event, path) {
     if (ready) {
         mainWindow.webContents.send('open-file', filePath)
         filePath = null
-        return
     }
-});
+})
 
 
 
@@ -345,8 +344,8 @@ async function handleLoadOciConfigProfile(event, profile) {
 		console.debug('Electron Main: handleLoadOciConfigProfileNames Parsed:', parsed)
 		console.debug('Electron Main: handleLoadOciConfigProfileNames Config By Profile:', parsed.accumulator.configurationsByProfile)
 		console.debug('Electron Main: handleLoadOciConfigProfileNames Keys:', Array.from(parsed.accumulator.configurationsByProfile.keys()))
-        const profile = Array.from(parsed.accumulator.configurationsByProfile[profile])
-		resolve(profiles)
+        const profileData = Array.from(parsed.accumulator.configurationsByProfile[profile])
+		resolve(profileData)
 	})
 }
 
