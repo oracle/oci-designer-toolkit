@@ -29,11 +29,6 @@ import OcdCommonTags from './OcdCommonTags'
 import { OcdReferenceDataQueryDialog } from '../components/dialogs/OcdReferenceDataQueryDialog'
 import { OcdActiveFileContext, OcdCacheContext, OcdConsoleConfigContext, OcdDocumentContext, OcdDragResourceContext, OcdSelectedResourceContext } from './OcdConsoleContext'
 
-// Import css as text
-// @ts-ignore
-// eslint-disable-next-line import/no-webpack-loader-syntax
-// import svgThemeCss from '!!css-loader?{"sourceMap":false,"exportType":"string"}!../css/oci-theme.css'
-
 export const ThemeContext = createContext<string>('')
 export const ActiveFileContext = createContext<OcdActiveFileContext>({activeFile: {name: '', modified: false}, setActiveFile: () => {}})
 export const ConsoleConfigContext = createContext<OcdConsoleConfigContext>({ocdConsoleConfig: OcdConsoleConfig.new(), setOcdConsoleConfig: () => {}})
@@ -43,7 +38,6 @@ export const SelectedResourceContext = createContext<OcdSelectedResourceContext>
 export const DragResourceContext = createContext<OcdDragResourceContext>({dragResource: OcdDocument.newDragResource(), setDragResource: () => {}})
 
 const OcdConsole = (): JSX.Element => {
-    // console.debug('OcdConsole: CSS', svgThemeCss)
     // State Variables
     const [ocdDocument, setOcdDocument] = useState(OcdDocument.new())
     const [ocdConsoleConfig, setOcdConsoleConfig] = useState(OcdConsoleConfig.new())
