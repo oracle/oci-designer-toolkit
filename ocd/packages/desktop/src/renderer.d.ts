@@ -19,11 +19,12 @@ export interface OcdElectronAPI {
     queryDropdown: (profile: string, region: string) => Promise<void>
 	// OCD Design 
     loadDesign: (filename: string) => Promise<void>
-    saveDesign: (design: OcdDesign | string, filename: string) => Promise<void>
+    saveDesign: (design: OcdDesign | string, filename: string, suggestedFilename: string | undefined) => Promise<void>
     discardConfirmation: () => Promise<void>
     exportTerraform: (design: OcdDesign | string, directory: string) => Promise<void>
     loadLibraryIndex: () => Promise<void>
     loadLibraryDesign: (section: string, filename: string) => Promise<void>
+    loadSvgCssFiles: () => Promise<void>
 	// OCD Configuration
     loadConsoleConfig: () => Promise<void>
     saveConsoleConfig: (config: OcdConsoleConfiguration) => Promise<void>

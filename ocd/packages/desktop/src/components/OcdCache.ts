@@ -25,8 +25,7 @@ export class OcdCacheData {
         this.cache = this.newCache()
         if (typeof cache === 'string' && cache.length > 0) this.cache = JSON.parse(cache)
         else if (cache instanceof Object) this.cache = cache
-        // else this.cache = this.newCache()
-        else this.loadCache()
+        else this.cache = this.newCache()
     }
 
     static readonly new = () => new OcdCacheData()

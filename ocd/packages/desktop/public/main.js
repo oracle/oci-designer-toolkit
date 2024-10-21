@@ -15,6 +15,11 @@ const common = require ('oci-common')
 const { OciQuery, OciReferenceDataQuery } = require('@ocd/query')
 const { unescape } = require("querystring")
 
+// Get Environment information
+const isDev = process.env.OCD_DEV === 'true';
+const isPreview = process.env.OCD_PREVIEW === 'true';
+const isMac = process.platform === 'darwin'
+
 // if (require('electron-squirrel-startup')) app.quit()
 const ocdConfigDirectory = path.join(app.getPath('home'), '.ocd')
 const ocdConsoleConfigFilename = path.join(ocdConfigDirectory, 'console_config.json')
@@ -41,12 +46,9 @@ const saveDesktopState = (config) => {
 	fs.writeFileSync(ocdWindowStateFilename, JSON.stringify(config, null, 4))
 }
 
-let mainWindow = undefined
-let activeFile = undefined
-let filePath = undefined
+let mainWindow
+let filePath
 let ready = false
-
-const isMac = process.platform === 'darwin'
 
 // Add Menu
 const template = [
@@ -150,7 +152,7 @@ const template = [
 	// 	}
 	//   ]
 	// }
-  ]
+]
   
 const menu = Menu.buildFromTemplate(template)
 
@@ -160,18 +162,18 @@ const selectionMenu = Menu.buildFromTemplate([
     {role: 'copy'},
     {type: 'separator'},
     {role: 'selectall'},
-  ])
+])
 
-  const inputMenu = Menu.buildFromTemplate([
-    {role: 'undo'},
-    {role: 'redo'},
-    {type: 'separator'},
-    {role: 'cut'},
-    {role: 'copy'},
-    {role: 'paste'},
-    {type: 'separator'},
-    {role: 'selectall'},
-  ])
+const inputMenu = Menu.buildFromTemplate([
+{role: 'undo'},
+{role: 'redo'},
+{type: 'separator'},
+{role: 'cut'},
+{role: 'copy'},
+{role: 'paste'},
+{type: 'separator'},
+{role: 'selectall'},
+])
 
 // Create OCD Window
 const createWindow = () => {
@@ -242,6 +244,7 @@ app.whenReady().then(() => {
 	ipcMain.handle('ocdDesign:exportTerraform', handleExportTerraform)
 	ipcMain.handle('ocdDesign:loadLibraryIndex', handleLoadLibraryIndex)
 	ipcMain.handle('ocdDesign:loadLibraryDesign', handleLoadLibraryDesign)
+	ipcMain.handle('ocdDesign:loadSvgCssFiles', handleLoadSvgCssFiles)
 	// OCD Configuration
 	ipcMain.handle('ocdConfig:loadConsoleConfig', handleLoadConsoleConfig)
 	ipcMain.handle('ocdConfig:saveConsoleConfig', handleSaveConsoleConfig)
@@ -290,9 +293,8 @@ app.on("open-file", function(event, path) {
     if (ready) {
         mainWindow.webContents.send('open-file', filePath)
         filePath = null
-        return
     }
-});
+})
 
 
 
@@ -342,8 +344,8 @@ async function handleLoadOciConfigProfile(event, profile) {
 		console.debug('Electron Main: handleLoadOciConfigProfileNames Parsed:', parsed)
 		console.debug('Electron Main: handleLoadOciConfigProfileNames Config By Profile:', parsed.accumulator.configurationsByProfile)
 		console.debug('Electron Main: handleLoadOciConfigProfileNames Keys:', Array.from(parsed.accumulator.configurationsByProfile.keys()))
-        const profile = Array.from(parsed.accumulator.configurationsByProfile[profile])
-		resolve(profiles)
+        const profileData = Array.from(parsed.accumulator.configurationsByProfile[profile])
+		resolve(profileData)
 	})
 }
 
@@ -441,29 +443,30 @@ async function handleDiscardConfirmation(event) {
 }
 
 async function handleExportTerraform(event, design, directory) {
-	design = typeof design === 'string' ? JSON.parse(design) : design
+	// design = typeof design === 'string' ? JSON.parse(design) : design
 	console.debug('Electron Main: handleExportTerraform')
-	return new Promise((resolve, reject) => {reject('Currently Not Implemented')})
+	// return new Promise((resolve, reject) => {reject('Currently Not Implemented')})
+	return Promise.reject(new Error('Currently Not Implemented'))
 }
 
 async function handleLoadConsoleConfig(event) {
 	console.debug('Electron Main: handleLoadConfig')
 	return new Promise((resolve, reject) => {
-		const defaultConfig = {
-            showPalette: true,
-            showModelPalette: true,
-            showProvidersPalette: ['oci'],
-            verboseProviderPalette: false,
-            displayPage: 'designer',
-            detailedResource: true,
-            showProperties: true,
-            highlightCompartmentResources: false,
-            recentDesigns: [],
-            maxRecent: 10,
-        }
+		// const defaultConfig = {
+        //     showPalette: true,
+        //     showModelPalette: true,
+        //     showProvidersPalette: ['oci'],
+        //     verboseProviderPalette: false,
+        //     displayPage: 'designer',
+        //     detailedResource: true,
+        //     showProperties: true,
+        //     highlightCompartmentResources: false,
+        //     recentDesigns: [],
+        //     maxRecent: 10,
+        // }
 		try {
 			// if (!fs.existsSync(ocdConsoleConfigFilename)) fs.writeFileSync(ocdConsoleConfigFilename, JSON.stringify(defaultConfig, null, 4))
-			if (!fs.existsSync(ocdConsoleConfigFilename)) reject('Console Config does not exist')
+			if (!fs.existsSync(ocdConsoleConfigFilename)) reject(new Error('Console Config does not exist'))
 			const config = fs.readFileSync(ocdConsoleConfigFilename, 'utf-8')
 			resolve(JSON.parse(config))
 		} catch (err) {
@@ -538,8 +541,9 @@ async function handleOpenExternalUrl(event, href) {
 }
 
 // Library / Reference Architecture Functions
-const libraryUrl = 'https://raw.githubusercontent.com/oracle/oci-designer-toolkit/refs/heads/master/ocd/library'
-// const libraryUrl = 'https://raw.githubusercontent.com/oracle/oci-designer-toolkit/refs/heads/toxophilist/sprint-dev/ocd/library'
+const prodLibraryUrl = 'https://raw.githubusercontent.com/oracle/oci-designer-toolkit/refs/heads/master/ocd/library'
+const devLibraryUrl = 'https://raw.githubusercontent.com/oracle/oci-designer-toolkit/refs/heads/toxophilist/sprint-dev/ocd/library'
+const libraryUrl = isDev || isPreview ? devLibraryUrl : prodLibraryUrl
 const libraryFile = 'referenceArchitectures.json'
 
 async function handleLoadLibraryIndex(event) {
@@ -558,7 +562,8 @@ async function handleLoadLibraryIndex(event) {
 		}).then((data) => {
             // console.debug('Electron Main: handleLoadLibraryIndex: Fetch Data', data)
 			const libraryIndex = JSON.parse(data)
-			const sectionQueries = [getLibrarySectionSvg(libraryIndex, 'oci')]
+			// const sectionQueries = [getLibrarySectionSvg(libraryIndex, 'oci')]
+			const sectionQueries = Object.keys(libraryIndex).map((k) => getLibrarySectionSvg(libraryIndex, k))
 			Promise.allSettled(sectionQueries).then((results) => {
 				// console.debug('Electron Main: handleLoadLibraryIndex: Section Query Results', results)
 				resolve(libraryIndex)
@@ -578,7 +583,7 @@ function getLibrarySectionSvg(libraryIndex, section) {
 		const svgUrls = svgRequests.map((request) => fetch(request))
 		Promise.allSettled(svgUrls).then((results) => Promise.allSettled(results.map((r) => r.value.text()))).then((svg) => {
 			svg.forEach((r, i) => {
-				console.debug('Electron Main: getLibrarySectionSvg: Svg Query Results', r.status)
+				console.debug('Electron Main: getLibrarySectionSvg: Svg Query Results', section, r.status)
 				// console.debug('Electron Main: getLibrarySectionSvg: Svg Query Results', r.value)
 				librarySection[i].dataUri = `data:image/svg+xml,${encodeURIComponent(r.value)}`
 				// librarySection[i].dataUri = `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(r.value)))}`
@@ -612,4 +617,8 @@ async function handleLoadLibraryDesign(event, section, filename) {
 			reject(err)
 		})
 	})
+}
+
+async function handleLoadSvgCssFiles() {
+	return Promise.reject(new Error('Not Implemented'))
 }

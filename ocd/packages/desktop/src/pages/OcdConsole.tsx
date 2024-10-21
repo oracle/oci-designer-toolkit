@@ -29,11 +29,6 @@ import OcdCommonTags from './OcdCommonTags'
 import { OcdReferenceDataQueryDialog } from '../components/dialogs/OcdReferenceDataQueryDialog'
 import { OcdActiveFileContext, OcdCacheContext, OcdConsoleConfigContext, OcdDocumentContext, OcdDragResourceContext, OcdSelectedResourceContext } from './OcdConsoleContext'
 
-// Import css as text
-// @ts-ignore
-// eslint-disable-next-line import/no-webpack-loader-syntax
-// import svgThemeCss from '!!css-loader?{"sourceMap":false,"exportType":"string"}!../css/oci-theme.css'
-
 export const ThemeContext = createContext<string>('')
 export const ActiveFileContext = createContext<OcdActiveFileContext>({activeFile: {name: '', modified: false}, setActiveFile: () => {}})
 export const ConsoleConfigContext = createContext<OcdConsoleConfigContext>({ocdConsoleConfig: OcdConsoleConfig.new(), setOcdConsoleConfig: () => {}})
@@ -43,7 +38,6 @@ export const SelectedResourceContext = createContext<OcdSelectedResourceContext>
 export const DragResourceContext = createContext<OcdDragResourceContext>({dragResource: OcdDocument.newDragResource(), setDragResource: () => {}})
 
 const OcdConsole = (): JSX.Element => {
-    // console.debug('OcdConsole: CSS', svgThemeCss)
     // State Variables
     const [ocdDocument, setOcdDocument] = useState(OcdDocument.new())
     const [ocdConsoleConfig, setOcdConsoleConfig] = useState(OcdConsoleConfig.new())
@@ -57,6 +51,15 @@ const OcdConsole = (): JSX.Element => {
     const documentContext = useMemo(() => ({ocdDocument, setOcdDocument}), [ocdDocument])
     const selectedResourceContext = useMemo(() => ({selectedResource, setSelectedResource}), [selectedResource])
     // Effect Hooks
+    // Check if OKIT-Ocd opened because of Double Click on file on OS
+    useEffect(() => {
+        // @ts-ignore
+        if (window.ocdAPI) window.ocdAPI.onOpenFile((event, filePath) => { // Running as an Electron App
+            console.debug('OcdConsole: onOpenFile', filePath)
+            loadDesign(filePath, setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig, setActiveFile)
+        })
+    }, []) // Empty Array to only run on initial render
+    // Load the Console Config Information
     useEffect(() => {
         OcdConfigFacade.loadConsoleConfig().then((results) => {
             console.debug('OcdConsole: Load Console Config', results)
@@ -68,23 +71,17 @@ const OcdConsole = (): JSX.Element => {
             // OcdConfigFacade.saveConsoleConfig(ocdConsoleConfig.config).then((results) => {console.debug('OcdConsole: Saved Console Config')}).catch((response) => console.debug('OcdConsole:', response))
         })
     }, []) // Empty Array to only run on initial render
+    // Load the Dropdown Resource Cache
     useEffect(() => {
-        // @ts-ignore
-        if (window.ocdAPI) window.ocdAPI.onOpenFile((event, filePath) => { // Running as an Electron App
-            console.debug('OcdConsole: onOpenFile', filePath)
-            loadDesign(filePath, setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig, setActiveFile)
+        OcdCacheFacade.loadCache().then((results) => {
+            console.debug('OcdConsole: Load Cache', results)
+            const cacheData = new OcdCacheData(results)
+            setOcdCache(cacheData)
+        }).catch((response) => {
+            console.debug('OcdConsole:', response)
+            OcdCacheFacade.saveCache(ocdCache.cache).then((results) => {console.debug('OcdConsole: Saved Cache')}).catch((response) => console.debug('OcdConsole:', response))
         })
     }, []) // Empty Array to only run on initial render
-    // useEffect(() => {
-    //     OcdCacheFacade.loadCache().then((results) => {
-    //         console.debug('OcdConsole: Load Cache', results)
-    //         const cacheData = new OcdCacheData(results)
-    //         setOcdCache(cacheData)
-    //     }).catch((response) => {
-    //         console.debug('OcdConsole:', response)
-    //         OcdCacheFacade.saveCache(ocdCache.cache).then((results) => {console.debug('OcdConsole: Saved Cache')}).catch((response) => console.debug('OcdConsole:', response))
-    //     })
-    // }, []) // Empty Array to only run on initial render
     // useEffect(() => {
     //     if (ocdCache === undefined) {
     //         OcdCacheFacade.loadCache().then((results) => {
@@ -113,6 +110,8 @@ const OcdConsole = (): JSX.Element => {
         // OcdCacheFacade.saveCache(cacheData.cache).then((results) => {console.debug('OcdConsole: Saved Cache')}).catch((response) => console.debug('OcdConsole:', response))
         setOcdCache(cacheData)
     }
+    console.debug('OcdConsole: Console Config', ocdConsoleConfig)
+    console.debug('OcdConsole: Dropdown Cache', ocdCache)
     return (
         <ConsoleConfigContext.Provider value={consoleConfigContext}>
             <ActiveFileContext.Provider value={activeFileContext}>

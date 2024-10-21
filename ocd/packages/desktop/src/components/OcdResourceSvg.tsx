@@ -7,7 +7,7 @@
 import { useContext, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { OcdDocument } from './OcdDocument'
-import { OcdViewPage, OcdViewConnector, OcdViewCoords, OcdViewLayer, OcdResource } from '@ocd/model'
+import { OcdViewPage, OcdViewCoords, OcdViewLayer } from '@ocd/model'
 import { ResourceRectProps, ResourceForeignObjectProps, ResourceSvgProps, ResourceSvgContextMenuProps, ResourceSvgGhostProps, OcdMouseEvents, ConnectorSvgProps } from '../types/ReactComponentProperties'
 import { OcdContextMenu } from './OcdCanvas'
 import { ActiveFileContext, SelectedResourceContext } from '../pages/OcdConsole'

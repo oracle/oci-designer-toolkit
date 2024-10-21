@@ -11,23 +11,19 @@ import { OcdDesignFacade } from '../facade/OcdDesignFacade'
 import { OcdConfigFacade } from '../facade/OcdConfigFacade'
 import { OcdViewLayer, OcdViewPage } from '@ocd/model'
 import { autoLayoutOptions } from '../data/OcdAutoLayoutOptions'
-
-// Import css as text
-// @ts-ignore
-// eslint-disable-next-line import/no-webpack-loader-syntax
-import svgThemeCss from '!!css-loader?{"sourceMap":false,"exportType":"string"}!../css/oci-theme.css'
-// @ts-ignore
-// eslint-disable-next-line import/no-webpack-loader-syntax
-import svgSvgCss from '!!css-loader?{"sourceMap":false,"exportType":"string"}!../css/ocd-svg.css'
+import { svgCssData } from '../data/OcdSvgCssData'
 import { OcdExternalFacade } from '../facade/OcdExternalFacade'
+
+const svgThemeCss = svgCssData['oci-theme.css']
+const svgSvgCss = svgCssData['ocd-svg.css']
 
 export interface MenuItem {
     label: string
     class?: string
     trueClass?: string
     falseClass?: string
-    click?: Function | undefined
-    view?: string | undefined
+    click?: Function
+    view?: string
     submenu?: MenuItem[] | Function
 }
 
@@ -106,8 +102,8 @@ export const menuItems: MenuItem[] = [
             {
                 label: 'Save As',
                 click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
-                    const suggestedName = activeFile && activeFile.name && activeFile.name !== '' ? `${activeFile.name.split('.')[0]}_Copy.okit` : ''    
-                    OcdDesignFacade.saveDesign(ocdDocument.design, '').then((results) => {
+                    const suggestedName = activeFile?.name && activeFile.name !== '' ? `${activeFile.name.split('.')[0]}_Copy.okit` : ''    
+                    OcdDesignFacade.saveDesign(ocdDocument.design, '', suggestedName).then((results) => {
                         if (!results.canceled) {
                             setActiveFile({name: results.filename, modified: false})
                             updateRecentFiles(results.filename, ocdConsoleConfig, setOcdConsoleConfig)

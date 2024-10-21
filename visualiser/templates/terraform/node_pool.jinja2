@@ -42,7 +42,7 @@ resource "oci_containerengine_node_pool" "{{ resource_name }}" {
     {% for config in node_config_details.placement_configs %}
     placement_configs {
         {# Get last character of AD from between the quotes this is the AD numerical value #}
-        availability_domain = data.oci_identity_availability_domains.AvailabilityDomains.availability_domains[{{ config.availability_domain[-2:-1] | safe | int }} - 1]["name"]
+        availability_domain = data.oci_identity_availability_domains.AvailabilityDomains.availability_domains[{{ config.availability_domain | safe | int }} - 1]["name"]
         subnet_id        = {{ config.subnet_id }}
         }
     {% endfor %}

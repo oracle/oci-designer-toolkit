@@ -26,6 +26,8 @@
     "compile": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
     "build": "npm run compile && npm run pack",
 
+    "generate-ocd-svg-css-desktop": "node lib/esm/ocd-build-svg-css.js -d ../desktop/src/data -i ../desktop/src/css",
+
     "generate-ocd-build-date-desktop": "node lib/esm/ocd-set-build-date.js -d ../desktop/src/data -p ../desktop/package.json",
     "generate-ocd-build-date-export": "node lib/esm/ocd-set-build-date.js -d ../export/src/data -p ../desktop/package.json",
     "generate-ocd-build-date": "npm run generate-ocd-build-date-desktop && npm run generate-ocd-build-date-export",
