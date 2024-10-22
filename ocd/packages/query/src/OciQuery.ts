@@ -9,9 +9,6 @@
 import { OcdDesign, OciModelResources, OciResources } from '@ocd/model'
 import { analytics, bastion, common, core, database, filestorage, identity, keymanagement, loadbalancer, mysql, networkloadbalancer, nosql, objectstorage, vault } from 'oci-sdk'
 import { OciCommonQuery } from './OciQueryCommon'
-import { OcdUtils } from '@ocd/core'
-import { OciLoadBalancerBackend } from '@ocd/model/src/provider/oci/resources/generated/OciLoadBalancerBackend'
-import { OciLoadBalancerBackendSet, OciLoadBalancerListener } from '@ocd/model/src/provider/oci/resources'
 
 export class OciQuery extends OciCommonQuery {
     // Clients
@@ -265,7 +262,7 @@ export class OciQuery extends OciCommonQuery {
                 if (results[queries.indexOf(listLoadBalancers)].status === 'fulfilled' && results[queries.indexOf(listLoadBalancers)].value.length > 0) design.model.oci.resources.load_balancer = results[queries.indexOf(listLoadBalancers)].value
                 if (design.model.oci.resources.load_balancer && design.model.oci.resources.load_balancer.length > 0) {
                     // Create Backend Sets
-                    design.model.oci.resources.load_balancer_backend_set = design.model.oci.resources.load_balancer.map((l) => Object.values(l.backendSets as OciLoadBalancerBackendSet[]).map((b) => {
+                    design.model.oci.resources.load_balancer_backend_set = design.model.oci.resources.load_balancer.map((l) => Object.values(l.backendSets as OciModelResources.OciLoadBalancerBackendSet[]).map((b) => {
                         return {...b, 
                             id: l.id.replace('loadbalancer', 'load_balancer_backend_set'), 
                             compartmentId: l.compartmentId, 
@@ -275,7 +272,7 @@ export class OciQuery extends OciCommonQuery {
                         }
                     })).flat()
                     // Create Backends
-                    design.model.oci.resources.load_balancer_backend = design.model.oci.resources.load_balancer_backend_set.map((bs) => Object.values(bs.backends as OciLoadBalancerBackend[]).map((b) => {
+                    design.model.oci.resources.load_balancer_backend = design.model.oci.resources.load_balancer_backend_set.map((bs) => Object.values(bs.backends as OciModelResources.OciLoadBalancerBackend[]).map((b) => {
                         const vnicAttachments = design.model.oci.resources.vnic_attachment ? design.model.oci.resources.vnic_attachment : []
                         const vnicAttachment = vnicAttachments.find((v) => v.privateIp && v.privateIp.ipAddress === b.ipAddress)
                         const instanceId = vnicAttachment ? vnicAttachment.instanceId : ''
@@ -293,7 +290,7 @@ export class OciQuery extends OciCommonQuery {
                         }
                     })).flat()
                     // Create Listeners
-                    design.model.oci.resources.load_balancer_listener = design.model.oci.resources.load_balancer.map((l) => (Object.values(l.listeners) as OciLoadBalancerListener[]).map((listener) => {
+                    design.model.oci.resources.load_balancer_listener = design.model.oci.resources.load_balancer.map((l) => (Object.values(l.listeners) as OciModelResources.OciLoadBalancerListener[]).map((listener) => {
                         return {...listener, 
                             id: l.id.replace('loadbalancer', 'load_balancer_listener'), 
                             compartmentId: l.compartmentId, 
