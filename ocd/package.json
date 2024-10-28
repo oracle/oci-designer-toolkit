@@ -32,6 +32,7 @@
     "install-and-codegen": "npm install --legacy-peer-deps && npm run compile-for-codegen && npm run import-and-generate && npm run build",
     "fresh-install": "npm run install-and-codegen",
     "reinstall": "npm run install-and-codegen",
+    "clean": "npm run clean --workspaces --if-present",
     "build": "npm run build --workspaces --if-present",
     "compile": "npm run compile --workspaces --if-present",
     "pack": "npm run pack --workspaces --if-present",
