@@ -11,17 +11,17 @@
 */
 
 export { GoogleComputeNetwork } from './resources/GoogleComputeNetwork'
-export { GoogleOracledatabaseAutonomousDatabaseRegular } from './resources/GoogleOracledatabaseAutonomousDatabaseRegular'
-export { GoogleOracledatabaseCloudVmCluster } from './resources/GoogleOracledatabaseCloudVmCluster'
-export { GoogleOracledatabaseExadataInfrastructure } from './resources/GoogleOracledatabaseExadataInfrastructure'
+export { GoogleOracleDatabaseAutonomousDatabase } from './resources/GoogleOracleDatabaseAutonomousDatabase'
+export { GoogleOracleDatabaseCloudExadataInfrastructure } from './resources/GoogleOracleDatabaseCloudExadataInfrastructure'
+export { GoogleOracleDatabaseCloudVmCluster } from './resources/GoogleOracleDatabaseCloudVmCluster'
 
 export { GoogleComputeNetworkConfigs } from './resources/configs/GoogleComputeNetwork'
-export { GoogleOracledatabaseAutonomousDatabaseRegularConfigs } from './resources/configs/GoogleOracledatabaseAutonomousDatabaseRegular'
-export { GoogleOracledatabaseCloudVmClusterConfigs } from './resources/configs/GoogleOracledatabaseCloudVmCluster'
-export { GoogleOracledatabaseExadataInfrastructureConfigs } from './resources/configs/GoogleOracledatabaseExadataInfrastructure'
+export { GoogleOracleDatabaseAutonomousDatabaseConfigs } from './resources/configs/GoogleOracleDatabaseAutonomousDatabase'
+export { GoogleOracleDatabaseCloudExadataInfrastructureConfigs } from './resources/configs/GoogleOracleDatabaseCloudExadataInfrastructure'
+export { GoogleOracleDatabaseCloudVmClusterConfigs } from './resources/configs/GoogleOracleDatabaseCloudVmCluster'
 
 export { GoogleComputeNetworkProxy } from './resources/proxies/GoogleComputeNetwork'
-export { GoogleOracledatabaseAutonomousDatabaseRegularProxy } from './resources/proxies/GoogleOracledatabaseAutonomousDatabaseRegular'
-export { GoogleOracledatabaseCloudVmClusterProxy } from './resources/proxies/GoogleOracledatabaseCloudVmCluster'
-export { GoogleOracledatabaseExadataInfrastructureProxy } from './resources/proxies/GoogleOracledatabaseExadataInfrastructure'
+export { GoogleOracleDatabaseAutonomousDatabaseProxy } from './resources/proxies/GoogleOracleDatabaseAutonomousDatabase'
+export { GoogleOracleDatabaseCloudExadataInfrastructureProxy } from './resources/proxies/GoogleOracleDatabaseCloudExadataInfrastructure'
+export { GoogleOracleDatabaseCloudVmClusterProxy } from './resources/proxies/GoogleOracleDatabaseCloudVmCluster'
     

@@ -6,6 +6,6 @@
 import { ResourceElementConfig } from "../../../../OcdPropertyTypes"
 import { GoogleCommonConfigs } from "../../GoogleCommonConfigs"
 
-export namespace GoogleOracledatabaseCloudVmClusterConfigs {
+export namespace GoogleOracleDatabaseCloudVmClusterConfigs {
     export function configs(): ResourceElementConfig[] {return [...GoogleCommonConfigs.configs()]}
 }
