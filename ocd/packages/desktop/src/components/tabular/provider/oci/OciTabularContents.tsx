@@ -117,7 +117,7 @@ export const OcdTabularHeader = ({columnTitles, ociResources, resourceElements, 
             <div className='th'>{ociResources[selected].length}</div>
             <div className={`th ocd-sortable-column ${sortHeaderClass('displayName')}`} onClick={() => onSortClick('displayName')} aria-hidden key={`${selected}-tabular-header-row-displayName`}>Name</div>
             <div className={`th ocd-sortable-column ${sortHeaderClass('compartmentId')}`} onClick={() => onSortClick('compartmentId')} aria-hidden key={`${selected}-tabular-header-row-compartmentId`}>Compartment</div>
-            {displayColumns.map((title: string, i: number) => {return <div className={`th ocd-sortable-column ${sortHeaderClass(resourceElements[i])}`} onClick={() => onSortClick(resourceElements[i])} key={`${selected}-tabular-header-row-${OcdUtils.toUnderscoreCase(title)}`}>{title}</div>})}
+            {displayColumns.map((title: string, i: number) => {return <div className={`th ocd-sortable-column ${sortHeaderClass(resourceElements[i])}`} onClick={() => onSortClick(resourceElements[i])} key={`${selected}-tabular-header-row-${OcdUtils.toUnderscoreCase(title)}`} aria-hidden>{title}</div>})}
             <div className={`th-menu ocd-console-three-dot-menu-icon`}>
                 <div className='ocd-console-toolbar-dropdown ocd-console-toolbar-dropdown-theme'>
                     <ul>
