@@ -262,7 +262,7 @@ export class OciQuery extends OciCommonQuery {
                 if (results[queries.indexOf(listLoadBalancers)].status === 'fulfilled' && results[queries.indexOf(listLoadBalancers)].value.length > 0) design.model.oci.resources.load_balancer = results[queries.indexOf(listLoadBalancers)].value
                 if (design.model.oci.resources.load_balancer && design.model.oci.resources.load_balancer.length > 0) {
                     // Create Backend Sets
-                    design.model.oci.resources.load_balancer_backend_set = design.model.oci.resources.load_balancer.map((l) => Object.values(l.backendSets as OciModelResources.OciLoadBalancerBackendSet[]).map((b) => {
+                    design.model.oci.resources.load_balancer_backend_set = design.model.oci.resources.load_balancer.map((l: OciModelResources.OciLoadBalancer) => Object.values(l.backendSets as OciModelResources.OciLoadBalancerBackendSet[]).map((b) => {
                         return {...b, 
                             id: l.id.replace('loadbalancer', 'load_balancer_backend_set'), 
                             compartmentId: l.compartmentId, 
@@ -290,7 +290,7 @@ export class OciQuery extends OciCommonQuery {
                         }
                     })).flat()
                     // Create Listeners
-                    design.model.oci.resources.load_balancer_listener = design.model.oci.resources.load_balancer.map((l) => (Object.values(l.listeners) as OciModelResources.OciLoadBalancerListener[]).map((listener) => {
+                    design.model.oci.resources.load_balancer_listener = design.model.oci.resources.load_balancer.map((l: OciModelResources.OciLoadBalancer) => (Object.values(l.listeners as OciModelResources.OciLoadBalancerListener[])).map((listener) => {
                         return {...listener, 
                             id: l.id.replace('loadbalancer', 'load_balancer_listener'), 
                             compartmentId: l.compartmentId, 
@@ -302,7 +302,7 @@ export class OciQuery extends OciCommonQuery {
                     })).flat()
                     design.model.oci.resources.load_balancer.forEach((l) => {
                         delete l.backendSets
-                        delete l.Listeners
+                        delete l.listeners
                     })
                     // console.debug('OciQuery: Load Balancer Backend Sets:', design.model.oci.resources.load_balancer_backend_set)
                     // console.debug('OciQuery: Load Balancer Backends:', design.model.oci.resources.load_balancer_backend)
