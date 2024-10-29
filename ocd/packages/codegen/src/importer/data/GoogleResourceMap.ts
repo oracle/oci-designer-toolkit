@@ -9,7 +9,7 @@ export const resourceMap: OcdResourceMap = {
     "google_compute_network": "compute_network",
     "google_oracle_database_autonomous_database": "oracle_database_autonomous_database",
     "google_oracle_database_cloud_exadata_infrastructure": "oracle_database_cloud_exadata_infrastructure",
-    // "google_oracle_database_cloud_vm_cluster": "oracle_database_cloud_vm_cluster",
+    "google_oracle_database_cloud_vm_cluster": "oracle_database_cloud_vm_cluster",
 }
 
 export const dataMap: OcdResourceMap = {}
