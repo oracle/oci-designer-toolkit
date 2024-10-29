@@ -13,5 +13,4 @@
 export { GoogleComputeNetwork } from './resources/GoogleComputeNetwork'
 export { GoogleOracleDatabaseAutonomousDatabase } from './resources/GoogleOracleDatabaseAutonomousDatabase'
 export { GoogleOracleDatabaseCloudExadataInfrastructure } from './resources/GoogleOracleDatabaseCloudExadataInfrastructure'
-export { GoogleOracleDatabaseCloudVmCluster } from './resources/GoogleOracleDatabaseCloudVmCluster'
     
