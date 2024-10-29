@@ -13,12 +13,15 @@
 export { GoogleComputeNetwork } from './resources/GoogleComputeNetwork'
 export { GoogleOracleDatabaseAutonomousDatabase } from './resources/GoogleOracleDatabaseAutonomousDatabase'
 export { GoogleOracleDatabaseCloudExadataInfrastructure } from './resources/GoogleOracleDatabaseCloudExadataInfrastructure'
+export { GoogleOracleDatabaseCloudVmCluster } from './resources/GoogleOracleDatabaseCloudVmCluster'
 
 export { GoogleComputeNetworkConfigs } from './resources/configs/GoogleComputeNetwork'
 export { GoogleOracleDatabaseAutonomousDatabaseConfigs } from './resources/configs/GoogleOracleDatabaseAutonomousDatabase'
 export { GoogleOracleDatabaseCloudExadataInfrastructureConfigs } from './resources/configs/GoogleOracleDatabaseCloudExadataInfrastructure'
+export { GoogleOracleDatabaseCloudVmClusterConfigs } from './resources/configs/GoogleOracleDatabaseCloudVmCluster'
 
 export { GoogleComputeNetworkProxy } from './resources/proxies/GoogleComputeNetwork'
 export { GoogleOracleDatabaseAutonomousDatabaseProxy } from './resources/proxies/GoogleOracleDatabaseAutonomousDatabase'
 export { GoogleOracleDatabaseCloudExadataInfrastructureProxy } from './resources/proxies/GoogleOracleDatabaseCloudExadataInfrastructure'
+export { GoogleOracleDatabaseCloudVmClusterProxy } from './resources/proxies/GoogleOracleDatabaseCloudVmCluster'
     
