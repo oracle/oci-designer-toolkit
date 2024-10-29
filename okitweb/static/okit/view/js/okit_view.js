@@ -56,10 +56,10 @@ class OkitJsonView {
     drop(source, target) {
         let newFunction = 'new' + source.name;
         let getFunction = 'get' + target.type.split(' ').join('');
+        console.debug('OkitJsonView: New:', newFunction,'Get:', getFunction)
     }
 
-    init() {
-    }
+    init() {return}
 
     clear() {
         for (const [key, value] of Object.entries(this)) {
@@ -166,7 +166,7 @@ class OkitArtefactView {
     static get fo_x_tranlation() {return this.icon_width + 5;}
     static get fo_y_tranlation() {return 0;}
 
-    constructor(artefact=null, json_view) {
+    constructor(artefact, json_view) {
         this.artefact = artefact;
         // this.view = json_view
         // this.artefact = new Proxy(artefact, model_proxy_handler);
@@ -338,6 +338,7 @@ class OkitArtefactView {
             id: this.icon_definition_id,
             transform: this.icon_transform
         }
+        return definition
     }
     getForeignObjectDefinition() {
         const definition = {

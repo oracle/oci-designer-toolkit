@@ -6,7 +6,7 @@
 import { GoogleTabularResourceProps } from "../../../../../types/ReactComponentProperties"
 import { OcdTabularContents } from "../GoogleTabularContents"
 
-export const GoogleOracledatabaseCloudVmCluster = ({ ocdDocument, googleResources, selected }: GoogleTabularResourceProps): JSX.Element => {
+export const GoogleOracleDatabaseCloudVmCluster = ({ ocdDocument, googleResources, selected }: GoogleTabularResourceProps): JSX.Element => {
     const columnTitles: string[] = []
     const resourceElements: string[] = []
     return (
@@ -16,7 +16,7 @@ export const GoogleOracledatabaseCloudVmCluster = ({ ocdDocument, googleResource
             selected={selected}
             columnTitles={columnTitles}
             resourceElements={resourceElements}
-            key={'GoogleOracledatabaseCloudVmClusterTabularContents'}
+            key={'GoogleOracleDatabaseCloudVmClusterTabularContents'}
         />
     )
 }

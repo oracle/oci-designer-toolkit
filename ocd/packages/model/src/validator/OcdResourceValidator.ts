@@ -30,8 +30,9 @@ export namespace OcdResourceValidator {
         // If not conditional then we will always display
         if (!conditional) return true
         // Check condition
-        const element = condition.element ? condition.element.indexOf('_') ? OcdUtils.toCamelCase(condition.element)  : condition.element : ''
-        const display = OcdUtils.isCondition(resource[element], condition.operator, condition.value)
+        const element = condition.element?.indexOf('_') ? OcdUtils.toCamelCase(condition.element)  : condition.element
+        const leftValue = element ? resource[element] : ''
+        const display = OcdUtils.isCondition(leftValue, condition.operator, condition.value)
         return display
     }
     export function noDefaultValidation(displayName: string, key: string, value: string | boolean | number, title: string, cssClass: string, resources: OcdResources, message: string | undefined = undefined): OcdValidationResult {

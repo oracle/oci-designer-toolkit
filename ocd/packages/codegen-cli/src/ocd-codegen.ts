@@ -5,9 +5,8 @@
 
 import fs from 'fs'
 import path from 'path'
-import { OciModelGenerator, OciTerraformGenerator, OciTerraformSchemaImporter, OciValidatorGenerator, OcdTerraformSchemaResourceAttributesGenerator, OciMarkdownGenerator, OciPropertiesGenerator, OciTabularGenerator, AzureMarkdownGenerator, AzurePropertiesGenerator, AzureTabularGenerator, AzureTerraformGenerator, AzureModelGenerator, AzureAzTerraformSchemaImporter, AzureRmTerraformSchemaImporter, AzureValidatorGenerator, GoogleTerraformSchemaImporter, GoogleModelGenerator, GoogleMarkdownGenerator, GooglePropertiesGenerator, GoogleTerraformGenerator, GoogleTabularGenerator, GoogleValidatorGenerator } from '@ocd/codegen'
+import { OcdSchema, OciModelGenerator, OciTerraformGenerator, OciTerraformSchemaImporter, OciValidatorGenerator, OcdTerraformSchemaResourceAttributesGenerator, OciMarkdownGenerator, OciPropertiesGenerator, OciTabularGenerator, AzureMarkdownGenerator, AzurePropertiesGenerator, AzureTabularGenerator, AzureTerraformGenerator, AzureModelGenerator, AzureAzTerraformSchemaImporter, AzureRmTerraformSchemaImporter, AzureValidatorGenerator, GoogleTerraformSchemaImporter, GoogleModelGenerator, GoogleMarkdownGenerator, GooglePropertiesGenerator, GoogleTerraformGenerator, GoogleTabularGenerator, GoogleValidatorGenerator } from '@ocd/codegen'
 import { parseArgs } from "node:util"
-import { OcdSchema } from '@ocd/codegen/src/types/OcdSchema'
 
 const options = {
     schema: {

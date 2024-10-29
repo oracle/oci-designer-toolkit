@@ -7,7 +7,7 @@ import { OcdCacheData } from '../../../../../OcdCache'
 import { OcdDocument } from '../../../../../OcdDocument'
 import { GoogleModelResources as Model } from '@ocd/model'
 
-export namespace GoogleOracledatabaseCloudVmClusterProxy {
+export namespace GoogleOracleDatabaseCloudVmClusterProxy {
     export function proxyHandler(ocdDocument: OcdDocument, ocdCache: OcdCacheData)  {
         const proxyHandler = {
             //@ts-ignore
@@ -21,9 +21,9 @@ export namespace GoogleOracledatabaseCloudVmClusterProxy {
         }
         return proxyHandler
     }
-    export function proxyResource(ocdDocument: OcdDocument, resource: Model.GoogleOracledatabaseCloudVmCluster, ocdCache: OcdCacheData) {
+    export function proxyResource(ocdDocument: OcdDocument, resource: Model.GoogleOracleDatabaseCloudVmCluster, ocdCache: OcdCacheData) {
         const pH = proxyHandler(ocdDocument, ocdCache)
-        const proxyResource = new Proxy<Model.GoogleOracledatabaseCloudVmCluster>(resource, pH)
+        const proxyResource = new Proxy<Model.GoogleOracleDatabaseCloudVmCluster>(resource, pH)
         return proxyResource
     }
 }
