@@ -542,7 +542,6 @@ class OkitPCAData extends OkitOCIData {
         const self = this;
         const start = new Date().getTime()
         const section = okitOciConfig.getSection(profile)
-        const config = section && section.session ? okitSessionOciConfigs.configs[profile] : {}
         // Get Shipped
         return new Promise((resolve, reject) => {
             $.getJSON('dropdown', {cache: false}).done((resp) => {
