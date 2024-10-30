@@ -228,7 +228,7 @@ const OcdContainerRect = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
 }
 
 const OcdResizePoint = ({cx, cy, position, setDimensions, onResizeEnd}: any): JSX.Element => {
-    const {activeFile, setActiveFile} = useContext(ActiveFileContext)
+    const {activeFile} = useContext(ActiveFileContext)
     const [dragging, setDragging] = useState(false)
     const [origin, setOrigin] = useState({ x: 0, y: 0 });
     const [radius, setRadius] = useState(3)
