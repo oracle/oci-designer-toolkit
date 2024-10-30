@@ -4,5 +4,9 @@
     "cSpell.words": [
         "OKIT"
     ],
-    "svg.preview.background": "transparent"
+    "svg.preview.background": "transparent",
+    "sonarlint.connectedMode.project": {
+        "connectionId": "oracle",
+        "projectKey": "oracle_oci-designer-toolkit"
+    }
 }

@@ -3,6 +3,8 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
+export { OcdSchema } from "./types/OcdSchema"
+
 export { AzureRmTerraformSchemaImporter } from "./importer/AzureRmTerraformSchemaImporter"
 export { AzureAzTerraformSchemaImporter } from "./importer/AzureAzTerraformSchemaImporter"
 export { AzureModelGenerator } from "./generator/AzureModelGenerator"
@@ -34,4 +36,5 @@ export { OcdCodeGenerator } from "./generator/OcdCodeGenerator"
 // export { OcdTabularGenerator } from "./generator/OcdTabularPageGenerator"
 
 export { OcdBuildDateGenerator } from "./generator/OcdBuildDateGenerator"
+export { OcdSvgCssGenerator } from "./generator/OcdSvgCssGenerator"
 export { OcdTerraformSchemaResourceAttributesGenerator } from "./importer/OcdTerraformSchemaResourceAttributesGenerator"

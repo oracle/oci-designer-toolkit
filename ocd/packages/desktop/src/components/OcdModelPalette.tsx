@@ -64,7 +64,7 @@ const OcdModelPaletteResources = ({ provider, type, resources, setDragData }: an
     const onDragEnd = () => {}
     return (
         <li className='collapsible-list-element'>
-            <div className={collapsed ? 'tree-collapsed' : ''} onClick={onClick}><label>{OcdUtils.toTitle(type)}</label></div>
+            <div className={collapsed ? 'tree-collapsed' : ''} onClick={onClick} aria-hidden><label>{OcdUtils.toTitle(type)}</label></div>
             <ul className={collapsed ? 'hidden' : ''}>
                 {resources.map((r: any) => {
                     return <OcdModelPaletteResource 

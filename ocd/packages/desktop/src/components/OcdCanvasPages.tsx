@@ -32,12 +32,12 @@ const OcdCanvasPage = ({ ocdDocument, setOcdDocument, page } : PageBarPageProps)
     }
     return (
         <div className={`ocd-designer-canvas-page ${page.selected ? 'ocd-page-selected' : ''}`}>
-            <div className={`ocd-canvas-page-name`} onClick={() => onPageSelectedClick()}>
-                <span contentEditable={true} onBlur={onBlur} suppressContentEditableWarning={true}>{page.title}</span>
+            <div className={`ocd-canvas-page-name`} onClick={() => onPageSelectedClick()} aria-hidden>
+                <span contentEditable={true} onBlur={onBlur} suppressContentEditableWarning={true} aria-hidden>{page.title}</span>
                 {/* <input type='text' value={page.title} onChange={onChange} tabIndex={-1}></input> */}
             </div>
             {ocdDocument.design.view.pages.length > 1 && <div className={`ocd-layer-visiblity-icon delete-layer`}
-                onClick={onDeleteClick}
+                onClick={onDeleteClick} aria-hidden
             ></div>}
         </div>
     )
@@ -65,7 +65,7 @@ const OcdCanvasPages = ({ ocdDocument, setOcdDocument }: PageBarPagesProps): JSX
                     })}
                 </div>
                 <div className='ocd-add-layer ocd-layer-icon add-plus'
-                    onClick={() => onClickAddPage()}
+                    onClick={() => onClickAddPage()} aria-hidden
                 ></div>
         </div>
     )
@@ -108,14 +108,14 @@ const OcdPagesThreeDotMenu = ({ocdDocument, setOcdDocument}: PageBarMenuProps): 
     return (
         <div className='ocd-console-toolbar-dropdown ocd-console-toolbar-dropdown-theme'>
             <ul>
-                <li className='ocd-console-toolbar-dropdown-item' onClick={onToggleMenuClick}>
+                <li className='ocd-console-toolbar-dropdown-item' onClick={onToggleMenuClick} aria-hidden>
                     <div className='three-dot-menu ocd-console-toolbar-icon'></div>
                     <ul className={`${menuVisible ? 'show slide-up' : 'hidden'}`}>
                         <li className='ocd-dropdown-menu-item ocd-mouseover-highlight'><div><label><input id='ocd_console_page_display_grid' type='checkbox' onChange={displayGridOnChange} ref={cbRef} checked={activePage.grid}/>Display Grid</label></div></li>
                         <li className='ocd-dropdown-menu-item'><div>--------------------------------</div></li>
-                        <li className='ocd-dropdown-menu-item ocd-mouseover-highlight'><div onClick={onDuplicatePageClick}>Duplicate "{activePageName}"</div></li>
+                        <li className='ocd-dropdown-menu-item ocd-mouseover-highlight'><div onClick={onDuplicatePageClick} aria-hidden>Duplicate "{activePageName}"</div></li>
                         {ocdDocument.design.view.pages.length > 1 && <li className='ocd-dropdown-menu-item ocd-mouseover-highlight'><div onClick={onDeletePageClick}>Delete "{activePageName}"</div></li>}
-                        <li className='ocd-dropdown-menu-item ocd-mouseover-highlight'><div onClick={onAddPageClick}>Add Page</div></li>
+                        <li className='ocd-dropdown-menu-item ocd-mouseover-highlight'><div onClick={onAddPageClick} aria-hidden>Add Page</div></li>
                     </ul>
                 </li>
             </ul>

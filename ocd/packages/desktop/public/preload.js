@@ -17,11 +17,12 @@ contextBridge.exposeInMainWorld('ocdAPI', {
   queryDropdown: (profile, region) => ipcRenderer.invoke('ociQuery:queryDropdown', profile, region),
   // OCD Design 
   loadDesign: (filename) => ipcRenderer.invoke('ocdDesign:loadDesign', filename),
-  saveDesign: (design, filename) => ipcRenderer.invoke('ocdDesign:saveDesign', design, filename),
+  saveDesign: (design, filename, suggestedFilename = '') => ipcRenderer.invoke('ocdDesign:saveDesign', design, filename, suggestedFilename),
   discardConfirmation: () => ipcRenderer.invoke('ocdDesign:discardConfirmation'),
   exportTerraform: (design, directory) => ipcRenderer.invoke('ocdDesign:exportTerraform', design, directory),
   loadLibraryIndex: () => ipcRenderer.invoke('ocdDesign:loadLibraryIndex'),
   loadLibraryDesign: (section, filename) => ipcRenderer.invoke('ocdDesign:loadLibraryDesign', section, filename),
+  loadSvgCssFiles: () => ipcRenderer.invoke('ocdDesign:loadSvgCssFiles'),
   // OCD Configuration
   loadConsoleConfig: () => ipcRenderer.invoke('ocdConfig:loadConsoleConfig'),
   saveConsoleConfig: (config) => ipcRenderer.invoke('ocdConfig:saveConsoleConfig', config),

@@ -680,17 +680,17 @@ export const palette = {
                         {
                             "container": false,
                             "title": "Oracle Exadata Database@Azure",
-                            "class": "azure-oracledatabase-exadata-infrastructure"
+                            "class": "azure-oracle-exadata-infrastructure"
                         },
                         {
                             "container": false,
                             "title": "Oracle Autonomous Database@Azure",
-                            "class": "azure-oracledatabase-autonomous-database-regular"
+                            "class": "azure-oracle-autonomous-database"
                         },
                         {
                             "container": false,
                             "title": "Oracle VM Cluster Database@Azure",
-                            "class": "azure-oracledatabase-cloud-vm-cluster"
+                            "class": "azure-oracle-cloud-vm-cluster"
                         },
                     ]
                 },
@@ -750,17 +750,17 @@ export const palette = {
                         {
                             "container": false,
                             "title": "Oracle Exadata Database@Google",
-                            "class": "google-oracledatabase-exadata-infrastructure"
+                            "class": "google-oracle-database-cloud-exadata-infrastructure"
                         },
                         {
                             "container": false,
                             "title": "Oracle Autonomous Database@Google",
-                            "class": "google-oracledatabase-autonomous-database-regular"
+                            "class": "google-oracle-database-autonomous-database"
                         },
                         {
                             "container": false,
                             "title": "Oracle VM Cluster Database@Google",
-                            "class": "google-oracledatabase-cloud-vm-cluster"
+                            "class": "google-oracle-database-cloud-vm-cluster"
                         },
                     ]
                 },

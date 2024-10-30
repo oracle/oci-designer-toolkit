@@ -11,7 +11,7 @@ import OcdConsoleConfig from "../OcdConsoleConfiguration"
 
 export const OcdReferenceDataQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps): JSX.Element => {
     const {ocdConsoleConfig, setOcdConsoleConfig} = useContext(ConsoleConfigContext)
-    const {ocdCache, setOcdCache} = useContext(CacheContext)
+    const {ocdCache} = useContext(CacheContext)
     const loadingState = '......Reading OCI Config'
     const regionsLoading = {id: 'Select Valid Profile', displayName: 'Select Valid Profile'}
     const className = `ocd-reference-data-query-dialog`

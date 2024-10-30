@@ -38,7 +38,7 @@ export namespace OcdDesignerBrowserActions {
                 resolve({canceled: false, filename: resp.filename, design: resp.design})
             }).catch((reason) => {
                 console.debug(reason)
-                reject(reason)
+                reject(new Error(reason))
             })
         })
     }
