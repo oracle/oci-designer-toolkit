@@ -36,7 +36,7 @@ export const OcdTabularContents = ({ ocdDocument, googleResources, selected, col
         setSortAscending(!sortAscending)
     }
     const sortFunction = (a: Record<string, any>, b: Record<string, any>): number => {
-        let result = 0
+        let result
         if (!sortColumn || sortColumn === '') result = 0
         else if (Array.isArray(a[sortColumn])) result = a[sortColumn].join(',').localeCompare(b[sortColumn].join(','))
         else if (isElementId(sortColumn)) result = getReferenceDisplayName(a[sortColumn]).localeCompare(getReferenceDisplayName(b[sortColumn]))
@@ -73,7 +73,7 @@ export const OcdTabularContents = ({ ocdDocument, googleResources, selected, col
                 />
             </div>
             <div className='tbody ocd-tabular-list-body'>
-                {googleResources[selected].sort(sortFunction).map((r: GoogleResource, i: number) => {
+                {googleResources[selected].toSorted(sortFunction).map((r: GoogleResource, i: number) => {
                     return <OcdTabularRow 
                         ocdDocument={ocdDocument}
                         googleResources={googleResources}

@@ -73,7 +73,7 @@ export const OcdTabularContents = ({ ocdDocument, azureResources, selected, colu
                 />
             </div>
             <div className='tbody ocd-tabular-list-body'>
-                {azureResources[selected].sort(sortFunction).map((r: AzureResource, i: number) => {
+                {azureResources[selected].toSorted(sortFunction).map((r: AzureResource, i: number) => {
                     return <OcdTabularRow 
                         ocdDocument={ocdDocument}
                         azureResources={azureResources}

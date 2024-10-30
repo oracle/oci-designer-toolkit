@@ -35,7 +35,7 @@ export const OcdTabularContents = ({ ocdDocument, ociResources, selected, column
         setSortAscending(!sortAscending)
     }
     const sortFunction = (a: Record<string, any>, b: Record<string, any>): number => {
-        let result = 0
+        let result
         if (!sortColumn || sortColumn === '') result = 0
         else if (Array.isArray(a[sortColumn])) result = a[sortColumn].join(',').localeCompare(b[sortColumn].join(','))
         else if (isElementId(sortColumn)) result = getReferenceDisplayName(a[sortColumn]).localeCompare(getReferenceDisplayName(b[sortColumn]))
@@ -72,7 +72,7 @@ export const OcdTabularContents = ({ ocdDocument, ociResources, selected, column
                 />
             </div>
             <div className='tbody ocd-tabular-list-body'>
-                {ociResources[selected].sort(sortFunction).map((r: OciResource, i: number) => {
+                {ociResources[selected].toSorted(sortFunction).map((r: OciResource, i: number) => {
                     return <OcdTabularRow 
                         ocdDocument={ocdDocument}
                         ociResources={ociResources}
