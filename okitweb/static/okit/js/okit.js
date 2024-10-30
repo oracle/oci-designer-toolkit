@@ -262,9 +262,9 @@ class OkitOCIData {
                         cache: false
                     }).done((resp) => {
                         console.info('OkitOCIData: Querying Dropdown data for', profile, region);
-                        const response = resp
+                        // const response = resp
                         const end = new Date().getTime()
-                        const profile_region = okitOciConfig.getRegion(profile)
+                        // const profile_region = okitOciConfig.getRegion(profile)
                         console.info('OkitOCIData: Querying Dropdown Region Subscription for', profile, 'took', end - start, 'ms')
                         // console.info('Region Subscriptions', typeof(response), response)
                         // We Know that this Profile is not a PCA-X9 so we can use the OCI Dropdowwn Query
