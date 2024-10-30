@@ -260,53 +260,54 @@ export class OciQuery extends OciCommonQuery {
                 // Load Balancers
                 // @ts-ignore
                 if (results[queries.indexOf(listLoadBalancers)].status === 'fulfilled' && results[queries.indexOf(listLoadBalancers)].value.length > 0) design.model.oci.resources.load_balancer = results[queries.indexOf(listLoadBalancers)].value
-                if (design.model.oci.resources.load_balancer && design.model.oci.resources.load_balancer.length > 0) {
-                    // Create Backend Sets
-                    design.model.oci.resources.load_balancer_backend_set = design.model.oci.resources.load_balancer.map((l) => Object.values(l.backendSets as OciModelResources.OciLoadBalancerBackendSet[]).map((b) => {
-                        return {...b, 
-                            id: l.id.replace('loadbalancer', 'load_balancer_backend_set'), 
-                            compartmentId: l.compartmentId, 
-                            displayName: b.name, 
-                            loadBalancerId: l.id, 
-                            lifecycleState: l.lifecycleState
-                        }
-                    })).flat()
-                    // Create Backends
-                    design.model.oci.resources.load_balancer_backend = design.model.oci.resources.load_balancer_backend_set.map((bs) => Object.values(bs.backends as OciModelResources.OciLoadBalancerBackend[]).map((b) => {
-                        const vnicAttachments = design.model.oci.resources.vnic_attachment ? design.model.oci.resources.vnic_attachment : []
-                        const vnicAttachment = vnicAttachments.find((v) => v.privateIp && v.privateIp.ipAddress === b.ipAddress)
-                        const instanceId = vnicAttachment ? vnicAttachment.instanceId : ''
-                        // const instanceId = design.model.oci.resources.vnic_attachment ? design.model.oci.resources.vnic_attachment.find((v) => v.privateIp && v.privateIp.ipAddress === b.ipAddress).instanceId : ''
-                        return {...b,
+                if (design.model.oci.resources.load_balancer && design.model.oci.resources.load_balancer.length > 0) this.processLoadBalancers(design)
+                // if (design.model.oci.resources.load_balancer && design.model.oci.resources.load_balancer.length > 0) {
+                //     // Create Backend Sets
+                //     design.model.oci.resources.load_balancer_backend_set = design.model.oci.resources.load_balancer.map((l: OciModelResources.OciLoadBalancer) => Object.values(l.backendSets as OciModelResources.OciLoadBalancerBackendSet[]).map((b) => {
+                //         return {...b, 
+                //             id: l.id.replace('loadbalancer', 'load_balancer_backend_set'), 
+                //             compartmentId: l.compartmentId, 
+                //             displayName: b.name, 
+                //             loadBalancerId: l.id, 
+                //             lifecycleState: l.lifecycleState
+                //         }
+                //     })).flat()
+                //     // Create Backends
+                //     design.model.oci.resources.load_balancer_backend = design.model.oci.resources.load_balancer_backend_set.map((bs) => Object.values(bs.backends as OciModelResources.OciLoadBalancerBackend[]).map((b) => {
+                //         const vnicAttachments = design.model.oci.resources.vnic_attachment ? design.model.oci.resources.vnic_attachment : []
+                //         const vnicAttachment = vnicAttachments.find((v) => v.privateIp && v.privateIp.ipAddress === b.ipAddress)
+                //         const instanceId = vnicAttachment ? vnicAttachment.instanceId : ''
+                //         // const instanceId = design.model.oci.resources.vnic_attachment ? design.model.oci.resources.vnic_attachment.find((v) => v.privateIp && v.privateIp.ipAddress === b.ipAddress).instanceId : ''
+                //         return {...b,
 
-                            id: bs.id.replace('load_balancer_backend_set', 'load_balancer_backend'), 
-                            compartmentId: bs.compartmentId, 
-                            displayName: b.name, 
-                            backendSetId: bs.id,
-                            backendsetName: bs.name,
-                            loadBalancerId: bs.loadBalancerId, 
-                            instanceId: instanceId,
-                            lifecycleState: bs.lifecycleState
-                        }
-                    })).flat()
-                    // Create Listeners
-                    design.model.oci.resources.load_balancer_listener = design.model.oci.resources.load_balancer.map((l) => (Object.values(l.listeners) as OciModelResources.OciLoadBalancerListener[]).map((listener) => {
-                        return {...listener, 
-                            id: l.id.replace('loadbalancer', 'load_balancer_listener'), 
-                            compartmentId: l.compartmentId, 
-                            displayName: listener.name, 
-                            defaultBackendSetName: design.model.oci.resources.load_balancer_backend_set.find((b) => b.loadBalancerId === l.id && b.displayName === listener.defaultBackendSetName)?.id,
-                            loadBalancerId: l.id, 
-                            lifecycleState: l.lifecycleState
-                        }
-                    })).flat()
-                    design.model.oci.resources.load_balancer.forEach((l) => {
-                        delete l.backendSets
-                        delete l.Listeners
-                    })
-                    // console.debug('OciQuery: Load Balancer Backend Sets:', design.model.oci.resources.load_balancer_backend_set)
-                    // console.debug('OciQuery: Load Balancer Backends:', design.model.oci.resources.load_balancer_backend)
-                }
+                //             id: bs.id.replace('load_balancer_backend_set', 'load_balancer_backend'), 
+                //             compartmentId: bs.compartmentId, 
+                //             displayName: b.name, 
+                //             backendSetId: bs.id,
+                //             backendsetName: bs.name,
+                //             loadBalancerId: bs.loadBalancerId, 
+                //             instanceId: instanceId,
+                //             lifecycleState: bs.lifecycleState
+                //         }
+                //     })).flat()
+                //     // Create Listeners
+                //     design.model.oci.resources.load_balancer_listener = design.model.oci.resources.load_balancer.map((l: OciModelResources.OciLoadBalancer) => (Object.values(l.listeners as OciModelResources.OciLoadBalancerListener[])).map((listener) => {
+                //         return {...listener, 
+                //             id: l.id.replace('loadbalancer', 'load_balancer_listener'), 
+                //             compartmentId: l.compartmentId, 
+                //             displayName: listener.name, 
+                //             defaultBackendSetName: design.model.oci.resources.load_balancer_backend_set.find((b) => b.loadBalancerId === l.id && b.displayName === listener.defaultBackendSetName)?.id,
+                //             loadBalancerId: l.id, 
+                //             lifecycleState: l.lifecycleState
+                //         }
+                //     })).flat()
+                //     design.model.oci.resources.load_balancer.forEach((l) => {
+                //         delete l.backendSets
+                //         delete l.listeners
+                //     })
+                //     // console.debug('OciQuery: Load Balancer Backend Sets:', design.model.oci.resources.load_balancer_backend_set)
+                //     // console.debug('OciQuery: Load Balancer Backends:', design.model.oci.resources.load_balancer_backend)
+                // }
                 // Network Load Balancers
                 // @ts-ignore
                 if (results[queries.indexOf(listNetworkLoadBalancers)].status === 'fulfilled' && results[queries.indexOf(listNetworkLoadBalancers)].value.length > 0) design.model.oci.resources.network_load_balancer = results[queries.indexOf(listNetworkLoadBalancers)].value
@@ -749,6 +750,56 @@ export class OciQuery extends OciCommonQuery {
                 reject(reason)
             })
         })
+    }
+
+    processLoadBalancers(design: OcdDesign) {
+        if (design.model.oci.resources.load_balancer && design.model.oci.resources.load_balancer.length > 0) {
+            // Create Backend Sets
+            design.model.oci.resources.load_balancer_backend_set = design.model.oci.resources.load_balancer.map((l: OciModelResources.OciLoadBalancer) => Object.values(l.backendSets as OciModelResources.OciLoadBalancerBackendSet[]).map((b) => {
+                return {...b, 
+                    id: l.id.replace('loadbalancer', 'load_balancer_backend_set'), 
+                    compartmentId: l.compartmentId, 
+                    displayName: b.name, 
+                    loadBalancerId: l.id, 
+                    lifecycleState: l.lifecycleState
+                }
+            })).flat()
+            // Create Backends
+            design.model.oci.resources.load_balancer_backend = design.model.oci.resources.load_balancer_backend_set.map((bs) => Object.values(bs.backends as OciModelResources.OciLoadBalancerBackend[]).map((b) => {
+                const vnicAttachments = design.model.oci.resources.vnic_attachment ? design.model.oci.resources.vnic_attachment : []
+                const vnicAttachment = vnicAttachments.find((v) => v.privateIp && v.privateIp.ipAddress === b.ipAddress)
+                const instanceId = vnicAttachment ? vnicAttachment.instanceId : ''
+                // const instanceId = design.model.oci.resources.vnic_attachment ? design.model.oci.resources.vnic_attachment.find((v) => v.privateIp && v.privateIp.ipAddress === b.ipAddress).instanceId : ''
+                return {...b,
+
+                    id: bs.id.replace('load_balancer_backend_set', 'load_balancer_backend'), 
+                    compartmentId: bs.compartmentId, 
+                    displayName: b.name, 
+                    backendSetId: bs.id,
+                    backendsetName: bs.name,
+                    loadBalancerId: bs.loadBalancerId, 
+                    instanceId: instanceId,
+                    lifecycleState: bs.lifecycleState
+                }
+            })).flat()
+            // Create Listeners
+            design.model.oci.resources.load_balancer_listener = design.model.oci.resources.load_balancer.map((l: OciModelResources.OciLoadBalancer) => (Object.values(l.listeners as OciModelResources.OciLoadBalancerListener[])).map((listener) => {
+                return {...listener, 
+                    id: l.id.replace('loadbalancer', 'load_balancer_listener'), 
+                    compartmentId: l.compartmentId, 
+                    displayName: listener.name, 
+                    defaultBackendSetName: design.model.oci.resources.load_balancer_backend_set.find((b) => b.loadBalancerId === l.id && b.displayName === listener.defaultBackendSetName)?.id,
+                    loadBalancerId: l.id, 
+                    lifecycleState: l.lifecycleState
+                }
+            })).flat()
+            design.model.oci.resources.load_balancer.forEach((l) => {
+                delete l.backendSets
+                delete l.listeners
+            })
+            // console.debug('OciQuery: Load Balancer Backend Sets:', design.model.oci.resources.load_balancer_backend_set)
+            // console.debug('OciQuery: Load Balancer Backends:', design.model.oci.resources.load_balancer_backend)
+        }
     }
 
     listMountTargets(compartmentIds: string[], retryCount: number = 0): Promise<any> {

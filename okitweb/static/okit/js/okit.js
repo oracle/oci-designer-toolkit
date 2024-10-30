@@ -262,9 +262,9 @@ class OkitOCIData {
                         cache: false
                     }).done((resp) => {
                         console.info('OkitOCIData: Querying Dropdown data for', profile, region);
-                        const response = resp
+                        // const response = resp
                         const end = new Date().getTime()
-                        const profile_region = okitOciConfig.getRegion(profile)
+                        // const profile_region = okitOciConfig.getRegion(profile)
                         console.info('OkitOCIData: Querying Dropdown Region Subscription for', profile, 'took', end - start, 'ms')
                         // console.info('Region Subscriptions', typeof(response), response)
                         // We Know that this Profile is not a PCA-X9 so we can use the OCI Dropdowwn Query
@@ -541,8 +541,6 @@ class OkitPCAData extends OkitOCIData {
         console.info('OkitPCAData: Querying PCA Dropdown data for', profile, region);
         const self = this;
         const start = new Date().getTime()
-        const section = okitOciConfig.getSection(profile)
-        const config = section && section.session ? okitSessionOciConfigs.configs[profile] : {}
         // Get Shipped
         return new Promise((resolve, reject) => {
             $.getJSON('dropdown', {cache: false}).done((resp) => {
