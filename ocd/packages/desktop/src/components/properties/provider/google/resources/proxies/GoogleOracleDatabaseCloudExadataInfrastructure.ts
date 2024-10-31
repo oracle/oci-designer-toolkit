@@ -3,8 +3,8 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import { OcdCacheData } from '../../../../../OcdCache'
-import { OcdDocument } from '../../../../../OcdDocument'
+import { OcdCacheData } from '../../../../../OcdCache.js'
+import { OcdDocument } from '../../../../../OcdDocument.js'
 import { GoogleModelResources as Model } from '@ocd/model'
 
 export namespace GoogleOracleDatabaseCloudExadataInfrastructureProxy {

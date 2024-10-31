@@ -10,16 +10,16 @@
 **
 */
 
-export { AzureContainerRegistry, AzureContainerRegistryClient } from './resources/AzureContainerRegistry'
-export { AzureDnsZone, AzureDnsZoneClient } from './resources/AzureDnsZone'
-export { AzureKubernetesCluster, AzureKubernetesClusterClient } from './resources/AzureKubernetesCluster'
-export { AzureLoadBalancer, AzureLoadBalancerClient } from './resources/AzureLoadBalancer'
-export { AzureMssqlServer, AzureMssqlServerClient } from './resources/AzureMssqlServer'
-export { AzureOracleAutonomousDatabase, AzureOracleAutonomousDatabaseClient } from './resources/AzureOracleAutonomousDatabase'
-export { AzureOracleCloudVmCluster, AzureOracleCloudVmClusterClient } from './resources/AzureOracleCloudVmCluster'
-export { AzureOracleExadataInfrastructure, AzureOracleExadataInfrastructureClient } from './resources/AzureOracleExadataInfrastructure'
-export { AzureResourceGroup, AzureResourceGroupClient } from './resources/AzureResourceGroup'
-export { AzureSubnet, AzureSubnetClient } from './resources/AzureSubnet'
-export { AzureVirtualMachine, AzureVirtualMachineClient } from './resources/AzureVirtualMachine'
-export { AzureVirtualNetwork, AzureVirtualNetworkClient } from './resources/AzureVirtualNetwork'
+export { AzureContainerRegistry } from './resources/AzureContainerRegistry.js'
+export { AzureDnsZone } from './resources/AzureDnsZone.js'
+export { AzureKubernetesCluster } from './resources/AzureKubernetesCluster.js'
+export { AzureLoadBalancer } from './resources/AzureLoadBalancer.js'
+export { AzureMssqlServer } from './resources/AzureMssqlServer.js'
+export { AzureOracleAutonomousDatabase } from './resources/AzureOracleAutonomousDatabase.js'
+export { AzureOracleCloudVmCluster } from './resources/AzureOracleCloudVmCluster.js'
+export { AzureOracleExadataInfrastructure } from './resources/AzureOracleExadataInfrastructure.js'
+export { AzureResourceGroup } from './resources/AzureResourceGroup.js'
+export { AzureSubnet } from './resources/AzureSubnet.js'
+export { AzureVirtualMachine } from './resources/AzureVirtualMachine.js'
+export { AzureVirtualNetwork } from './resources/AzureVirtualNetwork.js'
     

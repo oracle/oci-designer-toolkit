@@ -6,9 +6,9 @@
 
 import { v4 as uuidv4 } from 'uuid'
 import { OcdUtils } from '@ocd/core'
-import { OcdResource } from "../../OcdResource"
-import * as Resources from './resources'
-import { OcdResources } from '../../OcdDesign'
+import { OcdResource } from "../../OcdResource.js"
+import * as Resources from './resources.js'
+import { OcdResources } from '../../OcdDesign.js'
 
 export interface AzureResource extends OcdResource {
     location: string

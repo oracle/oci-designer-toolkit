@@ -3,9 +3,9 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import { TerraformSchema } from "../types/TerraformSchema"
-import { resourceMap as ociResourceMap, dataMap as ociDataMap } from './data/OciResourceMap'
-import { resourceMap as azureAzResourceMap } from './data/AzureRmResourceMap'
+import { TerraformSchema } from "../types/TerraformSchema.js"
+import { resourceMap as ociResourceMap, dataMap as ociDataMap } from './data/OciResourceMap.js'
+import { resourceMap as azureAzResourceMap } from './data/AzureRmResourceMap.js'
 import { OcdUtils } from "@ocd/core"
 
 export class OcdTerraformSchemaResourceAttributesGenerator {

@@ -9,4 +9,4 @@ import path from 'path'
 export class OcdCliExporter {}
 
 export default OcdCliExporter
-module.exports = { OcdCliExporter }
+// module.exports = { OcdCliExporter }

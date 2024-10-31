@@ -6,9 +6,9 @@
 import fs from 'fs'
 import path from 'path'
 import os from 'os'
-import { rootCertificates } from "tls"
-import { Agent as httpsAgent } from "https"
-import https from "https"
+// import { rootCertificates } from "tls"
+// import { Agent as httpsAgent } from "https"
+// import https from "https"
 import { OcdUtils } from "@ocd/core"
 import { common, identity } from "oci-sdk"
 
@@ -161,4 +161,4 @@ export class OciCommonQuery {
 }
 
 export default OciCommonQuery
-module.exports = { OciCommonQuery }
+// module.exports = { OciCommonQuery }

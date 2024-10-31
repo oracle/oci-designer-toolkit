@@ -3,8 +3,8 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import { GoogleTabularResourceProps } from "../../../../../types/ReactComponentProperties"
-import { OcdTabularContents } from "../GoogleTabularContents"
+import { GoogleTabularResourceProps } from "../../../../../types/ReactComponentProperties.js"
+import { OcdTabularContents } from "../GoogleTabularContents.js"
 
 export const GoogleOracleDatabaseAutonomousDatabase = ({ ocdDocument, googleResources, selected }: GoogleTabularResourceProps): JSX.Element => {
     const columnTitles: string[] = []

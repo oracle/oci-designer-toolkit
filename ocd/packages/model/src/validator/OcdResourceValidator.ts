@@ -4,7 +4,7 @@
 */
 
 import { OcdUtils } from "@ocd/core"
-import { OcdResources } from "../OcdDesign"
+import { OcdResources } from "../OcdDesign.js"
 
 export interface OcdValidationResult {
     valid: boolean

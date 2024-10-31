@@ -3,7 +3,7 @@
 ** Licensed under the GNU GENERAL PUBLIC LICENSE v 3.0 as shown at https://www.gnu.org/licenses/.
 */
 
-import { resourceMap } from './OcdResourceMap'
+import { resourceMap } from './OcdResourceMap.js'
 
 export namespace OcdUtils {
     export interface ResourcePropertyCondition {

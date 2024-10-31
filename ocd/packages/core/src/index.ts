@@ -4,4 +4,4 @@
 */
 
 
-export { OcdUtils } from "./OcdUtils"
+export { OcdUtils } from "./OcdUtils.js"

@@ -3,8 +3,8 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import { AzureTabularResourceProps } from "../../../../../types/ReactComponentProperties"
-import { OcdTabularContents } from "../AzureTabularContents"
+import { AzureTabularResourceProps } from "../../../../../types/ReactComponentProperties.js"
+import { OcdTabularContents } from "../AzureTabularContents.js"
 
 export const AzureVirtualNetwork = ({ ocdDocument, azureResources, selected }: AzureTabularResourceProps): JSX.Element => {
     const columnTitles: string[] = []

@@ -3,8 +3,8 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import { OcdPropertiesGenerator } from './OcdPropertiesGenerator'
-import { commonElements, commonIgnoreElements } from './data/OciCommonResourceProperties'
+import { OcdPropertiesGenerator } from './OcdPropertiesGenerator.js'
+import { commonElements, commonIgnoreElements } from './data/OciCommonResourceProperties.js'
 
 export class OciPropertiesGenerator extends OcdPropertiesGenerator {
     constructor () {
@@ -14,4 +14,4 @@ export class OciPropertiesGenerator extends OcdPropertiesGenerator {
 }
 
 export default OciPropertiesGenerator
-module.exports = { OciPropertiesGenerator }
+// module.exports = { OciPropertiesGenerator }

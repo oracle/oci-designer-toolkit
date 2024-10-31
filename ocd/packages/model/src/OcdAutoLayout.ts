@@ -4,16 +4,16 @@
 */
 
 import { v4 as uuidv4 } from 'uuid'
-import { OcdDesign, OcdViewCoords, OcdResources, OciResources, OcdViewPage, OcdViewLayer } from './OcdDesign'
-import { OcdResource } from './OcdResource'
-import { OciResource } from './provider/oci/OciResource'
 import { OcdUtils } from '@ocd/core'
-import { OciCompartment } from './provider/oci/resources/OciCompartment'
-import { OcdTwoColumnLayoutEngine } from './layout/OcdTwoColumnLayoutEngine'
-import { OcdSingleColumnLayoutEngine } from './layout/OcdSingleColumnLayoutEngine'
-import { OcdDynamicLayoutEngine } from './layout/OcdDynamicLayoutEngine'
-import { layoutEngineConfig } from './layout/OcdLayoutEngineConfig'
-import { OcdOkitWebLayoutEngine } from './layout/OcdOkitWebLayoutEngine'
+import { OcdDesign, OcdViewCoords, OcdResources, OciResources, OcdViewPage, OcdViewLayer } from './OcdDesign.js'
+import { OcdResource } from './OcdResource.js'
+import { OciResource } from './provider/oci/OciResource.js'
+import { OciCompartment } from './provider/oci/resources/OciCompartment.js'
+import { OcdTwoColumnLayoutEngine } from './layout/OcdTwoColumnLayoutEngine.js'
+import { OcdSingleColumnLayoutEngine } from './layout/OcdSingleColumnLayoutEngine.js'
+import { OcdDynamicLayoutEngine } from './layout/OcdDynamicLayoutEngine.js'
+import { layoutEngineConfig } from './layout/OcdLayoutEngineConfig.js'
+import { OcdOkitWebLayoutEngine } from './layout/OcdOkitWebLayoutEngine.js'
 
 export class OcdAutoLayout {
     coords: OcdViewCoords[]
