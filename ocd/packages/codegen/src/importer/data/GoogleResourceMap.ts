@@ -7,9 +7,9 @@ import { OcdIncludedElements, OcdResourceMap } from "../../types/OcdImporterData
 
 export const resourceMap: OcdResourceMap = {
     "google_compute_network": "compute_network",
-    "google_oracledatabase_autonomous_database_regular": "oracledatabase_autonomous_database_regular",
-    "google_oracledatabase_exadata_infrastructure": "oracledatabase_exadata_infrastructure",
-    "google_oracledatabase_cloud_vm_cluster": "oracledatabase_cloud_vm_cluster",
+    "google_oracle_database_autonomous_database": "oracle_database_autonomous_database",
+    "google_oracle_database_cloud_exadata_infrastructure": "oracle_database_cloud_exadata_infrastructure",
+    "google_oracle_database_cloud_vm_cluster": "oracle_database_cloud_vm_cluster",
 }
 
 export const dataMap: OcdResourceMap = {}
@@ -19,7 +19,22 @@ export const resourceAttributes: OcdIncludedElements = {
     "google_compute_network": [
         "gateway_ipv4"
       ],
-    "google_oracledatabase_autonomous_database_regular": [],
-    "google_oracledatabase_exadata_infrastructure": [],
-    "google_oracledatabase_cloud_vm_cluster": [],
+    "google_oracle_database_autonomous_database": [
+        "admin_password",
+        "autonomous_database_id",
+        "cidr",
+        "database",
+        "display_name"
+    ],
+    "google_oracle_database_cloud_exadata_infrastructure": [
+        "cloud_exadata_infrastructure_id",
+        "display_name"
+    ],
+    "google_oracle_database_cloud_vm_cluster": [
+        "backup_subnet_cidr",
+        "cidr",
+        "cloud_vm_cluster_id",
+        "exadata_infrastructure",
+        "network"
+    ],
 }

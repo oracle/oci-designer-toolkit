@@ -12,7 +12,7 @@ export namespace OcdCommonConfigs {
                 id: 'cidr_block',
                 properties: {
                     placeholder: '0.0.0.0/0',
-                    pattern: "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(3[0-2]|[1-2][0-9]|[0-9]))$)+|^var\.+$",
+                    pattern: String.raw`^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(3[0-2]|[1-2][0-9]|[0-9]))$)+|^var\.+$`,
                     title: 'IPv4 CIDR block'
                 },
                 configs: []
@@ -21,7 +21,7 @@ export namespace OcdCommonConfigs {
                 id: 'cidr_blocks',
                 properties: {
                     placeholder: '0.0.0.0/0,0.0.0.0/0',
-                    pattern: "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(3[0-2]|[1-2][0-9]|[0-9]))(,\s?|$))+|^(var\.+(,\s?|$))",
+                    pattern: String.raw`^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(3[0-2]|[1-2][0-9]|[0-9]))(,\s?|$))+|^(var\.+(,\s?|$))`,
                     title: 'Comma separated IPv4 CIDR blocks'
                 },
                 configs: []
@@ -30,7 +30,7 @@ export namespace OcdCommonConfigs {
                 id: 'ip_address',
                 properties: {
                     placeholder: '0.0.0.0',
-                    pattern: "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$)+|^var\.+$",
+                    pattern: String.raw`^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$)+|^var\.+$`,
                     title: 'IPv4 Address'
                 },
                 configs: []
@@ -39,7 +39,7 @@ export namespace OcdCommonConfigs {
                 id: 'ipv6cidr_block',
                 properties: {
                     placeholder: '0000:0000:0000:00::/00',
-                    pattern: "^((((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*|((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4})){7})(,\s?|$))+|^(var\.+(,\s?|$))",
+                    pattern: String.raw`^((((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*|((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4})){7})(,\s?|$))+|^(var\.+(,\s?|$))`,
                     title: 'IPv6 CIDR block'
                 },
                 configs: []
@@ -48,7 +48,7 @@ export namespace OcdCommonConfigs {
                 id: 'ipv6cidr_blocks',
                 properties: {
                     placeholder: '0000:0000:0000:00::/00,0000:0000:0000:00::/00',
-                    pattern: "^((((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*|((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4})){7})(,\s?|$))+|^(var\.+(,\s?|$))",
+                    pattern: String.raw`^((((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*|((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4})){7})(,\s?|$))+|^(var\.+(,\s?|$))`,
                     title: 'Comma separated IPv6 CIDR blocks'
                 },
                 configs: []
@@ -57,7 +57,7 @@ export namespace OcdCommonConfigs {
                 id: 'dns_label',
                 properties: {
                     maxLength: 15,
-                    pattern: '^[a-zA-Z][a-zA-Z0-9]{0,15}$|^var\.+$',
+                    pattern: String.raw`^[a-zA-Z][a-zA-Z0-9]{0,15}$|^var\.+$`,
                     title: 'Only letters and numbers, starting with a letter. 15 characters max, or a variable starting "var."'
                 },
                 configs: []
@@ -66,7 +66,7 @@ export namespace OcdCommonConfigs {
                 id: 'hostname_label',
                 properties: {
                     maxLength: 64,
-                    pattern: '^[a-zA-Z][a-zA-Z0-9]{0,64}$|^var\.+$',
+                    pattern: String.raw`^[a-zA-Z][a-zA-Z0-9]{0,64}$|^var\.+$`,
                     title: 'Hostname can only be letters and numbers, starting with a letter. 64 characters max.'
                 },
                 configs: []

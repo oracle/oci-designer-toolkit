@@ -13,7 +13,7 @@ export namespace GoogleCommonConfigs {
             {
                 id: 'admin_password',
                 properties: {
-                    pattern: '^var\.+$',
+                    pattern: String.raw`^var\.+$`,
                     title: 'Password fields only support Variables.'
                 },
                 configs: []

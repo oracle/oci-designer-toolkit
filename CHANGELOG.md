@@ -1,6 +1,15 @@
 # Release Notes
 
 
+## Version 0.65.0
+**Release Date**: 30th October 2024
+### Features
+1. OKIT-Web: Create PCA specific OKIT Cache classes for use when accessing the pca link.
+2. OKIT-Ocd: Update initial Azure resources to match released terraform providers. (#OKIT-316)
+3. OKIT-Ocd: Update initial Google resources to match released terraform providers . (#OKIT-317)
+### Bug Fixes
+1. OKIT-Web: Resolve issue with queried node_pool where the availability dodamin was still the full name. (#723)
+
 ## Version 0.64.0
 **Release Date**: 30th September 2024
 ### Features

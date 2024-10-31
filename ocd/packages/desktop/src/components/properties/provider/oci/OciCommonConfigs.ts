@@ -13,7 +13,7 @@ export namespace OciCommonConfigs {
             {
                 id: 'admin_password',
                 properties: {
-                    pattern: '^var\.+$',
+                    pattern: String.raw`^var\.+$`,
                     title: 'Password fields only support Variables.'
                 },
                 configs: []
@@ -31,7 +31,7 @@ export namespace OciCommonConfigs {
             {
                 id: 'backup_tde_password',
                 properties: {
-                    pattern: '^var\.+$',
+                    pattern: String.raw`^var\.+$`,
                     title: 'Password fields only support Variables.'
                 },
                 configs: []
@@ -39,7 +39,7 @@ export namespace OciCommonConfigs {
             {
                 id: 'cluster_admin_password',
                 properties: {
-                    pattern: '^var\.+$',
+                    pattern: String.raw`^var\.+$`,
                     title: 'Password fields only support Variables.'
                 },
                 configs: []
@@ -47,7 +47,7 @@ export namespace OciCommonConfigs {
             {
                 id: 'database_admin_password',
                 properties: {
-                    pattern: '^var\.+$',
+                    pattern: String.raw`^var\.+$`,
                     title: 'Password fields only support Variables.'
                 },
                 configs: []
@@ -67,7 +67,7 @@ export namespace OciCommonConfigs {
                 id: 'ipv6private_cidr_blocks',
                 properties: {
                     placeholder: '2001:0db8:0123:45::/56',
-                    pattern: "^((((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*|((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4})){7})(,\s?|$))+|^(var\.+(,\s?|$))",
+                    pattern: String.raw`^((((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*|((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4})){7})(,\s?|$))+|^(var\.+(,\s?|$))`,
                     title: 'Comma separated IPv6 CIDR blocks'
                 },
                 configs: []
@@ -84,7 +84,7 @@ export namespace OciCommonConfigs {
             {
                 id: 'tde_wallet_password',
                 properties: {
-                    pattern: '^var\.+$',
+                    pattern: String.raw`^var\.+$`,
                     title: 'Password fields only support Variables.'
                 },
                 configs: []
@@ -92,7 +92,7 @@ export namespace OciCommonConfigs {
             {
                 id: 'vpc_password',
                 properties: {
-                    pattern: '^var\.+$',
+                    pattern: String.raw`^var\.+$`,
                     title: 'Password fields only support Variables.'
                 },
                 configs: []
@@ -101,7 +101,7 @@ export namespace OciCommonConfigs {
                 id: 'whitelisted_ips',
                 properties: {
                     placeholder: '0.0.0.0/0,0.0.0.0/0',
-                    pattern: "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(3[0-2]|[1-2][0-9]|[0-9]))(,\s?|$))+|^(var\.+(,\s?|$))",
+                    pattern: String.raw`^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(3[0-2]|[1-2][0-9]|[0-9]))(,\s?|$))+|^(var\.+(,\s?|$))`,
                     title: 'Comma separated IPv4 CIDR blocks'
                 },
                 configs: []

@@ -243,7 +243,7 @@ class OkitOCIData {
     }
 
     query(profile, region='', save=false) {
-        console.info('Querying Dropdown data for', profile, region);
+        console.info('OkitOCIData: Querying OCI Dropdown data for', profile, region);
         const self = this;
         const start = new Date().getTime()
         const section = okitOciConfig.getSection(profile)
@@ -262,37 +262,37 @@ class OkitOCIData {
                         cache: false
                     }).done((resp) => {
                         console.info('OkitOCIData: Querying Dropdown data for', profile, region);
-                        const response = resp
+                        // const response = resp
                         const end = new Date().getTime()
-                        const profile_region = okitOciConfig.getRegion(profile)
+                        // const profile_region = okitOciConfig.getRegion(profile)
                         console.info('OkitOCIData: Querying Dropdown Region Subscription for', profile, 'took', end - start, 'ms')
                         // console.info('Region Subscriptions', typeof(response), response)
                         // We Know that this Profile is not a PCA-X9 so we can use the OCI Dropdowwn Query
-                        if (response.length === 1 && response[0].region_key !== profile_region) {
-                            if (region === '') region = profile_region
-                            console.info('OkitOCIData: Querying PCA Dropdown data for', profile, region);
-                            $.getJSON('pca/dropdown', {
-                                cache: false,
-                                profile: profile,
-                                region: region
-                            }).done((resp) => {
-                                self.dropdown_data = {...self.dropdown_data, ...resp};
-                                delete self.dropdown_data.default
-                                delete self.dropdown_data.shipped
-                                self.dropdown_data.cache_date = Date.now()
-                                const end = new Date().getTime()
-                                console.info('PCA-X9 Queried Dropdown Data for', profile, 'took', end - start, 'ms')
-                                console.info('PCA-X9 Data', resp)
-                                // save ? this.save(profile, region) : this.storeLocal(profile, region)
-                                this.save(profile, region)
-                                this.storeLocal(profile, region)
-                                resolve(this)
-                            }).fail((xhr, status, error) => {
-                                console.warn('Status : '+ status)
-                                console.warn('Error : '+ error)
-                                reject(error)
-                            })
-                        } else {
+                        // if (response.length === 1 && response[0].region_key !== profile_region) {
+                        //     if (region === '') region = profile_region
+                        //     console.info('OkitOCIData: Querying PCA Dropdown data for', profile, region);
+                        //     $.getJSON('pca/dropdown', {
+                        //         cache: false,
+                        //         profile: profile,
+                        //         region: region
+                        //     }).done((resp) => {
+                        //         self.dropdown_data = {...self.dropdown_data, ...resp};
+                        //         delete self.dropdown_data.default
+                        //         delete self.dropdown_data.shipped
+                        //         self.dropdown_data.cache_date = Date.now()
+                        //         const end = new Date().getTime()
+                        //         console.info('PCA-X9 Queried Dropdown Data for', profile, 'took', end - start, 'ms')
+                        //         console.info('PCA-X9 Data', resp)
+                        //         // save ? this.save(profile, region) : this.storeLocal(profile, region)
+                        //         this.save(profile, region)
+                        //         this.storeLocal(profile, region)
+                        //         resolve(this)
+                        //     }).fail((xhr, status, error) => {
+                        //         console.warn('Status : '+ status)
+                        //         console.warn('Error : '+ error)
+                        //         reject(error)
+                        //     })
+                        // } else {
                             console.info('OkitOCIData: Querying OCI Dropdown data for', profile, region);
                             $.getJSON('oci/dropdown', {
                                 profile: profile,
@@ -316,7 +316,7 @@ class OkitOCIData {
                                 console.warn('Error : '+ error)
                                 reject(error)
                             })
-                        }
+                        // }
                     }).fail((xhr, status, error) => {
                         console.warn('Status : '+ status)
                         console.warn('Error : '+ error)
@@ -536,6 +536,48 @@ class OkitOCIData {
     }
 }
 
+class OkitPCAData extends OkitOCIData {
+    query(profile, region='', save=false) {
+        console.info('OkitPCAData: Querying PCA Dropdown data for', profile, region);
+        const self = this;
+        const start = new Date().getTime()
+        // Get Shipped
+        return new Promise((resolve, reject) => {
+            $.getJSON('dropdown', {cache: false}).done((resp) => {
+                console.info('OkitPCAData: Retrieved Shipped Dropdown Data');
+                self.dropdown_data = resp
+                // Test if Profile is valid
+                if (okitOciConfig && okitOciConfig.getSections().includes(profile)) {
+                    $.getJSON('pca/dropdown', {
+                        cache: false,
+                        profile: profile,
+                        region: region
+                    }).done((resp) => {
+                        self.dropdown_data = {...self.dropdown_data, ...resp};
+                        delete self.dropdown_data.default
+                        delete self.dropdown_data.shipped
+                        self.dropdown_data.cache_date = Date.now()
+                        const end = new Date().getTime()
+                        console.info('OkitPCAData: PCA-X9 Queried Dropdown Data for', profile, 'took', end - start, 'ms')
+                        console.info('OkitPCAData: PCA-X9 Data', resp)
+                        // save ? this.save(profile, region) : this.storeLocal(profile, region)
+                        this.save(profile, region)
+                        this.storeLocal(profile, region)
+                        resolve(this)
+                    }).fail((xhr, status, error) => {
+                        console.warn('Status : '+ status)
+                        console.warn('Error : '+ error)
+                        reject(error)
+                    })
+                } else {
+                        console.warn('OkitPCAData: Profile "', profile, '" does not exist in OCI Config')
+                        reject('OkitPCAData: Profile', profile, 'does not exist in OCI Config')
+                }
+            })    
+        })
+    }
+}
+
 class OkitRegions {
     key = "OkitRegionCache"
     constructor(loaded_callback) {
@@ -634,20 +676,20 @@ class OkitRegions {
                     const profile_region = okitOciConfig.getRegion(profile)
                     console.info('Region Subscription for', profile, 'took', end - start, 'ms')
                     console.info('Region Subscriptions', typeof(response), Array.isArray(response), response)
-                    if (response.length === 1 && response[0].region_key !== profile_region) {
-                        console.info('OkitRegions: Querying PCA data for', profile, profile_region);
-                        $.getJSON(`pca/regions`, {
-                            profile: profile,
-                            cache: false
-                        }).done((resp) => {
-                            const end = new Date().getTime()
-                            console.info('Load Regions took', end - start, 'ms')
-                            self.regions = resp
-                            self.storeLocal(profile);
-                            if (self.loaded_callback) self.loaded_callback();
-                            resolve(this)
-                        }).fail((xhr, status, error) => {reject(error)})
-                    } else {
+                    // if (response.length === 1 && response[0].region_key !== profile_region) {
+                    //     console.info('OkitRegions: Querying PCA data for', profile, profile_region);
+                    //     $.getJSON(`pca/regions`, {
+                    //         profile: profile,
+                    //         cache: false
+                    //     }).done((resp) => {
+                    //         const end = new Date().getTime()
+                    //         console.info('Load Regions took', end - start, 'ms')
+                    //         self.regions = resp
+                    //         self.storeLocal(profile);
+                    //         if (self.loaded_callback) self.loaded_callback();
+                    //         resolve(this)
+                    //     }).fail((xhr, status, error) => {reject(error)})
+                    // } else {
                         console.info('OkitRegions: Querying OCI data for', profile, profile_region);
                         self.regions = resp
                         // if (self.regions.length === 1 && self.regions[0].region_key !== profile_region) self.regions = [{is_home_region: true, region_key: profile_region, region_name: profile_region, status: 'READY'}]
@@ -667,7 +709,7 @@ class OkitRegions {
                         //     if (self.loaded_callback) self.loaded_callback();
                         //     resolve(this)
                         // }).fail((xhr, status, error) => {reject(error)})
-                    }
+                    // }
                     // $.getJSON(`oci/regions/${profile}`, {
                     //     profile: profile,
                     //     config: JSON.stringify(config),
@@ -716,6 +758,37 @@ class OkitRegions {
     }
 
     isRegionAvailable(region_id) {return this.regions.map((r) => r.id).includes(region_id)}
+}
+
+class OkitPCARegions extends OkitRegions {
+    query(profile) {
+        console.info('OkitPCARegions: Loading Region data for', profile);
+        const self = this
+        const section = okitOciConfig.getSection(profile)
+        const config = section && section.session ? okitSessionOciConfigs.configs[profile] : {}
+        console.debug('OkitRegions: Config', config, 'Section', section)
+
+        return new Promise((resolve, reject) => {
+            if (okitOciConfig && okitOciConfig.getSections().includes(profile)) {
+                const start = new Date().getTime()
+                $.getJSON(`pca/regions`, {
+                    profile: profile,
+                    cache: false
+                }).done((resp) => {
+                    const end = new Date().getTime()
+                    console.info('Load Regions took', end - start, 'ms')
+                    self.regions = resp
+                    self.storeLocal(profile);
+                    if (self.loaded_callback) self.loaded_callback();
+                    resolve(this)
+                }).fail((xhr, status, error) => {reject(error)})
+            } else {
+                console.warn('OkitOciData: Profile "', profile, '" does not exist in OCI Config')
+                reject('OkitOciData: Profile', profile, 'does not exist in OCI Config')
+            }
+
+        })
+    }
 }
 
 class OkitSettings {

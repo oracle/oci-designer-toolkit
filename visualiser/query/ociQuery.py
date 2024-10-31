@@ -279,7 +279,7 @@ class OCIQuery(OCIConnection):
                     elif resource_type == "NetworkSecurityGroup":
                         resource_list = self.network_security_group(resource_list, resources)
                     elif resource_type == "NodePool":
-                        logger.info(f'Node Pools {jsonToFormattedString(resource_list)}')
+                        resource_list = self.node_pools(resource_list)
                     elif resource_type == "NoSQLTable":
                         resource_list = self.nosql_databases(resource_list, resources)
                     elif resource_type == "RouteTable":
@@ -489,6 +489,11 @@ class OCIQuery(OCIConnection):
         for database in databases:
             database['indexes'] = [i for i in indexes if i['table_id'] == database['id']]
         return databases
+
+    def node_pools(self, node_pools):
+        for node_pool in node_pools:
+            node_pool.pop('nodes', None)
+        return node_pools
 
     def object_storage_buckets(self, buckets, resources):
         for bucket in buckets:

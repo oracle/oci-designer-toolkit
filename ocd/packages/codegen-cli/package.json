@@ -1,6 +1,6 @@
 {
   "name": "@ocd/codegen-cli",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "OKIT Open Cloud DesignerCodegen Command-line",
   "title": "OKIT Open Cloud Designer Codegen Command-linetop",
   "author": {
@@ -22,9 +22,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
 
+    "clean": "rm -rf lib dist",
     "pack": "mkdir -p dist && npm pack --pack-destination dist",
     "compile": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
     "build": "npm run compile && npm run pack",
+
+    "generate-ocd-svg-css-desktop": "node lib/esm/ocd-build-svg-css.js -d ../desktop/src/data -i ../desktop/src/css",
 
     "generate-ocd-build-date-desktop": "node lib/esm/ocd-set-build-date.js -d ../desktop/src/data -p ../desktop/package.json",
     "generate-ocd-build-date-export": "node lib/esm/ocd-set-build-date.js -d ../export/src/data -p ../desktop/package.json",
@@ -78,6 +81,6 @@
     "import-and-generate": "npm run import-and-generate-oci && npm run import-and-generate-azurerm && npm run import-and-generate-google"
   },
   "dependencies": {
-    "@ocd/codegen": "^0.2.4"
+    "@ocd/codegen": ">=0.2.5"
   }
 }

@@ -20,8 +20,13 @@ const initialiseGlobals = () => {
     okitSessionOciConfigs = new OkitSessionOCIConfigs();
     okitSettings = new OkitSettings();
     okitOciConfig = new OkitOCIConfig(loadHeaderConfigDropDown);
-    okitRegions = new OkitRegions(loadHeaderRegionsDropDown);
-    okitOciData = new OkitOCIData(okitSettings.profile, okitSettings.region);
+    if (pca_mode || c3_mode) {
+        okitRegions = new OkitPCARegions(loadHeaderRegionsDropDown);
+        okitOciData = new OkitPCAData(okitSettings.profile, okitSettings.region);
+    } else {
+        okitRegions = new OkitRegions(loadHeaderRegionsDropDown);
+        okitOciData = new OkitOCIData(okitSettings.profile, okitSettings.region);
+    }
     okitGitConfig = new OkitGITConfig();
     okitOciProductPricing = new OkitOciProductPricing()
 

@@ -6,9 +6,9 @@
 import { useContext, useState } from 'react'
 import { menuItems, MenuItem } from './Menu'
 import OcdDocument from './OcdDocument'
-import { ConsoleMenuProps, ConsolePageProps, OcdActiveFile } from '../types/Console'
+import { ConsoleMenuProps, OcdActiveFile } from '../types/Console'
 import OcdConsoleConfig from './OcdConsoleConfiguration'
-import { ActiveFileContext, ConsoleConfigContext } from '../pages/OcdConsole'
+import { ActiveFileContext } from '../pages/OcdConsole'
 
 const OcdConsoleMenuItem = ({ menuItem, depth, ocdDocument, setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig }: any): JSX.Element => {
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
@@ -24,6 +24,7 @@ const OcdConsoleMenuItem = ({ menuItem, depth, ocdDocument, setOcdDocument, ocdC
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
         onClick={closeDropdown}
+        aria-hidden
         >
             {menuItem.submenu && Array.isArray(menuItem.submenu) ? (
                 <>

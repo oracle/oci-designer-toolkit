@@ -11,7 +11,7 @@
 */
 
 export { GoogleComputeNetwork, GoogleComputeNetworkClient } from './resources/GoogleComputeNetwork'
-export { GoogleOracledatabaseAutonomousDatabaseRegular, GoogleOracledatabaseAutonomousDatabaseRegularClient } from './resources/GoogleOracledatabaseAutonomousDatabaseRegular'
-export { GoogleOracledatabaseCloudVmCluster, GoogleOracledatabaseCloudVmClusterClient } from './resources/GoogleOracledatabaseCloudVmCluster'
-export { GoogleOracledatabaseExadataInfrastructure, GoogleOracledatabaseExadataInfrastructureClient } from './resources/GoogleOracledatabaseExadataInfrastructure'
+export { GoogleOracleDatabaseAutonomousDatabase, GoogleOracleDatabaseAutonomousDatabaseClient } from './resources/GoogleOracleDatabaseAutonomousDatabase'
+export { GoogleOracleDatabaseCloudExadataInfrastructure, GoogleOracleDatabaseCloudExadataInfrastructureClient } from './resources/GoogleOracleDatabaseCloudExadataInfrastructure'
+export { GoogleOracleDatabaseCloudVmCluster, GoogleOracleDatabaseCloudVmClusterClient } from './resources/GoogleOracleDatabaseCloudVmCluster'
     

@@ -4,9 +4,9 @@
 */
 
 export const releaseNotes = `[![License: UPL](https://img.shields.io/badge/license-UPL-green)](https://img.shields.io/badge/license-UPL-green) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=oracle_oci-designer-toolkit&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=oracle_oci-designer-toolkit)
-# September 2024 Release (Version 0.64.0)
+# September 2024 Release (Version 0.65.0)
 ____
-**Update 0.64.0**: This update addresses the following issues.
+**Update 0.65.0**: This update addresses the following issues.
 1. OKIT-Web: Resolve issue where save dialog did not display existing content (#717)
 2. OKIT-Web: Fix for underlying AuthLib api change.
 ____

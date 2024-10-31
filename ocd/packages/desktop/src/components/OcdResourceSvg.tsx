@@ -7,7 +7,7 @@
 import { useContext, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { OcdDocument } from './OcdDocument'
-import { OcdViewPage, OcdViewConnector, OcdViewCoords, OcdViewLayer, OcdResource } from '@ocd/model'
+import { OcdViewPage, OcdViewCoords, OcdViewLayer } from '@ocd/model'
 import { ResourceRectProps, ResourceForeignObjectProps, ResourceSvgProps, ResourceSvgContextMenuProps, ResourceSvgGhostProps, OcdMouseEvents, ConnectorSvgProps } from '../types/ReactComponentProperties'
 import { OcdContextMenu } from './OcdCanvas'
 import { ActiveFileContext, SelectedResourceContext } from '../pages/OcdConsole'
@@ -228,7 +228,7 @@ const OcdContainerRect = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
 }
 
 const OcdResizePoint = ({cx, cy, position, setDimensions, onResizeEnd}: any): JSX.Element => {
-    const {activeFile, setActiveFile} = useContext(ActiveFileContext)
+    const {activeFile} = useContext(ActiveFileContext)
     const [dragging, setDragging] = useState(false)
     const [origin, setOrigin] = useState({ x: 0, y: 0 });
     const [radius, setRadius] = useState(3)
@@ -287,7 +287,8 @@ const OcdResizePoint = ({cx, cy, position, setDimensions, onResizeEnd}: any): JS
                 break
         }
         onResizeEnd(dimensions)
-        if (!activeFile.modified && hasMoved) setActiveFile({name: activeFile.name, modified: true})
+        if (!activeFile.modified && hasMoved) activeFile.modified = true
+        // if (!activeFile.modified && hasMoved) setActiveFile({name: activeFile.name, modified: true})
     }
     const onMouseOver = (e: React.MouseEvent<SVGElement>) => {
         e.stopPropagation()

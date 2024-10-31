@@ -2,13 +2,11 @@
 ** Copyright (c) 2020, 2024, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
-// TODO: Remove Following
-// @ts-nocheck
 
 import { parseArgs } from "node:util"
 import { OcdBuildDateGenerator } from '@ocd/codegen'
 
-const options = {
+const options: Record<string, any> = {
     schema: {
         type: 'string',
         short: 's'
@@ -41,8 +39,8 @@ const args = parseArgs({options: options, allowPositionals: true})
 console.info('')
 
 // Read command as first argument
-const outputDirectory = args.values.destination
-const packageJsonFilename = args.values.package
+const outputDirectory = args.values.destination as string
+const packageJsonFilename = args.values.package as string
 const force = true
 const generator = new OcdBuildDateGenerator()
 generator.writeFiles(outputDirectory, packageJsonFilename, force)

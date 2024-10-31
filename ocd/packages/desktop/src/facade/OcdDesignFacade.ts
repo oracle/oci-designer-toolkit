@@ -14,30 +14,23 @@ export namespace OcdDesignFacade {
     export const loadDesign = (filename: string): Promise<any> => {
         return window.ocdAPI ? window.ocdAPI.loadDesign(filename) : OcdDesignerBrowserActions.loadDesign(filename)
     }
-    export const saveDesign = (design: OcdDesign, filename: string): Promise<any> => {
+    export const saveDesign = (design: OcdDesign, filename: string, suggestedFilename: string = ''): Promise<any> => {
         console.debug('OcdDesignFacade: saveDesign', filename, JSON.stringify(design, null, 2))
-        return window.ocdAPI ? window.ocdAPI.saveDesign(JSON.stringify(design, null, 2), filename) : OcdDesignerBrowserActions.saveDesign(design, filename)
+        return window.ocdAPI ? window.ocdAPI.saveDesign(JSON.stringify(design, null, 2), filename, suggestedFilename) : OcdDesignerBrowserActions.saveDesign(design, filename)
     }
     export const discardConfirmation = (): Promise<any> => {
         return window.ocdAPI ? window.ocdAPI.discardConfirmation() : OcdDesignerBrowserActions.discardConfirmation()
     }
     export const exportTerraform = (design: OcdDesign, directory: string): Promise<any> => {
-        return window.ocdAPI ? window.ocdAPI.exportTerraform(design, directory) : new Promise((resolve, reject) => {reject('Currently Not Implemented')})
+        return window.ocdAPI ? window.ocdAPI.exportTerraform(design, directory) : Promise.reject(new Error('Currently Not Implemented'))
     }
     export const loadLibraryIndex = (): Promise<any> => {
-        return window.ocdAPI ? window.ocdAPI.loadLibraryIndex() : new Promise((resolve, reject) => {reject('Currently Not Implemented')})
+        return window.ocdAPI ? window.ocdAPI.loadLibraryIndex() : Promise.reject(new Error('Currently Not Implemented'))
     }
     export const loadLibraryDesign = (section: string, filename: string): Promise<any> => {
-        return window.ocdAPI ? window.ocdAPI.loadLibraryDesign(section, filename) : new Promise((resolve, reject) => {reject('Currently Not Implemented')})
+        return window.ocdAPI ? window.ocdAPI.loadLibraryDesign(section, filename) : Promise.reject(new Error('Currently Not Implemented'))
+    }
+    export const loadSvgCssFiles = (): Promise<any> => {
+        return window.ocdAPI ? window.ocdAPI.loadSvgCssFiles() : Promise.reject(new Error('Currently Not Implemented'))
     }
 }
-
-// // @ts-ignore
-// if (window.ocdAPI) window.ocdAPI.onOpenFile((event, filePath) => {
-//     console.debug('OcdDesignFacade: onOpenFile', filePath)
-//     OcdDesignFacade.loadDesign(filePath).then((results) => {
-//         if (!results.canceled) {
-//             console.debug(results.design)
-//         }
-//     }).catch((resp) => {console.warn('Load Design Failed with', resp)})
-// })
