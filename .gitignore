@@ -20,12 +20,13 @@ __pycache__/
 *.egg-info/
 okit.wpr
 
-# Node / React / Electron
+# Node / React / Electron / Vite
 **/dist/
 **/build/
 **/node_modules
 **/out/
 **/lib/
+**/.vite/
 # **/package-lock.json
 
 # Terraform
@@ -70,3 +71,5 @@ workspace
 # Others
 .coverage
 htmlcov/
+
+# Build
