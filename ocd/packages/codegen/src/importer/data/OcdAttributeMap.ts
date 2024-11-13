@@ -3,7 +3,7 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import { OcdAttributeMap } from "../../types/OcdImporterData";
+import { OcdAttributeMap } from "../../types/OcdImporterData.js";
 
 export const attributeMap: OcdAttributeMap = {
     "cidr_blocks": {

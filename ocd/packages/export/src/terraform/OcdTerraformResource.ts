@@ -5,7 +5,7 @@
 
 import { OcdUtils } from "@ocd/core"
 import { OcdResource, OcdTag } from "@ocd/model"
-import { buildDetails } from '../data/OcdBuildDetails'
+import { buildDetails } from '../data/OcdBuildDetails.js'
 
 interface ResourcePropertyCondition extends OcdUtils.ResourcePropertyCondition {}
 

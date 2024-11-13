@@ -4,10 +4,9 @@
 */
 
 import { common, containerengine, core, database, datascience, limits, loadbalancer, mysql } from "oci-sdk"
-import { OciQuery } from "./OciQuery"
 import { OciResource } from "@ocd/model"
 import { OcdUtils } from "@ocd/core"
-import { OciCommonQuery } from './OciQueryCommon'
+import { OciCommonQuery } from './OciQueryCommon.js'
 
 export class OciReferenceDataQuery extends OciCommonQuery {
     // Clients
@@ -710,4 +709,4 @@ export class OciReferenceDataQuery extends OciCommonQuery {
 }
 
 export default OciReferenceDataQuery
-module.exports = { OciReferenceDataQuery }
+// module.exports = { OciReferenceDataQuery }

@@ -5,8 +5,8 @@
 
 import fs from 'fs'
 import path from 'path'
-import { OcdCodeGenerator } from './OcdCodeGenerator'
-import { OcdSchema } from '../types/OcdSchema'
+import { OcdCodeGenerator } from './OcdCodeGenerator.js'
+import { OcdSchema } from '../types/OcdSchema.js'
 
 export class OcdSvgCssGenerator extends OcdCodeGenerator {
     constructor () {
@@ -45,4 +45,4 @@ export default svgCssData
 }
 
 export default OcdSvgCssGenerator
-module.exports = { OcdSvgCssGenerator }
+// module.exports = { OcdSvgCssGenerator }

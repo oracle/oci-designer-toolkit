@@ -3,11 +3,11 @@
 ** Licensed under the GNU GENERAL PUBLIC LICENSE v 3.0 as shown at https://www.gnu.org/licenses/.
 */
 import { v4 as uuidv4 } from 'uuid'
-import * as ociResources from './provider/oci/resources'
-import { version } from './OcdModelVersion'
-import { schemaVersion } from './OcdSchemaVersion'
-import { OcdResource } from './OcdResource'
-import { OciResource } from './provider/oci/OciResource'
+import * as ociResources from './provider/oci/resources.js'
+import { version } from './OcdModelVersion.js'
+import { schemaVersion } from './OcdSchemaVersion.js'
+import { OcdResource } from './OcdResource.js'
+import { OciResource } from './provider/oci/OciResource.js'
 
 export interface OcdMetadata {
     ocdVersion: string,

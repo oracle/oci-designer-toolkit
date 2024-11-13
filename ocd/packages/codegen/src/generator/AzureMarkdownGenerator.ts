@@ -3,8 +3,8 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import { OcdMarkdownGenerator } from './OcdMarkdownGenerator'
-import { commonElements, commonIgnoreElements } from './data/AzureCommonResourceProperties'
+import { OcdMarkdownGenerator } from './OcdMarkdownGenerator.js'
+import { commonElements, commonIgnoreElements } from './data/AzureCommonResourceProperties.js'
 
 export class AzureMarkdownGenerator extends OcdMarkdownGenerator {
     constructor () {
@@ -14,4 +14,4 @@ export class AzureMarkdownGenerator extends OcdMarkdownGenerator {
 }
 
 export default AzureMarkdownGenerator
-module.exports = { AzureMarkdownGenerator }
+// module.exports = { AzureMarkdownGenerator }

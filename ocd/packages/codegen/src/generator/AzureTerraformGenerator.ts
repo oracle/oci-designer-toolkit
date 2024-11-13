@@ -3,9 +3,9 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import { OcdTerraformGenerator } from './OcdTerraformGenerator'
-import { terraformMetadataOverrides } from './data/AzureMetadataOverrides'
-import { commonElements, commonIgnoreElements } from './data/AzureCommonResourceProperties'
+import { OcdTerraformGenerator } from './OcdTerraformGenerator.js'
+import { terraformMetadataOverrides } from './data/AzureMetadataOverrides.js'
+import { commonElements, commonIgnoreElements } from './data/AzureCommonResourceProperties.js'
 
 export class AzureTerraformGenerator extends OcdTerraformGenerator {
     constructor () {
@@ -16,4 +16,4 @@ export class AzureTerraformGenerator extends OcdTerraformGenerator {
 }
 
 export default AzureTerraformGenerator
-module.exports = { AzureTerraformGenerator }
+// module.exports = { AzureTerraformGenerator }

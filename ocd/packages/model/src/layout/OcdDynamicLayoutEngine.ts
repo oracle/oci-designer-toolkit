@@ -3,8 +3,8 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import { OcdDesign, OcdViewCoords } from "../OcdDesign"
-import { OcdCommonLayoutEngine } from "./OcdCommonLayoutEngine"
+import { OcdDesign, OcdViewCoords } from "../OcdDesign.js"
+import { OcdCommonLayoutEngine } from "./OcdCommonLayoutEngine.js"
 
 export class OcdDynamicLayoutEngine extends OcdCommonLayoutEngine {
 
