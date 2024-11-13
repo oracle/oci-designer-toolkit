@@ -2,25 +2,44 @@
   "name": "@ocd/desktop",
   "productName": "ocd",
   "version": "0.2.5",
-  "description": "My Electron application description",
+  "description": "OKIT Open Cloud Designer Desktop",
+  "title": "OKIT Open Cloud Designer Desktop",
+  "author": {
+    "name": "Andrew Hopkinson",
+    "email": "andrew.hopkinson@oracle.com",
+    "url": "https://github.com/oracle/oci-designer-toolkit"
+  },
+  "bugs": "https://github.com/oracle/oci-designer-toolkit/issues",
+  "repository": {
+    "type": "github",
+    "url": "https://github.com/oracle/oci-designer-toolkit.git",
+    "directory": "ocd/packages/desktop"
+  },
+  "keywords": [
+    "ocd",
+    "okit"
+  ],
+  "license": "UPL-1.0",
   "main": ".vite/build/main.js",
   "scripts": {
     "clean": "rm -rf lib dist .vite out",
     "purge": "npm run clean && rm -rf node_modules",
     "build": "npm run make",
-    "start": "electron-forge start",
-    "package": "electron-forge package",
-    "make": "electron-forge make",
+    "start": "NODE_OPTIONS=--max-old-space-size=8192 electron-forge start",
+    "package": "NODE_OPTIONS=--max-old-space-size=8192 electron-forge package",
+    "make": "NODE_OPTIONS=--max-old-space-size=8192 DEBUG=electron-installer-dmg* electron-forge make ",
+    "make-macos-universal": "NODE_OPTIONS=--max-old-space-size=8192 DEBUG=electron-installer-dmg* electron-forge make --arch='universal'",
+    "make-macos-arm64-x64": "NODE_OPTIONS=--max-old-space-size=8192 DEBUG=electron-installer-dmg* electron-forge make --arch='arm64,x64'",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx ."
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.5.0",
     "@electron-forge/maker-deb": "^7.5.0",
+    "@electron-forge/maker-dmg": "^7.5.0",
     "@electron-forge/maker-rpm": "^7.5.0",
     "@electron-forge/maker-squirrel": "^7.5.0",
     "@electron-forge/maker-zip": "^7.5.0",
-    "@electron-forge/maker-dmg": "^7.5.0",
     "@electron-forge/plugin-auto-unpack-natives": "^7.5.0",
     "@electron-forge/plugin-fuses": "^7.5.0",
     "@electron-forge/plugin-vite": "^7.5.0",
@@ -28,25 +47,20 @@
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
     "electron": ">=32.2.0",
+    "electron-builder": "^25.1.8",
     "eslint": ">=8.57.1",
     "eslint-plugin-import": "^2.31.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.3",
     "vite": "^5.4.8"
   },
-  "keywords": [],
-  "author": {
-    "name": "Andrew Hopkinson",
-    "email": "64254061+toxophilist@users.noreply.github.com"
-  },
-  "license": "MIT",
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.1",
     "@ocd/core": ">=0.2.5",
     "@ocd/export": ">=0.2.5",
     "@ocd/import": ">=0.2.5",
     "@ocd/model": ">=0.2.5",
     "@ocd/query": ">=0.2.5",
-    "@ocd/react": ">=0.2.5"
+    "@ocd/react": ">=0.2.5",
+    "electron-squirrel-startup": "^1.0.1"
   }
 }

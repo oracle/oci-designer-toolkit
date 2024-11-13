@@ -3,16 +3,55 @@ import { MakerSquirrel } from '@electron-forge/maker-squirrel';
 import { MakerZIP } from '@electron-forge/maker-zip';
 import { MakerDeb } from '@electron-forge/maker-deb';
 import { MakerRpm } from '@electron-forge/maker-rpm';
+import { MakerDMG } from '@electron-forge/maker-dmg'
 import { VitePlugin } from '@electron-forge/plugin-vite';
 import { FusesPlugin } from '@electron-forge/plugin-fuses';
 import { FuseV1Options, FuseVersion } from '@electron/fuses';
 
 const config: ForgeConfig = {
+  outDir: '../../dist/${os}',
   packagerConfig: {
     asar: true,
+    // executableName: 'ocd',
+    icon: './public/assets/icon',
+    // osxSign: {}, // Appears to break the MacOS App I assume because it's empty
+    appCategoryType: 'public.app-category.developer-tools'
   },
   rebuildConfig: {},
-  makers: [new MakerSquirrel({}), new MakerZIP({}, ['darwin']), new MakerRpm({}), new MakerDeb({})],
+  makers: [
+    new MakerSquirrel({}), 
+    new MakerZIP({}, ['darwin']), 
+    new MakerDMG({
+      appPath: 'ocd', 
+      background: './public/assets/background.png',
+      format: 'ULFO',
+      overwrite: true,
+      additionalDMGOptions: {
+        window: {
+          size: {
+            width: 585,
+            height: 450
+          }
+        },
+      },
+      // contents: [
+      //   {
+      //     x: 500,
+      //     y: 200,
+      //     type: 'link',
+      //     path: '/Applications'
+      //   },
+      //   {
+      //     x: 100,
+      //     y: 200,
+      //     type: 'file',
+      //     path: './out/ocd-darwin-arm64/ocd.app'
+      //   }
+      // ]
+    }, ['darwin']), 
+    new MakerRpm({}), 
+    new MakerDeb({})
+  ],
   plugins: [
     new VitePlugin({
       // `build` can specify multiple entry builds, which can be Main process, Preload scripts, Worker process, etc.

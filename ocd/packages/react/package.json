@@ -2,7 +2,36 @@
   "name": "@ocd/react",
   "private": true,
   "version": "0.2.5",
+  "description": "OKIT Open Cloud Designer React Components",
+  "title": "OKIT Open Cloud Designer React Components",
+  "author": {
+    "name": "Andrew Hopkinson",
+    "email": "andrew.hopkinson@oracle.com",
+    "url": "https://github.com/oracle/oci-designer-toolkit"
+  },
+  "bugs": "https://github.com/oracle/oci-designer-toolkit/issues",
+  "repository": {
+    "type": "github",
+    "url": "https://github.com/oracle/oci-designer-toolkit.git",
+    "directory": "ocd/packages/react"
+  },
+  "keywords": [
+    "ocd",
+    "okit"
+  ],
   "type": "module",
+  "exports": {
+    ".": {
+        "import": {
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+        },
+        "require": {
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+        }
+    }
+  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
