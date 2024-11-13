@@ -7,9 +7,13 @@ import { MakerDMG } from '@electron-forge/maker-dmg'
 import { VitePlugin } from '@electron-forge/plugin-vite';
 import { FusesPlugin } from '@electron-forge/plugin-fuses';
 import { FuseV1Options, FuseVersion } from '@electron/fuses';
+import os from 'os'
 
+const archPos = process.argv.findIndex(arg => arg.startsWith('--arch'))
+const arch = archPos > 0 ? process.argv[archPos+1] : os.arch()
+console.info('Args:', process.argv, archPos, arch)
 const config: ForgeConfig = {
-  outDir: '../../dist/${os}',
+  outDir: '../../dist',
   packagerConfig: {
     asar: true,
     // executableName: 'ocd',
@@ -24,30 +28,32 @@ const config: ForgeConfig = {
     new MakerDMG({
       appPath: 'ocd', 
       background: './public/assets/background.png',
+      icon: './public/assets/icon.icns',
+      title: 'OKIT - Open Cloud Designer',
       format: 'ULFO',
       overwrite: true,
       additionalDMGOptions: {
         window: {
           size: {
             width: 585,
-            height: 450
+            height: 355
           }
         },
       },
-      // contents: [
-      //   {
-      //     x: 500,
-      //     y: 200,
-      //     type: 'link',
-      //     path: '/Applications'
-      //   },
-      //   {
-      //     x: 100,
-      //     y: 200,
-      //     type: 'file',
-      //     path: './out/ocd-darwin-arm64/ocd.app'
-      //   }
-      // ]
+      contents: [
+        {
+          x: 400,
+          y: 200,
+          type: 'link',
+          path: '/Applications'
+        },
+        {
+          x: 150,
+          y: 200,
+          type: 'file',
+          path: `${process.cwd()}/../../dist/ocd-darwin-${arch}/ocd.app`
+        }
+      ]
     }, ['darwin']), 
     new MakerRpm({}), 
     new MakerDeb({})
