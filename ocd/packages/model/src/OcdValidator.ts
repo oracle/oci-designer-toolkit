@@ -4,9 +4,9 @@
 */
 
 import { OcdUtils } from "@ocd/core"
-import { OcdDesign } from "./OcdDesign"
-import { OcdValidationResult } from "./validator/OcdResourceValidator"
-import * as ociResourceValidators from "./validator/provider/oci/resources"
+import { OcdDesign } from "./OcdDesign.js"
+import { OcdValidationResult } from "./validator/OcdResourceValidator.js"
+import * as ociResourceValidators from "./validator/provider/oci/resources.js"
 
 export namespace OcdValidator {
     export function validate(design: OcdDesign): OcdValidationResult[] {

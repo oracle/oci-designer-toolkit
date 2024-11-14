@@ -4,7 +4,7 @@
 */
 
 import { OcdDesign, OcdResource, OcdViewConnector, OcdViewCoords, OcdViewPage } from "@ocd/model"
-import { OcdExporter, OutputDataString, OutputDataStringArray } from "../OcdExporter"
+import { OcdExporter, OutputDataString, OutputDataStringArray } from "../OcdExporter.js"
 
 export class OcdSVGExporter extends OcdExporter {
     svg: string = ''

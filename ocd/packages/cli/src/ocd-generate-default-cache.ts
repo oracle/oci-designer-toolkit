@@ -9,7 +9,7 @@ import fs from 'fs'
 import path from 'path'
 import { OciReferenceDataQuery } from "@ocd/query"
 import { parseArgs } from "node:util"
-import { OcdReferenceDataGenerator } from "./generator/OcdReferenceDataGenerator"
+import { OcdReferenceDataGenerator } from "./generator/OcdReferenceDataGenerator.js"
 
 const options = {
     schema: {

@@ -3,4 +3,4 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-export { GeneralRectangle } from './resources/GeneralRectangle'
+export { GeneralRectangle } from './resources/GeneralRectangle.js'

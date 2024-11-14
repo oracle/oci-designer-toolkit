@@ -3,9 +3,9 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import { OcdTerraformGenerator } from './OcdTerraformGenerator'
-import { terraformMetadataOverrides } from './data/GoogleMetadataOverrides'
-import { commonElements, commonIgnoreElements } from './data/GoogleCommonResourceProperties'
+import { OcdTerraformGenerator } from './OcdTerraformGenerator.js'
+import { terraformMetadataOverrides } from './data/GoogleMetadataOverrides.js'
+import { commonElements, commonIgnoreElements } from './data/GoogleCommonResourceProperties.js'
 
 export class GoogleTerraformGenerator extends OcdTerraformGenerator {
     constructor () {
@@ -16,4 +16,4 @@ export class GoogleTerraformGenerator extends OcdTerraformGenerator {
 }
 
 export default GoogleTerraformGenerator
-module.exports = { GoogleTerraformGenerator }
+// module.exports = { GoogleTerraformGenerator }

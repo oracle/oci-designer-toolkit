@@ -8,7 +8,7 @@
 // import * as identity from "oci-identity"
 import { OcdDesign, OciModelResources, OciResources } from '@ocd/model'
 import { analytics, bastion, common, core, database, filestorage, identity, keymanagement, loadbalancer, mysql, networkloadbalancer, nosql, objectstorage, vault } from 'oci-sdk'
-import { OciCommonQuery } from './OciQueryCommon'
+import { OciCommonQuery } from './OciQueryCommon.js'
 
 export class OciQuery extends OciCommonQuery {
     // Clients
@@ -1310,7 +1310,7 @@ export class OciQuery extends OciCommonQuery {
 }
 
 export default OciQuery
-module.exports = { OciQuery }
+// module.exports = { OciQuery }
 function query() {
     throw new Error('Function not implemented.')
 }

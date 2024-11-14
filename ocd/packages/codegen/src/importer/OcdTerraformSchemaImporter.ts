@@ -4,10 +4,10 @@
 */
 
 import { OcdUtils } from "@ocd/core";
-import { OcdConditionalElements, OcdElementOverrides, OcdIgnoreElements, OcdIncludedElements } from "../types/OcdImporterData";
-import { OcdSchemaEntry } from "../types/OcdSchema";
-import { TerrafomSchemaEntry, TerraformSchema, TerraformSchemaDataMap, TerraformSchemaResourceMap } from "../types/TerraformSchema";
-import { OcdSchemaImporter } from "./OcdSchemaImporter";
+import { OcdConditionalElements, OcdElementOverrides, OcdIgnoreElements, OcdIncludedElements } from "../types/OcdImporterData.js";
+import { OcdSchemaEntry } from "../types/OcdSchema.js";
+import { TerrafomSchemaEntry, TerraformSchema, TerraformSchemaDataMap, TerraformSchemaResourceMap } from "../types/TerraformSchema.js";
+import { OcdSchemaImporter } from "./OcdSchemaImporter.js";
 
 export class OcdTerraformSchemaImporter extends OcdSchemaImporter {
     tfProvider: string = ''

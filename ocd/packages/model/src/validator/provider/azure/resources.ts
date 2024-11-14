@@ -10,16 +10,16 @@
 **
 */
 
-export { AzureContainerRegistry } from './resources/AzureContainerRegistry'
-export { AzureDnsZone } from './resources/AzureDnsZone'
-export { AzureKubernetesCluster } from './resources/AzureKubernetesCluster'
-export { AzureLoadBalancer } from './resources/AzureLoadBalancer'
-export { AzureMssqlServer } from './resources/AzureMssqlServer'
-export { AzureOracleAutonomousDatabase } from './resources/AzureOracleAutonomousDatabase'
-export { AzureOracleCloudVmCluster } from './resources/AzureOracleCloudVmCluster'
-export { AzureOracleExadataInfrastructure } from './resources/AzureOracleExadataInfrastructure'
-export { AzureResourceGroup } from './resources/AzureResourceGroup'
-export { AzureSubnet } from './resources/AzureSubnet'
-export { AzureVirtualMachine } from './resources/AzureVirtualMachine'
-export { AzureVirtualNetwork } from './resources/AzureVirtualNetwork'
+export { AzureContainerRegistry } from './resources/AzureContainerRegistry.js'
+export { AzureDnsZone } from './resources/AzureDnsZone.js'
+export { AzureKubernetesCluster } from './resources/AzureKubernetesCluster.js'
+export { AzureLoadBalancer } from './resources/AzureLoadBalancer.js'
+export { AzureMssqlServer } from './resources/AzureMssqlServer.js'
+export { AzureOracleAutonomousDatabase } from './resources/AzureOracleAutonomousDatabase.js'
+export { AzureOracleCloudVmCluster } from './resources/AzureOracleCloudVmCluster.js'
+export { AzureOracleExadataInfrastructure } from './resources/AzureOracleExadataInfrastructure.js'
+export { AzureResourceGroup } from './resources/AzureResourceGroup.js'
+export { AzureSubnet } from './resources/AzureSubnet.js'
+export { AzureVirtualMachine } from './resources/AzureVirtualMachine.js'
+export { AzureVirtualNetwork } from './resources/AzureVirtualNetwork.js'
     

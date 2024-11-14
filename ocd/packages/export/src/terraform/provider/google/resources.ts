@@ -10,8 +10,8 @@
 **
 */
 
-export { GoogleComputeNetwork } from './resources/GoogleComputeNetwork'
-export { GoogleOracleDatabaseAutonomousDatabase } from './resources/GoogleOracleDatabaseAutonomousDatabase'
-export { GoogleOracleDatabaseCloudExadataInfrastructure } from './resources/GoogleOracleDatabaseCloudExadataInfrastructure'
-export { GoogleOracleDatabaseCloudVmCluster } from './resources/GoogleOracleDatabaseCloudVmCluster'
+export { GoogleComputeNetwork } from './resources/GoogleComputeNetwork.js'
+export { GoogleOracleDatabaseAutonomousDatabase } from './resources/GoogleOracleDatabaseAutonomousDatabase.js'
+export { GoogleOracleDatabaseCloudExadataInfrastructure } from './resources/GoogleOracleDatabaseCloudExadataInfrastructure.js'
+export { GoogleOracleDatabaseCloudVmCluster } from './resources/GoogleOracleDatabaseCloudVmCluster.js'
     

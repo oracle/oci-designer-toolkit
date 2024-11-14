@@ -4,7 +4,7 @@
 */
 
 import { OcdDesign, OciResource } from "@ocd/model";
-import OcdExporter from "../OcdExporter";
+import OcdExporter from "../OcdExporter.js";
 
 interface OkitDesign extends Record<string, any> {}
 interface OkitResource extends Record<string, string | number | boolean> {}
