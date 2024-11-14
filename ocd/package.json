@@ -26,6 +26,8 @@
     "github-action-generate": "npm run import-and-generate --workspace=packages/codegen-cli && npm run generate-ocd-build-date --workspace=packages/codegen-cli",
     "github-action-compile": "npm run compile --workspaces --if-present",
     "github-action-pack": "npm run pack --workspaces --if-present",
+    "github-action-build": "npm run build --workspaces --if-present",
+    "github-action-build-macos-x86": "npm run make-macos-x64 --workspace=packages/desktop --if-present",
     "github-action-build-react": "npm run build-react-scripts --workspace=packages/desktop",
     "github-action-build-electron": "npm run electron-pack --workspace=packages/desktop",
     "test": "echo \"Error: no test specified\" && exit 1",
