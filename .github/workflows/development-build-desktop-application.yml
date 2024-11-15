@@ -100,8 +100,8 @@ jobs:
         if: matrix.os == 'macos-latest'
         run: |
           npm run github-action-build-macos-x86
-          ls -lash ./ocd/dist
-          gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/mac/ocd-${{ env.OCD_VERSION }}-*.dmg --clobber
+          ls -lashR ./ocd/dist
+          gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/make/ocd-${{ env.OCD_VERSION }}-*.dmg --clobber
       - name: Upload Windows Artifact to Release
         if: matrix.os == 'windows-latest'
         run: |
