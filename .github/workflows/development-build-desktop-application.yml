@@ -78,6 +78,7 @@ jobs:
       OCD_VERSION: ${{ needs.generate-variables.outputs.ocd_version }}
       # BRANCH_OCD_VERSION: ${{ needs.generate-variables.outputs.ocd_version }}-${{ github.head_ref || github.ref_name }}
       BRANCH_RELEASE_TAG: ocd.${{ github.head_ref || github.ref_name }}
+      NODE_OPTIONS: "--max-old-space-size=8192"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
