@@ -56,7 +56,7 @@ const config: ForgeConfig = {
       ]
     }, ['darwin']), 
     new MakerRpm({}), 
-    new MakerDeb({})
+    // new MakerDeb({})
   ],
   plugins: [
     new VitePlugin({
