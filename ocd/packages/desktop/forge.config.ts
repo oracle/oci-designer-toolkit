@@ -16,7 +16,7 @@ const config: ForgeConfig = {
   outDir: '../../dist',
   packagerConfig: {
     asar: true,
-    executableName: 'ocd',
+    executableName: '@ocd/desktop',
     icon: './public/assets/icon',
     // osxSign: {}, // Appears to break the MacOS App I assume because it's empty
     appCategoryType: 'public.app-category.developer-tools'
