@@ -104,14 +104,14 @@ jobs:
           ls -lashR ./ocd/dist
           gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/make/ocd-${{ env.OCD_VERSION }}-*.dmg --clobber
       - name: Upload Windows Artifact to Release
-        if: matrix.os == 'windows-latest'
+        if: matrix.os == 'windows-latest' && (failure() || success())
         run: |
           ls ./ocd/dist
           gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/win/ocd-${{ env.OCD_VERSION }}-x64.exe --clobber
       - name: Upload Linux Artifact to Release
-        if: matrix.os == 'ubuntu-latest'
+        if: matrix.os == 'ubuntu-latest' && (failure() || success())
         run: |
-          ls -lash ./ocd/dist
+          ls -lashR ./ocd/dist
           # gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}-*.rpm --clobber
           # gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}-*.deb --clobber
           gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}-*.snap --clobber
