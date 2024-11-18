@@ -16,7 +16,7 @@ const config: ForgeConfig = {
   outDir: '../../dist',
   packagerConfig: {
     asar: true,
-    executableName: 'ocd',
+    // executableName: 'ocd',
     icon: './public/assets/icon',
     // osxSign: {}, // Appears to break the MacOS App I assume because it's empty
     appCategoryType: 'public.app-category.developer-tools'
@@ -55,8 +55,18 @@ const config: ForgeConfig = {
         }
       ]
     }, ['darwin']), 
-    new MakerRpm({}), 
-    // new MakerDeb({})
+    new MakerRpm({
+      options: {
+        name: 'ocd',
+        productName: 'ocd'
+      }
+    }), 
+    new MakerDeb({
+      options: {
+        name: 'ocd',
+        productName: 'ocd'
+      }
+    })
   ],
   plugins: [
     new VitePlugin({
