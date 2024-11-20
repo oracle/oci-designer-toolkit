@@ -18,7 +18,7 @@ interface OcdLibraryDesign {
     dataUri: string
 }
 
-interface OcdLibrary extends Record<string, OcdLibraryDesign[]> {
+export interface OcdLibrary extends Record<string, OcdLibraryDesign[]> {
     oci: OcdLibraryDesign[]
     azure: OcdLibraryDesign[]
     google: OcdLibraryDesign[]

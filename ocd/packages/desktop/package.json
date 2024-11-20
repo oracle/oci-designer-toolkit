@@ -22,6 +22,8 @@
   "license": "UPL-1.0",
   "main": ".vite/build/main.js",
   "scripts": {
+    "dev": "vite",
+    "vite-build": "tsc -b ./tsconfig.json && vite build",
     "clean": "rm -rf lib dist .vite out",
     "purge": "npm run clean && rm -rf node_modules",
     "build": "npm run make",

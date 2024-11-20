@@ -7,10 +7,11 @@ import { app, dialog, BrowserWindow, ipcMain, screen, Menu, shell, MessageBoxOpt
 import path from 'path'
 import url from 'url'
 import fs from 'fs'
+import { fileURLToPath } from 'node:url'
 import common from 'oci-common'
 import { OciQuery, OciReferenceDataQuery } from '@ocd/query'
 import { OcdDesign } from '@ocd/model'
-import { OcdCache, OcdConsoleConfiguration } from '@ocd/react'
+import { OcdCache, OcdConsoleConfiguration, OcdLibrary } from '@ocd/react'
 // import { unescape } from 'querystring'
 
 app.commandLine.appendSwitch('ignore-certificate-errors') // Temporary work around for not being able to add additional certificates
@@ -20,6 +21,24 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0' // Temporary work around for not 
 const isDev = process.env.OCD_DEV === 'true';
 const isPreview = process.env.OCD_PREVIEW === 'true';
 const isMac = process.platform === 'darwin'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+// The built directory structure
+//
+// ├─┬─┬ dist
+// │ │ └── index.html
+// │ │
+// │ ├─┬ dist-electron
+// │ │ ├── main.js
+// │ │ └── preload.mjs
+// │
+process.env.APP_ROOT = path.join(__dirname, '..')
+
+export const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL']
+export const MAIN_DIST = path.join(process.env.APP_ROOT, 'dist-electron')
+export const RENDERER_DIST = path.join(process.env.APP_ROOT, 'dist')
+
+process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, 'public') : RENDERER_DIST
 
 // if (require('electron-squirrel-startup')) app.quit()
 const ocdConfigDirectory = path.join(app.getPath('home'), '.ocd')
@@ -194,7 +213,7 @@ const createWindow = () => {
 		webPreferences: {
 			nodeIntegration: true,
 			contextIsolation: true,
-			preload: path.join(__dirname, 'preload.js')
+			preload: path.join(__dirname, 'preload.mjs')
 		},
 	})
 
@@ -207,27 +226,35 @@ const createWindow = () => {
 	}
 
 	// mainWindow.on('move', (e) => console.debug('Move Event'))
-	mainWindow.on('moved', (e) => saveState())
+	mainWindow.on('moved', () => saveState())
 	// mainWindow.on('resize', (e) => console.debug('Resize Event'))
-	mainWindow.on('enter-full-screen', (e) => saveState())
-	mainWindow.on('leave-full-screen', (e) => saveState())
-	mainWindow.on('resized', (e) => saveState())
-	mainWindow.on('close', (e) => saveState())
+	mainWindow.on('enter-full-screen', () => saveState())
+	mainWindow.on('leave-full-screen', () => saveState())
+	mainWindow.on('resized', () => saveState())
+	mainWindow.on('close', () => saveState())
 
 	// Remove Menu
 	// mainWindow.removeMenu()
 	// mainWindow.setMenu(null)
 	// and load the index.html of the app.
 	const startUrl =
-		process.env.WEB_URL || MAIN_WINDOW_VITE_DEV_SERVER_URL ||
+		process.env.WEB_URL || VITE_DEV_SERVER_URL ||
 		url.format({
-			pathname: path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`),
+			pathname: path.join(RENDERER_DIST, `index.html`),
 			protocol: "file",
 			slashes: true,
 		})
-  	mainWindow.loadURL(startUrl)
+  // mainWindow.loadURL(startUrl)
+  console.debug('Start Url:', startUrl)
+
+  if (VITE_DEV_SERVER_URL) {
+    mainWindow.loadURL(VITE_DEV_SERVER_URL)
+  } else {
+    // win.loadFile('dist/index.html')
+    mainWindow.loadFile(path.join(RENDERER_DIST, 'index.html'))
+  }
   
-    if (desktopState.isMaximised) mainWindow.maximize()
+  if (desktopState.isMaximised) mainWindow.maximize()
     mainWindow.setFullScreen(desktopState.isFullScreen)
 
 	// Open the DevTools.
@@ -264,22 +291,22 @@ app.whenReady().then(() => {
 	app.on('activate', function () {
 	  if (BrowserWindow.getAllWindows().length === 0) createWindow()
 	})
-    mainWindow.webContents.on('did-finish-load', function() {
-        if (filePath) {
-            mainWindow.webContents.send('open-file', filePath)
-            filePath = null
-        }
-    });
+  mainWindow.webContents.on('did-finish-load', function() {
+      if (filePath) {
+          mainWindow.webContents.send('open-file', filePath)
+          filePath = null
+      }
+  });
 	Menu.setApplicationMenu(mainMenu)
 	// Context Menu
-	mainWindow.webContents.on('context-menu', (e, props) => {
-		const { selectionText, isEditable } = props;
-		if (isEditable) {
-		  inputMenu.popup(mainWindow);
-		} else if (selectionText && selectionText.trim() !== '') {
-		  selectionMenu.popup(mainWindow);
-		}
-	  })
+	// mainWindow.webContents.on('context-menu', (e, props) => {
+  //     const { selectionText, isEditable } = props;
+  //     if (isEditable) {
+  //       inputMenu.popup(mainWindow);
+  //     } else if (selectionText && selectionText.trim() !== '') {
+  //       selectionMenu.popup(mainWindow);
+  //     }
+	//   })
 	
 	ready = true
 })
@@ -327,7 +354,7 @@ async function handleLoadOciConfigProfileNames() {
 		console.debug('Electron Main: handleLoadOciConfigProfileNames', parsed)
 		console.debug('Electron Main: handleLoadOciConfigProfileNames', parsed.accumulator.configurationsByProfile)
 		console.debug('Electron Main: handleLoadOciConfigProfileNames', Array.from(parsed.accumulator.configurationsByProfile.keys()))
-        const profiles = Array.from(parsed.accumulator.configurationsByProfile.keys())
+    const profiles = Array.from(parsed.accumulator.configurationsByProfile.keys())
 		resolve(profiles)
 	})
 }
@@ -339,7 +366,8 @@ async function handleLoadOciConfigProfile(event: any, profile: string) {
 		console.debug('Electron Main: handleLoadOciConfigProfileNames Parsed:', parsed)
 		console.debug('Electron Main: handleLoadOciConfigProfileNames Config By Profile:', parsed.accumulator.configurationsByProfile)
 		console.debug('Electron Main: handleLoadOciConfigProfileNames Keys:', Array.from(parsed.accumulator.configurationsByProfile.keys()))
-        const profileData = Array.from(parsed.accumulator.configurationsByProfile[profile])
+    const profileData = Array.from(parsed.accumulator.configurationsByProfile.get(profile)?.keys() || [])
+		console.debug('Electron Main: handleLoadOciConfigProfileNames profileData:', profileData)
 		resolve(profileData)
 	})
 }
@@ -403,7 +431,7 @@ async function handleSaveDesign(event: any, design: OcdDesign, filename: string,
 			if (!filename || !fs.existsSync(filename) || !fs.statSync(filename).isFile()) {
 				dialog.showSaveDialog(mainWindow, {
 					defaultPath: suggestedFilename,
-					properties: ['openFile', 'createDirectory'],
+					properties: ['createDirectory'],
 					filters: [{name: 'Filetype', extensions: ['okit']}]
 				  }).then(result => {
 					if (!result.canceled) fs.writeFileSync(result.filePath, JSON.stringify(design, null, 4))
@@ -461,42 +489,44 @@ async function handleLoadLibraryIndex(event: any) {
         // console.debug('Electron Main: handleLoadLibraryIndex: URL', libraryJsonUrl, request)
         // Get Library File
         const libraryFetchPromise = fetch(request)
-		libraryFetchPromise.then((response) => {
+		    libraryFetchPromise.then((response) => {
             // console.debug('Electron Main: handleLoadLibraryIndex: Fetch Response', response)
             // console.debug('Electron Main: handleLoadLibraryIndex: Fetch Response', response.headers.get("content-type"))
-			return response.text()
-		}).then((data) => {
+            return response.text()
+        }).then((data) => {
             // console.debug('Electron Main: handleLoadLibraryIndex: Fetch Data', data)
-			const libraryIndex = JSON.parse(data)
-			// const sectionQueries = [getLibrarySectionSvg(libraryIndex, 'oci')]
-			const sectionQueries = Object.keys(libraryIndex).map((k) => getLibrarySectionSvg(libraryIndex, k))
-			Promise.allSettled(sectionQueries).then((results) => {
-				// console.debug('Electron Main: handleLoadLibraryIndex: Section Query Results', results)
-				resolve(libraryIndex)
-			})
-			// resolve(libraryIndex)
-		}).catch((err) => {
-            console.debug('Electron Main: handleLoadLibraryIndex: Fetch Error Response', err)
-			reject(err)
-		})
-	})
+            const libraryIndex: OcdLibrary = JSON.parse(data)
+            // const sectionQueries = [getLibrarySectionSvg(libraryIndex, 'oci')]
+            const sectionQueries = Object.keys(libraryIndex).map((k) => getLibrarySectionSvg(libraryIndex, k))
+            Promise.allSettled(sectionQueries).then((results) => {
+              // console.debug('Electron Main: handleLoadLibraryIndex: Section Query Results', results)
+              resolve(libraryIndex)
+            })
+          // resolve(libraryIndex)
+        }).catch((err) => {
+                console.debug('Electron Main: handleLoadLibraryIndex: Fetch Error Response', err)
+          reject(err)
+        })
+      })
 }
 
-function getLibrarySectionSvg(libraryIndex, section: string) {
+function getLibrarySectionSvg(libraryIndex: OcdLibrary, section: string) {
 	return new Promise((resolve, reject) => {
 		const librarySection = libraryIndex[section]
 		const svgRequests = librarySection.map((design) => new Request(`${libraryUrl}/${section}/${design.svgFile}`))
 		const svgUrls = svgRequests.map((request) => fetch(request))
+    // @ts-ignore
 		Promise.allSettled(svgUrls).then((results) => Promise.allSettled(results.map((r) => r.value.text()))).then((svg) => {
 			svg.forEach((r, i) => {
 				console.debug('Electron Main: getLibrarySectionSvg: Svg Query Results', section, r.status)
 				// console.debug('Electron Main: getLibrarySectionSvg: Svg Query Results', r.value)
-				librarySection[i].dataUri = `data:image/svg+xml,${encodeURIComponent(r.value)}`
+        // @ts-ignore
+        librarySection[i].dataUri = `data:image/svg+xml,${encodeURIComponent(r.value)}`
 				// librarySection[i].dataUri = `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(r.value)))}`
 			})
 			resolve(librarySection)
 		}).catch((err) => {
-            console.debug('Electron Main: getLibrarySectionSvg: Fetch Error Response', err)
+      console.debug('Electron Main: getLibrarySectionSvg: Fetch Error Response', err)
 			reject(err)
 		})
 	})
@@ -511,18 +541,18 @@ async function handleLoadLibraryDesign(event: any, section: string, filename: st
         // console.debug('Electron Main: handleLoadLibraryDesign: URL', libraryJsonUrl, request)
         // Get Library File
         const libraryFetchPromise = fetch(request)
-		libraryFetchPromise.then((response) => {
+        libraryFetchPromise.then((response) => {
             // console.debug('Electron Main: handleLoadLibraryDesign: Fetch Response', response)
             // console.debug('Electron Main: handleLoadLibraryDesign: Fetch Response', response.headers.get("content-type"))
-			return response.text()
-		}).then((design) => {
+            return response.text()
+        }).then((design) => {
             // console.debug('Electron Main: handleLoadLibraryDesign: Fetch Data', design)
-			resolve({canceled: false, filename: filename, design: JSON.parse(design)})
-		}).catch((err) => {
+            resolve({canceled: false, filename: filename, design: JSON.parse(design)})
+        }).catch((err) => {
             console.debug('Electron Main: handleLoadLibraryIndex: Fetch Error Response', err)
-			reject(err)
-		})
-	})
+          reject(err)
+        })
+      })
 }
 
 async function handleLoadSvgCssFiles() {
@@ -640,53 +670,71 @@ async function handleOpenExternalUrl(event: any, href: string) {
 
 
 
-// Handle creating/removing shortcuts on Windows when installing/uninstalling.
-// if (require('electron-squirrel-startup')) {
-//   app.quit();
+
+
+
+// import { app, BrowserWindow } from 'electron'
+// // import { fileURLToPath } from 'node:url'
+// import path from 'node:path'
+
+// // const __dirname = path.dirname(fileURLToPath(import.meta.url))
+
+// // The built directory structure
+// //
+// // ├─┬─┬ dist
+// // │ │ └── index.html
+// // │ │
+// // │ ├─┬ dist-electron
+// // │ │ ├── main.js
+// // │ │ └── preload.mjs
+// // │
+// process.env.APP_ROOT = path.join(__dirname, '..')
+
+// export const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL']
+// export const MAIN_DIST = path.join(process.env.APP_ROOT, 'dist-electron')
+// export const RENDERER_DIST = path.join(process.env.APP_ROOT, 'dist')
+
+// process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, 'public') : RENDERER_DIST
+
+// let win: BrowserWindow | null
+
+// function createWindow() {
+//   win = new BrowserWindow({
+//     icon: path.join(process.env.VITE_PUBLIC, 'electron-vite.svg'),
+//     webPreferences: {
+//       preload: path.join(__dirname, 'preload.mjs'),
+//     },
+//   })
+
+//   // Test active push message to Renderer-process.
+//   win.webContents.on('did-finish-load', () => {
+//     win?.webContents.send('main-process-message', (new Date).toLocaleString())
+//   })
+
+//   if (VITE_DEV_SERVER_URL) {
+//     win.loadURL(VITE_DEV_SERVER_URL)
+//   } else {
+//     // win.loadFile('dist/index.html')
+//     win.loadFile(path.join(RENDERER_DIST, 'index.html'))
+//   }
 // }
 
-// const createWindow = () => {
-//   // Create the browser window.
-//   const mainWindow = new BrowserWindow({
-//     width: 800,
-//     height: 600,
-//     webPreferences: {
-//       preload: path.join(__dirname, 'preload.js'),
-//     },
-//   });
-
-//   // and load the index.html of the app.
-//   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
-//     mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
-//   } else {
-//     mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
-//   }
-
-//   // Open the DevTools.
-//   // mainWindow.webContents.openDevTools();
-// };
-
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-// app.on('ready', createWindow);
-
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
+// // Quit when all windows are closed, except on macOS. There, it's common
+// // for applications and their menu bar to stay active until the user quits
+// // explicitly with Cmd + Q.
 // app.on('window-all-closed', () => {
 //   if (process.platform !== 'darwin') {
-//     app.quit();
+//     app.quit()
+//     win = null
 //   }
-// });
+// })
 
-app.on('activate', () => {
-  // On OS X it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
-  if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow();
-  }
-});
+// app.on('activate', () => {
+//   // On OS X it's common to re-create a window in the app when the
+//   // dock icon is clicked and there are no other windows open.
+//   if (BrowserWindow.getAllWindows().length === 0) {
+//     createWindow()
+//   }
+// })
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and import them here.
+// app.whenReady().then(createWindow)
