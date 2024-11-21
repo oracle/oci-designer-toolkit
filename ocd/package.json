@@ -56,7 +56,8 @@
     "packages/web",
     "packages/desktop",
     "packages/cli",
-    "packages/codegen-cli"
+    "packages/codegen-cli",
+    "packages/electron-desktop"
   ],
   "devDependencies": {
     "@types/node": "^22.9.0",

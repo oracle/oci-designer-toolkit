@@ -41,7 +41,7 @@
     "compile": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
     "build": "npm run compile && npm run pack"
   },
-  "dependencies": {
+  "peerDependencies": {
     "@ocd/core": ">=0.2.5"
   }
 }
