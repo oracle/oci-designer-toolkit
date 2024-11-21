@@ -23,8 +23,10 @@
   ],
   "license": "UPL-1.0",
   "scripts": {
+    "clean": "rm -rf lib dist dist-electron out",
+    "purge": "npm run clean && rm -rf node_modules",
     "dev": "NODE_OPTIONS=--max-old-space-size=8192 vite",
-    "dev-build": "tsc && NODE_OPTIONS=--max-old-space-size=8192 vite build && electron-builder",
+    "dev-build": "tsc && NODE_OPTIONS=--max-old-space-size=8192 vite build && electron-builder -c.electronVersion=32.2.0",
     "dev-tsc": "tsc",
     "dev-vite-build": "NODE_OPTIONS=--max-old-space-size=8192 vite build",
     "build": "tsc && vite build && electron-builder",
@@ -52,8 +54,8 @@
     "eslint-plugin-react-refresh": "^0.4.5",
     "typescript": "^5.2.2",
     "vite": "^5.1.6",
-    "electron": "^30.0.1",
-    "electron-builder": "^24.13.3",
+    "electron": ">=32.2.0",
+    "electron-builder": "^25.1.8",
     "vite-plugin-electron": "^0.28.6",
     "vite-plugin-electron-renderer": "^0.14.5"
   },

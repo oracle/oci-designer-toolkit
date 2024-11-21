@@ -102,17 +102,17 @@ jobs:
         run: |
           npm run github-action-build-macos-x86
           ls -lashR ./ocd/dist
-          gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/make/ocd-${{ env.OCD_VERSION }}-*.dmg --clobber
+          gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/release/${{ env.OCD_VERSION }}/ocd-${{ env.OCD_VERSION }}-*.dmg --clobber
       - name: Upload Windows Artifact to Release
         if: matrix.os == 'windows-latest' && (failure() || success())
         run: |
           ls -R ./ocd/dist
-          gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/win/ocd-${{ env.OCD_VERSION }}-x64.exe --clobber
+          gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/release/${{ env.OCD_VERSION }}/ocd-${{ env.OCD_VERSION }}-x64.exe --clobber
       - name: Upload Linux Artifact to Release
         if: matrix.os == 'ubuntu-latest' && (failure() || success())
         run: |
           ls -lashR ./ocd/dist
           # gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}-*.rpm --clobber
           # gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}-*.deb --clobber
-          gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}-*.snap --clobber
+          gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/release/${{ env.OCD_VERSION }}/ocd-${{ env.OCD_VERSION }}-*.snap --clobber
           # gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}-*.AppImage --clobber

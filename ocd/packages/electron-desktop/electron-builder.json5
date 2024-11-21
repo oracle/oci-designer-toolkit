@@ -1,21 +1,46 @@
 // @see - https://www.electron.build/configuration/configuration
 {
   "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
-  "appId": "YourAppID",
+  "appId": "com.oracle.okit-ocd",
+  "artifactName": "${productName}-${version}-${arch}.${ext}",
   "asar": true,
-  "productName": "YourAppName",
   "directories": {
-    "output": "release/${version}"
+    "output": "../../dist/release/${version}"
   },
   "files": [
     "dist",
     "dist-electron"
   ],
+  "fileAssociations": [
+    {
+      "ext": "okit",
+      "name": "OCD Design",
+      "role": "Editor"
+    },
+    {
+      "ext": "ocd",
+      "name": "OCD Design",
+      "role": "Editor"
+    }
+  ],
   "mac": {
+    "icon": "public/assets/icon.icns",
+    "category": "public.app-category.developer-tools",
+    "mergeASARs": false,
     "target": [
-      "dmg"
-    ],
-    "artifactName": "${productName}-Mac-${version}-Installer.${ext}"
+      {
+        "target": "dmg",
+        "arch": ["universal"]
+      }
+    ]
+  },
+  "dmg": {
+    "icon": "public/assets/icon.icns",
+    "background": "public/assets/background.png",
+    "window": {
+      "width": 585,
+      "height": 355
+    }
   },
   "win": {
     "target": [
