@@ -23,7 +23,9 @@ const config: ForgeConfig = {
   },
   rebuildConfig: {},
   makers: [
-    new MakerSquirrel({}), 
+    new MakerSquirrel({
+      name: 'ocd'
+    }), 
     new MakerZIP({}, ['darwin']), 
     new MakerDMG({
       appPath: 'ocd', 

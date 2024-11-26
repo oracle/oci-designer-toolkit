@@ -39,6 +39,7 @@
     "@ocd/export": ">=0.2.5",
     "@ocd/import": ">=0.2.5",
     "@ocd/model": ">=0.2.5",
-    "@ocd/query": ">=0.2.5"
+    "@ocd/query": ">=0.2.5",
+    "oci-sdk": "^2.69.0"
   }
 }

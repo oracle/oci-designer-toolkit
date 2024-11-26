@@ -64,6 +64,7 @@
     "@ocd/model": ">=0.2.5",
     "@ocd/query": ">=0.2.5",
     "@ocd/react": ">=0.2.5",
+    "oci-sdk": "^2.69.0",
     "electron-squirrel-startup": "^1.0.1"
   }
 }

@@ -29,7 +29,7 @@
     "dev-build": "tsc && NODE_OPTIONS=--max-old-space-size=8192 vite build && electron-builder -c.electronVersion=32.2.0",
     "dev-tsc": "tsc",
     "dev-vite-build": "NODE_OPTIONS=--max-old-space-size=8192 vite build",
-    "build": "tsc && vite build && electron-builder",
+    "build": "tsc && vite build && electron-builder -c.electronVersion=32.2.0",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
@@ -40,6 +40,7 @@
     "@ocd/model": ">=0.2.5",
     "@ocd/query": ">=0.2.5",
     "@ocd/react": ">=0.2.5",
+    "oci-sdk": "^2.69.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
