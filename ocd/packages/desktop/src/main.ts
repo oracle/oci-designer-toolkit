@@ -4,6 +4,7 @@
 */
 
 import { app, dialog, BrowserWindow, ipcMain, screen, Menu, shell, MessageBoxOptions, MenuItemConstructorOptions } from 'electron'
+import Squirrel from 'electron-squirrel-startup'
 import path from 'path'
 import url from 'url'
 import fs from 'fs'
@@ -22,6 +23,7 @@ const isPreview = process.env.OCD_PREVIEW === 'true';
 const isMac = process.platform === 'darwin'
 
 // if (require('electron-squirrel-startup')) app.quit()
+if (Squirrel) app.quit()
 const ocdConfigDirectory = path.join(app.getPath('home'), '.ocd')
 const ocdConsoleConfigFilename = path.join(ocdConfigDirectory, 'console_config.json')
 const ocdCacheFilename = path.join(ocdConfigDirectory, 'cache.json')

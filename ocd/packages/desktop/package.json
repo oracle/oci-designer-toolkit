@@ -47,6 +47,7 @@
     "@electron-forge/plugin-fuses": "^7.5.0",
     "@electron-forge/plugin-vite": "^7.5.0",
     "@electron/fuses": "^1.8.0",
+    "@types/electron-squirrel-startup": "^1.0.2",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
     "electron": ">=32.2.0",
@@ -64,7 +65,7 @@
     "@ocd/model": ">=0.2.5",
     "@ocd/query": ">=0.2.5",
     "@ocd/react": ">=0.2.5",
-    "oci-sdk": "^2.69.0",
-    "electron-squirrel-startup": "^1.0.1"
+    "electron-squirrel-startup": "^1.0.1",
+    "oci-sdk": "^2.69.0"
   }
 }
