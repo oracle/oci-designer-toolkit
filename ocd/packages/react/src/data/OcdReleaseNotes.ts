@@ -4,31 +4,26 @@
 */
 
 export const releaseNotes = `[![License: UPL](https://img.shields.io/badge/license-UPL-green)](https://img.shields.io/badge/license-UPL-green) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=oracle_oci-designer-toolkit&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=oracle_oci-designer-toolkit)
-# September 2024 Release (Version 0.65.0)
+# November 2024 Release (Version 0.66.0)
 ____
-**Update 0.65.0**: This update addresses the following issues.
-1. OKIT-Web: Resolve issue where save dialog did not display existing content (#717)
-2. OKIT-Web: Fix for underlying AuthLib api change.
+**Update 0.66.0**: This update addresses the following issues.
 ____
-Welcome to the September 2024 release of OKIT. This release is aim primarily at the desktop OKIT OCD Beta extending the current functionality and improving 
-it's useability. We have now added some basic resources for Azure and Google to allow for the design of Multi Cloud solutions. The current resources will be expaned onces the appropriate Terraform provider is available.
+Welcome to the November 2024 release of OKIT. This release switches the exiat Create React App based build format to Vite and Electron Forge.
+
+## OKIT (Web) Features
 
 ## OKIT - Open Cloud Designer
-1. Parse AzuraRM Terraform schema and generate OCD Resource Schema entries. (#OKIT-272)
-3. Write AzureRM Model Generator. (#OKIT-273)
-4. Write AzureRM Properties Generator. (#OKIT-274)
-5. Write AzureRM Terraform Generator. (#OKIT-275)
-6. Write AzureRM Markdown Generator. (#OKIT-276)
-7. Write AzureRM Validator Generator. (#OKIT-277)
-8. Write AzureRM Tabular Generator. (#OKIT-278)
-9. Parse Google Terraform schema and generate OCD Resource Schema entries. (#OKIT-284)
-10. Write Google Model Generator. (#OKIT-285)
-11. Write Google Properties Generator. (#OKIT-286)
-12. Write Google Terraform Generator. (#OKIT-287)
-13. Write Google Markdown Generator. (#OKIT-288)
-14. Write Google Validator Generator. (#OKIT-289)
-15. Write Google Tabular Generator. (#OKIT-290)
-16. Create Library View which will allow users to select pre-defined Reference Architectures. (#OKIT-304)
+1. OKIT-Ocd: Convert @ocd/core to ES6 Module (#OKIT-307)
+1. OKIT-Ocd: Convert @ocd/model to ES6 Module (#OKIT-308)
+1. OKIT-Ocd: Convert @ocd/query to ES6 Module (#OKIT-309)
+1. OKIT-Ocd: Convert @ocd/export to ES6 Module (#OKIT-310)
+1. OKIT-Ocd: Convert @ocd/import to ES6 Module (#OKIT-311)
+1. OKIT-Ocd: Convert @ocd/codegen to ES6 Module (#OKIT-312)
+1. OKIT-Ocd: Convert @ocd/codegen-cli to ES6 Module (#OKIT-313)
+1. OKIT-Ocd: Convert @ocd/cli to ES6 Module (#OKIT-314)
+1. OKIT-Ocd: Convert @ocd/desktop to ES6 Module (#OKIT-315)
+1. OKIT-Ocd: Switch build process from Create React App / Webpack to Vite (#OKIT-305)
+1. OKIT-Ocd: Switch to Electron Forge for building.
 
 ___**Available Resources**___
 
