@@ -8,6 +8,8 @@ import { VitePlugin } from '@electron-forge/plugin-vite';
 import { FusesPlugin } from '@electron-forge/plugin-fuses';
 import { FuseV1Options, FuseVersion } from '@electron/fuses';
 import os from 'os'
+// @ts-ignore
+import * as Package from './package.json'
 
 const archPos = process.argv.findIndex(arg => arg.startsWith('--arch'))
 const arch = archPos > 0 ? process.argv[archPos+1] : os.arch()
@@ -24,9 +26,10 @@ const config: ForgeConfig = {
   rebuildConfig: {},
   makers: [
     new MakerSquirrel({
-      name: 'ocd'
+      name: 'ocd',
+      setupExe: `ocd-${Package.version}-Setup.exe`
     }), 
-    new MakerZIP({}, ['darwin']), 
+    // new MakerZIP({}, ['darwin']), 
     new MakerDMG({
       appPath: 'ocd', 
       background: './public/assets/background.png',

@@ -55,12 +55,13 @@ jobs:
       fail-fast: false
       matrix:
         os: [macos-latest, windows-latest]
-        version: [latest]
+        version: [22.11.0]
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       RELEASE_TAG: ${{ needs.generate-variables.outputs.okit_release_tag }}
       OCD_VERSION: ${{ needs.generate-variables.outputs.ocd_version }}
+      NODE_OPTIONS: "--max-old-space-size=8192"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -74,24 +75,30 @@ jobs:
       - run: npm run github-action-install
       - run: npm run github-action-compile-for-codegen
       - run: npm run github-action-generate
-      - run: npm run github-action-compile
-      - run: npm run github-action-pack
-      - run: npm run github-action-build-react
-      - run: npm run github-action-build-electron
+      - run: npm run github-action-build
+      # - run: npm run github-action-compile
+      # - run: npm run github-action-pack
+      # - run: npm run github-action-build-react
+      # - run: npm run github-action-build-electron
       - run: ls -R ./ocd/dist
         if: always()
       - name: Upload Mac Artifact to Release
         if: matrix.os == 'macos-latest'
         run: |
-          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/mac/ocd-${{ env.OCD_VERSION }}-*.dmg --clobber
+          npm run github-action-build-macos-x86
+          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/make/ocd-${{ env.OCD_VERSION }}-*.dmg --clobber
+          # gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/mac/ocd-${{ env.OCD_VERSION }}-*.dmg --clobber
       - name: Upload Windows Artifact to Release
         if: matrix.os == 'windows-latest'
         run: |
-          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/win/ocd-${{ env.OCD_VERSION }}-x64.exe --clobber
+          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/make/squirrel.windows/x64/ocd-${{ env.OCD_VERSION }}*.exe --clobber
+          # gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/win/ocd-${{ env.OCD_VERSION }}-x64.exe --clobber
       - name: Upload Linux Artifact to Release
         if: matrix.os == 'ubuntu-latest'
         run: |
+          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/make/rpm/x64/ocd-${{ env.OCD_VERSION }}-*.rpm --clobber
+          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/make/deb/x64/ocd_${{ env.OCD_VERSION }}*.deb --clobber
           # gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}.rpm --clobber
           # gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}.deb --clobber
-          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}-*.snap --clobber
-          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}-*.AppImage --clobber
+          # gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}-*.snap --clobber
+          # gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}-*.AppImage --clobber
