@@ -14,8 +14,8 @@ import { OcdDesign } from '@ocd/model'
 import { OcdCache, OcdConsoleConfiguration, OcdLibrary } from '@ocd/react'
 // import { unescape } from 'querystring'
 
-app.commandLine.appendSwitch('ignore-certificate-errors') // Temporary work around for not being able to add additional certificates
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0' // Temporary work around for not being able to add additional certificates
+// app.commandLine.appendSwitch('ignore-certificate-errors') // Temporary work around for not being able to add additional certificates
+// process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0' // Temporary work around for not being able to add additional certificates
 
 // Get Environment information
 const isDev = process.env.OCD_DEV === 'true';
