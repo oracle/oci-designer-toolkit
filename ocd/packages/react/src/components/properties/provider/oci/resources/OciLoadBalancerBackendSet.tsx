@@ -39,7 +39,7 @@ export const OciLoadBalancerBackendsObjectList = ({ ocdDocument, setOcdDocument,
     return (
         <div className='ocd-property-row'>
             <details open={true}>
-                <summary className='summary-background ocd-summary-row'><div>Backends</div><div className='add-property action-button-background action-button-column action-button' onClick={onClick}></div></summary>
+                <summary className='summary-background ocd-summary-row'><div>Backends</div><div className='add-property action-button-background action-button-column action-button' onClick={onClick} aria-hidden></div></summary>
                 <div className='ocd-resource-properties'>
                     {ocdDocument.getOciResourceList('load_balancer_backend').filter((r: Model.OciLoadBalancerBackend) => r.backendSetId === resource.id).map((r: Model.OciLoadBalancerBackend) => {return <OciLoadBalancerBackendsObject ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={r} configs={configs} rootResource={rootResource} onDelete={onDelete} key={r.id}/>})}
                 </div>

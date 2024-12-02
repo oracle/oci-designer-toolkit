@@ -34,7 +34,7 @@ export const OcdCommonTags = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocume
         const tag = definedTags.find((t) => t.namespace === oldNamespace && t.key === key)
         if (tag) {
             tag.namespace = newNamespace
-            setDefinedTags(definedTags)
+            setDefinedTags([...definedTags])
             updateDefinedTags(definedTags)
         }
     })
@@ -42,7 +42,7 @@ export const OcdCommonTags = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocume
         const tag = definedTags.find((t) => t.namespace === namespace && t.key === oldKey)
         if (tag) {
             tag.key = newKey
-            setDefinedTags(definedTags)
+            setDefinedTags([...definedTags])
             updateDefinedTags(definedTags)
         }
     })
@@ -50,7 +50,7 @@ export const OcdCommonTags = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocume
         const tag = definedTags.find((t) => t.namespace === namespace && t.key === key)
         if (tag) {
             tag.value = value
-            setDefinedTags(definedTags)
+            setDefinedTags([...definedTags])
             updateDefinedTags(definedTags)
         }
     })
@@ -80,7 +80,7 @@ export const OcdCommonTags = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocume
         const tag = freeformTags.find((t) => t.key === oldKey)
         if (tag) {
             tag.key = newKey
-            setFreeformTags(freeformTags)
+            setFreeformTags([...freeformTags])
             updateFreeformTags(freeformTags)
         }
     })
@@ -88,7 +88,7 @@ export const OcdCommonTags = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocume
         const tag = freeformTags.find((t) => t.key === key)
         if (tag) {
             tag.value = value
-            setFreeformTags(freeformTags)
+            setFreeformTags([...freeformTags])
             updateFreeformTags(freeformTags)
         }
     })
@@ -106,7 +106,7 @@ export const OcdCommonTags = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocume
                                     <div className='tr'>
                                         <div className='th'>Key</div>
                                         <div className='th'>Value</div>
-                                        <div className='th action-button-background add-property' onClick={onOciFreeformTagAddClick}></div>
+                                        <div className='th action-button-background add-property' onClick={onOciFreeformTagAddClick} aria-hidden></div>
                                     </div>
                                 </div>
                                 <div className='tbody ocd-tags-list-body'>
@@ -134,7 +134,7 @@ export const OcdCommonTags = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocume
                                         <div className='th'>Namespace</div>
                                         <div className='th'>Key</div>
                                         <div className='th'>Value</div>
-                                        <div className='th action-button-background add-property' onClick={onOciDefinedTagAddClick}></div>
+                                        <div className='th action-button-background add-property' onClick={onOciDefinedTagAddClick} aria-hidden></div>
                                     </div>
                                 </div>
                                 <div className='tbody ocd-tags-list-body'>
@@ -181,7 +181,7 @@ export const OciDefinedTagRow = ({ocdDocument, setOcdDocument, tag, onDeleteClic
             <div className='td'><input type='text' placeholder='Namespace' value={namespace} onChange={onNamespaceChange}></input></div>
             <div className='td'><input type='text' placeholder='Key' value={key} onChange={onKeyChange}></input></div>
             <div className='td'><input type='text' placeholder='Value' value={value} onChange={onValueChange}></input></div>
-            <div className='td action-button-background delete-property' onClick={onDeleteClick}></div>
+            <div className='td action-button-background delete-property' onClick={onDeleteClick} aria-hidden></div>
         </div>
     )
 }
@@ -201,7 +201,7 @@ export const OciFreeformTagRow = ({ocdDocument, setOcdDocument, tag, onDeleteCli
         <div className='ocd-tag-row tr'>
             <div className='td'><input type='text' placeholder='Name' value={key} onChange={onKeyChange}></input></div>
             <div className='td'><input type='text' placeholder='Value' value={value} onChange={onValueChange}></input></div>
-            <div className='td action-button-background delete-property' onClick={onDeleteClick}></div>
+            <div className='td action-button-background delete-property' onClick={onDeleteClick} aria-hidden></div>
         </div>
     )
 }

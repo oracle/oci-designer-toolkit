@@ -276,7 +276,7 @@ const OcdResourceTags = ({ocdDocument, setOcdDocument}: DesignerResourceProperti
                             <div className='tr'>
                                 <div className='th'>Key</div>
                                 <div className='th'>Value</div>
-                                <div className='th action-button-background add-property' onClick={onFreeformTagAddClick}></div>
+                                <div className='th action-button-background add-property' onClick={onFreeformTagAddClick} aria-hidden></div>
                             </div>
                         </div>
                         <div className='tbody ocd-tags-list-body'>
@@ -304,7 +304,7 @@ const OcdResourceTags = ({ocdDocument, setOcdDocument}: DesignerResourceProperti
                                 <div className='th'>Namespace</div>
                                 <div className='th'>Key</div>
                                 <div className='th'>Value</div>
-                                <div className='th action-button-background add-property' onClick={onDefinedTagAddClick}></div>
+                                <div className='th action-button-background add-property' onClick={onDefinedTagAddClick} aria-hidden></div>
                             </div>
                         </div>
                         <div className='tbody ocd-tags-list-body'>
@@ -432,10 +432,10 @@ const OcdResourceArrangement = ({ocdDocument, setOcdDocument}: DesignerResourceP
     return (
         <div className={`ocd-properties-panel ocd-properties-panel-theme ocd-properties-arrangement-panel`}>
             <div className={`ocd-arrangement-z-positioning`}>
-                <div onClick={() => toFrontClick()}><span>To Front</span></div>
-                <div onClick={() => toBackClick()}><span>To Back</span></div>
-                <div onClick={() => bringForwardClick()}><span>Bring Forward</span></div>
-                <div onClick={() => sendBackwardClick()}><span>Send Backward</span></div>
+                <div onClick={() => toFrontClick()} aria-hidden><span>To Front</span></div>
+                <div onClick={() => toBackClick()} aria-hidden><span>To Back</span></div>
+                <div onClick={() => bringForwardClick()} aria-hidden><span>Bring Forward</span></div>
+                <div onClick={() => sendBackwardClick()} aria-hidden><span>Send Backward</span></div>
             </div>
             <div className={`ocd-arrangement-size ${!container ? 'hidden' : ''}`}>
                 <div><span>Size</span></div>
@@ -643,7 +643,7 @@ const OcdColourPicker = ({colour, setColour}: DesignerColourPicker): JSX.Element
             onMouseLeave={() => setPickerOpen(false)}>
             <div className='ocd-colour-picker-swatch'
                 style={{ backgroundColor: colour }}
-                onClick={() => setPickerOpen(!pickerOpen)}
+                onClick={() => setPickerOpen(!pickerOpen)} aria-hidden
             ></div>
             {pickerOpen && <div className='ocd-colour-picker-popup'>
                 {/* <div><RgbaColorPicker color={rgbaColor} onChange={setRgbaColor} /></div> */}

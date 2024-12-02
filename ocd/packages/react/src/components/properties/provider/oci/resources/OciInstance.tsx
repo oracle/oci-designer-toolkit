@@ -60,7 +60,7 @@ export const OciVolumeAttachmentsObjectList = ({ ocdDocument, setOcdDocument, re
     return (
         <div className='ocd-property-row'>
             <details open={true}>
-                <summary className='summary-background ocd-summary-row'><div>Volume Attachements</div><div className='add-property action-button-background action-button-column action-button' onClick={onClick}></div></summary>
+                <summary className='summary-background ocd-summary-row'><div>Volume Attachements</div><div className='add-property action-button-background action-button-column action-button' onClick={onClick} aria-hidden></div></summary>
                 <div className='ocd-resource-properties'>
                     {ocdDocument.getOciResourceList('volume_attachment').filter((r: Model.OciVolumeAttachment) => r.instanceId === resource.id).map((r: Model.OciVolumeAttachment) => {return <OciVolumeAttachmentsObject ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={r} configs={configs} rootResource={rootResource} onDelete={onDelete} key={r.id}/>})}
                 </div>

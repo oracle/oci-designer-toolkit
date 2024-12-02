@@ -31,7 +31,7 @@ const OcdVariables = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setO
                                 <div className='th'>Name</div>
                                 <div className='th'>Default</div>
                                 <div className='th'>Description</div>
-                                <div className='th action-button-background add-property' onClick={onOciAddClick}></div>
+                                <div className='th action-button-background add-property' onClick={onOciAddClick} aria-hidden></div>
                             </div>
                         </div>
                         <div className='tbody ocd-variables-list-body'>
@@ -74,7 +74,7 @@ const OcdVariableRow = ({ocdDocument, setOcdDocument, variable, onDeleteClick}: 
             <div className='td'><input type='text' placeholder='Name' value={variable.name} onChange={onNameChange}></input></div>
             <div className='td'><input type='text' placeholder='Default Value' value={variable.default} onChange={onDefaultChange}></input></div>
             <div className='td'><input type='text' placeholder='Description' value={variable.description} onChange={onDescriptionChange}></input></div>
-            <div className='td action-button-background delete-property' onClick={onDeleteClick}></div>
+            <div className='td action-button-background delete-property' onClick={onDeleteClick} aria-hidden></div>
         </div>
     )
 }
