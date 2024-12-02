@@ -86,23 +86,29 @@ const OcdCanvasLayer = ({ ocdDocument, setOcdDocument, layer } : LayerBarLayerPr
     )
 }
 
+const addLayer = (ocdDocument: OcdDocument, setOcdDocument: React.Dispatch<any>, setMenuVisible: React.Dispatch<any> | undefined) => {
+    console.debug('Adding Layer')
+    const compartment = OciModelResources.OciCompartment.newResource()
+    ocdDocument.design.model.oci.resources.compartment.push(compartment)
+    // Add Layer
+    ocdDocument.addLayer(compartment.id)
+    const page: OcdViewPage = ocdDocument.getActivePage()
+    page.layers.forEach((l: OcdViewLayer) => l.selected = l.id === compartment.id)
+    const selectedResource: OcdSelectedResource = {
+        modelId: compartment.id,
+        pageId: ocdDocument.getActivePage().id,
+        coordsId: '',
+        class: page.layers[0].class
+    }
+    ocdDocument.selectedResource = selectedResource
+    setOcdDocument(OcdDocument.clone(ocdDocument))
+    if (setMenuVisible) setMenuVisible(false)
+}
+
 const OcdCanvasLayers = ({ ocdDocument, setOcdDocument }: LayerBarLayersProps): JSX.Element => {
     const onClickAddLayer = () => {
         console.debug('OcdCanvasLayers: Adding Layer')
-        const compartment = OciModelResources.OciCompartment.newResource()
-        ocdDocument.design.model.oci.resources.compartment.push(compartment)
-        // Add Layer
-        ocdDocument.addLayer(compartment.id)
-        const page: OcdViewPage = ocdDocument.getActivePage()
-        page.layers.forEach((l: OcdViewLayer) => l.selected = l.id === compartment.id)
-        const selectedResource: OcdSelectedResource = {
-            modelId: compartment.id,
-            pageId: ocdDocument.getActivePage().id,
-            coordsId: '',
-            class: page.layers[0].class
-        }
-        ocdDocument.selectedResource = selectedResource
-        setOcdDocument(OcdDocument.clone(ocdDocument))
+        addLayer(ocdDocument, setOcdDocument, undefined)
     }
 
     const page: OcdViewPage = ocdDocument.getActivePage()
@@ -157,22 +163,8 @@ const OcdLayersThreeDotMenu = ({ocdDocument, setOcdDocument}: LayerBarMenuProps)
         setMenuVisible(false)
     }
     const onAddLayerClick = () => {
-        console.debug('OcdCanvasLayers: Adding Layer')
-        const compartment = OciModelResources.OciCompartment.newResource()
-        ocdDocument.design.model.oci.resources.compartment.push(compartment)
-        // Add Layer
-        ocdDocument.addLayer(compartment.id)
-        const page: OcdViewPage = ocdDocument.getActivePage()
-        page.layers.forEach((l: OcdViewLayer) => l.selected = l.id === compartment.id)
-        const selectedResource: OcdSelectedResource = {
-            modelId: compartment.id,
-            pageId: ocdDocument.getActivePage().id,
-            coordsId: '',
-            class: page.layers[0].class
-        }
-        ocdDocument.selectedResource = selectedResource
-        setOcdDocument(OcdDocument.clone(ocdDocument))
-        setMenuVisible(false)
+        console.debug('OcdCanvasLayers: OcdLayersThreeDotMenu: Adding Layer')
+        addLayer(ocdDocument, setOcdDocument, setMenuVisible)
     }
     const page: OcdViewPage = ocdDocument.getActivePage()
     const layer = page.layers.find((l) => l.selected)
