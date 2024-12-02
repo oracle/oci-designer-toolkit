@@ -114,7 +114,7 @@ const OcdPagesThreeDotMenu = ({ocdDocument, setOcdDocument}: PageBarMenuProps): 
                         <li className='ocd-dropdown-menu-item ocd-mouseover-highlight'><div><label><input id='ocd_console_page_display_grid' type='checkbox' onChange={displayGridOnChange} ref={cbRef} checked={activePage.grid}/>Display Grid</label></div></li>
                         <li className='ocd-dropdown-menu-item'><div>--------------------------------</div></li>
                         <li className='ocd-dropdown-menu-item ocd-mouseover-highlight'><div onClick={onDuplicatePageClick} aria-hidden>Duplicate "{activePageName}"</div></li>
-                        {ocdDocument.design.view.pages.length > 1 && <li className='ocd-dropdown-menu-item ocd-mouseover-highlight'><div onClick={onDeletePageClick}>Delete "{activePageName}"</div></li>}
+                        {ocdDocument.design.view.pages.length > 1 && <li className='ocd-dropdown-menu-item ocd-mouseover-highlight'><div onClick={onDeletePageClick} aria-hidden>Delete "{activePageName}"</div></li>}
                         <li className='ocd-dropdown-menu-item ocd-mouseover-highlight'><div onClick={onAddPageClick} aria-hidden>Add Page</div></li>
                     </ul>
                 </li>

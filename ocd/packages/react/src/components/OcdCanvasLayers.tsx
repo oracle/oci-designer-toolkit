@@ -81,9 +81,7 @@ const OcdCanvasLayer = ({ ocdDocument, setOcdDocument, layer } : LayerBarLayerPr
             <div className={`ocd-canvas-layer-name ${layer.class}`} onClick={() => onLayerSelectedClick()} aria-hidden>
                 <input id={layer.id.replace(/\W+/g, "")} type='text' value={title} onChange={onChange} tabIndex={-1}></input>
             </div>
-            {page.layers.length > 1 && <div className={`ocd-layer-visiblity-icon delete-layer`}
-                onClick={onDeleteClick}
-            ></div>}
+            {page.layers.length > 1 && <div className={`ocd-layer-visiblity-icon delete-layer`} onClick={onDeleteClick} aria-hidden></div>}
         </div>
     )
 }

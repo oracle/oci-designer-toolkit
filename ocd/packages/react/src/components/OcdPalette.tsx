@@ -19,8 +19,8 @@ const OcdPalette = ({ ocdConsoleConfig, setDragData, ocdDocument }: PaletteProps
     return (
         <div className='ocd-designer-left-panel'>
             <div className={`ocd-designer-tab-bar ocd-designer-tab-bar-theme`}>
-                <div className={`ocd-designer-tab ocd-designer-tab-theme ${activeTab === 'provider' ? 'ocd-designer-active-tab-theme' : ''}`} onClick={() => onTabClick('Provider')}><span>Provider</span></div>
-                <div className={`ocd-designer-tab ocd-designer-tab-theme ${activeTab === 'model' ? 'ocd-designer-active-tab-theme' : ''}`} onClick={() => onTabClick('Model')}><span>Model</span></div>
+                <div className={`ocd-designer-tab ocd-designer-tab-theme ${activeTab === 'provider' ? 'ocd-designer-active-tab-theme' : ''}`} onClick={() => onTabClick('Provider')} aria-hidden><span>Provider</span></div>
+                <div className={`ocd-designer-tab ocd-designer-tab-theme ${activeTab === 'model' ? 'ocd-designer-active-tab-theme' : ''}`} onClick={() => onTabClick('Model')} aria-hidden><span>Model</span></div>
             </div>
             <ActiveTab
                 ocdConsoleConfig={ocdConsoleConfig} 
