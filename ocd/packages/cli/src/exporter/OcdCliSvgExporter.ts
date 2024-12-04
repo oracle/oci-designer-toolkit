@@ -5,9 +5,9 @@
 
 import fs from 'fs'
 import path from 'path'
-import { OcdCliExporter } from './OcdCliExporter'
+import { OcdCliExporter } from './OcdCliExporter.js'
 
 export class OcdCliSvgExporter extends OcdCliExporter {}
 
 export default OcdCliSvgExporter
-module.exports = { OcdCliSvgExporter }
+// module.exports = { OcdCliSvgExporter }

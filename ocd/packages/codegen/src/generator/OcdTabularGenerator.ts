@@ -7,7 +7,7 @@
 
 import fs from 'fs'
 import path from 'path'
-import { OcdCodeGenerator } from './OcdCodeGenerator'
+import { OcdCodeGenerator } from './OcdCodeGenerator.js'
 
 export class OcdTabularGenerator extends OcdCodeGenerator {
     constructor (prefix: string='Oci') {
@@ -22,8 +22,8 @@ export class OcdTabularGenerator extends OcdCodeGenerator {
     content = (resource, schema) => {
         const contents = `${this.copyright()}
 
-import { ${this.prefix}TabularResourceProps } from "../../../../../types/ReactComponentProperties"
-import { OcdTabularContents } from "../${this.prefix}TabularContents"
+import { ${this.prefix}TabularResourceProps } from "../../../../../types/ReactComponentProperties.js"
+import { OcdTabularContents } from "../${this.prefix}TabularContents.js"
 
 export const ${this.reactResourceName(resource)} = ({ ocdDocument, ${this.prefix.toLowerCase()}Resources, selected }: ${this.prefix}TabularResourceProps): JSX.Element => {
     const columnTitles: string[] = []
@@ -59,4 +59,4 @@ export const ${this.reactResourceName(resource)} = ({ ocdDocument, ${this.prefix
 }
 
 export default OcdTabularGenerator
-module.exports = { OcdTabularGenerator }
+// module.exports = { OcdTabularGenerator }

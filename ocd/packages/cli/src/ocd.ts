@@ -13,9 +13,8 @@ import path from 'path'
 import { parseArgs } from "node:util"
 import { OcdMarkdownExporter, OcdSVGExporter, OcdTerraformExporter } from '@ocd/export'
 import { OciQuery } from "@ocd/query"
-import { OcdAutoLayout, OcdDesign, OcdViewCoords } from '@ocd/model'
+import { OcdAutoLayout, OcdDesign, OcdViewCoords, OciModelResources } from '@ocd/model'
 import { OcdUtils } from '@ocd/core'
-import { OciModelResources } from '@ocd/model'
 
 const options = {
     compartments: {

@@ -3,12 +3,12 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import { TerraformSchema } from "../types/TerraformSchema";
-import { OcdTerraformSchemaImporter } from "./OcdTerraformSchemaImporter";
-import { resourceMap, dataMap, resourceAttributes } from './data/GoogleResourceMap'
-import { ignoreElements } from './data/GoogleIgnoreElements';
-import { elementOverrides } from './data/GoogleElementOverrides';
-import { conditionalElements } from './data/GoogleConditionalElements';
+import { TerraformSchema } from "../types/TerraformSchema.js";
+import { OcdTerraformSchemaImporter } from "./OcdTerraformSchemaImporter.js";
+import { resourceMap, dataMap, resourceAttributes } from './data/GoogleResourceMap.js'
+import { ignoreElements } from './data/GoogleIgnoreElements.js';
+import { elementOverrides } from './data/GoogleElementOverrides.js';
+import { conditionalElements } from './data/GoogleConditionalElements.js';
 
 export class GoogleTerraformSchemaImporter extends OcdTerraformSchemaImporter {
     constructor() {
@@ -24,4 +24,4 @@ export class GoogleTerraformSchemaImporter extends OcdTerraformSchemaImporter {
 }
 
 export default GoogleTerraformSchemaImporter
-module.exports = { GoogleTerraformSchemaImporter }
+// module.exports = { GoogleTerraformSchemaImporter }

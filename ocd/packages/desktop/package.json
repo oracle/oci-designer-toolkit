@@ -1,7 +1,7 @@
 {
-  "name": "@ocd/desktop",
+  "name": "ocd",
   "productName": "ocd",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "OKIT Open Cloud Designer Desktop",
   "title": "OKIT Open Cloud Designer Desktop",
   "author": {
@@ -20,207 +20,52 @@
     "okit"
   ],
   "license": "UPL-1.0",
-  "main": "public/main.js",
-  "homepage": "./",
-  "private": true,
-  "config": {
-    "forge1": {
-      "packagerConfig": {
-        "asar": true,
-        "name": "ocd",
-        "executableName": "ocd",
-        "icon": "./public/assets/icon"
-      },
-      "rebuildConfig": {},
-      "makers": [
-        {
-          "name": "@electron-forge/maker-dmg",
-          "config": {
-            "icon": "./public/assets/icon.icns",
-            "format": "ULFO",
-            "overwrite": true
-          }
-        },
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "electron_quick_start"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
-        }
-      ],
-      "plugins": [
-        {
-          "name": "@electron-forge/plugin-auto-unpack-natives",
-          "config": {}
-        }
-      ]
-    }
-  },
-  "build": {
-    "appId": "com.oracle.okit-ocd",
-    "artifactName": "${productName}-${version}-${arch}.${ext}",
-    "files": [
-      "build/**/*",
-      "node_modules/**/*"
-    ],
-    "directories": {
-      "output": "../../dist/${os}",
-      "buildResources": "assets"
-    },
-    "fileAssociations": [
-      {
-        "ext": "okit",
-        "name": "OCD Design",
-        "role": "Editor"
-      },
-      {
-        "ext": "ocd",
-        "name": "OCD Design",
-        "role": "Editor"
-      }
-    ],
-    "mac": {
-      "icon": "build/assets/icon.icns",
-      "category": "public.app-category.developer-tools",
-      "mergeASARs": false,
-      "target": [
-        {
-          "target": "dmg",
-          "arch": ["universal"]
-        }
-      ]
-    },
-    "dmg": {
-      "icon": "build/assets/icon.icns",
-      "background": "build/assets/background.png",
-      "window": {
-        "width": 585,
-        "height": 355
-      }
-    },
-    "win": {
-      "icon": "build/assets/icon.ico"
-    },
-    "nsis": {
-      "perMachine": true
-    },
-    "linux": {
-      "desktop": {
-        "Name": "OKIT - Open Cloud designer",
-        "StartupNotify": "true",
-        "Terminal": "false",
-        "Type": "Application"        
-      },
-      "icon": "build/assets/icon.png",
-      "executableName": "${productName}-${version}.${ext}",
-      "target": [
-        "snap"
-      ]
-    },
-    "rpm": {}
-  },
-  "dependencies": {
-    "@ocd/core": ">=0.2.5",
-    "@ocd/export": ">=0.2.5",
-    "@ocd/import": ">=0.2.5",
-    "@ocd/model": ">=0.2.5",
-    "@ocd/query": ">=0.2.5",
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.5.2",
-    "@types/node": "^16.18.40",
-    "@types/react": "^18.2.20",
-    "@types/react-dom": "^18.2.7",
-    "electron-squirrel-startup": "^1.0.0",
-    "oci-sdk": "^2.68.0",
-    "react": "^18.2.0",
-    "react-colorful": "^5.6.1",
-    "react-dom": "^18.2.0",
-    "react-markdown": "^9.0.0",
-    "react-scripts": "5.0.1",
-    "rehype-raw": "^7.0.0",
-    "remark-gfm": "^4.0.0",
-    "uuid": "^9.0.0",
-    "web-vitals": "^2.1.4"
-  },
-  "scripts-old": {
-    "start-electron": "electron-forge start",
-    "package": "electron-forge package",
-    "make": "electron-forge make",
-    "publish": "electron-forge publish",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
+  "main": ".vite/build/main.js",
   "scripts": {
-    "start-react-scripts": "react-scripts start",
-    "build-react-scripts": "react-scripts build",
-    "test-react-scripts": "react-scripts test",
-    "start": "react-scripts start",
-    "build-old": "react-scripts build",
-    "electron": "WEB_URL=http://localhost:3000 electron .",
-    "electron-forge": "WEB_URL=http://localhost:3000 electron-forge start",
-    "electron-forge-dev": "npm run build && electron-forge start",
-    "electron-forge-package": "electron-forge package",
-    "electron-forge-make": "electron-forge make",
-    "electron-forge-publish": "electron-forge publish",
-    "electron-forge-build": "npm run build-react-scripts && npm run make",
-    "electron-start": "electron .",
-    "preelectron-linux-pack": "npm run build",
-    "electron-linux-pack": "electron-builder build --linux -c.extraMetadata.main=build/main.js",
-    "preelectron-macos-pack": "npm run build",
-    "electron-macos-pack": "electron-builder build --macos -c.extraMetadata.main=build/main.js",
-    "preelectron-win-pack": "npm run build",
-    "electron-win-pack": "electron-builder build --win -c.extraMetadata.main=build/main.js",
-    "preelectron-release-pack": "npm run build",
-    "electron-release-pack": "electron-builder build --x64 --macos --win --linux -c.extraMetadata.main=build/main.js",
-    "electron-pack": "electron-builder build -c.extraMetadata.main=build/main.js",
-    "clean": "rm -rf lib dist build",
-    "build": "npm run build-react-scripts && BRANCH_NAME='' npm run electron-pack",
-    "desktop": "npm run build-react-scripts && electron-forge start",
-    "web": "npm run start"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "dev": "vite",
+    "vite-build": "tsc -b ./tsconfig.json && vite build",
+    "clean": "rm -rf lib dist .vite out",
+    "purge": "npm run clean && rm -rf node_modules",
+    "build": "npm run make",
+    "start": "NODE_OPTIONS=--max-old-space-size=8192 electron-forge start",
+    "package": "NODE_OPTIONS=--max-old-space-size=8192 electron-forge package",
+    "make": "electron-forge make ",
+    "make-macos-universal": "NODE_OPTIONS=--max-old-space-size=8192 DEBUG=electron-installer-dmg* electron-forge make --arch='universal'",
+    "make-macos-arm64": "NODE_OPTIONS=--max-old-space-size=8192 DEBUG=electron-installer-dmg* electron-forge make --arch='arm64'",
+    "make-macos-x64": "NODE_OPTIONS=--max-old-space-size=8192 DEBUG=electron-installer-dmg* electron-forge make --arch='x64'",
+    "publish": "electron-forge publish",
+    "lint": "eslint --ext .ts,.tsx ."
   },
   "devDependencies": {
-    "@electron-forge/cli": "^6.3.0",
-    "@electron-forge/maker-deb": "^6.3.0",
-    "@electron-forge/maker-dmg": "^6.3.0",
-    "@electron-forge/maker-rpm": "^6.3.0",
-    "@electron-forge/maker-squirrel": "^6.3.0",
-    "@electron-forge/maker-zip": "^6.3.0",
-    "@electron-forge/plugin-auto-unpack-natives": "^6.3.0",
-    "@types/uuid": "^9.0.2",
-    "electron": "26.2.4",
-    "electron-builder": "^24.6.4",
-    "typescript": "^5.2.2"
+    "@electron-forge/cli": "^7.5.0",
+    "@electron-forge/maker-deb": "^7.5.0",
+    "@electron-forge/maker-dmg": "^7.5.0",
+    "@electron-forge/maker-rpm": "^7.5.0",
+    "@electron-forge/maker-squirrel": "^7.5.0",
+    "@electron-forge/maker-zip": "^7.5.0",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.5.0",
+    "@electron-forge/plugin-fuses": "^7.5.0",
+    "@electron-forge/plugin-vite": "^7.5.0",
+    "@electron/fuses": "^1.8.0",
+    "@types/electron-squirrel-startup": "^1.0.2",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
+    "electron": ">=32.2.0",
+    "electron-builder": "^25.1.8",
+    "eslint": ">=8.57.1",
+    "eslint-plugin-import": "^2.31.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.3",
+    "vite": "^5.4.8"
+  },
+  "dependencies": {
+    "@ocd/core": ">=0.2.6",
+    "@ocd/export": ">=0.2.6",
+    "@ocd/import": ">=0.2.6",
+    "@ocd/model": ">=0.2.6",
+    "@ocd/query": ">=0.2.6",
+    "@ocd/react": ">=0.2.6",
+    "electron-squirrel-startup": "^1.0.1",
+    "oci-sdk": "^2.69.0"
   }
 }

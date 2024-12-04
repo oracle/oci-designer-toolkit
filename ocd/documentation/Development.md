@@ -52,7 +52,7 @@ export class GoogleTerraformSchemaImporter extends OcdTerraformSchemaImporter {
 }
 
 export default GoogleTerraformSchemaImporter
-module.exports = { GoogleTerraformSchemaImporter }
+// module.exports = { GoogleTerraformSchemaImporter }
 ```
 
 #### src/importer/data/GoogleResourceMap.ts
@@ -243,7 +243,7 @@ export class GoogleMarkdownGenerator extends OcdMarkdownGenerator {
 }
 
 export default GoogleMarkdownGenerator
-module.exports = { GoogleMarkdownGenerator }
+// module.exports = { GoogleMarkdownGenerator }
 ```
 
 #### src/generator/GoogleModelGenerator.ts
@@ -266,7 +266,7 @@ export class GoogleModelGenerator extends OcdModelGenerator {
 }
 
 export default GoogleModelGenerator
-module.exports = { GoogleModelGenerator }
+// module.exports = { GoogleModelGenerator }
 ```
 
 #### src/generator/GooglePropertiesGenerator.ts
@@ -289,7 +289,7 @@ export class GooglePropertiesGenerator extends OcdPropertiesGenerator {
 }
 
 export default GooglePropertiesGenerator
-module.exports = { GooglePropertiesGenerator }
+// module.exports = { GooglePropertiesGenerator }
 ```
 
 #### src/generator/GoogleTabularGenerator.ts
@@ -312,7 +312,7 @@ export class GoogleTabularGenerator extends OcdTabularGenerator {
 }
 
 export default GoogleTabularGenerator
-module.exports = { GoogleTabularGenerator }
+// module.exports = { GoogleTabularGenerator }
 ```
 
 #### src/generator/GoogleTerraformGenerator.ts
@@ -337,7 +337,7 @@ export class GoogleTerraformGenerator extends OcdTerraformGenerator {
 }
 
 export default GoogleTerraformGenerator
-module.exports = { GoogleTerraformGenerator }
+// module.exports = { GoogleTerraformGenerator }
 ```
 
 #### src/generator/GoogleValidatorGenerator.ts
@@ -360,7 +360,7 @@ export class GoogleValidatorGenerator extends OcdValidatorGenerator {
 }
 
 export default GoogleValidatorGenerator
-module.exports = { GoogleValidatorGenerator }
+// module.exports = { GoogleValidatorGenerator }
 ```
 
 #### src/generator/data/GoogleCommonResourceProperties.ts

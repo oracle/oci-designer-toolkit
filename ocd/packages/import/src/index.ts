@@ -3,5 +3,5 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-export { OcdImporter } from './OcdImporter'
-export { OcdOKITImporter } from './okit/OcdOKITImporter'
+export { OcdImporter } from './OcdImporter.js'
+export { OcdOKITImporter } from './okit/OcdOKITImporter.js'

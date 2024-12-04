@@ -3,7 +3,7 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import { OcdIncludedElements, OcdResourceMap } from "../../types/OcdImporterData";
+import { OcdIncludedElements, OcdResourceMap } from "../../types/OcdImporterData.js";
 
 export const resourceMap: OcdResourceMap = {
     "oci_analytics_analytics_instance": "analytics_instance",

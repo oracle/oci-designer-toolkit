@@ -3,7 +3,7 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import OcdTerraformResource from "../../OcdTerraformResource"
+import OcdTerraformResource from "../../OcdTerraformResource.js"
 import { OcdDesign, GoogleResource } from '@ocd/model'
 
 export class GoogleTerraformResource extends OcdTerraformResource {

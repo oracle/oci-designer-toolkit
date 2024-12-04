@@ -3,16 +3,13 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import { ignoreElements } from './data/OciIgnoreElements'
-import { resourceMap, dataMap, resourceAttributes } from './data/OciResourceMap'
-import { elementOverrides } from './data/OciElementOverrides' 
-import { conditionalElements } from './data/OciConditionalElements'
-// import { attributeMap } from './data/OcdAttributeMap'
-import { TerrafomSchemaEntry, TerraformSchema } from '../types/TerraformSchema'
-import{ OcdSchemaEntry } from '../types/OcdSchema'
-// import { OcdResourceMap } from '../types/OcdImporterData'
-import { OcdUtils } from '@ocd/core'
-import { OcdTerraformSchemaImporter } from './OcdTerraformSchemaImporter'
+import { ignoreElements } from './data/OciIgnoreElements.js'
+import { resourceMap, dataMap, resourceAttributes } from './data/OciResourceMap.js'
+import { elementOverrides } from './data/OciElementOverrides.js' 
+import { conditionalElements } from './data/OciConditionalElements.js'
+import { TerrafomSchemaEntry, TerraformSchema } from '../types/TerraformSchema.js'
+import{ OcdSchemaEntry } from '../types/OcdSchema.js'
+import { OcdTerraformSchemaImporter } from './OcdTerraformSchemaImporter.js'
 
 export class OciTerraformSchemaImporter extends OcdTerraformSchemaImporter {
     constructor() {
@@ -155,4 +152,4 @@ export class OciTerraformSchemaImporter extends OcdTerraformSchemaImporter {
 }
 
 export default OciTerraformSchemaImporter
-module.exports = { OciTerraformSchemaImporter }
+// module.exports = { OciTerraformSchemaImporter }

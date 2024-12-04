@@ -3,7 +3,7 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import { OcdElementOverrides } from "../../types/OcdImporterData";
+import { OcdElementOverrides } from "../../types/OcdImporterData.js";
 
 export const elementOverrides: OcdElementOverrides = {
     "defaults": {

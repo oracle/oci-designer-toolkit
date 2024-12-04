@@ -3,14 +3,11 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import { OcdDesign, OcdVariable, OciResource } from "@ocd/model"
-import { OcdExporter, OutputDataStringArray } from "../OcdExporter"
-// import * as OciTerraformResources  from './provider/oci/resources'
-// import * as AzureTerraformResources  from './provider/azure/resources'
-// import { OcdUtils } from "@ocd/core"
-import { OciExporter } from "./OciExporter"
-import { AzureExporter } from "./AzureExporter"
-import { GoogleExporter } from "./GoogleExporter"
+import { OcdDesign } from "@ocd/model"
+import { OcdExporter, OutputDataStringArray } from "../OcdExporter.js"
+import { OciExporter } from "./OciExporter.js"
+import { AzureExporter } from "./AzureExporter.js"
+import { GoogleExporter } from "./GoogleExporter.js"
 
 interface ResourceMap extends Record<string, Record<string, string>> {}
 

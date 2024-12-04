@@ -1,17 +1,24 @@
 [![License: UPL](https://img.shields.io/badge/license-UPL-green)](https://img.shields.io/badge/license-UPL-green) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=oracle_oci-designer-toolkit&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=oracle_oci-designer-toolkit)
-# October 2024 Release (Version 0.65.0)
+# November 2024 Release (Version 0.66.0)
 ____
-**Update 0.65.0**: This update addresses the following issues.
-1. OKIT-Web: Resolve issue with queried node_pool where the availability dodamin was still the full name. (#723)
+**Update 0.66.0**: This update addresses the following issues.
 ____
-Welcome to the October 2024 release of OKIT. This release updates the Azure and Google based on the released terraform providers.
+Welcome to the November 2024 release of OKIT. This release switches the exiat Create React App based build format to Vite and Electron Forge.
 
 ## OKIT (Web) Features
-1. OKIT-Web: Create PCA specific OKIT Cache classes for use when accessing the pca link.
 
 ## OKIT - Open Cloud Designer
-1. OKIT-Ocd: Update initial Azure resources to match released terraform providers. (#OKIT-316)
-2. OKIT-Ocd: Update initial Google resources to match released terraform providers . (#OKIT-317)
+1. OKIT-Ocd: Convert @ocd/core to ES6 Module (#OKIT-307)
+1. OKIT-Ocd: Convert @ocd/model to ES6 Module (#OKIT-308)
+1. OKIT-Ocd: Convert @ocd/query to ES6 Module (#OKIT-309)
+1. OKIT-Ocd: Convert @ocd/export to ES6 Module (#OKIT-310)
+1. OKIT-Ocd: Convert @ocd/import to ES6 Module (#OKIT-311)
+1. OKIT-Ocd: Convert @ocd/codegen to ES6 Module (#OKIT-312)
+1. OKIT-Ocd: Convert @ocd/codegen-cli to ES6 Module (#OKIT-313)
+1. OKIT-Ocd: Convert @ocd/cli to ES6 Module (#OKIT-314)
+1. OKIT-Ocd: Convert @ocd/desktop to ES6 Module (#OKIT-315)
+1. OKIT-Ocd: Switch build process from Create React App / Webpack to Vite (#OKIT-305)
+1. OKIT-Ocd: Switch to Electron Forge for building.
 
 ### Beta Overview
 
