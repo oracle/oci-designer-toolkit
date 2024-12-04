@@ -15,7 +15,7 @@ export namespace OciSecurityListConfigs {
                 id: 'egress_security_rules.destination',
                 properties: {
                     placeholder: '0.0.0.0/0',
-                    pattern: "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(3[0-2]|[1-2][0-9]|[0-9]))$)+|^var\.+$",
+                    pattern: String.raw`^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(3[0-2]|[1-2][0-9]|[0-9]))$)+|^var\.+$`,
                     title: 'IPv4 CIDR block'
                 },
                 configs: []
@@ -44,13 +44,13 @@ export namespace OciSecurityListConfigs {
                 id: 'ingress_security_rules',
                 properties: {},
                 configs: [],
-                summary: (open: boolean, resource: OcdResource, openValue: string) => open ? openValue : resource && resource.description.trim().length > 0 ? resource.description : openValue
+                summary: (open: boolean, resource: OcdResource, openValue: string) => open ? openValue : resource?.description.trim().length > 0 ? resource.description : openValue
             },
             {
                 id: 'ingress_security_rules.source',
                 properties: {
                     placeholder: '0.0.0.0/0',
-                    pattern: "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(3[0-2]|[1-2][0-9]|[0-9]))$)+|^var\.+$",
+                    pattern: String.raw`^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(3[0-2]|[1-2][0-9]|[0-9]))$)+|^var\.+$`,
                     title: 'IPv4 CIDR block'
                 },
                 configs: []

@@ -24,7 +24,7 @@ const OcdTerraform = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setO
         <div className='ocd-terraform-view'>
             <div id='terraform_files' className='ocd-designer-canvas-layers'>
                 {Object.keys(terraform).map((k: string) => {
-                    return <div className={`ocd-designer-canvas-layer ${k === selected ? 'ocd-layer-selected' : ''}`} key={k}><label id={k} onClick={onClick}>{k}</label></div>
+                    return <div className={`ocd-designer-canvas-layer ${k === selected ? 'ocd-layer-selected' : ''}`} key={k}><label id={k} onClick={onClick} aria-hidden>{k}</label></div>
                 })}
             </div>
             <div id='selected_terraform_file' className="ocd-selected-terraform-content"><pre>{selectedTerraform}</pre></div>

@@ -35,7 +35,7 @@ export const OciNetworkSecurityGroupSecurityRulesObjectList = ({ ocdDocument, se
     return (
         <div className='ocd-property-row'>
             <details open={true}>
-                <summary className='summary-background ocd-summary-row'><div>Security Rules</div><div className='add-property action-button-background action-button-column action-button' onClick={onClick}></div></summary>
+                <summary className='summary-background ocd-summary-row'><div>Security Rules</div><div className='add-property action-button-background action-button-column action-button' onClick={onClick} aria-hidden></div></summary>
                 <div className='ocd-resource-properties'>
                     {ocdDocument.getOciResourceList('network_security_group_security_rule').filter((r: Model.OciNetworkSecurityGroupSecurityRule) => r.networkSecurityGroupId === resource.id).map((r: Model.OciNetworkSecurityGroupSecurityRule) => {return <OciNetworkSecurityGroupSecurityRulesObject ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={r} configs={configs} rootResource={rootResource} onDelete={onDelete} key={r.id}/>})}
                 </div>

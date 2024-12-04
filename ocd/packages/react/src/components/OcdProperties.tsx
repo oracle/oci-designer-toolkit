@@ -52,7 +52,7 @@ const OcdPropertiesTabbar = ({modelId, coordsId, activeTab, setActiveTab, additi
 const OcdPropertiesTabbarTab = ({title, active, setActive, additionalCss}: {title: string, active: boolean, setActive: (title: string) => void, additionalCss: string}): JSX.Element => {
     console.debug('OcdPropertiesTabbarTab: Render', title, active ? '- Active' : '')
     return(
-        <div className={`ocd-designer-tab ocd-designer-tab-theme ${active ? 'ocd-designer-active-tab-theme' : ''} ${additionalCss ? additionalCss : ''}`} onClick={() => setActive(title.toLowerCase())}><span>{title}</span></div>
+        <div className={`ocd-designer-tab ocd-designer-tab-theme ${active ? 'ocd-designer-active-tab-theme' : ''} ${additionalCss ? additionalCss : ''}`} onClick={() => setActive(title.toLowerCase())} aria-hidden><span>{title}</span></div>
     )
 }
 
@@ -218,7 +218,7 @@ const OcdResourceTags = ({ocdDocument, setOcdDocument}: DesignerResourceProperti
         const tag = freeformTags.find((t) => t.key === oldKey)
         if (tag) {
             tag.key = newKey
-            setFreeformTags(freeformTags)
+            setFreeformTags([...freeformTags])
             updateFreeformTags(freeformTags)
         }
     })
@@ -226,7 +226,7 @@ const OcdResourceTags = ({ocdDocument, setOcdDocument}: DesignerResourceProperti
         const tag = freeformTags.find((t) => t.key === key)
         if (tag) {
             tag.value = value
-            setFreeformTags(freeformTags)
+            setFreeformTags([...freeformTags])
             updateFreeformTags(freeformTags)
         }
     })
@@ -245,7 +245,7 @@ const OcdResourceTags = ({ocdDocument, setOcdDocument}: DesignerResourceProperti
         const tag = definedTags.find((t) => t.namespace === oldNamespace && t.key === key)
         if (tag) {
             tag.namespace = newNamespace
-            setDefinedTags(definedTags)
+            setDefinedTags([...definedTags])
             updateDefinedTags(definedTags)
         }
     })
@@ -253,7 +253,7 @@ const OcdResourceTags = ({ocdDocument, setOcdDocument}: DesignerResourceProperti
         const tag = definedTags.find((t) => t.namespace === namespace && t.key === oldKey)
         if (tag) {
             tag.key = newKey
-            setDefinedTags(definedTags)
+            setDefinedTags([...definedTags])
             updateDefinedTags(definedTags)
         }
     })
@@ -261,7 +261,7 @@ const OcdResourceTags = ({ocdDocument, setOcdDocument}: DesignerResourceProperti
         const tag = definedTags.find((t) => t.namespace === namespace && t.key === key)
         if (tag) {
             tag.value = value
-            setDefinedTags(definedTags)
+            setDefinedTags([...definedTags])
             updateDefinedTags(definedTags)
         }
     })
@@ -276,7 +276,7 @@ const OcdResourceTags = ({ocdDocument, setOcdDocument}: DesignerResourceProperti
                             <div className='tr'>
                                 <div className='th'>Key</div>
                                 <div className='th'>Value</div>
-                                <div className='th action-button-background add-property' onClick={onFreeformTagAddClick}></div>
+                                <div className='th action-button-background add-property' onClick={onFreeformTagAddClick} aria-hidden></div>
                             </div>
                         </div>
                         <div className='tbody ocd-tags-list-body'>
@@ -304,7 +304,7 @@ const OcdResourceTags = ({ocdDocument, setOcdDocument}: DesignerResourceProperti
                                 <div className='th'>Namespace</div>
                                 <div className='th'>Key</div>
                                 <div className='th'>Value</div>
-                                <div className='th action-button-background add-property' onClick={onDefinedTagAddClick}></div>
+                                <div className='th action-button-background add-property' onClick={onDefinedTagAddClick} aria-hidden></div>
                             </div>
                         </div>
                         <div className='tbody ocd-tags-list-body'>
@@ -432,10 +432,10 @@ const OcdResourceArrangement = ({ocdDocument, setOcdDocument}: DesignerResourceP
     return (
         <div className={`ocd-properties-panel ocd-properties-panel-theme ocd-properties-arrangement-panel`}>
             <div className={`ocd-arrangement-z-positioning`}>
-                <div onClick={() => toFrontClick()}><span>To Front</span></div>
-                <div onClick={() => toBackClick()}><span>To Back</span></div>
-                <div onClick={() => bringForwardClick()}><span>Bring Forward</span></div>
-                <div onClick={() => sendBackwardClick()}><span>Send Backward</span></div>
+                <div onClick={() => toFrontClick()} aria-hidden><span>To Front</span></div>
+                <div onClick={() => toBackClick()} aria-hidden><span>To Back</span></div>
+                <div onClick={() => bringForwardClick()} aria-hidden><span>Bring Forward</span></div>
+                <div onClick={() => sendBackwardClick()} aria-hidden><span>Send Backward</span></div>
             </div>
             <div className={`ocd-arrangement-size ${!container ? 'hidden' : ''}`}>
                 <div><span>Size</span></div>
@@ -643,7 +643,7 @@ const OcdColourPicker = ({colour, setColour}: DesignerColourPicker): JSX.Element
             onMouseLeave={() => setPickerOpen(false)}>
             <div className='ocd-colour-picker-swatch'
                 style={{ backgroundColor: colour }}
-                onClick={() => setPickerOpen(!pickerOpen)}
+                onClick={() => setPickerOpen(!pickerOpen)} aria-hidden
             ></div>
             {pickerOpen && <div className='ocd-colour-picker-popup'>
                 {/* <div><RgbaColorPicker color={rgbaColor} onChange={setRgbaColor} /></div> */}

@@ -101,7 +101,7 @@ const OcdDesignerViewConfigEditor = ({ ocdConsoleConfig, setOcdConsoleConfig }: 
     return (
         <div className='ocd-console-toolbar-dropdown ocd-console-toolbar-dropdown-theme ocd-toolbar-separator-right'>
             <ul>
-                <li className='ocd-console-toolbar-dropdown-item' onClick={toggleDropdown}>
+                <li className='ocd-console-toolbar-dropdown-item' onClick={toggleDropdown} aria-hidden>
                     <div className='left-palette ocd-console-toolbar-icon'></div>
                     <ul className={`${dropdown ? 'show' : 'hidden'}`}>
                         <li className='ocd-dropdown-menu-item'><div><label><input id='verboseProviderPalette' type='checkbox' onChange={verboseProviderPaletteOnChange} ref={cbRef} checked={ocdConsoleConfig.config.verboseProviderPalette}/>Verbose Palette</label></div></li>
@@ -159,9 +159,9 @@ const OcdDesignerViewZoomControls = ({ ocdConsoleConfig, setOcdConsoleConfig, oc
                     <option value={300}>300%</option>
                 </select>
             </div>
-            <div className={`zoom-out ocd-console-toolbar-icon`} onClick={onZoomOutClick}></div>
-            {/* <div className={`zoom-121 ocd-console-toolbar-icon`} onClick={onZoom121Click}></div> */}
-            <div className={`zoom-in ocd-console-toolbar-icon`}  onClick={onZoomInClick}></div>
+            <div className={`zoom-out ocd-console-toolbar-icon`} onClick={onZoomOutClick} aria-hidden></div>
+            {/* <div className={`zoom-121 ocd-console-toolbar-icon`} onClick={onZoom121Click} aria-hidden></div> */}
+            <div className={`zoom-in ocd-console-toolbar-icon`}  onClick={onZoomInClick} aria-hidden></div>
         </div>
     )
 }
@@ -179,7 +179,7 @@ export const OcdDesignerLeftToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, 
                 ocdConsoleConfig={ocdConsoleConfig} 
                 setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} 
                 />
-            <div className={panelLeftClassName} title={panelLeftTitle} onClick={onPanelLeftCollapseExpandClick}></div>
+            <div className={panelLeftClassName} title={panelLeftTitle} onClick={onPanelLeftCollapseExpandClick} aria-hidden></div>
             <OcdDesignerViewZoomControls 
                 ocdConsoleConfig={ocdConsoleConfig} 
                 setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} 
@@ -208,8 +208,8 @@ export const OcdDesignerRightToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig,
     const panelBothTitle = bothCollapsed ? 'Show side panels' : 'Hide side panels'
     return (
         <div className='ocd-designer-toolbar'>
-            <div className={panelBothClassName} title={panelBothTitle} onClick={() => onPanelBothCollapseExpandClick(bothCollapsed)}></div>
-            <div className={panelRightClassName} title={panelRightTitle} onClick={onPanelRightCollapseExpandClick}></div>
+            <div className={panelBothClassName} title={panelBothTitle} onClick={() => onPanelBothCollapseExpandClick(bothCollapsed)} aria-hidden></div>
+            <div className={panelRightClassName} title={panelRightTitle} onClick={onPanelRightCollapseExpandClick} aria-hidden></div>
         </div>
     )
 }
