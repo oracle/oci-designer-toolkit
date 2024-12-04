@@ -92,7 +92,8 @@ jobs:
         if: matrix.os == 'windows-latest'
         run: |
           ls ./ocd/dist/make/squirrel.windows/x64
-          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/make/squirrel.windows/x64/ocd-${{ env.OCD_VERSION }}*.exe --clobber
+          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/make/squirrel.windows/x64/ocd-${{ env.OCD_VERSION }}-Setup.exe --clobber
+          ls ./ocd/dist/make/squirrel.windows/x64
           # gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/win/ocd-${{ env.OCD_VERSION }}-x64.exe --clobber
       - name: Upload Linux Artifact to Release
         if: matrix.os == 'ubuntu-latest'
