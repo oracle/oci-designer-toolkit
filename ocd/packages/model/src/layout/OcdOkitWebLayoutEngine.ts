@@ -3,9 +3,9 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import { OcdDesign, OcdViewCoords } from "../OcdDesign"
-import { OcdCommonLayoutEngine } from "./OcdCommonLayoutEngine"
-import { OciResource } from "../index"
+import { OcdDesign, OcdViewCoords } from "../OcdDesign.js"
+import { OcdCommonLayoutEngine } from "./OcdCommonLayoutEngine.js"
+import { OciResource } from "../index.js"
 
 export class OcdOkitWebLayoutEngine extends OcdCommonLayoutEngine {
     moveToChild: Record<string, string[]> = {'oci-subnet': ['oci-dhcp-option', 'oci-route-table', 'oci-security-list']}

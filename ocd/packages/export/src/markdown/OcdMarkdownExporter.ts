@@ -4,9 +4,9 @@
 */
 
 import { OcdDesign, OcdResource, OcdViewConnector, OcdViewCoords, OcdViewPage, OciResource } from "@ocd/model"
-import { OcdExporter, OutputDataString, OutputDataStringArray } from "../OcdExporter"
-import { OcdSVGExporter } from "../svg/OcdSVGExporter"
-import * as ociMarkdownResources from './provider/oci/resources'
+import { OcdExporter, OutputDataString, OutputDataStringArray } from "../OcdExporter.js"
+import { OcdSVGExporter } from "../svg/OcdSVGExporter.js"
+import * as ociMarkdownResources from './provider/oci/resources.js'
 import { OcdUtils } from "@ocd/core"
 
 export class OcdMarkdownExporter extends OcdExporter {

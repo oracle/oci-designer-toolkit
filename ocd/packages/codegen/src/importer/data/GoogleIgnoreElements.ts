@@ -3,7 +3,7 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import { OcdIgnoreElements } from "../../types/OcdImporterData";
+import { OcdIgnoreElements } from "../../types/OcdImporterData.js";
 
 export const ignoreElements: OcdIgnoreElements = {
     "common": [

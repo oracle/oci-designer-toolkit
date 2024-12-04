@@ -15,6 +15,8 @@
         "github-action-generate": "cd ocd && npm run github-action-generate",
         "github-action-compile": "cd ocd && npm run github-action-compile",
         "github-action-pack": "cd ocd && npm run github-action-pack",
+        "github-action-build": "cd ocd && npm run github-action-build",
+        "github-action-build-macos-x86": "cd ocd && npm run github-action-build-macos-x86",
         "github-action-build-react": "cd ocd && npm run github-action-build-react",
         "github-action-build-electron": "cd ocd && npm run github-action-build-electron",
 

@@ -1,6 +1,6 @@
 {
   "name": "ocd",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "OKIT Open Cloud Designer Desktop",
   "title": "OKIT Open Cloud Designer (Beta)",
   "author": {
@@ -26,13 +26,16 @@
     "github-action-generate": "npm run import-and-generate --workspace=packages/codegen-cli && npm run generate-ocd-build-date --workspace=packages/codegen-cli",
     "github-action-compile": "npm run compile --workspaces --if-present",
     "github-action-pack": "npm run pack --workspaces --if-present",
+    "github-action-build": "npm run build --workspaces --if-present",
+    "github-action-build-macos-x86": "npm run make-macos-x64 --workspace=packages/desktop --if-present",
     "github-action-build-react": "npm run build-react-scripts --workspace=packages/desktop",
     "github-action-build-electron": "npm run electron-pack --workspace=packages/desktop",
     "test": "echo \"Error: no test specified\" && exit 1",
     "install-and-codegen": "npm install --legacy-peer-deps && npm run compile-for-codegen && npm run import-and-generate && npm run build",
     "fresh-install": "npm run install-and-codegen",
     "reinstall": "npm run install-and-codegen",
-    "clean": "npm run clean --workspaces --if-present",
+    "clean": "npm run clean --workspaces --if-present && rm -rf lib dist build",
+    "purge": "npm run purge --workspaces --if-present && rm -rf node_modules",
     "build": "npm run build --workspaces --if-present",
     "compile": "npm run compile --workspaces --if-present",
     "pack": "npm run pack --workspaces --if-present",
@@ -56,6 +59,7 @@
     "packages/codegen-cli"
   ],
   "devDependencies": {
+    "@types/node": "^22.9.0",
     "@types/node-fetch": "^2.6.11",
     "@types/uuid": "^9.0.2",
     "typescript": "^5.2.2"

@@ -1,6 +1,6 @@
 {
   "name": "@ocd/codegen-cli",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "OKIT Open Cloud DesignerCodegen Command-line",
   "title": "OKIT Open Cloud Designer Codegen Command-linetop",
   "author": {
@@ -14,6 +14,7 @@
     "okit"
   ],
   "license": "UPL-1.0",
+  "type": "module",
   "main": "lib/esm/index.js",
   "module": "lib/esm/index.js",
   "files": [
@@ -23,13 +24,14 @@
     "test": "echo \"Error: no test specified\" && exit 1",
 
     "clean": "rm -rf lib dist",
+    "purge": "npm run clean && rm -rf node_modules",
     "pack": "mkdir -p dist && npm pack --pack-destination dist",
     "compile": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
     "build": "npm run compile && npm run pack",
 
-    "generate-ocd-svg-css-desktop": "node lib/esm/ocd-build-svg-css.js -d ../desktop/src/data -i ../desktop/src/css",
+    "generate-ocd-svg-css-desktop": "node lib/esm/ocd-build-svg-css.js -d ../react/src/data -i ../react/src/css",
 
-    "generate-ocd-build-date-desktop": "node lib/esm/ocd-set-build-date.js -d ../desktop/src/data -p ../desktop/package.json",
+    "generate-ocd-build-date-desktop": "node lib/esm/ocd-set-build-date.js -d ../react/src/data -p ../desktop/package.json",
     "generate-ocd-build-date-export": "node lib/esm/ocd-set-build-date.js -d ../export/src/data -p ../desktop/package.json",
     "generate-ocd-build-date": "npm run generate-ocd-build-date-desktop && npm run generate-ocd-build-date-export",
 
@@ -50,26 +52,26 @@
 
     "generate-oci-markdown":       "node lib/esm/ocd-codegen.js generate oci-markdown-js   -s ./schema/oci-schema.json -d ../export/src/markdown/provider/oci",
     "generate-oci-model":          "node lib/esm/ocd-codegen.js generate oci-model-js      -s ./schema/oci-schema.json -d ../model/src/provider/oci",
-    "generate-oci-properties":     "node lib/esm/ocd-codegen.js generate oci-properties-js -s ./schema/oci-schema.json -d ../desktop/src/components/properties/provider/oci",
-    "generate-oci-tabular":        "node lib/esm/ocd-codegen.js generate oci-tabular-js    -s ./schema/oci-schema.json -d ../desktop/src/components/tabular/provider/oci",
+    "generate-oci-properties":     "node lib/esm/ocd-codegen.js generate oci-properties-js -s ./schema/oci-schema.json -d ../react/src/components/properties/provider/oci",
+    "generate-oci-tabular":        "node lib/esm/ocd-codegen.js generate oci-tabular-js    -s ./schema/oci-schema.json -d ../react/src/components/tabular/provider/oci",
     "generate-oci-terraform":      "node lib/esm/ocd-codegen.js generate oci-terraform-js  -s ./schema/oci-schema.json -d ../export/src/terraform/provider/oci",
     "generate-oci-validator":      "node lib/esm/ocd-codegen.js generate oci-validator-js  -s ./schema/oci-schema.json -d ../model/src/validator/provider/oci",
     "generate-oci":                "npm run generate-oci-model && npm run generate-oci-markdown && npm run generate-oci-properties && npm run generate-oci-terraform && npm run generate-oci-tabular && npm run generate-oci-validator",
 
-    "generate-azurerm-markdown":   "node lib/esm/ocd-codegen.js generate azurerm-markdown-js   -s ./schema/azurerm-schema.json -d ../export/src/markdown/provider/azure",
-    "generate-azurerm-model":      "node lib/esm/ocd-codegen.js generate azurerm-model-js      -s ./schema/azurerm-schema.json -d ../model/src/provider/azure",
-    "generate-azurerm-properties": "node lib/esm/ocd-codegen.js generate azurerm-properties-js -s ./schema/azurerm-schema.json -d ../desktop/src/components/properties/provider/azure",
-    "generate-azurerm-tabular":    "node lib/esm/ocd-codegen.js generate azurerm-tabular-js    -s ./schema/azurerm-schema.json -d ../desktop/src/components/tabular/provider/azure",
-    "generate-azurerm-terraform":  "node lib/esm/ocd-codegen.js generate azurerm-terraform-js  -s ./schema/azurerm-schema.json -d ../export/src/terraform/provider/azure",
-    "generate-azurerm-validator":  "node lib/esm/ocd-codegen.js generate azurerm-validator-js  -s ./schema/azurerm-schema.json -d ../model/src/validator/provider/azure",
+    "generate-azurerm-markdown":   "node lib/esm/ocd-codegen.js generate azurerm-markdown-js   -f -s ./schema/azurerm-schema.json -d ../export/src/markdown/provider/azure",
+    "generate-azurerm-model":      "node lib/esm/ocd-codegen.js generate azurerm-model-js      -f -s ./schema/azurerm-schema.json -d ../model/src/provider/azure",
+    "generate-azurerm-properties": "node lib/esm/ocd-codegen.js generate azurerm-properties-js -f -s ./schema/azurerm-schema.json -d ../react/src/components/properties/provider/azure",
+    "generate-azurerm-tabular":    "node lib/esm/ocd-codegen.js generate azurerm-tabular-js    -f -s ./schema/azurerm-schema.json -d ../react/src/components/tabular/provider/azure",
+    "generate-azurerm-terraform":  "node lib/esm/ocd-codegen.js generate azurerm-terraform-js  -f -s ./schema/azurerm-schema.json -d ../export/src/terraform/provider/azure",
+    "generate-azurerm-validator":  "node lib/esm/ocd-codegen.js generate azurerm-validator-js  -f -s ./schema/azurerm-schema.json -d ../model/src/validator/provider/azure",
     "generate-azurerm":            "npm run generate-azurerm-model && npm run generate-azurerm-markdown && npm run generate-azurerm-properties && npm run generate-azurerm-terraform && npm run generate-azurerm-tabular && npm run generate-azurerm-validator",
 
-    "generate-google-markdown":       "node lib/esm/ocd-codegen.js generate google-markdown-js   -s ./schema/google-schema.json -d ../export/src/markdown/provider/google",
-    "generate-google-model":          "node lib/esm/ocd-codegen.js generate google-model-js      -s ./schema/google-schema.json -d ../model/src/provider/google",
-    "generate-google-properties":     "node lib/esm/ocd-codegen.js generate google-properties-js -s ./schema/google-schema.json -d ../desktop/src/components/properties/provider/google",
-    "generate-google-tabular":        "node lib/esm/ocd-codegen.js generate google-tabular-js    -s ./schema/google-schema.json -d ../desktop/src/components/tabular/provider/google",
-    "generate-google-terraform":      "node lib/esm/ocd-codegen.js generate google-terraform-js  -s ./schema/google-schema.json -d ../export/src/terraform/provider/google",
-    "generate-google-validator":      "node lib/esm/ocd-codegen.js generate google-validator-js  -s ./schema/google-schema.json -d ../model/src/validator/provider/google",
+    "generate-google-markdown":       "node lib/esm/ocd-codegen.js generate google-markdown-js   -f -s ./schema/google-schema.json -d ../export/src/markdown/provider/google",
+    "generate-google-model":          "node lib/esm/ocd-codegen.js generate google-model-js      -f -s ./schema/google-schema.json -d ../model/src/provider/google",
+    "generate-google-properties":     "node lib/esm/ocd-codegen.js generate google-properties-js -f -s ./schema/google-schema.json -d ../react/src/components/properties/provider/google",
+    "generate-google-tabular":        "node lib/esm/ocd-codegen.js generate google-tabular-js    -f -s ./schema/google-schema.json -d ../react/src/components/tabular/provider/google",
+    "generate-google-terraform":      "node lib/esm/ocd-codegen.js generate google-terraform-js  -f -s ./schema/google-schema.json -d ../export/src/terraform/provider/google",
+    "generate-google-validator":      "node lib/esm/ocd-codegen.js generate google-validator-js  -f -s ./schema/google-schema.json -d ../model/src/validator/provider/google",
     "generate-google":                "npm run generate-google-model && npm run generate-google-markdown && npm run generate-google-properties && npm run generate-google-terraform && npm run generate-google-tabular && npm run generate-google-validator",
 
     "generate": "npm run generate-oci && npm run generate-azurerm && npm run generate-google",
@@ -81,6 +83,6 @@
     "import-and-generate": "npm run import-and-generate-oci && npm run import-and-generate-azurerm && npm run import-and-generate-google"
   },
   "dependencies": {
-    "@ocd/codegen": ">=0.2.5"
+    "@ocd/codegen": ">=0.2.6"
   }
 }

@@ -3,12 +3,12 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import { resourceMap, dataMap, resourceAttributes } from './data/AzureAzResourceMap'
-import { TerraformSchema } from "../types/TerraformSchema";
-import { OcdTerraformSchemaImporter } from "./OcdTerraformSchemaImporter";
-import { ignoreElements } from './data/AzureIgnoreElements';
-import { elementOverrides } from './data/AzureElementOverrides';
-import { conditionalElements } from './data/AzureConditionalElements';
+import { resourceMap, dataMap, resourceAttributes } from './data/AzureAzResourceMap.js'
+import { TerraformSchema } from "../types/TerraformSchema.js";
+import { OcdTerraformSchemaImporter } from "./OcdTerraformSchemaImporter.js";
+import { ignoreElements } from './data/AzureIgnoreElements.js';
+import { elementOverrides } from './data/AzureElementOverrides.js';
+import { conditionalElements } from './data/AzureConditionalElements.js';
 
 export class AzureAzTerraformSchemaImporter extends OcdTerraformSchemaImporter {
     constructor() {
@@ -24,4 +24,4 @@ export class AzureAzTerraformSchemaImporter extends OcdTerraformSchemaImporter {
 }
 
 export default AzureAzTerraformSchemaImporter
-module.exports = { AzureAzTerraformSchemaImporter }
+// module.exports = { AzureAzTerraformSchemaImporter }

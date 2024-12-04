@@ -5,9 +5,9 @@
 
 import { v4 as uuidv4 } from 'uuid'
 import { OcdUtils } from '@ocd/core'
-import { OcdResource } from "../../OcdResource"
-import * as Resources from './resources'
-import { OcdResources, OciDefinedTags, OciFreeformTags } from '../../OcdDesign'
+import { OcdResource } from "../../OcdResource.js"
+import * as Resources from './resources.js'
+import { OcdResources, OciDefinedTags, OciFreeformTags } from '../../OcdDesign.js'
 
 export interface OciResource extends OcdResource {
     region: string

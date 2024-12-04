@@ -1,6 +1,6 @@
 {
   "name": "@ocd/query",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "OKIT Open Cloud Designer Query Module",
   "title": "OKIT Open Cloud Designer Query Module",
   "author": {
@@ -14,6 +14,7 @@
     "okit"
   ],
   "license": "UPL-1.0",
+  "type": "module",
   "exports": {
     ".": {
         "import": {
@@ -35,13 +36,14 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rm -rf lib dist",
+    "purge": "npm run clean && rm -rf node_modules",
     "pack": "mkdir -p dist && npm pack --pack-destination dist",
     "compile": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
     "build": "npm run compile && npm run pack"
   },
-  "dependencies": {
-    "@ocd/core": ">=0.2.5",
-    "@ocd/model": ">=0.2.5",
+  "peerDependencies": {
+    "@ocd/core": ">=0.2.6",
+    "@ocd/model": ">=0.2.6",
     "oci-sdk": ">=2.69.0"
   }
 }

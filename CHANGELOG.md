@@ -1,6 +1,23 @@
 # Release Notes
 
 
+## Version 0.66.0
+**Release Date**: 30th November 2024
+### Features
+1. OKIT-Ocd: Convert @ocd/core to ES6 Module (#OKIT-307)
+1. OKIT-Ocd: Convert @ocd/model to ES6 Module (#OKIT-308)
+1. OKIT-Ocd: Convert @ocd/query to ES6 Module (#OKIT-309)
+1. OKIT-Ocd: Convert @ocd/export to ES6 Module (#OKIT-310)
+1. OKIT-Ocd: Convert @ocd/import to ES6 Module (#OKIT-311)
+1. OKIT-Ocd: Convert @ocd/codegen to ES6 Module (#OKIT-312)
+1. OKIT-Ocd: Convert @ocd/codegen-cli to ES6 Module (#OKIT-313)
+1. OKIT-Ocd: Convert @ocd/cli to ES6 Module (#OKIT-314)
+1. OKIT-Ocd: Convert @ocd/desktop to ES6 Module (#OKIT-315)
+1. OKIT-Ocd: Switch build process from Create React App / Webpack to Vite (#OKIT-305)
+1. OKIT-Ocd: Switch to Electron Forge for building.
+### Bug Fixes
+
+
 ## Version 0.65.0
 **Release Date**: 30th October 2024
 ### Features
