@@ -1,7 +1,8 @@
 [![License: UPL](https://img.shields.io/badge/license-UPL-green)](https://img.shields.io/badge/license-UPL-green) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=oracle_oci-designer-toolkit&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=oracle_oci-designer-toolkit)
-# November 2024 Release (Version 0.66.0)
+# November 2024 Release (Version 0.66.1)
 ____
-**Update 0.66.0**: This update addresses the following issues.
+**Update 0.66.1**: This update addresses the following issues.
+1. Update main README to de-emphasise Docker
 ____
 Welcome to the November 2024 release of OKIT. This release switches the exiat Create React App based build format to Vite and Electron Forge.
 

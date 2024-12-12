@@ -1,6 +1,13 @@
 # Release Notes
 
 
+## Version 0.66.1
+**Release Date**: 13th December 2024
+### Features
+### Bug Fixes
+1. Update main README to de-emphasise Docker (Issue: #733)
+
+
 ## Version 0.66.0
 **Release Date**: 30th November 2024
 ### Features
