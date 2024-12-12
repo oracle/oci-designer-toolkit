@@ -15,6 +15,8 @@ export interface CompartmentPickerProps {
     compartments: OciModelResources.OciCompartment[]
     selectedCompartmentIds: string[]
     setSelectedCompartmentIds: React.Dispatch<any>
+    collapsedCompartmentIds: string[]
+    setCollapsedCompartmentIds: React.Dispatch<any>
     root: boolean
     parentId: string
     setHierarchy: React.Dispatch<any>

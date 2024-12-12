@@ -2315,9 +2315,9 @@ table {
     text-decoration: none;    
 }
 
-.ocd-compartment-picker li > ul {
+/* .ocd-compartment-picker li > ul {
     padding-left: 1em;
-}
+} */
 
 .ocd-compartment-picker li > label,
 .ocd-compartment-picker li > span {
