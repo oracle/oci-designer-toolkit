@@ -25,6 +25,7 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
     const [selectedProfile, setSelectedProfile] = useState('DEFAULT')
     const [selectedRegion, setSelectedRegion] = useState('')
     const [selectedCompartmentIds, setSelectedCompartmentIds] = useState([])
+    const [collapsedCompartmentIds, setCollapsedCompartmentIds] = useState([])
     const [hierarchy, setHierarchy] = useState('')
     const refs: Record<string, React.RefObject<any>> = compartments.reduce((acc, value: OciModelResources.OciCompartment) => {
         acc[value.hierarchy] = React.createRef();
@@ -46,6 +47,7 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
         loadRegions(profile)
         loadCompartments(profile)
         setSelectedCompartmentIds([])
+        setCollapsedCompartmentIds([])
     }
     const onRegionChanged = (e: React.ChangeEvent<HTMLSelectElement>) => {
         console.debug('OcdQueryDialog: Selected Region', e.target.value)
@@ -114,7 +116,7 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
         })
     }
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        // console.debug('OcdQueryDialog: onChange', e)
+        console.debug('OcdQueryDialog: onChange', e)
         const keys = Object.keys(refs).filter((k) => k.includes(e.target.value))
         // if (keys.length > 0) refs[keys[0]].current.scrollIntoView(true)
         // if (keys.length > 0) refs[keys[0]].current.scrollIntoView({behavior: 'smooth', block: 'start', inline: 'nearest'})
@@ -145,6 +147,8 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
                                     compartments={compartments} 
                                     selectedCompartmentIds={selectedCompartmentIds}
                                     setSelectedCompartmentIds={setSelectedCompartmentIds}
+                                    collapsedCompartmentIds={collapsedCompartmentIds} 
+                                    setCollapsedCompartmentIds={setCollapsedCompartmentIds}
                                     root={true}
                                     parentId={''}
                                     setHierarchy={setHierarchy}
@@ -167,11 +171,14 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
     )
 }
 
-const CompartmentPicker = ({compartments, selectedCompartmentIds, setSelectedCompartmentIds, root, parentId, setHierarchy, refs}: CompartmentPickerProps): JSX.Element => {
+const CompartmentPicker = ({compartments, selectedCompartmentIds, setSelectedCompartmentIds, root, parentId, setHierarchy, refs, collapsedCompartmentIds, setCollapsedCompartmentIds}: CompartmentPickerProps): JSX.Element => {
+    // const [isOpen, setIsOpen] = useState(true)
+    // const isOpen = collapsedCompartmentIds.includes(parentId)
     const filter = root ? (c: OciModelResources.OciCompartment) => c.root : (c: OciModelResources.OciCompartment) => c.compartmentId === parentId
     const filteredCompartments = compartments.filter(filter)
     console.debug('OcdQueryDialog:', root, parentId, filteredCompartments)
     const onChange = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
+        e.stopPropagation()
         const selected = e.target.checked
         // console.debug('OcdQueryDialog: Selected', selected)
         const compartmentIds = selected ? [...selectedCompartmentIds, id] : selectedCompartmentIds.filter((i) => i !== id)
@@ -188,15 +195,30 @@ const CompartmentPicker = ({compartments, selectedCompartmentIds, setSelectedCom
         const compartment: OciModelResources.OciCompartment | undefined = compartments.find((c: OciModelResources.OciCompartment) => c.id === id)
         setHierarchy(compartment !== undefined ? compartment.hierarchy : '')
     }
+    const onClick = (e: React.MouseEvent<HTMLLIElement>, id: string) => {
+        e.stopPropagation()
+        const isClosed = collapsedCompartmentIds.includes(id)
+        // Toggle State
+        const compartmentIds = isClosed ? collapsedCompartmentIds.filter((i) => i !== id) : [...collapsedCompartmentIds, id]
+        setCollapsedCompartmentIds(compartmentIds)
+        // setIsOpen(!isOpen)
+    }
+    const onInputClick = (e: React.MouseEvent<HTMLInputElement>) => e.stopPropagation()
+    const subCompartmentsClasses = collapsedCompartmentIds.includes(parentId) ? 'hidden' : ''
     return (
-        <ul>
+        <ul className={subCompartmentsClasses}>
             {filteredCompartments.length > 0 && filteredCompartments.map((c) => {
-                return <li key={c.id} ref={refs[c.hierarchy]}>
-                            <label onMouseEnter={(e) => onMouseOver(c.id)} onMouseLeave={(e) => onMouseOver('')}><input type="checkbox" checked={selectedCompartmentIds.includes(c.id)} onChange={(e) => onChange(e, c.id)}></input>{c.name}</label>
-                            {compartments.filter((cc) => cc.compartmentId === c.id).length > 0 && <CompartmentPicker 
+                const subCompartmentsCount = compartments.filter((cc) => cc.compartmentId === c.id).length
+                const isClosed = collapsedCompartmentIds.includes(c.id)
+                const labelClasses = subCompartmentsCount > 0 ? isClosed ? 'ocd-collapable-list-element ocd-list-collapsed' : 'ocd-collapable-list-element ocd-list-open' : 'ocd-collapable-list-element'
+                return <li className={labelClasses} key={c.id} ref={refs[c.hierarchy]} onClick={(e) => onClick(e, c.id)}>
+                            <label onMouseEnter={(e) => onMouseOver(c.id)} onMouseLeave={(e) => onMouseOver('')}><input type="checkbox" checked={selectedCompartmentIds.includes(c.id)} onChange={(e) => onChange(e, c.id)} onClick={onInputClick}></input>{c.name}</label>
+                            {subCompartmentsCount > 0 && <CompartmentPicker 
                                 compartments={compartments} 
                                 selectedCompartmentIds={selectedCompartmentIds}
                                 setSelectedCompartmentIds={setSelectedCompartmentIds}
+                                collapsedCompartmentIds={collapsedCompartmentIds} 
+                                setCollapsedCompartmentIds={setCollapsedCompartmentIds}
                                 root={false}
                                 parentId={c.id}
                                 setHierarchy={setHierarchy}
