@@ -27,6 +27,7 @@ okit.wpr
 **/out/
 **/lib/
 **/.vite/
+**/*.tsbuildinfo
 # **/package-lock.json
 
 # Terraform
