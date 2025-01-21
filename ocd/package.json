@@ -61,7 +61,7 @@
   "devDependencies": {
     "@types/node": "^22.9.0",
     "@types/node-fetch": "^2.6.11",
-    "@types/uuid": "^9.0.2",
+    "@types/uuid": "^9.0.8",
     "typescript": "^5.2.2"
   },
   "dependencies": {
