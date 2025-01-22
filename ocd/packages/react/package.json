@@ -84,7 +84,7 @@
     "remark-gfm": "^4.0.0",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.7.0",
-    "vite": "^5.4.8",
+    "vite": "^5.4.12",
     "vite-plugin-dts": "^4.2.4"
   },
   "sideEffects": [
