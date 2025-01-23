@@ -4,9 +4,9 @@
     "version": "0.1.0",
     "description": "OKIT Open Cloud Designer",
     "author": {
-      "name": "Andrew Hopkinson",
-      "email": "andrew.hopkinson@oracle.com",
-      "url": "https://github.com/oracle/oci-designer-toolkit"
+        "name": "Andrew Hopkinson",
+        "email": "andrew.hopkinson@oracle.com",
+        "url": "https://github.com/oracle/oci-designer-toolkit"
     },
     "bugs": "https://github.com/oracle/oci-designer-toolkit/issues",
     "scripts": {

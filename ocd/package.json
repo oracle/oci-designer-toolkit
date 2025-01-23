@@ -33,10 +33,11 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "install-and-codegen": "npm install --legacy-peer-deps && npm run compile-for-codegen && npm run import-and-generate && npm run build",
     "fresh-install": "npm run install-and-codegen",
-    "reinstall": "npm run install-and-codegen",
+    "reinstall": "npm run purge && npm run install-and-codegen",
     "clean": "npm run clean --workspaces --if-present && rm -rf lib dist build",
     "purge": "npm run purge --workspaces --if-present && rm -rf node_modules",
     "build": "npm run build --workspaces --if-present",
+    "rebuild": "npm run clean && npm run build",
     "compile": "npm run compile --workspaces --if-present",
     "pack": "npm run pack --workspaces --if-present",
     "compile-for-codegen": "npm run compile --workspace=packages/core --workspace=packages/codegen --workspace=packages/codegen-cli",
@@ -61,7 +62,7 @@
   "devDependencies": {
     "@types/node": "^22.9.0",
     "@types/node-fetch": "^2.6.11",
-    "@types/uuid": "^9.0.2",
+    "@types/uuid": "^9.0.8",
     "typescript": "^5.2.2"
   },
   "dependencies": {
