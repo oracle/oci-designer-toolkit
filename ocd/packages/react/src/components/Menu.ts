@@ -191,6 +191,72 @@ export const menuItems: MenuItem[] = [
                 click: undefined,
                 submenu: [
                     {
+                        label: 'Markdown',
+                        click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
+                            const saveFile = async (ocdDocument: OcdDocument) => {
+                                try {
+                                    const options = {
+                                        types: [
+                                            {
+                                                description: 'Markdown Files',
+                                                accept: {
+                                                    'text/markdown': ['.md'],
+                                                },
+                                            },
+                                        ],
+                                    }
+                                    // @ts-ignore 
+                                    const handle = await window.showSaveFilePicker(options)
+                                    const writable = await handle.createWritable()
+                                    const exporter = new OcdMarkdownExporter([svgThemeCss, svgSvgCss])
+                                    const output = exporter.export(ocdDocument.design)
+                                    await writable.write(output)
+                                    await writable.close()
+                                    return handle
+                                } catch (err: any) {
+                                    console.error(err.name, err.message);
+                                }
+                            }
+                            saveFile(ocdDocument).then((resp) => console.info('Saved', resp))             
+                        }
+                    },
+                    {
+                        label: 'OpenTofu (Terraform)',
+                        click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
+                            const writeTerraformFile = async (dirHandle: FileSystemDirectoryHandle, filename: string, contents: string[]) => {
+                                const fileHandle: FileSystemFileHandle = await dirHandle.getFileHandle(filename, {create: true})
+                                // @ts-ignore 
+                                const writable = await fileHandle.createWritable()
+                                await writable.write(contents.join('\n'))
+                                await writable.close()
+                                return writable
+                            }
+                            const saveFile = async (ocdDocument: OcdDocument) => {
+                                try {
+                                    // @ts-ignore 
+                                    const handle = await showDirectoryPicker()
+                                    // const writable = await handle.createWritable()
+                                    const exporter = new OcdTerraformExporter()
+                                    const terraform = exporter.export(ocdDocument.design)
+                                    const fileWriters = Object.entries(terraform).map(([k, v]) => writeTerraformFile(handle, k, v))
+                                    return Promise.all(fileWriters)
+                                } catch (err: any) {
+                                    console.error(err.name, err.message);
+                                }
+                            }
+                            saveFile(ocdDocument).then((resp) => console.info('Saved', resp))             
+                        }
+                    },
+                    // {
+                    //     label: 'Resource Manager',
+                    //     click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
+                    //         const clone = OcdDocument.clone(ocdDocument)
+                    //         clone.dialog.resourceManager = true
+                    //         console.debug('Menu: Setting Resource Manager', ocdDocument, clone)
+                    //         setOcdDocument(clone)
+                    //     }
+                    // },
+                    {
                         label: 'Image',
                         click: undefined,
                         submenu: [
@@ -233,63 +299,6 @@ export const menuItems: MenuItem[] = [
                                 }
                             }
                         ]
-                    },
-                    {
-                        label: 'OpenTofu (Terraform)',
-                        click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
-                            const writeTerraformFile = async (dirHandle: FileSystemDirectoryHandle, filename: string, contents: string[]) => {
-                                const fileHandle: FileSystemFileHandle = await dirHandle.getFileHandle(filename, {create: true})
-                                // @ts-ignore 
-                                const writable = await fileHandle.createWritable()
-                                await writable.write(contents.join('\n'))
-                                await writable.close()
-                                return writable
-                            }
-                            const saveFile = async (ocdDocument: OcdDocument) => {
-                                try {
-                                    // @ts-ignore 
-                                    const handle = await showDirectoryPicker()
-                                    // const writable = await handle.createWritable()
-                                    const exporter = new OcdTerraformExporter()
-                                    const terraform = exporter.export(ocdDocument.design)
-                                    const fileWriters = Object.entries(terraform).map(([k, v]) => writeTerraformFile(handle, k, v))
-                                    return Promise.all(fileWriters)
-                                } catch (err: any) {
-                                    console.error(err.name, err.message);
-                                }
-                            }
-                            saveFile(ocdDocument).then((resp) => console.info('Saved', resp))             
-                        }
-                    },
-                    {
-                        label: 'Markdown',
-                        click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
-                            const saveFile = async (ocdDocument: OcdDocument) => {
-                                try {
-                                    const options = {
-                                        types: [
-                                            {
-                                                description: 'Markdown Files',
-                                                accept: {
-                                                    'text/markdown': ['.md'],
-                                                },
-                                            },
-                                        ],
-                                    }
-                                    // @ts-ignore 
-                                    const handle = await window.showSaveFilePicker(options)
-                                    const writable = await handle.createWritable()
-                                    const exporter = new OcdMarkdownExporter([svgThemeCss, svgSvgCss])
-                                    const output = exporter.export(ocdDocument.design)
-                                    await writable.write(output)
-                                    await writable.close()
-                                    return handle
-                                } catch (err: any) {
-                                    console.error(err.name, err.message);
-                                }
-                            }
-                            saveFile(ocdDocument).then((resp) => console.info('Saved', resp))             
-                        }
                     },
                     {
                         label: 'OKIT Json',

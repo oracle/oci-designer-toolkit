@@ -6,6 +6,7 @@
 import { OcdDesign } from "@ocd/model"
 import { OcdConsoleConfiguration } from "../components/OcdConsoleConfiguration"
 import { OcdCache } from "../components/OcdCache"
+import { OutputDataStringArray } from "@ocd/export"
 
 export interface OcdElectronAPI {
     // Build Information
@@ -17,6 +18,10 @@ export interface OcdElectronAPI {
     listTenancyCompartments: (profile: string) => Promise<void>
     queryTenancy: (profile: string, compartmentIds: string[], region: string) => Promise<void>
     queryDropdown: (profile: string, region: string) => Promise<void>
+    listStacks: (profile: string, region: string, compartmentId: string) => Promise<void>
+    createStack: (profile: string, region: string, compartmentId: string, data: OutputDataStringArray, apply: boolean) => Promise<void>
+    updateStack: (profile: string, region: string, stackId: string, data: OutputDataStringArray, apply: boolean) => Promise<void>
+    createJob: (profile: string, region: string, stackId: string, apply: boolean) => Promise<void>
 	// OCD Design 
     loadDesign: (filename: string) => Promise<void>
     saveDesign: (design: OcdDesign | string, filename: string, suggestedFilename: string | undefined) => Promise<void>

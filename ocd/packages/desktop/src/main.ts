@@ -9,7 +9,7 @@ import path from 'path'
 import url from 'url'
 import fs from 'fs'
 import common from 'oci-common'
-import { OciQuery, OciReferenceDataQuery } from '@ocd/query'
+import { OciQuery, OciReferenceDataQuery, OciResourceManagerQuery } from '@ocd/query'
 import { OcdDesign } from '@ocd/model'
 import { OcdCache, OcdConsoleConfiguration } from '@ocd/react'
 // import { unescape } from 'querystring'
@@ -22,7 +22,6 @@ const isDev = process.env.OCD_DEV === 'true';
 const isPreview = process.env.OCD_PREVIEW === 'true';
 const isMac = process.platform === 'darwin'
 
-// if (require('electron-squirrel-startup')) app.quit()
 if (Squirrel) app.quit()
 const ocdConfigDirectory = path.join(app.getPath('home'), '.ocd')
 const ocdConsoleConfigFilename = path.join(ocdConfigDirectory, 'console_config.json')
@@ -239,13 +238,18 @@ const createWindow = () => {
 app.whenReady().then(() => {
 	// Build Information
 	ipcMain.handle('ocdBuild:getVersion', handleGetVersion)
-	// OCI API Calls / Query
+	// OCI API Calls 
+	// Query
 	ipcMain.handle('ociConfig:loadProfileNames', handleLoadOciConfigProfileNames)
 	ipcMain.handle('ociConfig:loadProfile', handleLoadOciConfigProfile)
 	ipcMain.handle('ociQuery:listRegions', handleListRegions)
 	ipcMain.handle('ociQuery:listTenancyCompartments', handleListTenancyCompartments)
 	ipcMain.handle('ociQuery:queryTenancy', handleQueryTenancy)
 	ipcMain.handle('ociQuery:queryDropdown', handleQueryDropdown)
+	ipcMain.handle('ociQuery:listStacks', handleListStacks)
+	ipcMain.handle('OciResourceManager:createStack', handleCreateStack)
+	ipcMain.handle('OciResourceManager:updateStack', handleUpdateStack)
+	ipcMain.handle('OciResourceManager:createJob', handleCreateJob)
 	// OCD Design 
 	ipcMain.handle('ocdDesign:loadDesign', handleLoadDesign)
 	ipcMain.handle('ocdDesign:saveDesign', handleSaveDesign)
@@ -277,9 +281,9 @@ app.whenReady().then(() => {
 	mainWindow.webContents.on('context-menu', (e, props) => {
 		const { selectionText, isEditable } = props;
 		if (isEditable) {
-		  inputMenu.popup(mainWindow);
+		  inputMenu.popup({window: mainWindow});
 		} else if (selectionText && selectionText.trim() !== '') {
-		  selectionMenu.popup(mainWindow);
+		  selectionMenu.popup({window: mainWindow});
 		}
 	  })
 	
@@ -321,14 +325,15 @@ async function handleGetVersion() {
 }
 
 
-// OCI API Calls / Query
+// OCI API Calls 
+// Query
 async function handleLoadOciConfigProfileNames() {
 	console.debug('Electron Main: handleLoadOciConfigProfileNames')
 	return new Promise((resolve, reject) => {
 		const parsed = common.ConfigFileReader.parseDefault(null)
-		console.debug('Electron Main: handleLoadOciConfigProfileNames', parsed)
-		console.debug('Electron Main: handleLoadOciConfigProfileNames', parsed.accumulator.configurationsByProfile)
-		console.debug('Electron Main: handleLoadOciConfigProfileNames', Array.from(parsed.accumulator.configurationsByProfile.keys()))
+		console.debug('Electron Main: handleLoadOciConfigProfileNames:', parsed)
+		console.debug('Electron Main: handleLoadOciConfigProfileNames:', parsed.accumulator.configurationsByProfile)
+		console.debug('Electron Main: handleLoadOciConfigProfileNames:', Array.from(parsed.accumulator.configurationsByProfile.keys()))
         const profiles = Array.from(parsed.accumulator.configurationsByProfile.keys())
 		resolve(profiles)
 	})
@@ -338,10 +343,13 @@ async function handleLoadOciConfigProfile(event: any, profile: string) {
 	console.debug('Electron Main: handleLoadOciConfigProfile')
 	return new Promise((resolve, reject) => {
 		const parsed = common.ConfigFileReader.parseDefault(null)
-		console.debug('Electron Main: handleLoadOciConfigProfileNames Parsed:', parsed)
-		console.debug('Electron Main: handleLoadOciConfigProfileNames Config By Profile:', parsed.accumulator.configurationsByProfile)
-		console.debug('Electron Main: handleLoadOciConfigProfileNames Keys:', Array.from(parsed.accumulator.configurationsByProfile.keys()))
-        const profileData = Array.from(parsed.accumulator.configurationsByProfile[profile])
+		console.debug('Electron Main: handleLoadOciConfigProfile: Parsed:', parsed)
+		console.debug('Electron Main: handleLoadOciConfigProfile: Config By Profile:', parsed.accumulator.configurationsByProfile)
+		console.debug('Electron Main: handleLoadOciConfigProfile: Keys:', Array.from(parsed.accumulator.configurationsByProfile.keys()))
+		console.debug('Electron Main: handleLoadOciConfigProfile: Profile:', parsed.accumulator.configurationsByProfile.get(profile))
+        const profileData = parsed.accumulator.configurationsByProfile.get(profile)
+        // const profileData = Array.from(parsed.accumulator.configurationsByProfile[profile])
+		console.debug('Electron Main: handleLoadOciConfigProfile: Profile Data:', profileData)
 		resolve(profileData)
 	})
 }
@@ -368,6 +376,24 @@ async function handleQueryDropdown(event: any, profile: string, region: string) 
 	console.debug('Electron Main: handleQueryDropdown')
 	const ociQuery = new OciReferenceDataQuery(profile, region)
 	return ociQuery.query()
+}
+
+async function handleListStacks(event: any, profile: string, region: string, compartmentId: string) {
+	console.debug('Electron Main: handleListStacks')
+	const ociQuery = new OciResourceManagerQuery(profile, region)
+	return ociQuery.query([compartmentId])
+}
+// Resource Manager
+async function handleUpdateStack(event: any) {
+	console.debug('Electron Main: handleUpdateStack')
+}
+
+async function handleCreateStack(event: any) {
+	console.debug('Electron Main: handleCreateStack')
+}
+
+async function handleCreateJob(event: any) {
+	console.debug('Electron Main: handleCreateJob')
 }
 
 
@@ -484,7 +510,7 @@ async function handleLoadLibraryIndex(event: any) {
 	})
 }
 
-function getLibrarySectionSvg(libraryIndex, section: string) {
+function getLibrarySectionSvg(libraryIndex: Record<string, Record<string, string>[]>, section: string) {
 	return new Promise((resolve, reject) => {
 		const librarySection = libraryIndex[section]
 		const svgRequests = librarySection.map((design) => new Request(`${libraryUrl}/${section}/${design.svgFile}`))

@@ -22,3 +22,15 @@ export interface CompartmentPickerProps {
     setHierarchy: React.Dispatch<any>
     refs: Record<string, React.RefObject<any>>
 }
+
+export interface StackPickerProps {
+    stacks: Record<string, any>[]
+    selectedStack: string
+    setSelectedStack: React.Dispatch<any>
+}
+
+// export type OcdDialogs = {
+//     query: boolean
+//     resourceManager: boolean
+//     referenceData: boolean
+// }

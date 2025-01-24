@@ -6,17 +6,24 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { OcdDesign } from '@ocd/model'
 import { OcdCache, OcdConsoleConfiguration } from '@ocd/react'
+import { OutputDataStringArray } from "@ocd/export"
 
 contextBridge.exposeInMainWorld('ocdAPI', {
   // Build Information
   getVersion: () => ipcRenderer.invoke('ocdBuild:getVersion'),
-  // OCI API Calls / Query
+  // OCI API Calls 
+  // Query
   loadOCIConfigProfileNames: () => ipcRenderer.invoke('ociConfig:loadProfileNames'),
   loadOCIConfigProfile: (profile: string) => ipcRenderer.invoke('ociConfig:loadProfile', profile),
   listRegions: (profile: string) => ipcRenderer.invoke('ociQuery:listRegions', profile),
   listTenancyCompartments: (profile: string) => ipcRenderer.invoke('ociQuery:listTenancyCompartments', profile),
   queryTenancy: (profile: string, compartmentIds: string[], region: string) => ipcRenderer.invoke('ociQuery:queryTenancy', profile, compartmentIds, region),
   queryDropdown: (profile: string, region: string) => ipcRenderer.invoke('ociQuery:queryDropdown', profile, region),
+  listStacks: (profile: string, region: string, compartmentId: string) => ipcRenderer.invoke('ociQuery:listStacks', profile, region, compartmentId),
+  // Resource Manager
+  createStack: (profile: string, region: string, compartmentId: string, data: OutputDataStringArray, apply: boolean) => ipcRenderer.invoke('OciResourceManager:updateStack', profile, region, compartmentId, data, apply),
+  updateStack: (profile: string, region: string, stackId: string, data: OutputDataStringArray, apply: boolean) => ipcRenderer.invoke('OciResourceManager:updateStack', profile, region, stackId, data, apply),
+  createJob: (profile: string, region: string, stackId: string, apply: boolean) => ipcRenderer.invoke('OciResourceManager:createJob', profile, region, stackId, apply),
   // OCD Design 
   loadDesign: (filename: string) => ipcRenderer.invoke('ocdDesign:loadDesign', filename),
   saveDesign: (design: OcdDesign, filename: string, suggestedFilename = '') => ipcRenderer.invoke('ocdDesign:saveDesign', design, filename, suggestedFilename),
