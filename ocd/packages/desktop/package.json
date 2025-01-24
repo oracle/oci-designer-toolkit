@@ -66,6 +66,7 @@
     "@ocd/query": ">=0.2.6",
     "@ocd/react": ">=0.2.6",
     "electron-squirrel-startup": "^1.0.1",
+    "exceljs": "^4.4.0",
     "oci-sdk": "^2.69.0"
   }
 }
