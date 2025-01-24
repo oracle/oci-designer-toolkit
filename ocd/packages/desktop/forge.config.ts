@@ -10,6 +10,7 @@ import { FuseV1Options, FuseVersion } from '@electron/fuses';
 import os from 'os'
 // @ts-ignore
 import * as Package from './package.json' with {type: "json"}
+console.debug('Forge Config: package,json', Package)
 
 const archPos = process.argv.findIndex(arg => arg.startsWith('--arch'))
 const arch = archPos > 0 ? process.argv[archPos+1] : os.arch()
