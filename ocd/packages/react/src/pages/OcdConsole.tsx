@@ -27,7 +27,8 @@ import { buildDetails } from '../data/OcdBuildDetails'
 import OcdHelp from './OcdHelp'
 import OcdCommonTags from './OcdCommonTags'
 import { OcdReferenceDataQueryDialog } from '../components/dialogs/OcdReferenceDataQueryDialog'
-import { OcdActiveFileContext, OcdCacheContext, OcdConsoleConfigContext, OcdDocumentContext, OcdDragResourceContext, OcdSelectedResourceContext } from './OcdConsoleContext'
+import { OcdActiveFileContext, OcdCacheContext, OcdConsoleConfigContext, OcdDialogContext, OcdDocumentContext, OcdDragResourceContext, OcdSelectedResourceContext } from './OcdConsoleContext'
+import { OcdExportToResourceManagerDialog } from '../components/dialogs/OcdExportToResourceManagerDialog'
 
 export const ThemeContext = createContext<string>('')
 export const ActiveFileContext = createContext<OcdActiveFileContext>({activeFile: {name: '', modified: false}, setActiveFile: () => {}})
@@ -36,6 +37,7 @@ export const CacheContext = createContext<OcdCacheContext>({ocdCache: OcdCacheDa
 export const DocumentContext = createContext<OcdDocumentContext>({ocdDocument: OcdDocument.new(), setOcdDocument: () => {}})
 export const SelectedResourceContext = createContext<OcdSelectedResourceContext>({selectedResource: OcdDocument.newSelectedResource(), setSelectedResource: () => {}})
 export const DragResourceContext = createContext<OcdDragResourceContext>({dragResource: OcdDocument.newDragResource(), setDragResource: () => {}})
+export const DialogContext = createContext<OcdDialogContext>({displayDialog: '', setDisplayDialog: () => {}})
 
 export const OcdConsole = (): JSX.Element => {
     // State Variables
@@ -247,6 +249,8 @@ const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument,
 const OcdConsoleBody = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument }: ConsolePageProps): JSX.Element => {
     const showQueryDialog = ocdDocument.query
     const showReferenceDataQueryDialog = ocdConsoleConfig.queryReferenceData
+    const showExportToResourceManagerDialog = ocdDocument.dialog.resourceManager
+    console.debug('OcdConsoleBody: Dialogs: Query', showQueryDialog, 'ReferenceData', showReferenceDataQueryDialog, 'Resource Manager', showExportToResourceManagerDialog)
     // const DisplayPage = ocdConsoleConfig.config.displayPage === 'bom' ? OcdBom : 
     //                     ocdConsoleConfig.config.displayPage === 'designer' ? OcdDesigner : 
     //                     ocdConsoleConfig.config.displayPage === 'documentation' ? OcdDocumentation : 
@@ -312,6 +316,10 @@ const OcdConsoleBody = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, se
                 setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} 
             />}
             {showReferenceDataQueryDialog && <OcdReferenceDataQueryDialog 
+                ocdDocument={ocdDocument} 
+                setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} 
+            />}
+            {showExportToResourceManagerDialog && <OcdExportToResourceManagerDialog 
                 ocdDocument={ocdDocument} 
                 setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} 
             />}

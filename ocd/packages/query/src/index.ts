@@ -5,3 +5,4 @@
 
 export { OciQuery } from './OciQuery.js'
 export { OciReferenceDataQuery } from './OciReferenceDataQuery.js'
+export { OciResourceManagerQuery } from './OciResourceManagerQuery.js'

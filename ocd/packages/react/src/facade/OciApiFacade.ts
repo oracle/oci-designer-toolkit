@@ -3,6 +3,8 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
+import { OutputDataStringArray } from "@ocd/export"
+
 /*
 ** Facade exists so we can switch between Electron based and Web based which will require a web server
 */
@@ -28,5 +30,17 @@ export namespace OciApiFacade {
     }
     export const queryDropdown = (profile: string = 'DEFAULT', region: string = 'uk-london-1'): Promise<any> => {
         return window.ocdAPI ? window.ocdAPI.queryDropdown(profile, region) : Promise.reject(new Error('Currently Not Implemented'))
+    }
+    export const listStacks = (profile: string = 'DEFAULT', region: string = 'uk-london-1', compartmentId: string = ''): Promise<any> => {
+        return window.ocdAPI ? window.ocdAPI.listStacks(profile, region, compartmentId) : Promise.reject(new Error('Currently Not Implemented'))
+    }
+    export const createStack = (profile: string = 'DEFAULT', region: string = 'uk-london-1', compartmentId: string = '', data: OutputDataStringArray = {}, apply: boolean = false): Promise<any> => {
+        return window.ocdAPI ? window.ocdAPI.createStack(profile, region, compartmentId, data, apply) : Promise.reject(new Error('Currently Not Implemented'))
+    }
+    export const updateStack = (profile: string = 'DEFAULT', region: string = 'uk-london-1', stackId: string = '', data: OutputDataStringArray = {}, apply: boolean = false): Promise<any> => {
+        return window.ocdAPI ? window.ocdAPI.updateStack(profile, region, stackId, data, apply) : Promise.reject(new Error('Currently Not Implemented'))
+    }
+    export const createJob = (profile: string = 'DEFAULT', region: string = 'uk-london-1', stackId: string = '', apply: boolean = false): Promise<any> => {
+        return window.ocdAPI ? window.ocdAPI.createJob(profile, region, stackId, apply) : Promise.reject(new Error('Currently Not Implemented'))
     }
 }
