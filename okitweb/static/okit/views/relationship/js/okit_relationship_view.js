@@ -68,14 +68,20 @@ class OkitRelationshipJsonView extends OkitJsonView {
                 const resource_div = this.selection_div.append('div')
                 const cb = resource_div.append('input').attr('type', 'checkbox')
                     .attr('id', `${k}_relationship_cb`)
-                    .on('input', (d, i, n) => {
-                        if (n[i].checked) {
-                            this.excluded = this.excluded.filter((e) => e !== k)
-                        } else {
-                            this.excluded.push(k)
-                        }
-                        this.drawRelationshipSVG()
-                    })
+                cb.on('input', (event, d) => { // event replaces d3.event
+                    const n = cb.nodes()
+                    const i = 0 // n.indexOf(this)
+                    console.debug('Draw Resource Selection (d)', d)
+                    console.debug('Draw Resource Selection (n)', n)
+                    console.debug('Draw Resource Selection (i)', i)
+                    console.debug('Draw Resource Selection (this)', this)
+                    if (n[i].checked) {
+                        this.excluded = this.excluded.filter((e) => e !== k)
+                    } else {
+                        this.excluded.push(k)
+                    }
+                    this.drawRelationshipSVG()
+                })
                 const label = resource_div.append('label')
                     .attr('for', `${k}_relationship_cb`)
                     .text(titleCase(k.replaceAll('_', ' ')))
@@ -95,7 +101,7 @@ class OkitRelationshipJsonView extends OkitJsonView {
             .attr("id", 'relationship-svg')
             .attr("width", '100%')
             .attr("height", "100%")
-            .call(d3.zoom().scaleExtent([0.1, 3]).on("zoom", function () {d3.select("#relationship-svg g").attr("transform", d3.event.transform)}))
+            .call(d3.zoom().scaleExtent([0.1, 3]).on("zoom", function (event) {d3.select("#relationship-svg g").attr("transform", event.transform)})) // event replaces d3.event
             .append("g")
             // .attr('transform', function(d) {return 'translate(' + [width / 2, height / 2] + ')'});
 
@@ -161,19 +167,19 @@ class OkitRelationshipJsonView extends OkitJsonView {
           .attr("transform", function(d) {return "translate(" + d.x + "," + d.y + ")";});
     }
 
-    dragstarted(d) {
-        if (!d3.event.active) relationship_simulation.alphaTarget(0.3).restart();
+    dragstarted(event, d) {
+        if (!event.active) relationship_simulation.alphaTarget(0.3).restart(); // event replaces d3.event
         d.fx = d.x;
         d.fy = d.y;
     }
 
-    dragged(d) {
-        d.fx = d3.event.x;
-        d.fy = d3.event.y;
+    dragged(event, d) {
+        d.fx = event.x; // event replaces d3.event
+        d.fy = event.y;
     }
 
-    dragended(d) {
-        if (!d3.event.active) relationship_simulation.alphaTarget(0);
+    dragended(event, d) {
+        if (!event.active) relationship_simulation.alphaTarget(0); // event replaces d3.event
         d.fx = null;
         d.fy = null;
     }

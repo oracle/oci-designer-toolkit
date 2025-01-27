@@ -344,11 +344,11 @@ function displaySaveAsDialog(title, callback, root_dir='templates/user', placeho
         .attr('name', 'template_file_name')
         .attr('type', 'text')
         .attr('placeholder', placeholder)
-        .on('keydown', (e) => {
-            if (d3.event.keyCode == 220) {
-                d3.event.preventDefault()
-            } else if (d3.event.keyCode == 32) {
-                d3.event.preventDefault()
+        .on('keydown', (event) => {
+            if (event.keyCode == 220) { // event replaces d3.event
+                event.preventDefault()
+            } else if (event.keyCode == 32) {
+                event.preventDefault()
             }
         })
         .on('blur', () => {
@@ -391,11 +391,11 @@ function displaySaveAsDialog(title, callback, root_dir='templates/user', placeho
         .attr('type', 'text')
         .attr('readonly', true)
         .attr('placeholder', '<Directory Path>')
-        .on('keydown', (e) => {
-            if (d3.event.keyCode == 220) {
-                d3.event.preventDefault()
-            } else if (d3.event.keyCode == 32) {
-                d3.event.preventDefault()
+        .on('keydown', (event) => {
+            if (event.keyCode == 220) { // event replaces d3.event
+                event.preventDefault()
+            } else if (event.keyCode == 32) {
+                event.preventDefault()
             }
         })
         .on('blur', () => {
@@ -765,10 +765,10 @@ function loadGlobalTags() {
             let tr = tbody.append('div').attr('class', 'tr')
             tr.append('div').attr('class', 'td').append('label').text(key)
             tr.append('div').attr('class', 'td').append('label').text(value)
-            tr.append('div').attr('class', 'td delete-tag action-button-background delete').on('click', () => {
+            tr.append('div').attr('class', 'td delete-tag action-button-background delete').on('click', (event) => {
                 delete okitJsonModel.freeform_tags[key];
                 loadGlobalTags()
-                d3.event.stopPropagation()
+                event.stopPropagation() // event replaces d3.event
             })
         }
     }
@@ -780,11 +780,11 @@ function loadGlobalTags() {
                 tr.append('div').attr('class', 'td').append('label').text(namespace)
                 tr.append('div').attr('class', 'td').append('label').text(key)
                 tr.append('div').attr('class', 'td').append('label').text(value)
-                tr.append('div').attr('class', 'td  delete-tag action-button-background delete').on('click', () => {
+                tr.append('div').attr('class', 'td  delete-tag action-button-background delete').on('click', (event) => {
                     delete okitJsonModel.defined_tags[namespace][key];
                     if (Object.keys(okitJsonModel.defined_tags[namespace]).length === 0) {delete okitJsonModel.defined_tags[namespace];}
                     loadGlobalTags()
-                    d3.event.stopPropagation()
+                    event.stopPropagation() // event replaces d3.event
                 })
             }
         }
