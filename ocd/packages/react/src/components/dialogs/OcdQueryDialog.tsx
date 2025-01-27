@@ -212,7 +212,9 @@ const CompartmentPicker = ({compartments, selectedCompartmentIds, setSelectedCom
             {filteredCompartments.length > 0 && filteredCompartments.map((c) => {
                 const subCompartmentsCount = compartments.filter((cc) => cc.compartmentId === c.id).length
                 const isClosed = collapsedCompartmentIds.includes(c.id)
-                const labelClasses = subCompartmentsCount > 0 ? isClosed ? 'ocd-collapable-list-element ocd-list-collapsed' : 'ocd-collapable-list-element ocd-list-open' : 'ocd-collapable-list-element'
+                const isClosedClasses = isClosed ? 'ocd-collapable-list-element ocd-list-collapsed' : 'ocd-collapable-list-element ocd-list-open'
+                const labelClasses = subCompartmentsCount > 0 ? isClosedClasses : 'ocd-collapable-list-element'
+                // const labelClasses = subCompartmentsCount > 0 ? isClosed ? 'ocd-collapable-list-element ocd-list-collapsed' : 'ocd-collapable-list-element ocd-list-open' : 'ocd-collapable-list-element'
                 return <li className={labelClasses} key={c.id} ref={refs[c.hierarchy]} onClick={(e) => onClick(e, c.id)} aria-hidden>
                             <label onMouseEnter={(e) => onMouseOver(c.id)} onMouseLeave={(e) => onMouseOver('')} onClick={onLabelClick} aria-hidden><input type="checkbox" checked={selectedCompartmentIds.includes(c.id)} onChange={(e) => onChange(e, c.id)} onClick={onInputClick}></input>{c.name}</label>
                             {subCompartmentsCount > 0 && <CompartmentPicker 

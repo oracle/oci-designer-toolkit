@@ -5,16 +5,12 @@
 
 import { CompartmentPickerProps, QueryDialogProps, StackPickerProps } from "../../types/Dialogs"
 import { OciApiFacade } from "../../facade/OciApiFacade"
-import React, { useContext, useEffect, useState } from "react"
-import { OcdDesign, OciModelResources } from '@ocd/model'
+import React, { useEffect, useState } from "react"
+import { OciModelResources } from '@ocd/model'
 import { OcdResourceManagerExporter } from '@ocd/export'
 import { OcdDocument } from "../OcdDocument"
-import { OcdUtils } from '@ocd/core'
-import { ActiveFileContext, ConsoleConfigContext } from "../../pages/OcdConsole"
 
 export const OcdExportToResourceManagerDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps): JSX.Element => {
-    const {activeFile, setActiveFile} = useContext(ActiveFileContext)
-    const {ocdConsoleConfig, setOcdConsoleConfig} = useContext(ConsoleConfigContext)
     const loadingState = '......Reading OCI Config'
     const regionsLoading = {id: 'Select Valid Profile', displayName: 'Select Valid Profile'}
     const className = `ocd-query-dialog`
@@ -174,7 +170,6 @@ export const OcdExportToResourceManagerDialog = ({ocdDocument, setOcdDocument}: 
                             <label><input type="radio" name="createUpdateStack" value={'Create'} checked={createStack} onChange={() => setCreateStack(true)}></input>Create</label>
                             <label><input type="radio" name="createUpdateStack" value={'Update'} checked={!createStack} onChange={() => setCreateStack(false)}></input>Update</label>
                         </div>
-                        {/* {createStack && <><div>Stack Name</div><div className="ocd-compartment-hierarchy">{hierarchy}</div></>} */}
                         {(() => {
                             if (createStack) return <><div>Stack Name</div><div className="ocd-compartment-search"><input type="text" onChange={onStackNameChange} placeholder="Enter Stack Name" value={stackName}></input></div></>
                             else return <><div>Stack</div><div><StackPicker stacks={stacks} selectedStack={selectedStack} setSelectedStack={setSelectedStack}/></div></>
@@ -232,7 +227,9 @@ const CompartmentPicker = ({compartments, selectedCompartmentIds, setSelectedCom
             {filteredCompartments.length > 0 && filteredCompartments.map((c) => {
                 const subCompartmentsCount = compartments.filter((cc) => cc.compartmentId === c.id).length
                 const isClosed = collapsedCompartmentIds.includes(c.id)
-                const labelClasses = subCompartmentsCount > 0 ? isClosed ? 'ocd-collapable-list-element ocd-list-collapsed' : 'ocd-collapable-list-element ocd-list-open' : 'ocd-collapable-list-element'
+                const isClosedClasses = isClosed ? 'ocd-collapable-list-element ocd-list-collapsed' : 'ocd-collapable-list-element ocd-list-open'
+                const labelClasses = subCompartmentsCount > 0 ? isClosedClasses : 'ocd-collapable-list-element'
+                // const labelClasses = subCompartmentsCount > 0 ? isClosed ? 'ocd-collapable-list-element ocd-list-collapsed' : 'ocd-collapable-list-element ocd-list-open' : 'ocd-collapable-list-element'
                 return <li className={labelClasses} key={c.id} ref={refs[c.hierarchy]} onClick={(e) => onClick(e, c.id)} aria-hidden>
                             <label onMouseEnter={(e) => onMouseOver(c.id)} onMouseLeave={(e) => onMouseOver('')}><input type="radio" name="compartmentPicker" checked={selectedCompartmentIds.includes(c.id)} onChange={(e) => onChange(e, c.id)} onClick={onInputClick}></input>{c.name}</label>
                             {subCompartmentsCount > 0 && <CompartmentPicker 
@@ -258,9 +255,5 @@ const StackPicker = ({stacks, selectedStack, setSelectedStack}: StackPickerProps
         console.debug('OcdExportToResourceManagerDialog: Selected Stack', e.target.value)
         setSelectedStack(e.target.value)
     }
-    return <>
-                <select onChange={onRegionChanged} value={selectedStack}>
-                    {stacks.map((r) => {return <option key={r.id} value={r.id}>{r.displayName}</option>})}
-                </select>
-            </>
+    return <select onChange={onRegionChanged} value={selectedStack}>{stacks.map((r) => {return <option key={r.id} value={r.id}>{r.displayName}</option>})}</select>
 }
