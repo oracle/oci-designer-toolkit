@@ -193,22 +193,16 @@ export const OcdExportToResourceManagerDialog = ({ocdDocument, setOcdDocument}: 
 }
 
 const CompartmentPicker = ({compartments, selectedCompartmentIds, setSelectedCompartmentIds, root, parentId, setHierarchy, refs, collapsedCompartmentIds, setCollapsedCompartmentIds}: CompartmentPickerProps): JSX.Element => {
-    // const [isOpen, setIsOpen] = useState(true)
-    // const isOpen = collapsedCompartmentIds.includes(parentId)
     const filter = root ? (c: OciModelResources.OciCompartment) => c.root : (c: OciModelResources.OciCompartment) => c.compartmentId === parentId
     const filteredCompartments = compartments.filter(filter)
     console.debug('OcdExportToResourceManagerDialog:', root, parentId, filteredCompartments)
     const onChange = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
         e.stopPropagation()
         const selected = e.target.checked
-        // console.debug('OcdExportToResourceManagerDialog: Selected', selected)
-        // const compartmentIds = selected ? [...selectedCompartmentIds, id] : selectedCompartmentIds.filter((i) => i !== id)
         const compartmentIds = selected ? [id] : []
         setSelectedCompartmentIds(compartmentIds)
     }
     const onMouseOver = (id: string) => {
-        // console.debug('OcdExportToResourceManagerDialog: onMouseOver', id)
-        // setHierarchy(id === '' ? '' : getHierarchy(id).join('/'))
         const compartment: OciModelResources.OciCompartment | undefined = compartments.find((c: OciModelResources.OciCompartment) => c.id === id)
         setHierarchy(compartment !== undefined ? compartment.hierarchy : '')
     }
@@ -218,7 +212,6 @@ const CompartmentPicker = ({compartments, selectedCompartmentIds, setSelectedCom
         // Toggle State
         const compartmentIds = isClosed ? collapsedCompartmentIds.filter((i) => i !== id) : [...collapsedCompartmentIds, id]
         setCollapsedCompartmentIds(compartmentIds)
-        // setIsOpen(!isOpen)
     }
     const onInputClick = (e: React.MouseEvent<HTMLInputElement>) => e.stopPropagation()
     const subCompartmentsClasses = collapsedCompartmentIds.includes(parentId) ? 'hidden' : ''
@@ -229,7 +222,6 @@ const CompartmentPicker = ({compartments, selectedCompartmentIds, setSelectedCom
                 const isClosed = collapsedCompartmentIds.includes(c.id)
                 const isClosedClasses = isClosed ? 'ocd-collapable-list-element ocd-list-collapsed' : 'ocd-collapable-list-element ocd-list-open'
                 const labelClasses = subCompartmentsCount > 0 ? isClosedClasses : 'ocd-collapable-list-element'
-                // const labelClasses = subCompartmentsCount > 0 ? isClosed ? 'ocd-collapable-list-element ocd-list-collapsed' : 'ocd-collapable-list-element ocd-list-open' : 'ocd-collapable-list-element'
                 return <li className={labelClasses} key={c.id} ref={refs[c.hierarchy]} onClick={(e) => onClick(e, c.id)} aria-hidden>
                             <label onMouseEnter={(e) => onMouseOver(c.id)} onMouseLeave={(e) => onMouseOver('')}><input type="radio" name="compartmentPicker" checked={selectedCompartmentIds.includes(c.id)} onChange={(e) => onChange(e, c.id)} onClick={onInputClick}></input>{c.name}</label>
                             {subCompartmentsCount > 0 && <CompartmentPicker 

@@ -61,15 +61,15 @@ Detailed OKIT Installation steps can be found in the [OCI Designer Toolkit Insta
 3. [Oracle Linux](documentation/Installation.md#oracle-linux-ol8)
 ### OKIT-Ocd
 OKIT-Ocd is the next iteration of OKIT and is currently available as a Beta release. The native installables can be found in the Assets section 
-on the [0.66.1 Release](https://github.com/oracle/oci-designer-toolkit/releases/tag/v0.66.1).
+on the [0.67.0 Release](https://github.com/oracle/oci-designer-toolkit/releases/tag/v0.67.0).
 1. MacOS
-    1. [Arm dmg](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.66.1/ocd-0.2.6-arm64.dmg)
-    2. [x64 dmg](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.66.1/ocd-0.2.6-x64.dmg)
+    1. [Arm dmg](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.67.0/ocd-0.2.7-arm64.dmg)
+    2. [x64 dmg](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.67.0/ocd-0.2.7-x64.dmg)
 2. Windows
-    1. [Setup](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.66.1/ocd-0.2.6-Setup.exe)
+    1. [Setup](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.67.0/ocd-0.2.7-Setup.exe)
 3. Linux
-    1. [rpm](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.66.1/ocd-0.2.6-1.x86_64.rpm)
-    2. [deb](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.66.1/ocd_0.2.6_amd64.deb)
+    1. [rpm](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.67.0/ocd-0.2.7-1.x86_64.rpm)
+    2. [deb](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.67.0/ocd_0.2.7_amd64.deb)
 
 
 
