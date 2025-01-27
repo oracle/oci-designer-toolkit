@@ -5,8 +5,8 @@
 console.debug('Loaded Console Javascript');
 
 
-const okitVersion = '0.66.0';
-const okitReleaseDate = '30th Novermber 2024';
+const okitVersion = '0.67.0';
+const okitReleaseDate = '31st January 2025';
 // const okitReleaseDate = 'Nightly';
 
 // Validation
