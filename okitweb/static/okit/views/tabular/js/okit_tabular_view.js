@@ -310,11 +310,11 @@ class OkitTabularJsonView extends OkitJsonView {
 
     addContextMenu(tr, resource_type, resource) {
         const self = this;
-        tr.on("contextmenu", function () {
-            d3.event.preventDefault();
-            d3.event.stopPropagation();
+        tr.on("contextmenu", function (event) {
+            event.preventDefault(); // event replaces d3.event
+            event.stopPropagation();
             const canvas_position = $(jqId("canvas-div")).offset();
-            const position = {top: d3.event.pageY - canvas_position.top, left: d3.event.pageX - 5};
+            const position = {top: event.pageY - canvas_position.top, left: event.pageX - 5};
             $(jqId("context-menu")).empty();
             $(jqId("context-menu")).css(position);
             const contextmenu = d3.select(d3Id("context-menu"));

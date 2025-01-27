@@ -64,50 +64,45 @@ function dragFragmentStart(evt, artefact, title) {
     palette_drag_artefact = artefact;
 }
 
-function dragEnter(evt) {
-    evt = evt || d3.event;
-    dragEnterOverLeave(evt);
+function dragEnter(event) {
+    dragEnterOverLeave(event); // event replaces d3.event
 }
 
-function dragOver(evt) {
-    evt = evt || d3.event;
-    if (evt.preventDefault) {
-        evt.preventDefault(); // Necessary. Allows us to drop.
+function dragOver(event) {
+    if (event.preventDefault) { // event replaces d3.event
+        event.preventDefault(); // Necessary. Allows us to drop.
     }
-    dragEnterOverLeave(evt);
+    dragEnterOverLeave(event);
 }
 
-function dragLeave(evt) {
-    evt = evt || d3.event;
+function dragLeave(event) { // event replaces d3.event
 }
 
-function dragEnterOverLeave(evt) {
-    evt = evt || d3.event;
-    let type = evt.target.getAttribute('data-type');
+function dragEnterOverLeave(event) {
+    let type = event.target.getAttribute('data-type'); // event replaces d3.event
     if (palette_drag_artefact !== undefined && palette_drag_artefact.getDropTargets().indexOf(type) >= 0) {
-        evt.dataTransfer.dropEffect = 'copy';  // See the section on the DataTransfer object.
+        event.dataTransfer.dropEffect = 'copy';  // See the section on the DataTransfer object.
     } else {
-        evt.dataTransfer.effectAllowed = "none";
-        evt.dataTransfer.dropEffect = "none";
+        event.dataTransfer.effectAllowed = "none";
+        event.dataTransfer.dropEffect = "none";
     }
 }
 
-function dragDrop(evt) {
-    evt = evt || d3.event;
-    if (evt.stopPropagation) {
-        evt.stopPropagation(); // Stops some browsers from redirecting.
+function dragDrop(event) {
+    if (event.stopPropagation) { // event replaces d3.event
+        event.stopPropagation(); // Stops some browsers from redirecting.
     }
-    if (evt.preventDefault) {
-        evt.preventDefault(); // Necessary. Allows us to drop.
+    if (event.preventDefault) {
+        event.preventDefault(); // Necessary. Allows us to drop.
     }
-    let palette_artefact_data = JSON.parse(evt.dataTransfer.getData('text/plain'));
+    let palette_artefact_data = JSON.parse(event.dataTransfer.getData('text/plain'));
     let target = {
         // id: evt.target.id,
-        id: evt.target.getAttribute('data-okit-id'),
-        element_id: evt.target.id,
-        okit_id: evt.target.getAttribute('data-okit-id'),
-        type: evt.target.getAttribute('data-type'),
-        compartment_id: evt.target.getAttribute('data-compartment-id'),
+        id: event.target.getAttribute('data-okit-id'),
+        element_id: event.target.id,
+        okit_id: event.target.getAttribute('data-okit-id'),
+        type: event.target.getAttribute('data-type'),
+        compartment_id: event.target.getAttribute('data-compartment-id'),
         title: palette_artefact_data.title
     };
     let artefact = palette_drag_artefact;
@@ -123,9 +118,8 @@ function dragDrop(evt) {
     return false;
 }
 
-function dragEnd(evt) {
-    evt = evt || d3.event;
-    console.info('>>>>>>> Drag End ' + evt);
+function dragEnd(event) {
+    console.info('>>>>>>> Drag End ' + event); // event replaces d3.event
 }
 
 
@@ -133,9 +127,9 @@ function dragEnd(evt) {
 ** SVG Psudo Drag & Drop
  */
 
-function handleConnectorDrag(e) {
+function handleConnectorDrag(event) {
     if (connectorStartElement) {
-        let mousePos = getMousePosition(d3.event);
+        let mousePos = getMousePosition(event); // event replaces d3.event
         d3.select("#Connector")
             .attr("x2", mousePos.x)
             .attr("y2", mousePos.y);
@@ -146,9 +140,9 @@ const left_click = 1;
 const middle_click = 2;
 const right_click = 3;
 
-function handleConnectorDragStart() {
+function handleConnectorDragStart(event) {
     console.info('Connector Drag Start');
-    if (d3.event.which == left_click) {
+    if (event.which == left_click) { // event replaces d3.event
         let thisid = d3.select(this).attr('id');
         console.info('This Id : ' + thisid);
         let source_type = d3.select(this).attr('data-type');
@@ -259,17 +253,17 @@ function getMousePosition(evt) {
     };
 }
 
-function handleContextMenu() {
+function handleContextMenu(event) {
     let thisid = d3.select(this).attr('id');
     let okit_id = d3.select(this).attr('data-okit-id');
     let artefact = d3.select(this).attr('data-type');
     console.info('Right Click on ' + thisid);
-    d3.event.preventDefault();
-    d3.event.stopPropagation();
+    event.preventDefault(); // event replaces d3.event
+    event.stopPropagation();
     let element = document.getElementById("context-menu");
     element.classList.toggle("hidden");
-    element.style.top =  d3.event.clientY + 'px';
-    element.style.left = d3.event.clientX + 'px';
+    element.style.top =  event.clientY + 'px';
+    element.style.left = event.clientX + 'px';
     $("#context-menu").find("*").off();
     $("#right-click-delete").on('click', function() {deleteAssetFromSVG(artefact, okit_id);});
 }

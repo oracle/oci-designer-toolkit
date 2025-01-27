@@ -193,10 +193,10 @@ function loadTags(json_element) {
             let tr = tbody.append('div').attr('class', 'tr')
             tr.append('div').attr('class', 'td').append('label').text(key)
             tr.append('div').attr('class', 'td').append('label').text(value)
-            tr.append('div').attr('class', 'td delete-tag action-button-background delete').on('click', () => {
+            tr.append('div').attr('class', 'td delete-tag action-button-background delete').on('click', (event) => {
                 delete json_element.freeform_tags[key];
                 loadTags(json_element)
-                d3.event.stopPropagation()
+                event.stopPropagation() // event replaces d3.event
             })
         }
     }
@@ -208,11 +208,11 @@ function loadTags(json_element) {
                 tr.append('div').attr('class', 'td').append('label').text(namespace)
                 tr.append('div').attr('class', 'td').append('label').text(key)
                 tr.append('div').attr('class', 'td').append('label').text(value)
-                tr.append('div').attr('class', 'td  delete-tag action-button-background delete').on('click', () => {
+                tr.append('div').attr('class', 'td  delete-tag action-button-background delete').on('click', (event) => {
                     delete json_element.defined_tags[namespace][key];
                     if (Object.keys(json_element.defined_tags[namespace]).length === 0) {delete json_element.defined_tags[namespace];}
                     loadTags(json_element)
-                    d3.event.stopPropagation()
+                    event.stopPropagation() // event replaces d3.event
                 })
             }
         }
