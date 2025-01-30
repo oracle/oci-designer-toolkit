@@ -473,17 +473,13 @@ async function handleDiscardConfirmation(event: any) {
 }
 
 async function handleExportTerraform(event: any, design: OcdDesign, directory: string) {
-	design = typeof design === 'string' ? JSON.parse(design) : design
 	console.debug('Electron Main: handleExportTerraform')
 	return Promise.reject(new Error('Currently Not Implemented'))
 }
 
 async function handleExportToExcel(event: any, design: OcdDesign, suggestedFilename='') {
-	// design = typeof design === 'string' ? JSON.parse(design) : design
 	console.debug('Electron Main: handleExportToExcel')
-	// return new Promise((resolve, reject) => {reject('Currently Not Implemented')})
 	return new Promise((resolve, reject) => {
-		// try {
 			dialog.showSaveDialog(mainWindow, {
 				defaultPath: suggestedFilename,
 				properties: ['createDirectory'],
@@ -544,15 +540,10 @@ async function handleExportToExcel(event: any, design: OcdDesign, suggestedFilen
 				console.error(err)
 				reject(new Error(err))
 			})
-		// } catch (err) {
-		// 	reject(err)
-		// }
 	})
-	// return Promise.reject(new Error('Currently Not Implemented'))
 }
 
 async function handleExportToMarkdown(event: any, design: OcdDesign, css: string[]=[], suggestedFilename='') {
-	// design = typeof design === 'string' ? JSON.parse(design) : design
 	console.debug('Electron Main: handleExportToMarkdown')
 	return new Promise((resolve, reject) => {
 		dialog.showSaveDialog(mainWindow, {
@@ -575,7 +566,6 @@ async function handleExportToMarkdown(event: any, design: OcdDesign, css: string
 }
 
 async function handleExportToTerraform(event: any, design: OcdDesign, directory: string) {
-	// design = typeof design === 'string' ? JSON.parse(design) : design
 	console.debug('Electron Main: handleExportTerraform')
 	return new Promise((resolve, reject) => {
 		dialog.showOpenDialog(mainWindow, {
@@ -596,7 +586,6 @@ async function handleExportToTerraform(event: any, design: OcdDesign, directory:
 			reject(new Error(err))
 		})
 	})
-	return Promise.reject(new Error('Currently Not Implemented'))
 }
 
 // Library / Reference Architecture Functions
