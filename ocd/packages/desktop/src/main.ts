@@ -429,7 +429,7 @@ async function handleLoadDesign(event: any, filename: string) {
 }
 
 async function handleSaveDesign(event: any, design: OcdDesign, filename: string, suggestedFilename='') {
-	design = typeof design === 'string' ? JSON.parse(design) : design
+	// design = typeof design === 'string' ? JSON.parse(design) : design
 	console.debug('Electron Main: handleSaveDesign', filename, JSON.stringify(design, null, 2))
 	return new Promise((resolve, reject) => {
 		try {
@@ -542,7 +542,7 @@ async function handleExportToExcel(event: any, design: OcdDesign, suggestedFilen
 				}
 			}).catch(err => {
 				console.error(err)
-				reject(err)
+				reject(new Error(err))
 			})
 		// } catch (err) {
 		// 	reject(err)
@@ -552,7 +552,7 @@ async function handleExportToExcel(event: any, design: OcdDesign, suggestedFilen
 }
 
 async function handleExportToMarkdown(event: any, design: OcdDesign, css: string[]=[], suggestedFilename='') {
-	design = typeof design === 'string' ? JSON.parse(design) : design
+	// design = typeof design === 'string' ? JSON.parse(design) : design
 	console.debug('Electron Main: handleExportToMarkdown')
 	return new Promise((resolve, reject) => {
 		dialog.showSaveDialog(mainWindow, {
@@ -575,7 +575,7 @@ async function handleExportToMarkdown(event: any, design: OcdDesign, css: string
 }
 
 async function handleExportToTerraform(event: any, design: OcdDesign, directory: string) {
-	design = typeof design === 'string' ? JSON.parse(design) : design
+	// design = typeof design === 'string' ? JSON.parse(design) : design
 	console.debug('Electron Main: handleExportTerraform')
 	return new Promise((resolve, reject) => {
 		dialog.showOpenDialog(mainWindow, {

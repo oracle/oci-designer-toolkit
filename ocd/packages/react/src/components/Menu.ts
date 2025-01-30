@@ -192,7 +192,7 @@ export const menuItems: MenuItem[] = [
                 submenu: [
                     {
                         label: 'Markdown',
-                        click: (ocdDocument: OcdDocument, setOcdDocument: Function) => { // TODO: Convert to call to Electron API
+                        click: (ocdDocument: OcdDocument, setOcdDocument: Function) => { // Convert to call to Electron API
                             const saveFile = async (ocdDocument: OcdDocument) => {
                                 try {
                                     const options = {
@@ -222,7 +222,7 @@ export const menuItems: MenuItem[] = [
                     },
                     {
                         label: 'OpenTofu (Terraform)',
-                        click: (ocdDocument: OcdDocument, setOcdDocument: Function) => { // TODO: Convert to call to Electron API
+                        click: (ocdDocument: OcdDocument, setOcdDocument: Function) => { // Convert to call to Electron API
                             const writeTerraformFile = async (dirHandle: FileSystemDirectoryHandle, filename: string, contents: string[]) => {
                                 const fileHandle: FileSystemFileHandle = await dirHandle.getFileHandle(filename, {create: true})
                                 // @ts-ignore 

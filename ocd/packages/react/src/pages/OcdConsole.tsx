@@ -241,12 +241,6 @@ const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument,
                         ocdDocument={ocdDocument} 
                         setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} 
                         />
-                    {/* {!hideZoomClassName && <OcdDesignerLeftToolbar 
-                        ocdConsoleConfig={ocdConsoleConfig} 
-                        setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} 
-                        ocdDocument={ocdDocument} 
-                        setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} 
-                        />} */}
                 </div>
             </div>
             <div className='ocd-toolbar-centre'>
@@ -255,12 +249,6 @@ const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument,
             </div>
             <div className='ocd-toolbar-right'>
                 <div>
-                    {/* {!hideZoomClassName && <OcdDesignerRightToolbar 
-                        ocdConsoleConfig={ocdConsoleConfig} 
-                        setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} 
-                        ocdDocument={ocdDocument} 
-                        setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} 
-                        />} */}
                     <PageRightToolbar 
                         ocdConsoleConfig={ocdConsoleConfig} 
                         setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} 
