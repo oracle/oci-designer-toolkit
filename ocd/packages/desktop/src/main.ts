@@ -15,6 +15,7 @@ import { OcdDesign, OcdResource } from '@ocd/model'
 import { OcdCache, OcdConsoleConfiguration } from '@ocd/react'
 import { OcdUtils } from '@ocd/core'
 import { OcdMarkdownExporter, OcdTerraformExporter } from '@ocd/export'
+import { OciModelResources } from '@ocd/model'
 
 app.commandLine.appendSwitch('ignore-certificate-errors') // Temporary work around for not being able to add additional certificates
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0' // Temporary work around for not being able to add additional certificates
@@ -477,6 +478,10 @@ async function handleExportTerraform(event: any, design: OcdDesign, directory: s
 	return Promise.reject(new Error('Currently Not Implemented'))
 }
 
+const compartmentName = (id: string, compartments: OciModelResources.OciCompartment[]): string | undefined => compartments.find((c) => c.id === id)?.displayName
+const updateResources = (resources: OcdResource[], compartments: OciModelResources.OciCompartment[]): OcdResource[] => resources.map((r: OcdResource) => {return {...r, compartmentName: compartmentName(r.compartmentId, compartments)}})
+// @ts-ignore
+const toTableRows = (resources: OcdResource[]): any[][] => resources.reduce((a, c) => {return [...a, [c.displayName, c.compartmentName]]}, [])
 async function handleExportToExcel(event: any, design: OcdDesign, suggestedFilename='') {
 	console.debug('Electron Main: handleExportToExcel')
 	return new Promise((resolve, reject) => {
@@ -489,12 +494,13 @@ async function handleExportToExcel(event: any, design: OcdDesign, suggestedFilen
 				if (!result.canceled) {
 					const ociResources = design.model.oci.resources
 					const compartments = ociResources.compartment
-					const compartmentName = (id: string): string => compartments.find((c) => c.id === id)?.displayName
+					// const compartmentName = (id: string): string => compartments.find((c) => c.id === id)?.displayName
 					const workbook = new ExcelJS.Workbook()
 					let styleNumber = 1
 					Object.entries(ociResources).forEach(([k, v]) => {
 						const worksheet = workbook.addWorksheet(OcdUtils.toTitle(k))
-						const resources = v.map((r: OcdResource) => {return {...r, compartmentName: compartmentName(r.compartmentId)}})
+						// const resources = v.map((r: OcdResource) => {return {...r, compartmentName: compartmentName(r.compartmentId, compartments)}})
+						const resources = updateResources(v, compartments)
 						console.debug('handleExportToExcel:', JSON.stringify(resources, null, 2))
 						const columns = [
 							{header: 'Name', key: 'displayName', width: 20},
@@ -507,7 +513,8 @@ async function handleExportToExcel(event: any, design: OcdDesign, suggestedFilen
 							{name: 'Compartment', filterButton: true}
 						]
 						// @ts-ignore
-						const tableRows: any[][] = resources.reduce((a, c) => {return [...a, [c.displayName, c.compartmentName]]}, [])
+						// const tableRows: any[][] = resources.reduce((a, c) => {return [...a, [c.displayName, c.compartmentName]]}, [])
+						const tableRows = toTableRows(resources)
 						console.debug('handleExportToExcel: Table:', JSON.stringify(tableRows, null, 2))
 						const table: TableProperties = {
 							name: `${k}Table`,
