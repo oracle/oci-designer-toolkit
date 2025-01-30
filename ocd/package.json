@@ -35,7 +35,7 @@
     "fresh-install": "npm run install-and-codegen",
     "reinstall": "npm run purge && npm run install-and-codegen",
     "clean": "npm run clean --workspaces --if-present && rm -rf lib dist build",
-    "purge": "npm run purge --workspaces --if-present && rm -rf node_modules",
+    "purge": "npm run purge --workspaces --if-present && rm -rf node_modules lib dist build",
     "build": "npm run build --workspaces --if-present",
     "rebuild": "npm run clean && npm run build",
     "compile": "npm run compile --workspaces --if-present",

@@ -8,11 +8,13 @@ import Squirrel from 'electron-squirrel-startup'
 import path from 'path'
 import url from 'url'
 import fs from 'fs'
+import ExcelJS, { TableColumnProperties, TableProperties } from 'exceljs'
 import common from 'oci-common'
 import { OciQuery, OciReferenceDataQuery, OciResourceManagerQuery } from '@ocd/query'
-import { OcdDesign } from '@ocd/model'
+import { OcdDesign, OcdResource } from '@ocd/model'
 import { OcdCache, OcdConsoleConfiguration } from '@ocd/react'
-// import { unescape } from 'querystring'
+import { OcdUtils } from '@ocd/core'
+import { OcdMarkdownExporter, OcdTerraformExporter } from '@ocd/export'
 
 app.commandLine.appendSwitch('ignore-certificate-errors') // Temporary work around for not being able to add additional certificates
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0' // Temporary work around for not being able to add additional certificates
@@ -254,10 +256,13 @@ app.whenReady().then(() => {
 	ipcMain.handle('ocdDesign:loadDesign', handleLoadDesign)
 	ipcMain.handle('ocdDesign:saveDesign', handleSaveDesign)
 	ipcMain.handle('ocdDesign:discardConfirmation', handleDiscardConfirmation)
-	ipcMain.handle('ocdDesign:exportTerraform', handleExportTerraform)
 	ipcMain.handle('ocdDesign:loadLibraryIndex', handleLoadLibraryIndex)
 	ipcMain.handle('ocdDesign:loadLibraryDesign', handleLoadLibraryDesign)
 	ipcMain.handle('ocdDesign:loadSvgCssFiles', handleLoadSvgCssFiles)
+	ipcMain.handle('ocdDesign:exportTerraform', handleExportTerraform)
+	ipcMain.handle('ocdDesign:exportToExcel', handleExportToExcel)
+	ipcMain.handle('ocdDesign:exportToMarkdown', handleExportToMarkdown)
+	ipcMain.handle('ocdDesign:exportToTerraform', handleExportToTerraform)
 	// OCD Configuration
 	ipcMain.handle('ocdConfig:loadConsoleConfig', handleLoadConsoleConfig)
 	ipcMain.handle('ocdConfig:saveConsoleConfig', handleSaveConsoleConfig)
@@ -431,9 +436,9 @@ async function handleSaveDesign(event: any, design: OcdDesign, filename: string,
 			if (!filename || !fs.existsSync(filename) || !fs.statSync(filename).isFile()) {
 				dialog.showSaveDialog(mainWindow, {
 					defaultPath: suggestedFilename,
-					properties: ['openFile', 'createDirectory'],
+					properties: ['createDirectory'],
 					filters: [{name: 'Filetype', extensions: ['okit']}]
-				  }).then(result => {
+				}).then(result => {
 					if (!result.canceled) fs.writeFileSync(result.filePath, JSON.stringify(design, null, 4))
 					resolve({canceled: false, filename: result.canceled ? '' : result.filePath, design: design})
 				}).catch(err => {
@@ -468,9 +473,129 @@ async function handleDiscardConfirmation(event: any) {
 }
 
 async function handleExportTerraform(event: any, design: OcdDesign, directory: string) {
-	// design = typeof design === 'string' ? JSON.parse(design) : design
+	design = typeof design === 'string' ? JSON.parse(design) : design
 	console.debug('Electron Main: handleExportTerraform')
+	return Promise.reject(new Error('Currently Not Implemented'))
+}
+
+async function handleExportToExcel(event: any, design: OcdDesign, suggestedFilename='') {
+	// design = typeof design === 'string' ? JSON.parse(design) : design
+	console.debug('Electron Main: handleExportToExcel')
 	// return new Promise((resolve, reject) => {reject('Currently Not Implemented')})
+	return new Promise((resolve, reject) => {
+		// try {
+			dialog.showSaveDialog(mainWindow, {
+				defaultPath: suggestedFilename,
+				properties: ['createDirectory'],
+				filters: [{name: 'Filetype', extensions: ['xlsx']}],
+				buttonLabel: 'Export'
+			}).then(result => {
+				if (!result.canceled) {
+					const ociResources = design.model.oci.resources
+					const compartments = ociResources.compartment
+					const compartmentName = (id: string): string => compartments.find((c) => c.id === id)?.displayName
+					const workbook = new ExcelJS.Workbook()
+					let styleNumber = 1
+					Object.entries(ociResources).forEach(([k, v]) => {
+						const worksheet = workbook.addWorksheet(OcdUtils.toTitle(k))
+						const resources = v.map((r: OcdResource) => {return {...r, compartmentName: compartmentName(r.compartmentId)}})
+						console.debug('handleExportToExcel:', JSON.stringify(resources, null, 2))
+						const columns = [
+							{header: 'Name', key: 'displayName', width: 20},
+							{header: 'Compartment', key: 'compartmentName', width: 35}
+						]
+						worksheet.columns = columns
+						// worksheet.addRows(resources)
+						const tableColumns: TableColumnProperties[] = [
+							{name: 'Name', filterButton: true},
+							{name: 'Compartment', filterButton: true}
+						]
+						// @ts-ignore
+						const tableRows: any[][] = resources.reduce((a, c) => {return [...a, [c.displayName, c.compartmentName]]}, [])
+						console.debug('handleExportToExcel: Table:', JSON.stringify(tableRows, null, 2))
+						const table: TableProperties = {
+							name: `${k}Table`,
+							ref: 'A1',
+							headerRow: true,
+							totalsRow: false,
+							style: {
+								// @ts-ignore
+								theme: `TableStyleLight${styleNumber}`,
+								showRowStripes: true,
+							},
+							columns: tableColumns,
+							rows: tableRows,
+						}
+						worksheet.addTable(table)
+						styleNumber += 1
+					})
+					workbook.xlsx.writeFile(result.filePath).then(() => {
+						console.log('Workbook saved successfully!')
+						resolve({canceled: false, filename: result.filePath, design: design})
+					}).catch((error) => {
+						console.error('Error saving workbook:', error)
+						reject(new Error(error))
+					})
+					// fs.writeFileSync(result.filePath, JSON.stringify(design, null, 4))
+				} else {
+					resolve({canceled: false, filename: '', design: design})
+				}
+			}).catch(err => {
+				console.error(err)
+				reject(err)
+			})
+		// } catch (err) {
+		// 	reject(err)
+		// }
+	})
+	// return Promise.reject(new Error('Currently Not Implemented'))
+}
+
+async function handleExportToMarkdown(event: any, design: OcdDesign, css: string[]=[], suggestedFilename='') {
+	design = typeof design === 'string' ? JSON.parse(design) : design
+	console.debug('Electron Main: handleExportToMarkdown')
+	return new Promise((resolve, reject) => {
+		dialog.showSaveDialog(mainWindow, {
+			defaultPath: suggestedFilename,
+			properties: ['createDirectory'],
+			filters: [{name: 'Filetype', extensions: ['md']}],
+			buttonLabel: 'Export'
+		}).then(result => {
+			if (!result.canceled) {
+				const exporter = new OcdMarkdownExporter(css)
+				const output = exporter.export(design)
+				fs.writeFileSync(result.filePath, output)
+			}
+			resolve({canceled: false, filename: result.canceled ? '' : result.filePath, design: design})
+		}).catch(err => {
+			console.error(err)
+			reject(new Error(err))
+		})
+	})
+}
+
+async function handleExportToTerraform(event: any, design: OcdDesign, directory: string) {
+	design = typeof design === 'string' ? JSON.parse(design) : design
+	console.debug('Electron Main: handleExportTerraform')
+	return new Promise((resolve, reject) => {
+		dialog.showOpenDialog(mainWindow, {
+			properties: ['openDirectory', 'createDirectory'],
+			defaultPath: directory,
+			buttonLabel: 'Export'
+			}).then(result => {
+			if (!result.canceled) {
+				const exporter = new OcdTerraformExporter()
+				const terraform = exporter.export(design)
+				console.debug('handleExportToTerraform: ', result.filePaths)
+				const directory = result.filePaths[0]
+				Object.entries(terraform).forEach(([k, v]) => fs.writeFileSync(path.join(directory, k), v.join('\n')))
+			}
+			resolve({canceled: result.canceled, filename: result.filePaths[0], design: design})
+		}).catch(err => {
+			console.error(err)
+			reject(new Error(err))
+		})
+	})
 	return Promise.reject(new Error('Currently Not Implemented'))
 }
 

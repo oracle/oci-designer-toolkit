@@ -10,9 +10,9 @@ import OcdConsoleMenuBar from '../components/OcdConsoleMenuBar'
 import { OcdConsoleConfig } from '../components/OcdConsoleConfiguration'
 import { ConsoleHeaderProps, ConsolePageProps, ConsoleToolbarProps, OcdSelectedResource } from '../types/Console'
 import OcdBom from './OcdBom'
-import OcdMarkdown from './OcdMarkdown'
-import OcdTabular from './OcdTabular'
-import OcdTerraform from './OcdTerraform'
+import OcdMarkdown, { OcdMarkdownLeftToolbar } from './OcdMarkdown'
+import OcdTabular, { OcdTabularLeftToolbar } from './OcdTabular'
+import OcdTerraform, { OcdTerraformLeftToolbar } from './OcdTerraform'
 import OcdVariables from './OcdVariables'
 import OcdLibrary from './OcdLibrary'
 import { OcdQueryDialog } from '../components/dialogs/OcdQueryDialog'
@@ -203,7 +203,24 @@ const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument,
     const onEstimateClick = () => {
         console.info('Estimate Clicked')
     }
-    const hideZoomClassName = ocdConsoleConfig.config.displayPage === 'designer' ? '' : 'hidden'
+    let PageLeftToolbar = OcdEmptyLeftRightToolbar
+    let PageRightToolbar = OcdEmptyLeftRightToolbar
+    switch (ocdConsoleConfig.config.displayPage) {
+        case 'designer':
+            PageLeftToolbar = OcdDesignerLeftToolbar
+            PageRightToolbar = OcdDesignerRightToolbar
+            break;
+        case 'markdown':
+            PageLeftToolbar = OcdMarkdownLeftToolbar
+            break;
+        case 'tabular':
+            PageLeftToolbar = OcdTabularLeftToolbar
+            break;
+        case 'terraform':
+            PageLeftToolbar = OcdTerraformLeftToolbar
+            break;
+    }
+    // const hideZoomClassName = ocdConsoleConfig.config.displayPage === 'designer' ? '' : 'hidden'
     const validationResults = OcdValidator.validate(ocdDocument.design)
     const hasErrors = validationResults.filter((v: OcdValidationResult) => v.type === 'error').length > 0
     const hasWarnings = validationResults.filter((v: OcdValidationResult) => v.type === 'warning').length > 0
@@ -218,12 +235,18 @@ const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument,
                         ocdConsoleConfig={ocdConsoleConfig} 
                         setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} 
                         />
-                    {!hideZoomClassName && <OcdDesignerLeftToolbar 
+                    <PageLeftToolbar 
                         ocdConsoleConfig={ocdConsoleConfig} 
                         setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} 
                         ocdDocument={ocdDocument} 
                         setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} 
-                        />}
+                        />
+                    {/* {!hideZoomClassName && <OcdDesignerLeftToolbar 
+                        ocdConsoleConfig={ocdConsoleConfig} 
+                        setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} 
+                        ocdDocument={ocdDocument} 
+                        setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} 
+                        />} */}
                 </div>
             </div>
             <div className='ocd-toolbar-centre'>
@@ -232,12 +255,18 @@ const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument,
             </div>
             <div className='ocd-toolbar-right'>
                 <div>
-                    {!hideZoomClassName && <OcdDesignerRightToolbar 
+                    {/* {!hideZoomClassName && <OcdDesignerRightToolbar 
                         ocdConsoleConfig={ocdConsoleConfig} 
                         setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} 
                         ocdDocument={ocdDocument} 
                         setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} 
-                        />}
+                        />} */}
+                    <PageRightToolbar 
+                        ocdConsoleConfig={ocdConsoleConfig} 
+                        setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} 
+                        ocdDocument={ocdDocument} 
+                        setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} 
+                        />
                     <div className={validateClassName} title={validateTitle} onClick={onValidateClick} aria-hidden></div>
                     {/* <div className='cost-estimate ocd-console-toolbar-icon' onClick={onEstimateClick}></div> */}
                 </div>
@@ -246,23 +275,13 @@ const OcdConsoleToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument,
     )
 }
 
+const OcdEmptyLeftRightToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument}: ConsolePageProps): JSX.Element => {return (<></>)}
+
 const OcdConsoleBody = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument }: ConsolePageProps): JSX.Element => {
     const showQueryDialog = ocdDocument.query
     const showReferenceDataQueryDialog = ocdConsoleConfig.queryReferenceData
     const showExportToResourceManagerDialog = ocdDocument.dialog.resourceManager
     console.debug('OcdConsoleBody: Dialogs: Query', showQueryDialog, 'ReferenceData', showReferenceDataQueryDialog, 'Resource Manager', showExportToResourceManagerDialog)
-    // const DisplayPage = ocdConsoleConfig.config.displayPage === 'bom' ? OcdBom : 
-    //                     ocdConsoleConfig.config.displayPage === 'designer' ? OcdDesigner : 
-    //                     ocdConsoleConfig.config.displayPage === 'documentation' ? OcdDocumentation : 
-    //                     ocdConsoleConfig.config.displayPage === 'markdown' ? OcdMarkdown : 
-    //                     ocdConsoleConfig.config.displayPage === 'tabular' ? OcdTabular : 
-    //                     ocdConsoleConfig.config.displayPage === 'tags' ? OcdCommonTags : 
-    //                     ocdConsoleConfig.config.displayPage === 'terraform' ? OcdTerraform : 
-    //                     ocdConsoleConfig.config.displayPage === 'variables' ? OcdVariables : 
-    //                     ocdConsoleConfig.config.displayPage === 'validation' ? OcdValidation : 
-    //                     ocdConsoleConfig.config.displayPage === 'help' ? OcdHelp : 
-    //                     ocdConsoleConfig.config.displayPage === 'library' ? OcdLibrary : 
-    //                     OcdDesigner
     let DisplayPage = OcdDesigner
     switch (ocdConsoleConfig.config.displayPage) {
         case 'bom':

@@ -192,7 +192,7 @@ export const menuItems: MenuItem[] = [
                 submenu: [
                     {
                         label: 'Markdown',
-                        click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
+                        click: (ocdDocument: OcdDocument, setOcdDocument: Function) => { // TODO: Convert to call to Electron API
                             const saveFile = async (ocdDocument: OcdDocument) => {
                                 try {
                                     const options = {
@@ -222,7 +222,7 @@ export const menuItems: MenuItem[] = [
                     },
                     {
                         label: 'OpenTofu (Terraform)',
-                        click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
+                        click: (ocdDocument: OcdDocument, setOcdDocument: Function) => { // TODO: Convert to call to Electron API
                             const writeTerraformFile = async (dirHandle: FileSystemDirectoryHandle, filename: string, contents: string[]) => {
                                 const fileHandle: FileSystemFileHandle = await dirHandle.getFileHandle(filename, {create: true})
                                 // @ts-ignore 
@@ -256,6 +256,19 @@ export const menuItems: MenuItem[] = [
                     //         setOcdDocument(clone)
                     //     }
                     // },
+                    {
+                        label: 'Excel',
+                        click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
+                            const suggestedFilename = activeFile.name.replaceAll('.okit', '.xlsx')
+                            OcdDesignFacade.exportToExcel(ocdDocument.design, suggestedFilename).then((results) => {
+                                if (!results.canceled) {
+                                    console.debug('Design Exported to Excel')
+                                } else {
+                                    console.debug('Design Exported to Excel Cancelled')
+                                }
+                            }).catch((resp) => {console.warn('Save Design Failed with', resp)})
+                        }
+                    },
                     {
                         label: 'Image',
                         click: undefined,
