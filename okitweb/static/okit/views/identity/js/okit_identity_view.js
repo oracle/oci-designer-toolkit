@@ -36,6 +36,7 @@ class OkitIdentityView extends OkitJsonView {
         const user_div = parent.append('div').attr('class', 'oci-user okit-user')
             .attr('title', `${user.display_name}`)
             .on('click', (event) => {
+                event = d3.event // Temp Work around for v0.67.0 release
                 event.stopPropagation();  // event replaces d3.event
                 $(jqId(PROPERTIES_PANEL)).load("propertysheets/user.html", () => {loadPropertiesSheet(user);})
             });
@@ -53,6 +54,7 @@ class OkitIdentityView extends OkitJsonView {
             .on('click', () => {group ? self.deleteUserFromGroup(user, group) : self.deleteUser(user.id)})
         if (!group) {
             user_div.attr('draggable', 'true').on('dragstart', (event) => {
+                event = d3.event // Temp Work around for v0.67.0 release
                 event.dataTransfer.setData('text/plain', user.id) // event replaces d3.event
             })
         }
@@ -101,6 +103,7 @@ class OkitIdentityView extends OkitJsonView {
             .on('click', () => {self.deleteUserGroup(group.id)})
         group_div.on('dragover', (event) => {event.preventDefault()})
             .on('drop', (event) => { // event replaces d3.event
+                event = d3.event // Temp Work around for v0.67.0 release
                 const user_id = event.dataTransfer.getData('text/plain') // event replaces d3.event
                 if (!group.user_ids.includes(user_id)) group.user_ids.push(user_id)
                 self.draw()

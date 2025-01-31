@@ -345,6 +345,7 @@ function displaySaveAsDialog(title, callback, root_dir='templates/user', placeho
         .attr('type', 'text')
         .attr('placeholder', placeholder)
         .on('keydown', (event) => {
+            event = d3.event // Temp Work around for v0.67.0 release
             if (event.keyCode == 220) { // event replaces d3.event
                 event.preventDefault()
             } else if (event.keyCode == 32) {
@@ -392,6 +393,7 @@ function displaySaveAsDialog(title, callback, root_dir='templates/user', placeho
         .attr('readonly', true)
         .attr('placeholder', '<Directory Path>')
         .on('keydown', (event) => {
+            event = d3.event // Temp Work around for v0.67.0 release
             if (event.keyCode == 220) { // event replaces d3.event
                 event.preventDefault()
             } else if (event.keyCode == 32) {
@@ -768,6 +770,7 @@ function loadGlobalTags() {
             tr.append('div').attr('class', 'td delete-tag action-button-background delete').on('click', (event) => {
                 delete okitJsonModel.freeform_tags[key];
                 loadGlobalTags()
+                event = d3.event // Temp Work around for v0.67.0 release
                 event.stopPropagation() // event replaces d3.event
             })
         }
@@ -784,6 +787,7 @@ function loadGlobalTags() {
                     delete okitJsonModel.defined_tags[namespace][key];
                     if (Object.keys(okitJsonModel.defined_tags[namespace]).length === 0) {delete okitJsonModel.defined_tags[namespace];}
                     loadGlobalTags()
+                    event = d3.event // Temp Work around for v0.67.0 release
                     event.stopPropagation() // event replaces d3.event
                 })
             }

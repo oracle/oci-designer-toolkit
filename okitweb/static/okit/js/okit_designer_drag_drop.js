@@ -65,10 +65,12 @@ function dragFragmentStart(evt, artefact, title) {
 }
 
 function dragEnter(event) {
+    event = d3.event // Temp Work around for v0.67.0 release
     dragEnterOverLeave(event); // event replaces d3.event
 }
 
 function dragOver(event) {
+    event = d3.event // Temp Work around for v0.67.0 release
     if (event.preventDefault) { // event replaces d3.event
         event.preventDefault(); // Necessary. Allows us to drop.
     }
@@ -89,6 +91,7 @@ function dragEnterOverLeave(event) {
 }
 
 function dragDrop(event) {
+    event = d3.event // Temp Work around for v0.67.0 release
     if (event.stopPropagation) { // event replaces d3.event
         event.stopPropagation(); // Stops some browsers from redirecting.
     }
@@ -128,6 +131,7 @@ function dragEnd(event) {
  */
 
 function handleConnectorDrag(event) {
+    event = d3.event // Temp Work around for v0.67.0 release
     if (connectorStartElement) {
         let mousePos = getMousePosition(event); // event replaces d3.event
         d3.select("#Connector")
@@ -142,6 +146,7 @@ const right_click = 3;
 
 function handleConnectorDragStart(event) {
     console.info('Connector Drag Start');
+    event = d3.event // Temp Work around for v0.67.0 release
     if (event.which == left_click) { // event replaces d3.event
         let thisid = d3.select(this).attr('id');
         console.info('This Id : ' + thisid);
@@ -258,6 +263,7 @@ function handleContextMenu(event) {
     let okit_id = d3.select(this).attr('data-okit-id');
     let artefact = d3.select(this).attr('data-type');
     console.info('Right Click on ' + thisid);
+    event = d3.event // Temp Work around for v0.67.0 release
     event.preventDefault(); // event replaces d3.event
     event.stopPropagation();
     let element = document.getElementById("context-menu");
