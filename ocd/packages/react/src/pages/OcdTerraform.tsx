@@ -6,6 +6,7 @@
 import { useState } from "react"
 import { ConsolePageProps } from "../types/Console"
 import { OcdTerraformExporter } from "@ocd/export"
+import { OcdDesignFacade } from "../facade/OcdDesignFacade"
 
 const OcdTerraform = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument}: ConsolePageProps): JSX.Element => {
     const [selected, setSelected] = useState('oci_provider.tf')
@@ -29,6 +30,31 @@ const OcdTerraform = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setO
             </div>
             <div id='selected_terraform_file' className="ocd-selected-terraform-content"><pre>{selectedTerraform}</pre></div>
         </div>
+    )
+}
+
+export const OcdTerraformLeftToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument}: ConsolePageProps): JSX.Element => {
+    // const {ocdConsoleConfig, setOcdConsoleConfig} = useContext(ConsoleConfigContext)
+    const onClickTerraform = () => {
+        console.debug('OcdTerraform: Export to OpenTofu (Terraform)')
+        const design = ocdDocument.design
+        OcdDesignFacade.exportToTerraform(design, `design.xlsx`).then((results) => {
+            console.debug('Exported to Terraform')
+        }).catch((error) => {
+            console.warn('Export To Terraform Failed with', error)
+            alert(error)
+        })
+    }
+    return (
+        <div className='ocd-designer-toolbar'>
+            <div className='ocd-console-toolbar-icon opentofu' title='Export to OpenTofu (Terraform)' onClick={onClickTerraform} aria-hidden></div>
+        </div>
+    )
+}
+
+export const OcdTerraformRightToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument}: ConsolePageProps): JSX.Element => {
+    return (
+        <div className='ocd-designer-toolbar'></div>
     )
 }
 

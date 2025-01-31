@@ -35,7 +35,11 @@ class OkitIdentityView extends OkitJsonView {
         const self = this
         const user_div = parent.append('div').attr('class', 'oci-user okit-user')
             .attr('title', `${user.display_name}`)
-            .on('click', (e) => {d3.event.stopPropagation(); $(jqId(PROPERTIES_PANEL)).load("propertysheets/user.html", () => {loadPropertiesSheet(user);})});
+            .on('click', (event) => {
+                event = d3.event // Temp Work around for v0.67.0 release
+                event.stopPropagation();  // event replaces d3.event
+                $(jqId(PROPERTIES_PANEL)).load("propertysheets/user.html", () => {loadPropertiesSheet(user);})
+            });
         const details_div = user_div.append('div').attr('class', 'okit-resource-details')
         details_div.append('div').attr('class', 'okit-resource-title').text('User')
         details_div.append('div').append('input').attr('class', 'okit-resource-display-name').attr('tabindex', -1)
@@ -49,10 +53,10 @@ class OkitIdentityView extends OkitJsonView {
         user_div.append('div').attr('class', 'cancel action-button-background cancel-overlay')
             .on('click', () => {group ? self.deleteUserFromGroup(user, group) : self.deleteUser(user.id)})
         if (!group) {
-            user_div.attr('draggable', 'true').on('dragstart', () => {
-                d3.event.dataTransfer.setData('text/plain', user.id)
+            user_div.attr('draggable', 'true').on('dragstart', (event) => {
+                event = d3.event // Temp Work around for v0.67.0 release
+                event.dataTransfer.setData('text/plain', user.id) // event replaces d3.event
             })
-            // .on('dragend', () => {console.info('Drag End', d3.event)})
         }
     }
 
@@ -97,12 +101,13 @@ class OkitIdentityView extends OkitJsonView {
         group.user_ids.forEach((id) => self.addUserToPanel(group_div, self.model.getUser(id), group))
         group_div.append('div').attr('class', 'cancel action-button-background cancel-overlay')
             .on('click', () => {self.deleteUserGroup(group.id)})
-        group_div.on('dragover', () => {d3.event.preventDefault()}).on('drop', () => {
-            const user_id = d3.event.dataTransfer.getData('text/plain')
-            if (!group.user_ids.includes(user_id)) group.user_ids.push(user_id)
-            // if (!group.user_ids.includes(user_id)) group.user_ids = [...group.user_ids, user_id]
-            self.draw()
-        })
+        group_div.on('dragover', (event) => {event.preventDefault()})
+            .on('drop', (event) => { // event replaces d3.event
+                event = d3.event // Temp Work around for v0.67.0 release
+                const user_id = event.dataTransfer.getData('text/plain') // event replaces d3.event
+                if (!group.user_ids.includes(user_id)) group.user_ids.push(user_id)
+                self.draw()
+            })
     }
 
     updateGroupDisplayName(existing, updated) {

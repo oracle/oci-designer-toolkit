@@ -38,3 +38,10 @@ export type OcdDragResourceContext = {
     setDragResource: (c: OcdDragResource) => void
 }
 
+export type OcdDialogs = 'queryDialog' | 'resourceManagerDialog' | 'referenceDataQueryDialog' | ''
+
+export type OcdDialogContext = {
+    displayDialog: OcdDialogs
+    setDisplayDialog: (c: OcdDialogs) => void
+}
+
