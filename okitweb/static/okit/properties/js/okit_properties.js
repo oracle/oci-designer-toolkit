@@ -267,6 +267,7 @@ class OkitResourceProperties {
             tr.append('div').attr('class', 'td delete-tag action-button-background delete').on('click', (event) => {
                 delete this.resource.freeform_tags[key];
                 self.loadFreeformTags()
+                event = d3.event // Temp Work around for v0.67.0 release
                 event.stopPropagation() // event replaces d3.event
             })
         }
@@ -285,6 +286,7 @@ class OkitResourceProperties {
                     delete this.resource.defined_tags[namespace][key];
                     if (Object.keys(this.resource.defined_tags[namespace]).length === 0) {delete this.resource.defined_tags[namespace];}
                     self.loadDefinedTags()
+                    event = d3.event // Temp Work around for v0.67.0 release
                     event.stopPropagation() // event replaces d3.event
                 })
             }

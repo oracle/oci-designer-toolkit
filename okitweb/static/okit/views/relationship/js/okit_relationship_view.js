@@ -68,9 +68,10 @@ class OkitRelationshipJsonView extends OkitJsonView {
                 const resource_div = this.selection_div.append('div')
                 const cb = resource_div.append('input').attr('type', 'checkbox')
                     .attr('id', `${k}_relationship_cb`)
-                cb.on('input', (event, d) => { // event replaces d3.event
-                    const n = cb.nodes()
-                    const i = 0 // n.indexOf(this)
+                // cb.on('input', (event, d) => { // event replaces d3.event
+                cb.on('input', (d, i, n) => { // event replaces d3.event
+                    // const n = cb.nodes()
+                    // const i = 0 // n.indexOf(event.currentTarget)
                     console.debug('Draw Resource Selection (d)', d)
                     console.debug('Draw Resource Selection (n)', n)
                     console.debug('Draw Resource Selection (i)', i)
@@ -101,7 +102,10 @@ class OkitRelationshipJsonView extends OkitJsonView {
             .attr("id", 'relationship-svg')
             .attr("width", '100%')
             .attr("height", "100%")
-            .call(d3.zoom().scaleExtent([0.1, 3]).on("zoom", function (event) {d3.select("#relationship-svg g").attr("transform", event.transform)})) // event replaces d3.event
+            .call(d3.zoom().scaleExtent([0.1, 3]).on("zoom", function (event) {
+                event = d3.event // Temp Work around for v0.67.0 release
+                d3.select("#relationship-svg g").attr("transform", event.transform)
+            })) // event replaces d3.event
             .append("g")
             // .attr('transform', function(d) {return 'translate(' + [width / 2, height / 2] + ')'});
 
@@ -167,18 +171,24 @@ class OkitRelationshipJsonView extends OkitJsonView {
           .attr("transform", function(d) {return "translate(" + d.x + "," + d.y + ")";});
     }
 
-    dragstarted(event, d) {
+    // dragstarted(event, d) {
+    dragstarted(d) {
+        let event = d3.event // Temp Work around for v0.67.0 release
         if (!event.active) relationship_simulation.alphaTarget(0.3).restart(); // event replaces d3.event
         d.fx = d.x;
         d.fy = d.y;
     }
 
-    dragged(event, d) {
+    // dragged(event, d) {
+    dragged(d) {
+        let event = d3.event // Temp Work around for v0.67.0 release
         d.fx = event.x; // event replaces d3.event
         d.fy = event.y;
     }
 
-    dragended(event, d) {
+    // dragended(event, d) {
+    dragended(d) {
+        let event = d3.event // Temp Work around for v0.67.0 release
         if (!event.active) relationship_simulation.alphaTarget(0); // event replaces d3.event
         d.fx = null;
         d.fy = null;

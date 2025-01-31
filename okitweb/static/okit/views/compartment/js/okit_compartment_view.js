@@ -119,7 +119,10 @@ class OkitCompartmentJsonView extends OkitJsonView {
         canvas_div.selectAll('*').remove();
         // Zoom & Pan SVG
         // Zoom function associated with Canvas SVG but acts on the first <g> tag
-        const zoom = d3.zoom().scaleExtent([0.1, 3]).on("zoom", (event) => transform_group.attr("transform", event.transform)); // event replaces d3.event
+        const zoom = d3.zoom().scaleExtent([0.1, 3]).on("zoom", (event) => {
+            event = d3.event // Temp Work around for v0.67.0 release
+            transform_group.attr("transform", event.transform)
+        }); // event replaces d3.event
         const canvas_root_svg = canvas_div.append("svg")
         .attr("id", 'canvas_root_svg')
         .attr("width", "100%")
