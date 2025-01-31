@@ -1,6 +1,14 @@
 # Release Notes
 
 
+## Version 0.67.0
+**Release Date**: 31st January 2025
+### Features
+1. OKIT-Web: Update D3 library to V7
+2. OKIT-Web: Update JQuery to V3.7.1
+### Bug Fixes
+
+
 ## Version 0.66.1
 **Release Date**: 13th December 2024
 ### Features

@@ -2280,6 +2280,11 @@ table {
     row-gap: 5px;
 }
 
+.ocd-dialog-body .ocd-radio-buttons label {
+    font-family: var(--dialog-input-font-family);
+    font-size: var(--dialog-input-font-size);
+}
+
 .ocd-dialog-footer {
     background-color: var(--dialog-footer-background-colour);
     color: var(--dialog-footer-colour);
@@ -2306,6 +2311,10 @@ table {
     overflow-x: hidden;
 }
 
+.ocd-export-compartment-picker {
+    height: 300px;
+}
+
 .ocd-compartment-picker ul {
     margin: 0;
     padding: 0;
@@ -2313,10 +2322,6 @@ table {
     align-items: center;
     list-style: none;
     text-decoration: none;    
-}
-
-.ocd-compartment-picker li > ul {
-    padding-left: 1em;
 }
 
 .ocd-compartment-picker li > label,
@@ -2342,6 +2347,8 @@ table {
     display: inline-block;
     font-family: var(--dialog-input-font-family);
     font-size: var(--dialog-input-font-size);
+    height: 1.5em;
+    vertical-align: middle;
 }
 
 

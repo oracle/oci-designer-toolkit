@@ -706,15 +706,17 @@ class OkitArtefactView {
 
     addClickEvent(svg) {
         const self = this;
-        svg.on("click", function() {
-            d3.event.preventDefault();
-            d3.event.stopPropagation();
+        svg.on("click", function(event) {
+            event = d3.event // Temp Work around for v0.67.0 release
+            event.preventDefault(); // event replaces d3.event
+            event.stopPropagation();
             self.loadSlidePanels();
             $(jqId("context-menu")).addClass("hidden");
         });
-        svg.on("dblclick", () => {
-            d3.event.preventDefault();
-            d3.event.stopPropagation();
+        svg.on("dblclick", (event) => {
+            event = d3.event // Temp Work around for v0.67.0 release
+            event.preventDefault(); // event replaces d3.event
+            event.stopPropagation();
             // self.loadSlidePanels();
             // $(jqId("context-menu")).addClass("hidden");
             // const open = $('#toggle_properties_button').hasClass('okit-bar-panel-displayed');
@@ -728,16 +730,18 @@ class OkitArtefactView {
     addMouseOverEvents(svg) {
         const self = this;
         const display_mouseover_links = okitSettings.show_connections_on_mouseover && !okitSettings.show_all_connections && !this.resource.show_connections
-        svg.on('mouseenter', () => {
-            d3.event.stopPropagation();
-            d3.event.preventDefault();
+        svg.on('mouseenter', (event) => {
+            event = d3.event // Temp Work around for v0.67.0 release
+            event.stopPropagation(); // event replaces d3.event
+            event.preventDefault();
             if (okitSettings.highlight_association) {self.addAssociationHighlighting();}
             if (display_mouseover_links) {this.getLinks().forEach((id) => this.drawConnection(this.id, id))}
             $(jqId(self.id)).addClass('highlight-rect');
         })
-        svg.on('mouseleave', () => {
-            d3.event.stopPropagation();
-            d3.event.preventDefault();
+        svg.on('mouseleave', (event) => {
+            event = d3.event // Temp Work around for v0.67.0 release
+            event.stopPropagation(); // event replaces d3.event
+            event.preventDefault();
             if (okitSettings.highlight_association) {self.removeAssociationHighlighting();}
             if (display_mouseover_links) {this.getLinks().forEach((id) => this.removeConnection(this.id, id))}
             $(jqId(self.id)).removeClass('highlight-rect');
@@ -770,11 +774,12 @@ class OkitArtefactView {
 
     addContextMenu(svg) {
         const self = this;
-        svg.on("contextmenu", function () {
-            d3.event.preventDefault();
-            d3.event.stopPropagation();
+        svg.on("contextmenu", function (event) {
+            event = d3.event // Temp Work around for v0.67.0 release
+            event.preventDefault(); // event replaces d3.event
+            event.stopPropagation();
             const canvas_position = $(jqId("canvas-div")).offset();
-            const position = {top: d3.event.pageY - canvas_position.top, left: d3.event.pageX - 5};
+            const position = {top: event.pageY - canvas_position.top, left: event.pageX - 5};
             $(jqId("context-menu")).empty();
             $(jqId("context-menu")).css(position);
             const contextmenu = d3.select(d3Id("context-menu"));

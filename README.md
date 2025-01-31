@@ -1,9 +1,9 @@
 [![License: UPL](https://img.shields.io/badge/license-UPL-green)](https://img.shields.io/badge/license-UPL-green) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=oracle_oci-designer-toolkit&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=oracle_oci-designer-toolkit)
-# Oracle Cloud Infrastructure Designer and Visualisation Toolkit [0.66.1](CHANGELOG.md#version-0.66.1)
+# Oracle Cloud Infrastructure Designer and Visualisation Toolkit [0.67.0](CHANGELOG.md#version-0.67.0)
 
-Full Release Details Can Found [0.66.1 Release](https://github.com/oracle/oci-designer-toolkit/releases/tag/v0.66.1).
+Full Release Details Can Found [0.67.0 Release](https://github.com/oracle/oci-designer-toolkit/releases/tag/v0.67.0).
 
-**OKIT - Open Cloud Designer** Public Beta is now Available see [0.66.1 Release](https://github.com/oracle/oci-designer-toolkit/releases/tag/v0.66.1) for details.
+**OKIT - Open Cloud Designer** Public Beta is now Available see [0.67.0 Release](https://github.com/oracle/oci-designer-toolkit/releases/tag/v0.67.0) for details.
 _____
 
 OCI designer and visualisation toolKIT (OKIT) is a browser based tool that allows the user to [design](https://www.ateam-oracle.com/introduction-to-okit-the-oci-designer-toolkit), 
@@ -38,7 +38,7 @@ OCI environments through a graphical web based interface.
 
 ## Changes
 
-[Changes for the current release (0.66.1) are documented here.](CHANGELOG.md#version-0.66.1)
+[Changes for the current release (0.67.0) are documented here.](CHANGELOG.md#version-0.67.0)
 
 
 ## Releases
@@ -61,15 +61,15 @@ Detailed OKIT Installation steps can be found in the [OCI Designer Toolkit Insta
 3. [Oracle Linux](documentation/Installation.md#oracle-linux-ol8)
 ### OKIT-Ocd
 OKIT-Ocd is the next iteration of OKIT and is currently available as a Beta release. The native installables can be found in the Assets section 
-on the [0.66.1 Release](https://github.com/oracle/oci-designer-toolkit/releases/tag/v0.66.1).
+on the [0.67.0 Release](https://github.com/oracle/oci-designer-toolkit/releases/tag/v0.67.0).
 1. MacOS
-    1. [Arm dmg](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.66.1/ocd-0.2.6-arm64.dmg)
-    2. [x64 dmg](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.66.1/ocd-0.2.6-x64.dmg)
+    1. [Arm dmg](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.67.0/ocd-0.2.7-arm64.dmg)
+    2. [x64 dmg](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.67.0/ocd-0.2.7-x64.dmg)
 2. Windows
-    1. [Setup](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.66.1/ocd-0.2.6-Setup.exe)
+    1. [Setup](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.67.0/ocd-0.2.7-Setup.exe)
 3. Linux
-    1. [rpm](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.66.1/ocd-0.2.6-1.x86_64.rpm)
-    2. [deb](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.66.1/ocd_0.2.6_amd64.deb)
+    1. [rpm](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.67.0/ocd-0.2.7-1.x86_64.rpm)
+    2. [deb](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.67.0/ocd_0.2.7_amd64.deb)
 
 
 

@@ -8,6 +8,11 @@ import { ConsolePageProps } from "../types/Console"
 import Markdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 import remarkGfm from 'remark-gfm'
+import { OcdDesignFacade } from "../facade/OcdDesignFacade"
+import { svgCssData } from '../data/OcdSvgCssData'
+
+const svgThemeCss = svgCssData['oci-theme.css']
+const svgSvgCss = svgCssData['ocd-svg.css']
 
 const OcdMarkdown = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument}: ConsolePageProps): JSX.Element => {
     const markdownExporter = new OcdMarkdownExporter([])
@@ -16,6 +21,31 @@ const OcdMarkdown = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOc
         <div className={`ocd-markdown-view`}>
             {<div className='ocd-documentation-preview'><Markdown rehypePlugins={[rehypeRaw, remarkGfm]}>{markdown}</Markdown></div>}
         </div>
+    )
+}
+
+export const OcdMarkdownLeftToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument}: ConsolePageProps): JSX.Element => {
+    // const {ocdConsoleConfig, setOcdConsoleConfig} = useContext(ConsoleConfigContext)
+    const onClickMarkdown = () => {
+        console.debug('OcdMarkdown: Export to Markdown')
+        const design = ocdDocument.design
+        OcdDesignFacade.exportToMarkdown(design, [svgThemeCss, svgSvgCss], `design.md`).then((results) => {
+            console.debug('Exported to Markdown')
+        }).catch((error) => {
+            console.warn('Export To Markdown Failed with', error)
+            alert(error)
+        })
+    }
+    return (
+        <div className='ocd-designer-toolbar'>
+            <div className='ocd-console-toolbar-icon markdown' title='Export to Markdown' onClick={onClickMarkdown} aria-hidden></div>
+        </div>
+    )
+}
+
+export const OcdTerraformRightToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument}: ConsolePageProps): JSX.Element => {
+    return (
+        <div className='ocd-designer-toolbar'></div>
     )
 }
 

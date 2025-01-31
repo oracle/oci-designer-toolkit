@@ -23,6 +23,7 @@ export class OcdDocument {
     design: OcdDesign
     selectedResource: OcdSelectedResource
     dragResource: OcdDragResource
+    dialog: Record<string, boolean>
     constructor(design?: string | OcdDesign, resource?: OcdSelectedResource, dragResource?: OcdDragResource) {
         if (typeof design === 'string' && design.length > 0) this.design = JSON.parse(design)
         else if (design instanceof Object) this.design = design
@@ -30,6 +31,10 @@ export class OcdDocument {
         this.selectedResource = resource || OcdDocument.newSelectedResource()
         this.dragResource = dragResource || OcdDocument.newDragResource()
         this.query = false
+        this.dialog = {
+            resourceManager: false,
+            query: false
+        }
     }
 
     static readonly new = () => new OcdDocument()

@@ -21,9 +21,6 @@ export namespace OcdDesignFacade {
     export const discardConfirmation = (): Promise<any> => {
         return window.ocdAPI ? window.ocdAPI.discardConfirmation() : OcdDesignerBrowserActions.discardConfirmation()
     }
-    export const exportTerraform = (design: OcdDesign, directory: string): Promise<any> => {
-        return window.ocdAPI ? window.ocdAPI.exportTerraform(design, directory) : Promise.reject(new Error('Currently Not Implemented'))
-    }
     export const loadLibraryIndex = (): Promise<any> => {
         return window.ocdAPI ? window.ocdAPI.loadLibraryIndex() : Promise.reject(new Error('Currently Not Implemented'))
     }
@@ -32,5 +29,17 @@ export namespace OcdDesignFacade {
     }
     export const loadSvgCssFiles = (): Promise<any> => {
         return window.ocdAPI ? window.ocdAPI.loadSvgCssFiles() : Promise.reject(new Error('Currently Not Implemented'))
+    }
+    export const exportTerraform = (design: OcdDesign, directory: string): Promise<any> => {
+        return window.ocdAPI ? window.ocdAPI.exportTerraform(design, directory) : Promise.reject(new Error('Currently Not Implemented'))
+    }
+    export const exportToExcel = (design: OcdDesign, suggestedFilename: string = ''): Promise<any> => {
+        return window.ocdAPI ? window.ocdAPI.exportToExcel(design, suggestedFilename) : Promise.reject(new Error('Currently Not Implemented'))
+    }
+    export const exportToMarkdown = (design: OcdDesign, css: string[], suggestedFilename: string = ''): Promise<any> => {
+        return window.ocdAPI ? window.ocdAPI.exportToMarkdown(design, css, suggestedFilename) : Promise.reject(new Error('Currently Not Implemented'))
+    }
+    export const exportToTerraform = (design: OcdDesign, directory: string): Promise<any> => {
+        return window.ocdAPI ? window.ocdAPI.exportToTerraform(design, directory) : Promise.reject(new Error('Currently Not Implemented'))
     }
 }
