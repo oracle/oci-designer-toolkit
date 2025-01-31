@@ -11,11 +11,10 @@ import fs from 'fs'
 import ExcelJS, { TableColumnProperties, TableProperties } from 'exceljs'
 import common from 'oci-common'
 import { OciQuery, OciReferenceDataQuery, OciResourceManagerQuery } from '@ocd/query'
-import { OcdDesign, OcdResource } from '@ocd/model'
+import { OcdDesign, OcdResource, OciModelResources } from '@ocd/model'
 import { OcdCache, OcdConsoleConfiguration } from '@ocd/react'
 import { OcdUtils } from '@ocd/core'
 import { OcdMarkdownExporter, OcdTerraformExporter } from '@ocd/export'
-import { OciModelResources } from '@ocd/model'
 
 app.commandLine.appendSwitch('ignore-certificate-errors') // Temporary work around for not being able to add additional certificates
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0' // Temporary work around for not being able to add additional certificates
