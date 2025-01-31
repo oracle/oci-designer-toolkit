@@ -346,9 +346,7 @@ function displaySaveAsDialog(title, callback, root_dir='templates/user', placeho
         .attr('placeholder', placeholder)
         .on('keydown', (event) => {
             event = d3.event // Temp Work around for v0.67.0 release
-            if (event.keyCode == 220) { // event replaces d3.event
-                event.preventDefault()
-            } else if (event.keyCode == 32) {
+            if (event.keyCode == 220 || event.keyCode == 32) { // event replaces d3.event
                 event.preventDefault()
             }
         })
@@ -394,9 +392,7 @@ function displaySaveAsDialog(title, callback, root_dir='templates/user', placeho
         .attr('placeholder', '<Directory Path>')
         .on('keydown', (event) => {
             event = d3.event // Temp Work around for v0.67.0 release
-            if (event.keyCode == 220) { // event replaces d3.event
-                event.preventDefault()
-            } else if (event.keyCode == 32) {
+            if (event.keyCode == 220 || event.keyCode == 32) { // event replaces d3.event
                 event.preventDefault()
             }
         })
