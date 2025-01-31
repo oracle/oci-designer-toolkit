@@ -6,9 +6,9 @@
 import { useState } from "react"
 import { ConsolePageProps } from "../types/Console"
 import { OcdUtils } from "@ocd/core"
-import { OciResource } from "@ocd/model"
 import { OciDefault } from "../components/tabular/provider/oci/OciTabularContents"
 import * as ociTabularResources from '../components/tabular/provider/oci/resources'
+import { OcdDesignFacade } from "../facade/OcdDesignFacade"
 
 const OcdTabular = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument}: ConsolePageProps): JSX.Element => {
     const [selected, setSelected] = useState('compartment')
@@ -43,6 +43,40 @@ const OcdTabular = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcd
                 <ResourceTabularContents ocdDocument={ocdDocument} ociResources={ociResources} selected={selected} key={`${selected}-tabular-contents`}/>
             </div>
         </div>
+    )
+}
+
+export interface ExcelResource {
+    sheetName: string
+    resourceName: string
+    displayColumns: string[]
+}
+
+export const OcdTabularLeftToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument}: ConsolePageProps): JSX.Element => {
+    // const {ocdConsoleConfig, setOcdConsoleConfig} = useContext(ConsoleConfigContext)
+    const onClickExcel = () => {
+        console.debug('OcdTabular: Export to Excel')
+        const design = ocdDocument.design
+        const displayColumns = ocdConsoleConfig.config.displayColumns || {}
+        console.debug('OcdTabular: Export to Excel - design', design)
+        console.debug('OcdTabular: Export to Excel - displayColumns', displayColumns)
+        OcdDesignFacade.exportToExcel(design, `design.xlsx`).then((results) => {
+            console.debug('Exported to Excel')
+        }).catch((error) => {
+            console.warn('Export To Excel Failed with', error)
+            alert(error)
+        })
+    }
+    return (
+        <div className='ocd-designer-toolbar'>
+            <div className='ocd-console-toolbar-icon excel' title='Export to Excel' onClick={onClickExcel} aria-hidden></div>
+        </div>
+    )
+}
+
+export const OcdTabularRightToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument}: ConsolePageProps): JSX.Element => {
+    return (
+        <div className='ocd-designer-toolbar'></div>
     )
 }
 

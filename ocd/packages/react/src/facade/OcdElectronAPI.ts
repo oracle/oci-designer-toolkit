@@ -26,10 +26,13 @@ export interface OcdElectronAPI {
     loadDesign: (filename: string) => Promise<void>
     saveDesign: (design: OcdDesign | string, filename: string, suggestedFilename: string | undefined) => Promise<void>
     discardConfirmation: () => Promise<void>
-    exportTerraform: (design: OcdDesign | string, directory: string) => Promise<void>
     loadLibraryIndex: () => Promise<void>
     loadLibraryDesign: (section: string, filename: string) => Promise<void>
     loadSvgCssFiles: () => Promise<void>
+    exportTerraform: (design: OcdDesign | string, directory: string) => Promise<void>
+    exportToExcel: (design: OcdDesign | string, suggestedFilename: string) => Promise<void>
+    exportToMarkdown: (design: OcdDesign | string, css: string[], suggestedFilename: string) => Promise<void>
+    exportToTerraform: (design: OcdDesign | string, directory: string) => Promise<void>
 	// OCD Configuration
     loadConsoleConfig: () => Promise<void>
     saveConsoleConfig: (config: OcdConsoleConfiguration) => Promise<void>

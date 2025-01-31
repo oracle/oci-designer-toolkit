@@ -8,6 +8,7 @@ import { OciTabularContentsProps, OciTabularHeaderProps, OciTabularResourceProps
 import { useContext, useState } from "react"
 import { OcdUtils } from "@ocd/core"
 import { ConsoleConfigContext } from "../../../../pages/OcdConsole"
+import { OcdConsoleConfig } from "../../../OcdConsoleConfiguration"
 
 export const OciDefault = ({ ocdDocument, ociResources, selected }: OciTabularResourceProps): JSX.Element => {
     console.debug('OciTabularContents: OciDefault')
@@ -24,8 +25,10 @@ export const OciDefault = ({ ocdDocument, ociResources, selected }: OciTabularRe
 }
 
 export const OcdTabularContents = ({ ocdDocument, ociResources, selected, columnTitles, resourceElements }: OciTabularContentsProps): JSX.Element => {
-    const {ocdConsoleConfig, setOcdConsoleConfig} = useContext(ConsoleConfigContext)
-    const [displayColumns, setDisplayColumns] = useState(ocdConsoleConfig.config.displayColumns ? ocdConsoleConfig.config.displayColumns[selected] ? ocdConsoleConfig.config.displayColumns[selected] : columnTitles : columnTitles)
+    const {ocdConsoleConfig} = useContext(ConsoleConfigContext)
+    const configDisplayColumns = ocdConsoleConfig.config.displayColumns || {}
+    const [displayColumns, setDisplayColumns] = useState(configDisplayColumns[selected] ? configDisplayColumns[selected] : columnTitles)
+    // const [displayColumns, setDisplayColumns] = useState(ocdConsoleConfig.config.displayColumns ? ocdConsoleConfig.config.displayColumns[selected] ? ocdConsoleConfig.config.displayColumns[selected] : columnTitles : columnTitles)
     const [sortColumn, setSortColumn] = useState('')
     const [sortAscending, setSortAscending] = useState(true)
     const onSortClick = (element: string) => {
@@ -104,7 +107,7 @@ export const OcdTabularHeader = ({columnTitles, ociResources, resourceElements, 
         if (!ocdConsoleConfig.config.displayColumns) ocdConsoleConfig.config.displayColumns = {}
         ocdConsoleConfig.config.displayColumns[selected] = newDisplayColumns
         setDisplayColumns(newDisplayColumns)
-        // setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+        setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
     }
     console.debug('OcdTabularHeader: Selected', selected, displayColumns)
     const sortHeaderClass = (name: string): string => {

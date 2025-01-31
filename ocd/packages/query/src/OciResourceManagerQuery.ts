@@ -3,9 +3,7 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import { common, resourcemanager } from "oci-sdk"
-import { OciResource } from "@ocd/model"
-import { OcdUtils } from "@ocd/core"
+import { resourcemanager } from "oci-sdk"
 import { OciCommonQuery } from './OciQueryCommon.js'
 
 export class OciResourceManagerQuery extends OciCommonQuery {
@@ -33,7 +31,7 @@ export class OciResourceManagerQuery extends OciCommonQuery {
                 resolve(resourceManagerData)
             }).catch((reason) => {
                 console.error(reason)
-                reject(reason)
+                reject(new Error(reason))
             })
         })
     }
@@ -49,7 +47,7 @@ export class OciResourceManagerQuery extends OciCommonQuery {
                 resolve(resources)
             }).catch((reason) => {
                 console.error('OciResourceManagerQuery: listStacks:', reason)
-                reject(reason)
+                reject(new Error(reason))
             })
         })
     }

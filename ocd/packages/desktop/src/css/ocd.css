@@ -2324,10 +2324,6 @@ table {
     text-decoration: none;    
 }
 
-/* .ocd-compartment-picker li > ul {
-    padding-left: 1em;
-} */
-
 .ocd-compartment-picker li > label,
 .ocd-compartment-picker li > span {
     font-family: var(--dialog-input-font-family);
