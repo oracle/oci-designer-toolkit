@@ -6,10 +6,11 @@ ____
 Welcome to the January 2025 release of OKIT. This release updates a number of embedded JavaScript libraries to their latest release..
 
 ## OKIT (Web) Features
-1. OKIT-Web: Update D3 library to V7
-2. OKIT-Web: Update JQuery to V3.7.1
+1. OKIT-Web: Update JQuery to V3.7.1
 
 ## OKIT - Open Cloud Designer
+1. Add export buttons to Tabular, Terraform and Markdown views
+2. Add export to Excel (Simple)
 
 ### Beta Overview
 

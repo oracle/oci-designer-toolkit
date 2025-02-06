@@ -14,7 +14,7 @@ import { OciQuery, OciReferenceDataQuery, OciResourceManagerQuery } from '@ocd/q
 import { OcdDesign, OcdResource, OciModelResources } from '@ocd/model'
 import { OcdCache, OcdConsoleConfiguration } from '@ocd/react'
 import { OcdUtils } from '@ocd/core'
-import { OcdMarkdownExporter, OcdTerraformExporter } from '@ocd/export'
+import { OcdExcelExporter, OcdMarkdownExporter, OcdTerraformExporter } from '@ocd/export'
 
 app.commandLine.appendSwitch('ignore-certificate-errors') // Temporary work around for not being able to add additional certificates
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0' // Temporary work around for not being able to add additional certificates
@@ -428,8 +428,8 @@ async function handleLoadDesign(event: any, filename: string) {
 	})
 }
 
-async function handleSaveDesign(event: any, design: OcdDesign, filename: string, suggestedFilename='') {
-	// design = typeof design === 'string' ? JSON.parse(design) : design
+async function handleSaveDesign(event: any, design: OcdDesign | string, filename: string, suggestedFilename='') {
+	design = typeof design === 'string' ? JSON.parse(design) : design
 	console.debug('Electron Main: handleSaveDesign', filename, JSON.stringify(design, null, 2))
 	return new Promise((resolve, reject) => {
 		try {
@@ -491,46 +491,48 @@ async function handleExportToExcel(event: any, design: OcdDesign, suggestedFilen
 				buttonLabel: 'Export'
 			}).then(result => {
 				if (!result.canceled) {
-					const ociResources = design.model.oci.resources
-					const compartments = ociResources.compartment
+					// const ociResources = design.model.oci.resources
+					// const compartments = ociResources.compartment
 					// const compartmentName = (id: string): string => compartments.find((c) => c.id === id)?.displayName
-					const workbook = new ExcelJS.Workbook()
-					let styleNumber = 1
-					Object.entries(ociResources).forEach(([k, v]) => {
-						const worksheet = workbook.addWorksheet(OcdUtils.toTitle(k))
-						// const resources = v.map((r: OcdResource) => {return {...r, compartmentName: compartmentName(r.compartmentId, compartments)}})
-						const resources = updateResources(v, compartments)
-						console.debug('handleExportToExcel:', JSON.stringify(resources, null, 2))
-						const columns = [
-							{header: 'Name', key: 'displayName', width: 20},
-							{header: 'Compartment', key: 'compartmentName', width: 35}
-						]
-						worksheet.columns = columns
-						// worksheet.addRows(resources)
-						const tableColumns: TableColumnProperties[] = [
-							{name: 'Name', filterButton: true},
-							{name: 'Compartment', filterButton: true}
-						]
-						// @ts-ignore
-						// const tableRows: any[][] = resources.reduce((a, c) => {return [...a, [c.displayName, c.compartmentName]]}, [])
-						const tableRows = toTableRows(resources)
-						console.debug('handleExportToExcel: Table:', JSON.stringify(tableRows, null, 2))
-						const table: TableProperties = {
-							name: `${k}Table`,
-							ref: 'A1',
-							headerRow: true,
-							totalsRow: false,
-							style: {
-								// @ts-ignore
-								theme: `TableStyleLight${styleNumber}`,
-								showRowStripes: true,
-							},
-							columns: tableColumns,
-							rows: tableRows,
-						}
-						worksheet.addTable(table)
-						styleNumber += 1
-					})
+					// const workbook = new ExcelJS.Workbook()
+					const exporter = new OcdExcelExporter()
+					const workbook = exporter.export(design)
+					// let styleNumber = 1
+					// Object.entries(ociResources).forEach(([k, v]) => {
+					// 	const worksheet = workbook.addWorksheet(OcdUtils.toTitle(k))
+					// 	// const resources = v.map((r: OcdResource) => {return {...r, compartmentName: compartmentName(r.compartmentId, compartments)}})
+					// 	const resources = updateResources(v, compartments)
+					// 	console.debug('handleExportToExcel:', JSON.stringify(resources, null, 2))
+					// 	const columns = [
+					// 		{header: 'Name', key: 'displayName', width: 20},
+					// 		{header: 'Compartment', key: 'compartmentName', width: 35}
+					// 	]
+					// 	worksheet.columns = columns
+					// 	// worksheet.addRows(resources)
+					// 	const tableColumns: TableColumnProperties[] = [
+					// 		{name: 'Name', filterButton: true},
+					// 		{name: 'Compartment', filterButton: true}
+					// 	]
+					// 	// @ts-ignore
+					// 	// const tableRows: any[][] = resources.reduce((a, c) => {return [...a, [c.displayName, c.compartmentName]]}, [])
+					// 	const tableRows = toTableRows(resources)
+					// 	console.debug('handleExportToExcel: Table:', JSON.stringify(tableRows, null, 2))
+					// 	const table: TableProperties = {
+					// 		name: `${k}Table`,
+					// 		ref: 'A1',
+					// 		headerRow: true,
+					// 		totalsRow: false,
+					// 		style: {
+					// 			// @ts-ignore
+					// 			theme: `TableStyleLight${styleNumber}`,
+					// 			showRowStripes: true,
+					// 		},
+					// 		columns: tableColumns,
+					// 		rows: tableRows,
+					// 	}
+					// 	worksheet.addTable(table)
+					// 	styleNumber += 1
+					// })
 					workbook.xlsx.writeFile(result.filePath).then(() => {
 						console.log('Workbook saved successfully!')
 						resolve({canceled: false, filename: result.filePath, design: design})

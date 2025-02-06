@@ -53,7 +53,10 @@
                         ],
                         "dnsLabel": "vcna",
                         "ipv6cidrBlocks": [],
-                        "isIpv6enabled": false
+                        "isIpv6enabled": false,
+                        "freeformTags": {
+                            "TAG Key f184": "Value"
+                        }
                     }
                 ],
                 "route_table": [

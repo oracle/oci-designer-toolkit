@@ -213,6 +213,9 @@ ${resources.toSorted(this.simpleSort).map((r) => `export { ${this.resourceName(r
     // Markdown   
     markdownFilename = (resource: string) => this.resourceFilename(resource)
 
+    // Excel   
+    excelFilename = (resource: string) => this.resourceFilename(resource)
+
  
     toTitleCase = (str: string) => str.replace(/\b\w+/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase();}).replaceAll('-', '_').replace(/\W+/g, ' ')
     toCamelCase = (str: string) => `${this.toTitleCase(str.split('_').join(' ')).split(' ').map((e, i) => i === 0 ? e.toLowerCase() : e).join('')}`
