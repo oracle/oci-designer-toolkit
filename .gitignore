@@ -60,12 +60,15 @@ containers/ssh/*
 **/model/src/provider/azure/resources.ts
 **/model/src/provider/google/resources.ts
 **/model/src/provider/oci/resources.ts
-**/export/src/terraform/provider/azure/resources.ts
-**/export/src/terraform/provider/google/resources.ts
-**/export/src/terraform/provider/oci/resources.ts
-**/export/src/markdown/provider/azure/resources.ts
-**/export/src/markdown/provider/google/resources.ts
-**/export/src/markdown/provider/oci/resources.ts
+# **/export/src/terraform/provider/azure/resources.ts
+# **/export/src/terraform/provider/google/resources.ts
+# **/export/src/terraform/provider/oci/resources.ts
+# **/export/src/markdown/provider/azure/resources.ts
+# **/export/src/markdown/provider/google/resources.ts
+# **/export/src/markdown/provider/oci/resources.ts
+**/export/src/*/provider/azure/resources.ts
+**/export/src/*/provider/google/resources.ts
+**/export/src/*/provider/oci/resources.ts
 **/react/src/components/tabular/provider/azure/resources.ts
 **/react/src/components/tabular/provider/google/resources.ts
 **/react/src/components/tabular/provider/oci/resources.ts

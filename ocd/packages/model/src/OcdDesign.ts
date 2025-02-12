@@ -355,11 +355,17 @@ export namespace OcdDesign {
     export function ociFreeformTagArrayToTags(freeformTags: OciFreeformTag[]): OciFreeformTags {
         return freeformTags.reduce((a, c) => {a[c.key] = c.value; return a}, {} as OciFreeformTags)
     }
+    export function ociFreeformTagsToString(tags: OciFreeformTags): string {
+        return tags ? Object.entries(tags).map(([k, v]) => `${k}: ${v}`).join('\n') : ''
+    }
     export function ociDefinedTagsToArray(definedTags: OciDefinedTags | undefined): OciDefinedTag[] {
         return definedTags ? Object.entries(definedTags).reduce((a, [nk, nv]) => {return [...a, ...Object.entries(nv).map(([k, v]) => {return {namespace: nk, key: k, value: v}})]}, [] as OciDefinedTag[]) : []
     }
     export function ociDefinedTagArrayToTags(definedTags: OciDefinedTag[]): OciDefinedTags {
         return definedTags.reduce((a, c) => {a[c.namespace] ? a[c.namespace][c.key] = c.value : a[c.namespace] = {[c.key]: c.value}; return a}, {} as OciDefinedTags)
+    }
+    export function ociDefinedTagsToString(tags: OciDefinedTags): string {
+        return tags ? Object.keys(tags).sort((a, b) => a.localeCompare(b)).flatMap((n) => Object.entries(tags[n]).map(([k, v]) => `${n}.${k}: ${v}`)).join('\n') : ''
     }
 }
 

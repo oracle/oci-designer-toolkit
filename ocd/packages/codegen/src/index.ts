@@ -21,6 +21,7 @@ export { OciPropertiesGenerator } from "./generator/OciPropertiesGenerator.js"
 export { OciTabularGenerator } from "./generator/OciTabularGenerator.js"
 export { OciTerraformGenerator } from "./generator/OciTerraformGenerator.js"
 export { OciValidatorGenerator } from "./generator/OciValidatorGenerator.js"
+export { OciExcelGenerator } from "./generator/OciExcelGenerator.js"
 
 export { GoogleTerraformSchemaImporter } from "./importer/GoogleTerraformSchemaImporter.js"
 export { GoogleMarkdownGenerator } from "./generator/GoogleMarkdownGenerator.js"

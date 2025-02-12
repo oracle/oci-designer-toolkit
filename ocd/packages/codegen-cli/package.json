@@ -56,7 +56,8 @@
     "generate-oci-tabular":        "node lib/esm/ocd-codegen.js generate oci-tabular-js    -s ./schema/oci-schema.json -d ../react/src/components/tabular/provider/oci",
     "generate-oci-terraform":      "node lib/esm/ocd-codegen.js generate oci-terraform-js  -s ./schema/oci-schema.json -d ../export/src/terraform/provider/oci",
     "generate-oci-validator":      "node lib/esm/ocd-codegen.js generate oci-validator-js  -s ./schema/oci-schema.json -d ../model/src/validator/provider/oci",
-    "generate-oci":                "npm run generate-oci-model && npm run generate-oci-markdown && npm run generate-oci-properties && npm run generate-oci-terraform && npm run generate-oci-tabular && npm run generate-oci-validator",
+    "generate-oci-excel":          "node lib/esm/ocd-codegen.js generate oci-excel-js      -s ./schema/oci-schema.json -d ../export/src/excel/provider/oci",
+    "generate-oci":                "npm run generate-oci-model && npm run generate-oci-markdown && npm run generate-oci-properties && npm run generate-oci-terraform && npm run generate-oci-tabular && npm run generate-oci-validator && npm run generate-oci-excel",
 
     "generate-azurerm-markdown":   "node lib/esm/ocd-codegen.js generate azurerm-markdown-js   -f -s ./schema/azurerm-schema.json -d ../export/src/markdown/provider/azure",
     "generate-azurerm-model":      "node lib/esm/ocd-codegen.js generate azurerm-model-js      -f -s ./schema/azurerm-schema.json -d ../model/src/provider/azure",

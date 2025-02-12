@@ -56,7 +56,7 @@ export const OcdTabularLeftToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, o
     // const {ocdConsoleConfig, setOcdConsoleConfig} = useContext(ConsoleConfigContext)
     const onClickExcel = () => {
         console.debug('OcdTabular: Export to Excel')
-        const design = ocdDocument.design
+        const design = JSON.parse(JSON.stringify(ocdDocument.design)) // Resolve cloning issue when design changed
         const displayColumns = ocdConsoleConfig.config.displayColumns || {}
         console.debug('OcdTabular: Export to Excel - design', design)
         console.debug('OcdTabular: Export to Excel - displayColumns', displayColumns)

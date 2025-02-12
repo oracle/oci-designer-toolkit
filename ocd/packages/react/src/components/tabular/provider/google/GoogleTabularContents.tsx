@@ -82,6 +82,7 @@ export const OcdTabularContents = ({ ocdDocument, googleResources, selected, col
                         resource={r}
                         // resourceElements={resourceElements}
                         resourceElements={displayColumns.map((c: string) => resourceElements[columnTitles.indexOf(c)])}
+                        displayColumns={displayColumns}
                         key={`${selected}-tabular-${r.id}`}
                     />
                 })}
@@ -136,7 +137,7 @@ export const OcdTabularHeader = ({columnTitles, googleResources, resourceElement
     )
 }
 
-export const OcdTabularRow = ({ocdDocument, googleResources, index, resource, resourceElements, selected}: GoogleTabularRowProps): JSX.Element => {
+export const OcdTabularRow = ({ocdDocument, googleResources, index, resource, resourceElements, displayColumns, selected}: GoogleTabularRowProps): JSX.Element => {
     const getReferenceDisplayName = (id: string) => {
         const resource = ocdDocument.getResource(id)
         return resource ? resource.displayName : 'Unknown'

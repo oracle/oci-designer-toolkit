@@ -11,7 +11,7 @@ export { OcdAutoLayout } from './OcdAutoLayout.js'
 
 export { PaletteGroup, PaletteResource } from './OcdPalette.js'
 // Oci
-export { OciDefinedTag, OciFreeformTag, OciResources } from './OcdDesign.js'
+export { OciDefinedTag, OciDefinedTags, OciFreeformTag, OciFreeformTags, OciResources } from './OcdDesign.js'
 export { OciResource } from './provider/oci/OciResource.js'
 export * as OciModelResources from './provider/oci/resources.js'
 export * as OciResourceValidation from './validator/provider/oci/resources.js'
