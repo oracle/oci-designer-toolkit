@@ -9,15 +9,12 @@ import * as ociExcelResources from './provider/oci/resources.js'
 import { OcdUtils } from "@ocd/core"
 import ExcelJS, { TableProperties, Workbook } from 'exceljs'
 import { OcdExcelResource } from "./OcdExcelResource.js"
+import { ociNoneVisualResources } from '../data/OcdNoneVisualResources.js'
 
 export class OcdExcelExporter extends OcdExporter {
 
     export = (design: OcdDesign): Workbook => {
         const workbook = new ExcelJS.Workbook()
-        // const worksheets: OutputDataAnyArrayArray = {
-        //     ...this.generateOciWorksheets(design, workbook)
-        // }
-        // return worksheets
         this.generateOciWorksheets(design, workbook)
         return workbook
     }
@@ -25,9 +22,7 @@ export class OcdExcelExporter extends OcdExporter {
     generateOciWorksheets(design: OcdDesign, workbook: Workbook): Workbook {
         const resourceLists = OcdDesign.getOciResourceLists(design)
         const allResources = OcdDesign.getOciResources(design)
-        const sortedKeys = Object.keys(resourceLists).sort((a, b) => a.localeCompare(b))
-        // const worksheets = sortedKeys.reduce((a, c) => {return {...a, ...{c: this.generateOciResourceListRows(resourceLists[c], allResources)}}}, {})
-        // return worksheets
+        const sortedKeys = Object.keys(resourceLists).sort((a, b) => a.localeCompare(b)).filter((r) => !ociNoneVisualResources.includes(r))
         let styleNumber = 1
         sortedKeys.forEach((k) => {
             const resources = resourceLists[k]
@@ -37,7 +32,7 @@ export class OcdExcelExporter extends OcdExporter {
                 const resource = resources[0]
                 const excelExporterName = `${OcdUtils.toTitleCase(resource.provider)}${resource.resourceType}`
                 // @ts-ignore
-                const excelExporter = new ociExcelResources[excelExporterName](resource, allResources)
+                const excelExporter: OcdExcelResource = new ociExcelResources[excelExporterName](resource, allResources)
                 const columns = excelExporter.columns()
                 const tableColumns = excelExporter.tableColumns()
                 // Add column titles to worksheet
@@ -47,10 +42,9 @@ export class OcdExcelExporter extends OcdExporter {
                     name: `${k}Table`,
                     ref: 'A1',
                     headerRow: true,
-                    totalsRow: false,
+                    totalsRow: true,
                     style: {
-                        // @ts-ignore
-                        theme: `TableStyleMedium${styleNumber}`,
+                        theme: `TableStyleLight16`,
                         showRowStripes: true,
                         showFirstColumn: true
                     },
@@ -60,6 +54,7 @@ export class OcdExcelExporter extends OcdExporter {
                 worksheet.addTable(table)
                 styleNumber += 1
                 if (styleNumber > 28) styleNumber = 1
+                columns.forEach((c) => worksheet.getColumn(c.key).alignment = {wrapText: true, vertical: 'top'})
             }
         })
         return workbook

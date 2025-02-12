@@ -260,7 +260,9 @@ export const menuItems: MenuItem[] = [
                         label: 'Excel',
                         click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
                             const suggestedFilename = activeFile.name.replaceAll('.okit', '.xlsx')
-                            OcdDesignFacade.exportToExcel(ocdDocument.design, suggestedFilename).then((results) => {
+                            const design = JSON.parse(JSON.stringify(ocdDocument.design)) // Resolve cloning issue when design changed
+                            console.debug('Export Excel Design:', design)
+                            OcdDesignFacade.exportToExcel(design, suggestedFilename).then((results) => {
                                 if (!results.canceled) {
                                     console.debug('Design Exported to Excel')
                                 } else {

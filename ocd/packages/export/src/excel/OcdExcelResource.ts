@@ -3,8 +3,8 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import { OcdUtils } from "@ocd/core"
 import { OcdResource } from "@ocd/model"
+import { TableColumnProperties } from 'exceljs'
 
 export interface ExcelColumnProperties {
     header: string
@@ -21,6 +21,11 @@ export class OcdExcelResource {
     ocdCommonGeneration = (resource: OcdResource): any[] => {
         return []
     }
+    toNumber = (value: any) => {
+        if (typeof value === 'number') return value
+        else if (typeof value === 'string') return parseInt(value)
+        return null
+    }
     generateReferenceAttribute = (value: string | undefined, allResources: OcdResource[] = []): string => {
         const resource = allResources.find((r) => r.id === value)
         const displayName = resource ? resource.displayName : ''
@@ -36,6 +41,8 @@ export class OcdExcelResource {
         const valuesArray = typeof value === 'string' ? value.split(',') : Array.isArray(value) ? value : []
         return valuesArray.join('')
     }
+    columns = (): ExcelColumnProperties[] => []
+    tableColumns = (): TableColumnProperties[] => []
 }
 
 export default OcdExcelResource

@@ -4,7 +4,7 @@
 */
 
 import { OcdExcelResource, ExcelColumnProperties } from '../../OcdExcelResource.js'
-import { OciResource } from '@ocd/model'
+import { OciResource, OciFreeformTags, OciDefinedTags } from '@ocd/model'
 import { TableColumnProperties } from 'exceljs'
 
 export class OciExcelResource extends OcdExcelResource {
@@ -24,15 +24,26 @@ export class OciExcelResource extends OcdExcelResource {
         ]   
         return columns
     }
-    resourceTagGeneration = (resource: OciResource): any[] => [JSON.stringify(resource.freeformTags, null, 2), JSON.stringify(resource.definedTags, null, 2)]
+    resourceTagGeneration = (resource: OciResource): any[] => [resource.lifecycleState, this.freeformTagsToString(resource.freeformTags || {}), this.definedTagsToString(resource.definedTags || {})]
     resourceTagColumns = (): ExcelColumnProperties[] => [
-        {header: 'Freeform Tags', key: 'freeformTags', width: 50},
-        {header: 'Defined Tags', key: 'definedTags', width: 50}
+        {header: 'Lifecycle State', key: 'lifecycleState', width: 50},
+        {header: 'Freeform Tags', key: 'freeformTags', width: 80},
+        {header: 'Defined Tags', key: 'definedTags', width: 100}
     ]
     resourceTagTableColumns = (): TableColumnProperties[] => [
+        {name: 'Lifecycle State', filterButton: true},
         {name: 'Freeform Tags', filterButton: true},
         {name: 'Defined Tags', filterButton: true}
     ]
+    freeformTagsToString = (tags: OciFreeformTags): string => {
+        const tagsString = Object.entries(tags).map(([k, v]) => `${k}: ${v}`).join('\n')
+        return tagsString
+    }
+    definedTagsToString = (tags: OciDefinedTags): string => {
+        const namespaces = Object.keys(tags).sort((a, b) => a.localeCompare(b))
+        const tagsString = namespaces.flatMap((n) => Object.entries(tags[n]).map(([k, v]) => `${n}.${k}: ${v}`)).join('\n')
+        return tagsString
+    }
 }
 
 export default OciExcelResource
