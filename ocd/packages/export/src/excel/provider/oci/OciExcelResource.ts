@@ -4,7 +4,7 @@
 */
 
 import { OcdExcelResource, ExcelColumnProperties } from '../../OcdExcelResource.js'
-import { OciResource, OciFreeformTags, OciDefinedTags } from '@ocd/model'
+import { OciResource, OciFreeformTags, OciDefinedTags, OcdDesign } from '@ocd/model'
 import { TableColumnProperties } from 'exceljs'
 
 export class OciExcelResource extends OcdExcelResource {
@@ -24,7 +24,8 @@ export class OciExcelResource extends OcdExcelResource {
         ]   
         return columns
     }
-    resourceTagGeneration = (resource: OciResource): any[] => [resource.lifecycleState, this.freeformTagsToString(resource.freeformTags || {}), this.definedTagsToString(resource.definedTags || {})]
+    resourceTagGeneration = (resource: OciResource): any[] => [resource.lifecycleState, OcdDesign.ociFreeformTagsToString(resource.freeformTags || {}), OcdDesign.ociDefinedTagsToString(resource.definedTags || {})]
+    // resourceTagGeneration = (resource: OciResource): any[] => [resource.lifecycleState, this.freeformTagsToString(resource.freeformTags || {}), this.definedTagsToString(resource.definedTags || {})]
     resourceTagColumns = (): ExcelColumnProperties[] => [
         {header: 'Lifecycle State', key: 'lifecycleState', width: 50},
         {header: 'Freeform Tags', key: 'freeformTags', width: 80},
@@ -35,15 +36,15 @@ export class OciExcelResource extends OcdExcelResource {
         {name: 'Freeform Tags', filterButton: true},
         {name: 'Defined Tags', filterButton: true}
     ]
-    freeformTagsToString = (tags: OciFreeformTags): string => {
-        const tagsString = Object.entries(tags).map(([k, v]) => `${k}: ${v}`).join('\n')
-        return tagsString
-    }
-    definedTagsToString = (tags: OciDefinedTags): string => {
-        const namespaces = Object.keys(tags).sort((a, b) => a.localeCompare(b))
-        const tagsString = namespaces.flatMap((n) => Object.entries(tags[n]).map(([k, v]) => `${n}.${k}: ${v}`)).join('\n')
-        return tagsString
-    }
+    // freeformTagsToString = (tags: OciFreeformTags): string => {
+    //     const tagsString = Object.entries(tags).map(([k, v]) => `${k}: ${v}`).join('\n')
+    //     return tagsString
+    // }
+    // definedTagsToString = (tags: OciDefinedTags): string => {
+    //     const namespaces = Object.keys(tags).sort((a, b) => a.localeCompare(b))
+    //     const tagsString = namespaces.flatMap((n) => Object.entries(tags[n]).map(([k, v]) => `${n}.${k}: ${v}`)).join('\n')
+    //     return tagsString
+    // }
 }
 
 export default OciExcelResource
