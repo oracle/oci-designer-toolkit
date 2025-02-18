@@ -7,8 +7,8 @@ import { OciTabularResourceProps } from "../../../../../types/ReactComponentProp
 import { OcdTabularContents } from "../OciTabularContents"
 
 export const OciVolume = ({ ocdDocument, ociResources, selected }: OciTabularResourceProps): JSX.Element => {
-    const columnTitles: string[] = []
-    const resourceElements: string[] = []
+    const columnTitles: string[] = ['Size (GBs)', 'VPUs/GB']
+    const resourceElements: string[] = ['sizeInGBs', 'vpusPerGB']
     return (
         <OcdTabularContents 
             ocdDocument={ocdDocument}
