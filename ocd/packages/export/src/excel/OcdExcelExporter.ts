@@ -6,10 +6,9 @@
 import { OcdDesign, OciResource } from "@ocd/model"
 import { OcdExporter } from "../OcdExporter.js"
 import * as ociExcelResources from './provider/oci/resources.js'
-import { OcdUtils } from "@ocd/core"
+import { OcdUtils, ociNoneVisualResources } from "@ocd/core"
 import ExcelJS, { TableProperties, Workbook } from 'exceljs'
 import { OcdExcelResource } from "./OcdExcelResource.js"
-import { ociNoneVisualResources } from '../data/OcdNoneVisualResources.js'
 
 export class OcdExcelExporter extends OcdExporter {
 
