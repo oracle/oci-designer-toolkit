@@ -7,8 +7,8 @@ import { OciTabularResourceProps } from "../../../../../types/ReactComponentProp
 import { OcdTabularContents } from "../OciTabularContents"
 
 export const OciInstance = ({ ocdDocument, ociResources, selected }: OciTabularResourceProps): JSX.Element => {
-    const columnTitles: string[] = ['Availability Domain', 'Fault Domain', 'Shape', 'Subnet']
-    const resourceElements: string[] = ['availabilityDomain', 'faultDomain', 'shape', 'createVnicDetails.subnetId']
+    const columnTitles: string[] = ['Availability Domain', 'Fault Domain', 'Shape', 'Subnet', 'Memory (GBs)', 'OCPUs']
+    const resourceElements: string[] = ['availabilityDomain', 'faultDomain', 'shape', 'createVnicDetails.subnetId', 'shapeConfig.memoryInGBs', 'shapeConfig.ocpus']
     return (
         <OcdTabularContents 
             ocdDocument={ocdDocument}
