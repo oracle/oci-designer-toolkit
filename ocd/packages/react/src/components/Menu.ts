@@ -220,33 +220,33 @@ export const menuItems: MenuItem[] = [
                             saveFile(ocdDocument).then((resp) => console.info('Saved', resp))             
                         }
                     },
-                    {
-                        label: 'OpenTofu (Terraform)',
-                        click: (ocdDocument: OcdDocument, setOcdDocument: Function) => { // Convert to call to Electron API
-                            const writeTerraformFile = async (dirHandle: FileSystemDirectoryHandle, filename: string, contents: string[]) => {
-                                const fileHandle: FileSystemFileHandle = await dirHandle.getFileHandle(filename, {create: true})
-                                // @ts-ignore 
-                                const writable = await fileHandle.createWritable()
-                                await writable.write(contents.join('\n'))
-                                await writable.close()
-                                return writable
-                            }
-                            const saveFile = async (ocdDocument: OcdDocument) => {
-                                try {
-                                    // @ts-ignore 
-                                    const handle = await showDirectoryPicker()
-                                    // const writable = await handle.createWritable()
-                                    const exporter = new OcdTerraformExporter()
-                                    const terraform = exporter.export(ocdDocument.design)
-                                    const fileWriters = Object.entries(terraform).map(([k, v]) => writeTerraformFile(handle, k, v))
-                                    return Promise.all(fileWriters)
-                                } catch (err: any) {
-                                    console.error(err.name, err.message);
-                                }
-                            }
-                            saveFile(ocdDocument).then((resp) => console.info('Saved', resp))             
-                        }
-                    },
+                    // {
+                    //     label: 'OpenTofu (Terraform)',
+                    //     click: (ocdDocument: OcdDocument, setOcdDocument: Function) => { // Convert to call to Electron API
+                    //         const writeTerraformFile = async (dirHandle: FileSystemDirectoryHandle, filename: string, contents: string[]) => {
+                    //             const fileHandle: FileSystemFileHandle = await dirHandle.getFileHandle(filename, {create: true})
+                    //             // @ts-ignore 
+                    //             const writable = await fileHandle.createWritable()
+                    //             await writable.write(contents.join('\n'))
+                    //             await writable.close()
+                    //             return writable
+                    //         }
+                    //         const saveFile = async (ocdDocument: OcdDocument) => {
+                    //             try {
+                    //                 // @ts-ignore 
+                    //                 const handle = await showDirectoryPicker()
+                    //                 // const writable = await handle.createWritable()
+                    //                 const exporter = new OcdTerraformExporter()
+                    //                 const terraform = exporter.export(ocdDocument.design)
+                    //                 const fileWriters = Object.entries(terraform).map(([k, v]) => writeTerraformFile(handle, k, v))
+                    //                 return Promise.all(fileWriters)
+                    //             } catch (err: any) {
+                    //                 console.error(err.name, err.message);
+                    //             }
+                    //         }
+                    //         saveFile(ocdDocument).then((resp) => console.info('Saved', resp))             
+                    //     }
+                    // },
                     {
                         label: 'Resource Manager',
                         click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
@@ -254,6 +254,21 @@ export const menuItems: MenuItem[] = [
                             clone.dialog.resourceManager = true
                             console.debug('Menu: Setting Resource Manager', ocdDocument, clone)
                             setOcdDocument(clone)
+                        }
+                    },
+                    {
+                        label: 'OpenTofu (Terraform)',
+                        click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
+                            const suggestedFilename = activeFile.name.replaceAll('.okit', '.xlsx')
+                            const design = JSON.parse(JSON.stringify(ocdDocument.design)) // Resolve cloning issue when design changed
+                            console.debug('Export Excel Design:', design)
+                            OcdDesignFacade.exportToTerraform(design, suggestedFilename).then((results) => {
+                                if (!results.canceled) {
+                                    console.debug('Design Exported to OpenTofu')
+                                } else {
+                                    console.debug('Design Exported to OpenTofu Cancelled')
+                                }
+                            }).catch((resp) => {console.warn('Save Design Failed with', resp)})
                         }
                     },
                     {
