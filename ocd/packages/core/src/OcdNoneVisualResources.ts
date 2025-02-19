@@ -6,6 +6,7 @@
 // Resources that will be excluded from None OpenTofu exports
 export const ociNoneVisualResources: string[] = [
     'network_security_group_security_rule',
+    'volume_attachment',
     'vnic_attachment'
 ]
 export const azureNoneVisualResources: string[] = []
