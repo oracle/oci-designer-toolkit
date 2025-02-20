@@ -4,18 +4,22 @@
 */
 
 import { OcdOKITImporter } from '@ocd/import'
-import { OcdMarkdownExporter, OcdOKITExporter, OcdSVGExporter, OcdTerraformExporter, OutputDataString } from '@ocd/export'
+import { OcdMarkdownExporter, OcdOKITExporter } from '@ocd/export'
 import { OcdConsoleConfig } from './OcdConsoleConfiguration'
 import { OcdDocument } from './OcdDocument'
 import { OcdDesignFacade } from '../facade/OcdDesignFacade'
 import { OcdConfigFacade } from '../facade/OcdConfigFacade'
 import { OcdViewLayer, OcdViewPage } from '@ocd/model'
 import { autoLayoutOptions } from '../data/OcdAutoLayoutOptions'
-import { svgCssData } from '../data/OcdSvgCssData'
+import { getSvgCssData } from '../data/OcdSvgCssData'
 import { OcdExternalFacade } from '../facade/OcdExternalFacade'
+// import { OcdDesign } from '../../../model/lib/cjs'
 
-const svgThemeCss = svgCssData['oci-theme.css']
-const svgSvgCss = svgCssData['ocd-svg.css']
+// const ociSvgThemeCss = svgCssData['oci-theme.css']
+// const azureSvgThemeCss = svgCssData['azure-theme.css']
+// const generalSvgThemeCss = svgCssData['general-theme.css']
+// const googleSvgThemeCss = svgCssData['google-theme.css']
+// const svgSvgCss = svgCssData['ocd-svg.css']
 
 export interface MenuItem {
     label: string
@@ -26,6 +30,14 @@ export interface MenuItem {
     view?: string
     submenu?: MenuItem[] | Function
 }
+
+// export const getSvgCssData = (design: OcdDesign): string[] => {
+//     let cssData = [ociSvgThemeCss, svgSvgCss]
+//     if (design.model.general && Object.keys(design.model.general).length > 0) cssData = [...cssData, generalSvgThemeCss]
+//     if (design.model.azure && Object.keys(design.model.azure).length > 0) cssData = [...cssData, azureSvgThemeCss]
+//     if (design.model.google && Object.keys(design.model.google).length > 0) cssData = [...cssData, googleSvgThemeCss]
+//     return cssData
+// }
 
 export const menuItems: MenuItem[] = [
     {
@@ -190,56 +202,29 @@ export const menuItems: MenuItem[] = [
                 label: 'Export To',
                 click: undefined,
                 submenu: [
-                    {
-                        label: 'Markdown',
-                        click: (ocdDocument: OcdDocument, setOcdDocument: Function) => { // Convert to call to Electron API
-                            const saveFile = async (ocdDocument: OcdDocument) => {
-                                try {
-                                    const options = {
-                                        types: [
-                                            {
-                                                description: 'Markdown Files',
-                                                accept: {
-                                                    'text/markdown': ['.md'],
-                                                },
-                                            },
-                                        ],
-                                    }
-                                    // @ts-ignore 
-                                    const handle = await window.showSaveFilePicker(options)
-                                    const writable = await handle.createWritable()
-                                    const exporter = new OcdMarkdownExporter([svgThemeCss, svgSvgCss])
-                                    const output = exporter.export(ocdDocument.design)
-                                    await writable.write(output)
-                                    await writable.close()
-                                    return handle
-                                } catch (err: any) {
-                                    console.error(err.name, err.message);
-                                }
-                            }
-                            saveFile(ocdDocument).then((resp) => console.info('Saved', resp))             
-                        }
-                    },
                     // {
-                    //     label: 'OpenTofu (Terraform)',
+                    //     label: 'Markdown Old',
                     //     click: (ocdDocument: OcdDocument, setOcdDocument: Function) => { // Convert to call to Electron API
-                    //         const writeTerraformFile = async (dirHandle: FileSystemDirectoryHandle, filename: string, contents: string[]) => {
-                    //             const fileHandle: FileSystemFileHandle = await dirHandle.getFileHandle(filename, {create: true})
-                    //             // @ts-ignore 
-                    //             const writable = await fileHandle.createWritable()
-                    //             await writable.write(contents.join('\n'))
-                    //             await writable.close()
-                    //             return writable
-                    //         }
                     //         const saveFile = async (ocdDocument: OcdDocument) => {
                     //             try {
+                    //                 const options = {
+                    //                     types: [
+                    //                         {
+                    //                             description: 'Markdown Files',
+                    //                             accept: {
+                    //                                 'text/markdown': ['.md'],
+                    //                             },
+                    //                         },
+                    //                     ],
+                    //                 }
                     //                 // @ts-ignore 
-                    //                 const handle = await showDirectoryPicker()
-                    //                 // const writable = await handle.createWritable()
-                    //                 const exporter = new OcdTerraformExporter()
-                    //                 const terraform = exporter.export(ocdDocument.design)
-                    //                 const fileWriters = Object.entries(terraform).map(([k, v]) => writeTerraformFile(handle, k, v))
-                    //                 return Promise.all(fileWriters)
+                    //                 const handle = await window.showSaveFilePicker(options)
+                    //                 const writable = await handle.createWritable()
+                    //                 const exporter = new OcdMarkdownExporter([ociSvgThemeCss, svgSvgCss])
+                    //                 const output = exporter.export(ocdDocument.design)
+                    //                 await writable.write(output)
+                    //                 await writable.close()
+                    //                 return handle
                     //             } catch (err: any) {
                     //                 console.error(err.name, err.message);
                     //             }
@@ -248,27 +233,45 @@ export const menuItems: MenuItem[] = [
                     //     }
                     // },
                     {
-                        label: 'Resource Manager',
-                        click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
-                            const clone = OcdDocument.clone(ocdDocument)
-                            clone.dialog.resourceManager = true
-                            console.debug('Menu: Setting Resource Manager', ocdDocument, clone)
-                            setOcdDocument(clone)
+                        label: 'Markdown',
+                        click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>) => { // Convert to call to Electron API
+                            const suggestedFilename = activeFile.name.replaceAll('.okit', '.md')
+                            const design = JSON.parse(JSON.stringify(ocdDocument.design)) // Resolve cloning issue when design changed
+                            const css = getSvgCssData(design)
+                            console.debug('Export Markdown Design:', design)
+                            OcdDesignFacade.exportToMarkdown(design, css, suggestedFilename).then((results) => {
+                                if (!results.canceled) {
+                                    console.debug('Design Exported to Markdown')
+                                } else {
+                                    console.debug('Design Exported to Markdown Cancelled')
+                                }
+                            }).catch((resp) => {console.warn('Save Design Failed with', resp)})
                         }
                     },
                     {
                         label: 'OpenTofu (Terraform)',
                         click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
-                            const suggestedFilename = activeFile.name.replaceAll('.okit', '.xlsx')
+                            const suggestedFilename = activeFile.name.replaceAll('.okit', '.tf')
+                            const directory = activeFile.name.split('/').slice(0, -1).join('/')
                             const design = JSON.parse(JSON.stringify(ocdDocument.design)) // Resolve cloning issue when design changed
+                            console.debug('Export Excel Design:', directory)
                             console.debug('Export Excel Design:', design)
-                            OcdDesignFacade.exportToTerraform(design, suggestedFilename).then((results) => {
+                            OcdDesignFacade.exportToTerraform(design, directory).then((results) => {
                                 if (!results.canceled) {
                                     console.debug('Design Exported to OpenTofu')
                                 } else {
                                     console.debug('Design Exported to OpenTofu Cancelled')
                                 }
                             }).catch((resp) => {console.warn('Save Design Failed with', resp)})
+                        }
+                    },
+                    {
+                        label: 'Resource Manager',
+                        click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
+                            const clone = OcdDocument.clone(ocdDocument)
+                            clone.dialog.resourceManager = true
+                            console.debug('Menu: Setting Resource Manager', ocdDocument, clone)
+                            setOcdDocument(clone)
                         }
                     },
                     {
@@ -302,30 +305,47 @@ export const menuItems: MenuItem[] = [
                                     alert('Currently not implemented.')
                                 }
                             },
+                            // {
+                            //     label: 'SVG Old',
+                            //     click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
+                            //         const writeTerraformFile = async (dirHandle: FileSystemDirectoryHandle, filename: string, contents: string) => {
+                            //             const fileHandle: FileSystemFileHandle = await dirHandle.getFileHandle(filename, {create: true})
+                            //             // @ts-ignore 
+                            //             const writable = await fileHandle.createWritable()
+                            //             await writable.write(contents)
+                            //             await writable.close()
+                            //             return writable
+                            //         }
+                            //         const saveFile = async (ocdDocument: OcdDocument) => {
+                            //             try {
+                            //                 // @ts-ignore 
+                            //                 const handle = await showDirectoryPicker()
+                            //                 const exporter = new OcdSVGExporter([ociSvgThemeCss, svgSvgCss])
+                            //                 const svg: OutputDataString = exporter.export(ocdDocument.design)
+                            //                 const fileWriters = Object.entries(svg).map(([k, v]) => writeTerraformFile(handle, `${k.replaceAll(' ', '_')}.svg`, v))
+                            //                 return Promise.all(fileWriters)
+                            //             } catch (err: any) {
+                            //                 console.error(err.name, err.message);
+                            //             }
+                            //         }
+                            //         saveFile(ocdDocument).then((resp) => console.info('Saved', resp))             
+                            //     }
+                            // },
                             {
                                 label: 'SVG',
-                                click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
-                                    const writeTerraformFile = async (dirHandle: FileSystemDirectoryHandle, filename: string, contents: string) => {
-                                        const fileHandle: FileSystemFileHandle = await dirHandle.getFileHandle(filename, {create: true})
-                                        // @ts-ignore 
-                                        const writable = await fileHandle.createWritable()
-                                        await writable.write(contents)
-                                        await writable.close()
-                                        return writable
-                                    }
-                                    const saveFile = async (ocdDocument: OcdDocument) => {
-                                        try {
-                                            // @ts-ignore 
-                                            const handle = await showDirectoryPicker()
-                                            const exporter = new OcdSVGExporter([svgThemeCss, svgSvgCss])
-                                            const svg: OutputDataString = exporter.export(ocdDocument.design)
-                                            const fileWriters = Object.entries(svg).map(([k, v]) => writeTerraformFile(handle, `${k.replaceAll(' ', '_')}.svg`, v))
-                                            return Promise.all(fileWriters)
-                                        } catch (err: any) {
-                                            console.error(err.name, err.message);
+                                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>) => {
+                                    const design = JSON.parse(JSON.stringify(ocdDocument.design)) // Resolve cloning issue when design changed
+                                    const suggestedFilename = activeFile.name.replaceAll('.okit', '.svg')
+                                    const directory = activeFile.name.split('/').slice(0, -1).join('/')
+                                    const css = getSvgCssData(design)
+                                    console.debug('Export SVG:', design)
+                                    OcdDesignFacade.exportToSvg(design, css, directory, suggestedFilename).then((results) => {
+                                        if (!results.canceled) {
+                                            console.debug('Design Exported to SVG')
+                                        } else {
+                                            console.debug('Design Exported to SVG Cancelled')
                                         }
-                                    }
-                                    saveFile(ocdDocument).then((resp) => console.info('Saved', resp))             
+                                    }).catch((resp) => {console.warn('Save Design Failed with', resp)})
                                 }
                             }
                         ]

@@ -12,7 +12,7 @@ import common from 'oci-common'
 import { OciQuery, OciReferenceDataQuery, OciResourceManagerQuery } from '@ocd/query'
 import { OcdDesign, OcdResource, OciModelResources } from '@ocd/model'
 import { OcdCache, OcdConsoleConfiguration } from '@ocd/react'
-import { OcdExcelExporter, OcdMarkdownExporter, OcdTerraformExporter } from '@ocd/export'
+import { OcdExcelExporter, OcdMarkdownExporter, OcdSVGExporter, OcdTerraformExporter } from '@ocd/export'
 
 app.commandLine.appendSwitch('ignore-certificate-errors') // Temporary work around for not being able to add additional certificates
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0' // Temporary work around for not being able to add additional certificates
@@ -262,6 +262,7 @@ app.whenReady().then(() => {
 	ipcMain.handle('ocdDesign:exportTerraform', handleExportTerraform)
 	ipcMain.handle('ocdDesign:exportToExcel', handleExportToExcel)
 	ipcMain.handle('ocdDesign:exportToMarkdown', handleExportToMarkdown)
+	ipcMain.handle('ocdDesign:exportToSvg', handleExportToSvg)
 	ipcMain.handle('ocdDesign:exportToTerraform', handleExportToTerraform)
 	// OCD Configuration
 	ipcMain.handle('ocdConfig:loadConsoleConfig', handleLoadConsoleConfig)
@@ -530,6 +531,51 @@ async function handleExportToMarkdown(event: any, design: OcdDesign, css: string
 			reject(new Error(err))
 		})
 	})
+}
+
+async function handleExportToSvg(event: any, design: OcdDesign, css: string[] = [], directory: string = '', suggestedFilename = '') {
+	console.debug('Electron Main: exportToSvg')
+	if (design.view.pages.length > 1) {
+		const additionalFilename: string = suggestedFilename && suggestedFilename.length > 0 ? suggestedFilename : design.metadata.title.replaceAll(' ', '_')
+		return new Promise((resolve, reject) => {
+			dialog.showOpenDialog(mainWindow, {
+				properties: ['openDirectory', 'createDirectory'],
+				defaultPath: directory,
+				buttonLabel: 'Export'
+			}).then(result => {
+				if (!result.canceled) {
+					const exporter = new OcdSVGExporter(css)
+					const output = exporter.export(design)
+					console.debug('handleExportToSvg: ', result.filePaths)
+					const directory = result.filePaths[0]
+					Object.entries(output).forEach(([k, v]) => fs.writeFileSync(path.join(directory, `${k.replaceAll(' ', '_')}.svg`), v))
+				}
+				resolve({canceled: false, filename: result.canceled ? '' : result.filePaths[0], design: design})
+			}).catch(err => {
+				console.error(err)
+				reject(new Error(err))
+			})
+		})
+	} else {
+		return new Promise((resolve, reject) => {
+			dialog.showSaveDialog(mainWindow, {
+				defaultPath: suggestedFilename,
+				properties: ['createDirectory'],
+				filters: [{name: 'Filetype', extensions: ['svg']}],
+				buttonLabel: 'Export'
+			}).then(result => {
+				if (!result.canceled) {
+					const exporter = new OcdSVGExporter(css)
+					const output = exporter.export(design)
+					fs.writeFileSync(result.filePath, Object.values(output)[0])
+				}
+				resolve({canceled: false, filename: result.canceled ? '' : result.filePath, design: design})
+			}).catch(err => {
+				console.error(err)
+				reject(new Error(err))
+			})
+		})
+	}
 }
 
 async function handleExportToTerraform(event: any, design: OcdDesign, directory: string) {

@@ -36,7 +36,8 @@ export class OcdSVGExporter extends OcdExporter {
         const height = this.calculateHeight(page.coords)
         // const svg = `<svg xmlns="http://www.w3.org/2000/svg" fill="white" width="${width}px" height="${height}px">
         // const svg = `<svg xmlns="http://www.w3.org/2000/svg" fill="white" width="100%" height="${height}px" viewBox="0 0 ${width} ${height}" preserveAspectRation="xMinYMin meet">
-        const svg = `<svg xmlns="http://www.w3.org/2000/svg" fill="white" width="${width}px" height="${height}px" viewBox="0 0 ${width} ${height}" preserveAspectRation="xMinYMin meet">
+        // const svg = `<svg xmlns="http://www.w3.org/2000/svg" fill="white" width="${width}px" height="${height}px" viewBox="0 0 ${width} ${height}" preserveAspectRation="xMinYMin meet">
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" fill="white" width="100%" viewBox="0 0 ${width} ${height}" preserveAspectRation="xMinYMin meet">
 <defs></defs>
 <style type="text/css">
 ${this.css.join('')}
