@@ -13,7 +13,12 @@ export const OcdCommonTags = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocume
     const [freeformTags, setFreeformTags] = useState(OcdDesign.ociFreeformTagsToArray(ocdDocument.design.model.oci.tags.freeformTags))
     const [definedTags, setDefinedTags] = useState(OcdDesign.ociDefinedTagsToArray(ocdDocument.design.model.oci.tags.definedTags))
     const onOciDefinedTagDeleteClick = ((namespace:string, key: string) => {
-        console.debug('OcdCommonTags: Deleting Defined Row', key, ocdDocument)
+        console.debug('OcdCommonTags: Deleting Defined Row', key, ocdDocument, definedTags)
+        const namespaceKey = `${namespace}.${key}`
+        const updatedTags = definedTags.filter((t) => `${t.namespace}.${t.key}` !== namespaceKey)
+        console.debug('OcdCommonTags: Deleting Defined Row', namespaceKey, updatedTags)
+        setDefinedTags(updatedTags)
+        updateDefinedTags(updatedTags)
         // const clone = OcdDocument.clone(ocdDocument)
         // if (clone.design.model.oci.tags.defined) {
         //     clone.design.model.oci.tags.defined = clone.design.model.oci.tags.defined.filter((v) => v.key !== key)
@@ -34,7 +39,7 @@ export const OcdCommonTags = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocume
         const tag = definedTags.find((t) => t.namespace === oldNamespace && t.key === key)
         if (tag) {
             tag.namespace = newNamespace
-            setDefinedTags([...definedTags])
+            // setDefinedTags([...definedTags])
             updateDefinedTags(definedTags)
         }
     })
@@ -42,7 +47,7 @@ export const OcdCommonTags = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocume
         const tag = definedTags.find((t) => t.namespace === namespace && t.key === oldKey)
         if (tag) {
             tag.key = newKey
-            setDefinedTags([...definedTags])
+            // setDefinedTags([...definedTags])
             updateDefinedTags(definedTags)
         }
     })
@@ -50,7 +55,7 @@ export const OcdCommonTags = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocume
         const tag = definedTags.find((t) => t.namespace === namespace && t.key === key)
         if (tag) {
             tag.value = value
-            setDefinedTags([...definedTags])
+            // setDefinedTags([...definedTags])
             updateDefinedTags(definedTags)
         }
     })
@@ -80,7 +85,7 @@ export const OcdCommonTags = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocume
         const tag = freeformTags.find((t) => t.key === oldKey)
         if (tag) {
             tag.key = newKey
-            setFreeformTags([...freeformTags])
+            // setFreeformTags([...freeformTags])
             updateFreeformTags(freeformTags)
         }
     })
@@ -88,7 +93,7 @@ export const OcdCommonTags = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocume
         const tag = freeformTags.find((t) => t.key === key)
         if (tag) {
             tag.value = value
-            setFreeformTags([...freeformTags])
+            // setFreeformTags([...freeformTags])
             updateFreeformTags(freeformTags)
         }
     })

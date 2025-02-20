@@ -339,7 +339,7 @@ export namespace OcdDesign {
     export function newOciFreeformTag(): OciFreeformTag {
         return {
             // id: uuidv4(),
-            key: `TAG Key ${uuidv4().slice(-4)}`,
+            key: `Key${uuidv4().slice(-4)}`,
             value: ''
         }
     }
