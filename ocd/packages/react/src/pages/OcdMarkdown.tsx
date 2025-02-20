@@ -9,10 +9,8 @@ import Markdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 import remarkGfm from 'remark-gfm'
 import { OcdDesignFacade } from "../facade/OcdDesignFacade"
-import { svgCssData } from '../data/OcdSvgCssData'
-
-const svgThemeCss = svgCssData['oci-theme.css']
-const svgSvgCss = svgCssData['ocd-svg.css']
+import { getSvgCssData } from '../data/OcdSvgCssData'
+// import { getSvgCssData } from "../components/Menu"
 
 const OcdMarkdown = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument}: ConsolePageProps): JSX.Element => {
     const markdownExporter = new OcdMarkdownExporter([])
@@ -29,7 +27,8 @@ export const OcdMarkdownLeftToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, 
     const onClickMarkdown = () => {
         console.debug('OcdMarkdown: Export to Markdown')
         const design = ocdDocument.design
-        OcdDesignFacade.exportToMarkdown(design, [svgThemeCss, svgSvgCss], `design.md`).then((results) => {
+        const css = getSvgCssData(design)
+        OcdDesignFacade.exportToMarkdown(design, css, `design.md`).then((results) => {
             console.debug('Exported to Markdown')
         }).catch((error) => {
             console.warn('Export To Markdown Failed with', error)

@@ -27,7 +27,7 @@
     "clean": "rm -rf lib dist .vite out",
     "purge": "npm run clean && rm -rf node_modules",
     "build": "npm run make",
-    "start": "NODE_OPTIONS=--max-old-space-size=8192 electron-forge start",
+    "start": "NODE_OPTIONS=--max-old-space-size=8192 electron-forge start -- --trace-warnings",
     "package": "NODE_OPTIONS=--max-old-space-size=8192 electron-forge package",
     "make": "electron-forge make ",
     "make-macos-universal": "NODE_OPTIONS=--max-old-space-size=8192 DEBUG=electron-installer-dmg* electron-forge make --arch='universal'",

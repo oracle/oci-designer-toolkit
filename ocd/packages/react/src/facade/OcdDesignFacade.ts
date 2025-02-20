@@ -39,6 +39,9 @@ export namespace OcdDesignFacade {
     export const exportToMarkdown = (design: OcdDesign, css: string[], suggestedFilename: string = ''): Promise<any> => {
         return window.ocdAPI ? window.ocdAPI.exportToMarkdown(design, css, suggestedFilename) : Promise.reject(new Error('Currently Not Implemented'))
     }
+    export const exportToSvg = (design: OcdDesign, css: string[], directory: string, suggestedFilename: string = ''): Promise<any> => {
+        return window.ocdAPI ? window.ocdAPI.exportToSvg(design, css, directory, suggestedFilename) : Promise.reject(new Error('Currently Not Implemented'))
+    }
     export const exportToTerraform = (design: OcdDesign, directory: string): Promise<any> => {
         return window.ocdAPI ? window.ocdAPI.exportToTerraform(design, directory) : Promise.reject(new Error('Currently Not Implemented'))
     }

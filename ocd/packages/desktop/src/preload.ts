@@ -34,6 +34,7 @@ contextBridge.exposeInMainWorld('ocdAPI', {
   exportTerraform: (design: OcdDesign, directory: string) => ipcRenderer.invoke('ocdDesign:exportTerraform', design, directory),
   exportToExcel: (design: OcdDesign, suggestedFilename = '') => ipcRenderer.invoke('ocdDesign:exportToExcel', design, suggestedFilename),
   exportToMarkdown: (design: OcdDesign, css: string[], suggestedFilename = '') => ipcRenderer.invoke('ocdDesign:exportToMarkdown', design, css, suggestedFilename),
+  exportToSvg: (design: OcdDesign, css: string[], directory: string, suggestedFilename = '') => ipcRenderer.invoke('ocdDesign:exportToSvg', design, css, directory, suggestedFilename),
   exportToTerraform: (design: OcdDesign, directory: string) => ipcRenderer.invoke('ocdDesign:exportToTerraform', design, directory),
   // OCD Configuration
   loadConsoleConfig: () => ipcRenderer.invoke('ocdConfig:loadConsoleConfig'),

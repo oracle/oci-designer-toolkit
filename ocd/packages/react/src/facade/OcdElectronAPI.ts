@@ -32,6 +32,7 @@ export interface OcdElectronAPI {
     exportTerraform: (design: OcdDesign | string, directory: string) => Promise<void>
     exportToExcel: (design: OcdDesign | string, suggestedFilename: string | undefined) => Promise<void>
     exportToMarkdown: (design: OcdDesign | string, css: string[], suggestedFilename: string | undefined) => Promise<void>
+    exportToSvg: (design: OcdDesign | string, css: string[], directory: string, suggestedFilename: string | undefined) => Promise<void>
     exportToTerraform: (design: OcdDesign | string, directory: string) => Promise<void>
 	// OCD Configuration
     loadConsoleConfig: () => Promise<void>
