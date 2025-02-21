@@ -115,6 +115,9 @@ export const elementOverrides: OcdElementOverrides = {
         "oci_core_volume": {
             "size_in_gbs": "sizeInGBs",
             "vpus_per_gb": "vpusPerGB"
+        },
+        "oci_database_db_system": {
+            "data_storage_size_in_gb": "dataStorageSizeInGBs"
         }
     },
     "required": {

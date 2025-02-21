@@ -8284,7 +8284,7 @@
       },
       "data_storage_size_in_gb": {
         "provider": "oci",
-        "key": "dataStorageSizeInGb",
+        "key": "dataStorageSizeInGBs",
         "name": "data_storage_size_in_gb",
         "type": "number",
         "subtype": "",

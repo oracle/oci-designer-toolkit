@@ -23,7 +23,7 @@
   "scripts": {
     "github-action-install": "npm install --legacy-peer-deps ",
     "github-action-compile-for-codegen": "npm run compile --workspace=packages/core --workspace=packages/codegen --workspace=packages/codegen-cli",
-    "github-action-generate": "npm run import-and-generate --workspace=packages/codegen-cli && npm run generate-ocd-build-date --workspace=packages/codegen-cli",
+    "github-action-generate": "npm run import-and-generate --workspace=packages/codegen-cli && npm run generate-ocd-build-date --workspace=packages/codegen-cli && npm run generate-ocd-svg-css-desktop --workspace=packages/codegen-cli",
     "github-action-compile": "npm run compile --workspaces --if-present",
     "github-action-pack": "npm run pack --workspaces --if-present",
     "github-action-build": "npm run build --workspaces --if-present",
@@ -33,7 +33,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "install-and-codegen": "npm install --legacy-peer-deps && npm run compile-for-codegen && npm run import-and-generate && npm run build",
     "fresh-install": "npm run install-and-codegen",
-    "reinstall": "npm run purge && npm run install-and-codegen",
+    "new-install": "npm run github-action-install && npm run github-action-compile-for-codegen && npm run github-action-generate && npm run github-action-build",
+    "reinstall": "npm run purge && npm run new-install",
     "clean": "npm run clean --workspaces --if-present && rm -rf lib dist build",
     "purge": "npm run purge --workspaces --if-present && rm -rf node_modules lib dist build",
     "build": "npm run build --workspaces --if-present",
