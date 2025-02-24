@@ -17,7 +17,7 @@ export class OciReferenceDataQuery extends OciCommonQuery {
     datascienceClient: datascience.DataScienceClient
     limitsClient: limits.LimitsClient
     loadbalancerClient: loadbalancer.LoadBalancerClient
-    mysqlClient: mysql.MysqlaasClient
+    mysqlaasClient: mysql.MysqlaasClient
     vcnClient: core.VirtualNetworkClient
     constructor(profile: string='DEFAULT', region?: string) {
         super(profile, region)
@@ -29,7 +29,7 @@ export class OciReferenceDataQuery extends OciCommonQuery {
         this.datascienceClient = new datascience.DataScienceClient(this.authenticationConfiguration, this.clientConfiguration)
         this.limitsClient = new limits.LimitsClient(this.authenticationConfiguration, this.clientConfiguration)
         this.loadbalancerClient = new loadbalancer.LoadBalancerClient(this.authenticationConfiguration, this.clientConfiguration)
-        this.mysqlClient = new mysql.MysqlaasClient(this.authenticationConfiguration, this.clientConfiguration)
+        this.mysqlaasClient = new mysql.MysqlaasClient(this.authenticationConfiguration, this.clientConfiguration)
         this.vcnClient = new core.VirtualNetworkClient(this.authenticationConfiguration, this.clientConfiguration)
     }
 
@@ -225,6 +225,10 @@ export class OciReferenceDataQuery extends OciCommonQuery {
         })
     }
 
+    getImage(imageId: string): Promise<any> {
+        return Promise.reject(new Error('Not Implemented'))
+    }
+
     getNodePoolOptions(retryCount: number = 0): Promise<any> {
         return new Promise((resolve, reject) => {
             const request: containerengine.requests.GetNodePoolOptionsRequest = {nodePoolOptionId: 'all'}
@@ -357,6 +361,39 @@ export class OciReferenceDataQuery extends OciCommonQuery {
         })
     }
 
+    // listAllImages(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+    //     return new Promise((resolve, reject) => {
+    //         // const allCompartmentIds = [this.provider.getTenantId(), null]
+    //         const allCompartmentIds = [...compartmentIds, this.provider.getTenantId()]
+    //         // @ts-ignore
+    //         const requests: core.requests.ListImagesRequest[] = allCompartmentIds.map((id) => {return {compartmentId: id, limit: 10000}})
+    //         const responseIterators = requests.map((r) => this.computeClient.listImagesResponseIterator(r))
+    //         const queries = responseIterators.map((r) => this.getAllResponseData(r))
+    //         Promise.allSettled(queries).then((results) => {
+    //             console.debug('OciReferenceDataQuery: listAllImages: All Settled')
+    //             //@ts-ignore
+    //             const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value], []).map((r) => {return {
+    //                     id: `${r.operatingSystem}-${r.operatingSystemVersion}`,
+    //                     // id: r.displayName,
+    //                     ocid: r.id,
+    //                     displayName: `${r.operatingSystem} ${r.operatingSystemVersion}`,
+    //                     sourceDisplayName: r.displayName,
+    //                     platform: r.compartmentId === null,
+    //                     compartmentId: r.compartmentId,
+    //                     operatingSystem: r.operatingSystem,
+    //                     operatingSystemVersion: r.operatingSystemVersion,
+    //                     billableSizeInGBs: r.billableSizeInGBs,
+    //                     lifecycleState: r.lifecycleState
+    //                 }
+    //             }).sort((a: OciResource, b: OciResource) => (a.id.localeCompare(b.id) * -1))
+    //             resolve(resources)
+    //         }).catch((reason) => {
+    //             console.error('OciReferenceDataQuery: listAllImages: Error', reason)
+    //             reject(new Error(reason))
+    //         })
+    //     })
+    // }
+
     listImages(compartmentIds: string[], retryCount: number = 0): Promise<any> {
         return new Promise((resolve, reject) => {
             const requests: core.requests.ListImagesRequest[] = compartmentIds.map((id) => {return {compartmentId: id, limit: 10000}})
@@ -364,7 +401,7 @@ export class OciReferenceDataQuery extends OciCommonQuery {
             const queries = responseIterators.map((r) => this.getAllResponseData(r))
             // const queries = requests.map((r) => this.computeClient.listImages(r))
             Promise.allSettled(queries).then((results) => {
-                console.debug('OciReferenceDataQuery: listImages: All Settled', results)
+                console.debug('OciReferenceDataQuery: listImages: All Settled')
                 //@ts-ignore
                 const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value], []).map((r) => {return {
                         id: `${r.operatingSystem}-${r.operatingSystemVersion}`,
@@ -373,15 +410,18 @@ export class OciReferenceDataQuery extends OciCommonQuery {
                         displayName: `${r.operatingSystem} ${r.operatingSystemVersion}`,
                         sourceDisplayName: r.displayName,
                         platform: r.compartmentId === null,
+                        compartmentId: r.compartmentId,
                         operatingSystem: r.operatingSystem,
                         operatingSystemVersion: r.operatingSystemVersion,
                         billableSizeInGBs: r.billableSizeInGBs,
                         lifecycleState: r.lifecycleState
                     }
                 }).sort((a: OciResource, b: OciResource) => (a.id.localeCompare(b.id) * -1))
+                resources.forEach((i: Record<string, any>) => console.debug('OciReferenceDataQuery: Images:', i.id, ':', i.ocid))
                 // @ts-ignore
                 // const uniqueResources = Array.from(new Set(resources.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
-                const uniqueResources = resources.filter((r, i) => resources.findIndex((v) => r.id === v.id) === i).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
+                // const uniqueResources = resources.filter((r, i) => resources.findIndex((v) => r.id === v.id) === i).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
+                const uniqueResources = resources.filter((r, i) => resources.findIndex((v) => r.ocid === v.ocid) === i).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
                 const imageIds = uniqueResources.map((r: Record<string, string>) => r.ocid)
                 this.listImageShapeCompatabilities(imageIds).then((compatibilities) => {
                     uniqueResources.forEach((r: Record<string, string>) => r.shapes = compatibilities.filter((c: Record<string, string>) => c.imageId === r.ocid).map((c: Record<string, string>) => c.shape))
@@ -526,7 +566,7 @@ export class OciReferenceDataQuery extends OciCommonQuery {
     listMySQLConfigurations(compartmentIds: string[], retryCount: number = 0): Promise<any> {
         return new Promise((resolve, reject) => {
             const requests: mysql.requests.ListConfigurationsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.mysqlClient.listConfigurations(r))
+            const queries = requests.map((r) => this.mysqlaasClient.listConfigurations(r))
             Promise.allSettled(queries).then((results) => {
                 console.debug('OciReferenceDataQuery: listMySQLConfigurations: All Settled')
                 //@ts-ignore
@@ -549,7 +589,7 @@ export class OciReferenceDataQuery extends OciCommonQuery {
     listMySQLShapes(compartmentIds: string[], retryCount: number = 0): Promise<any> {
         return new Promise((resolve, reject) => {
             const requests: mysql.requests.ListShapesRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.mysqlClient.listShapes(r))
+            const queries = requests.map((r) => this.mysqlaasClient.listShapes(r))
             Promise.allSettled(queries).then((results) => {
                 console.debug('OciReferenceDataQuery: listMySQLShapes: All Settled')
                 //@ts-ignore
@@ -572,7 +612,7 @@ export class OciReferenceDataQuery extends OciCommonQuery {
     listMySQLVersions(compartmentIds: string[], retryCount: number = 0): Promise<any> {
         return new Promise((resolve, reject) => {
             const requests: mysql.requests.ListVersionsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.mysqlClient.listVersions(r))
+            const queries = requests.map((r) => this.mysqlaasClient.listVersions(r))
             Promise.allSettled(queries).then((results) => {
                 console.debug('OciReferenceDataQuery: listMySQLVersions: All Settled')
                 //@ts-ignore
