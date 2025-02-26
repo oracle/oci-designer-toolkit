@@ -226,7 +226,31 @@ export class OciReferenceDataQuery extends OciCommonQuery {
     }
 
     getImage(imageId: string): Promise<any> {
-        return Promise.reject(new Error('Not Implemented'))
+        return new Promise((resolve, reject) => {
+            const request: core.requests.GetImageRequest = {imageId: imageId}
+            const query = this.computeClient.getImage(request)
+            query.then((results) => {
+                console.debug('OciReferenceDataQuery: getImage: All Settled')
+                const image = results.image
+                const resource = {
+                    id: `${image.operatingSystem}-${image.operatingSystemVersion}`,
+                    // id: r.displayName,
+                    ocid: image.id,
+                    displayName: `${image.operatingSystem} ${image.operatingSystemVersion}`,
+                    sourceDisplayName: image.displayName,
+                    platform: image.compartmentId === null,
+                    compartmentId: image.compartmentId,
+                    operatingSystem: image.operatingSystem,
+                    operatingSystemVersion: image.operatingSystemVersion,
+                    billableSizeInGBs: image.billableSizeInGBs,
+                    lifecycleState: image.lifecycleState
+                }
+                resolve(resource)
+            }).catch((reason) => {
+                console.error(reason)
+                reject(reason)
+            })
+        })
     }
 
     getNodePoolOptions(retryCount: number = 0): Promise<any> {
@@ -419,9 +443,7 @@ export class OciReferenceDataQuery extends OciCommonQuery {
                 }).sort((a: OciResource, b: OciResource) => (a.id.localeCompare(b.id) * -1))
                 resources.forEach((i: Record<string, any>) => console.debug('OciReferenceDataQuery: Images:', i.id, ':', i.ocid))
                 // @ts-ignore
-                // const uniqueResources = Array.from(new Set(resources.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
-                // const uniqueResources = resources.filter((r, i) => resources.findIndex((v) => r.id === v.id) === i).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
-                const uniqueResources = resources.filter((r, i) => resources.findIndex((v) => r.ocid === v.ocid) === i).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
+                const uniqueResources = resources.filter((r, i) => resources.findIndex((v) => r.id === v.id) === i).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
                 const imageIds = uniqueResources.map((r: Record<string, string>) => r.ocid)
                 this.listImageShapeCompatabilities(imageIds).then((compatibilities) => {
                     uniqueResources.forEach((r: Record<string, string>) => r.shapes = compatibilities.filter((c: Record<string, string>) => c.imageId === r.ocid).map((c: Record<string, string>) => c.shape))

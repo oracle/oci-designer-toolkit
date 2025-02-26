@@ -245,9 +245,7 @@ export class OciQuery extends OciReferenceDataQuery {
                     if (results[queries.indexOf(listInstances)].status === 'fulfilled' && results[queries.indexOf(listInstances)].value.length > 0) {
                         // @ts-ignore
                         design.model.oci.resources.instance = results[queries.indexOf(listInstances)].value
-                        computeImages.forEach((i: Record<string, any>) => console.debug('OciQuery: Compute Images', i.id, ':', i.ocid, i.compartmentId))
                         design.model.oci.resources.instance.forEach((i) => i.sourceDetails.sourceId = computeImages.find((ci: Record<string, any>) => ci.ocid === i.sourceDetails.imageId)?.id)
-                        design.model.oci.resources.instance.forEach((i) => console.debug('OciQuery: Instance Image', i.sourceDetails.imageId, ':', i.sourceDetails.sourceId))
                     }
                     // @ts-ignore
                     // const vnicAttachments = results[queries.indexOf(listVnicAttachments)].status === 'fulfilled' ? results[queries.indexOf(listVnicAttachments)].value : []
@@ -376,11 +374,61 @@ export class OciQuery extends OciReferenceDataQuery {
                     const filteredResources: OciResources = {}
                     Object.keys(design.model.oci.resources).forEach((k) => filteredResources[k] = design.model.oci.resources[k].filter((r) => this.lifecycleStates.includes(r.lifecycleState) || r.lifecycleState === undefined))
                     design.model.oci.resources = filteredResources
-                    resolve(design)
+                    this.postQuery(design).then((results) => {
+                        resolve(design)
+                    }).catch((reason) => {
+                        console.error(reason)
+                        reject(reason)
+                    })
+                    // resolve(design)
                 }).catch((reason) => {
                     console.error(reason)
                     reject(reason)
                 })
+            })
+        })
+    }
+
+    postQuery(design: OcdDesign): Promise<any> {
+        const resources = design.model.oci.resources
+        const missingImageIds = resources.instance !== undefined ? resources.instance.filter((i) => i.sourceDetails.sourceId === undefined).map((i) => i.sourceDetails.imageId) : []
+        const hiddenImages = this.getHiddenImages(missingImageIds)
+        const queries = [
+            hiddenImages
+        ]
+        return new Promise((resolve, reject) => {
+            Promise.allSettled(queries).then((results) => {
+                /*
+                ** Infrastructure
+                */
+                // Instances
+                // @ts-ignore
+                if (results[queries.indexOf(hiddenImages)].status === 'fulfilled' && results[queries.indexOf(hiddenImages)].value.length > 0) {
+                    // @ts-ignore
+                    const images: Record<string, any>[] = results[queries.indexOf(hiddenImages)].value
+                    // @ts-ignore
+                    design.model.oci.resources.instance.forEach((i) => {
+                        if (i.sourceDetails.sourceId === undefined) i.sourceDetails.sourceId = images.find((ci: Record<string, any>) => ci.ocid === i.sourceDetails.imageId)?.id
+                    })
+                    design.model.oci.resources.instance.forEach((i) => console.debug('OciQuery: Instance Image', i.sourceDetails.imageId, ':', i.sourceDetails.sourceId))
+                }
+
+                resolve(design)
+            }).catch((reason) => {
+                console.error(reason)
+                reject(reason)
+            })
+                 
+        })
+       }
+
+    getHiddenImages(imageIds: string[]): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const queries = imageIds.map((id) => this.getImage(id))
+            Promise.allSettled(queries).then((results) => {
+                console.debug('OciQuery: getHiddenImages: All Settled', results)
+                const images = results.filter((r) => r.status === 'fulfilled').map((r) => r.value)
+                resolve(images)
             })
         })
     }
@@ -1175,17 +1223,12 @@ export class OciQuery extends OciReferenceDataQuery {
                 const getVnics = this.getVnics(vnicIds)
                 const listPrivateIps = this.listPrivateIps(vnicIds)
                 const queries = [getVnics, listPrivateIps]
-                // this.getVnics(vnicIds).then((response) => {
-                //     //@ts-ignore
-                //     resources.forEach((r) => r.vnic = response.find((v) => v.id === r.vnicId))
-                //     resolve(resources)
-                // })
                 Promise.allSettled(queries).then((response) => {
                     //@ts-ignore
                     if (response[queries.indexOf(getVnics)].status === 'fulfilled' && response[queries.indexOf(getVnics)].value.length > 0) resources.forEach((r) => r.vnic = response[queries.indexOf(getVnics)].value.find((v) => v.id === r.vnicId))
                     //@ts-ignore
                     if (response[queries.indexOf(listPrivateIps)].status === 'fulfilled' && response[queries.indexOf(listPrivateIps)].value.length > 0) resources.forEach((r) => r.privateIp = response[queries.indexOf(listPrivateIps)].value.find((v) => v.vnicId === r.vnicId))
-                    console.debug('OciQuery: listVnicAttachments: All Settled', resources)
+                    console.debug('OciQuery: listVnicAttachments: All Settled')
                     resolve(resources)
                 })
                 // resolve(resources)
@@ -1211,22 +1254,6 @@ export class OciQuery extends OciReferenceDataQuery {
             })
         })
     }
-
-    // listBootVolumeAttachments(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-    //     return new Promise((resolve, reject) => {
-    //         const requests: core.requests.ListBootVolumeAttachmentsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-    //         const queries = requests.map((r) => this.computeClient.listBootVolumeAttachments(r))
-    //         Promise.allSettled(queries).then((results) => {
-    //             console.debug('OciQuery: listBootVolumeAttachments: All Settled')
-    //             //@ts-ignore
-    //             const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
-    //             resolve(resources)
-    //         }).catch((reason) => {
-    //             console.error(reason)
-    //             reject(reason)
-    //         })
-    //     })
-    // }
 
     listBootVolumeAttachments(compartmentIds: string[], retryCount: number = 0): Promise<any> {
         return new Promise((resolve, reject) => {
