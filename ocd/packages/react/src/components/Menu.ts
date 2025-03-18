@@ -9,7 +9,7 @@ import { OcdConsoleConfig } from './OcdConsoleConfiguration'
 import { OcdDocument } from './OcdDocument'
 import { OcdDesignFacade } from '../facade/OcdDesignFacade'
 import { OcdConfigFacade } from '../facade/OcdConfigFacade'
-import { OcdViewLayer, OcdViewPage } from '@ocd/model'
+import { OcdViewLayer, OcdViewPage, OciModelResources } from '@ocd/model'
 import { autoLayoutOptions } from '../data/OcdAutoLayoutOptions'
 import { getSvgCssData } from '../data/OcdSvgCssData'
 import { OcdExternalFacade } from '../facade/OcdExternalFacade'
@@ -144,7 +144,7 @@ export const menuItems: MenuItem[] = [
                 }
             },
             {
-                label: 'Import From',
+                label: 'Import',
                 click: undefined,
                 submenu: [
                     {
@@ -184,54 +184,36 @@ export const menuItems: MenuItem[] = [
                             }).catch((reason) => {console.debug(reason)})
                         }
                     },
+                    // {
+                    //     label: 'OCI Resources',
+                    //     click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
+                    //         alert('Currently not implemented.')
+                    //     }
+                    // },
                     {
-                        label: 'OCI Resources',
-                        click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
-                            alert('Currently not implemented.')
+                        label: 'Terraform',
+                        click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
+                            if (activeFile.modified) {
+                                OcdDesignFacade.discardConfirmation().then((discard) => {
+                                    if (discard) importFromTerraform(setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig, setActiveFile)
+                                }).catch((resp) => {console.warn('Discard Failed with', resp)})
+                            } else {
+                                importFromTerraform(setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig, setActiveFile)
+                            }
                         }
                     },
-                    {
-                        label: 'Terraform State File',
-                        click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
-                            alert('Currently not implemented.')
-                        }
-                    }
+                    // {
+                    //     label: 'Terraform State File',
+                    //     click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
+                    //         alert('Currently not implemented.')
+                    //     }
+                    // }
                 ]
             },
             {
-                label: 'Export To',
+                label: 'Export',
                 click: undefined,
                 submenu: [
-                    // {
-                    //     label: 'Markdown Old',
-                    //     click: (ocdDocument: OcdDocument, setOcdDocument: Function) => { // Convert to call to Electron API
-                    //         const saveFile = async (ocdDocument: OcdDocument) => {
-                    //             try {
-                    //                 const options = {
-                    //                     types: [
-                    //                         {
-                    //                             description: 'Markdown Files',
-                    //                             accept: {
-                    //                                 'text/markdown': ['.md'],
-                    //                             },
-                    //                         },
-                    //                     ],
-                    //                 }
-                    //                 // @ts-ignore 
-                    //                 const handle = await window.showSaveFilePicker(options)
-                    //                 const writable = await handle.createWritable()
-                    //                 const exporter = new OcdMarkdownExporter([ociSvgThemeCss, svgSvgCss])
-                    //                 const output = exporter.export(ocdDocument.design)
-                    //                 await writable.write(output)
-                    //                 await writable.close()
-                    //                 return handle
-                    //             } catch (err: any) {
-                    //                 console.error(err.name, err.message);
-                    //             }
-                    //         }
-                    //         saveFile(ocdDocument).then((resp) => console.info('Saved', resp))             
-                    //     }
-                    // },
                     {
                         label: 'Markdown',
                         click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>) => { // Convert to call to Electron API
@@ -249,7 +231,7 @@ export const menuItems: MenuItem[] = [
                         }
                     },
                     {
-                        label: 'OpenTofu (Terraform)',
+                        label: 'Terraform',
                         click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
                             const suggestedFilename = activeFile.name.replaceAll('.okit', '.tf')
                             const directory = activeFile.name.split('/').slice(0, -1).join('/')
@@ -447,7 +429,7 @@ export const menuItems: MenuItem[] = [
                 }
             },
             {
-                label: 'OpenTofu (Terraform)',
+                label: 'Terraform',
                 click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
                     ocdConsoleConfig.config.displayPage = 'terraform'
                     setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
@@ -644,6 +626,34 @@ export const loadDesign = (filename: string, setOcdDocument: Function, ocdConsol
         }
     }).catch((resp) => {console.warn('Load Design Failed with', resp)})
 }
+
+export const importFromTerraform = (setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, setActiveFile: Function): Promise<any> => {
+    return OcdDesignFacade.importFromTerraform().then((results) => {
+        console.debug('menu: importFromTerraform:', JSON.stringify(results, null, 2))
+        if (!results.canceled) {
+            const ocdDocument = OcdDocument.new()
+            const design = results.design
+            design.metadata.title = `Imported Terraform ${results.filename}`
+            design.view.pages[0].title = results.filename
+            design.view.pages[0].layers = []
+            ocdDocument.design = design
+            console.debug('importFromTerraform: Design', JSON.stringify(ocdDocument.design, null, 2))
+            // Add Layers
+            const resultsOciResources = design.model.oci.resources
+            console.debug('importFromTerraform: Oci Resources', JSON.stringify(resultsOciResources, null, 2))
+            resultsOciResources.compartment.forEach((c: OciModelResources.OciCompartment, i: number) => ocdDocument.addLayer(c.id, i === 0))
+            // Auto Arrange
+            ocdDocument.autoLayout(ocdDocument.getActivePage().id, true, ocdConsoleConfig.config.defaultAutoArrangeStyle)
+            setOcdDocument(ocdDocument)
+            // setActiveFile({name: results.filename.replaceAll('.tf', '.okit'), modified: false})
+            // updateRecentFiles(results.filename, ocdConsoleConfig, setOcdConsoleConfig)
+            ocdConsoleConfig.config.displayPage = 'designer'
+            setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+        }
+    }).catch((resp) => {console.warn('Load Design Failed with', resp)})
+}
+
+
 
 export const saveDesign = () => {
     

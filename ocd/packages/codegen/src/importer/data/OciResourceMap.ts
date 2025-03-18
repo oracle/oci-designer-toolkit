@@ -33,7 +33,7 @@ export const resourceMap: OcdResourceMap = {
     "oci_core_service_gateway": "service_gateway",
     "oci_core_subnet": "subnet",
     "oci_core_vcn": "vcn",
-    "oci_core_vnic": "vnic",
+    // "oci_core_vnic": "vnic",
     "oci_core_vnic_attachment": "vnic_attachment",
     "oci_core_volume": "volume",
     "oci_core_volume_attachment": "volume_attachment",

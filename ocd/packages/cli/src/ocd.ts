@@ -14,6 +14,7 @@ import { parseArgs } from "node:util"
 import { OcdMarkdownExporter, OcdSVGExporter, OcdTerraformExporter } from '@ocd/export'
 import { OciQuery } from "@ocd/query"
 import { OcdAutoLayout, OcdDesign, OcdViewCoords, OciModelResources } from '@ocd/model'
+import { TerraformParser } from '@ocd/parser'
 import { OcdUtils } from '@ocd/core'
 
 const options = {
@@ -35,6 +36,10 @@ const options = {
     input: {
         type: "string",
         short: "i"
+    },
+    inputDir: {
+        type: "string",
+        short: "I"
     },
     output: {
         type: "string",
@@ -202,6 +207,19 @@ if (args.positionals.length === 0 || Object.hasOwn(args.values, 'help')) {
                     fs.writeFileSync(designFile, JSON.stringify(design, null, 2))
                 })
             }).catch((resp) => console.error(resp))
+        } else if (command === 'parse' && category === 'terraform' && inputFile !== undefined) {
+            fs.readFile(inputFile, 'utf8', (err, data) => {
+                if (err) {
+                    console.error(err)
+                    return
+                }
+                const parser = new TerraformParser(data)
+                const json = JSON.stringify(parser.parse(), null, 2)
+                if (outputFile !== undefined) {
+                    fs.writeFileSync(outputFile, json, {encoding: 'utf8'})
+                }
+                else {console.info(json)} // Print to screen
+            })
         } else {
             topLevelUsage()
         }

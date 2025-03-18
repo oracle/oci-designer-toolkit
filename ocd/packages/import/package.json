@@ -43,6 +43,7 @@
   },
   "peerDependencies": {
     "@ocd/core": ">=0.2.7",
-    "@ocd/model": ">=0.2.7"
+    "@ocd/model": ">=0.2.7",
+    "@ocd/parser": ">=0.2.7"
   }
 }

@@ -52,7 +52,8 @@ export class OcdTerraformSchemaImporter extends OcdSchemaImporter {
         Object.entries(source_schema.provider_schemas[this.tfProvider].data_source_schemas).filter(([k, v]) => dataKeys.includes(k)).forEach(([key, value]) => {
             console.debug('OcdTerraformSchemaImporter: Processing data', key)
             this.ocd_schema[dataMap[key]] = {
-                'tf_resource': key.endsWith('s') ? dataMap[key] : key,
+                // 'tf_resource': key.endsWith('s') ? key.slice(0, -1) : key,
+                'tf_resource': key,
                 'type': 'object',
                 'subtype': '',
                 // @ts-ignore

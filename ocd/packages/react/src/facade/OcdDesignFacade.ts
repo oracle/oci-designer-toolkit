@@ -45,4 +45,7 @@ export namespace OcdDesignFacade {
     export const exportToTerraform = (design: OcdDesign, directory: string): Promise<any> => {
         return window.ocdAPI ? window.ocdAPI.exportToTerraform(design, directory) : Promise.reject(new Error('Currently Not Implemented'))
     }
+    export const importFromTerraform = (): Promise<any> => {
+        return window.ocdAPI ? window.ocdAPI.importFromTerraform() : Promise.reject(new Error('Currently Not Implemented'))
+    }
 }
