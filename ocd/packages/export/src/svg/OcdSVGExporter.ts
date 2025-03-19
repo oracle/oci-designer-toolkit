@@ -94,7 +94,11 @@ ${coords.coords !== undefined ? coords.coords.map((c) => this.generateResource(c
 
     getOciResources() {return Object.values(this.design.model.oci.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], [])}
     getOciResourcesObject() {return this.design.model.oci.resources}
-    getResources() {return this.getOciResources()}
+    getAzureResources() {return Object.values(this.design.model.azure.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], [])}
+    getAzureResourcesObject() {return this.design.model.azure.resources}
+    getGoogleResources() {return Object.values(this.design.model.google.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], [])}
+    getGoogleResourcesObject() {return this.design.model.google.resources}
+    getResources() {return [...this.getOciResources(), ...this.getAzureResources(), ...this.getGoogleResources()]}
     getResource(id='') {return this.getResources().find((r: OcdResource) => r.id === id)}
 
     generateConnector(connector: OcdViewConnector, parentConnector: boolean = false, detailedResource: boolean = true): string {
