@@ -514,13 +514,6 @@ locals {
         }
         
         
-        # ------- Create Password
-        resource "oci_identity_ui_password" "OkitUser1713779390586Password" {
-            provider       = oci.home_region
-            #Required
-            user_id = oci_identity_user.OkitUser1713779390586.id
-        }
-        
         `,
         expect: ''
     }
