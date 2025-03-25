@@ -7,9 +7,9 @@ import { OcdResource } from "@ocd/model"
 import { TerraformJson } from "@ocd/parser"
 
 export class OcdResourceBuilder {
-    resourceMap: Record<string, string>
+    resourceMap: Map<string, string>
     constructor() {
-        this.resourceMap = {}
+        this.resourceMap = new Map()
     }
     generate(terraformResource: string, resourceName: string, resourceData: Record<string, string>): OcdResource | null {
         return null

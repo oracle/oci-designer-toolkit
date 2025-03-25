@@ -516,5 +516,16 @@ locals {
         
         `,
         expect: ''
-    }
+    },
+    {
+        description: 'Tes Variable Block Parsing',
+        input: `
+    
+variable "admin-p" {
+    default = "WelcomE_-12345#"
+    description = ""
+}
+        `,
+        expect: ''
+    },
 ]

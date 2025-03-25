@@ -254,7 +254,7 @@ resource "oci_core_instance" "OkitInstance1706530690079" {
         expect: ``
     },
     {
-        description: 'Test Identity Block Parsing',
+        description: 'Test Identity Block Lexing',
         input: `
         # ------ Create Compartment
         resource "oci_identity_compartment" "OkitCompartment1704709397851" {
@@ -274,6 +274,17 @@ resource "oci_core_instance" "OkitInstance1706530690079" {
             
         
         }
+        `,
+        expect: ''
+    },
+    {
+        description: 'Test Variable Block Parsing',
+        input: `
+    
+variable "admin-p" {
+    default = "WelcomE_-12345#"
+    description = ""
+}
         `,
         expect: ''
     },

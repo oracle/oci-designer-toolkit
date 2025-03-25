@@ -73,6 +73,10 @@ export class TerraformLexer {
                     token = new Token(TokenTypes.TERRAFORM, 'TERRAFORM', value)
                     break
                 }
+                case 'variable': {
+                    token = new Token(TokenTypes.VARIABLE, 'VARIABLE', value)
+                    break
+                }
                 case 'base64encode': {
                     token = new Token(TokenTypes.FUNCTION, 'FUNCTION', value)
                     break

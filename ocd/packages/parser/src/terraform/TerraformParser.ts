@@ -53,42 +53,15 @@ export class TerraformParser {
                     token = this.#parseTerraform()
                     break
                 }
+                case TokenTypes.VARIABLE: {
+                    token = this.#parseVariable()
+                    break
+                }
                 default:
                     token = this.lexer.nextToken()
             }
         }
         return this.terraformJson
-    }
-
-    #parseResource(): Token {
-        let token: Token = this.lexer.nextToken()
-        if (token.type === TokenTypes.STRING) {
-            const resourceType = token.value
-            token = this.lexer.nextToken()
-            if (token.type === TokenTypes.STRING) {
-                const resourceName = token.value
-                if (!this.terraformJson.resource.hasOwnProperty(resourceType)) this.terraformJson.resource[resourceType] = {}
-                this.terraformJson.resource[resourceType][resourceName] = {}
-                const resource = this.terraformJson.resource[resourceType][resourceName]
-                token = this.lexer.nextToken()
-                if (token.type === TokenTypes.BRACEOPEN) token = this.lexer.nextToken()
-                while (!BlockTokens.includes(token.type) && token.type !== TokenTypes.EOF) {
-                    switch(token.type) {
-                        case TokenTypes.IDENTIFIER: {
-                            const identifierValue = this.#getIdentifierValue()
-                            if (Array.isArray(identifierValue) && resource.hasOwnProperty(token.value)) {
-                                resource[token.value] = [...resource[token.value], ...identifierValue]
-                            } else {
-                                resource[token.value] = identifierValue
-                            }
-                            break
-                        }
-                    }
-                    token = this.lexer.nextToken()
-                }
-            }
-        }
-        return token
     }
 
     #parseData(): Token {
@@ -112,6 +85,14 @@ export class TerraformParser {
                             } else {
                                 resource[token.value] = identifierValue
                             }
+                            // if (Array.isArray(identifierValue) && resource.hasOwnProperty(token.value)) {
+                            //     if(Array.isArray(resource[token.value])) resource[token.value] = [...resource[token.value], ...identifierValue]
+                            //     else resource[token.value] = [token.value, ...identifierValue]
+                            // } else if (Array.isArray(identifierValue) && identifierValue.length > 0) {
+                            //     resource[token.value] = identifierValue[0]
+                            // } else {
+                            //     resource[token.value] = identifierValue
+                            // }
                             break
                         }
                     }
@@ -122,6 +103,27 @@ export class TerraformParser {
         return token
     }
 
+    #parseLocals(): Token {
+        let token: Token = this.lexer.nextToken()
+        if (token.type === TokenTypes.BRACEOPEN) token = this.lexer.nextToken()
+        const locals = this.terraformJson.locals
+        while (!BlockTokens.includes(token.type) && token.type !== TokenTypes.EOF) {
+            switch(token.type) {
+                case TokenTypes.IDENTIFIER: {
+                    const identifierValue = this.#getIdentifierValue()
+                    if (Array.isArray(identifierValue) && locals.hasOwnProperty(token.value)) {
+                        locals[token.value] = [...locals[token.value], ...identifierValue]
+                    } else {
+                        locals[token.value] = identifierValue
+                    }
+                    break
+                }
+            }
+            token = this.lexer.nextToken()
+        }
+        return token
+    }
+    
     #parseOutput(): Token {
         let token: Token = this.lexer.nextToken()
         if (token.type === TokenTypes.STRING) {
@@ -176,27 +178,45 @@ export class TerraformParser {
         return token
     }
 
-    #parseLocals(): Token {
+    #parseResource(): Token {
         let token: Token = this.lexer.nextToken()
-        if (token.type === TokenTypes.BRACEOPEN) token = this.lexer.nextToken()
-        const locals = this.terraformJson.locals
-        while (!BlockTokens.includes(token.type) && token.type !== TokenTypes.EOF) {
-            switch(token.type) {
-                case TokenTypes.IDENTIFIER: {
-                    const identifierValue = this.#getIdentifierValue()
-                    if (Array.isArray(identifierValue) && locals.hasOwnProperty(token.value)) {
-                        locals[token.value] = [...locals[token.value], ...identifierValue]
-                    } else {
-                        locals[token.value] = identifierValue
+        if (token.type === TokenTypes.STRING) {
+            const resourceType = token.value
+            token = this.lexer.nextToken()
+            if (token.type === TokenTypes.STRING) {
+                const resourceName = token.value
+                if (!this.terraformJson.resource.hasOwnProperty(resourceType)) this.terraformJson.resource[resourceType] = {}
+                this.terraformJson.resource[resourceType][resourceName] = {}
+                const resource = this.terraformJson.resource[resourceType][resourceName]
+                token = this.lexer.nextToken()
+                if (token.type === TokenTypes.BRACEOPEN) token = this.lexer.nextToken()
+                while (!BlockTokens.includes(token.type) && token.type !== TokenTypes.EOF) {
+                    switch(token.type) {
+                        case TokenTypes.IDENTIFIER: {
+                            const identifierValue = this.#getIdentifierValue()
+                            if (Array.isArray(identifierValue) && resource.hasOwnProperty(token.value)) {
+                                resource[token.value] = [...resource[token.value], ...identifierValue]
+                            } else {
+                                resource[token.value] = identifierValue
+                            }
+                            // if (Array.isArray(identifierValue) && resource.hasOwnProperty(token.value)) {
+                            //     if(Array.isArray(resource[token.value])) resource[token.value] = [...resource[token.value], ...identifierValue]
+                            //     else resource[token.value] = [token.value, ...identifierValue]
+                            // } else if (Array.isArray(identifierValue) && identifierValue.length > 0) {
+                            //     resource[token.value] = identifierValue[0]
+                            // } else {
+                            //     resource[token.value] = identifierValue
+                            // }
+                            break
+                        }
                     }
-                    break
+                    token = this.lexer.nextToken()
                 }
             }
-            token = this.lexer.nextToken()
         }
         return token
     }
-    
+
     #parseTerraform(): Token {
         let token: Token = this.lexer.nextToken()
         if (token.type === TokenTypes.BRACEOPEN) token = this.lexer.nextToken()
@@ -218,6 +238,32 @@ export class TerraformParser {
         return token
     }
     
+    #parseVariable(): Token {
+        let token: Token = this.lexer.nextToken()
+        if (token.type === TokenTypes.STRING) {
+            const variableName = token.value
+            token = this.lexer.nextToken()
+            if (token.type === TokenTypes.BRACEOPEN) {token = this.lexer.nextToken()}
+            this.terraformJson.variable[variableName] = {}
+            const variable = this.terraformJson.variable[variableName]
+            while (!BlockTokens.includes(token.type) && token.type !== TokenTypes.EOF) {
+                switch(token.type) {
+                    case TokenTypes.IDENTIFIER: {
+                        const identifierValue = this.#getIdentifierValue()
+                        if (Array.isArray(identifierValue) && variable.hasOwnProperty(token.value)) {
+                            variable[token.value] = [...variable[token.value], ...identifierValue]
+                        } else {
+                            variable[token.value] = identifierValue
+                        }
+                        break
+                    }
+                }
+                token = this.lexer.nextToken()
+            }
+        }
+        return token
+    }
+
     #getIdentifierValue(): string | string[] | boolean | number | Record<string, any> | Record<string, any>[] {
         let identifierValue: string | string[] | boolean | number | Record<string, any> | Record<string, any>[] = ''
         let token: Token = this.lexer.nextToken()

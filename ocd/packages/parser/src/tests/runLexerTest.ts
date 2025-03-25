@@ -4,7 +4,7 @@ import { TerraformLexer } from '../index.js'
 
 lexerTestCases.forEach((testCase) => {
     console.info('')
-    console.info('Parser Test:', testCase.description)
+    console.info('Lexer Test:', testCase.description)
     console.info('===================================================')
     console.info('')
     const lexer = new TerraformLexer(testCase.input)

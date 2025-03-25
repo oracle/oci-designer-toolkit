@@ -30,6 +30,7 @@ export enum TokenTypes {
     SQUAREBRACKETOPEN,  // [
     STRING,             // Quoted String
     TERRAFORM,          // TF terraform
+    VARIABLE,           // TF variable
 }
 
 export const BlockTokens = [
@@ -38,5 +39,6 @@ export const BlockTokens = [
     TokenTypes.OUTPUT, 
     TokenTypes.PROVIDER, 
     TokenTypes.RESOURCE, 
-    TokenTypes.TERRAFORM
+    TokenTypes.TERRAFORM,
+    TokenTypes.VARIABLE,
 ]
