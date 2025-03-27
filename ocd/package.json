@@ -52,6 +52,7 @@
     "packages/codegen",
     "packages/model",
     "packages/query",
+    "packages/parser",
     "packages/import",
     "packages/export",
     "packages/react",

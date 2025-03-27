@@ -5,7 +5,7 @@
 
 import fs from 'fs'
 import path from 'path'
-import { OcdSchema, OciModelGenerator, OciTerraformGenerator, OciTerraformSchemaImporter, OciValidatorGenerator, OcdTerraformSchemaResourceAttributesGenerator, OciMarkdownGenerator, OciPropertiesGenerator, OciTabularGenerator, AzureMarkdownGenerator, AzurePropertiesGenerator, AzureTabularGenerator, AzureTerraformGenerator, AzureModelGenerator, AzureAzTerraformSchemaImporter, AzureRmTerraformSchemaImporter, AzureValidatorGenerator, GoogleTerraformSchemaImporter, GoogleModelGenerator, GoogleMarkdownGenerator, GooglePropertiesGenerator, GoogleTerraformGenerator, GoogleTabularGenerator, GoogleValidatorGenerator, OciExcelGenerator } from '@ocd/codegen'
+import { OcdSchema, OciModelGenerator, OciTerraformGenerator, OciTerraformImportGenerator, OciTerraformSchemaImporter, OciValidatorGenerator, OcdTerraformSchemaResourceAttributesGenerator, OciMarkdownGenerator, OciPropertiesGenerator, OciTabularGenerator, AzureMarkdownGenerator, AzurePropertiesGenerator, AzureTabularGenerator, AzureTerraformGenerator, AzureModelGenerator, AzureAzTerraformSchemaImporter, AzureRmTerraformSchemaImporter, AzureValidatorGenerator, GoogleTerraformSchemaImporter, GoogleModelGenerator, GoogleMarkdownGenerator, GooglePropertiesGenerator, GoogleTerraformGenerator, GoogleTabularGenerator, GoogleValidatorGenerator, OciExcelGenerator } from '@ocd/codegen'
 import { parseArgs } from "node:util"
 
 const options = {
@@ -56,6 +56,7 @@ if (command.toLocaleLowerCase() === 'generate') {
     else if (subcommand.toLocaleLowerCase() === 'oci-tabular-js') generator = new OciTabularGenerator()
     else if (subcommand.toLocaleLowerCase() === 'oci-validator-js') generator = new OciValidatorGenerator()
     else if (subcommand.toLocaleLowerCase() === 'oci-excel-js') generator = new OciExcelGenerator()
+    else if (subcommand.toLocaleLowerCase() === 'oci-terraform-import-js') generator = new OciTerraformImportGenerator()
     // else if (subcommand.toLocaleLowerCase() === 'azureaz-model-js') generator = new AzureModelGenerator()
     // else if (subcommand.toLocaleLowerCase() === 'azureaz-validator-js') generator = new AzureValidatorGenerator()
     else if (subcommand.toLocaleLowerCase() === 'azurerm-model-js') generator = new AzureModelGenerator()
@@ -77,8 +78,15 @@ if (command.toLocaleLowerCase() === 'generate') {
         })
         if (generator.resources.length > 0) {
             // console.info(generator.resourceFile)
-            const resource_file_name = path.join(outputDirectory, 'resources.ts')
-            fs.writeFileSync(resource_file_name, generator.resourceFile)
+            const fullFilename = path.join(outputDirectory, 'resources.ts')
+            fs.writeFileSync(fullFilename, generator.resourceFile)
+        }
+        generator.generateAdditionalFiles()
+        if (generator.additionalFiles.length > 0) {
+            generator.additionalFiles.forEach((a) => {
+                const fullFilename = path.join(outputDirectory, a.filename)
+                fs.writeFileSync(fullFilename, a.contents)
+            })
         }
     } else {
         console.debug(`ocd-codegen: generate sub-command ${subcommand} does not exist.`)

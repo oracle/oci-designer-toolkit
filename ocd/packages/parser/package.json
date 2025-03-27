@@ -1,0 +1,53 @@
+{
+  "name": "@ocd/parser",
+  "version": "0.2.7",
+  "description": "OKIT Open Cloud Designer Parser Module",
+  "title": "OKIT Open Cloud Designer Parser Module",
+  "author": {
+    "name": "Andrew Hopkinson",
+    "email": "andrew.hopkinson@oracle.com",
+    "url": "https://github.com/oracle/oci-designer-toolkit"
+  },
+  "bugs": "https://github.com/oracle/oci-designer-toolkit/issues",
+  "keywords": [
+    "ocd",
+    "okit",
+    "parser"
+  ],
+  "license": "UPL-1.0",
+  "type": "module",
+  "exports": {
+    ".": {
+        "import": {
+            "types": "./lib/esm/index.d.ts",
+            "default": "./lib/esm/index.js"
+        },
+        "require": {
+            "types": "./lib/cjs/index.d.ts",
+            "default": "./lib/cjs/index.js"
+        }
+    }
+  },
+  "main": "lib/cjs/index.js",
+  "module": "lib/esm/index.js",
+  "types": "lib/esm/index.d.js",
+  "files": [
+    "lib/"
+  ],
+  "scripts": {
+    "build_and_test": "npm run build && npm run test",
+    "build_and_test_lexer": "npm run build && npm run test_lexer",
+    "build_and_test_parser": "npm run build && npm run test_parser",
+    "test": "npm run test_lexer && npm run test_parser",
+    "test_lexer": "node lib/esm/tests/runLexerTest.js",
+    "test_parser": "node lib/esm/tests/runParserTest.js",
+    "clean": "rm -rf lib dist",
+    "purge": "npm run clean && rm -rf node_modules",
+    "pack": "mkdir -p dist && npm pack --pack-destination dist",
+    "compile": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
+    "build": "npm run compile && npm run pack"
+  },
+  "peerDependencies": {
+    "@ocd/core": ">=0.2.7"
+  }
+}

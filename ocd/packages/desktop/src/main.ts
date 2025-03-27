@@ -13,6 +13,7 @@ import { OciQuery, OciReferenceDataQuery, OciResourceManagerQuery } from '@ocd/q
 import { OcdDesign, OcdResource, OciModelResources } from '@ocd/model'
 import { OcdCache, OcdConsoleConfiguration } from '@ocd/react'
 import { OcdExcelExporter, OcdMarkdownExporter, OcdSVGExporter, OcdTerraformExporter } from '@ocd/export'
+import { OcdTerraformImporter } from '@ocd/import'
 
 app.commandLine.appendSwitch('ignore-certificate-errors') // Temporary work around for not being able to add additional certificates
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0' // Temporary work around for not being able to add additional certificates
@@ -264,6 +265,7 @@ app.whenReady().then(() => {
 	ipcMain.handle('ocdDesign:exportToMarkdown', handleExportToMarkdown)
 	ipcMain.handle('ocdDesign:exportToSvg', handleExportToSvg)
 	ipcMain.handle('ocdDesign:exportToTerraform', handleExportToTerraform)
+	ipcMain.handle('ocdDesign:importFromTerraform', importFromTerraform)
 	// OCD Configuration
 	ipcMain.handle('ocdConfig:loadConsoleConfig', handleLoadConsoleConfig)
 	ipcMain.handle('ocdConfig:saveConsoleConfig', handleSaveConsoleConfig)
@@ -599,6 +601,29 @@ async function handleExportToTerraform(event: any, design: OcdDesign, directory:
 			reject(new Error(err))
 		})
 	})
+}
+
+async function importFromTerraform(event: any) {
+	console.debug('Electron Main: importFromTerraform')
+	return new Promise((resolve, reject) => {
+		dialog.showOpenDialog(mainWindow, {
+			properties: ['openFile', 'multiSelections'],
+			filters: [{name: 'Filetype', extensions: ['tf']}]
+			}).then(result => {
+			const importer = new OcdTerraformImporter()
+			// const design = result.canceled ? '' : fs.readFileSync(result.filePaths[0], 'utf-8')
+			const design = result.canceled ? '' : readFilesSync(result.filePaths, 'utf-8').join('\n')
+			resolve({canceled: result.canceled, filename: result.filePaths[0], design: importer.import(design)})
+		}).catch(err => {
+			console.error(err)
+			reject(new Error(err))
+		})
+	})
+}
+
+function readFilesSync(filePaths: string[], encoding:string = 'utf-8'): string[] {
+	const contents: string[] = filePaths.map((f) => fs.readFileSync(f, 'utf-8'))
+	return contents
 }
 
 // Library / Reference Architecture Functions

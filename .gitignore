@@ -69,6 +69,8 @@ containers/ssh/*
 **/export/src/*/provider/azure/resources.ts
 **/export/src/*/provider/google/resources.ts
 **/export/src/*/provider/oci/resources.ts
+**/import/src/*/provider/oci/resources.ts
+**/import/src/*/provider/oci/OciResourceBuilder.ts
 **/react/src/components/tabular/provider/azure/resources.ts
 **/react/src/components/tabular/provider/google/resources.ts
 **/react/src/components/tabular/provider/oci/resources.ts

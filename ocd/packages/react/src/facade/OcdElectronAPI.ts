@@ -34,6 +34,7 @@ export interface OcdElectronAPI {
     exportToMarkdown: (design: OcdDesign | string, css: string[], suggestedFilename: string | undefined) => Promise<void>
     exportToSvg: (design: OcdDesign | string, css: string[], directory: string, suggestedFilename: string | undefined) => Promise<void>
     exportToTerraform: (design: OcdDesign | string, directory: string) => Promise<void>
+    importFromTerraform: () => Promise<void>
 	// OCD Configuration
     loadConsoleConfig: () => Promise<void>
     saveConsoleConfig: (config: OcdConsoleConfiguration) => Promise<void>

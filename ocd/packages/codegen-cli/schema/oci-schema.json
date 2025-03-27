@@ -13272,7 +13272,7 @@
     }
   },
   "boot_volume_attachment": {
-    "tf_resource": "boot_volume_attachment",
+    "tf_resource": "oci_core_boot_volume_attachments",
     "type": "object",
     "subtype": "",
     "attributes": {
