@@ -15,7 +15,11 @@ import Package from './package.json' with {type: "json"}
 console.debug('Forge Config: package.json.version', Package.version)
 
 const archPos = process.argv.findIndex(arg => arg.startsWith('--arch'))
-const arch = archPos > 0 ? process.argv[archPos+1] : os.arch()
+let arch = archPos > 0 ? process.argv[archPos+1] : os.arch()
+if (arch === undefined) {
+  arch = process.argv[archPos].replace('arch', '').replace(/[\W]+/g,"")
+}
+// const arch = archPos > 0 ? process.argv[archPos+1] : os.arch()
 console.info('Args:', process.argv, archPos, arch)
 const config: ForgeConfig = {
   outDir: '../../dist',

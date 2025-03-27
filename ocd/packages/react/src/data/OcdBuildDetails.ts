@@ -13,9 +13,9 @@
 export const buildDetails: Record<string, string> = {
     version: '0.2.7',
     date: '27/03/2025',
-    time: '12:54:36',
-    datetime: '27/03/2025, 12:54:36',
-    utc: 'Thu, 27 Mar 2025 12:54:36 GMT'
+    time: '15:10:02',
+    datetime: '27/03/2025, 15:10:02',
+    utc: 'Thu, 27 Mar 2025 15:10:02 GMT'
 }
 
 export default buildDetails
