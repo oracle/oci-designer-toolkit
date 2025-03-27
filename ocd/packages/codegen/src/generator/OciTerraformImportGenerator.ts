@@ -9,11 +9,16 @@ import { OcdTerraformImportGenerator } from './OcdTerraformImportGenerator.js'
 import { resourceMap } from '../importer/data/OciResourceMap.js'
 
 export class OciTerraformImportGenerator extends OcdTerraformImportGenerator {
+    defaultResourceMap = {
+        "oci_core_default_dhcp_options": "dhcp_options",
+        "oci_core_default_route_table": "route_table",
+        "oci_core_default_security_list": "security_list",
+    }
     constructor () {
         super('Oci', commonElements, commonIgnoreElements)
         this.terraformMetadataOverrides = terraformMetadataOverrides
         this.ignoreAttributes = [...commonElements, ...commonIgnoreElements]
-        this.resourceMap = resourceMap
+        this.resourceMap = {...resourceMap, ...this.defaultResourceMap}
     }
 }
 

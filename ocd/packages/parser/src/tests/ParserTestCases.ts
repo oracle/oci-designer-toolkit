@@ -528,4 +528,94 @@ variable "admin-p" {
         `,
         expect: ''
     },
+    {
+        description: 'Test Route Table Parsing',
+        input: `
+# ------ Update Default Route Table
+resource "oci_core_default_route_table" "OkitRouteTable1704881592638" {
+    manage_default_resource_id = local.OkitVcn1704881592637_default_route_table_id
+    display_name = "ocdputrt"
+    route_rules {
+        description = "Access Internet"
+        destination = "0.0.0.0/0"
+        destination_type = "CIDR_BLOCK"
+        network_entity_id = local.OkitInternetGateway1704904637830_id
+    }
+    # Tags
+    freeform_tags = {
+        "ocd_version" : "0.2.7",
+        "OKIT-Open-Cloud-Designer-Version" : "0.2.7",
+        "ocd_design_name" : "OCD Beta Test Design",
+        "yet_another_tag" : "Test"
+    }
+    
+
+}
+
+locals {
+    OkitRouteTable1704881592638_id = oci_core_default_route_table.OkitRouteTable1704881592638.id
+    
+}
+
+
+# ------ Create Route Table
+resource "oci_core_route_table" "OkitRouteTable1704905350785" {
+    
+    compartment_id = local.OkitCompartment1704709397851_id
+    display_name = "ocdprivrt"
+
+    vcn_id = local.OkitVcn1704881592637_id
+    route_rules {
+        description = "NAT Internet Access"
+        destination = "0.0.0.0/0"
+        destination_type = "CIDR_BLOCK"
+        network_entity_id = local.OkitNatGateway1704905104188_id
+    }
+    # Tags
+    freeform_tags = {
+        "ocd_version" : "0.2.7",
+        "OKIT-Open-Cloud-Designer-Version" : "0.2.7",
+        "ocd_design_name" : "OCD Beta Test Design",
+        "yet_another_tag" : "Test"
+    }
+    
+
+}
+
+locals {
+    OkitRouteTable1704905350785_id = oci_core_route_table.OkitRouteTable1704905350785.id
+    
+}
+
+
+
+
+# ------ Update Default Route Table
+resource "oci_core_default_route_table" "OkitRouteTable1710854551243" {
+    manage_default_resource_id = local.OkitVcn1710854551242_default_route_table_id
+    display_name = "ocdprivrt"
+    route_rules {
+        description = "All to NAT"
+        destination = "0.0.0.0/0"
+        destination_type = "CIDR_BLOCK"
+        network_entity_id = local.OkitNatGateway1716308905251_id
+    }
+    # Tags
+    freeform_tags = {
+        "ocd_version" : "0.2.7",
+        "OKIT-Open-Cloud-Designer-Version" : "0.2.7",
+        "ocd_design_name" : "OCD Beta Test Design",
+        "yet_another_tag" : "Test"
+    }
+    
+
+}
+
+locals {
+    OkitRouteTable1710854551243_id = oci_core_default_route_table.OkitRouteTable1710854551243.id
+    
+}
+        `,
+        expect: ''
+    },
 ]

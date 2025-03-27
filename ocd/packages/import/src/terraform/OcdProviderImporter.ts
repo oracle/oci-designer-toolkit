@@ -60,7 +60,7 @@ export class OcdProviderImporter {
         console.debug('OcdProviderImporter: parseResources: resourceIdMap', JSON.stringify(Object.fromEntries(this.resourceIdMap), null, 2))
     }
 
-    convertResources = () => {
+    convertResources() {
         const allResources = OcdDesign.getResources(this.design)
         allResources.forEach((r) => {
             this.convertResource(r)
