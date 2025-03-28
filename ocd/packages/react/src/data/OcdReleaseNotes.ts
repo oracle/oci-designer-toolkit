@@ -4,27 +4,19 @@
 */
 
 export const releaseNotes = `[![License: UPL](https://img.shields.io/badge/license-UPL-green)](https://img.shields.io/badge/license-UPL-green) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=oracle_oci-designer-toolkit&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=oracle_oci-designer-toolkit)
-# November 2024 Release (Version 0.66.1)
+# March 2025 Release (Version 0.68.0)
 ____
-**Update 0.66.1**: This update addresses the following issues.
-1. Update main README to de-emphasise Docker
+**Update 0.68.0**: This update addresses the following issues.
 ____
-Welcome to the November 2024 release of OKIT. This release switches the exiat Create React App based build format to Vite and Electron Forge.
+Welcome to the March 2025 release of OKIT. This release extends both import and export functions of the OCD Desktop rlease whilst adding token based authentication.
 
-## OKIT (Web) Features
+## OKIT Classic Features
+1. OKIT-Web: Remove optional compartment_id from Object Storage namespace query in Terraform
 
-## OKIT - Open Cloud Designer
-1. OKIT-Ocd: Convert @ocd/core to ES6 Module (#OKIT-307)
-1. OKIT-Ocd: Convert @ocd/model to ES6 Module (#OKIT-308)
-1. OKIT-Ocd: Convert @ocd/query to ES6 Module (#OKIT-309)
-1. OKIT-Ocd: Convert @ocd/export to ES6 Module (#OKIT-310)
-1. OKIT-Ocd: Convert @ocd/import to ES6 Module (#OKIT-311)
-1. OKIT-Ocd: Convert @ocd/codegen to ES6 Module (#OKIT-312)
-1. OKIT-Ocd: Convert @ocd/codegen-cli to ES6 Module (#OKIT-313)
-1. OKIT-Ocd: Convert @ocd/cli to ES6 Module (#OKIT-314)
-1. OKIT-Ocd: Convert @ocd/desktop to ES6 Module (#OKIT-315)
-1. OKIT-Ocd: Switch build process from Create React App / Webpack to Vite (#OKIT-305)
-1. OKIT-Ocd: Switch to Electron Forge for building.
+## OKIT Desktop Features
+1. OKIT-320: Import Terraform Files. This is the initiall release of the Terraform import functionality and may need updates as and when issues are seen.
+2. OKIT-301: Add export to Excel (Detailed)
+3. OKIT-319: Add security Token based authentication. If during authentication OKIT Desktop notices the presence of a security token entry in the config file it will switch to token based authentication.
 
 ___**Available Resources**___
 
