@@ -25,12 +25,10 @@ export class OcdProviderImporter {
         const resource = this.providerFilter(teraformJson.resource, `${this.provider}_`)
         const locals = teraformJson.locals
         const variables = teraformJson.variable
-        // console.debug('OcdProviderImporter: Reduced', resource)
         this.parseResources(resource)
         this.parseLocals(locals)
         this.parseVariables(variables)
         this.convertResources()
-        // console.debug('OcdProviderImporter: Design:', JSON.stringify(this.design, null, 2))
         return this.design
     }
 
@@ -41,14 +39,11 @@ export class OcdProviderImporter {
         // @ts-ignore
         const providerResources = this.design.model[this.provider].resources
         Object.entries(resource).forEach(([k, v]) => {
-            // console.debug('OcdProviderImporter: parseResources: processing', k)
             const  providerResource = this.resourceBuilder.resourceMap.get(k)
-            // const  providerResource = this.resourceBuilder.resourceMap[k]
             if (providerResource !== undefined) {
                 if (!providerResources.hasOwnProperty(providerResource)) providerResources[providerResource] = []
                 Object.entries(v).forEach(([resourceName, resourceData]) => {
                     const ocdResource: OcdResource | null = this.resourceBuilder.generate(k, resourceName, resourceData as Record<string, any>)
-                    // console.debug('OcdProviderImporter: parseResources: ocdResource', JSON.stringify(ocdResource, null, 2))
                     if (ocdResource !== null) {
                         this.resourceIdMap.set(`${k}.${resourceName}`, ocdResource.id)
                         providerResources[providerResource].push(ocdResource)
@@ -56,7 +51,6 @@ export class OcdProviderImporter {
                 })
             }
         })
-        // console.debug('OcdProviderImporter: parseResources: design', JSON.stringify(this.design, null, 2))
         console.debug('OcdProviderImporter: parseResources: resourceIdMap', JSON.stringify(Object.fromEntries(this.resourceIdMap), null, 2))
     }
 
@@ -102,7 +96,6 @@ export class OcdProviderImporter {
     getReferenceId = (value: string): string | undefined => this.resourceIdMap.get(value.split('.').slice(0, 2).join('.'))
 
     parseLocals = (locals: Record<string, any>) => {
-        // console.debug('OcdProviderImporter: parseLocals: Parsing', locals)
         Object.entries(locals).forEach(([k, v]) => {
             if (this.isReference(v)) {
                 const id = this.getReferenceId(v)
@@ -114,7 +107,6 @@ export class OcdProviderImporter {
     }
 
     parseVariables = (variables: Record<string, any>) => {
-        // console.debug('OcdProviderImporter: parseVariables: Parsing', variables)
         // @ts-ignore
         const providerVariables = this.design.model[this.provider].vars
         Object.entries(variables).forEach(([k, v]) => {
@@ -124,6 +116,5 @@ export class OcdProviderImporter {
             variable.description = v.description
             providerVariables.push(variable)
         })
-        // console.debug('OcdProviderImporter: parseVariables: design', JSON.stringify(this.design, null, 2))
     }
 }
