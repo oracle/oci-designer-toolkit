@@ -1,16 +1,17 @@
 [![License: UPL](https://img.shields.io/badge/license-UPL-green)](https://img.shields.io/badge/license-UPL-green) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=oracle_oci-designer-toolkit&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=oracle_oci-designer-toolkit)
-# January 2025 Release (Version 0.67.0)
+# March 2025 Release (Version 0.68.0)
 ____
-**Update 0.67.0**: This update addresses the following issues.
+**Update 0.68.0**: This update addresses the following issues.
 ____
-Welcome to the January 2025 release of OKIT. This release updates a number of embedded JavaScript libraries to their latest release..
+Welcome to the March 2025 release of OKIT. This release extends both import and export functions of the OCD Desktop rlease whilst adding token based authentication.
 
-## OKIT (Web) Features
-1. OKIT-Web: Update JQuery to V3.7.1
+## OKIT Classic Features
+1. OKIT-Classic: Remove optional compartment_id from Object Storage namespace query in Terraform
 
-## OKIT - Open Cloud Designer
-1. Add export buttons to Tabular, Terraform and Markdown views
-2. Add export to Excel (Simple)
+## OKIT Desktop Features
+1. OKIT-320: Import Terraform Files. This is the initiall release of the Terraform import functionality and may need updates as and when issues are seen.
+2. OKIT-301: Add export to Excel (Detailed)
+3. OKIT-319: Add security Token based authentication. If during authentication OKIT Desktop notices the presence of a security token entry in the config file it will switch to token based authentication.
 
 ### Beta Overview
 

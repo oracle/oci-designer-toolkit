@@ -1,12 +1,75 @@
 [![License: UPL](https://img.shields.io/badge/license-UPL-green)](https://img.shields.io/badge/license-UPL-green) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=oracle_oci-designer-toolkit&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=oracle_oci-designer-toolkit)
-# Oracle Cloud Infrastructure Designer and Visualisation Toolkit [0.67.0](CHANGELOG.md#version-0.67.0)
+# Oracle Cloud Infrastructure Designer and Visualisation Toolkit [0.68.0](CHANGELOG.md#version-0.68.0)
 
-Full Release Details Can Found [0.67.0 Release](https://github.com/oracle/oci-designer-toolkit/releases/tag/v0.67.0).
+Full Release Details Can Found [0.68.0 Release](https://github.com/oracle/oci-designer-toolkit/releases/tag/v0.68.0).
 
-**OKIT - Open Cloud Designer** Public Beta is now Available see [0.67.0 Release](https://github.com/oracle/oci-designer-toolkit/releases/tag/v0.67.0) for details.
-_____
 
-OCI designer and visualisation toolKIT (OKIT) is a browser based tool that allows the user to [design](https://www.ateam-oracle.com/introduction-to-okit-the-oci-designer-toolkit), 
+
+
+
+## OKIT Desktop (OCD) [0.2.8](CHANGELOG.md#version-0.68.0)
+
+OKIT Desktop is the next generation implementation of the OKIT Classic design tool that takes the concepts within OKIT Classic and re-implements them within
+an Electron based desktop application, providing native installs for Mac, Windows and Linux.
+
+**OKIT Desktop** Public Beta is now Available see [0.68.0 Release](https://github.com/oracle/oci-designer-toolkit/releases/tag/v0.68.0) for details.
+
+The OKIT Desktop provides the user with a fully freeform Drag & Drop canvas with the ability to create multiple pages to represent the same design in alternative formats, as seen below. As with the OKIT Classic the properties of resources can be editted within the properties panel along with the ability to add detailed description of each resource, if required. The OKIT Desktop will provide feature compatability with the OKIT Classic allowing the user multiple views of the design information:
+
+- Views
+    - Design
+    - Documentation
+    - Variables
+    - Common Tags
+    - Markdown
+    - Tabular
+    - Terraform
+
+Exporting the design will now allow the following options:
+
+- Export
+    - Markdown
+    - Terraform
+    - Excel
+    - Image
+
+Importing the design will allow the following options
+- Import
+    - Query
+        - OCI
+    - Terraform
+
+The OKIT Desktop release is also preparing for Multi-Cloud implementation of Oracle database and will be extended to include Azure, Google and AWS. This is currently Alpha release and hence limitted in it's functionality.
+
+### Traditional Design
+![Ocd Desktop](https://github.com/oracle/oci-designer-toolkit/blob/master/ocd/images/OcdDesktop3.png)
+### Connection Based View
+![Ocd Desktop Connections](https://github.com/oracle/oci-designer-toolkit/blob/master/ocd/images/OcdDesktop4.png)
+
+### Installation
+OKIT Desktop is the next iteration of OKIT and is currently available as a Beta release. 
+The native installables can be found in the Assets section on the [0.68.0 Release](https://github.com/oracle/oci-designer-toolkit/releases/tag/v0.68.0).
+1. MacOS
+    1. [Arm dmg](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.68.0/ocd-0.2.7-arm64.dmg)
+    2. [x64 dmg](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.68.0/ocd-0.2.7-x64.dmg)
+2. Windows
+    1. [Setup](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.68.0/ocd-0.2.7-Setup.exe)
+3. Linux
+    1. [rpm](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.68.0/ocd-0.2.7-1.x86_64.rpm)
+    2. [deb](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.68.0/ocd_0.2.7_amd64.deb)
+
+At present the binaries are unsigned so on Mac and Windows you will specifically need to authorise the first run.
+
+For anyone trying to install the Desktop version on a Mac running Sequoia 15.x.x you will probably notice that you can no longer override the licence warning within settings. There is a way around this and it is to execute the following once thw dmg has been installed.
+```bash
+xattr -d com.apple.quarantine /Applications/ocd.app
+```
+
+
+
+## OKIT Classic [0.68.0](CHANGELOG.md#version-0.68.0)
+
+OKIT Classic is the original browser based tool that allows the user to [design](https://www.ateam-oracle.com/introduction-to-okit-the-oci-designer-toolkit), 
 [deploy](https://www.ateam-oracle.com/introduction-to-okit-the-oci-designer-toolkit) and visualise ([introspect/query](https://www.ateam-oracle.com/the-oci-designer-toolkit-query-feature)) 
 OCI environments through a graphical web based interface. 
 
@@ -35,16 +98,24 @@ OCI environments through a graphical web based interface.
     OKIT will also allow the user to introspect existing OCI environments, through simple query functionality embedded within the
     web interface, to provide a portable generic json file, that can be used to visualise existing systems or generate terraform/ansible.
 
+### Installation
+Detailed OKIT Installation steps can be found in the [OCI Designer Toolkit Installation Guide](documentation/Installation.md).
+1. [MacOS](documentation/Installation.md#macos)
+2. [Windows 10 / WSL (Ubuntu)](documentation/Installation.md#windows-10--wsl-ubuntu)
+3. [Oracle Linux](documentation/Installation.md#oracle-linux-ol8)
 
-## Changes
 
-[Changes for the current release (0.67.0) are documented here.](CHANGELOG.md#version-0.67.0)
+
 
 
 ## Releases
 
 See [Releases](https://github.com/oracle/oci-designer-toolkit/releases)
   
+
+
+
+
 ## Blogs
 - [Introduction to OKIT the OCI Designer Toolkit](https://www.ateam-oracle.com/introduction-to-okit-the-oci-designer-toolkit)
 - [The OCI Designer Toolkit Templates Feature](https://www.ateam-oracle.com/the-oci-designer-toolkit-templates-feature)
@@ -53,82 +124,23 @@ See [Releases](https://github.com/oracle/oci-designer-toolkit/releases)
 - [The OCI Designer Toolkit Documentation Generation](https://www.ateam-oracle.com/the-oci-designer-toolkit-documentation-generation)
 
 
-## Installation
-### OKIT-Web
-Detailed OKIT Installation steps can be found in the [OCI Designer Toolkit Installation Guide](documentation/Installation.md).
-1. [MacOS](documentation/Installation.md#macos)
-2. [Windows 10 / WSL (Ubuntu)](documentation/Installation.md#windows-10--wsl-ubuntu)
-3. [Oracle Linux](documentation/Installation.md#oracle-linux-ol8)
-### OKIT-Ocd
-OKIT-Ocd is the next iteration of OKIT and is currently available as a Beta release. The native installables can be found in the Assets section 
-on the [0.67.0 Release](https://github.com/oracle/oci-designer-toolkit/releases/tag/v0.67.0).
-1. MacOS
-    1. [Arm dmg](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.67.0/ocd-0.2.7-arm64.dmg)
-    2. [x64 dmg](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.67.0/ocd-0.2.7-x64.dmg)
-2. Windows
-    1. [Setup](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.67.0/ocd-0.2.7-Setup.exe)
-3. Linux
-    1. [rpm](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.67.0/ocd-0.2.7-1.x86_64.rpm)
-    2. [deb](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.67.0/ocd_0.2.7_amd64.deb)
 
-
-
-### OCI Config File
-
-Create the OCI cli __config__ file in the directory __&lt;USER HOME DIR&gt;/.oci__ with contents similar to that below.
-The __*key_file*__ is a fixed value because the contents of the __&lt;USER HOME DIR&gt;/.oci__ will be mounted to the
-appropriate users home directory, as __~/.oci__, during the run process.
-
-```properties
-[DEFAULT]
-user=ocid1.user.oc1..aaaaaaaak6z......
-fingerprint=3b:7e:37:ec:a0:86:1....
-key_file=~/.oci/oci_api_key.pem  
-tenancy=ocid1.tenancy.oc1..aaaaaaaawpqblfem........
-region=us-phoenix-1
-```
-
-If connecting to a PCA or C3 machine that requires a cert bundle then an additional entry will need to be added to the config file entry specifying
-the location of the cert bundle similar to the following.
-```properties
-cert-bundle=~/.oci/certs/certbundle.cert
-```
-
-### GIT Settings File
-
-If Git integration is required you will need to create a __git_repositories__ file within the directory 
-__&lt;USER HOME DIR&gt;/.oci__ with contents similar to that below.
-
-```properties
-[OKIT Community Templates]
-branch=main
-url=git@github.com:username/okit-community-templates.git
-  
-[Example Repo]
-branch = master
-url = git@url1.git
-
-[Internal]
-branch = BRANCHNAME
-url = git@url2.git
-```
-
-This properties file contains a list of the Git repositories you want to access. It assumes that you are using public/private
-key access, the key files exist within your __&lt;USER HOME DIR&gt;/.ssh__ directory and the __&lt;USER HOME DIR&gt;/.ssh/config__
-defines the key/url mapping, similar to the following.
-
-```properties
-Host github.com
-	IdentityFile ~/.ssh/id_rsa_github
-```
 
 
 ## Usage / Examples
 The OKIT User / Usage Guide and worked examples can be found in the [OCI Designer Toolkit Usage Guide](documentation/Usage.md)
 
+
+
+
+
 ## Changes
 
 See [CHANGELOG](CHANGELOG.md).
+
+
+
+
 
 ## Known Issues
 

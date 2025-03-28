@@ -1,6 +1,6 @@
 {
   "name": "@ocd/codegen",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "OKIT Open Cloud Designer Code Generation Module",
   "title": "OKIT Open Cloud Designer Code Generation Module",
   "author": {
@@ -42,7 +42,7 @@
     "build": "npm run compile && npm run pack"
   },
   "dependencies": {
-    "@ocd/core": ">=0.2.7",
+    "@ocd/core": ">=0.2.8",
     "fs": "^0.0.1-security",
     "path": "^0.12.7"
   }
