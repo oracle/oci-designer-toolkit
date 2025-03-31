@@ -218,7 +218,7 @@ const OcdResourceTags = ({ocdDocument, setOcdDocument}: DesignerResourceProperti
         const tag = freeformTags.find((t) => t.key === oldKey)
         if (tag) {
             tag.key = newKey
-            setFreeformTags([...freeformTags])
+            // setFreeformTags([...freeformTags])
             updateFreeformTags(freeformTags)
         }
     })
@@ -226,13 +226,18 @@ const OcdResourceTags = ({ocdDocument, setOcdDocument}: DesignerResourceProperti
         const tag = freeformTags.find((t) => t.key === key)
         if (tag) {
             tag.value = value
-            setFreeformTags([...freeformTags])
+            // setFreeformTags([...freeformTags])
             updateFreeformTags(freeformTags)
         }
     })
     const updateFreeformTags = (tags: OciFreeformTag[]) => selectedResourceProxy.freeformTags = OcdDesign.ociFreeformTagArrayToTags(tags)
     const onDefinedTagDeleteClick = ((namespace:string, key: string) => {
-        console.debug('OcdProperies: Deleting Defined Row', key, ocdDocument)
+        console.debug('OcdProperies: Deleting Defined Row', key, ocdDocument, definedTags)
+        const namespaceKey = `${namespace}.${key}`
+        const updatedTags = definedTags.filter((t) => `${t.namespace}.${t.key}` !== namespaceKey)
+        console.debug('OcdCommonTags: Deleting Defined Row', namespaceKey, updatedTags)
+        setDefinedTags(updatedTags)
+        updateDefinedTags(updatedTags)
     })
     const onDefinedTagAddClick = (() => {
         const newTag = OcdDesign.newOciDefinedTag()
@@ -245,7 +250,7 @@ const OcdResourceTags = ({ocdDocument, setOcdDocument}: DesignerResourceProperti
         const tag = definedTags.find((t) => t.namespace === oldNamespace && t.key === key)
         if (tag) {
             tag.namespace = newNamespace
-            setDefinedTags([...definedTags])
+            // setDefinedTags([...definedTags])
             updateDefinedTags(definedTags)
         }
     })
@@ -253,7 +258,7 @@ const OcdResourceTags = ({ocdDocument, setOcdDocument}: DesignerResourceProperti
         const tag = definedTags.find((t) => t.namespace === namespace && t.key === oldKey)
         if (tag) {
             tag.key = newKey
-            setDefinedTags([...definedTags])
+            // setDefinedTags([...definedTags])
             updateDefinedTags(definedTags)
         }
     })
@@ -261,7 +266,7 @@ const OcdResourceTags = ({ocdDocument, setOcdDocument}: DesignerResourceProperti
         const tag = definedTags.find((t) => t.namespace === namespace && t.key === key)
         if (tag) {
             tag.value = value
-            setDefinedTags([...definedTags])
+            // setDefinedTags([...definedTags])
             updateDefinedTags(definedTags)
         }
     })

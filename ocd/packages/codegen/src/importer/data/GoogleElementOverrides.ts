@@ -12,6 +12,9 @@ export const elementOverrides: OcdElementOverrides = {
     "labels": {
         "common": {},
     },
+    "keys": {
+        "common": {},
+    },
     "required": {
         "common": {},
     },

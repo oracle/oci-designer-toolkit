@@ -4086,7 +4086,7 @@
         "attributes": {
           "memory_in_gbs": {
             "provider": "oci",
-            "key": "memoryInGbs",
+            "key": "memoryInGBs",
             "name": "memory_in_gbs",
             "type": "number",
             "subtype": "",
@@ -4136,7 +4136,7 @@
         "attributes": {
           "boot_volume_size_in_gbs": {
             "provider": "oci",
-            "key": "bootVolumeSizeInGbs",
+            "key": "bootVolumeSizeInGBs",
             "name": "boot_volume_size_in_gbs",
             "type": "number",
             "subtype": "",
@@ -7447,7 +7447,7 @@
       },
       "size_in_gbs": {
         "provider": "oci",
-        "key": "sizeInGbs",
+        "key": "sizeInGBs",
         "name": "size_in_gbs",
         "type": "number",
         "subtype": "",
@@ -7465,7 +7465,7 @@
       },
       "vpus_per_gb": {
         "provider": "oci",
-        "key": "vpusPerGb",
+        "key": "vpusPerGB",
         "name": "vpus_per_gb",
         "type": "number",
         "subtype": "",
@@ -8284,7 +8284,7 @@
       },
       "data_storage_size_in_gb": {
         "provider": "oci",
-        "key": "dataStorageSizeInGb",
+        "key": "dataStorageSizeInGBs",
         "name": "data_storage_size_in_gb",
         "type": "number",
         "subtype": "",
@@ -13272,7 +13272,7 @@
     }
   },
   "boot_volume_attachment": {
-    "tf_resource": "boot_volume_attachment",
+    "tf_resource": "oci_core_boot_volume_attachments",
     "type": "object",
     "subtype": "",
     "attributes": {

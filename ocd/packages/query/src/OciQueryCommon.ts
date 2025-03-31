@@ -14,7 +14,7 @@ import { common, identity } from "oci-sdk"
 
 export class OciCommonQuery {
     profile: string
-    provider: common.ConfigFileAuthenticationDetailsProvider
+    provider: common.ConfigFileAuthenticationDetailsProvider | common.SessionAuthDetailProvider
     clientConfiguration: common.ClientConfiguration
     authenticationConfiguration: common.AuthParams
     // Clients
@@ -25,6 +25,7 @@ export class OciCommonQuery {
     constructor(profile: string='DEFAULT', region?: string) {
         this.profile = profile
         this.provider = new common.ConfigFileAuthenticationDetailsProvider(undefined, profile)
+        if (this.isSessionTokenSpecified(profile)) this.provider = new common.SessionAuthDetailProvider(undefined, profile)
         if (region) this.provider.setRegion(region)
         else console.debug('OciCommonQuery: Using Region', this.provider.getRegion().regionId)
         const certBundle: string | undefined = this.getCertBundle(profile)
@@ -45,6 +46,8 @@ export class OciCommonQuery {
         console.debug('OciCommonQuery Client Configuration:', this.clientConfiguration)
         this.identityClient = new identity.IdentityClient(this.authenticationConfiguration, this.clientConfiguration)
     }
+
+    isSessionTokenSpecified = (profile: string): boolean => this.provider.getProfileCredentials()?.configurationsByProfile.get(profile)?.get('security_token_file') !== undefined
 
     getCertBundle = (profile: string): string | undefined => {
         const certBundleFile = this.provider.getProfileCredentials()?.configurationsByProfile.get(profile)?.get('cert-bundle')

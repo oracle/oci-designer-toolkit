@@ -8,13 +8,12 @@ import Squirrel from 'electron-squirrel-startup'
 import path from 'path'
 import url from 'url'
 import fs from 'fs'
-import ExcelJS, { TableColumnProperties, TableProperties } from 'exceljs'
 import common from 'oci-common'
 import { OciQuery, OciReferenceDataQuery, OciResourceManagerQuery } from '@ocd/query'
 import { OcdDesign, OcdResource, OciModelResources } from '@ocd/model'
 import { OcdCache, OcdConsoleConfiguration } from '@ocd/react'
-import { OcdUtils } from '@ocd/core'
-import { OcdMarkdownExporter, OcdTerraformExporter } from '@ocd/export'
+import { OcdExcelExporter, OcdMarkdownExporter, OcdSVGExporter, OcdTerraformExporter } from '@ocd/export'
+import { OcdTerraformImporter } from '@ocd/import'
 
 app.commandLine.appendSwitch('ignore-certificate-errors') // Temporary work around for not being able to add additional certificates
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0' // Temporary work around for not being able to add additional certificates
@@ -209,11 +208,13 @@ const createWindow = () => {
 		saveDesktopState(desktopState)
 	}
 
-	// mainWindow.on('move', (e) => console.debug('Move Event'))
+	// @ts-ignore
 	mainWindow.on('moved', (e) => saveState())
-	// mainWindow.on('resize', (e) => console.debug('Resize Event'))
+	// @ts-ignore
 	mainWindow.on('enter-full-screen', (e) => saveState())
+	// @ts-ignore
 	mainWindow.on('leave-full-screen', (e) => saveState())
+	// @ts-ignore
 	mainWindow.on('resized', (e) => saveState())
 	mainWindow.on('close', (e) => saveState())
 
@@ -262,7 +263,9 @@ app.whenReady().then(() => {
 	ipcMain.handle('ocdDesign:exportTerraform', handleExportTerraform)
 	ipcMain.handle('ocdDesign:exportToExcel', handleExportToExcel)
 	ipcMain.handle('ocdDesign:exportToMarkdown', handleExportToMarkdown)
+	ipcMain.handle('ocdDesign:exportToSvg', handleExportToSvg)
 	ipcMain.handle('ocdDesign:exportToTerraform', handleExportToTerraform)
+	ipcMain.handle('ocdDesign:importFromTerraform', importFromTerraform)
 	// OCD Configuration
 	ipcMain.handle('ocdConfig:loadConsoleConfig', handleLoadConsoleConfig)
 	ipcMain.handle('ocdConfig:saveConsoleConfig', handleSaveConsoleConfig)
@@ -416,20 +419,20 @@ async function handleLoadDesign(event: any, filename: string) {
 					resolve({canceled: result.canceled, filename: result.filePaths[0], design: JSON.parse(design)})
 				}).catch(err => {
 					console.error(err)
-					reject(err)
+					reject(new Error(err))
 				})
 			} else {
 				const design = fs.readFileSync(filename, 'utf-8')
 				resolve({canceled: false, filename: filename, design: JSON.parse(design)})
 			}
 		} catch (err) {
-			reject(err)
+			reject(new Error(`${err}`))
 		}
 	})
 }
 
-async function handleSaveDesign(event: any, design: OcdDesign, filename: string, suggestedFilename='') {
-	// design = typeof design === 'string' ? JSON.parse(design) : design
+async function handleSaveDesign(event: any, design: OcdDesign | string, filename: string, suggestedFilename='') {
+	design = typeof design === 'string' ? JSON.parse(design) : design
 	console.debug('Electron Main: handleSaveDesign', filename, JSON.stringify(design, null, 2))
 	return new Promise((resolve, reject) => {
 		try {
@@ -443,14 +446,14 @@ async function handleSaveDesign(event: any, design: OcdDesign, filename: string,
 					resolve({canceled: false, filename: result.canceled ? '' : result.filePath, design: design})
 				}).catch(err => {
 					console.error(err)
-					reject(err)
+					reject(new Error(err))
 				})
 			} else {
 				fs.writeFileSync(filename, JSON.stringify(design, null, 4))
 				resolve({canceled: false, filename: filename, design: design})
 			}
 		} catch (err) {
-			reject(err)
+			reject(new Error(`${err}`))
 		}
 	})
 }
@@ -491,46 +494,8 @@ async function handleExportToExcel(event: any, design: OcdDesign, suggestedFilen
 				buttonLabel: 'Export'
 			}).then(result => {
 				if (!result.canceled) {
-					const ociResources = design.model.oci.resources
-					const compartments = ociResources.compartment
-					// const compartmentName = (id: string): string => compartments.find((c) => c.id === id)?.displayName
-					const workbook = new ExcelJS.Workbook()
-					let styleNumber = 1
-					Object.entries(ociResources).forEach(([k, v]) => {
-						const worksheet = workbook.addWorksheet(OcdUtils.toTitle(k))
-						// const resources = v.map((r: OcdResource) => {return {...r, compartmentName: compartmentName(r.compartmentId, compartments)}})
-						const resources = updateResources(v, compartments)
-						console.debug('handleExportToExcel:', JSON.stringify(resources, null, 2))
-						const columns = [
-							{header: 'Name', key: 'displayName', width: 20},
-							{header: 'Compartment', key: 'compartmentName', width: 35}
-						]
-						worksheet.columns = columns
-						// worksheet.addRows(resources)
-						const tableColumns: TableColumnProperties[] = [
-							{name: 'Name', filterButton: true},
-							{name: 'Compartment', filterButton: true}
-						]
-						// @ts-ignore
-						// const tableRows: any[][] = resources.reduce((a, c) => {return [...a, [c.displayName, c.compartmentName]]}, [])
-						const tableRows = toTableRows(resources)
-						console.debug('handleExportToExcel: Table:', JSON.stringify(tableRows, null, 2))
-						const table: TableProperties = {
-							name: `${k}Table`,
-							ref: 'A1',
-							headerRow: true,
-							totalsRow: false,
-							style: {
-								// @ts-ignore
-								theme: `TableStyleLight${styleNumber}`,
-								showRowStripes: true,
-							},
-							columns: tableColumns,
-							rows: tableRows,
-						}
-						worksheet.addTable(table)
-						styleNumber += 1
-					})
+					const exporter = new OcdExcelExporter()
+					const workbook = exporter.export(design)
 					workbook.xlsx.writeFile(result.filePath).then(() => {
 						console.log('Workbook saved successfully!')
 						resolve({canceled: false, filename: result.filePath, design: design})
@@ -538,7 +503,6 @@ async function handleExportToExcel(event: any, design: OcdDesign, suggestedFilen
 						console.error('Error saving workbook:', error)
 						reject(new Error(error))
 					})
-					// fs.writeFileSync(result.filePath, JSON.stringify(design, null, 4))
 				} else {
 					resolve({canceled: false, filename: '', design: design})
 				}
@@ -571,6 +535,51 @@ async function handleExportToMarkdown(event: any, design: OcdDesign, css: string
 	})
 }
 
+async function handleExportToSvg(event: any, design: OcdDesign, css: string[] = [], directory: string = '', suggestedFilename = '') {
+	console.debug('Electron Main: exportToSvg')
+	if (design.view.pages.length > 1) {
+		const additionalFilename: string = suggestedFilename && suggestedFilename.length > 0 ? suggestedFilename : design.metadata.title.replaceAll(' ', '_')
+		return new Promise((resolve, reject) => {
+			dialog.showOpenDialog(mainWindow, {
+				properties: ['openDirectory', 'createDirectory'],
+				defaultPath: directory,
+				buttonLabel: 'Export'
+			}).then(result => {
+				if (!result.canceled) {
+					const exporter = new OcdSVGExporter(css)
+					const output = exporter.export(design)
+					console.debug('handleExportToSvg: ', result.filePaths)
+					const directory = result.filePaths[0]
+					Object.entries(output).forEach(([k, v]) => fs.writeFileSync(path.join(directory, `${k.replaceAll(' ', '_')}.svg`), v))
+				}
+				resolve({canceled: false, filename: result.canceled ? '' : result.filePaths[0], design: design})
+			}).catch(err => {
+				console.error(err)
+				reject(new Error(err))
+			})
+		})
+	} else {
+		return new Promise((resolve, reject) => {
+			dialog.showSaveDialog(mainWindow, {
+				defaultPath: suggestedFilename,
+				properties: ['createDirectory'],
+				filters: [{name: 'Filetype', extensions: ['svg']}],
+				buttonLabel: 'Export'
+			}).then(result => {
+				if (!result.canceled) {
+					const exporter = new OcdSVGExporter(css)
+					const output = exporter.export(design)
+					fs.writeFileSync(result.filePath, Object.values(output)[0])
+				}
+				resolve({canceled: false, filename: result.canceled ? '' : result.filePath, design: design})
+			}).catch(err => {
+				console.error(err)
+				reject(new Error(err))
+			})
+		})
+	}
+}
+
 async function handleExportToTerraform(event: any, design: OcdDesign, directory: string) {
 	console.debug('Electron Main: handleExportTerraform')
 	return new Promise((resolve, reject) => {
@@ -592,6 +601,29 @@ async function handleExportToTerraform(event: any, design: OcdDesign, directory:
 			reject(new Error(err))
 		})
 	})
+}
+
+async function importFromTerraform(event: any) {
+	console.debug('Electron Main: importFromTerraform')
+	return new Promise((resolve, reject) => {
+		dialog.showOpenDialog(mainWindow, {
+			properties: ['openFile', 'multiSelections'],
+			filters: [{name: 'Filetype', extensions: ['tf']}]
+			}).then(result => {
+			const importer = new OcdTerraformImporter()
+			// const design = result.canceled ? '' : fs.readFileSync(result.filePaths[0], 'utf-8')
+			const design = result.canceled ? '' : readFilesSync(result.filePaths, 'utf-8').join('\n')
+			resolve({canceled: result.canceled, filename: result.filePaths[0], design: importer.import(design)})
+		}).catch(err => {
+			console.error(err)
+			reject(new Error(err))
+		})
+	})
+}
+
+function readFilesSync(filePaths: string[], encoding:string = 'utf-8'): string[] {
+	const contents: string[] = filePaths.map((f) => fs.readFileSync(f, 'utf-8'))
+	return contents
 }
 
 // Library / Reference Architecture Functions
@@ -625,7 +657,7 @@ async function handleLoadLibraryIndex(event: any) {
 			// resolve(libraryIndex)
 		}).catch((err) => {
             console.debug('Electron Main: handleLoadLibraryIndex: Fetch Error Response', err)
-			reject(err)
+			reject(new Error(err))
 		})
 	})
 }
@@ -645,7 +677,7 @@ function getLibrarySectionSvg(libraryIndex: Record<string, Record<string, string
 			resolve(librarySection)
 		}).catch((err) => {
             console.debug('Electron Main: getLibrarySectionSvg: Fetch Error Response', err)
-			reject(err)
+			reject(new Error(err))
 		})
 	})
 }
@@ -668,7 +700,7 @@ async function handleLoadLibraryDesign(event: any, section: string, filename: st
 			resolve({canceled: false, filename: filename, design: JSON.parse(design)})
 		}).catch((err) => {
             console.debug('Electron Main: handleLoadLibraryIndex: Fetch Error Response', err)
-			reject(err)
+			reject(new Error(err))
 		})
 	})
 }
@@ -682,25 +714,12 @@ async function handleLoadSvgCssFiles() {
 async function handleLoadConsoleConfig(event: any) {
 	console.debug('Electron Main: handleLoadConfig')
 	return new Promise((resolve, reject) => {
-		// const defaultConfig = {
-        //     showPalette: true,
-        //     showModelPalette: true,
-        //     showProvidersPalette: ['oci'],
-        //     verboseProviderPalette: false,
-        //     displayPage: 'designer',
-        //     detailedResource: true,
-        //     showProperties: true,
-        //     highlightCompartmentResources: false,
-        //     recentDesigns: [],
-        //     maxRecent: 10,
-        // }
 		try {
-			// if (!fs.existsSync(ocdConsoleConfigFilename)) fs.writeFileSync(ocdConsoleConfigFilename, JSON.stringify(defaultConfig, null, 4))
 			if (!fs.existsSync(ocdConsoleConfigFilename)) reject(new Error('Console Config does not exist'))
 			const config = fs.readFileSync(ocdConsoleConfigFilename, 'utf-8')
 			resolve(JSON.parse(config))
 		} catch (err) {
-			reject(err)
+			reject(new Error(`${err}`))
 		}
 	})
 }
@@ -713,7 +732,7 @@ async function handleSaveConsoleConfig(event: any, config: OcdConsoleConfigurati
 			fs.writeFileSync(ocdConsoleConfigFilename, JSON.stringify(config, null, 4))
 			resolve(config)
 		} catch (err) {
-			reject(err)
+			reject(new Error(`${err}`))
 		}
 	})
 }
@@ -729,7 +748,7 @@ async function handleLoadCache(event: any) {
 			const config = fs.readFileSync(ocdCacheFilename, 'utf-8')
 			resolve(JSON.parse(config))
 		} catch (err) {
-			reject(err)
+			reject(new Error(`${err}`))
 		}
 	})
 }
@@ -741,7 +760,7 @@ async function handleSaveCache(event: any, cache: OcdCache) {
 			fs.writeFileSync(ocdCacheFilename, JSON.stringify(cache, null, 4))
 			resolve(cache)
 		} catch (err) {
-			reject(err)
+			reject(new Error(`${err}`))
 		}
 	})
 }
@@ -755,7 +774,7 @@ async function handleLoadCacheProfile(event: any, profile: string) {
 			const config = fs.readFileSync(ocdCacheFilename, 'utf-8')
 			resolve(JSON.parse(config))
 		} catch (err) {
-			reject(err)
+			reject(new Error(`${err}`))
 		}
 	})
 }
@@ -768,7 +787,7 @@ async function handleOpenExternalUrl(event: any, href: string) {
 			shell.openExternal(href)
 			resolve('Opened')
 		} catch (err) {
-			reject(err)
+			reject(new Error(`${err}`))
 		}
 	})
 }

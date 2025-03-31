@@ -36,7 +36,8 @@ export class OcdSVGExporter extends OcdExporter {
         const height = this.calculateHeight(page.coords)
         // const svg = `<svg xmlns="http://www.w3.org/2000/svg" fill="white" width="${width}px" height="${height}px">
         // const svg = `<svg xmlns="http://www.w3.org/2000/svg" fill="white" width="100%" height="${height}px" viewBox="0 0 ${width} ${height}" preserveAspectRation="xMinYMin meet">
-        const svg = `<svg xmlns="http://www.w3.org/2000/svg" fill="white" width="${width}px" height="${height}px" viewBox="0 0 ${width} ${height}" preserveAspectRation="xMinYMin meet">
+        // const svg = `<svg xmlns="http://www.w3.org/2000/svg" fill="white" width="${width}px" height="${height}px" viewBox="0 0 ${width} ${height}" preserveAspectRation="xMinYMin meet">
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" fill="white" width="100%" viewBox="0 0 ${width} ${height}" preserveAspectRation="xMinYMin meet">
 <defs></defs>
 <style type="text/css">
 ${this.css.join('')}
@@ -93,7 +94,14 @@ ${coords.coords !== undefined ? coords.coords.map((c) => this.generateResource(c
 
     getOciResources() {return Object.values(this.design.model.oci.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], [])}
     getOciResourcesObject() {return this.design.model.oci.resources}
-    getResources() {return this.getOciResources()}
+    getAzureResources() {return this.design.model.azure?.resources ? Object.values(this.design.model.azure.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []) : []}
+    getAzureResourcesObject() {return this.design.model.azure?.resources ? this.design.model.azure.resources : {}}
+    getGoogleResources() {return this.design.model.google?.resources ? Object.values(this.design.model.google.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []) : []}
+    getGoogleResourcesObject() {return this.design.model.google?.resources ? this.design.model.google.resources : {}}
+    getAwsResources() {return this.design.model.aws?.resources ? Object.values(this.design.model.aws.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []) : []}
+    getAwsResourcesObject() {return this.design.model.aws?.resources ? this.design.model.aws.resources : {}}
+    getResources() {return [...this.getOciResources(), ...this.getAzureResources(), ...this.getGoogleResources(), ...this.getAwsResources()]}
+    // getResources() {return [...this.getOciResources()]}
     getResource(id='') {return this.getResources().find((r: OcdResource) => r.id === id)}
 
     generateConnector(connector: OcdViewConnector, parentConnector: boolean = false, detailedResource: boolean = true): string {

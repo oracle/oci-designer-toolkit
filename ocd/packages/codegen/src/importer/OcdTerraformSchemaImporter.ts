@@ -52,7 +52,8 @@ export class OcdTerraformSchemaImporter extends OcdSchemaImporter {
         Object.entries(source_schema.provider_schemas[this.tfProvider].data_source_schemas).filter(([k, v]) => dataKeys.includes(k)).forEach(([key, value]) => {
             console.debug('OcdTerraformSchemaImporter: Processing data', key)
             this.ocd_schema[dataMap[key]] = {
-                'tf_resource': key.endsWith('s') ? dataMap[key] : key,
+                // 'tf_resource': key.endsWith('s') ? key.slice(0, -1) : key,
+                'tf_resource': key,
                 'type': 'object',
                 'subtype': '',
                 // @ts-ignore
@@ -71,6 +72,7 @@ export class OcdTerraformSchemaImporter extends OcdSchemaImporter {
         const maps = {...this.elementOverrides.maps.common, ...this.elementOverrides.maps[key] !== undefined ? this.elementOverrides.maps[key] : {}}
         const defaults = {...this.elementOverrides.defaults.common, ...this.elementOverrides.defaults[key] !== undefined ? this.elementOverrides.defaults[key] : {}}
         const labels = {...this.elementOverrides.labels.common, ...this.elementOverrides.labels[key] !== undefined ? this.elementOverrides.labels[key] : {}}
+        const keys = {...this.elementOverrides.keys.common, ...this.elementOverrides.keys[key] || {}}
         const lookupOverrides = {...this.elementOverrides.lookupOverrides.common, ...this.elementOverrides.lookupOverrides[key] !== undefined ? this.elementOverrides.lookupOverrides[key] : {}}
         // console.debug('OcdTerraformSchemaImporter: Resource', key, includeAttributes)
         // console.debug('OcdTerraformSchemaImporter: Resource', key, type_overrides)
@@ -79,9 +81,10 @@ export class OcdTerraformSchemaImporter extends OcdSchemaImporter {
         // let attributes = block.attributes ? Object.entries(block.attributes).filter(([k, v]) => !ignore_attributes.includes(this.genId(k, hierarchy)) && !v.deprecated).reduce((r, [k, v]) => {
         let attributes = block.attributes ? Object.entries(block.attributes).filter(([k, v]) => includeAttributes.includes(this.genId(k, hierarchy)) && !v.deprecated).reduce((r, [k, v]) => {
             const id = this.genId(k, hierarchy)
+            // console.debug('OcdTerraformSchemaImport: getAttribute: key: ', key, ':', k, '-', this.toKey(k, keys, hierarchy))
             r[k] = {
                 provider: this.provider,
-                key: this.toCamelCase(k),
+                key: this.toKey(k, keys, hierarchy),
                 name: k,
                 // @ts-ignore
                 type: type_overrides[k] ? type_overrides[k][0] : this.isMultiReference(k) ? 'list' : Array.isArray(v.type) ? v.type[0] : v.type,
@@ -113,9 +116,10 @@ export class OcdTerraformSchemaImporter extends OcdSchemaImporter {
             // attributes = Object.entries(block.block_types).filter(([k, v]) => !ignore_attributes.includes(this.genId(k, hierarchy))).reduce((r, [k, v]) => {
             attributes = Object.entries(block.block_types).filter(([k, v]) => includeAttributes.includes(this.genId(k, hierarchy))).reduce((r, [k, v]) => {
                 const id = [...hierarchy, k].join('.')
+                // console.debug('OcdTerraformSchemaImport: getAttribute: key: ', key, ':', k, '-', this.toKey(k, keys, hierarchy))
                 r[k] = {
                     provider: 'oci',
-                    key: this.toCamelCase(k),
+                    key: this.toKey(k, keys, hierarchy),
                     name: k,
                     // @ts-ignore
                     type: v.nesting_mode === 'list' && v.max_items === 1 ? 'object' : v.nesting_mode === 'set' ? 'list' : v.nesting_mode,
@@ -148,6 +152,7 @@ export class OcdTerraformSchemaImporter extends OcdSchemaImporter {
     lookupResourceElement = (key: string, overrides: Record<string, any>) => Object.hasOwn(overrides, key) ? overrides[key].element : 'id'
     cacheLookupResource = (key: string, resource: string = 'common') => (Object.hasOwn(this.elementOverrides.cacheLookups, resource) && Object.hasOwn(this.elementOverrides.cacheLookups[resource], key)) ? this.elementOverrides.cacheLookups[resource][key] : this.elementOverrides.cacheLookups.common[key]
     toLabel = (key: string, labels: Record<string,any>, hierarchy=[]) => Object.hasOwn(labels, this.genId(key, hierarchy)) ? labels[this.genId(key, hierarchy)] : key.endsWith('_id') || key.endsWith('_ids') ? OcdUtils.toTitleCase(key.split('_').slice(0, -1).join(' ')) : OcdUtils.toTitleCase(key.split('_').join(' '))
+    toKey = (key: string, keys: Record<string,any>, hierarchy=[]) => Object.hasOwn(keys, this.genId(key, hierarchy)) ? keys[this.genId(key, hierarchy)] : this.toCamelCase(key)
     isConditional = (key: string, element: string) => Object.hasOwn(this.conditionalElements, key) && Object.hasOwn(this.conditionalElements[key], element)
 
 }

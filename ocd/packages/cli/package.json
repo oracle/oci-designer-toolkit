@@ -1,6 +1,6 @@
 {
   "name": "@ocd/cli",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "OKIT Open Cloud Designer Command-line",
   "title": "OKIT Open Cloud Designer Command-linetop",
   "author": {
@@ -27,19 +27,21 @@
     "pack": "mkdir -p dist && npm pack --pack-destination dist",
     "compile": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
     "build": "npm run compile && npm run pack",
-    "generate-oci-reference-data": "node lib/esm/ocd-generate-default-cache.js  -d ../desktop/src/data",
-    "test-export-to-md":  "node lib/esm/ocd.js export markdown  -d ../../test/design.okit -o ../../test/export/md/okit.md -C ../desktop/src/css/oci-theme.css -C ../desktop/src/css/ocd-svg.css",
-    "test-export-to-svg": "node lib/esm/ocd.js export svg       -d ../../test/design.okit -O ../../test/export/svg -C ../desktop/src/css/oci-theme.css -C ../desktop/src/css/ocd-svg.css",
-    "test-export-to-tf":  "node lib/esm/ocd.js export terraform -d ../../test/design.okit -O ../../test/export/tf",
+    "generate-oci-reference-data": "node lib/esm/ocd-generate-default-cache.js  -d ../react/src/data",
+    "test-export-to-md":  "node lib/esm/ocd.js export markdown  -d ../../test/design.okit  -o ../../test/export/md/okit.md -C ../desktop/src/css/oci-theme.css -C ../desktop/src/css/ocd-svg.css",
+    "test-export-to-svg": "node lib/esm/ocd.js export svg       -d ../../test/design.okit  -O ../../test/export/svg -C ../desktop/src/css/oci-theme.css -C ../desktop/src/css/ocd-svg.css",
+    "test-export-to-tf":  "node lib/esm/ocd.js export terraform -d ../../test/design.okit  -O ../../test/export/tf",
+    "test-parse-tf":      "node lib/esm/ocd.js parse  terraform -i ../../test/terraform.tf -o ../../test/terraform.json",
     "test-query":         "node lib/esm/ocd.js query  oci       -d ../../test/query.okit -p DEFAULT -c OKIT -c infrastructure -c network"
   },
   "dependencies": {
-    "@ocd/codegen": ">=0.2.7",
-    "@ocd/core": ">=0.2.7",
-    "@ocd/export": ">=0.2.7",
-    "@ocd/import": ">=0.2.7",
-    "@ocd/model": ">=0.2.7",
-    "@ocd/query": ">=0.2.7",
+    "@ocd/codegen": ">=0.2.8",
+    "@ocd/core": ">=0.2.8",
+    "@ocd/export": ">=0.2.8",
+    "@ocd/import": ">=0.2.8",
+    "@ocd/model": ">=0.2.8",
+    "@ocd/parser": ">=0.2.8",
+    "@ocd/query": ">=0.2.8",
     "oci-sdk": "^2.69.0"
   }
 }

@@ -3,7 +3,7 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import { OciResource } from "@ocd/model"
+import { OcdDesign, OcdResource, OciResource } from "@ocd/model"
 import { OciTabularContentsProps, OciTabularHeaderProps, OciTabularResourceProps, OciTabularRowProps } from "../../../../types/ReactComponentProperties"
 import { useContext, useState } from "react"
 import { OcdUtils } from "@ocd/core"
@@ -24,8 +24,12 @@ export const OciDefault = ({ ocdDocument, ociResources, selected }: OciTabularRe
     )
 }
 
+const additionalColumnTitles = ['Freeform Tags', 'Defined Tags']
+const additionalResourceElements = ['freeformTags', 'definedTags']
+
 export const OcdTabularContents = ({ ocdDocument, ociResources, selected, columnTitles, resourceElements }: OciTabularContentsProps): JSX.Element => {
     const {ocdConsoleConfig} = useContext(ConsoleConfigContext)
+    const columnTitlesWithTags = [...columnTitles, ...additionalColumnTitles]
     const configDisplayColumns = ocdConsoleConfig.config.displayColumns || {}
     const [displayColumns, setDisplayColumns] = useState(configDisplayColumns[selected] ? configDisplayColumns[selected] : columnTitles)
     // const [displayColumns, setDisplayColumns] = useState(ocdConsoleConfig.config.displayColumns ? ocdConsoleConfig.config.displayColumns[selected] ? ocdConsoleConfig.config.displayColumns[selected] : columnTitles : columnTitles)
@@ -62,7 +66,7 @@ export const OcdTabularContents = ({ ocdDocument, ociResources, selected, column
         <div id='ocd_resource_grid' className='table ocd-tabular-content'>
             <div className='thead ocd-tabular-list-header'>
                 <OcdTabularHeader 
-                    columnTitles={columnTitles}
+                    columnTitles={columnTitlesWithTags}
                     ociResources={ociResources}
                     resourceElements={resourceElements}
                     selected={selected}
@@ -83,7 +87,8 @@ export const OcdTabularContents = ({ ocdDocument, ociResources, selected, column
                         index={i}
                         resource={r}
                         // resourceElements={resourceElements}
-                        resourceElements={displayColumns.map((c: string) => resourceElements[columnTitles.indexOf(c)])}
+                        resourceElements={displayColumns.filter((c: string) => !additionalColumnTitles.includes(c)).map((c: string) => resourceElements[columnTitles.indexOf(c)])}
+                        displayColumns={displayColumns}
                         key={`${selected}-tabular-${r.id}`}
                     />
                 })}
@@ -120,7 +125,9 @@ export const OcdTabularHeader = ({columnTitles, ociResources, resourceElements, 
             <div className='th'>{ociResources[selected].length}</div>
             <div className={`th ocd-sortable-column ${sortHeaderClass('displayName')}`} onClick={() => onSortClick('displayName')} aria-hidden key={`${selected}-tabular-header-row-displayName`}>Name</div>
             <div className={`th ocd-sortable-column ${sortHeaderClass('compartmentId')}`} onClick={() => onSortClick('compartmentId')} aria-hidden key={`${selected}-tabular-header-row-compartmentId`}>Compartment</div>
-            {displayColumns.map((title: string, i: number) => {return <div className={`th ocd-sortable-column ${sortHeaderClass(resourceElements[i])}`} onClick={() => onSortClick(resourceElements[i])} key={`${selected}-tabular-header-row-${OcdUtils.toUnderscoreCase(title)}`} aria-hidden>{title}</div>})}
+            {displayColumns.filter((c: string) => !additionalColumnTitles.includes(c)).map((title: string, i: number) => {return <div className={`th ocd-sortable-column ${sortHeaderClass(resourceElements[i])}`} onClick={() => onSortClick(resourceElements[i])} key={`${selected}-tabular-header-row-${OcdUtils.toUnderscoreCase(title)}`} aria-hidden>{title}</div>})}
+            {displayColumns.includes('Freeform Tags') && <div className={`th ocd-sortable-column ${sortHeaderClass('freeformTags')}`} onClick={() => onSortClick('freeformTags')} aria-hidden key={`${selected}-tabular-header-row-freeformTags`}>Freeform Tags</div>}
+            {displayColumns.includes('Defined Tags') && <div className={`th ocd-sortable-column ${sortHeaderClass('definedTags')}`} onClick={() => onSortClick('definedTags')} aria-hidden key={`${selected}-tabular-header-row-definedTags`}>Defined Tags</div>}
             <div className={`th-menu ocd-console-three-dot-menu-icon`}>
                 <div className='ocd-console-toolbar-dropdown ocd-console-toolbar-dropdown-theme'>
                     <ul>
@@ -138,8 +145,8 @@ export const OcdTabularHeader = ({columnTitles, ociResources, resourceElements, 
     )
 }
 
-export const OcdTabularRow = ({ocdDocument, ociResources, index, resource, resourceElements, selected}: OciTabularRowProps): JSX.Element => {
-    const {ocdConsoleConfig, setOcdConsoleConfig} = useContext(ConsoleConfigContext)
+export const OcdTabularRow = ({ocdDocument, ociResources, index, resource, resourceElements, displayColumns, selected}: OciTabularRowProps): JSX.Element => {
+    // const {ocdConsoleConfig, setOcdConsoleConfig} = useContext(ConsoleConfigContext)
     const getReferenceDisplayName = (id: string) => {
         const resource = ocdDocument.getResource(id)
         return resource ? resource.displayName : 'Unknown'
@@ -149,9 +156,12 @@ export const OcdTabularRow = ({ocdDocument, ociResources, index, resource, resou
     }
     const isElementId = (name: string) => name ? name.endsWith('Id') : false
     const isElementIdList = (name: string) => name ? name.endsWith('Ids') : false
+    const isMultiLevel = (name: string) => name?.includes('.') ?? false
     console.debug('OcdTabularRow: Selected', selected)
-    const cellData = (element: string): string => {
-        if (isElementId(element)) return getReferenceDisplayName(resource[element])
+    const cellData = (element: string, resource: OcdResource): string => {
+        console.debug('OcdTabularRow: cellData:', element, JSON.stringify(resource, null, 2))
+        if (isMultiLevel(element)) return cellData(element.split('.').slice(1).join('.'), resource[element.split('.')[0]])
+        else if (isElementId(element)) return getReferenceDisplayName(resource[element])
         else if (isElementIdList(element)) return getReferenceListDisplayNames(resource[element])
         else return String(resource[element])
     }
@@ -160,7 +170,9 @@ export const OcdTabularRow = ({ocdDocument, ociResources, index, resource, resou
             <div className='td'>{index + 1}</div><div className='td'>{resource.displayName}</div>
             <div className='td'>{getReferenceDisplayName(resource.compartmentId)}</div>
             {/* <div className='td'>{ocdDocument.getResource(r.compartmentId) ? ocdDocument.getResource(r.compartmentId).displayName : ''}</div> */}
-            {resourceElements.map((element) => {return <div className='td' key={`tabular-${resource.id}-${element}`}>{cellData(element)}</div>})}
+            {resourceElements.map((element) => {return <div className='td' key={`tabular-${resource.id}-${element}`}>{cellData(element, resource)}</div>})}
+            {displayColumns.includes('Freeform Tags') && <div className='td'><pre>{OcdDesign.ociFreeformTagsToString(resource.freeformTags)}</pre></div>}
+            {displayColumns.includes('Defined Tags') && <div className='td'><pre>{OcdDesign.ociDefinedTagsToString(resource.definedTags)}</pre></div>}
             <div className="td"></div>
         </div>
     )

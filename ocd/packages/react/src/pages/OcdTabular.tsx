@@ -5,7 +5,7 @@
 
 import { useState } from "react"
 import { ConsolePageProps } from "../types/Console"
-import { OcdUtils } from "@ocd/core"
+import { OcdUtils, ociNoneVisualResources } from "@ocd/core"
 import { OciDefault } from "../components/tabular/provider/oci/OciTabularContents"
 import * as ociTabularResources from '../components/tabular/provider/oci/resources'
 import { OcdDesignFacade } from "../facade/OcdDesignFacade"
@@ -35,7 +35,7 @@ const OcdTabular = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcd
     return (
         <div className='ocd-tabular-view'>
             <div id='ocd_resources_bar' className='ocd-designer-canvas-layers'>
-                {Object.keys(ociResources).sort(OcdUtils.simpleSort).map((k: string) => {
+                {Object.keys(ociResources).filter((k: string) => !ociNoneVisualResources.includes(k)).sort(OcdUtils.simpleSort).map((k: string) => {
                     return <div className={`ocd-designer-canvas-layer ${k === selected ? 'ocd-layer-selected' : ''}`} key={k}><label id={k} onClick={onClick} aria-hidden>{`${OcdUtils.toTitle(k)} (${ociResources[k].length})`}</label></div>
                 })}
             </div>
@@ -56,7 +56,7 @@ export const OcdTabularLeftToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, o
     // const {ocdConsoleConfig, setOcdConsoleConfig} = useContext(ConsoleConfigContext)
     const onClickExcel = () => {
         console.debug('OcdTabular: Export to Excel')
-        const design = ocdDocument.design
+        const design = JSON.parse(JSON.stringify(ocdDocument.design)) // Resolve cloning issue when design changed
         const displayColumns = ocdConsoleConfig.config.displayColumns || {}
         console.debug('OcdTabular: Export to Excel - design', design)
         console.debug('OcdTabular: Export to Excel - displayColumns', displayColumns)
