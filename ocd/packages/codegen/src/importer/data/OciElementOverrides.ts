@@ -106,6 +106,20 @@ export const elementOverrides: OcdElementOverrides = {
             "default_backend_set_name": "Backend Set"
         }
     },
+    "keys": {
+        "common": {},
+        "oci_core_instance": {
+            "shape_config.memory_in_gbs": "memoryInGBs",
+            "source_details.boot_volume_size_in_gbs": "bootVolumeSizeInGBs",
+        },
+        "oci_core_volume": {
+            "size_in_gbs": "sizeInGBs",
+            "vpus_per_gb": "vpusPerGB"
+        },
+        "oci_database_db_system": {
+            "data_storage_size_in_gb": "dataStorageSizeInGBs"
+        }
+    },
     "required": {
         "common": {},
         "oci_core_security_list": {

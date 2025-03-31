@@ -29,7 +29,8 @@ jobs:
           echo "okit_release_version=$(jq -r '.release' okitweb/static/okit/json/release.json)"  >> "$GITHUB_OUTPUT"
           echo "okit_release_tag=$(jq -r '.tag' okitweb/static/okit/json/release.json)"  >> "$GITHUB_OUTPUT"
           echo "okit_release_title=$(jq -r '.title' okitweb/static/okit/json/release.json)"  >> "$GITHUB_OUTPUT"
-  update-or-create-release: 
+  
+  create-release: 
     needs: [generate-variables]
     runs-on: ubuntu-latest
     continue-on-error: true
@@ -43,7 +44,6 @@ jobs:
       RELEASE_TAG: ${{ needs.generate-variables.outputs.okit_release_tag }}
       RELEASE_TITLE: ${{ needs.generate-variables.outputs.okit_release_title }}
       OCD_VERSION: ${{ needs.generate-variables.outputs.ocd_version }}
-      # BRANCH_OCD_VERSION: ${{ needs.generate-variables.outputs.ocd_version }}-${{ github.head_ref || github.ref_name }}
       BRANCH_RELEASE_TAG: ocd.${{ github.head_ref || github.ref_name }}
     steps:
       - uses: actions/checkout@v4
@@ -51,18 +51,15 @@ jobs:
         id: delete_release
         run: |
           gh release delete ${{ env.BRANCH_RELEASE_TAG }} --yes --cleanup-tag
-      # - name: Update Release
-      #   id: update_release
-      #   run: |
-      #     gh release edit ${{ env.BRANCH_RELEASE_TAG }} --title "OCD ${{ env.BRANCH }} Release ${{ env.OCD_VERSION }}" --notes-file ./ocd/README.md --target ${{ env.BRANCH }} --latest
       - name: Create Release if Update fails
         if: failure() || success()
         id: create_release
         run: |
-          gh release create ${{ env.BRANCH_RELEASE_TAG }} --title "OCD ${{ env.BRANCH }} Release ${{ env.OCD_VERSION }}" --notes-file ./ocd/README.md --target ${{ env.BRANCH }} --latest --prerelease
+          gh release create ${{ env.BRANCH_RELEASE_TAG }} --title "OCD ${{ env.BRANCH }} Release ${{ env.OCD_VERSION }}" --notes-file ./ocd/README.md --target ${{ env.BRANCH }} --prerelease=true
+          # gh release edit ${{ env.BRANCH_RELEASE_TAG }} --draft=false
     
   build-and-release:
-    needs: [update-or-create-release, generate-variables]
+    needs: [create-release, generate-variables]
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -119,3 +116,20 @@ jobs:
           gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/make/deb/x64/ocd_${{ env.OCD_VERSION }}*.deb --clobber
           # gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/release/${{ env.OCD_VERSION }}/ocd-${{ env.OCD_VERSION }}-*.snap --clobber
           # gh release upload ${{ env.BRANCH_RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}-*.AppImage --clobber
+
+  update-release: 
+    needs: [build-and-release]
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      BRANCH_RELEASE_TAG: ocd.${{ github.head_ref || github.ref_name }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update Release
+        id: update_release
+        run: |
+          gh release edit ${{ env.BRANCH_RELEASE_TAG }} --draft=false
+        

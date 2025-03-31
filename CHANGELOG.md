@@ -1,6 +1,16 @@
 # Release Notes
 
 
+## Version 0.68.0
+**Release Date**: 31st March 2025
+### Features
+1. OKIT-Desktop: (OKIT-320) Import Terraform Files. This is the initiall release of the Terraform import functionality and may need updates as and when issues are seen.
+2. OKIT-Desktop: (OKIT-301) Add export to Excel (Detailed)
+3. OKIT-Desktop: (OKIT-319) Add security Token based authentication. If during authentication OKIT Desktop notices the presence of a security token entry in the config file it will switch to token based authentication.
+### Bug Fixes
+1. OKIT-Classic: Remove optional compartment_id from Object Storage namespace query in Terraform
+
+
 ## Version 0.67.0
 **Release Date**: 31st January 2025
 ### Features

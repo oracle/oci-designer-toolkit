@@ -82,6 +82,7 @@ export const OcdTabularContents = ({ ocdDocument, azureResources, selected, colu
                         resource={r}
                         // resourceElements={resourceElements}
                         resourceElements={displayColumns.map((c: string) => resourceElements[columnTitles.indexOf(c)])}
+                        displayColumns={displayColumns}
                         key={`${selected}-tabular-${r.id}`}
                     />
                 })}
@@ -136,7 +137,7 @@ export const OcdTabularHeader = ({columnTitles, azureResources, resourceElements
     )
 }
 
-export const OcdTabularRow = ({ocdDocument, azureResources, index, resource, resourceElements, selected}: AzureTabularRowProps): JSX.Element => {
+export const OcdTabularRow = ({ocdDocument, azureResources, index, resource, resourceElements, displayColumns, selected}: AzureTabularRowProps): JSX.Element => {
     const getReferenceDisplayName = (id: string) => {
         const resource = ocdDocument.getResource(id)
         return resource ? resource.displayName : 'Unknown'

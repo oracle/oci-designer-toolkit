@@ -5,3 +5,4 @@
 
 export { OcdImporter } from './OcdImporter.js'
 export { OcdOKITImporter } from './okit/OcdOKITImporter.js'
+export { OcdTerraformImporter } from './terraform/OcdTerraformImporter.js'

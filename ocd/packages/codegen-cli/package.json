@@ -1,6 +1,6 @@
 {
   "name": "@ocd/codegen-cli",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "OKIT Open Cloud DesignerCodegen Command-line",
   "title": "OKIT Open Cloud Designer Codegen Command-linetop",
   "author": {
@@ -29,7 +29,7 @@
     "compile": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
     "build": "npm run compile && npm run pack",
 
-    "generate-ocd-svg-css-desktop": "node lib/esm/ocd-build-svg-css.js -d ../react/src/data -i ../react/src/css",
+    "generate-ocd-svg-css-desktop": "node lib/esm/ocd-build-svg-css.js -d ../react/src/data -i ../desktop/src/css",
 
     "generate-ocd-build-date-desktop": "node lib/esm/ocd-set-build-date.js -d ../react/src/data -p ../desktop/package.json",
     "generate-ocd-build-date-export": "node lib/esm/ocd-set-build-date.js -d ../export/src/data -p ../desktop/package.json",
@@ -50,13 +50,15 @@
 
     "generate-terraform-schema-resource-attributes": "node lib/esm/ocd-codegen.js import terraform-schema-resource-attributes -i ./schema/tf-schema.json -o ./schema/schema-resource-attributes.json",
 
-    "generate-oci-markdown":       "node lib/esm/ocd-codegen.js generate oci-markdown-js   -s ./schema/oci-schema.json -d ../export/src/markdown/provider/oci",
-    "generate-oci-model":          "node lib/esm/ocd-codegen.js generate oci-model-js      -s ./schema/oci-schema.json -d ../model/src/provider/oci",
-    "generate-oci-properties":     "node lib/esm/ocd-codegen.js generate oci-properties-js -s ./schema/oci-schema.json -d ../react/src/components/properties/provider/oci",
-    "generate-oci-tabular":        "node lib/esm/ocd-codegen.js generate oci-tabular-js    -s ./schema/oci-schema.json -d ../react/src/components/tabular/provider/oci",
-    "generate-oci-terraform":      "node lib/esm/ocd-codegen.js generate oci-terraform-js  -s ./schema/oci-schema.json -d ../export/src/terraform/provider/oci",
-    "generate-oci-validator":      "node lib/esm/ocd-codegen.js generate oci-validator-js  -s ./schema/oci-schema.json -d ../model/src/validator/provider/oci",
-    "generate-oci":                "npm run generate-oci-model && npm run generate-oci-markdown && npm run generate-oci-properties && npm run generate-oci-terraform && npm run generate-oci-tabular && npm run generate-oci-validator",
+    "generate-oci-markdown":          "node lib/esm/ocd-codegen.js generate oci-markdown-js         -s ./schema/oci-schema.json -d ../export/src/markdown/provider/oci",
+    "generate-oci-model":             "node lib/esm/ocd-codegen.js generate oci-model-js            -s ./schema/oci-schema.json -d ../model/src/provider/oci",
+    "generate-oci-properties":        "node lib/esm/ocd-codegen.js generate oci-properties-js       -s ./schema/oci-schema.json -d ../react/src/components/properties/provider/oci",
+    "generate-oci-tabular":           "node lib/esm/ocd-codegen.js generate oci-tabular-js          -s ./schema/oci-schema.json -d ../react/src/components/tabular/provider/oci",
+    "generate-oci-terraform":         "node lib/esm/ocd-codegen.js generate oci-terraform-js        -s ./schema/oci-schema.json -d ../export/src/terraform/provider/oci",
+    "generate-oci-validator":         "node lib/esm/ocd-codegen.js generate oci-validator-js        -s ./schema/oci-schema.json -d ../model/src/validator/provider/oci",
+    "generate-oci-excel":             "node lib/esm/ocd-codegen.js generate oci-excel-js            -s ./schema/oci-schema.json -d ../export/src/excel/provider/oci",
+    "generate-oci-terraform-import":  "node lib/esm/ocd-codegen.js generate oci-terraform-import-js -s ./schema/oci-schema.json -d ../import/src/terraform/provider/oci",
+    "generate-oci":                   "npm run generate-oci-model && npm run generate-oci-markdown && npm run generate-oci-properties && npm run generate-oci-terraform && npm run generate-oci-tabular && npm run generate-oci-validator && npm run generate-oci-excel && npm run generate-oci-terraform-import",
 
     "generate-azurerm-markdown":   "node lib/esm/ocd-codegen.js generate azurerm-markdown-js   -f -s ./schema/azurerm-schema.json -d ../export/src/markdown/provider/azure",
     "generate-azurerm-model":      "node lib/esm/ocd-codegen.js generate azurerm-model-js      -f -s ./schema/azurerm-schema.json -d ../model/src/provider/azure",
@@ -83,6 +85,6 @@
     "import-and-generate": "npm run import-and-generate-oci && npm run import-and-generate-azurerm && npm run import-and-generate-google"
   },
   "dependencies": {
-    "@ocd/codegen": ">=0.2.7"
+    "@ocd/codegen": ">=0.2.8"
   }
 }

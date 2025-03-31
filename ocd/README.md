@@ -75,6 +75,11 @@ System Settings -> Security
 
 Select "Open Anyway"
 
+For anyone trying to install the Desktop version on a Mac running Sequoia 15.x.x you will probably notice that you can no longer override the licence warning within settings. There is a way around this and it is to execute the following once thw dmg has been installed.
+```bash
+xattr -d com.apple.quarantine /Applications/ocd.app
+```
+
 # OCD Desktop Features 
 
 The OCD Desktop / Web interface is composed of a number of section similar to those provided in the original OKIT BUI. These 

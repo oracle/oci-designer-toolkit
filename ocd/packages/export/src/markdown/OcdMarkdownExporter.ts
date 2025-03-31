@@ -3,8 +3,8 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import { OcdDesign, OcdResource, OcdViewConnector, OcdViewCoords, OcdViewPage, OciResource } from "@ocd/model"
-import { OcdExporter, OutputDataString, OutputDataStringArray } from "../OcdExporter.js"
+import { OcdDesign, OcdViewPage, OciResource } from "@ocd/model"
+import { OcdExporter, OutputDataString } from "../OcdExporter.js"
 import { OcdSVGExporter } from "../svg/OcdSVGExporter.js"
 import * as ociMarkdownResources from './provider/oci/resources.js'
 import { OcdUtils } from "@ocd/core"

@@ -4,7 +4,7 @@
         "ocdSchemaVersion": "0.1.0",
         "ocdModelId": "ocd-model-b229c12b-895f-4317-aae0-9b9c2a7d8232",
         "platform": "oci",
-        "title": "OKE Networking for PCA",
+        "title": "OKE Networking for C3",
         "documentation": "",
         "created": "2024-3-20 15:17:4",
         "updated": ""
@@ -937,23 +937,7 @@
                         "vcnId": "okit.vcn.81346ca4-8738-446a-861e-76a66333e15f"
                     }
                 ],
-                "dynamic_group": [
-                    {
-                        "provider": "oci",
-                        "locked": false,
-                        "terraformResourceName": "OkitDynamicGroup1713431305858",
-                        "okitReference": "okit-6166659f-5cd6-4e4b-8b6a-4470d96de17a",
-                        "resourceType": "DynamicGroup",
-                        "resourceTypeName": "Dynamic Group",
-                        "id": "okit.dynamic_group.be91810e-d732-4ac0-ae6e-f1b700b2677b",
-                        "region": "",
-                        "compartmentId": "okit.compartment.c373a27c-dc58-4cde-9dce-db3de0ca8056",
-                        "displayName": "Dynamic Group bed0",
-                        "documentation": "",
-                        "description": "",
-                        "matchingRule": ""
-                    }
-                ]
+                "dynamic_group": []
             }
         }
     },

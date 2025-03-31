@@ -5,9 +5,11 @@
 
 import { OcdDesign } from "@ocd/model";
 import { OcdUtils } from "@ocd/core";
+import { Workbook } from 'exceljs'
 
 export interface OutputDataString extends Record<string, string> {}
 export interface OutputDataStringArray extends Record<string, string[]> {}
+export interface OutputDataAnyArrayArray extends Record<string, any[][]> {}
 
 class OcdExporter {
     design: OcdDesign
@@ -20,7 +22,7 @@ class OcdExporter {
     getGoogleResources() {return OcdDesign.getGoogleResources(this.design)}
     getResources() {return OcdDesign.getResources(this.design)}
 
-    export = (design: OcdDesign): string | OutputDataStringArray | OutputDataString => ''
+    export = (design: OcdDesign): string | OutputDataStringArray | OutputDataString | OutputDataAnyArrayArray | Workbook => ''
 
     toTitleCase = (str: string) => OcdUtils.toTitleCase(str)
     toCamelCase = (str: string) => OcdUtils.toCamelCase(str)

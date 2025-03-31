@@ -151,6 +151,7 @@ export interface OcdTabularRowProps {
     index: number
     resource: OcdResource
     resourceElements: string[]
+    displayColumns: string[]
     selected: string
 }
 

@@ -6,47 +6,48 @@
 // import * as common from 'oci-common'
 // import * as core from "oci-core"
 // import * as identity from "oci-identity"
-import { OcdDesign, OciModelResources, OciResources } from '@ocd/model'
-import { analytics, bastion, common, core, database, filestorage, identity, keymanagement, loadbalancer, mysql, networkloadbalancer, nosql, objectstorage, vault } from 'oci-sdk'
-import { OciCommonQuery } from './OciQueryCommon.js'
+import { OcdDesign, OciModelResources, OciResource, OciResources } from '@ocd/model'
+import { analytics, bastion, core, database, filestorage, identity, keymanagement, loadbalancer, mysql, networkloadbalancer, nosql, objectstorage, vault } from 'oci-sdk'
+// import { OciCommonQuery } from './OciQueryCommon.js'
+import { OciReferenceDataQuery } from './OciReferenceDataQuery.js'
 
-export class OciQuery extends OciCommonQuery {
+export class OciQuery extends OciReferenceDataQuery {
     // Clients
-    vcnClient: core.VirtualNetworkClient
-    computeClient: core.ComputeClient
-    blockstorageClient: core.BlockstorageClient
+    // vcnClient: core.VirtualNetworkClient
+    // computeClient: core.ComputeClient
+    // blockstorageClient: core.BlockstorageClient
+    analyticsClient: analytics.AnalyticsClient
     bastionClient: bastion.BastionClient
+    fileStorageClient: filestorage.FileStorageClient
     kmsManagementClient: keymanagement.KmsManagementClient
     kmsVaultClient: keymanagement.KmsVaultClient
-    vaultClient: vault.VaultsClient
-    analyticsClient: analytics.AnalyticsClient
-    databaseClient: database.DatabaseClient
-    objectStorageClient: objectstorage.ObjectStorageClient
     mysqlClient: mysql.DbSystemClient
-    fileStorageClient: filestorage.FileStorageClient
-    loadbalancerClient: loadbalancer.LoadBalancerClient
     networkLoadbalancerClient: networkloadbalancer.NetworkLoadBalancerClient
     nosqlClient: nosql.NosqlClient
+    objectStorageClient: objectstorage.ObjectStorageClient
+    vaultClient: vault.VaultsClient
+    // databaseClient: database.DatabaseClient
+    // loadbalancerClient: loadbalancer.LoadBalancerClient
 
     constructor(profile: string='DEFAULT', region?: string) {
         super(profile, region)
         console.debug('OciQuery: Region', region)
         // Initialise All Clients
-        this.vcnClient = new core.VirtualNetworkClient(this.authenticationConfiguration, this.clientConfiguration)
-        this.computeClient = new core.ComputeClient(this.authenticationConfiguration, this.clientConfiguration)
-        this.blockstorageClient = new core.BlockstorageClient(this.authenticationConfiguration, this.clientConfiguration)
-        this.bastionClient = new bastion.BastionClient(this.authenticationConfiguration, this.clientConfiguration)
-        this.kmsVaultClient = new keymanagement.KmsVaultClient(this.authenticationConfiguration, this.clientConfiguration)
-        this.kmsManagementClient = new keymanagement.KmsManagementClient(this.authenticationConfiguration, this.clientConfiguration)
-        this.vaultClient = new vault.VaultsClient(this.authenticationConfiguration, this.clientConfiguration)
+        // this.vcnClient = new core.VirtualNetworkClient(this.authenticationConfiguration, this.clientConfiguration)
+        // this.computeClient = new core.ComputeClient(this.authenticationConfiguration, this.clientConfiguration)
+        // this.blockstorageClient = new core.BlockstorageClient(this.authenticationConfiguration, this.clientConfiguration)
         this.analyticsClient = new analytics.AnalyticsClient(this.authenticationConfiguration, this.clientConfiguration)
-        this.databaseClient = new database.DatabaseClient(this.authenticationConfiguration, this.clientConfiguration)
-        this.objectStorageClient = new objectstorage.ObjectStorageClient(this.authenticationConfiguration, this.clientConfiguration)
-        this.mysqlClient = new mysql.DbSystemClient(this.authenticationConfiguration, this.clientConfiguration)
+        this.bastionClient = new bastion.BastionClient(this.authenticationConfiguration, this.clientConfiguration)
         this.fileStorageClient = new filestorage.FileStorageClient(this.authenticationConfiguration, this.clientConfiguration)
-        this.loadbalancerClient = new loadbalancer.LoadBalancerClient(this.authenticationConfiguration, this.clientConfiguration)
+        this.kmsManagementClient = new keymanagement.KmsManagementClient(this.authenticationConfiguration, this.clientConfiguration)
+        this.kmsVaultClient = new keymanagement.KmsVaultClient(this.authenticationConfiguration, this.clientConfiguration)
+        this.mysqlClient = new mysql.DbSystemClient(this.authenticationConfiguration, this.clientConfiguration)
         this.networkLoadbalancerClient = new networkloadbalancer.NetworkLoadBalancerClient(this.authenticationConfiguration, this.clientConfiguration)
         this.nosqlClient = new nosql.NosqlClient(this.authenticationConfiguration, this.clientConfiguration)
+        this.objectStorageClient = new objectstorage.ObjectStorageClient(this.authenticationConfiguration, this.clientConfiguration)
+        this.vaultClient = new vault.VaultsClient(this.authenticationConfiguration, this.clientConfiguration)
+        // this.databaseClient = new database.DatabaseClient(this.authenticationConfiguration, this.clientConfiguration)
+        // this.loadbalancerClient = new loadbalancer.LoadBalancerClient(this.authenticationConfiguration, this.clientConfiguration)
     }
 
     newDesign = () => OcdDesign.newDesign()
@@ -57,312 +58,377 @@ export class OciQuery extends OciCommonQuery {
         console.debug('QciQuery: queryTenancy')
         return new Promise((resolve, reject) => {
             const design = this.newDesign()
-            // Kick Off In Sequence Container Based Resources
-            const getCompartments = this.getCompartments(compartmentIds)
-            const listVcns = this.listVcns(compartmentIds)
-            const listSubnets = this.listSubnets(compartmentIds)
-            // Networking
-            const listDhcpOptions = this.listDhcpOptions(compartmentIds)
-            const listInternetGateways = this.listInternetGateways(compartmentIds)
-            const listNatGateways = this.listNatGateways(compartmentIds)
-            const listRouteTables = this.listRouteTables(compartmentIds)
-            const listSecurityLists = this.listSecurityLists(compartmentIds)
-            const listNetworkSecurityGroups = this.listNetworkSecurityGroups(compartmentIds)
-            const listIPSecConnections = this.listIPSecConnections(compartmentIds)
-            const listDrgs = this.listDrgs(compartmentIds)
-            const listDrgAttachments = this.listDrgAttachments(compartmentIds)
-            const listServiceGateways = this.listServiceGateways(compartmentIds)
-            const listLocalPeeringGateways = this.listLocalPeeringGateways(compartmentIds)
-            const listRemotePeeringConnections = this.listRemotePeeringConnections(compartmentIds)
-            const listCpes = this.listCpes(compartmentIds)
-            // Storage
-            const listVolumes = this.listVolumes(compartmentIds)
-            const listBootVolumes = this.listBootVolumes(compartmentIds)
-            const listFileSystems = this.listFileSystems(compartmentIds)
-            const listMountTargets = this.listMountTargets(compartmentIds)
-            const listBuckets = this.listBuckets(compartmentIds)
-            // Databases
-            const listAutonomousDatabases = this.listAutonomousDatabases(compartmentIds)
-            const listDatabaseSystems = this.listDatabaseSystems(compartmentIds)
-            const listMySqlDatabaseSystems = this.listMySqlDatabaseSystems(compartmentIds)
-            const listNoSqlTables = this.listNoSqlTables(compartmentIds)
-            // const listNoSqlIndexes = this.listNoSqlIndexes(compartmentIds)
-            // Infrastructure
-            const listInstances = this.listInstances(compartmentIds)
-            const listVnicAttachments = this.listVnicAttachments(compartmentIds)
-            const listVolumeAttachments = this.listVolumeAttachments(compartmentIds)
-            const listBootVolumeAttachments = this.listBootVolumeAttachments(compartmentIds)
-            const listAnalyticsInstances = this.listAnalyticsInstances(compartmentIds)
-            const listLoadBalancers = this.listLoadBalancers(compartmentIds)
-            const listNetworkLoadBalancers = this.listNetworkLoadBalancers(compartmentIds)
-            // Identity
-            const listBastions = this.listBastions(compartmentIds)
-            const listVaults = this.listVaults(compartmentIds)
-            const listKeys = this.listKeys(compartmentIds)
-            const listSecrets = this.listSecrets(compartmentIds)
-            const listDynamicGroups = this.listDynamicGroups(compartmentIds)
-            // const listDynamicGroups = this.listDynamicGroups([this.provider.getTenantId()])
-            const listPolicies = this.listPolicies(compartmentIds)
-            // const listPolicies = this.listPolicies([...compartmentIds, this.provider.getTenantId()])
-            // Wait for all queries to be settled
-            const queries = [
-                getCompartments, 
-                listVcns, 
-                listSubnets, 
-                listRouteTables, 
-                listSecurityLists, 
-                listNetworkSecurityGroups, 
-                listDhcpOptions, 
-                listInternetGateways, 
-                listNatGateways, 
-                listInstances, 
-                listVnicAttachments, 
-                listVolumeAttachments, 
-                listBootVolumeAttachments, 
-                listVolumes, 
-                listBootVolumes, 
-                listFileSystems, 
-                listMountTargets, 
-                listBuckets, 
-                listAutonomousDatabases, 
-                listAnalyticsInstances,
-                listDatabaseSystems, 
-                listMySqlDatabaseSystems, 
-                listNoSqlTables, 
-                // listNoSqlIndexes, 
-                listLoadBalancers, 
-                listNetworkLoadBalancers, 
-                listIPSecConnections, 
-                listDrgs, 
-                listDrgAttachments, 
-                listServiceGateways, 
-                listLocalPeeringGateways,
-                listRemotePeeringConnections, 
-                listCpes, 
-                listBastions, 
-                listVaults, 
-                listKeys, 
-                listSecrets,
-                listDynamicGroups,
-                listPolicies
-            ]
+            this.listTenancyCompartments().then((compartments) => {
+                const allTenancyCompartmentIds = compartments.map((c: OciResource) => c.id)
+                // Reference Data
+                const listImages = this.listImages(allTenancyCompartmentIds)
+                // Kick Off In Sequence Container Based Resources
+                const getCompartments = this.getCompartments(compartmentIds)
+                const listVcns = this.listVcns(compartmentIds)
+                const listSubnets = this.listSubnets(compartmentIds)
+                // Networking
+                const listDhcpOptions = this.listDhcpOptions(compartmentIds)
+                const listInternetGateways = this.listInternetGateways(compartmentIds)
+                const listNatGateways = this.listNatGateways(compartmentIds)
+                const listRouteTables = this.listRouteTables(compartmentIds)
+                const listSecurityLists = this.listSecurityLists(compartmentIds)
+                const listNetworkSecurityGroups = this.listNetworkSecurityGroups(compartmentIds)
+                const listIPSecConnections = this.listIPSecConnections(compartmentIds)
+                const listDrgs = this.listDrgs(compartmentIds)
+                const listDrgAttachments = this.listDrgAttachments(compartmentIds)
+                const listServiceGateways = this.listServiceGateways(compartmentIds)
+                const listLocalPeeringGateways = this.listLocalPeeringGateways(compartmentIds)
+                const listRemotePeeringConnections = this.listRemotePeeringConnections(compartmentIds)
+                const listCpes = this.listCpes(compartmentIds)
+                // Storage
+                const listVolumes = this.listVolumes(compartmentIds)
+                const listBootVolumes = this.listBootVolumes(compartmentIds)
+                const listFileSystems = this.listFileSystems(compartmentIds)
+                const listMountTargets = this.listMountTargets(compartmentIds)
+                const listBuckets = this.listBuckets(compartmentIds)
+                // Databases
+                const listAutonomousDatabases = this.listAutonomousDatabases(compartmentIds)
+                const listDatabaseSystems = this.listDatabaseSystems(compartmentIds)
+                const listMySqlDatabaseSystems = this.listMySqlDatabaseSystems(compartmentIds)
+                const listNoSqlTables = this.listNoSqlTables(compartmentIds)
+                // const listNoSqlIndexes = this.listNoSqlIndexes(compartmentIds)
+                // Infrastructure
+                const listInstances = this.listInstances(compartmentIds)
+                const listVnicAttachments = this.listVnicAttachments(compartmentIds)
+                const listVolumeAttachments = this.listVolumeAttachments(compartmentIds)
+                const listBootVolumeAttachments = this.listBootVolumeAttachments(compartmentIds)
+                const listAnalyticsInstances = this.listAnalyticsInstances(compartmentIds)
+                const listLoadBalancers = this.listLoadBalancers(compartmentIds)
+                const listNetworkLoadBalancers = this.listNetworkLoadBalancers(compartmentIds)
+                // Identity
+                const listBastions = this.listBastions(compartmentIds)
+                const listVaults = this.listVaults(compartmentIds)
+                const listKeys = this.listKeys(compartmentIds)
+                const listSecrets = this.listSecrets(compartmentIds)
+                const listDynamicGroups = this.listDynamicGroups(compartmentIds)
+                // const listDynamicGroups = this.listDynamicGroups([this.provider.getTenantId()])
+                const listPolicies = this.listPolicies(compartmentIds)
+                // const listPolicies = this.listPolicies([...compartmentIds, this.provider.getTenantId()])
+                // Wait for all queries to be settled
+                const queries = [
+                    // Reference Data
+                    listImages,
+                    // Resources
+                    getCompartments, 
+                    listVcns, 
+                    listSubnets, 
+                    listRouteTables, 
+                    listSecurityLists, 
+                    listNetworkSecurityGroups, 
+                    listDhcpOptions, 
+                    listInternetGateways, 
+                    listNatGateways, 
+                    listInstances, 
+                    listVnicAttachments, 
+                    listVolumeAttachments, 
+                    listBootVolumeAttachments, 
+                    listVolumes, 
+                    listBootVolumes, 
+                    listFileSystems, 
+                    listMountTargets, 
+                    listBuckets, 
+                    listAutonomousDatabases, 
+                    listAnalyticsInstances,
+                    listDatabaseSystems, 
+                    listMySqlDatabaseSystems, 
+                    listNoSqlTables, 
+                    // listNoSqlIndexes, 
+                    listLoadBalancers, 
+                    listNetworkLoadBalancers, 
+                    listIPSecConnections, 
+                    listDrgs, 
+                    listDrgAttachments, 
+                    listServiceGateways, 
+                    listLocalPeeringGateways,
+                    listRemotePeeringConnections, 
+                    listCpes, 
+                    listBastions, 
+                    listVaults, 
+                    listKeys, 
+                    listSecrets,
+                    listDynamicGroups,
+                    listPolicies
+                ]
+                Promise.allSettled(queries).then((results) => {
+                    console.debug('OciQuery: queryTenancy: All Settled')
+                    // Reference Data
+                    // @ts-ignore
+                    const computeImages = results[queries.indexOf(listImages)].value
+                    // Compartments
+                    // @ts-ignore
+                    design.model.oci.resources.compartment = results[queries.indexOf(getCompartments)].value
+                    // @ts-ignore
+                    design.view.pages[0].layers = design.model.oci.resources.compartment.map((c, i) => {return {id: c.id, class: 'oci-compartment', visible: true, selected: i === 0}})
+
+                    /*
+                    ** Networking
+                    */
+                    // VCNs
+                    // @ts-ignore
+                    if (results[queries.indexOf(listVcns)].status === 'fulfilled' && results[queries.indexOf(listVcns)].value.length > 0) design.model.oci.resources.vcn = results[queries.indexOf(listVcns)].value
+                    // Subnets
+                    // @ts-ignore
+                    if (results[queries.indexOf(listSubnets)].status === 'fulfilled' && results[queries.indexOf(listSubnets)].value.length > 0) design.model.oci.resources.subnet = results[queries.indexOf(listSubnets)].value
+                    // Route Tables
+                    // @ts-ignore
+                    if (results[queries.indexOf(listRouteTables)].status === 'fulfilled' && results[queries.indexOf(listRouteTables)].value.length > 0) design.model.oci.resources.route_table = results[queries.indexOf(listRouteTables)].value
+                    // Security Lists
+                    // @ts-ignore
+                    if (results[queries.indexOf(listSecurityLists)].status === 'fulfilled' && results[queries.indexOf(listSecurityLists)].value.length > 0) design.model.oci.resources.security_list = results[queries.indexOf(listSecurityLists)].value
+                    // Network Security Groups
+                    // @ts-ignore
+                    if (results[queries.indexOf(listNetworkSecurityGroups)].status === 'fulfilled' && results[queries.indexOf(listNetworkSecurityGroups)].value.length > 0) design.model.oci.resources.network_security_group = results[queries.indexOf(listNetworkSecurityGroups)].value.groups
+                    // Network Security Groups Rules
+                    // @ts-ignore
+                    // if (results[queries.indexOf(listNetworkSecurityGroups)].status === 'fulfilled') design.model.oci.resources.network_security_group_security_rules = design.model.oci.resources.network_security_group.reduce((a, c) => [...a, ...c.rules], [])
+                    if (results[queries.indexOf(listNetworkSecurityGroups)].status === 'fulfilled' && results[queries.indexOf(listNetworkSecurityGroups)].value.length > 0) design.model.oci.resources.network_security_group_security_rule = results[queries.indexOf(listNetworkSecurityGroups)].value.rules
+                    // DHCP Options
+                    // @ts-ignore
+                    if (results[queries.indexOf(listDhcpOptions)].status === 'fulfilled' && results[queries.indexOf(listDhcpOptions)].value.length > 0) design.model.oci.resources.dhcp_options = results[queries.indexOf(listDhcpOptions)].value
+                    // Internet Gateways
+                    // @ts-ignore
+                    if (results[queries.indexOf(listInternetGateways)].status === 'fulfilled' && results[queries.indexOf(listInternetGateways)].value.length > 0) design.model.oci.resources.internet_gateway = results[queries.indexOf(listInternetGateways)].value
+                    // NAT Gateways
+                    // @ts-ignore
+                    if (results[queries.indexOf(listNatGateways)].status === 'fulfilled' && results[queries.indexOf(listNatGateways)].value.length > 0) design.model.oci.resources.nat_gateway = results[queries.indexOf(listNatGateways)].value
+                    // IPSec Connection
+                    // @ts-ignore
+                    if (results[queries.indexOf(listIPSecConnections)].status === 'fulfilled' && results[queries.indexOf(listIPSecConnections)].value.length > 0) design.model.oci.resources.ipsec = results[queries.indexOf(listIPSecConnections)].value
+                    // DRG
+                    // @ts-ignore
+                    if (results[queries.indexOf(listDrgs)].status === 'fulfilled' && results[queries.indexOf(listDrgs)].value.length > 0) design.model.oci.resources.drg = results[queries.indexOf(listDrgs)].value
+                    // DRG Attachment
+                    // @ts-ignore
+                    if (results[queries.indexOf(listDrgAttachments)].status === 'fulfilled' && results[queries.indexOf(listDrgAttachments)].value.length > 0) design.model.oci.resources.drg_attachment = results[queries.indexOf(listDrgAttachments)].value
+                    // Service Gateway
+                    // @ts-ignore
+                    if (results[queries.indexOf(listServiceGateways)].status === 'fulfilled' && results[queries.indexOf(listServiceGateways)].value.length > 0) design.model.oci.resources.service_gateway = results[queries.indexOf(listServiceGateways)].value
+                    // Local Peering Gateway
+                    // @ts-ignore
+                    if (results[queries.indexOf(listLocalPeeringGateways)].status === 'fulfilled' && results[queries.indexOf(listLocalPeeringGateways)].value.length > 0) design.model.oci.resources.local_peering_gateway = results[queries.indexOf(listLocalPeeringGateways)].value
+                    // Remote Peering Connection
+                    // @ts-ignore
+                    if (results[queries.indexOf(listRemotePeeringConnections)].status === 'fulfilled' && results[queries.indexOf(listRemotePeeringConnections)].value.length > 0) design.model.oci.resources.remote_peering_connection = results[queries.indexOf(listRemotePeeringConnections)].value
+                    // CPE
+                    // @ts-ignore
+                    if (results[queries.indexOf(listCpes)].status === 'fulfilled' && results[queries.indexOf(listCpes)].value.length > 0) design.model.oci.resources.cpe = results[queries.indexOf(listCpes)].value
+
+                    /*
+                    ** Storage
+                    */
+                    // Volumes
+                    // @ts-ignore
+                    if (results[queries.indexOf(listVolumes)].status === 'fulfilled' && results[queries.indexOf(listVolumes)].value.length > 0) design.model.oci.resources.volume = results[queries.indexOf(listVolumes)].value
+                    // Boot Volumes
+                    // @ts-ignore
+                    if (results[queries.indexOf(listBootVolumes)].status === 'fulfilled' && results[queries.indexOf(listBootVolumes)].value.length > 0) design.model.oci.resources.boot_volume = results[queries.indexOf(listBootVolumes)].value
+                    // File Systems
+                    // @ts-ignore
+                    if (results[queries.indexOf(listFileSystems)].status === 'fulfilled' && results[queries.indexOf(listFileSystems)].value.length > 0) design.model.oci.resources.file_system = results[queries.indexOf(listFileSystems)].value
+                    // Mount Targets
+                    // @ts-ignore
+                    if (results[queries.indexOf(listMountTargets)].status === 'fulfilled' && results[queries.indexOf(listMountTargets)].value.length > 0) design.model.oci.resources.mount_target = results[queries.indexOf(listMountTargets)].value
+                    // Buckets
+                    // @ts-ignore
+                    if (results[queries.indexOf(listBuckets)].status === 'fulfilled' && results[queries.indexOf(listBuckets)].value.length > 0) design.model.oci.resources.bucket = results[queries.indexOf(listBuckets)].value
+
+                    /*
+                    ** Infrastructure
+                    */
+                    // Instances
+                    // @ts-ignore
+                    if (results[queries.indexOf(listInstances)].status === 'fulfilled' && results[queries.indexOf(listInstances)].value.length > 0) {
+                        // @ts-ignore
+                        design.model.oci.resources.instance = results[queries.indexOf(listInstances)].value
+                        design.model.oci.resources.instance.forEach((i) => i.sourceDetails.sourceId = computeImages.find((ci: Record<string, any>) => ci.ocid === i.sourceDetails.imageId)?.id)
+                    }
+                    // @ts-ignore
+                    // const vnicAttachments = results[queries.indexOf(listVnicAttachments)].status === 'fulfilled' ? results[queries.indexOf(listVnicAttachments)].value : []
+                    if (results[queries.indexOf(listVnicAttachments)].status === 'fulfilled' && results[queries.indexOf(listVnicAttachments)].value.length > 0) design.model.oci.resources.vnic_attachment = results[queries.indexOf(listVnicAttachments)].value
+                    // @ts-ignore
+                    // const volumeAttachments = results[queries.indexOf(listVolumeAttachments)].status === 'fulfilled' ? results[queries.indexOf(listVolumeAttachments)].value : []
+                    if (results[queries.indexOf(listVolumeAttachments)].status === 'fulfilled' && results[queries.indexOf(listVolumeAttachments)].value.length > 0) design.model.oci.resources.volume_attachment = results[queries.indexOf(listVolumeAttachments)].value
+                    // @ts-ignore
+                    if (results[queries.indexOf(listBootVolumeAttachments)].status === 'fulfilled' && results[queries.indexOf(listBootVolumeAttachments)].value.length > 0) design.model.oci.resources.boot_volume_attachment = results[queries.indexOf(listBootVolumeAttachments)].value
+                    // Set Primaty Vnic
+                    if (design.model.oci.resources.vnic_attachment) {
+                        design.model.oci.resources.instance.forEach((i) => {
+                            const primaryVnicAttachment: OciModelResources.OciVnicAttachment = design.model.oci.resources.vnic_attachment.find((v: OciModelResources.OciVnicAttachment) => v.instanceId === i.id && v.lifecycleState === 'ATTACHED' && v.vnic && v.vnic.isPrimary)
+                            //.map((v: OciModelResources.OciVnicAttachment) => v.vnic)
+                            if (primaryVnicAttachment ) {
+                                const primaryVnic = primaryVnicAttachment.vnic
+                                i.createVnicDetails = {
+                                    assignPublicIp: (primaryVnic.publicIp && primaryVnic.publicIp !== ''),
+                                    hostnameLabel: primaryVnic.hostnameLabel,
+                                    nsgIds: primaryVnic.nsgIds,
+                                    skipSourceDestCheck: primaryVnic.skipSourceDestCheck,
+                                    subnetId: primaryVnic.subnetId
+                                }
+                            }
+                        })
+                    }
+                    // Load Balancers
+                    // @ts-ignore
+                    if (results[queries.indexOf(listLoadBalancers)].status === 'fulfilled' && results[queries.indexOf(listLoadBalancers)].value.length > 0) design.model.oci.resources.load_balancer = results[queries.indexOf(listLoadBalancers)].value
+                    if (design.model.oci.resources.load_balancer && design.model.oci.resources.load_balancer.length > 0) this.processLoadBalancers(design)
+                    // if (design.model.oci.resources.load_balancer && design.model.oci.resources.load_balancer.length > 0) {
+                    //     // Create Backend Sets
+                    //     design.model.oci.resources.load_balancer_backend_set = design.model.oci.resources.load_balancer.map((l: OciModelResources.OciLoadBalancer) => Object.values(l.backendSets as OciModelResources.OciLoadBalancerBackendSet[]).map((b) => {
+                    //         return {...b, 
+                    //             id: l.id.replace('loadbalancer', 'load_balancer_backend_set'), 
+                    //             compartmentId: l.compartmentId, 
+                    //             displayName: b.name, 
+                    //             loadBalancerId: l.id, 
+                    //             lifecycleState: l.lifecycleState
+                    //         }
+                    //     })).flat()
+                    //     // Create Backends
+                    //     design.model.oci.resources.load_balancer_backend = design.model.oci.resources.load_balancer_backend_set.map((bs) => Object.values(bs.backends as OciModelResources.OciLoadBalancerBackend[]).map((b) => {
+                    //         const vnicAttachments = design.model.oci.resources.vnic_attachment ? design.model.oci.resources.vnic_attachment : []
+                    //         const vnicAttachment = vnicAttachments.find((v) => v.privateIp && v.privateIp.ipAddress === b.ipAddress)
+                    //         const instanceId = vnicAttachment ? vnicAttachment.instanceId : ''
+                    //         // const instanceId = design.model.oci.resources.vnic_attachment ? design.model.oci.resources.vnic_attachment.find((v) => v.privateIp && v.privateIp.ipAddress === b.ipAddress).instanceId : ''
+                    //         return {...b,
+
+                    //             id: bs.id.replace('load_balancer_backend_set', 'load_balancer_backend'), 
+                    //             compartmentId: bs.compartmentId, 
+                    //             displayName: b.name, 
+                    //             backendSetId: bs.id,
+                    //             backendsetName: bs.name,
+                    //             loadBalancerId: bs.loadBalancerId, 
+                    //             instanceId: instanceId,
+                    //             lifecycleState: bs.lifecycleState
+                    //         }
+                    //     })).flat()
+                    //     // Create Listeners
+                    //     design.model.oci.resources.load_balancer_listener = design.model.oci.resources.load_balancer.map((l: OciModelResources.OciLoadBalancer) => (Object.values(l.listeners as OciModelResources.OciLoadBalancerListener[])).map((listener) => {
+                    //         return {...listener, 
+                    //             id: l.id.replace('loadbalancer', 'load_balancer_listener'), 
+                    //             compartmentId: l.compartmentId, 
+                    //             displayName: listener.name, 
+                    //             defaultBackendSetName: design.model.oci.resources.load_balancer_backend_set.find((b) => b.loadBalancerId === l.id && b.displayName === listener.defaultBackendSetName)?.id,
+                    //             loadBalancerId: l.id, 
+                    //             lifecycleState: l.lifecycleState
+                    //         }
+                    //     })).flat()
+                    //     design.model.oci.resources.load_balancer.forEach((l) => {
+                    //         delete l.backendSets
+                    //         delete l.listeners
+                    //     })
+                    //     // console.debug('OciQuery: Load Balancer Backend Sets:', design.model.oci.resources.load_balancer_backend_set)
+                    //     // console.debug('OciQuery: Load Balancer Backends:', design.model.oci.resources.load_balancer_backend)
+                    // }
+                    // Network Load Balancers
+                    // @ts-ignore
+                    if (results[queries.indexOf(listNetworkLoadBalancers)].status === 'fulfilled' && results[queries.indexOf(listNetworkLoadBalancers)].value.length > 0) design.model.oci.resources.network_load_balancer = results[queries.indexOf(listNetworkLoadBalancers)].value
+                    // Analytics Instance
+                    // @ts-ignore
+                    if (results[queries.indexOf(listAnalyticsInstances)].status === 'fulfilled' && results[queries.indexOf(listAnalyticsInstances)].value.length > 0) design.model.oci.resources.analytics_instance = results[queries.indexOf(listAnalyticsInstances)].value
+
+                    /*
+                    ** Databases
+                    */
+                    // Autonomous Database
+                    // @ts-ignore
+                    if (results[queries.indexOf(listAutonomousDatabases)].status === 'fulfilled' && results[queries.indexOf(listAutonomousDatabases)].value.length > 0) design.model.oci.resources.autonomous_database = results[queries.indexOf(listAutonomousDatabases)].value
+                    // DB System
+                    // @ts-ignore
+                    if (results[queries.indexOf(listDatabaseSystems)].status === 'fulfilled' && results[queries.indexOf(listDatabaseSystems)].value.length > 0) design.model.oci.resources.db_system = results[queries.indexOf(listDatabaseSystems)].value
+                    // MySQL DB System
+                    // @ts-ignore
+                    if (results[queries.indexOf(listMySqlDatabaseSystems)].status === 'fulfilled' && results[queries.indexOf(listMySqlDatabaseSystems)].value.length > 0) design.model.oci.resources.mysql_db_system = results[queries.indexOf(listMySqlDatabaseSystems)].value
+                    // NoSQL DB System
+                    // @ts-ignore
+                    if (results[queries.indexOf(listNoSqlTables)].status === 'fulfilled' && results[queries.indexOf(listNoSqlTables)].value.length > 0) design.model.oci.resources.nosql_table = results[queries.indexOf(listNoSqlTables)].value
+                    // @ts-ignore
+                    // const nosql_indexes = results[queries.indexOf(listNoSqlTables)].status === 'fulfilled' ? results[queries.indexOf(listNoSqlIndexes)].value : []
+
+                    /*
+                    ** Identity
+                    */
+                    // Bastion
+                    // @ts-ignore
+                    if (results[queries.indexOf(listBastions)].status === 'fulfilled' && results[queries.indexOf(listBastions)].value.length > 0) design.model.oci.resources.bastion = results[queries.indexOf(listBastions)].value
+                    // Vault
+                    // @ts-ignore
+                    if (results[queries.indexOf(listVaults)].status === 'fulfilled' && results[queries.indexOf(listVaults)].value.length > 0) design.model.oci.resources.vault = results[queries.indexOf(listVaults)].value
+                    // Key
+                    // @ts-ignore
+                    if (results[queries.indexOf(listKeys)].status === 'fulfilled' && results[queries.indexOf(listKeys)].value.length > 0) design.model.oci.resources.key = results[queries.indexOf(listKeys)].value
+                    // Secret
+                    // @ts-ignore
+                    if (results[queries.indexOf(listSecrets)].status === 'fulfilled' && results[queries.indexOf(listSecrets)].value.length > 0) design.model.oci.resources.secret = results[queries.indexOf(listSecrets)].value
+                    // Dynamic Group
+                    // @ts-ignore
+                    if (results[queries.indexOf(listDynamicGroups)].status === 'fulfilled' && results[queries.indexOf(listDynamicGroups)].value.length > 0) design.model.oci.resources.dynamic_group = results[queries.indexOf(listDynamicGroups)].value.map((r) => {return {...r, displayName: r.name}})
+                    // Policy
+                    // @ts-ignore
+                    if (results[queries.indexOf(listPolicies)].status === 'fulfilled' && results[queries.indexOf(listPolicies)].value.length > 0) design.model.oci.resources.policy = results[queries.indexOf(listPolicies)].value
+
+                    // console.debug('OciQuery: queryTenancy:', JSON.stringify(design, null, 4))
+                    const filteredResources: OciResources = {}
+                    Object.keys(design.model.oci.resources).forEach((k) => filteredResources[k] = design.model.oci.resources[k].filter((r) => this.lifecycleStates.includes(r.lifecycleState) || r.lifecycleState === undefined))
+                    design.model.oci.resources = filteredResources
+                    this.postQuery(design).then((results) => {
+                        resolve(design)
+                    }).catch((reason) => {
+                        console.error(reason)
+                        reject(reason)
+                    })
+                    // resolve(design)
+                }).catch((reason) => {
+                    console.error(reason)
+                    reject(reason)
+                })
+            })
+        })
+    }
+
+    postQuery(design: OcdDesign): Promise<any> {
+        const resources = design.model.oci.resources
+        const missingImageIds = resources.instance !== undefined ? resources.instance.filter((i) => i.sourceDetails.sourceId === undefined).map((i) => i.sourceDetails.imageId) : []
+        const hiddenImages = this.getHiddenImages(missingImageIds)
+        const queries = [
+            hiddenImages
+        ]
+        return new Promise((resolve, reject) => {
             Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: queryTenancy: All Settled')
-                // Compartments
-                // @ts-ignore
-                design.model.oci.resources.compartment = results[queries.indexOf(getCompartments)].value
-                // @ts-ignore
-                design.view.pages[0].layers = design.model.oci.resources.compartment.map((c, i) => {return {id: c.id, class: 'oci-compartment', visible: true, selected: i === 0}})
-
-                /*
-                ** Networking
-                */
-                // VCNs
-                // @ts-ignore
-                if (results[queries.indexOf(listVcns)].status === 'fulfilled' && results[queries.indexOf(listVcns)].value.length > 0) design.model.oci.resources.vcn = results[queries.indexOf(listVcns)].value
-                // Subnets
-                // @ts-ignore
-                if (results[queries.indexOf(listSubnets)].status === 'fulfilled' && results[queries.indexOf(listSubnets)].value.length > 0) design.model.oci.resources.subnet = results[queries.indexOf(listSubnets)].value
-                // Route Tables
-                // @ts-ignore
-                if (results[queries.indexOf(listRouteTables)].status === 'fulfilled' && results[queries.indexOf(listRouteTables)].value.length > 0) design.model.oci.resources.route_table = results[queries.indexOf(listRouteTables)].value
-                // Security Lists
-                // @ts-ignore
-                if (results[queries.indexOf(listSecurityLists)].status === 'fulfilled' && results[queries.indexOf(listSecurityLists)].value.length > 0) design.model.oci.resources.security_list = results[queries.indexOf(listSecurityLists)].value
-                // Network Security Groups
-                // @ts-ignore
-                if (results[queries.indexOf(listNetworkSecurityGroups)].status === 'fulfilled' && results[queries.indexOf(listNetworkSecurityGroups)].value.length > 0) design.model.oci.resources.network_security_group = results[queries.indexOf(listNetworkSecurityGroups)].value.groups
-                // Network Security Groups Rules
-                // @ts-ignore
-                // if (results[queries.indexOf(listNetworkSecurityGroups)].status === 'fulfilled') design.model.oci.resources.network_security_group_security_rules = design.model.oci.resources.network_security_group.reduce((a, c) => [...a, ...c.rules], [])
-                if (results[queries.indexOf(listNetworkSecurityGroups)].status === 'fulfilled' && results[queries.indexOf(listNetworkSecurityGroups)].value.length > 0) design.model.oci.resources.network_security_group_security_rule = results[queries.indexOf(listNetworkSecurityGroups)].value.rules
-                // DHCP Options
-                // @ts-ignore
-                if (results[queries.indexOf(listDhcpOptions)].status === 'fulfilled' && results[queries.indexOf(listDhcpOptions)].value.length > 0) design.model.oci.resources.dhcp_options = results[queries.indexOf(listDhcpOptions)].value
-                // Internet Gateways
-                // @ts-ignore
-                if (results[queries.indexOf(listInternetGateways)].status === 'fulfilled' && results[queries.indexOf(listInternetGateways)].value.length > 0) design.model.oci.resources.internet_gateway = results[queries.indexOf(listInternetGateways)].value
-                // NAT Gateways
-                // @ts-ignore
-                if (results[queries.indexOf(listNatGateways)].status === 'fulfilled' && results[queries.indexOf(listNatGateways)].value.length > 0) design.model.oci.resources.nat_gateway = results[queries.indexOf(listNatGateways)].value
-                // IPSec Connection
-                // @ts-ignore
-                if (results[queries.indexOf(listIPSecConnections)].status === 'fulfilled' && results[queries.indexOf(listIPSecConnections)].value.length > 0) design.model.oci.resources.ipsec = results[queries.indexOf(listIPSecConnections)].value
-                // DRG
-                // @ts-ignore
-                if (results[queries.indexOf(listDrgs)].status === 'fulfilled' && results[queries.indexOf(listDrgs)].value.length > 0) design.model.oci.resources.drg = results[queries.indexOf(listDrgs)].value
-                // DRG Attachment
-                // @ts-ignore
-                if (results[queries.indexOf(listDrgAttachments)].status === 'fulfilled' && results[queries.indexOf(listDrgAttachments)].value.length > 0) design.model.oci.resources.drg_attachment = results[queries.indexOf(listDrgAttachments)].value
-                // Service Gateway
-                // @ts-ignore
-                if (results[queries.indexOf(listServiceGateways)].status === 'fulfilled' && results[queries.indexOf(listServiceGateways)].value.length > 0) design.model.oci.resources.service_gateway = results[queries.indexOf(listServiceGateways)].value
-                // Local Peering Gateway
-                // @ts-ignore
-                if (results[queries.indexOf(listLocalPeeringGateways)].status === 'fulfilled' && results[queries.indexOf(listLocalPeeringGateways)].value.length > 0) design.model.oci.resources.local_peering_gateway = results[queries.indexOf(listLocalPeeringGateways)].value
-                // Remote Peering Connection
-                // @ts-ignore
-                if (results[queries.indexOf(listRemotePeeringConnections)].status === 'fulfilled' && results[queries.indexOf(listRemotePeeringConnections)].value.length > 0) design.model.oci.resources.remote_peering_connection = results[queries.indexOf(listRemotePeeringConnections)].value
-                // CPE
-                // @ts-ignore
-                if (results[queries.indexOf(listCpes)].status === 'fulfilled' && results[queries.indexOf(listCpes)].value.length > 0) design.model.oci.resources.cpe = results[queries.indexOf(listCpes)].value
-
-                /*
-                ** Storage
-                */
-                // Volumes
-                // @ts-ignore
-                if (results[queries.indexOf(listVolumes)].status === 'fulfilled' && results[queries.indexOf(listVolumes)].value.length > 0) design.model.oci.resources.volume = results[queries.indexOf(listVolumes)].value
-                // Boot Volumes
-                // @ts-ignore
-                if (results[queries.indexOf(listBootVolumes)].status === 'fulfilled' && results[queries.indexOf(listBootVolumes)].value.length > 0) design.model.oci.resources.boot_volume = results[queries.indexOf(listBootVolumes)].value
-                // File Systems
-                // @ts-ignore
-                if (results[queries.indexOf(listFileSystems)].status === 'fulfilled' && results[queries.indexOf(listFileSystems)].value.length > 0) design.model.oci.resources.file_system = results[queries.indexOf(listFileSystems)].value
-                // Mount Targets
-                // @ts-ignore
-                if (results[queries.indexOf(listMountTargets)].status === 'fulfilled' && results[queries.indexOf(listMountTargets)].value.length > 0) design.model.oci.resources.mount_target = results[queries.indexOf(listMountTargets)].value
-                // Buckets
-                // @ts-ignore
-                if (results[queries.indexOf(listBuckets)].status === 'fulfilled' && results[queries.indexOf(listBuckets)].value.length > 0) design.model.oci.resources.bucket = results[queries.indexOf(listBuckets)].value
-
                 /*
                 ** Infrastructure
                 */
                 // Instances
                 // @ts-ignore
-                if (results[queries.indexOf(listInstances)].status === 'fulfilled' && results[queries.indexOf(listInstances)].value.length > 0) design.model.oci.resources.instance = results[queries.indexOf(listInstances)].value
+                if (results[queries.indexOf(hiddenImages)].status === 'fulfilled' && results[queries.indexOf(hiddenImages)].value.length > 0) {
                     // @ts-ignore
-                // const vnicAttachments = results[queries.indexOf(listVnicAttachments)].status === 'fulfilled' ? results[queries.indexOf(listVnicAttachments)].value : []
-                if (results[queries.indexOf(listVnicAttachments)].status === 'fulfilled' && results[queries.indexOf(listVnicAttachments)].value.length > 0) design.model.oci.resources.vnic_attachment = results[queries.indexOf(listVnicAttachments)].value
-                // @ts-ignore
-                // const volumeAttachments = results[queries.indexOf(listVolumeAttachments)].status === 'fulfilled' ? results[queries.indexOf(listVolumeAttachments)].value : []
-                if (results[queries.indexOf(listVolumeAttachments)].status === 'fulfilled' && results[queries.indexOf(listVolumeAttachments)].value.length > 0) design.model.oci.resources.volume_attachment = results[queries.indexOf(listVolumeAttachments)].value
-                // @ts-ignore
-                if (results[queries.indexOf(listBootVolumeAttachments)].status === 'fulfilled' && results[queries.indexOf(listBootVolumeAttachments)].value.length > 0) design.model.oci.resources.boot_volume_attachment = results[queries.indexOf(listBootVolumeAttachments)].value
-                // Set Primaty Vnic
-                if (design.model.oci.resources.vnic_attachment) {
+                    const images: Record<string, any>[] = results[queries.indexOf(hiddenImages)].value
+                    // @ts-ignore
                     design.model.oci.resources.instance.forEach((i) => {
-                        const primaryVnicAttachment: OciModelResources.OciVnicAttachment = design.model.oci.resources.vnic_attachment.find((v: OciModelResources.OciVnicAttachment) => v.instanceId === i.id && v.lifecycleState === 'ATTACHED' && v.vnic && v.vnic.isPrimary)
-                        //.map((v: OciModelResources.OciVnicAttachment) => v.vnic)
-                        if (primaryVnicAttachment ) {
-                            const primaryVnic = primaryVnicAttachment.vnic
-                            i.createVnicDetails = {
-                                assignPublicIp: (primaryVnic.publicIp && primaryVnic.publicIp !== ''),
-                                hostnameLabel: primaryVnic.hostnameLabel,
-                                nsgIds: primaryVnic.nsgIds,
-                                skipSourceDestCheck: primaryVnic.skipSourceDestCheck,
-                                subnetId: primaryVnic.subnetId
-                            }
-                        }
+                        if (i.sourceDetails.sourceId === undefined) i.sourceDetails.sourceId = images.find((ci: Record<string, any>) => ci.ocid === i.sourceDetails.imageId)?.id
                     })
+                    design.model.oci.resources.instance.forEach((i) => console.debug('OciQuery: Instance Image', i.sourceDetails.imageId, ':', i.sourceDetails.sourceId))
                 }
-                // Load Balancers
-                // @ts-ignore
-                if (results[queries.indexOf(listLoadBalancers)].status === 'fulfilled' && results[queries.indexOf(listLoadBalancers)].value.length > 0) design.model.oci.resources.load_balancer = results[queries.indexOf(listLoadBalancers)].value
-                if (design.model.oci.resources.load_balancer && design.model.oci.resources.load_balancer.length > 0) this.processLoadBalancers(design)
-                // if (design.model.oci.resources.load_balancer && design.model.oci.resources.load_balancer.length > 0) {
-                //     // Create Backend Sets
-                //     design.model.oci.resources.load_balancer_backend_set = design.model.oci.resources.load_balancer.map((l: OciModelResources.OciLoadBalancer) => Object.values(l.backendSets as OciModelResources.OciLoadBalancerBackendSet[]).map((b) => {
-                //         return {...b, 
-                //             id: l.id.replace('loadbalancer', 'load_balancer_backend_set'), 
-                //             compartmentId: l.compartmentId, 
-                //             displayName: b.name, 
-                //             loadBalancerId: l.id, 
-                //             lifecycleState: l.lifecycleState
-                //         }
-                //     })).flat()
-                //     // Create Backends
-                //     design.model.oci.resources.load_balancer_backend = design.model.oci.resources.load_balancer_backend_set.map((bs) => Object.values(bs.backends as OciModelResources.OciLoadBalancerBackend[]).map((b) => {
-                //         const vnicAttachments = design.model.oci.resources.vnic_attachment ? design.model.oci.resources.vnic_attachment : []
-                //         const vnicAttachment = vnicAttachments.find((v) => v.privateIp && v.privateIp.ipAddress === b.ipAddress)
-                //         const instanceId = vnicAttachment ? vnicAttachment.instanceId : ''
-                //         // const instanceId = design.model.oci.resources.vnic_attachment ? design.model.oci.resources.vnic_attachment.find((v) => v.privateIp && v.privateIp.ipAddress === b.ipAddress).instanceId : ''
-                //         return {...b,
 
-                //             id: bs.id.replace('load_balancer_backend_set', 'load_balancer_backend'), 
-                //             compartmentId: bs.compartmentId, 
-                //             displayName: b.name, 
-                //             backendSetId: bs.id,
-                //             backendsetName: bs.name,
-                //             loadBalancerId: bs.loadBalancerId, 
-                //             instanceId: instanceId,
-                //             lifecycleState: bs.lifecycleState
-                //         }
-                //     })).flat()
-                //     // Create Listeners
-                //     design.model.oci.resources.load_balancer_listener = design.model.oci.resources.load_balancer.map((l: OciModelResources.OciLoadBalancer) => (Object.values(l.listeners as OciModelResources.OciLoadBalancerListener[])).map((listener) => {
-                //         return {...listener, 
-                //             id: l.id.replace('loadbalancer', 'load_balancer_listener'), 
-                //             compartmentId: l.compartmentId, 
-                //             displayName: listener.name, 
-                //             defaultBackendSetName: design.model.oci.resources.load_balancer_backend_set.find((b) => b.loadBalancerId === l.id && b.displayName === listener.defaultBackendSetName)?.id,
-                //             loadBalancerId: l.id, 
-                //             lifecycleState: l.lifecycleState
-                //         }
-                //     })).flat()
-                //     design.model.oci.resources.load_balancer.forEach((l) => {
-                //         delete l.backendSets
-                //         delete l.listeners
-                //     })
-                //     // console.debug('OciQuery: Load Balancer Backend Sets:', design.model.oci.resources.load_balancer_backend_set)
-                //     // console.debug('OciQuery: Load Balancer Backends:', design.model.oci.resources.load_balancer_backend)
-                // }
-                // Network Load Balancers
-                // @ts-ignore
-                if (results[queries.indexOf(listNetworkLoadBalancers)].status === 'fulfilled' && results[queries.indexOf(listNetworkLoadBalancers)].value.length > 0) design.model.oci.resources.network_load_balancer = results[queries.indexOf(listNetworkLoadBalancers)].value
-                // Analytics Instance
-                // @ts-ignore
-                if (results[queries.indexOf(listAnalyticsInstances)].status === 'fulfilled' && results[queries.indexOf(listAnalyticsInstances)].value.length > 0) design.model.oci.resources.analytics_instance = results[queries.indexOf(listAnalyticsInstances)].value
-
-                /*
-                ** Databases
-                */
-                // Autonomous Database
-                // @ts-ignore
-                if (results[queries.indexOf(listAutonomousDatabases)].status === 'fulfilled' && results[queries.indexOf(listAutonomousDatabases)].value.length > 0) design.model.oci.resources.autonomous_database = results[queries.indexOf(listAutonomousDatabases)].value
-                // DB System
-                // @ts-ignore
-                if (results[queries.indexOf(listDatabaseSystems)].status === 'fulfilled' && results[queries.indexOf(listDatabaseSystems)].value.length > 0) design.model.oci.resources.db_system = results[queries.indexOf(listDatabaseSystems)].value
-                // MySQL DB System
-                // @ts-ignore
-                if (results[queries.indexOf(listMySqlDatabaseSystems)].status === 'fulfilled' && results[queries.indexOf(listMySqlDatabaseSystems)].value.length > 0) design.model.oci.resources.mysql_db_system = results[queries.indexOf(listMySqlDatabaseSystems)].value
-                // NoSQL DB System
-                // @ts-ignore
-                if (results[queries.indexOf(listNoSqlTables)].status === 'fulfilled' && results[queries.indexOf(listNoSqlTables)].value.length > 0) design.model.oci.resources.nosql_table = results[queries.indexOf(listNoSqlTables)].value
-                // @ts-ignore
-                // const nosql_indexes = results[queries.indexOf(listNoSqlTables)].status === 'fulfilled' ? results[queries.indexOf(listNoSqlIndexes)].value : []
-
-                /*
-                ** Identity
-                */
-                // Bastion
-                // @ts-ignore
-                if (results[queries.indexOf(listBastions)].status === 'fulfilled' && results[queries.indexOf(listBastions)].value.length > 0) design.model.oci.resources.bastion = results[queries.indexOf(listBastions)].value
-                // Vault
-                // @ts-ignore
-                if (results[queries.indexOf(listVaults)].status === 'fulfilled' && results[queries.indexOf(listVaults)].value.length > 0) design.model.oci.resources.vault = results[queries.indexOf(listVaults)].value
-                // Key
-                // @ts-ignore
-                if (results[queries.indexOf(listKeys)].status === 'fulfilled' && results[queries.indexOf(listKeys)].value.length > 0) design.model.oci.resources.key = results[queries.indexOf(listKeys)].value
-                // Secret
-                // @ts-ignore
-                if (results[queries.indexOf(listSecrets)].status === 'fulfilled' && results[queries.indexOf(listSecrets)].value.length > 0) design.model.oci.resources.secret = results[queries.indexOf(listSecrets)].value
-                // Dynamic Group
-                // @ts-ignore
-                if (results[queries.indexOf(listDynamicGroups)].status === 'fulfilled' && results[queries.indexOf(listDynamicGroups)].value.length > 0) design.model.oci.resources.dynamic_group = results[queries.indexOf(listDynamicGroups)].value.map((r) => {return {...r, displayName: r.name}})
-                // Policy
-                // @ts-ignore
-                if (results[queries.indexOf(listPolicies)].status === 'fulfilled' && results[queries.indexOf(listPolicies)].value.length > 0) design.model.oci.resources.policy = results[queries.indexOf(listPolicies)].value
-
-                // console.debug('OciQuery: queryTenancy:', JSON.stringify(design, null, 4))
-                const filteredResources: OciResources = {}
-                Object.keys(design.model.oci.resources).forEach((k) => filteredResources[k] = design.model.oci.resources[k].filter((r) => this.lifecycleStates.includes(r.lifecycleState) || r.lifecycleState === undefined))
-                design.model.oci.resources = filteredResources
                 resolve(design)
             }).catch((reason) => {
                 console.error(reason)
                 reject(reason)
+            })
+                 
+        })
+       }
+
+    getHiddenImages(imageIds: string[]): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const queries = imageIds.map((id) => this.getImage(id))
+            Promise.allSettled(queries).then((results) => {
+                console.debug('OciQuery: getHiddenImages: All Settled', results)
+                const images = results.filter((r) => r.status === 'fulfilled').map((r) => r.value)
+                resolve(images)
             })
         })
     }
@@ -1157,17 +1223,12 @@ export class OciQuery extends OciCommonQuery {
                 const getVnics = this.getVnics(vnicIds)
                 const listPrivateIps = this.listPrivateIps(vnicIds)
                 const queries = [getVnics, listPrivateIps]
-                // this.getVnics(vnicIds).then((response) => {
-                //     //@ts-ignore
-                //     resources.forEach((r) => r.vnic = response.find((v) => v.id === r.vnicId))
-                //     resolve(resources)
-                // })
                 Promise.allSettled(queries).then((response) => {
                     //@ts-ignore
                     if (response[queries.indexOf(getVnics)].status === 'fulfilled' && response[queries.indexOf(getVnics)].value.length > 0) resources.forEach((r) => r.vnic = response[queries.indexOf(getVnics)].value.find((v) => v.id === r.vnicId))
                     //@ts-ignore
                     if (response[queries.indexOf(listPrivateIps)].status === 'fulfilled' && response[queries.indexOf(listPrivateIps)].value.length > 0) resources.forEach((r) => r.privateIp = response[queries.indexOf(listPrivateIps)].value.find((v) => v.vnicId === r.vnicId))
-                    console.debug('OciQuery: listVnicAttachments: All Settled', resources)
+                    console.debug('OciQuery: listVnicAttachments: All Settled')
                     resolve(resources)
                 })
                 // resolve(resources)
@@ -1193,22 +1254,6 @@ export class OciQuery extends OciCommonQuery {
             })
         })
     }
-
-    // listBootVolumeAttachments(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-    //     return new Promise((resolve, reject) => {
-    //         const requests: core.requests.ListBootVolumeAttachmentsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-    //         const queries = requests.map((r) => this.computeClient.listBootVolumeAttachments(r))
-    //         Promise.allSettled(queries).then((results) => {
-    //             console.debug('OciQuery: listBootVolumeAttachments: All Settled')
-    //             //@ts-ignore
-    //             const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
-    //             resolve(resources)
-    //         }).catch((reason) => {
-    //             console.error(reason)
-    //             reject(reason)
-    //         })
-    //     })
-    // }
 
     listBootVolumeAttachments(compartmentIds: string[], retryCount: number = 0): Promise<any> {
         return new Promise((resolve, reject) => {
