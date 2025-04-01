@@ -12,7 +12,7 @@ __version__ = "1.0.0"
 __module__ = "wsgi"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
-from okitweb import create_authenticated_app
+from okitserver import create_authenticated_app
 
 app = create_authenticated_app()
 

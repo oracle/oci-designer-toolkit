@@ -12,7 +12,7 @@ __version__ = "1.0.0"
 __module__ = "wsgi"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
-from okitweb import create_local_app
+from okitserver import create_local_app
 
 app = create_local_app()
 

@@ -21,7 +21,7 @@ from discovery import OciResourceDiscoveryClient
 from common.okitCommon import logJson
 from common.okitLogging import getLogger
 from facades.ociConnection import OCIConnection
-from visualiser.common.okitCommon import jsonToFormattedString
+from modules.common.okitCommon import jsonToFormattedString
 
 # Configure logging
 logger = getLogger()

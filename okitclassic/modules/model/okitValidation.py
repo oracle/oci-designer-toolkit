@@ -15,7 +15,7 @@ __module__ = "ociJsonValidator"
 import ipaddress
 
 from common.okitLogging import getLogger
-from visualiser.common.okitCommon import jsonToFormattedString
+from modules.common.okitCommon import jsonToFormattedString
 
 # Configure logging
 logger = getLogger()

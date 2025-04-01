@@ -132,21 +132,21 @@ python3 -m pip install --no-cache-dir -r ${OKIT_GITHUB_DIR}/oci-designer-toolkit
 # Create OKIT Required Directories
 mkdir -p ${OKIT_DIR}/{log,instance/git,instance/local,instance/templates/user,workspace,ssl}
 # Link Directories
-ln -sv ${OKIT_GITHUB_DIR}/oci-designer-toolkit/config ${OKIT_DIR}/config
-ln -sv ${OKIT_GITHUB_DIR}/oci-designer-toolkit/okitweb ${OKIT_DIR}/okitweb
-ln -sv ${OKIT_GITHUB_DIR}/oci-designer-toolkit/visualiser ${OKIT_DIR}/visualiser
-ln -sv ${OKIT_GITHUB_DIR}/oci-designer-toolkit/okitweb/static/okit/templates/reference_architecture ${OKIT_DIR}/instance/templates/reference_architecture
+ln -sv ${OKIT_GITHUB_DIR}/oci-designer-toolkit/okitclassic/config ${OKIT_DIR}/config
+ln -sv ${OKIT_GITHUB_DIR}/oci-designer-toolkit/okitclassic/okitserver ${OKIT_DIR}/okitserver
+ln -sv ${OKIT_GITHUB_DIR}/oci-designer-toolkit/okitclassic/modules ${OKIT_DIR}/modules
+ln -sv ${OKIT_GITHUB_DIR}/oci-designer-toolkit/okitclassic/okitserver/static/okit/templates/reference_architecture ${OKIT_DIR}/instance/templates/reference_architecture
 ```
 
 ### Run
 ```bash
 export OKIT_DIR=${HOME}/okit
 export OKIT_LOGFILE=${OKIT_DIR}/log/okit.log
-export PYTHONPATH=:${OKIT_DIR}/visualiser:${OKIT_DIR}/okitweb:${OKIT_DIR}
+export PYTHONPATH=:${OKIT_DIR}/modules:${OKIT_DIR}/okitserver:${OKIT_DIR}
 # Activate Virtual Environment
 source ${OKIT_DIR}/.venv/bin/activate
 # Run Server
-${OKIT_DIR}/.venv/bin/gunicorn okitweb.wsgi:app --config ${OKIT_DIR}/config/gunicorn_http.py
+${OKIT_DIR}/.venv/bin/gunicorn okitserver.wsgi:app --config ${OKIT_DIR}/config/gunicorn_http.py
 ```
 
 ## Windows 10 / WSL (Ubuntu)
@@ -181,21 +181,21 @@ python3 -m pip install --no-cache-dir -r ${OKIT_GITHUB_DIR}/oci-designer-toolkit
 # Create OKIT Required Directories
 mkdir -p ${OKIT_DIR}/{git,local,log,instance/git,instance/local,instance/templates/user,workspace,ssl}
 # Link Directories
-ln -sv ${OKIT_GITHUB_DIR}/oci-designer-toolkit/config ${OKIT_DIR}/config
-ln -sv ${OKIT_GITHUB_DIR}/oci-designer-toolkit/okitweb ${OKIT_DIR}/okitweb
-ln -sv ${OKIT_GITHUB_DIR}/oci-designer-toolkit/visualiser ${OKIT_DIR}/visualiser
-ln -sv ${OKIT_GITHUB_DIR}/oci-designer-toolkit/okitweb/static/okit/templates/reference_architecture ${OKIT_DIR}/instance/templates/reference_architecture
+ln -sv ${OKIT_GITHUB_DIR}/oci-designer-toolkit/okitclassic/config ${OKIT_DIR}/config
+ln -sv ${OKIT_GITHUB_DIR}/oci-designer-toolkit/okitclassic/okitserver ${OKIT_DIR}/okitserver
+ln -sv ${OKIT_GITHUB_DIR}/oci-designer-toolkit/okitclassic/modules ${OKIT_DIR}/modules
+ln -sv ${OKIT_GITHUB_DIR}/oci-designer-toolkit/okitclassic/okitserver/static/okit/templates/reference_architecture ${OKIT_DIR}/instance/templates/reference_architecture
 ```
 
 ### Run
 ```bash
 export OKIT_DIR=${HOME}/okit
 export OKIT_LOGFILE=${OKIT_DIR}/log/okit.log
-export PYTHONPATH=:${OKIT_DIR}/visualiser:${OKIT_DIR}/okitweb:${OKIT_DIR}
+export PYTHONPATH=:${OKIT_DIR}/modules:${OKIT_DIR}/okitserver:${OKIT_DIR}
 # Activate Virtual Environment
 source ${OKIT_DIR}/.venv/bin/activate
 # Run Server
-${OKIT_DIR}/.venv/bin/gunicorn okitweb.wsgi:app --config ${OKIT_DIR}/config/gunicorn_http.py
+${OKIT_DIR}/.venv/bin/gunicorn okitserver.wsgi:app --config ${OKIT_DIR}/config/gunicorn_http.py
 ```
 
 __Note:__ You may need to replace "localhost" in the OKIT URL with the IP Address of you WSL2 Virtual Machine.
@@ -237,10 +237,10 @@ git clone -b ${OKIT_BRANCH} https://github.com/oracle/oci-designer-toolkit.git $
 sudo bash -c "python3 -m pip install --no-cache-dir -r ${OKIT_GITHUB_DIR}/oci-designer-toolkit/requirements.txt"
 # Create OKIT Required Directories
 mkdir -p ${OKIT_DIR}/{log,instance/git,instance/local,instance/templates/user,workspace,ssl}
-ln -sv ${OKIT_GITHUB_DIR}/oci-designer-toolkit/config ${OKIT_DIR}/config
-ln -sv ${OKIT_GITHUB_DIR}/oci-designer-toolkit/okitweb ${OKIT_DIR}/okitweb
-ln -sv ${OKIT_GITHUB_DIR}/oci-designer-toolkit/visualiser ${OKIT_DIR}/visualiser
-ln -sv ${OKIT_GITHUB_DIR}/oci-designer-toolkit/okitweb/static/okit/templates/reference_architecture ${OKIT_DIR}/instance/templates/reference_architecture
+ln -sv ${OKIT_GITHUB_DIR}/oci-designer-toolkit/okitclassic/config ${OKIT_DIR}/config
+ln -sv ${OKIT_GITHUB_DIR}/oci-designer-toolkit/okitclassic/okitserver ${OKIT_DIR}/okitserver
+ln -sv ${OKIT_GITHUB_DIR}/oci-designer-toolkit/okitclassic/modules ${OKIT_DIR}/modules
+ln -sv ${OKIT_GITHUB_DIR}/oci-designer-toolkit/okitclassic/okitserver/static/okit/templates/reference_architecture ${OKIT_DIR}/instance/templates/reference_architecture
 # Link to root level okit directory
 sudo bash -c "ln -sv ${OKIT_DIR} /okit"
 # Open Firewall
@@ -249,7 +249,7 @@ sudo firewall-offline-cmd  --add-port=443/tcp
 sudo systemctl restart firewalld
 # Add additional environment information 
 sudo bash -c "echo 'export OKIT_DIR=:${OKIT_DIR}' >> /etc/bashrc"
-sudo bash -c "echo 'export PYTHONPATH=:${OKIT_DIR}/visualiser:${OKIT_DIR}/okitweb:/okit' >> /etc/bashrc"
+sudo bash -c "echo 'export PYTHONPATH=:${OKIT_DIR}/modules:${OKIT_DIR}/okitserver:/okit' >> /etc/bashrc"
 sudo bash -c "echo 'export PATH=$PATH:/usr/local/bin' >> /etc/bashrc"
 # Generate ssl Self Sign Key
 sudo bash -c "openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ${OKIT_DIR}/ssl/okit.key -out ${OKIT_DIR}/ssl/okit.crt -subj '/C=GB/ST=Berkshire/L=Reading/O=Oracle/OU=OKIT/CN=www.oci_okit.com'"
@@ -258,12 +258,12 @@ sudo bash -c "openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ${OKIT
 #####                        If HTTPS / 443 Is required                                                      #####
 ##### Copy GUnicorn Service File (HTTPS)                                                                     #####
 ##################################################################################################################
-sudo bash -c "cp -v ${OKIT_GITHUB_DIR}/oci-designer-toolkit/containers/services/gunicorn.https.service /etc/systemd/system/gunicorn.service"
+sudo bash -c "cp -v ${OKIT_GITHUB_DIR}/oci-designer-toolkit/okitclassic/containers/services/gunicorn.https.service /etc/systemd/system/gunicorn.service"
 ##################################################################################################################
 #####                        If HTTP / 80 Is required                                                        #####
 ##### Copy GUnicorn Service File (HTTP)                                                                      #####
 ##################################################################################################################
-sudo bash -c "cp -v ${OKIT_GITHUB_DIR}/oci-designer-toolkit/containers/services/gunicorn.http.service /etc/systemd/system/gunicorn.service"
+sudo bash -c "cp -v ${OKIT_GITHUB_DIR}/oci-designer-toolkit/okitclassic/containers/services/gunicorn.http.service /etc/systemd/system/gunicorn.service"
 
 # Enable Gunicorn Service
 sudo systemctl enable gunicorn.service

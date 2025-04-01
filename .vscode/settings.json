@@ -10,6 +10,7 @@
         "projectKey": "oracle_oci-designer-toolkit"
     },
     "conventionalCommits.scopes": [
-        "SonarCloud"
+        "SonarCloud",
+        "(OKIT-Classic)"
     ]
 }

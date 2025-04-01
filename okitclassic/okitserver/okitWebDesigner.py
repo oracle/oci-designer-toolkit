@@ -48,7 +48,7 @@ from generators.okitTerraform11Generator import OCITerraform11Generator
 from generators.okitTerraformGenerator import OCITerraformGenerator
 from generators.okitResourceManagerGenerator import OCIResourceManagerGenerator
 from generators.okitMarkdownGenerator import OkitMarkdownGenerator
-from visualiser.common.okitCommon import readXmlFile
+from modules.common.okitCommon import readXmlFile
 
 # Configure logging
 logger = getLogger()
