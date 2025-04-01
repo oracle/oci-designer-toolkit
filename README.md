@@ -99,10 +99,10 @@ OCI environments through a graphical web based interface.
     web interface, to provide a portable generic json file, that can be used to visualise existing systems or generate terraform/ansible.
 
 ### Installation
-Detailed OKIT Installation steps can be found in the [OCI Designer Toolkit Installation Guide](documentation/Installation.md).
-1. [MacOS](documentation/Installation.md#macos)
-2. [Windows 10 / WSL (Ubuntu)](documentation/Installation.md#windows-10--wsl-ubuntu)
-3. [Oracle Linux](documentation/Installation.md#oracle-linux-ol8)
+Detailed OKIT Installation steps can be found in the [OCI Designer Toolkit Installation Guide](okitclassic/documentation/Installation.md).
+1. [MacOS](okitclassic/documentation/Installation.md#macos)
+2. [Windows 10 / WSL (Ubuntu)](okitclassic/documentation/Installation.md#windows-10--wsl-ubuntu)
+3. [Oracle Linux](okitclassic/documentation/Installation.md#oracle-linux-ol8)
 
 
 
@@ -128,7 +128,7 @@ See [Releases](https://github.com/oracle/oci-designer-toolkit/releases)
 
 
 ## Usage / Examples
-The OKIT User / Usage Guide and worked examples can be found in the [OCI Designer Toolkit Usage Guide](documentation/Usage.md)
+The OKIT User / Usage Guide and worked examples can be found in the [OCI Designer Toolkit Usage Guide](okitclassic/documentation/Usage.md)
 
 
 
@@ -164,4 +164,4 @@ Released under the Universal Permissive License v1.0 as shown at
 <https://oss.oracle.com/licenses/upl/>.
 
 
-If you would like to extend OKIT the development documentation can be found in [OCI Designer Toolkit Development Guide](documentation/Development.md)
+If you would like to extend OKIT the development documentation can be found in [OCI Designer Toolkit Development Guide](okitclassic/documentation/Development.md)
