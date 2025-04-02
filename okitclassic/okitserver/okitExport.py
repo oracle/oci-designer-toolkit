@@ -42,7 +42,7 @@ logger = getLogger()
 bp = Blueprint('export', __name__, url_prefix='/okit/export', static_folder='static/okit')
 
 debug_mode = bool(str(os.getenv('DEBUG_MODE', 'False')).title())
-template_root = f'{getOkitHome()}/visualiser/templates'
+template_root = f'{getOkitHome()}/modules/templates'
 
 @bp.route('terraform', methods=(['GET']))
 def terraform():
