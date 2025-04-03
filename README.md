@@ -14,7 +14,7 @@ an Electron based desktop application, providing native installs for Mac, Window
 
 **OKIT Desktop** Public Beta is now Available see [0.68.0 Release](https://github.com/oracle/oci-designer-toolkit/releases/tag/v0.68.0) for details.
 
-The OKIT Desktop provides the user with a fully freeform Drag & Drop canvas with the ability to create multiple pages to represent the same design in alternative formats, as seen below. As with the OKIT Classic the properties of resources can be editted within the properties panel along with the ability to add detailed description of each resource, if required. The OKIT Desktop will provide feature compatability with the OKIT Classic allowing the user multiple views of the design information:
+The OKIT Desktop provides the user with a fully freeform Drag & Drop canvas with the ability to create multiple pages to represent the same design in alternative formats, as seen below. As with the OKIT Classic the properties of resources can be editted within the properties panel along with the ability to add detailed description of each resource, if required. The OKIT Desktop will provide feature compatibility with the OKIT Classic allowing the user multiple views of the design information:
 
 - Views
     - Design
@@ -39,7 +39,7 @@ Importing the design will allow the following options
         - OCI
     - Terraform
 
-The OKIT Desktop release is also preparing for Multi-Cloud implementation of Oracle database and will be extended to include Azure, Google and AWS. This is currently Alpha release and hence limitted in it's functionality.
+The OKIT Desktop release is also preparing for Multi-Cloud implementation of Oracle database and will be extended to include Azure, Google and AWS. This is currently Alpha release and hence limited in its functionality.
 
 ### Traditional Design
 ![Ocd Desktop](https://github.com/oracle/oci-designer-toolkit/blob/master/ocd/images/OcdDesktop3.png)
@@ -60,7 +60,7 @@ The native installables can be found in the Assets section on the [0.68.0 Releas
 
 At present the binaries are unsigned so on Mac and Windows you will specifically need to authorise the first run.
 
-For anyone trying to install the Desktop version on a Mac running Sequoia 15.x.x you will probably notice that you can no longer override the licence warning within settings. There is a way around this and it is to execute the following once thw dmg has been installed.
+For anyone trying to install the Desktop version on a Mac running Sequoia 15.x.x you will probably notice that you can no longer override the licence warning within settings. There is a way around this, and it is to execute the following once thw dmg has been installed.
 ```bash
 xattr -d com.apple.quarantine /Applications/ocd.app
 ```
