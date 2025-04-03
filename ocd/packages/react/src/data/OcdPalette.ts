@@ -205,26 +205,26 @@ export const palette = {
                     "title": "Identity",
                     "class": "oci-identity",
                     "resources": [
-                        // {
-                        //     "container": false,
-                        //     "title": "Bastion",
-                        //     "class": "oci-bastion"
-                        // },
-                        // {
-                        //     "container": true,
-                        //     "title": "Vault",
-                        //     "class": "oci-vault"
-                        // },
-                        // {
-                        //     "container": false,
-                        //     "title": "Secret",
-                        //     "class": "oci-secret"
-                        // },
-                        // {
-                        //     "container": false,
-                        //     "title": "Key",
-                        //     "class": "oci-key"
-                        // },
+                        {
+                            "container": false,
+                            "title": "Bastion",
+                            "class": "oci-bastion"
+                        },
+                        {
+                            "container": true,
+                            "title": "Vault",
+                            "class": "oci-vault"
+                        },
+                        {
+                            "container": false,
+                            "title": "Secret",
+                            "class": "oci-secret"
+                        },
+                        {
+                            "container": false,
+                            "title": "Key",
+                            "class": "oci-key"
+                        },
                         {
                             "container": false,
                             "title": "Dynamic Group",

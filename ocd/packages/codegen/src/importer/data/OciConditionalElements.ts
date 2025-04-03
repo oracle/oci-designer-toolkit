@@ -135,6 +135,18 @@ export const conditionalElements: OcdConditionalElements = {
             "value": true
         }
     },
+    "oci_kms_key": {
+        "key_shape.curve_id": {
+            "element": "algorithm",
+            "operator": "eq",
+            "value": "ECDSA"
+        },
+        "key_shape.length": {
+            "element": "algorithm",
+            "operator": "ne",
+            "value": "ECDSA"
+        },
+    },
     "oci_load_balancer_load_balancer": {
         "shape_details": {
             "element": "shape",

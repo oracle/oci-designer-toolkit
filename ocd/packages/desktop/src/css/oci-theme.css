@@ -284,10 +284,12 @@
 }
 
 /* Identity and Security */
+.oci-bastion-background-colour,
 .oci-dynamic-group-background-colour,
 .oci-group-background-colour,
 .oci-key-background-colour,
 .oci-policy-background-colour,
+.oci-secret-background-colour,
 .oci-user-background-colour,
 .oci-vault-background-colour {
     background-color: var(--svg-identity-resources-background-colour);

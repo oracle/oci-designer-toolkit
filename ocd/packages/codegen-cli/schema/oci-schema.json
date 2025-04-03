@@ -419,13 +419,14 @@
         "required": true,
         "label": "Bastion Type",
         "id": "bastion_type",
-        "staticLookup": false,
+        "staticLookup": true,
         "cacheLookup": false,
-        "lookup": false,
-        "lookupResource": "",
-        "lookupResourceElement": "",
+        "lookup": true,
+        "lookupResource": "bastion",
+        "lookupResourceElement": "id",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "starndard"
       },
       "client_cidr_block_allow_list": {
         "provider": "oci",
@@ -470,23 +471,6 @@
         "required": false,
         "label": "Defined Tags",
         "id": "defined_tags",
-        "staticLookup": false,
-        "cacheLookup": false,
-        "lookup": false,
-        "lookupResource": "",
-        "lookupResourceElement": "",
-        "conditional": false,
-        "condition": {}
-      },
-      "dns_proxy_status": {
-        "provider": "oci",
-        "key": "dnsProxyStatus",
-        "name": "dns_proxy_status",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Dns Proxy Status",
-        "id": "dns_proxy_status",
         "staticLookup": false,
         "cacheLookup": false,
         "lookup": false,
@@ -546,57 +530,6 @@
         "conditional": false,
         "condition": {}
       },
-      "phone_book_entry": {
-        "provider": "oci",
-        "key": "phoneBookEntry",
-        "name": "phone_book_entry",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Phone Book Entry",
-        "id": "phone_book_entry",
-        "staticLookup": false,
-        "cacheLookup": false,
-        "lookup": false,
-        "lookupResource": "",
-        "lookupResourceElement": "",
-        "conditional": false,
-        "condition": {}
-      },
-      "private_endpoint_ip_address": {
-        "provider": "oci",
-        "key": "privateEndpointIpAddress",
-        "name": "private_endpoint_ip_address",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Private Endpoint Ip Address",
-        "id": "private_endpoint_ip_address",
-        "staticLookup": false,
-        "cacheLookup": false,
-        "lookup": false,
-        "lookupResource": "",
-        "lookupResourceElement": "",
-        "conditional": false,
-        "condition": {}
-      },
-      "static_jump_host_ip_addresses": {
-        "provider": "oci",
-        "key": "staticJumpHostIpAddresses",
-        "name": "static_jump_host_ip_addresses",
-        "type": "list",
-        "subtype": "string",
-        "required": false,
-        "label": "Static Jump Host Ip Addresses",
-        "id": "static_jump_host_ip_addresses",
-        "staticLookup": false,
-        "cacheLookup": false,
-        "lookup": false,
-        "lookupResource": "",
-        "lookupResourceElement": "",
-        "conditional": false,
-        "condition": {}
-      },
       "target_subnet_id": {
         "provider": "oci",
         "key": "targetSubnetId",
@@ -609,24 +542,7 @@
         "staticLookup": false,
         "cacheLookup": false,
         "lookup": true,
-        "lookupResource": "target_subnet",
-        "lookupResourceElement": "id",
-        "conditional": false,
-        "condition": {}
-      },
-      "target_vcn_id": {
-        "provider": "oci",
-        "key": "targetVcnId",
-        "name": "target_vcn_id",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Target Vcn",
-        "id": "target_vcn_id",
-        "staticLookup": false,
-        "cacheLookup": false,
-        "lookup": true,
-        "lookupResource": "target_vcn",
+        "lookupResource": "subnet",
         "lookupResourceElement": "id",
         "conditional": false,
         "condition": {}
@@ -2594,20 +2510,8 @@
             "lookup": false,
             "lookupResource": "",
             "lookupResourceElement": "",
-            "conditional": true,
-            "condition": [
-              {
-                "element": "server_type",
-                "operator": "eq",
-                "value": "CustomDnsServer"
-              },
-              {
-                "logic_operator": "and",
-                "element": "type",
-                "operator": "eq",
-                "value": "DomainNameServer"
-              }
-            ]
+            "conditional": false,
+            "condition": {}
           },
           "search_domain_names": {
             "provider": "oci",
@@ -2623,12 +2527,8 @@
             "lookup": false,
             "lookupResource": "",
             "lookupResourceElement": "",
-            "conditional": true,
-            "condition": {
-              "element": "type",
-              "operator": "eq",
-              "value": "SearchDomain"
-            }
+            "conditional": false,
+            "condition": {}
           },
           "server_type": {
             "provider": "oci",
@@ -2644,12 +2544,8 @@
             "lookup": true,
             "lookupResource": "server",
             "lookupResourceElement": "id",
-            "conditional": true,
-            "condition": {
-              "element": "type",
-              "operator": "eq",
-              "value": "DomainNameServer"
-            }
+            "conditional": false,
+            "condition": {}
           },
           "type": {
             "provider": "oci",
@@ -5795,12 +5691,8 @@
             "required": false,
             "label": "Icmp Options",
             "id": "egress_security_rules.icmp_options",
-            "conditional": true,
-            "condition": {
-              "element": "protocol",
-              "operator": "eq",
-              "value": "1"
-            },
+            "conditional": false,
+            "condition": {},
             "attributes": {
               "code": {
                 "provider": "oci",
@@ -5847,12 +5739,8 @@
             "required": false,
             "label": "Tcp Options",
             "id": "egress_security_rules.tcp_options",
-            "conditional": true,
-            "condition": {
-              "element": "protocol",
-              "operator": "eq",
-              "value": "6"
-            },
+            "conditional": false,
+            "condition": {},
             "attributes": {
               "max": {
                 "provider": "oci",
@@ -5947,12 +5835,8 @@
             "required": false,
             "label": "Udp Options",
             "id": "egress_security_rules.udp_options",
-            "conditional": true,
-            "condition": {
-              "element": "protocol",
-              "operator": "eq",
-              "value": "17"
-            },
+            "conditional": false,
+            "condition": {},
             "attributes": {
               "max": {
                 "provider": "oci",
@@ -6146,12 +6030,8 @@
             "required": false,
             "label": "Icmp Options",
             "id": "ingress_security_rules.icmp_options",
-            "conditional": true,
-            "condition": {
-              "element": "protocol",
-              "operator": "eq",
-              "value": "1"
-            },
+            "conditional": false,
+            "condition": {},
             "attributes": {
               "code": {
                 "provider": "oci",
@@ -6198,12 +6078,8 @@
             "required": false,
             "label": "Tcp Options",
             "id": "ingress_security_rules.tcp_options",
-            "conditional": true,
-            "condition": {
-              "element": "protocol",
-              "operator": "eq",
-              "value": "6"
-            },
+            "conditional": false,
+            "condition": {},
             "attributes": {
               "max": {
                 "provider": "oci",
@@ -6298,12 +6174,8 @@
             "required": false,
             "label": "Udp Options",
             "id": "ingress_security_rules.udp_options",
-            "conditional": true,
-            "condition": {
-              "element": "protocol",
-              "operator": "eq",
-              "value": "17"
-            },
+            "conditional": false,
+            "condition": {},
             "attributes": {
               "max": {
                 "provider": "oci",
@@ -10190,23 +10062,6 @@
         "conditional": false,
         "condition": {}
       },
-      "is_primary": {
-        "provider": "oci",
-        "key": "isPrimary",
-        "name": "is_primary",
-        "type": "bool",
-        "subtype": "",
-        "required": false,
-        "label": "Is Primary",
-        "id": "is_primary",
-        "staticLookup": false,
-        "cacheLookup": false,
-        "lookup": false,
-        "lookupResource": "",
-        "lookupResourceElement": "",
-        "conditional": false,
-        "condition": {}
-      },
       "management_endpoint": {
         "provider": "oci",
         "key": "managementEndpoint",
@@ -10233,13 +10088,14 @@
         "required": false,
         "label": "Protection Mode",
         "id": "protection_mode",
-        "staticLookup": false,
+        "staticLookup": true,
         "cacheLookup": false,
-        "lookup": false,
-        "lookupResource": "",
-        "lookupResourceElement": "",
+        "lookup": true,
+        "lookupResource": "protection",
+        "lookupResourceElement": "id",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "HSM"
       },
       "vault_id": {
         "provider": "oci",
@@ -10285,7 +10141,8 @@
             "lookupResource": "",
             "lookupResourceElement": "id",
             "conditional": false,
-            "condition": {}
+            "condition": {},
+            "default": "AES"
           },
           "curve_id": {
             "provider": "oci",
@@ -10296,13 +10153,18 @@
             "required": false,
             "label": "Curve",
             "id": "key_shape.curve_id",
-            "staticLookup": false,
+            "staticLookup": true,
             "cacheLookup": false,
             "lookup": true,
             "lookupResource": "curve",
             "lookupResourceElement": "id",
-            "conditional": false,
-            "condition": {}
+            "conditional": true,
+            "condition": {
+              "element": "algorithm",
+              "operator": "eq",
+              "value": "ECDSA"
+            },
+            "default": ""
           },
           "length": {
             "provider": "oci",
@@ -10318,8 +10180,13 @@
             "lookup": true,
             "lookupResource": "",
             "lookupResourceElement": "id",
-            "conditional": false,
-            "condition": {}
+            "conditional": true,
+            "condition": {
+              "element": "algorithm",
+              "operator": "ne",
+              "value": "ECDSA"
+            },
+            "default": 32
           }
         }
       }
@@ -10430,7 +10297,8 @@
         "lookupResource": "vault",
         "lookupResourceElement": "id",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "DEFAULT"
       }
     }
   },
@@ -13119,57 +12987,6 @@
         "conditional": false,
         "condition": {}
       },
-      "last_rotation_time": {
-        "provider": "oci",
-        "key": "lastRotationTime",
-        "name": "last_rotation_time",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Last Rotation Time",
-        "id": "last_rotation_time",
-        "staticLookup": false,
-        "cacheLookup": false,
-        "lookup": false,
-        "lookupResource": "",
-        "lookupResourceElement": "",
-        "conditional": false,
-        "condition": {}
-      },
-      "next_rotation_time": {
-        "provider": "oci",
-        "key": "nextRotationTime",
-        "name": "next_rotation_time",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Next Rotation Time",
-        "id": "next_rotation_time",
-        "staticLookup": false,
-        "cacheLookup": false,
-        "lookup": false,
-        "lookupResource": "",
-        "lookupResourceElement": "",
-        "conditional": false,
-        "condition": {}
-      },
-      "rotation_status": {
-        "provider": "oci",
-        "key": "rotationStatus",
-        "name": "rotation_status",
-        "type": "string",
-        "subtype": "",
-        "required": false,
-        "label": "Rotation Status",
-        "id": "rotation_status",
-        "staticLookup": false,
-        "cacheLookup": false,
-        "lookup": false,
-        "lookupResource": "",
-        "lookupResourceElement": "",
-        "conditional": false,
-        "condition": {}
-      },
       "secret_name": {
         "provider": "oci",
         "key": "secretName",
@@ -13242,30 +13059,14 @@
             "required": true,
             "label": "Content Type",
             "id": "secret_content.content_type",
-            "staticLookup": false,
+            "staticLookup": true,
             "cacheLookup": false,
-            "lookup": false,
-            "lookupResource": "",
-            "lookupResourceElement": "",
+            "lookup": true,
+            "lookupResource": "content",
+            "lookupResourceElement": "id",
             "conditional": false,
-            "condition": {}
-          },
-          "name": {
-            "provider": "oci",
-            "key": "name",
-            "name": "name",
-            "type": "string",
-            "subtype": "",
-            "required": false,
-            "label": "Name",
-            "id": "secret_content.name",
-            "staticLookup": false,
-            "cacheLookup": false,
-            "lookup": false,
-            "lookupResource": "",
-            "lookupResourceElement": "",
-            "conditional": false,
-            "condition": {}
+            "condition": {},
+            "default": "BASE64"
           }
         }
       }
