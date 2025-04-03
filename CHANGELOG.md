@@ -1,6 +1,17 @@
 # Release Notes
 
 
+## Version 0.69.0
+**Release Date**: 30th April 2025
+### BREAKING CHANGE
+1. OKIT-Classic: (OKIT-321) Restructure Repository to move exist OKIT files to okitclassinc Subdirectory.
+```diff
+- This modification will require any existing users to change their environment variables and any start scripts they use. The documentation and associated scripts within the repository have been updated and the user must follow the new instructions.
+```
+### Features
+### Bug Fixes
+
+
 ## Version 0.68.0
 **Release Date**: 31st March 2025
 ### Features
