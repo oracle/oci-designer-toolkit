@@ -35,11 +35,26 @@ export const palette = {
                             "title": "Instance",
                             "class": "oci-instance"
                         },
-                        // {
-                        //     "container": false,
-                        //     "title": "Analytics Instance",
-                        //     "class": "oci-analytics-instance"
-                        // }
+                        {
+                            "container": false,
+                            "title": "Analytics Instance",
+                            "class": "oci-analytics-instance"
+                        },
+                        {
+                            "container": false,
+                            "title": "Integration Instance",
+                            "class": "oci-integration-instance"
+                        },
+                        {
+                            "container": true,
+                            "title": "DataScience Project",
+                            "class": "oci-datascience-project"
+                        },
+                        {
+                            "container": false,
+                            "title": "DataScience Notebook Session",
+                            "class": "oci-datascience-notebook-session"
+                        }
                     ]
                 },
                 {

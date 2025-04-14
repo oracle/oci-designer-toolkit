@@ -35,16 +35,12 @@ export const OcdCanvasGrid = (): JSX.Element => {
 export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument, setOcdDocument }: CanvasProps): JSX.Element => {
     // console.info('OcdCanvas: OCD Document:', ocdDocument)
     console.info('OcdCanvas: OCD Design:', ocdDocument.design)
-    const {selectedResource, setSelectedResource} = useContext(SelectedResourceContext)
+    const {setSelectedResource} = useContext(SelectedResourceContext)
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
     const uuid = () => `gid-${uuidv4()}`
     const page: OcdViewPage = ocdDocument.getActivePage()
-    // const allCompartmentIds = ocdDocument.getOciResourceList('comparment').map((r) => r.id)
     const visibleLayers = page.layers.filter((l: OcdViewLayer) => l.visible).map((l: OcdViewLayer) => l.id)
-    // const visibleResourceIds = ocdDocument.getResources().filter((r: OcdResource) => visibleLayers.includes(r.compartmentId) || (!allCompartmentIds.includes(r.compartmentId) && r.resourceType !== 'Compartment')).map((r: any) => r.id)
     const visibleResourceIds = ocdDocument.getResources().filter((r: any) => visibleLayers.includes(r.compartmentId)).map((r: any) => r.id)
-    // const visibleResourceIds = ocdDocument.getResources().map((r: any) => r.id)
-    // console.debug('OcdCanvas: Visible Resource Ids', visibleResourceIds)
     const [dragResource, setDragResource] = useState(OcdDocument.newDragResource(false))
     const [contextMenu, setContextMenu] = useState<OcdContextMenu>({show: false, x: 0, y: 0})
     const [dragging, setDragging] = useState(false)
@@ -52,10 +48,8 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
     const [ghostTranslate, setGhostTranslate] = useState<Point>({ x: 0, y: 0 });
     const [origin, setOrigin] = useState<Point>({ x: 0, y: 0 });
     const [panOrigin, setPanOrigin] = useState<Point>({ x: 0, y: 0 });
-    // const [transformMatrix, setTransformMatrix] = useState(page.transform)
     const transformMatrix = page.transform
     const [panning, setPanning] = useState(false)
-    // const resource = ocdDocument.dragResource.resource
 
     // Click Event to Reset Selected
     const onClick = (e: React.MouseEvent<SVGElement>) => {
@@ -388,9 +382,7 @@ export const OcdCanvas = ({ dragData, setDragData, ocdConsoleConfig, ocdDocument
     // @ts-ignore 
     const allPageCoords = ocdDocument.getAllPageCoords(page)
     const allVisibleCoords = allPageCoords.filter((r: OcdViewCoords) => visibleResourceIds.includes(r.ocid))
-    // const visibleCoords = page.coords.filter((r: OcdViewCoords) => visibleResourceIds.includes(r.ocid))
     const visibleCoords = page.coords
-    // page.coords && page.coords.filter((r: OcdViewCoords) => visibleResourceIds.includes(r.ocid))
     const parentMap = allVisibleCoords.filter(c => c.showParentConnection).map((r: OcdViewCoords) => {return {parentId: ocdDocument.getResourceParentId(r.ocid), childId: r.ocid, childCoordsId: r.id, pgid: r.pgid}})
     const parentConnectors = parentMap.reduce((a, c) => {return [...a, ...allVisibleCoords.filter(coords => coords.ocid === c.parentId).filter(p => p.id !== c.pgid).map(p => {return {startCoordsId: p.id, endCoordsId: c.childCoordsId}})]}, [] as OcdViewConnector[])
     const associationMap = allVisibleCoords.filter(c => c.showConnections).map((r: OcdViewCoords) => {return ocdDocument.getResourceAssociationIds(r.ocid).map(aId => {return {startCoordsId: r.id, associationId: aId}})}).reduce((a, c) => [...a, ...c], [])

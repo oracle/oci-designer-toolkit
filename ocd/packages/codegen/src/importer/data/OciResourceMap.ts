@@ -45,13 +45,13 @@ export const resourceMap: OcdResourceMap = {
     "oci_database_db_system": "db_system",
     // "oci_database_exadata_infrastructure": "exadata_infrastructure",
     // "oci_dataintegration_workspace": "dataintegration_workspace",
-    // "oci_datascience_notebook_session": "datascience_notebook_session",
-    // "oci_datascience_project": "datascience_project",
+    "oci_datascience_notebook_session": "datascience_notebook_session",
+    "oci_datascience_project": "datascience_project",
     "oci_file_storage_export": "file_system_export",
     "oci_file_storage_export_set": "file_system_export_set",
     "oci_file_storage_file_system": "file_system",
     "oci_file_storage_mount_target": "mount_target",
-    // "oci_integration_integration_instance": "integration_instance",
+    "oci_integration_integration_instance": "integration_instance",
     "oci_identity_compartment": "compartment",
     "oci_identity_dynamic_group": "dynamic_group",
     "oci_identity_group": "group",
@@ -639,6 +639,20 @@ export const resourceAttributes: OcdIncludedElements = {
         "db_home.database.vault_id",
     ],
     "oci_database_exadata_infrastructure": [],
+    "oci_datascience_notebook_session": [
+        "project_id",
+        "notebook_session_url",
+        "notebook_session_config_details",
+        "notebook_session_config_details.shape",
+        "notebook_session_config_details.block_storage_size_in_gbs",
+        "notebook_session_config_details.subnet_id",
+        "notebook_session_config_details.notebook_session_shape_config_details",
+        "notebook_session_config_details.notebook_session_shape_config_details.memory_in_gbs",
+        "notebook_session_config_details.notebook_session_shape_config_details.ocpus",
+    ],
+    "oci_datascience_project": [
+        "description"
+    ],
     "oci_file_storage_export": [
         "export_set_id",
         "file_system_id",
@@ -708,6 +722,16 @@ export const resourceAttributes: OcdIncludedElements = {
     "oci_identity_user_group_membership": [
         "group_id",
         "user_id"
+    ],
+    "oci_integration_integration_instance": [
+        "consumption_model",
+        "integration_instance_type",
+        "idcs_at",
+        "is_byol",
+        "is_file_server_enabled",
+        "is_visual_builder_enabled",
+        "message_packs",
+        "shape",
     ],
     "oci_kms_key": [
         "display_name",

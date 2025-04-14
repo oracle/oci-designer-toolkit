@@ -46,6 +46,10 @@ export const elementOverrides: OcdElementOverrides = {
             "data_storage_size_in_gb": 256,
             "node_count": 1
         },
+        "oci_integration_integration_instance": {
+            "integration_instance_type": "ENTERPRISEX",
+            "shape": "PRODUCTION"
+        },
         "oci_kms_key": {
             "protection_mode": "HSM",
             "key_shape.algorithm": "AES",
@@ -117,6 +121,9 @@ export const elementOverrides: OcdElementOverrides = {
         "oci_file_storage_file_system": {
             "filesystem_snapshot_policy_id": "Snapshot Policy"
         },
+        "oci_integration_integration_instance": {
+            "idcs_at": "IDCS Authentication token"
+        },
         "oci_load_balancer_listener": {
             "default_backend_set_name": "Backend Set"
         }
@@ -165,6 +172,9 @@ export const elementOverrides: OcdElementOverrides = {
         "oci_core_local_peering_gateway": {
             "peer_id": {"list": "local_peering_gateway", "element": "id"}
         },
+        "oci_datascience_notebook_session": {
+            "project_id": {"list": "datascience_project", "element": "id"}
+        },
         "oci_load_balancer_listener": {
             "default_backend_set_name": {"list": "load_balancer_backend_set", "element": "name"}
         }
@@ -199,6 +209,9 @@ export const elementOverrides: OcdElementOverrides = {
         "oci_database_db_system": {
             "shape": "dbSystemShapes",
             "db_home.db_version": "dbVersions",
+        },
+        "oci_datascience_notebook_session": {
+            "notebook_session_config_details.shape": "datascienceNotebookSessionShapes"
         },
         "oci_file_storage_file_system": {
             "filesystem_snapshot_policy_id": "snapshotPolicies"
@@ -253,6 +266,10 @@ export const elementOverrides: OcdElementOverrides = {
         ],
         "oci_database_db_system": [
             "database_edition"
+        ],
+        "oci_integration_integration_instance": [
+            "integration_instance_type",
+            "shape"
         ],
         "oci_kms_key": [
             "protection_mode",

@@ -45,3 +45,12 @@ export type OcdDialogContext = {
     setDisplayDialog: (c: OcdDialogs) => void
 }
 
+export type OcdModelContext = {
+    modelId: string | null
+    setModel: (c: string | null) => void
+}
+
+export type OcdCoordsContext = {
+    coordsId: string | null
+    setCoords: (c: string | null) => void
+}

@@ -12,10 +12,10 @@
 
 export const buildDetails: Record<string, string> = {
     version: '0.2.8',
-    date: '03/04/2025',
-    time: '16:22:21',
-    datetime: '03/04/2025, 16:22:21',
-    utc: 'Thu, 03 Apr 2025 15:22:21 GMT'
+    date: '14/04/2025',
+    time: '13:34:12',
+    datetime: '14/04/2025, 13:34:12',
+    utc: 'Mon, 14 Apr 2025 12:34:12 GMT'
 }
 
 export default buildDetails

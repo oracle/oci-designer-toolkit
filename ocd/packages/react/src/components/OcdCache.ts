@@ -69,8 +69,16 @@ export class OcdCacheData {
     loadCache(): Promise<any> {
         return OcdCacheFacade.loadCache().then((results) => {
             this.cache = results
-            this.cache.dropdownData.shipped = defaultCache.dropdownData.shipped
-            this.saveCache()
+            const shippedCacheAsString = JSON.stringify(defaultCache.dropdownData.shipped)
+            const localCacheAsString = JSON.stringify(this.cache.dropdownData.shipped)
+            const defaultCacheAsString = JSON.stringify(defaultCache.dropdownData.shipped)
+            if (localCacheAsString.localeCompare(defaultCacheAsString) !== 0) {
+                console.debug('OcdCacheData: Shipped/Default Cache differs from local Cache')
+                this.cache.dropdownData.shipped = JSON.parse(shippedCacheAsString)
+                this.saveCache()
+            } else {
+                console.debug('OcdCacheData: Shipped/Default Cache same as local Cache')
+            }
         }).catch((response) => {
             this.cache = this.newCache()
             this.saveCache()

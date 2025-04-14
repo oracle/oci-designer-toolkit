@@ -44,7 +44,7 @@ body {
 details {
     display: block;
     box-sizing: border-box;
-    margin-top: 1em;
+    margin-top: 5px;
     width: 100%;
     max-width: 100%;
 }

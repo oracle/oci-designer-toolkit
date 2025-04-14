@@ -465,16 +465,10 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
     const onResourceMouseEnter = (e: React.MouseEvent<SVGElement>) => {}
     const onResourceMouseMove = (e: React.MouseEvent<SVGElement>) => {}
     const onResourceMouseLeave = (e: React.MouseEvent<SVGElement>) => {}
-    console.debug(`>> OcdResourceSvg: OcdResourceSvg:   Render(${resource.id})`)
+    console.debug(`>> OcdResourceSvg: OcdResourceSvg: Render(${resource.id})`, resource.class, resource.ocid)
     return (
         <g className='ocd-designer-resource' 
             id={resource.id} 
-            // data-ox={resource.x} 
-            // data-oy={resource.y} 
-            // data-gid={resource.id} 
-            // data-pgid={resource.pgid} 
-            // data-ocid={resource.ocid} 
-            // data-pocid={resource.pocid}
             transform={`translate(${gX}, ${gY})`}
             onMouseDown={!hidden ? onResourceDragStart : onNooPEvent}
             onMouseUp={!hidden ? onResourceMouseUp : onNooPEvent}
@@ -528,7 +522,7 @@ export const OcdDragResourceGhostSvg = ({ ocdConsoleConfig, ocdDocument, setOcdD
         'onSVGDrag': () => {},
         'onSVGDragEnd': () => {},
     }
-    console.debug(`>> OcdResourceSvg: OcdDragResourceGhostSvg: Render(${resource.id})`)
+    console.debug(`>> OcdResourceSvg: OcdDragResourceGhostSvg: Render(${resource.id})`, resource.class, resource.ocid)
     return (
         <g className='ocd-svg-drag-ghost'
             transform={`translate(0, 0)`}
