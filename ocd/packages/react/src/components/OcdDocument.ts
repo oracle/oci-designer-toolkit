@@ -11,7 +11,7 @@ import { OcdAutoLayout, OcdDesign, OcdViewPage, OcdViewCoords, OcdViewLayer, Ocd
     GeneralModelResources, GeneralResource } from '@ocd/model'
 import { OcdUtils } from '@ocd/core'
 import { additionTitleInfo } from '../data/OcdAdditionTitleInfo'
-import { OcdDragResource, OcdSelectedResource } from '../types/Console'
+import { OcdDragResource, OcdSelectedResourceModel, OcdSelectedResource, OcdSelectedResourceView } from '../types/Console'
 
 export interface OcdAddResourceResponse {
     modelResource: OcdResource | undefined
@@ -48,6 +48,19 @@ export class OcdDocument {
             modelId: '',
             pageId: '',
             coordsId: '',
+            class: 'ocd-image'
+        }
+    }
+    static readonly newSelectedResourceModel = (): OcdSelectedResourceModel => {
+        return {
+            modelId: null
+        }
+    }
+    static readonly newSelectedResourceView = (): OcdSelectedResourceView => {
+        return {
+            modelId: null,
+            pageId: null,
+            coordsId: null,
             class: 'ocd-image'
         }
     }

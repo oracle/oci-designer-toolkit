@@ -6,7 +6,7 @@
 import { OcdCacheData } from "../components/OcdCache"
 import { OcdConsoleConfig } from "../components/OcdConsoleConfiguration"
 import { OcdDocument } from "../components/OcdDocument"
-import { OcdActiveFile, OcdDragResource, OcdSelectedResource } from "../types/Console"
+import { OcdActiveFile, OcdDragResource, OcdSelectedResourceModel, OcdSelectedResource, OcdSelectedResourceView } from "../types/Console"
 
 export type OcdActiveFileContext = {
     activeFile: OcdActiveFile
@@ -33,6 +33,16 @@ export type OcdSelectedResourceContext = {
     setSelectedResource: (c: OcdSelectedResource) => void
 }
 
+export type OcdSelectedModelContext = {
+    selectedResourceModel: OcdSelectedResourceModel
+    setSelectedResourceModel: (c: OcdSelectedResourceModel) => void
+}
+
+export type OcdSelectedViewContext = {
+    selectedResourceView: OcdSelectedResourceView
+    setSelectedResourceView: (c: OcdSelectedResourceView) => void
+}
+
 export type OcdDragResourceContext = {
     dragResource: OcdDragResource
     setDragResource: (c: OcdDragResource) => void
@@ -43,14 +53,4 @@ export type OcdDialogs = 'queryDialog' | 'resourceManagerDialog' | 'referenceDat
 export type OcdDialogContext = {
     displayDialog: OcdDialogs
     setDisplayDialog: (c: OcdDialogs) => void
-}
-
-export type OcdModelContext = {
-    modelId: string | null
-    setModel: (c: string | null) => void
-}
-
-export type OcdCoordsContext = {
-    coordsId: string | null
-    setCoords: (c: string | null) => void
 }
