@@ -89,10 +89,12 @@ export class OcdCacheData {
         return OcdCacheFacade.saveCache(this.cache).then((results) => {}).catch((response) => console.debug('OcdCacheData:', response))
     }
 
-    getOciReferenceDataList(resource: string, profile?: string , region?: string) {
+    getOciReferenceDataList(resource: string, profile?: string, region?: string) {
         console.debug('OcdCacheData: getOciReferenceDataList:', resource, profile, region)
-        if (profile === undefined) profile = this.cache.profile
-        if (region === undefined) region = this.cache.region
+        profile ??= this.cache.profile
+        region ??= this.cache.region
+        // if (profile === undefined) profile = this.cache.profile
+        // if (region === undefined) region = this.cache.region
         console.debug('OcdCacheData: getOciReferenceDataList:', resource, profile, region)
         if (profile === undefined || !Object.hasOwn(this.cache.dropdownData, profile)) {
             profile = 'shipped'
