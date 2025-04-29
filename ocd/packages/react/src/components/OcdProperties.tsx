@@ -823,14 +823,6 @@ const OcdProperties = ({ocdDocument, setOcdDocument}: DesignerResourceProperties
     const onPropertiesTabClick = (tab: string) => {
         setActiveTab(tab.toLowerCase())
     }
-    // const ActiveTab = activeTab === 'properties' ? OcdResourceProperties :
-    //                   activeTab === 'tags' ? OcdResourceTags :
-    //                   activeTab === 'documentation' ? OcdResourceDocumentation :
-    //                   activeTab === 'arrange' ? OcdResourceArrangement :
-    //                   activeTab === 'style' && selectedResource.coordsId !== '' ? OcdResourceStyle :
-    //                   activeTab === 'style' ? OcdLayerStyle :
-    //                   activeTab === 'validation' ? OcdResourceValidation :
-    //                   OcdResourceDocumentation
     const modelId = ocdDocument.selectedResource.modelId
     const coordsId = ocdDocument.selectedResource.coordsId
     const additionalCss = {validation: validationTabClass}
@@ -844,26 +836,6 @@ const OcdProperties = ({ocdDocument, setOcdDocument}: DesignerResourceProperties
     const propertiesTabbarJMX = useMemo(() => <OcdPropertiesTabbar modelId={modelId} coordsId={coordsId} activeTab={activeTab} setActiveTab={onPropertiesTabClick} additionalCss={additionalCss}/>, [modelId, coordsId, additionalCss])
     const propertiesHeaderJMX = useMemo(() => <OcdResourcePropertiesHeader ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourcePropertiesHeader`}/>, [modelId])
     const activeTabJMX = getActiveTabJMX(availableTabs, activeTab, ocdDocument, setOcdDocument, coordsId === '')
-    // const activeTabJMX = useMemo(() => getActiveTabJMX(availableTabs, activeTab, ocdDocument, setOcdDocument, coordsId === ''), [modelId, coordsId, activeTab])
-    // const activeTabJMX = activeTab === 'properties' ? <OcdResourceProperties ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/> :
-    //                                             activeTab === 'tags' ? <OcdResourceTags ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/> :
-    //                                             activeTab === 'documentation' ? <OcdResourceDocumentation ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/> :
-    //                                             activeTab === 'arrange' ? <OcdResourceArrangement ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/> :
-    //                                             activeTab === 'style' && selectedResource.coordsId !== '' ? <OcdResourceStyle ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/> :
-    //                                             activeTab === 'style' ? <OcdLayerStyle ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/> :
-    //                                             activeTab === 'validation' ? <OcdResourceValidation ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/> :
-    //                                             <OcdResourceDocumentation ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/>
-    // const activeTabJMX = useMemo(() => {
-    //                                     return activeTab === 'properties' ? <OcdResourceProperties ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/> :
-    //                                             activeTab === 'tags' ? <OcdResourceTags ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/> :
-    //                                             activeTab === 'documentation' ? <OcdResourceDocumentation ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/> :
-    //                                             activeTab === 'arrange' ? <OcdResourceArrangement ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/> :
-    //                                             activeTab === 'style' && selectedResource.coordsId !== '' ? <OcdResourceStyle ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/> :
-    //                                             activeTab === 'style' ? <OcdLayerStyle ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/> :
-    //                                             activeTab === 'validation' ? <OcdResourceValidation ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/> :
-    //                                             <OcdResourceDocumentation ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/>
-    //                                 }, [modelId, activeTab])
-    // const activeTabJMX = useMemo(() => <ActiveTab ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/>, [modelId, activeTab])
     console.debug(`>>> OcdProperies: OcdProperties: Render(${activeTab})`, modelId)
     return (
         <div className='ocd-designer-properties'>

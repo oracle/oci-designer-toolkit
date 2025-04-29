@@ -17,9 +17,9 @@ Welcome to the March 2025 release of OKIT. This release extends both import and 
 
 The public Beta native desktop installs are attached to this release.
 
-This Beta release shows the new desktop functionality that will be available in the next iteration of OKIT providing Native Installers rather than the current Web Based solution. In addtion to a native installation the designer provides a true Drag-&-Drop interface allowing the user to define the layout of there design without any of the previous restrictions.
+This Beta release shows the new desktop functionality that will be available in the next iteration of OKIT providing Native Installers rather than the current Web Based solution. In addition to a native installation the designer provides a true Drag-&-Drop interface allowing the user to define the layout of there design without any of the previous restrictions.
 
-The concept of container based layouts has been remove and as such Compartment are nolonger represented on the canvas but are created as tabs across the top of the design with functionality that will allow the user to hide/show resources associated with the compartment. We have also added the concept of multiple Page/Views of the designs resources by placing page tabs at the bottom of the design. Here the user can create addition pages to show sub-sets of the designs resources, which can be selected from the "model" palette.
+The concept of container based layouts has been removed and as such Compartment are no longer represented on the canvas but are created as tabs across the top of the design with functionality that will allow the user to hide/show resources associated with the compartment. We have also added the concept of multiple Page/Views of the designs resources by placing page tabs at the bottom of the design. Here the user can create addition pages to show sub-sets of the designs resources, which can be selected from the "model" palette.
 
 At present the Open Cloud Designer only supports a subset of the original OKIT (Web) resources but this covers the core resource and more will be added soon.
 
@@ -55,7 +55,7 @@ ___**Available Resources**___
 | Users                          | &check;    | &check;   |            |         |            |
 
 #### Native Installs
-___At present we do not have any certificates associated with these and hence you may see some security warnings during execution. If you are happy to accept that the installation files built by GitHub are okey then
+___At present we do not have any certificates associated with these and hence you may see some security warnings during execution. If you are happy to accept that the installation files built by GitHub are okay then
 you will need to acknowledge in the appropriate dialog for your system.___
 
 #### OCD Desktop Features 
@@ -79,7 +79,7 @@ same [Page/View](#pagesviews) or a new [Page/View](#pagesviews).
 
 ##### Canvas
 
-Freeform location where your design can be created. Once a Resource has been dragged from the palete and dropped on the canvas it can subsequently be moved as required by the user. In addition container style Resource (Vcn / Subnet) will also allow resize and can contain other resources. It should be noted that Compartments are not represented on the
+Freeform location where your design can be created. Once a Resource has been dragged from the palette and dropped on the canvas it can subsequently be moved as required by the user. In addition container style Resource (Vcn / Subnet) will also allow resize and can contain other resources. It should be noted that Compartments are not represented on the
 canvas as a Resource but rather created as Layers using the top tab bar. These compartment layers can subsequently be shown/hidden and the Resources within the Compartment layer will be shown/hidden on the canvas. In addition Compartment Layers can be coloured (Style in properties) and if the "Highlight Compartment Resources" is selected from the designer menu (above the palette) 
 then the borders of resource will be coloured to match the compartment.
 
@@ -89,4 +89,4 @@ The Page/View Tabs (at base of canvas) allow the user to create multiple visual 
 
 ##### Properties
 
-The properties panel provides access to the edittable properties available for the selected Resource. In addition the User can provide Resource specific documentation that will be included in any generated Markdown.
+The properties panel provides access to the editable properties available for the selected Resource. In addition the User can provide Resource specific documentation that will be included in any generated Markdown.
