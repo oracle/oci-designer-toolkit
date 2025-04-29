@@ -9,7 +9,7 @@
 - This modification will require any existing users to change their environment variables and any start scripts they use. The documentation and associated scripts within the repository have been updated and the user must follow the new instructions.
 ```
 ### Features
-1. Add new OCI Resources
+1. OKIT-Desktop: Add new OCI Resources
     1. Bastion (OKIT-322)
     2. Vault (OKIT-323)
     3. Key (OKIT-324)

@@ -1,17 +1,24 @@
 [![License: UPL](https://img.shields.io/badge/license-UPL-green)](https://img.shields.io/badge/license-UPL-green) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=oracle_oci-designer-toolkit&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=oracle_oci-designer-toolkit)
-# March 2025 Release (Version 0.68.0)
+# April 2025 Release (Version 0.69.0)
 ____
-**Update 0.68.0**: This update addresses the following issues.
+**Update 0.69.0**: This update addresses the following issues.
 ____
-Welcome to the March 2025 release of OKIT. This release extends both import and export functions of the OCD Desktop rlease whilst adding token based authentication.
+Welcome to the April 2025 release of OKIT. This release extends the number of resources supported within OKIT-Desktop whilst restructuring the git repository to clearly identify Classic code.
 
 ## OKIT Classic Features
-1. OKIT-Classic: Remove optional compartment_id from Object Storage namespace query in Terraform
-
+1. OKIT-Classic: (OKIT-321) Restructure Repository to move exist OKIT files to okitclassinc Subdirectory.
+```diff
+- This modification will require any existing users to change their environment variables and any start scripts they use. The documentation and associated scripts within the repository have been updated and the user must follow the new instructions.
+```
 ## OKIT Desktop Features
-1. OKIT-320: Import Terraform Files. This is the initiall release of the Terraform import functionality and may need updates as and when issues are seen.
-2. OKIT-301: Add export to Excel (Detailed)
-3. OKIT-319: Add security Token based authentication. If during authentication OKIT Desktop notices the presence of a security token entry in the config file it will switch to token based authentication.
+1. OKIT-Desktop: Add new OCI Resources
+    1. Bastion (OKIT-322)
+    2. Vault (OKIT-323)
+    3. Key (OKIT-324)
+    4. Secret (OKIT-325)
+    5. Data Science Project (OKIT-331)
+    6. Data Science Notebook Session (OKIT-332)
+    7. Integration Instance (OKIT-333)
 
 ### Beta Overview
 
@@ -53,6 +60,13 @@ ___**Available Resources**___
 | Dynamic Groups                 | &check;    | &check;   |            | &check; |            |
 | Groups                         | &check;    | &check;   |            |         |            |
 | Users                          | &check;    | &check;   |            |         |            |
+| Bastion                        | &check;    | &check;   |            |         |            |
+| Vault                          | &check;    | &check;   |            |         |            |
+| Key                            | &check;    | &check;   |            |         |            |
+| Secret                         | &check;    | &check;   |            |         |            |
+| Data Science Project           | &check;    | &check;   |            |         |            |
+| Data Science Notebook Session  | &check;    | &check;   |            |         |            |
+| Integration Instance           | &check;    | &check;   |            |         |            |
 
 #### Native Installs
 ___At present we do not have any certificates associated with these and hence you may see some security warnings during execution. If you are happy to accept that the installation files built by GitHub are okay then
