@@ -33,15 +33,6 @@ const getResourceTabs = (modelId: string, coordsId: string): string[] => {
 const OcdPropertiesTabbar = ({modelId, coordsId, activeTab, setActiveTab, additionalCss}: {modelId: string, coordsId: string, activeTab: string, setActiveTab: (title: string) => void, additionalCss: Record<string, string>}): JSX.Element => {
     console.debug('OcdPropertiesTabbar: Render', activeTab, modelId)
     const tabs: string[] = useMemo(() => {
-        // const tabs = [
-        //     ...modelId && modelId !== '' ? ['Properties', 'Tags'] : [],
-        //     'Documentation',
-        //     ...modelId && modelId !== '' ? ['Style'] : [],
-        //     ...coordsId && coordsId !== '' ? ['Arrange'] : [],
-        //     ...modelId && modelId !== '' ? ['Validation'] : [],
-        // ]
-        // console.debug('OcdPropertiesTabbar: Available Tabs:', tabs)
-        // return tabs
         return getResourceTabs(modelId, coordsId)
     }, [modelId, coordsId])
     // const [active, setActive] = useState(tabs.includes(activeTab) ? activeTab : 'documentation')
@@ -94,8 +85,6 @@ const OciCommonResourceProperties = ({ocdDocument, setOcdDocument, resource, roo
                 <summary className='summary-background'>Core</summary>
                 <div>
                 <OcdDisplayNameProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={configs.find((c) => c.id === 'display_name')} rootResource={rootResource} attribute={displayName} key={`${resource.id}-displayName`}/>
-                {/* <OcdTextProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={configs.find((c) => c.id === 'display_name')} rootResource={rootResource} attribute={displayName} key={`${resource.id}-displayName`}/> */}
-                {/* <OcdTextProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={configs.find((c) => c.id === 'display_name')} rootResource={rootResource} attribute={displayName}/> */}
                 <OcdLookupProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={configs.find((c) => c.id === 'compartment_id')} rootResource={rootResource} attribute={compartmentId}  key={`${resource.id}-compartmentId`}/>
                 </div>
             </details>
