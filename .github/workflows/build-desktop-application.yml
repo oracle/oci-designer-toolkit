@@ -26,9 +26,9 @@ jobs:
       - id: version
         run: |
           echo "ocd_version=$(jq -r '.version' ocd/packages/desktop/package.json)"  >> "$GITHUB_OUTPUT"
-          echo "okit_release_version=$(jq -r '.release' okitweb/static/okit/json/release.json)"  >> "$GITHUB_OUTPUT"
-          echo "okit_release_tag=$(jq -r '.tag' okitweb/static/okit/json/release.json)"  >> "$GITHUB_OUTPUT"
-          echo "okit_release_title=$(jq -r '.title' okitweb/static/okit/json/release.json)"  >> "$GITHUB_OUTPUT"
+          echo "okit_release_version=$(jq -r '.release' okitclassic/okitserver/static/okit/json/release.json)"  >> "$GITHUB_OUTPUT"
+          echo "okit_release_tag=$(jq -r '.tag' okitclassic/okitserver/static/okit/json/release.json)"  >> "$GITHUB_OUTPUT"
+          echo "okit_release_title=$(jq -r '.title' okitclassic/okitserver/static/okit/json/release.json)"  >> "$GITHUB_OUTPUT"
   create-release: 
     needs: [generate-variables]
     if: github.event.pull_request.merged == true
