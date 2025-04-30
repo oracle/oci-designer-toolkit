@@ -100,6 +100,7 @@ export class OciTerraformResource extends OcdTerraformResource {
     retrieveLoadbalancerShapeId = (): string => '' // Simple Text Replace Reference
     retrieveRegionId = (): string => '' // Simple Text Replace Reference
     retrieveShapeId = (): string => '' // Simple Text Replace Reference
+    retrieveDatascienceNotebookSessionShapeId = (): string => '' // Simple Text Replace Reference
     // Id Lookups
     retrieveCpeDeviceShapeId = (): string => {return 'Method must be define in Resource class'}
     retrieveImageId = (): string => {return 'Method must be define in Resource class'}

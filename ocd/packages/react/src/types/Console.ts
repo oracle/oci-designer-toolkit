@@ -64,6 +64,21 @@ export interface OcdSelectedResource {
     coords?: OcdViewCoords
 }
 
+export interface OcdSelectedResourceModel {
+    modelId: string | null
+    model?: OcdResource
+}
+
+export interface OcdSelectedResourceView {
+    modelId: string | null
+    pageId: string | null
+    coordsId: string | null
+    class: string
+    model?: OcdResource
+    page?: OcdViewPage
+    coords?: OcdViewCoords
+}
+
 export interface OcdDragResource {
     dragging: boolean
     modelId: string

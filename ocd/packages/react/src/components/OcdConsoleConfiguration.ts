@@ -31,8 +31,8 @@ export class OcdConsoleConfig {
         else this.config = this.newConsoleConfiguration()
     }
 
-    static new = () => new OcdConsoleConfig()
-    static clone = (ocdConsoleState: OcdConsoleConfig) => new OcdConsoleConfig(ocdConsoleState.config)
+    static readonly new = () => new OcdConsoleConfig()
+    static readonly clone = (ocdConsoleState: OcdConsoleConfig) => new OcdConsoleConfig(ocdConsoleState.config)
 
     newConsoleConfiguration = (): OcdConsoleConfiguration => {
         return {

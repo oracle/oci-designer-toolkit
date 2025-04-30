@@ -230,7 +230,7 @@ export class OciReferenceDataQuery extends OciCommonQuery {
             const request: core.requests.GetImageRequest = {imageId: imageId}
             const query = this.computeClient.getImage(request)
             query.then((results) => {
-                console.debug('OciReferenceDataQuery: getImage: All Settled')
+                // console.debug('OciReferenceDataQuery: getImage: All Settled')
                 const image = results.image
                 const resource = {
                     id: `${image.operatingSystem}-${image.operatingSystemVersion}`,
@@ -326,7 +326,8 @@ export class OciReferenceDataQuery extends OciCommonQuery {
                 const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], []).map((r) => {return {
                         ...r,
                         id: r.name,
-                        displayName: r.name
+                        displayName: r.name,
+                        isFlexible: r.name.endsWith('.Flex')
                     }
                 }).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
                 // @ts-ignore
@@ -385,39 +386,6 @@ export class OciReferenceDataQuery extends OciCommonQuery {
         })
     }
 
-    // listAllImages(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-    //     return new Promise((resolve, reject) => {
-    //         // const allCompartmentIds = [this.provider.getTenantId(), null]
-    //         const allCompartmentIds = [...compartmentIds, this.provider.getTenantId()]
-    //         // @ts-ignore
-    //         const requests: core.requests.ListImagesRequest[] = allCompartmentIds.map((id) => {return {compartmentId: id, limit: 10000}})
-    //         const responseIterators = requests.map((r) => this.computeClient.listImagesResponseIterator(r))
-    //         const queries = responseIterators.map((r) => this.getAllResponseData(r))
-    //         Promise.allSettled(queries).then((results) => {
-    //             console.debug('OciReferenceDataQuery: listAllImages: All Settled')
-    //             //@ts-ignore
-    //             const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value], []).map((r) => {return {
-    //                     id: `${r.operatingSystem}-${r.operatingSystemVersion}`,
-    //                     // id: r.displayName,
-    //                     ocid: r.id,
-    //                     displayName: `${r.operatingSystem} ${r.operatingSystemVersion}`,
-    //                     sourceDisplayName: r.displayName,
-    //                     platform: r.compartmentId === null,
-    //                     compartmentId: r.compartmentId,
-    //                     operatingSystem: r.operatingSystem,
-    //                     operatingSystemVersion: r.operatingSystemVersion,
-    //                     billableSizeInGBs: r.billableSizeInGBs,
-    //                     lifecycleState: r.lifecycleState
-    //                 }
-    //             }).sort((a: OciResource, b: OciResource) => (a.id.localeCompare(b.id) * -1))
-    //             resolve(resources)
-    //         }).catch((reason) => {
-    //             console.error('OciReferenceDataQuery: listAllImages: Error', reason)
-    //             reject(new Error(reason))
-    //         })
-    //     })
-    // }
-
     listImages(compartmentIds: string[], retryCount: number = 0): Promise<any> {
         return new Promise((resolve, reject) => {
             const requests: core.requests.ListImagesRequest[] = compartmentIds.map((id) => {return {compartmentId: id, limit: 10000}})
@@ -441,7 +409,7 @@ export class OciReferenceDataQuery extends OciCommonQuery {
                         lifecycleState: r.lifecycleState
                     }
                 }).sort((a: OciResource, b: OciResource) => (a.id.localeCompare(b.id) * -1))
-                resources.forEach((i: Record<string, any>) => console.debug('OciReferenceDataQuery: Images:', i.id, ':', i.ocid))
+                // resources.forEach((i: Record<string, any>) => console.debug('OciReferenceDataQuery: Images:', i.id, ':', i.ocid))
                 // @ts-ignore
                 const uniqueResources = resources.filter((r, i) => resources.findIndex((v) => r.id === v.id) === i).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
                 const imageIds = uniqueResources.map((r: Record<string, string>) => r.ocid)
@@ -456,42 +424,6 @@ export class OciReferenceDataQuery extends OciCommonQuery {
                 // resolve(resources)
             }).catch((reason) => {
                 console.error('OciReferenceDataQuery: listImages: Error', reason)
-                reject(reason)
-            })
-        })
-    }
-
-    listImagesOrig(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: core.requests.ListImagesRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.computeClient.listImages(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciReferenceDataQuery: listImages: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], []).map((r) => {return {
-                        id: r.displayName,
-                        ocid: r.id,
-                        displayName: r.displayName,
-                        platform: r.compartmentId === null,
-                        operatingSystem: r.operatingSystem,
-                        operatingSystemVersion: r.operatingSystemVersion,
-                        billableSizeInGBs: r.billableSizeInGBs,
-                        lifecycleState: r.lifecycleState
-                    }
-                }).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
-                // @ts-ignore
-                const uniqueResources = Array.from(new Set(resources.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
-                const imageIds = uniqueResources.map((r) => r.ocid)
-                this.listImageShapeCompatabilities(imageIds).then((compatibilities) => {
-                    uniqueResources.forEach((r) => r.shapes = compatibilities.filter((c: Record<string, string>) => c.imageId === r.ocid).map((c: Record<string, string>) => c.shape))
-                    resolve(uniqueResources)
-                }).catch((reason) => {
-                    console.error(reason)
-                    reject(reason)
-                })
-                // resolve(resources)
-            }).catch((reason) => {
-                console.error(reason)
                 reject(reason)
             })
         })

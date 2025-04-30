@@ -20,6 +20,17 @@ export namespace OcdUtils {
         b: number
         a: number
     }
+    export function now(): string {
+        const now = new Date()
+        const year = now.getFullYear()
+        const month = `${now.getMonth() + 1}`.padStart(2,'0') // Months are zero-indexed, so we add 1
+        const day = `${now.getDate()}`.padStart(2,'0')
+        const hours = now.getHours()
+        const minutes = now.getMinutes()
+        const seconds = now.getSeconds();       
+        const nowStr = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
+        return nowStr
+    }
     export const simpleSort = (a: string, b: string) => a.localeCompare(b)
     export function toTitle(str: string): string {
         let key = str as keyof typeof resourceMap

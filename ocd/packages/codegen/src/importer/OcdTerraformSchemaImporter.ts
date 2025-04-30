@@ -99,8 +99,8 @@ export class OcdTerraformSchemaImporter extends OcdSchemaImporter {
                 lookup: this.isReference(k) || this.isMultiReference(k) || this.isLookupOverride(id, key),
                 lookupResource: this.isCacheLookup(id, key) ? this.cacheLookupResource(id, key) : this.isReference(k) || this.isMultiReference(k) || this.isLookupOverride(id, key) ? this.lookupResource(k, lookupOverrides) : '',
                 lookupResourceElement: this.isCacheLookup(id, key) ? this.cacheLookupResource(id, key) : this.isReference(k) || this.isMultiReference(k) || this.isLookupOverride(id, key) ? this.lookupResourceElement(k, lookupOverrides) : '',
-                conditional: this.isConditional(key, k),
-                condition: this.isConditional(key, k) ? this.conditionalElements[key][k] : {},
+                conditional: this.isConditional(key, id),
+                condition: this.isConditional(key, id) ? this.conditionalElements[key][id] : {},
                 default: defaults[id] !== undefined ? defaults[id] : undefined
             }
             if (r[k].type === 'map' && Object.hasOwn(maps, k)) {
@@ -131,8 +131,8 @@ export class OcdTerraformSchemaImporter extends OcdSchemaImporter {
                     label: this.toLabel(k, labels, hierarchy),
                     // label: this.toLabel(k),
                     id: id,
-                    conditional: this.isConditional(key, k),
-                    condition: this.isConditional(key, k) ? this.conditionalElements[key][k] : {},
+                    conditional: this.isConditional(key, id),
+                    condition: this.isConditional(key, id) ? this.conditionalElements[key][id] : {},
                     // @ts-ignore
                     attributes: this.getAttributes(key, v.block, [...hierarchy, k])
                 }
