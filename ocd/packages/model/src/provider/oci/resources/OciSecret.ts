@@ -37,6 +37,7 @@ export namespace OciSecret {
     export function getConnectionIds(resource: OciSecret, allResources: OcdResources): string[] {
         // This List of Ids does not include the Parent Id or Compartment Id
         let associationIds: string[] = []
+        if (resource.keyId && resource.keyId.length > 0) associationIds = [...associationIds, resource.keyId]
         return associationIds
     }
 }

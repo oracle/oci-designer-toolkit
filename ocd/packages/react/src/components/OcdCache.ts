@@ -69,8 +69,16 @@ export class OcdCacheData {
     loadCache(): Promise<any> {
         return OcdCacheFacade.loadCache().then((results) => {
             this.cache = results
-            this.cache.dropdownData.shipped = defaultCache.dropdownData.shipped
-            this.saveCache()
+            const shippedCacheAsString = JSON.stringify(defaultCache.dropdownData.shipped)
+            const localCacheAsString = JSON.stringify(this.cache.dropdownData.shipped)
+            const defaultCacheAsString = JSON.stringify(defaultCache.dropdownData.shipped)
+            if (localCacheAsString.localeCompare(defaultCacheAsString) !== 0) {
+                console.debug('OcdCacheData: Shipped/Default Cache differs from local Cache')
+                this.cache.dropdownData.shipped = JSON.parse(shippedCacheAsString)
+                this.saveCache()
+            } else {
+                console.debug('OcdCacheData: Shipped/Default Cache same as local Cache')
+            }
         }).catch((response) => {
             this.cache = this.newCache()
             this.saveCache()
@@ -81,10 +89,10 @@ export class OcdCacheData {
         return OcdCacheFacade.saveCache(this.cache).then((results) => {}).catch((response) => console.debug('OcdCacheData:', response))
     }
 
-    getOciReferenceDataList(resource: string, profile?: string , region?: string) {
+    getOciReferenceDataList(resource: string, profile?: string, region?: string) {
         console.debug('OcdCacheData: getOciReferenceDataList:', resource, profile, region)
-        if (profile === undefined) profile = this.cache.profile
-        if (region === undefined) region = this.cache.region
+        profile ??= this.cache.profile
+        region ??= this.cache.region
         console.debug('OcdCacheData: getOciReferenceDataList:', resource, profile, region)
         if (profile === undefined || !Object.hasOwn(this.cache.dropdownData, profile)) {
             profile = 'shipped'
@@ -94,7 +102,6 @@ export class OcdCacheData {
             profile = 'shipped'
             region = 'all'
         }
-        // console.debug('OcdCacheData: getOciReferenceDataList:', resource, profile, region)
         console.debug('OcdCacheData: getOciReferenceDataList:', resource, profile, region, this.cache.dropdownData[profile][region])
         return Object.hasOwn(this.cache.dropdownData[profile][region], resource) ? this.cache.dropdownData[profile][region][resource] : []
     }

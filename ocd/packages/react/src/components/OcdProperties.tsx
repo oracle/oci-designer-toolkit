@@ -18,20 +18,25 @@ import { CacheContext, SelectedResourceContext } from '../pages/OcdConsole'
 import { OciDefinedTagRow, OciFreeformTagRow } from '../pages/OcdCommonTags'
 import { OcdCacheData } from './OcdCache'
 
-const OcdPropertiesTabbar = ({modelId, coordsId, activeTab, setActiveTab, additionalCss}:{modelId: string, coordsId: string, activeTab: string, setActiveTab: (title: string) => void, additionalCss: Record<string, string>}): JSX.Element => {
-    console.debug('OcdPropertiesTabbar: Render', activeTab)
-    const [active, setActive] = useState(activeTab)
+const getResourceTabs = (modelId: string, coordsId: string): string[] => {
+    const tabs = [
+        ...modelId && modelId !== '' ? ['Properties', 'Tags'] : [],
+        'Documentation',
+        ...modelId && modelId !== '' ? ['Style'] : [],
+        ...coordsId && coordsId !== '' ? ['Arrange'] : [],
+        ...modelId && modelId !== '' ? ['Validation'] : [],
+    ]
+    console.debug('OcdPropertiesTabbar: getResourceTabs:', tabs)
+    return tabs
+}
+
+const OcdPropertiesTabbar = ({modelId, coordsId, activeTab, setActiveTab, additionalCss}: {modelId: string, coordsId: string, activeTab: string, setActiveTab: (title: string) => void, additionalCss: Record<string, string>}): JSX.Element => {
+    console.debug('OcdPropertiesTabbar: Render', activeTab, modelId)
     const tabs: string[] = useMemo(() => {
-        const tabs = [
-            ...modelId && modelId !== '' ? ['Properties', 'Tags'] : [],
-            'Documentation',
-            ...modelId && modelId !== '' ? ['Style'] : [],
-            ...coordsId && coordsId !== '' ? ['Arrange'] : [],
-            ...modelId && modelId !== '' ? ['Validation'] : [],
-        ]
-        console.debug('OcdPropertiesTabbar: Available Tabs:', tabs)
-        return tabs
+        return getResourceTabs(modelId, coordsId)
     }, [modelId, coordsId])
+    // const [active, setActive] = useState(tabs.includes(activeTab) ? activeTab : 'documentation')
+    const [active, setActive] = useState('documentation')
     const tabClicked = (title: string) => {
         console.debug('OcdPropertiesTabbar: Tab Clicked', title)
         setActive(title.toLocaleLowerCase())
@@ -40,11 +45,6 @@ const OcdPropertiesTabbar = ({modelId, coordsId, activeTab, setActiveTab, additi
     return (
         <div className={`ocd-designer-tab-bar ocd-designer-tab-bar-theme`}>
             {tabs.map((tab) => <OcdPropertiesTabbarTab title={tab} active={active === tab.toLocaleLowerCase()} setActive={tabClicked} additionalCss={additionalCss[tab.toLocaleLowerCase()]} key={tab}/>)}
-            {/* {ocdDocument.selectedResource.modelId !== '' && <div className={`ocd-designer-tab ocd-designer-tab-theme ${activeTab === 'properties' ? 'ocd-designer-active-tab-theme' : ''}`} onClick={() => onPropertiesTabClick('Properties')}><span>Properties</span></div>}
-            <div className={`ocd-designer-tab ocd-designer-tab-theme ${activeTab === 'documentation' ? 'ocd-designer-active-tab-theme' : ''}`} onClick={() => onPropertiesTabClick('Documentation')}><span>Documentation</span></div>
-            {ocdDocument.selectedResource.modelId !== '' && <div className={`ocd-designer-tab ocd-designer-tab-theme ${activeTab === 'style' ? 'ocd-designer-active-tab-theme' : ''}`} onClick={() => onPropertiesTabClick('Style')}><span>Style</span></div>}
-            {ocdDocument.selectedResource.coordsId !== '' && <div className={`ocd-designer-tab ocd-designer-tab-theme ${activeTab === 'arrange' ? 'ocd-designer-active-tab-theme' : ''}`} onClick={() => onPropertiesTabClick('Arrange')}><span>Arrange</span></div>}
-            {ocdDocument.selectedResource.modelId !== '' && <div className={`ocd-designer-tab ocd-designer-tab-theme ${validationTabClass} ${activeTab === 'validation' ? 'ocd-designer-active-tab-theme' : ''}`} onClick={() => onPropertiesTabClick('Validation')}><span>Validation</span></div>} */}
         </div>
     )
 }
@@ -85,8 +85,6 @@ const OciCommonResourceProperties = ({ocdDocument, setOcdDocument, resource, roo
                 <summary className='summary-background'>Core</summary>
                 <div>
                 <OcdDisplayNameProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={configs.find((c) => c.id === 'display_name')} rootResource={rootResource} attribute={displayName} key={`${resource.id}-displayName`}/>
-                {/* <OcdTextProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={configs.find((c) => c.id === 'display_name')} rootResource={rootResource} attribute={displayName} key={`${resource.id}-displayName`}/> */}
-                {/* <OcdTextProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={configs.find((c) => c.id === 'display_name')} rootResource={rootResource} attribute={displayName}/> */}
                 <OcdLookupProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={configs.find((c) => c.id === 'compartment_id')} rootResource={rootResource} attribute={compartmentId}  key={`${resource.id}-compartmentId`}/>
                 </div>
             </details>
@@ -165,8 +163,8 @@ const getResourceProperties = (selectedModelResource: OcdResource) => {
 }
 
 const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
-    const {ocdCache, setOcdCache} = useContext(CacheContext)
-    const {selectedResource, setSelectedResource} = useContext(SelectedResourceContext)
+    const {ocdCache} = useContext(CacheContext)
+    // const {selectedResource } = useContext(SelectedResourceContext)
     const selectedModelResource: OcdResource = ocdDocument.getSelectedResource()
     const selectedModelResourceProxy: OcdResource = useMemo(() => getSelectedResourceProxy(ocdDocument, selectedModelResource, ocdCache), [selectedModelResource])
     const ResourceProperties = useMemo(() => getResourceProperties(selectedModelResource), [selectedModelResource])
@@ -188,8 +186,8 @@ const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourcePr
 }
 
 const OcdResourceTags = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
-    const {selectedResource, setSelectedResource} = useContext(SelectedResourceContext)
-    const {ocdCache, setOcdCache} = useContext(CacheContext)
+    const {selectedResource } = useContext(SelectedResourceContext)
+    const {ocdCache} = useContext(CacheContext)
     // const selectedModelResource: OcdResource = ocdDocument.getSelectedResource()
     const selectedModelResource: OcdResource = ocdDocument.getResource(selectedResource.modelId)
     console.debug('OcdProperties: OcdResourceTags: selectedResource', selectedResource, '\nselectedModelResource', selectedModelResource)
@@ -334,7 +332,7 @@ const OcdResourceTags = ({ocdDocument, setOcdDocument}: DesignerResourceProperti
 }
 
 const OcdResourceDocumentation = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
-    const {selectedResource, setSelectedResource} = useContext(SelectedResourceContext)
+    const {selectedResource } = useContext(SelectedResourceContext)
     const [preview, setPreview] = useState(false)
     const selectedModelResource = ocdDocument.getSelectedResource()
     const activePage = ocdDocument.getActivePage()
@@ -367,7 +365,7 @@ const OcdResourceDocumentation = ({ocdDocument, setOcdDocument}: DesignerResourc
 }
 
 const OcdResourceArrangement = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
-    const {selectedResource, setSelectedResource} = useContext(SelectedResourceContext)
+    const {selectedResource } = useContext(SelectedResourceContext)
     // const selectedResource = ocdDocument.selectedResource
     const page: OcdViewPage = ocdDocument.getActivePage()
     // console.info('Selected Resource', selectedResource)
@@ -772,8 +770,35 @@ const OcdResourceValidationResult = ({result, resource}: DesignerResourceValidat
     )
 }
 
+const getActiveTabJMX = (availableTabs: string[], activeTab: string, ocdDocument: OcdDocument, setOcdDocument: React.Dispatch<any>, isLayer: boolean = false): JSX.Element => {
+    console.debug('OcdProperties: getActiveTabJMX: Requested', activeTab, availableTabs)
+    if (!availableTabs.includes(activeTab)) activeTab  = 'documentation'
+    console.debug('OcdProperties: getActiveTabJMX: Returning', activeTab, availableTabs)
+    switch (activeTab) {
+        case 'properties': {
+            return <OcdResourceProperties ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/>
+        }
+        case 'tags': {
+            return <OcdResourceTags ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/>
+        }
+        case 'arrange': {
+            return <OcdResourceArrangement ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/>
+        }
+        case 'style': {
+            if (isLayer) return <OcdLayerStyle ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/>
+            else return <OcdResourceStyle ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/>
+        }
+        case 'validation': {
+            return <OcdResourceValidation ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/>
+        }
+        default: {
+            return <OcdResourceDocumentation ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/>
+        }
+    }
+}
+
 const OcdProperties = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
-    const {selectedResource, setSelectedResource} = useContext(SelectedResourceContext)
+    // const {selectedResource } = useContext(SelectedResourceContext)
     const ociResources: OciResources = ocdDocument.getOciResourcesObject()
     const resourceValidationMethod = ocdDocument.getSelectedResource() ? `${OcdUtils.toTitleCase(ocdDocument.getSelectedResource().provider)}${ocdDocument.getSelectedResource().resourceType}` : ''
     // @ts-ignore 
@@ -781,70 +806,42 @@ const OcdProperties = ({ocdDocument, setOcdDocument}: DesignerResourceProperties
     const validationResults = ResourceValidation ? ResourceValidation.validateResource(ocdDocument.getSelectedResource(), ociResources) : []
     const hasErrors = validationResults.filter((v: OcdValidationResult) => v.type === 'error').length > 0
     const hasWarnings = validationResults.filter((v: OcdValidationResult) => v.type === 'warning').length > 0
-    const validationTabClass = `ocd-validation-tab ${hasErrors ? 'ocd-validation-error' : hasWarnings ? 'ocd-validation-warning' : 'ocd-validation-ok'}`
+    // const validationTabClass = `ocd-validation-tab ${hasErrors ? 'ocd-validation-error' : hasWarnings ? 'ocd-validation-warning' : 'ocd-validation-ok'}`
+    const validationTabClass = (() => {
+                                        if (hasErrors) return 'ocd-validation-tab ocd-validation-error'
+                                        else if (hasWarnings) return 'ocd-validation-tab ocd-validation-warning'
+                                        else return 'ocd-validation-tab ocd-validation-ok'
+                                    })()
     // const selectedResource = ocdDocument.selectedResource
-    console.debug('\n================================\nOcdProperties: Selected Resource', ocdDocument.selectedResource, ocdDocument.getSelectedResource())
-    const [activeTab, setActiveTab] = useState(ocdDocument.selectedResource.modelId !== '' ? 'properties' : 'documentation')
+    console.debug('================================')
+    console.debug('OcdProperties: Selected Resource', ocdDocument.selectedResource)
+    console.debug('OcdProperties: getSelectedResource()', ocdDocument.getSelectedResource())
+    // console.debug('OcdProperties: Selected Resource Context', selectedResource)
+    console.debug('================================')
+    let [activeTab, setActiveTab] = useState('documentation')
+    // let [activeTab, setActiveTab] = useState(ocdDocument.selectedResource.modelId !== '' ? 'properties' : 'documentation')
     const onPropertiesTabClick = (tab: string) => {
         setActiveTab(tab.toLowerCase())
     }
-    // const ActiveTab = activeTab === 'properties' ? OcdResourceProperties :
-    //                   activeTab === 'tags' ? OcdResourceTags :
-    //                   activeTab === 'documentation' ? OcdResourceDocumentation :
-    //                   activeTab === 'arrange' ? OcdResourceArrangement :
-    //                   activeTab === 'style' && selectedResource.coordsId !== '' ? OcdResourceStyle :
-    //                   activeTab === 'style' ? OcdLayerStyle :
-    //                   activeTab === 'validation' ? OcdResourceValidation :
-    //                   OcdResourceDocumentation
     const modelId = ocdDocument.selectedResource.modelId
     const coordsId = ocdDocument.selectedResource.coordsId
     const additionalCss = {validation: validationTabClass}
+    const availableTabs = getResourceTabs(modelId, coordsId).map((t) => t.toLowerCase())
+    console.debug('OcdProperties: Active Tabs', availableTabs, 'Selected Tab', activeTab)
+    if (!availableTabs.includes(activeTab)) {
+        activeTab = 'documentation'
+        setActiveTab('documentation')
+    }
     // Conditional on change
     const propertiesTabbarJMX = useMemo(() => <OcdPropertiesTabbar modelId={modelId} coordsId={coordsId} activeTab={activeTab} setActiveTab={onPropertiesTabClick} additionalCss={additionalCss}/>, [modelId, coordsId, additionalCss])
     const propertiesHeaderJMX = useMemo(() => <OcdResourcePropertiesHeader ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourcePropertiesHeader`}/>, [modelId])
-    const activeTabJMX = activeTab === 'properties' ? <OcdResourceProperties ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/> :
-                                                activeTab === 'tags' ? <OcdResourceTags ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/> :
-                                                activeTab === 'documentation' ? <OcdResourceDocumentation ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/> :
-                                                activeTab === 'arrange' ? <OcdResourceArrangement ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/> :
-                                                activeTab === 'style' && selectedResource.coordsId !== '' ? <OcdResourceStyle ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/> :
-                                                activeTab === 'style' ? <OcdLayerStyle ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/> :
-                                                activeTab === 'validation' ? <OcdResourceValidation ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/> :
-                                                <OcdResourceDocumentation ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/>
-    // const activeTabJMX = useMemo(() => {
-    //                                     return activeTab === 'properties' ? <OcdResourceProperties ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/> :
-    //                                             activeTab === 'tags' ? <OcdResourceTags ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/> :
-    //                                             activeTab === 'documentation' ? <OcdResourceDocumentation ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/> :
-    //                                             activeTab === 'arrange' ? <OcdResourceArrangement ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/> :
-    //                                             activeTab === 'style' && selectedResource.coordsId !== '' ? <OcdResourceStyle ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/> :
-    //                                             activeTab === 'style' ? <OcdLayerStyle ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/> :
-    //                                             activeTab === 'validation' ? <OcdResourceValidation ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/> :
-    //                                             <OcdResourceDocumentation ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/>
-    //                                 }, [modelId, activeTab])
-    // const activeTabJMX = useMemo(() => <ActiveTab ocdDocument={ocdDocument} setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} key={`ResourceActiveTab`}/>, [modelId, activeTab])
-    console.debug(`>>> OcdProperies: OcdProperties: Render(${activeTab})`)
+    const activeTabJMX = getActiveTabJMX(availableTabs, activeTab, ocdDocument, setOcdDocument, coordsId === '')
+    console.debug(`>>> OcdProperies: OcdProperties: Render(${activeTab})`, modelId)
     return (
         <div className='ocd-designer-properties'>
             {propertiesTabbarJMX}
             {propertiesHeaderJMX}
             {activeTabJMX}
-            {/* TODO: Delete */}
-            {/* <div className={`ocd-designer-tab-bar ocd-designer-tab-bar-theme`}>
-                {ocdDocument.selectedResource.modelId !== '' && <div className={`ocd-designer-tab ocd-designer-tab-theme ${activeTab === 'properties' ? 'ocd-designer-active-tab-theme' : ''}`} onClick={() => onPropertiesTabClick('Properties')}><span>Properties</span></div>}
-                <div className={`ocd-designer-tab ocd-designer-tab-theme ${activeTab === 'documentation' ? 'ocd-designer-active-tab-theme' : ''}`} onClick={() => onPropertiesTabClick('Documentation')}><span>Documentation</span></div>
-                {ocdDocument.selectedResource.modelId !== '' && <div className={`ocd-designer-tab ocd-designer-tab-theme ${activeTab === 'style' ? 'ocd-designer-active-tab-theme' : ''}`} onClick={() => onPropertiesTabClick('Style')}><span>Style</span></div>}
-                {ocdDocument.selectedResource.coordsId !== '' && <div className={`ocd-designer-tab ocd-designer-tab-theme ${activeTab === 'arrange' ? 'ocd-designer-active-tab-theme' : ''}`} onClick={() => onPropertiesTabClick('Arrange')}><span>Arrange</span></div>}
-                {ocdDocument.selectedResource.modelId !== '' && <div className={`ocd-designer-tab ocd-designer-tab-theme ${validationTabClass} ${activeTab === 'validation' ? 'ocd-designer-active-tab-theme' : ''}`} onClick={() => onPropertiesTabClick('Validation')}><span>Validation</span></div>}
-            </div> */}
-            {/* <OcdResourcePropertiesHeader
-                ocdDocument={ocdDocument} 
-                setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} 
-                key={`ResourcePropertiesHeader`}
-            /> */}
-            {/* <ActiveTab
-                ocdDocument={ocdDocument} 
-                setOcdDocument={(ocdDocument: OcdDocument) => setOcdDocument(ocdDocument)} 
-                key={`ResourceActiveTab`}
-            /> */}
         </div>
     )
 }

@@ -44,10 +44,14 @@ export const resourceMap: OcdResourceMap = {
     // "oci_database_cloud_vm_cluster": "cloud_vm_cluster",
     "oci_database_db_system": "db_system",
     // "oci_database_exadata_infrastructure": "exadata_infrastructure",
+    // "oci_dataintegration_workspace": "dataintegration_workspace",
+    "oci_datascience_notebook_session": "datascience_notebook_session",
+    "oci_datascience_project": "datascience_project",
     "oci_file_storage_export": "file_system_export",
     "oci_file_storage_export_set": "file_system_export_set",
     "oci_file_storage_file_system": "file_system",
     "oci_file_storage_mount_target": "mount_target",
+    "oci_integration_integration_instance": "integration_instance",
     "oci_identity_compartment": "compartment",
     "oci_identity_dynamic_group": "dynamic_group",
     "oci_identity_group": "group",
@@ -67,7 +71,9 @@ export const resourceMap: OcdResourceMap = {
     "oci_nosql_index": "nosql_index",
     "oci_nosql_table": "nosql_table",
     "oci_objectstorage_bucket": "bucket",
-    "oci_vault_secret": "secret"
+    // "oci_oda_oda_instance": "oda_instance",
+    "oci_vault_secret": "secret",
+    // "oci_visual_builder_vb_instance": "visual_builder_instance"
 }
 
 export const dataMap: OcdResourceMap = {
@@ -106,14 +112,14 @@ export const resourceAttributes: OcdIncludedElements = {
     "oci_bastion_bastion": [
         "bastion_type",
         "client_cidr_block_allow_list",
-        "dns_proxy_status",
+        // "dns_proxy_status",
         "max_session_ttl_in_seconds",
         "name",
-        "phone_book_entry",
-        "private_endpoint_ip_address",
-        "static_jump_host_ip_addresses",
+        // "phone_book_entry",
+        // "private_endpoint_ip_address",
+        // "static_jump_host_ip_addresses",
         "target_subnet_id",
-        "target_vcn_id",
+        // "target_vcn_id",
     ],
     "oci_containerengine_cluster": [
         "available_kubernetes_upgrades",
@@ -633,6 +639,20 @@ export const resourceAttributes: OcdIncludedElements = {
         "db_home.database.vault_id",
     ],
     "oci_database_exadata_infrastructure": [],
+    "oci_datascience_notebook_session": [
+        "project_id",
+        "notebook_session_url",
+        "notebook_session_config_details",
+        "notebook_session_config_details.shape",
+        "notebook_session_config_details.block_storage_size_in_gbs",
+        "notebook_session_config_details.subnet_id",
+        "notebook_session_config_details.notebook_session_shape_config_details",
+        "notebook_session_config_details.notebook_session_shape_config_details.memory_in_gbs",
+        "notebook_session_config_details.notebook_session_shape_config_details.ocpus",
+    ],
+    "oci_datascience_project": [
+        "description"
+    ],
     "oci_file_storage_export": [
         "export_set_id",
         "file_system_id",
@@ -703,9 +723,19 @@ export const resourceAttributes: OcdIncludedElements = {
         "group_id",
         "user_id"
     ],
+    "oci_integration_integration_instance": [
+        "consumption_model",
+        "integration_instance_type",
+        "idcs_at",
+        "is_byol",
+        "is_file_server_enabled",
+        "is_visual_builder_enabled",
+        "message_packs",
+        "shape",
+    ],
     "oci_kms_key": [
         "display_name",
-        "is_primary",
+        // "is_primary",
         "management_endpoint",
         "protection_mode",
         "vault_id",
@@ -874,14 +904,14 @@ export const resourceAttributes: OcdIncludedElements = {
     "oci_vault_secret": [
         "description",
         "key_id",
-        "last_rotation_time",
-        "next_rotation_time",
-        "rotation_status",
+        // "last_rotation_time",
+        // "next_rotation_time",
+        // "rotation_status",
         "secret_name",
         "vault_id",
         "secret_content",
         "secret_content.content",
         "secret_content.content_type",
-        "secret_content.name",
+        // "secret_content.name",
     ],
 }

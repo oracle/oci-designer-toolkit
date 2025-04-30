@@ -18,6 +18,14 @@ export namespace OciSecretConfigs {
                 },
                 configs: []
             },
+            {
+                id: 'secret_content.content_type',
+                properties: {},
+                configs: [],
+                options: [
+                    {id: 'BASE64', displayName: 'Base64'},
+                ]
+            },
         ]
     }
 }

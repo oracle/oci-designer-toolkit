@@ -7,5 +7,18 @@ import { ResourceElementConfig } from "../../../../OcdPropertyTypes"
 import { OciCommonConfigs } from "../../OciCommonConfigs"
 
 export namespace OciVaultConfigs {
-    export function configs(): ResourceElementConfig[] {return [...OciCommonConfigs.configs()]}
+    export function configs(): ResourceElementConfig[] {
+        return [
+            ...OciCommonConfigs.configs(),
+            {
+                id: 'vault_type',
+                properties: {},
+                configs: [],
+                options: [
+                    {id: 'DEFAULT', displayName: 'Default'},
+                    {id: 'VIRTUAL_PRIVATE', displayName: 'Virtual Private Vault'},
+                ]
+            },
+        ]
+    }
 }
