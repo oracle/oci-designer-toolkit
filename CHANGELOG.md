@@ -1,6 +1,14 @@
 # Release Notes
 
 
+## Version 0.69.1
+**Release Date**: 7th May 2025
+### Features
+### Bug Fixes
+1. OKIT-Classic: (#757) Update App directory name from okitweb to okitserver
+2. Docs: (#749) Fix links to desktop apps in README
+
+
 ## Version 0.69.0
 **Release Date**: 30th April 2025
 ### BREAKING CHANGE
