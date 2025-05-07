@@ -12,7 +12,7 @@ LABEL "provider"="Oracle" \
 # SHELL ["/bin/bash", "-c"]
 ENV PYTHONIOENCODING=utf8 \
     PYTHONPATH=":/okit/modules:/okit/okitserver:/okit" \
-    FLASK_APP=okitweb \
+    FLASK_APP=okitserver \
     FLASK_DEBUG=1 \
     LANG=en_GB.UTF-8 \
     LANGUAGE=en_GB:en \
@@ -23,9 +23,6 @@ ENV PYTHONIOENCODING=utf8 \
 # Expose Ports
 EXPOSE 80
 EXPOSE 443
-# Copy source code
-# COPY containers/oci/* /root/.oci/
-# COPY containers/docker/run-server.sh /root/bin/
 # Install new yum repos
 RUN yum install -y \
     oraclelinux-developer-release-el8 \
