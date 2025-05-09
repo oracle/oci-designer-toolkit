@@ -312,8 +312,7 @@ const OcdConsoleBody = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, se
 }
 
 const OcdConsoleFooter = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument }: ConsolePageProps): JSX.Element => {
-    const {activeFile, setActiveFile} = useContext(ActiveFileContext)
-    const {ocdCache, setOcdCache} = useContext(CacheContext)
+    const {activeFile} = useContext(ActiveFileContext)
     const filenameClass = `${activeFile.modified ? 'ocd-design-modified ocd-active-file-modified-icon' : ''}`
     return (
         <div className='ocd-console-footer ocd-console-footer-theme'>
