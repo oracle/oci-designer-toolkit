@@ -14,9 +14,11 @@ import * as azureResources from './properties/provider/azure/resources'
 import * as googleResources from './properties/provider/google/resources'
 import { RgbaStringColorPicker } from 'react-colorful'
 import Markdown from 'react-markdown'
-import { CacheContext, SelectedResourceContext } from '../pages/OcdConsole'
+import { SelectedResourceContext } from '../pages/OcdConsole'
+// import { CacheContext, SelectedResourceContext } from '../pages/OcdConsole'
 import { OciDefinedTagRow, OciFreeformTagRow } from '../pages/OcdCommonTags'
 import { OcdCacheData } from './OcdCache'
+import { useCache } from '../contexts/OcdCacheContext'
 
 const getResourceTabs = (modelId: string, coordsId: string): string[] => {
     const tabs = [
@@ -163,8 +165,10 @@ const getResourceProperties = (selectedModelResource: OcdResource) => {
 }
 
 const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
-    const {ocdCache} = useContext(CacheContext)
+    // const {ocdCache} = useContext(CacheContext)
     // const {selectedResource } = useContext(SelectedResourceContext)
+    const ocdCache = useCache()
+    console.debug(`>>> OcdProperies: OcdResourceProperties: Render(): Using Cache`, ocdCache)
     const selectedModelResource: OcdResource = ocdDocument.getSelectedResource()
     const selectedModelResourceProxy: OcdResource = useMemo(() => getSelectedResourceProxy(ocdDocument, selectedModelResource, ocdCache), [selectedModelResource])
     const ResourceProperties = useMemo(() => getResourceProperties(selectedModelResource), [selectedModelResource])
@@ -187,8 +191,9 @@ const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourcePr
 
 const OcdResourceTags = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
     const {selectedResource } = useContext(SelectedResourceContext)
-    const {ocdCache} = useContext(CacheContext)
+    // const {ocdCache} = useContext(CacheContext)
     // const selectedModelResource: OcdResource = ocdDocument.getSelectedResource()
+    const ocdCache = useCache()
     const selectedModelResource: OcdResource = ocdDocument.getResource(selectedResource.modelId)
     console.debug('OcdProperties: OcdResourceTags: selectedResource', selectedResource, '\nselectedModelResource', selectedModelResource)
     // const selectedResourceProxy = getSelectedResourceProxy(ocdDocument, selectedModelResource, ocdCache)

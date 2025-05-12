@@ -12,6 +12,8 @@ export const CacheDispatchContext = createContext<Dispatch<CacheReducerAction>>(
 export type CacheReducerAction = {
     type: string
     cache: OcdCacheData
+    profile?: string
+    region?: string
 }
 
 export function CacheProvider({ children }: Readonly<{children: JSX.Element | JSX.Element[]}>): JSX.Element {
@@ -44,12 +46,24 @@ export function useCacheDispatch() {
 }
 
 function cacheReducer(cache: OcdCacheData, action: CacheReducerAction) {
+    console.debug('OcdCacheContext: cacheReducer: cache', cache)
+    console.debug('OcdCacheContext: cacheReducer: action', action)
     switch (action.type) {
         case 'new': {
             return OcdCacheData.new()
         }
         case 'updated': {
             return action.cache
+        }
+        case 'setProfile': {
+            const clone = OcdCacheData.clone(cache)
+            clone.cache.profile = action.profile ?? ''
+            return clone
+        }
+        case 'setRegion': {
+            const clone = OcdCacheData.clone(cache)
+            clone.cache.region = action.region ?? ''
+            return clone
         }
         default: {
             throw Error(`Unknown action: ${action.type}`)

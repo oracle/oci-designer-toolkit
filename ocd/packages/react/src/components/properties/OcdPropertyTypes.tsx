@@ -7,7 +7,9 @@ import { OcdResource } from '@ocd/model'
 import { OcdUtils } from '@ocd/core'
 import { OcdDocument } from '../OcdDocument'
 import { useContext, useEffect, useId, useMemo, useState } from 'react'
-import { ActiveFileContext, CacheContext } from '../../pages/OcdConsole'
+import { ActiveFileContext } from '../../pages/OcdConsole'
+import { useCache } from '../../contexts/OcdCacheContext'
+// import { ActiveFileContext, CacheContext } from '../../pages/OcdConsole'
 
 export interface ResourcePropertyCondition extends OcdUtils.ResourcePropertyCondition {}
 
@@ -390,7 +392,8 @@ export const OcdStaticLookupProperty = ({ ocdDocument, setOcdDocument, resource,
 export const OcdCacheLookupProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute, rootResource }: ResourceProperty): JSX.Element => {
     console.debug('OcdPropertyTypes: OcdCacheLookupProperty', config, attribute, resource)
     const {activeFile} = useContext(ActiveFileContext)
-    const {ocdCache} = useContext(CacheContext)
+    // const {ocdCache} = useContext(CacheContext)
+    const ocdCache = useCache()
     const [value, setValue]= useState(resource[attribute.key])
     const properties = config && config.properties ? config.properties : {}
     // const id = `${rootResource.id.replace(/\W+/g, "")}_${attribute.id.replace(/\W+/g, "")}`

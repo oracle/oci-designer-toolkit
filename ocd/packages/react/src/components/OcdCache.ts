@@ -9,7 +9,7 @@ import { OcdCacheFacade } from "../facade/OcdCacheFacade"
 
 export interface OcdCacheEntry extends Record <string, any> {}
 
-export interface OcdCacheRegionData extends Record <string, OcdCacheEntry[] | OcdCacheEntry> {}
+export interface OcdCacheRegionData extends Record <string, OcdCacheEntry[]> {}
 
 export interface OcdCacheProfileData extends Record <string, OcdCacheRegionData> {}
 
@@ -17,6 +17,22 @@ export interface OcdCache {
     profile: string,
     region: string,
     dropdownData: Record<string, OcdCacheProfileData>
+}
+
+export namespace OcdCache {
+    export function getOciReferenceDataList(cache: OcdCache, resource: string, profile?: string, region?: string): OcdCacheEntry[] {
+        console.debug('OcdCache: getOciReferenceDataList:', resource, profile, region)
+        if (profile === undefined || !Object.hasOwn(cache.dropdownData, profile)) {
+            profile = 'shipped'
+            region = 'all'
+        }
+        if (region === undefined || !Object.hasOwn(cache.dropdownData[profile], region)) {
+            profile = 'shipped'
+            region = 'all'
+        }
+        console.debug('OcdCache: getOciReferenceDataList:', resource, profile, region, cache.dropdownData[profile][region])
+        return Object.hasOwn(cache.dropdownData[profile][region], resource) ? cache.dropdownData[profile][region][resource] : []
+    }
 }
 
 export class OcdCacheData {

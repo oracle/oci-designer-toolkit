@@ -27,13 +27,15 @@ import { buildDetails } from '../data/OcdBuildDetails'
 import OcdHelp from './OcdHelp'
 import OcdCommonTags from './OcdCommonTags'
 import { OcdReferenceDataQueryDialog } from '../components/dialogs/OcdReferenceDataQueryDialog'
-import { OcdActiveFileContext, OcdCacheContext, OcdConsoleConfigContext, OcdDialogContext, OcdDocumentContext, OcdDragResourceContext, OcdSelectedResourceContext } from './OcdConsoleContext'
+import { OcdActiveFileContext, OcdConsoleConfigContext, OcdDialogContext, OcdDocumentContext, OcdDragResourceContext, OcdSelectedResourceContext } from './OcdConsoleContext'
+// import { OcdActiveFileContext, OcdCacheContext, OcdConsoleConfigContext, OcdDialogContext, OcdDocumentContext, OcdDragResourceContext, OcdSelectedResourceContext } from './OcdConsoleContext'
 import { OcdExportToResourceManagerDialog } from '../components/dialogs/OcdExportToResourceManagerDialog'
+import { CacheProvider, useCache, useCacheDispatch } from '../contexts/OcdCacheContext'
 
 export const ThemeContext = createContext<string>('')
 export const ActiveFileContext = createContext<OcdActiveFileContext>({activeFile: {name: '', modified: false}, setActiveFile: () => {}})
 export const ConsoleConfigContext = createContext<OcdConsoleConfigContext>({ocdConsoleConfig: OcdConsoleConfig.new(), setOcdConsoleConfig: () => {}})
-export const CacheContext = createContext<OcdCacheContext>({ocdCache: OcdCacheData.new(), setOcdCache: () => {}})
+// export const CacheContext = createContext<OcdCacheContext>({ocdCache: OcdCacheData.new(), setOcdCache: () => {}})
 export const DocumentContext = createContext<OcdDocumentContext>({ocdDocument: OcdDocument.new(), setOcdDocument: () => {}})
 export const SelectedResourceContext = createContext<OcdSelectedResourceContext>({selectedResource: OcdDocument.newSelectedResource(), setSelectedResource: () => {}})
 export const DragResourceContext = createContext<OcdDragResourceContext>({dragResource: OcdDocument.newDragResource(), setDragResource: () => {}})
@@ -94,7 +96,8 @@ export const OcdConsole = (): JSX.Element => {
     return (
         <ConsoleConfigContext.Provider value={consoleConfigContext}>
             <ActiveFileContext.Provider value={activeFileContext}>
-                <CacheContext.Provider value={cacheContext}>
+                <CacheProvider>
+                {/* <CacheContext.Provider value={cacheContext}> */}
                     <DocumentContext.Provider value={documentContext}>
                         <SelectedResourceContext.Provider value={selectedResourceContext}>
                             <div className='ocd-console'>
@@ -105,7 +108,8 @@ export const OcdConsole = (): JSX.Element => {
                             </div>
                         </SelectedResourceContext.Provider>
                     </DocumentContext.Provider>
-                </CacheContext.Provider>
+                {/* </CacheContext.Provider> */}
+                </CacheProvider>
             </ActiveFileContext.Provider>
         </ConsoleConfigContext.Provider>
     )
@@ -335,11 +339,18 @@ const OcdConsoleFooter = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, 
 }
 
 const OcdCachePicker = (): JSX.Element => {
-    const {ocdCache, setOcdCache} = useContext(CacheContext)
+    // const {ocdCache, setOcdCache} = useContext(CacheContext)
+    const ocdCache = useCache()
+    const setOcdCache = useCacheDispatch()
     const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         ocdCache.cache.profile = e.target.value
-        setOcdCache(OcdCacheData.clone(ocdCache))
-        ocdCache.saveCache()
+        // setOcdCache(OcdCacheData.clone(ocdCache))
+        setOcdCache({
+            type: 'setRegion',
+            cache: ocdCache,
+            region: e.target.value
+        })
+    ocdCache.saveCache()
     }
     return (
         <div className='ocd-cache-picker'>
