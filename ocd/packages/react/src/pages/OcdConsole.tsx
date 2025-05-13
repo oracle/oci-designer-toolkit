@@ -45,12 +45,12 @@ export const OcdConsole = (): JSX.Element => {
     // State Variables
     const [ocdDocument, setOcdDocument] = useState(OcdDocument.new())
     const [ocdConsoleConfig, setOcdConsoleConfig] = useState(OcdConsoleConfig.new())
-    const [ocdCache, setOcdCache] = useState(OcdCacheData.new())
+    // const [ocdCache, setOcdCache] = useState(OcdCacheData.new())
     const [activeFile, setActiveFile] = useState({name: '', modified: false})
     const [selectedResource, setSelectedResource] = useState({} as OcdSelectedResource)
     // Memo Hooks
     const activeFileContext = useMemo(() => ({activeFile, setActiveFile}), [activeFile])
-    const cacheContext = useMemo(() => ({ocdCache, setOcdCache}), [ocdCache])
+    // const cacheContext = useMemo(() => ({ocdCache, setOcdCache}), [ocdCache])
     const consoleConfigContext = useMemo(() => ({ocdConsoleConfig, setOcdConsoleConfig}), [ocdConsoleConfig])
     const documentContext = useMemo(() => ({ocdDocument, setOcdDocument}), [ocdDocument])
     const selectedResourceContext = useMemo(() => ({selectedResource, setSelectedResource}), [selectedResource])
@@ -76,23 +76,23 @@ export const OcdConsole = (): JSX.Element => {
         })
     }, []) // Empty Array to only run on initial render
     // Load the Dropdown Resource Cache
-    useEffect(() => {
-        ocdCache.loadCache().then((results) => {
-            console.debug('OcdConsole: useEffect: loadCache:', ocdCache)
-        })
-    }, []) // Empty Array to only run on initial render
+    // useEffect(() => {
+    //     ocdCache.loadCache().then((results) => {
+    //         console.debug('OcdConsole: useEffect: loadCache:', ocdCache)
+    //     })
+    // }, []) // Empty Array to only run on initial render
     const setAndSaveOcdConsoleConfig = (consoleConfig: OcdConsoleConfig) => {
         OcdConfigFacade.saveConsoleConfig(consoleConfig.config).then((results) => {}).catch((response) => console.debug('OcdConsole:', response))
         // OcdConfigFacade.saveConsoleConfig(consoleConfig.config).then((results) => {console.debug('OcdConsole: Saved Config')}).catch((response) => console.debug('OcdConsole:', response))
         setOcdConsoleConfig(consoleConfig)
     }
-    const setAndSaveOcdCache = (cacheData: OcdCacheData) => {
-        OcdCacheFacade.saveCache(cacheData.cache).then((results) => {}).catch((response) => console.debug('OcdConsole:', response))
-        // OcdCacheFacade.saveCache(cacheData.cache).then((results) => {console.debug('OcdConsole: Saved Cache')}).catch((response) => console.debug('OcdConsole:', response))
-        setOcdCache(cacheData)
-    }
+    // const setAndSaveOcdCache = (cacheData: OcdCacheData) => {
+    //     OcdCacheFacade.saveCache(cacheData.cache).then((results) => {}).catch((response) => console.debug('OcdConsole:', response))
+    //     // OcdCacheFacade.saveCache(cacheData.cache).then((results) => {console.debug('OcdConsole: Saved Cache')}).catch((response) => console.debug('OcdConsole:', response))
+    //     setOcdCache(cacheData)
+    // }
     console.debug('OcdConsole: Console Config', ocdConsoleConfig)
-    console.debug('OcdConsole: Dropdown Cache', ocdCache)
+    // console.debug('OcdConsole: Dropdown Cache', ocdCache)
     return (
         <ConsoleConfigContext.Provider value={consoleConfigContext}>
             <ActiveFileContext.Provider value={activeFileContext}>
