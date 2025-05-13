@@ -5691,8 +5691,12 @@
             "required": false,
             "label": "Icmp Options",
             "id": "egress_security_rules.icmp_options",
-            "conditional": false,
-            "condition": {},
+            "conditional": true,
+            "condition": {
+              "element": "protocol",
+              "operator": "eq",
+              "value": "1"
+            },
             "attributes": {
               "code": {
                 "provider": "oci",
@@ -5739,8 +5743,12 @@
             "required": false,
             "label": "Tcp Options",
             "id": "egress_security_rules.tcp_options",
-            "conditional": false,
-            "condition": {},
+            "conditional": true,
+            "condition": {
+              "element": "protocol",
+              "operator": "eq",
+              "value": "6"
+            },
             "attributes": {
               "max": {
                 "provider": "oci",
@@ -5835,8 +5843,12 @@
             "required": false,
             "label": "Udp Options",
             "id": "egress_security_rules.udp_options",
-            "conditional": false,
-            "condition": {},
+            "conditional": true,
+            "condition": {
+              "element": "protocol",
+              "operator": "eq",
+              "value": "17"
+            },
             "attributes": {
               "max": {
                 "provider": "oci",
@@ -6030,8 +6042,12 @@
             "required": false,
             "label": "Icmp Options",
             "id": "ingress_security_rules.icmp_options",
-            "conditional": false,
-            "condition": {},
+            "conditional": true,
+            "condition": {
+              "element": "protocol",
+              "operator": "eq",
+              "value": "1"
+            },
             "attributes": {
               "code": {
                 "provider": "oci",
@@ -6078,8 +6094,12 @@
             "required": false,
             "label": "Tcp Options",
             "id": "ingress_security_rules.tcp_options",
-            "conditional": false,
-            "condition": {},
+            "conditional": true,
+            "condition": {
+              "element": "protocol",
+              "operator": "eq",
+              "value": "6"
+            },
             "attributes": {
               "max": {
                 "provider": "oci",
@@ -6174,8 +6194,12 @@
             "required": false,
             "label": "Udp Options",
             "id": "ingress_security_rules.udp_options",
-            "conditional": false,
-            "condition": {},
+            "conditional": true,
+            "condition": {
+              "element": "protocol",
+              "operator": "eq",
+              "value": "17"
+            },
             "attributes": {
               "max": {
                 "provider": "oci",

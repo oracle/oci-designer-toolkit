@@ -85,17 +85,32 @@ export const conditionalElements: OcdConditionalElements = {
         }
     },
     "oci_core_security_list": {
-        "icmp_options": {
+        "egress_security_rules.icmp_options": {
             "element": "protocol",
             "operator": "eq",
             "value": "1"
         },
-        "tcp_options": {
+        "egress_security_rules.tcp_options": {
             "element": "protocol",
             "operator": "eq",
             "value": "6"
         },
-        "udp_options": {
+        "egress_security_rules.udp_options": {
+            "element": "protocol",
+            "operator": "eq",
+            "value": "17"
+        },
+        "ingress_security_rules.icmp_options": {
+            "element": "protocol",
+            "operator": "eq",
+            "value": "1"
+        },
+        "ingress_security_rules.tcp_options": {
+            "element": "protocol",
+            "operator": "eq",
+            "value": "6"
+        },
+        "ingress_security_rules.udp_options": {
             "element": "protocol",
             "operator": "eq",
             "value": "17"
