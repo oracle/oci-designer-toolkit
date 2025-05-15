@@ -3,7 +3,7 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import React, { createContext, Dispatch, useContext, useReducer } from 'react'
+import { createContext, Dispatch, useContext, useReducer } from 'react'
 import { OcdActiveFile } from '../types/Console'
 
 export const newActiveFile = () => {return {name: '', modified: false}}

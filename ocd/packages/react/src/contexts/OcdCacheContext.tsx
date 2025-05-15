@@ -3,14 +3,13 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import React, { createContext, Dispatch, useContext, useEffect, useReducer } from 'react'
+import { createContext, Dispatch, useContext, useEffect, useReducer } from 'react'
 import { OcdCacheData } from "../components/OcdCache"
 
 export const CacheContext = createContext<OcdCacheData>(OcdCacheData.new())
 export const CacheDispatchContext = createContext<Dispatch<CacheReducerAction>>(() => {})
-// export const CacheDispatchContext = createContext<OcdCacheContext>({ocdCache: OcdCacheData.new(), setOcdCache: () => {}})
 export type CacheReducerAction = {
-    type: string
+    type: 'new' | 'updated' | 'setRegion' | 'setProfile'
     cache: OcdCacheData
     profile?: string
     region?: string
