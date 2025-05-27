@@ -1,6 +1,6 @@
 {
   "name": "@ocd/parser",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "OKIT Open Cloud Designer Parser Module",
   "title": "OKIT Open Cloud Designer Parser Module",
   "author": {
@@ -48,6 +48,6 @@
     "build": "npm run compile && npm run pack"
   },
   "peerDependencies": {
-    "@ocd/core": ">=0.2.8"
+    "@ocd/core": ">=0.2.9"
   }
 }

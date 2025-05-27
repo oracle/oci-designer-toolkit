@@ -4,7 +4,6 @@
 */
 
 import { OcdResource } from "@ocd/model"
-import { TerraformJson } from "@ocd/parser"
 
 export class OcdResourceBuilder {
     resourceMap: Map<string, string>

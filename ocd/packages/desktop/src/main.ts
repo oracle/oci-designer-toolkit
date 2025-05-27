@@ -9,6 +9,7 @@ import path from 'path'
 import url from 'url'
 import fs from 'fs'
 import common from 'oci-common'
+import { OcdUtils } from '@ocd/core' 
 import { OciQuery, OciReferenceDataQuery, OciResourceManagerQuery } from '@ocd/query'
 import { OcdDesign, OcdResource, OciModelResources } from '@ocd/model'
 import { OcdCache, OcdConsoleConfiguration } from '@ocd/react'
@@ -223,7 +224,7 @@ const createWindow = () => {
 	// mainWindow.setMenu(null)
 	// and load the index.html of the app.
 	const startUrl =
-		process.env.WEB_URL || MAIN_WINDOW_VITE_DEV_SERVER_URL ||
+		process.env.WEB_URL ?? MAIN_WINDOW_VITE_DEV_SERVER_URL ??
 		url.format({
 			pathname: path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`),
 			protocol: "file",
@@ -235,7 +236,7 @@ const createWindow = () => {
     mainWindow.setFullScreen(desktopState.isFullScreen)
 
 	// Open the DevTools.
-	// mainWindow.webContents.openDevTools()
+	if (isDev) mainWindow.webContents.openDevTools()
 }
 
 app.whenReady().then(() => {
@@ -442,8 +443,9 @@ async function handleSaveDesign(event: any, design: OcdDesign | string, filename
 					properties: ['createDirectory'],
 					filters: [{name: 'Filetype', extensions: ['okit']}]
 				}).then(result => {
-					if (!result.canceled) fs.writeFileSync(result.filePath, JSON.stringify(design, null, 4))
-					resolve({canceled: false, filename: result.canceled ? '' : result.filePath, design: design})
+					const filePath = path.extname(result.filePath) === '.okit' ? result.filePath : `${result.filePath}.okit`
+					if (!result.canceled) fs.writeFileSync(filePath, JSON.stringify(design, null, 4))
+					resolve({canceled: false, filename: result.canceled ? '' : filePath, design: design})
 				}).catch(err => {
 					console.error(err)
 					reject(new Error(err))
@@ -754,9 +756,10 @@ async function handleLoadCache(event: any) {
 }
 
 async function handleSaveCache(event: any, cache: OcdCache) {
-	console.debug('Electron Main: handleSaveCache')
+	console.debug('Electron Main: handleSaveCache', cache)
 	return new Promise((resolve, reject) => {
 		try {
+			cache.saveDate = OcdUtils.now()
 			fs.writeFileSync(ocdCacheFilename, JSON.stringify(cache, null, 4))
 			resolve(cache)
 		} catch (err) {

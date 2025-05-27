@@ -303,15 +303,15 @@ export const menuItems: MenuItem[] = [
                             }).catch((resp) => {console.warn('Save Design Failed with', resp)})
                         }
                     },
-                    {
-                        label: 'Resource Manager',
-                        click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
-                            const clone = OcdDocument.clone(ocdDocument)
-                            clone.dialog.resourceManager = true
-                            console.debug('Menu: Setting Resource Manager', ocdDocument, clone)
-                            setOcdDocument(clone)
-                        }
-                    },
+                    // {
+                    //     label: 'Resource Manager',
+                    //     click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
+                    //         const clone = OcdDocument.clone(ocdDocument)
+                    //         clone.dialog.resourceManager = true
+                    //         console.debug('Menu: Setting Resource Manager', ocdDocument, clone)
+                    //         setOcdDocument(clone)
+                    //     }
+                    // },
                     {
                         label: 'Excel',
                         click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {

@@ -1,20 +1,20 @@
 [![License: UPL](https://img.shields.io/badge/license-UPL-green)](https://img.shields.io/badge/license-UPL-green) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=oracle_oci-designer-toolkit&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=oracle_oci-designer-toolkit)
-# Oracle Cloud Infrastructure Designer and Visualisation Toolkit [0.68.0](CHANGELOG.md#version-0.68.0)
+# Oracle Cloud Infrastructure Designer and Visualisation Toolkit [0.69.1](CHANGELOG.md#version-0.69.1)
 
-Full Release Details Can Found [0.68.0 Release](https://github.com/oracle/oci-designer-toolkit/releases/tag/v0.68.0).
-
-
+Full Release Details Can Found [0.69.1 Release](https://github.com/oracle/oci-designer-toolkit/releases/tag/v0.69.1).
 
 
 
-## OKIT Desktop (OCD) [0.2.8](CHANGELOG.md#version-0.68.0)
+
+
+## OKIT Desktop (OCD) [0.2.9](CHANGELOG.md#version-0.69.1)
 
 OKIT Desktop is the next generation implementation of the OKIT Classic design tool that takes the concepts within OKIT Classic and re-implements them within
 an Electron based desktop application, providing native installs for Mac, Windows and Linux.
 
-**OKIT Desktop** Public Beta is now Available see [0.68.0 Release](https://github.com/oracle/oci-designer-toolkit/releases/tag/v0.68.0) for details.
+**OKIT Desktop** Public Beta is now Available see [0.69.1 Release](https://github.com/oracle/oci-designer-toolkit/releases/tag/v0.69.1) for details.
 
-The OKIT Desktop provides the user with a fully freeform Drag & Drop canvas with the ability to create multiple pages to represent the same design in alternative formats, as seen below. As with the OKIT Classic the properties of resources can be editted within the properties panel along with the ability to add detailed description of each resource, if required. The OKIT Desktop will provide feature compatability with the OKIT Classic allowing the user multiple views of the design information:
+The OKIT Desktop provides the user with a fully freeform Drag & Drop canvas with the ability to create multiple pages to represent the same design in alternative formats, as seen below. As with the OKIT Classic the properties of resources can be editted within the properties panel along with the ability to add detailed description of each resource, if required. The OKIT Desktop will provide feature compatibility with the OKIT Classic allowing the user multiple views of the design information:
 
 - Views
     - Design
@@ -39,7 +39,7 @@ Importing the design will allow the following options
         - OCI
     - Terraform
 
-The OKIT Desktop release is also preparing for Multi-Cloud implementation of Oracle database and will be extended to include Azure, Google and AWS. This is currently Alpha release and hence limitted in it's functionality.
+The OKIT Desktop release is also preparing for Multi-Cloud implementation of Oracle database and will be extended to include Azure, Google and AWS. This is currently Alpha release and hence limited in its functionality.
 
 ### Traditional Design
 ![Ocd Desktop](https://github.com/oracle/oci-designer-toolkit/blob/master/ocd/images/OcdDesktop3.png)
@@ -48,15 +48,15 @@ The OKIT Desktop release is also preparing for Multi-Cloud implementation of Ora
 
 ### Installation
 OKIT Desktop is the next iteration of OKIT and is currently available as a Beta release. 
-The native installables can be found in the Assets section on the [0.68.0 Release](https://github.com/oracle/oci-designer-toolkit/releases/tag/v0.68.0).
+The native installables can be found in the Assets section on the [0.69.1 Release](https://github.com/oracle/oci-designer-toolkit/releases/tag/v0.69.1).
 1. MacOS
-    1. [Arm dmg](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.68.0/ocd-0.2.7-arm64.dmg)
-    2. [x64 dmg](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.68.0/ocd-0.2.7-x64.dmg)
+    1. [Arm dmg](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.69.1/ocd-0.2.9-arm64.dmg)
+    2. [x64 dmg](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.69.1/ocd-0.2.9-x64.dmg)
 2. Windows
-    1. [Setup](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.68.0/ocd-0.2.7-Setup.exe)
+    1. [Setup](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.69.1/ocd-0.2.9-Setup.exe)
 3. Linux
-    1. [rpm](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.68.0/ocd-0.2.7-1.x86_64.rpm)
-    2. [deb](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.68.0/ocd_0.2.7_amd64.deb)
+    1. [rpm](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.69.1/ocd-0.2.9-1.x86_64.rpm)
+    2. [deb](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.69.1/ocd_0.2.9_amd64.deb)
 
 At present the binaries are unsigned so on Mac and Windows you will specifically need to authorise the first run.
 
@@ -67,7 +67,7 @@ xattr -d com.apple.quarantine /Applications/ocd.app
 
 
 
-## OKIT Classic [0.68.0](CHANGELOG.md#version-0.68.0)
+## OKIT Classic [0.69.1](CHANGELOG.md#version-0.69.1)
 
 OKIT Classic is the original browser based tool that allows the user to [design](https://www.ateam-oracle.com/introduction-to-okit-the-oci-designer-toolkit), 
 [deploy](https://www.ateam-oracle.com/introduction-to-okit-the-oci-designer-toolkit) and visualise ([introspect/query](https://www.ateam-oracle.com/the-oci-designer-toolkit-query-feature)) 
@@ -99,10 +99,10 @@ OCI environments through a graphical web based interface.
     web interface, to provide a portable generic json file, that can be used to visualise existing systems or generate terraform/ansible.
 
 ### Installation
-Detailed OKIT Installation steps can be found in the [OCI Designer Toolkit Installation Guide](documentation/Installation.md).
-1. [MacOS](documentation/Installation.md#macos)
-2. [Windows 10 / WSL (Ubuntu)](documentation/Installation.md#windows-10--wsl-ubuntu)
-3. [Oracle Linux](documentation/Installation.md#oracle-linux-ol8)
+Detailed OKIT Installation steps can be found in the [OCI Designer Toolkit Installation Guide](okitclassic/documentation/Installation.md).
+1. [MacOS](okitclassic/documentation/Installation.md#macos)
+2. [Windows 10 / WSL (Ubuntu)](okitclassic/documentation/Installation.md#windows-10--wsl-ubuntu)
+3. [Oracle Linux](okitclassic/documentation/Installation.md#oracle-linux-ol8)
 
 
 
@@ -128,7 +128,7 @@ See [Releases](https://github.com/oracle/oci-designer-toolkit/releases)
 
 
 ## Usage / Examples
-The OKIT User / Usage Guide and worked examples can be found in the [OCI Designer Toolkit Usage Guide](documentation/Usage.md)
+The OKIT User / Usage Guide and worked examples can be found in the [OCI Designer Toolkit Usage Guide](okitclassic/documentation/Usage.md)
 
 
 
@@ -164,4 +164,4 @@ Released under the Universal Permissive License v1.0 as shown at
 <https://oss.oracle.com/licenses/upl/>.
 
 
-If you would like to extend OKIT the development documentation can be found in [OCI Designer Toolkit Development Guide](documentation/Development.md)
+If you would like to extend OKIT the development documentation can be found in [OCI Designer Toolkit Development Guide](okitclassic/documentation/Development.md)

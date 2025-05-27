@@ -139,7 +139,6 @@ export class TerraformLexer {
 
     #readIdentifier(): string {
         const start = this.position
-        // while (this.#charIsLetter()) {
         while (this.#charIsExtendedAlphaNumeric()) {
             this.#advanceChar()
         }

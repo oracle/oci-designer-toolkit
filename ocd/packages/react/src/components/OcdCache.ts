@@ -19,6 +19,22 @@ export interface OcdCache {
     dropdownData: Record<string, OcdCacheProfileData>
 }
 
+export namespace OcdCache {
+    export function getOciReferenceDataList(cache: OcdCache, resource: string, profile?: string, region?: string): OcdCacheEntry[] | OcdCacheEntry {
+        console.debug('OcdCache: getOciReferenceDataList:', resource, profile, region)
+        if (profile === undefined || !Object.hasOwn(cache.dropdownData, profile)) {
+            profile = 'shipped'
+            region = 'all'
+        }
+        if (region === undefined || !Object.hasOwn(cache.dropdownData[profile], region)) {
+            profile = 'shipped'
+            region = 'all'
+        }
+        console.debug('OcdCache: getOciReferenceDataList:', resource, profile, region, cache.dropdownData[profile][region])
+        return Object.hasOwn(cache.dropdownData[profile][region], resource) ? cache.dropdownData[profile][region][resource] : []
+    }
+}
+
 export class OcdCacheData {
     cache: OcdCache
     constructor (cache: any = undefined) {
@@ -69,8 +85,16 @@ export class OcdCacheData {
     loadCache(): Promise<any> {
         return OcdCacheFacade.loadCache().then((results) => {
             this.cache = results
-            this.cache.dropdownData.shipped = defaultCache.dropdownData.shipped
-            this.saveCache()
+            const shippedCacheAsString = JSON.stringify(defaultCache.dropdownData.shipped)
+            const localCacheAsString = JSON.stringify(this.cache.dropdownData.shipped)
+            const defaultCacheAsString = JSON.stringify(defaultCache.dropdownData.shipped)
+            if (localCacheAsString.localeCompare(defaultCacheAsString) !== 0) {
+                console.debug('OcdCacheData: Shipped/Default Cache differs from local Cache')
+                this.cache.dropdownData.shipped = JSON.parse(shippedCacheAsString)
+                this.saveCache()
+            } else {
+                console.debug('OcdCacheData: Shipped/Default Cache same as local Cache')
+            }
         }).catch((response) => {
             this.cache = this.newCache()
             this.saveCache()
@@ -81,11 +105,11 @@ export class OcdCacheData {
         return OcdCacheFacade.saveCache(this.cache).then((results) => {}).catch((response) => console.debug('OcdCacheData:', response))
     }
 
-    getOciReferenceDataList(resource: string, profile?: string , region?: string) {
-        console.debug('OcdCacheData: getOciReferenceDataList:', resource, profile, region)
-        if (profile === undefined) profile = this.cache.profile
-        if (region === undefined) region = this.cache.region
-        console.debug('OcdCacheData: getOciReferenceDataList:', resource, profile, region)
+    getOciReferenceDataList(resource: string, profile?: string, region?: string) {
+        console.debug('OcdCacheData: getOciReferenceDataList: Passed Data:', resource, profile, region)
+        profile ??= this.cache.profile
+        region ??= this.cache.region
+        console.debug('OcdCacheData: getOciReferenceDataList: Using:', resource, profile, region)
         if (profile === undefined || !Object.hasOwn(this.cache.dropdownData, profile)) {
             profile = 'shipped'
             region = 'all'
@@ -94,8 +118,7 @@ export class OcdCacheData {
             profile = 'shipped'
             region = 'all'
         }
-        // console.debug('OcdCacheData: getOciReferenceDataList:', resource, profile, region)
-        console.debug('OcdCacheData: getOciReferenceDataList:', resource, profile, region, this.cache.dropdownData[profile][region])
+        console.debug('OcdCacheData: getOciReferenceDataList: Dropdown Data', resource, profile, region, this.cache.dropdownData[profile][region])
         return Object.hasOwn(this.cache.dropdownData[profile][region], resource) ? this.cache.dropdownData[profile][region][resource] : []
     }
 }

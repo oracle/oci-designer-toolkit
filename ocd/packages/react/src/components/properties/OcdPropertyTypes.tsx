@@ -7,7 +7,9 @@ import { OcdResource } from '@ocd/model'
 import { OcdUtils } from '@ocd/core'
 import { OcdDocument } from '../OcdDocument'
 import { useContext, useEffect, useId, useMemo, useState } from 'react'
-import { ActiveFileContext, CacheContext } from '../../pages/OcdConsole'
+import { ActiveFileContext } from '../../pages/OcdConsole'
+import { useCache } from '../../contexts/OcdCacheContext'
+// import { ActiveFileContext, CacheContext } from '../../pages/OcdConsole'
 
 export interface ResourcePropertyCondition extends OcdUtils.ResourcePropertyCondition {}
 
@@ -390,19 +392,25 @@ export const OcdStaticLookupProperty = ({ ocdDocument, setOcdDocument, resource,
 export const OcdCacheLookupProperty = ({ ocdDocument, setOcdDocument, resource, config, attribute, rootResource }: ResourceProperty): JSX.Element => {
     console.debug('OcdPropertyTypes: OcdCacheLookupProperty', config, attribute, resource)
     const {activeFile} = useContext(ActiveFileContext)
-    const {ocdCache} = useContext(CacheContext)
+    // const {ocdCache} = useContext(CacheContext)
+    const ocdCache = useCache()
+    console.debug('OcdPropertyTypes: OcdCacheLookupProperty - ocdCache:', ocdCache)
     const [value, setValue]= useState(resource[attribute.key])
-    const properties = config && config.properties ? config.properties : {}
+    const properties = config?.properties ? config.properties : {}
+    // const properties = config && config.properties ? config.properties : {}
     // const id = `${rootResource.id.replace(/\W+/g, "")}_${attribute.id.replace(/\W+/g, "")}`
-    const lookupGroups = config && config.lookupGroups ? config.lookupGroups : []
+    const lookupGroups = config?.lookupGroups ? config.lookupGroups : []
+    // const lookupGroups = config && config.lookupGroups ? config.lookupGroups : []
     const resourceType = OcdUtils.toResourceType(attribute.lookupResource)
     const baseFilter = (r: any) => r.resourceType !== resourceType || r.id !== resource.id
-    const customFilter = config && config.resourceFilter ? (r: any) => config.resourceFilter && config.resourceFilter(r, resource, rootResource) : config && config.simpleFilter ? config.simpleFilter : () => true
+    const customFilter = config?.resourceFilter ? (r: any) => config.resourceFilter && config.resourceFilter(r, resource, rootResource) : config?.simpleFilter ? config.simpleFilter : () => true
+    // const customFilter = config && config.resourceFilter ? (r: any) => config.resourceFilter && config.resourceFilter(r, resource, rootResource) : config && config.simpleFilter ? config.simpleFilter : () => true
     const resources = attribute.provider === 'oci' ? ocdCache.getOciReferenceDataList(attribute.lookupResource ? attribute.lookupResource : '').filter(customFilter).filter(baseFilter) : []
     // const resources = attribute.provider === 'oci' ? ocdDocument.getOciResourceList(attribute.lookupResource ? attribute.lookupResource : '').filter(customFilter).filter(baseFilter) : []
+    console.debug('OcdPropertyTypes: OcdCacheLookupProperty - resources:', resources)
     lookupGroups.forEach((g) => {
         if (Object.hasOwn(g, 'lookupResource')) {
-            const resourceType = OcdUtils.toResourceType(g.lookupResource) 
+            // const resourceType = OcdUtils.toResourceType(g.lookupResource) 
             g.resources = attribute.provider === 'oci' ? ocdCache.getOciReferenceDataList(g.lookupResource ? g.lookupResource : '').filter(customFilter).filter(baseFilter) : []
         } else if (Object.hasOwn(g, 'simpleFilter')) {
             g.resources = attribute.provider === 'oci' ? ocdCache.getOciReferenceDataList(attribute.lookupResource ? attribute.lookupResource : '').filter(customFilter).filter(baseFilter).filter(g.simpleFilter) : []
@@ -439,7 +447,8 @@ export const OcdStringListProperty = ({ ocdDocument, setOcdDocument, resource, c
     const id = useId()
     const {activeFile} = useContext(ActiveFileContext)
     const [value, setValue]= useState(resource[attribute.key] ? resource[attribute.key].join(',') : '')
-    const properties = config && config.properties ? config.properties : {}
+    const properties = config?.properties ? config.properties : {}
+    // const properties = config && config.properties ? config.properties : {}
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         console.debug(`OcdPropertyTypes: OcdStringListProperty: ${attribute.id} onChange(${e.target.value})`)
         setValue(e.target.value)

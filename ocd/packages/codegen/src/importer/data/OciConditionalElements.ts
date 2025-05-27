@@ -85,17 +85,32 @@ export const conditionalElements: OcdConditionalElements = {
         }
     },
     "oci_core_security_list": {
-        "icmp_options": {
+        "egress_security_rules.icmp_options": {
             "element": "protocol",
             "operator": "eq",
             "value": "1"
         },
-        "tcp_options": {
+        "egress_security_rules.tcp_options": {
             "element": "protocol",
             "operator": "eq",
             "value": "6"
         },
-        "udp_options": {
+        "egress_security_rules.udp_options": {
+            "element": "protocol",
+            "operator": "eq",
+            "value": "17"
+        },
+        "ingress_security_rules.icmp_options": {
+            "element": "protocol",
+            "operator": "eq",
+            "value": "1"
+        },
+        "ingress_security_rules.tcp_options": {
+            "element": "protocol",
+            "operator": "eq",
+            "value": "6"
+        },
+        "ingress_security_rules.udp_options": {
             "element": "protocol",
             "operator": "eq",
             "value": "17"
@@ -134,6 +149,18 @@ export const conditionalElements: OcdConditionalElements = {
             "operator": "eq",
             "value": true
         }
+    },
+    "oci_kms_key": {
+        "key_shape.curve_id": {
+            "element": "algorithm",
+            "operator": "eq",
+            "value": "ECDSA"
+        },
+        "key_shape.length": {
+            "element": "algorithm",
+            "operator": "ne",
+            "value": "ECDSA"
+        },
     },
     "oci_load_balancer_load_balancer": {
         "shape_details": {

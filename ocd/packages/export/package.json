@@ -1,6 +1,6 @@
 {
   "name": "@ocd/export",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "OKIT Open Cloud Designer Export Module",
   "title": "OKIT Open Cloud Designer Export Module",
   "author": {
@@ -42,7 +42,7 @@
     "build": "npm run compile && npm run pack"
   },
   "peerDependencies": {
-    "@ocd/core": ">=0.2.8",
-    "@ocd/model": ">=0.2.8"
+    "@ocd/core": ">=0.2.9",
+    "@ocd/model": ">=0.2.9"
   }
 }
