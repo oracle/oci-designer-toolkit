@@ -8,17 +8,17 @@ import { OcdConditionalElements } from "../../types/OcdImporterData.js";
 export const conditionalElements: OcdConditionalElements = {
     "common": {},
     "oci_core_dhcp_options": {
-        "search_domain_names": {
+        "options.search_domain_names": {
             "element": "type",
             "operator": "eq",
             "value": "SearchDomain"
         },
-        "server_type": {
+        "options.server_type": {
             "element": "type",
             "operator": "eq",
             "value": "DomainNameServer"
         },
-        "custom_dns_servers": [
+        "options.custom_dns_servers": [
             {
                 "element": "server_type",
                 "operator": "eq",
