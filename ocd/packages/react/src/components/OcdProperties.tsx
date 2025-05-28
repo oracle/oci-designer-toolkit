@@ -33,12 +33,14 @@ const getResourceTabs = (modelId: string, coordsId: string): string[] => {
 }
 
 const OcdPropertiesTabbar = ({modelId, coordsId, activeTab, setActiveTab, additionalCss}: {modelId: string, coordsId: string, activeTab: string, setActiveTab: (title: string) => void, additionalCss: Record<string, string>}): JSX.Element => {
-    console.debug('OcdPropertiesTabbar: Render', activeTab, modelId)
+    console.debug('OcdPropertiesTabbar: Render: Active Tab =', activeTab, 'ModelId = ', modelId)
     const tabs: string[] = useMemo(() => {
         return getResourceTabs(modelId, coordsId)
     }, [modelId, coordsId])
+    // const tabs = getResourceTabs(modelId, coordsId)
+    const [active, setActive] = useState(activeTab)
     // const [active, setActive] = useState(tabs.includes(activeTab) ? activeTab : 'documentation')
-    const [active, setActive] = useState('documentation')
+    // const [active, setActive] = useState('documentation')
     const tabClicked = (title: string) => {
         console.debug('OcdPropertiesTabbar: Tab Clicked', title)
         setActive(title.toLocaleLowerCase())
@@ -61,7 +63,8 @@ const OcdPropertiesTabbarTab = ({title, active, setActive, additionalCss}: {titl
 const OcdResourcePropertiesHeader = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
     const selectedResource = ocdDocument.getSelectedResource()
     const activePage = ocdDocument.getActivePage()
-    const padlock: string = selectedResource ? selectedResource.locked ? 'padlock-closed' : 'padlock-open' : 'padlock-open'
+    const padlock: string = selectedResource?.locked ? 'padlock-closed' : 'padlock-open'
+    // const padlock: string = selectedResource ? selectedResource.locked ? 'padlock-closed' : 'padlock-open' : 'padlock-open'
     const title: string = selectedResource ? `${selectedResource.resourceTypeName} (${ocdDocument.getDisplayName(ocdDocument.selectedResource.modelId)})` : `Page (${activePage.title})`
     return (
         <div className='ocd-properties-header'>
