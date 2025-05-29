@@ -34,12 +34,15 @@ const getResourceTabs = (modelId: string, coordsId: string): string[] => {
 
 const OcdPropertiesTabbar = ({modelId, coordsId, activeTab, setActiveTab, additionalCss}: {modelId: string, coordsId: string, activeTab: string, setActiveTab: (title: string) => void, additionalCss: Record<string, string>}): JSX.Element => {
     console.debug('OcdPropertiesTabbar: Render: Active Tab =', activeTab, 'ModelId = ', modelId)
+    const [active, setActive] = useState(activeTab)
     const tabs: string[] = useMemo(() => {
-        return getResourceTabs(modelId, coordsId)
+        const tabs = getResourceTabs(modelId, coordsId)
+        if (!tabs.map((tab) => tab.toLocaleLowerCase()).includes(active)) setActive('documentation')
+        return tabs
     }, [modelId, coordsId])
     // const tabs = getResourceTabs(modelId, coordsId)
-    const [active, setActive] = useState(activeTab)
-    // const [active, setActive] = useState(tabs.includes(activeTab) ? activeTab : 'documentation')
+    // const [active, setActive] = useState(activeTab)
+    // const [active, setActive] = useState(tabs.map((tab) => tab.toLocaleLowerCase()).includes(activeTab) ? activeTab : 'documentation')
     // const [active, setActive] = useState('documentation')
     const tabClicked = (title: string) => {
         console.debug('OcdPropertiesTabbar: Tab Clicked', title)
