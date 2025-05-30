@@ -399,8 +399,8 @@ svg {
     --console-menubar-height: 25px;
     --console-header-height: 50px;
     --console-toolbar-height: 25px;
-    --console-toolbar-icon-height: 25px;
-    --console-toolbar-icon-width: 25px;
+    --console-toolbar-icon-height: 20px;
+    --console-toolbar-icon-width: 20px;
     --console-footer-height: 30px;
     --console-logo-height: 50px;
     --console-logo-width: 50px;
@@ -2206,6 +2206,12 @@ table {
     border-bottom: 1px solid #d1d1d4;
 }
 
+.ocd-properties-header-grid {
+    display: grid;
+    grid-template-columns: auto var(--console-toolbar-icon-width) var(--console-toolbar-icon-width);
+    column-gap: 2px;
+}
+
 .property-editor-title {
     display: block;
     box-sizing: border-box;
@@ -2222,8 +2228,8 @@ table {
 .heading-background {
     background-position: right center;
     background-repeat: no-repeat;
-    background-size: 20px;
-    margin-right: 1em;
+    background-size: var(--console-toolbar-icon-width);
+    /* margin-right: 1em; */
 }
 
 .ocd-properties-panel {
@@ -3189,6 +3195,14 @@ details[open] > summary.summary-background {
 
 .padlock-closed {
     background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTEyIDRhMyAzIDAgMDEzIDN2M0g5VjdhMyAzIDAgMDEzLTN6bTUgNlY3QTUgNSAwIDAwNyA3djNINHYxMmgxNlYxMGgtM3pNNiAxMmgxMnY4SDZ2LTh6IiBmaWxsPSIjMTYxNTEzIi8+PHBhdGggZD0iTTExIDE0aDJ2NGgtMnYtNHoiIGZpbGw9IiMxNjE1MTMiLz48L3N2Zz4=");
+}
+
+.read-only {
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTEuNjY3IDEuNjY2bDE2LjY2NiAxNi42NjdtLTcuMDY0LTcuMDg0TDUuMDEzIDE3LjVIMi41di0yLjUxbDYuMjQ0LTYuMjRtOC40MTctMy4zODdsLTIuNTEzLTIuNTExLTIuOTMyIDIuOTMgMi41MTMgMi41MSAyLjkzMi0yLjkyOXoiIHN0cm9rZT0iIzE2MTUxMyIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48L3N2Zz4=");
+}
+
+.read-write {
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTExLjcxNiA1Ljc4MWwyLjkzMi0yLjkzIDIuNTE0IDIuNTEyLTIuOTMzIDIuOTNNMTEuNzE2IDUuNzhMMi41IDE0Ljk5VjE3LjVoMi41MTNsOS4yMTYtOS4yMDhtLTIuNTEzLTIuNTFsMi41MTMgMi41MSIgc3Ryb2tlPSIjMTYxNTEzIiBzdHJva2Utd2lkdGg9IjEuNSIvPjwvc3ZnPg==");
 }
 
 .add-property {

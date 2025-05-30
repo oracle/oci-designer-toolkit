@@ -53,7 +53,8 @@
         "lookupResource": "",
         "lookupResourceElement": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "Resource Description"
       },
       "email_notification": {
         "provider": "oci",
@@ -4758,7 +4759,8 @@
         "lookupResource": "",
         "lookupResourceElement": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "Resource Description"
       },
       "destination": {
         "provider": "oci",
@@ -9032,7 +9034,8 @@
         "lookupResource": "",
         "lookupResourceElement": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "Resource Description"
       },
       "freeform_tags": {
         "provider": "oci",
@@ -9764,7 +9767,8 @@
         "lookupResource": "",
         "lookupResourceElement": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "Resource Description"
       },
       "enable_delete": {
         "provider": "oci",
@@ -9873,7 +9877,8 @@
         "lookupResource": "",
         "lookupResourceElement": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "Resource Description"
       },
       "freeform_tags": {
         "provider": "oci",
@@ -9982,7 +9987,8 @@
         "lookupResource": "",
         "lookupResourceElement": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "Resource Description"
       },
       "freeform_tags": {
         "provider": "oci",
@@ -10074,7 +10080,8 @@
         "lookupResource": "",
         "lookupResourceElement": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "Resource Description"
       },
       "freeform_tags": {
         "provider": "oci",
@@ -10200,7 +10207,8 @@
         "lookupResource": "",
         "lookupResourceElement": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "Resource Description"
       },
       "email": {
         "provider": "oci",
@@ -11830,7 +11838,8 @@
         "lookupResource": "",
         "lookupResourceElement": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "Resource Description"
       },
       "display_name": {
         "provider": "oci",
@@ -13471,7 +13480,8 @@
         "lookupResource": "",
         "lookupResourceElement": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "Resource Description"
       },
       "freeform_tags": {
         "provider": "oci",

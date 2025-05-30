@@ -9,6 +9,7 @@ export const elementOverrides: OcdElementOverrides = {
     "defaults": {
         "common": {
             "availability_domain": '1',
+            "description": "Resource Description",
             "fault_domain": "FAULT-DOMAIN-1",
             "license_model": "LICENSE_INCLUDED"
         },

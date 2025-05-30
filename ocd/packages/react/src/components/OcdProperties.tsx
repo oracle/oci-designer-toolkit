@@ -64,15 +64,34 @@ const OcdPropertiesTabbarTab = ({title, active, setActive, additionalCss}: {titl
 }
 
 const OcdResourcePropertiesHeader = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
-    const selectedResource = ocdDocument.getSelectedResource()
+    // const selectedResource = ocdDocument.getSelectedResource()
+    const {selectedResource } = useContext(SelectedResourceContext)
+    const ocdCache = useCache()
+    const selectedModelResource: OcdResource = ocdDocument.getResource(selectedResource.modelId)
+    console.debug('OcdProperties: OcdResourcePropertiesHeader: selectedResource', selectedResource, '\nselectedModelResource', selectedModelResource)
+    const selectedResourceProxy: OcdResource = useMemo(() => getSelectedResourceProxy(ocdDocument, selectedModelResource, ocdCache), [selectedResource])
     const activePage = ocdDocument.getActivePage()
-    const padlock: string = selectedResource?.locked ? 'padlock-closed' : 'padlock-open'
+    const [editLocked, setEditLocked] = useState(selectedResourceProxy?.editLocked)
+    const [locked, setLocked] = useState(selectedResourceProxy?.locked)
+    const padlock: string = locked ? 'padlock-closed' : 'padlock-open'
+    const readOnly: string = editLocked ? 'read-only' : 'read-write'
     // const padlock: string = selectedResource ? selectedResource.locked ? 'padlock-closed' : 'padlock-open' : 'padlock-open'
-    const title: string = selectedResource ? `${selectedResource.resourceTypeName} (${ocdDocument.getDisplayName(ocdDocument.selectedResource.modelId)})` : `Page (${activePage.title})`
+    const title: string = selectedModelResource ? `${selectedModelResource.resourceTypeName} (${ocdDocument.getDisplayName(selectedResource.modelId)})` : `Page (${activePage.title})`
+    // const title: string = selectedResource ? `${selectedResource.resourceTypeName} (${ocdDocument.getDisplayName(ocdDocument.selectedResource.modelId)})` : `Page (${activePage.title})`
+    const onEditLockedClick = (() => {
+        setEditLocked(!editLocked)
+        selectedResourceProxy.editLocked = !selectedResourceProxy.editLocked
+    })
+    const onLockedClick = (() => {
+        setLocked(!locked)
+        selectedResourceProxy.locked = !selectedResourceProxy.locked
+    })
     return (
         <div className='ocd-properties-header'>
-            <div className={`property-editor-title ${ocdDocument.selectedResource.class}`}>
-                <div className={`heading-background ${padlock}`}>{title}</div>
+            <div className={`ocd-properties-header-grid`}>
+                <div className={`property-editor-title ${ocdDocument.selectedResource.class}`}>{title}</div>
+                {selectedModelResource && <div className={`heading-background ${readOnly}`} onClick={onEditLockedClick} aria-hidden></div>}
+                {selectedModelResource && <div className={`heading-background ${padlock}`} onClick={onLockedClick} aria-hidden></div>}
             </div>
         </div>
     )
