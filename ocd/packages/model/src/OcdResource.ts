@@ -9,6 +9,7 @@ import { OcdUtils } from '@ocd/core'
 export interface OcdResource extends Record<string, any> {
     provider: string
     locked: boolean
+    editLocked: boolean
     terraformResourceName: string
     okitReference: string
     resourceType: string
@@ -25,6 +26,7 @@ export namespace OcdResource {
         return {
             provider: '',
             locked: false,
+            editLocked: false,
             terraformResourceName: `${terraformResourceName}`,
             okitReference: `okit-${uuidv4()}`,
             resourceType: `${resourceType}`,

@@ -5,8 +5,8 @@
     --console-menubar-height: 25px;
     --console-header-height: 50px;
     --console-toolbar-height: 25px;
-    --console-toolbar-icon-height: 25px;
-    --console-toolbar-icon-width: 25px;
+    --console-toolbar-icon-height: 20px;
+    --console-toolbar-icon-width: 20px;
     --console-footer-height: 30px;
     --console-logo-height: 50px;
     --console-logo-width: 50px;
@@ -1812,6 +1812,12 @@ table {
     border-bottom: 1px solid #d1d1d4;
 }
 
+.ocd-properties-header-grid {
+    display: grid;
+    grid-template-columns: auto var(--console-toolbar-icon-width) var(--console-toolbar-icon-width);
+    column-gap: 2px;
+}
+
 .property-editor-title {
     display: block;
     box-sizing: border-box;
@@ -1828,8 +1834,8 @@ table {
 .heading-background {
     background-position: right center;
     background-repeat: no-repeat;
-    background-size: 20px;
-    margin-right: 1em;
+    background-size: var(--console-toolbar-icon-width);
+    /* margin-right: 1em; */
 }
 
 .ocd-properties-panel {
