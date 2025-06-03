@@ -81,6 +81,7 @@ const OcdResourcePropertiesHeader = ({ocdDocument, setOcdDocument}: DesignerReso
     const onEditLockedClick = (() => {
         setEditLocked(!editLocked)
         selectedResourceProxy.editLocked = !selectedResourceProxy.editLocked
+        setOcdDocument(OcdDocument.clone(ocdDocument))
     })
     const onLockedClick = (() => {
         setLocked(!locked)
