@@ -162,47 +162,67 @@ export const menuItems: MenuItem[] = [
             //     ]
             // },
             {
+                label: 'Query',
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
+                    if (activeFile.modified) {
+                        OcdDesignFacade.discardConfirmation().then((discard) => {
+                            if (discard) {
+                                const clone = OcdDocument.clone(ocdDocument)
+                                clone.query = !ocdDocument.query
+                                console.debug('Menu: Setting Query', ocdDocument, clone)
+                                setOcdDocument(clone)
+                            }
+                        }).catch((resp) => {console.warn('Discard Failed with', resp)})
+                    } else {
+                        const clone = OcdDocument.clone(ocdDocument)
+                        clone.query = !ocdDocument.query
+                        console.debug('Menu: Setting Query', ocdDocument, clone)
+                        setOcdDocument(clone)
+                    }
+                }
+            },
+            {
                 label: 'Import',
                 click: undefined,
                 submenu: [
-                    {
-                        label: 'Query',
-                        click: undefined,
-                        submenu: [
-                            {
-                                label: 'OCI',
-                                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
-                                    if (activeFile.modified) {
-                                        OcdDesignFacade.discardConfirmation().then((discard) => {
-                                            if (discard) {
-                                                const clone = OcdDocument.clone(ocdDocument)
-                                                clone.query = !ocdDocument.query
-                                                console.debug('Menu: Setting Query', ocdDocument, clone)
-                                                setOcdDocument(clone)
-                                            }
-                                        }).catch((resp) => {console.warn('Discard Failed with', resp)})
-                                    } else {
-                                        const clone = OcdDocument.clone(ocdDocument)
-                                        clone.query = !ocdDocument.query
-                                        console.debug('Menu: Setting Query', ocdDocument, clone)
-                                        setOcdDocument(clone)
-                                    }
-                                }
-                            },
-                            {
-                                label: 'Azure',
-                                click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
-                                    alert('Currently not implemented.')
-                                }
-                            },
-                            {
-                                label: 'Google',
-                                click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
-                                    alert('Currently not implemented.')
-                                }
-                            },
-                        ]
-                    },
+                    // {
+                    //     label: 'Query',
+                    //     click: undefined,
+                    //     submenu: [
+                    //         {
+                    //             label: 'OCI',
+                    //             click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
+                    //                 if (activeFile.modified) {
+                    //                     OcdDesignFacade.discardConfirmation().then((discard) => {
+                    //                         if (discard) {
+                    //                             const clone = OcdDocument.clone(ocdDocument)
+                    //                             clone.query = !ocdDocument.query
+                    //                             console.debug('Menu: Setting Query', ocdDocument, clone)
+                    //                             setOcdDocument(clone)
+                    //                         }
+                    //                     }).catch((resp) => {console.warn('Discard Failed with', resp)})
+                    //                 } else {
+                    //                     const clone = OcdDocument.clone(ocdDocument)
+                    //                     clone.query = !ocdDocument.query
+                    //                     console.debug('Menu: Setting Query', ocdDocument, clone)
+                    //                     setOcdDocument(clone)
+                    //                 }
+                    //             }
+                    //         },
+                    //         {
+                    //             label: 'Azure',
+                    //             click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
+                    //                 alert('Currently not implemented.')
+                    //             }
+                    //         },
+                    //         {
+                    //             label: 'Google',
+                    //             click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
+                    //                 alert('Currently not implemented.')
+                    //             }
+                    //         },
+                    //     ]
+                    // },
                     {
                         label: 'Terraform',
                         click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {

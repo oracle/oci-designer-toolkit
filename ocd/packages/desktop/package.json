@@ -26,6 +26,7 @@
     "vite-build": "tsc -b ./tsconfig.json && vite build",
     "clean": "rm -rf lib dist .vite out",
     "purge": "npm run clean && rm -rf node_modules",
+    "prebuild": "",
     "build": "npm run make",
     "start": "NODE_OPTIONS=--max-old-space-size=8192 electron-forge start",
     "package": "NODE_OPTIONS=--max-old-space-size=8192 electron-forge package",
