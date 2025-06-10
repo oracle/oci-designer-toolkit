@@ -2,7 +2,7 @@
   "name": "@ocd/cli",
   "version": "0.2.9",
   "description": "OKIT Open Cloud Designer Command-line",
-  "title": "OKIT Open Cloud Designer Command-linetop",
+  "title": "OKIT Open Cloud Designer Command-line",
   "author": {
     "name": "Andrew Hopkinson",
     "email": "andrew.hopkinson@oracle.com",
