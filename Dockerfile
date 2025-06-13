@@ -33,7 +33,7 @@ RUN yum install -y \
         git \
         openssl \
         python38 \
-        python3-pip \
+        python38-pip \
  && rm -rf /var/cache/yum \
  && alternatives --set python3 /usr/bin/python3.8 \
 # Configure ssh
