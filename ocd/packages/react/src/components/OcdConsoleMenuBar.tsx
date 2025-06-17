@@ -9,6 +9,7 @@ import OcdDocument from './OcdDocument'
 import { ConsoleMenuProps, OcdActiveFile } from '../types/Console'
 import OcdConsoleConfig from './OcdConsoleConfiguration'
 import { ActiveFileContext } from '../pages/OcdConsole'
+import { useTheme } from '../contexts/OcdThemeContext'
 
 const OcdConsoleMenuItem = ({ menuItem, depth, ocdDocument, setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig }: any): JSX.Element => {
     const {activeFile, setActiveFile} = useContext(ActiveFileContext)
@@ -105,8 +106,10 @@ const OcdConsoleMenu = ({ ocdDocument, setOcdDocument, ocdConsoleConfig, setOcdC
 }
 
 const OcdConsoleMenuBar = ({ ocdDocument, setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig }: ConsoleMenuProps): JSX.Element => {
+    const theme = useTheme()
+    const divClassName = `ocd-console-menu-bar ocd-console-menubar-default-theme ocd-console-menubar-${theme}-theme`
     return (
-        <div className='ocd-console-menu-bar ocd-console-menubar-colour'>
+        <div className={divClassName}>
             <OcdConsoleMenu 
                 ocdConsoleConfig={ocdConsoleConfig} 
                 setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setOcdConsoleConfig(ocdConsoleConfig)} 

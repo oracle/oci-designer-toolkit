@@ -13,7 +13,7 @@ export interface OcdMetadata {
     ocdVersion: string,
     ocdSchemaVersion: string,
     ocdModelId: string,
-    platform: 'oci' | 'pca'
+    platform: 'oci' | 'pca' | 'edge'
     title: string,
     documentation: string,
     created: string,
