@@ -6,6 +6,7 @@
 import { createContext, Dispatch, useContext, useEffect, useReducer } from 'react'
 import { OcdConsoleConfiguration } from "../components/OcdConsoleConfiguration"
 import { OcdConfigFacade } from '../facade/OcdConfigFacade'
+import { useThemeDispatch } from './OcdThemeContext'
 
 export const SimpleConsoleConfigContext = createContext<OcdConsoleConfiguration>(OcdConsoleConfiguration.newConfig())
 export const SimpleConsoleConfigDispatchContext = createContext<Dispatch<ConsoleConfigReducerAction>>(() => {})
@@ -16,6 +17,7 @@ export type ConsoleConfigReducerAction = {
 
 export function ConsoleConfigProvider({ children }: Readonly<{children: JSX.Element | JSX.Element[]}>): JSX.Element {
     const [consoleConfig, dispatch] = useReducer(consoleConfigReducer, OcdConsoleConfiguration.newConfig())
+    const setTheme = useThemeDispatch()
     // Load the Console Config Information
     useEffect(() => {
         OcdConfigFacade.loadConsoleConfig().then((results) => {
@@ -27,7 +29,11 @@ export function ConsoleConfigProvider({ children }: Readonly<{children: JSX.Elem
             console.debug('ConsoleConfigProvider: updatedConfig:', updatedConfig)
             dispatch({
                 type: 'updated', 
-                consoleConfig: existingConfig
+                consoleConfig: updatedConfig
+            })
+            setTheme({
+                type: 'set',
+                theme: updatedConfig.theme
             })
         }).catch((response) => {
             console.debug('ConsoleConfigProvider: Load Console Config', response)

@@ -12,6 +12,7 @@
     --console-logo-width: 50px;
     --console-tab-bar-height: 25px;
     --console-layers-bar-height: 25px;
+    --console-layers-bar-menu-icon-width: 25px;
     --console-pages-bar-height: 25px;
     --console-palette-width: 200px;
     --console-properties-width: 500px;
@@ -1085,7 +1086,7 @@ summary {
 
 .ocd-designer-canvas-layers-bar {
     display: grid;
-    grid-template-columns: var(--console-toolbar-icon-width) auto var(--console-toolbar-icon-width);
+    grid-template-columns: var(--console-layers-bar-menu-icon-width) auto var(--console-layers-bar-menu-icon-width);
     height: var(--console-layers-bar-height);
     min-height: var(--console-layers-bar-height);
     max-height: var(--console-layers-bar-height);
@@ -1161,7 +1162,7 @@ summary {
 .ocd-layer-icon {
     display: block;
     height: var(--console-layers-bar-height);
-    width: var(--console-layers-bar-height);
+    width: var(--console-layers-bar-menu-icon-width);
     background-position: center;
     background-repeat: no-repeat;
     background-size: 15px;
@@ -1191,7 +1192,7 @@ summary {
 
 .ocd-designer-canvas-pages-bar {
     display: grid;
-    grid-template-columns: var(--console-toolbar-icon-width) auto var(--console-toolbar-icon-width);
+    grid-template-columns: var(--console-layers-bar-menu-icon-width) auto var(--cconsole-layers-bar-menu-icon-width);
     width: 100%;
     border-top: #312D2A solid 1px;
     padding: 0;
