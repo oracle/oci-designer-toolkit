@@ -1748,7 +1748,10 @@ summary {
 
 .ocd-designer-canvas-pages-bar {
     display: grid;
-    grid-template-columns: var(--console-toolbar-icon-width) auto var(--console-toolbar-icon-width);
+    grid-template-columns: var(--console-layers-bar-menu-icon-width) auto var(--console-layers-bar-menu-icon-width);
+    height: var(--console-layers-bar-height);
+    min-height: var(--console-layers-bar-height);
+    max-height: var(--console-layers-bar-height);
     width: 100%;
     border-top: #312D2A solid 1px;
     padding: 0;
