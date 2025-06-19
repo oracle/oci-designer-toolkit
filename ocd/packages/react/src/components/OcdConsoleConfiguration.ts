@@ -2,6 +2,7 @@
 ** Copyright (c) 2021, Andrew Hopkinson.
 ** Licensed under the GNU GENERAL PUBLIC LICENSE v 3.0 as shown at https://www.gnu.org/licenses/.
 */
+import { v4 as uuidv4 } from 'uuid'
 
 export interface OcdConsoleConfiguration {
     showPalette: boolean
@@ -20,6 +21,35 @@ export interface OcdConsoleConfiguration {
     displayColumns?: Record<string, string[]>
     defaultAutoArrangeStyle?: string
     visibleProviderPalettes: string[]
+    theme: string
+    uuid?: string
+}
+
+export namespace OcdConsoleConfiguration {
+    export function newConfig(): OcdConsoleConfiguration {
+        return {
+            showPalette: true,
+            showModelPalette: true,
+            showProvidersPalette: ['oci'],
+            verboseProviderPalette: false,
+            displayPage: 'designer',
+            detailedResource: true,
+            showPreviousViewOnStart: true,
+            showProperties: true,
+            highlightCompartmentResources: false,
+            zoomOnWheel: false,
+            recentDesigns: [],
+            maxRecent: 10,
+            displayColumns: {},
+            defaultAutoArrangeStyle: 'dynamic-columns',
+            visibleProviderPalettes: ['OCI'],
+            theme: 'default',
+            uuid: uuidv4()
+        }
+    }
+    export function clone(data: OcdConsoleConfiguration): OcdConsoleConfiguration {
+        return JSON.parse(JSON.stringify(data))
+    }
 }
 
 export class OcdConsoleConfig {
@@ -50,7 +80,9 @@ export class OcdConsoleConfig {
             maxRecent: 10,
             displayColumns: {},
             defaultAutoArrangeStyle: 'dynamic-columns',
-            visibleProviderPalettes: ['OCI']
+            visibleProviderPalettes: ['OCI'],
+            theme: 'default',
+            uuid: uuidv4()
         }
     }
 }

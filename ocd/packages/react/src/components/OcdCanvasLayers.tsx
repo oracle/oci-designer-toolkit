@@ -174,7 +174,7 @@ const OcdLayersThreeDotMenu = ({ocdDocument, setOcdDocument}: LayerBarMenuProps)
         <div className='ocd-console-toolbar-dropdown ocd-console-toolbar-dropdown-theme'>
             <ul>
                 <li className='ocd-console-toolbar-dropdown-item' onClick={onToggleMenuClick} aria-hidden>
-                    <div className='three-dot-menu ocd-console-toolbar-icon'></div>
+                    <div className='three-dot-menu ocd-layer-icon'></div>
                     <ul className={`${menuVisible ? 'show slide-down' : 'hidden'}`}>
                         {page.layers.length > 1 && <li className='ocd-dropdown-menu-item ocd-mouseover-highlight'><div onClick={onDeleteLayerClick} aria-hidden>Delete "{selectedLayerName}"</div></li>}
                         <li className='ocd-dropdown-menu-item ocd-mouseover-highlight'><div onClick={onAddLayerClick} aria-hidden>Add Layer</div></li>

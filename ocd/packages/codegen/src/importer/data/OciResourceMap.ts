@@ -237,13 +237,13 @@ export const resourceAttributes: OcdIncludedElements = {
     ],
     "oci_core_dhcp_options": [
         "display_name",
-        "domain_name_type",
         "vcn_id",
+        "domain_name_type",
         "options",
+        "options.type",
         "options.custom_dns_servers",
         "options.search_domain_names",
         "options.server_type",
-        "options.type"
     ],
     "oci_core_drg": [
         "display_name",
@@ -474,11 +474,11 @@ export const resourceAttributes: OcdIncludedElements = {
         "vcn_id",
     ],
     "oci_core_vcn": [
-        "cidr_blocks",
         "display_name",
         "dns_label",
-        "ipv6cidr_blocks",
+        "cidr_blocks",
         "is_ipv6enabled",
+        "ipv6cidr_blocks",
     ],
     "oci_core_vnic_attachment": [
         "availability_domain",

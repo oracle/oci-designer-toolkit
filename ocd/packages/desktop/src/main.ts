@@ -443,8 +443,9 @@ async function handleSaveDesign(event: any, design: OcdDesign | string, filename
 					properties: ['createDirectory'],
 					filters: [{name: 'Filetype', extensions: ['okit']}]
 				}).then(result => {
-					if (!result.canceled) fs.writeFileSync(result.filePath, JSON.stringify(design, null, 4))
-					resolve({canceled: false, filename: result.canceled ? '' : result.filePath, design: design})
+					const filePath = path.extname(result.filePath) === '.okit' ? result.filePath : `${result.filePath}.okit`
+					if (!result.canceled) fs.writeFileSync(filePath, JSON.stringify(design, null, 4))
+					resolve({canceled: false, filename: result.canceled ? '' : filePath, design: design})
 				}).catch(err => {
 					console.error(err)
 					reject(new Error(err))

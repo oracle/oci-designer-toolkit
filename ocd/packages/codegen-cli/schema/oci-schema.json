@@ -53,7 +53,8 @@
         "lookupResource": "",
         "lookupResourceElement": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "Resource Description"
       },
       "email_notification": {
         "provider": "oci",
@@ -2510,8 +2511,20 @@
             "lookup": false,
             "lookupResource": "",
             "lookupResourceElement": "",
-            "conditional": false,
-            "condition": {}
+            "conditional": true,
+            "condition": [
+              {
+                "element": "server_type",
+                "operator": "eq",
+                "value": "CustomDnsServer"
+              },
+              {
+                "logic_operator": "and",
+                "element": "type",
+                "operator": "eq",
+                "value": "DomainNameServer"
+              }
+            ]
           },
           "search_domain_names": {
             "provider": "oci",
@@ -2527,8 +2540,12 @@
             "lookup": false,
             "lookupResource": "",
             "lookupResourceElement": "",
-            "conditional": false,
-            "condition": {}
+            "conditional": true,
+            "condition": {
+              "element": "type",
+              "operator": "eq",
+              "value": "SearchDomain"
+            }
           },
           "server_type": {
             "provider": "oci",
@@ -2544,8 +2561,12 @@
             "lookup": true,
             "lookupResource": "server",
             "lookupResourceElement": "id",
-            "conditional": false,
-            "condition": {}
+            "conditional": true,
+            "condition": {
+              "element": "type",
+              "operator": "eq",
+              "value": "DomainNameServer"
+            }
           },
           "type": {
             "provider": "oci",
@@ -4738,7 +4759,8 @@
         "lookupResource": "",
         "lookupResourceElement": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "Resource Description"
       },
       "destination": {
         "provider": "oci",
@@ -5691,8 +5713,12 @@
             "required": false,
             "label": "Icmp Options",
             "id": "egress_security_rules.icmp_options",
-            "conditional": false,
-            "condition": {},
+            "conditional": true,
+            "condition": {
+              "element": "protocol",
+              "operator": "eq",
+              "value": "1"
+            },
             "attributes": {
               "code": {
                 "provider": "oci",
@@ -5739,8 +5765,12 @@
             "required": false,
             "label": "Tcp Options",
             "id": "egress_security_rules.tcp_options",
-            "conditional": false,
-            "condition": {},
+            "conditional": true,
+            "condition": {
+              "element": "protocol",
+              "operator": "eq",
+              "value": "6"
+            },
             "attributes": {
               "max": {
                 "provider": "oci",
@@ -5835,8 +5865,12 @@
             "required": false,
             "label": "Udp Options",
             "id": "egress_security_rules.udp_options",
-            "conditional": false,
-            "condition": {},
+            "conditional": true,
+            "condition": {
+              "element": "protocol",
+              "operator": "eq",
+              "value": "17"
+            },
             "attributes": {
               "max": {
                 "provider": "oci",
@@ -6030,8 +6064,12 @@
             "required": false,
             "label": "Icmp Options",
             "id": "ingress_security_rules.icmp_options",
-            "conditional": false,
-            "condition": {},
+            "conditional": true,
+            "condition": {
+              "element": "protocol",
+              "operator": "eq",
+              "value": "1"
+            },
             "attributes": {
               "code": {
                 "provider": "oci",
@@ -6078,8 +6116,12 @@
             "required": false,
             "label": "Tcp Options",
             "id": "ingress_security_rules.tcp_options",
-            "conditional": false,
-            "condition": {},
+            "conditional": true,
+            "condition": {
+              "element": "protocol",
+              "operator": "eq",
+              "value": "6"
+            },
             "attributes": {
               "max": {
                 "provider": "oci",
@@ -6174,8 +6216,12 @@
             "required": false,
             "label": "Udp Options",
             "id": "ingress_security_rules.udp_options",
-            "conditional": false,
-            "condition": {},
+            "conditional": true,
+            "condition": {
+              "element": "protocol",
+              "operator": "eq",
+              "value": "17"
+            },
             "attributes": {
               "max": {
                 "provider": "oci",
@@ -8988,7 +9034,8 @@
         "lookupResource": "",
         "lookupResourceElement": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "Resource Description"
       },
       "freeform_tags": {
         "provider": "oci",
@@ -9720,7 +9767,8 @@
         "lookupResource": "",
         "lookupResourceElement": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "Resource Description"
       },
       "enable_delete": {
         "provider": "oci",
@@ -9829,7 +9877,8 @@
         "lookupResource": "",
         "lookupResourceElement": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "Resource Description"
       },
       "freeform_tags": {
         "provider": "oci",
@@ -9938,7 +9987,8 @@
         "lookupResource": "",
         "lookupResourceElement": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "Resource Description"
       },
       "freeform_tags": {
         "provider": "oci",
@@ -10030,7 +10080,8 @@
         "lookupResource": "",
         "lookupResourceElement": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "Resource Description"
       },
       "freeform_tags": {
         "provider": "oci",
@@ -10156,7 +10207,8 @@
         "lookupResource": "",
         "lookupResourceElement": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "Resource Description"
       },
       "email": {
         "provider": "oci",
@@ -11786,7 +11838,8 @@
         "lookupResource": "",
         "lookupResourceElement": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "Resource Description"
       },
       "display_name": {
         "provider": "oci",
@@ -13427,7 +13480,8 @@
         "lookupResource": "",
         "lookupResourceElement": "",
         "conditional": false,
-        "condition": {}
+        "condition": {},
+        "default": "Resource Description"
       },
       "freeform_tags": {
         "provider": "oci",
