@@ -344,6 +344,18 @@ summary {
     text-shadow: 0 0 5px #1d2733;
 }
 
+.ocd-console-toolbar-checkbox {
+    display: inline-flex;
+    margin-top: auto;
+    margin-bottom: auto;
+    font-size: 12px;
+}
+
+.ocd-console-toolbar-checkbox label {
+    display: inline-flex;
+    align-items: center;
+}
+
 .ocd-console-toolbar-dropdown {
     margin: 0;
     padding: 0;
