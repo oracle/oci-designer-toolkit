@@ -3,13 +3,16 @@
 ** Licensed under the GNU GENERAL PUBLIC LICENSE v 3.0 as shown at https://www.gnu.org/licenses/.
 */
 
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { ConsolePageProps } from "../types/Console"
 import { OcdTerraformExporter } from "@ocd/export"
 import { OcdDesignFacade } from "../facade/OcdDesignFacade"
+import { OcdDocument } from "../components/OcdDocument"
 
 const OcdTerraform = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument}: ConsolePageProps): JSX.Element => {
-    const [selected, setSelected] = useState('oci_provider.tf')
+    const design = ocdDocument.design
+    const separateIdentity = design.metadata.separateIdentity
+    const [selected, setSelected] = useState(separateIdentity ? 'identity/oci_provider.tf' : 'oci_provider.tf')
     const ocdExporter = new OcdTerraformExporter()
     const terraform = ocdExporter.export(ocdDocument.design)
     const onClick = (e: React.MouseEvent<HTMLElement>) => {
@@ -19,6 +22,7 @@ const OcdTerraform = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setO
         const selectedTab = e.target.id
         setSelected(selectedTab)
     }
+    useEffect(() => {setSelected(separateIdentity ? 'identity/oci_provider.tf' : 'oci_provider.tf')}, [separateIdentity])
     const selectedTerraform = terraform[selected]
     // console.debug('OcdTerraform:', terraform)
     return (
@@ -35,6 +39,11 @@ const OcdTerraform = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setO
 
 export const OcdTerraformLeftToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument}: ConsolePageProps): JSX.Element => {
     // const {ocdConsoleConfig, setOcdConsoleConfig} = useContext(ConsoleConfigContext)
+    const cbRef = useRef<HTMLInputElement>(null)
+    const onChangeSeparateIdentity = () => {
+        ocdDocument.design.metadata.separateIdentity = !ocdDocument.design.metadata.separateIdentity
+        setOcdDocument(OcdDocument.clone(ocdDocument))
+    }
     const onClickTerraform = () => {
         console.debug('OcdTerraform: Export to OpenTofu (Terraform)')
         const design = ocdDocument.design
@@ -47,7 +56,8 @@ export const OcdTerraformLeftToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig,
     }
     return (
         <div className='ocd-designer-toolbar'>
-            <div className='ocd-console-toolbar-icon opentofu' title='Export to OpenTofu (Terraform)' onClick={onClickTerraform} aria-hidden></div>
+            <div className='ocd-console-toolbar-icon opentofu  ocd-toolbar-separator-right' title='Export to OpenTofu (Terraform)' onClick={onClickTerraform} aria-hidden></div>
+            <div className='ocd-console-toolbar-checkbox'><label><input id='separateIdentity' type='checkbox' onChange={onChangeSeparateIdentity} ref={cbRef} checked={ocdDocument.design.metadata.separateIdentity}/>Separate Identity Resources</label></div>            
         </div>
     )
 }

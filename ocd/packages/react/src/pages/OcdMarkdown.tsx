@@ -42,7 +42,7 @@ export const OcdMarkdownLeftToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, 
     )
 }
 
-export const OcdTerraformRightToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument}: ConsolePageProps): JSX.Element => {
+export const OcdMarkdownRightToolbar = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument}: ConsolePageProps): JSX.Element => {
     return (
         <div className='ocd-designer-toolbar'></div>
     )

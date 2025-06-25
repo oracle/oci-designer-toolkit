@@ -5,11 +5,13 @@
 
 import { OcdPropertiesGenerator } from './OcdPropertiesGenerator.js'
 import { commonElements, commonIgnoreElements } from './data/OciCommonResourceProperties.js'
+import { propertySortSequence } from './data/OciPropertySheetFieldOrder.js'
 
 export class OciPropertiesGenerator extends OcdPropertiesGenerator {
     constructor () {
         super('Oci')
         this.ignoreAttributes = [...commonElements, ...commonIgnoreElements]
+        this.propertySortSequence = propertySortSequence
     }
 }
 

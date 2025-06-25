@@ -28,9 +28,10 @@ import { OcdReferenceDataQueryDialog } from '../components/dialogs/OcdReferenceD
 import { OcdActiveFileContext, OcdConsoleConfigContext, OcdDialogContext, OcdDocumentContext, OcdDragResourceContext, OcdSelectedResourceContext } from './OcdConsoleContext'
 // import { OcdActiveFileContext, OcdCacheContext, OcdConsoleConfigContext, OcdDialogContext, OcdDocumentContext, OcdDragResourceContext, OcdSelectedResourceContext } from './OcdConsoleContext'
 import { OcdExportToResourceManagerDialog } from '../components/dialogs/OcdExportToResourceManagerDialog'
+import { ocdThemes } from '../data/OcdThemes'
 // Context Providers
 import { CacheProvider, useCache, useCacheDispatch } from '../contexts/OcdCacheContext'
-import { ThemeProvider } from '../contexts/OcdThemeContext'
+import { defaultTheme, ThemeProvider, useThemeDispatch } from '../contexts/OcdThemeContext'
 import { ConsoleConfigProvider } from '../contexts/OcdConsoleConfigContext'
 
 export const ActiveFileContext = createContext<OcdActiveFileContext>({activeFile: {name: '', modified: false}, setActiveFile: () => {}})
@@ -48,6 +49,7 @@ export const OcdConsole = (): JSX.Element => {
     // const [ocdCache, setOcdCache] = useState(OcdCacheData.new())
     const [activeFile, setActiveFile] = useState({name: '', modified: false})
     const [selectedResource, setSelectedResource] = useState({} as OcdSelectedResource)
+    // Context
     // Memo Hooks
     const activeFileContext = useMemo(() => ({activeFile, setActiveFile}), [activeFile])
     // const cacheContext = useMemo(() => ({ocdCache, setOcdCache}), [ocdCache])
@@ -69,6 +71,10 @@ export const OcdConsole = (): JSX.Element => {
             console.debug('OcdConsole: Load Console Config', results)
             const consoleConfig = new OcdConsoleConfig(results)
             setOcdConsoleConfig(consoleConfig)
+            // setTheme({
+            //     type: 'set',
+            //     theme: consoleConfig.config.theme || defaultTheme
+            // })
         }).catch((response) => {
             console.debug('OcdConsole: Load Console Config', response)
             OcdConfigFacade.saveConsoleConfig(ocdConsoleConfig.config).then((results) => {}).catch((response) => console.debug('OcdConsole:', response))
@@ -138,6 +144,7 @@ const OcdConsoleHeader = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, 
 }
 
 const OcdConsoleSettingsEditor = ({ ocdConsoleConfig, setOcdConsoleConfig }: any): JSX.Element => {
+    const setOcdTheme = useThemeDispatch()
     const [dropdown, setDropdown] = useState(false)
     const toggleDropdown = () => {setDropdown(!dropdown)}
     const cbRef = useRef<HTMLInputElement>(null)
@@ -149,6 +156,18 @@ const OcdConsoleSettingsEditor = ({ ocdConsoleConfig, setOcdConsoleConfig }: any
         ocdConsoleConfig.config.zoomOnWheel = !ocdConsoleConfig.config.zoomOnWheel
         setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
     }
+    const onThemeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        ocdConsoleConfig.config.theme = e.target.value
+        setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+        setDropdown(!dropdown)
+        setOcdTheme({
+                type: 'set',
+                theme: e.target.value
+            })
+    }
+    const selectClicked = (e: React.MouseEvent<HTMLSelectElement>) => {
+        e.stopPropagation()
+    }
     return (
         <div className='ocd-console-toolbar-dropdown ocd-console-toolbar-dropdown-theme ocd-toolbar-separator-right'>
             <ul>
@@ -158,6 +177,9 @@ const OcdConsoleSettingsEditor = ({ ocdConsoleConfig, setOcdConsoleConfig }: any
                         <li className='ocd-dropdown-menu-item'><div><label><input id='showPreviousViewOnStart' type='checkbox' onChange={showPreviousViewOnStartOnChange} ref={cbRef} checked={ocdConsoleConfig.config.showPreviousViewOnStart}/>Show Previous View On Start</label></div></li>
                         <li className='ocd-dropdown-menu-item'><div>--------------------------------</div></li>
                         <li className='ocd-dropdown-menu-item'><div><label><input id='zoomOnWheel' type='checkbox' onChange={zoomOnWheelOnChange} ref={cbRef} checked={ocdConsoleConfig.config.zoomOnWheel}/>Allow Zoom Mouse Wheel</label></div></li>
+                        <li className='ocd-dropdown-menu-item'><div>--------------------------------</div></li>
+                        <li className='ocd-dropdown-menu-item'><div>Theme</div></li>
+                        <li className='ocd-dropdown-menu-item'><div><select value={ocdConsoleConfig.config.theme} onChange={onThemeChange} onClick={selectClicked}>{Object.entries(ocdThemes).filter(([k, v]) => k !== 'default').map(([k, v]) => {return <option value={k} key={k}>{v}</option>})}</select></div></li>
                     </ul>
                 </li>
             </ul>

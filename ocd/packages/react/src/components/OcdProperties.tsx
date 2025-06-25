@@ -19,6 +19,7 @@ import { SelectedResourceContext } from '../pages/OcdConsole'
 import { OciDefinedTagRow, OciFreeformTagRow } from '../pages/OcdCommonTags'
 import { OcdCacheData } from './OcdCache'
 import { useCache } from '../contexts/OcdCacheContext'
+import { useTheme } from '../contexts/OcdThemeContext'
 
 const getResourceTabs = (modelId: string, coordsId: string): string[] => {
     const tabs = [
@@ -34,6 +35,7 @@ const getResourceTabs = (modelId: string, coordsId: string): string[] => {
 
 const OcdPropertiesTabbar = ({modelId, coordsId, activeTab, setActiveTab, additionalCss}: {modelId: string, coordsId: string, activeTab: string, setActiveTab: (title: string) => void, additionalCss: Record<string, string>}): JSX.Element => {
     console.debug('OcdPropertiesTabbar: Render: Active Tab =', activeTab, 'ModelId = ', modelId)
+    const theme = useTheme()
     const [active, setActive] = useState(activeTab)
     const tabs: string[] = useMemo(() => {
         const tabs = getResourceTabs(modelId, coordsId)
@@ -49,8 +51,9 @@ const OcdPropertiesTabbar = ({modelId, coordsId, activeTab, setActiveTab, additi
         setActive(title.toLocaleLowerCase())
         setActiveTab(title)
     }
+    const divClassNames = `ocd-designer-tab-bar ocd-designer-tab-bar-default-theme ocd-designer-tab-bar-${theme}-theme` // Use CSS positional precedence to override
     return (
-        <div className={`ocd-designer-tab-bar ocd-designer-tab-bar-theme`}>
+        <div className={divClassNames}>
             {tabs.map((tab) => <OcdPropertiesTabbarTab title={tab} active={active === tab.toLocaleLowerCase()} setActive={tabClicked} additionalCss={additionalCss[tab.toLocaleLowerCase()]} key={tab}/>)}
         </div>
     )
@@ -58,8 +61,12 @@ const OcdPropertiesTabbar = ({modelId, coordsId, activeTab, setActiveTab, additi
 
 const OcdPropertiesTabbarTab = ({title, active, setActive, additionalCss}: {title: string, active: boolean, setActive: (title: string) => void, additionalCss: string}): JSX.Element => {
     console.debug('OcdPropertiesTabbarTab: Render', title, active ? '- Active' : '')
+    const theme = useTheme()
+    const activeClassNames = active ? `ocd-designer-active-tab-default-theme ocd-designer-active-tab-${theme}-theme` : ''
+    const additionalClassNames = additionalCss || ''
+    const divClassNames = `ocd-designer-tab ocd-designer-tab-default-theme ocd-designer-tab-${theme}-theme ${activeClassNames} ${additionalClassNames}` // Use CSS positional precedence to override
     return(
-        <div className={`ocd-designer-tab ocd-designer-tab-theme ${active ? 'ocd-designer-active-tab-theme' : ''} ${additionalCss ? additionalCss : ''}`} onClick={() => setActive(title.toLowerCase())} aria-hidden><span>{title}</span></div>
+        <div className={divClassNames} onClick={() => setActive(title.toLowerCase())} aria-hidden><span>{title}</span></div>
     )
 }
 
@@ -67,6 +74,7 @@ const OcdResourcePropertiesHeader = ({ocdDocument, setOcdDocument}: DesignerReso
     // const selectedResource = ocdDocument.getSelectedResource()
     const {selectedResource } = useContext(SelectedResourceContext)
     const ocdCache = useCache()
+    const theme = useTheme()
     const selectedModelResource: OcdResource = ocdDocument.getResource(selectedResource.modelId)
     console.debug('OcdProperties: OcdResourcePropertiesHeader: selectedResource', selectedResource, '\nselectedModelResource', selectedModelResource)
     const selectedResourceProxy: OcdResource = useMemo(() => getSelectedResourceProxy(ocdDocument, selectedModelResource, ocdCache), [selectedResource])
@@ -87,8 +95,9 @@ const OcdResourcePropertiesHeader = ({ocdDocument, setOcdDocument}: DesignerReso
         setLocked(!locked)
         selectedResourceProxy.locked = !selectedResourceProxy.locked
     })
+    const divClassNames = `ocd-properties-header ocd-properties-header-default-theme ocd-properties-header-${theme}-theme` // Use CSS positional precedence to override
     return (
-        <div className='ocd-properties-header'>
+        <div className={divClassNames}>
             <div className={`ocd-properties-header-grid`}>
                 <div className={`property-editor-title ${ocdDocument.selectedResource.class}`}>{title}</div>
                 {selectedModelResource && <div className={`heading-background ${readOnly}`} onClick={onEditLockedClick} aria-hidden></div>}
@@ -99,6 +108,7 @@ const OcdResourcePropertiesHeader = ({ocdDocument, setOcdDocument}: DesignerReso
 }
 
 const OciCommonResourceProperties = ({ocdDocument, setOcdDocument, resource, rootResource}: ResourceProperties): JSX.Element => {
+    const theme = useTheme()
     const selectedResource: OcdResource = ocdDocument.getSelectedResource()
     const resourceConfigsName = selectedResource ? `${OcdUtils.toTitleCase(selectedResource.provider)}${selectedResource.resourceType}Configs` : ''
     // @ts-ignore 
@@ -107,10 +117,11 @@ const OciCommonResourceProperties = ({ocdDocument, setOcdDocument, resource, roo
     console.debug('OcdProperties: OciCommonResourceProperties: config', configs)
     const displayName = {"provider": "oci", "key": "displayName", "name": "displayName", "type": "string", "subtype": "", "required": true, "label": "Name", "id": "displayName", "conditional": false, "condition": {}}
     const compartmentId = {"provider": "oci", "key": "compartmentId", "name": "compartmentId", "type": "string", "subtype": "", "required": true, "label": "Compartment", "id": "compartmentId", "lookupResource": "compartment", "conditional": false, "condition": {}}
+    const summaryClassNames = `summary-background summary-background-default-theme summary-background-${theme}-theme` // Use CSS positional precedence to override
     return (
         <div>
             <details open={true}>
-                <summary className='summary-background'>Core</summary>
+                <summary className={summaryClassNames}>Core</summary>
                 <div>
                 <OcdDisplayNameProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={configs.find((c) => c.id === 'display_name')} rootResource={rootResource} attribute={displayName} key={`${resource.id}-displayName`}/>
                 <OcdLookupProperty  ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={resource} config={configs.find((c) => c.id === 'compartment_id')} rootResource={rootResource} attribute={compartmentId}  key={`${resource.id}-compartmentId`}/>
@@ -194,6 +205,7 @@ const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourcePr
     // const {ocdCache} = useContext(CacheContext)
     // const {selectedResource } = useContext(SelectedResourceContext)
     const ocdCache = useCache()
+    const theme = useTheme()
     console.debug(`>>> OcdProperies: OcdResourceProperties: Render(): Using Cache`, ocdCache)
     const selectedModelResource: OcdResource = ocdDocument.getSelectedResource()
     const selectedModelResourceProxy: OcdResource = useMemo(() => getSelectedResourceProxy(ocdDocument, selectedModelResource, ocdCache), [selectedModelResource])
@@ -206,8 +218,9 @@ const OcdResourceProperties = ({ocdDocument, setOcdDocument}: DesignerResourcePr
     // const resourceProperties = useMemo(() => <ResourceProperties ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={selectedResourceProxy} key={`${selectedResourceProxy ? selectedResourceProxy.id : ''}.Properties`}/>, [modelId])
     const resourceProperties = <ResourceProperties ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} resource={selectedModelResourceProxy} key={`${selectedModelResourceProxy ? selectedModelResourceProxy.id : ''}.Properties`}/>
     console.debug(`>>> OcdProperies: OcdResourceProperties: Render()`, selectedModelResource, ResourceProperties)
+    const divClassNames = `ocd-properties-panel ocd-properties-panel-default-theme ocd-properties-panel-${theme}-theme` // Use CSS positional precedence to override
     return (
-        <div className={`ocd-properties-panel ocd-properties-panel-theme`}>
+        <div className={divClassNames}>
             {selectedModelResource && selectedModelResourceProxy && variablesDatalist}
             {selectedModelResource && selectedModelResource.provider === 'oci' && commonProperties} 
             {selectedModelResource && ResourceProperties && resourceProperties} 
@@ -220,6 +233,7 @@ const OcdResourceTags = ({ocdDocument, setOcdDocument}: DesignerResourceProperti
     // const {ocdCache} = useContext(CacheContext)
     // const selectedModelResource: OcdResource = ocdDocument.getSelectedResource()
     const ocdCache = useCache()
+    const theme = useTheme()
     const selectedModelResource: OcdResource = ocdDocument.getResource(selectedResource.modelId)
     console.debug('OcdProperties: OcdResourceTags: selectedResource', selectedResource, '\nselectedModelResource', selectedModelResource)
     // const selectedResourceProxy = getSelectedResourceProxy(ocdDocument, selectedModelResource, ocdCache)
@@ -300,10 +314,12 @@ const OcdResourceTags = ({ocdDocument, setOcdDocument}: DesignerResourceProperti
         }
     })
     const updateDefinedTags = (tags: OciDefinedTag[]) => selectedResourceProxy.definedTags = OcdDesign.ociDefinedTagArrayToTags(tags)
+    const divClassNames = `ocd-properties-panel ocd-properties-panel-default-theme ocd-properties-panel-${theme}-theme` // Use CSS positional precedence to override
+    const summaryClassNames = `summary-background summary-background-default-theme summary-background-${theme}-theme` // Use CSS positional precedence to override
     return (
-        <div className={`ocd-properties-panel ocd-properties-panel-theme`}>
+        <div className={divClassNames}>
             <details className='ocd-details' open={true}>
-                <summary className='summary-background'><label>Freeform Tags</label></summary>
+                <summary className={summaryClassNames}><label>Freeform Tags</label></summary>
                 <div className='ocd-details-body'>
                     <div className='table ocd-tags-table'>
                         <div className='thead ocd-tags-list-header'>
@@ -330,7 +346,7 @@ const OcdResourceTags = ({ocdDocument, setOcdDocument}: DesignerResourceProperti
                 </div>
             </details>
             <details className='ocd-details' open={true}>
-                <summary className='summary-background'><label>Defined Tags</label></summary>
+                <summary className={summaryClassNames}><label>Defined Tags</label></summary>
                 <div className='ocd-details-body'>
                     <div className='table ocd-tags-table'>
                         <div className='thead ocd-tags-list-header'>
@@ -363,6 +379,7 @@ const OcdResourceTags = ({ocdDocument, setOcdDocument}: DesignerResourceProperti
 }
 
 const OcdResourceDocumentation = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
+    const theme = useTheme()
     const {selectedResource } = useContext(SelectedResourceContext)
     const [preview, setPreview] = useState(false)
     const selectedModelResource = ocdDocument.getSelectedResource()
@@ -384,8 +401,9 @@ const OcdResourceDocumentation = ({ocdDocument, setOcdDocument}: DesignerResourc
     console.debug('OcdProperties: OcdResourceDocumentation: selectedResource', selectedResource)
     console.debug('OcdProperties: OcdResourceDocumentation: selectedModelResource', selectedModelResource)
     console.debug('OcdProperties: OcdResourceDocumentation: documentation', documentation)
+    const divClassNames = `ocd-properties-panel ocd-properties-documentation-panel ocd-properties-panel-default-theme ocd-properties-panel-${theme}-theme` // Use CSS positional precedence to override
     return (
-        <div className={`ocd-properties-panel ocd-properties-panel-theme ocd-properties-documentation-panel`}>
+        <div className={divClassNames}>
             <div className='ocd-properties-documentation-preview-bar'><input id='documentation_preview_checkbox' type='checkbox' checked={preview} onChange={onPreviewChanged}></input><label htmlFor='documentation_preview_checkbox'>Preview</label></div>
             {!preview && <textarea id='ocd_resource_documentation' onChange={onChange} onBlur={onBlur} value={documentation}></textarea>}
             {preview && <div className='ocd-properties-documentation-preview'><Markdown>{documentation}</Markdown></div>}
@@ -396,6 +414,7 @@ const OcdResourceDocumentation = ({ocdDocument, setOcdDocument}: DesignerResourc
 }
 
 const OcdResourceArrangement = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
+    const theme = useTheme()
     const {selectedResource } = useContext(SelectedResourceContext)
     // const selectedResource = ocdDocument.selectedResource
     const page: OcdViewPage = ocdDocument.getActivePage()
@@ -463,8 +482,9 @@ const OcdResourceArrangement = ({ocdDocument, setOcdDocument}: DesignerResourceP
         if (coords) {ocdDocument.sendBackward(coords, page.id)}
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
+    const divClassNames = `ocd-properties-panel ocd-properties-arrangement-panel ocd-properties-panel-default-theme ocd-properties-panel-${theme}-theme` // Use CSS positional precedence to override
     return (
-        <div className={`ocd-properties-panel ocd-properties-panel-theme ocd-properties-arrangement-panel`}>
+        <div className={divClassNames}>
             <div className={`ocd-arrangement-z-positioning`}>
                 <div onClick={() => toFrontClick()} aria-hidden><span>To Front</span></div>
                 <div onClick={() => toBackClick()} aria-hidden><span>To Back</span></div>
@@ -491,6 +511,7 @@ const OcdResourceArrangement = ({ocdDocument, setOcdDocument}: DesignerResourceP
     )
 }
 const OcdResourceStyle = ({ocdDocument, setOcdDocument}: DesignerResourceProperties): JSX.Element => {
+    const theme = useTheme()
     const selectedResource = ocdDocument.selectedResource
     console.debug('OcdProperties: Selected Resource', selectedResource)
     const page: OcdViewPage = ocdDocument.getActivePage()
@@ -582,8 +603,9 @@ const OcdResourceStyle = ({ocdDocument, setOcdDocument}: DesignerResourcePropert
         const clone = OcdDocument.clone(ocdDocument)
         setOcdDocument(clone)
     }
+    const divClassNames = `ocd-properties-panel ocd-properties-style-panel ocd-properties-panel-default-theme ocd-properties-panel-${theme}-theme` // Use CSS positional precedence to override
     return (
-        <div className={`ocd-properties-panel ocd-properties-panel-theme ocd-properties-style-panel`}>
+        <div className={divClassNames}>
             <div className={`ocd-style-fill`}>
                 <div><input id='resourceStyleFill' type='checkbox' onChange={fillCheckedChanged} checked={fillChecked}/><span>Fill</span></div>
                 {fillChecked && <div><OcdColourPicker colour={fill} setColour={setFillColour} /></div>}

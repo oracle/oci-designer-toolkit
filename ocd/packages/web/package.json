@@ -17,6 +17,8 @@
   "main": "index.js",
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prebuild": "cp -v ../react/src/css/*.css ./src/css || copy /y ../react/src/css/*.css ./src/css",
+    "build": ""
   }
 }
