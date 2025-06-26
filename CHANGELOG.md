@@ -1,6 +1,18 @@
 # Release Notes
 
 
+## June 2025 Release
+**Release Date**: 30th June 2025
+
+### OKIT-Desktop Version 0.3.0
+#### Features
+#### Bug Fixes
+
+### OKIT-Classic Version 0.70.0
+##### Features
+### Bug Fixes
+
+
 ## Version 0.69.1
 **Release Date**: 7th May 2025
 ### Features

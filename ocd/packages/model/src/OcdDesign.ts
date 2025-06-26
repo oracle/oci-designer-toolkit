@@ -196,7 +196,7 @@ export namespace OcdDesign {
                 ocdSchemaVersion: schemaVersion,
                 ocdModelId: `ocd-model-${uuidv4()}`,
                 platform: 'oci',
-                title: 'Untitled - Open Cloud Design',
+                title: 'Untitled - Edge Cloud Design',
                 documentation: '',
                 created: `${date} ${time}`,
                 updated: '',
