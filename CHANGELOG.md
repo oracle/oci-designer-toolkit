@@ -25,9 +25,8 @@
 **Release Date**: 30th April 2025
 ### BREAKING CHANGE
 1. OKIT-Classic: (OKIT-321) Restructure Repository to move exist OKIT files to okitclassinc Subdirectory.
-```diff
-- This modification will require any existing users to change their environment variables and any start scripts they use. The documentation and associated scripts within the repository have been updated and the user must follow the new instructions.
-```
+> [!WARNING]  
+> **This modification will require any existing users to change their environment variables and any start scripts they use. The documentation and associated scripts within the repository have been updated and the user must follow the new instructions.**
 ### Features
 1. OKIT-Desktop: Add new OCI Resources
     1. Bastion (OKIT-322)
