@@ -3,8 +3,8 @@
 
 
 
-[!IMPORTANT]  
-___As of June 2025 OKIT-Classic and OKIT-Desktop will drop full OCI and Multi-Cloud support and become a pure Oracle Edge Cloud tool.___ 
+> [!IMPORTANT]  
+> ___As of June 2025 OKIT-Classic and OKIT-Desktop will drop full OCI and Multi-Cloud support and become a pure Oracle Edge Cloud tool.___ 
 
 
 
