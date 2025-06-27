@@ -14,10 +14,7 @@
 
 Full Release Details Can Found [0.3.0 Release](https://github.com/oracle/oci-designer-toolkit/releases/tag/v0.3.0).
 
-OKIT Desktop is the next generation implementation of the OKIT Classic design tool that takes the concepts within OKIT Classic and re-implements them within
-an Electron based desktop application, providing native installs for Mac, Windows and Linux.
-
-**OKIT Desktop** Public Beta is now Available see [0.3.0 Release](https://github.com/oracle/oci-designer-toolkit/releases/tag/v0.3.0) for details.
+OKIT Desktop is the next generation implementation of the OKIT Classic design tool that takes the concepts within OKIT Classic and re-implements them within an Electron based desktop application, providing native installs for Mac, Windows and Linux.
 
 The OKIT Desktop provides the user with a fully freeform Drag & Drop canvas with the ability to create multiple pages to represent the same design in alternative formats, as seen below. As with the OKIT Classic the properties of resources can be editted within the properties panel along with the ability to add detailed description of each resource, if required. The OKIT Desktop will provide feature compatibility with the OKIT Classic allowing the user multiple views of the design information:
 
