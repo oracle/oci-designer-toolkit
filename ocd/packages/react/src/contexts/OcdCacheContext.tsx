@@ -3,15 +3,16 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import React, { createContext, Dispatch, useContext, useEffect, useReducer } from 'react'
+import { createContext, Dispatch, useContext, useEffect, useReducer } from 'react'
 import { OcdCacheData } from "../components/OcdCache"
 
 export const CacheContext = createContext<OcdCacheData>(OcdCacheData.new())
 export const CacheDispatchContext = createContext<Dispatch<CacheReducerAction>>(() => {})
-// export const CacheDispatchContext = createContext<OcdCacheContext>({ocdCache: OcdCacheData.new(), setOcdCache: () => {}})
 export type CacheReducerAction = {
-    type: string
+    type: 'new' | 'updated' | 'setRegion' | 'setProfile'
     cache: OcdCacheData
+    profile?: string
+    region?: string
 }
 
 export function CacheProvider({ children }: Readonly<{children: JSX.Element | JSX.Element[]}>): JSX.Element {
@@ -44,12 +45,24 @@ export function useCacheDispatch() {
 }
 
 function cacheReducer(cache: OcdCacheData, action: CacheReducerAction) {
+    console.debug('OcdCacheContext: cacheReducer: cache', cache)
+    console.debug('OcdCacheContext: cacheReducer: action', action)
     switch (action.type) {
         case 'new': {
             return OcdCacheData.new()
         }
         case 'updated': {
             return action.cache
+        }
+        case 'setProfile': {
+            const clone = OcdCacheData.clone(cache)
+            clone.cache.profile = action.profile ?? ''
+            return clone
+        }
+        case 'setRegion': {
+            const clone = OcdCacheData.clone(cache)
+            clone.cache.region = action.region ?? ''
+            return clone
         }
         default: {
             throw Error(`Unknown action: ${action.type}`)

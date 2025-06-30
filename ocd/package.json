@@ -1,8 +1,8 @@
 {
   "name": "ocd",
-  "version": "0.2.9",
+  "version": "0.3.0",
   "description": "OKIT Open Cloud Designer Desktop",
-  "title": "OKIT Open Cloud Designer (Beta)",
+  "title": "OKIT-Desktop April 2025 (Beta)",
   "author": {
     "name": "Andrew Hopkinson",
     "email": "andrew.hopkinson@oracle.com",

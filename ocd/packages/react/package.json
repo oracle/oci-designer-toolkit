@@ -1,7 +1,7 @@
 {
   "name": "@ocd/react",
   "private": true,
-  "version": "0.2.9",
+  "version": "0.3.0",
   "description": "OKIT Open Cloud Designer React Components",
   "title": "OKIT Open Cloud Designer React Components",
   "author": {
@@ -49,11 +49,11 @@
   "dependencies": {
   },
   "peerDependencies": {
-    "@ocd/core": ">=0.2.9",
-    "@ocd/export": ">=0.2.9",
-    "@ocd/import": ">=0.2.9",
-    "@ocd/model": ">=0.2.9",
-    "@ocd/query": ">=0.2.9",
+    "@ocd/core": ">=0.3.0",
+    "@ocd/export": ">=0.3.0",
+    "@ocd/import": ">=0.3.0",
+    "@ocd/model": ">=0.3.0",
+    "@ocd/query": ">=0.3.0",
     "react": "^18.3.1",
     "react-colorful": "^5.6.1",
     "react-dom": "^18.3.1",
@@ -71,11 +71,11 @@
     "eslint-plugin-react-refresh": "^0.4.12",
     "glob": "^11.0.0",
     "globals": "^15.9.0",
-    "@ocd/core": ">=0.2.9",
-    "@ocd/export": ">=0.2.9",
-    "@ocd/import": ">=0.2.9",
-    "@ocd/model": ">=0.2.9",
-    "@ocd/query": ">=0.2.9",
+    "@ocd/core": ">=0.3.0",
+    "@ocd/export": ">=0.3.0",
+    "@ocd/import": ">=0.3.0",
+    "@ocd/model": ">=0.3.0",
+    "@ocd/query": ">=0.3.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-markdown": "^9.0.0",
@@ -84,7 +84,7 @@
     "remark-gfm": "^4.0.0",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.7.0",
-    "vite": ">=6.3.3",
+    "vite": ">=6.3.4",
     "vite-plugin-dts": "^4.3.0"
   },
   "sideEffects": [

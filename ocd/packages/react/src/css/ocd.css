@@ -5,13 +5,14 @@
     --console-menubar-height: 25px;
     --console-header-height: 50px;
     --console-toolbar-height: 25px;
-    --console-toolbar-icon-height: 25px;
-    --console-toolbar-icon-width: 25px;
+    --console-toolbar-icon-height: 20px;
+    --console-toolbar-icon-width: 20px;
     --console-footer-height: 30px;
     --console-logo-height: 50px;
     --console-logo-width: 50px;
     --console-tab-bar-height: 25px;
     --console-layers-bar-height: 25px;
+    --console-layers-bar-menu-icon-width: 25px;
     --console-pages-bar-height: 25px;
     --console-palette-width: 200px;
     --console-properties-width: 500px;
@@ -44,7 +45,7 @@ body {
 details {
     display: block;
     box-sizing: border-box;
-    margin-top: 1em;
+    margin-top: 5px;
     width: 100%;
     max-width: 100%;
 }
@@ -341,6 +342,18 @@ summary {
     color: #1d2733;
     box-shadow: 0 0 5px #1d2733;
     text-shadow: 0 0 5px #1d2733;
+}
+
+.ocd-console-toolbar-checkbox {
+    display: inline-flex;
+    margin-top: auto;
+    margin-bottom: auto;
+    font-size: 12px;
+}
+
+.ocd-console-toolbar-checkbox label {
+    display: inline-flex;
+    align-items: center;
 }
 
 .ocd-console-toolbar-dropdown {
@@ -1085,7 +1098,7 @@ summary {
 
 .ocd-designer-canvas-layers-bar {
     display: grid;
-    grid-template-columns: var(--console-toolbar-icon-width) auto var(--console-toolbar-icon-width);
+    grid-template-columns: var(--console-layers-bar-menu-icon-width) auto var(--console-layers-bar-menu-icon-width);
     height: var(--console-layers-bar-height);
     min-height: var(--console-layers-bar-height);
     max-height: var(--console-layers-bar-height);
@@ -1161,7 +1174,7 @@ summary {
 .ocd-layer-icon {
     display: block;
     height: var(--console-layers-bar-height);
-    width: var(--console-layers-bar-height);
+    width: var(--console-layers-bar-menu-icon-width);
     background-position: center;
     background-repeat: no-repeat;
     background-size: 15px;
@@ -1191,7 +1204,10 @@ summary {
 
 .ocd-designer-canvas-pages-bar {
     display: grid;
-    grid-template-columns: var(--console-toolbar-icon-width) auto var(--console-toolbar-icon-width);
+    grid-template-columns: var(--console-layers-bar-menu-icon-width) auto var(--console-layers-bar-menu-icon-width);
+    height: var(--console-layers-bar-height);
+    min-height: var(--console-layers-bar-height);
+    max-height: var(--console-layers-bar-height);
     width: 100%;
     border-top: #312D2A solid 1px;
     padding: 0;
@@ -1812,6 +1828,12 @@ table {
     border-bottom: 1px solid #d1d1d4;
 }
 
+.ocd-properties-header-grid {
+    display: grid;
+    grid-template-columns: auto var(--console-toolbar-icon-width) var(--console-toolbar-icon-width);
+    column-gap: 2px;
+}
+
 .property-editor-title {
     display: block;
     box-sizing: border-box;
@@ -1828,8 +1850,8 @@ table {
 .heading-background {
     background-position: right center;
     background-repeat: no-repeat;
-    background-size: 20px;
-    margin-right: 1em;
+    background-size: var(--console-toolbar-icon-width);
+    /* margin-right: 1em; */
 }
 
 .ocd-properties-panel {
@@ -2280,6 +2302,11 @@ table {
     row-gap: 5px;
 }
 
+.ocd-dialog-body .ocd-radio-buttons label {
+    font-family: var(--dialog-input-font-family);
+    font-size: var(--dialog-input-font-size);
+}
+
 .ocd-dialog-footer {
     background-color: var(--dialog-footer-background-colour);
     color: var(--dialog-footer-colour);
@@ -2306,6 +2333,10 @@ table {
     overflow-x: hidden;
 }
 
+.ocd-export-compartment-picker {
+    height: 300px;
+}
+
 .ocd-compartment-picker ul {
     margin: 0;
     padding: 0;
@@ -2313,10 +2344,6 @@ table {
     align-items: center;
     list-style: none;
     text-decoration: none;    
-}
-
-.ocd-compartment-picker li > ul {
-    padding-left: 1em;
 }
 
 .ocd-compartment-picker li > label,
@@ -2342,6 +2369,8 @@ table {
     display: inline-block;
     font-family: var(--dialog-input-font-family);
     font-size: var(--dialog-input-font-size);
+    height: 1.5em;
+    vertical-align: middle;
 }
 
 

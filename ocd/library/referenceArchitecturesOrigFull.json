@@ -1,0 +1,29 @@
+{
+    "oci": [
+        {
+            "title": "Simple Networking",
+            "description": "Simple Networking example which will create a vcn and subnet.",
+            "okitFile": "SimpleNetworking.okit",
+            "svgFile": "SimpleNetworking.svg"
+        }
+    ],
+    "azure": [],
+    "google": [],
+    "aws": [],
+    "pca": [
+        {
+            "title": "OKE Networking",
+            "description": "OKE networking infrastructure for the PCA.",
+            "okitFile": "OKENetworkInfrastructure.okit",
+            "svgFile": "OKENetworkInfrastructure.svg"
+        }
+    ],
+    "c3": [
+        {
+            "title": "OKE Networking",
+            "description": "OKE networking infrastructure for the C3.",
+            "okitFile": "OKENetworkInfrastructure.okit",
+            "svgFile": "OKENetworkInfrastructure.svg"
+        }
+    ]
+}

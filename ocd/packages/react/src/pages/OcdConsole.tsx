@@ -18,8 +18,6 @@ import OcdLibrary from './OcdLibrary'
 import { OcdQueryDialog } from '../components/dialogs/OcdQueryDialog'
 import { OcdConfigFacade } from '../facade/OcdConfigFacade'
 import OcdDocumentation from './OcdDocumentation'
-import { OcdCacheData } from '../components/OcdCache'
-import { OcdCacheFacade } from '../facade/OcdCacheFacade'
 import { loadDesign } from '../components/Menu'
 import { OcdValidationResult, OcdValidator } from '@ocd/model'
 import OcdValidation from './OcdValidation'
@@ -27,13 +25,18 @@ import { buildDetails } from '../data/OcdBuildDetails'
 import OcdHelp from './OcdHelp'
 import OcdCommonTags from './OcdCommonTags'
 import { OcdReferenceDataQueryDialog } from '../components/dialogs/OcdReferenceDataQueryDialog'
-import { OcdActiveFileContext, OcdCacheContext, OcdConsoleConfigContext, OcdDialogContext, OcdDocumentContext, OcdDragResourceContext, OcdSelectedResourceContext } from './OcdConsoleContext'
+import { OcdActiveFileContext, OcdConsoleConfigContext, OcdDialogContext, OcdDocumentContext, OcdDragResourceContext, OcdSelectedResourceContext } from './OcdConsoleContext'
+// import { OcdActiveFileContext, OcdCacheContext, OcdConsoleConfigContext, OcdDialogContext, OcdDocumentContext, OcdDragResourceContext, OcdSelectedResourceContext } from './OcdConsoleContext'
 import { OcdExportToResourceManagerDialog } from '../components/dialogs/OcdExportToResourceManagerDialog'
+import { ocdThemes } from '../data/OcdThemes'
+// Context Providers
+import { CacheProvider, useCache, useCacheDispatch } from '../contexts/OcdCacheContext'
+import { defaultTheme, ThemeProvider, useThemeDispatch } from '../contexts/OcdThemeContext'
+import { ConsoleConfigProvider } from '../contexts/OcdConsoleConfigContext'
 
-export const ThemeContext = createContext<string>('')
 export const ActiveFileContext = createContext<OcdActiveFileContext>({activeFile: {name: '', modified: false}, setActiveFile: () => {}})
 export const ConsoleConfigContext = createContext<OcdConsoleConfigContext>({ocdConsoleConfig: OcdConsoleConfig.new(), setOcdConsoleConfig: () => {}})
-export const CacheContext = createContext<OcdCacheContext>({ocdCache: OcdCacheData.new(), setOcdCache: () => {}})
+// export const CacheContext = createContext<OcdCacheContext>({ocdCache: OcdCacheData.new(), setOcdCache: () => {}})
 export const DocumentContext = createContext<OcdDocumentContext>({ocdDocument: OcdDocument.new(), setOcdDocument: () => {}})
 export const SelectedResourceContext = createContext<OcdSelectedResourceContext>({selectedResource: OcdDocument.newSelectedResource(), setSelectedResource: () => {}})
 export const DragResourceContext = createContext<OcdDragResourceContext>({dragResource: OcdDocument.newDragResource(), setDragResource: () => {}})
@@ -43,12 +46,13 @@ export const OcdConsole = (): JSX.Element => {
     // State Variables
     const [ocdDocument, setOcdDocument] = useState(OcdDocument.new())
     const [ocdConsoleConfig, setOcdConsoleConfig] = useState(OcdConsoleConfig.new())
-    const [ocdCache, setOcdCache] = useState(OcdCacheData.new())
+    // const [ocdCache, setOcdCache] = useState(OcdCacheData.new())
     const [activeFile, setActiveFile] = useState({name: '', modified: false})
     const [selectedResource, setSelectedResource] = useState({} as OcdSelectedResource)
+    // Context
     // Memo Hooks
     const activeFileContext = useMemo(() => ({activeFile, setActiveFile}), [activeFile])
-    const cacheContext = useMemo(() => ({ocdCache, setOcdCache}), [ocdCache])
+    // const cacheContext = useMemo(() => ({ocdCache, setOcdCache}), [ocdCache])
     const consoleConfigContext = useMemo(() => ({ocdConsoleConfig, setOcdConsoleConfig}), [ocdConsoleConfig])
     const documentContext = useMemo(() => ({ocdDocument, setOcdDocument}), [ocdDocument])
     const selectedResourceContext = useMemo(() => ({selectedResource, setSelectedResource}), [selectedResource])
@@ -67,16 +71,14 @@ export const OcdConsole = (): JSX.Element => {
             console.debug('OcdConsole: Load Console Config', results)
             const consoleConfig = new OcdConsoleConfig(results)
             setOcdConsoleConfig(consoleConfig)
+            // setTheme({
+            //     type: 'set',
+            //     theme: consoleConfig.config.theme || defaultTheme
+            // })
         }).catch((response) => {
             console.debug('OcdConsole: Load Console Config', response)
             OcdConfigFacade.saveConsoleConfig(ocdConsoleConfig.config).then((results) => {}).catch((response) => console.debug('OcdConsole:', response))
             // OcdConfigFacade.saveConsoleConfig(ocdConsoleConfig.config).then((results) => {console.debug('OcdConsole: Saved Console Config')}).catch((response) => console.debug('OcdConsole:', response))
-        })
-    }, []) // Empty Array to only run on initial render
-    // Load the Dropdown Resource Cache
-    useEffect(() => {
-        ocdCache.loadCache().then((results) => {
-            console.debug('OcdConsole: useEffect: loadCache:', ocdCache)
         })
     }, []) // Empty Array to only run on initial render
     const setAndSaveOcdConsoleConfig = (consoleConfig: OcdConsoleConfig) => {
@@ -84,28 +86,26 @@ export const OcdConsole = (): JSX.Element => {
         // OcdConfigFacade.saveConsoleConfig(consoleConfig.config).then((results) => {console.debug('OcdConsole: Saved Config')}).catch((response) => console.debug('OcdConsole:', response))
         setOcdConsoleConfig(consoleConfig)
     }
-    const setAndSaveOcdCache = (cacheData: OcdCacheData) => {
-        OcdCacheFacade.saveCache(cacheData.cache).then((results) => {}).catch((response) => console.debug('OcdConsole:', response))
-        // OcdCacheFacade.saveCache(cacheData.cache).then((results) => {console.debug('OcdConsole: Saved Cache')}).catch((response) => console.debug('OcdConsole:', response))
-        setOcdCache(cacheData)
-    }
     console.debug('OcdConsole: Console Config', ocdConsoleConfig)
-    console.debug('OcdConsole: Dropdown Cache', ocdCache)
     return (
         <ConsoleConfigContext.Provider value={consoleConfigContext}>
             <ActiveFileContext.Provider value={activeFileContext}>
-                <CacheContext.Provider value={cacheContext}>
-                    <DocumentContext.Provider value={documentContext}>
-                        <SelectedResourceContext.Provider value={selectedResourceContext}>
-                            <div className='ocd-console'>
-                                <OcdConsoleHeader ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
-                                <OcdConsoleToolbar ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
-                                <OcdConsoleBody ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
-                                <OcdConsoleFooter ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
-                            </div>
-                        </SelectedResourceContext.Provider>
-                    </DocumentContext.Provider>
-                </CacheContext.Provider>
+                <DocumentContext.Provider value={documentContext}>
+                    <SelectedResourceContext.Provider value={selectedResourceContext}>
+                        <ConsoleConfigProvider>
+                            <CacheProvider>
+                                <ThemeProvider>
+                                    <div className='ocd-console'>
+                                        <OcdConsoleHeader ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
+                                        <OcdConsoleToolbar ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
+                                        <OcdConsoleBody ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
+                                        <OcdConsoleFooter ocdConsoleConfig={ocdConsoleConfig} setOcdConsoleConfig={(ocdConsoleConfig: OcdConsoleConfig) => setAndSaveOcdConsoleConfig(ocdConsoleConfig)} ocdDocument={ocdDocument} setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)} />
+                                    </div>
+                                </ThemeProvider>
+                            </CacheProvider>
+                        </ConsoleConfigProvider>
+                    </SelectedResourceContext.Provider>
+                </DocumentContext.Provider>
             </ActiveFileContext.Provider>
         </ConsoleConfigContext.Provider>
     )
@@ -144,6 +144,7 @@ const OcdConsoleHeader = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, 
 }
 
 const OcdConsoleSettingsEditor = ({ ocdConsoleConfig, setOcdConsoleConfig }: any): JSX.Element => {
+    const setOcdTheme = useThemeDispatch()
     const [dropdown, setDropdown] = useState(false)
     const toggleDropdown = () => {setDropdown(!dropdown)}
     const cbRef = useRef<HTMLInputElement>(null)
@@ -155,6 +156,18 @@ const OcdConsoleSettingsEditor = ({ ocdConsoleConfig, setOcdConsoleConfig }: any
         ocdConsoleConfig.config.zoomOnWheel = !ocdConsoleConfig.config.zoomOnWheel
         setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
     }
+    const onThemeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        ocdConsoleConfig.config.theme = e.target.value
+        setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+        setDropdown(!dropdown)
+        setOcdTheme({
+                type: 'set',
+                theme: e.target.value
+            })
+    }
+    const selectClicked = (e: React.MouseEvent<HTMLSelectElement>) => {
+        e.stopPropagation()
+    }
     return (
         <div className='ocd-console-toolbar-dropdown ocd-console-toolbar-dropdown-theme ocd-toolbar-separator-right'>
             <ul>
@@ -164,6 +177,9 @@ const OcdConsoleSettingsEditor = ({ ocdConsoleConfig, setOcdConsoleConfig }: any
                         <li className='ocd-dropdown-menu-item'><div><label><input id='showPreviousViewOnStart' type='checkbox' onChange={showPreviousViewOnStartOnChange} ref={cbRef} checked={ocdConsoleConfig.config.showPreviousViewOnStart}/>Show Previous View On Start</label></div></li>
                         <li className='ocd-dropdown-menu-item'><div>--------------------------------</div></li>
                         <li className='ocd-dropdown-menu-item'><div><label><input id='zoomOnWheel' type='checkbox' onChange={zoomOnWheelOnChange} ref={cbRef} checked={ocdConsoleConfig.config.zoomOnWheel}/>Allow Zoom Mouse Wheel</label></div></li>
+                        <li className='ocd-dropdown-menu-item'><div>--------------------------------</div></li>
+                        <li className='ocd-dropdown-menu-item'><div>Theme</div></li>
+                        <li className='ocd-dropdown-menu-item'><div><select value={ocdConsoleConfig.config.theme} onChange={onThemeChange} onClick={selectClicked}>{Object.entries(ocdThemes).filter(([k, v]) => k !== 'default').map(([k, v]) => {return <option value={k} key={k}>{v}</option>})}</select></div></li>
                     </ul>
                 </li>
             </ul>
@@ -312,8 +328,7 @@ const OcdConsoleBody = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, se
 }
 
 const OcdConsoleFooter = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOcdDocument }: ConsolePageProps): JSX.Element => {
-    const {activeFile, setActiveFile} = useContext(ActiveFileContext)
-    const {ocdCache, setOcdCache} = useContext(CacheContext)
+    const {activeFile} = useContext(ActiveFileContext)
     const filenameClass = `${activeFile.modified ? 'ocd-design-modified ocd-active-file-modified-icon' : ''}`
     return (
         <div className='ocd-console-footer ocd-console-footer-theme'>
@@ -336,11 +351,18 @@ const OcdConsoleFooter = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, 
 }
 
 const OcdCachePicker = (): JSX.Element => {
-    const {ocdCache, setOcdCache} = useContext(CacheContext)
+    // const {ocdCache, setOcdCache} = useContext(CacheContext)
+    const ocdCache = useCache()
+    const setOcdCache = useCacheDispatch()
     const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         ocdCache.cache.profile = e.target.value
-        setOcdCache(OcdCacheData.clone(ocdCache))
-        ocdCache.saveCache()
+        // setOcdCache(OcdCacheData.clone(ocdCache))
+        setOcdCache({
+            type: 'setRegion',
+            cache: ocdCache,
+            region: e.target.value
+        })
+    ocdCache.saveCache()
     }
     return (
         <div className='ocd-cache-picker'>

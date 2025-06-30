@@ -8,17 +8,17 @@ import { OcdConditionalElements } from "../../types/OcdImporterData.js";
 export const conditionalElements: OcdConditionalElements = {
     "common": {},
     "oci_core_dhcp_options": {
-        "search_domain_names": {
+        "options.search_domain_names": {
             "element": "type",
             "operator": "eq",
             "value": "SearchDomain"
         },
-        "server_type": {
+        "options.server_type": {
             "element": "type",
             "operator": "eq",
             "value": "DomainNameServer"
         },
-        "custom_dns_servers": [
+        "options.custom_dns_servers": [
             {
                 "element": "server_type",
                 "operator": "eq",
@@ -85,17 +85,32 @@ export const conditionalElements: OcdConditionalElements = {
         }
     },
     "oci_core_security_list": {
-        "icmp_options": {
+        "egress_security_rules.icmp_options": {
             "element": "protocol",
             "operator": "eq",
             "value": "1"
         },
-        "tcp_options": {
+        "egress_security_rules.tcp_options": {
             "element": "protocol",
             "operator": "eq",
             "value": "6"
         },
-        "udp_options": {
+        "egress_security_rules.udp_options": {
+            "element": "protocol",
+            "operator": "eq",
+            "value": "17"
+        },
+        "ingress_security_rules.icmp_options": {
+            "element": "protocol",
+            "operator": "eq",
+            "value": "1"
+        },
+        "ingress_security_rules.tcp_options": {
+            "element": "protocol",
+            "operator": "eq",
+            "value": "6"
+        },
+        "ingress_security_rules.udp_options": {
             "element": "protocol",
             "operator": "eq",
             "value": "17"

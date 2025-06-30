@@ -21,31 +21,46 @@ jobs:
       okit_release_version: ${{ steps.version.outputs.okit_release_version }}
       okit_release_tag: ${{ steps.version.outputs.okit_release_tag }}
       okit_release_title: ${{ steps.version.outputs.okit_release_title }}
+      okit_classic_release_version: ${{ steps.version.outputs.okit_classic_release_version }}
+      okit_classic_release_tag: ${{ steps.version.outputs.okit_classic_release_tag }}
+      okit_classic_release_title: ${{ steps.version.outputs.okit_classic_release_title }}
+      okit_desktop_release_version: ${{ steps.version.outputs.okit_desktop_release_version }}
+      okit_desktop_release_tag: ${{ steps.version.outputs.okit_desktop_release_tag }}
+      okit_desktop_release_title: ${{ steps.version.outputs.okit_desktop_release_title }}
     steps:
       - uses: actions/checkout@v4
       - id: version
         run: |
           echo "ocd_version=$(jq -r '.version' ocd/packages/desktop/package.json)"  >> "$GITHUB_OUTPUT"
-          echo "okit_release_version=$(jq -r '.release' okitweb/static/okit/json/release.json)"  >> "$GITHUB_OUTPUT"
-          echo "okit_release_tag=$(jq -r '.tag' okitweb/static/okit/json/release.json)"  >> "$GITHUB_OUTPUT"
-          echo "okit_release_title=$(jq -r '.title' okitweb/static/okit/json/release.json)"  >> "$GITHUB_OUTPUT"
+          echo "okit_release_version=$(jq -r '.release' okitclassic/okitserver/static/okit/json/release.json)"  >> "$GITHUB_OUTPUT"
+          echo "okit_release_tag=$(jq -r '.tag' okitclassic/okitserver/static/okit/json/release.json)"  >> "$GITHUB_OUTPUT"
+          echo "okit_release_title=$(jq -r '.title' okitclassic/okitserver/static/okit/json/release.json)"  >> "$GITHUB_OUTPUT"
+          echo "okit_classic_release_version=$(jq -r '.release' okitclassic/okitserver/static/okit/json/release.json)"  >> "$GITHUB_OUTPUT"
+          echo "okit_classic_release_tag=$(jq -r '.tag' okitclassic/okitserver/static/okit/json/release.json)"  >> "$GITHUB_OUTPUT"
+          echo "okit_classic_release_title=$(jq -r '.title' okitclassic/okitserver/static/okit/json/release.json)"  >> "$GITHUB_OUTPUT"
+          echo "okit_desktop_release_version=$(jq -r '.version' ocd/packages/desktop/package.json)"  >> "$GITHUB_OUTPUT"
+          echo "okit_desktop_release_tag=v$(jq -r '.version' ocd/packages/desktop/package.json)"  >> "$GITHUB_OUTPUT"
+          echo "okit_desktop_release_title=$(jq -r '.title' ocd/packages/desktop/package.json) Release"  >> "$GITHUB_OUTPUT"
   create-release: 
     needs: [generate-variables]
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     continue-on-error: true
-    strategy:
-      fail-fast: false
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       RELEASE_TAG: ${{ needs.generate-variables.outputs.okit_release_tag }}
       RELEASE_TITLE: ${{ needs.generate-variables.outputs.okit_release_title }}
+      CLASSIC_RELEASE_TAG: ${{ needs.generate-variables.outputs.okit_classic_release_tag }}
+      CLASSIC_RELEASE_TITLE: ${{ needs.generate-variables.outputs.okit_classic_release_title }}
+      DESKTOP_RELEASE_TAG: ${{ needs.generate-variables.outputs.okit_desktop_release_tag }}
+      DESKTOP_RELEASE_TITLE: ${{ needs.generate-variables.outputs.okit_desktop_release_title }}
     steps:
       - uses: actions/checkout@v4
       - name: Create Release 
         id: create_release
         run: |
-          gh release create ${{ env.RELEASE_TAG }} --title "${{ env.RELEASE_TITLE }}" --notes-file ./RELEASE_NOTES.md --target master --latest
+          gh release create ${{ env.CLASSIC_RELEASE_TAG }} --title "${{ env.CLASSIC_RELEASE_TITLE }}" --notes-file ./okitclassic/RELEASE_NOTES.md --target master --latest
+          gh release create ${{ env.DESKTOP_RELEASE_TAG }} --title "${{ env.DESKTOP_RELEASE_TITLE }}" --notes-file ./ocd/RELEASE_NOTES.md --target master --latest
     
   build-and-release:
     needs: [create-release, generate-variables]
@@ -62,6 +77,9 @@ jobs:
       RELEASE_TAG: ${{ needs.generate-variables.outputs.okit_release_tag }}
       OCD_VERSION: ${{ needs.generate-variables.outputs.ocd_version }}
       NODE_OPTIONS: "--max-old-space-size=8192"
+      DESKTOP_RELEASE_VERSION: ${{ needs.generate-variables.outputs.okit_desktop_release_version }}
+      DESKTOP_RELEASE_TAG: ${{ needs.generate-variables.outputs.okit_desktop_release_tag }}
+      DESKTOP_RELEASE_TITLE: ${{ needs.generate-variables.outputs.okit_desktop_release_title }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -86,20 +104,20 @@ jobs:
         if: matrix.os == 'macos-latest'
         run: |
           npm run github-action-build-macos-x86
-          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/make/ocd-${{ env.OCD_VERSION }}-*.dmg --clobber
-          # gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/mac/ocd-${{ env.OCD_VERSION }}-*.dmg --clobber
+          gh release upload ${{ env.DESKTOP_RELEASE_TAG }} ./ocd/dist/make/ocd-${{ env.DESKTOP_RELEASE_VERSION }}-*.dmg --clobber
+          # gh release upload ${{ env.DESKTOP_RELEASE_TAG }} ./ocd/dist/mac/ocd-${{ env.DESKTOP_RELEASE_VERSION }}-*.dmg --clobber
       - name: Upload Windows Artifact to Release
         if: matrix.os == 'windows-latest'
         run: |
           ls ./ocd/dist/make/squirrel.windows/x64
-          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/make/squirrel.windows/x64/ocd-${{ env.OCD_VERSION }}-Setup.exe --clobber
+          gh release upload ${{ env.DESKTOP_RELEASE_TAG }} ./ocd/dist/make/squirrel.windows/x64/ocd-${{ env.DESKTOP_RELEASE_VERSION }}-Setup.exe --clobber
           ls ./ocd/dist/make/squirrel.windows/x64
-          # gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/win/ocd-${{ env.OCD_VERSION }}-x64.exe --clobber
+          # gh release upload ${{ env.DESKTOP_RELEASE_TAG }} ./ocd/dist/win/ocd-${{ env.DESKTOP_RELEASE_VERSION }}-x64.exe --clobber
       - name: Upload Linux Artifact to Release
         if: matrix.os == 'ubuntu-latest'
         run: |
-          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/make/rpm/x64/ocd-${{ env.OCD_VERSION }}-*.rpm --clobber
-          gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/make/deb/x64/ocd_${{ env.OCD_VERSION }}*.deb --clobber
+          gh release upload ${{ env.DESKTOP_RELEASE_TAG }} ./ocd/dist/make/rpm/x64/ocd-${{ env.DESKTOP_RELEASE_VERSION }}-*.rpm --clobber
+          gh release upload ${{ env.DESKTOP_RELEASE_TAG }} ./ocd/dist/make/deb/x64/ocd_${{ env.DESKTOP_RELEASE_VERSION }}*.deb --clobber
           # gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}.rpm --clobber
           # gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}.deb --clobber
           # gh release upload ${{ env.RELEASE_TAG }} ./ocd/dist/linux/ocd-${{ env.OCD_VERSION }}-*.snap --clobber

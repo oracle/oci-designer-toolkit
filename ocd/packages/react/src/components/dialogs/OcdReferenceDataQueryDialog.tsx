@@ -6,12 +6,16 @@
 import { QueryDialogProps } from "../../types/Dialogs"
 import { OciApiFacade } from "../../facade/OciApiFacade"
 import React, { useContext, useState } from "react"
-import { CacheContext, ConsoleConfigContext } from "../../pages/OcdConsole"
+import { ConsoleConfigContext } from "../../pages/OcdConsole"
+// import { CacheContext, ConsoleConfigContext } from "../../pages/OcdConsole"
 import OcdConsoleConfig from "../OcdConsoleConfiguration"
+import { useCache, useCacheDispatch } from "../../contexts/OcdCacheContext"
 
 export const OcdReferenceDataQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps): JSX.Element => {
     const {ocdConsoleConfig, setOcdConsoleConfig} = useContext(ConsoleConfigContext)
-    const {ocdCache} = useContext(CacheContext)
+    // const {ocdCache} = useContext(CacheContext)
+    const ocdCache = useCache()
+    const setOcdCache = useCacheDispatch()
     const loadingState = '......Reading OCI Config'
     const regionsLoading = {id: 'Select Valid Profile', displayName: 'Select Valid Profile'}
     const className = `ocd-reference-data-query-dialog`
@@ -65,7 +69,11 @@ export const OcdReferenceDataQueryDialog = ({ocdDocument, setOcdDocument}: Query
         ocdCache.loadProfileRegionCache(selectedProfile, selectedRegion).then((results) => {
             console.debug('OcdReferenceDataQueryDialog: Query Dropdown', JSON.stringify(results, null, 2))
             const clone = OcdConsoleConfig.clone(ocdConsoleConfig)
-            setOcdConsoleConfig(clone)
+            setOcdConsoleConfig(clone) // Force a redraw - Need to start using Display Dialog Context
+            setOcdCache({
+                type: 'updated',
+                cache: ocdCache
+            })
             setCursor('default')
             console.debug('OcdReferenceDataQueryDialog: Cache', ocdCache)
         })

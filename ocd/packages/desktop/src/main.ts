@@ -443,8 +443,9 @@ async function handleSaveDesign(event: any, design: OcdDesign | string, filename
 					properties: ['createDirectory'],
 					filters: [{name: 'Filetype', extensions: ['okit']}]
 				}).then(result => {
-					if (!result.canceled) fs.writeFileSync(result.filePath, JSON.stringify(design, null, 4))
-					resolve({canceled: false, filename: result.canceled ? '' : result.filePath, design: design})
+					const filePath = path.extname(result.filePath) === '.okit' ? result.filePath : `${result.filePath}.okit`
+					if (!result.canceled) fs.writeFileSync(filePath, JSON.stringify(design, null, 4))
+					resolve({canceled: false, filename: result.canceled ? '' : filePath, design: design})
 				}).catch(err => {
 					console.error(err)
 					reject(new Error(err))
@@ -594,6 +595,11 @@ async function handleExportToTerraform(event: any, design: OcdDesign, directory:
 				const terraform = exporter.export(design)
 				console.debug('handleExportToTerraform: ', result.filePaths)
 				const directory = result.filePaths[0]
+				if (design.metadata.separateIdentity) {
+					// create identity & resources sub-directories
+					fs.mkdirSync(path.join(directory, 'identity'))
+					fs.mkdirSync(path.join(directory, 'resources'))
+				}
 				Object.entries(terraform).forEach(([k, v]) => fs.writeFileSync(path.join(directory, k), v.join('\n')))
 			}
 			resolve({canceled: result.canceled, filename: result.filePaths[0], design: design})
