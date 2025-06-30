@@ -1851,7 +1851,6 @@ table {
     background-position: right center;
     background-repeat: no-repeat;
     background-size: var(--console-toolbar-icon-width);
-    /* margin-right: 1em; */
 }
 
 .ocd-properties-panel {
