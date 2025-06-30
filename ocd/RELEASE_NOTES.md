@@ -2,18 +2,24 @@
 # June 2025 Release (Version 0.3.0)
 ____
 **Update 0.3.0**: This update addresses the following issues.
+1. Fix security list options issue where the fields were not being correctly hidden.
+2. Fix issue where Documentation tab was not always highlighted correctly.
+
 ____
 Welcome to the June 2025 release of OKIT. This release extends the number of resources supported within OKIT-Desktop.
 
 ## OKIT Desktop Features
-1. OKIT-Desktop: Add new OCI Resources
-    1. Bastion (OKIT-322)
-    2. Vault (OKIT-323)
-    3. Key (OKIT-324)
-    4. Secret (OKIT-325)
-    5. Data Science Project (OKIT-331)
-    6. Data Science Notebook Session (OKIT-332)
-    7. Integration Instance (OKIT-333)
+1. Rebrand to Edge Cloud Design Tool
+2. Add feature to allow the user to specify that the Identity Resource should be split from non-identity resources and create multiple directories.
+3. Option to Edit Lock resource, i.e. do not allow editting of fields if the lock is closed.
+4. Save now always guarentees a ".okit" extension
+5. Add Simple Theme framework.
+6. Create Reducer based Contexts in readiness to improve code.
+    1. Cache
+    2. Console Config
+    3. Theme
+    4. Active File
+7. Restructure build workflow to create Classic & Desktop releases.
 
 ### Beta Overview
 
