@@ -595,6 +595,11 @@ async function handleExportToTerraform(event: any, design: OcdDesign, directory:
 				const terraform = exporter.export(design)
 				console.debug('handleExportToTerraform: ', result.filePaths)
 				const directory = result.filePaths[0]
+				if (design.metadata.separateIdentity) {
+					// create identity & resources sub-directories
+					fs.mkdirSync(path.join(directory, 'identity'))
+					fs.mkdirSync(path.join(directory, 'resources'))
+				}
 				Object.entries(terraform).forEach(([k, v]) => fs.writeFileSync(path.join(directory, k), v.join('\n')))
 			}
 			resolve({canceled: result.canceled, filename: result.filePaths[0], design: design})

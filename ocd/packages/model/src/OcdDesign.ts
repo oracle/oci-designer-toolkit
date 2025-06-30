@@ -17,7 +17,8 @@ export interface OcdMetadata {
     title: string,
     documentation: string,
     created: string,
-    updated: string
+    updated: string,
+    separateIdentity: boolean
 }
 
 export interface OcdTag {
@@ -195,10 +196,11 @@ export namespace OcdDesign {
                 ocdSchemaVersion: schemaVersion,
                 ocdModelId: `ocd-model-${uuidv4()}`,
                 platform: 'oci',
-                title: 'Untitled - Open Cloud Design',
+                title: 'Untitled - Edge Cloud Design',
                 documentation: '',
                 created: `${date} ${time}`,
-                updated: ''
+                updated: '',
+                separateIdentity: true
             },
             model: {
                 oci: {

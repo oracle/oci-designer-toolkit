@@ -5,8 +5,8 @@
 console.debug('Loaded Console Javascript');
 
 
-const okitVersion = '0.69.1';
-const okitReleaseDate = '31st March 2025';
+const okitVersion = '0.70.0 (Final Release)';
+const okitReleaseDate = '30th June 2025';
 // const okitReleaseDate = 'Nightly';
 
 // Validation
@@ -18,7 +18,7 @@ function hideNavMenu() {
 }
 
 function checkForUpdate() {
-    $.getJSON('https://raw.githubusercontent.com/oracle/oci-designer-toolkit/master/okitweb/static/okit/json/release.json', function(resp) {
+    $.getJSON('https://raw.githubusercontent.com/oracle/oci-designer-toolkit/master/okitclassic/okitserver/static/okit/json/release.json', function(resp) {
         const release = resp.release.split('.');
         const version = okitVersion.split('.');
         if ((Number(release[0]) > Number(version[0])) ||
