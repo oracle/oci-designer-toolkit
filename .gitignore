@@ -78,14 +78,19 @@ containers/ssh/*
 **/react/src/components/properties/provider/google/resources.ts
 **/react/src/components/properties/provider/oci/resources.ts
 
+# Copied css files
+**/desktop/src/css/*.css
+**/web/src/css/*.css
+
 # Runtime Generated Files
-okitweb/static/okit/json/dropdown_data/*
-okitweb/static/okit/templates/user/*
-okitweb/static/okit/json/dropdown/profiles/*
-okitweb/static/okit/json/cache.json
+okitclassic/okitserver/static/okit/json/dropdown_data/*
+okitclassic/okitserver/static/okit/templates/user/*
+okitclassic/okitserver/static/okit/json/dropdown/profiles/*
+okitclassic/okitserver/static/okit/json/cache.json
 output/
 log/
 /instance/
+okitclassic/instance/
 
 # Testing
 test
