@@ -5,13 +5,12 @@
         "OKIT"
     ],
     "svg.preview.background": "transparent",
+    "conventionalCommits.scopes": [
+        "SonarCloud",
+        "OKIT-Classic"
+    ],
     "sonarlint.connectedMode.project": {
         "connectionId": "oracle",
         "projectKey": "oracle_oci-designer-toolkit"
-    },
-    "conventionalCommits.scopes": [
-        "SonarCloud",
-        "(OKIT-Classic)",
-        "OKIT-Classic"
-    ]
+    }
 }
