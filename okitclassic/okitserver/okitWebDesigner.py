@@ -22,6 +22,7 @@ import urllib
 import giturlparse
 import glob
 import ast
+import re
 from git import Repo
 from flask import Blueprint
 from flask import current_app
@@ -33,6 +34,7 @@ from flask import send_from_directory
 from flask import session
 from flask import url_for
 from markupsafe import escape
+from urllib.parse import urlparse
 
 import json
 from common.okitCommon import jsonToFormattedString
@@ -49,6 +51,24 @@ from generators.okitTerraformGenerator import OCITerraformGenerator
 from generators.okitResourceManagerGenerator import OCIResourceManagerGenerator
 from generators.okitMarkdownGenerator import OkitMarkdownGenerator
 from modules.common.okitCommon import readXmlFile
+
+# ============================================================================
+# SECURITY CONFIGURATION - Git Repository Allowlist
+# ============================================================================
+
+# Option A: Allow specific domains (less restrictive)
+ALLOWED_GIT_DOMAINS = [
+    'github.com',
+    'gitlab.com',
+]
+
+# Option B: Allow specific repositories (more secure, recommended)
+ALLOWED_GIT_REPOSITORIES = [
+    'https://github.com/oracle/oci-designer-toolkit.git',
+]
+
+# Set to True to enable domain-based allowlist, False for repository-based
+USE_DOMAIN_ALLOWLIST = True  # or False to use ALLOWED_GIT_REPOSITORIES instead
 
 # Configure logging
 logger = getLogger()
@@ -824,33 +844,233 @@ def validateJson():
     else:
         return '404'
 
-# TODO: Delete
+def is_git_url_allowed(git_url):
+    """
+    Validate that the Git URL is from an allowed domain or repository.
+    
+    Args:
+        git_url (str): The Git repository URL to validate
+        
+    Returns:
+        bool: True if URL is allowed, False otherwise
+    """
+    try:
+        parsed_url = urlparse(git_url)
+        
+        # Check if using secure protocol
+        if parsed_url.scheme not in ['https', 'ssh']:
+            logger.warning(f'Rejected Git URL with insecure protocol: {git_url}')
+            return False
+        
+        # Method 1: Check against allowed domains (if USE_DOMAIN_ALLOWLIST is True)
+        if USE_DOMAIN_ALLOWLIST:
+            domain = parsed_url.netloc.lower()
+            # Remove port if present
+            domain = domain.split(':')[0]
+            if domain in [d.lower() for d in ALLOWED_GIT_DOMAINS]:
+                return True
+        
+        # Method 2: Check against explicit repository allowlist
+        if ALLOWED_GIT_REPOSITORIES:
+            # Normalize URLs for comparison
+            normalized_input = git_url.lower().rstrip('/').rstrip('.git')
+            for allowed_repo in ALLOWED_GIT_REPOSITORIES:
+                normalized_allowed = allowed_repo.lower().rstrip('/').rstrip('.git')
+                if normalized_input == normalized_allowed:
+                    return True
+        
+        logger.warning(f'Rejected Git URL not in allowlist: {git_url}')
+        return False
+        
+    except Exception as e:
+        logger.error(f'Error validating Git URL: {e}')
+        return False
+
+
+def remove_symlinks_from_directory(directory):
+    """
+    Recursively find and remove all symbolic links in a directory.
+    
+    Args:
+        directory (str): Path to directory to scan
+        
+    Returns:
+        list: List of removed symlink paths
+    """
+    removed_symlinks = []
+    
+    try:
+        for root, dirs, files in os.walk(directory, topdown=False):
+            # Check files
+            for name in files:
+                path = os.path.join(root, name)
+                if os.path.islink(path):
+                    logger.warning(f'Removing symbolic link: {path}')
+                    os.unlink(path)
+                    removed_symlinks.append(path)
+            
+            # Check directories
+            for name in dirs:
+                path = os.path.join(root, name)
+                if os.path.islink(path):
+                    logger.warning(f'Removing symbolic link directory: {path}')
+                    os.unlink(path)
+                    removed_symlinks.append(path)
+    
+    except Exception as e:
+        logger.error(f'Error removing symlinks: {e}')
+        raise
+    
+    return removed_symlinks
+
+
+def get_secure_git_storage_path():
+    """
+    Get a secure storage path for Git repositories outside the web root.
+    
+    Returns:
+        str: Absolute path to secure storage directory
+    """
+    # Store outside the static/web-accessible directory
+    okit_home = getOkitHome()
+    secure_path = os.path.abspath(os.path.join(okit_home, 'data', 'git_repositories'))
+    
+    # Create directory if it doesn't exist
+    os.makedirs(secure_path, exist_ok=True)
+    
+    return secure_path
+
+
+def validate_path_within_base(file_path, base_path):
+    """
+    Validate that a file path is within the allowed base directory.
+    Prevents directory traversal attacks.
+    
+    Args:
+        file_path (str): Path to validate
+        base_path (str): Base directory that file_path must be within
+        
+    Returns:
+        bool: True if path is safe, False otherwise
+    """
+    try:
+        # Resolve to absolute paths
+        abs_base = os.path.abspath(base_path)
+        abs_file = os.path.abspath(file_path)
+        
+        # Check if the file path is within base path
+        return abs_file.startswith(abs_base + os.sep) or abs_file == abs_base
+        
+    except Exception as e:
+        logger.error(f'Error validating path: {e}')
+        return False
+
 @bp.route('loadfromgit', methods=(['POST']))
 def loadfromgit():
-    logger.debug('JSON     : {0:s}'.format(str(request.json)))
+    """
+    Load OKIT templates from a Git repository.
+    
+    Security improvements:
+    - URL validation against allowlist
+    - Symlink detection and removal
+    - Secure storage outside web root
+    - Path traversal prevention
+    """
+    logger.debug('JSON: {0:s}'.format(str(request.json)))
+    
     if request.method == 'POST':
         try:
-            git_url, git_branch = request.json['git_repository'].split('*')
+            # Parse request
+            git_repository = request.json.get('git_repository', '')
+            if not git_repository:
+                return jsonify({"error": "git_repository parameter is required"}), 400
+            
+            # Split URL and branch
+            if '*' not in git_repository:
+                return jsonify({"error": "Invalid format. Expected: URL*BRANCH"}), 400
+                
+            git_url, git_branch = git_repository.split('*', 1)
+            
+            # SECURITY: Validate Git URL against allowlist
+            if not is_git_url_allowed(git_url):
+                logger.warning(f'Rejected unauthorized Git URL: {git_url}')
+                return jsonify({
+                    "error": "Git repository URL is not in the allowlist",
+                    "details": "Only pre-approved repositories are allowed"
+                }), 403
+            
+            # Parse Git URL
             parsed_git_url = giturlparse.parse(git_url)
-            template_git_dir = os.path.abspath(os.path.join(bp.static_folder, 'templates', 'git'))
-            if not os.path.exists(template_git_dir):
-                os.makedirs(template_git_dir, exist_ok=True)
-            git_repo_dir = os.path.abspath(os.path.join(template_git_dir, parsed_git_url.name))
+            if not parsed_git_url.valid:
+                return jsonify({"error": "Invalid Git URL"}), 400
+            
+            # SECURITY: Use secure storage path outside web root
+            template_git_dir = get_secure_git_storage_path()
+            
+            # Sanitize repository name to prevent path traversal
+            repo_name = re.sub(r'[^a-zA-Z0-9_-]', '_', parsed_git_url.name)
+            git_repo_dir = os.path.abspath(os.path.join(template_git_dir, repo_name))
+            
+            # SECURITY: Validate that repo directory is within allowed base
+            if not validate_path_within_base(git_repo_dir, template_git_dir):
+                logger.error(f'Path traversal attempt detected: {git_repo_dir}')
+                return jsonify({"error": "Invalid repository path"}), 400
+            
+            # Clone or update repository
             if os.path.exists(git_repo_dir):
+                logger.info(f'Updating existing repository: {git_repo_dir}')
                 repo = Repo(git_repo_dir)
+                
+                # Verify remote URL matches (prevent remote hijacking)
+                remote_url = repo.remotes.origin.url
+                if not is_git_url_allowed(remote_url):
+                    logger.error(f'Repository remote URL changed to unauthorized: {remote_url}')
+                    shutil.rmtree(git_repo_dir)
+                    return jsonify({"error": "Repository remote URL is not authorized"}), 403
+                
                 repo.remotes.origin.pull()
             else:
+                logger.info(f'Cloning repository: {git_url} to {git_repo_dir}')
                 repo = Repo.clone_from(git_url, git_repo_dir, branch=git_branch, no_single_branch=True)
                 repo.remotes.origin.pull()
-            files = list(glob.iglob(os.path.join(git_repo_dir, "*.json")))
-            logger.info(files)
-            files_list = [f.replace("okit/okitweb/", "") for f in files]
-            logger.debug('JSON     : {0:s}'.format(str(request.json)))
-            logger.debug('Files Walk : {0!s:s}'.format(files_list))
-            result = {"fileslist": files_list}
-            logger.info(result)
-            return json.dumps(result)
+            
+            # SECURITY: Remove all symbolic links
+            removed_symlinks = remove_symlinks_from_directory(git_repo_dir)
+            if removed_symlinks:
+                logger.warning(f'Removed {len(removed_symlinks)} symbolic links from repository')
+            
+            # Find JSON files
+            json_pattern = os.path.join(git_repo_dir, "*.json")
+            files = list(glob.iglob(json_pattern))
+            
+            # SECURITY: Validate all file paths
+            validated_files = []
+            for file_path in files:
+                if validate_path_within_base(file_path, git_repo_dir):
+                    # Don't expose full system paths to client
+                    relative_path = os.path.relpath(file_path, template_git_dir)
+                    validated_files.append(relative_path)
+                else:
+                    logger.warning(f'Skipping file outside repository: {file_path}')
+            
+            logger.info(f'Found {len(validated_files)} JSON files')
+            
+            result = {
+                "fileslist": validated_files,
+                "repository": repo_name,
+                "branch": git_branch
+            }
+            
+            if removed_symlinks:
+                result["warning"] = f"Removed {len(removed_symlinks)} symbolic links for security"
+            
+            return jsonify(result)
+            
+        except ValueError as e:
+            logger.error(f'Invalid request format: {e}')
+            return jsonify({"error": "Invalid request format"}), 400
         except Exception as e:
             logger.exception(e)
-            return 'Failed to load from Git', 500
-
+            return jsonify({"error": "Failed to load from Git", "details": str(e)}), 500
+    
+    return jsonify({"error": "Method not allowed"}), 405
