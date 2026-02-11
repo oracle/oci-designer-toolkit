@@ -38,8 +38,8 @@ RUN yum install -y \
  && alternatives --set python3 /usr/bin/python3.8 \
 # Configure ssh
  && echo 'Host *' > /etc/ssh/ssh_config \
- && echo '  StrictHostKeyChecking no' >> /etc/ssh/ssh_config \
- && echo '  UserKnownHostsFile=/dev/null' >> /etc/ssh/ssh_config \
+ && echo '  StrictHostKeyChecking accept-new' >> /etc/ssh/ssh_config \
+ && echo '  UserKnownHostsFile ~/.ssh/known_hosts' >> /etc/ssh/ssh_config \
 # Upgrade pip
  && python3 -m pip install --upgrade pip \
 # Create Workspace
