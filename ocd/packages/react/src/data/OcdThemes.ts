@@ -6,4 +6,5 @@
 export const ocdThemes = {
     "light": "Light",
     "redwood": "Redwood",
+    "redwood-ng": "Redwood (Next Gen)",
 }

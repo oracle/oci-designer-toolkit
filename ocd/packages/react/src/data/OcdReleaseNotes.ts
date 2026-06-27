@@ -4,6 +4,17 @@
 */
 
 export const releaseNotes = `[![License: UPL](https://img.shields.io/badge/license-UPL-green)](https://img.shields.io/badge/license-UPL-green) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=oracle_oci-designer-toolkit&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=oracle_oci-designer-toolkit)
+# June 2026 Next Gen Update (Version 0.4.5)
+____
+**Update 0.4.5**: This update moves the Next Gen workbench toward a modular Oracle Cloud architecture platform.
+
+1. Added a Redwood-inspired shell and Integration Hub for external project add-ons, OCI discovery, Terraform/Resource Manager, governance checks, and Architecture Agent workflows.
+2. Added executable project add-on update actions for approved Landing Zone sources through the local backend allowlist.
+3. Added Integration Hub readiness probes for backend availability, source status, and configuration prerequisites.
+4. Improved OCI Discovery so live profile, region, and compartment context replaces stale sample inventory, selected compartments auto-refresh, and live OCI resource inventory/topology/resource-mix views update from the active discovery snapshot.
+5. Added bundled static Library loading for browser and Pages builds so reference architectures are available without the Electron desktop bridge.
+6. Kept Resource Manager and provisioning workflows plan-first; generated Terraform must be reviewed before apply.
+
 # June 2025 Release (Version 0.3.0)
 ____
 **Update 0.3.0**: This update addresses the following issues.

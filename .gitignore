@@ -27,6 +27,7 @@ okit.wpr
 **/out/
 **/lib/
 **/.vite/
+**/web-dist/
 **/*.tsbuildinfo
 # **/package-lock.json
 
@@ -82,6 +83,20 @@ containers/ssh/*
 **/desktop/src/css/*.css
 **/web/src/css/*.css
 
+# Copied wasm (Landing Zone Wizard) — prebuild copies from react/src/landingzone/wasm
+**/desktop/public/libjsonnet.wasm
+# Standalone react dev server — predev copies these into public/ (see react/scripts/copy-static-assets.mjs)
+**/react/public/libjsonnet.wasm
+
+# Copied reference architecture library — prebuild copies from ocd/library
+**/desktop/public/library/
+**/react/public/library/
+
+# Landing Zone Wizard — vendored OCI Operating Entities sources are fetched
+# locally via `npm run setup-lz` and NOT committed (they embed upstream OCI
+# reference OCIDs). Keep this repo free of any OCIDs / environment identifiers.
+**/landingzone/oe/gen/
+
 # Runtime Generated Files
 okitclassic/okitserver/static/okit/json/dropdown_data/*
 okitclassic/okitserver/static/okit/templates/user/*
@@ -91,6 +106,11 @@ output/
 log/
 /instance/
 okitclassic/instance/
+baselines/oci-landing-zones/
+addons/oci-observability-end-to-end/dist/
+external/lz-addons/
+# Never commit env files into the embedded vendored LZNG copy (placeholder keys trip the redaction gate)
+ocd/external/landing-zone-next-gen/.env*
 
 # Testing
 test
@@ -102,4 +122,12 @@ workspace
 .coverage
 htmlcov/
 
+# Logs and tooling artifacts
+*.log
+firebase-debug.log*
+firestore-debug.log*
+.firebase/
+
 # Build
+.a2-verify.log
+*.original.md

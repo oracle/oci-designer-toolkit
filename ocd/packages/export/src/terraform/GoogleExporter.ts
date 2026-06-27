@@ -15,6 +15,13 @@ export class GoogleExporter extends OcdProviderExporter {
     terraform: string = ''
     resourceFileMap: ResourceMap = {
         compute_network: "google_networking.tf",
+        compute_subnetwork: "google_networking.tf",
+        compute_firewall: "google_networking.tf",
+        compute_router: "google_networking.tf",
+
+        compute_instance: "google_compute.tf",
+
+        storage_bucket: "google_storage.tf",
 
         unknown: "google_unspecified.tf"
     }

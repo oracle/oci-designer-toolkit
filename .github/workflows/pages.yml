@@ -1,0 +1,163 @@
+name: Deploy Web App to GitHub Pages
+
+# Builds the OCD Electron renderer as a STATIC site and publishes it to GitHub
+# Pages. The deployed app runs fully client-side: the Landing Zone wizard
+# (jsonnet-WASM), Terraform import, palette, theme, and the cost snapshot all
+# work. Live OCI discovery and live pricing need a backend and are unavailable on
+# Pages (the app degrades gracefully — see docs/github-pages.md).
+#
+# No secrets / OCIDs are required: this is a public static deploy from the repo.
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+    inputs:
+      base_path:
+        description: 'Pages base path (must start and end with /). Defaults to /<repo>/'
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  NODE_OPTIONS: '--max-old-space-size=8192'
+  CI: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 26
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Python tests (pytest)
+        run: pytest -q
+
+      - name: Install JS dependencies
+        run: npm run github-action-install
+
+      - name: Compile packages for codegen
+        run: npm run github-action-compile-for-codegen
+
+      - name: Run codegen (generate gitignored resource files)
+        run: npm run github-action-generate
+
+      - name: Setup Landing Zone (fetch OE jsonnet sources — required by vitest)
+        run: npm run setup-lz
+
+      # Build only the workspace libs that @ocd/react imports at test time.
+      # @ocd/react itself is NOT built here — vitest runs directly on its src/.
+      - name: Build workspace libraries (required for vitest module resolution)
+        run: |
+          cd ocd && npm run build \
+            --workspace=packages/core \
+            --workspace=packages/model \
+            --workspace=packages/query \
+            --workspace=packages/import \
+            --workspace=packages/export \
+            --workspace=packages/parser \
+            --if-present
+
+      - name: Run JS tests (vitest — @ocd/react)
+        run: cd ocd && npm test
+
+      # TODO: src/main.ts has ~93 pre-existing noImplicitAny errors (the electron-forge
+      # vite plugin uses esbuild and bypasses tsc on the make path, so they have never
+      # been caught). Non-blocking until those type errors are resolved.
+      - name: Desktop type-check (non-blocking — pre-existing errors in src/main.ts)
+        continue-on-error: true
+        run: cd ocd && npm run typecheck --workspace=packages/desktop
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 26
+
+      # The repo ships the workspaces but NOT the generated resource files
+      # (provider resources.ts, etc. are gitignored) nor the OE jsonnet sources
+      # (skip-worktree / gitignored). Both must be produced before the renderer
+      # can build, so we run the same codegen the desktop build uses, plus
+      # setup-lz to vendor the public OCI Operating Entities jsonnet.
+      - name: Install dependencies
+        run: npm run github-action-install
+
+      - name: Compile packages for codegen
+        run: npm run github-action-compile-for-codegen
+
+      - name: Run codegen (generate gitignored resource files)
+        run: npm run github-action-generate
+
+      - name: Setup Landing Zone (fetch OE jsonnet sources)
+        run: npm run setup-lz
+
+      - name: Build workspaces (@ocd/* libs incl. @ocd/react)
+        run: npm run github-action-build
+
+      - name: Resolve Pages base path
+        id: base
+        # Pass untrusted workflow_dispatch input + repo name through env vars rather
+        # than inline ${{ }} interpolation, so neither can break out of the shell
+        # script (GitHub Actions script-injection hardening). Behavior is unchanged:
+        # a non-empty base_path wins, otherwise we fall back to /<repo>/.
+        env:
+          INPUT_BASE_PATH: ${{ github.event.inputs.base_path }}
+          REPO_NAME: ${{ github.event.repository.name }}
+        run: |
+          if [ -n "$INPUT_BASE_PATH" ]; then
+            echo "value=$INPUT_BASE_PATH" >> "$GITHUB_OUTPUT"
+          else
+            echo "value=/$REPO_NAME/" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build static site (GitHub Pages)
+        env:
+          OCD_PAGES_BASE: ${{ steps.base.outputs.value }}
+        run: npm run build:pages
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ocd/packages/desktop/web-dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

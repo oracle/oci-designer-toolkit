@@ -48,7 +48,10 @@ export namespace OciInstanceConfigs {
             {
                 id: 'source_details.boot_volume_size_in_gbs',
                 properties: {
-                    min: 50
+                    // Issues #434 / #633: OCI compute boot volumes commonly default to ~47GB
+                    // (Oracle Linux image default), so a 50GB floor rejects valid imported
+                    // tenancy resources. Block volumes keep the 50GB OCI minimum (see OciVolume.ts).
+                    min: 47
                 },
                 configs: []
             },
@@ -71,6 +74,40 @@ export namespace OciInstanceConfigs {
                 configs: [],
                 options: [
                     {id: 'image', displayName: 'Image'}
+                ]
+            },
+            {
+                // Issue #563: surface the full standard OCI Oracle Cloud Agent plugin set
+                // (previously only the Management/Monitoring booleans were exposed). Each
+                // plugin is added via the agent_config.plugins_config list with a name and
+                // desired_state; these options drive the name suggestion datalist.
+                id: 'agent_config.plugins_config.name',
+                properties: {},
+                configs: [],
+                options: [
+                    {id: 'Bastion', displayName: 'Bastion'},
+                    {id: 'Block Volume Management', displayName: 'Block Volume Management'},
+                    {id: 'Cloud Guard Workload Protection', displayName: 'Cloud Guard Workload Protection'},
+                    {id: 'Compute HPC RDMA Authentication', displayName: 'Compute HPC RDMA Authentication'},
+                    {id: 'Compute HPC RDMA Auto-Configuration', displayName: 'Compute HPC RDMA Auto-Configuration'},
+                    {id: 'Compute Instance Monitoring', displayName: 'Compute Instance Monitoring'},
+                    {id: 'Compute Instance Run Command', displayName: 'Compute Instance Run Command'},
+                    {id: 'Compute RDMA GPU Monitoring', displayName: 'Compute RDMA GPU Monitoring'},
+                    {id: 'Custom Logs Monitoring', displayName: 'Custom Logs Monitoring'},
+                    {id: 'Management Agent', displayName: 'Management Agent'},
+                    {id: 'OS Management Hub Agent', displayName: 'OS Management Hub Agent'},
+                    {id: 'OS Management Service Agent', displayName: 'OS Management Service Agent'},
+                    {id: 'Oracle Autonomous Linux', displayName: 'Oracle Autonomous Linux'},
+                    {id: 'Vulnerability Scanning', displayName: 'Vulnerability Scanning'}
+                ]
+            },
+            {
+                id: 'agent_config.plugins_config.desired_state',
+                properties: {},
+                configs: [],
+                options: [
+                    {id: 'ENABLED', displayName: 'Enabled'},
+                    {id: 'DISABLED', displayName: 'Disabled'}
                 ]
             }
         ]

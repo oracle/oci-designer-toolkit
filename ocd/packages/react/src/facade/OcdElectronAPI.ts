@@ -3,46 +3,54 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import { OcdDesign } from "@ocd/model"
-import { OcdConsoleConfiguration } from "../components/OcdConsoleConfiguration"
-import { OcdCache } from "../components/OcdCache"
-import { OutputDataStringArray } from "@ocd/export"
+import { OcdBackend } from "./OcdBackend"
 
-export interface OcdElectronAPI {
+export interface OcdElectronAPI extends OcdBackend {
     // Build Information
-    getVersion: () => Promise<void>
+    getVersion: OcdBackend['getVersion']
     // OCI API Calls / Query
-    loadOCIConfigProfileNames: () => Promise<void>
-    loadOCIConfigProfile: (profile: string) => Promise<void>
-    listRegions: (profile: string) => Promise<void>
-    listTenancyCompartments: (profile: string) => Promise<void>
-    queryTenancy: (profile: string, compartmentIds: string[], region: string) => Promise<void>
-    queryDropdown: (profile: string, region: string) => Promise<void>
-    listStacks: (profile: string, region: string, compartmentId: string) => Promise<void>
-    createStack: (profile: string, region: string, compartmentId: string, data: OutputDataStringArray, apply: boolean) => Promise<void>
-    updateStack: (profile: string, region: string, stackId: string, data: OutputDataStringArray, apply: boolean) => Promise<void>
-    createJob: (profile: string, region: string, stackId: string, apply: boolean) => Promise<void>
-	// OCD Design 
-    loadDesign: (filename: string) => Promise<void>
-    saveDesign: (design: OcdDesign | string, filename: string, suggestedFilename: string | undefined) => Promise<void>
-    discardConfirmation: () => Promise<void>
-    loadLibraryIndex: () => Promise<void>
-    loadLibraryDesign: (section: string, filename: string) => Promise<void>
-    loadSvgCssFiles: () => Promise<void>
-    exportTerraform: (design: OcdDesign | string, directory: string) => Promise<void>
-    exportToExcel: (design: OcdDesign | string, suggestedFilename: string | undefined) => Promise<void>
-    exportToMarkdown: (design: OcdDesign | string, css: string[], suggestedFilename: string | undefined) => Promise<void>
-    exportToSvg: (design: OcdDesign | string, css: string[], directory: string, suggestedFilename: string | undefined) => Promise<void>
-    exportToTerraform: (design: OcdDesign | string, directory: string) => Promise<void>
-    importFromTerraform: () => Promise<void>
+    loadOCIConfigProfileNames: OcdBackend['loadOCIConfigProfileNames']
+    loadOCIConfigProfile: OcdBackend['loadOCIConfigProfile']
+    listRegions: OcdBackend['listRegions']
+    listTenancyCompartments: OcdBackend['listTenancyCompartments']
+    queryTenancy: OcdBackend['queryTenancy']
+    queryDropdown: OcdBackend['queryDropdown']
+    queryDiscoverySnapshot: OcdBackend['queryDiscoverySnapshot']
+    generateArchitecturePlanWithGenAi: OcdBackend['generateArchitecturePlanWithGenAi']
+    generateArchitecturePlanFromImageWithGenAi: OcdBackend['generateArchitecturePlanFromImageWithGenAi']
+    listStacks: OcdBackend['listStacks']
+    createStack: OcdBackend['createStack']
+    updateStack: OcdBackend['updateStack']
+    createJob: OcdBackend['createJob']
+    getResourceManagerPlanReview: OcdBackend['getResourceManagerPlanReview']
+    updateLandingZoneAddon: OcdBackend['updateLandingZoneAddon']
+    startLandingZoneAddonUpdateJob: OcdBackend['startLandingZoneAddonUpdateJob']
+    getLandingZoneAddonUpdateJob: OcdBackend['getLandingZoneAddonUpdateJob']
+    cancelLandingZoneAddonUpdateJob: OcdBackend['cancelLandingZoneAddonUpdateJob']
+    listLandingZoneAddonHealth: OcdBackend['listLandingZoneAddonHealth']
+    // OCI Pricing
+    getOciPriceList: OcdBackend['getOciPriceList']
+	// OCD Design
+    loadDesign: OcdBackend['loadDesign']
+    saveDesign: OcdBackend['saveDesign']
+    discardConfirmation: OcdBackend['discardConfirmation']
+    loadLibraryIndex: OcdBackend['loadLibraryIndex']
+    loadLibraryDesign: OcdBackend['loadLibraryDesign']
+    loadSvgCssFiles: OcdBackend['loadSvgCssFiles']
+    exportTerraform: OcdBackend['exportTerraform']
+    exportToExcel: OcdBackend['exportToExcel']
+    exportToMarkdown: OcdBackend['exportToMarkdown']
+    exportToSvg: OcdBackend['exportToSvg']
+    exportToTerraform: OcdBackend['exportToTerraform']
+    importFromTerraform: OcdBackend['importFromTerraform']
 	// OCD Configuration
-    loadConsoleConfig: () => Promise<void>
-    saveConsoleConfig: (config: OcdConsoleConfiguration) => Promise<void>
+    loadConsoleConfig: OcdBackend['loadConsoleConfig']
+    saveConsoleConfig: OcdBackend['saveConsoleConfig']
 	// OCD Cache
-    loadCache: () => Promise<void>
-    saveCache: (cache: OcdCache) => Promise<void>
+    loadCache: OcdBackend['loadCache']
+    saveCache: OcdBackend['saveCache']
     // External URLs
-    openExternalUrl: (href: string) => Promise<void>
+    openExternalUrl: OcdBackend['openExternalUrl']
 }
   
 declare global {

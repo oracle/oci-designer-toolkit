@@ -4,14 +4,86 @@
 ** Licensed under the GNU GENERAL PUBLIC LICENSE v 3.0 as shown at https://www.gnu.org/licenses/.
 */
 
-import { useContext, useState } from 'react'
+import { memo, useCallback, useContext, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { OcdDocument } from './OcdDocument'
 import { OcdViewPage, OcdViewCoords, OcdViewLayer } from '@ocd/model'
 import { ResourceRectProps, ResourceForeignObjectProps, ResourceSvgProps, ResourceSvgContextMenuProps, ResourceSvgGhostProps, OcdMouseEvents, ConnectorSvgProps } from '../types/ReactComponentProperties'
-import { OcdContextMenu } from './OcdCanvas'
+import { OcdContextMenu, PortConnectContext } from './OcdCanvas'
 import { ActiveFileContext, SelectedResourceContext } from '../pages/OcdConsole'
 import { OcdDragResource, OcdSelectedResource } from '../types/Console'
+import { canConnectResources } from './OcdConnect'
+
+export interface OcdConnectorRect {
+    x: number
+    y: number
+    w: number
+    h: number
+}
+
+export interface OcdConnectorPath {
+    d: string
+    labelX: number
+    labelY: number
+}
+
+type OcdConnectorSide = 'left' | 'right' | 'top' | 'bottom'
+
+const getRectCenter = (rect: OcdConnectorRect): { x: number, y: number } => ({
+    x: rect.x + rect.w / 2,
+    y: rect.y + rect.h / 2,
+})
+
+const getAnchor = (rect: OcdConnectorRect, side: OcdConnectorSide): { x: number, y: number } => {
+    const center = getRectCenter(rect)
+    if (side === 'left') return { x: rect.x, y: center.y }
+    if (side === 'right') return { x: rect.x + rect.w, y: center.y }
+    if (side === 'top') return { x: center.x, y: rect.y }
+    return { x: center.x, y: rect.y + rect.h }
+}
+
+const getConnectorSides = (startDimensions: OcdConnectorRect, endDimensions: OcdConnectorRect): {
+    startSide: OcdConnectorSide
+    endSide: OcdConnectorSide
+    axis: 'horizontal' | 'vertical'
+} => {
+    const startCenter = getRectCenter(startDimensions)
+    const endCenter = getRectCenter(endDimensions)
+    const dx = endCenter.x - startCenter.x
+    const dy = endCenter.y - startCenter.y
+    if (Math.abs(dx) >= Math.abs(dy)) {
+        return dx >= 0
+            ? { startSide: 'right', endSide: 'left', axis: 'horizontal' }
+            : { startSide: 'left', endSide: 'right', axis: 'horizontal' }
+    }
+    return dy >= 0
+        ? { startSide: 'bottom', endSide: 'top', axis: 'vertical' }
+        : { startSide: 'top', endSide: 'bottom', axis: 'vertical' }
+}
+
+const getControlOffset = (distance: number): number => Math.max(40, Math.min(100, Math.abs(distance) / 2))
+
+export const buildConnectorPath = (
+    startDimensions: OcdConnectorRect,
+    endDimensions: OcdConnectorRect,
+    labelOffsetY = 0,
+): OcdConnectorPath => {
+    const { startSide, endSide, axis } = getConnectorSides(startDimensions, endDimensions)
+    const startAnchor = getAnchor(startDimensions, startSide)
+    const endAnchor = getAnchor(endDimensions, endSide)
+    const offset = getControlOffset(axis === 'horizontal' ? endAnchor.x - startAnchor.x : endAnchor.y - startAnchor.y)
+    const startControl = axis === 'horizontal'
+        ? { x: startAnchor.x + (startSide === 'right' ? offset : -offset), y: startAnchor.y }
+        : { x: startAnchor.x, y: startAnchor.y + (startSide === 'bottom' ? offset : -offset) }
+    const endControl = axis === 'horizontal'
+        ? { x: endAnchor.x + (endSide === 'right' ? offset : -offset), y: endAnchor.y }
+        : { x: endAnchor.x, y: endAnchor.y + (endSide === 'bottom' ? offset : -offset) }
+    return {
+        d: `M ${startAnchor.x} ${startAnchor.y} C ${startControl.x} ${startControl.y}, ${endControl.x} ${endControl.y}, ${endAnchor.x} ${endAnchor.y}`,
+        labelX: (startAnchor.x + endAnchor.x) / 2,
+        labelY: (startAnchor.y + endAnchor.y) / 2 + labelOffsetY,
+    }
+}
 
 export const OcdSvgContextMenu = ({ contextMenu, setContextMenu, ocdDocument, setOcdDocument, resource }: ResourceSvgContextMenuProps): JSX.Element => {
     console.info('OcdResourceSvg: OcdSvgContextMenu')
@@ -43,17 +115,25 @@ export const OcdSvgContextMenu = ({ contextMenu, setContextMenu, ocdDocument, se
     const onCloneClick = (e: React.MouseEvent<HTMLElement>) => {
         e.stopPropagation()
         const page = ocdDocument.getActivePage()
-        const cloneResource = ocdDocument.cloneResource(resource.ocid)
-        if (cloneResource) {
-            // Coords
-            const cloneCoords = ocdDocument.cloneCoords(resource)
-            cloneCoords.ocid = cloneResource.id
-            ocdDocument.setCoordsRelativeToCanvas(cloneCoords)
-            ocdDocument.addCoords(cloneCoords, page.id, cloneCoords.pgid)
+        // Deep-clone the resource AND any nested child resources (e.g. a Subnet
+        // containing a DB System). cloneResourceTree clones each backing model
+        // resource, re-parents children onto the freshly cloned parent, and
+        // returns the new coords sub-tree ready to attach to the page.
+        const newRoot = ocdDocument.cloneResourceTree(resource)
+        if (newRoot) {
+            ocdDocument.setCoordsRelativeToCanvas(newRoot)
+            ocdDocument.addCoords(newRoot, page.id, newRoot.pgid)
         }
         setContextMenu({show: false, x: 0, y: 0})
         const clone = OcdDocument.clone(ocdDocument)
         setOcdDocument(clone)
+    }
+    const onAttachContainedClick = (e: React.MouseEvent<HTMLElement>) => {
+        e.stopPropagation()
+        const page = ocdDocument.getActivePage()
+        ocdDocument.attachContainedCoordsToFrame(resource, page.id)
+        setContextMenu({show: false, x: 0, y: 0})
+        setOcdDocument(OcdDocument.clone(ocdDocument))
     }
     const onToFrontClick = (e: React.MouseEvent<HTMLElement>) => {
         e.stopPropagation()
@@ -111,6 +191,7 @@ export const OcdSvgContextMenu = ({ contextMenu, setContextMenu, ocdDocument, se
                         <li className='ocd-svg-context-menu-item'><a href='#' onClick={onDeleteClick}>Delete From Model</a></li>
                         <li><hr/></li>
                         <li className='ocd-svg-context-menu-item'><a href='#' onClick={onCloneClick}>Clone</a></li>
+                        {resource.container && <li className='ocd-svg-context-menu-item'><a href='#' onClick={onAttachContainedClick}>Attach Contained Resources</a></li>}
                         <li><hr/></li>
                         <li className='ocd-svg-context-menu-item'><a href='#' onClick={onToFrontClick}>To Front</a></li>
                         <li className='ocd-svg-context-menu-item'><a href='#' onClick={onToBackClick}>To Back</a></li>
@@ -172,18 +253,18 @@ const OcdContainerRect = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
     const rY = dimensions.y
     const width = resource.w + dimensions.w 
     const height = resource.h + dimensions.h
-    const onResizeEnd = () => {
+    const onResizeEnd = (resizeDimensions = dimensions) => {
         const page: OcdViewPage = ocdDocument.getActivePage()
         const coords: OcdViewCoords = JSON.parse(JSON.stringify(resource)) as OcdViewCoords
-        coords.x += dimensions.x
-        coords.y += dimensions.y
-        coords.w += dimensions.w
-        coords.h += dimensions.h
+        coords.x += resizeDimensions.x
+        coords.y += resizeDimensions.y
+        coords.w += resizeDimensions.w
+        coords.h += resizeDimensions.h
+        const constrainedCoords = ocdDocument.constrainContainerResize(resource, coords)
         setDimensions({x: 0, y: 0, w: 0, h: 0})
         setOrigin({x: 0, y: 0})
-        ocdDocument.updateCoords(coords, page.id)
+        ocdDocument.updateCoords(constrainedCoords, page.id)
         // Redraw
-        console.info('OcdResourceSvg: Design:', ocdDocument)
         setOcdDocument(OcdDocument.clone(ocdDocument))
     }
     const setDimensionsAndOrigin = (dimensions: {x: number, y:number, w: number, h: number}) => {
@@ -267,7 +348,7 @@ const OcdResizePoint = ({cx, cy, position, setDimensions, onResizeEnd}: any): JS
     const onResizeDragEnd = (e: React.MouseEvent<SVGElement>) => {
         e.stopPropagation()
         e.preventDefault()
-        const hasMoved = (position === 'east' && (e.clientX !== origin.x)) || (position === 'south' && (e.clientY !== origin.y))
+        const hasMoved = e.clientX !== origin.x || e.clientY !== origin.y
         setDragging(false)
         const dimensions = {x: 0, y: 0, w: 0, h: 0 }
         switch (position) {
@@ -377,7 +458,7 @@ const OcdForeignObject = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resou
     )
 }
 
-export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, contextMenu, setContextMenu, svgDragDropEvents, resource, ghost }: ResourceSvgProps): JSX.Element => {
+export const OcdResourceSvg = memo(({ ocdConsoleConfig, ocdDocument, setOcdDocument, contextMenu, setContextMenu, svgDragDropEvents, resource, ghost }: ResourceSvgProps): JSX.Element => {
     const {selectedResource, setSelectedResource} = useContext(SelectedResourceContext)
     const page: OcdViewPage = ocdDocument.getActivePage()
     const visibleLayers = page.layers.filter((l: OcdViewLayer) => l.visible).map((l: OcdViewLayer) => l.id)
@@ -385,6 +466,20 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
     const hidden = !visibleResourceIds.includes(resource.ocid)
     const [dragging, setDragging] = useState(false)
     const [origin, setOrigin] = useState({ x: 0, y: 0 })
+    const updateOcdDocument = useCallback((ocdDocument: OcdDocument) => setOcdDocument(ocdDocument), [setOcdDocument])
+    // Draw.io-style drop-target hint while dragging a connection over this resource.
+    const [connectHint, setConnectHint] = useState<'none' | 'valid' | 'invalid'>('none')
+    // Hover state drives the always-available connect "ports" on this resource.
+    const [hovered, setHovered] = useState(false)
+    // Port connect context: sourceModelId is non-empty while a hover-port drag is
+    // in progress; begin() starts one from this resource (see onPortMouseDown).
+    const portConnect = useContext(PortConnectContext)
+    // A connection drag (either the connect-mode body drag or a hover-port drag)
+    // is in progress. Source = the port source if set, else the body-drag source.
+    const connectSourceId = portConnect.sourceModelId !== ''
+        ? portConnect.sourceModelId
+        : (ocdConsoleConfig.config.connectMode ? ocdDocument.dragResource?.resource?.ocid : '')
+    const connectInProgress = !!connectSourceId
     const containerLayout = (resource.container && (!resource.detailsStyle || resource.detailsStyle === 'default'))
     const SvgRect = containerLayout ? OcdContainerRect : OcdSimpleRect
     const gX = resource.x
@@ -448,10 +543,31 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
         const contextPosition = {show: true, x: x, y: y, resource: resource}
         setContextMenu(contextPosition)
     }
+    // Press on a hover port: start an always-available connect drag from this
+    // resource. stopPropagation/preventDefault keep it off the canvas pan
+    // (onSVGDragStart) and the resource body move (onResourceDragStart) — the
+    // port is the only thing that initiates a connect without connect mode.
+    const onPortMouseDown = (e: React.MouseEvent<SVGElement>) => {
+        e.stopPropagation()
+        e.preventDefault()
+        setHovered(false)
+        portConnect.begin(resource, e.clientX, e.clientY)
+    }
     const onResourceMouseUp = (e: React.MouseEvent<SVGElement>) => {
         e.preventDefault()
         console.info('OcdResourceSvg: Resource Mouse Up', resource.ocid, e.clientX, e.clientY)
         if (!contextMenu.show) {
+            // Drag-to-connect: while a connect drag is in progress (connect-mode body
+            // drag OR a hover-port drag), dropping onto another resource records it as
+            // the connection target (wired on drag end). Default reparenting is
+            // unchanged when no connect drag is active.
+            if (connectInProgress) {
+                if (resource.ocid !== connectSourceId) {
+                    ocdDocument.dragResource.connectTarget = resource
+                }
+                setConnectHint('none')
+                return
+            }
             if (resource.container) {
                 const childCoordIds = ocdDocument.getChildCoords([ocdDocument.dragResource.resource]).map((c) => c.id)
                 if (resource.id !== ocdDocument.dragResource.resource.id && !childCoordIds.includes(resource.id) && !ocdDocument.dragResource.parent) {
@@ -462,31 +578,63 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
         }
     }
     const onNooPEvent = (e: React.MouseEvent<SVGElement>) => {}
-    const onResourceMouseEnter = (e: React.MouseEvent<SVGElement>) => {}
+    // Draw.io-style live drop-target highlight: while a connection drag is in
+    // progress (connect mode + a drag source recorded), entering another resource
+    // glows it green (the source has an FK for this type) or red (it does not).
+    const onResourceMouseEnter = (e: React.MouseEvent<SVGElement>) => {
+        setHovered(true)
+        // Live drop-target highlight: green if the source has an FK for this type,
+        // red if not. Applies to both connect-mode and hover-port connect drags.
+        if (!connectInProgress || connectSourceId === resource.ocid) return
+        setConnectHint(canConnectResources(ocdDocument.design, connectSourceId, resource.ocid) ? 'valid' : 'invalid')
+    }
     const onResourceMouseMove = (e: React.MouseEvent<SVGElement>) => {}
-    const onResourceMouseLeave = (e: React.MouseEvent<SVGElement>) => {}
+    const onResourceMouseLeave = (e: React.MouseEvent<SVGElement>) => {
+        setHovered(false)
+        if (connectHint !== 'none') setConnectHint('none')
+    }
     console.debug(`>> OcdResourceSvg: OcdResourceSvg: Render(${resource.id})`, resource.class, resource.ocid)
     return (
-        <g className='ocd-designer-resource' 
-            id={resource.id} 
+        <g className={`ocd-designer-resource${connectHint !== 'none' ? ` ocd-connect-target-${connectHint}` : ''}`}
+            id={resource.id}
             transform={`translate(${gX}, ${gY})`}
             onMouseDown={!hidden ? onResourceDragStart : onNooPEvent}
             onMouseUp={!hidden ? onResourceMouseUp : onNooPEvent}
+            onMouseEnter={!hidden ? onResourceMouseEnter : onNooPEvent}
+            onMouseLeave={!hidden ? onResourceMouseLeave : onNooPEvent}
             onClick={!hidden ? onResourceClick : onNooPEvent}
             onContextMenu={!hidden ? onResourceRightClick : onNooPEvent}
             >
-                <SvgRect 
+                <SvgRect
                     ocdConsoleConfig={ocdConsoleConfig}
                     ocdDocument={ocdDocument}
-                    setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)}
+                    setOcdDocument={updateOcdDocument}
                     resource={resource}
                     hidden={hidden}
                     setOrigin={setOrigin}
                     />
-                <OcdForeignObject 
+                {/* Connect-mode affordance: a handle hinting "drag me onto another
+                    resource to wire an association". The whole resource is the drag
+                    source; this is the visual cue. */}
+                {ocdConsoleConfig.config.connectMode && !hidden && !resource.container &&
+                    <circle className='ocd-connect-handle' cx={resource.w || 32} cy={(resource.h || 32) / 2} r={5} />}
+                {/* Hover ports: always-available connect handles at the resource's
+                    edge anchors. Shown only on hover, when not already in a connect
+                    drag, not body-dragging, and not in connect mode (which has its
+                    own handle). Pressing one starts a connect drag (onPortMouseDown
+                    isolates it from pan/move via stop/preventDefault). */}
+                {!hidden && !ghost && !resource.container && hovered && !dragging && !connectInProgress && !ocdConsoleConfig.config.connectMode &&
+                    (['left', 'right', 'top', 'bottom'] as OcdConnectorSide[]).map((side) => {
+                        const anchor = getAnchor({ x: 0, y: 0, w: resource.w || 32, h: resource.h || 32 }, side)
+                        return <circle className='ocd-svg-connect-port'
+                            key={`${resource.id}-port-${side}`}
+                            cx={anchor.x} cy={anchor.y} r={4}
+                            onMouseDown={onPortMouseDown} />
+                    })}
+                <OcdForeignObject
                     ocdConsoleConfig={ocdConsoleConfig}
                     ocdDocument={ocdDocument}
-                    setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)}
+                    setOcdDocument={updateOcdDocument}
                     resource={resource}
                     hidden={hidden}
                     ghost={ghost}
@@ -496,7 +644,7 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
                     return <OcdResourceSvg
                                 ocdConsoleConfig={ocdConsoleConfig}
                                 ocdDocument={ocdDocument}
-                                setOcdDocument={(ocdDocument:OcdDocument) => setOcdDocument(ocdDocument)}
+                                setOcdDocument={updateOcdDocument}
                                 contextMenu={contextMenu}
                                 setContextMenu={(contextMenu: OcdContextMenu) => setContextMenu(contextMenu)}
                                 svgDragDropEvents={svgDragDropEvents}
@@ -506,7 +654,9 @@ export const OcdResourceSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, 
                                 })}
         </g>
     )
-}
+})
+
+OcdResourceSvg.displayName = 'OcdResourceSvg'
 
 export const OcdDragResourceGhostSvg = ({ ocdConsoleConfig, ocdDocument, setOcdDocument, resource }: ResourceSvgGhostProps): JSX.Element => {
     const page: OcdViewPage = ocdDocument.getActivePage()
@@ -560,11 +710,10 @@ export const OcdDragResourceGhostSvg = ({ ocdConsoleConfig, ocdDocument, setOcdD
     )
 }
 
-export const OcdConnector = ({ocdConsoleConfig, ocdDocument, connector, parentConnector}: ConnectorSvgProps): JSX.Element => {
+export const OcdConnector = ({ocdConsoleConfig, ocdDocument, connector, parentConnector, label, labelOffsetY = 0}: ConnectorSvgProps): JSX.Element => {
     const simpleWidth = 40
     const detailedWidth = 170
     const simpleHeight = 40
-    const controlPoint = 100
     // Start Coords Dimensions
     const startCoords = ocdDocument.getCoords(connector.startCoordsId)
     const startRelativeXY = startCoords ? ocdDocument.getRelativeXY(startCoords) : ocdDocument.newCoords()
@@ -579,44 +728,27 @@ export const OcdConnector = ({ocdConsoleConfig, ocdDocument, connector, parentCo
     const endDimensions = {x: endRelativeXY.x, y: endRelativeXY.y, w: endWidth, h: endHeight}
     // console.debug('OcdResourceSvg: Start Dimensions', startDimensions)
     // console.debug('OcdResourceSvg: End Dimensions', endDimensions)
-    // Build Path
-    const path: string[] = ['M']
-    // Identify if we are goin left to right or right to left
-    if (startDimensions.x < endDimensions.x) {
-        // We will start middle right of the Start Coord
-        path.push(`${startDimensions.x + startDimensions.w}`)
-        path.push(`${startDimensions.y + startDimensions.h / 2}`)
-        // Start Control Point
-        path.push('C')
-        path.push(`${startDimensions.x + startDimensions.w + controlPoint}`)
-        path.push(`${startDimensions.y + startDimensions.h / 2},`)
-        // Add End Control Point
-        path.push(`${endDimensions.x - controlPoint}`)
-        path.push(`${endDimensions.y + endDimensions.h / 2},`)
-        // We will end at the middle left of the End Coord
-        path.push(`${endDimensions.x}`)
-        path.push(`${endDimensions.y + endDimensions.h / 2}`)
-    } else {
-        // We will start middle right of the Start Coord
-        path.push(`${startDimensions.x }`)
-        path.push(`${startDimensions.y + startDimensions.h / 2}`)
-        // Start Control Point
-        path.push('C')
-        path.push(`${startDimensions.x - controlPoint}`)
-        path.push(`${startDimensions.y + startDimensions.h / 2},`)
-        // Add End Control Point
-        path.push(`${endDimensions.x + endDimensions.w + controlPoint}`)
-        path.push(`${endDimensions.y + endDimensions.h / 2},`)
-        // We will end at the middle left of the End Coord
-        path.push(`${endDimensions.x + endDimensions.w}`)
-        path.push(`${endDimensions.y + endDimensions.h / 2}`)
-    }
-    // console.debug('OcdResourceSvg: Connector Path', path)
-    // console.debug('OcdResourceSvg: Connector Path as String', path.join(' '))
+    const path = buildConnectorPath(startDimensions, endDimensions, labelOffsetY)
     const className = parentConnector ? 'ocd-svg-parent-connector' : 'ocd-svg-association-connector'
+    const labelText = label?.trim()
+    const displayLabel = labelText && labelText.length > 56 ? `${labelText.slice(0, 53)}...` : labelText
     console.debug(`>> OcdResourceSvg: OcdConnector: Render()`)
     return (
-        <path className={className} d={path.join(' ')}></path>
+        <g className='ocd-svg-connector-group'>
+            <path className={className} d={path.d}>
+                {labelText && <title>{labelText}</title>}
+            </path>
+            {displayLabel && (
+                <text
+                    className={`ocd-svg-connector-label ${parentConnector ? 'ocd-svg-parent-connector-label' : 'ocd-svg-association-connector-label'}`}
+                    x={path.labelX}
+                    y={path.labelY}
+                    textAnchor='middle'
+                >
+                    {displayLabel}
+                </text>
+            )}
+        </g>
     )
 }
 

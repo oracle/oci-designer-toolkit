@@ -1,18 +1,32 @@
 {
-    "pca": [
-        {
-            "title": "OKE Networking",
-            "description": "OKE networking infrastructure for the PCA.",
-            "okitFile": "OKENetworkInfrastructure.okit",
-            "svgFile": "OKENetworkInfrastructure.svg"
-        }
-    ],
     "c3": [
         {
-            "title": "OKE Networking",
             "description": "OKE networking infrastructure for the C3.",
             "okitFile": "OKENetworkInfrastructure.okit",
-            "svgFile": "OKENetworkInfrastructure.svg"
+            "svgFile": "OKENetworkInfrastructure.svg",
+            "title": "OKE Networking"
+        }
+    ],
+    "oci": [
+        {
+            "description": "One-OE observability add-on baseline with free-first service posture and generated cost assumptions.",
+            "okitFile": "ObservabilityLandingZoneFreeFirst.okit",
+            "svgFile": "ObservabilityLandingZoneFreeFirst.svg",
+            "title": "Observability Landing Zone - Free First"
+        },
+        {
+            "description": "One-OE observability add-on baseline with explicit paid feature toggles and multi-stack workflow.",
+            "okitFile": "ObservabilityLandingZoneEnterprise.okit",
+            "svgFile": "ObservabilityLandingZoneEnterprise.svg",
+            "title": "Observability Landing Zone - Full Enterprise"
+        }
+    ],
+    "pca": [
+        {
+            "description": "OKE networking infrastructure for the PCA.",
+            "okitFile": "OKENetworkInfrastructure.okit",
+            "svgFile": "OKENetworkInfrastructure.svg",
+            "title": "OKE Networking"
         }
     ]
 }

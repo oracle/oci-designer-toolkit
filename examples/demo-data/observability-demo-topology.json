@@ -1,0 +1,66 @@
+{
+    "applications": [
+        {
+            "apm": {
+                "data_key": "<APM_DATA_KEY_FROM_VAULT_OR_ENV>",
+                "enabled": true
+            },
+            "name": "checkout-api",
+            "otel_exporter": "<APM_OTEL_ENDPOINT>",
+            "runtime": "java"
+        },
+        {
+            "apm": {
+                "data_key": "<APM_DATA_KEY_FROM_VAULT_OR_ENV>",
+                "enabled": true
+            },
+            "name": "inventory-api",
+            "otel_exporter": "<APM_OTEL_ENDPOINT>",
+            "runtime": "python"
+        }
+    ],
+    "landing_zone": {
+        "parent_compartment_ocid": "<PARENT_COMPARTMENT_OCID>",
+        "region": "<OCI_REGION>",
+        "tenancy_ocid": "<TENANCY_OCID>"
+    },
+    "name": "observability-landing-zone-demo",
+    "redaction_policy": "all tenant-specific identifiers use placeholders",
+    "schema_version": "oci.okit.demo_topology.v1",
+    "workloads": [
+        {
+            "agent_recipe": "linux-management-agent",
+            "compartment": "cmp-lz-prod",
+            "instance_ocids": [
+                "<COMPUTE_INSTANCE_OCID_1>",
+                "<COMPUTE_INSTANCE_OCID_2>"
+            ],
+            "logs": [
+                "syslog",
+                "auth.log",
+                "application.log"
+            ],
+            "name": "demo-linux-fleet",
+            "type": "compute"
+        },
+        {
+            "cluster_ocid": "<OKE_CLUSTER_OCID>",
+            "compartment": "cmp-lz-prod",
+            "helm_values": "assets/oke/values-observability.yaml",
+            "name": "demo-oke-cluster",
+            "namespaces": [
+                "kube-system",
+                "demo"
+            ],
+            "type": "oke"
+        },
+        {
+            "compartment": "cmp-lz-prod",
+            "database_ocid": "<AUTONOMOUS_DATABASE_OCID>",
+            "db_management": "basic",
+            "name": "demo-autonomous-database",
+            "operations_insights": "disabled_until_opt_in",
+            "type": "autonomous_database"
+        }
+    ]
+}

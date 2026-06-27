@@ -25,7 +25,8 @@ export namespace OciNetworkSecurityGroupSecurityRuleConfigs {
                 configs: [],
                 options: [
                     {id: 'CIDR_BLOCK', displayName: 'CIDR Block'},
-                    {id: 'SERVICE_CIDR_BLOCK', displayName: 'Service CIDR Block'}
+                    {id: 'SERVICE_CIDR_BLOCK', displayName: 'Service CIDR Block'},
+                    {id: 'NETWORK_SECURITY_GROUP', displayName: 'Network Security Group'}
                 ]
             },
             {
@@ -63,7 +64,8 @@ export namespace OciNetworkSecurityGroupSecurityRuleConfigs {
                 configs: [],
                 options: [
                     {id: 'CIDR_BLOCK', displayName: 'CIDR Block'},
-                    {id: 'SERVICE_CIDR_BLOCK', displayName: 'Service CIDR Block'}
+                    {id: 'SERVICE_CIDR_BLOCK', displayName: 'Service CIDR Block'},
+                    {id: 'NETWORK_SECURITY_GROUP', displayName: 'Network Security Group'}
                 ]
             },
         ]

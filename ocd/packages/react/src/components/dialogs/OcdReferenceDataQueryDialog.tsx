@@ -4,8 +4,8 @@
 */
 
 import { QueryDialogProps } from "../../types/Dialogs"
-import { OciApiFacade } from "../../facade/OciApiFacade"
-import React, { useContext, useState } from "react"
+import { formatOciBackendError, isBackendUnavailableError, OciApiFacade } from "../../facade/OciApiFacade"
+import React, { useContext, useEffect, useState } from "react"
 import { ConsoleConfigContext } from "../../pages/OcdConsole"
 // import { CacheContext, ConsoleConfigContext } from "../../pages/OcdConsole"
 import OcdConsoleConfig from "../OcdConsoleConfiguration"
@@ -26,18 +26,30 @@ export const OcdReferenceDataQueryDialog = ({ocdDocument, setOcdDocument}: Query
     const [regions, setRegions] = useState([regionsLoading])
     const [selectedProfile, setSelectedProfile] = useState('DEFAULT')
     const [selectedRegion, setSelectedRegion] = useState('')
+    const [queryError, setQueryError] = useState('')
 
-    if (!profilesLoaded) OciApiFacade.loadOCIConfigProfileNames().then((results) => {
-        setProfilesLoaded(true)
-        setProfiles(results)
-        loadRegions(results.length ? results[0] : [regionsLoading])
-    }).catch((reason) => {
-        setProfilesLoaded(true)
-        setProfiles(['Failed to Read Profiles Fron OCI Config'])
-    })
+    useEffect(() => {
+        if (profilesLoaded) return
+        let cancelled = false
+        OciApiFacade.loadOCIConfigProfileNames().then((results) => {
+            if (cancelled) return
+            setProfilesLoaded(true)
+            setProfiles(results)
+            loadRegions(results.length ? results[0] : '')
+        }).catch((reason) => {
+            if (cancelled) return
+            setProfilesLoaded(true)
+            setProfiles([isBackendUnavailableError(reason) ? 'Backend unavailable' : 'Failed to Read Profiles Fron OCI Config'])
+            if (isBackendUnavailableError(reason)) setQueryError(formatOciBackendError(reason))
+        })
+        return () => {
+            cancelled = true
+        }
+    }, [profilesLoaded])
     const onProfileChanged = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const profile = e.target.value
         console.debug('OcdReferenceDataQueryDialog: Selected Profile', profile)
+        setQueryError('')
         setSelectedProfile(profile)
         loadRegions(profile)
     }
@@ -52,6 +64,7 @@ export const OcdReferenceDataQueryDialog = ({ocdDocument, setOcdDocument}: Query
             const homeRegion = results.find((r: Record<string, any>) => r.isHomeRegion)
             setSelectedRegion(homeRegion ? homeRegion.id : results[0].id)
         }).catch((reason) => {
+            if (isBackendUnavailableError(reason)) setQueryError(formatOciBackendError(reason))
             setRegions([regionsLoading])
         })
     }
@@ -76,6 +89,10 @@ export const OcdReferenceDataQueryDialog = ({ocdDocument, setOcdDocument}: Query
             })
             setCursor('default')
             console.debug('OcdReferenceDataQueryDialog: Cache', ocdCache)
+        }).catch((reason) => {
+            setCursor('default')
+            setWorkingClassName('ocd-query-wrapper hidden')
+            setQueryError(formatOciBackendError(reason))
         })
     }
    
@@ -95,6 +112,7 @@ export const OcdReferenceDataQueryDialog = ({ocdDocument, setOcdDocument}: Query
                                 {regions.map((r) => {return <option key={r.id} value={r.id}>{r.displayName}</option>})}
                             </select>
                         </div>
+                        {queryError && <><div>Status</div><div className="ocd-resource-manager-status"><span className="ocd-resource-manager-error">{queryError}</span></div></>}
                     </div>
                 </div>
                 <div className='ocd-dialog-footer'>

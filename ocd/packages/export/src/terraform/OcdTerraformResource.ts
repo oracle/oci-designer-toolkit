@@ -47,8 +47,12 @@ export class OcdTerraformResource {
     }
     generateReferenceAttribute = (name: string, value: string | undefined, required: boolean, level=0, element: string = 'id') => {
         if (this.isVariable(value)) return `${this.indentation[level]}${name} = ${this.formatVariable(value)}`
-        else if (required) return `${this.indentation[level]}${name} = local.${this.idTFResourceMap[value as string]}_${element}`
-        else if (value && value !== '') return `${this.indentation[level]}${name} = local.${this.idTFResourceMap[value]}_${element}`
+        // Resolve the referenced resource's terraform name; only emit a local.* reference when it
+        // is actually part of this export. Emitting local.undefined_* produces invalid HCL that
+        // fails `terraform validate`, so guard against a missing mapping (see generateReferenceListAttribute).
+        const mapped = value !== undefined && value !== '' ? this.idTFResourceMap[value] : undefined
+        if (mapped !== undefined) return `${this.indentation[level]}${name} = local.${mapped}_${element}`
+        else if (required) return `${this.indentation[level]}# TODO: ${name} references a resource not present in this export (${value})`
         else return `${this.indentation[level]}# ${name} = "${value}"`
     }
     generateTextAttribute = (name: string, value: string | undefined, required: boolean, level=0) => {
@@ -80,8 +84,18 @@ export class OcdTerraformResource {
     }
     generateReferenceListAttribute = (name: string, value: string | string[] | undefined, required: boolean, level=0) => {
         if (!Array.isArray(value) && this.isVariable(value)) return `${this.indentation[level]}${name} = ${this.formatVariable(value as string)}`
-        else if (required && Array.isArray(value)) return `${this.indentation[level]}${name} = [${value.map((v: string) => `local.${this.idTFResourceMap[v]}_id`)}]`
-        else if (Array.isArray(value) && value.length > 0) return `${this.indentation[level]}${name} = [${value.map((v: string) => `local.${this.idTFResourceMap[v]}_id`)}]`
+        // Skip any referenced ids that are not part of this export so we never emit local.undefined_*.
+        // If every referenced id is missing, comment the attribute out entirely (valid-by-omission).
+        else if (required && Array.isArray(value)) {
+            const present = value.filter((v: string) => this.idTFResourceMap[v] !== undefined)
+            if (value.length > 0 && present.length === 0) return `${this.indentation[level]}# TODO: ${name} references resource(s) not present in this export (${value.join(', ')})`
+            return `${this.indentation[level]}${name} = [${present.map((v: string) => `local.${this.idTFResourceMap[v]}_id`)}]`
+        }
+        else if (Array.isArray(value) && value.length > 0) {
+            const present = value.filter((v: string) => this.idTFResourceMap[v] !== undefined)
+            if (present.length === 0) return `${this.indentation[level]}# ${name} references resource(s) not present in this export (${value.join(', ')})`
+            return `${this.indentation[level]}${name} = [${present.map((v: string) => `local.${this.idTFResourceMap[v]}_id`)}]`
+        }
         else return `${this.indentation[level]}# ${name} = "${value}"`
     }
     generateStringListAttribute = (name: string, value: string | string[] | undefined, required: boolean, level=0) => {

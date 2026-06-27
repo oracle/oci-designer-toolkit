@@ -1,0 +1,52 @@
+{
+    "api": "UsageapiClient.request_summarized_usages",
+    "cli": {
+        "arguments": {
+            "compartment-depth": 6,
+            "granularity": "MONTHLY",
+            "group-by": [
+                "service"
+            ],
+            "query-type": "COST",
+            "tenant-id": "<TENANCY_OCID>",
+            "time-usage-ended": "<UTC_END_TIMESTAMP>",
+            "time-usage-start": "<UTC_START_TIMESTAMP>"
+        },
+        "command": "oci usage-api usage-summary request-summarized-usages"
+    },
+    "notes": [
+        "Use this query after deployment to compare actual usage against the generated estimate.",
+        "The filter assumes generated resources keep the ManagedBy freeform tag.",
+        "Keep returned tenant-specific usage data out of source control."
+    ],
+    "profile": "free-first",
+    "schema_version": "oci.usage_api.query_template.v1",
+    "sdk_request": {
+        "compartment_depth": 6,
+        "filter": {
+            "dimensions": [
+                {
+                    "key": "tagNamespace",
+                    "value": "freeformTags"
+                },
+                {
+                    "key": "tagKey",
+                    "value": "ManagedBy"
+                },
+                {
+                    "key": "tagValue",
+                    "value": "okit-observability-landing-zone"
+                }
+            ],
+            "operator": "AND"
+        },
+        "granularity": "MONTHLY",
+        "group_by": [
+            "service"
+        ],
+        "query_type": "COST",
+        "tenant_id": "<TENANCY_OCID>",
+        "time_usage_ended": "<UTC_END_TIMESTAMP>",
+        "time_usage_started": "<UTC_START_TIMESTAMP>"
+    }
+}

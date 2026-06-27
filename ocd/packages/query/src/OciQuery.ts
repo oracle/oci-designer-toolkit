@@ -6,10 +6,14 @@
 // import * as common from 'oci-common'
 // import * as core from "oci-core"
 // import * as identity from "oci-identity"
+import { OcdLogger, OcdMetrics } from '@ocd/core'
 import { OcdDesign, OciModelResources, OciResource, OciResources } from '@ocd/model'
 import { analytics, bastion, core, database, filestorage, identity, keymanagement, loadbalancer, mysql, networkloadbalancer, nosql, objectstorage, vault } from 'oci-sdk'
 // import { OciCommonQuery } from './OciQueryCommon.js'
 import { OciReferenceDataQuery } from './OciReferenceDataQuery.js'
+import { QUERY_CONCURRENCY_LIMIT, runWithConcurrency, withRetry } from './OciQueryConcurrency.js'
+
+const logger = OcdLogger.scope('OciQuery')
 
 export class OciQuery extends OciReferenceDataQuery {
     // Clients
@@ -31,7 +35,7 @@ export class OciQuery extends OciReferenceDataQuery {
 
     constructor(profile: string='DEFAULT', region?: string) {
         super(profile, region)
-        console.debug('OciQuery: Region', region)
+        logger.debug('Region', region)
         // Initialise All Clients
         // this.vcnClient = new core.VirtualNetworkClient(this.authenticationConfiguration, this.clientConfiguration)
         // this.computeClient = new core.ComputeClient(this.authenticationConfiguration, this.clientConfiguration)
@@ -54,9 +58,22 @@ export class OciQuery extends OciReferenceDataQuery {
 
     // Top Level functions to drive the query
 
-    queryTenancy(compartmentIds: string[]): Promise<any> {
-        console.debug('QciQuery: queryTenancy')
-        return new Promise((resolve, reject) => {
+    queryTenancy(compartmentIds: string[], options?: { requestId?: string }): Promise<any> {
+        // When the originating request id is threaded from the web-server HTTP boundary
+        // (see OciWebServerHttp / handlers), scope the logger to it so query-layer log
+        // lines for this run correlate with the X-Request-Id observed at the HTTP edge.
+        // requestId is an opaque correlation token (never an OCID/secret); no design JSON
+        // is logged here, preserving the existing no-design-JSON / no-OCID logging contract.
+        const runLogger = options?.requestId ? OcdLogger.scope(`OciQuery:${options.requestId}`) : logger
+        runLogger.debug('queryTenancy')
+        // Reset the per-run failure accumulator so queryErrors only reflects this run.
+        this.queryFailures = []
+        // Observability: time the whole discovery run and tally success/failure.
+        // requestId is intentionally NOT a metric label (high cardinality); it is
+        // only carried by the scoped logger above. The timer/counters wrap the
+        // existing promise without altering its resolution value or control flow.
+        const queryTimer = OcdMetrics.timer('oci.query.tenancy.ms')
+        const queryRun = new Promise((resolve, reject) => {
             const design = this.newDesign()
             this.listTenancyCompartments().then((compartments) => {
                 const allTenancyCompartmentIds = compartments.map((c: OciResource) => c.id)
@@ -155,7 +172,7 @@ export class OciQuery extends OciReferenceDataQuery {
                     listPolicies
                 ]
                 Promise.allSettled(queries).then((results) => {
-                    console.debug('OciQuery: queryTenancy: All Settled')
+                    runLogger.debug('queryTenancy: All Settled')
                     // Reference Data
                     // @ts-ignore
                     const computeImages = results[queries.indexOf(listImages)].value
@@ -320,8 +337,8 @@ export class OciQuery extends OciReferenceDataQuery {
                     //         delete l.backendSets
                     //         delete l.listeners
                     //     })
-                    //     // console.debug('OciQuery: Load Balancer Backend Sets:', design.model.oci.resources.load_balancer_backend_set)
-                    //     // console.debug('OciQuery: Load Balancer Backends:', design.model.oci.resources.load_balancer_backend)
+                    //     // logger.debug('Load Balancer Backend Sets:', design.model.oci.resources.load_balancer_backend_set)
+                    //     // logger.debug('Load Balancer Backends:', design.model.oci.resources.load_balancer_backend)
                     // }
                     // Network Load Balancers
                     // @ts-ignore
@@ -370,23 +387,43 @@ export class OciQuery extends OciReferenceDataQuery {
                     // @ts-ignore
                     if (results[queries.indexOf(listPolicies)].status === 'fulfilled' && results[queries.indexOf(listPolicies)].value.length > 0) design.model.oci.resources.policy = results[queries.indexOf(listPolicies)].value
 
-                    // console.debug('OciQuery: queryTenancy:', JSON.stringify(design, null, 4))
+                    // logger.debug('queryTenancy:', JSON.stringify(design, null, 4))
                     const filteredResources: OciResources = {}
                     Object.keys(design.model.oci.resources).forEach((k) => filteredResources[k] = design.model.oci.resources[k].filter((r) => this.lifecycleStates.includes(r.lifecycleState) || r.lifecycleState === undefined))
                     design.model.oci.resources = filteredResources
                     this.postQuery(design).then((results) => {
-                        resolve(design)
+                        // Surface partial discovery failures alongside the design without mutating the
+                        // existing OcdDesign shape: queryErrors is an additive field carrying any
+                        // per-query rejections (403s, throttling) recorded during this run (issue OBS-01).
+                        if (this.queryFailures.length > 0) runLogger.warn('queryTenancy: completed with', this.queryFailures.length, 'partial query failure(s)')
+                        resolve({ ...design, queryErrors: [...this.queryFailures] })
                     }).catch((reason) => {
-                        console.error(reason)
+                        runLogger.error(reason)
                         reject(reason)
                     })
                     // resolve(design)
                 }).catch((reason) => {
-                    console.error(reason)
+                    runLogger.error(reason)
                     reject(reason)
                 })
+            }).catch((reason) => {
+                // Without this catch a rejection from listTenancyCompartments (e.g. auth /
+                // permission / unreachable region failure) would leave the outer Promise
+                // unsettled, causing the renderer spinner to hang forever (issue #741).
+                runLogger.error('queryTenancy: listTenancyCompartments failed', reason)
+                reject(reason)
             })
         })
+        return queryRun.then(
+            (result) => {
+                OcdMetrics.counter('oci.query.tenancy.success')
+                return result
+            },
+            (error) => {
+                OcdMetrics.counter('oci.query.tenancy.failure')
+                throw error
+            },
+        ).finally(() => { queryTimer.stop() })
     }
 
     postQuery(design: OcdDesign): Promise<any> {
@@ -410,12 +447,13 @@ export class OciQuery extends OciReferenceDataQuery {
                     design.model.oci.resources.instance.forEach((i) => {
                         if (i.sourceDetails.sourceId === undefined) i.sourceDetails.sourceId = images.find((ci: Record<string, any>) => ci.ocid === i.sourceDetails.imageId)?.id
                     })
-                    design.model.oci.resources.instance.forEach((i) => console.debug('OciQuery: Instance Image', i.sourceDetails.imageId, ':', i.sourceDetails.sourceId))
+                    // Do not log per-instance image/source ids (OCID-bearing); log the count only.
+                    logger.debug('Instance Image source ids resolved for', design.model.oci.resources.instance.length, 'instance(s)')
                 }
 
                 resolve(design)
             }).catch((reason) => {
-                console.error(reason)
+                logger.error(reason)
                 reject(reason)
             })
                  
@@ -424,10 +462,11 @@ export class OciQuery extends OciReferenceDataQuery {
 
     getHiddenImages(imageIds: string[]): Promise<any> {
         return new Promise((resolve, reject) => {
-            const queries = imageIds.map((id) => this.getImage(id))
+            const queries = runWithConcurrency(imageIds.map((id) => () => this.getImage(id)), QUERY_CONCURRENCY_LIMIT)
             Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: getHiddenImages: All Settled', results)
-                const images = results.filter((r) => r.status === 'fulfilled').map((r) => r.value)
+                const images = this.collectSettled(results, 'getHiddenImages', (value) => [value])
+                // Do not log the settled results (image payloads carry OCIDs); log counts only.
+                logger.debug('getHiddenImages: All Settled,', images.length, 'of', results.length, 'fulfilled')
                 resolve(images)
             })
         })
@@ -444,19 +483,20 @@ export class OciQuery extends OciReferenceDataQuery {
                 // @ts-ignore 
                 const sorter = (a, b) => a.displayName.localeCompare(b.displayName)
                 if (results[0].status === 'fulfilled') {
-                    // console.debug('OciQuery: listRegions: Tenancy has List Region Subscriptions', JSON.stringify(results[0].value, null, 2))
+                    // logger.debug('listRegions: Tenancy has List Region Subscriptions', JSON.stringify(results[0].value, null, 2))
                     const resources = results[0].value.items.map((r) => {return {id: r.regionName, displayName: this.regionNameToDisplayName(r.regionName as string), ...r}}).sort(sorter).reverse()
-                    // console.debug('OciQuery: listRegions: Tenancy has List Region Subscriptions', JSON.stringify(resources, null, 2))
+                    // logger.debug('listRegions: Tenancy has List Region Subscriptions', JSON.stringify(resources, null, 2))
                     // When using against a C3 the call will return a subscription list but does not include the correct region specified in the config so we will add it.
                     resolve([...resources.find((r) => r.id === this.provider.getRegion().regionId) === undefined ? [{id: this.provider.getRegion().regionId, displayName: this.provider.getRegion().regionId}] : [], ...resources])
                     // resolve(resources)
                 // } else if (results[1].status === 'fulfilled') {
-                //     console.debug('OciQuery: listRegions: Tenancy does not have List Region Subscriptions', JSON.stringify(results[1].value, null, 2))
+                //     logger.debug('listRegions: Tenancy does not have List Region Subscriptions', JSON.stringify(results[1].value, null, 2))
                 //     const resources = results[1].value.items.map((r) => {return {id: r.key, displayName: this.regionNameToDisplayName(r.key as string), ...r}}).sort(sorter).reverse()
                 //     resolve(resources)
                 } else {
-                    console.debug('OciQuery: listRegions: Tenancy has neither List Region Subscriptions or List Regions')
-                    if (results[1].status === 'fulfilled') console.debug('OciQuery: listRegions: Tenancy does not have List Region Subscriptions', JSON.stringify(results[1].value, null, 2))
+                    logger.debug('listRegions: Tenancy has neither List Region Subscriptions or List Regions')
+                    // Do not log the raw response payload; log the item count only.
+                    if (results[1].status === 'fulfilled') logger.debug('listRegions: Tenancy does not have List Region Subscriptions,', results[1].value.items?.length ?? 0, 'region(s) listed')
                     const resources = [{id: this.provider.getRegion().regionId, displayName: this.provider.getRegion().regionId}]
                     resolve(resources)
                     // reject('Regions Query Failed')
@@ -467,355 +507,134 @@ export class OciQuery extends OciReferenceDataQuery {
 
     // List Function to retrieve most information
 
-    listAnalyticsInstances(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: analytics.requests.ListAnalyticsInstancesRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.analyticsClient.listAnalyticsInstances(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listAnalyticsInstances: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
-                resolve(resources)
-            }).catch((reason) => {
-                console.error('OciQuery: listAnalyticsInstances:', reason)
-                reject(reason)
-            })
-        })
+    listAnalyticsInstances(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listAnalyticsInstances', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.analyticsClient.listAnalyticsInstances(r))
     }
 
-    listAutonomousDatabases(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: database.requests.ListAutonomousDatabasesRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.databaseClient.listAutonomousDatabases(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listAutonomousDatabases: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
-                resolve(resources)
-            }).catch((reason) => {
-                console.error('OciQuery: listAutonomousDatabases:', reason)
-                reject(reason)
-            })
-        })
+    listAutonomousDatabases(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listAutonomousDatabases', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.databaseClient.listAutonomousDatabases(r))
     }
 
-    listAvailabilityDomains(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: identity.requests.ListAvailabilityDomainsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.identityClient.listAvailabilityDomains(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listAvailabilityDomains: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
-                resolve(resources)
-            }).catch((reason) => {
-                console.error('OciQuery: listAvailabilityDomains:', reason)
-                reject(reason)
-            })
-        })
+    listAvailabilityDomains(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listAvailabilityDomains', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.identityClient.listAvailabilityDomains(r))
     }
 
-    listBastions(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: bastion.requests.ListBastionsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.bastionClient.listBastions(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listBastions: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
-                resolve(resources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
-        })
+    listBastions(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listBastions', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.bastionClient.listBastions(r))
     }
 
-    listBuckets(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            this.getObjectStorageNamespace().then((namespace) => {
-                const requests: objectstorage.requests.ListBucketsRequest[] = compartmentIds.map((id) => {return {compartmentId: id, namespaceName: namespace.value}})
-                const queries = requests.map((r) => this.objectStorageClient.listBuckets(r))
-                Promise.allSettled(queries).then((results) => {
-                    console.debug('OciQuery: listBuckets: All Settled')
-                    //@ts-ignore
-                    const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
-                    resolve(resources)
-                }).catch((reason) => {
-                    console.error(reason)
-                    reject(reason)
-                })
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
-        })
+    listBuckets(compartmentIds: string[]): Promise<any> {
+        return this.getObjectStorageNamespace().then((namespace) =>
+            this.listByCompartment('listBuckets', compartmentIds,
+                (id) => ({ compartmentId: id, namespaceName: namespace.value }),
+                (r) => this.objectStorageClient.listBuckets(r)))
     }
 
-    listCpes(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: core.requests.ListCpesRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.vcnClient.listCpes(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listCpes: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
-                resolve(resources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
-        })
+    listCpes(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listCpes', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.vcnClient.listCpes(r))
     }
 
-    listDatabaseSystems(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: database.requests.ListDbSystemsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.databaseClient.listDbSystems(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listDatabaseSystems: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
-                resolve(resources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
-        })
+    listDatabaseSystems(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listDatabaseSystems', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.databaseClient.listDbSystems(r))
     }
 
-    listDhcpOptions(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: core.requests.ListDhcpOptionsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.vcnClient.listDhcpOptions(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listDhcpOptions: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
-                resolve(resources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
-        })
+    listDhcpOptions(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listDhcpOptions', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.vcnClient.listDhcpOptions(r))
     }
 
-    listDrgs(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: core.requests.ListDrgsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.vcnClient.listDrgs(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listDrgs: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
-                resolve(resources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
-        })
+    listDrgs(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listDrgs', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.vcnClient.listDrgs(r))
     }
 
-    listDrgAttachments(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: core.requests.ListDrgAttachmentsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.vcnClient.listDrgAttachments(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listDrgAttachments: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
-                resolve(resources)
-            }).catch((reason) => {
-                console.error('OciQuery: listDrgAttachments:', reason)
-                reject(reason)
-            })
-        })
+    listDrgAttachments(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listDrgAttachments', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.vcnClient.listDrgAttachments(r))
     }
 
-    listDynamicGroups(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: identity.requests.ListDynamicGroupsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.identityClient.listDynamicGroups(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listDynamicGroups: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
-                resolve(resources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
-        })
+    listDynamicGroups(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listDynamicGroups', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.identityClient.listDynamicGroups(r))
     }
 
-    iterateDynamicGroups(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+    iterateDynamicGroups(compartmentIds: string[]): Promise<any> {
         return new Promise((resolve, reject) => {
             const requests: identity.requests.ListDynamicGroupsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
             const iterators = requests.map((r) => this.identityClient.listDynamicGroupsResponseIterator(r))
-            const queries = iterators.map((i) => this.getAllResponseData(i))
+            const queries = runWithConcurrency(iterators.map((i) => withRetry(() => this.getAllResponseData(i))), QUERY_CONCURRENCY_LIMIT)
             // const queries = requests.map((r) => this.identityClient.listDynamicGroups(r))
             Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: iterateDynamicGroups: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
+                logger.debug('iterateDynamicGroups: All Settled')
+                const resources = this.collectSettled(results, 'iterateDynamicGroups')
                 resolve(resources)
             }).catch((reason) => {
-                console.error(reason)
+                logger.error(reason)
                 reject(reason)
             })
         })
     }
 
-    listFileSystems(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+    listFileSystems(compartmentIds: string[]): Promise<any> {
         return new Promise((resolve, reject) => {
             this.listAvailabilityDomains(compartmentIds.slice(0,1)).then((ads) => {
                 const queries = ads.map((r: identity.models.AvailabilityDomain) => this.listFileSystemsByAvailabilityDomain(compartmentIds, r.name as string))
                 Promise.allSettled(queries).then((results) => {
-                    console.debug('OciQuery: listFileSystems: All Settled')
-                    //@ts-ignore
-                    const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value], [])
+                    logger.debug('listFileSystems: All Settled')
+                    const resources = this.collectSettled(results, 'listFileSystems', (value) => value)
                     resolve(resources)
                 }).catch((reason) => {
-                    console.error('OciQuery: listFileSystems:', reason)
+                    logger.error('listFileSystems:', reason)
                     reject(reason)
                 })
             }).catch((reason) => {
-                console.error('OciQuery: listFileSystems:', reason)
+                logger.error('listFileSystems:', reason)
                 reject(reason)
             })
         })
     }
 
-    listFileSystemsByAvailabilityDomain(compartmentIds: string[], availabilityDomain: string, retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: filestorage.requests.ListFileSystemsRequest[] = compartmentIds.map((id) => {return {compartmentId: id, availabilityDomain: availabilityDomain}})
-            const queries = requests.map((r) => this.fileStorageClient.listFileSystems(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listFileSystemsByAvailabilityDomain: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
-                resolve(resources)
-            }).catch((reason) => {
-                console.error('OciQuery: listFileSystemsByAvailabilityDomain:', reason)
-                reject(reason)
-            })
-        })
+    listFileSystemsByAvailabilityDomain(compartmentIds: string[], availabilityDomain: string): Promise<any> {
+        return this.listByCompartment('listFileSystemsByAvailabilityDomain', compartmentIds, (id) => ({ compartmentId: id, availabilityDomain: availabilityDomain }), (r) => this.fileStorageClient.listFileSystems(r))
     }
 
-    listInstances(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: core.requests.ListInstancesRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.computeClient.listInstances(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listInstances: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
-                resolve(resources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
-        })
+    listInstances(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listInstances', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.computeClient.listInstances(r))
     }
 
-    listInternetGateways(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: core.requests.ListInternetGatewaysRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.vcnClient.listInternetGateways(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listInternetGateways: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
-                resolve(resources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
-        })
+    listInternetGateways(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listInternetGateways', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.vcnClient.listInternetGateways(r))
     }
 
-    listIPSecConnections(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: core.requests.ListIPSecConnectionsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.vcnClient.listIPSecConnections(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listIPSecConnections: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
-                resolve(resources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
-        })
+    listIPSecConnections(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listIPSecConnections', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.vcnClient.listIPSecConnections(r))
     }
 
     // Local Peering Gateways
-    iterateLocalPeeringGateways(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+    iterateLocalPeeringGateways(compartmentIds: string[]): Promise<any> {
         return new Promise((resolve, reject) => {
             const requests: core.requests.ListLocalPeeringGatewaysRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
             const iterators = requests.map((r) => this.vcnClient.listLocalPeeringGatewaysResponseIterator(r))
-            const queries = iterators.map((i) => this.getAllResponseData(i))
+            const queries = runWithConcurrency(iterators.map((i) => withRetry(() => this.getAllResponseData(i))), QUERY_CONCURRENCY_LIMIT)
             // const queries = requests.map((r) => this.identityClient.listDynamicGroups(r))
             Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: iterateLocalPeeringGateways: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
+                logger.debug('iterateLocalPeeringGateways: All Settled')
+                const resources = this.collectSettled(results, 'iterateLocalPeeringGateways')
                 resolve(resources)
             }).catch((reason) => {
-                console.error(reason)
+                logger.error(reason)
                 reject(reason)
             })
         })
     }
 
-    listLocalPeeringGateways(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: core.requests.ListLocalPeeringGatewaysRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.vcnClient.listLocalPeeringGateways(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listLocalPeeringGateways: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
-                resolve(resources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
-        })
+    listLocalPeeringGateways(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listLocalPeeringGateways', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.vcnClient.listLocalPeeringGateways(r))
     }
 
     // Keys
-    listKeys(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: keymanagement.requests.ListKeysRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.kmsManagementClient.listKeys(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listKeys: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
-                resolve(resources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
-        })
+    listKeys(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listKeys', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.kmsManagementClient.listKeys(r))
     }
 
-    listLoadBalancers(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: loadbalancer.requests.ListLoadBalancersRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.loadbalancerClient.listLoadBalancers(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listLoadBalancers: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
-                resolve(resources)
-            }).catch((reason) => {
-                console.error('OciQuery: listLoadBalancers:', reason)
-                reject(reason)
-            })
-        })
+    listLoadBalancers(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listLoadBalancers', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.loadbalancerClient.listLoadBalancers(r))
     }
 
     processLoadBalancers(design: OcdDesign) {
@@ -863,103 +682,59 @@ export class OciQuery extends OciReferenceDataQuery {
                 delete l.backendSets
                 delete l.listeners
             })
-            // console.debug('OciQuery: Load Balancer Backend Sets:', design.model.oci.resources.load_balancer_backend_set)
-            // console.debug('OciQuery: Load Balancer Backends:', design.model.oci.resources.load_balancer_backend)
+            // logger.debug('Load Balancer Backend Sets:', design.model.oci.resources.load_balancer_backend_set)
+            // logger.debug('Load Balancer Backends:', design.model.oci.resources.load_balancer_backend)
         }
     }
 
-    listMountTargets(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+    listMountTargets(compartmentIds: string[]): Promise<any> {
         return new Promise((resolve, reject) => {
             this.listAvailabilityDomains(compartmentIds.slice(0,1)).then((ads) => {
                 const queries = ads.map((r: identity.models.AvailabilityDomain) => this.listMountTargetsByAvailabilityDomain(compartmentIds, r.name as string))
                 Promise.allSettled(queries).then((results) => {
-                    console.debug('OciQuery: listMountTargets: All Settled')
-                    //@ts-ignore
-                    const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value], [])
+                    logger.debug('listMountTargets: All Settled')
+                    const resources = this.collectSettled(results, 'listMountTargets', (value) => value)
                     resolve(resources)
                 }).catch((reason) => {
-                    console.error('OciQuery: listMountTargets:', reason)
+                    logger.error('listMountTargets:', reason)
                     reject(reason)
                 })
             }).catch((reason) => {
-                console.error('OciQuery: listMountTargets:', reason)
+                logger.error('listMountTargets:', reason)
                 reject(reason)
             })
         })
     }
 
-    listMountTargetsByAvailabilityDomain(compartmentIds: string[], availabilityDomain: string, retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: filestorage.requests.ListMountTargetsRequest[] = compartmentIds.map((id) => {return {compartmentId: id, availabilityDomain: availabilityDomain}})
-            const queries = requests.map((r) => this.fileStorageClient.listMountTargets(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listMountTargetsByAvailabilityDomain: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
-                resolve(resources)
-            }).catch((reason) => {
-                console.error('OciQuery: listMountTargetsByAvailabilityDomain:', reason)
-                reject(reason)
-            })
+    listMountTargetsByAvailabilityDomain(compartmentIds: string[], availabilityDomain: string): Promise<any> {
+        return this.listByCompartment('listMountTargetsByAvailabilityDomain', compartmentIds, (id) => ({ compartmentId: id, availabilityDomain: availabilityDomain }), (r) => this.fileStorageClient.listMountTargets(r))
+    }
+
+    listMySqlDatabaseSystems(compartmentIds: string[]): Promise<any> {
+        // listByCompartment surfaces per-compartment failures (e.g. a missing `mysql-family`
+        // read policy) via queryFailures instead of silently dropping them, which previously
+        // made MySQL DB Systems look absent from the query results with no explanation (issue #543).
+        return this.listByCompartment('listMySqlDatabaseSystems', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.mysqlClient.listDbSystems(r)).then((resources) => {
+            logger.debug('listMySqlDatabaseSystems: retrieved', resources.length, 'MySQL DB System(s)')
+            return resources
         })
     }
 
-    listMySqlDatabaseSystems(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: mysql.requests.ListDbSystemsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.mysqlClient.listDbSystems(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listMySqlDatabaseSystems: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
-                resolve(resources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
-        })
+    listNatGateways(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listNatGateways', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.vcnClient.listNatGateways(r))
     }
 
-    listNatGateways(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: core.requests.ListNatGatewaysRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.vcnClient.listNatGateways(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listNatGateways: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
-                resolve(resources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
-        })
+    listNetworkLoadBalancers(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listNetworkLoadBalancers', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.networkLoadbalancerClient.listNetworkLoadBalancers(r), (value) => value.networkLoadBalancerCollection.items ?? [])
     }
 
-    listNetworkLoadBalancers(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: networkloadbalancer.requests.ListNetworkLoadBalancersRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.networkLoadbalancerClient.listNetworkLoadBalancers(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listNetworkLoadBalancers: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.networkLoadBalancerCollection.items], [])
-                resolve(resources)
-            }).catch((reason) => {
-                console.error('OciQuery: listNetworkLoadBalancers:', reason)
-                reject(reason)
-            })
-        })
-    }
-
-    listNetworkSecurityGroups(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+    listNetworkSecurityGroups(compartmentIds: string[]): Promise<any> {
         return new Promise((resolve, reject) => {
             const requests: core.requests.ListNetworkSecurityGroupsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.vcnClient.listNetworkSecurityGroups(r))
+            const queries = runWithConcurrency(requests.map((r) => withRetry(() => this.vcnClient.listNetworkSecurityGroups(r))), QUERY_CONCURRENCY_LIMIT)
             Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listNetworkSecurityGroups: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], []) as Record<string, any>[]
+                logger.debug('listNetworkSecurityGroups: All Settled')
+                const resources = this.collectSettled<Record<string, any>>(results, 'listNetworkSecurityGroups')
                 const nsgIds = resources.map(r => r.id)
                 this.listNetworkSecurityGroupSecurityRules(nsgIds).then((response) => {
                     //@ts-ignore
@@ -969,256 +744,137 @@ export class OciQuery extends OciReferenceDataQuery {
                     // resolve(resources)
                 })
             }).catch((reason) => {
-                console.error(reason)
+                logger.error(reason)
                 reject(reason)
             })
         })
     }
 
-    listNetworkSecurityGroupSecurityRules(nsgIds: string[], retryCount: number = 0): Promise<any> {
+    listNetworkSecurityGroupSecurityRules(nsgIds: string[]): Promise<any> {
         return new Promise((resolve, reject) => {
             const requests: core.requests.ListNetworkSecurityGroupSecurityRulesRequest[] = nsgIds.map((id) => {return {networkSecurityGroupId: id}})
-            const queries = requests.map((r) => this.vcnClient.listNetworkSecurityGroupSecurityRules(r))
+            const queries = runWithConcurrency(requests.map((r) => withRetry(() => this.vcnClient.listNetworkSecurityGroupSecurityRules(r))), QUERY_CONCURRENCY_LIMIT)
             Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listNetworkSecurityGroupSecurityRules: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c, i) => [...a, ...c.value.items.map((s) => {return {...s, nsgId: nsgIds[i]}})], [])
+                logger.debug('listNetworkSecurityGroupSecurityRules: All Settled')
+                this.recordSettledFailures(results, 'listNetworkSecurityGroupSecurityRules')
+                const resources = results
+                    .filter((r): r is PromiseFulfilledResult<any> => r.status === 'fulfilled')
+                    .reduce((a: any[], c, i) => [...a, ...c.value.items.map((s: Record<string, any>) => {return {...s, nsgId: nsgIds[i]}})], [])
                 resolve(resources)
             }).catch((reason) => {
-                console.error(reason)
+                logger.error(reason)
                 reject(reason)
             })
         })
     }
 
-    listNoSqlIndexes(tableIds: string[], retryCount: number = 0): Promise<any> {
+    listNoSqlIndexes(tableIds: string[]): Promise<any> {
         return new Promise((resolve, reject) => {
             const requests: nosql.requests.ListIndexesRequest[] = tableIds.map((id) => {return {tableNameOrId: id}})
-            const queries = requests.map((r) => this.nosqlClient.listIndexes(r))
+            const queries = runWithConcurrency(requests.map((r) => withRetry(() => this.nosqlClient.listIndexes(r))), QUERY_CONCURRENCY_LIMIT)
             Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listNoSqlIndexes: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c, i) => [...a, ...c.value.indexCollection.items.map((s) => {return {...s, tableId: tableIds[i]}})], [])
+                logger.debug('listNoSqlIndexes: All Settled')
+                this.recordSettledFailures(results, 'listNoSqlIndexes')
+                const resources = results
+                    .filter((r): r is PromiseFulfilledResult<any> => r.status === 'fulfilled')
+                    .reduce((a: any[], c, i) => [...a, ...c.value.indexCollection.items.map((s: Record<string, any>) => {return {...s, tableId: tableIds[i]}})], [])
                 resolve(resources)
             }).catch((reason) => {
-                console.error('OciQuery: listNoSqlIndexes:', reason)
+                logger.error('listNoSqlIndexes:', reason)
                 reject(reason)
             })
         })
     }
 
-    listNoSqlTables(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+    listNoSqlTables(compartmentIds: string[]): Promise<any> {
         return new Promise((resolve, reject) => {
             const requests: nosql.requests.ListTablesRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.nosqlClient.listTables(r))
+            const queries = runWithConcurrency(requests.map((r) => withRetry(() => this.nosqlClient.listTables(r))), QUERY_CONCURRENCY_LIMIT)
             Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listNoSqlTables: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.tableCollection.items], []) as Record<string, any>[]
+                logger.debug('listNoSqlTables: All Settled')
+                const resources = this.collectSettled<any, Record<string, any>>(results, 'listNoSqlTables', (value) => value.tableCollection.items)
                 const tableIds = resources.map(r => r.id)
                 this.listNoSqlIndexes(tableIds).then((response) => {
                     resolve(resources)
                     //@ts-ignore
                     resources.forEach((r) => r.indexes = response.filter((n) => r.id === n.tableId))
                 }).catch((reason) => {
-                    console.error('OciQuery: listNoSqlTables:', reason)
+                    logger.error('listNoSqlTables:', reason)
                     reject(reason)
                 })
             }).catch((reason) => {
-                console.error('OciQuery: listNoSqlTables:', reason)
+                logger.error('listNoSqlTables:', reason)
                 reject(reason)
             })
         })
     }
 
     // Policies
-    listPolicies(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: identity.requests.ListPoliciesRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.identityClient.listPolicies(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listPolicies: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
-                resolve(resources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
-        })
+    listPolicies(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listPolicies', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.identityClient.listPolicies(r))
     }
 
-    iteratePolicies(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+    iteratePolicies(compartmentIds: string[]): Promise<any> {
         return new Promise((resolve, reject) => {
             const requests: identity.requests.ListPoliciesRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
             const iterators = requests.map((r) => this.identityClient.listPoliciesResponseIterator(r))
-            const queries = iterators.map((i) => this.getAllResponseData(i))
+            const queries = runWithConcurrency(iterators.map((i) => withRetry(() => this.getAllResponseData(i))), QUERY_CONCURRENCY_LIMIT)
             // const queries = requests.map((r) => this.identityClient.listDynamicGroups(r))
             Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: iteratePolicies: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
+                logger.debug('iteratePolicies: All Settled')
+                const resources = this.collectSettled(results, 'iteratePolicies')
                 resolve(resources)
             }).catch((reason) => {
-                console.error(reason)
+                logger.error(reason)
                 reject(reason)
             })
         })
     }
 
     // Private IPs
-    listPrivateIps(vnicIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: core.requests.ListPrivateIpsRequest[] = vnicIds.map((id) => {return {vnicId: id}})
-            const queries = requests.map((r) => this.vcnClient.listPrivateIps(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listPrivateIps: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
-                resolve(resources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
-        })
+    listPrivateIps(vnicIds: string[]): Promise<any> {
+        return this.listByCompartment('listPrivateIps', vnicIds, (id) => ({ vnicId: id }), (r) => this.vcnClient.listPrivateIps(r))
     }
 
-    listRemotePeeringConnections(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: core.requests.ListRemotePeeringConnectionsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.vcnClient.listRemotePeeringConnections(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listRemotePeeringConnections: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
-                resolve(resources)
-            }).catch((reason) => {
-                console.error('OciQuery: listRemotePeeringConnections:', reason)
-                reject(reason)
-            })
-        })
+    listRemotePeeringConnections(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listRemotePeeringConnections', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.vcnClient.listRemotePeeringConnections(r))
     }
 
-    listRouteTables(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: core.requests.ListRouteTablesRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.vcnClient.listRouteTables(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listRouteTables: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
-                resolve(resources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
-        })
+    listRouteTables(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listRouteTables', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.vcnClient.listRouteTables(r))
     }
 
-    listSecrets(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: vault.requests.ListSecretsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.vaultClient.listSecrets(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listSecrets: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
-                resolve(resources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
-        })
+    listSecrets(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listSecrets', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.vaultClient.listSecrets(r))
     }
 
-    listSecurityLists(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: core.requests.ListSecurityListsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.vcnClient.listSecurityLists(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listSecurityLists: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
-                resolve(resources)
-            }).catch((reason) => {
-                console.error('OciQuery: listSecurityLists:', reason)
-                reject(reason)
-            })
-        })
+    listSecurityLists(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listSecurityLists', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.vcnClient.listSecurityLists(r))
     }
 
-    listServiceGateways(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: core.requests.ListServiceGatewaysRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.vcnClient.listServiceGateways(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listServiceGateways: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
-                resolve(resources)
-            }).catch((reason) => {
-                console.error('OciQuery: listServiceGateways:', reason)
-                reject(reason)
-            })
-        })
+    listServiceGateways(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listServiceGateways', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.vcnClient.listServiceGateways(r))
     }
 
-    listSubnets(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: core.requests.ListSubnetsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.vcnClient.listSubnets(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listSubnets: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
-                resolve(resources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
-        })
+    listSubnets(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listSubnets', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.vcnClient.listSubnets(r))
     }
 
-    listVaults(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: keymanagement.requests.ListVaultsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.kmsVaultClient.listVaults(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listVaults: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
-                resolve(resources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
-        })
+    listVaults(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listVaults', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.kmsVaultClient.listVaults(r))
     }
 
-    listVcns(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: core.requests.ListVcnsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.vcnClient.listVcns(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listVCNs: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
-                resolve(resources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
-        })
+    listVcns(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listVCNs', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.vcnClient.listVcns(r))
     }
 
-    listVnicAttachments(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+    listVnicAttachments(compartmentIds: string[]): Promise<any> {
         return new Promise((resolve, reject) => {
             const requests: core.requests.ListVnicAttachmentsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.computeClient.listVnicAttachments(r))
+            const queries = runWithConcurrency(requests.map((r) => withRetry(() => this.computeClient.listVnicAttachments(r))), QUERY_CONCURRENCY_LIMIT)
             Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listVnicAttachments: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], []) as Record<string, any>[]
+                logger.debug('listVnicAttachments: All Settled')
+                const resources = this.collectSettled<Record<string, any>>(results, 'listVnicAttachments')
                 const vnicIds = resources.map(r => r.vnicId)
                 const getVnics = this.getVnics(vnicIds)
                 const listPrivateIps = this.listPrivateIps(vnicIds)
@@ -1228,99 +884,50 @@ export class OciQuery extends OciReferenceDataQuery {
                     if (response[queries.indexOf(getVnics)].status === 'fulfilled' && response[queries.indexOf(getVnics)].value.length > 0) resources.forEach((r) => r.vnic = response[queries.indexOf(getVnics)].value.find((v) => v.id === r.vnicId))
                     //@ts-ignore
                     if (response[queries.indexOf(listPrivateIps)].status === 'fulfilled' && response[queries.indexOf(listPrivateIps)].value.length > 0) resources.forEach((r) => r.privateIp = response[queries.indexOf(listPrivateIps)].value.find((v) => v.vnicId === r.vnicId))
-                    console.debug('OciQuery: listVnicAttachments: All Settled')
+                    logger.debug('listVnicAttachments: All Settled')
                     resolve(resources)
                 })
                 // resolve(resources)
             }).catch((reason) => {
-                console.error(reason)
+                logger.error(reason)
                 reject(reason)
             })
         })
     }
 
-    listVolumeAttachments(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: core.requests.ListVolumeAttachmentsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.computeClient.listVolumeAttachments(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listVolumeAttachments: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
-                resolve(resources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
-        })
+    listVolumeAttachments(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listVolumeAttachments', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.computeClient.listVolumeAttachments(r))
     }
 
-    listBootVolumeAttachments(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+    listBootVolumeAttachments(compartmentIds: string[]): Promise<any> {
         return new Promise((resolve, reject) => {
             this.listAvailabilityDomains(compartmentIds.slice(0,1)).then((ads) => {
                 const queries = ads.map((r: identity.models.AvailabilityDomain) => this.listBootVolumeAttachmentsByAvailabilityDomain(compartmentIds, r.name as string))
                 Promise.allSettled(queries).then((results) => {
-                    console.debug('OciQuery: listBootVolumeAttachments: All Settled')
-                    //@ts-ignore
-                    const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value], [])
+                    logger.debug('listBootVolumeAttachments: All Settled')
+                    const resources = this.collectSettled(results, 'listBootVolumeAttachments', (value) => value)
                     resolve(resources)
                 }).catch((reason) => {
-                    console.error('OciQuery: listBootVolumeAttachments:', reason)
+                    logger.error('listBootVolumeAttachments:', reason)
                     reject(reason)
                 })
             }).catch((reason) => {
-                console.error('OciQuery: listBootVolumeAttachments:', reason)
+                logger.error('listBootVolumeAttachments:', reason)
                 reject(reason)
             })
         })
     }
 
-    listBootVolumeAttachmentsByAvailabilityDomain(compartmentIds: string[], availabilityDomain: string, retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: core.requests.ListBootVolumeAttachmentsRequest[] = compartmentIds.map((id) => {return {compartmentId: id, availabilityDomain: availabilityDomain}})
-            const queries = requests.map((r) => this.computeClient.listBootVolumeAttachments(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listBootVolumeAttachmentsByAvailabilityDomain: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
-                resolve(resources)
-            }).catch((reason) => {
-                console.error('OciQuery: listBootVolumeAttachmentsByAvailabilityDomain:', reason)
-                reject(reason)
-            })
-        })
+    listBootVolumeAttachmentsByAvailabilityDomain(compartmentIds: string[], availabilityDomain: string): Promise<any> {
+        return this.listByCompartment('listBootVolumeAttachmentsByAvailabilityDomain', compartmentIds, (id) => ({ compartmentId: id, availabilityDomain: availabilityDomain }), (r) => this.computeClient.listBootVolumeAttachments(r))
     }
 
-    listVolumes(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: core.requests.ListVolumesRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.blockstorageClient.listVolumes(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listVolumes: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
-                resolve(resources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
-        })
+    listVolumes(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listVolumes', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.blockstorageClient.listVolumes(r))
     }
 
-    listBootVolumes(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: core.requests.ListBootVolumesRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.blockstorageClient.listBootVolumes(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: listBootVolumes: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], [])
-                resolve(resources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
-        })
+    listBootVolumes(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listBootVolumes', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.blockstorageClient.listBootVolumes(r))
     }
 
     // Get Function to retrieve specific information missed in the list or where list does not exist.
@@ -1330,23 +937,11 @@ export class OciQuery extends OciReferenceDataQuery {
         return this.objectStorageClient.getNamespace(request)
     }
 
-    getVnics(vnicIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: core.requests.GetVnicRequest[] = vnicIds.map((id) => {return {vnicId: id}})
-            const queries = requests.map((r) => this.vcnClient.getVnic(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: getVnics: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, c.value.vnic], []).sort(r => r.isPrimary)
-                resolve(resources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
-        })
+    getVnics(vnicIds: string[]): Promise<any> {
+        return this.listByCompartment('getVnics', vnicIds, (id) => ({ vnicId: id }), (r) => this.vcnClient.getVnic(r), (value) => [value.vnic]).then((resources) => resources.sort((r: Record<string, any>) => r.isPrimary))
     }
 
-    template(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+    template(compartmentIds: string[]): Promise<any> {
         return new Promise((resolve, reject) => {
             reject('Not Implemented')
         })

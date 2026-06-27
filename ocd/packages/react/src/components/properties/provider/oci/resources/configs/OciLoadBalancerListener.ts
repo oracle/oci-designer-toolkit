@@ -13,10 +13,32 @@ export namespace OciLoadBalancerListenerConfigs {
             id: 'display_name',
             properties: {
                 maxLength: 64,
-                pattern: '^[a-zA-Z][a-zA-Z0-9]{0,64}$|^var\.+$',
-                title: 'Backend Set Name can only be letters and numbers, starting with a letter. 64 characters max.'
+                pattern: '^[a-zA-Z][a-zA-Z0-9]{0,63}$|^var\.+$',
+                title: 'Listener name can only be letters and numbers, starting with a letter. 64 characters max.'
             },
             configs: []
+        },
+        {
+            id: 'port',
+            properties: {
+                min: 1,
+                max: 65535,
+                title: 'Listener port must be between 1 and 65535.'
+            },
+            configs: []
+        },
+        {
+            id: 'protocol',
+            properties: {
+                title: 'Use a protocol supported by the selected OCI load balancer shape.'
+            },
+            configs: [],
+            options: [
+                {id: 'HTTP', displayName: 'HTTP'},
+                {id: 'HTTPS', displayName: 'HTTPS'},
+                {id: 'HTTP2', displayName: 'HTTP/2'},
+                {id: 'TCP', displayName: 'TCP'}
+            ]
         },
         {
             id: 'hostname_names',

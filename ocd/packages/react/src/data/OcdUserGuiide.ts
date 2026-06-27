@@ -3,7 +3,39 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-export const userGuide = `# OCD Desktop Features 
+export const userGuide = `# Oracle Designer Toolkit Next Gen
+
+The Next Gen workbench is organized around one flow: discover or import architecture data, normalize it into an editable model, review generated Terraform, and only then push changes through a plan-first deployment path.
+
+## Primary Workbenches
+
+1. **Discovery** loads OCI profiles, regions, and compartments through the local backend or desktop bridge. When a live context is available, the sample dataset is replaced by a live OCI discovery snapshot. Inventory, Topology, Analytics, and LZ Mapping all read from the same active snapshot so the view stays consistent after profile, region, compartment, or discovery refresh changes.
+2. **Landing Zone Next-Gen** builds a governed OCI baseline from approved source modules. Project add-on sources can be checked and updated from the Sources and Updates panel or the Integration Hub.
+3. **AI Architect** can use deterministic local planning, OpenAI-compatible planning, or OCI Generative AI through the backend bridge. Discovery briefs are redacted before model calls and generated plans are validated before they can update the design.
+4. **Integrations** lists external project add-ons and local bridges as modular plugins. Each card reports readiness for backend reachability, source status, and configuration prerequisites.
+5. **Library** loads bundled reference architectures in both desktop and browser builds. Double-click a card to open the reference design in the Designer.
+6. **Designer** remains the editable canvas where imported, discovered, generated, or library designs become the canonical architecture model.
+
+## Live Discovery
+
+Use a profile from your local OCI configuration, select a region, and select one or more compartments. Discovery auto-refreshes selected compartments after context changes and can also be run manually. Live OCI names come from the selected tenancy at runtime; the published app does not hardcode customer profile names, compartment names, OCIDs, or environment-specific values.
+
+The Discovery tabs use the active snapshot:
+
+1. **Inventory** shows discovered applications/compartments, compute hosts when available, and a separate OCI resource inventory.
+2. **Topology** shows observed service dependencies when imported telemetry exists, or OCI containment/resource relationships for live OCI inventory.
+3. **Analytics** shows utilization metrics when supplied, plus OCI resource mix and Zero Trust readiness signals.
+4. **LZ Mapping** maps service/runtime signals to conservative Landing Zone and OCI target recommendations.
+
+## Provisioning Workflow
+
+Generated Terraform and Resource Manager actions are plan-first. Review generated files, resource counts, variables, and plan output before apply. Apply or push-forward actions should be enabled only after the operator confirms the target tenancy, compartment, profile, region, and generated changes.
+
+## External Project Add-ons
+
+External integrations are declared as plugin-style registry entries. Source update actions are limited to allowlisted project add-ons from the Landing Zone source manifest. The renderer supplies only a source key; the backend chooses the command and validates that the source is installable before running it.
+
+# Legacy OCD Desktop Features
 
 The OCD Desktop / Web interface is composed of a number of section similar to those provided in the original OKIT BUI. These 
 provide similar functionality but with some key difference that will be document below.

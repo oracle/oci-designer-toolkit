@@ -1,0 +1,1323 @@
+{
+    "metadata": {
+        "created": "2026-05-30T00:00:00+00:00",
+        "documentation": "One-OE Landing Zone baseline with observability shared services. All tenant identifiers are placeholders.",
+        "ocdModelId": "okit.model.498e50f31d0e",
+        "ocdSchemaVersion": "0.1.0",
+        "ocdVersion": "0.3.0",
+        "platform": "oci",
+        "separateIdentity": true,
+        "title": "OCI Observability Landing Zone - Full Enterprise",
+        "updated": ""
+    },
+    "model": {
+        "azure": {
+            "resources": {},
+            "vars": []
+        },
+        "general": {
+            "resources": {},
+            "vars": []
+        },
+        "google": {
+            "resources": {},
+            "vars": []
+        },
+        "oci": {
+            "resources": {
+                "compartment": [
+                    {
+                        "compartmentId": "",
+                        "description": "Network Shared Services",
+                        "displayName": "cmp-lz-network",
+                        "documentation": "",
+                        "editLocked": false,
+                        "id": "okit.compartment.0b76ed666f79",
+                        "locked": false,
+                        "name": "cmp_lz_network",
+                        "okitReference": "okit.ref.50b2dbfcf97b",
+                        "provider": "oci",
+                        "region": "",
+                        "resourceType": "Compartment",
+                        "resourceTypeName": "Compartment",
+                        "terraformResourceName": "OkitCompartment96a53244"
+                    },
+                    {
+                        "compartmentId": "",
+                        "description": "Security Shared Services",
+                        "displayName": "cmp-lz-security",
+                        "documentation": "",
+                        "editLocked": false,
+                        "id": "okit.compartment.5c5e339e9f46",
+                        "locked": false,
+                        "name": "cmp_lz_security",
+                        "okitReference": "okit.ref.d91e372d34f7",
+                        "provider": "oci",
+                        "region": "",
+                        "resourceType": "Compartment",
+                        "resourceTypeName": "Compartment",
+                        "terraformResourceName": "OkitCompartmentc9ecdbd8"
+                    },
+                    {
+                        "compartmentId": "",
+                        "description": "Platform Shared Services",
+                        "displayName": "cmp-lz-platform",
+                        "documentation": "",
+                        "editLocked": false,
+                        "id": "okit.compartment.dd973ff03def",
+                        "locked": false,
+                        "name": "cmp_lz_platform",
+                        "okitReference": "okit.ref.5701d66ed23b",
+                        "provider": "oci",
+                        "region": "",
+                        "resourceType": "Compartment",
+                        "resourceTypeName": "Compartment",
+                        "terraformResourceName": "OkitCompartment1b4180f3"
+                    },
+                    {
+                        "compartmentId": "",
+                        "description": "Observability Shared Services",
+                        "displayName": "cmp-lz-observability",
+                        "documentation": "",
+                        "editLocked": false,
+                        "id": "okit.compartment.87af14df1b41",
+                        "locked": false,
+                        "name": "cmp_lz_observability",
+                        "okitReference": "okit.ref.cee6417cc263",
+                        "provider": "oci",
+                        "region": "",
+                        "resourceType": "Compartment",
+                        "resourceTypeName": "Compartment",
+                        "terraformResourceName": "OkitCompartment8b4bf82a"
+                    },
+                    {
+                        "compartmentId": "",
+                        "description": "Production Workload Environment",
+                        "displayName": "cmp-lz-prod",
+                        "documentation": "",
+                        "editLocked": false,
+                        "id": "okit.compartment.506ad7f7e371",
+                        "locked": false,
+                        "name": "cmp_lz_prod",
+                        "okitReference": "okit.ref.60d63b635327",
+                        "provider": "oci",
+                        "region": "",
+                        "resourceType": "Compartment",
+                        "resourceTypeName": "Compartment",
+                        "terraformResourceName": "OkitCompartmentbb8b2b54"
+                    },
+                    {
+                        "compartmentId": "",
+                        "description": "Non-Production Workload Environment",
+                        "displayName": "cmp-lz-nonprod",
+                        "documentation": "",
+                        "editLocked": false,
+                        "id": "okit.compartment.b38ee787e0d6",
+                        "locked": false,
+                        "name": "cmp_lz_nonprod",
+                        "okitReference": "okit.ref.f66d006990f2",
+                        "provider": "oci",
+                        "region": "",
+                        "resourceType": "Compartment",
+                        "resourceTypeName": "Compartment",
+                        "terraformResourceName": "OkitCompartmentef1f72df"
+                    }
+                ],
+                "route_table": [
+                    {
+                        "compartmentId": "okit.compartment.0b76ed666f79",
+                        "description": "",
+                        "displayName": "Observability Private Routes",
+                        "documentation": "",
+                        "editLocked": false,
+                        "id": "okit.route_table.cf026a283980",
+                        "locked": false,
+                        "okitReference": "okit.ref.bed0b699ed45",
+                        "provider": "oci",
+                        "region": "",
+                        "resourceType": "RouteTable",
+                        "resourceTypeName": "RouteTable",
+                        "routeRules": [
+                            {
+                                "description": "OCI service access",
+                                "destination": "all-region-services-in-oracle-services-network",
+                                "destinationType": "SERVICE_CIDR_BLOCK",
+                                "key": "oci-services",
+                                "networkEntityId": "okit.service_gateway.9a7498132843"
+                            }
+                        ],
+                        "terraformResourceName": "OkitRouteTablef40ff03e",
+                        "vcnId": "okit.vcn.d96b202dc4b8"
+                    }
+                ],
+                "security_list": [
+                    {
+                        "compartmentId": "okit.compartment.0b76ed666f79",
+                        "description": "",
+                        "displayName": "Observability Private Security List",
+                        "documentation": "",
+                        "editLocked": false,
+                        "egressSecurityRules": [
+                            {
+                                "description": "Controlled egress for agents and service connectors",
+                                "destination": "0.0.0.0/0",
+                                "destinationType": "CIDR_BLOCK",
+                                "key": "controlled-egress",
+                                "protocol": "all",
+                                "stateless": false
+                            }
+                        ],
+                        "id": "okit.security_list.fd47c7fa06b1",
+                        "ingressSecurityRules": [],
+                        "locked": false,
+                        "okitReference": "okit.ref.b655a891cf9c",
+                        "provider": "oci",
+                        "region": "",
+                        "resourceType": "SecurityList",
+                        "resourceTypeName": "SecurityList",
+                        "terraformResourceName": "OkitSecurityList3d400bab",
+                        "vcnId": "okit.vcn.d96b202dc4b8"
+                    }
+                ],
+                "service_gateway": [
+                    {
+                        "compartmentId": "okit.compartment.0b76ed666f79",
+                        "description": "",
+                        "displayName": "OCI Services Gateway",
+                        "documentation": "",
+                        "editLocked": false,
+                        "id": "okit.service_gateway.9a7498132843",
+                        "locked": false,
+                        "okitReference": "okit.ref.a755f609e1f7",
+                        "provider": "oci",
+                        "region": "",
+                        "resourceType": "ServiceGateway",
+                        "resourceTypeName": "ServiceGateway",
+                        "terraformResourceName": "OkitServiceGateway6dc711d4",
+                        "vcnId": "okit.vcn.d96b202dc4b8"
+                    }
+                ],
+                "subnet": [
+                    {
+                        "cidrBlock": "10.100.10.0/24",
+                        "compartmentId": "okit.compartment.0b76ed666f79",
+                        "description": "",
+                        "displayName": "Observability Private Subnet",
+                        "dnsLabel": "obspriv",
+                        "documentation": "",
+                        "editLocked": false,
+                        "id": "okit.subnet.30ac26457535",
+                        "locked": false,
+                        "okitReference": "okit.ref.eea0c3479fff",
+                        "prohibitPublicIpOnVnic": true,
+                        "provider": "oci",
+                        "region": "",
+                        "resourceType": "Subnet",
+                        "resourceTypeName": "Subnet",
+                        "terraformResourceName": "OkitSubnet420e2361",
+                        "vcnId": "okit.vcn.d96b202dc4b8"
+                    }
+                ],
+                "vcn": [
+                    {
+                        "cidrBlocks": [
+                            "10.100.0.0/16"
+                        ],
+                        "compartmentId": "okit.compartment.0b76ed666f79",
+                        "description": "",
+                        "displayName": "Observability Hub VCN",
+                        "dnsLabel": "obshub",
+                        "documentation": "",
+                        "editLocked": false,
+                        "freeformTags": {
+                            "ManagedBy": "okit-landing-zone-template"
+                        },
+                        "id": "okit.vcn.d96b202dc4b8",
+                        "ipv6cidrBlocks": [],
+                        "isIpv6enabled": false,
+                        "locked": false,
+                        "okitReference": "okit.ref.380234b4e9c8",
+                        "provider": "oci",
+                        "region": "",
+                        "resourceType": "Vcn",
+                        "resourceTypeName": "Vcn",
+                        "terraformResourceName": "OkitVcn7850b978"
+                    }
+                ]
+            },
+            "tags": {
+                "definedTags": {},
+                "freeformTags": {
+                    "ManagedBy": "okit-landing-zone-template"
+                }
+            },
+            "vars": [
+                {
+                    "default": "<TENANCY_OCID>",
+                    "description": "Tenancy OCID. Keep tenant-specific values outside source control.",
+                    "key": "tenancy_ocid",
+                    "name": "tenancy_ocid"
+                },
+                {
+                    "default": "<REGION>",
+                    "description": "OCI region identifier.",
+                    "key": "region",
+                    "name": "region"
+                },
+                {
+                    "default": "<PARENT_COMPARTMENT_OCID_OR_NULL>",
+                    "description": "Parent compartment OCID for generated landing-zone compartments. Defaults to tenancy_ocid when null.",
+                    "key": "parent_compartment_ocid",
+                    "name": "parent_compartment_ocid"
+                },
+                {
+                    "default": "cmp-lz-network",
+                    "description": "Network shared-services compartment name.",
+                    "key": "network_compartment_name",
+                    "name": "network_compartment_name"
+                },
+                {
+                    "default": "cmp-lz-observability",
+                    "description": "Observability shared-services compartment name.",
+                    "key": "observability_compartment_name",
+                    "name": "observability_compartment_name"
+                },
+                {
+                    "default": [
+                        "10.100.0.0/16"
+                    ],
+                    "description": "CIDR blocks for the observability hub VCN.",
+                    "key": "vcn_cidr_blocks",
+                    "name": "vcn_cidr_blocks"
+                },
+                {
+                    "default": "10.100.10.0/24",
+                    "description": "CIDR block for the private observability subnet.",
+                    "key": "private_subnet_cidr",
+                    "name": "private_subnet_cidr"
+                },
+                {
+                    "default": "obshub",
+                    "description": "DNS label for the observability hub VCN.",
+                    "key": "hub_vcn_dns_label",
+                    "name": "hub_vcn_dns_label"
+                },
+                {
+                    "default": "obspriv",
+                    "description": "DNS label for the private observability subnet.",
+                    "key": "private_subnet_dns_label",
+                    "name": "private_subnet_dns_label"
+                },
+                {
+                    "default": "observability-alarm-topic",
+                    "description": "Notifications topic name for observability alarms.",
+                    "key": "notification_topic_name",
+                    "name": "notification_topic_name"
+                },
+                {
+                    "default": 90,
+                    "description": "Template CPU alarm threshold.",
+                    "key": "alarm_cpu_threshold",
+                    "name": "alarm_cpu_threshold"
+                },
+                {
+                    "default": true,
+                    "description": "Enable paid Streaming baseline resources for enterprise observability flows.",
+                    "key": "enable_streaming",
+                    "name": "enable_streaming"
+                },
+                {
+                    "default": true,
+                    "description": "Enable APM service pack metadata and operator recipes.",
+                    "key": "enable_apm",
+                    "name": "enable_apm"
+                },
+                {
+                    "default": true,
+                    "description": "Enable Log Analytics service pack metadata and importer recipes.",
+                    "key": "enable_log_analytics",
+                    "name": "enable_log_analytics"
+                },
+                {
+                    "default": true,
+                    "description": "Enable Management Agent installation and association recipes.",
+                    "key": "enable_management_agent",
+                    "name": "enable_management_agent"
+                },
+                {
+                    "default": true,
+                    "description": "Enable DB Management Basic baseline. Full Management remains an explicit paid add-on outside this baseline.",
+                    "key": "enable_database_management",
+                    "name": "enable_database_management"
+                },
+                {
+                    "default": true,
+                    "description": "Enable OKE monitoring and logging Helm values in generated examples.",
+                    "key": "enable_oke_monitoring",
+                    "name": "enable_oke_monitoring"
+                }
+            ]
+        }
+    },
+    "userDefined": {
+        "ociObservabilityLandingZone": {
+            "baseline_sources": [
+                {
+                    "branch": "master",
+                    "local_path": "baselines/oci-landing-zones/oci-landing-zone-operating-entities",
+                    "name": "oci-landing-zone-operating-entities",
+                    "purpose": "One-OE Landing Zone orchestration baseline and add-on workflow reference.",
+                    "url": "https://github.com/oci-landing-zones/oci-landing-zone-operating-entities.git"
+                },
+                {
+                    "branch": "main",
+                    "local_path": "baselines/oci-landing-zones/terraform-oci-core-landingzone",
+                    "name": "terraform-oci-core-landingzone",
+                    "purpose": "Core Landing Zone modules and variable conventions.",
+                    "url": "https://github.com/oci-landing-zones/terraform-oci-core-landingzone.git"
+                },
+                {
+                    "branch": "main",
+                    "local_path": "baselines/oci-landing-zones/terraform-oci-modules-orchestrator",
+                    "name": "terraform-oci-modules-orchestrator",
+                    "purpose": "JSON/YAML/HCL configuration orchestration conventions.",
+                    "url": "https://github.com/oci-landing-zones/terraform-oci-modules-orchestrator.git"
+                },
+                {
+                    "branch": "main",
+                    "local_path": "baselines/oci-landing-zones/oci-cis-landingzone-quickstart",
+                    "name": "oci-cis-landingzone-quickstart",
+                    "purpose": "CIS Landing Zone quickstart reference for legacy OKIT/OCI-LZ comparisons.",
+                    "url": "https://github.com/oci-landing-zones/oci-cis-landingzone-quickstart.git"
+                }
+            ],
+            "cost_estimate": {
+                "currency": "USD",
+                "line_items": [
+                    {
+                        "enabled": true,
+                        "estimated_usd": 0,
+                        "id": "logging.log_group",
+                        "label": "Logging log group baseline"
+                    },
+                    {
+                        "enabled": true,
+                        "estimated_usd": 0,
+                        "id": "monitoring.alarm_topic",
+                        "label": "Notifications topic and Monitoring alarm baseline"
+                    },
+                    {
+                        "enabled": true,
+                        "estimated_usd": 18.25,
+                        "id": "streaming.enterprise_stream",
+                        "label": "Enterprise stream for service connector targets"
+                    }
+                ],
+                "monthly_estimate": {
+                    "basis": "Template assumptions. Use OCI Usage API for actual costs after deployment.",
+                    "confidence": "medium",
+                    "estimated_usd": 18.25
+                },
+                "profile": "full-enterprise",
+                "schema_version": "oci.okit.cost_estimate.v1",
+                "usage_api": {
+                    "query_template": "ocd/library/oci/ObservabilityLandingZoneEnterpriseUsageApiQuery.json",
+                    "recommended": true,
+                    "summary": "Use OCI Usage API requestSummarizedUsages for historical actuals."
+                }
+            },
+            "extension_mode": "multi-stack",
+            "generated_artifacts": [
+                "terraform/main.tf.json",
+                "terraform/hcl/main.tf",
+                "architecture.drawio",
+                "resourcemanager/okit-resource-manager-manifest.json",
+                "addons/oci-observability-end-to-end/observability.auto.tfvars.json",
+                "examples/observability-landing-zone/observability.model.json",
+                "cost/cost-estimate.json"
+            ],
+            "hub_model": "Hub Model A",
+            "profile": "full-enterprise",
+            "schema_version": "oci.observability.okit_lz_template.v1",
+            "service_packs": [
+                "logging",
+                "log_analytics",
+                "management_agent",
+                "db_observability",
+                "apm",
+                "alarms_dashboards",
+                "oke_monitoring"
+            ]
+        }
+    },
+    "view": {
+        "id": "view-observability-lz",
+        "pages": [
+            {
+                "connectors": [],
+                "coords": [
+                    {
+                        "class": "oci-compartment",
+                        "container": false,
+                        "h": 78,
+                        "id": "gid-506b6a799cbc",
+                        "ocid": "okit.compartment.0b76ed666f79",
+                        "pgid": "",
+                        "pocid": "",
+                        "showConnections": true,
+                        "showParentConnection": true,
+                        "title": "cmp-lz-network",
+                        "w": 210,
+                        "x": 20,
+                        "y": 25
+                    },
+                    {
+                        "class": "oci-compartment",
+                        "container": false,
+                        "h": 78,
+                        "id": "gid-4f3f9d2e94ee",
+                        "ocid": "okit.compartment.5c5e339e9f46",
+                        "pgid": "",
+                        "pocid": "",
+                        "showConnections": true,
+                        "showParentConnection": true,
+                        "title": "cmp-lz-security",
+                        "w": 210,
+                        "x": 20,
+                        "y": 125
+                    },
+                    {
+                        "class": "oci-compartment",
+                        "container": false,
+                        "h": 78,
+                        "id": "gid-9639e70552d4",
+                        "ocid": "okit.compartment.dd973ff03def",
+                        "pgid": "",
+                        "pocid": "",
+                        "showConnections": true,
+                        "showParentConnection": true,
+                        "title": "cmp-lz-platform",
+                        "w": 210,
+                        "x": 20,
+                        "y": 225
+                    },
+                    {
+                        "class": "oci-compartment",
+                        "container": false,
+                        "h": 78,
+                        "id": "gid-5a2f6792b9be",
+                        "ocid": "okit.compartment.87af14df1b41",
+                        "pgid": "",
+                        "pocid": "",
+                        "showConnections": true,
+                        "showParentConnection": true,
+                        "title": "cmp-lz-observability",
+                        "w": 210,
+                        "x": 20,
+                        "y": 325
+                    },
+                    {
+                        "class": "oci-compartment",
+                        "container": false,
+                        "h": 110,
+                        "id": "gid-470d5b4b9dee",
+                        "ocid": "okit.compartment.506ad7f7e371",
+                        "pgid": "",
+                        "pocid": "",
+                        "showConnections": true,
+                        "showParentConnection": true,
+                        "title": "cmp-lz-prod",
+                        "w": 230,
+                        "x": 300,
+                        "y": 90
+                    },
+                    {
+                        "class": "oci-compartment",
+                        "container": false,
+                        "h": 110,
+                        "id": "gid-3d5ab5264796",
+                        "ocid": "okit.compartment.b38ee787e0d6",
+                        "pgid": "",
+                        "pocid": "",
+                        "showConnections": true,
+                        "showParentConnection": true,
+                        "title": "cmp-lz-nonprod",
+                        "w": 230,
+                        "x": 300,
+                        "y": 260
+                    },
+                    {
+                        "class": "oci-vcn",
+                        "container": true,
+                        "coords": [
+                            {
+                                "class": "oci-route-table",
+                                "container": false,
+                                "h": 32,
+                                "id": "gid-d2547f91a30a",
+                                "ocid": "okit.route_table.cf026a283980",
+                                "pgid": "",
+                                "pocid": "",
+                                "showConnections": true,
+                                "showParentConnection": true,
+                                "title": "Route Table",
+                                "w": 32,
+                                "x": 35,
+                                "y": 70
+                            },
+                            {
+                                "class": "oci-security-list",
+                                "container": false,
+                                "h": 32,
+                                "id": "gid-1712db09153a",
+                                "ocid": "okit.security_list.fd47c7fa06b1",
+                                "pgid": "",
+                                "pocid": "",
+                                "showConnections": true,
+                                "showParentConnection": true,
+                                "title": "Security List",
+                                "w": 32,
+                                "x": 35,
+                                "y": 130
+                            },
+                            {
+                                "class": "oci-service-gateway",
+                                "container": false,
+                                "h": 32,
+                                "id": "gid-8542fa7b0fb0",
+                                "ocid": "okit.service_gateway.9a7498132843",
+                                "pgid": "",
+                                "pocid": "",
+                                "showConnections": true,
+                                "showParentConnection": true,
+                                "title": "Service Gateway",
+                                "w": 32,
+                                "x": 410,
+                                "y": 70
+                            },
+                            {
+                                "class": "oci-subnet",
+                                "container": true,
+                                "h": 110,
+                                "id": "gid-ea06d658a116",
+                                "ocid": "okit.subnet.30ac26457535",
+                                "pgid": "",
+                                "pocid": "",
+                                "showConnections": true,
+                                "showParentConnection": true,
+                                "title": "Private Subnet",
+                                "w": 270,
+                                "x": 210,
+                                "y": 150
+                            }
+                        ],
+                        "h": 330,
+                        "id": "gid-dd867e19af12",
+                        "ocid": "okit.vcn.d96b202dc4b8",
+                        "pgid": "",
+                        "pocid": "",
+                        "showConnections": true,
+                        "showParentConnection": true,
+                        "title": "Observability Hub VCN",
+                        "w": 520,
+                        "x": 600,
+                        "y": 90
+                    }
+                ],
+                "documentation": "One-OE compartment and network baseline for observability.",
+                "grid": true,
+                "id": "page-landing-zone",
+                "layers": [
+                    {
+                        "class": "oci-compartment",
+                        "id": "okit.compartment.0b76ed666f79",
+                        "selected": true,
+                        "visible": true
+                    },
+                    {
+                        "class": "oci-compartment",
+                        "id": "okit.compartment.5c5e339e9f46",
+                        "selected": false,
+                        "visible": true
+                    },
+                    {
+                        "class": "oci-compartment",
+                        "id": "okit.compartment.dd973ff03def",
+                        "selected": false,
+                        "visible": true
+                    },
+                    {
+                        "class": "oci-compartment",
+                        "id": "okit.compartment.87af14df1b41",
+                        "selected": false,
+                        "visible": true
+                    },
+                    {
+                        "class": "oci-compartment",
+                        "id": "okit.compartment.506ad7f7e371",
+                        "selected": false,
+                        "visible": true
+                    },
+                    {
+                        "class": "oci-compartment",
+                        "id": "okit.compartment.b38ee787e0d6",
+                        "selected": false,
+                        "visible": true
+                    }
+                ],
+                "selected": false,
+                "title": "Landing Zone Baseline",
+                "transform": [
+                    1,
+                    0,
+                    0,
+                    1,
+                    0,
+                    0
+                ]
+            },
+            {
+                "connectors": [],
+                "coords": [
+                    {
+                        "class": "oci-compartment",
+                        "container": false,
+                        "h": 120,
+                        "id": "gid-9eb96d948e5b",
+                        "ocid": "okit.compartment.87af14df1b41",
+                        "pgid": "",
+                        "pocid": "",
+                        "showConnections": true,
+                        "showParentConnection": true,
+                        "title": "Observability Shared Services",
+                        "w": 260,
+                        "x": 30,
+                        "y": 40
+                    },
+                    {
+                        "class": "oci-vcn",
+                        "container": true,
+                        "coords": [
+                            {
+                                "class": "oci-route-table",
+                                "container": false,
+                                "h": 32,
+                                "id": "gid-d2547f91a30a",
+                                "ocid": "okit.route_table.cf026a283980",
+                                "pgid": "",
+                                "pocid": "",
+                                "showConnections": true,
+                                "showParentConnection": true,
+                                "title": "Route Table",
+                                "w": 32,
+                                "x": 35,
+                                "y": 70
+                            },
+                            {
+                                "class": "oci-security-list",
+                                "container": false,
+                                "h": 32,
+                                "id": "gid-1712db09153a",
+                                "ocid": "okit.security_list.fd47c7fa06b1",
+                                "pgid": "",
+                                "pocid": "",
+                                "showConnections": true,
+                                "showParentConnection": true,
+                                "title": "Security List",
+                                "w": 32,
+                                "x": 35,
+                                "y": 130
+                            },
+                            {
+                                "class": "oci-service-gateway",
+                                "container": false,
+                                "h": 32,
+                                "id": "gid-8542fa7b0fb0",
+                                "ocid": "okit.service_gateway.9a7498132843",
+                                "pgid": "",
+                                "pocid": "",
+                                "showConnections": true,
+                                "showParentConnection": true,
+                                "title": "Service Gateway",
+                                "w": 32,
+                                "x": 410,
+                                "y": 70
+                            },
+                            {
+                                "class": "oci-subnet",
+                                "container": true,
+                                "h": 110,
+                                "id": "gid-ea06d658a116",
+                                "ocid": "okit.subnet.30ac26457535",
+                                "pgid": "",
+                                "pocid": "",
+                                "showConnections": true,
+                                "showParentConnection": true,
+                                "title": "Private Subnet",
+                                "w": 270,
+                                "x": 210,
+                                "y": 150
+                            }
+                        ],
+                        "h": 260,
+                        "id": "gid-a3dd9a3f97c9",
+                        "ocid": "okit.vcn.d96b202dc4b8",
+                        "pgid": "",
+                        "pocid": "",
+                        "showConnections": true,
+                        "showParentConnection": true,
+                        "title": "Hub / Service Access",
+                        "w": 430,
+                        "x": 350,
+                        "y": 40
+                    }
+                ],
+                "documentation": "Observability service packs and network access path.",
+                "grid": true,
+                "id": "page-observability-runtime",
+                "layers": [
+                    {
+                        "class": "oci-compartment",
+                        "id": "okit.compartment.0b76ed666f79",
+                        "selected": true,
+                        "visible": true
+                    },
+                    {
+                        "class": "oci-compartment",
+                        "id": "okit.compartment.5c5e339e9f46",
+                        "selected": false,
+                        "visible": true
+                    },
+                    {
+                        "class": "oci-compartment",
+                        "id": "okit.compartment.dd973ff03def",
+                        "selected": false,
+                        "visible": true
+                    },
+                    {
+                        "class": "oci-compartment",
+                        "id": "okit.compartment.87af14df1b41",
+                        "selected": false,
+                        "visible": true
+                    },
+                    {
+                        "class": "oci-compartment",
+                        "id": "okit.compartment.506ad7f7e371",
+                        "selected": false,
+                        "visible": true
+                    },
+                    {
+                        "class": "oci-compartment",
+                        "id": "okit.compartment.b38ee787e0d6",
+                        "selected": false,
+                        "visible": true
+                    }
+                ],
+                "selected": false,
+                "title": "Observability Runtime",
+                "transform": [
+                    1,
+                    0,
+                    0,
+                    1,
+                    0,
+                    0
+                ]
+            },
+            {
+                "connectors": [],
+                "coords": [
+                    {
+                        "class": "oci-compartment",
+                        "container": false,
+                        "h": 72,
+                        "id": "gid-a42772b40a75",
+                        "ocid": "okit.compartment.87af14df1b41",
+                        "pgid": "",
+                        "pocid": "",
+                        "showConnections": true,
+                        "showParentConnection": true,
+                        "title": "Logging",
+                        "w": 190,
+                        "x": 40,
+                        "y": 80
+                    },
+                    {
+                        "class": "oci-subnet",
+                        "container": false,
+                        "h": 72,
+                        "id": "gid-b3351ba4bae3",
+                        "ocid": "okit.subnet.30ac26457535",
+                        "pgid": "",
+                        "pocid": "",
+                        "showConnections": true,
+                        "showParentConnection": true,
+                        "title": "Log Analytics",
+                        "w": 190,
+                        "x": 280,
+                        "y": 80
+                    },
+                    {
+                        "class": "oci-vcn",
+                        "container": false,
+                        "h": 72,
+                        "id": "gid-13d8c37f3e78",
+                        "ocid": "okit.vcn.d96b202dc4b8",
+                        "pgid": "",
+                        "pocid": "",
+                        "showConnections": true,
+                        "showParentConnection": true,
+                        "title": "Management Agent",
+                        "w": 190,
+                        "x": 520,
+                        "y": 80
+                    },
+                    {
+                        "class": "oci-service-gateway",
+                        "container": false,
+                        "h": 72,
+                        "id": "gid-31e8bf699863",
+                        "ocid": "okit.service_gateway.9a7498132843",
+                        "pgid": "",
+                        "pocid": "",
+                        "showConnections": true,
+                        "showParentConnection": true,
+                        "title": "APM + OTEL",
+                        "w": 190,
+                        "x": 760,
+                        "y": 80
+                    },
+                    {
+                        "class": "oci-compartment",
+                        "container": false,
+                        "h": 82,
+                        "id": "gid-faf1238a50d3",
+                        "ocid": "okit.compartment.506ad7f7e371",
+                        "pgid": "",
+                        "pocid": "",
+                        "showConnections": true,
+                        "showParentConnection": true,
+                        "title": "DBM / OPSI Toggles",
+                        "w": 230,
+                        "x": 160,
+                        "y": 230
+                    },
+                    {
+                        "class": "oci-compartment",
+                        "container": false,
+                        "h": 82,
+                        "id": "gid-e7607dd5a19c",
+                        "ocid": "okit.compartment.b38ee787e0d6",
+                        "pgid": "",
+                        "pocid": "",
+                        "showConnections": true,
+                        "showParentConnection": true,
+                        "title": "OKE Monitoring",
+                        "w": 230,
+                        "x": 460,
+                        "y": 230
+                    },
+                    {
+                        "class": "oci-route-table",
+                        "container": false,
+                        "h": 82,
+                        "id": "gid-b7f2dbb3d4c2",
+                        "ocid": "okit.route_table.cf026a283980",
+                        "pgid": "",
+                        "pocid": "",
+                        "showConnections": true,
+                        "showParentConnection": true,
+                        "title": "Alarms + Dashboards",
+                        "w": 230,
+                        "x": 760,
+                        "y": 230
+                    }
+                ],
+                "documentation": "Logging, Log Analytics, agents, APM, OKE, database observability, alarms, and dashboards.",
+                "grid": true,
+                "id": "page-service-packs",
+                "layers": [
+                    {
+                        "class": "oci-compartment",
+                        "id": "okit.compartment.0b76ed666f79",
+                        "selected": true,
+                        "visible": true
+                    },
+                    {
+                        "class": "oci-compartment",
+                        "id": "okit.compartment.5c5e339e9f46",
+                        "selected": false,
+                        "visible": true
+                    },
+                    {
+                        "class": "oci-compartment",
+                        "id": "okit.compartment.dd973ff03def",
+                        "selected": false,
+                        "visible": true
+                    },
+                    {
+                        "class": "oci-compartment",
+                        "id": "okit.compartment.87af14df1b41",
+                        "selected": false,
+                        "visible": true
+                    },
+                    {
+                        "class": "oci-compartment",
+                        "id": "okit.compartment.506ad7f7e371",
+                        "selected": false,
+                        "visible": true
+                    },
+                    {
+                        "class": "oci-compartment",
+                        "id": "okit.compartment.b38ee787e0d6",
+                        "selected": false,
+                        "visible": true
+                    }
+                ],
+                "selected": false,
+                "title": "Service Pack Architecture",
+                "transform": [
+                    1,
+                    0,
+                    0,
+                    1,
+                    0,
+                    0
+                ]
+            },
+            {
+                "connectors": [],
+                "coords": [
+                    {
+                        "class": "oci-compartment",
+                        "container": false,
+                        "h": 80,
+                        "id": "gid-d592566ec1fb",
+                        "ocid": "okit.compartment.0b76ed666f79",
+                        "pgid": "",
+                        "pocid": "",
+                        "showConnections": true,
+                        "showParentConnection": true,
+                        "title": "1. One-OE baseline",
+                        "w": 210,
+                        "x": 40,
+                        "y": 80
+                    },
+                    {
+                        "class": "oci-compartment",
+                        "container": false,
+                        "h": 80,
+                        "id": "gid-1cd071a511cc",
+                        "ocid": "okit.compartment.87af14df1b41",
+                        "pgid": "",
+                        "pocid": "",
+                        "showConnections": true,
+                        "showParentConnection": true,
+                        "title": "2. Observability add-on",
+                        "w": 210,
+                        "x": 300,
+                        "y": 80
+                    },
+                    {
+                        "class": "oci-subnet",
+                        "container": false,
+                        "h": 80,
+                        "id": "gid-975b018eab2a",
+                        "ocid": "okit.subnet.30ac26457535",
+                        "pgid": "",
+                        "pocid": "",
+                        "showConnections": true,
+                        "showParentConnection": true,
+                        "title": "3. Asset imports",
+                        "w": 210,
+                        "x": 560,
+                        "y": 80
+                    },
+                    {
+                        "class": "oci-compartment",
+                        "container": false,
+                        "h": 80,
+                        "id": "gid-36dc0ef9cb57",
+                        "ocid": "okit.compartment.506ad7f7e371",
+                        "pgid": "",
+                        "pocid": "",
+                        "showConnections": true,
+                        "showParentConnection": true,
+                        "title": "4. Target onboarding",
+                        "w": 210,
+                        "x": 820,
+                        "y": 80
+                    }
+                ],
+                "documentation": "full-enterprise deployment workflow.",
+                "grid": true,
+                "id": "page-deployment-workflow",
+                "layers": [
+                    {
+                        "class": "oci-compartment",
+                        "id": "okit.compartment.0b76ed666f79",
+                        "selected": true,
+                        "visible": true
+                    },
+                    {
+                        "class": "oci-compartment",
+                        "id": "okit.compartment.5c5e339e9f46",
+                        "selected": false,
+                        "visible": true
+                    },
+                    {
+                        "class": "oci-compartment",
+                        "id": "okit.compartment.dd973ff03def",
+                        "selected": false,
+                        "visible": true
+                    },
+                    {
+                        "class": "oci-compartment",
+                        "id": "okit.compartment.87af14df1b41",
+                        "selected": false,
+                        "visible": true
+                    },
+                    {
+                        "class": "oci-compartment",
+                        "id": "okit.compartment.506ad7f7e371",
+                        "selected": false,
+                        "visible": true
+                    },
+                    {
+                        "class": "oci-compartment",
+                        "id": "okit.compartment.b38ee787e0d6",
+                        "selected": false,
+                        "visible": true
+                    }
+                ],
+                "selected": false,
+                "title": "Deployment Workflow",
+                "transform": [
+                    1,
+                    0,
+                    0,
+                    1,
+                    0,
+                    0
+                ]
+            },
+            {
+                "connectors": [],
+                "coords": [
+                    {
+                        "class": "oci-compartment",
+                        "container": false,
+                        "h": 76,
+                        "id": "gid-b34ef3e49937",
+                        "ocid": "okit.model.498e50f31d0e",
+                        "pgid": "",
+                        "pocid": "",
+                        "showConnections": true,
+                        "showParentConnection": true,
+                        "title": "OKIT Model",
+                        "w": 180,
+                        "x": 40,
+                        "y": 120
+                    },
+                    {
+                        "class": "oci-subnet",
+                        "container": false,
+                        "h": 76,
+                        "id": "gid-499d3ccfc5ef",
+                        "ocid": "okit.subnet.30ac26457535",
+                        "pgid": "",
+                        "pocid": "",
+                        "showConnections": true,
+                        "showParentConnection": true,
+                        "title": "Terraform JSON",
+                        "w": 180,
+                        "x": 280,
+                        "y": 120
+                    },
+                    {
+                        "class": "oci-route-table",
+                        "container": false,
+                        "h": 76,
+                        "id": "gid-d104530ea55b",
+                        "ocid": "okit.route_table.cf026a283980",
+                        "pgid": "",
+                        "pocid": "",
+                        "showConnections": true,
+                        "showParentConnection": true,
+                        "title": "Readable HCL",
+                        "w": 180,
+                        "x": 520,
+                        "y": 120
+                    },
+                    {
+                        "class": "oci-service-gateway",
+                        "container": false,
+                        "h": 76,
+                        "id": "gid-1d0deea954a2",
+                        "ocid": "okit.service_gateway.9a7498132843",
+                        "pgid": "",
+                        "pocid": "",
+                        "showConnections": true,
+                        "showParentConnection": true,
+                        "title": "Resource Manager ZIP",
+                        "w": 220,
+                        "x": 760,
+                        "y": 120
+                    }
+                ],
+                "documentation": "Terraform export packaging for OCI Resource Manager ZIP_UPLOAD stacks.",
+                "grid": true,
+                "id": "page-resource-manager-package",
+                "layers": [
+                    {
+                        "class": "oci-compartment",
+                        "id": "okit.compartment.0b76ed666f79",
+                        "selected": true,
+                        "visible": true
+                    },
+                    {
+                        "class": "oci-compartment",
+                        "id": "okit.compartment.5c5e339e9f46",
+                        "selected": false,
+                        "visible": true
+                    },
+                    {
+                        "class": "oci-compartment",
+                        "id": "okit.compartment.dd973ff03def",
+                        "selected": false,
+                        "visible": true
+                    },
+                    {
+                        "class": "oci-compartment",
+                        "id": "okit.compartment.87af14df1b41",
+                        "selected": false,
+                        "visible": true
+                    },
+                    {
+                        "class": "oci-compartment",
+                        "id": "okit.compartment.506ad7f7e371",
+                        "selected": false,
+                        "visible": true
+                    },
+                    {
+                        "class": "oci-compartment",
+                        "id": "okit.compartment.b38ee787e0d6",
+                        "selected": false,
+                        "visible": true
+                    }
+                ],
+                "selected": false,
+                "title": "Resource Manager Package",
+                "transform": [
+                    1,
+                    0,
+                    0,
+                    1,
+                    0,
+                    0
+                ]
+            },
+            {
+                "connectors": [],
+                "coords": [
+                    {
+                        "class": "oci-compartment",
+                        "container": false,
+                        "h": 90,
+                        "id": "gid-59f13cfad728",
+                        "ocid": "okit.compartment.87af14df1b41",
+                        "pgid": "",
+                        "pocid": "",
+                        "showConnections": true,
+                        "showParentConnection": true,
+                        "title": "Free-first defaults",
+                        "w": 230,
+                        "x": 80,
+                        "y": 120
+                    },
+                    {
+                        "class": "oci-vcn",
+                        "container": false,
+                        "h": 90,
+                        "id": "gid-e07da55aa7da",
+                        "ocid": "okit.vcn.d96b202dc4b8",
+                        "pgid": "",
+                        "pocid": "",
+                        "showConnections": true,
+                        "showParentConnection": true,
+                        "title": "Explicit paid toggles",
+                        "w": 230,
+                        "x": 380,
+                        "y": 120
+                    },
+                    {
+                        "class": "oci-service-gateway",
+                        "container": false,
+                        "h": 90,
+                        "id": "gid-693720603544",
+                        "ocid": "okit.service_gateway.9a7498132843",
+                        "pgid": "",
+                        "pocid": "",
+                        "showConnections": true,
+                        "showParentConnection": true,
+                        "title": "OCI Usage API actuals",
+                        "w": 230,
+                        "x": 680,
+                        "y": 120
+                    }
+                ],
+                "documentation": "Free-first defaults, paid toggles, and OCI Usage API follow-up cost controls.",
+                "grid": true,
+                "id": "page-cost-governance",
+                "layers": [
+                    {
+                        "class": "oci-compartment",
+                        "id": "okit.compartment.0b76ed666f79",
+                        "selected": true,
+                        "visible": true
+                    },
+                    {
+                        "class": "oci-compartment",
+                        "id": "okit.compartment.5c5e339e9f46",
+                        "selected": false,
+                        "visible": true
+                    },
+                    {
+                        "class": "oci-compartment",
+                        "id": "okit.compartment.dd973ff03def",
+                        "selected": false,
+                        "visible": true
+                    },
+                    {
+                        "class": "oci-compartment",
+                        "id": "okit.compartment.87af14df1b41",
+                        "selected": false,
+                        "visible": true
+                    },
+                    {
+                        "class": "oci-compartment",
+                        "id": "okit.compartment.506ad7f7e371",
+                        "selected": false,
+                        "visible": true
+                    },
+                    {
+                        "class": "oci-compartment",
+                        "id": "okit.compartment.b38ee787e0d6",
+                        "selected": false,
+                        "visible": true
+                    }
+                ],
+                "selected": false,
+                "title": "Cost And Governance",
+                "transform": [
+                    1,
+                    0,
+                    0,
+                    1,
+                    0,
+                    0
+                ]
+            }
+        ]
+    }
+}

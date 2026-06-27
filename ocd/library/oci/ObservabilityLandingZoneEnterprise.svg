@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540">
+  <rect width="960" height="540" fill="#fbfbfb"/>
+  <rect x="30" y="30" width="900" height="480" rx="8" fill="#ffffff" stroke="#9b9b9b"/>
+  <text x="54" y="72" font-family="Arial" font-size="26" font-weight="700" fill="#1f2937">Observability Landing Zone</text>
+  <text x="54" y="104" font-family="Arial" font-size="15" fill="#667085">Full Enterprise One-OE observability baseline</text>
+  <rect x="70" y="140" width="230" height="70" fill="#fffbd7" stroke="#111827" stroke-dasharray="4 4"/>
+  <rect x="70" y="230" width="230" height="70" fill="#fffbd7" stroke="#111827" stroke-dasharray="4 4"/>
+  <rect x="70" y="320" width="230" height="70" fill="#fffbd7" stroke="#111827" stroke-dasharray="4 4"/>
+  <rect x="350" y="160" width="230" height="90" fill="#dcefd8" stroke="#111827" stroke-dasharray="4 4"/>
+  <rect x="350" y="290" width="230" height="90" fill="#dcefd8" stroke="#111827" stroke-dasharray="4 4"/>
+  <rect x="640" y="160" width="220" height="220" rx="8" fill="#eef7ff" stroke="#2aa198"/>
+  <text x="92" y="182" font-family="Arial" font-size="16" font-weight="700" fill="#4f5660">Shared Services</text>
+  <text x="378" y="210" font-family="Arial" font-size="16" font-weight="700" fill="#4f5660">Workload Environments</text>
+  <text x="675" y="220" font-family="Arial" font-size="16" font-weight="700" fill="#1f2937">Observability Plane</text>
+  <text x="675" y="252" font-family="Arial" font-size="13" fill="#475467">Logging / LA / APM</text>
+  <text x="675" y="278" font-family="Arial" font-size="13" fill="#475467">Agents / DBM / OPSI</text>
+  <text x="675" y="304" font-family="Arial" font-size="13" fill="#475467">Alarms / Dashboards</text>
+</svg>

@@ -1,9 +1,9 @@
 {
-  "name": "ocd",
-  "productName": "ocd",
-  "version": "0.3.0",
-  "description": "OKIT Open Cloud Designer Desktop",
-  "title": "OKIT Open Cloud Designer Desktop",
+  "name": "oci-designer-toolkit-next-gen",
+  "productName": "oci-designer-toolkit-next-gen",
+  "version": "0.4.5",
+  "description": "OCI Designer Toolkit Next Gen",
+  "title": "oci-designer-toolkit-next-gen",
   "author": {
     "name": "Andrew Hopkinson",
     "email": "andrew.hopkinson@oracle.com",
@@ -22,20 +22,25 @@
   "license": "UPL-1.0",
   "main": ".vite/build/main.js",
   "scripts": {
-    "dev": "vite",
+    "dev": "npm run prebuild && vite",
+    "web": "npm run prebuild && vite --host 0.0.0.0",
     "vite-build": "tsc -b ./tsconfig.json && vite build",
-    "clean": "rm -rf lib dist .vite out",
+    "build:web": "npm run prebuild && tsc -p ./tsconfig.web.json && vite build --config vite.web.config.mts",
+    "build:pages": "npm run build:web && node scripts/prepare-pages-build.mjs web-dist",
+    "clean": "rm -rf lib dist .vite out web-dist",
     "purge": "npm run clean && rm -rf node_modules",
-    "prebuild": "cp -v ../react/src/css/*.css ./src/css || copy /y ../react/src/css/*.css ./src/css",
+    "prebuild": "node scripts/prepare-static-assets.mjs",
     "build": "npm run make",
     "start": "NODE_OPTIONS=--max-old-space-size=8192 electron-forge start",
     "package": "NODE_OPTIONS=--max-old-space-size=8192 electron-forge package",
-    "make": "electron-forge make ",
+    "make": "NODE_OPTIONS=--max-old-space-size=8192 electron-forge make ",
     "make-macos-universal": "NODE_OPTIONS=--max-old-space-size=8192 DEBUG=electron-installer-dmg* electron-forge make --arch='universal'",
     "make-macos-arm64": "NODE_OPTIONS=--max-old-space-size=8192 DEBUG=electron-installer-dmg* electron-forge make --arch='arm64'",
     "make-macos-x64": "NODE_OPTIONS=--max-old-space-size=8192 DEBUG=electron-installer-dmg* electron-forge make --arch='x64'",
     "publish": "electron-forge publish",
-    "lint": "eslint --ext .ts,.tsx ."
+    "lint": "eslint --ext .ts,.tsx .",
+    "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.vite.json",
+    "premake": "npm run typecheck"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.6.0",
@@ -51,24 +56,28 @@
     "@types/electron-squirrel-startup": "^1.0.2",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
+    "@vitejs/plugin-react": "^6.0.2",
     "electron": ">=32.2.0",
-    "electron-builder": "^25.1.8",
+    "electron-builder": "^26.15.2",
     "eslint": ">=8.57.1",
     "eslint-plugin-import": "^2.31.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.3",
-    "vite": ">=6.3.4"
+    "vite": "^8.0.16"
   },
   "dependencies": {
     "@ocd/core": ">=0.3.0",
     "@ocd/export": ">=0.3.0",
     "@ocd/import": ">=0.3.0",
     "@ocd/model": ">=0.3.0",
-    "@ocd/query": ">=0.3.0",
     "@ocd/parser": ">=0.3.0",
+    "@ocd/query": ">=0.3.0",
     "@ocd/react": ">=0.3.0",
     "electron-squirrel-startup": "^1.0.1",
     "exceljs": "^4.4.0",
     "oci-sdk": "^2.69.0"
+  },
+  "optionalDependencies": {
+    "appdmg": "^0.6.6"
   }
 }

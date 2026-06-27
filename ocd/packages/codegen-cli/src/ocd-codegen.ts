@@ -5,7 +5,7 @@
 
 import fs from 'fs'
 import path from 'path'
-import { OcdSchema, OciModelGenerator, OciTerraformGenerator, OciTerraformImportGenerator, OciTerraformSchemaImporter, OciValidatorGenerator, OcdTerraformSchemaResourceAttributesGenerator, OciMarkdownGenerator, OciPropertiesGenerator, OciTabularGenerator, AzureMarkdownGenerator, AzurePropertiesGenerator, AzureTabularGenerator, AzureTerraformGenerator, AzureModelGenerator, AzureAzTerraformSchemaImporter, AzureRmTerraformSchemaImporter, AzureValidatorGenerator, GoogleTerraformSchemaImporter, GoogleModelGenerator, GoogleMarkdownGenerator, GooglePropertiesGenerator, GoogleTerraformGenerator, GoogleTabularGenerator, GoogleValidatorGenerator, OciExcelGenerator } from '@ocd/codegen'
+import { AwsTerraformGenerator, OcdSchema, OciModelGenerator, OciTerraformGenerator, OciTerraformImportGenerator, OciTerraformSchemaImporter, OciValidatorGenerator, OcdTerraformSchemaResourceAttributesGenerator, OciMarkdownGenerator, OciPropertiesGenerator, OciTabularGenerator, AzureMarkdownGenerator, AzurePropertiesGenerator, AzureTabularGenerator, AzureTerraformGenerator, AzureModelGenerator, AzureAzTerraformSchemaImporter, AzureRmTerraformSchemaImporter, AzureValidatorGenerator, GoogleTerraformSchemaImporter, GoogleModelGenerator, GoogleMarkdownGenerator, GooglePropertiesGenerator, GoogleTerraformGenerator, GoogleTabularGenerator, GoogleValidatorGenerator, OciExcelGenerator } from '@ocd/codegen'
 import { parseArgs } from "node:util"
 
 const options = {
@@ -71,6 +71,7 @@ if (command.toLocaleLowerCase() === 'generate') {
     else if (subcommand.toLocaleLowerCase() === 'google-terraform-js') generator = new GoogleTerraformGenerator()
     else if (subcommand.toLocaleLowerCase() === 'google-tabular-js') generator = new GoogleTabularGenerator()
     else if (subcommand.toLocaleLowerCase() === 'google-validator-js') generator = new GoogleValidatorGenerator()
+    else if (subcommand.toLocaleLowerCase() === 'aws-terraform-js') generator = new AwsTerraformGenerator()
     if (generator !== undefined) {
         Object.entries(schema).forEach(([key, value]) => {
             generator.generate(key, value as OcdSchema)

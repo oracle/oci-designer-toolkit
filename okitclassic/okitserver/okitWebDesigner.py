@@ -502,7 +502,10 @@ def get_template_entry(root, path, json_file):
 @bp.route('/templates/load', methods=(['GET']))
 def templates():
     if request.method == 'GET':
-        templates_root = os.path.join(current_app.instance_path, request.args['root_dir'].strip('/'))
+        templates_root = resolve_safe_template_dir(current_app.instance_path, request.args['root_dir'])
+        if templates_root is None:
+            logger.error(f"Path traversal attempt detected for templates load: {request.args['root_dir']}")
+            return jsonify({"error": "Invalid root_dir path"}), 400
         templates = dir_to_json(templates_root, current_app.instance_path)
         logger.info(f'Templates : {jsonToFormattedString(templates)}')
         return templates
@@ -528,10 +531,12 @@ def template_save():
         git_commit_msg = request.json.get('git_commit_msg', '')
         logger.info(f'Save Template : {root_dir} {template_filename}')
 
-        template_dir = os.path.dirname(template_filename)
-        full_dir = os.path.join(instance_path, root_dir, template_dir)
-        full_filename = os.path.join(full_dir, os.path.basename(template_filename))
-        full_filename = os.path.join(instance_path, root_dir, template_filename)
+        # SECURITY: Validate the fully-assembled path stays within instance_path
+        safe_path = resolve_safe_template_path(instance_path, root_dir, template_filename)
+        if safe_path is None:
+            logger.error(f'Path traversal attempt detected for template save: {root_dir} {template_filename}')
+            return jsonify({"error": "Invalid template path"}), 400
+        full_dir, full_filename = safe_path
         if not os.path.exists(full_dir):
             os.makedirs(full_dir, exist_ok=True)
         writeJsonFile(okit_json, full_filename)
@@ -612,7 +617,18 @@ def generate(language, destination):
         use_vars = request.json.get("use_variables", True)
         try:
             if destination == 'git':
-                git_url, git_branch = request.json['git_repository'].split('*')
+                git_repository = request.json.get('git_repository', '')
+                # Validate URL*BRANCH format
+                if '*' not in git_repository:
+                    return jsonify({"error": "Invalid format. Expected: URL*BRANCH"}), 400
+                git_url, git_branch = git_repository.split('*', 1)
+                # SECURITY: Validate Git URL against allowlist
+                if not is_git_url_allowed(git_url):
+                    logger.warning(f'Rejected unauthorized Git URL: {git_url}')
+                    return jsonify({
+                        "error": "Git repository URL is not in the allowlist",
+                        "details": "Only pre-approved repositories are allowed"
+                    }), 403
                 parsed_git_url = giturlparse.parse(git_url)
                 generate_git_dir = os.path.abspath(os.path.join(bp.static_folder, 'git'))
                 logger.info(generate_git_dir)
@@ -680,7 +696,18 @@ def saveas(savetype):
                 writeJsonFile(request.json, fullpath)
                 return escape(filename)
             elif savetype == 'git':
-                git_url, git_branch = request.json['git_repository'].split('*')
+                git_repository = request.json.get('git_repository', '')
+                # Validate URL*BRANCH format
+                if '*' not in git_repository:
+                    return jsonify({"error": "Invalid format. Expected: URL*BRANCH"}), 400
+                git_url, git_branch = git_repository.split('*', 1)
+                # SECURITY: Validate Git URL against allowlist
+                if not is_git_url_allowed(git_url):
+                    logger.warning(f'Rejected unauthorized Git URL: {git_url}')
+                    return jsonify({
+                        "error": "Git repository URL is not in the allowlist",
+                        "details": "Only pre-approved repositories are allowed"
+                    }), 403
                 git_commit_msg = request.json['git_repository_commitmsg']
                 if request.json['git_repository_filename'] != '':
                     filename = request.json['git_repository_filename'].replace(' ', '_').lower()
@@ -960,10 +987,57 @@ def validate_path_within_base(file_path, base_path):
         
         # Check if the file path is within base path
         return abs_file.startswith(abs_base + os.sep) or abs_file == abs_base
-        
+
     except Exception as e:
         logger.error(f'Error validating path: {e}')
         return False
+
+
+def resolve_safe_template_dir(instance_path, root_dir):
+    """
+    Resolve instance_path/root_dir to an absolute directory, ensuring the
+    result stays within instance_path. Prevents directory traversal.
+
+    Args:
+        instance_path (str): Base directory that the result must be within
+        root_dir (str): Untrusted relative directory provided by the request
+
+    Returns:
+        str | None: Absolute directory path if safe, otherwise None
+    """
+    base = os.path.abspath(instance_path)
+    candidate = os.path.abspath(os.path.join(base, root_dir.strip('/')))
+    if validate_path_within_base(candidate, base):
+        return candidate
+    return None
+
+
+def resolve_safe_template_path(instance_path, root_dir, filename):
+    """
+    Resolve instance_path/root_dir/filename to an absolute file path, ensuring
+    both the final file path and its parent directory stay within
+    instance_path. Prevents directory traversal on the write path.
+
+    Args:
+        instance_path (str): Base directory that the result must be within
+        root_dir (str): Untrusted relative directory provided by the request
+        filename (str): Untrusted relative filename provided by the request
+
+    Returns:
+        tuple[str, str] | None: (full_dir, full_filename) if safe, else None
+    """
+    base = os.path.abspath(instance_path)
+    safe_root = resolve_safe_template_dir(base, root_dir)
+    if safe_root is None:
+        return None
+    full_filename = os.path.abspath(os.path.join(safe_root, filename.strip('/')))
+    full_dir = os.path.dirname(full_filename)
+    if not validate_path_within_base(full_filename, base):
+        return None
+    if not validate_path_within_base(full_dir, base):
+        return None
+    return (full_dir, full_filename)
+
 
 @bp.route('loadfromgit', methods=(['POST']))
 def loadfromgit():

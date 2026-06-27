@@ -8,6 +8,7 @@ import { ConsolePageProps } from "../types/Console"
 import Markdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 import remarkGfm from 'remark-gfm'
+import { rehypeSanitizeOcd } from "../utils/rehypeSanitizeOcd"
 import { OcdDesignFacade } from "../facade/OcdDesignFacade"
 import { getSvgCssData } from '../data/OcdSvgCssData'
 // import { getSvgCssData } from "../components/Menu"
@@ -17,7 +18,7 @@ const OcdMarkdown = ({ ocdConsoleConfig, setOcdConsoleConfig, ocdDocument, setOc
     const markdown = markdownExporter.export(ocdDocument.design)
     return (
         <div className={`ocd-markdown-view`}>
-            {<div className='ocd-documentation-preview'><Markdown rehypePlugins={[rehypeRaw, remarkGfm]}>{markdown}</Markdown></div>}
+            {<div className='ocd-documentation-preview'><Markdown rehypePlugins={[rehypeRaw, rehypeSanitizeOcd, remarkGfm]}>{markdown}</Markdown></div>}
         </div>
     )
 }

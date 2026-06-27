@@ -26,6 +26,26 @@ export namespace OciLoadBalancerListener {
     }
     function customValidation(resource: Model.OciLoadBalancerListener, resources: OciResources): OcdValidationResult[] {
         const results: OcdValidationResult[] = []
+        const displayName = resource.displayName ? resource.displayName : 'Load Balancer Listener'
+        const protocol = resource.protocol ? resource.protocol.toUpperCase() : ''
+        const validProtocols = ['HTTP', 'HTTPS', 'HTTP2', 'TCP']
+        if (!validProtocols.includes(protocol)) {
+            results.push(validationResult(false, 'error', 'protocol', 'Protocol', displayName, `Protocol must be one of ${validProtocols.join(', ')}.`))
+        }
+        if (!Number.isInteger(resource.port) || resource.port < 1 || resource.port > 65535) {
+            results.push(validationResult(false, 'error', 'port', 'Port', displayName, 'Port must be an integer between 1 and 65535.'))
+        }
         return results
+    }
+    function validationResult(valid: boolean, type: 'error' | 'warning' | 'information' | '', element: string, title: string, displayName: string, message: string): OcdValidationResult {
+        return {
+            valid,
+            type,
+            message,
+            element,
+            title,
+            displayName,
+            class: 'oci-load-balancer-listener',
+        }
     }
 }

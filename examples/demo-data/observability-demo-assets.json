@@ -1,0 +1,82 @@
+{
+    "apm": {
+        "data_key_source": "vault-or-environment-placeholder",
+        "domain": "<APM_DOMAIN_ID>",
+        "otel_endpoint": "<APM_OTEL_ENDPOINT>",
+        "recipes": [
+            "java-otel-agent",
+            "python-otel-sdk",
+            "collector-otlp-to-oci-apm"
+        ]
+    },
+    "log_analytics": {
+        "fields": [
+            {
+                "name": "demo_app",
+                "type": "string"
+            },
+            {
+                "name": "demo_trace_id",
+                "type": "string"
+            },
+            {
+                "name": "demo_severity",
+                "type": "string"
+            }
+        ],
+        "log_groups": [
+            "observability-log-group"
+        ],
+        "namespace": "<LA_NAMESPACE>",
+        "parsers": [
+            {
+                "fields": [
+                    "demo_app",
+                    "demo_trace_id",
+                    "demo_severity"
+                ],
+                "name": "demo-json-application-parser",
+                "type": "json"
+            }
+        ],
+        "saved_searches": [
+            "landing-zone-errors-by-service",
+            "apm-trace-log-correlation"
+        ],
+        "sources": [
+            {
+                "entity_types": [
+                    "Host"
+                ],
+                "name": "demo-linux-syslog-source",
+                "parser": "demo-json-application-parser"
+            },
+            {
+                "entity_types": [
+                    "Kubernetes Cluster"
+                ],
+                "name": "demo-oke-container-source",
+                "parser": "demo-json-application-parser"
+            }
+        ]
+    },
+    "management_agent": {
+        "install_key": "<MANAGEMENT_AGENT_INSTALL_KEY_FROM_VAULT_OR_ENV>",
+        "recipes": [
+            "linux-management-agent",
+            "windows-management-agent"
+        ]
+    },
+    "name": "observability-demo-assets",
+    "oke": {
+        "helm_values": {
+            "authType": "instance_principal",
+            "clusterOcid": "<OKE_CLUSTER_OCID>",
+            "collectApplicationLogs": true,
+            "collectKubeSystemLogs": true,
+            "logAnalyticsNamespace": "<LA_NAMESPACE>"
+        }
+    },
+    "redaction_policy": "all tenant-specific identifiers use placeholders",
+    "schema_version": "oci.okit.demo_assets.v1"
+}

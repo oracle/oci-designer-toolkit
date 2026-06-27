@@ -9,6 +9,9 @@
         "url": "https://github.com/oracle/oci-designer-toolkit"
     },
     "bugs": "https://github.com/oracle/oci-designer-toolkit/issues",
+    "engines": {
+        "node": ">=26"
+    },
     "scripts": {
         "github-action-install": "cd ocd && npm run github-action-install",
         "github-action-compile-for-codegen": "cd ocd && npm run github-action-compile-for-codegen",
@@ -22,9 +25,27 @@
 
         "desktop": "cd ocd && npm run desktop",
         "web": "cd ocd && npm run web",
+        "build:pages": "cd ocd && npm run build:pages",
         "install": "cd ocd && npm install",
         "compile": "cd ocd && npm run compile-for-codegen",
         "generate": "cd ocd && npm run import-and-generate",
-        "build": "cd ocd && npm run build"
+        "generate-observability-lz": "cd ocd && npm run generate-observability-lz",
+        "validate-observability-lz": "cd ocd && npm run validate-observability-lz",
+        "validate-observability-lz-terraform": "python scripts/validate_observability_lz_terraform.py",
+        "sync-oci-lz-baselines": "cd ocd && npm run sync-oci-lz-baselines",
+        "package-observability-lz": "python scripts/package_observability_lz_addon.py",
+        "estimate-observability-lz-costs": "python scripts/estimate_observability_lz_costs.py",
+        "audit-observability-lz": "python scripts/audit_observability_lz_addon.py",
+        "build": "cd ocd && npm run build",
+        "generate-lz-jsonnet": "node scripts/generate_lz_jsonnet_sources.mjs",
+        "setup-lz": "node scripts/setup_landing_zone.mjs",
+        "setup-lz:check": "node scripts/setup_landing_zone.mjs --check",
+        "setup-lz:latest": "node scripts/setup_landing_zone.mjs --latest",
+        "setup-lz:addon": "node scripts/setup_landing_zone.mjs --latest --install",
+        "import-oci-stencils": "node scripts/import_oci_stencils.mjs",
+        "hooks:install": "git config core.hooksPath .githooks && echo 'Git hooks enabled (.githooks): pre-commit redaction gate + pre-push chain.'",
+        "test:e2e": "cd e2e && npm install --no-save && npx playwright test",
+        "test:e2e:headed": "cd e2e && npm install --no-save && npx playwright test --headed",
+        "test:e2e:build-first": "cd ocd/packages/react && npm run build && cd ../.. && OCD_PAGES_BASE=/ npm run build:pages && npm run test:e2e"
     }
 }

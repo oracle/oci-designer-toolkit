@@ -7,6 +7,7 @@ import { contextBridge, ipcRenderer } from 'electron'
 import { OcdDesign } from '@ocd/model'
 import { OcdCache, OcdConsoleConfiguration } from '@ocd/react'
 import { OutputDataStringArray } from "@ocd/export"
+import type { OciResourceManagerJobOptions } from '@ocd/query'
 
 contextBridge.exposeInMainWorld('ocdAPI', {
   // Build Information
@@ -19,12 +20,23 @@ contextBridge.exposeInMainWorld('ocdAPI', {
   listTenancyCompartments: (profile: string) => ipcRenderer.invoke('ociQuery:listTenancyCompartments', profile),
   queryTenancy: (profile: string, compartmentIds: string[], region: string) => ipcRenderer.invoke('ociQuery:queryTenancy', profile, compartmentIds, region),
   queryDropdown: (profile: string, region: string) => ipcRenderer.invoke('ociQuery:queryDropdown', profile, region),
+  queryDiscoverySnapshot: (profile: string, region: string, compartmentIds: string[] = []) => ipcRenderer.invoke('ociQuery:discoverySnapshot', profile, region, compartmentIds),
+  generateArchitecturePlanWithGenAi: (profile: string, region: string, compartmentId: string, modelId: string, prompt: string, temperature?: number, maxTokens?: number) => ipcRenderer.invoke('ociGenAi:architecturePlan', profile, region, compartmentId, modelId, prompt, temperature, maxTokens),
+  generateArchitecturePlanFromImageWithGenAi: (profile: string, region: string, compartmentId: string, modelId: string, prompt: string, imageDataUri: string, temperature?: number, maxTokens?: number) => ipcRenderer.invoke('ociGenAi:architecturePlanFromImage', profile, region, compartmentId, modelId, prompt, imageDataUri, temperature, maxTokens),
   listStacks: (profile: string, region: string, compartmentId: string) => ipcRenderer.invoke('ociQuery:listStacks', profile, region, compartmentId),
   // Resource Manager
-  createStack: (profile: string, region: string, compartmentId: string, data: OutputDataStringArray, apply: boolean) => ipcRenderer.invoke('OciResourceManager:updateStack', profile, region, compartmentId, data, apply),
-  updateStack: (profile: string, region: string, stackId: string, data: OutputDataStringArray, apply: boolean) => ipcRenderer.invoke('OciResourceManager:updateStack', profile, region, stackId, data, apply),
-  createJob: (profile: string, region: string, stackId: string, apply: boolean) => ipcRenderer.invoke('OciResourceManager:createJob', profile, region, stackId, apply),
-  // OCD Design 
+  createStack: (profile: string, region: string, compartmentId: string, stackName: string, data: OutputDataStringArray, jobOptions: OciResourceManagerJobOptions) => ipcRenderer.invoke('OciResourceManager:createStack', profile, region, compartmentId, stackName, data, jobOptions),
+  updateStack: (profile: string, region: string, stackId: string, data: OutputDataStringArray, jobOptions: OciResourceManagerJobOptions) => ipcRenderer.invoke('OciResourceManager:updateStack', profile, region, stackId, data, jobOptions),
+  createJob: (profile: string, region: string, stackId: string, jobOptions: OciResourceManagerJobOptions) => ipcRenderer.invoke('OciResourceManager:createJob', profile, region, stackId, jobOptions),
+  getResourceManagerPlanReview: (profile: string, region: string, jobId: string) => ipcRenderer.invoke('OciResourceManager:getPlanReview', profile, region, jobId),
+  updateLandingZoneAddon: (sourceKey: string, githubToken?: string) => ipcRenderer.invoke('OciLzAddon:update', sourceKey, githubToken),
+  startLandingZoneAddonUpdateJob: (sourceKey: string, githubToken?: string) => ipcRenderer.invoke('OciLzAddon:startUpdateJob', sourceKey, githubToken),
+  getLandingZoneAddonUpdateJob: (jobId: string) => ipcRenderer.invoke('OciLzAddon:getUpdateJob', jobId),
+  cancelLandingZoneAddonUpdateJob: (jobId: string) => ipcRenderer.invoke('OciLzAddon:cancelUpdateJob', jobId),
+  listLandingZoneAddonHealth: () => ipcRenderer.invoke('OciLzAddon:health'),
+  // OCI Pricing
+  getOciPriceList: (partNumbers: string[], currencyCode: string) => ipcRenderer.invoke('ociPricing:getPriceList', partNumbers, currencyCode),
+  // OCD Design
   loadDesign: (filename: string) => ipcRenderer.invoke('ocdDesign:loadDesign', filename),
   saveDesign: (design: OcdDesign, filename: string, suggestedFilename = '') => ipcRenderer.invoke('ocdDesign:saveDesign', design, filename, suggestedFilename),
   discardConfirmation: () => ipcRenderer.invoke('ocdDesign:discardConfirmation'),

@@ -1,0 +1,295 @@
+{
+    "baseline_sources": [
+        {
+            "branch": "master",
+            "local_path": "baselines/oci-landing-zones/oci-landing-zone-operating-entities",
+            "name": "oci-landing-zone-operating-entities",
+            "purpose": "One-OE Landing Zone orchestration baseline and add-on workflow reference.",
+            "url": "https://github.com/oci-landing-zones/oci-landing-zone-operating-entities.git"
+        },
+        {
+            "branch": "main",
+            "local_path": "baselines/oci-landing-zones/terraform-oci-core-landingzone",
+            "name": "terraform-oci-core-landingzone",
+            "purpose": "Core Landing Zone modules and variable conventions.",
+            "url": "https://github.com/oci-landing-zones/terraform-oci-core-landingzone.git"
+        },
+        {
+            "branch": "main",
+            "local_path": "baselines/oci-landing-zones/terraform-oci-modules-orchestrator",
+            "name": "terraform-oci-modules-orchestrator",
+            "purpose": "JSON/YAML/HCL configuration orchestration conventions.",
+            "url": "https://github.com/oci-landing-zones/terraform-oci-modules-orchestrator.git"
+        },
+        {
+            "branch": "main",
+            "local_path": "baselines/oci-landing-zones/oci-cis-landingzone-quickstart",
+            "name": "oci-cis-landingzone-quickstart",
+            "purpose": "CIS Landing Zone quickstart reference for legacy OKIT/OCI-LZ comparisons.",
+            "url": "https://github.com/oci-landing-zones/oci-cis-landingzone-quickstart.git"
+        }
+    ],
+    "drawio_file": "ocd/library/oci/ObservabilityLandingZoneFreeFirst.drawio",
+    "okit_file": "ocd/library/oci/ObservabilityLandingZoneFreeFirst.okit",
+    "profile": "free-first",
+    "resource_counts": {
+        "compartment": 6,
+        "route_table": 1,
+        "security_list": 1,
+        "service_gateway": 1,
+        "subnet": 1,
+        "vcn": 1
+    },
+    "schema_version": "oci.okit.template_data.v1",
+    "svg_file": "ocd/library/oci/ObservabilityLandingZoneFreeFirst.svg",
+    "variable_bindings": {
+        "alarm_cpu_threshold": {
+            "description": "Template CPU alarm threshold.",
+            "normalized_model_path": "services.alarms_dashboards.alarm_cpu_threshold",
+            "okit_variable_key": "alarm_cpu_threshold",
+            "one_oe_baseline_mapping": "One-OE Monitoring alarm threshold.",
+            "terraform_variable": "var.alarm_cpu_threshold",
+            "tf_json_path": "variable.alarm_cpu_threshold",
+            "tfvars_key": "alarm_cpu_threshold"
+        },
+        "enable_apm": {
+            "description": "Enable APM service pack metadata and operator recipes.",
+            "normalized_model_path": "services.apm.enabled",
+            "okit_variable_key": "enable_apm",
+            "one_oe_baseline_mapping": "APM service-pack toggle.",
+            "terraform_variable": "var.enable_apm",
+            "tf_json_path": "variable.enable_apm",
+            "tfvars_key": "enable_apm"
+        },
+        "enable_database_management": {
+            "description": "Enable DB Management Basic baseline. Full Management remains an explicit paid add-on outside this baseline.",
+            "normalized_model_path": "services.db_observability.enabled",
+            "okit_variable_key": "enable_database_management",
+            "one_oe_baseline_mapping": "Database Management service-pack toggle.",
+            "terraform_variable": "var.enable_database_management",
+            "tf_json_path": "variable.enable_database_management",
+            "tfvars_key": "enable_database_management"
+        },
+        "enable_log_analytics": {
+            "description": "Enable Log Analytics service pack metadata and importer recipes.",
+            "normalized_model_path": "services.log_analytics.enabled",
+            "okit_variable_key": "enable_log_analytics",
+            "one_oe_baseline_mapping": "Log Analytics service-pack toggle.",
+            "terraform_variable": "var.enable_log_analytics",
+            "tf_json_path": "variable.enable_log_analytics",
+            "tfvars_key": "enable_log_analytics"
+        },
+        "enable_management_agent": {
+            "description": "Enable Management Agent installation and association recipes.",
+            "normalized_model_path": "services.management_agent.enabled",
+            "okit_variable_key": "enable_management_agent",
+            "one_oe_baseline_mapping": "Management Agent service-pack toggle.",
+            "terraform_variable": "var.enable_management_agent",
+            "tf_json_path": "variable.enable_management_agent",
+            "tfvars_key": "enable_management_agent"
+        },
+        "enable_oke_monitoring": {
+            "description": "Enable OKE monitoring and logging Helm values in generated examples.",
+            "normalized_model_path": "services.oke_monitoring.enabled",
+            "okit_variable_key": "enable_oke_monitoring",
+            "one_oe_baseline_mapping": "OKE monitoring service-pack toggle.",
+            "terraform_variable": "var.enable_oke_monitoring",
+            "tf_json_path": "variable.enable_oke_monitoring",
+            "tfvars_key": "enable_oke_monitoring"
+        },
+        "enable_streaming": {
+            "description": "Enable paid Streaming baseline resources for enterprise observability flows.",
+            "normalized_model_path": "services.streaming.enabled",
+            "okit_variable_key": "enable_streaming",
+            "one_oe_baseline_mapping": "Paid Streaming add-on toggle. Disabled in free-first.",
+            "terraform_variable": "var.enable_streaming",
+            "tf_json_path": "variable.enable_streaming",
+            "tfvars_key": "enable_streaming"
+        },
+        "hub_vcn_dns_label": {
+            "description": "DNS label for the observability hub VCN.",
+            "normalized_model_path": "landing_zone.network.hub_vcn_dns_label",
+            "okit_variable_key": "hub_vcn_dns_label",
+            "one_oe_baseline_mapping": "One-OE hub VCN DNS label convention.",
+            "terraform_variable": "var.hub_vcn_dns_label",
+            "tf_json_path": "variable.hub_vcn_dns_label",
+            "tfvars_key": "hub_vcn_dns_label"
+        },
+        "network_compartment_name": {
+            "description": "Network shared-services compartment name.",
+            "normalized_model_path": "landing_zone.compartments.network",
+            "okit_variable_key": "network_compartment_name",
+            "one_oe_baseline_mapping": "One-OE network shared-services compartment naming convention.",
+            "terraform_variable": "var.network_compartment_name",
+            "tf_json_path": "variable.network_compartment_name",
+            "tfvars_key": "network_compartment_name"
+        },
+        "notification_topic_name": {
+            "description": "Notifications topic name for observability alarms.",
+            "normalized_model_path": "services.alarms_dashboards.notification_topic_name",
+            "okit_variable_key": "notification_topic_name",
+            "one_oe_baseline_mapping": "One-OE observability notifications topic.",
+            "terraform_variable": "var.notification_topic_name",
+            "tf_json_path": "variable.notification_topic_name",
+            "tfvars_key": "notification_topic_name"
+        },
+        "observability_compartment_name": {
+            "description": "Observability shared-services compartment name.",
+            "normalized_model_path": "landing_zone.compartments.observability",
+            "okit_variable_key": "observability_compartment_name",
+            "one_oe_baseline_mapping": "Observability add-on shared-services compartment.",
+            "terraform_variable": "var.observability_compartment_name",
+            "tf_json_path": "variable.observability_compartment_name",
+            "tfvars_key": "observability_compartment_name"
+        },
+        "parent_compartment_ocid": {
+            "description": "Parent compartment OCID for generated landing-zone compartments. Defaults to tenancy_ocid when null.",
+            "normalized_model_path": "landing_zone.parent_compartment_ocid",
+            "okit_variable_key": "parent_compartment_ocid",
+            "one_oe_baseline_mapping": "One-OE enclosing compartment or tenancy OCID input.",
+            "terraform_variable": "var.parent_compartment_ocid",
+            "tf_json_path": "variable.parent_compartment_ocid",
+            "tfvars_key": "parent_compartment_ocid"
+        },
+        "private_subnet_cidr": {
+            "description": "CIDR block for the private observability subnet.",
+            "normalized_model_path": "landing_zone.network.private_subnet_cidr",
+            "okit_variable_key": "private_subnet_cidr",
+            "one_oe_baseline_mapping": "One-OE private subnet CIDR baseline for agents/connectors.",
+            "terraform_variable": "var.private_subnet_cidr",
+            "tf_json_path": "variable.private_subnet_cidr",
+            "tfvars_key": "private_subnet_cidr"
+        },
+        "private_subnet_dns_label": {
+            "description": "DNS label for the private observability subnet.",
+            "normalized_model_path": "landing_zone.network.private_subnet_dns_label",
+            "okit_variable_key": "private_subnet_dns_label",
+            "one_oe_baseline_mapping": "One-OE private subnet DNS label convention.",
+            "terraform_variable": "var.private_subnet_dns_label",
+            "tf_json_path": "variable.private_subnet_dns_label",
+            "tfvars_key": "private_subnet_dns_label"
+        },
+        "region": {
+            "description": "OCI region identifier.",
+            "normalized_model_path": "landing_zone.region",
+            "okit_variable_key": "region",
+            "one_oe_baseline_mapping": "One-OE region input.",
+            "terraform_variable": "var.region",
+            "tf_json_path": "variable.region",
+            "tfvars_key": "region"
+        },
+        "tenancy_ocid": {
+            "description": "Tenancy OCID. Keep tenant-specific values outside source control.",
+            "normalized_model_path": "landing_zone.tenancy_ocid",
+            "okit_variable_key": "tenancy_ocid",
+            "one_oe_baseline_mapping": "One-OE root tenancy_ocid input.",
+            "terraform_variable": "var.tenancy_ocid",
+            "tf_json_path": "variable.tenancy_ocid",
+            "tfvars_key": "tenancy_ocid"
+        },
+        "vcn_cidr_blocks": {
+            "description": "CIDR blocks for the observability hub VCN.",
+            "normalized_model_path": "landing_zone.network.vcn_cidr_blocks",
+            "okit_variable_key": "vcn_cidr_blocks",
+            "one_oe_baseline_mapping": "One-OE hub or add-on network CIDR baseline.",
+            "terraform_variable": "var.vcn_cidr_blocks",
+            "tf_json_path": "variable.vcn_cidr_blocks",
+            "tfvars_key": "vcn_cidr_blocks"
+        }
+    },
+    "variables": {
+        "alarm_cpu_threshold": {
+            "default": 90,
+            "description": "Template CPU alarm threshold.",
+            "type": "number"
+        },
+        "enable_apm": {
+            "default": true,
+            "description": "Enable APM service pack metadata and operator recipes.",
+            "type": "bool"
+        },
+        "enable_database_management": {
+            "default": false,
+            "description": "Enable DB Management Basic baseline. Full Management remains an explicit paid add-on outside this baseline.",
+            "type": "bool"
+        },
+        "enable_log_analytics": {
+            "default": true,
+            "description": "Enable Log Analytics service pack metadata and importer recipes.",
+            "type": "bool"
+        },
+        "enable_management_agent": {
+            "default": true,
+            "description": "Enable Management Agent installation and association recipes.",
+            "type": "bool"
+        },
+        "enable_oke_monitoring": {
+            "default": false,
+            "description": "Enable OKE monitoring and logging Helm values in generated examples.",
+            "type": "bool"
+        },
+        "enable_streaming": {
+            "default": false,
+            "description": "Enable paid Streaming baseline resources for enterprise observability flows.",
+            "type": "bool"
+        },
+        "hub_vcn_dns_label": {
+            "default": "obshub",
+            "description": "DNS label for the observability hub VCN.",
+            "type": "string"
+        },
+        "network_compartment_name": {
+            "default": "cmp-lz-network",
+            "description": "Network shared-services compartment name.",
+            "type": "string"
+        },
+        "notification_topic_name": {
+            "default": "observability-alarm-topic",
+            "description": "Notifications topic name for observability alarms.",
+            "type": "string"
+        },
+        "observability_compartment_name": {
+            "default": "cmp-lz-observability",
+            "description": "Observability shared-services compartment name.",
+            "type": "string"
+        },
+        "parent_compartment_ocid": {
+            "default": null,
+            "description": "Parent compartment OCID for generated landing-zone compartments. Defaults to tenancy_ocid when null.",
+            "type": "string"
+        },
+        "private_subnet_cidr": {
+            "default": "10.100.10.0/24",
+            "description": "CIDR block for the private observability subnet.",
+            "type": "string"
+        },
+        "private_subnet_dns_label": {
+            "default": "obspriv",
+            "description": "DNS label for the private observability subnet.",
+            "type": "string"
+        },
+        "region": {
+            "description": "OCI region identifier.",
+            "type": "string"
+        },
+        "tenancy_ocid": {
+            "description": "Tenancy OCID. Keep tenant-specific values outside source control.",
+            "type": "string"
+        },
+        "vcn_cidr_blocks": {
+            "default": [
+                "10.100.0.0/16"
+            ],
+            "description": "CIDR blocks for the observability hub VCN.",
+            "type": "list(string)"
+        }
+    },
+    "view_pages": [
+        "Landing Zone Baseline",
+        "Observability Runtime",
+        "Service Pack Architecture",
+        "Deployment Workflow",
+        "Resource Manager Package",
+        "Cost And Governance"
+    ]
+}

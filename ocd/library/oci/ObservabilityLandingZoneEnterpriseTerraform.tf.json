@@ -1,0 +1,280 @@
+{
+    "data": {
+        "oci_core_services": {
+            "all_region_services": {
+                "filter": [
+                    {
+                        "name": "name",
+                        "regex": true,
+                        "values": [
+                            "All .* Services In Oracle Services Network"
+                        ]
+                    }
+                ]
+            }
+        }
+    },
+    "locals": {
+        "common_tags": {
+            "ManagedBy": "okit-observability-landing-zone",
+            "Profile": "full-enterprise"
+        },
+        "enabled_service_packs": "${compact([\"logging\", var.enable_log_analytics ? \"log_analytics\" : \"\", var.enable_management_agent ? \"management_agent\" : \"\", var.enable_apm ? \"apm\" : \"\", var.enable_database_management ? \"db_observability\" : \"\", var.enable_oke_monitoring ? \"oke_monitoring\" : \"\", \"alarms_dashboards\"])}",
+        "managed_by": "okit-observability-landing-zone",
+        "parent_compartment_id": "${coalesce(var.parent_compartment_ocid, var.tenancy_ocid)}",
+        "profile": "full-enterprise"
+    },
+    "output": {
+        "enabled_service_packs": {
+            "value": "${local.enabled_service_packs}"
+        },
+        "notification_topic_id": {
+            "value": "${oci_ons_notification_topic.observability.id}"
+        },
+        "observability_compartment_id": {
+            "value": "${oci_identity_compartment.observability_shared_services.id}"
+        },
+        "observability_log_group_id": {
+            "value": "${oci_logging_log_group.observability.id}"
+        }
+    },
+    "provider": {
+        "oci": {
+            "region": "${var.region}",
+            "tenancy_ocid": "${var.tenancy_ocid}"
+        }
+    },
+    "resource": {
+        "oci_core_route_table": {
+            "private": {
+                "compartment_id": "${oci_identity_compartment.network_shared_services.id}",
+                "display_name": "observability-private-routes",
+                "freeform_tags": "${local.common_tags}",
+                "route_rules": [
+                    {
+                        "description": "OCI service access for agents and service connectors.",
+                        "destination": "all-region-services-in-oracle-services-network",
+                        "destination_type": "SERVICE_CIDR_BLOCK",
+                        "network_entity_id": "${oci_core_service_gateway.oci_services.id}"
+                    }
+                ],
+                "vcn_id": "${oci_core_vcn.observability_hub.id}"
+            }
+        },
+        "oci_core_security_list": {
+            "private": {
+                "compartment_id": "${oci_identity_compartment.network_shared_services.id}",
+                "display_name": "observability-private-security-list",
+                "egress_security_rules": [
+                    {
+                        "description": "Controlled egress for observability agents and service connectors.",
+                        "destination": "0.0.0.0/0",
+                        "destination_type": "CIDR_BLOCK",
+                        "protocol": "all",
+                        "stateless": false
+                    }
+                ],
+                "freeform_tags": "${local.common_tags}",
+                "vcn_id": "${oci_core_vcn.observability_hub.id}"
+            }
+        },
+        "oci_core_service_gateway": {
+            "oci_services": {
+                "compartment_id": "${oci_identity_compartment.network_shared_services.id}",
+                "display_name": "observability-oci-services-gateway",
+                "freeform_tags": "${local.common_tags}",
+                "services": [
+                    {
+                        "service_id": "${data.oci_core_services.all_region_services.services[0].id}"
+                    }
+                ],
+                "vcn_id": "${oci_core_vcn.observability_hub.id}"
+            }
+        },
+        "oci_core_subnet": {
+            "observability_private": {
+                "cidr_block": "${var.private_subnet_cidr}",
+                "compartment_id": "${oci_identity_compartment.network_shared_services.id}",
+                "display_name": "observability-private-subnet",
+                "dns_label": "${var.private_subnet_dns_label}",
+                "freeform_tags": "${local.common_tags}",
+                "prohibit_public_ip_on_vnic": true,
+                "route_table_id": "${oci_core_route_table.private.id}",
+                "security_list_ids": [
+                    "${oci_core_security_list.private.id}"
+                ],
+                "vcn_id": "${oci_core_vcn.observability_hub.id}"
+            }
+        },
+        "oci_core_vcn": {
+            "observability_hub": {
+                "cidr_blocks": "${var.vcn_cidr_blocks}",
+                "compartment_id": "${oci_identity_compartment.network_shared_services.id}",
+                "display_name": "observability-hub-vcn-enterprise",
+                "dns_label": "${var.hub_vcn_dns_label}",
+                "freeform_tags": "${local.common_tags}"
+            }
+        },
+        "oci_identity_compartment": {
+            "network_shared_services": {
+                "compartment_id": "${local.parent_compartment_id}",
+                "description": "Network shared services compartment for the observability landing zone baseline.",
+                "enable_delete": true,
+                "freeform_tags": "${local.common_tags}",
+                "name": "${var.network_compartment_name}"
+            },
+            "observability_shared_services": {
+                "compartment_id": "${local.parent_compartment_id}",
+                "description": "Observability shared services compartment.",
+                "enable_delete": true,
+                "freeform_tags": "${local.common_tags}",
+                "name": "${var.observability_compartment_name}"
+            }
+        },
+        "oci_logging_log_group": {
+            "observability": {
+                "compartment_id": "${oci_identity_compartment.observability_shared_services.id}",
+                "description": "Landing-zone log group for audit, service, and application logs.",
+                "display_name": "observability-log-group",
+                "freeform_tags": "${local.common_tags}"
+            }
+        },
+        "oci_monitoring_alarm": {
+            "high_cpu_placeholder": {
+                "body": "Template alarm. Scope metric_compartment_id to the target workload compartment before production use.",
+                "compartment_id": "${oci_identity_compartment.observability_shared_services.id}",
+                "destinations": [
+                    "${oci_ons_notification_topic.observability.id}"
+                ],
+                "display_name": "observability-high-cpu-template",
+                "freeform_tags": "${local.common_tags}",
+                "is_enabled": true,
+                "metric_compartment_id": "${oci_identity_compartment.observability_shared_services.id}",
+                "namespace": "oci_computeagent",
+                "query": "CpuUtilization[1m].mean() > ${var.alarm_cpu_threshold}",
+                "severity": "WARNING"
+            }
+        },
+        "oci_ons_notification_topic": {
+            "observability": {
+                "compartment_id": "${oci_identity_compartment.observability_shared_services.id}",
+                "description": "Notification target for landing-zone observability alarms.",
+                "freeform_tags": "${local.common_tags}",
+                "name": "${var.notification_topic_name}"
+            }
+        },
+        "oci_streaming_stream": {
+            "observability_events": {
+                "count": "${var.enable_streaming ? 1 : 0}",
+                "freeform_tags": "${local.common_tags}",
+                "name": "observability-events",
+                "partitions": 1,
+                "stream_pool_id": "${oci_streaming_stream_pool.observability[0].id}"
+            }
+        },
+        "oci_streaming_stream_pool": {
+            "observability": {
+                "compartment_id": "${oci_identity_compartment.observability_shared_services.id}",
+                "count": "${var.enable_streaming ? 1 : 0}",
+                "freeform_tags": "${local.common_tags}",
+                "name": "observability-stream-pool"
+            }
+        }
+    },
+    "terraform": {
+        "required_providers": {
+            "oci": {
+                "source": "oracle/oci",
+                "version": ">= 6.0.0"
+            }
+        },
+        "required_version": ">= 1.5.0"
+    },
+    "variable": {
+        "alarm_cpu_threshold": {
+            "default": 90,
+            "description": "Template CPU alarm threshold.",
+            "type": "number"
+        },
+        "enable_apm": {
+            "default": true,
+            "description": "Enable APM service pack metadata and operator recipes.",
+            "type": "bool"
+        },
+        "enable_database_management": {
+            "default": true,
+            "description": "Enable DB Management Basic baseline. Full Management remains an explicit paid add-on outside this baseline.",
+            "type": "bool"
+        },
+        "enable_log_analytics": {
+            "default": true,
+            "description": "Enable Log Analytics service pack metadata and importer recipes.",
+            "type": "bool"
+        },
+        "enable_management_agent": {
+            "default": true,
+            "description": "Enable Management Agent installation and association recipes.",
+            "type": "bool"
+        },
+        "enable_oke_monitoring": {
+            "default": true,
+            "description": "Enable OKE monitoring and logging Helm values in generated examples.",
+            "type": "bool"
+        },
+        "enable_streaming": {
+            "default": true,
+            "description": "Enable paid Streaming baseline resources for enterprise observability flows.",
+            "type": "bool"
+        },
+        "hub_vcn_dns_label": {
+            "default": "obshub",
+            "description": "DNS label for the observability hub VCN.",
+            "type": "string"
+        },
+        "network_compartment_name": {
+            "default": "cmp-lz-network",
+            "description": "Network shared-services compartment name.",
+            "type": "string"
+        },
+        "notification_topic_name": {
+            "default": "observability-alarm-topic",
+            "description": "Notifications topic name for observability alarms.",
+            "type": "string"
+        },
+        "observability_compartment_name": {
+            "default": "cmp-lz-observability",
+            "description": "Observability shared-services compartment name.",
+            "type": "string"
+        },
+        "parent_compartment_ocid": {
+            "default": null,
+            "description": "Parent compartment OCID for generated landing-zone compartments. Defaults to tenancy_ocid when null.",
+            "type": "string"
+        },
+        "private_subnet_cidr": {
+            "default": "10.100.10.0/24",
+            "description": "CIDR block for the private observability subnet.",
+            "type": "string"
+        },
+        "private_subnet_dns_label": {
+            "default": "obspriv",
+            "description": "DNS label for the private observability subnet.",
+            "type": "string"
+        },
+        "region": {
+            "description": "OCI region identifier.",
+            "type": "string"
+        },
+        "tenancy_ocid": {
+            "description": "Tenancy OCID. Keep tenant-specific values outside source control.",
+            "type": "string"
+        },
+        "vcn_cidr_blocks": {
+            "default": [
+                "10.100.0.0/16"
+            ],
+            "description": "CIDR blocks for the observability hub VCN.",
+            "type": "list(string)"
+        }
+    }
+}

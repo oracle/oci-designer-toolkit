@@ -1,6 +1,7 @@
 module.exports = {
     "appId": "com.oracle.okit-ocd",
     "artifactName": "${productName}-${version}-${arch}.${ext}",
+    "asarUnpack": ["**/*.wasm"],
     "files": [
       ".vite/build/**/*",
       "../../node_modules/**/*"

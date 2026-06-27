@@ -1,0 +1,38 @@
+{
+  "name": "@ocd/web-server",
+  "version": "0.4.5",
+  "description": "OKIT Open Cloud Designer local web backend (read-only OCI discovery for the browser build)",
+  "title": "OKIT Open Cloud Designer Web Backend",
+  "author": {
+    "name": "Andrew Hopkinson",
+    "email": "andrew.hopkinson@oracle.com",
+    "url": "https://github.com/oracle/oci-designer-toolkit"
+  },
+  "bugs": "https://github.com/oracle/oci-designer-toolkit/issues",
+  "keywords": [
+    "ocd",
+    "okit"
+  ],
+  "license": "UPL-1.0",
+  "type": "module",
+  "main": "lib/esm/server.js",
+  "module": "lib/esm/server.js",
+  "files": [
+    "lib/"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "rm -rf lib dist",
+    "purge": "npm run clean && rm -rf node_modules",
+    "compile": "tsc -p tsconfig.json",
+    "build": "npm run compile",
+    "start": "node lib/esm/server.js",
+    "dev": "npm run compile && node lib/esm/server.js"
+  },
+  "dependencies": {
+    "@ocd/core": ">=0.3.0",
+    "@ocd/model": ">=0.3.0",
+    "@ocd/query": ">=0.3.0",
+    "oci-sdk": "^2.69.0"
+  }
+}

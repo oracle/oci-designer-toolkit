@@ -1,6 +1,6 @@
 {
   "name": "@ocd/codegen",
-  "version": "0.3.0",
+  "version": "0.4.5",
   "description": "OKIT Open Cloud Designer Code Generation Module",
   "title": "OKIT Open Cloud Designer Code Generation Module",
   "author": {
@@ -17,14 +17,14 @@
   "type": "module",
   "exports": {
     ".": {
-        "import": {
-            "types": "./lib/esm/index.d.ts",
-            "default": "./lib/esm/index.js"
-        },
-        "require": {
-            "types": "./lib/cjs/index.d.ts",
-            "default": "./lib/cjs/index.js"
-        }
+      "import": {
+        "types": "./lib/esm/index.d.ts",
+        "default": "./lib/esm/index.js"
+      },
+      "require": {
+        "types": "./lib/cjs/index.d.ts",
+        "default": "./lib/cjs/index.js"
+      }
     }
   },
   "main": "lib/cjs/index.js",
@@ -34,7 +34,7 @@
     "lib/"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest run tests",
     "clean": "rm -rf lib dist",
     "purge": "npm run clean && rm -rf node_modules",
     "pack": "mkdir -p dist && npm pack --pack-destination dist",

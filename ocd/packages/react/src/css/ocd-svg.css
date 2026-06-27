@@ -76,6 +76,45 @@ svg {
     fill-opacity: 0;
 }
 
+/* Hover ports: always-available drag-to-connect handles shown on a resource's
+   edge anchors while the pointer hovers it (no connect-mode toggle needed).
+   Subtle until hovered so they do not clutter the canvas; pressing one starts a
+   connect drag (see OcdResourceSvg onPortMouseDown). The connect drag itself
+   reuses the existing .ocd-connect-rubber-band line and the
+   .ocd-connect-target-valid / -invalid drop hints (defined in ocd-lzng.css). */
+.ocd-svg-connect-port {
+    fill: var(--oracle-red, #C74634);
+    stroke: #ffffff;
+    stroke-width: 1;
+    opacity: 0.55;
+    cursor: crosshair;
+    transition: opacity 120ms ease;
+}
+
+.ocd-svg-connect-port:hover {
+    opacity: 1;
+    fill: var(--oracle-red-dark, #A63D2E);
+}
+
+.ocd-svg-connector-label {
+    paint-order: stroke;
+    stroke: #ffffff;
+    stroke-width: 4px;
+    stroke-linejoin: round;
+    fill: #312d2a;
+    font-size: 11px;
+    font-weight: 700;
+    pointer-events: none;
+}
+
+.ocd-svg-parent-connector-label {
+    fill: #5a3f78;
+}
+
+.ocd-svg-association-connector-label {
+    fill: #315357;
+}
+
 .ocd-svg-container {
     stroke: var(--svg-container-resource-stroke);
     stroke-width: var(--svg-container-resource-stroke-width);
@@ -179,4 +218,3 @@ svg {
     border-width: var(--svg-simple-resource-stroke-width);
     border-radius: 5px 5px;
 }
-

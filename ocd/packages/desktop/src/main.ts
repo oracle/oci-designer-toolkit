@@ -3,28 +3,54 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 
-import { app, dialog, BrowserWindow, ipcMain, screen, Menu, shell, MessageBoxOptions, MenuItemConstructorOptions } from 'electron'
+import { app, dialog, BrowserWindow, ipcMain, screen, Menu, shell, MessageBoxOptions, MenuItemConstructorOptions, crashReporter } from 'electron'
 import Squirrel from 'electron-squirrel-startup'
 import path from 'path'
 import url from 'url'
 import fs from 'fs'
-import common from 'oci-common'
-import { OcdUtils } from '@ocd/core' 
-import { OciQuery, OciReferenceDataQuery, OciResourceManagerQuery } from '@ocd/query'
+import { fetchWithTimeout, OcdLogger, OcdUtils } from '@ocd/core'
+import {
+	cancelLandingZoneAddonUpdateJob,
+	createJob,
+	createStack,
+	generateArchitecturePlanFromImageWithGenAi,
+	generateArchitecturePlanWithGenAi,
+	getLandingZoneAddonUpdateJob,
+	getResourceManagerPlanReview,
+	listLandingZoneAddonHealth,
+	listRegions,
+	listStacks,
+	listTenancyCompartments,
+	loadOciConfigProfile,
+	loadOciConfigProfileNames,
+	queryDiscoverySnapshot,
+	queryDropdown,
+	queryTenancy,
+	startLandingZoneAddonUpdateJob,
+	updateLandingZoneAddon,
+	updateStack,
+} from '@ocd/query'
+import type { OciResourceManagerJobOptions } from '@ocd/query'
 import { OcdDesign, OcdResource, OciModelResources } from '@ocd/model'
 import { OcdCache, OcdConsoleConfiguration } from '@ocd/react'
 import { OcdExcelExporter, OcdMarkdownExporter, OcdSVGExporter, OcdTerraformExporter } from '@ocd/export'
 import { OcdTerraformImporter } from '@ocd/import'
+import { handleGetOciPriceList } from './handlers/OciPriceListHandlers'
 
-app.commandLine.appendSwitch('ignore-certificate-errors') // Temporary work around for not being able to add additional certificates
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0' // Temporary work around for not being able to add additional certificates
+// Scoped structured logger (level via OCD_LOG_LEVEL, default 'info').
+// CONTRACT: never log design JSON or OCID-bearing payloads (see OcdLogger).
+const logger = OcdLogger.scope('main')
+
+const toError = (reason: unknown): Error => reason instanceof Error ? reason : new Error(String(reason))
 
 // Get Environment information
 const isDev = process.env.OCD_DEV === 'true';
 const isPreview = process.env.OCD_PREVIEW === 'true';
 const isMac = process.platform === 'darwin'
+const APP_DISPLAY_NAME = 'oci-designer-toolkit-next-gen'
 
 if (Squirrel) app.quit()
+app.setName(APP_DISPLAY_NAME)
 const ocdConfigDirectory = path.join(app.getPath('home'), '.ocd')
 const ocdConsoleConfigFilename = path.join(ocdConfigDirectory, 'console_config.json')
 const ocdCacheFilename = path.join(ocdConfigDirectory, 'cache.json')
@@ -43,7 +69,7 @@ const loadDesktopState = () => {
   }
   if (!fs.existsSync(ocdWindowStateFilename)) fs.writeFileSync(ocdWindowStateFilename, JSON.stringify(initialState, null, 4))
   const config = fs.readFileSync(ocdWindowStateFilename, 'utf-8')
-  return {...initialState, ...JSON.parse(config)} 
+  return {...initialState, ...JSON.parse(config)}
 }
 
 const saveDesktopState = (config: Record<string, any>) => {
@@ -53,6 +79,48 @@ const saveDesktopState = (config: Record<string, any>) => {
 let mainWindow: BrowserWindow
 let filePath: string | null
 let ready = false
+
+const isAllowedNavigationUrl = (href: string): boolean => {
+	try {
+		const parsedUrl = new URL(href)
+		return parsedUrl.protocol === 'file:' || parsedUrl.origin === 'http://localhost:5173'
+	} catch (err) {
+		return false
+	}
+}
+
+const openExternalHttpUrl = async (href: string) => {
+	const parsedUrl = new URL(href)
+	if (!['http:', 'https:'].includes(parsedUrl.protocol)) throw new Error(`Unsupported external URL protocol: ${parsedUrl.protocol}`)
+	return shell.openExternal(parsedUrl.toString())
+}
+
+const isSafeSilentSavePath = (filename: string): boolean => {
+	if (!filename) return false
+	const resolvedFilename = path.resolve(filename)
+	// Canonicalize the safe directories so symlinked safe dirs resolve to their real targets.
+	// Skip any safe dir that cannot be resolved (e.g. does not exist).
+	const safeDirectories = ['home', 'documents', 'downloads'].reduce<string[]>((accumulator, name) => {
+		try {
+			accumulator.push(fs.realpathSync(path.resolve(app.getPath(name as 'home' | 'documents' | 'downloads'))))
+		} catch {
+			// Unresolvable safe directory: ignore it rather than treating an unresolved path as safe.
+		}
+		return accumulator
+	}, [])
+	// The target file usually does not exist yet (about to be written), so canonicalize its
+	// parent directory and re-join the basename. This dereferences a symlinked parent dir,
+	// preventing a symlink inside a safe dir from escaping the sandbox. If the parent cannot
+	// be resolved (ENOENT), fall through to the save dialog instead of writing.
+	let canonicalFilename: string
+	try {
+		const canonicalParent = fs.realpathSync(path.dirname(resolvedFilename))
+		canonicalFilename = path.join(canonicalParent, path.basename(resolvedFilename))
+	} catch {
+		return false
+	}
+	return safeDirectories.some((directory) => canonicalFilename === directory || canonicalFilename.startsWith(`${directory}${path.sep}`))
+}
 
 
 // Configure Menus
@@ -194,8 +262,9 @@ const createWindow = () => {
 		y: desktopState.y,
 		width: desktopState.width,
 		height: desktopState.height,
+		title: APP_DISPLAY_NAME,
 		webPreferences: {
-			nodeIntegration: true,
+			nodeIntegration: false,
 			contextIsolation: true,
 			preload: path.join(__dirname, 'preload.js')
 		},
@@ -218,6 +287,13 @@ const createWindow = () => {
 	// @ts-ignore
 	mainWindow.on('resized', (e) => saveState())
 	mainWindow.on('close', (e) => saveState())
+	mainWindow.webContents.on('will-navigate', (event, navigationUrl) => {
+		if (!isAllowedNavigationUrl(navigationUrl)) event.preventDefault()
+	})
+	mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+		openExternalHttpUrl(url).catch((err) => logger.error(err))
+		return { action: 'deny' }
+	})
 
 	// Remove Menu
 	// mainWindow.removeMenu()
@@ -231,7 +307,7 @@ const createWindow = () => {
 			slashes: true,
 		})
   	mainWindow.loadURL(startUrl)
-  
+
     if (desktopState.isMaximised) mainWindow.maximize()
     mainWindow.setFullScreen(desktopState.isFullScreen)
 
@@ -240,9 +316,12 @@ const createWindow = () => {
 }
 
 app.whenReady().then(() => {
+	process.on('uncaughtException', (err) => logger.error('uncaughtException', err))
+	process.on('unhandledRejection', (err) => logger.error('unhandledRejection', err))
+	crashReporter.start({ uploadToServer: false })
 	// Build Information
 	ipcMain.handle('ocdBuild:getVersion', handleGetVersion)
-	// OCI API Calls 
+	// OCI API Calls
 	// Query
 	ipcMain.handle('ociConfig:loadProfileNames', handleLoadOciConfigProfileNames)
 	ipcMain.handle('ociConfig:loadProfile', handleLoadOciConfigProfile)
@@ -250,11 +329,22 @@ app.whenReady().then(() => {
 	ipcMain.handle('ociQuery:listTenancyCompartments', handleListTenancyCompartments)
 	ipcMain.handle('ociQuery:queryTenancy', handleQueryTenancy)
 	ipcMain.handle('ociQuery:queryDropdown', handleQueryDropdown)
+	ipcMain.handle('ociQuery:discoverySnapshot', handleQueryDiscoverySnapshot)
+	ipcMain.handle('ociGenAi:architecturePlan', handleGenerateArchitecturePlanWithGenAi)
+	ipcMain.handle('ociGenAi:architecturePlanFromImage', handleGenerateArchitecturePlanFromImageWithGenAi)
 	ipcMain.handle('ociQuery:listStacks', handleListStacks)
 	ipcMain.handle('OciResourceManager:createStack', handleCreateStack)
 	ipcMain.handle('OciResourceManager:updateStack', handleUpdateStack)
 	ipcMain.handle('OciResourceManager:createJob', handleCreateJob)
-	// OCD Design 
+	ipcMain.handle('OciResourceManager:getPlanReview', handleGetResourceManagerPlanReview)
+	ipcMain.handle('OciLzAddon:update', handleUpdateLandingZoneAddon)
+	ipcMain.handle('OciLzAddon:startUpdateJob', handleStartLandingZoneAddonUpdateJob)
+	ipcMain.handle('OciLzAddon:getUpdateJob', handleGetLandingZoneAddonUpdateJob)
+	ipcMain.handle('OciLzAddon:cancelUpdateJob', handleCancelLandingZoneAddonUpdateJob)
+	ipcMain.handle('OciLzAddon:health', handleListLandingZoneAddonHealth)
+	// OCI Pricing (unauthenticated public list-pricing API)
+	ipcMain.handle('ociPricing:getPriceList', handleGetOciPriceList)
+	// OCD Design
 	ipcMain.handle('ocdDesign:loadDesign', handleLoadDesign)
 	ipcMain.handle('ocdDesign:saveDesign', handleSaveDesign)
 	ipcMain.handle('ocdDesign:discardConfirmation', handleDiscardConfirmation)
@@ -295,10 +385,10 @@ app.whenReady().then(() => {
 		  selectionMenu.popup({window: mainWindow});
 		}
 	  })
-	
+
 	ready = true
 })
-  
+
 app.on("window-all-closed", () => {
 	if (process.platform !== "darwin") {
 		app.quit()
@@ -324,7 +414,7 @@ app.on("open-file", function(event, path) {
 
 // Build Information
 async function handleGetVersion() {
-	console.debug('Electron Main: handleGetVersion')
+	logger.debug('Electron Main: handleGetVersion')
 	return new Promise((resolve, reject) => {
 		const buildInformation = {
 			version: app.getVersion()
@@ -334,81 +424,126 @@ async function handleGetVersion() {
 }
 
 
-// OCI API Calls 
+// OCI API Calls
 // Query
 async function handleLoadOciConfigProfileNames() {
-	console.debug('Electron Main: handleLoadOciConfigProfileNames')
-	return new Promise((resolve, reject) => {
-		const parsed = common.ConfigFileReader.parseDefault(null)
-		console.debug('Electron Main: handleLoadOciConfigProfileNames:', parsed)
-		console.debug('Electron Main: handleLoadOciConfigProfileNames:', parsed.accumulator.configurationsByProfile)
-		console.debug('Electron Main: handleLoadOciConfigProfileNames:', Array.from(parsed.accumulator.configurationsByProfile.keys()))
-        const profiles = Array.from(parsed.accumulator.configurationsByProfile.keys())
-		resolve(profiles)
-	})
+	logger.debug('Electron Main: handleLoadOciConfigProfileNames')
+	return loadOciConfigProfileNames()
 }
 
 async function handleLoadOciConfigProfile(event: any, profile: string) {
-	console.debug('Electron Main: handleLoadOciConfigProfile')
-	return new Promise((resolve, reject) => {
-		const parsed = common.ConfigFileReader.parseDefault(null)
-		console.debug('Electron Main: handleLoadOciConfigProfile: Parsed:', parsed)
-		console.debug('Electron Main: handleLoadOciConfigProfile: Config By Profile:', parsed.accumulator.configurationsByProfile)
-		console.debug('Electron Main: handleLoadOciConfigProfile: Keys:', Array.from(parsed.accumulator.configurationsByProfile.keys()))
-		console.debug('Electron Main: handleLoadOciConfigProfile: Profile:', parsed.accumulator.configurationsByProfile.get(profile))
-        const profileData = parsed.accumulator.configurationsByProfile.get(profile)
-        // const profileData = Array.from(parsed.accumulator.configurationsByProfile[profile])
-		console.debug('Electron Main: handleLoadOciConfigProfile: Profile Data:', profileData)
-		resolve(profileData)
-	})
+	logger.debug('Electron Main: handleLoadOciConfigProfile')
+	return loadOciConfigProfile(profile)
 }
 
 async function handleListRegions(event: any, profile: string) {
-	console.debug('Electron Main: handleListRegions')
-	const ociQuery = new OciQuery(profile)
-	return ociQuery.listRegions()
+	logger.debug('Electron Main: handleListRegions')
+	return listRegions(profile)
 }
 
 async function handleListTenancyCompartments(event: any, profile: string) {
-	console.debug('Electron Main: handleListTenancyCompartments')
-	const ociQuery = new OciQuery(profile)
-	return ociQuery.listTenancyCompartments()
+	logger.debug('Electron Main: handleListTenancyCompartments')
+	return listTenancyCompartments(profile)
 }
 
 async function handleQueryTenancy(event: any, profile: string, compartmentIds: string[], region: string) {
-	console.debug('Electron Main: handleQueryTenancy')
-	const ociQuery = new OciQuery(profile, region)
-	return ociQuery.queryTenancy(compartmentIds)
+	logger.debug('Electron Main: handleQueryTenancy')
+	return queryTenancy({ profile, region, compartmentIds })
 }
 
 async function handleQueryDropdown(event: any, profile: string, region: string) {
-	console.debug('Electron Main: handleQueryDropdown')
-	const ociQuery = new OciReferenceDataQuery(profile, region)
-	return ociQuery.query()
+	logger.debug('Electron Main: handleQueryDropdown')
+	return queryDropdown({ profile, region })
+}
+
+async function handleQueryDiscoverySnapshot(event: any, profile: string, region: string, compartmentIds: string[] = []) {
+	logger.debug('Electron Main: handleQueryDiscoverySnapshot')
+	return queryDiscoverySnapshot({ profile, region, compartmentIds })
+}
+
+async function handleGenerateArchitecturePlanWithGenAi(
+	event: any,
+	profile: string,
+	region: string,
+	compartmentId: string,
+	modelId: string,
+	prompt: string,
+	temperature?: number,
+	maxTokens?: number,
+) {
+	logger.debug('Electron Main: handleGenerateArchitecturePlanWithGenAi')
+	return generateArchitecturePlanWithGenAi({ profile, region, compartmentId, modelId, prompt, temperature, maxTokens })
+}
+
+async function handleGenerateArchitecturePlanFromImageWithGenAi(
+	event: any,
+	profile: string,
+	region: string,
+	compartmentId: string,
+	modelId: string,
+	prompt: string,
+	imageDataUri: string,
+	temperature?: number,
+	maxTokens?: number,
+) {
+	logger.debug('Electron Main: handleGenerateArchitecturePlanFromImageWithGenAi')
+	return generateArchitecturePlanFromImageWithGenAi({ profile, region, compartmentId, modelId, prompt, imageDataUri, temperature, maxTokens })
 }
 
 async function handleListStacks(event: any, profile: string, region: string, compartmentId: string) {
-	console.debug('Electron Main: handleListStacks')
-	const ociQuery = new OciResourceManagerQuery(profile, region)
-	return ociQuery.query([compartmentId])
+	logger.debug('Electron Main: handleListStacks')
+	return listStacks(profile, region, compartmentId)
 }
 // Resource Manager
-async function handleUpdateStack(event: any) {
-	console.debug('Electron Main: handleUpdateStack')
+async function handleUpdateStack(event: any, profile: string, region: string, stackId: string, data: any, jobOptions: OciResourceManagerJobOptions) {
+	logger.debug('Electron Main: handleUpdateStack')
+	return updateStack({ profile, region, stackId, data, jobOptions })
 }
 
-async function handleCreateStack(event: any) {
-	console.debug('Electron Main: handleCreateStack')
+async function handleCreateStack(event: any, profile: string, region: string, compartmentId: string, stackName: string, data: any, jobOptions: OciResourceManagerJobOptions) {
+	logger.debug('Electron Main: handleCreateStack')
+	return createStack({ profile, region, compartmentId, stackName, data, jobOptions })
 }
 
-async function handleCreateJob(event: any) {
-	console.debug('Electron Main: handleCreateJob')
+async function handleCreateJob(event: any, profile: string, region: string, stackId: string, jobOptions: OciResourceManagerJobOptions) {
+	logger.debug('Electron Main: handleCreateJob')
+	return createJob({ profile, region, stackId, jobOptions })
+}
+
+async function handleGetResourceManagerPlanReview(event: any, profile: string, region: string, jobId: string) {
+	logger.debug('Electron Main: handleGetResourceManagerPlanReview')
+	return getResourceManagerPlanReview({ profile, region, jobId })
+}
+
+async function handleUpdateLandingZoneAddon(event: any, sourceKey: string, githubToken?: string) {
+	logger.debug('Electron Main: handleUpdateLandingZoneAddon', { sourceKey })
+	return updateLandingZoneAddon(sourceKey, { githubToken })
+}
+
+async function handleStartLandingZoneAddonUpdateJob(event: any, sourceKey: string, githubToken?: string) {
+	logger.debug('Electron Main: handleStartLandingZoneAddonUpdateJob', { sourceKey })
+	return startLandingZoneAddonUpdateJob(sourceKey, { githubToken })
+}
+
+async function handleGetLandingZoneAddonUpdateJob(event: any, jobId: string) {
+	logger.debug('Electron Main: handleGetLandingZoneAddonUpdateJob', { jobId })
+	return getLandingZoneAddonUpdateJob(jobId)
+}
+
+async function handleCancelLandingZoneAddonUpdateJob(event: any, jobId: string) {
+	logger.debug('Electron Main: handleCancelLandingZoneAddonUpdateJob', { jobId })
+	return cancelLandingZoneAddonUpdateJob(jobId)
+}
+
+async function handleListLandingZoneAddonHealth(event: any) {
+	logger.debug('Electron Main: handleListLandingZoneAddonHealth')
+	return listLandingZoneAddonHealth()
 }
 
 
 // OCD Design
 async function handleLoadDesign(event: any, filename: string) {
-	console.debug('Electron Main: handleLoadDesign')
+	logger.debug('Electron Main: handleLoadDesign')
 	return new Promise((resolve, reject) => {
 		try {
 			if (!filename || !fs.existsSync(filename) || !fs.statSync(filename).isFile()) {
@@ -419,25 +554,26 @@ async function handleLoadDesign(event: any, filename: string) {
 					const design = result.canceled ? '{}' : fs.readFileSync(result.filePaths[0], 'utf-8')
 					resolve({canceled: result.canceled, filename: result.filePaths[0], design: JSON.parse(design)})
 				}).catch(err => {
-					console.error(err)
-					reject(new Error(err))
+					logger.error(err)
+					reject(toError(err))
 				})
 			} else {
 				const design = fs.readFileSync(filename, 'utf-8')
 				resolve({canceled: false, filename: filename, design: JSON.parse(design)})
 			}
 		} catch (err) {
-			reject(new Error(`${err}`))
+			reject(toError(err))
 		}
 	})
 }
 
 async function handleSaveDesign(event: any, design: OcdDesign | string, filename: string, suggestedFilename='') {
 	design = typeof design === 'string' ? JSON.parse(design) : design
-	console.debug('Electron Main: handleSaveDesign', filename, JSON.stringify(design, null, 2))
+	const resourceCount = Object.values((design as OcdDesign).model?.oci?.resources ?? {}).reduce((total: number, resources: unknown) => total + (Array.isArray(resources) ? resources.length : 0), 0)
+	logger.debug('Electron Main: handleSaveDesign', filename, 'resources', resourceCount)
 	return new Promise((resolve, reject) => {
 		try {
-			if (!filename || !fs.existsSync(filename) || !fs.statSync(filename).isFile()) {
+			if (!filename || !fs.existsSync(filename) || !fs.statSync(filename).isFile() || !isSafeSilentSavePath(filename)) {
 				dialog.showSaveDialog(mainWindow, {
 					defaultPath: suggestedFilename,
 					properties: ['createDirectory'],
@@ -447,15 +583,15 @@ async function handleSaveDesign(event: any, design: OcdDesign | string, filename
 					if (!result.canceled) fs.writeFileSync(filePath, JSON.stringify(design, null, 4))
 					resolve({canceled: false, filename: result.canceled ? '' : filePath, design: design})
 				}).catch(err => {
-					console.error(err)
-					reject(new Error(err))
+					logger.error(err)
+					reject(toError(err))
 				})
 			} else {
 				fs.writeFileSync(filename, JSON.stringify(design, null, 4))
 				resolve({canceled: false, filename: filename, design: design})
 			}
 		} catch (err) {
-			reject(new Error(`${err}`))
+			reject(toError(err))
 		}
 	})
 }
@@ -470,7 +606,7 @@ async function handleDiscardConfirmation(event: any) {
 			defaultId: 1
 		}
 		dialog.showMessageBox(mainWindow, options).then((result) => {
-			console.debug('Discard Confirmation', result)
+			logger.debug('Discard Confirmation', result)
 			const discardResponse = [true, false]
 			resolve(discardResponse[result.response])
 		})
@@ -478,7 +614,7 @@ async function handleDiscardConfirmation(event: any) {
 }
 
 async function handleExportTerraform(event: any, design: OcdDesign, directory: string) {
-	console.debug('Electron Main: handleExportTerraform')
+	logger.debug('Electron Main: handleExportTerraform')
 	return Promise.reject(new Error('Currently Not Implemented'))
 }
 
@@ -487,7 +623,7 @@ const updateResources = (resources: OcdResource[], compartments: OciModelResourc
 // @ts-ignore
 const toTableRows = (resources: OcdResource[]): any[][] => resources.reduce((a, c) => {return [...a, [c.displayName, c.compartmentName]]}, [])
 async function handleExportToExcel(event: any, design: OcdDesign, suggestedFilename='') {
-	console.debug('Electron Main: handleExportToExcel')
+	logger.debug('Electron Main: handleExportToExcel')
 	return new Promise((resolve, reject) => {
 			dialog.showSaveDialog(mainWindow, {
 				defaultPath: suggestedFilename,
@@ -499,24 +635,24 @@ async function handleExportToExcel(event: any, design: OcdDesign, suggestedFilen
 					const exporter = new OcdExcelExporter()
 					const workbook = exporter.export(design)
 					workbook.xlsx.writeFile(result.filePath).then(() => {
-						console.log('Workbook saved successfully!')
+						logger.info('Workbook saved successfully!')
 						resolve({canceled: false, filename: result.filePath, design: design})
 					}).catch((error) => {
-						console.error('Error saving workbook:', error)
-						reject(new Error(error))
+						logger.error('Error saving workbook:', error)
+						reject(toError(error))
 					})
 				} else {
 					resolve({canceled: false, filename: '', design: design})
 				}
 			}).catch(err => {
-				console.error(err)
-				reject(new Error(err))
+				logger.error(err)
+				reject(toError(err))
 			})
 	})
 }
 
 async function handleExportToMarkdown(event: any, design: OcdDesign, css: string[]=[], suggestedFilename='') {
-	console.debug('Electron Main: handleExportToMarkdown')
+	logger.debug('Electron Main: handleExportToMarkdown')
 	return new Promise((resolve, reject) => {
 		dialog.showSaveDialog(mainWindow, {
 			defaultPath: suggestedFilename,
@@ -531,14 +667,14 @@ async function handleExportToMarkdown(event: any, design: OcdDesign, css: string
 			}
 			resolve({canceled: false, filename: result.canceled ? '' : result.filePath, design: design})
 		}).catch(err => {
-			console.error(err)
-			reject(new Error(err))
+			logger.error(err)
+			reject(toError(err))
 		})
 	})
 }
 
 async function handleExportToSvg(event: any, design: OcdDesign, css: string[] = [], directory: string = '', suggestedFilename = '') {
-	console.debug('Electron Main: exportToSvg')
+	logger.debug('Electron Main: exportToSvg')
 	if (design.view.pages.length > 1) {
 		const additionalFilename: string = suggestedFilename && suggestedFilename.length > 0 ? suggestedFilename : design.metadata.title.replaceAll(' ', '_')
 		return new Promise((resolve, reject) => {
@@ -550,14 +686,14 @@ async function handleExportToSvg(event: any, design: OcdDesign, css: string[] = 
 				if (!result.canceled) {
 					const exporter = new OcdSVGExporter(css)
 					const output = exporter.export(design)
-					console.debug('handleExportToSvg: ', result.filePaths)
+					logger.debug('handleExportToSvg: ', result.filePaths)
 					const directory = result.filePaths[0]
 					Object.entries(output).forEach(([k, v]) => fs.writeFileSync(path.join(directory, `${k.replaceAll(' ', '_')}.svg`), v))
 				}
 				resolve({canceled: false, filename: result.canceled ? '' : result.filePaths[0], design: design})
 			}).catch(err => {
-				console.error(err)
-				reject(new Error(err))
+				logger.error(err)
+				reject(toError(err))
 			})
 		})
 	} else {
@@ -575,15 +711,15 @@ async function handleExportToSvg(event: any, design: OcdDesign, css: string[] = 
 				}
 				resolve({canceled: false, filename: result.canceled ? '' : result.filePath, design: design})
 			}).catch(err => {
-				console.error(err)
-				reject(new Error(err))
+				logger.error(err)
+				reject(toError(err))
 			})
 		})
 	}
 }
 
 async function handleExportToTerraform(event: any, design: OcdDesign, directory: string) {
-	console.debug('Electron Main: handleExportTerraform')
+	logger.debug('Electron Main: handleExportTerraform')
 	return new Promise((resolve, reject) => {
 		dialog.showOpenDialog(mainWindow, {
 			properties: ['openDirectory', 'createDirectory'],
@@ -593,7 +729,7 @@ async function handleExportToTerraform(event: any, design: OcdDesign, directory:
 			if (!result.canceled) {
 				const exporter = new OcdTerraformExporter()
 				const terraform = exporter.export(design)
-				console.debug('handleExportToTerraform: ', result.filePaths)
+				logger.debug('handleExportToTerraform: ', result.filePaths)
 				const directory = result.filePaths[0]
 				if (design.metadata.separateIdentity) {
 					// create identity & resources sub-directories
@@ -604,14 +740,14 @@ async function handleExportToTerraform(event: any, design: OcdDesign, directory:
 			}
 			resolve({canceled: result.canceled, filename: result.filePaths[0], design: design})
 		}).catch(err => {
-			console.error(err)
-			reject(new Error(err))
+			logger.error(err)
+			reject(toError(err))
 		})
 	})
 }
 
 async function importFromTerraform(event: any) {
-	console.debug('Electron Main: importFromTerraform')
+	logger.debug('Electron Main: importFromTerraform')
 	return new Promise((resolve, reject) => {
 		dialog.showOpenDialog(mainWindow, {
 			properties: ['openFile', 'multiSelections'],
@@ -622,8 +758,8 @@ async function importFromTerraform(event: any) {
 			const design = result.canceled ? '' : readFilesSync(result.filePaths, 'utf-8').join('\n')
 			resolve({canceled: result.canceled, filename: result.filePaths[0], design: importer.import(design)})
 		}).catch(err => {
-			console.error(err)
-			reject(new Error(err))
+			logger.error(err)
+			reject(toError(err))
 		})
 	})
 }
@@ -639,15 +775,44 @@ const devLibraryUrl = 'https://raw.githubusercontent.com/oracle/oci-designer-too
 const libraryUrl = isDev || isPreview ? devLibraryUrl : prodLibraryUrl
 const libraryFile = 'referenceArchitectures.json'
 
+// Renderer-supplied path segments (section / filename / svgFile) are interpolated
+// into the GitHub raw URL. Even though the base host is fixed, an unconstrained
+// segment lets a compromised renderer steer the fetch to an arbitrary path on the
+// CDN. Allow only simple path-segment characters; reject anything with a slash,
+// backslash, or traversal sequence.
+// Charset still allows `.` so legitimate filenames (e.g. `foo.svg`) work, but
+// traversal/encoding bypasses are blocked by the dedicated guards below.
+const SAFE_LIBRARY_SEGMENT = /^[A-Za-z0-9._-]+$/
+function assertSafeLibrarySegment(segment: string, label: string): void {
+	// Reject in order:
+	//  - non-strings
+	//  - any `%` (defeats percent-encoded traversal/encoding tricks like `%2e%2e`)
+	//  - segments altered by NFC normalization (defeats Unicode-normalization bypass)
+	//  - anything outside the safe path-segment charset (blocks `/`, `\`, etc.)
+	//  - `..` traversal sequences, or a leading/trailing `.`
+	// `||` short-circuits, so `normalize` only runs once `segment` is a string.
+	const isInvalid =
+		typeof segment !== 'string' ||
+		segment.includes('%') ||
+		segment.normalize('NFC') !== segment ||
+		!SAFE_LIBRARY_SEGMENT.test(segment) ||
+		segment.includes('..') ||
+		segment.startsWith('.') ||
+		segment.endsWith('.')
+	if (isInvalid) {
+		throw new Error(`Invalid library ${label}: ${segment}`)
+	}
+}
+
 async function handleLoadLibraryIndex(event: any) {
-	console.debug('Electron Main: handleLoadLibraryIndex')
+	logger.debug('Electron Main: handleLoadLibraryIndex')
 	return new Promise((resolve, reject) => {
         // Build Library JSON File URL
         const libraryJsonUrl = `${libraryUrl}/${libraryFile}`
         const request = new Request(libraryJsonUrl)
         // console.debug('Electron Main: handleLoadLibraryIndex: URL', libraryJsonUrl, request)
         // Get Library File
-        const libraryFetchPromise = fetch(request)
+        const libraryFetchPromise = fetchWithTimeout(request)
 		libraryFetchPromise.then((response) => {
             // console.debug('Electron Main: handleLoadLibraryIndex: Fetch Response', response)
             // console.debug('Electron Main: handleLoadLibraryIndex: Fetch Response', response.headers.get("content-type"))
@@ -663,51 +828,65 @@ async function handleLoadLibraryIndex(event: any) {
 			})
 			// resolve(libraryIndex)
 		}).catch((err) => {
-            console.debug('Electron Main: handleLoadLibraryIndex: Fetch Error Response', err)
-			reject(new Error(err))
+            logger.debug('Electron Main: handleLoadLibraryIndex: Fetch Error Response', err)
+			reject(toError(err))
 		})
 	})
 }
 
 function getLibrarySectionSvg(libraryIndex: Record<string, Record<string, string>[]>, section: string) {
 	return new Promise((resolve, reject) => {
+		try {
+			assertSafeLibrarySegment(section, 'section')
+		} catch (err) {
+			return reject(err instanceof Error ? err : new Error(String(err)))
+		}
 		const librarySection = libraryIndex[section]
-		const svgRequests = librarySection.map((design) => new Request(`${libraryUrl}/${section}/${design.svgFile}`))
-		const svgUrls = svgRequests.map((request) => fetch(request))
-		Promise.allSettled(svgUrls).then((results) => Promise.allSettled(results.map((r) => r.value.text()))).then((svg) => {
-			svg.forEach((r, i) => {
-				console.debug('Electron Main: getLibrarySectionSvg: Svg Query Results', section, r.status)
-				// console.debug('Electron Main: getLibrarySectionSvg: Svg Query Results', r.value)
-				librarySection[i].dataUri = `data:image/svg+xml,${encodeURIComponent(r.value)}`
+		const svgUrls = librarySection.map((design, index) => {
+			assertSafeLibrarySegment(design.svgFile, 'svgFile')
+			return fetchWithTimeout(new Request(`${libraryUrl}/${section}/${design.svgFile}`)).then((response) => response.text()).then((text) => ({index, text}))
+		})
+		Promise.allSettled(svgUrls).then((svg) => {
+			svg.filter((r): r is PromiseFulfilledResult<{index: number, text: string}> => r.status === 'fulfilled').forEach((r) => {
+				logger.debug('Electron Main: getLibrarySectionSvg: Svg Query Results', section, r.status)
+				librarySection[r.value.index].dataUri = `data:image/svg+xml,${encodeURIComponent(r.value.text)}`
 				// librarySection[i].dataUri = `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(r.value)))}`
 			})
 			resolve(librarySection)
 		}).catch((err) => {
-            console.debug('Electron Main: getLibrarySectionSvg: Fetch Error Response', err)
-			reject(new Error(err))
+            logger.debug('Electron Main: getLibrarySectionSvg: Fetch Error Response', err)
+			reject(toError(err))
 		})
 	})
 }
 
 async function handleLoadLibraryDesign(event: any, section: string, filename: string) {
-	console.debug('Electron Main: handleLoadLibraryDesign')
+	logger.debug('Electron Main: handleLoadLibraryDesign')
 	return new Promise((resolve, reject) => {
+        try {
+            assertSafeLibrarySegment(section, 'section')
+            assertSafeLibrarySegment(filename, 'filename')
+        } catch (err) {
+            return reject(err instanceof Error ? err : new Error(String(err)))
+        }
         // Build Design JSON File URL
         const libraryJsonUrl = `${libraryUrl}/${section}/${filename}`
         const request = new Request(libraryJsonUrl)
-        // console.debug('Electron Main: handleLoadLibraryDesign: URL', libraryJsonUrl, request)
         // Get Library File
-        const libraryFetchPromise = fetch(request)
+        const libraryFetchPromise = fetchWithTimeout(request)
 		libraryFetchPromise.then((response) => {
-            // console.debug('Electron Main: handleLoadLibraryDesign: Fetch Response', response)
-            // console.debug('Electron Main: handleLoadLibraryDesign: Fetch Response', response.headers.get("content-type"))
+            // Reject non-JSON responses (e.g. a 404 HTML page) before JSON.parse.
+            const contentType = response.headers.get('content-type') ?? ''
+            if (!contentType.includes('json') && !contentType.includes('text/plain')) {
+                throw new Error(`Library design fetch returned unexpected content-type: ${contentType}`)
+            }
 			return response.text()
 		}).then((design) => {
             // console.debug('Electron Main: handleLoadLibraryDesign: Fetch Data', design)
 			resolve({canceled: false, filename: filename, design: JSON.parse(design)})
 		}).catch((err) => {
-            console.debug('Electron Main: handleLoadLibraryIndex: Fetch Error Response', err)
-			reject(new Error(err))
+            logger.debug('Electron Main: handleLoadLibraryIndex: Fetch Error Response', err)
+			reject(toError(err))
 		})
 	})
 }
@@ -719,27 +898,27 @@ async function handleLoadSvgCssFiles() {
 
 // OCD Configuration
 async function handleLoadConsoleConfig(event: any) {
-	console.debug('Electron Main: handleLoadConfig')
+	logger.debug('Electron Main: handleLoadConfig')
 	return new Promise((resolve, reject) => {
 		try {
 			if (!fs.existsSync(ocdConsoleConfigFilename)) reject(new Error('Console Config does not exist'))
 			const config = fs.readFileSync(ocdConsoleConfigFilename, 'utf-8')
 			resolve(JSON.parse(config))
 		} catch (err) {
-			reject(new Error(`${err}`))
+			reject(toError(err))
 		}
 	})
 }
 
 async function handleSaveConsoleConfig(event: any, config: OcdConsoleConfiguration) {
-	console.debug('Electron Main: handleSaveConfig')
+	logger.debug('Electron Main: handleSaveConfig')
 	return new Promise((resolve, reject) => {
 		try {
 			if (!config.showPreviousViewOnStart) config.displayPage = 'designer' // If we do not want to display previous page then default to designer.
 			fs.writeFileSync(ocdConsoleConfigFilename, JSON.stringify(config, null, 4))
 			resolve(config)
 		} catch (err) {
-			reject(new Error(`${err}`))
+			reject(toError(err))
 		}
 	})
 }
@@ -747,7 +926,7 @@ async function handleSaveConsoleConfig(event: any, config: OcdConsoleConfigurati
 
 // OCD Cache
 async function handleLoadCache(event: any) {
-	console.debug('Electron Main: handleLoadCache')
+	logger.debug('Electron Main: handleLoadCache')
 	return new Promise((resolve, reject) => {
 		try {
 			// if (!fs.existsSync(ocdCacheFilename)) fs.writeFileSync(ocdCacheFilename, JSON.stringify(defaultCache, null, 4))
@@ -755,26 +934,26 @@ async function handleLoadCache(event: any) {
 			const config = fs.readFileSync(ocdCacheFilename, 'utf-8')
 			resolve(JSON.parse(config))
 		} catch (err) {
-			reject(new Error(`${err}`))
+			reject(toError(err))
 		}
 	})
 }
 
 async function handleSaveCache(event: any, cache: OcdCache) {
-	console.debug('Electron Main: handleSaveCache', cache)
+	logger.debug('Electron Main: handleSaveCache') // Do not log cache contents (may carry OCID-bearing data)
 	return new Promise((resolve, reject) => {
 		try {
 			cache.saveDate = OcdUtils.now()
 			fs.writeFileSync(ocdCacheFilename, JSON.stringify(cache, null, 4))
 			resolve(cache)
 		} catch (err) {
-			reject(new Error(`${err}`))
+			reject(toError(err))
 		}
 	})
 }
 
 async function handleLoadCacheProfile(event: any, profile: string) {
-	console.debug('Electron Main: handleLoadCacheProfile')
+	logger.debug('Electron Main: handleLoadCacheProfile')
 	return new Promise((resolve, reject) => {
 		try {
 			// if (!fs.existsSync(ocdCacheFilename)) fs.writeFileSync(ocdCacheFilename, JSON.stringify(defaultCache, null, 4))
@@ -782,20 +961,19 @@ async function handleLoadCacheProfile(event: any, profile: string) {
 			const config = fs.readFileSync(ocdCacheFilename, 'utf-8')
 			resolve(JSON.parse(config))
 		} catch (err) {
-			reject(new Error(`${err}`))
+			reject(toError(err))
 		}
 	})
 }
 
 // External URLs
 async function handleOpenExternalUrl(event: any, href: string) {
-	console.debug('Electron Main: handleOpenExternalUrl')
+	logger.debug('Electron Main: handleOpenExternalUrl')
 	return new Promise((resolve, reject) => {
 		try {
-			shell.openExternal(href)
-			resolve('Opened')
+			openExternalHttpUrl(href).then(() => resolve('Opened')).catch((err) => reject(toError(err)))
 		} catch (err) {
-			reject(new Error(`${err}`))
+			reject(toError(err))
 		}
 	})
 }

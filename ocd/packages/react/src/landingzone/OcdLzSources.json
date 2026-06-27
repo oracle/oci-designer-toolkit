@@ -1,0 +1,60 @@
+{
+  "sources": [
+    {
+      "key": "operating-entities",
+      "label": "OCI Operating Entities",
+      "repo": "oci-landing-zones/oci-landing-zone-operating-entities",
+      "kind": "commit",
+      "pinnedRef": "9d390e9581b9c7b70e0f6115b64289b36a1affcc",
+      "role": "vendored-jsonnet",
+      "setup": {
+        "cloneSubdir": "gen",
+        "localSubdir": "ocd/packages/react/src/landingzone/oe/gen",
+        "generator": "scripts/generate_lz_jsonnet_sources.mjs",
+        "generatedFile": "ocd/packages/react/src/landingzone/oe/OcdLandingZoneJsonnetSources.ts",
+        "skipWorktree": true
+      }
+    },
+    {
+      "key": "landing-zone-next-gen",
+      "label": "Landing Zone Next Gen",
+      "repo": "iwanhoogendoorn/landing-zone-next-gen",
+      "kind": "commit",
+      "pinnedRef": "47438563279915d93ab4e8f1013f9378de6b9f82",
+      "role": "project-addon",
+      "default": true,
+      "embedded": "ocd/external/landing-zone-next-gen",
+      "setup": {
+        "localSubdir": "external/lz-addons/landing-zone-next-gen",
+        "gitIgnored": true,
+        "install": {
+          "mode": "git-checkout"
+        }
+      }
+    },
+    {
+      "key": "core-landingzone",
+      "label": "OCI Core Landing Zone (CIS)",
+      "repo": "oci-landing-zones/terraform-oci-core-landingzone",
+      "kind": "commit",
+      "pinnedRef": "",
+      "role": "reference"
+    },
+    {
+      "key": "modules-orchestrator",
+      "label": "OCI Modules Orchestrator",
+      "repo": "oci-landing-zones/terraform-oci-modules-orchestrator",
+      "kind": "commit",
+      "pinnedRef": "",
+      "role": "reference"
+    },
+    {
+      "key": "cis-landingzone-quickstart",
+      "label": "OCI CIS Landing Zone Quickstart",
+      "repo": "oci-landing-zones/oci-cis-landingzone-quickstart",
+      "kind": "commit",
+      "pinnedRef": "",
+      "role": "reference"
+    }
+  ]
+}

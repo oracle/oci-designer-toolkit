@@ -9,7 +9,7 @@ export interface OcdConsoleConfiguration {
     showModelPalette: boolean
     showProvidersPalette: string[]
     verboseProviderPalette: boolean
-    displayPage: 'bom' | 'designer' | 'documentation' | 'help' | 'library' | 'markdown' | 'tabular' | 'tags' | 'terraform' | 'variables' | 'validation'
+    displayPage: 'agent' | 'bom' | 'classic' | 'designer' | 'discovery' | 'documentation' | 'governance' | 'help' | 'integrations' | 'landingzone' | 'library' | 'markdown' | 'plan' | 'software' | 'tabular' | 'tags' | 'terraform' | 'variables' | 'validation'
     helpPage?: 'releasenotes' | 'userguide'
     detailedResource: boolean
     showPreviousViewOnStart: boolean
@@ -23,6 +23,8 @@ export interface OcdConsoleConfiguration {
     visibleProviderPalettes: string[]
     theme: string
     uuid?: string
+    /** Drag-to-connect mode: drop a resource on another to wire their FK association. */
+    connectMode?: boolean
 }
 
 export namespace OcdConsoleConfiguration {

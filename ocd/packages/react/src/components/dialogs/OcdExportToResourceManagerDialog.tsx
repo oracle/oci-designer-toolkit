@@ -4,11 +4,26 @@
 */
 
 import { CompartmentPickerProps, QueryDialogProps, StackPickerProps } from "../../types/Dialogs"
-import { OciApiFacade } from "../../facade/OciApiFacade"
+import { formatOciBackendError, isBackendUnavailableError, OciApiFacade } from "../../facade/OciApiFacade"
+import { OciResourceManagerStack } from "../../facade/OcdBackend"
 import React, { useEffect, useState } from "react"
 import { OciModelResources } from '@ocd/model'
 import { OcdResourceManagerExporter } from '@ocd/export'
 import { OcdDocument } from "../OcdDocument"
+import { formatResourceManagerPlanReviewMessage, useResourceManagerPlanReview } from "../../resource-manager/OcdResourceManagerPlanReview"
+import { OcdResourceManagerRecentPlans } from "../../resource-manager/OcdResourceManagerRecentPlans"
+import {
+    loadResourceManagerRecentPlans,
+    removeResourceManagerRecentPlan,
+    saveResourceManagerRecentPlan,
+    type OcdResourceManagerRecentPlan,
+} from "../../resource-manager/OcdResourceManagerPlanRegistry"
+
+interface ResourceManagerPlanJob {
+    stackId: string
+    stackDisplay: string
+    jobId: string
+}
 
 export const OcdExportToResourceManagerDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps): JSX.Element => {
     const loadingState = '......Reading OCI Config'
@@ -25,46 +40,74 @@ export const OcdExportToResourceManagerDialog = ({ocdDocument, setOcdDocument}: 
     const [collapsedCompartmentIds, setCollapsedCompartmentIds] = useState([])
     const [hierarchy, setHierarchy] = useState('')
     const [createStack, setCreateStack] = useState(true)
-    const [applyStack, setApplyStack] = useState(false)
     const [selectedStack, setSelectedStack] = useState('')
     const [stackName, setStackName] = useState('')
-    const [stacks, setStacks] = useState([])
+    const [stacks, setStacks] = useState<OciResourceManagerStack[]>([])
+    const [lastPlanJob, setLastPlanJob] = useState<ResourceManagerPlanJob | undefined>(undefined)
+    const [recentPlans, setRecentPlans] = useState<OcdResourceManagerRecentPlan[]>([])
+    const [applyApproval, setApplyApproval] = useState('')
+    const [actionStatus, setActionStatus] = useState('')
+    const [actionError, setActionError] = useState('')
+    const { planReview, planReviewError } = useResourceManagerPlanReview({
+        profile: selectedProfile,
+        region: selectedRegion,
+        jobId: lastPlanJob?.jobId ?? '',
+        timeoutMessage: 'Plan job is still running. Refresh the plan status before applying.',
+    })
     const refs: Record<string, React.RefObject<any>> = compartments.reduce((acc, value: OciModelResources.OciCompartment) => {
         acc[value.hierarchy] = React.createRef();
         return acc;
       }, {} as Record<string, React.RefObject<any>>);
-    if (!profilesLoaded) OciApiFacade.loadOCIConfigProfileNames().then((results) => {
-        setProfilesLoaded(true)
-        setProfiles(results)
-        loadRegions(results.length ? results[0] : [regionsLoading])
-        loadCompartments(results.length ? results[0] : [])
-    }).catch((reason) => {
-        setProfilesLoaded(true)
-        setProfiles(['Failed to Read Profiles Fron OCI Config'])
-    })
+    useEffect(() => {
+        if (profilesLoaded) return
+        let cancelled = false
+        OciApiFacade.loadOCIConfigProfileNames().then((results) => {
+            if (cancelled) return
+            setProfilesLoaded(true)
+            setProfiles(results)
+            loadRegions(results.length ? results[0] : '')
+            loadCompartments(results.length ? results[0] : '')
+            setRecentPlans(loadResourceManagerRecentPlans())
+        }).catch((reason) => {
+            if (cancelled) return
+            setProfilesLoaded(true)
+            setProfiles([isBackendUnavailableError(reason) ? 'Backend unavailable' : 'Failed to Read Profiles From OCI Config'])
+            if (isBackendUnavailableError(reason)) setActionError(formatOciBackendError(reason))
+        })
+        return () => {
+            cancelled = true
+        }
+    }, [profilesLoaded])
     const onProfileChanged = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const profile = e.target.value
         console.debug('OcdExportToResourceManagerDialog: Selected Profile', profile)
+        setActionError('')
         setSelectedProfile(profile)
         loadRegions(profile)
         loadCompartments(profile)
         setSelectedCompartmentIds([])
         setCollapsedCompartmentIds([])
         setStacks([])
+        setLastPlanJob(undefined)
+        setApplyApproval('')
     }
     const onRegionChanged = (e: React.ChangeEvent<HTMLSelectElement>) => {
         console.debug('OcdExportToResourceManagerDialog: Selected Region', e.target.value)
         setSelectedRegion(e.target.value)
         setStacks([])
+        setLastPlanJob(undefined)
+        setApplyApproval('')
     }
-    const loadRegions = (profile: string) => {
+    const loadRegions = (profile: string, preferredRegion = '') => {
         console.debug('OcdExportToResourceManagerDialog: loadRegions: Profile', profile)
         OciApiFacade.listRegions(profile).then((results) => {
             setRegions(results)
             const homeRegion = results.find((r: Record<string, any>) => r.isHomeRegion)
-            setSelectedRegion(homeRegion ? homeRegion.id : results[0].id)
+            const preferred = results.find((r: Record<string, any>) => r.id === preferredRegion)
+            setSelectedRegion(preferred ? preferred.id : homeRegion ? homeRegion.id : results[0].id)
         }).catch((reason) => {
             console.warn('OcdExportToResourceManagerDialog: loadRegions: Failed Profile', profile, reason)
+            if (isBackendUnavailableError(reason)) setActionError(formatOciBackendError(reason))
             setRegions([regionsLoading])
         })
     }
@@ -75,6 +118,7 @@ export const OcdExportToResourceManagerDialog = ({ocdDocument, setOcdDocument}: 
             const compartments = results.map((c: OciModelResources.OciCompartment) => {return {...c, hierarchy: getHierarchy(c.id, results).join('/')}})
             setCompartments(compartments)
         }).catch((reason) => {
+            if (isBackendUnavailableError(reason)) setActionError(formatOciBackendError(reason))
             setCompartments([])
         })
     }
@@ -82,14 +126,23 @@ export const OcdExportToResourceManagerDialog = ({ocdDocument, setOcdDocument}: 
         console.debug('OcdExportToResourceManagerDialog: loadStacks: Profile', profile, region, compartmentId)
         OciApiFacade.listStacks(profile, region, compartmentId).then((results) => {
             console.debug('OcdExportToResourceManagerDialog: Stacks', results)
-            if (results.stacks) setStacks(results.stacks)
-            else setStacks([])
+            if (results.stacks) {
+                setStacks(results.stacks)
+                setSelectedStack(results.stacks.length > 0 ? results.stacks[0].id : '')
+            } else {
+                setStacks([])
+                setSelectedStack('')
+            }
         }).catch((reason) => {
+            setActionError(formatOciBackendError(reason))
             setStacks([])
+            setSelectedStack('')
         })
     }
     useEffect(() => {
         console.debug('OcdExportToResourceManagerDialog: useEffect: Selected Compartment Ids', selectedCompartmentIds)
+        setLastPlanJob(undefined)
+        setApplyApproval('')
         if (selectedCompartmentIds.length > 0) loadStacks(selectedProfile, selectedRegion, selectedCompartmentIds[0])
         else setStacks([])
     }, [selectedCompartmentIds])
@@ -104,21 +157,92 @@ export const OcdExportToResourceManagerDialog = ({ocdDocument, setOcdDocument}: 
         setOcdDocument(clone)
     }
     const onClickStackAction = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault()
+        setActionStatus('')
+        setActionError('')
+        if (selectedCompartmentIds.length === 0) {
+            setActionError('Select a compartment before exporting to Resource Manager.')
+            return
+        }
+        if (createStack && stackName.trim().length === 0) {
+            setActionError('Enter a stack name before creating the Resource Manager stack.')
+            return
+        }
+        if (!createStack && selectedStack.trim().length === 0) {
+            setActionError('Select an existing Resource Manager stack to update.')
+            return
+        }
         setWorkingClassName('ocd-query-wrapper')
         console.debug('OcdExportToResourceManagerDialog: Selected Compartments', selectedCompartmentIds)
-        OciApiFacade.queryTenancy(selectedProfile, selectedCompartmentIds, selectedRegion).then((results) => {
-            // @ts-ignore
-            console.debug('OcdExportToResourceManagerDialog: Query Tenancy', JSON.stringify(results, null, 2))
-            const exporter = new OcdResourceManagerExporter()
-            const terraform = exporter.export(ocdDocument.design)
-            console.debug('OcdExportToResourceManagerDialog: Terraform', JSON.stringify(terraform, null, 2))
-            const clone = OcdDocument.clone(ocdDocument)
-            clone.dialog.resourceManager = false
-            setOcdDocument(clone)
+        const exporter = new OcdResourceManagerExporter()
+        const terraform = exporter.export(ocdDocument.design)
+        const stackAction = createStack
+            ? OciApiFacade.createStack(selectedProfile, selectedRegion, selectedCompartmentIds[0], stackName, terraform, { operation: 'PLAN' })
+            : OciApiFacade.updateStack(selectedProfile, selectedRegion, selectedStack, terraform, { operation: 'PLAN' })
+        stackAction.then((results) => {
+            console.debug('OcdExportToResourceManagerDialog: Resource Manager Results', JSON.stringify(results, null, 2))
+            const stackDisplay = results.stack?.displayName ? results.stack.displayName : createStack ? stackName : selectedStack
+            const stackId = results.stack?.id ?? selectedStack
+            const jobDisplay = results.job?.id ? ` Plan job ${results.job.id} submitted.` : ''
+            if (stackId && results.job?.id) {
+                setLastPlanJob({ stackId, stackDisplay, jobId: results.job.id })
+                saveResourceManagerRecentPlan({
+                    origin: 'designer',
+                    profile: selectedProfile,
+                    region: selectedRegion,
+                    stackName: stackDisplay,
+                    stackId,
+                    jobId: results.job.id,
+                })
+                setRecentPlans(loadResourceManagerRecentPlans())
+            } else {
+                setLastPlanJob(undefined)
+            }
+            setApplyApproval('')
+            setActionStatus(`${createStack ? 'Created' : 'Updated'} stack ${stackDisplay}.${jobDisplay}`)
+            setWorkingClassName('ocd-query-wrapper hidden')
         }).catch((reason) => {
-            const clone = OcdDocument.clone(ocdDocument)
-            clone.dialog.resourceManager = false
-            setOcdDocument(clone)
+            console.warn('OcdExportToResourceManagerDialog: Resource Manager export failed', reason)
+            setActionError(formatOciBackendError(reason))
+            setLastPlanJob(undefined)
+            setApplyApproval('')
+            setWorkingClassName('ocd-query-wrapper hidden')
+        })
+    }
+    const onClickApplyReviewedPlan = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault()
+        setActionStatus('')
+        setActionError('')
+        if (!lastPlanJob) {
+            setActionError('Run a Resource Manager plan before applying.')
+            return
+        }
+        if (lastPlanJob.stackId.trim() === '') {
+            setActionError('This recent plan does not include a stack id, so apply is unavailable. Re-run the plan from a selected stack first.')
+            return
+        }
+        if (!planReview?.readyToApply) {
+            setActionError('Wait for the Resource Manager plan job to succeed and review the plan output before applying.')
+            return
+        }
+        if (applyApproval.trim() !== 'APPLY') {
+            setActionError('Type APPLY to confirm Resource Manager apply.')
+            return
+        }
+        setWorkingClassName('ocd-query-wrapper')
+        OciApiFacade.createJob(selectedProfile, selectedRegion, lastPlanJob.stackId, {
+            operation: 'APPLY',
+            planJobId: lastPlanJob.jobId,
+            approval: applyApproval,
+        }).then((results) => {
+            const jobDisplay = results.job?.id ? ` Apply job ${results.job.id} submitted.` : ' Apply job submitted.'
+            setActionStatus(`Applying reviewed plan for stack ${lastPlanJob.stackDisplay}.${jobDisplay}`)
+            setApplyApproval('')
+            setWorkingClassName('ocd-query-wrapper hidden')
+        }).catch((reason) => {
+            console.warn('OcdExportToResourceManagerDialog: Resource Manager apply failed', reason)
+            setActionError(formatOciBackendError(reason))
+            setWorkingClassName('ocd-query-wrapper hidden')
         })
     }
     const onCompartmentSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -129,9 +253,37 @@ export const OcdExportToResourceManagerDialog = ({ocdDocument, setOcdDocument}: 
     const onStackNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         console.debug('OcdExportToResourceManagerDialog: onStackNameChange', e)
         setStackName(e.target.value)
+        setLastPlanJob(undefined)
+        setApplyApproval('')
+    }
+    const onSelectRecentPlan = (plan: OcdResourceManagerRecentPlan) => {
+        setActionStatus(`Loaded recent ${plan.origin === 'discovery' ? 'Discovery' : 'Designer'} PLAN for ${plan.stackName}.`)
+        setActionError('')
+        setSelectedProfile(plan.profile)
+        setSelectedRegion(plan.region)
+        loadRegions(plan.profile, plan.region)
+        loadCompartments(plan.profile)
+        setLastPlanJob({
+            stackId: plan.stackId ?? '',
+            stackDisplay: plan.stackName,
+            jobId: plan.jobId,
+        })
+        setApplyApproval('')
+    }
+    const onForgetRecentPlan = (plan: OcdResourceManagerRecentPlan) => {
+        removeResourceManagerRecentPlan(plan.id)
+        const nextPlans = loadResourceManagerRecentPlans()
+        setRecentPlans(nextPlans)
+        if (lastPlanJob?.jobId === plan.jobId && selectedProfile === plan.profile && selectedRegion === plan.region) {
+            setLastPlanJob(undefined)
+            setApplyApproval('')
+            setActionStatus('')
+        }
     }
 
-    const actionButtonLabel = createStack ? 'Create Stack' : 'Update Stack'
+    const actionButtonLabel = createStack ? 'Create Stack + Plan' : 'Update Stack + Plan'
+    const planLifecycleState = planReview?.job.lifecycleState ?? 'SUBMITTED'
+    const planReadyToApply = Boolean(planReview?.readyToApply && lastPlanJob?.stackId)
    
     return (
         <div className={className}>
@@ -167,16 +319,41 @@ export const OcdExportToResourceManagerDialog = ({ocdDocument, setOcdDocument}: 
                         </div>
                         <div></div><div className="ocd-compartment-hierarchy">{hierarchy}</div>
                         <div>Action</div><div className="ocd-radio-buttons">
-                            <label><input type="radio" name="createUpdateStack" value={'Create'} checked={createStack} onChange={() => setCreateStack(true)}></input>Create</label>
-                            <label><input type="radio" name="createUpdateStack" value={'Update'} checked={!createStack} onChange={() => setCreateStack(false)}></input>Update</label>
+                            <label><input type="radio" name="createUpdateStack" value={'Create'} checked={createStack} onChange={() => { setCreateStack(true); setLastPlanJob(undefined); setApplyApproval('') }}></input>Create</label>
+                            <label><input type="radio" name="createUpdateStack" value={'Update'} checked={!createStack} onChange={() => { setCreateStack(false); setLastPlanJob(undefined); setApplyApproval('') }}></input>Update</label>
                         </div>
                         {(() => {
                             if (createStack) return <><div>Stack Name</div><div className="ocd-compartment-search"><input type="text" onChange={onStackNameChange} placeholder="Enter Stack Name" value={stackName}></input></div></>
-                            else return <><div>Stack</div><div><StackPicker stacks={stacks} selectedStack={selectedStack} setSelectedStack={setSelectedStack}/></div></>
+                            else return <><div>Stack</div><div><StackPicker stacks={stacks} selectedStack={selectedStack} setSelectedStack={(value: string) => { setSelectedStack(value); setLastPlanJob(undefined); setApplyApproval('') }}/></div></>
                         })()}
-                        <div>Execute</div><div className="ocd-radio-buttons">
-                            <label><input type="radio" name="planApplyStack" value={'Plan'} checked={!applyStack} onChange={() => setApplyStack(false)}></input>Plan</label>
-                            <label><input type="radio" name="planApplyStack" value={'Apply'} checked={applyStack} onChange={() => setApplyStack(true)}></input>Apply</label>
+                        <div>Execution</div><div>
+                            <span>Plan job only. Apply unlocks after Resource Manager reports a succeeded plan.</span>
+                        </div>
+                        <div>Recent Plans</div><OcdResourceManagerRecentPlans
+                            currentProfile={selectedProfile}
+                            currentRegion={selectedRegion}
+                            onForget={onForgetRecentPlan}
+                            onReview={onSelectRecentPlan}
+                            plans={recentPlans}
+                        />
+                        {lastPlanJob && <>
+                            <div>Reviewed Plan</div><div className="ocd-resource-manager-status">
+                                <span>{lastPlanJob.jobId} ({planLifecycleState})</span>
+                                {planReviewError && <span className="ocd-resource-manager-error"> {planReviewError}</span>}
+                                {!planReview && !planReviewError && <span> {formatResourceManagerPlanReviewMessage(undefined)}</span>}
+                                {planReview && <span className={!planReview.readyToApply && planReview.terminal ? 'ocd-resource-manager-error' : ''}> {formatResourceManagerPlanReviewMessage(planReview, { ready: 'Plan succeeded and is ready for apply review.', terminalFailed: 'Plan did not succeed.', running: 'Plan job is still running.' })}</span>}
+                            </div>
+                            <div>Plan Output</div><div>
+                                <textarea className="ocd-resource-manager-plan-preview" readOnly value={planReview?.planText ?? ''} placeholder="Terraform plan output appears here after the plan job succeeds."></textarea>
+                            </div>
+                            <div>Confirm Apply</div><div className="ocd-compartment-search">
+                                <input type="text" value={applyApproval} onChange={(e) => setApplyApproval(e.target.value)} placeholder="Type APPLY" disabled={!planReadyToApply}></input>
+                            </div>
+                        </>}
+                        <div>Status</div><div className="ocd-resource-manager-status">
+                            {actionError && <span className="ocd-resource-manager-error">{actionError}</span>}
+                            {actionStatus && <span>{actionStatus}</span>}
+                            {!actionError && !actionStatus && <span>Ready to package Terraform and submit a Resource Manager plan job.</span>}
                         </div>
                     </div>
                 </div>
@@ -184,6 +361,7 @@ export const OcdExportToResourceManagerDialog = ({ocdDocument, setOcdDocument}: 
                     <div>
                         <div className="ocd-dialog-button ocd-dialog-cancel-button"><button onClick={onClickCancel}>Cancel</button></div>
                         <div className="ocd-dialog-button ocd-dialog-cancel-button"><button onClick={onClickStackAction}>{actionButtonLabel}</button></div>
+                        {lastPlanJob && <div className="ocd-dialog-button ocd-dialog-cancel-button"><button onClick={onClickApplyReviewedPlan} disabled={!planReadyToApply || applyApproval.trim() !== 'APPLY'}>Apply Reviewed Plan</button></div>}
                     </div>
                 </div>
             </div>

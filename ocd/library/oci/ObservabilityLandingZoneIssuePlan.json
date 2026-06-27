@@ -1,0 +1,98 @@
+{
+    "fork": "https://github.com/adibirzu/oci-designer-toolkit",
+    "implemented": [
+        {
+            "files": [
+                "ocd/packages/react/src/pages/OcdBom.tsx",
+                "ocd/library/oci/*CostEstimate.json"
+            ],
+            "issue": 143,
+            "status": "implemented",
+            "title": "Cost estimator baseline"
+        },
+        {
+            "files": [
+                "ocd/library/oci/ObservabilityLandingZone*.okit"
+            ],
+            "issue": 550,
+            "status": "implemented",
+            "title": "Landing Zone baseline"
+        },
+        {
+            "files": [
+                "ocd/packages/query/src/OciResourceManagerQuery.ts",
+                "ocd/packages/react/src/components/dialogs/OcdExportToResourceManagerDialog.tsx"
+            ],
+            "issue": 722,
+            "status": "implemented",
+            "title": "Resource Manager stack packaging"
+        },
+        {
+            "files": [
+                "ocd/packages/desktop/src/main.ts",
+                "ocd/packages/desktop/src/preload.ts"
+            ],
+            "issue": 751,
+            "status": "implemented",
+            "title": "Resource Manager export workflow"
+        },
+        {
+            "files": [
+                "ocd/packages/react/src/components/properties/provider/oci/resources/configs/OciOkeNodePool.ts",
+                "ocd/packages/export/src/terraform/provider/oci/resources/OciOkeNodePool.ts"
+            ],
+            "issue": 161,
+            "status": "partial",
+            "title": "OKE node pool operator fields"
+        },
+        {
+            "files": [
+                "ocd/packages/react/src/components/properties/provider/oci/resources/configs/OciLoadBalancerListener.ts",
+                "ocd/packages/model/src/validator/provider/oci/resources/OciLoadBalancerListener.ts"
+            ],
+            "issue": 294,
+            "status": "partial",
+            "title": "Load balancer listener validation"
+        },
+        {
+            "files": [
+                "ocd/packages/react/src/components/properties/provider/oci/resources/configs/OciNetworkSecurityGroupSecurityRule.ts",
+                "ocd/packages/model/src/validator/provider/oci/resources/OciNetworkSecurityGroupSecurityRule.ts"
+            ],
+            "issue": 759,
+            "status": "partial",
+            "title": "NSG-to-NSG rule selection and validation"
+        }
+    ],
+    "next": [
+        {
+            "issues": [
+                741,
+                586,
+                599,
+                545
+            ],
+            "title": "Query and import reliability"
+        },
+        {
+            "issues": [
+                781,
+                782
+            ],
+            "title": "Provider schema refresh for latest OCI services and regions"
+        },
+        {
+            "issues": [
+                779,
+                775,
+                774,
+                773,
+                770,
+                763,
+                623
+            ],
+            "title": "Packaging and runtime fixes"
+        }
+    ],
+    "schema_version": "oci.okit.issue_resolution_plan.v1"
+}

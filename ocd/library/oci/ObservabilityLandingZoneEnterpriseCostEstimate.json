@@ -1,0 +1,35 @@
+{
+    "currency": "USD",
+    "line_items": [
+        {
+            "enabled": true,
+            "estimated_usd": 0,
+            "id": "logging.log_group",
+            "label": "Logging log group baseline"
+        },
+        {
+            "enabled": true,
+            "estimated_usd": 0,
+            "id": "monitoring.alarm_topic",
+            "label": "Notifications topic and Monitoring alarm baseline"
+        },
+        {
+            "enabled": true,
+            "estimated_usd": 18.25,
+            "id": "streaming.enterprise_stream",
+            "label": "Enterprise stream for service connector targets"
+        }
+    ],
+    "monthly_estimate": {
+        "basis": "Template assumptions. Use OCI Usage API for actual costs after deployment.",
+        "confidence": "medium",
+        "estimated_usd": 18.25
+    },
+    "profile": "full-enterprise",
+    "schema_version": "oci.okit.cost_estimate.v1",
+    "usage_api": {
+        "query_template": "ocd/library/oci/ObservabilityLandingZoneEnterpriseUsageApiQuery.json",
+        "recommended": true,
+        "summary": "Use OCI Usage API requestSummarizedUsages for historical actuals."
+    }
+}

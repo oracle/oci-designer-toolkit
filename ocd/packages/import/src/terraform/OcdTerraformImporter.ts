@@ -12,7 +12,12 @@ export class OcdTerraformImporter extends OcdImporter {
     import = (terraform: string): OcdDesign => {
         const terraformParser: TerraformParser = new TerraformParser(terraform)
         const parsedTerraform = terraformParser.parse()
-        console.debug('OcdTerraformImporter: Parsed Terraform', JSON.stringify(parsedTerraform, null, 2))
+        // Log a bounded summary, not the full parsed config — a real .tf project
+        // dumps megabytes of JSON to the console and freezes devtools.
+        const resourceCount = Array.isArray((parsedTerraform as any)?.resource)
+            ? (parsedTerraform as any).resource.length
+            : Object.keys((parsedTerraform as any)?.resource ?? {}).length
+        console.debug(`OcdTerraformImporter: parsed Terraform (${resourceCount} resource block(s))`)
         const ociImporter = new OciImporter()
         const ociDesign = ociImporter.import(JSON.stringify(parsedTerraform))
         this.design.model.oci = ociDesign.model.oci

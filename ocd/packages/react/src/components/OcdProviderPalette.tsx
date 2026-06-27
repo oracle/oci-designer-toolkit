@@ -4,15 +4,72 @@
 */
 
 // import palette from '../json/palette.json'
+import { useEffect } from 'react'
 import { palette } from '../data/OcdPalette'
-import { PaletteGroup, PaletteResource } from '@ocd/model'
+import { PaletteResource } from '@ocd/model'
 import { DragData, Point } from '../types/DragData'
 import { PaletteProps } from '../types/ReactComponentProperties'
+import { normalizePaletteSearch, paletteSearchMatches } from './OcdPaletteSearch'
+import { CustomStencilManifest, hydrateStencilCss, manifestToPaletteProvider } from '../stencils/OcdStencilRegistry'
 
-const OcdProviderPalette = ({ ocdConsoleConfig, setDragData, ocdDocument }: PaletteProps): JSX.Element => {
+type OcdPaletteGroup = {
+    title: string
+    class: string
+    resources: PaletteResource[]
+}
+
+// Build the runtime 'custom' palette providers (0 or 1) from the imported
+// stencil manifests stored on the design. Search-filtered like the static
+// providers. Wrapped by the caller in try/catch so a bad manifest never breaks
+// the static palette.
+const buildCustomProviders = (ocdDocument: PaletteProps['ocdDocument'], query: string): any[] => {
+    const customStencils = ocdDocument?.design?.userDefined?.customStencils as Record<string, CustomStencilManifest> | undefined
+    if (!customStencils || Object.keys(customStencils).length === 0) return []
+    const provider = manifestToPaletteProvider(Object.values(customStencils))
+    const groups = provider.groups
+        .map((group) => {
+            const groupMatches = paletteSearchMatches(query, provider.title, provider.provider, group.title)
+            const resources = groupMatches
+                ? group.resources
+                : group.resources.filter((resource) => paletteSearchMatches(query, provider.title, provider.provider, group.title, resource.title, resource.class))
+            return { ...group, resources }
+        })
+        .filter((group) => group.resources.length > 0)
+    return groups.length > 0 ? [{ ...provider, groups }] : []
+}
+
+const OcdProviderPalette = ({ ocdConsoleConfig, setDragData, searchTerm, ocdDocument }: PaletteProps): JSX.Element => {
+    const query = normalizePaletteSearch(searchTerm)
+    // Inject runtime icon CSS for imported stencils once per design change so the
+    // tiles (and dropped canvas icons) render. Idempotent + DOM-guarded.
+    useEffect(() => {
+        try {
+            if (ocdDocument?.design) hydrateStencilCss(ocdDocument.design)
+        } catch { /* never let a bad stencil break the palette */ }
+    }, [ocdDocument?.design?.userDefined?.customStencils])
+    const staticProviders = palette.providers
+        .filter((p) => ocdConsoleConfig.config.visibleProviderPalettes.includes(p.title))
+        .map((provider) => {
+            const groups = provider.groups
+                .map((group: OcdPaletteGroup) => {
+                    const groupMatches = paletteSearchMatches(query, provider.title, provider.provider, group.title)
+                    const resources = groupMatches
+                        ? group.resources
+                        : group.resources.filter((resource: PaletteResource) => paletteSearchMatches(query, provider.title, provider.provider, group.title, resource.title, resource.class))
+                    return { ...group, resources }
+                })
+                .filter((group: OcdPaletteGroup) => group.resources.length > 0)
+            return { ...provider, groups }
+        })
+        .filter((provider) => provider.groups.length > 0)
+    let customProviders: any[] = []
+    try {
+        customProviders = buildCustomProviders(ocdDocument, query)
+    } catch { customProviders = [] }
+    const visibleProviders = [...staticProviders, ...customProviders]
     return (
         <div className='ocd-designer-palette'>
-            {palette.providers.filter((p) => ocdConsoleConfig.config.visibleProviderPalettes.includes(p.title)).map((provider) => {
+            {visibleProviders.map((provider) => {
                 return <OcdProviderPaletteProviders 
                             provider={provider} 
                             ocdConsoleConfig={ocdConsoleConfig}
@@ -20,6 +77,7 @@ const OcdProviderPalette = ({ ocdConsoleConfig, setDragData, ocdDocument }: Pale
                             key={provider.title}
                             />
                         })}
+            {visibleProviders.length === 0 && <div className='ocd-palette-empty'>No matching resources</div>}
         </div>
     )
 }
@@ -32,7 +90,7 @@ const OcdProviderPaletteProviders = ({ provider, ocdConsoleConfig, setDragData }
             <details id={provider.title} open={open}>
                 <summary><div className={provider.class}><span>{provider.title}</span></div></summary>
                 <div>
-                    {provider.groups.map((group: PaletteGroup) => {
+                    {provider.groups.map((group: OcdPaletteGroup) => {
                         return <OcdProviderPaletteGroup 
                                 provider={provider.provider}
                                 group={group} 
@@ -59,11 +117,11 @@ const OcdProviderPaletteGroup = ({ provider, group, ocdConsoleConfig, setDragDat
                 <summary><div className={group.class}><span>{group.title}</span></div></summary>
                 <div className={`${ocdConsoleConfig.config.verboseProviderPalette ? 'ocd-designer-palette-group-verbose-grid' : 'ocd-designer-palette-group-grid'}`}>
                     {group.resources.map((resource: PaletteResource) => {
-                        resource.provider = provider
+                        const dragResource = { ...resource, provider }
                         return <OcdProviderPaletteResource 
                                     resource={resource}
                                     ocdConsoleConfig={ocdConsoleConfig}
-                                    dragObject={resource} 
+                                    dragObject={dragResource}
                                     onDragStart={(dragData:any) => onDragStart(dragData)}
                                     onDragEnd={() => onDragEnd()}
                                     key={`${provider}-${group.title}-${resource.title}`}

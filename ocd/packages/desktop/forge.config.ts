@@ -12,9 +12,26 @@ import os from 'os'
 // import * as Package from './package.json'
 // import * as Package from './package.json' with {type: "json"}
 import Package from './package.json' with {type: "json"}
+import { existsSync } from 'fs'
+import path from 'path'
 console.debug('Forge Config: package.json.version', Package.version)
 
-const archPos = process.argv.findIndex(arg => arg.startsWith('--arch'))
+// The DMG maker depends on the optional native `appdmg` (-> `macos-alias`), which
+// does not compile under newer Node (e.g. Node 26 + electron node-gyp). When it
+// is unavailable, fall back to the ZIP maker for darwin so `electron-forge make`
+// still succeeds (the build gate stays green). A real .dmg is produced only where
+// appdmg actually resolves. Filesystem check (no import.meta/require) so it works
+// regardless of how electron-forge loads this config. node_modules is hoisted to
+// the monorepo root (../../) but may also be local (./).
+function appdmgAvailable(): boolean {
+  const cwd = process.cwd()
+  return existsSync(path.join(cwd, '..', '..', 'node_modules', 'appdmg', 'package.json')) ||
+         existsSync(path.join(cwd, 'node_modules', 'appdmg', 'package.json'))
+}
+const dmgMakerAvailable = appdmgAvailable()
+console.info('Forge Config: appdmg available =', dmgMakerAvailable)
+
+const archPos = process.argv.findIndex((arg: string) => arg.startsWith('--arch'))
 let arch = archPos > 0 ? process.argv[archPos+1] : os.arch()
 if (arch === undefined) {
   arch = process.argv[archPos].replace('arch', '').replace(/[\W]+/g,"")
@@ -24,8 +41,12 @@ console.info('Args:', process.argv, archPos, arch)
 const config: ForgeConfig = {
   outDir: '../../dist',
   packagerConfig: {
-    asar: true,
-    executableName: 'ocd',
+    // Basename glob (asar unpack uses matchBase) so it matches the jsonnet WASM
+    // even though Vite emits it under the dot-dir `.vite/` — `**/*.wasm` would
+    // miss it because minimatch `**` does not traverse dot-directories. The
+    // WASM must be asar-unpacked so the renderer can fetch it under file://.
+    asar: { unpack: '*.wasm' },
+    executableName: 'oci-designer-toolkit-next-gen',
     icon: './public/assets/icon',
     // osxSign: {}, // Appears to break the MacOS App I assume because it's empty
     appCategoryType: 'public.app-category.developer-tools'
@@ -33,15 +54,18 @@ const config: ForgeConfig = {
   rebuildConfig: {},
   makers: [
     new MakerSquirrel({
-      name: 'ocd',
-      setupExe: `ocd-${Package.version}-Setup.exe`
+      name: 'oci-designer-toolkit-next-gen',
+      setupExe: `oci-designer-toolkit-next-gen-${Package.version}-Setup.exe`
     }), 
-    // new MakerZIP({}, ['darwin']), 
-    new MakerDMG({
-      appPath: 'ocd', 
+    // Always ship a darwin ZIP (no native deps) so the build gate is green even
+    // when appdmg cannot compile. The DMG maker below is added only when available.
+    new MakerZIP({}, ['darwin']),
+    ...(dmgMakerAvailable ? [new MakerDMG({
       background: './public/assets/background.png',
       icon: './public/assets/icon.icns',
-      title: 'OKIT - Open Cloud Designer',
+      // appdmg/macos-alias requires the mounted volume name to be <= 27 chars.
+      // Keep the app/package identity long, but use a short installer volume.
+      title: 'ODT Next Gen',
       format: 'ULFO',
       overwrite: true,
       additionalDMGOptions: {
@@ -63,20 +87,20 @@ const config: ForgeConfig = {
           x: 150,
           y: 200,
           type: 'file',
-          path: `${process.cwd()}/../../dist/ocd-darwin-${arch}/ocd.app`
+          path: `${process.cwd()}/../../dist/oci-designer-toolkit-next-gen-darwin-${arch}/oci-designer-toolkit-next-gen.app`
         }
       ]
-    }, ['darwin']), 
+    }, ['darwin'])] : []),
     new MakerRpm({
       options: {
-        name: 'ocd',
-        productName: 'ocd'
+        name: 'oci-designer-toolkit-next-gen',
+        productName: 'oci-designer-toolkit-next-gen'
       }
     }), 
     new MakerDeb({
       options: {
-        name: 'ocd',
-        productName: 'ocd'
+        name: 'oci-designer-toolkit-next-gen',
+        productName: 'oci-designer-toolkit-next-gen'
       }
     })
   ],

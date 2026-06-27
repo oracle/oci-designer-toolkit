@@ -5,4 +5,9 @@
 
 
 export { OcdUtils } from "./OcdUtils.js"
+export { OcdLogger } from "./OcdLogger.js"
+export { fetchWithTimeout, DEFAULT_FETCH_TIMEOUT_MS } from "./OcdFetch.js"
+export { OcdMetrics } from "./OcdMetrics.js"
+export type { OcdLogLevel } from "./OcdLogger.js"
+export type { OcdMetricKind, OcdMetricLabels, OcdMetricRecord, OcdMetricSink, OcdTimerHandle } from "./OcdMetrics.js"
 export { ociNoneVisualResources, azureNoneVisualResources, awsNoneVisualResources, googleNoneVisualResources } from "./OcdNoneVisualResources.js"

@@ -26,6 +26,43 @@ export namespace OciNetworkSecurityGroupSecurityRule {
     }
     function customValidation(resource: Model.OciNetworkSecurityGroupSecurityRule, resources: OciResources): OcdValidationResult[] {
         const results: OcdValidationResult[] = []
+        const displayName = resource.displayName ? resource.displayName : 'Network Security Group Security Rule'
+        const validDirections = ['INGRESS', 'EGRESS']
+        const validTypes = ['CIDR_BLOCK', 'SERVICE_CIDR_BLOCK', 'NETWORK_SECURITY_GROUP']
+        const validProtocols = ['all', '1', '6', '17']
+        if (!validDirections.includes(resource.direction)) {
+            results.push(validationResult(false, 'error', 'direction', 'Direction', displayName, 'Direction must be INGRESS or EGRESS.'))
+        }
+        if (resource.sourceType && !validTypes.includes(resource.sourceType)) {
+            results.push(validationResult(false, 'error', 'source_type', 'Source Type', displayName, `Source type must be one of ${validTypes.join(', ')}.`))
+        }
+        if (resource.destinationType && !validTypes.includes(resource.destinationType)) {
+            results.push(validationResult(false, 'error', 'destination_type', 'Destination Type', displayName, `Destination type must be one of ${validTypes.join(', ')}.`))
+        }
+        if (resource.protocol && !validProtocols.includes(resource.protocol) && !isProtocolNumber(resource.protocol)) {
+            results.push(validationResult(false, 'error', 'protocol', 'Protocol', displayName, 'Protocol must be all or an IP protocol number from 0 to 255.'))
+        }
+        if (resource.direction === 'INGRESS' && !resource.source) {
+            results.push(validationResult(false, 'error', 'source', 'Source', displayName, 'Ingress rules require a source CIDR, service CIDR, or network security group id.'))
+        }
+        if (resource.direction === 'EGRESS' && !resource.destination) {
+            results.push(validationResult(false, 'error', 'destination', 'Destination', displayName, 'Egress rules require a destination CIDR, service CIDR, or network security group id.'))
+        }
         return results
+    }
+    function isProtocolNumber(protocol: string): boolean {
+        const value = Number(protocol)
+        return Number.isInteger(value) && value >= 0 && value <= 255
+    }
+    function validationResult(valid: boolean, type: 'error' | 'warning' | 'information' | '', element: string, title: string, displayName: string, message: string): OcdValidationResult {
+        return {
+            valid,
+            type,
+            message,
+            element,
+            title,
+            displayName,
+            class: 'oci-network-security-group-security-rule',
+        }
     }
 }

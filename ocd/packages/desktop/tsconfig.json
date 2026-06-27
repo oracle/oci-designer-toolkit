@@ -24,5 +24,6 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true
-  }
+  },
+  "exclude": ["forge.config.ts", "forge.env.d.ts", "vite.*.config.mts"]
 }

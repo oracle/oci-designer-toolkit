@@ -1,0 +1,12 @@
+{
+    "provider": "custom",
+    "class": "custom-acme-widget",
+    "title": "ACME Widget",
+    "container": false,
+    "svgIcon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHJlY3QgeD0iMiIgeT0iMiIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiByeD0iMyIgZmlsbD0iIzg2NWRmZiIvPjwvc3ZnPg==",
+    "properties": [
+        { "key": "endpoint", "label": "Endpoint URL", "type": "string", "default": "" },
+        { "key": "replicas", "label": "Replicas", "type": "number", "default": 1 },
+        { "key": "enabled", "label": "Enabled", "type": "boolean", "default": true }
+    ]
+}

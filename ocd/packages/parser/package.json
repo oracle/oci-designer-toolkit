@@ -1,6 +1,6 @@
 {
   "name": "@ocd/parser",
-  "version": "0.3.0",
+  "version": "0.4.5",
   "description": "OKIT Open Cloud Designer Parser Module",
   "title": "OKIT Open Cloud Designer Parser Module",
   "author": {
@@ -18,14 +18,14 @@
   "type": "module",
   "exports": {
     ".": {
-        "import": {
-            "types": "./lib/esm/index.d.ts",
-            "default": "./lib/esm/index.js"
-        },
-        "require": {
-            "types": "./lib/cjs/index.d.ts",
-            "default": "./lib/cjs/index.js"
-        }
+      "import": {
+        "types": "./lib/esm/index.d.ts",
+        "default": "./lib/esm/index.js"
+      },
+      "require": {
+        "types": "./lib/cjs/index.d.ts",
+        "default": "./lib/cjs/index.js"
+      }
     }
   },
   "main": "lib/cjs/index.js",

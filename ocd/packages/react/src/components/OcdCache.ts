@@ -16,6 +16,7 @@ export interface OcdCacheProfileData extends Record <string, OcdCacheRegionData>
 export interface OcdCache {
     profile: string,
     region: string,
+    saveDate?: string,
     dropdownData: Record<string, OcdCacheProfileData>
 }
 

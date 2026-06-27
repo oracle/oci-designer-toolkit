@@ -12,10 +12,13 @@ export class OcdDynamicLayoutEngine extends OcdCommonLayoutEngine {
         super(coords, design)
         // Column Layouts
         this.columnLayout = [
+            ['oci-policy', 'oci-dynamic-group', 'oci-vault', 'oci-key'],
             ['oci-internet-gateway', 'oci-nat-gateway'], 
-            ['oci-dhcp-options', 'oci-policy', 'oci-route-table', 'oci-security-list'],
-            ['oci-vcn', 'oci-subnet', 'oci-load-balancer'],
-            ['oci-instance'], 
+            ['oci-dhcp-options', 'oci-route-table', 'oci-security-list', 'oci-network-security-group'],
+            ['oci-vcn', 'oci-subnet', 'oci-load-balancer', 'oci-network-load-balancer', 'oci-web-app-firewall', 'oci-api-gateway'],
+            ['oci-instance', 'oci-functions-application', 'oci-functions-function', 'oci-oke-cluster', 'oci-oke-node-pool', 'oci-bastion'], 
+            ['oci-db-system', 'oci-data-safe-target-database', 'oci-data-safe-security-assessment'],
+            ['oci-log-group', 'oci-log-analytics-log-group', 'oci-service-connector', 'oci-streaming-stream-pool', 'oci-streaming-stream', 'oci-monitoring-alarm', 'oci-budget', 'oci-cloud-guard-target'],
             ['oci-boot-volume', 'oci-mount-target', 'oci-volume', 'oci-drg'], 
             ['oci-ipsec', 'oci-file-system'], 
             ['oci-cpe']

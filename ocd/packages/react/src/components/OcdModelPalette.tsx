@@ -8,14 +8,17 @@ import { PaletteResource } from '@ocd/model'
 import { DragData, Point } from '../types/DragData'
 import { PaletteProps } from '../types/ReactComponentProperties'
 import { OcdUtils } from '@ocd/core'
+import { normalizePaletteSearch, paletteSearchMatches } from './OcdPaletteSearch'
 
-const OcdModelPalette = ({ ocdConsoleConfig, setDragData, ocdDocument }: PaletteProps): JSX.Element => {
+const OcdModelPalette = ({ setDragData, ocdDocument, searchTerm }: PaletteProps): JSX.Element => {
+    const query = normalizePaletteSearch(searchTerm)
     return (
     <div className='ocd-model-palette'>
         {Object.entries(ocdDocument.design.model).map(([p, m]) => {
             return <OcdModelPaletteProviders 
                         provider={p} 
                         model={m} 
+                        searchTerm={query}
                         setDragData={(dragData:any) => setDragData(dragData)}
                         key={`${p}-model-palette-providers`}
                         />
@@ -24,7 +27,7 @@ const OcdModelPalette = ({ ocdConsoleConfig, setDragData, ocdDocument }: Palette
 )
 }
 
-const OcdModelPaletteProviders = ({ provider, model, setDragData }: any): JSX.Element => {
+const OcdModelPaletteProviders = ({ provider, model, searchTerm, setDragData }: any): JSX.Element => {
     const open = true
     const modelExcludeResources = ['compartment']
     const hiddenResourceTypes = [
@@ -35,29 +38,53 @@ const OcdModelPaletteProviders = ({ provider, model, setDragData }: any): JSX.El
         'vnic_attachment',
         'volume_attachment'
     ]
+    const resourceEntries = Object.entries(model.resources)
+        .filter(([k]) => !modelExcludeResources.includes(k))
+        .sort((a, b) => a[0].localeCompare(b[0]))
+        .filter(([k]) => !hiddenResourceTypes.includes(k))
+        .map(([type, resources]) => {
+            const typeMatches = paletteSearchMatches(searchTerm, provider, type, OcdUtils.toTitle(type))
+            const resourcesList = resources as any[]
+            const filteredResources = typeMatches
+                ? resourcesList
+                : resourcesList.filter((resource: any) => paletteSearchMatches(
+                    searchTerm,
+                    provider,
+                    type,
+                    OcdUtils.toTitle(type),
+                    resource.displayName,
+                    resource.name,
+                    resource.resourceTypeName,
+                    resource.id,
+                ))
+            return [type, filteredResources] as const
+        })
+        .filter(([, resources]) => (resources as any[]).length > 0)
     return (
         <div className='ocd-designer-palette-provider'>
             <details id={provider.title} open={open}>
                 <summary><div className={provider}><label>{provider.toUpperCase()}</label></div></summary>
                 <div>
                     <ul>
-                        {Object.entries(model.resources).filter(([k, v]) => !modelExcludeResources.includes(k)).sort((a, b) => a[0].localeCompare(b[0])).filter(([k, r]) => !hiddenResourceTypes.includes(k)).map(([k, resources]) => {
+                        {resourceEntries.map(([k, resources]) => {
                             return <OcdModelPaletteResources 
                                         provider={provider}
                                         type={k} 
                                         resources={resources} 
+                                        searchTerm={searchTerm}
                                         setDragData={(dragData:any) => setDragData(dragData)}
                                         key={`${provider}-${k}-model-palette-resources`}
                                         />
                         })}
                     </ul>
+                    {resourceEntries.length === 0 && <div className='ocd-palette-empty'>No matching resources</div>}
                 </div>
             </details>
         </div>
     )
 }
 
-const OcdModelPaletteResources = ({ provider, type, resources, setDragData }: any): JSX.Element => {
+const OcdModelPaletteResources = ({ provider, type, resources, searchTerm, setDragData }: any): JSX.Element => {
     const [collapsed, setCollapsed] = useState(false)
     const onClick = () => {setCollapsed(!collapsed)}
     const onDragStart = (dragData: any) => {setDragData(dragData)}
@@ -65,7 +92,7 @@ const OcdModelPaletteResources = ({ provider, type, resources, setDragData }: an
     return (
         <li className='collapsible-list-element'>
             <div className={collapsed ? 'tree-collapsed' : ''} onClick={onClick} aria-hidden><label>{OcdUtils.toTitle(type)}</label></div>
-            <ul className={collapsed ? 'hidden' : ''}>
+            <ul className={collapsed && normalizePaletteSearch(searchTerm) === '' ? 'hidden' : ''}>
                 {resources.map((r: any) => {
                     return <OcdModelPaletteResource 
                                 provider={provider} 

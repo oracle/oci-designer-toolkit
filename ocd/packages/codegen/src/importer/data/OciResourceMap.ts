@@ -47,6 +47,7 @@ export const resourceMap: OcdResourceMap = {
     // "oci_dataintegration_workspace": "dataintegration_workspace",
     "oci_datascience_notebook_session": "datascience_notebook_session",
     "oci_datascience_project": "datascience_project",
+    "oci_dns_zone": "dns_zone",
     "oci_file_storage_export": "file_system_export",
     "oci_file_storage_export_set": "file_system_export_set",
     "oci_file_storage_file_system": "file_system",
@@ -60,20 +61,340 @@ export const resourceMap: OcdResourceMap = {
     "oci_identity_user_group_membership": "user_group_membership",
     "oci_kms_key": "key",
     "oci_kms_vault": "vault",
+    "oci_logging_log_group": "log_group",
+    "oci_functions_application": "functions_application",
+    "oci_monitoring_alarm": "monitoring_alarm",
+    "oci_ons_notification_topic": "notification_topic",
     "oci_load_balancer_load_balancer": "load_balancer",
     "oci_load_balancer_backend": "load_balancer_backend",
     "oci_load_balancer_backend_set": "load_balancer_backend_set",
     "oci_load_balancer_listener": "load_balancer_listener",
     "oci_mysql_mysql_db_system": "mysql_db_system",
     "oci_network_load_balancer_network_load_balancer": "network_load_balancer",
-    // "oci_network_load_balancer_backend_set": "network_load_balancer_backend_set",
-    // "oci_network_load_balancer_listener": "network_load_balancer_listener",
+    // Moved to batch 3 explicit entries below
     "oci_nosql_index": "nosql_index",
     "oci_nosql_table": "nosql_table",
     "oci_objectstorage_bucket": "bucket",
     // "oci_oda_oda_instance": "oda_instance",
     "oci_vault_secret": "secret",
     // "oci_visual_builder_vb_instance": "visual_builder_instance"
+    "oci_streaming_stream": "streaming_stream",
+    "oci_apigateway_gateway": "api_gateway",
+    "oci_apigateway_deployment": "api_deployment",
+    "oci_sch_service_connector": "service_connector",
+    "oci_events_rule": "events_rule",
+    "oci_queue_queue": "queue",
+    "oci_budget_budget": "budget",
+    "oci_waf_web_app_firewall": "web_app_firewall",
+    // Logging
+    "oci_logging_log": "logging_log",
+    // Autoscaling
+    "oci_autoscaling_auto_scaling_configuration": "autoscaling_configuration",
+    // Compute scaling
+    "oci_core_instance_pool": "instance_pool",
+    "oci_core_instance_configuration": "instance_configuration",
+    // Networking
+    "oci_core_vlan": "vlan",
+    // Artifacts & Container Registry
+    "oci_artifacts_repository": "artifacts_repository",
+    "oci_artifacts_container_repository": "artifacts_container_repository",
+    // DevOps
+    "oci_devops_project": "devops_project",
+    // APM
+    "oci_apm_apm_domain": "apm_domain",
+    // Data / Analytics
+    "oci_opensearch_opensearch_cluster": "opensearch_cluster",
+    "oci_redis_redis_cluster": "redis_cluster",
+    // Email
+    "oci_email_email_domain": "email_domain",
+    // PostgreSQL
+    "oci_psql_db_system": "psql_db_system",
+    // Certificates
+    "oci_certificates_management_certificate": "certificates_certificate",
+    "oci_certificates_management_certificate_authority": "certificates_certificate_authority",
+    // Big Data
+    "oci_bds_bds_instance": "bds_instance",
+    // Container Instances
+    "oci_container_instances_container_instance": "container_instance",
+    // Data Flow
+    "oci_dataflow_application": "dataflow_application",
+    // Network Firewall
+    "oci_network_firewall_network_firewall": "network_firewall",
+    "oci_network_firewall_network_firewall_policy": "network_firewall_policy",
+    // Service Mesh
+    "oci_service_mesh_mesh": "service_mesh",
+    // Health Checks
+    "oci_health_checks_http_monitor": "health_checks_http_monitor",
+    "oci_health_checks_http_probe": "health_checks_http_probe",
+    "oci_health_checks_ping_probe": "health_checks_ping_probe",
+    // Log Analytics
+    "oci_log_analytics_log_analytics_log_group": "log_analytics_log_group",
+    // Management Agent
+    "oci_management_agent_management_agent_install_key": "management_agent_install_key",
+    // Identity Tags
+    "oci_identity_tag_namespace": "tag_namespace",
+    "oci_identity_tag": "tag",
+    // Network Load Balancer sub-resources
+    "oci_network_load_balancer_backend_set": "network_load_balancer_backend_set",
+    "oci_network_load_balancer_listener": "network_load_balancer_listener",
+    // Functions
+    "oci_functions_function": "functions_function",
+    // Bastion Session
+    "oci_bastion_session": "bastion_session",
+    // GoldenGate
+    "oci_golden_gate_deployment": "golden_gate_deployment",
+    // Resource Scheduler
+    "oci_resource_scheduler_schedule": "resource_scheduler_schedule",
+    // Compute Capacity Reservation
+    "oci_core_compute_capacity_reservation": "compute_capacity_reservation",
+    // Streaming Stream Pool
+    "oci_streaming_stream_pool": "streaming_stream_pool",
+    // Data Catalog
+    "oci_datacatalog_catalog": "datacatalog_catalog",
+    // Visual Builder
+    "oci_visual_builder_vb_instance": "visual_builder_instance",
+    // Blockchain
+    "oci_blockchain_blockchain_platform": "blockchain_platform",
+    // ODA (Digital Assistant)
+    "oci_oda_oda_instance": "oda_instance",
+    // DNS Resolver
+    "oci_dns_resolver": "dns_resolver",
+    // Vulnerability Scanning
+    "oci_vulnerability_scanning_host_scan_recipe": "vss_host_scan_recipe",
+    "oci_vulnerability_scanning_host_scan_target": "vss_host_scan_target",
+    "oci_vulnerability_scanning_container_scan_recipe": "vss_container_scan_recipe",
+    "oci_vulnerability_scanning_container_scan_target": "vss_container_scan_target",
+    // AI Language
+    "oci_ai_language_project": "ai_language_project",
+    // AI Vision
+    "oci_ai_vision_project": "ai_vision_project",
+    // Data Labeling
+    "oci_data_labeling_service_dataset": "data_labeling_dataset",
+    // Data Science
+    "oci_datascience_model": "datascience_model",
+    "oci_datascience_model_deployment": "datascience_model_deployment",
+    "oci_datascience_job": "datascience_job",
+    // Data Integration
+    "oci_dataintegration_workspace": "dataintegration_workspace",
+    // Governance / Quotas
+    "oci_limits_quota": "limits_quota",
+    // Web App Acceleration (WAA)
+    "oci_waa_web_app_acceleration_policy": "waa_policy",
+    "oci_waa_web_app_acceleration": "waa_acceleration",
+    // DevOps sub-resources
+    "oci_devops_repository": "devops_repository",
+    "oci_devops_build_pipeline": "devops_build_pipeline",
+    "oci_devops_deploy_pipeline": "devops_deploy_pipeline",
+    "oci_devops_deploy_environment": "devops_deploy_environment",
+    // Compute
+    "oci_core_volume_group": "volume_group",
+    "oci_core_dedicated_vm_host": "dedicated_vm_host",
+    // Exadata
+    "oci_database_cloud_exadata_infrastructure": "cloud_exadata_infrastructure",
+    // Database Management (DBM)
+    "oci_database_management_db_management_private_endpoint": "dbm_private_endpoint",
+    "oci_database_management_managed_database_group": "managed_database_group",
+    "oci_database_management_external_db_system": "external_db_system",
+    "oci_database_management_external_db_system_connector": "external_db_system_connector",
+    // Operations Insights (OPSI)
+    "oci_opsi_database_insight": "opsi_database_insight",
+    "oci_opsi_operations_insights_private_endpoint": "opsi_private_endpoint",
+    "oci_opsi_exadata_insight": "opsi_exadata_insight",
+    "oci_opsi_host_insight": "opsi_host_insight",
+    "oci_opsi_awr_hub": "opsi_awr_hub",
+    "oci_opsi_operations_insights_warehouse": "opsi_warehouse",
+    "oci_opsi_opsi_configuration": "opsi_configuration",
+    // Management Agent
+    "oci_management_agent_management_agent": "management_agent",
+    // Batch 2 — Identity Domains
+    "oci_identity_domain": "identity_domain",
+    // Cloud Guard (Security)
+    "oci_cloud_guard_target": "cloud_guard_target",
+    "oci_cloud_guard_detector_recipe": "cloud_guard_detector_recipe",
+    // Data Safe (Database Security)
+    "oci_data_safe_target_database": "data_safe_target_database",
+    // Database — Pluggable DB + Data Guard
+    "oci_database_pluggable_database": "pluggable_database",
+    "oci_database_data_guard_association": "data_guard_association",
+    // Java Management Service
+    "oci_jms_fleet": "jms_fleet",
+    // Stack Monitoring (Observability)
+    "oci_stack_monitoring_monitored_resource": "stack_monitoring_resource",
+    // APM Synthetics
+    "oci_apm_synthetics_monitor": "apm_synthetics_monitor",
+    // Full Stack Disaster Recovery
+    "oci_disaster_recovery_dr_protection_group": "dr_protection_group",
+    // Compute — Custom Image
+    "oci_core_image": "custom_image",
+    // Networking — Reserved Public IP
+    "oci_core_public_ip": "public_ip",
+    // Object Storage — Lifecycle Policy
+    "oci_objectstorage_object_lifecycle_policy": "object_lifecycle_policy",
+    // AI Anomaly Detection
+    "oci_ai_anomaly_detection_project": "ai_anomaly_detection_project",
+    // Batch 3 — Generative AI (inference service)
+    "oci_generative_ai_dedicated_ai_cluster": "genai_dedicated_cluster",
+    "oci_generative_ai_endpoint": "genai_endpoint",
+    // Database — DB Home
+    "oci_database_db_home": "db_home",
+    // Compute — HPC/RDMA Compute Cluster
+    "oci_core_compute_cluster": "compute_cluster",
+    // Object Storage — PAR + Replication Policy
+    "oci_objectstorage_preauthrequest": "preauthenticated_request",
+    "oci_objectstorage_replication_policy": "replication_policy",
+    // Networking — Private IP + HPC Cluster Network
+    "oci_core_private_ip": "private_ip",
+    "oci_core_cluster_network": "cluster_network",
+    // Observability — Unified Monitoring Agent configuration
+    "oci_logging_unified_agent_configuration": "unified_agent_configuration",
+    // Identity — Network Source (IAM allow-list)
+    "oci_identity_network_source": "network_source",
+    // Cloud Guard — Responder Recipe
+    "oci_cloud_guard_responder_recipe": "cloud_guard_responder_recipe",
+    // DNS — Steering (Traffic Management) Policy
+    "oci_dns_steering_policy": "dns_steering_policy",
+    // Database — Autonomous Container DB + Backup
+    "oci_database_autonomous_container_database": "autonomous_container_database",
+    "oci_database_backup": "database_backup",
+    // Batch 4 (168 -> 182): FastConnect, LB sub-resources, Exadata/VM clusters,
+    // DNS view, Email Delivery, DevOps deploy/connection, Data Safe assessment, AI model
+    "oci_core_virtual_circuit": "virtual_circuit",
+    "oci_core_cross_connect": "cross_connect",
+    "oci_core_cross_connect_group": "cross_connect_group",
+    "oci_load_balancer_certificate": "load_balancer_certificate",
+    "oci_load_balancer_path_route_set": "load_balancer_path_route_set",
+    "oci_database_vm_cluster": "vm_cluster",
+    "oci_database_autonomous_vm_cluster": "autonomous_vm_cluster",
+    "oci_database_exadata_infrastructure": "exadata_infrastructure",
+    "oci_dns_view": "dns_view",
+    "oci_email_sender": "email_sender",
+    "oci_devops_deployment": "devops_deployment",
+    "oci_devops_connection": "devops_connection",
+    "oci_data_safe_security_assessment": "data_safe_security_assessment",
+    "oci_ai_anomaly_detection_model": "ai_anomaly_detection_model",
+    // Batch 5 (182 -> 196): API Gateway/WAF policy/RMS PE/GoldenGate/DevOps stage/
+    // Data Safe user assessment/Cloud Guard list/ADB backup/MySQL channel/DNS rrset/
+    // Email DKIM/Stack Monitoring config/DB KeyStore/FSDR DR plan
+    "oci_apigateway_api": "apigateway_api",
+    "oci_waf_web_app_firewall_policy": "web_app_firewall_policy",
+    "oci_resourcemanager_private_endpoint": "resourcemanager_private_endpoint",
+    "oci_golden_gate_connection": "golden_gate_connection",
+    "oci_devops_deploy_stage": "devops_deploy_stage",
+    "oci_data_safe_user_assessment": "data_safe_user_assessment",
+    "oci_cloud_guard_managed_list": "cloud_guard_managed_list",
+    "oci_database_autonomous_database_backup": "autonomous_database_backup",
+    "oci_mysql_channel": "mysql_channel",
+    "oci_dns_rrset": "dns_rrset",
+    "oci_email_dkim": "email_dkim",
+    "oci_stack_monitoring_config": "stack_monitoring_config",
+    "oci_database_key_store": "database_key_store",
+    "oci_disaster_recovery_dr_plan": "dr_plan",
+    // Batch 6 (196 -> 210): governance(Cloud Advisor/Service Catalog)/identity creds/
+    // LB sub-resources/WAF address list/API Gateway cert+usage-plan/Object Storage object/
+    // KMS key version/Fusion Apps/DevOps trigger/Database software image
+    "oci_optimizer_profile": "optimizer_profile",
+    "oci_service_catalog_service_catalog": "service_catalog",
+    "oci_identity_api_key": "identity_api_key",
+    "oci_identity_auth_token": "identity_auth_token",
+    "oci_load_balancer_rule_set": "load_balancer_rule_set",
+    "oci_load_balancer_hostname": "load_balancer_hostname",
+    "oci_waf_network_address_list": "waf_network_address_list",
+    "oci_apigateway_certificate": "apigateway_certificate",
+    "oci_apigateway_usage_plan": "apigateway_usage_plan",
+    "oci_objectstorage_object": "objectstorage_object",
+    "oci_kms_key_version": "kms_key_version",
+    "oci_fusion_apps_fusion_environment": "fusion_environment",
+    "oci_devops_trigger": "devops_trigger",
+    "oci_database_database_software_image": "database_software_image",
+    "oci_containerengine_virtual_node_pool": "virtual_node_pool",
+    "oci_containerengine_addon": "containerengine_addon",
+    "oci_core_boot_volume_backup": "boot_volume_backup",
+    "oci_file_storage_replication": "file_storage_replication",
+    "oci_file_storage_filesystem_snapshot_policy": "filesystem_snapshot_policy",
+    "oci_mysql_heat_wave_cluster": "mysql_heat_wave_cluster",
+    "oci_ons_subscription": "ons_subscription",
+    "oci_budget_alert_rule": "budget_alert_rule",
+    "oci_datacatalog_data_asset": "datacatalog_data_asset",
+    "oci_dns_resolver_endpoint": "dns_resolver_endpoint",
+    "oci_waas_waas_policy": "waas_policy",
+    "oci_ai_language_endpoint": "ai_language_endpoint",
+    "oci_certificates_management_ca_bundle": "certificates_ca_bundle",
+    "oci_nosql_table_replica": "nosql_table_replica",
+    "oci_database_migration_migration": "database_migration",
+    "oci_ocvp_sddc": "ocvp_sddc",
+    "oci_service_mesh_virtual_service": "service_mesh_virtual_service",
+    "oci_service_mesh_virtual_deployment": "service_mesh_virtual_deployment",
+    "oci_datascience_pipeline": "datascience_pipeline",
+    "oci_ai_vision_model": "ai_vision_model",
+    "oci_ai_document_processor_job": "ai_document_processor_job",
+    "oci_artifacts_generic_artifact": "generic_artifact",
+    "oci_health_checks_ping_monitor": "health_checks_ping_monitor",
+    "oci_log_analytics_log_analytics_object_collection_rule": "log_analytics_object_collection_rule",
+    "oci_database_exadb_vm_cluster": "exadb_vm_cluster",
+    "oci_core_vtap": "vtap",
+    "oci_streaming_connect_harness": "connect_harness",
+    "oci_dns_tsig_key": "dns_tsig_key",
+    // Batch 7 — Discovery and migration planning
+    "oci_cloud_bridge_agent": "cloud_bridge_agent",
+    "oci_cloud_bridge_agent_dependency": "cloud_bridge_agent_dependency",
+    "oci_cloud_bridge_agent_plugin": "cloud_bridge_agent_plugin",
+    "oci_cloud_bridge_asset": "cloud_bridge_asset",
+    "oci_cloud_bridge_asset_source": "cloud_bridge_asset_source",
+    "oci_cloud_bridge_discovery_schedule": "cloud_bridge_discovery_schedule",
+    "oci_cloud_bridge_environment": "cloud_bridge_environment",
+    "oci_cloud_bridge_inventory": "cloud_bridge_inventory",
+    "oci_cloud_migrations_migration": "cloud_migrations_migration",
+    "oci_cloud_migrations_migration_asset": "cloud_migrations_migration_asset",
+    "oci_cloud_migrations_migration_plan": "cloud_migrations_migration_plan",
+    "oci_cloud_migrations_replication_schedule": "cloud_migrations_replication_schedule",
+    "oci_cloud_migrations_target_asset": "cloud_migrations_target_asset",
+    "oci_stack_monitoring_discovery_job": "stack_monitoring_discovery_job",
+    "oci_stack_monitoring_monitored_resource_task": "stack_monitoring_monitored_resource_task",
+    "oci_stack_monitoring_monitored_resource_type": "stack_monitoring_monitored_resource_type",
+    "oci_log_analytics_log_analytics_entity": "log_analytics_entity",
+    // Batch 7 (+10): ADM + AI Document/Language/Anomaly Detection
+    "oci_adm_knowledge_base": "adm_knowledge_base",
+    "oci_adm_vulnerability_audit": "adm_vulnerability_audit",
+    "oci_adm_remediation_recipe": "adm_remediation_recipe",
+    "oci_adm_remediation_run": "adm_remediation_run",
+    "oci_ai_document_project": "ai_document_project",
+    "oci_ai_document_model": "ai_document_model",
+    "oci_ai_language_model": "ai_language_model",
+    "oci_ai_anomaly_detection_ai_private_endpoint": "ai_anomaly_detection_private_endpoint",
+    "oci_ai_anomaly_detection_data_asset": "ai_anomaly_detection_data_asset",
+    "oci_ai_anomaly_detection_detect_anomaly_job": "ai_anomaly_detection_job",
+    // Batch 12 — Database Migration connections and job controls
+    "oci_database_migration_connection": "database_migration_connection",
+    "oci_database_migration_job": "database_migration_job",
+    // Batch 13 — License Manager configuration and license inventory
+    "oci_license_manager_configuration": "license_manager_configuration",
+    "oci_license_manager_license_record": "license_manager_license_record",
+    "oci_license_manager_product_license": "license_manager_product_license",
+    // Batch 14 — Announcements subscriptions
+    "oci_announcements_service_announcement_subscription": "announcement_subscription",
+    "oci_announcements_service_announcement_subscriptions_filter_group": "announcement_subscription_filter_group",
+    // Batch 15 — Analytics instance access endpoints
+    "oci_analytics_analytics_instance_private_access_channel": "analytics_instance_private_access_channel",
+    "oci_analytics_analytics_instance_vanity_url": "analytics_instance_vanity_url",
+    // Batch 16 — Tenancy-level service configuration
+    "oci_audit_configuration": "audit_configuration",
+    "oci_artifacts_container_configuration": "artifacts_container_configuration",
+    "oci_cloud_guard_cloud_guard_configuration": "cloud_guard_configuration",
+    // Batch 11 — Block volume backups, DNS records, FSS snapshots, MySQL backups/config/replicas
+    "oci_core_volume_backup": "volume_backup",
+    "oci_core_volume_backup_policy": "volume_backup_policy",
+    "oci_core_volume_backup_policy_assignment": "volume_backup_policy_assignment",
+    "oci_core_volume_group_backup": "volume_group_backup",
+    "oci_core_instance_console_connection": "instance_console_connection",
+    "oci_core_route_table_attachment": "route_table_attachment",
+    "oci_core_ipv6": "ipv6",
+    "oci_core_public_ip_pool": "public_ip_pool",
+    "oci_file_storage_snapshot": "file_storage_snapshot",
+    "oci_mysql_mysql_backup": "mysql_backup",
+    "oci_mysql_mysql_configuration": "mysql_configuration",
+    "oci_mysql_replica": "mysql_replica",
+    "oci_dns_record": "dns_record",
+    "oci_dns_steering_policy_attachment": "dns_steering_policy_attachment"
 }
 
 export const dataMap: OcdResourceMap = {
@@ -556,12 +877,22 @@ export const resourceAttributes: OcdIncludedElements = {
     ],
     // "oci_database_autonomous_exadata_infrastructure": [],
     "oci_database_cloud_exadata_infrastructure": [
+            "display_name",
             "availability_domain",
             "shape",
             "cluster_placement_group_id",
             "compute_count",
+            "storage_count",
             "customer_contacts",
             "customer_contacts.email",
+            "maintenance_window",
+            "maintenance_window.preference",
+            "maintenance_window.days_of_week",
+            "maintenance_window.days_of_week.name",
+            "maintenance_window.hours_of_day",
+            "maintenance_window.months",
+            "maintenance_window.months.name",
+            "maintenance_window.weeks_of_month"
     ],
     "oci_database_cloud_autonomous_vm_cluster": [],
     "oci_database_cloud_vm_cluster": [
@@ -574,7 +905,7 @@ export const resourceAttributes: OcdIncludedElements = {
         "subnet_id",
         "backup_network_nsg_ids",
         "cluster_name",
-        "data_collection_options", 
+        "data_collection_options",
         "data_collection_options.is_diagnostics_events_enabled",
         "data_collection_options.is_health_monitoring_enabled",
         "data_collection_options.is_incident_logs_enabled",
@@ -638,7 +969,6 @@ export const resourceAttributes: OcdIncludedElements = {
         "db_home.database.tde_wallet_password",
         "db_home.database.vault_id",
     ],
-    "oci_database_exadata_infrastructure": [],
     "oci_datascience_notebook_session": [
         "project_id",
         "notebook_session_url",
@@ -652,6 +982,73 @@ export const resourceAttributes: OcdIncludedElements = {
     ],
     "oci_datascience_project": [
         "description"
+    ],
+    "oci_dns_zone": [
+        "name",
+        "scope",
+        "view_id",
+        "zone_type",
+        "external_downstreams",
+        "external_downstreams.address",
+        "external_downstreams.port",
+        "external_downstreams.tsig_key_id",
+        "external_masters",
+        "external_masters.address",
+        "external_masters.port",
+        "external_masters.tsig_key_id"
+    ],
+    "oci_logging_log_group": [
+        "description",
+        "display_name"
+    ],
+    "oci_functions_application": [
+        "config",
+        "display_name",
+        "network_security_group_ids",
+        "shape",
+        "subnet_ids",
+        "syslog_url",
+        "image_policy_config",
+        "image_policy_config.is_policy_enabled",
+        "trace_config",
+        "trace_config.domain_id",
+        "trace_config.is_enabled"
+    ],
+    "oci_monitoring_alarm": [
+        "alarm_summary",
+        "body",
+        "destinations",
+        "display_name",
+        "evaluation_slack_duration",
+        "is_enabled",
+        "is_notifications_per_metric_dimension_enabled",
+        "message_format",
+        "metric_compartment_id",
+        "metric_compartment_id_in_subtree",
+        "namespace",
+        "notification_title",
+        "notification_version",
+        "pending_duration",
+        "query",
+        "repeat_notification_duration",
+        "resolution",
+        "resource_group",
+        "rule_name",
+        "severity",
+        "overrides",
+        "overrides.body",
+        "overrides.pending_duration",
+        "overrides.query",
+        "overrides.rule_name",
+        "overrides.severity",
+        "suppression",
+        "suppression.description",
+        "suppression.time_suppress_from",
+        "suppression.time_suppress_until"
+    ],
+    "oci_ons_notification_topic": [
+        "description",
+        "name"
     ],
     "oci_file_storage_export": [
         "export_set_id",
@@ -914,4 +1311,2271 @@ export const resourceAttributes: OcdIncludedElements = {
         "secret_content.content_type",
         // "secret_content.name",
     ],
+    "oci_streaming_stream": [
+        "name",
+        "partitions",
+        "retention_in_hours",
+        "stream_pool_id"
+    ],
+    "oci_apigateway_gateway": [
+        "display_name",
+        "endpoint_type",
+        "subnet_id",
+        "certificate_id",
+        "network_security_group_ids"
+    ],
+    "oci_apigateway_deployment": [
+        "display_name",
+        "gateway_id",
+        "path_prefix"
+    ],
+    "oci_sch_service_connector": [
+        "display_name",
+        "description",
+        "state"
+    ],
+    "oci_events_rule": [
+        "display_name",
+        "description",
+        "condition",
+        "is_enabled"
+    ],
+    "oci_queue_queue": [
+        "display_name",
+        "channel_consumption_limit",
+        "custom_encryption_key_id",
+        "dead_letter_queue_delivery_count",
+        "retention_in_seconds",
+        "timeout_in_seconds",
+        "visibility_in_seconds"
+    ],
+    "oci_budget_budget": [
+        "display_name",
+        "description",
+        "amount",
+        "reset_period",
+        "processing_period_type",
+        "budget_processing_period_start_offset",
+        "start_date",
+        "end_date",
+        "target_type",
+        "target_compartment_id",
+        "targets"
+    ],
+    "oci_waf_web_app_firewall": [
+        "display_name",
+        "backend_type",
+        "load_balancer_id",
+        "web_app_firewall_policy_id"
+    ],
+    "oci_logging_log": [
+        "display_name",
+        "is_enabled",
+        "log_group_id",
+        "log_type",
+        "retention_duration",
+        "configuration",
+        "configuration.compartment_id",
+        "configuration.source",
+        "configuration.source.category",
+        "configuration.source.resource",
+        "configuration.source.service",
+        "configuration.source.source_type"
+    ],
+    "oci_autoscaling_auto_scaling_configuration": [
+        "cool_down_in_seconds",
+        "display_name",
+        "is_enabled",
+        "auto_scaling_resources",
+        "auto_scaling_resources.id",
+        "auto_scaling_resources.type",
+        "policies",
+        "policies.display_name",
+        "policies.is_enabled",
+        "policies.policy_type"
+    ],
+    "oci_core_instance_pool": [
+        "display_name",
+        "instance_configuration_id",
+        "instance_display_name_formatter",
+        "instance_hostname_formatter",
+        "size",
+        "load_balancers",
+        "load_balancers.backend_set_name",
+        "load_balancers.load_balancer_id",
+        "load_balancers.port",
+        "load_balancers.vnic_selection",
+        "placement_configurations",
+        "placement_configurations.availability_domain",
+        "placement_configurations.fault_domains",
+        "placement_configurations.primary_subnet_id"
+    ],
+    "oci_core_instance_configuration": [
+        "display_name",
+        "instance_id",
+        "source"
+    ],
+    "oci_core_vlan": [
+        "availability_domain",
+        "cidr_block",
+        "display_name",
+        "nsg_ids",
+        "route_table_id",
+        "vcn_id",
+        "vlan_tag"
+    ],
+    "oci_artifacts_repository": [
+        "description",
+        "display_name",
+        "is_immutable",
+        "repository_type"
+    ],
+    "oci_artifacts_container_repository": [
+        "display_name",
+        "is_immutable",
+        "is_public"
+    ],
+    "oci_devops_project": [
+        "description",
+        "name",
+        "notification_config",
+        "notification_config.topic_id"
+    ],
+    "oci_apm_apm_domain": [
+        "description",
+        "display_name",
+        "is_free_tier"
+    ],
+    "oci_opensearch_opensearch_cluster": [
+        "data_node_count",
+        "data_node_host_memory_gb",
+        "data_node_host_ocpu_count",
+        "data_node_host_type",
+        "data_node_storage_gb",
+        "display_name",
+        "master_node_count",
+        "master_node_host_memory_gb",
+        "master_node_host_ocpu_count",
+        "master_node_host_type",
+        "opendashboard_node_count",
+        "opendashboard_node_host_memory_gb",
+        "opendashboard_node_host_ocpu_count",
+        "security_mode",
+        "software_version",
+        "subnet_compartment_id",
+        "subnet_id",
+        "vcn_compartment_id",
+        "vcn_id"
+    ],
+    "oci_redis_redis_cluster": [
+        "display_name",
+        "node_count",
+        "node_memory_in_gbs",
+        "nsg_ids",
+        "software_version",
+        "subnet_id"
+    ],
+    "oci_email_email_domain": [
+        "description",
+        "name"
+    ],
+    "oci_psql_db_system": [
+        "admin_username",
+        "config_id",
+        "db_version",
+        "description",
+        "display_name",
+        "instance_count",
+        "instance_memory_size_in_gbs",
+        "instance_ocpu_count",
+        "shape",
+        "system_type",
+        "network_details",
+        "network_details.nsg_ids",
+        "network_details.primary_db_endpoint_private_ip",
+        "network_details.subnet_id",
+        "storage_details",
+        "storage_details.is_regionally_durable",
+        "storage_details.system_type"
+    ],
+    "oci_certificates_management_certificate": [
+        "config_type",
+        "description",
+        "issuer_certificate_authority_id",
+        "name",
+        "certificate_config",
+        "certificate_config.certificate_profile_type",
+        "certificate_config.config_type",
+        "certificate_config.key_algorithm",
+        "certificate_config.signature_algorithm",
+        "certificate_config.subject",
+        "certificate_config.subject.common_name",
+        "certificate_config.subject.country",
+        "certificate_config.subject.organization"
+    ],
+    "oci_certificates_management_certificate_authority": [
+        "config_type",
+        "description",
+        "issuer_certificate_authority_id",
+        "kms_key_id",
+        "name",
+        "certificate_authority_config",
+        "certificate_authority_config.config_type",
+        "certificate_authority_config.signing_algorithm",
+        "certificate_authority_config.subject",
+        "certificate_authority_config.subject.common_name",
+        "certificate_authority_config.subject.country",
+        "certificate_authority_config.subject.organization"
+    ],
+    "oci_bds_bds_instance": [
+        "cluster_admin_password",
+        "cluster_profile",
+        "cluster_version",
+        "display_name",
+        "is_cloud_sql_configured",
+        "is_high_availability",
+        "is_kafka_configured",
+        "is_secure",
+        "master_node",
+        "master_node.number_of_nodes",
+        "master_node.shape",
+        "master_node.subnet_id",
+        "util_node",
+        "util_node.number_of_nodes",
+        "util_node.shape",
+        "util_node.subnet_id",
+        "worker_node",
+        "worker_node.number_of_nodes",
+        "worker_node.shape",
+        "worker_node.subnet_id",
+        "worker_node.block_volume_size_in_gbs"
+    ],
+    "oci_container_instances_container_instance": [
+        "availability_domain",
+        "container_restart_policy",
+        "display_name",
+        "fault_domain",
+        "graceful_shutdown_timeout_in_seconds",
+        "shape",
+        "containers",
+        "containers.display_name",
+        "containers.image_url",
+        "containers.command",
+        "containers.arguments",
+        "containers.working_directory",
+        "containers.environment_variables",
+        "containers.is_resource_principal_disabled",
+        "shape_config",
+        "shape_config.ocpus",
+        "shape_config.memory_in_gbs",
+        "vnics",
+        "vnics.subnet_id",
+        "vnics.display_name",
+        "vnics.is_public_ip_assigned",
+        "vnics.nsg_ids",
+        "vnics.private_ip"
+    ],
+    "oci_dataflow_application": [
+        "display_name",
+        "description",
+        "language",
+        "driver_shape",
+        "executor_shape",
+        "num_executors",
+        "file_uri",
+        "class_name",
+        "execute",
+        "archive_uri",
+        "logs_bucket_uri",
+        "idle_timeout_in_minutes",
+        "max_duration_in_minutes",
+        "metastore_id",
+        "driver_shape_config",
+        "driver_shape_config.ocpus",
+        "driver_shape_config.memory_in_gbs",
+        "executor_shape_config",
+        "executor_shape_config.ocpus",
+        "executor_shape_config.memory_in_gbs"
+    ],
+    "oci_network_firewall_network_firewall": [
+        "availability_domain",
+        "display_name",
+        "network_firewall_policy_id",
+        "subnet_id",
+        "ipv4address",
+        "ipv6address",
+        "network_security_group_ids"
+    ],
+    "oci_network_firewall_network_firewall_policy": [
+        "display_name"
+    ],
+    "oci_service_mesh_mesh": [
+        "display_name",
+        "description",
+        "certificate_authorities",
+        "certificate_authorities.id",
+        "mtls"
+    ],
+    "oci_health_checks_http_monitor": [
+        "display_name",
+        "protocol",
+        "targets",
+        "port",
+        "path",
+        "method",
+        "interval_in_seconds",
+        "timeout_in_seconds",
+        "is_enabled",
+        "vantage_point_names"
+    ],
+    "oci_health_checks_http_probe": [
+        "protocol",
+        "targets",
+        "port",
+        "path",
+        "method",
+        "headers",
+        "timeout_in_seconds",
+        "vantage_point_names"
+    ],
+    "oci_health_checks_ping_probe": [
+        "protocol",
+        "targets",
+        "port",
+        "timeout_in_seconds",
+        "vantage_point_names"
+    ],
+    "oci_log_analytics_log_analytics_log_group": [
+        "display_name",
+        "description",
+        "namespace"
+    ],
+    "oci_management_agent_management_agent_install_key": [
+        "display_name",
+        "allowed_key_install_count",
+        "is_unlimited",
+        "time_expires"
+    ],
+    "oci_identity_tag_namespace": [
+        "name",
+        "description",
+        "is_retired"
+    ],
+    "oci_identity_tag": [
+        "name",
+        "description",
+        "tag_namespace_id",
+        "is_cost_tracking",
+        "is_retired"
+    ],
+    "oci_network_load_balancer_backend_set": [
+        "name",
+        "network_load_balancer_id",
+        "policy",
+        "ip_version",
+        "is_fail_open",
+        "is_instant_failover_enabled",
+        "is_preserve_source",
+        "health_checker",
+        "health_checker.protocol",
+        "health_checker.port",
+        "health_checker.url_path",
+        "health_checker.return_code",
+        "health_checker.retries",
+        "health_checker.timeout_in_millis",
+        "health_checker.interval_in_millis",
+        "health_checker.response_body_regex"
+    ],
+    "oci_network_load_balancer_listener": [
+        "name",
+        "network_load_balancer_id",
+        "default_backend_set_name",
+        "port",
+        "protocol",
+        "ip_version",
+        "tcp_idle_timeout",
+        "udp_idle_timeout"
+    ],
+    "oci_functions_function": [
+        "application_id",
+        "display_name",
+        "image",
+        "image_digest",
+        "memory_in_mbs",
+        "timeout_in_seconds",
+        "shape",
+        "config",
+        "source_details",
+        "source_details.source_type",
+        "source_details.pbf_listing_id",
+        "trace_config"
+    ],
+    "oci_bastion_session": [
+        "bastion_id",
+        "display_name",
+        "key_type",
+        "session_ttl_in_seconds",
+        "key_details",
+        "key_details.public_key_content",
+        "target_resource_details",
+        "target_resource_details.session_type",
+        "target_resource_details.target_resource_id",
+        "target_resource_details.target_resource_port",
+        "target_resource_details.target_resource_operating_system_user_name",
+        "target_resource_details.target_resource_private_ip_address",
+        "target_resource_details.target_resource_fqdn"
+    ],
+    "oci_golden_gate_deployment": [
+        "display_name",
+        "description",
+        "deployment_type",
+        "license_model",
+        "cpu_core_count",
+        "is_auto_scaling_enabled",
+        "is_public",
+        "fqdn",
+        "nsg_ids",
+        "load_balancer_subnet_id",
+        "ogg_data",
+        "ogg_data.deployment_name",
+        "ogg_data.admin_username",
+        "ogg_data.admin_password",
+        "ogg_data.ogg_version",
+        "ogg_data.credential_store",
+        "maintenance_window",
+        "maintenance_window.day",
+        "maintenance_window.start_hour"
+    ],
+    "oci_resource_scheduler_schedule": [
+        "display_name",
+        "description",
+        "action",
+        "recurrence_type",
+        "recurrence_details",
+        "time_starts",
+        "time_ends",
+        "resource_filters",
+        "resource_filters.attribute",
+        "resource_filters.condition",
+        "resource_filters.should_include_child_compartments"
+    ],
+    "oci_core_compute_capacity_reservation": [
+        "display_name",
+        "availability_domain",
+        "is_default_reservation",
+        "instance_reservation_configs",
+        "instance_reservation_configs.instance_shape",
+        "instance_reservation_configs.reserved_count",
+        "instance_reservation_configs.fault_domain",
+        "instance_reservation_configs.instance_shape_config",
+        "instance_reservation_configs.instance_shape_config.ocpus",
+        "instance_reservation_configs.instance_shape_config.memory_in_gbs"
+    ],
+    "oci_streaming_stream_pool": [
+        "name",
+        "is_private",
+        "kafka_settings",
+        "kafka_settings.auto_create_topics_enable",
+        "kafka_settings.log_retention_hours",
+        "kafka_settings.num_partitions",
+        "custom_encryption_key",
+        "custom_encryption_key.kms_key_id",
+        "private_endpoint_settings",
+        "private_endpoint_settings.subnet_id",
+        "private_endpoint_settings.private_endpoint_ip",
+        "private_endpoint_settings.nsg_ids"
+    ],
+    "oci_datacatalog_catalog": [
+        "display_name"
+    ],
+    "oci_visual_builder_vb_instance": [
+        "display_name",
+        "node_count",
+        "consumption_model",
+        "is_visual_builder_enabled",
+        "idcs_open_id",
+        "custom_endpoint",
+        "custom_endpoint.hostname",
+        "custom_endpoint.certificate_secret_id"
+    ],
+    "oci_blockchain_blockchain_platform": [
+        "display_name",
+        "description",
+        "platform_role",
+        "compute_shape",
+        "platform_version",
+        "idcs_access_token",
+        "is_byol",
+        "is_multi_ad",
+        "storage_size_in_tbs",
+        "total_ocpu_capacity",
+        "load_balancer_shape",
+        "replicas",
+        "replicas.ca_count",
+        "replicas.console_count",
+        "replicas.proxy_count"
+    ],
+    "oci_oda_oda_instance": [
+        "display_name",
+        "description",
+        "shape_name",
+        "is_role_based_access",
+        "identity_domain"
+    ],
+    "oci_dns_resolver": [
+        "display_name",
+        "scope",
+        "attached_vcn_id",
+        "default_view_id",
+        "attached_views",
+        "attached_views.view_id",
+        "rules",
+        "rules.action",
+        "rules.destination_addresses",
+        "rules.source_endpoint_name",
+        "rules.client_address_conditions",
+        "rules.qname_cover_conditions"
+    ],
+    "oci_vulnerability_scanning_host_scan_recipe": [
+        "display_name",
+        "agent_settings",
+        "agent_settings.scan_level",
+        "port_settings",
+        "port_settings.scan_level",
+        "schedule",
+        "schedule.type",
+        "schedule.day_of_week",
+        "application_settings",
+        "application_settings.is_enabled",
+        "application_settings.application_scan_recurrence"
+    ],
+    "oci_vulnerability_scanning_host_scan_target": [
+        "display_name",
+        "description",
+        "host_scan_recipe_id",
+        "target_compartment_id",
+        "instance_ids"
+    ],
+    "oci_vulnerability_scanning_container_scan_recipe": [
+        "display_name",
+        "image_count",
+        "scan_settings",
+        "scan_settings.scan_level"
+    ],
+    "oci_vulnerability_scanning_container_scan_target": [
+        "display_name",
+        "description",
+        "container_scan_recipe_id",
+        "target_registry",
+        "target_registry.compartment_id",
+        "target_registry.repositories",
+        "target_registry.type",
+        "target_registry.url"
+    ],
+    "oci_ai_language_project": [
+        "display_name",
+        "description"
+    ],
+    "oci_ai_vision_project": [
+        "display_name",
+        "description"
+    ],
+    "oci_data_labeling_service_dataset": [
+        "display_name",
+        "description",
+        "annotation_format",
+        "labeling_instructions",
+        "dataset_format_details",
+        "dataset_format_details.format_type",
+        "dataset_source_details",
+        "dataset_source_details.source_type",
+        "dataset_source_details.namespace",
+        "dataset_source_details.bucket",
+        "dataset_source_details.prefix",
+        "label_set"
+    ],
+    "oci_datascience_model": [
+        "display_name",
+        "description",
+        "project_id",
+        "input_schema",
+        "output_schema",
+        "model_artifact",
+        "artifact_content_length",
+        "artifact_content_disposition",
+        "custom_metadata_list",
+        "custom_metadata_list.key",
+        "custom_metadata_list.value",
+        "custom_metadata_list.category",
+        "defined_metadata_list",
+        "defined_metadata_list.key",
+        "defined_metadata_list.value"
+    ],
+    "oci_datascience_model_deployment": [
+        "display_name",
+        "description",
+        "project_id",
+        "model_deployment_configuration_details",
+        "model_deployment_configuration_details.deployment_type",
+        "model_deployment_configuration_details.model_configuration_details",
+        "model_deployment_configuration_details.model_configuration_details.model_id",
+        "model_deployment_configuration_details.model_configuration_details.instance_configuration",
+        "model_deployment_configuration_details.model_configuration_details.instance_configuration.instance_shape_name",
+        "model_deployment_configuration_details.model_configuration_details.scaling_policy",
+        "category_log_details",
+        "category_log_details.access",
+        "category_log_details.access.log_group_id",
+        "category_log_details.access.log_id",
+        "category_log_details.predict",
+        "category_log_details.predict.log_group_id",
+        "category_log_details.predict.log_id"
+    ],
+    "oci_datascience_job": [
+        "display_name",
+        "description",
+        "project_id",
+        "job_artifact",
+        "artifact_content_length",
+        "artifact_content_disposition",
+        "job_configuration_override_details",
+        "job_infrastructure_configuration_details",
+        "job_infrastructure_configuration_details.job_infrastructure_type",
+        "job_infrastructure_configuration_details.shape_name",
+        "job_infrastructure_configuration_details.subnet_id",
+        "job_infrastructure_configuration_details.block_storage_size_in_gbs",
+        "job_log_configuration_override_details"
+    ],
+    "oci_dataintegration_workspace": [
+        "display_name",
+        "description",
+        "subnet_id",
+        "vcn_id",
+        "is_private_network_enabled",
+        "endpoint_id",
+        "endpoint_name",
+        "dns_server_ip",
+        "dns_server_zone"
+    ],
+    "oci_limits_quota": [
+        "name",
+        "description",
+        "statements",
+        "is_lock_override"
+    ],
+    "oci_waa_web_app_acceleration_policy": [
+        "display_name",
+        "response_caching_policy",
+        "response_caching_policy.is_response_header_based_caching_enabled",
+        "response_compression_policy",
+        "response_compression_policy.gzip_compression",
+        "response_compression_policy.gzip_compression.is_enabled"
+    ],
+    "oci_waa_web_app_acceleration": [
+        "display_name",
+        "backend_type",
+        "load_balancer_id",
+        "web_app_acceleration_policy_id"
+    ],
+    "oci_devops_repository": [
+        "name",
+        "description",
+        "project_id",
+        "repository_type",
+        "default_branch",
+        "mirror_repository_config",
+        "mirror_repository_config.repository_url",
+        "mirror_repository_config.connector_id",
+        "mirror_repository_config.trigger_schedule",
+        "mirror_repository_config.trigger_schedule.type",
+        "mirror_repository_config.trigger_schedule.custom_schedule"
+    ],
+    "oci_devops_build_pipeline": [
+        "display_name",
+        "description",
+        "project_id",
+        "build_pipeline_parameters",
+        "build_pipeline_parameters.items",
+        "build_pipeline_parameters.items.name",
+        "build_pipeline_parameters.items.default_value",
+        "build_pipeline_parameters.items.description"
+    ],
+    "oci_devops_deploy_pipeline": [
+        "display_name",
+        "description",
+        "project_id",
+        "deploy_pipeline_parameters",
+        "deploy_pipeline_parameters.items",
+        "deploy_pipeline_parameters.items.name",
+        "deploy_pipeline_parameters.items.default_value",
+        "deploy_pipeline_parameters.items.description"
+    ],
+    "oci_devops_deploy_environment": [
+        "display_name",
+        "description",
+        "project_id",
+        "deploy_environment_type",
+        "cluster_id",
+        "function_id",
+        "network_channel",
+        "network_channel.network_channel_type",
+        "network_channel.subnet_id",
+        "network_channel.nsg_ids"
+    ],
+    "oci_core_volume_group": [
+        "display_name",
+        "availability_domain",
+        "volume_ids",
+        "source_details",
+        "source_details.type",
+        "source_details.volume_ids",
+        "source_details.volume_group_id",
+        "source_details.volume_group_backup_id",
+        "backup_policy_id",
+        "volume_group_replicas",
+        "volume_group_replicas.availability_domain",
+        "volume_group_replicas.display_name"
+    ],
+    "oci_core_dedicated_vm_host": [
+        "display_name",
+        "availability_domain",
+        "dedicated_vm_host_shape",
+        "fault_domain"
+    ],
+    "oci_database_management_db_management_private_endpoint": [
+        "name",
+        "description",
+        "subnet_id",
+        "vcn_id",
+        "nsg_ids",
+        "is_cluster",
+        "is_dns_resolution_enabled"
+    ],
+    "oci_database_management_managed_database_group": [
+        "name",
+        "description",
+        "managed_databases",
+        "managed_databases.id",
+        "managed_databases.name",
+        "managed_databases.database_type",
+        "managed_databases.database_sub_type",
+        "managed_databases.deployment_type",
+        "managed_databases.workload_type"
+    ],
+    "oci_database_management_external_db_system": [
+        "display_name",
+        "db_system_discovery_id",
+        "discovery_agent_id",
+        "is_cluster",
+        "home_directory",
+        "database_management_config",
+        "database_management_config.license_model",
+        "stack_monitoring_config",
+        "stack_monitoring_config.is_enabled"
+    ],
+    "oci_database_management_external_db_system_connector": [
+        "display_name",
+        "external_db_system_id",
+        "connector_type",
+        "agent_id",
+        "connection_info",
+        "connection_info.component_type",
+        "connection_info.connection_string",
+        "connection_info.connection_string.host_name",
+        "connection_info.connection_string.port",
+        "connection_info.connection_string.protocol",
+        "connection_info.connection_string.service",
+        "connection_info.connection_credentials",
+        "connection_info.connection_credentials.credential_name",
+        "connection_info.connection_credentials.credential_type",
+        "connection_info.connection_credentials.user_name",
+        "connection_info.connection_credentials.role",
+        "connection_info.connection_credentials.password_secret_id"
+    ],
+    "oci_opsi_database_insight": [
+        "entity_source",
+        "database_id",
+        "database_resource_type",
+        "deployment_type",
+        "opsi_private_endpoint_id",
+        "dbm_private_endpoint_id",
+        "exadata_insight_id",
+        "service_name",
+        "connection_details",
+        "connection_details.host_name",
+        "connection_details.port",
+        "connection_details.protocol",
+        "connection_details.service_name",
+        "credential_details",
+        "credential_details.credential_type",
+        "credential_details.credential_source_name",
+        "credential_details.user_name",
+        "credential_details.role",
+        "credential_details.password_secret_id",
+        "credential_details.wallet_secret_id"
+    ],
+    "oci_opsi_operations_insights_private_endpoint": [
+        "display_name",
+        "description",
+        "vcn_id",
+        "subnet_id",
+        "nsg_ids",
+        "is_used_for_rac_dbs"
+    ],
+    "oci_opsi_exadata_insight": [
+        "entity_source",
+        "exadata_infra_id",
+        "exadata_infra_resource_type",
+        "exadata_type",
+        "is_auto_sync_enabled",
+        "is_virtualized_exadata",
+        "member_vm_cluster_details",
+        "member_vm_cluster_details.vmcluster_id",
+        "member_vm_cluster_details.compartment_id",
+        "member_vm_cluster_details.dbm_private_endpoint_id",
+        "member_vm_cluster_details.opsi_private_endpoint_id"
+    ],
+    "oci_opsi_host_insight": [
+        "entity_source",
+        "compute_id",
+        "management_agent_id",
+        "host_type",
+        "host_name",
+        "host_display_name",
+        "exadata_insight_id"
+    ],
+    "oci_opsi_awr_hub": [
+        "display_name",
+        "operations_insights_warehouse_id",
+        "object_storage_bucket_name"
+    ],
+    "oci_opsi_operations_insights_warehouse": [
+        "display_name",
+        "cpu_allocated",
+        "storage_allocated_in_gbs"
+    ],
+    "oci_opsi_opsi_configuration": [
+        "opsi_config_type",
+        "display_name",
+        "description",
+        "config_items",
+        "config_items.config_item_type",
+        "config_items.name",
+        "config_items.value",
+        "config_items.applicable_contexts"
+    ],
+    "oci_management_agent_management_agent": [
+        "display_name",
+        "managed_agent_id",
+        "deploy_plugins_id",
+        "install_key_id",
+        "is_agent_auto_upgradable"
+    ],
+    "oci_identity_domain": [
+        "display_name",
+        "description",
+        "license_type",
+        "admin_email",
+        "admin_first_name",
+        "admin_last_name",
+        "admin_user_name",
+        "is_hidden_on_login",
+        "is_notification_bypassed",
+        "is_primary_email_required"
+    ],
+    "oci_cloud_guard_target": [
+        "display_name",
+        "description",
+        "target_resource_id",
+        "target_resource_type",
+        "state",
+        "target_detector_recipes",
+        "target_detector_recipes.detector_recipe_id",
+        "target_responder_recipes",
+        "target_responder_recipes.responder_recipe_id"
+    ],
+    "oci_cloud_guard_detector_recipe": [
+        "display_name",
+        "description",
+        "source_detector_recipe_id",
+        "detector_rules",
+        "detector_rules.detector_rule_id"
+    ],
+    "oci_data_safe_target_database": [
+        "display_name",
+        "description",
+        "database_details",
+        "database_details.database_type",
+        "database_details.infrastructure_type",
+        "database_details.autonomous_database_id",
+        "database_details.db_system_id",
+        "database_details.vm_cluster_id",
+        "database_details.instance_id",
+        "database_details.listener_port",
+        "database_details.service_name",
+        "connection_option",
+        "connection_option.connection_type",
+        "connection_option.datasafe_private_endpoint_id",
+        "connection_option.on_prem_connector_id",
+        "credentials",
+        "credentials.user_name"
+    ],
+    "oci_database_pluggable_database": [
+        "pdb_name",
+        "container_database_id",
+        "should_pdb_admin_account_be_locked",
+        "pdb_creation_type_details",
+        "pdb_creation_type_details.creation_type",
+        "pdb_creation_type_details.source_pluggable_database_id"
+    ],
+    "oci_database_data_guard_association": [
+        "display_name",
+        "database_id",
+        "creation_type",
+        "protection_mode",
+        "transport_type",
+        "delete_standby_db_home_on_delete",
+        "is_active_data_guard_enabled",
+        "peer_db_system_id",
+        "peer_db_home_id",
+        "peer_vm_cluster_id",
+        "subnet_id",
+        "nsg_ids",
+        "shape",
+        "license_model",
+        "hostname"
+    ],
+    "oci_jms_fleet": [
+        "display_name",
+        "description",
+        "is_advanced_features_enabled",
+        "inventory_log",
+        "inventory_log.log_group_id",
+        "inventory_log.log_id",
+        "operation_log",
+        "operation_log.log_group_id",
+        "operation_log.log_id"
+    ],
+    "oci_stack_monitoring_monitored_resource": [
+        "name",
+        "type",
+        "display_name",
+        "host_name",
+        "management_agent_id",
+        "external_id",
+        "external_resource_id",
+        "resource_time_zone",
+        "license",
+        "database_connection_details",
+        "database_connection_details.connector_id",
+        "database_connection_details.db_id",
+        "database_connection_details.service_name",
+        "database_connection_details.port",
+        "database_connection_details.protocol",
+        "properties",
+        "properties.name",
+        "properties.value"
+    ],
+    "oci_apm_synthetics_monitor": [
+        "apm_domain_id",
+        "display_name",
+        "monitor_type",
+        "repeat_interval_in_seconds",
+        "status",
+        "target",
+        "script_id",
+        "timeout_in_seconds",
+        "scheduling_policy",
+        "vantage_points",
+        "vantage_points.name",
+        "configuration",
+        "configuration.config_type",
+        "configuration.request_method",
+        "configuration.protocol"
+    ],
+    "oci_disaster_recovery_dr_protection_group": [
+        "display_name",
+        "log_location",
+        "log_location.bucket",
+        "log_location.namespace",
+        "association",
+        "association.peer_id",
+        "association.peer_region",
+        "association.role",
+        "members",
+        "members.member_id",
+        "members.member_type",
+        "members.destination_compartment_id",
+        "members.destination_load_balancer_id"
+    ],
+    "oci_core_image": [
+        "display_name",
+        "instance_id",
+        "launch_mode",
+        "image_source_details",
+        "image_source_details.source_type",
+        "image_source_details.bucket_name",
+        "image_source_details.namespace_name",
+        "image_source_details.object_name",
+        "image_source_details.operating_system",
+        "image_source_details.source_uri"
+    ],
+    "oci_core_public_ip": [
+        "display_name",
+        "lifetime",
+        "private_ip_id",
+        "public_ip_pool_id"
+    ],
+    "oci_objectstorage_object_lifecycle_policy": [
+        "bucket",
+        "namespace",
+        "rules",
+        "rules.action",
+        "rules.is_enabled",
+        "rules.name",
+        "rules.target",
+        "rules.time_amount",
+        "rules.time_unit"
+    ],
+    "oci_ai_anomaly_detection_project": [
+        "display_name",
+        "description"
+    ],
+    "oci_generative_ai_dedicated_ai_cluster": [
+        "display_name",
+        "description",
+        "type",
+        "unit_count",
+        "unit_shape"
+    ],
+    "oci_generative_ai_endpoint": [
+        "display_name",
+        "description",
+        "dedicated_ai_cluster_id",
+        "model_id",
+        "content_moderation_config",
+        "content_moderation_config.is_enabled"
+    ],
+    "oci_database_db_home": [
+        "display_name",
+        "db_system_id",
+        "vm_cluster_id",
+        "db_version",
+        "source",
+        "database",
+        "database.db_name",
+        "database.db_unique_name",
+        "database.pdb_name",
+        "database.character_set",
+        "database.ncharacter_set"
+    ],
+    "oci_core_compute_cluster": [
+        "display_name",
+        "availability_domain"
+    ],
+    "oci_objectstorage_preauthrequest": [
+        "bucket",
+        "namespace",
+        "name",
+        "access_type",
+        "object_name",
+        "time_expires",
+        "bucket_listing_action"
+    ],
+    "oci_objectstorage_replication_policy": [
+        "bucket",
+        "namespace",
+        "name",
+        "destination_bucket_name",
+        "destination_region_name"
+    ],
+    "oci_core_private_ip": [
+        "display_name",
+        "hostname_label",
+        "ip_address",
+        "vnic_id",
+        "vlan_id"
+    ],
+    "oci_core_cluster_network": [
+        "display_name",
+        "placement_configuration",
+        "placement_configuration.availability_domain",
+        "placement_configuration.primary_subnet_id",
+        "placement_configuration.secondary_vnic_subnets",
+        "cluster_configuration",
+        "cluster_configuration.hpc_island_id",
+        "cluster_configuration.network_block_ids"
+    ],
+    "oci_logging_unified_agent_configuration": [
+        "display_name",
+        "description",
+        "is_enabled",
+        "group_association",
+        "group_association.group_list",
+        "service_configuration",
+        "service_configuration.configuration_type"
+    ],
+    "oci_identity_network_source": [
+        "name",
+        "description",
+        "public_source_list",
+        "virtual_source_list",
+        "services"
+    ],
+    "oci_cloud_guard_responder_recipe": [
+        "display_name",
+        "description",
+        "source_responder_recipe_id",
+        "responder_rules",
+        "responder_rules.responder_rule_id",
+        "responder_rules.details",
+        "responder_rules.details.is_enabled",
+        "responder_rules.details.mode"
+    ],
+    "oci_dns_steering_policy": [
+        "display_name",
+        "template",
+        "health_check_monitor_id",
+        "ttl",
+        "answers",
+        "answers.name",
+        "answers.rdata",
+        "answers.rtype",
+        "answers.pool",
+        "rules",
+        "rules.rule_type"
+    ],
+    "oci_database_autonomous_container_database": [
+        "display_name",
+        "cloud_autonomous_vm_cluster_id",
+        "autonomous_vm_cluster_id",
+        "patch_model",
+        "db_unique_name",
+        "db_version",
+        "service_level_agreement_type",
+        "backup_config",
+        "backup_config.recovery_window_in_days"
+    ],
+    "oci_database_backup": [
+        "display_name",
+        "database_id"
+    ],
+    "oci_core_virtual_circuit": [
+        "display_name",
+        "type",
+        "bandwidth_shape_name",
+        "customer_asn",
+        "customer_bgp_asn",
+        "gateway_id",
+        "ip_mtu",
+        "is_bfd_enabled",
+        "provider_service_id",
+        "routing_policy",
+        "cross_connect_mappings",
+        "cross_connect_mappings.cross_connect_or_cross_connect_group_id",
+        "cross_connect_mappings.customer_bgp_peering_ip",
+        "cross_connect_mappings.oracle_bgp_peering_ip",
+        "cross_connect_mappings.vlan",
+        "public_prefixes",
+        "public_prefixes.cidr_block"
+    ],
+    "oci_core_cross_connect": [
+        "display_name",
+        "cross_connect_group_id",
+        "customer_reference_name",
+        "location_name",
+        "port_speed_shape_name",
+        "far_cross_connect_or_cross_connect_group_id",
+        "near_cross_connect_or_cross_connect_group_id",
+        "macsec_properties",
+        "macsec_properties.encryption_cipher",
+        "macsec_properties.is_unprotected_traffic_allowed"
+    ],
+    "oci_core_cross_connect_group": [
+        "display_name",
+        "customer_reference_name",
+        "macsec_properties",
+        "macsec_properties.encryption_cipher",
+        "macsec_properties.is_unprotected_traffic_allowed"
+    ],
+    "oci_load_balancer_certificate": [
+        "certificate_name",
+        "load_balancer_id",
+        "ca_certificate",
+        "public_certificate"
+    ],
+    "oci_load_balancer_path_route_set": [
+        "name",
+        "load_balancer_id",
+        "path_routes",
+        "path_routes.backend_set_name",
+        "path_routes.path"
+    ],
+    "oci_database_vm_cluster": [
+        "display_name",
+        "exadata_infrastructure_id",
+        "vm_cluster_network_id",
+        "cpu_core_count",
+        "gi_version",
+        "license_model",
+        "memory_size_in_gbs",
+        "ssh_public_keys",
+        "is_local_backup_enabled",
+        "is_sparse_diskgroup_enabled",
+        "data_collection_options",
+        "data_collection_options.is_diagnostics_events_enabled",
+        "data_collection_options.is_health_monitoring_enabled",
+        "data_collection_options.is_incident_logs_enabled"
+    ],
+    "oci_database_autonomous_vm_cluster": [
+        "display_name",
+        "exadata_infrastructure_id",
+        "vm_cluster_network_id",
+        "autonomous_data_storage_size_in_tbs",
+        "cpu_core_count_per_node",
+        "license_model",
+        "is_mtls_enabled",
+        "memory_per_oracle_compute_unit_in_gbs",
+        "total_container_databases",
+        "time_zone"
+    ],
+    "oci_database_exadata_infrastructure": [
+        "display_name",
+        "shape",
+        "admin_network_cidr",
+        "infini_band_network_cidr",
+        "cloud_control_plane_server1",
+        "cloud_control_plane_server2",
+        "netmask",
+        "gateway",
+        "dns_server",
+        "ntp_server",
+        "compute_count",
+        "storage_count",
+        "time_zone",
+        "contacts",
+        "contacts.name",
+        "contacts.email",
+        "contacts.phone_number",
+        "contacts.is_primary",
+        "maintenance_window",
+        "maintenance_window.preference",
+        "maintenance_window.hours_of_day"
+    ],
+    "oci_dns_view": [
+        "display_name",
+        "scope"
+    ],
+    "oci_email_sender": [
+        "email_address"
+    ],
+    "oci_devops_deployment": [
+        "display_name",
+        "deployment_type",
+        "deploy_pipeline_id",
+        "deploy_stage_id",
+        "previous_deployment_id"
+    ],
+    "oci_devops_connection": [
+        "display_name",
+        "description",
+        "connection_type",
+        "project_id",
+        "base_url",
+        "username",
+        "tls_verify_config",
+        "tls_verify_config.ca_certificate_bundle_id",
+        "tls_verify_config.tls_verify_mode"
+    ],
+    "oci_data_safe_security_assessment": [
+        "display_name",
+        "description",
+        "target_id",
+        "is_assessment_scheduled",
+        "schedule"
+    ],
+    "oci_ai_anomaly_detection_model": [
+        "display_name",
+        "description",
+        "project_id",
+        "model_training_details",
+        "model_training_details.algorithm_hint",
+        "model_training_details.data_asset_ids",
+        "model_training_details.target_fap",
+        "model_training_details.training_fraction",
+        "model_training_details.window_size"
+    ],
+    "oci_apigateway_api": [
+        "display_name",
+        "content"
+    ],
+    "oci_waf_web_app_firewall_policy": [
+        "display_name",
+        "actions",
+        "actions.name",
+        "actions.type",
+        "actions.code",
+        "request_access_control",
+        "request_access_control.default_action_name",
+        "request_protection",
+        "request_protection.body_inspection_size_limit_in_bytes"
+    ],
+    "oci_resourcemanager_private_endpoint": [
+        "display_name",
+        "description",
+        "vcn_id",
+        "subnet_id",
+        "nsg_id_list",
+        "dns_zones",
+        "is_used_with_configuration_source_provider"
+    ],
+    "oci_golden_gate_connection": [
+        "display_name",
+        "description",
+        "connection_type",
+        "technology_type",
+        "vault_id",
+        "subnet_id",
+        "database_id",
+        "deployment_id",
+        "nsg_ids",
+        "routing_method"
+    ],
+    "oci_devops_deploy_stage": [
+        "display_name",
+        "description",
+        "deploy_stage_type",
+        "deploy_pipeline_id",
+        "deploy_environment_id_a",
+        "deploy_environment_id_b",
+        "deploy_artifact_ids",
+        "compute_instance_group_deploy_environment_id",
+        "oke_cluster_deploy_environment_id"
+    ],
+    "oci_data_safe_user_assessment": [
+        "display_name",
+        "description",
+        "target_id",
+        "is_assessment_scheduled",
+        "schedule"
+    ],
+    "oci_cloud_guard_managed_list": [
+        "display_name",
+        "description",
+        "list_type",
+        "list_items",
+        "source_managed_list_id"
+    ],
+    "oci_database_autonomous_database_backup": [
+        "display_name",
+        "autonomous_database_id",
+        "is_long_term_backup",
+        "retention_period_in_days"
+    ],
+    "oci_mysql_channel": [
+        "display_name",
+        "description",
+        "is_enabled",
+        "source",
+        "source.source_type",
+        "source.hostname",
+        "source.port",
+        "source.ssl_mode",
+        "source.username",
+        "target",
+        "target.target_type",
+        "target.db_system_id",
+        "target.channel_name",
+        "target.applier_username",
+        "target.delay_in_seconds"
+    ],
+    "oci_dns_rrset": [
+        "domain",
+        "rtype",
+        "zone_name_or_id",
+        "view_id",
+        "scope"
+    ],
+    "oci_email_dkim": [
+        "name",
+        "description",
+        "email_domain_id"
+    ],
+    "oci_stack_monitoring_config": [
+        "display_name",
+        "config_type",
+        "is_enabled",
+        "license"
+    ],
+    "oci_database_key_store": [
+        "display_name"
+    ],
+    "oci_disaster_recovery_dr_plan": [
+        "display_name",
+        "type",
+        "dr_protection_group_id"
+    ],
+    "oci_optimizer_profile": [
+        "name",
+        "description",
+        "aggregation_interval_in_days",
+        "levels_configuration",
+        "levels_configuration.items",
+        "levels_configuration.items.level",
+        "levels_configuration.items.recommendation_id",
+        "target_compartments",
+        "target_compartments.items",
+        "target_tags",
+        "target_tags.items",
+        "target_tags.items.tag_definition_name",
+        "target_tags.items.tag_namespace_name",
+        "target_tags.items.tag_value_type",
+        "target_tags.items.tag_values"
+    ],
+    "oci_service_catalog_service_catalog": [
+        "display_name"
+    ],
+    "oci_identity_api_key": [
+        "user_id",
+        "key_value"
+    ],
+    "oci_identity_auth_token": [
+        "user_id",
+        "description"
+    ],
+    "oci_load_balancer_rule_set": [
+        "name",
+        "load_balancer_id",
+        "items",
+        "items.action",
+        "items.allowed_methods",
+        "items.description",
+        "items.header",
+        "items.prefix",
+        "items.suffix",
+        "items.value",
+        "items.response_code",
+        "items.status_code",
+        "items.conditions",
+        "items.conditions.attribute_name",
+        "items.conditions.attribute_value",
+        "items.conditions.operator",
+        "items.redirect_uri",
+        "items.redirect_uri.host",
+        "items.redirect_uri.path",
+        "items.redirect_uri.port",
+        "items.redirect_uri.protocol",
+        "items.redirect_uri.query"
+    ],
+    "oci_load_balancer_hostname": [
+        "name",
+        "hostname",
+        "load_balancer_id"
+    ],
+    "oci_waf_network_address_list": [
+        "display_name",
+        "type",
+        "addresses",
+        "vcn_addresses",
+        "vcn_addresses.addresses",
+        "vcn_addresses.vcn_id"
+    ],
+    "oci_apigateway_certificate": [
+        "display_name",
+        "subject_names"
+    ],
+    "oci_apigateway_usage_plan": [
+        "display_name",
+        "entitlements",
+        "entitlements.name",
+        "entitlements.description",
+        "entitlements.quota",
+        "entitlements.quota.operation_on_breach",
+        "entitlements.quota.reset_policy",
+        "entitlements.quota.unit",
+        "entitlements.quota.value",
+        "entitlements.rate_limit",
+        "entitlements.rate_limit.unit",
+        "entitlements.rate_limit.value",
+        "entitlements.targets",
+        "entitlements.targets.deployment_id"
+    ],
+    "oci_objectstorage_object": [
+        "bucket",
+        "namespace",
+        "object",
+        "content_type",
+        "content_encoding",
+        "content_language",
+        "content_disposition",
+        "cache_control",
+        "storage_tier",
+        "metadata",
+        "opc_sse_kms_key_id",
+        "source"
+    ],
+    "oci_kms_key_version": [
+        "key_id",
+        "vault_id",
+        "management_endpoint",
+        "is_primary",
+        "is_auto_rotated",
+        "public_key"
+    ],
+    "oci_fusion_apps_fusion_environment": [
+        "display_name",
+        "dns_prefix",
+        "fusion_environment_family_id",
+        "fusion_environment_type",
+        "kms_key_id",
+        "lockbox_id",
+        "subscription_ids",
+        "additional_language_packs",
+        "is_break_glass_enabled",
+        "create_fusion_environment_admin_user_details",
+        "create_fusion_environment_admin_user_details.email_address",
+        "create_fusion_environment_admin_user_details.first_name",
+        "create_fusion_environment_admin_user_details.last_name",
+        "create_fusion_environment_admin_user_details.username",
+        "maintenance_policy",
+        "maintenance_policy.environment_maintenance_override",
+        "maintenance_policy.monthly_patching_override",
+        "rules",
+        "rules.action",
+        "rules.description",
+        "rules.conditions",
+        "rules.conditions.attribute_name",
+        "rules.conditions.attribute_value"
+    ],
+    "oci_devops_trigger": [
+        "display_name",
+        "description",
+        "project_id",
+        "connection_id",
+        "repository_id",
+        "trigger_source",
+        "actions",
+        "actions.build_pipeline_id",
+        "actions.type",
+        "actions.filter",
+        "actions.filter.events",
+        "actions.filter.trigger_source",
+        "actions.filter.include",
+        "actions.filter.exclude"
+    ],
+    "oci_database_database_software_image": [
+        "display_name",
+        "database_version",
+        "image_shape_family",
+        "image_type",
+        "patch_set",
+        "source_db_home_id",
+        "database_software_image_included_patches",
+        "database_software_image_one_off_patches"
+    ],
+    "oci_containerengine_virtual_node_pool": [
+        "display_name",
+        "cluster_id",
+        "size",
+        "nsg_ids"
+    ],
+    "oci_containerengine_addon": [
+        "addon_name",
+        "cluster_id",
+        "version",
+        "remove_addon_resources_on_delete"
+    ],
+    "oci_core_boot_volume_backup": [
+        "display_name",
+        "boot_volume_id",
+        "type",
+        "kms_key_id"
+    ],
+    "oci_file_storage_replication": [
+        "display_name",
+        "source_id",
+        "target_id",
+        "replication_interval"
+    ],
+    "oci_file_storage_filesystem_snapshot_policy": [
+        "display_name",
+        "availability_domain",
+        "policy_prefix"
+    ],
+    "oci_mysql_heat_wave_cluster": [
+        "db_system_id",
+        "shape_name",
+        "cluster_size",
+        "is_lakehouse_enabled"
+    ],
+    "oci_ons_subscription": [
+        "topic_id",
+        "protocol",
+        "endpoint"
+    ],
+    "oci_budget_alert_rule": [
+        "display_name",
+        "description",
+        "budget_id",
+        "type",
+        "threshold",
+        "threshold_type",
+        "message",
+        "recipients"
+    ],
+    "oci_datacatalog_data_asset": [
+        "display_name",
+        "description",
+        "catalog_id",
+        "type_key"
+    ],
+    "oci_dns_resolver_endpoint": [
+        "name",
+        "resolver_id",
+        "subnet_id",
+        "endpoint_type",
+        "is_forwarding",
+        "is_listening",
+        "forwarding_address",
+        "listening_address",
+        "nsg_ids",
+        "scope"
+    ],
+    "oci_waas_waas_policy": [
+        "display_name",
+        "domain",
+        "additional_domains"
+    ],
+    "oci_ai_language_endpoint": [
+        "display_name",
+        "description",
+        "model_id",
+        "inference_units"
+    ],
+    "oci_certificates_management_ca_bundle": [
+        "name",
+        "description",
+        "ca_bundle_pem"
+    ],
+    "oci_nosql_table_replica": [
+        "table_name_or_id",
+        "max_read_units",
+        "max_write_units"
+    ],
+    "oci_database_migration_migration": [
+        "display_name",
+        "description",
+        "type",
+        "database_combination",
+        "source_database_connection_id",
+        "source_container_database_connection_id",
+        "target_database_connection_id"
+    ],
+    "oci_database_migration_connection": [
+        "display_name",
+        "description",
+        "connection_type",
+        "technology_type",
+        "database_name",
+        "connection_string",
+        "host",
+        "port",
+        "username",
+        "password",
+        "replication_username",
+        "replication_password",
+        "db_system_id",
+        "key_id",
+        "vault_id",
+        "subnet_id",
+        "nsg_ids",
+        "security_protocol",
+        "ssl_mode",
+        "additional_attributes",
+        "additional_attributes.name",
+        "additional_attributes.value"
+    ],
+    "oci_database_migration_job": [
+        "display_name",
+        "job_id",
+        "suspend_trigger"
+    ],
+    "oci_license_manager_configuration": [
+        "email_ids"
+    ],
+    "oci_license_manager_license_record": [
+        "display_name",
+        "product_license_id",
+        "is_perpetual",
+        "is_unlimited",
+        "license_count",
+        "expiration_date",
+        "support_end_date"
+    ],
+    "oci_license_manager_product_license": [
+        "display_name",
+        "is_vendor_oracle",
+        "license_unit",
+        "vendor_name",
+        "images",
+        "images.listing_id",
+        "images.package_version"
+    ],
+    "oci_announcements_service_announcement_subscription": [
+        "display_name",
+        "description",
+        "ons_topic_id",
+        "preferred_language",
+        "preferred_time_zone"
+    ],
+    "oci_announcements_service_announcement_subscriptions_filter_group": [
+        "announcement_subscription_id",
+        "name",
+        "filters",
+        "filters.type",
+        "filters.value"
+    ],
+    "oci_analytics_analytics_instance_private_access_channel": [
+        "analytics_instance_id",
+        "display_name",
+        "network_security_group_ids",
+        "subnet_id",
+        "vcn_id",
+        "private_source_dns_zones",
+        "private_source_dns_zones.dns_zone",
+        "private_source_scan_hosts",
+        "private_source_scan_hosts.scan_hostname",
+        "private_source_scan_hosts.scan_port"
+    ],
+    "oci_analytics_analytics_instance_vanity_url": [
+        "analytics_instance_id",
+        "ca_certificate",
+        "description",
+        "hosts",
+        "passphrase",
+        "private_key",
+        "public_certificate"
+    ],
+    "oci_audit_configuration": [
+        "retention_period_days"
+    ],
+    "oci_artifacts_container_configuration": [
+        "is_repository_created_on_first_push"
+    ],
+    "oci_cloud_guard_cloud_guard_configuration": [
+        "reporting_region",
+        "self_manage_resources",
+        "status"
+    ],
+    "oci_ocvp_sddc": [
+        "display_name",
+        "compute_availability_domain",
+        "esxi_hosts_count",
+        "vmware_software_version",
+        "initial_sku",
+        "is_hcx_enabled",
+        "ssh_authorized_keys",
+        "provisioning_subnet_id",
+        "nsx_vtep_vlan_id",
+        "vmotion_vlan_id",
+        "vsan_vlan_id",
+        "vsphere_vlan_id",
+        "workload_network_cidr"
+    ],
+    "oci_service_mesh_virtual_service": [
+        "name",
+        "description",
+        "hosts",
+        "mesh_id"
+    ],
+    "oci_service_mesh_virtual_deployment": [
+        "name",
+        "description",
+        "virtual_service_id"
+    ],
+    "oci_datascience_pipeline": [
+        "display_name",
+        "description",
+        "project_id"
+    ],
+    "oci_ai_vision_model": [
+        "display_name",
+        "description",
+        "model_type",
+        "model_version",
+        "is_quick_mode",
+        "max_training_duration_in_hours",
+        "project_id"
+    ],
+    "oci_ai_document_processor_job": [
+        "display_name"
+    ],
+    "oci_artifacts_generic_artifact": [
+        "artifact_id"
+    ],
+    "oci_health_checks_ping_monitor": [
+        "display_name",
+        "interval_in_seconds",
+        "is_enabled",
+        "port",
+        "protocol",
+        "targets",
+        "timeout_in_seconds",
+        "vantage_point_names"
+    ],
+    "oci_log_analytics_log_analytics_object_collection_rule": [
+        "name",
+        "description",
+        "namespace",
+        "log_group_id",
+        "log_source_name",
+        "log_type",
+        "os_bucket_name",
+        "os_namespace",
+        "collection_type",
+        "entity_id",
+        "char_encoding",
+        "is_enabled"
+    ],
+    "oci_database_exadb_vm_cluster": [
+        "display_name",
+        "availability_domain",
+        "cluster_name",
+        "hostname",
+        "shape",
+        "license_model",
+        "system_version",
+        "time_zone",
+        "grid_image_id",
+        "ssh_public_keys",
+        "subnet_id",
+        "backup_subnet_id",
+        "nsg_ids",
+        "backup_network_nsg_ids",
+        "private_zone_id",
+        "exascale_db_storage_vault_id",
+        "scan_listener_port_tcp",
+        "scan_listener_port_tcp_ssl",
+        "domain"
+    ],
+    "oci_core_vtap": [
+        "display_name",
+        "vcn_id",
+        "source_id",
+        "target_id",
+        "target_ip",
+        "source_type",
+        "target_type",
+        "capture_filter_id",
+        "encapsulation_protocol",
+        "is_vtap_enabled",
+        "max_packet_size",
+        "traffic_mode",
+        "vxlan_network_identifier",
+        "source_private_endpoint_subnet_id"
+    ],
+    "oci_streaming_connect_harness": [
+        "name"
+    ],
+    "oci_dns_tsig_key": [
+        "name",
+        "algorithm"
+    ],
+    "oci_adm_knowledge_base": [
+        "display_name"
+    ],
+    "oci_adm_vulnerability_audit": [
+        "build_type",
+        "display_name",
+        "knowledge_base_id",
+        "application_dependencies",
+        "application_dependencies.application_dependency_node_ids",
+        "application_dependencies.gav",
+        "application_dependencies.node_id",
+        "application_dependencies.purl",
+        "configuration",
+        "configuration.exclusions",
+        "configuration.max_permissible_cvss_v2score",
+        "configuration.max_permissible_cvss_v3score",
+        "configuration.max_permissible_severity",
+        "source",
+        "source.description",
+        "source.oci_resource_id",
+        "source.type",
+        "usage_data",
+        "usage_data.bucket",
+        "usage_data.namespace",
+        "usage_data.source_type"
+    ],
+    "oci_adm_remediation_recipe": [
+        "display_name",
+        "is_run_triggered_on_kb_change",
+        "knowledge_base_id",
+        "state",
+        "detect_configuration",
+        "detect_configuration.exclusions",
+        "detect_configuration.max_permissible_cvss_v2score",
+        "detect_configuration.max_permissible_cvss_v3score",
+        "detect_configuration.max_permissible_severity",
+        "detect_configuration.upgrade_policy",
+        "network_configuration",
+        "network_configuration.nsg_ids",
+        "network_configuration.subnet_id",
+        "scm_configuration",
+        "scm_configuration.branch",
+        "scm_configuration.build_file_location",
+        "scm_configuration.external_scm_type",
+        "scm_configuration.is_automerge_enabled",
+        "scm_configuration.oci_code_repository_id",
+        "scm_configuration.pat_secret_id",
+        "scm_configuration.repository_url",
+        "scm_configuration.scm_type",
+        "scm_configuration.username",
+        "verify_configuration",
+        "verify_configuration.additional_parameters",
+        "verify_configuration.build_service_type",
+        "verify_configuration.jenkins_url",
+        "verify_configuration.job_name",
+        "verify_configuration.pat_secret_id",
+        "verify_configuration.pipeline_id",
+        "verify_configuration.repository_url",
+        "verify_configuration.trigger_secret_id",
+        "verify_configuration.username",
+        "verify_configuration.workflow_name"
+    ],
+    "oci_adm_remediation_run": [
+        "display_name",
+        "remediation_recipe_id"
+    ],
+    "oci_ai_document_project": [
+        "display_name",
+        "description"
+    ],
+    "oci_ai_document_model": [
+        "display_name",
+        "description",
+        "is_quick_mode",
+        "max_training_time_in_hours",
+        "model_id",
+        "model_type",
+        "model_version",
+        "project_id",
+        "component_models",
+        "component_models.model_id",
+        "testing_dataset",
+        "testing_dataset.bucket",
+        "testing_dataset.dataset_id",
+        "testing_dataset.dataset_type",
+        "testing_dataset.namespace",
+        "training_dataset",
+        "training_dataset.bucket",
+        "training_dataset.dataset_id",
+        "training_dataset.dataset_type",
+        "training_dataset.namespace",
+        "validation_dataset",
+        "validation_dataset.bucket",
+        "validation_dataset.dataset_id",
+        "validation_dataset.dataset_type",
+        "validation_dataset.namespace"
+    ],
+    "oci_ai_language_model": [
+        "display_name",
+        "description",
+        "project_id",
+        "model_details",
+        "model_details.language_code",
+        "model_details.model_type",
+        "model_details.version",
+        "test_strategy",
+        "test_strategy.strategy_type",
+        "training_dataset",
+        "training_dataset.dataset_id",
+        "training_dataset.dataset_type"
+    ],
+    "oci_ai_anomaly_detection_ai_private_endpoint": [
+        "display_name",
+        "dns_zones",
+        "subnet_id"
+    ],
+    "oci_ai_anomaly_detection_data_asset": [
+        "display_name",
+        "description",
+        "private_endpoint_id",
+        "project_id",
+        "data_source_details",
+        "data_source_details.atp_password_secret_id",
+        "data_source_details.atp_user_name",
+        "data_source_details.bucket",
+        "data_source_details.cwallet_file_secret_id",
+        "data_source_details.data_source_type",
+        "data_source_details.database_name",
+        "data_source_details.ewallet_file_secret_id",
+        "data_source_details.key_store_file_secret_id",
+        "data_source_details.measurement_name",
+        "data_source_details.namespace",
+        "data_source_details.ojdbc_file_secret_id",
+        "data_source_details.password_secret_id",
+        "data_source_details.table_name",
+        "data_source_details.tnsnames_file_secret_id",
+        "data_source_details.truststore_file_secret_id",
+        "data_source_details.url",
+        "data_source_details.user_name",
+        "data_source_details.wallet_password_secret_id"
+    ],
+    "oci_ai_anomaly_detection_detect_anomaly_job": [
+        "description",
+        "display_name",
+        "model_id",
+        "sensitivity",
+        "input_details",
+        "input_details.content",
+        "input_details.content_type",
+        "input_details.input_type",
+        "input_details.signal_names",
+        "output_details",
+        "output_details.bucket",
+        "output_details.namespace",
+        "output_details.output_type",
+        "output_details.prefix"
+    ],
+    "oci_cloud_bridge_agent": [
+        "display_name",
+        "agent_type",
+        "agent_version",
+        "environment_id"
+    ],
+    "oci_cloud_bridge_agent_dependency": [
+        "display_name",
+        "dependency_name",
+        "dependency_version",
+        "description",
+        "namespace",
+        "bucket",
+        "object",
+        "checksum"
+    ],
+    "oci_cloud_bridge_agent_plugin": [
+        "agent_id",
+        "plugin_name",
+        "plugin_version",
+        "desired_state",
+        "name"
+    ],
+    "oci_cloud_bridge_asset": [
+        "display_name",
+        "asset_type",
+        "asset_source_ids",
+        "inventory_id",
+        "external_asset_key",
+        "source_key"
+    ],
+    "oci_cloud_bridge_asset_source": [
+        "display_name",
+        "environment_id",
+        "inventory_id",
+        "assets_compartment_id",
+        "discovery_schedule_id",
+        "are_historical_metrics_collected",
+        "are_realtime_metrics_collected"
+    ],
+    "oci_cloud_bridge_discovery_schedule": [
+        "display_name",
+        "execution_recurrences"
+    ],
+    "oci_cloud_bridge_environment": [
+        "display_name"
+    ],
+    "oci_cloud_bridge_inventory": [
+        "display_name"
+    ],
+    "oci_cloud_migrations_migration": [
+        "display_name",
+        "replication_schedule_id",
+        "is_completed"
+    ],
+    "oci_cloud_migrations_migration_asset": [
+        "display_name",
+        "migration_id",
+        "inventory_asset_id",
+        "replication_schedule_id",
+        "replication_compartment_id",
+        "snap_shot_bucket_name",
+        "availability_domain",
+        "notifications",
+        "depended_on_by",
+        "migration_asset_depends_on"
+    ],
+    "oci_cloud_migrations_migration_plan": [
+        "display_name",
+        "migration_id",
+        "source_migration_plan_id"
+    ],
+    "oci_cloud_migrations_replication_schedule": [
+        "display_name",
+        "execution_recurrences"
+    ],
+    "oci_cloud_migrations_target_asset": [
+        "display_name",
+        "migration_plan_id",
+        "is_excluded_from_execution",
+        "preferred_shape_type",
+        "ms_license"
+    ],
+    "oci_stack_monitoring_discovery_job": [
+        "discovery_client",
+        "discovery_type",
+        "should_propagate_tags_to_discovered_resources"
+    ],
+    "oci_stack_monitoring_monitored_resource_task": [
+        "name",
+        "work_request_ids"
+    ],
+    "oci_stack_monitoring_monitored_resource_type": [
+        "name",
+        "display_name",
+        "description",
+        "resource_category",
+        "source_type",
+        "metric_namespace"
+    ],
+    "oci_log_analytics_log_analytics_entity": [
+        "name",
+        "entity_type_name",
+        "entity_type_internal_name",
+        "hostname",
+        "management_agent_id",
+        "management_agent_compartment_id",
+        "are_logs_collected"
+    ],
+    "oci_core_volume_backup": [
+        "display_name",
+        "expiration_time",
+        "kms_key_id",
+        "source_type",
+        "source_volume_backup_id",
+        "type",
+        "volume_id",
+        "source_details",
+        "source_details.kms_key_id",
+        "source_details.volume_backup_id"
+    ],
+    "oci_core_volume_backup_policy": [
+        "display_name",
+        "destination_region",
+        "schedules",
+        "schedules.backup_type",
+        "schedules.day_of_month",
+        "schedules.day_of_week",
+        "schedules.hour_of_day",
+        "schedules.month",
+        "schedules.offset_seconds",
+        "schedules.offset_type",
+        "schedules.period",
+        "schedules.retention_seconds",
+        "schedules.time_zone"
+    ],
+    "oci_core_volume_backup_policy_assignment": [
+        "asset_id",
+        "policy_id"
+    ],
+    "oci_core_volume_group_backup": [
+        "display_name",
+        "expiration_time",
+        "source_type",
+        "source_volume_group_backup_id",
+        "type",
+        "volume_backup_ids",
+        "volume_group_id",
+        "source_details",
+        "source_details.kms_key_id",
+        "source_details.volume_group_backup_id"
+    ],
+    "oci_core_instance_console_connection": [
+        "fingerprint",
+        "instance_id",
+        "public_key"
+    ],
+    "oci_core_route_table_attachment": [
+        "route_table_id",
+        "subnet_id"
+    ],
+    "oci_core_ipv6": [
+        "display_name",
+        "ip_address",
+        "ipv6subnet_cidr",
+        "subnet_id",
+        "vnic_id"
+    ],
+    "oci_core_public_ip_pool": [
+        "cidr_blocks",
+        "display_name"
+    ],
+    "oci_file_storage_snapshot": [
+        "expiration_time",
+        "file_system_id",
+        "filesystem_snapshot_policy_id",
+        "name",
+        "snapshot_time",
+        "snapshot_type"
+    ],
+    "oci_mysql_mysql_backup": [
+        "backup_type",
+        "creation_type",
+        "db_system_id",
+        "description",
+        "display_name",
+        "immediate_source_backup_id",
+        "retention_in_days",
+        "source_details",
+        "source_details.backup_id",
+        "source_details.compartment_id"
+    ],
+    "oci_mysql_mysql_configuration": [
+        "description",
+        "display_name",
+        "parent_configuration_id",
+        "shape_name",
+        "init_variables",
+        "init_variables.lower_case_table_names",
+        "variables",
+        "variables.autocommit",
+        "variables.binlog_expire_logs_seconds",
+        "variables.connect_timeout",
+        "variables.default_authentication_plugin",
+        "variables.foreign_key_checks",
+        "variables.innodb_buffer_pool_size",
+        "variables.innodb_lock_wait_timeout",
+        "variables.max_allowed_packet",
+        "variables.max_connections",
+        "variables.sql_mode",
+        "variables.sql_require_primary_key",
+        "variables.time_zone",
+        "variables.wait_timeout"
+    ],
+    "oci_mysql_replica": [
+        "availability_domain",
+        "configuration_id",
+        "db_system_id",
+        "description",
+        "display_name",
+        "fault_domain",
+        "is_delete_protected",
+        "replica_overrides",
+        "replica_overrides.configuration_id",
+        "replica_overrides.mysql_version",
+        "replica_overrides.shape_name"
+    ],
+    "oci_dns_record": [
+        "domain",
+        "rdata",
+        "rtype",
+        "ttl",
+        "zone_name_or_id"
+    ],
+    "oci_dns_steering_policy_attachment": [
+        "display_name",
+        "domain_name",
+        "rtypes",
+        "steering_policy_id",
+        "zone_id"
+    ]
 }

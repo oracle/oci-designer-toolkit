@@ -6,6 +6,7 @@
 import { OcdDesign } from "@ocd/model"
 import { OcdExporter, OutputDataStringArray } from "../OcdExporter.js"
 import { OciExporter } from "./OciExporter.js"
+import { AwsExporter } from "./AwsExporter.js"
 import { AzureExporter } from "./AzureExporter.js"
 import { GoogleExporter } from "./GoogleExporter.js"
 
@@ -91,10 +92,12 @@ export class OcdTerraformExporter extends OcdExporter {
     export = (design: OcdDesign): OutputDataStringArray => {
         this.design = design
         const ociExporter = new OciExporter()
+        const awsExporter = new AwsExporter()
         const azureExporter = new AzureExporter()
         const googleExporter = new GoogleExporter()
         const outputData: OutputDataStringArray = {
             ...ociExporter.export(design),
+            ...awsExporter.export(design),
             ...azureExporter.export(design),
             ...googleExporter.export(design),
             // ...this.exportOci(design),

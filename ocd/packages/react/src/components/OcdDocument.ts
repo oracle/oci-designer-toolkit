@@ -4,19 +4,33 @@
 */
 
 import { v4 as uuidv4 } from 'uuid'
-import { OcdAutoLayout, OcdDesign, OcdViewPage, OcdViewCoords, OcdViewLayer, OcdBaseModel, OcdViewPoint, OcdViewCoordsStyle, OcdResource, PaletteResource, 
+import { OcdAutoLayout, OcdDesign, OcdViewPage, OcdViewCoords, OcdViewLayer, OcdBaseModel, OcdViewPoint, OcdViewCoordsStyle, OcdResource, PaletteResource,
     OciModelResources, OciResource,
-    AzureModelResources, AzureResource, 
+    AwsModelResources, AwsResource,
+    AzureModelResources, AzureResource,
     GoogleModelResources, GoogleResource,
-    GeneralModelResources, GeneralResource } from '@ocd/model'
+    GeneralModelResources, GeneralResource,
+    CustomResource } from '@ocd/model'
 import { OcdUtils } from '@ocd/core'
 import { additionTitleInfo } from '../data/OcdAdditionTitleInfo'
 import { OcdDragResource, OcdSelectedResourceModel, OcdSelectedResource, OcdSelectedResourceView } from '../types/Console'
+import { newCustomResourceInstance } from '../stencils/OcdStencilRegistry'
 
 export interface OcdAddResourceResponse {
     modelResource: OcdResource | undefined
     additionalResources: OcdResource[]
 }
+
+export interface OcdCoordsBounds {
+    x: number
+    y: number
+    w: number
+    h: number
+}
+
+const MINIMUM_CONTAINER_WIDTH = 140
+const MINIMUM_CONTAINER_HEIGHT = 120
+const CONTAINER_CHILD_PADDING = 32
 
 export class OcdDocument {
     query: boolean
@@ -26,20 +40,26 @@ export class OcdDocument {
     dialog: Record<string, boolean>
     constructor(design?: string | OcdDesign, resource?: OcdSelectedResource, dragResource?: OcdDragResource) {
         if (typeof design === 'string' && design.length > 0) this.design = JSON.parse(design)
-        else if (design instanceof Object) this.design = design
+        else if (design instanceof Object) this.design = OcdDocument.clonePlainData(design)
         else this.design = OcdDesign.newDesign()
-        this.selectedResource = resource || OcdDocument.newSelectedResource()
-        this.dragResource = dragResource || OcdDocument.newDragResource()
+        this.selectedResource = resource ? OcdDocument.clonePlainData(resource) : OcdDocument.newSelectedResource()
+        this.dragResource = dragResource ? OcdDocument.clonePlainData(dragResource) : OcdDocument.newDragResource()
         this.query = false
         this.dialog = {
             resourceManager: false,
-            query: false
+            query: false,
+            templateGallery: false
         }
     }
 
     static readonly new = () => new OcdDocument()
 
     static readonly clone = (ocdDocument:OcdDocument) => new OcdDocument(ocdDocument.design, ocdDocument.selectedResource, ocdDocument.dragResource)
+
+    private static readonly clonePlainData = <T,>(data: T): T => {
+        if (typeof structuredClone === 'function') return structuredClone(data)
+        return JSON.parse(JSON.stringify(data)) as T
+    }
 
     static readonly newDesign = (): OcdDesign => OcdDesign.newDesign()
 
@@ -83,6 +103,7 @@ export class OcdDocument {
     isOciResourceList(key: string): boolean {return Object.hasOwn(this.design.model.oci.resources, key)}
     getOciResourceList(key: string) {return OcdDesign.getOciResourceList(this.design, key)}
     getOciResourcesObject() {return this.design.model.oci.resources}
+    getAwsResourcesObject() {return Object.hasOwn(this.design.model, 'aws') ? this.design.model.aws!.resources : {}}
     getAzureResourcesObject() {return this.design.model.azure.resources}
     getGoogleResourcesObject() {return this.design.model.google.resources}
     getResourceLists() {return OcdDesign.getResourceLists(this.design)}
@@ -92,6 +113,11 @@ export class OcdDocument {
         if (!Object.hasOwn(this.design.model, 'oci')) this.design.model.oci = {resources: {}, vars: [], tags: {}}
         if (!Object.hasOwn(this.design.model.oci.resources, key)) this.design.model.oci.resources[key] = []
         this.design.model.oci.resources[key].push(modelResource)
+    }
+    addAwsReasourceToList(key: string, modelResource: AwsResource) {
+        if (!Object.hasOwn(this.design.model, 'aws')) this.design.model.aws = {resources: {}, vars: []}
+        if (!Object.hasOwn(this.design.model.aws!.resources, key)) this.design.model.aws!.resources[key] = []
+        this.design.model.aws!.resources[key].push(modelResource)
     }
     addAzureReasourceToList(key: string, modelResource: AzureResource) {
         if (!Object.hasOwn(this.design.model, 'azure')) this.design.model.azure = {resources: {}, vars: []}
@@ -108,20 +134,40 @@ export class OcdDocument {
         if (!Object.hasOwn(this.design.model.general.resources, key)) this.design.model.general.resources[key] = []
         this.design.model.general.resources[key].push(modelResource)
     }
+    addCustomReasourceToList(key: string, modelResource: CustomResource) {
+        if (!Object.hasOwn(this.design.model, 'custom')) this.design.model.custom = {resources: {}, vars: []}
+        if (!Object.hasOwn(this.design.model.custom!.resources, key)) this.design.model.custom!.resources[key] = []
+        this.design.model.custom!.resources[key].push(modelResource)
+    }
     addResource(paletteResource: PaletteResource, compartmentId: string): OcdAddResourceResponse {
         switch(paletteResource.provider) {
             case 'oci':
                 return this.addOciResource(paletteResource, compartmentId)
+            case 'aws':
+                return this.addAwsResource(paletteResource, compartmentId)
             case 'azure':
                 return this.addAzureResource(paletteResource, compartmentId)
             case 'google':
                 return this.addGoogleResource(paletteResource, compartmentId)
             case 'general':
                 return this.addGeneralResource(paletteResource, compartmentId)
+            case 'custom':
+                return this.addCustomResource(paletteResource, compartmentId)
             default:
                 alert(`Provider ${paletteResource.provider} has not yet been implemented.`)
                 return {modelResource: undefined, additionalResources: []}
         }
+    }
+    addCustomResource(paletteResource: PaletteResource, compartmentId: string): OcdAddResourceResponse {
+        // Manifest was persisted to design.userDefined.customStencils[class] at import time.
+        const manifest = this.design.userDefined?.customStencils?.[paletteResource.class]
+        if (!manifest) {
+            alert(`Custom stencil ${paletteResource.class} could not be found. Re-import the stencil JSON via File > Import > Custom Stencil.`)
+            return {modelResource: undefined, additionalResources: []}
+        }
+        const modelResource = newCustomResourceInstance(manifest, compartmentId)
+        this.addCustomReasourceToList(paletteResource.class, modelResource)
+        return {modelResource: modelResource, additionalResources: []}
     }
     addOciResource(paletteResource: PaletteResource, compartmentId: string): OcdAddResourceResponse {
         const resourceList = paletteResource.class.split('-').slice(1).join('_')
@@ -154,11 +200,42 @@ export class OcdDocument {
             return {modelResource: undefined, additionalResources: []}
         }
     }
+    addAwsResource(paletteResource: PaletteResource, compartmentId: string): OcdAddResourceResponse {
+        const resourceList = paletteResource.class.split('-').slice(1).join('_')
+        const resourceClass = paletteResource.class.toLowerCase().split('-').map((w) => `${w.charAt(0).toUpperCase()}${w.slice(1)}`).join('')
+        const resourceNamespace: string = `${resourceClass}`
+        // @ts-ignore
+        const client = AwsModelResources[resourceNamespace]
+        console.debug('OcdDocument: Namespace',resourceNamespace , client)
+        if (client) {
+            const modelResource = client.newResource()
+            modelResource.compartmentId = compartmentId
+            console.debug('OcdDocument:', modelResource)
+            this.addAwsReasourceToList(resourceList, modelResource)
+            const response: OcdAddResourceResponse = {modelResource: modelResource, additionalResources: []}
+            const additionalResources = client.getAdditionalResources?.() // Use Optional Chaining to test if function exists
+            if (additionalResources) {
+                console.debug('OcdDocument: Creating Additional Resources', additionalResources)
+                additionalResources.forEach((r: PaletteResource) => {
+                    const additionalResource = this.addAwsResource(r, compartmentId).modelResource
+                    if (additionalResource) {
+                        response.additionalResources.push(additionalResource)
+                        this.setResourceParent(additionalResource.id, modelResource.id)
+                        client.setAdditionalResourceValues?.(modelResource, additionalResource)
+                    }
+                })
+            }
+            return response
+        } else {
+            alert(`Aws Resource ${resourceClass} has not yet been implemented.`)
+            return {modelResource: undefined, additionalResources: []}
+        }
+    }
     addAzureResource(paletteResource: PaletteResource, compartmentId: string): OcdAddResourceResponse {
         const resourceList = paletteResource.class.split('-').slice(1).join('_')
         const resourceClass = paletteResource.class.toLowerCase().split('-').map((w) => `${w.charAt(0).toUpperCase()}${w.slice(1)}`).join('')
         const resourceNamespace: string = `${resourceClass}`
-        // @ts-ignore 
+        // @ts-ignore
         const client = AzureModelResources[resourceNamespace]
         console.debug('OcdDocument: Namespace',resourceNamespace , client)
         if (client) {
@@ -273,7 +350,6 @@ export class OcdDocument {
             const client = OciModelResources[resourceNamespace]
             if (client) {
                 cloneResource = client.cloneResource(resource)
-                console.debug(cloneResource)
                 this.design.model.oci.resources[resourceList] ? this.design.model.oci.resources[resourceList].push(cloneResource) : this.design.model.oci.resources[resourceList] = [cloneResource]
             }
         } else {
@@ -295,7 +371,6 @@ export class OcdDocument {
     setResourceParent(id: string, parentId: string) {
         const resource = this.getResource(id)
         const parentResource = this.getResource(parentId)
-        console.debug('OcdDocument: Setting Parent Resource', resource, parentResource)
         if (resource && parentResource) {
             if (resource.provider === 'oci') OciResource.assignParentId(resource, parentResource)
         }
@@ -432,6 +507,8 @@ export class OcdDocument {
     getCoords = (id: string) => {return this.design.view.pages.map(p => [...p.coords, ...this.getChildCoords(p.coords)]).reduce((a, c) => [...a, ...c], []).find(c => c.id === id)}
     // getChildCoords = (coords?: OcdViewCoords[]): OcdViewCoords[] => coords ? coords.reduce((a, c) => [...a, ...this.getChildCoords(c.coords)], [] as OcdViewCoords[]) : []
     getChildCoords = (coords?: OcdViewCoords[]): OcdViewCoords[] => coords ? coords.reduce((a, c) => [...a, ...this.getChildCoords(c.coords)], coords) : []
+    getVisibleCoordsWidth = (coords: OcdViewCoords): number => Math.max(coords.w || 0, coords.container ? MINIMUM_CONTAINER_WIDTH : 32)
+    getVisibleCoordsHeight = (coords: OcdViewCoords): number => Math.max(coords.h || 0, coords.container ? MINIMUM_CONTAINER_HEIGHT : 32)
     getRelativeXY = (coords: OcdViewCoords): OcdViewPoint => {
         // console.debug('OcdDocument: Get Relative XY for', coords.id, 'Parent', coords.pgid)
         const parentCoords: OcdViewCoords | undefined = this.getCoords(coords.pgid)
@@ -444,6 +521,78 @@ export class OcdDocument {
         }
         // console.debug('OcdDocument: Relative XY', relativeXY)
         return relativeXY
+    }
+    getCoordsBounds = (coords: OcdViewCoords): OcdCoordsBounds => {
+        const point = this.getRelativeXY(coords)
+        return {
+            x: point.x,
+            y: point.y,
+            w: this.getVisibleCoordsWidth(coords),
+            h: this.getVisibleCoordsHeight(coords)
+        }
+    }
+    isBoundsInsideBounds = (candidate: OcdCoordsBounds, container: OcdCoordsBounds): boolean => {
+        return candidate.x >= container.x
+            && candidate.y >= container.y
+            && candidate.x + candidate.w <= container.x + container.w
+            && candidate.y + candidate.h <= container.y + container.h
+    }
+    getContainerMinimumDimensions = (coords: OcdViewCoords, padding: number = CONTAINER_CHILD_PADDING): Pick<OcdCoordsBounds, 'w' | 'h'> => {
+        const childCoords = coords.coords ?? []
+        if (childCoords.length === 0) return {w: MINIMUM_CONTAINER_WIDTH, h: MINIMUM_CONTAINER_HEIGHT}
+        const childBounds = childCoords.map((child) => ({
+            x: child.x,
+            y: child.y,
+            w: this.getVisibleCoordsWidth(child),
+            h: this.getVisibleCoordsHeight(child)
+        }))
+        const minChildX = Math.min(...childBounds.map((child) => child.x))
+        const minChildY = Math.min(...childBounds.map((child) => child.y))
+        const maxChildX = Math.max(...childBounds.map((child) => child.x + child.w))
+        const maxChildY = Math.max(...childBounds.map((child) => child.y + child.h))
+        return {
+            w: Math.max(MINIMUM_CONTAINER_WIDTH, maxChildX + padding, Math.abs(Math.min(0, minChildX)) + maxChildX + padding),
+            h: Math.max(MINIMUM_CONTAINER_HEIGHT, maxChildY + padding, Math.abs(Math.min(0, minChildY)) + maxChildY + padding)
+        }
+    }
+    constrainContainerResize = (source: OcdViewCoords, candidate: OcdViewCoords): OcdViewCoords => {
+        const minimum = this.getContainerMinimumDimensions(source)
+        const constrained = OcdDocument.clonePlainData(candidate)
+        const eastEdge = source.x + source.w
+        const southEdge = source.y + source.h
+        constrained.w = Math.max(constrained.w, minimum.w)
+        constrained.h = Math.max(constrained.h, minimum.h)
+        if (candidate.x !== source.x && constrained.w !== candidate.w) constrained.x = eastEdge - constrained.w
+        if (candidate.y !== source.y && constrained.h !== candidate.h) constrained.y = southEdge - constrained.h
+        return constrained
+    }
+    getSiblingCoords = (coords: OcdViewCoords, page: OcdViewPage): OcdViewCoords[] => {
+        const parent = this.getCoords(coords.pgid)
+        if (parent?.coords) return parent.coords
+        return page.coords
+    }
+    attachContainedCoordsToFrame = (frame: OcdViewCoords, viewId: string): number => {
+        if (!frame.container) return 0
+        const page = this.getPage(viewId)
+        if (!page) return 0
+        const frameBounds = this.getCoordsBounds(frame)
+        const frameDescendantIds = new Set(this.getChildCoords(frame.coords ?? []).map((coords) => coords.id))
+        const siblings = this.getSiblingCoords(frame, page)
+        const containedSiblings = siblings.filter((candidate) => {
+            if (candidate.id === frame.id || frameDescendantIds.has(candidate.id)) return false
+            return this.isBoundsInsideBounds(this.getCoordsBounds(candidate), frameBounds)
+        })
+        containedSiblings.forEach((candidate) => {
+            const candidateBounds = this.getCoordsBounds(candidate)
+            this.removeCoords(candidate, viewId, candidate.pgid)
+            candidate.pgid = frame.id
+            candidate.pocid = frame.ocid
+            candidate.x = candidateBounds.x - frameBounds.x
+            candidate.y = candidateBounds.y - frameBounds.y
+            this.setResourceParent(candidate.ocid, frame.ocid)
+            frame.coords = [...(frame.coords ?? []), candidate]
+        })
+        return containedSiblings.length
     }
     addCoords(coords: OcdViewCoords, viewId: string, pgid: string = '') {
         const view: OcdViewPage = this.getPage(viewId)
@@ -507,6 +656,59 @@ export class OcdDocument {
         cloneCoords.container = coords.container
         // console.debug('OcdDocument: Coords', coords, 'Clone', cloneCoords)
         return cloneCoords
+    }
+    // Clone a coords node preserving its position relative to its parent (used for
+    // nested children so they are not double-offset like the cloned root is).
+    cloneChildCoords(coords: OcdViewCoords): OcdViewCoords {
+        let cloneCoords = this.newCoords()
+        cloneCoords.pgid = coords.pgid
+        cloneCoords.ocid = coords.ocid
+        cloneCoords.pocid = coords.pocid
+        cloneCoords.x = coords.x
+        cloneCoords.y = coords.y
+        cloneCoords.w = coords.w
+        cloneCoords.h = coords.h
+        cloneCoords.title = coords.title
+        cloneCoords.class = coords.class
+        cloneCoords.container = coords.container
+        return cloneCoords
+    }
+    // Recursively deep-clone a coords sub-tree AND its backing model resources.
+    // Returns a new (in-memory, not yet added) coords root whose nested children
+    // each reference freshly cloned model resources and are re-parented to the
+    // newly cloned parent resource.
+    //
+    // For the root call (isChild=false) the returned coords keeps the SOURCE's
+    // pgid/pocid so the caller can re-attach it to the same parent on the page,
+    // and inherits cloneCoords' positional nudge. For nested children the caller
+    // passes the new parent's coords id (newPgid) and model id (newPocid) so the
+    // child is re-parented onto the freshly cloned parent, preserving its relative
+    // position.
+    cloneResourceTree(sourceCoords: OcdViewCoords, newPgid?: string, newPocid?: string): OcdViewCoords | undefined {
+        const isChild = newPgid !== undefined && newPocid !== undefined
+        // Clone THIS model resource
+        const newModelResource = this.cloneResource(sourceCoords.ocid)
+        if (!newModelResource) {
+            console.warn('OcdDocument: cloneResourceTree could not clone model resource for', sourceCoords.ocid)
+            return undefined
+        }
+        // Re-point the new child resource's parent link to the new parent resource.
+        // setResourceParent guards with allowedParentTypes, so unsupported child types
+        // are left unchanged rather than crashing.
+        if (isChild && newPocid) this.setResourceParent(newModelResource.id, newPocid)
+        // The root keeps cloneCoords' nudge so it does not sit exactly on top of the
+        // source; children keep their relative position within the parent.
+        const newCoords = isChild ? this.cloneChildCoords(sourceCoords) : this.cloneCoords(sourceCoords)
+        newCoords.ocid = newModelResource.id
+        if (isChild) {
+            newCoords.pgid = newPgid as string
+            newCoords.pocid = newPocid as string
+        }
+        const children = sourceCoords.coords ?? []
+        newCoords.coords = children
+            .map((child) => this.cloneResourceTree(child, newCoords.id, newModelResource.id))
+            .filter((c): c is OcdViewCoords => c !== undefined)
+        return newCoords
     }
     setCoordsRelativeToCanvas = (coords: OcdViewCoords) => {
         const parent = this.getCoords(coords.pgid)

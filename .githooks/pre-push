@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+# Repo pre-push hook.
+#
+# 1. Redaction sweep over the commits about to be pushed. pre-commit hooks do not
+#    run at all under `git commit --no-verify`, so this re-scans the outgoing
+#    range with the same patterns (scripts/check-redaction.sh --revs) and blocks
+#    the push if anything slipped through. Same ALLOW_OCIDS=1 override applies.
+# 2. Chains to the previously-configured GLOBAL pre-push (e.g. an ECC/codex
+#    build+pytest gate) when present, since setting repo core.hooksPath to
+#    .githooks would otherwise bypass any global hooks dir. Portable: a no-op
+#    if no global hook exists.
+set -euo pipefail
+ROOT="$(git rev-parse --show-toplevel)"
+ZERO=0000000000000000000000000000000000000000
+
+# Capture the "<local-ref> <local-sha> <remote-ref> <remote-sha>" lines git feeds
+# us on stdin, so we can both scan them and forward them to the global hook.
+STDIN="$(cat || true)"
+
+while read -r local_ref local_sha remote_ref remote_sha; do
+    if [ -z "$local_ref" ]; then
+        continue
+    fi
+    if [ "$local_sha" = "$ZERO" ]; then
+        continue  # branch deletion — nothing outgoing to scan
+    fi
+    if [ "$remote_sha" = "$ZERO" ]; then
+        # New remote branch: scan only commits not already on any remote.
+        revs=("$local_sha" --not --remotes)
+    else
+        revs=("$remote_sha..$local_sha")
+    fi
+    if ! "$ROOT/scripts/check-redaction.sh" --revs "${revs[@]}"; then
+        printf '\n[pre-push] BLOCKED: redaction sweep failed for %s.\n' "$local_ref" >&2
+        printf '[pre-push] A commit in this push contains unredacted values (e.g. committed with --no-verify).\n' >&2
+        printf '[pre-push] Rewrite the offending commit(s) before pushing — do NOT add a "fix" commit on top.\n' >&2
+        exit 1
+    fi
+done <<< "$STDIN"
+
+GLOBAL_HOOKS="$(git config --global core.hooksPath 2>/dev/null || true)"
+GLOBAL_HOOKS="${GLOBAL_HOOKS/#\~/$HOME}"
+if [ -n "$GLOBAL_HOOKS" ] && [ -x "$GLOBAL_HOOKS/pre-push" ]; then
+    printf '%s\n' "$STDIN" | "$GLOBAL_HOOKS/pre-push" "$@"
+fi
+exit 0

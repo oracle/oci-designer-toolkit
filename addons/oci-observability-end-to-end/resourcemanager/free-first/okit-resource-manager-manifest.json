@@ -1,0 +1,23 @@
+{
+    "auto_tfvars": "observability.auto.tfvars.json",
+    "config_source_type": "ZIP_UPLOAD",
+    "contains_sensitive_values": false,
+    "operator_steps": [
+        "Create a Resource Manager stack using ZIP_UPLOAD.",
+        "Upload this folder as the stack zip source.",
+        "Set tenancy_ocid and region through Resource Manager variables or update observability.auto.tfvars.json locally.",
+        "Run plan first. Apply requires explicit operator approval."
+    ],
+    "placeholders": [
+        "<TENANCY_OCID>",
+        "<OCI_REGION>"
+    ],
+    "profile": "free-first",
+    "schema_version": "oci.okit.resource_manager_manifest.v1",
+    "source_files": {
+        "cost_estimate": "ocd/library/oci/ObservabilityLandingZoneFreeFirstCostEstimate.json",
+        "drawio": "ocd/library/oci/ObservabilityLandingZoneFreeFirst.drawio",
+        "terraform_json": "ocd/library/oci/ObservabilityLandingZoneFreeFirstTerraform.tf.json"
+    },
+    "terraform_entrypoint": "main.tf.json"
+}

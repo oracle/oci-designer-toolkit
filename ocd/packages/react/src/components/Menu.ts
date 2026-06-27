@@ -11,9 +11,21 @@ import { OcdDesignFacade } from '../facade/OcdDesignFacade'
 import { OcdConfigFacade } from '../facade/OcdConfigFacade'
 import { OcdViewLayer, OcdViewPage, OciModelResources } from '@ocd/model'
 import { autoLayoutOptions } from '../data/OcdAutoLayoutOptions'
-import { getSvgCssData } from '../data/OcdSvgCssData'
+// OcdSvgCssData (a very large generated CSS table) is loaded via dynamic
+// `import()` inside the export click handlers below so it is code-split out of
+// the entry bundle and only fetched when an SVG/Markdown export is requested.
 import { OcdExternalFacade } from '../facade/OcdExternalFacade'
+import { buildDesignFromLzUpload } from '../landingzone/OcdLzFileImport'
+import { buildDesignFromDrawio } from '../import/OcdDrawioImport'
+import { injectStencilCss, validateStencilManifest } from '../stencils/OcdStencilRegistry'
+import { lzConfigToWizardSeed, stageWizardSeed } from '../landingzone/OcdLzWizardContext'
+import { OcdLogger } from '@ocd/core'
 // import { OcdDesign } from '../../../model/lib/cjs'
+
+// Structured, payload-free logger (mirrors OcdConsole). OcdLogger contract: never
+// pass design JSON / OCID-bearing payloads — log operation names and error objects
+// only, since this is a public fork whose console output may surface in bug reports.
+const logger = OcdLogger.scope('Menu')
 
 // const ociSvgThemeCss = svgCssData['oci-theme.css']
 // const azureSvgThemeCss = svgCssData['azure-theme.css']
@@ -56,7 +68,7 @@ export const menuItems: MenuItem[] = [
                                 ocdConsoleConfig.config.displayPage = 'designer'
                                 setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
                                         }
-                        }).catch((resp) => {console.warn('Discard Failed with', resp)})
+                        }).catch((resp) => {logger.warn('Discard Failed with', resp)})
                     } else {
                         const document: OcdDocument = OcdDocument.new()
                         setOcdDocument(document)
@@ -67,12 +79,29 @@ export const menuItems: MenuItem[] = [
                 }
             },
             {
+                label: 'New from Template…',
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
+                    const openGallery = () => {
+                        const document: OcdDocument = OcdDocument.clone(ocdDocument)
+                        document.dialog.templateGallery = true
+                        setOcdDocument(document)
+                    }
+                    if (activeFile.modified) {
+                        OcdDesignFacade.discardConfirmation().then((discard) => {
+                            if (discard) openGallery()
+                        }).catch((resp) => {logger.warn('Discard Failed with', resp)})
+                    } else {
+                        openGallery()
+                    }
+                }
+            },
+            {
                 label: 'Open',
                 click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
                     if (activeFile.modified) {
                         OcdDesignFacade.discardConfirmation().then((discard) => {
                             if (discard) loadDesign('', setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig, setActiveFile)
-                        }).catch((resp) => {console.warn('Discard Failed with', resp)})
+                        }).catch((resp) => {logger.warn('Discard Failed with', resp)})
                     } else {
                         loadDesign('', setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig, setActiveFile)
                     }
@@ -88,11 +117,11 @@ export const menuItems: MenuItem[] = [
                     return config.recentDesigns.map((r) => {return {
                         label: r,
                         click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
-                            console.debug('>>>> Opening:', r)
+                            logger.debug('Opening recent design')
                             if (activeFile.modified) {
                                 OcdDesignFacade.discardConfirmation().then((discard) => {
                                     if (discard) loadDesign(r, setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig, setActiveFile)
-                                }).catch((resp) => {console.warn('Discard Failed with', resp)})
+                                }).catch((resp) => {logger.warn('Discard Failed with', resp)})
                             } else {
                                 loadDesign(r, setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig, setActiveFile)
                             }
@@ -108,7 +137,7 @@ export const menuItems: MenuItem[] = [
                             setActiveFile({name: results.filename, modified: false})
                             updateRecentFiles(results.filename, ocdConsoleConfig, setOcdConsoleConfig)
                         }
-                    }).catch((resp) => {console.warn('Save Design Failed with', resp)})
+                    }).catch((resp) => {logger.warn('Save Design Failed with', resp)})
                 }
             },
             {
@@ -120,47 +149,9 @@ export const menuItems: MenuItem[] = [
                             setActiveFile({name: results.filename, modified: false})
                             updateRecentFiles(results.filename, ocdConsoleConfig, setOcdConsoleConfig)
                         }
-                    }).catch((resp) => {console.warn('Load Design Failed with', resp)})
+                    }).catch((resp) => {logger.warn('Load Design Failed with', resp)})
                 }
             },
-            // {
-            //     label: 'Query',
-            //     click: undefined,
-            //     submenu: [
-            //         {
-            //             label: 'OCI',
-            //             click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
-            //                 if (activeFile.modified) {
-            //                     OcdDesignFacade.discardConfirmation().then((discard) => {
-            //                         if (discard) {
-            //                             const clone = OcdDocument.clone(ocdDocument)
-            //                             clone.query = !ocdDocument.query
-            //                             console.debug('Menu: Setting Query', ocdDocument, clone)
-            //                             setOcdDocument(clone)
-            //                         }
-            //                     }).catch((resp) => {console.warn('Discard Failed with', resp)})
-            //                 } else {
-            //                     const clone = OcdDocument.clone(ocdDocument)
-            //                     clone.query = !ocdDocument.query
-            //                     console.debug('Menu: Setting Query', ocdDocument, clone)
-            //                     setOcdDocument(clone)
-            //                 }
-            //             }
-            //         },
-            //         {
-            //             label: 'Azure',
-            //             click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
-            //                 alert('Currently not implemented.')
-            //             }
-            //         },
-            //         {
-            //             label: 'Google',
-            //             click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
-            //                 alert('Currently not implemented.')
-            //             }
-            //         },
-            //     ]
-            // },
             {
                 label: 'Query',
                 click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
@@ -169,14 +160,14 @@ export const menuItems: MenuItem[] = [
                             if (discard) {
                                 const clone = OcdDocument.clone(ocdDocument)
                                 clone.query = !ocdDocument.query
-                                console.debug('Menu: Setting Query', ocdDocument, clone)
+                                logger.debug('Setting Query')
                                 setOcdDocument(clone)
                             }
-                        }).catch((resp) => {console.warn('Discard Failed with', resp)})
+                        }).catch((resp) => {logger.warn('Discard Failed with', resp)})
                     } else {
                         const clone = OcdDocument.clone(ocdDocument)
                         clone.query = !ocdDocument.query
-                        console.debug('Menu: Setting Query', ocdDocument, clone)
+                        logger.debug('Setting Query')
                         setOcdDocument(clone)
                     }
                 }
@@ -185,51 +176,13 @@ export const menuItems: MenuItem[] = [
                 label: 'Import',
                 click: undefined,
                 submenu: [
-                    // {
-                    //     label: 'Query',
-                    //     click: undefined,
-                    //     submenu: [
-                    //         {
-                    //             label: 'OCI',
-                    //             click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
-                    //                 if (activeFile.modified) {
-                    //                     OcdDesignFacade.discardConfirmation().then((discard) => {
-                    //                         if (discard) {
-                    //                             const clone = OcdDocument.clone(ocdDocument)
-                    //                             clone.query = !ocdDocument.query
-                    //                             console.debug('Menu: Setting Query', ocdDocument, clone)
-                    //                             setOcdDocument(clone)
-                    //                         }
-                    //                     }).catch((resp) => {console.warn('Discard Failed with', resp)})
-                    //                 } else {
-                    //                     const clone = OcdDocument.clone(ocdDocument)
-                    //                     clone.query = !ocdDocument.query
-                    //                     console.debug('Menu: Setting Query', ocdDocument, clone)
-                    //                     setOcdDocument(clone)
-                    //                 }
-                    //             }
-                    //         },
-                    //         {
-                    //             label: 'Azure',
-                    //             click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
-                    //                 alert('Currently not implemented.')
-                    //             }
-                    //         },
-                    //         {
-                    //             label: 'Google',
-                    //             click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
-                    //                 alert('Currently not implemented.')
-                    //             }
-                    //         },
-                    //     ]
-                    // },
                     {
                         label: 'Terraform',
                         click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
                             if (activeFile.modified) {
                                 OcdDesignFacade.discardConfirmation().then((discard) => {
                                     if (discard) importFromTerraform(setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig, setActiveFile)
-                                }).catch((resp) => {console.warn('Discard Failed with', resp)})
+                                }).catch((resp) => {logger.warn('Discard Failed with', resp)})
                             } else {
                                 importFromTerraform(setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig, setActiveFile)
                             }
@@ -259,7 +212,7 @@ export const menuItems: MenuItem[] = [
                                     const contents = await file.text()
                                     return contents
                                 } catch (err: any) {
-                                    console.error(err.name, err.message)
+                                    logger.error(err.name, err.message)
                                     throw err
                                 }
                             }
@@ -269,7 +222,25 @@ export const menuItems: MenuItem[] = [
                                 ocdDocument.design = okitImporter.parse(resp)
                                 ocdDocument.autoLayout(ocdDocument.getActivePage().id)
                                 setOcdDocument(ocdDocument)
-                            }).catch((reason) => {console.debug(reason)})
+                            }).catch((reason) => {logger.debug('OKIT JSON import failed', reason)})
+                        }
+                    },
+                    {
+                        label: 'OCI Landing Zone (LZNG)',
+                        click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
+                            importFromLandingZoneFiles(setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig)
+                        }
+                    },
+                    {
+                        label: 'draw.io Diagram',
+                        click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
+                            importFromDrawio(setOcdDocument, ocdConsoleConfig, setOcdConsoleConfig)
+                        }
+                    },
+                    {
+                        label: 'Custom Stencil (.json)',
+                        click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
+                            importStencilManifest(ocdDocument, setOcdDocument)
                         }
                     },
                     // {
@@ -287,6 +258,18 @@ export const menuItems: MenuItem[] = [
                 ]
             },
             {
+                label: 'Edit Landing Zone in Wizard',
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
+                    editLandingZoneInWizard(ocdDocument, ocdConsoleConfig, setOcdConsoleConfig)
+                }
+            },
+            {
+                label: 'Software & Ansible Provisioning',
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
+                    openSoftwareProvisioning(ocdConsoleConfig, setOcdConsoleConfig)
+                }
+            },
+            {
                 label: 'Export',
                 click: undefined,
                 submenu: [
@@ -295,15 +278,17 @@ export const menuItems: MenuItem[] = [
                         click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>) => { // Convert to call to Electron API
                             const suggestedFilename = activeFile.name.replaceAll('.okit', '.md')
                             const design = JSON.parse(JSON.stringify(ocdDocument.design)) // Resolve cloning issue when design changed
-                            const css = getSvgCssData(design)
-                            console.debug('Export Markdown Design:', design)
-                            OcdDesignFacade.exportToMarkdown(design, css, suggestedFilename).then((results) => {
-                                if (!results.canceled) {
-                                    console.debug('Design Exported to Markdown')
-                                } else {
-                                    console.debug('Design Exported to Markdown Cancelled')
-                                }
-                            }).catch((resp) => {console.warn('Save Design Failed with', resp)})
+                            import('../data/OcdSvgCssData').then(({ getSvgCssData }) => {
+                                const css = getSvgCssData(design)
+                                logger.debug('Export Markdown')
+                                return OcdDesignFacade.exportToMarkdown(design, css, suggestedFilename).then((results) => {
+                                    if (!results.canceled) {
+                                        logger.debug('Design Exported to Markdown')
+                                    } else {
+                                        logger.debug('Design Exported to Markdown Cancelled')
+                                    }
+                                })
+                            }).catch((resp) => {logger.warn('Save Design Failed with', resp)})
                         }
                     },
                     {
@@ -312,39 +297,29 @@ export const menuItems: MenuItem[] = [
                             const suggestedFilename = activeFile.name.replaceAll('.okit', '.tf')
                             const directory = activeFile.name.split('/').slice(0, -1).join('/')
                             const design = JSON.parse(JSON.stringify(ocdDocument.design)) // Resolve cloning issue when design changed
-                            console.debug('Export Excel Design:', directory)
-                            console.debug('Export Excel Design:', design)
+                            logger.debug('Export Terraform')
                             OcdDesignFacade.exportToTerraform(design, directory).then((results) => {
                                 if (!results.canceled) {
-                                    console.debug('Design Exported to OpenTofu')
+                                    logger.debug('Design Exported to OpenTofu')
                                 } else {
-                                    console.debug('Design Exported to OpenTofu Cancelled')
+                                    logger.debug('Design Exported to OpenTofu Cancelled')
                                 }
-                            }).catch((resp) => {console.warn('Save Design Failed with', resp)})
+                            }).catch((resp) => {logger.warn('Save Design Failed with', resp)})
                         }
                     },
-                    // {
-                    //     label: 'Resource Manager',
-                    //     click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
-                    //         const clone = OcdDocument.clone(ocdDocument)
-                    //         clone.dialog.resourceManager = true
-                    //         console.debug('Menu: Setting Resource Manager', ocdDocument, clone)
-                    //         setOcdDocument(clone)
-                    //     }
-                    // },
                     {
                         label: 'Excel',
                         click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
                             const suggestedFilename = activeFile.name.replaceAll('.okit', '.xlsx')
                             const design = JSON.parse(JSON.stringify(ocdDocument.design)) // Resolve cloning issue when design changed
-                            console.debug('Export Excel Design:', design)
+                            logger.debug('Export Excel')
                             OcdDesignFacade.exportToExcel(design, suggestedFilename).then((results) => {
                                 if (!results.canceled) {
-                                    console.debug('Design Exported to Excel')
+                                    logger.debug('Design Exported to Excel')
                                 } else {
-                                    console.debug('Design Exported to Excel Cancelled')
+                                    logger.debug('Design Exported to Excel Cancelled')
                                 }
-                            }).catch((resp) => {console.warn('Save Design Failed with', resp)})
+                            }).catch((resp) => {logger.warn('Save Design Failed with', resp)})
                         }
                     },
                     {
@@ -363,47 +338,23 @@ export const menuItems: MenuItem[] = [
                                     alert('Currently not implemented.')
                                 }
                             },
-                            // {
-                            //     label: 'SVG Old',
-                            //     click: (ocdDocument: OcdDocument, setOcdDocument: Function) => {
-                            //         const writeTerraformFile = async (dirHandle: FileSystemDirectoryHandle, filename: string, contents: string) => {
-                            //             const fileHandle: FileSystemFileHandle = await dirHandle.getFileHandle(filename, {create: true})
-                            //             // @ts-ignore 
-                            //             const writable = await fileHandle.createWritable()
-                            //             await writable.write(contents)
-                            //             await writable.close()
-                            //             return writable
-                            //         }
-                            //         const saveFile = async (ocdDocument: OcdDocument) => {
-                            //             try {
-                            //                 // @ts-ignore 
-                            //                 const handle = await showDirectoryPicker()
-                            //                 const exporter = new OcdSVGExporter([ociSvgThemeCss, svgSvgCss])
-                            //                 const svg: OutputDataString = exporter.export(ocdDocument.design)
-                            //                 const fileWriters = Object.entries(svg).map(([k, v]) => writeTerraformFile(handle, `${k.replaceAll(' ', '_')}.svg`, v))
-                            //                 return Promise.all(fileWriters)
-                            //             } catch (err: any) {
-                            //                 console.error(err.name, err.message);
-                            //             }
-                            //         }
-                            //         saveFile(ocdDocument).then((resp) => console.info('Saved', resp))             
-                            //     }
-                            // },
                             {
                                 label: 'SVG',
                                 click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>) => {
                                     const design = JSON.parse(JSON.stringify(ocdDocument.design)) // Resolve cloning issue when design changed
                                     const suggestedFilename = activeFile.name.replaceAll('.okit', '.svg')
                                     const directory = activeFile.name.split('/').slice(0, -1).join('/')
-                                    const css = getSvgCssData(design)
-                                    console.debug('Export SVG:', design)
-                                    OcdDesignFacade.exportToSvg(design, css, directory, suggestedFilename).then((results) => {
-                                        if (!results.canceled) {
-                                            console.debug('Design Exported to SVG')
-                                        } else {
-                                            console.debug('Design Exported to SVG Cancelled')
-                                        }
-                                    }).catch((resp) => {console.warn('Save Design Failed with', resp)})
+                                    import('../data/OcdSvgCssData').then(({ getSvgCssData }) => {
+                                        const css = getSvgCssData(design)
+                                        logger.debug('Export SVG')
+                                        return OcdDesignFacade.exportToSvg(design, css, directory, suggestedFilename).then((results) => {
+                                            if (!results.canceled) {
+                                                logger.debug('Design Exported to SVG')
+                                            } else {
+                                                logger.debug('Design Exported to SVG Cancelled')
+                                            }
+                                        })
+                                    }).catch((resp) => {logger.warn('Save Design Failed with', resp)})
                                 }
                             }
                         ]
@@ -432,10 +383,10 @@ export const menuItems: MenuItem[] = [
                                     await writable.close()
                                     return handle
                                 } catch (err: any) {
-                                    console.error(err.name, err.message);
+                                    logger.error(err.name, err.message);
                                 }
                             }
-                            saveFile(ocdDocument).then((resp) => console.info('Saved', resp))             
+                            saveFile(ocdDocument).then(() => logger.info('Saved'))
                         }
                     }
                 ]
@@ -445,7 +396,7 @@ export const menuItems: MenuItem[] = [
                 click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, activeFile: Record<string, any>, setActiveFile: Function) => {
                     const clone = OcdConsoleConfig.clone(ocdConsoleConfig)
                     clone.queryReferenceData = !ocdConsoleConfig.queryReferenceData
-                    console.debug('Menu: Setting Reference Data Query', ocdDocument, clone)
+                    logger.debug('Setting Reference Data Query')
                     setOcdConsoleConfig(clone)
                 }
             }
@@ -487,6 +438,34 @@ export const menuItems: MenuItem[] = [
                 label: 'BoM',
                 click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
                     ocdConsoleConfig.config.displayPage = 'bom'
+                    setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+                }
+            },
+            {
+                label: 'Discovery',
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
+                    ocdConsoleConfig.config.displayPage = 'discovery'
+                    setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+                }
+            },
+            {
+                label: 'OKIT Classic 0.70 Parity',
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
+                    ocdConsoleConfig.config.displayPage = 'classic'
+                    setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+                }
+            },
+            {
+                label: 'Architecture Agent',
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
+                    ocdConsoleConfig.config.displayPage = 'agent'
+                    setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+                }
+            },
+            {
+                label: 'Integration Hub',
+                click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
+                    ocdConsoleConfig.config.displayPage = 'integrations'
                     setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
                 }
             },
@@ -539,7 +518,7 @@ export const menuItems: MenuItem[] = [
                             const page: OcdViewPage = ocdDocument.getActivePage()
                             // @ts-ignore 
                             page.layers.find((l: OcdViewLayer) => l.id === layer.id).visible = !layer.visible
-                            console.info(`Change Visibility ${layer.visible} ${ocdDocument}`)
+                            logger.info(`Change layer visibility to ${layer.visible}`)
                             // setViewPage(structuredClone(page))
                             setOcdDocument(OcdDocument.clone(ocdDocument))
                         }
@@ -658,13 +637,13 @@ export const menuItems: MenuItem[] = [
             {
                 label: 'Web Site',
                 click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
-                    OcdExternalFacade.openExternalUrl('https://github.com/oracle/oci-designer-toolkit').then((resp) => {console.warn('Open Succeeded with', resp)}).catch((resp) => {console.warn('Open Failed with', resp)})
+                    OcdExternalFacade.openExternalUrl('https://github.com/oracle/oci-designer-toolkit').then((resp) => {logger.warn('Open Succeeded with', resp)}).catch((resp) => {logger.warn('Open Failed with', resp)})
                 }
             },
             {
                 label: 'Report Issue',
                 click: (ocdDocument: OcdDocument, setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
-                    OcdExternalFacade.openExternalUrl('https://github.com/oracle/oci-designer-toolkit/issues/new').then((resp) => {console.warn('Open Succeeded with', resp)}).catch((resp) => {console.warn('Open Failed with', resp)})
+                    OcdExternalFacade.openExternalUrl('https://github.com/oracle/oci-designer-toolkit/issues/new').then((resp) => {logger.warn('Open Succeeded with', resp)}).catch((resp) => {logger.warn('Open Failed with', resp)})
                 }
             },
         ]
@@ -674,17 +653,16 @@ export const menuItems: MenuItem[] = [
 export const updateRecentFiles = (filename: string, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function) => {
     if (filename && filename !== '') {
         OcdConfigFacade.loadConsoleConfig().then((results) => {
-            console.debug('Menu: Load Console Config', results)
+            logger.debug('Load Console Config')
             const consoleConfig = new OcdConsoleConfig(results)
             const recentDesigns: string[] = consoleConfig.config.recentDesigns ? consoleConfig.config.recentDesigns.filter((f) => f !== filename) : []
             consoleConfig.config.recentDesigns = [filename, ...recentDesigns].slice(0, consoleConfig.config.maxRecent)
-            console.debug('Menu: Load: Config', consoleConfig)
-            OcdConfigFacade.saveConsoleConfig(consoleConfig.config).catch((resp) => {console.warn(resp)})
+            logger.debug('Load Console Config: updated recent designs')
+            OcdConfigFacade.saveConsoleConfig(consoleConfig.config).catch((resp) => {logger.warn('Save Console Config failed', resp)})
             setOcdConsoleConfig(consoleConfig)
         }).catch((response) => {
-            console.debug('Menu: Load Console Config', response)
-            OcdConfigFacade.saveConsoleConfig(ocdConsoleConfig.config).then((results) => {}).catch((response) => console.debug('Menu:', response))
-            // OcdConfigFacade.saveConsoleConfig(ocdConsoleConfig.config).then((results) => {console.debug('OcdConsole: Saved Console Config')}).catch((response) => console.debug('OcdConsole:', response))
+            logger.debug('Load Console Config failed', response)
+            OcdConfigFacade.saveConsoleConfig(ocdConsoleConfig.config).then((results) => {}).catch((response) => logger.debug('Save Console Config failed', response))
         })
     }
 }
@@ -700,12 +678,12 @@ export const loadDesign = (filename: string, setOcdDocument: Function, ocdConsol
             ocdConsoleConfig.config.displayPage = 'designer'
             setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
         }
-    }).catch((resp) => {console.warn('Load Design Failed with', resp)})
+    }).catch((resp) => {logger.warn('Load Design Failed with', resp)})
 }
 
 export const importFromTerraform = (setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function, setActiveFile: Function): Promise<any> => {
     return OcdDesignFacade.importFromTerraform().then((results) => {
-        console.debug('menu: importFromTerraform:', JSON.stringify(results, null, 2))
+        logger.debug('importFromTerraform: results received')
         if (!results.canceled) {
             const ocdDocument = OcdDocument.new()
             const design = results.design
@@ -713,10 +691,10 @@ export const importFromTerraform = (setOcdDocument: Function, ocdConsoleConfig: 
             design.view.pages[0].title = results.filename
             design.view.pages[0].layers = []
             ocdDocument.design = design
-            console.debug('importFromTerraform: Design', JSON.stringify(ocdDocument.design, null, 2))
+            logger.debug('importFromTerraform: design built')
             // Add Layers
             const resultsOciResources = design.model.oci.resources
-            console.debug('importFromTerraform: Oci Resources', JSON.stringify(resultsOciResources, null, 2))
+            logger.debug('importFromTerraform: oci resources mapped')
             resultsOciResources.compartment.forEach((c: OciModelResources.OciCompartment, i: number) => ocdDocument.addLayer(c.id, i === 0))
             // Auto Arrange
             ocdDocument.autoLayout(ocdDocument.getActivePage().id, true, ocdConsoleConfig.config.defaultAutoArrangeStyle)
@@ -726,11 +704,171 @@ export const importFromTerraform = (setOcdDocument: Function, ocdConsoleConfig: 
             ocdConsoleConfig.config.displayPage = 'designer'
             setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
         }
-    }).catch((resp) => {console.warn('Load Design Failed with', resp)})
+    }).catch((resp) => {logger.warn('Load Design Failed with', resp)})
+}
+
+/**
+ * Import pre-generated OCI Landing Zone Next Gen (LZNG) JSON files (iam.json,
+ * network.json, …) from a multi-file picker and open them in the Designer.
+ *
+ * Mirrors importFromTerraform: build an OcdDocument, add one layer per top-level
+ * compartment, auto-arrange, then switch to the Designer page. The resulting
+ * design is flagged lzOrigin=true (by buildOcdDesignFromLz), so further non-LZ
+ * stencils dropped onto it route through the LZ placement resolver.
+ */
+export const importFromLandingZoneFiles = (setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function): Promise<any> => {
+    const pickFiles = async (): Promise<{ name: string; content: string }[]> => {
+        const options = {
+            multiple: true,
+            types: [
+                {
+                    description: 'Landing Zone JSON (iam.json, network.json, …)',
+                    accept: { 'application/json': ['.json'] },
+                },
+            ],
+        }
+        // @ts-ignore - File System Access API
+        const handles = await window.showOpenFilePicker(options)
+        return Promise.all(
+            handles.map(async (handle: any) => {
+                const file = await handle.getFile()
+                return { name: file.name, content: await file.text() }
+            }),
+        )
+    }
+    return pickFiles().then((uploads) => {
+        const { design, topCompartmentIds } = buildDesignFromLzUpload(uploads)
+        const ocdDocument = OcdDocument.new()
+        ocdDocument.design = design
+        const layerIds: string[] = topCompartmentIds.length > 0
+            ? topCompartmentIds
+            : [design.model.oci.resources.compartment?.[0]?.id].filter(Boolean)
+        layerIds.forEach((id: string, i: number) => ocdDocument.addLayer(id, i === 0))
+        ocdDocument.autoLayout(ocdDocument.getActivePage().id, true, ocdConsoleConfig.config.defaultAutoArrangeStyle)
+        setOcdDocument(ocdDocument)
+        ocdConsoleConfig.config.displayPage = 'designer'
+        setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+    }).catch((reason: any) => {
+        // AbortError = user dismissed the picker; only surface real failures.
+        if (reason?.name === 'AbortError') return
+        logger.warn('LZ import failed', reason?.message ?? reason)
+        if (reason?.message) alert(reason.message)
+    })
+}
+
+/**
+ * Reopen a saved Landing Zone (LZNG) design back in the wizard so it can be
+ * edited and re-generated. Only meaningful when the active design originated
+ * from the wizard (carries a persisted `lzConfig`); otherwise this is a no-op
+ * with a friendly notice (the menu item is effectively disabled).
+ *
+ * Stages a one-shot wizard seed (config + title + add-on toggles) and switches
+ * the console to the Landing Zone page, which consumes the seed on mount.
+ */
+export const editLandingZoneInWizard = (ocdDocument: OcdDocument, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function): void => {
+    const seed = lzConfigToWizardSeed(ocdDocument?.design)
+    if (!seed) {
+        alert('This design was not created by the Landing Zone wizard, so there is no Landing Zone configuration to edit. Create or import a Landing Zone design first.')
+        return
+    }
+    stageWizardSeed(seed)
+    ocdConsoleConfig.config.displayPage = 'landingzone'
+    setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+}
+
+/** Switch to the Software & Ansible Provisioning page for the current design. */
+export const openSoftwareProvisioning = (ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function): void => {
+    ocdConsoleConfig.config.displayPage = 'software'
+    setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+}
+
+/**
+ * Import a draw.io (diagrams.net) diagram and recreate it in the Designer.
+ *
+ * Reads a single uncompressed .drawio / .xml file, maps each shape to an OCI
+ * resource, wires edges + container nesting into FK associations, then
+ * auto-arranges and switches to the Designer. Compressed .drawio files raise a
+ * clear "re-export uncompressed" error.
+ */
+export const importFromDrawio = (setOcdDocument: Function, ocdConsoleConfig: OcdConsoleConfig, setOcdConsoleConfig: Function): Promise<any> => {
+    const pickFile = async (): Promise<{ name: string; content: string }> => {
+        const options = {
+            multiple: false,
+            types: [
+                {
+                    description: 'draw.io diagram (uncompressed XML)',
+                    accept: { 'application/xml': ['.drawio', '.xml'] },
+                },
+            ],
+        }
+        // @ts-ignore - File System Access API
+        const [handle] = await window.showOpenFilePicker(options)
+        const file = await handle.getFile()
+        return { name: file.name, content: await file.text() }
+    }
+    return pickFile().then(({ name, content }) => {
+        const title = name.replace(/\.(drawio|xml)$/i, '')
+        const { design, topCompartmentIds } = buildDesignFromDrawio(content, `Imported ${title}`)
+        const ocdDocument = OcdDocument.new()
+        ocdDocument.design = design
+        const layerIds: string[] = topCompartmentIds.length > 0
+            ? topCompartmentIds
+            : [design.model.oci.resources.compartment?.[0]?.id].filter(Boolean)
+        layerIds.forEach((id: string, i: number) => ocdDocument.addLayer(id, i === 0))
+        ocdDocument.autoLayout(ocdDocument.getActivePage().id, true, ocdConsoleConfig.config.defaultAutoArrangeStyle)
+        setOcdDocument(ocdDocument)
+        ocdConsoleConfig.config.displayPage = 'designer'
+        setOcdConsoleConfig(OcdConsoleConfig.clone(ocdConsoleConfig))
+    }).catch((reason: any) => {
+        if (reason?.name === 'AbortError') return
+        logger.warn('draw.io import failed', reason?.message ?? reason)
+        if (reason?.message) alert(reason.message)
+    })
 }
 
 
+/**
+ * Import a custom-stencil JSON manifest (single object or array) into the CURRENT
+ * design without a rebuild. Reuses the same File System Access `showOpenFilePicker`
+ * flow as the OKIT Json import. Each validated manifest is persisted to
+ * design.userDefined.customStencils[class] (so it travels with save/load) and its
+ * icon CSS is injected immediately; the imported stencils then appear in the
+ * palette and can be dropped onto the canvas.
+ */
+export const importStencilManifest = (ocdDocument: OcdDocument, setOcdDocument: Function): Promise<any> => {
+    const pickFile = async (): Promise<string> => {
+        const options = {
+            multiple: false,
+            types: [
+                {
+                    description: 'Custom Stencil Manifest (.json)',
+                    accept: { 'application/json': ['.json'] },
+                },
+            ],
+        }
+        // @ts-ignore - File System Access API
+        const [handle] = await window.showOpenFilePicker(options)
+        const file = await handle.getFile()
+        return file.text()
+    }
+    return pickFile().then((contents) => {
+        const manifests = validateStencilManifest(JSON.parse(contents))
+        const clone = OcdDocument.clone(ocdDocument)
+        if (!clone.design.userDefined.customStencils) clone.design.userDefined.customStencils = {}
+        manifests.forEach((manifest) => {
+            clone.design.userDefined.customStencils[manifest.class] = manifest
+            injectStencilCss(manifest)
+        })
+        logger.info(`Imported ${manifests.length} custom stencil(s)`)
+        setOcdDocument(clone)
+    }).catch((reason: any) => {
+        // AbortError = user dismissed the picker; only surface real failures.
+        if (reason?.name === 'AbortError') return
+        logger.warn('Custom stencil import failed', reason?.message ?? reason)
+        if (reason?.message) alert(reason.message)
+    })
+}
 
 export const saveDesign = () => {
-    
+
 }

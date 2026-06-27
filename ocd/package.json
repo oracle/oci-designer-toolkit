@@ -1,8 +1,8 @@
 {
-  "name": "ocd",
-  "version": "0.3.0",
-  "description": "OKIT Open Cloud Designer Desktop",
-  "title": "OKIT-Desktop April 2025 (Beta)",
+  "name": "oci-designer-toolkit-next-gen",
+  "version": "0.4.5",
+  "description": "OCI Designer Toolkit Next Gen Desktop",
+  "title": "oci-designer-toolkit-next-gen",
   "author": {
     "name": "Andrew Hopkinson",
     "email": "andrew.hopkinson@oracle.com",
@@ -21,6 +21,7 @@
   "license": "UPL-1.0",
   "main": "index.js",
   "scripts": {
+    "postinstall": "patch-package",
     "github-action-install": "npm install --legacy-peer-deps ",
     "github-action-compile-for-codegen": "npm run compile --workspace=packages/core --workspace=packages/codegen --workspace=packages/codegen-cli",
     "github-action-generate": "npm run import-and-generate --workspace=packages/codegen-cli && npm run generate-ocd-build-date --workspace=packages/codegen-cli && npm run generate-ocd-svg-css-desktop --workspace=packages/codegen-cli",
@@ -30,7 +31,7 @@
     "github-action-build-macos-x86": "npm run make-macos-x64 --workspace=packages/desktop --if-present",
     "github-action-build-react": "npm run build-react-scripts --workspace=packages/desktop",
     "github-action-build-electron": "npm run electron-pack --workspace=packages/desktop",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npm run test --workspace=packages/react && npm run test --workspace=packages/query && npm run test --workspace=packages/core && npm run test --workspace=packages/import && npm run test --workspace=packages/export && npm run test --workspace=packages/model",
     "install-and-codegen": "npm install --legacy-peer-deps && npm run compile-for-codegen && npm run import-and-generate && npm run build",
     "fresh-install": "npm run install-and-codegen",
     "new-install": "npm run github-action-install && npm run github-action-compile-for-codegen && npm run github-action-generate && npm run github-action-build",
@@ -43,9 +44,25 @@
     "pack": "npm run pack --workspaces --if-present",
     "compile-for-codegen": "npm run compile --workspace=packages/core --workspace=packages/codegen --workspace=packages/codegen-cli",
     "import-and-generate": "npm run import-and-generate --workspace=packages/codegen-cli",
+    "generate-observability-lz": "python ../scripts/generate_observability_lz_library.py",
+    "validate-observability-lz": "python ../scripts/validate_observability_lz_library.py",
+    "validate-observability-lz-terraform": "python ../scripts/validate_observability_lz_terraform.py",
+    "sync-oci-lz-baselines": "python ../scripts/sync_oci_lz_baselines.py",
+    "package-observability-lz": "python ../scripts/package_observability_lz_addon.py",
+    "estimate-observability-lz-costs": "python ../scripts/estimate_observability_lz_costs.py",
+    "audit-observability-lz": "python ../scripts/audit_observability_lz_addon.py",
     "desktop": "npm run desktop --workspace=packages/desktop",
     "web": "npm run web --workspace=packages/desktop",
-    "dev-desktop": "npm run build && npm run desktop"
+    "build:pages": "npm run build:pages --workspace=packages/desktop",
+    "web-server": "npm run start --workspace=packages/web-server",
+    "web-server-dev": "npm run dev --workspace=packages/web-server",
+    "dev-desktop": "npm run build && npm run desktop",
+    "test:e2e": "cd ../e2e && npm install --no-save && npx playwright test",
+    "setup-lz": "node ../scripts/setup_landing_zone.mjs",
+    "setup-lz:check": "node ../scripts/setup_landing_zone.mjs --check",
+    "setup-lz:latest": "node ../scripts/setup_landing_zone.mjs --latest",
+    "setup-lz:addon": "node ../scripts/setup_landing_zone.mjs --latest --install",
+    "import-oci-stencils": "node ../scripts/import_oci_stencils.mjs"
   },
   "workspaces": [
     "packages/core",
@@ -57,6 +74,7 @@
     "packages/export",
     "packages/react",
     "packages/web",
+    "packages/web-server",
     "packages/desktop",
     "packages/cli",
     "packages/codegen-cli"
@@ -65,9 +83,16 @@
     "@types/node": "^22.9.0",
     "@types/node-fetch": "^2.6.11",
     "@types/uuid": "^9.0.8",
+    "patch-package": "^8.0.1",
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "uuid": "^9.0.0"
+    "uuid": "^11.1.1"
+  },
+  "overrides": {
+    "tar": "^7.5.16",
+    "tmp": "^0.2.7",
+    "uuid": "^11.1.1",
+    "vite": "^8.0.16"
   }
 }

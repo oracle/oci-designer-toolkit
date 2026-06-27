@@ -4,8 +4,8 @@
 */
 
 import { CompartmentPickerProps, QueryDialogProps } from "../../types/Dialogs"
-import { OciApiFacade } from "../../facade/OciApiFacade"
-import React, { useContext, useState } from "react"
+import { formatOciBackendError, isBackendUnavailableError, OciApiFacade } from "../../facade/OciApiFacade"
+import React, { useContext, useEffect, useState } from "react"
 import { OcdDesign, OciModelResources } from '@ocd/model'
 import { OcdDocument } from "../OcdDocument"
 import { OcdUtils } from '@ocd/core'
@@ -27,22 +27,34 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
     const [selectedCompartmentIds, setSelectedCompartmentIds] = useState([])
     const [collapsedCompartmentIds, setCollapsedCompartmentIds] = useState([])
     const [hierarchy, setHierarchy] = useState('')
+    const [queryError, setQueryError] = useState('')
     const refs: Record<string, React.RefObject<any>> = compartments.reduce((acc, value: OciModelResources.OciCompartment) => {
         acc[value.hierarchy] = React.createRef();
         return acc;
       }, {} as Record<string, React.RefObject<any>>);
-    if (!profilesLoaded) OciApiFacade.loadOCIConfigProfileNames().then((results) => {
-        setProfilesLoaded(true)
-        setProfiles(results)
-        loadRegions(results.length ? results[0] : [regionsLoading])
-        loadCompartments(results.length ? results[0] : [])
-    }).catch((reason) => {
-        setProfilesLoaded(true)
-        setProfiles(['Failed to Read Profiles Fron OCI Config'])
-    })
+    useEffect(() => {
+        if (profilesLoaded) return
+        let cancelled = false
+        OciApiFacade.loadOCIConfigProfileNames().then((results) => {
+            if (cancelled) return
+            setProfilesLoaded(true)
+            setProfiles(results)
+            loadRegions(results.length ? results[0] : '')
+            loadCompartments(results.length ? results[0] : '')
+        }).catch((reason) => {
+            if (cancelled) return
+            setProfilesLoaded(true)
+            setProfiles([isBackendUnavailableError(reason) ? 'Backend unavailable' : 'Failed to Read Profiles Fron OCI Config'])
+            if (isBackendUnavailableError(reason)) setQueryError(formatOciBackendError(reason))
+        })
+        return () => {
+            cancelled = true
+        }
+    }, [profilesLoaded])
     const onProfileChanged = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const profile = e.target.value
         console.debug('OcdQueryDialog: Selected Profile', profile)
+        setQueryError('')
         setSelectedProfile(profile)
         loadRegions(profile)
         loadCompartments(profile)
@@ -61,6 +73,7 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
             setSelectedRegion(homeRegion ? homeRegion.id : results[0].id)
         }).catch((reason) => {
             console.warn('OciQueryDialog: loadRegions: Failed Profile', profile, reason)
+            if (isBackendUnavailableError(reason)) setQueryError(formatOciBackendError(reason))
             setRegions([regionsLoading])
         })
     }
@@ -71,6 +84,7 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
             const compartments = results.map((c: OciModelResources.OciCompartment) => {return {...c, hierarchy: getHierarchy(c.id, results).join('/')}})
             setCompartments(compartments)
         }).catch((reason) => {
+            if (isBackendUnavailableError(reason)) setQueryError(formatOciBackendError(reason))
             setCompartments([])
         })
     }
@@ -86,6 +100,7 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
     }
     const onClickQuery = (e: React.MouseEvent<HTMLButtonElement>) => {
         setWorkingClassName('ocd-query-wrapper')
+        setQueryError('')
         console.debug('OcdQueryDialog: Selected Compartments', selectedCompartmentIds)
         OciApiFacade.queryTenancy(selectedProfile, selectedCompartmentIds, selectedRegion).then((results) => {
             // @ts-ignore
@@ -113,6 +128,13 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
             clone.autoLayout(clone.getActivePage().id, true, ocdConsoleConfig.config.defaultAutoArrangeStyle)
             setOcdDocument(clone)
             setActiveFile({name: '', modified: false})
+        }).catch((reason) => {
+            // Without this catch a rejected query (auth failure, missing permissions,
+            // unreachable / unresolved region, timeout) would leave the spinner running
+            // forever (issue #741). Hide the spinner and surface the error to the user.
+            console.warn('OcdQueryDialog: Query Tenancy failed', reason)
+            setWorkingClassName('ocd-query-wrapper hidden')
+            setQueryError(formatOciBackendError(reason))
         })
     }
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -157,6 +179,7 @@ export const OcdQueryDialog = ({ocdDocument, setOcdDocument}: QueryDialogProps):
                             </div>
                         </div>
                         <div></div><div className="ocd-compartment-hierarchy">{hierarchy}</div>
+                        {queryError && <><div>Status</div><div className="ocd-resource-manager-status"><span className="ocd-resource-manager-error">{queryError}</span></div></>}
                     </div>
                 </div>
                 <div className='ocd-dialog-footer'>

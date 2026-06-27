@@ -1,0 +1,4 @@
+{
+  "extends": "./tsconfig.web.json",
+  "include": ["forge.config.ts", "forge.env.d.ts", "vite.*.config.mts"]
+}

@@ -25,8 +25,8 @@ data "oci_identity_compartments" "${resource.terraformResourceName}" {
 }
 
 locals {
-    ${resource.terraformResourceName}_id   = data.oci_identity_compartments.${resource.terraformResourceName}.compartments[0].id
-    ${resource.terraformResourceName}_ocid = data.oci_identity_compartments.${resource.terraformResourceName}.compartments[0].id
+    ${resource.terraformResourceName}_id   = length(data.oci_identity_compartments.${resource.terraformResourceName}.compartments) == 0 ? "" : data.oci_identity_compartments.${resource.terraformResourceName}.compartments[0].id
+    ${resource.terraformResourceName}_ocid = length(data.oci_identity_compartments.${resource.terraformResourceName}.compartments) == 0 ? "" : data.oci_identity_compartments.${resource.terraformResourceName}.compartments[0].id
 }
 `
     return content

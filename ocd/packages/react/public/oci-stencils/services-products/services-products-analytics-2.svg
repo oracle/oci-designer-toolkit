@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 42 38.353">
+  <metadata><?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?>
+<x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="Adobe XMP Core 9.1-c001 79.a8d4753, 2023/03/23-08:56:37        ">
+   <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about=""
+            xmlns:dc="http://purl.org/dc/elements/1.1/"
+            xmlns:xmp="http://ns.adobe.com/xap/1.0/"
+            xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/"
+            xmlns:stEvt="http://ns.adobe.com/xap/1.0/sType/ResourceEvent#"
+            xmlns:xmpRights="http://ns.adobe.com/xap/1.0/rights/">
+         <dc:subject>
+            <rdf:Bag>
+               <rdf:li>computer</rdf:li>
+               <rdf:li>analytic</rdf:li>
+               <rdf:li>graph</rdf:li>
+               <rdf:li>stats</rdf:li>
+            </rdf:Bag>
+         </dc:subject>
+         <xmp:MetadataDate>2024-08-15T15:58:42-06:00</xmp:MetadataDate>
+         <xmpMM:InstanceID>xmp.iid:24840c96-6e62-4491-98b5-34f4385ac652</xmpMM:InstanceID>
+         <xmpMM:DocumentID>xmp.did:1cdcb86e-5f62-4708-a9a6-9741fce7c9a5</xmpMM:DocumentID>
+         <xmpMM:OriginalDocumentID>xmp.did:1cdcb86e-5f62-4708-a9a6-9741fce7c9a5</xmpMM:OriginalDocumentID>
+         <xmpMM:History>
+            <rdf:Seq>
+               <rdf:li>
+                  <rdf:Description>
+                     <stEvt:action>saved</stEvt:action>
+                     <stEvt:instanceID>xmp.iid:1cdcb86e-5f62-4708-a9a6-9741fce7c9a5</stEvt:instanceID>
+                     <stEvt:when>2024-08-15T15:58:33-06:00</stEvt:when>
+                     <stEvt:softwareAgent>Adobe Bridge 2024</stEvt:softwareAgent>
+                     <stEvt:changed>/metadata</stEvt:changed>
+                  </rdf:Description>
+               </rdf:li>
+               <rdf:li>
+                  <rdf:Description>
+                     <stEvt:action>saved</stEvt:action>
+                     <stEvt:instanceID>xmp.iid:24840c96-6e62-4491-98b5-34f4385ac652</stEvt:instanceID>
+                     <stEvt:when>2024-08-15T15:58:42-06:00</stEvt:when>
+                     <stEvt:softwareAgent>Adobe Bridge 2024</stEvt:softwareAgent>
+                     <stEvt:changed>/metadata</stEvt:changed>
+                  </rdf:Description>
+               </rdf:li>
+            </rdf:Seq>
+         </xmpMM:History>
+         <xmpRights:UsageTerms>
+            <rdf:Alt>
+               <rdf:li xml:lang="x-default">Oracle All Right  </rdf:li>
+            </rdf:Alt>
+         </xmpRights:UsageTerms>
+         <xmpRights:Marked>True</xmpRights:Marked>
+      </rdf:Description>
+   </rdf:RDF>
+</x:xmpmeta>
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                       
+<?xpacket end="w"?></metadata>
+<defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+      }
+
+      .cls-2 {
+        fill: #2d5967;
+      }
+    </style>
+  </defs>
+  <polygon class="cls-1" points="41 0 1 0 0 0 0 1 0 31.68 0 32.68 1 32.68 14.189 32.68 13.982 34.444 13.301 34.444 13.065 34.444 12.854 34.549 10.941 35.504 10.388 35.78 10.388 36.399 10.388 37.353 10.388 38.353 11.388 38.353 13.301 38.353 29.104 38.353 31.017 38.353 32.017 38.353 32.017 37.353 32.017 36.399 32.017 35.78 31.464 35.504 29.551 34.549 29.34 34.444 29.105 34.444 28.018 34.444 27.811 32.68 41 32.68 42 32.68 42 31.68 42 1 42 0 41 0"/>
+  <path class="cls-2" d="m41,1H1v30.68h14.313l-.441,3.764h-1.571s-1.913.955-1.913.955v.954h1.913s0,0,0,0h15.804s1.913,0,1.913,0v-.954l-1.913-.955h0s-1.976,0-1.976,0l-.441-3.764h14.313V1Zm-24.206,34.444l.441-3.764h7.531l.441,3.764h-8.413Zm22.298-5.673H2.909v-3.764h36.182v3.764Zm-30.315-5.822v-7.874h4.147v7.874h-4.147Zm10.151,0v-10.976h4.147v10.976h-4.147Zm10.15,0v-14.078h4.147v14.078h-4.147Zm10.014.149h-3.958V7.962h-7.965v16.136h-2.186v-13.034h-7.964v13.034h-2.186v-9.932h-7.965v9.932h-3.958V2.909h36.182v21.189Z"/>
+</svg>

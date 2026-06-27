@@ -1,14 +1,88 @@
-[![License: UPL](https://img.shields.io/badge/license-UPL-green)](https://img.shields.io/badge/license-UPL-green) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=oracle_oci-designer-toolkit&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=oracle_oci-designer-toolkit)
-# Oracle Edge Cloud Infrastructure Designer and Visualisation Toolkit [OKIT-Desktop 0.3.0](CHANGELOG.md#okit-desktop-version-0.3.0) / [OKIT-Classic 0.70.0](CHANGELOG.md#okit-classic-version-0.70.0)
+[![License: UPL](https://img.shields.io/badge/license-UPL-green)](https://img.shields.io/badge/license-UPL-green)
 
+# oci-designer-toolkit-next-gen
 
+**oci-designer-toolkit-next-gen** is a new Next Gen OCI architecture design product that started from Oracle OKIT / OCI Designer Toolkit and has evolved into a different project focused on Landing Zone Next Gen, discovery-driven migration planning, OCI resource analytics, governance, cost estimation, and a modern Redwood desktop experience.
 
-> [!IMPORTANT]  
-> ___As of June 2025 OKIT-Classic and OKIT-Desktop will drop full OCI and Multi-Cloud support and become a pure Oracle Edge Cloud tool.___ 
+This repository is no longer presented as the upstream OKIT desktop beta. It preserves OKIT compatibility where useful, but the active product direction is Next Gen OCI design, discovery, analysis, and Landing Zone delivery.
 
+Current enhanced fork release: [v0.4.5.8](CHANGELOG.md#enhanced-fork-release-v0458). Compatibility reference: [OKIT Classic 0.70.0](CHANGELOG.md#okit-classic-version-0700).
 
+## What This Product Adds
 
+- **Oracle Redwood Next Gen desktop UX** aligned with Landing Zone Next Gen design patterns.
+- **Landing Zone Wizard** that renders OCI Operating Entities Landing Zone JSON via jsonnet-WASM and opens the result directly on the drag-and-drop canvas.
+- **Landing Zone import, update, and plan/diff** for generated `iam.json`, `network.json`, and `observability.json` outputs.
+- **Realm, Region, AD, and FD scaffolding** that keeps wizard-generated topology and designer frames reconciled.
+- **Real OCI cost estimation** using Oracle public list-pricing data, compute shape SKU mapping, multi-currency support, and snapshot fallback.
+- **Discovery Workbench** for inventory, dependency topology, utilization and cost rollups, OCI target mapping, migration waves, Landing Zone recommendations, and Resource Analytics.
+- **Architecture Agent** for chat-driven OCI architecture generation. It works offline with deterministic local planning and can call any OpenAI-compatible LLM endpoint that the user provides at runtime, then applies the generated plan directly to the Designer canvas.
+- **Agentic Zero Trust architecture generation** with Redwood-styled reasoning -> policy -> scoped-execution UX, prompt templates, and editable OCI controls for API Gateway, Functions, Dynamic Groups, IAM policies, Vault, Data Safe, Cloud Guard, Logging Analytics, and Service Connector evidence pipelines.
+- **Oracle Resource Analytics integration** through desktop IPC and web-server endpoints with shared SELECT-only SQL validation in `@ocd/core`.
+- **Governance, remediation, and reachability analysis** for public exposure, weak segmentation, missing tags/budgets, unsafe DB placement, route-table gaps, dangling route targets, and internet-reachable databases.
+- **Enterprise IAM and policy blueprint overlay** for Landing Zone groups, compartment-scoped policy bundles, and governance tags.
+- **OKE-native and Database Observability overlays** for VCN-native CNI, Workload Identity, Vault/Key, DBM, OPSI, Database Insight, and Management Agent patterns.
+- **Architecture template gallery** for curated OCI starter architectures.
+- **OKIT Classic 0.70 parity workbench** that tracks Classic views, import/export/query surfaces, image export, Resource Manager handoff, and portable JSON introspection against the Next Gen implementation.
+- **Drag-to-connect and draw.io import** for faster relationship modeling and diagram migration.
+- **Expanded OCI catalog** with 265 curated OCI services, official Oracle diagram icons, Terraform import/export, Markdown/Excel export, property panels, validators, and discovery/migration resource batches.
+- **Release hardening** with Vitest, Playwright E2E, static E2E serving, web bundle splitting, Node 26 CI alignment, macOS packaging, and pre-commit redaction checks.
 
+No OCIDs, tenancy names, or secrets are stored in this repository. You supply your own OCI configuration at runtime.
+
+## Latest Additions Since The v0.4.5 Fork Baseline
+
+- `v0.4.5.1`: Landing Zone Next Gen hero CTA, architecture templates, upstream OKIT feature-sync banner, and the first Governance page.
+- `v0.4.5.2`: Governance remediation summaries, Copy Terraform, and safe one-click fixes for deterministic cases.
+- `v0.4.5.3`: Network reachability analysis and Landing Zone plan/diff.
+- `v0.4.5.4`: Enterprise IAM and Policy blueprint, Node 26 CI pinning, and durable macOS DMG creation under endpoint protection.
+- `v0.4.5.5`: ADM and AI Document/Language/Anomaly Detection catalog curation plus catalog guard tests.
+- `v0.4.5.6`: Discovery Workbench, Resource Analytics integration, Landing Zone discovery recommendations, E2E coverage, and discovery/migration catalog curation.
+- `v0.4.5.7`: Product rename to `oci-designer-toolkit-next-gen`, OKIT Classic 0.70 parity workbench, codegen test runner, audit hygiene, and updated Next Gen documentation.
+- `v0.4.5.8`: BYO-LLM Architecture Agent, local deterministic planner fallback, chat-to-design generation, Agentic Zero Trust prompt/control mapping, Redwood UX refresh, toolbar/View menu entry, and Playwright E2E coverage for applying generated designs.
+
+See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for system architecture and [docs/oci-lz-designer-roadmap.md](docs/oci-lz-designer-roadmap.md) for the roadmap.
+
+## Build And Run
+
+Run these from the repo root unless noted:
+
+```bash
+npm run setup-lz        # one-time: fetch OE Landing Zone sources needed by the wizard
+npm run setup-lz:latest # same, but pin to the latest upstream OE release
+```
+
+Then, from the `ocd/` directory:
+
+```bash
+npm run build                                   # build all workspaces
+npm run dev-desktop                             # build and launch the desktop app in dev
+npm run package --workspace=packages/desktop    # produce unsigned .app output under ocd/dist/
+npm run make-macos-arm64 --workspace=packages/desktop  # build the macOS arm64 DMG installer
+```
+
+The wizard's `libjsonnet.wasm` is asar-unpacked so the renderer can fetch it under `file://`. `prebuild` copies the React CSS themes and wasm into the desktop package. It auto-runs before `npm run build`, but not before direct `package` or `make` runs:
+
+```bash
+npm run prebuild --workspace=packages/desktop
+npm run package  --workspace=packages/desktop
+```
+
+The DMG maker requires the optional `appdmg` native dependency. Use `npm run package --workspace=packages/desktop` when you only need a runnable `.app`.
+
+## Security Audit Behind Corporate TLS Inspection
+
+If `npm audit` fails with `UNABLE_TO_VERIFY_LEAF_SIGNATURE` or `unable to verify the first certificate`, treat it as a local trust-store problem rather than a vulnerability result. Export the corporate root/intermediate CA as PEM and run:
+
+```bash
+NODE_EXTRA_CA_CERTS=/path/to/corporate-ca.pem npm audit --omit=dev
+```
+
+Do not use `strict-ssl=false`; keep TLS verification enabled and fix the local CA trust path instead.
+
+## Legacy OKIT Background
+
+The sections below are retained as upstream OKIT / OCD historical context. The active project in this repository is **oci-designer-toolkit-next-gen**.
 
 ## OKIT Desktop (OCD) [0.3.0](CHANGELOG.md#okit-desktop-version-0.3.0)
 
@@ -49,7 +123,7 @@ The OKIT Desktop release is also preparing for Multi-Cloud implementation of Ora
 ![Ocd Desktop Connections](https://github.com/oracle/oci-designer-toolkit/blob/master/ocd/images/OcdDesktop4.png)
 
 ### Installation
-OKIT Desktop is the next iteration of OKIT and is currently available as a Beta release. 
+OKIT Desktop is the next iteration of OKIT and is currently available as a Beta release.
 The native installables can be found in the Assets section on the [0.3.0 Release](https://github.com/oracle/oci-designer-toolkit/releases/tag/v0.3.0).
 1. MacOS
     1. [Arm dmg](https://github.com/oracle/oci-designer-toolkit/releases/download/v0.3.0/ocd-0.3.0-arm64.dmg)
@@ -73,14 +147,14 @@ xattr -d com.apple.quarantine /Applications/ocd.app
 
 Full Release Details Can Found [0.70.0 Release](https://github.com/oracle/oci-designer-toolkit/releases/tag/v0.70.0).
 
-OKIT Classic is the original browser based tool that allows the user to [design](https://www.ateam-oracle.com/introduction-to-okit-the-oci-designer-toolkit), 
-[deploy](https://www.ateam-oracle.com/introduction-to-okit-the-oci-designer-toolkit) and visualise ([introspect/query](https://www.ateam-oracle.com/the-oci-designer-toolkit-query-feature)) 
-OCI environments through a graphical web based interface. 
+OKIT Classic is the original browser based tool that allows the user to [design](https://www.ateam-oracle.com/introduction-to-okit-the-oci-designer-toolkit),
+[deploy](https://www.ateam-oracle.com/introduction-to-okit-the-oci-designer-toolkit) and visualise ([introspect/query](https://www.ateam-oracle.com/the-oci-designer-toolkit-query-feature))
+OCI environments through a graphical web based interface.
 
 - [Design](https://www.ateam-oracle.com/introduction-to-okit-the-oci-designer-toolkit)
 
     The Web based interface will allow architects and designers to build a visual representation of their infrastructure
-    and then export this in a number of formats. 
+    and then export this in a number of formats.
 
     - svg
     - png
@@ -90,11 +164,11 @@ OCI environments through a graphical web based interface.
 
     Once completed the design can be enhanced to add key property information allowing the designed infrastructure to
     be exported to a number of DevOps frameworks or Markdown for documentation.
-    
+
     - Terraform
     - OCI Resource Manager
     - Markdown
-    
+
     This allows for rapid proto-typing and building.
 
 - [Introspect](https://www.ateam-oracle.com/the-oci-designer-toolkit-query-feature)
@@ -115,7 +189,7 @@ Detailed OKIT Installation steps can be found in the [OCI Designer Toolkit Insta
 ## Releases
 
 See [Releases](https://github.com/oracle/oci-designer-toolkit/releases)
-  
+
 
 
 
@@ -150,7 +224,7 @@ See [CHANGELOG](CHANGELOG.md).
 
 You can find information on any known issues with OKIT here and under the Issues tab of this project's GitHub repository.
 Any issues found with the tool should be raised on the projects issues page. Please check that the issue has not previously
-been reported. 
+been reported.
 
 ## Contributing
 

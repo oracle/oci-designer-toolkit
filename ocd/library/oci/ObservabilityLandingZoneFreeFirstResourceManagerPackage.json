@@ -1,0 +1,21 @@
+{
+    "config_source_type": "ZIP_UPLOAD",
+    "files": [
+        "main.tf.json",
+        "observability.auto.tfvars.json",
+        "okit-resource-manager-manifest.json",
+        "README_RESOURCE_MANAGER.md",
+        "cost-estimate.json",
+        "usage-api-query.json",
+        "architecture.drawio"
+    ],
+    "profile": "free-first",
+    "readiness_checks": [
+        "All Terraform files are generated without tenant-specific OCIDs.",
+        "Provider configuration omits local user credentials for Resource Manager execution.",
+        "The package includes okit-resource-manager-manifest.json for stack zip inspection.",
+        "Plan jobs are the default; apply jobs require explicit operator selection."
+    ],
+    "schema_version": "oci.okit.resource_manager_package.v1",
+    "terraform_version": ">= 1.5.0"
+}

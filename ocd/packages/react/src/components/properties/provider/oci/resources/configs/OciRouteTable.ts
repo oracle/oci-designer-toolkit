@@ -30,7 +30,11 @@ export namespace OciRouteTableConfigs {
             },
             {
                 id: 'route_rules.network_entity_id',
-                properties: {},
+                // Issue #369: OCD does not model a Private IP as a standalone, selectable resource, so a
+                // private-IP route target (e.g. a VNIC private IP used as a network virtual appliance hop)
+                // cannot be picked from the gateway lists. Render this lookup as an editable combobox so the
+                // user can still pick a known gateway OR paste a private-IP OCID as free text.
+                properties: {editable: true},
                 configs: [],
                 lookupGroups: [
                     {displayName: 'Internet Gateways', lookupResource: 'internet_gateway'},
@@ -39,7 +43,14 @@ export namespace OciRouteTableConfigs {
                     {displayName: 'Service Gateways', lookupResource: 'service_gateway'},
                     {displayName: 'Local Peering Gateways', lookupResource: 'local_peering_gateway'}
                 ],
-                resourceFilter: (r, resource, rootResource) => r.vcnId === rootResource.vcnId // r: Gateway / rootResource: route_table
+                // Issue #452: gateways in the SAME VCN but a different compartment must still appear. The
+                // previous strict equality (`r.vcnId === rootResource.vcnId`) wrongly excluded valid targets
+                // whenever either side's vcnId is empty/undefined — e.g. DRG attachments (which carry no
+                // vcnId in the model) or any gateway/route table imported without a resolved vcnId. Treat a
+                // missing vcnId on either side as "do not exclude", while still excluding gateways whose
+                // vcnId is set and differs from the route table's set vcnId (so other VCNs are not listed).
+                // r: Gateway / rootResource: route_table
+                resourceFilter: (r, resource, rootResource) => !r.vcnId || !rootResource.vcnId || r.vcnId === rootResource.vcnId
             },
         ]
     }

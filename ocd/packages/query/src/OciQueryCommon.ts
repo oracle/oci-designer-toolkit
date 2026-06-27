@@ -9,8 +9,11 @@ import os from 'os'
 // import { rootCertificates } from "tls"
 // import { Agent as httpsAgent } from "https"
 // import https from "https"
-import { OcdUtils } from "@ocd/core"
+import { OcdLogger, OcdUtils } from "@ocd/core"
 import { common, identity } from "oci-sdk"
+import { QUERY_CONCURRENCY_LIMIT, runWithConcurrency, withRetry } from './OciQueryConcurrency.js'
+
+const logger = OcdLogger.scope('OciCommonQuery')
 
 export class OciCommonQuery {
     profile: string
@@ -21,13 +24,36 @@ export class OciCommonQuery {
     identityClient: identity.IdentityClient
     // Lifecycle States
     lifecycleStates: string[] = ['ACTIVE', 'ALLOCATED', 'ATTACHED', 'AVAILABLE', 'CREATING', 'ENABLED', 'INACTIVE', 'PROVISIONING', 'RUNNING', 'STARTING', 'STOPPED', 'STOPPING', 'UPDATING']
+    // Accumulates per-query discovery failures (e.g. a 403 on a single compartment, or
+    // request throttling) so that a partial discovery failure surfaces to the renderer
+    // instead of silently rendering a complete-looking topology (issue OBS-01). Reset at
+    // the start of each top level query run (see OciQuery.queryTenancy).
+    queryFailures: { label: string, reason: string }[] = []
 
     constructor(profile: string='DEFAULT', region?: string) {
         this.profile = profile
         this.provider = new common.ConfigFileAuthenticationDetailsProvider(undefined, profile)
         if (this.isSessionTokenSpecified(profile)) this.provider = new common.SessionAuthDetailProvider(undefined, profile)
         if (region) this.provider.setRegion(region)
-        else console.debug('OciCommonQuery: Using Region', this.provider.getRegion().regionId)
+        else logger.debug('Using Region', this.provider.getRegion().regionId)
+        // Defensive region/realm resolution diagnostic (issue #782). For dedicated regions and
+        // alternate realms the OCI SDK resolves endpoints from a region it can recognise; it reads
+        // unknown regions from ~/.oci/regions-config.json or the OCI_REGION_METADATA env var. If the
+        // configured region cannot be resolved the SDK silently falls back to the public realm
+        // (oraclecloud.com), so requests target the wrong endpoint. We do not hardcode realm domains
+        // here (cannot be verified without a dedicated tenancy); instead we warn so the operator knows
+        // to provide region metadata. We never throw, to avoid breaking standard public regions.
+        try {
+            const configuredRegionId = this.provider.getRegion()?.regionId
+            if (configuredRegionId && common.Region.fromRegionId(configuredRegionId) === undefined) {
+                logger.warn(
+                    `Region '${configuredRegionId}' is not recognised by the OCI SDK and will fall back to the public realm (oraclecloud.com). ` +
+                    `For dedicated regions / alternate realms, register the region via ~/.oci/regions-config.json or the OCI_REGION_METADATA environment variable.`
+                )
+            }
+        } catch (reason: unknown) {
+            logger.warn('Unable to verify region resolution', reason)
+        }
         const certBundle: string | undefined = this.getCertBundle(profile)
         // Define Retry Configuration
         const retryConfiguration: common.RetryConfiguration = {
@@ -43,8 +69,94 @@ export class OciCommonQuery {
         // }
         this.clientConfiguration = { retryConfiguration: retryConfiguration, httpOptions: httpOptions }
         this.authenticationConfiguration = { authenticationDetailsProvider: this.provider }
-        console.debug('OciCommonQuery Client Configuration:', this.clientConfiguration)
+        // Do not log the configuration object itself: httpOptions may carry cert-bundle material.
+        logger.debug('Client configuration initialised', `retryConfigured=${this.clientConfiguration.retryConfiguration !== undefined}`, `httpOptions=${httpOptions !== undefined}`)
         this.identityClient = new identity.IdentityClient(this.authenticationConfiguration, this.clientConfiguration)
+    }
+
+    // Default upper bound (milliseconds) for a single top level tenancy query before we
+    // surface a timeout error to the renderer. Without this an unresponsive / unreachable
+    // endpoint (e.g. an unresolved dedicated region falling back to a non routable host)
+    // leaves the UI spinner running indefinitely (see issue #741).
+    static readonly DEFAULT_QUERY_TIMEOUT_MS: number = 120000
+
+    /*
+    ** Wrap a Promise so that it rejects if it has not settled within timeoutMs. This guarantees
+    ** the renderer always receives either a result or an error and never hangs forever. The
+    ** wrapped promise's own resolution/rejection is still honoured if it settles first.
+    */
+    withTimeout<T>(promise: Promise<T>, label: string, timeoutMs: number = OciCommonQuery.DEFAULT_QUERY_TIMEOUT_MS): Promise<T> {
+        return new Promise<T>((resolve, reject) => {
+            const timer = setTimeout(() => {
+                reject(new Error(`${label} timed out after ${timeoutMs}ms`))
+            }, timeoutMs)
+            promise.then((value) => {
+                clearTimeout(timer)
+                resolve(value)
+            }).catch((reason) => {
+                clearTimeout(timer)
+                reject(reason)
+            })
+        })
+    }
+
+    /*
+    ** Reduce a rejection reason to a safe, human readable string. Never serialise an
+    ** arbitrary payload: OCI error objects / response bodies can embed OCIDs and other
+    ** topology detail, so we surface the message text (or a generic fallback) only.
+    */
+    private settledFailureReason(reason: unknown): string {
+        if (reason instanceof Error) return reason.message
+        if (typeof reason === 'string') return reason
+        return 'Unknown error'
+    }
+
+    /*
+    ** Record every rejected settlement against queryFailures and emit a single warning
+    ** carrying the label, the failed/total counts and the first reason. Logs counts and
+    ** reason text only — never OCIDs or raw response payloads.
+    */
+    recordSettledFailures(results: PromiseSettledResult<unknown>[], label: string): void {
+        const rejected = results.filter((r): r is PromiseRejectedResult => r.status === 'rejected')
+        if (rejected.length === 0) return
+        rejected.forEach((r) => this.queryFailures.push({ label, reason: this.settledFailureReason(r.reason) }))
+        logger.warn(`${label}: ${rejected.length} of ${results.length} query(ies) failed (partial results)`, this.settledFailureReason(rejected[0].reason))
+    }
+
+    /*
+    ** Concatenate the `items` arrays of every fulfilled settlement, recording any
+    ** rejections via recordSettledFailures so partial failures are never silently lost.
+    ** The optional extractor supports the handful of responses that nest their
+    ** collection under a different key (or return a single object).
+    */
+    collectSettled<T>(results: PromiseSettledResult<{ items: T[] }>[], label: string): T[]
+    collectSettled<V, T>(results: PromiseSettledResult<V>[], label: string, extract: (value: V) => T[]): T[]
+    collectSettled<T>(results: PromiseSettledResult<any>[], label: string, extract: (value: any) => T[] = (value) => value.items): T[] {
+        this.recordSettledFailures(results, label)
+        return results
+            .filter((r): r is PromiseFulfilledResult<any> => r.status === 'fulfilled')
+            .reduce<T[]>((acc, r) => [...acc, ...extract(r.value)], [])
+    }
+
+    /*
+    ** Shared compartment fan-out used by every list* resource query. Builds one
+    ** request per compartment, wraps each in a transient-failure retry, runs them
+    ** through the bounded concurrency pool, and folds the settled results with
+    ** collectSettled so partial failures are recorded (never silently dropped).
+    ** Collapses ~50 near-identical method bodies into a single tested path and is
+    ** the home for retry/backoff (replacing the former unused per-method retry param).
+    */
+    protected listByCompartment<Req, Res>(
+        label: string,
+        compartmentIds: string[],
+        buildRequest: (compartmentId: string) => Req,
+        listFn: (request: Req) => Promise<Res>,
+        extract: (value: Res) => any[] = (value) => (value as { items?: any[] }).items ?? [],
+    ): Promise<any[]> {
+        const requests = compartmentIds.map(buildRequest)
+        const tasks = requests.map((request) => withRetry(() => listFn(request)))
+        const queries = runWithConcurrency(tasks, QUERY_CONCURRENCY_LIMIT)
+        return Promise.allSettled(queries).then((results) => this.collectSettled(results, label, extract))
     }
 
     isSessionTokenSpecified = (profile: string): boolean => this.provider.getProfileCredentials()?.configurationsByProfile.get(profile)?.get('security_token_file') !== undefined
@@ -98,10 +210,10 @@ export class OciCommonQuery {
                 return resources
             }
             query(responseIterator).then((results) => {
-                console.debug('OciCommonQuery: getAllResponseData: All Settled')
+                logger.debug('getAllResponseData: All Settled')
                 resolve(results)
             }).catch((reason) => {
-                console.error('OciCommonQuery: getAllResponseData: Error', reason)
+                logger.error('getAllResponseData: Error', reason)
                 reject(reason)
             })
         })
@@ -125,21 +237,14 @@ export class OciCommonQuery {
         })
     }
 
-    getCompartments(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: identity.requests.GetCompartmentRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.identityClient.getCompartment(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciQuery: getCompartments: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').map((r) => {return {...r.value.compartment, displayName: r.value.compartment.name}})
-                // console.debug('OciQuery: getCompartments: Resources', resources)
-                resolve(resources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
-        })
+    getCompartments(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment(
+            'getCompartments',
+            compartmentIds,
+            (id) => ({ compartmentId: id }) as identity.requests.GetCompartmentRequest,
+            (r) => this.identityClient.getCompartment(r),
+            (value) => [{ ...value.compartment, displayName: value.compartment.name }],
+        )
     }
 
     listTenancyCompartments(): Promise<any> {
@@ -149,7 +254,7 @@ export class OciCommonQuery {
             const compartmentQuery = this.getAllResponseData(compartmentResponseIterator)
             const getTenancy = this.getCompartments([this.provider.getTenantId()])
             Promise.allSettled([getTenancy, compartmentQuery]).then((results) => {
-                console.debug('OciQuery: listTenancyCompartments: All Settled')
+                logger.debug('listTenancyCompartments: All Settled')
                 if (results[0].status === 'fulfilled' && results[1].status === 'fulfilled') {
                     results[0].value[0].compartmentId = ''
                     const resources = [...results[0].value, ...results[1].value].map((c) => {return {...c, root: c.compartmentId === ''}})

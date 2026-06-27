@@ -1,0 +1,11 @@
+# gitleaks false-positive allowlist (fingerprints).
+# These are entropy-based `generic-api-key` matches on NON-secret content,
+# verified by hand. The mandatory grep redaction gate (scripts/check-redaction.sh)
+# still runs and is authoritative for real OCIDs/IPs/keys/tokens.
+#
+# 1) JSON schema property NAME "ipv6subnetCidr" (a field key in the generated
+#    OCI schema), not a credential.
+ocd/packages/codegen-cli/schema/oci-schema.json:generic-api-key:16656
+#
+# 2) The English phrase "region/compartment" in prose inside the task tracker.
+SHARED_TASK_NOTES.remediation.md:generic-api-key:279

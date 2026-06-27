@@ -69,6 +69,7 @@ export interface PaletteProps {
     ocdConsoleConfig: OcdConsoleConfig,
     setDragData: React.Dispatch<any>
     ocdDocument: OcdDocument
+    searchTerm?: string
 }
 
 export interface ConnectorSvgProps {
@@ -76,6 +77,8 @@ export interface ConnectorSvgProps {
     ocdDocument: OcdDocument
     connector: OcdViewConnector
     parentConnector: boolean
+    label?: string
+    labelOffsetY?: number
 }
 
 export interface OcdMouseEvents extends Record<string, MouseEventHandler<SVGGElement>> {}

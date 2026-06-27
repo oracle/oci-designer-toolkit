@@ -1,5 +1,170 @@
 # Release Notes
 
+> **Versioning scheme (enhanced fork).** Each new major add-on bumps the patch by `0.0.5`
+> (e.g. 0.4.0 → 0.4.5). Smaller changes bump the 4th component `0.0.x.x`
+> (e.g. 0.4.5 → 0.4.5.1). Major/minor jumps (e.g. → 0.5.0, → 1.0.0) are set by the maintainer.
+
+
+## Enhanced Fork Release (v0.4.5.8)
+
+### oci-designer-toolkit-next-gen
+
+#### Architecture Agent
+- **BYO-LLM architecture generation.** Added a first-class **Architecture Agent** page that turns a user chat request into a structured OCI architecture plan. The agent can call any OpenAI-compatible chat-completions endpoint supplied by the user at runtime; API keys are kept in renderer memory only.
+- **Offline deterministic planner.** When no LLM endpoint/model is configured, the agent uses local planning heuristics for common OCI patterns including three-tier applications, secure OKE platforms, and hub-spoke networks.
+- **Agentic Zero Trust planner.** Added a deterministic Agentic Zero Trust architecture template that maps reasoning isolation, policy-gated execution, scoped identity, and evidence-by-design controls into editable OCI resources where model support exists.
+- **Concrete OCI security-resource output.** The Architecture Agent can now generate API Gateway, Functions application/function, Web Application Firewall, Data Safe target/assessment, Cloud Guard target, Logging Analytics log group, and Service Connector resources in addition to the existing network, compute, OKE, IAM, Vault, logging, monitoring, and budget resources.
+- **Redwood Zero Trust UX.** Refreshed the agent page with a Redwood-style flow strip, prompt templates, plan metrics, control-model cards, and evidence outputs. Discovery analytics now includes Zero Trust readiness and control-matrix views.
+- **Chat-to-Designer handoff.** Generated plans are converted into editable `OcdDesign` resources using the existing OCI model factories, then auto-arranged and opened on the Designer canvas.
+- **Console integration.** Added the **AI Architect** toolbar entry and **View -> Architecture Agent** menu item.
+
+#### Testing
+- **Architecture Agent unit coverage.** Added Vitest coverage for local planning, Agentic Zero Trust resource mapping, fenced JSON LLM response parsing, OpenAI-compatible request formation, and design construction.
+- **Architecture Agent E2E coverage.** Added Playwright coverage for the full browser flow: open agent, verify the Zero Trust UX, generate an OKE plan, apply it to the Designer, and verify rendered resources.
+- **DMG packaging guard.** Shortened the macOS DMG mounted volume label so `electron-forge make` succeeds while preserving the `oci-designer-toolkit-next-gen` app/package identity.
+
+
+## Enhanced Fork Release (v0.4.5.7)
+
+### oci-designer-toolkit-next-gen
+
+#### OKIT Classic 0.70 parity
+- **Product rename.** The fork/app identity is now **oci-designer-toolkit-next-gen** across package metadata, Electron display name, installer maker names, and README positioning.
+- **Classic parity workbench.** Added a new console page and View menu entry for **OKIT Classic 0.70 Parity**, mapping Classic Desktop views, import/export/query surfaces, and Resource Manager handoff to the current Next Gen implementation status.
+- **Next Gen enhancement lanes.** The parity page highlights the active enhancement areas already developed in the fork: Landing Zone Next-Gen, governance/reachability, Discovery Workbench/Resource Analytics, and the expanded OCI service catalog.
+
+#### Testing
+- **Parity guard coverage.** Added focused Vitest coverage for the Classic 0.70 capability catalog so future changes do not drop tracked views or import/export/query surfaces silently.
+- **Classic parity E2E coverage.** Added Playwright coverage for the new toolbar entry and parity page content, including the Classic view and import/export/query mappings.
+- **Codegen test runner.** The `@ocd/codegen` workspace now runs its Vitest guard suite through `npm run test --workspace=packages/codegen`.
+- **Audit hygiene.** Re-ran `npm audit --omit=dev` behind a trusted local CA path, applied the non-force fix for the `brace-expansion` advisory, and documented the corporate TLS trust-store requirement for repeatable audit runs.
+
+
+## Enhanced Fork Release (v0.4.5.6)
+
+### Oracle Designer Toolkit - OCTO
+
+#### Discovery Workbench
+- **New Discovery console page.** Added a first-class Discovery Workbench with Inventory, Topology, Analytics, Landing Zone Mapping, and Resource Analytics tabs. The workbench uses deterministic sample data for offline/demo runs and is wired through the existing console navigation.
+- **Application-centric analytics.** Added typed discovery snapshots, inventory summaries, dependency graph extraction, utilization/cost rollups, risk counters, migration waves, and OCI target mapping for compute, OKE, load balancing, database, cache, streaming, queueing, observability, and security services.
+- **Landing Zone recommendations.** Discovery output now feeds LZNG-oriented recommendations for workload compartments, observability/OKE/IAM overlays, and migration phases derived from applications, environments, owners, runtimes, and dispositions.
+
+#### Resource Analytics
+- **Read-only Resource Analytics integration.** Added facade, web-server, and desktop IPC paths for discovery snapshots and Resource Analytics query results.
+- **Shared SQL guard.** `@ocd/core` now validates Resource Analytics SQL centrally: SELECT-only, no semicolons, and mutation/admin keywords rejected unless inside quoted strings.
+- **Profile sanitization.** Desktop OCI profile handling now avoids raw config/profile debug output and returns sanitized profile records through IPC.
+
+#### OCI service catalog curation
+- **Discovery/migration resource batch.** Added 17 generated OCI resource surfaces across model, properties, tabular, Terraform/Markdown/Excel export, validator, and Terraform import layers: Cloud Bridge agent/dependency/plugin/asset/asset source/discovery schedule/environment/inventory; Cloud Migrations migration/migration asset/migration plan/replication schedule/target asset; Stack Monitoring discovery job/monitored resource task/monitored resource type; and Log Analytics entity.
+- **Lookup override guards.** Added codegen overrides and tests so generated editor lookups point at curated resource keys such as `cloud_bridge_environment`, `cloud_bridge_inventory`, `cloud_bridge_asset_source`, `cloud_migrations_migration`, and `cloud_migrations_migration_plan`.
+- **Generator usability cleanup.** Omitted empty complex blocks from the curated discovery batch so generated editors/import/export surfaces stay usable instead of rendering placeholder-only nested sections.
+
+#### Testing
+- **Discovery unit coverage.** Added Vitest coverage for inventory analytics, OCI target mapping, Landing Zone recommendations, Resource Analytics normalization/merge behavior, and the discovery catalog curation batch.
+- **Discovery E2E coverage.** Added Playwright coverage for the Discovery Workbench navigation and all primary tabs, including Resource Analytics query details and Landing Zone recommendation output.
+
+
+## Enhanced Fork Release (v0.4.5.5)
+
+### Oracle Designer Toolkit - OCTO
+
+#### OCI service catalog curation
+- **A2 catalog curation resumed.** Added 10 generated OCI resource surfaces across the model, properties, tabular, Terraform/Markdown/Excel export, validator, and Terraform import layers: ADM knowledge base, ADM vulnerability audit, ADM remediation recipe/run, AI Document project/model, AI Language model, and AI Anomaly Detection private endpoint/data asset/anomaly job.
+- **Catalog guard test.** Added a focused Vitest guard for the new curation batch so resource names and meaningful editable attributes are checked before regeneration.
+- **Generator collision note.** The batch intentionally omits nested leaf fields named `object` because they collide with generated object-block helper names in validator/import/export output.
+
+#### Build
+- **Upstream checker type fix.** `OCTO_BASELINE_REF` is explicitly typed as `string` and the upstream resource-count baseline was refreshed to the current parser count, allowing the React package build to pass under strict TypeScript.
+
+#### Testing & Landing Zone polish
+- **Offline-friendly Playwright server.** E2E smoke tests now serve the built static app through a repo-local Node helper instead of `npx serve`, avoiding npm registry access during test startup while preserving SPA fallback behavior.
+- **OKE-native overlay labels.** The managed OKE-native add-on now stamps its intended display names (`OKE Pod Subnet (VCN-native CNI)`, `OKE Cluster (enhanced)`) onto generated resources, with unit and Playwright coverage for the wizard-to-Designer path.
+
+
+## Enhanced Fork Release (v0.4.5.4)
+
+### Oracle Designer Toolkit - OCTO
+
+#### Enterprise IAM + Policy blueprint
+- **New Designer add-on** (toolbar, LZ-origin designs) that applies an idempotent enterprise IAM blueprint: 5 groups (`lz-administrators`, `lz-network-admins`, `lz-security-admins`, `lz-developers`, `lz-auditors`), least-privilege **policy bundles** whose statements are scoped to the design's compartments by name, and an **`lz-governance` tag namespace** with cost-tracking tags (`cost-centre`, `environment`, `owner`). Mirrors the DB-Observability / OKE-native add-on pattern (`OcdLzIamBlueprint.ts`, `applyIamBlueprintOverlay`); lands editable model resources; idempotent re-apply; 16 Vitest specs.
+
+#### Build & toolchain
+- **Node 26 across CI** — `pages.yml` 22→26; desktop build matrices `latest`→`26` (`macos-dmg.yml` already pinned 26).
+- **Durable macOS `.dmg` builds on Node 26 behind EDR.** appdmg's `hdiutil detach` is patched (committed `ocd/patches/appdmg+0.6.6.patch` applied via `patch-package` on `postinstall`) to use `hdiutil detach -force` and retry on **any** error, surviving CrowdStrike's transient lock on the freshly-mounted build volume (previously "Operation not permitted"). appdmg stays an optional dependency, so non-macOS installs degrade cleanly to the ZIP maker. Verified end-to-end: `ocd-0.4.5-arm64.dmg` (116 MB) builds, mounts, and detaches cleanly.
+
+
+## Enhanced Fork Release (v0.4.5.3)
+
+### Oracle Designer Toolkit - OCTO
+
+#### Smart connectivity / reachability analysis
+- **Network-intent checks merged into the Governance page.** A new pure graph analysis (`analysis/OcdReachability.ts`, `evaluateReachability(design)`) walks subnets ↔ route tables ↔ gateways ↔ databases and flags: subnet with no egress route, dangling route target (rule points at an absent gateway), internet-reachable database (0.0.0.0/0 → Internet Gateway in front of a DB), database in a public subnet, and subnet referencing a missing route table / security list. Findings reuse the `GovernanceFinding` shape (category `network`, guidance-only remediation + Terraform) and are concatenated into the Governance page alongside the posture checks. 32 Vitest specs.
+
+#### Landing Zone Plan / Diff
+- **Compare the current design against an imported Landing Zone** (new toolbar action → Plan page). A pure `diffDesigns(base, target)` (`landingzone/plan/OcdLzPlan.ts`) matches resources across two designs by `resourceType`+`displayName` (id fallback) and produces a terraform-plan-style **create / update / delete / no-op** list, excluding volatile fields (`id`, `ocid`, `okitReference`, `region`, and `*Id`/`*Ids` uuid cross-refs) so only semantic changes show. `OcdLzPlanPanel` renders the plan grouped by action with per-field `from → to` diffs; the Plan page loads the comparison target via the existing LZNG file picker (`buildDesignFromLzUpload`). 22 Vitest specs.
+
+> Both shipped via parallel agents on disjoint modules, integrated in one pass: `tsc --noEmit` clean, `build:pages` green, 271/271 Vitest, both surfaces verified headless.
+
+
+## Enhanced Fork Release (v0.4.5.2)
+
+### Oracle Designer Toolkit - OCTO
+
+#### Governance remediation generator
+- **Findings are now actionable.** Each governance finding carries a `remediation` (a one-line *Fix:* summary plus an illustrative Terraform snippet, copied via **Copy Terraform**). Where a fix is deterministic and safe, an **Apply fix** button edits the design model in place and the finding clears on re-evaluation. Auto-fixable rules: public subnet → `prohibitPublicIpOnVnic = true`, public bucket → `accessType = 'NoPublicAccess'`, public instance → `createVnicDetails.assignPublicIp = false`. The remaining checks (open ingress, missing NSG/Budget/compartment, DB subnet placement, tags) are guidance-only — no safe deterministic default, so they get Terraform + summary without auto-apply. `applyRemediation(design, finding)` is pure/immutable (id-safe no-op when the resource is gone); covered by Vitest (governance suite now 45 specs, 217 total). Wired through the `OcdGovernance` page adapter → `setOcdDocument`.
+
+
+## Enhanced Fork Release (v0.4.5.1)
+
+### Oracle Designer Toolkit - OCTO
+
+#### Landing Zone Next-Gen hero CTA
+- **Promoted LZ wizard entry point.** The Landing Zone Next-Gen wizard is now accessible via a prominent labeled red-pill button — `.ocd-lz-hero-cta` — rendered in the OcdConsole home area. The previous entry point was a 15 px toolbar icon (title="Landing Zone Wizard"); the new CTA pairs a glyph with a visible text label ("Landing Zone Next-Gen"), making the primary action immediately discoverable at any viewport width. Clicking the CTA sets `displayPage = 'landingzone'` and lazy-loads `OcdLandingZone` exactly as before.
+- **E2E coverage added.** `e2e/specs/lzng-hero-cta.spec.ts` verifies: the `.ocd-lz-hero-cta` button is visible with label text "Landing Zone Next-Gen", is not disabled, and clicking it opens the wizard on the Foundation step (`.ocd-lzng`, stepper nav, `aria-current="step"` → Foundation, `Step 1 of 5` subtitle).
+
+#### Enterprise architecture lanes
+- **Architecture template gallery** (File ▸ *New from Template…*). A modal picker of curated starter architectures (hub-spoke network, three-tier web app, OKE platform, secure landing-zone-lite). Selecting a template builds a fresh, valid `OcdDesign` via the model resource factories, auto-arranges it, and drops the user on the Designer — the wireframe-tool "start from a template" entry point. New modules under `landingzone/templates/` (`OcdArchitectureTemplates.ts`, `OcdTemplateGallery.tsx`); the gallery reuses the existing `ocd-dialog-*` shell plus new `ocd-template-*` card styles.
+- **Upstream OKIT feature-sync banner.** The Landing Zone updates banner now also detects when the public upstream `oracle/oci-designer-toolkit` has new commits / model resources beyond this fork's baseline, and surfaces a read-only **"new upstream features available"** row with a compare link and a copy-to-clipboard, spelled-out curation path (re-vendor + which curation file to extend) — guided, never an automatic regen (the catalog is a curated allow-list). New modules under `upstream/` (`OcdUpstreamCheck.ts`, `useUpstreamFeatureCheck.ts`); unauthenticated GitHub REST with a 6 h cache and rate-limit-tolerant degradation.
+- **Governance & compliance posture overlay.** A new **Governance** toolbar action (shield icon) + page runs a pure rule set (`governance/OcdGovernanceChecks.ts`) over the current design and lists findings grouped by severity — ~12 CIS-OCI-style checks across network exposure (public subnets, `0.0.0.0/0` ingress), public buckets, missing cost-tracking tags, single-compartment segmentation, DB/LB without NSG/private subnet, and missing Budget. Mirrors the validation page surface; covered by Vitest specs.
+
+> The Landing Zone Next-Gen hero CTA, template gallery, upstream feature-sync banner, and governance overlay were developed in parallel across four isolated lanes and integrated together: full `tsc --noEmit` clean, `build:pages` green, 194/194 Vitest tests passing, and all four surfaces verified in a headless-browser screenshot pass.
+
+
+## Enhanced Fork Release (v0.4.5)
+
+### Oracle Designer Toolkit - OCTO
+#### Rebrand
+- Product renamed **Oracle Designer Toolkit - OCTO** (window title, in-app headers, LZ wizard header, favicon). OCTO octopus brand mark wired into the Designer console header and the Landing Zone wizard header. Internal package id / Electron bundle kept as `ocd` for artifact + CI stability.
+
+#### Fixes
+- **Landing Zone generation restored in web/Pages builds.** The Go WASM runtime shim (`globalThis.Go`) was being tree-shaken out of production bundles because `@ocd/react`'s `sideEffects` allow-list only covered CSS; the side-effect-only `import './wasm/wasmExec'` was dropped, so `libjsonnet.wasm` could not instantiate ("Go WASM runtime did not initialize"). Added the shim to the `sideEffects` allow-list. LZ generation and **Open in Designer** now work in the static web build.
+
+#### Designer & Landing Zone
+- **Continue in the Designer with non-LZ resources.** After Open-in-Designer, dropping a non-LZ stencil (Compute, OKE, DB, storage, LB — anything the OE/LZ generator does not emit) now routes it to a workload/application/project compartment instead of the root.
+- **Import LZNG output files** (File ▸ Import ▸ *OCI Landing Zone (LZNG)*): a multi-file picker reads pre-generated `iam.json` / `network.json` / … and rebuilds them into an editable, `lzOrigin`-flagged design — the upload counterpart to the wizard handoff.
+- **Import draw.io diagrams** (File ▸ Import ▸ *draw.io Diagram*): parse an uncompressed `.drawio` / `.xml` diagram, map each shape to an OCI resource (keyword/shape heuristics), and recreate the architecture **with its relations** — edges and container nesting become FK associations; the design is then auto-arranged. Compressed `.drawio` files prompt to re-export as uncompressed XML.
+- **draw.io-style drag-and-link.** In connect mode, the resource under the cursor highlights green (valid drop target — the source has an FK for its type) or red (invalid) while dragging, with an animated "marching ants" rubber-band.
+- **One-click LZ update.** The "OCI Landing Zone updates available" banner gains an **Update now** button that copies the re-vendor command (`npm run setup-lz:latest`), lists exactly which sources changed (`from → to` with GitHub compare links) and which pin files to bump, and re-runs the update check. (The OE jsonnet sources are bundled at build time, so applying still requires the re-vendor + rebuild — the button makes that step one click and fully spelled out.)
+- **Add-ons in the Designer.** The DB-Observability and OKE-native add-ons can now be applied directly from the Designer toolbar (not just the wizard) for LZ-origin designs — alongside the existing Realm/AD/FD frames and live-reconcile controls. Each is idempotent and lands editable model resources.
+- **observability.json now maps to the model.** The LZ→Designer bridge previously mapped only `iam.json` + `network.json`; it now also recreates `observability.json` — events rules, notification topics, service connectors, and log groups with their logs (each log wired to its log group) — so the full Landing Zone, including observability, opens in the Designer with editable properties.
+
+
+## Enhanced Fork Release (v0.4.0)
+
+### OKIT-Desktop Version 0.4.0
+#### Features (enhanced fork)
+- **Oracle Redwood (Next-Gen) theme** and a 5-step **Landing Zone Wizard** rendering the official OCI Operating-Entities LZ via jsonnet-WASM in-browser, opening into the designer.
+- **Real cost estimation** via the OCI `cetools` list-pricing API, with per-shape compute SKU mapping (E2–E6, A1/A2, GPU, HPC, DenseIO) and all-costable-service SKUs; multi-currency + snapshot fallback.
+- **Realm → Region → AD → FD scaffold** — idempotent designer overlay + **Add Frames** toolbar action (region-driven AD count); dual-tick live reconcile between wizard and designer.
+- **Database Observability overlay** — DBM + OPSI private endpoints, Database Insight, Management Agent.
+- **OKE-native overlay** — VCN-native CNI pod subnet, enhanced cluster, Workload Identity (dynamic group + policy), NSG, Vault + Key.
+- **Drag-to-connect** — Connect mode wires entity FK associations by dragging one resource onto another.
+- **~140 curated OCI services** in the catalog; official Oracle diagram icons; full provider stencil palette.
+- **Web OCI discovery** backend (`@ocd/web-server`); GitHub Pages static deploy; web-bundle code-splitting.
+- **Quality**: Vitest suite (130+ tests), Playwright wizard E2E, pre-commit redaction gate.
+
+See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) and [`docs/oci-lz-designer-roadmap.md`](docs/oci-lz-designer-roadmap.md).
+
 
 ## June 2025 Release
 **Release Date**: 30th June 2025
@@ -39,7 +204,7 @@
 **Release Date**: 30th April 2025
 ### BREAKING CHANGE
 1. OKIT-Classic: (OKIT-321) Restructure Repository to move exist OKIT files to okitclassinc Subdirectory.
-> [!WARNING]  
+> [!WARNING]
 > **This modification will require any existing users to change their environment variables and any start scripts they use. The documentation and associated scripts within the repository have been updated and the user must follow the new instructions.**
 ### Features
 1. OKIT-Desktop: Add new OCI Resources
@@ -132,7 +297,7 @@
 ### Features
 1. OKIT-Ocd: Build OKIT-Web style auto arranger. (#OKIT-299)
 2. OKIT-Ocd: Generated example connection.tfvars file during OpenTofu export. (#OKIT-297)
-3. OKIT-Ocd: Add Palette for Compute Cloud@Customer. (#OKIT-298) 
+3. OKIT-Ocd: Add Palette for Compute Cloud@Customer. (#OKIT-298)
 4. OKIT-Ocd: Add Palette for PCA-X9. (#OKIT-298)
 5. OKIT-Ocd: Allow quering of cache data from specified Config Profiles and then switch. (#OKIT-296)
 
@@ -172,7 +337,7 @@
 **Release Date**: 30th June 2024
 ### Features
 1. OKIT-Web: Add Query support for Network load Balancers on PCA.
-2. OKIT-Web: Add PCA Template to define OKE networking infrastructure. 
+2. OKIT-Web: Add PCA Template to define OKE networking infrastructure.
 3. OKIT-Ocd: Add the ability to create common Freeform Tags that will be used across all reasorces created by OCD.
 ### Bug Fixes
 1. Resolve Dynamic Group Resource Terraform Validation issue where it erroniously states they are not supported for PCA.
@@ -428,7 +593,7 @@
 5. Increase Resource display width when name display is selected.
 6. New PCA-X9 Template for HA VIP Configuration
 ### Bug Fixes
-1. Issue #540 : Check does not verify DNS-Label 
+1. Issue #540 : Check does not verify DNS-Label
 2. Convert VCN CIDR_BLOCKS to string in MArkdown export.
 3. Add correct DBHome & Database information to Database System following query.
 
@@ -448,7 +613,7 @@
 **Release Date**: 7th September 2022
 ### Features
 1. Streamline / refactor backend javascript / css file identification and load functionality
-2. Update Properties sheet for 
+2. Update Properties sheet for
     1. MySQL Database and allow drop on Compartment.
     2. Database Systems.
     3. Autonomous Database.
@@ -590,7 +755,7 @@
 ## Version 0.34.0
 **Release Date**: 23rd March 2022
 ### Features
-1. New Properties Sheet format added for 
+1. New Properties Sheet format added for
     1. Block Storage Volume
 2. Add Option to Generate Terraform on Save
 3. Store Save Filename within model to allow for it to be populated during Save.
@@ -612,7 +777,7 @@
 **Release Date**: 2nd March 2022
 ### Features
 1. BOAT Authentication added (Requires tenancy_override in config file to indicate the actual tenancy whilst tenancy indicates the authentication tenancy)
-2. New Properties Sheet format added for 
+2. New Properties Sheet format added for
     1. Compartment
     2. Dhcp Option
     3. Route Table
@@ -622,8 +787,8 @@
 3. Update Vagrant build functionality to clone Git Repository during build rather than copy file information and add a run-server.sh script that attempts to pull latest update before running the server.
 4. Add Query Functionality for PCA-X9
 5. Add URL arguments to lock the diagram type to either PCA-X9 or OCI
-    1. PCA-X9: pca=true 
-    2. OCI: oci=true 
+    1. PCA-X9: pca=true
+    2. OCI: oci=true
 ### Bug Fixes
 1. Fix error in query size when tenancy contains a large number of compartments.
 
@@ -729,7 +894,7 @@
 **Release Date**: 1st October 2021
 ### Bug Fixes
 1. Force rename of DhcpOptions.svg to DHCPOptions.svg. The master had not changed case originally to match development branch.
-2. Include the User Defined Terraform in the Resource Manager zip. 
+2. Include the User Defined Terraform in the Resource Manager zip.
 3. Resolve issue with File Storage System failing to display properties correctly.
 
 
@@ -887,7 +1052,7 @@
 
 ### Bug Fixes
 1. Resolve issue where region was not being passed to Instance Principal queries.
-2. GitHub Issue #315: Query for sub-compartments adds "/" to name 
+2. GitHub Issue #315: Query for sub-compartments adds "/" to name
 3. Resolve issue where fast discovery was not returning DbHome & DbNode for ExaCC.
 4. Fix issue with display when Subnet has a Security list that is no longer in the model.
 
@@ -983,7 +1148,7 @@
 1. Object Storage Bucket not displaying queried name (Issue #206)
 
 
-## Version 0.15.0 
+## Version 0.15.0
 **Release Date**: 9th December 2020
 ### Features
 1. Cut / Copy / Paste / Clone functionality added.
@@ -996,7 +1161,7 @@
 3. Undefined variable in ansible export Issue: #189
 
 
-## Version 0.14.1 
+## Version 0.14.1
 **Release Date**: 18th November 2020
 ### Bug Fixes
 1. Reinstate Public / Private to Subnet description
@@ -1004,7 +1169,7 @@
 3. Fix delete issue with CPE
 
 
-## Version 0.14.0 
+## Version 0.14.0
 **Release Date**: 18th November 2020
 ### Features
 1. Add collapse / expand to container style artefacts Compartment / VCN / Subnet.
@@ -1012,7 +1177,7 @@
 3. Add Preferences option to choose display label (Name / Resource / None) this will be displayed below the element on the SVG (Enhancement: #126).
 4. Add OKIT specific "Definition" field to all artefacts to allow a free text definition of the artefact (Enhancement: #149).
 5. Add preference to specify the type of tooltip to be displayed (Name / Definition / Summary) when hovering over elements in the diagram.
-6. Add artefact element highlighting when the properties sheet is open. Moving the cursor over the properties sheet will highlight the associated artefact. 
+6. Add artefact element highlighting when the properties sheet is open. Moving the cursor over the properties sheet will highlight the associated artefact.
 7. Implement simple Auto Save functionality to save model every 60 seconds to local storage (Enhancement: #169).
 8. Generate Title & Description for queried diagrams (Enhancement: #164).
 
@@ -1020,14 +1185,14 @@
 1. Fix issue where MySQL Databases could not be deleted.
 
 
-## Version 0.13.0 
+## Version 0.13.0
 **Release Date**: 28th October 2020
 ### Features
 1. Read Load Balancer Shapes from OCI / Cached OCI Values
 2. Simple Command Line generator (visualiser/okit_generator) to convert OKIT.
 3. Add MySQL Resource / Artefact.
 4. Add Cost Estimation functionality for the designed model. This is based on the Oracle public APIs.
-5. Add top-level Dockerfile and update Runtime build documentation. 
+5. Add top-level Dockerfile and update Runtime build documentation.
 6. Enable Instance Principal Authentication for Query/Resource Manager.
 
 ### Bug Fixes
@@ -1035,7 +1200,7 @@
 2. Instances were picking up Network Security Groups assigned to Autonomous Database during Terraform generation.
 3. Decoding Instance Metadata cloud-init data fails to decode .(Issue: #55)
 
-## Version 0.12.0 
+## Version 0.12.0
 **Release Date**: 7th October 2020
 ### Features
 1. Enhanced feedback for multi region query.
@@ -1056,7 +1221,7 @@
 4. Update Virtual Cloud Network and Subnet CIDR generation to check existing CIDRs. This resolves the duplicate CIDR issue.
 
 
-## Version 0.11.0 
+## Version 0.11.0
 **Release Date**: 16th September 2020
 ### Features
 1. Modify Multiple Select Options to Checkbox Group
@@ -1070,19 +1235,19 @@
 3. DRG not being displayed if it was not attached to a VCN following a query.
 
 
-## Version 0.10.2 
+## Version 0.10.2
 **Release Date**: 27th August 2020
 ### Bug Fixes
-1. Resolve issue where deleting an artefact would cause an addition OKE cluster to be created if one exists on the canvas. In addition deleting OKE caused it to be removed from the model but not the view. 
+1. Resolve issue where deleting an artefact would cause an addition OKE cluster to be created if one exists on the canvas. In addition deleting OKE caused it to be removed from the model but not the view.
 
 
-## Version 0.10.1 
+## Version 0.10.1
 **Release Date**: 27th August 2020
 ### Bug Fixes
-1. Querying occasionally hit a condition where the SVG rectangle does not exist before attempting to get the bounding client information (Issue: #86) 
+1. Querying occasionally hit a condition where the SVG rectangle does not exist before attempting to get the bounding client information (Issue: #86)
 
 
-## Version 0.10.0 
+## Version 0.10.0
 **Release Date**: 26th August 2020
 ### Features
 1. Modify the Hamburger menu to replace the mouseover events for menu display to mouse click events.
@@ -1097,19 +1262,19 @@
 3. Internet Gateways could only be created on the first subnet in a vcn (Issue: #71).
 
 
-## Version 0.9.2 
+## Version 0.9.2
 **Release Date**: 7th August 2020
 ### Bug Fixes
 1. Unable to drop gateways on second or subsequent VCNs (Issue #73).
 
 
-## Version 0.9.1 
+## Version 0.9.1
 **Release Date**: 6th August 2020
 ### Bug Fixes
 1. Config file warning being displayed when only [DEFAULT] section defined (OKIT-110).
 
 
-## Version 0.9.0 
+## Version 0.9.0
 **Release Date**: 5th August 2020
 ### Features
 1. Split Designer View functionality from OKIT Model (OKIT-89).
@@ -1129,13 +1294,13 @@
 8. Quotes added to security Ingress / Egress rules (GitHub Issue #65).
 
 
-## Version 0.8.0 
+## Version 0.8.0
 **Release Date**: 15th July 2020
 ### Features
 1. Add Explorer / Tree View for the Artefacts in the diagram (OKIT-90).
 2. When Creating Route Table / Security List for VCN modify the Default versions for the first Route Table / Security List defined.
 3. HA Web Application Reference Architecture Template.
-4. Replace Preferences Menu Option with side panel. 
+4. Replace Preferences Menu Option with side panel.
 
 ### Bug Fixes
 1. Resolve issues where, occasionally, the Open/Load function would not reopen a file.
@@ -1144,7 +1309,7 @@
 4. Resolve pem key privilege issues.
 
 
-## Version 0.7.0 
+## Version 0.7.0
 **Release Date**: 24th June 2020
 ### Features
 1. Windows PowerShell Docker Helper Scripts.
@@ -1164,7 +1329,7 @@
 4. Terraform being generated with invalid characters (OKIT-84).
 
 
-## Version 0.6.0 
+## Version 0.6.0
 **Release Date**: 3rd June 2020
 ### Features
 1. Optional generation of variable file for Ansible and Terraform, defaults:
@@ -1182,7 +1347,7 @@
 
 ### Bug Fixes
 1. Palette did not scroll
-2. Link to OCI Console should be data driven #20 
+2. Link to OCI Console should be data driven #20
 3. 100 variable limit with Resource Manager causes upload failure (Issue #09)
 4. Add Tenancy root to selectable list of compartments (Issue: #21)
 5. Generation of terraform with regional subnet throws error for missing availability domain. (Issue: #22).
@@ -1193,7 +1358,7 @@
     3. Error planning job with no Tags (OKIT-45).
 
 
-## Version 0.5.1 
+## Version 0.5.1
 **Release Date**: 18th May 2020
 ### Features
 1. Consolidate vangrant and docker files below container directory.
@@ -1204,7 +1369,7 @@
 
 
 
-## Version 0.5.0 
+## Version 0.5.0
 **Release Date**: 13th May 2020
 ### Features
 1. Querying Overlay
@@ -1212,11 +1377,11 @@
 3. Default OCI_CONFIG_DIR variable to ~/.oci
 
 ### Bug Fixes
-1. Update User Guide and make examples platform independent 
+1. Update User Guide and make examples platform independent
 
 
 
-## Version 0.4.1 
+## Version 0.4.1
 **Release Date**: 24th April 2020
 ### Features
 1. Slide Out Menu
@@ -1227,10 +1392,10 @@
 
 
 
-## Version 0.4.0 
+## Version 0.4.0
 **Release Date**: 22nd April 2020
 ### Features
-1. Extended Instance 
+1. Extended Instance
     1. VNIC Support allowing full specification of vnics / secondary vnics (with the exception of private IP).
     2. Network Security Groups
     3. Multiple VNICs for same Subnet
@@ -1252,7 +1417,7 @@
 
 
 
-## Version 0.3.0 
+## Version 0.3.0
 **Release Date**: 1st April 2020
 ### Features
 1. Canvas Grid is now optional.
@@ -1286,7 +1451,7 @@
 
 
 
-## Version 0.2.0 
+## Version 0.2.0
 **Release Date**: 6th March 2020
 ### Features
 1. Save As Template
@@ -1308,7 +1473,7 @@
 ## Version 0.1.0
 **Release Date**: 6th February 2020
 
-Initial internal release providing a number of basic functionality with required properties. This release allows for the 
+Initial internal release providing a number of basic functionality with required properties. This release allows for the
 drawing of infrastructure, generation of Ansible & Terraform for the implemented artifacts and the querying of multiple
 regions to generate diagrams representing implemented infrastructure.
 ### Features

@@ -1,0 +1,167 @@
+name: macOS DMG (verify)
+
+# On-demand macOS DMG build + verification on a clean GitHub runner.
+#
+# Why this exists: appdmg + macos-alias compile and run fine on Node 26, but a
+# real .dmg cannot be produced on a developer Mac running an EDR agent (e.g.
+# CrowdStrike), which holds the freshly-mounted build volume and makes appdmg's
+# `hdiutil detach` fail with "Operation not permitted". GitHub's macOS runners
+# have no such agent, so the unpatched toolchain builds the DMG cleanly here.
+#
+# This is a verifier you can run from any branch (workflow_dispatch) without
+# cutting a release. The merge-to-master release DMG is built by
+# build-desktop-application.yml.
+
+on:
+  workflow_dispatch:
+    inputs:
+      arch:
+        description: Target architecture
+        type: choice
+        options:
+          - arm64
+          - x64
+          - universal
+        default: arm64
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      NODE_OPTIONS: "--max-old-space-size=8192"
+      CI: "false"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "26"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Python tests (pytest)
+        run: pytest -q
+
+      - name: Install JS dependencies
+        run: npm run github-action-install
+
+      - name: Codegen
+        run: |
+          npm run github-action-compile-for-codegen
+          npm run github-action-generate
+
+      - name: Setup Landing Zone (fetch OE jsonnet sources — required by vitest)
+        run: npm run setup-lz
+
+      # Build only the workspace libs that @ocd/react imports at test time.
+      # @ocd/react itself is NOT built here — vitest runs directly on its src/.
+      - name: Build workspace libraries (required for vitest module resolution)
+        run: |
+          cd ocd && npm run build \
+            --workspace=packages/core \
+            --workspace=packages/model \
+            --workspace=packages/query \
+            --workspace=packages/import \
+            --workspace=packages/export \
+            --workspace=packages/parser \
+            --if-present
+
+      - name: Run JS tests (vitest — @ocd/react)
+        run: cd ocd && npm test
+
+      # TODO: src/main.ts has ~93 pre-existing noImplicitAny errors (the electron-forge
+      # vite plugin uses esbuild and bypasses tsc on the make path, so they have never
+      # been caught). Non-blocking until those type errors are resolved.
+      - name: Desktop type-check (non-blocking — pre-existing errors in src/main.ts)
+        continue-on-error: true
+        run: cd ocd && npm run typecheck --workspace=packages/desktop
+
+  build-dmg:
+    needs: test
+    runs-on: macos-latest
+    env:
+      NODE_OPTIONS: "--max-old-space-size=8192"
+      CI: "false"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "26"
+
+      - name: Toolchain versions
+        run: |
+          node --version
+          npm --version
+          python3 --version || true
+
+      - name: Install dependencies
+        run: npm run github-action-install
+
+      - name: Ensure appdmg (optional darwin native dep) is built
+        run: |
+          set -e
+          if [ ! -f ocd/node_modules/appdmg/package.json ]; then
+            echo "appdmg not materialized by lockfile install; installing explicitly"
+            ( cd ocd && npm install appdmg@^0.6.6 \
+                --workspace=packages/desktop --include=optional \
+                --legacy-peer-deps --no-audit --no-fund )
+          fi
+          node -e "const {existsSync}=require('fs'); const p='ocd/node_modules/appdmg/package.json'; if (!existsSync(p)) { console.error('appdmg missing — DMG maker cannot run'); process.exit(1); } console.log('appdmg present:', require('./'+p).version)"
+          # Prove the native binary loads under this Node before we make.
+          node -e "process.chdir('ocd/node_modules/appdmg'); require('macos-alias'); console.log('macos-alias native binary loads OK')"
+
+      - name: Codegen
+        run: |
+          npm run github-action-compile-for-codegen
+          npm run github-action-generate
+
+      - name: Build workspace libraries (desktop main + renderer deps)
+        run: |
+          cd ocd && npm run build \
+            --workspace=packages/model \
+            --workspace=packages/core \
+            --workspace=packages/query \
+            --workspace=packages/import \
+            --workspace=packages/export \
+            --workspace=packages/parser \
+            --workspace=packages/react \
+            --if-present
+
+      - name: Make macOS DMG (${{ inputs.arch }})
+        run: cd ocd && npm run make-macos-${{ inputs.arch }} --workspace=packages/desktop
+
+      - name: Verify DMG (checksum + mount + contents)
+        run: |
+          set -e
+          DMG=$(ls ocd/dist/make/ocd-*-*.dmg | head -1)
+          echo "DMG artifact: $DMG"
+          hdiutil verify "$DMG"
+          MP=$(hdiutil attach -readonly -nobrowse "$DMG" | awk -F'\t' 'END{print $NF}')
+          echo "Mounted at: $MP"
+          ls -la "$MP"
+          if ! ls -d "$MP"/*.app >/dev/null 2>&1; then
+            echo "FAIL: no .app bundle inside the DMG"
+            hdiutil detach -force "$MP" || true
+            exit 1
+          fi
+          if [ ! -L "$MP/Applications" ]; then
+            echo "WARN: no /Applications drop-target symlink in DMG"
+          fi
+          hdiutil detach -force "$MP"
+          echo "DMG verified: valid checksum, mounts, contains .app"
+
+      - name: Upload DMG artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ocd-macos-${{ inputs.arch }}-dmg
+          path: ocd/dist/make/ocd-*-*.dmg
+          if-no-files-found: error

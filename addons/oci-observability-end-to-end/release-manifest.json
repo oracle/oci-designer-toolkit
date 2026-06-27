@@ -1,0 +1,218 @@
+{
+    "commands": {
+        "estimate_costs": "python scripts/estimate_observability_lz_costs.py --profile all",
+        "generate": "python scripts/generate_observability_lz_library.py",
+        "package": "python scripts/package_observability_lz_addon.py",
+        "validate": "python scripts/validate_observability_lz_library.py",
+        "validate_terraform": "python scripts/validate_observability_lz_terraform.py"
+    },
+    "file_count": 40,
+    "files": [
+        {
+            "path": "README.md",
+            "sha256": "f1dfa4d8103f9b66af3e7cef356936b3682e97dfb73bc091972439f12eefbd8a",
+            "size_bytes": 1457
+        },
+        {
+            "path": "addon_observability_enterprise.json",
+            "sha256": "08b31398a76d9cb3978bf80fcacdad1ae1eeb3fb84f1cd70cf40a8dbe17d5a93",
+            "size_bytes": 15656
+        },
+        {
+            "path": "addon_observability_free_first.json",
+            "sha256": "474374da6599fe6e83873788a3ae7242c0795926695595ffd3015eebbfb6b90f",
+            "size_bytes": 15297
+        },
+        {
+            "path": "baseline-links.json",
+            "sha256": "c2cae5cce6e99f5b5d074cc22b457af3711dacf37a76bf9b8e98d9eef3eac906",
+            "size_bytes": 14002
+        },
+        {
+            "path": "cost/free-first-cost-estimate.json",
+            "sha256": "7a142046a64072e5d177fb29c2a4483f1fa6c8ed99fd3060711e2c36e91e6844",
+            "size_bytes": 1128
+        },
+        {
+            "path": "cost/free-first-usage-api-query.json",
+            "sha256": "0190faba221e0890afa027a80cc6d7c14cdd891b316fb7f41a2a2840e650f939",
+            "size_bytes": 1684
+        },
+        {
+            "path": "cost/full-enterprise-cost-estimate.json",
+            "sha256": "94d259b39b9796618b1790fd9b75943ab472df752383ca166058e5b64758c29d",
+            "size_bytes": 1144
+        },
+        {
+            "path": "cost/full-enterprise-usage-api-query.json",
+            "sha256": "ed2a36e8d1f7061249ec429ad79d01c53fdab95c64aa21b56ef56c3aa9a494d1",
+            "size_bytes": 1689
+        },
+        {
+            "path": "drawio/free-first.drawio",
+            "sha256": "f28fb63e8b52daa91311570aca7f026e7bd5523fc51506906775ec5b78027732",
+            "size_bytes": 4174
+        },
+        {
+            "path": "drawio/full-enterprise.drawio",
+            "sha256": "9f2d54e1cbc602e5ea34e36534d82d382d31b3c4e6507108e6baf198be3b8b0f",
+            "size_bytes": 4189
+        },
+        {
+            "path": "observability.auto.tfvars.json",
+            "sha256": "d677310e92596de38e2a616843375bae552ca3bb274f22abcf0aaabf33fe8e8c",
+            "size_bytes": 693
+        },
+        {
+            "path": "observability.enterprise.auto.tfvars.json",
+            "sha256": "4b2421b7bdaf6b6099b2d66029f9687a87ac39f24eb5143c09cd8823821b688d",
+            "size_bytes": 690
+        },
+        {
+            "path": "operator-runbook.md",
+            "sha256": "5e56df1d8852786f13d6f1e4f9c35e75007460e3c9e69d0f1389bfdc723b0544",
+            "size_bytes": 1190
+        },
+        {
+            "path": "resourcemanager/free-first/README_RESOURCE_MANAGER.md",
+            "sha256": "5476dc4bc301aa72855f855480ebd0f4134c2fdb3fc5f0cb7af22bc86e423d95",
+            "size_bytes": 342
+        },
+        {
+            "path": "resourcemanager/free-first/architecture.drawio",
+            "sha256": "f28fb63e8b52daa91311570aca7f026e7bd5523fc51506906775ec5b78027732",
+            "size_bytes": 4174
+        },
+        {
+            "path": "resourcemanager/free-first/cost-estimate.json",
+            "sha256": "7a142046a64072e5d177fb29c2a4483f1fa6c8ed99fd3060711e2c36e91e6844",
+            "size_bytes": 1128
+        },
+        {
+            "path": "resourcemanager/free-first/main.tf.json",
+            "sha256": "ad2c09a5bc40bb413a399c857bc7bcda465183b91c5402aa9b81fa5cf1650d1a",
+            "size_bytes": 11828
+        },
+        {
+            "path": "resourcemanager/free-first/observability.auto.tfvars.json",
+            "sha256": "d677310e92596de38e2a616843375bae552ca3bb274f22abcf0aaabf33fe8e8c",
+            "size_bytes": 693
+        },
+        {
+            "path": "resourcemanager/free-first/okit-resource-manager-manifest.json",
+            "sha256": "de975969725cc67891a01d4d9f2cd30fb5848fef392ebe607cf6f02ba0383366",
+            "size_bytes": 987
+        },
+        {
+            "path": "resourcemanager/free-first/usage-api-query.json",
+            "sha256": "0190faba221e0890afa027a80cc6d7c14cdd891b316fb7f41a2a2840e650f939",
+            "size_bytes": 1684
+        },
+        {
+            "path": "resourcemanager/full-enterprise/README_RESOURCE_MANAGER.md",
+            "sha256": "f775b58bef07596dd1ed12a51ed5459b6f884eb35d14dc1d9b1e5a76311f1aac",
+            "size_bytes": 347
+        },
+        {
+            "path": "resourcemanager/full-enterprise/architecture.drawio",
+            "sha256": "9f2d54e1cbc602e5ea34e36534d82d382d31b3c4e6507108e6baf198be3b8b0f",
+            "size_bytes": 4189
+        },
+        {
+            "path": "resourcemanager/full-enterprise/cost-estimate.json",
+            "sha256": "94d259b39b9796618b1790fd9b75943ab472df752383ca166058e5b64758c29d",
+            "size_bytes": 1144
+        },
+        {
+            "path": "resourcemanager/full-enterprise/main.tf.json",
+            "sha256": "eb737147f6b2ec6ef87a4e3eefe1c4e19120aa30a058aa7023ab54dc56cd4390",
+            "size_bytes": 11835
+        },
+        {
+            "path": "resourcemanager/full-enterprise/observability.auto.tfvars.json",
+            "sha256": "4b2421b7bdaf6b6099b2d66029f9687a87ac39f24eb5143c09cd8823821b688d",
+            "size_bytes": 690
+        },
+        {
+            "path": "resourcemanager/full-enterprise/okit-resource-manager-manifest.json",
+            "sha256": "ed827cde942ea16b4f9c337dcf9f7d599d6a29d595baddb3dfbbd472115d68bf",
+            "size_bytes": 995
+        },
+        {
+            "path": "resourcemanager/full-enterprise/usage-api-query.json",
+            "sha256": "ed2a36e8d1f7061249ec429ad79d01c53fdab95c64aa21b56ef56c3aa9a494d1",
+            "size_bytes": 1689
+        },
+        {
+            "path": "terraform/free-first-hcl/README.md",
+            "sha256": "e402e908ecd46d6aeed1a9b2f526677254eac98baee5ded14656ba1a7cf237f2",
+            "size_bytes": 438
+        },
+        {
+            "path": "terraform/free-first-hcl/main.tf",
+            "sha256": "7d085d85b2fa95d7847828e328f7cc5cd2fd166a88bf76b605871624616ef1c4",
+            "size_bytes": 8891
+        },
+        {
+            "path": "terraform/free-first-hcl/observability.auto.tfvars.json",
+            "sha256": "d677310e92596de38e2a616843375bae552ca3bb274f22abcf0aaabf33fe8e8c",
+            "size_bytes": 693
+        },
+        {
+            "path": "terraform/free-first-json/README.md",
+            "sha256": "ff575da9bbfb13763a27f45f6e5130d98ded1e536a9413607db826f62f2cade4",
+            "size_bytes": 444
+        },
+        {
+            "path": "terraform/free-first-json/main.tf.json",
+            "sha256": "ad2c09a5bc40bb413a399c857bc7bcda465183b91c5402aa9b81fa5cf1650d1a",
+            "size_bytes": 11828
+        },
+        {
+            "path": "terraform/free-first-json/observability.auto.tfvars.json",
+            "sha256": "d677310e92596de38e2a616843375bae552ca3bb274f22abcf0aaabf33fe8e8c",
+            "size_bytes": 693
+        },
+        {
+            "path": "terraform/full-enterprise-hcl/README.md",
+            "sha256": "86e9bf1dcaa0c2f85d7c25ffd0ac1c4eaff06bde5478cb00bcf32e3c2beaf580",
+            "size_bytes": 448
+        },
+        {
+            "path": "terraform/full-enterprise-hcl/main.tf",
+            "sha256": "39ba494c3a5341b89d809ebb800b097993fb9781df1a3de283b5b1b2ff3c20f5",
+            "size_bytes": 8898
+        },
+        {
+            "path": "terraform/full-enterprise-hcl/observability.auto.tfvars.json",
+            "sha256": "4b2421b7bdaf6b6099b2d66029f9687a87ac39f24eb5143c09cd8823821b688d",
+            "size_bytes": 690
+        },
+        {
+            "path": "terraform/full-enterprise-json/README.md",
+            "sha256": "6815029ea75fa0764b133e079ed0dd1e88060101baeac52e9e73e5978b66d438",
+            "size_bytes": 454
+        },
+        {
+            "path": "terraform/full-enterprise-json/main.tf.json",
+            "sha256": "eb737147f6b2ec6ef87a4e3eefe1c4e19120aa30a058aa7023ab54dc56cd4390",
+            "size_bytes": 11835
+        },
+        {
+            "path": "terraform/full-enterprise-json/observability.auto.tfvars.json",
+            "sha256": "4b2421b7bdaf6b6099b2d66029f9687a87ac39f24eb5143c09cd8823821b688d",
+            "size_bytes": 690
+        },
+        {
+            "path": "variables.json",
+            "sha256": "f3c874e7f1e2d7e911fb8fb83b95d719dcbae8dc56383345abc1dbb6b63598ae",
+            "size_bytes": 30160
+        }
+    ],
+    "name": "oci-observability-end-to-end",
+    "profiles": [
+        "free-first",
+        "full-enterprise"
+    ],
+    "schema_version": "oci.observability.addon.release_manifest.v1"
+}

@@ -10,9 +10,11 @@ import OcdModelPalette from './OcdModelPalette'
 
 const OcdPalette = ({ ocdConsoleConfig, setDragData, ocdDocument }: PaletteProps): JSX.Element => {
     const [activeTab, setActivieTab] = useState('provider')
+    const [searchTerm, setSearchTerm] = useState('')
     const onTabClick = (tab: string) => {
         setActivieTab(tab.toLowerCase())
     }
+    const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)
     const ActiveTab = activeTab === 'provider' ? OcdProviderPalette :
                       activeTab === 'model' ? OcdModelPalette :
                       OcdProviderPalette
@@ -22,10 +24,20 @@ const OcdPalette = ({ ocdConsoleConfig, setDragData, ocdDocument }: PaletteProps
                 <div className={`ocd-designer-tab ocd-designer-tab-theme ${activeTab === 'provider' ? 'ocd-designer-active-tab-theme' : ''}`} onClick={() => onTabClick('Provider')} aria-hidden><span>Provider</span></div>
                 <div className={`ocd-designer-tab ocd-designer-tab-theme ${activeTab === 'model' ? 'ocd-designer-active-tab-theme' : ''}`} onClick={() => onTabClick('Model')} aria-hidden><span>Model</span></div>
             </div>
+            <div className='ocd-palette-search'>
+                <input
+                    type='search'
+                    value={searchTerm}
+                    onChange={onSearchChange}
+                    placeholder='Search resources'
+                    aria-label='Search resources'
+                />
+            </div>
             <ActiveTab
                 ocdConsoleConfig={ocdConsoleConfig} 
                 setDragData={(dragData:any) => setDragData(dragData)} 
                 ocdDocument={ocdDocument}
+                searchTerm={searchTerm}
             />
         </div>
     )

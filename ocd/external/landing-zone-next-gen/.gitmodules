@@ -1,0 +1,3 @@
+[submodule "3rd/oci-landing-zone-operating-entities"]
+	path = 3rd/oci-landing-zone-operating-entities
+	url = https://github.com/oci-landing-zones/oci-landing-zone-operating-entities.git

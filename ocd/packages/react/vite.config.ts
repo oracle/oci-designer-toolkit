@@ -13,6 +13,7 @@ export default defineConfig({
       tsconfigPath: resolve(__dirname, "tsconfig.lib.json"),
     }),
   ],
+  assetsInclude: ['**/*.wasm'],
   build: {
     copyPublicDir: false,
     lib: {
@@ -23,7 +24,7 @@ export default defineConfig({
       external: ['react', 'react/jsx-runtime'],
       input: Object.fromEntries(
         glob.sync('src/**/*.{ts,mts,tsx}',{
-          ignore: ["src/**/*.d.ts"],
+          ignore: ["src/**/*.d.ts", "src/**/__tests__/**", "src/**/*.test.ts", "src/**/*.test.tsx"],
         }).map(file => [
           relative(
             'src',

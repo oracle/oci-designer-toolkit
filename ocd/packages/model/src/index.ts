@@ -9,12 +9,20 @@ export { OcdValidationResult } from './validator/OcdResourceValidator.js'
 export { OcdValidator } from './OcdValidator.js'
 export { OcdAutoLayout } from './OcdAutoLayout.js'
 
+// Landing Zone variable / naming contract — the single authoritative generator
+// for region/realm/env/lze tokens and canonical resource names.
+export * from './OcdVariableContract.js'
+
 export { PaletteGroup, PaletteResource } from './OcdPalette.js'
 // Oci
 export { OciDefinedTag, OciDefinedTags, OciFreeformTag, OciFreeformTags, OciResources } from './OcdDesign.js'
 export { OciResource } from './provider/oci/OciResource.js'
 export * as OciModelResources from './provider/oci/resources.js'
 export * as OciResourceValidation from './validator/provider/oci/resources.js'
+// Aws
+export { AwsResources } from './OcdDesign.js'
+export { AwsResource } from './provider/aws/AwsResource.js'
+export * as AwsModelResources from './provider/aws/resources.js'
 // Azure
 export { AzureResources } from './OcdDesign.js'
 export { AzureResource } from './provider/azure/AzureResource.js'
@@ -28,3 +36,7 @@ export * as GoogleResourceValidation from './validator/provider/google/resources
 
 export { GeneralResource } from './provider/general/GeneralResource.js'
 export * as GeneralModelResources from './provider/general/resources.js'
+
+// Custom (runtime-imported stencils — no codegen namespace; instances are minted
+// by the react OcdStencilRegistry from an imported JSON manifest).
+export { CustomResource, CustomResources, CustomModel } from './OcdDesign.js'

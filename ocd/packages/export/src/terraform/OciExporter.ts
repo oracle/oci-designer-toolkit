@@ -71,6 +71,14 @@ export class OciExporter extends OcdProviderExporter {
         oke_cluster: "oci_container.tf",
         node_pool: "oci_container.tf",
 
+        dns_zone: "oci_networking.tf",
+
+        log_group: "oci_observability.tf",
+        monitoring_alarm: "oci_observability.tf",
+        notification_topic: "oci_observability.tf",
+
+        functions_application: "oci_serverless.tf",
+
         unknown: "oci_unspecified.tf"
     }
     // Oci Methods

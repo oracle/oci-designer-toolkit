@@ -87,4 +87,6 @@ export interface OcdDragResource {
     class: string
     resource: OcdViewCoords
     parent?: OcdViewCoords
+    /** Drag-to-connect target (set when dropping onto another resource in connect mode). */
+    connectTarget?: OcdViewCoords
 }

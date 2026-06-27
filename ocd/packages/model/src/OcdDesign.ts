@@ -152,6 +152,14 @@ export interface GoogleResources {
     [key: string]: any[]
 }
 
+// Runtime custom-stencil instances (imported via a JSON manifest, no rebuild).
+// Keyed by the stencil `class` (e.g. 'custom-acme-widget'). The instance shape is
+// intentionally loose — manifest-defined property keys are stored as top-level
+// fields so OcdTextProperty bindings to resource[key] resolve directly.
+export interface CustomResources {
+    [key: string]: any[]
+}
+
 export interface OcdBaseModel {
     vars: OcdVariable[]
     resources: OcdResources
@@ -164,6 +172,16 @@ export interface AwsModel extends OcdBaseModel {}
 export interface AzureModel extends OcdBaseModel {}
 export interface GoogleModel extends OcdBaseModel {}
 export interface GeneralModel extends OcdBaseModel {}
+export interface CustomModel extends OcdBaseModel {}
+
+// A runtime custom-stencil instance. Extends OcdResource (which is itself a loose
+// Record<string, any>) so manifest-defined property keys live as top-level fields.
+export interface CustomResource extends OcdResource {
+    class: string
+    displayName: string
+    compartmentId: string
+    parentId: string
+}
 
 export interface OcdDesign {
     metadata: OcdMetadata
@@ -173,6 +191,7 @@ export interface OcdDesign {
         azure: AzureModel
         google: GoogleModel
         general: GeneralModel
+        custom?: CustomModel
     },
     view: OcdView,
     userDefined: OcdUserDefined
@@ -196,7 +215,7 @@ export namespace OcdDesign {
                 ocdSchemaVersion: schemaVersion,
                 ocdModelId: `ocd-model-${uuidv4()}`,
                 platform: 'oci',
-                title: 'Untitled - Edge Cloud Design',
+                title: 'Untitled - Oracle Designer Toolkit - OCTO',
                 documentation: '',
                 created: `${date} ${time}`,
                 updated: '',
@@ -246,8 +265,8 @@ export namespace OcdDesign {
         }
     }
     // Model Methods
-    export function getResourceLists(design: OcdDesign) {return {...getOciResourceLists(design), ...getAzureResourceLists(design), ...getGoogleResourceLists(design), ...getGeneralResourceLists(design)}}
-    export function getResources(design: OcdDesign) {return [...getOciResources(design), ...getAzureResources(design), ...getGoogleResources(design), ...getGeneralResources(design)]}
+    export function getResourceLists(design: OcdDesign) {return {...getOciResourceLists(design), ...getAwsResourceLists(design), ...getAzureResourceLists(design), ...getGoogleResourceLists(design), ...getGeneralResourceLists(design), ...getCustomResourceLists(design)}}
+    export function getResources(design: OcdDesign) {return [...getOciResources(design), ...getAwsResources(design), ...getAzureResources(design), ...getGoogleResources(design), ...getGeneralResources(design), ...getCustomResources(design)]}
     export function getResource(design: OcdDesign, id='') {return getResources(design).find((r: OcdResource) => r.id === id)}
     export function getResourceParentId(design: OcdDesign, id: string): string {
         const resource = getResource(design, id)
@@ -263,6 +282,10 @@ export namespace OcdDesign {
     export function getOciResourceLists(design: OcdDesign) {return Object.hasOwn(design.model, 'oci') ? design.model.oci.resources : {}}
     export function getOciResourceList(design: OcdDesign, key: string) {return Object.hasOwn(design.model, 'oci') && Object.hasOwn(design.model.oci.resources, key) ? design.model.oci.resources[key] : []}
     export function getOciResources(design: OcdDesign) {return Object.hasOwn(design.model, 'oci') ? Object.values(design.model.oci.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []) : []}
+    // Aws
+    export function getAwsResourceLists(design: OcdDesign) {return Object.hasOwn(design.model, 'aws') ? design.model.aws!.resources : {}}
+    export function getAwsResourceList(design: OcdDesign, key: string) {return Object.hasOwn(design.model, 'aws') && Object.hasOwn(design.model.aws!.resources, key) ? design.model.aws!.resources[key] : []}
+    export function getAwsResources(design: OcdDesign) {return Object.hasOwn(design.model, 'aws') ? Object.values(design.model.aws!.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []) : []}
     // Azure
     export function getAzureResourceLists(design: OcdDesign) {return Object.hasOwn(design.model, 'azure') ? design.model.azure.resources : {}}
     export function getAzureResourceList(design: OcdDesign, key: string) {return Object.hasOwn(design.model, 'azure') && Object.hasOwn(design.model.azure.resources, key) ? design.model.azure.resources[key] : []}
@@ -275,6 +298,10 @@ export namespace OcdDesign {
     export function getGeneralResourceLists(design: OcdDesign) {return Object.hasOwn(design.model, 'general') ? design.model.general.resources : {}}
     export function getGeneralResourceList(design: OcdDesign, key: string) {return Object.hasOwn(design.model, 'general') && Object.hasOwn(design.model.general.resources, key) ? design.model.general.resources[key] : []}
     export function getGeneralResources(design: OcdDesign) {return Object.hasOwn(design.model, 'general') ? Object.values(design.model.general.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []) : []}
+    // Custom (runtime-imported stencils)
+    export function getCustomResourceLists(design: OcdDesign) {return Object.hasOwn(design.model, 'custom') ? design.model.custom!.resources : {}}
+    export function getCustomResourceList(design: OcdDesign, key: string) {return Object.hasOwn(design.model, 'custom') && Object.hasOwn(design.model.custom!.resources, key) ? design.model.custom!.resources[key] : []}
+    export function getCustomResources(design: OcdDesign) {return Object.hasOwn(design.model, 'custom') ? Object.values(design.model.custom!.resources).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []) : []}
 
     // View Methods
     export function resetPanZoom(): number[] {

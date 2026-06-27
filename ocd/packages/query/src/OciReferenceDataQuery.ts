@@ -4,9 +4,32 @@
 */
 
 import { common, containerengine, core, database, datascience, limits, loadbalancer, mysql } from "oci-sdk"
-import { OciResource } from "@ocd/model"
-import { OcdUtils } from "@ocd/core"
+import { OcdLogger, OcdUtils } from "@ocd/core"
 import { OciCommonQuery } from './OciQueryCommon.js'
+import { QUERY_CONCURRENCY_LIMIT, runWithConcurrency, withRetry } from './OciQueryConcurrency.js'
+
+const logger = OcdLogger.scope('OciReferenceDataQuery')
+
+type LookupResource = Record<string, unknown> & {
+    id: string
+    displayName?: string
+    imageId?: string
+    ocid?: string
+    shapes?: string[]
+}
+
+const sortById = <T extends { id: string }>(a: T, b: T): number => a.id.localeCompare(b.id)
+const sortByIdDesc = <T extends { id: string }>(a: T, b: T): number => b.id.localeCompare(a.id)
+const sortByImageId = <T extends { imageId?: string }>(a: T, b: T): number => (a.imageId ?? '').localeCompare(b.imageId ?? '')
+const sortByDisplayName = <T extends { displayName?: string }>(a: T, b: T): number => (a.displayName ?? '').localeCompare(b.displayName ?? '')
+
+function uniqueByJson<T>(resources: T[]): T[] {
+    return Array.from(new Map(resources.map((resource) => [JSON.stringify(resource), resource])).values())
+}
+
+function uniqueById<T extends { id: string }>(resources: T[]): T[] {
+    return resources.filter((resource, idx, self) => idx === self.findIndex((candidate) => candidate.id === resource.id))
+}
 
 export class OciReferenceDataQuery extends OciCommonQuery {
     // Clients
@@ -21,7 +44,7 @@ export class OciReferenceDataQuery extends OciCommonQuery {
     vcnClient: core.VirtualNetworkClient
     constructor(profile: string='DEFAULT', region?: string) {
         super(profile, region)
-        console.debug('OciReferenceDataQuery: Region', region)
+        logger.debug('Region', region)
         this.blockstorageClient = new core.BlockstorageClient(this.authenticationConfiguration, this.clientConfiguration)
         this.computeClient = new core.ComputeClient(this.authenticationConfiguration, this.clientConfiguration)
         this.containerengineClient = new containerengine.ContainerEngineClient(this.authenticationConfiguration, this.clientConfiguration)
@@ -34,12 +57,12 @@ export class OciReferenceDataQuery extends OciCommonQuery {
     }
 
     query(): Promise<any> {
-        console.debug('OciReferenceDataQuery: query')
+        logger.debug('query')
         return new Promise((resolve, reject) => {
             const referenceData: Record<string, any[]> = {}
             this.listTenancyCompartments().then((compartments) => {
-                console.debug('OciReferenceDataQuery: Query: Compartments')
-                const compartmentIds = compartments.map((c: OciResource) => c.id)
+                logger.debug('Query: Compartments')
+                const compartmentIds = compartments.map((c: LookupResource) => c.id)
                 const tenancyId = [this.provider.getTenantId()]
                 // Top Level
                 const listRegions = this.listAllRegions()
@@ -94,132 +117,112 @@ export class OciReferenceDataQuery extends OciCommonQuery {
                     listVolumeBackupPolicies
                 ]
                 Promise.allSettled(queries).then((results) => {
-                    console.debug('OciReferenceDataQuery: query: All Settled')
+                    logger.debug('query: All Settled')
+                    const fulfilledValue = <T>(query: Promise<T>): T | undefined => {
+                        const result = results[queries.indexOf(query)] as PromiseSettledResult<T>
+                        return result.status === 'fulfilled' ? result.value : undefined
+                    }
                     /*
                     ** OCI Top Level
                     */
                     // All Regions
-                    // @ts-ignore
-                    if (results[queries.indexOf(listRegions)].status === 'fulfilled') referenceData.regions = results[queries.indexOf(listRegions)].value
+                    referenceData.regions = fulfilledValue(listRegions) ?? referenceData.regions
                     /*
                     ** Compute
                     */
                     // Shapes
-                    // @ts-ignore
-                    if (results[queries.indexOf(listShapes)].status === 'fulfilled') referenceData.shapes = results[queries.indexOf(listShapes)].value
+                    referenceData.shapes = fulfilledValue(listShapes) ?? referenceData.shapes
                     // Images
-                    // @ts-ignore
-                    if (results[queries.indexOf(listImages)].status === 'fulfilled') referenceData.images = results[queries.indexOf(listImages)].value
+                    referenceData.images = fulfilledValue(listImages) ?? referenceData.images
                     /*
                     ** Loadbalancer
                     */
                     // Loadbalancer Shapes
-                    // @ts-ignore
-                    if (results[queries.indexOf(listLoadbalancerShapes)].status === 'fulfilled') referenceData.loadbalancerShapes = results[queries.indexOf(listLoadbalancerShapes)].value
+                    referenceData.loadbalancerShapes = fulfilledValue(listLoadbalancerShapes) ?? referenceData.loadbalancerShapes
                     // Loadbalancer Listener Policies
-                    // @ts-ignore
-                    if (results[queries.indexOf(listLoadbalancerPolicies)].status === 'fulfilled') referenceData.loadbalancerPolicies = results[queries.indexOf(listLoadbalancerPolicies)].value
+                    referenceData.loadbalancerPolicies = fulfilledValue(listLoadbalancerPolicies) ?? referenceData.loadbalancerPolicies
                     // Loadbalancer Listener Protocols
-                    // @ts-ignore
-                    if (results[queries.indexOf(listLoadbalancerProtocols)].status === 'fulfilled') referenceData.loadbalancerProtocols = results[queries.indexOf(listLoadbalancerProtocols)].value
+                    referenceData.loadbalancerProtocols = fulfilledValue(listLoadbalancerProtocols) ?? referenceData.loadbalancerProtocols
                     /*
                     ** MySQL
                     */
                     // MySQL Configurations
-                    // @ts-ignore
-                    if (results[queries.indexOf(listMySQLConfigurations)].status === 'fulfilled') referenceData.mysqlConfigurations = results[queries.indexOf(listMySQLConfigurations)].value
+                    referenceData.mysqlConfigurations = fulfilledValue(listMySQLConfigurations) ?? referenceData.mysqlConfigurations
                     // MySQL Shape
-                    // @ts-ignore
-                    if (results[queries.indexOf(listMySQLShapes)].status === 'fulfilled') referenceData.mysqlShapes = results[queries.indexOf(listMySQLShapes)].value
+                    referenceData.mysqlShapes = fulfilledValue(listMySQLShapes) ?? referenceData.mysqlShapes
                     // MySQL Versions
-                    // @ts-ignore
-                    if (results[queries.indexOf(listMySQLVersions)].status === 'fulfilled') referenceData.mysqlVersions = results[queries.indexOf(listMySQLVersions)].value
+                    referenceData.mysqlVersions = fulfilledValue(listMySQLVersions) ?? referenceData.mysqlVersions
                     /*
                     ** Network
                     */
                     // Service gateway Services
-                    // @ts-ignore
-                    if (results[queries.indexOf(listServiceGatewayServices)].status === 'fulfilled') referenceData.serviceGatewayServices = results[queries.indexOf(listServiceGatewayServices)].value
+                    referenceData.serviceGatewayServices = fulfilledValue(listServiceGatewayServices) ?? referenceData.serviceGatewayServices
                     /*
                     ** Database
                     */
                     // DB System Shape
-                    // @ts-ignore
-                    if (results[queries.indexOf(listDbSystemShapes)].status === 'fulfilled') referenceData.dbSystemShapes = results[queries.indexOf(listDbSystemShapes)].value
+                    referenceData.dbSystemShapes = fulfilledValue(listDbSystemShapes) ?? referenceData.dbSystemShapes
                     // DB System Version
-                    // @ts-ignore
-                    if (results[queries.indexOf(listDbSystemVersions)].status === 'fulfilled') referenceData.dbVersions = results[queries.indexOf(listDbSystemVersions)].value
+                    referenceData.dbVersions = fulfilledValue(listDbSystemVersions) ?? referenceData.dbVersions
                     // Autonomous DB Version
-                    // @ts-ignore
-                    if (results[queries.indexOf(listAutonomousDbVersions)].status === 'fulfilled') referenceData.autonomousDbVersions = results[queries.indexOf(listAutonomousDbVersions)].value
+                    referenceData.autonomousDbVersions = fulfilledValue(listAutonomousDbVersions) ?? referenceData.autonomousDbVersions
                     /*
                     ** CPE
                     */
                     // CPE Device Shape
-                    // @ts-ignore
-                    if (results[queries.indexOf(listCpeDeviceShapes)].status === 'fulfilled') referenceData.cpeDeviceShapes = results[queries.indexOf(listCpeDeviceShapes)].value
+                    referenceData.cpeDeviceShapes = fulfilledValue(listCpeDeviceShapes) ?? referenceData.cpeDeviceShapes
                     /*
                     ** DataScience
                     */
                     // DataScience Notebook Session Shape
-                    // @ts-ignore
-                    if (results[queries.indexOf(listDataScienceNotebookSessionShapes)].status === 'fulfilled') referenceData.datascienceNotebookSessionShapes = results[queries.indexOf(listDataScienceNotebookSessionShapes)].value
+                    referenceData.datascienceNotebookSessionShapes = fulfilledValue(listDataScienceNotebookSessionShapes) ?? referenceData.datascienceNotebookSessionShapes
                     /*
                     ** Limits
                     */
                     // Services
-                    // @ts-ignore
-                    if (results[queries.indexOf(listServices)].status === 'fulfilled') referenceData.services = results[queries.indexOf(listServices)].value
+                    referenceData.services = fulfilledValue(listServices) ?? referenceData.services
                     /*
                     ** Container Engine
                     */
                     // Pod Shapes
-                    // @ts-ignore
-                    if (results[queries.indexOf(listPodShapes)].status === 'fulfilled') referenceData.podShapes = results[queries.indexOf(listPodShapes)].value
+                    referenceData.podShapes = fulfilledValue(listPodShapes) ?? referenceData.podShapes
                     // Cluster Options
-                    // @ts-ignore
-                    if (results[queries.indexOf(getClusterOptions)].status === 'fulfilled') {
-                        // @ts-ignore
-                        const clusterOptions = results[queries.indexOf(getClusterOptions)].value
+                    const clusterOptions = fulfilledValue(getClusterOptions)
+                    if (clusterOptions) {
                         referenceData.kubernetesVersions = clusterOptions.kubernetesVersions
                         referenceData.clusterPodNetworkOptions = clusterOptions.clusterPodNetworkOptions
                     }
                     // Node Pool Options
-                    // @ts-ignore
-                    if (results[queries.indexOf(getNodePoolOptions)].status === 'fulfilled') {
-                        // @ts-ignore
-                        referenceData.nodePoolOptions = results[queries.indexOf(getNodePoolOptions)].value
-                    }
+                    referenceData.nodePoolOptions = fulfilledValue(getNodePoolOptions) ?? referenceData.nodePoolOptions
                     /*
                     ** Storage
                     */
                     // Volume Backup Policies
-                    // @ts-ignore
-                    if (results[queries.indexOf(listVolumeBackupPolicies)].status === 'fulfilled') referenceData.volumeBackupPolicies = results[queries.indexOf(listVolumeBackupPolicies)].value
+                    referenceData.volumeBackupPolicies = fulfilledValue(listVolumeBackupPolicies) ?? referenceData.volumeBackupPolicies
 
                     // console.debug('OciReferenceDataQuery:', referenceData)
                     resolve(referenceData)
                 })
             }).catch((reason) => {
-                console.error(reason)
+                logger.error(reason)
                 reject(reason)
             })
         })
     }
 
-    getClusterOptions(retryCount: number = 0): Promise<any> {
+    getClusterOptions(): Promise<any> {
         return new Promise((resolve, reject) => {
             const request: containerengine.requests.GetClusterOptionsRequest = {clusterOptionId: 'all'}
             const shapeQuery = this.containerengineClient.getClusterOptions(request)
             shapeQuery.then((results) => {
-                console.debug('OciReferenceDataQuery: getClusterOptions: All Settled')
+                logger.debug('getClusterOptions: All Settled')
                 const resources = {
                     kubernetesVersions: results.clusterOptions.kubernetesVersions?.map((v) => {return {id: v, displayName: v, version: v}}),
                     clusterPodNetworkOptions: results.clusterOptions.clusterPodNetworkOptions?.map((o) => {return {...o, id: o.cniType, displayName: o.cniType}})
                 }
                 resolve(resources)
             }).catch((reason) => {
-                console.error(reason)
+                logger.error(reason)
                 reject(reason)
             })
         })
@@ -230,7 +233,7 @@ export class OciReferenceDataQuery extends OciCommonQuery {
             const request: core.requests.GetImageRequest = {imageId: imageId}
             const query = this.computeClient.getImage(request)
             query.then((results) => {
-                // console.debug('OciReferenceDataQuery: getImage: All Settled')
+                // logger.debug('getImage: All Settled')
                 const image = results.image
                 const resource = {
                     id: `${image.operatingSystem}-${image.operatingSystemVersion}`,
@@ -247,18 +250,18 @@ export class OciReferenceDataQuery extends OciCommonQuery {
                 }
                 resolve(resource)
             }).catch((reason) => {
-                console.error(reason)
+                logger.error(reason)
                 reject(reason)
             })
         })
     }
 
-    getNodePoolOptions(retryCount: number = 0): Promise<any> {
+    getNodePoolOptions(): Promise<any> {
         return new Promise((resolve, reject) => {
             const request: containerengine.requests.GetNodePoolOptionsRequest = {nodePoolOptionId: 'all'}
             const shapeQuery = this.containerengineClient.getNodePoolOptions(request)
             shapeQuery.then((results) => {
-                console.debug('OciReferenceDataQuery: getNodePoolOptions: All Settled')
+                logger.debug('getNodePoolOptions: All Settled')
                 const resources = {
                     kubernetesVersions: results.nodePoolOptions.kubernetesVersions?.map((v) => {return {id: v, displayName: v, version: v}}),
                     shapes: results.nodePoolOptions.shapes?.map((s) => {return {id: s, displayName: s}}),
@@ -266,136 +269,90 @@ export class OciReferenceDataQuery extends OciCommonQuery {
                 }
                 resolve(resources)
             }).catch((reason) => {
-                console.error(reason)
+                logger.error(reason)
                 reject(reason)
             })
         })
     }
 
-    listAutonomousDbVersions(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: database.requests.ListAutonomousDbVersionsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.databaseClient.listAutonomousDbVersions(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciReferenceDataQuery: listAutonomousDbVersions: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], []).map((r) => {return {
-                        ...r,
-                        id: r.version,
-                        displayName: r.version
-                    }
-                }).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
-                // @ts-ignore
-                const uniqueResources = Array.from(new Set(resources.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
-                resolve(uniqueResources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
+    listAutonomousDbVersions(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listAutonomousDbVersions', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.databaseClient.listAutonomousDbVersions(r)).then((resources) => {
+            const mapped = resources.map((r: any) => {return {
+                    ...r,
+                    id: r.version,
+                    displayName: r.version
+                }
+            }).sort(sortById)
+            return uniqueByJson(mapped)
         })
     }
 
-    listCpeDeviceShapes(retryCount: number = 0): Promise<any> {
+    listCpeDeviceShapes(): Promise<any> {
         return new Promise((resolve, reject) => {
             const request: core.requests.ListCpeDeviceShapesRequest = {}
             const shapeQuery = this.vcnClient.listCpeDeviceShapes(request)
             shapeQuery.then((results) => {
-                console.debug('OciReferenceDataQuery: listCpeDeviceShapes: All Settled')
-                //@ts-ignore
-                const resources = results.items.map((r) => {return {
+                logger.debug('listCpeDeviceShapes: All Settled')
+                const resources = (results.items as Array<{ cpeDeviceInfo?: { platformSoftwareVersion?: string; vendor?: string } } & Record<string, unknown>>).map((r): LookupResource => {return {
                         ...r,
-                        id: r.cpeDeviceInfo?.platformSoftwareVersion, 
-                        displayName: `${r.cpeDeviceInfo?.vendor} ${r.cpeDeviceInfo?.platformSoftwareVersion}` 
+                        id: r.cpeDeviceInfo?.platformSoftwareVersion ?? '',
+                        displayName: `${r.cpeDeviceInfo?.vendor ?? ''} ${r.cpeDeviceInfo?.platformSoftwareVersion ?? ''}`.trim()
                     }
                 })
                 resolve(resources)
             }).catch((reason) => {
-                console.error(reason)
+                logger.error(reason)
                 reject(reason)
             })
         })
     }
 
-    listDataScienceNotebookSessionShapes(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: datascience.requests.ListNotebookSessionShapesRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.datascienceClient.listNotebookSessionShapes(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciReferenceDataQuery: listDataScienceNotebookSessionShapes: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], []).map((r) => {return {
-                        ...r,
-                        id: r.name,
-                        displayName: r.name,
-                        isFlexible: r.name.endsWith('.Flex')
-                    }
-                }).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
-                // @ts-ignore
-                const uniqueResources = Array.from(new Set(resources.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
-                resolve(uniqueResources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
+    listDataScienceNotebookSessionShapes(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listDataScienceNotebookSessionShapes', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.datascienceClient.listNotebookSessionShapes(r)).then((resources) => {
+            const mapped = resources.map((r: any) => {return {
+                    ...r,
+                    id: r.name,
+                    displayName: r.name,
+                    isFlexible: r.name.endsWith('.Flex')
+                }
+            }).sort(sortById)
+            return uniqueByJson(mapped)
         })
     }
 
-    listDbSystemShapes(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: database.requests.ListDbSystemShapesRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.databaseClient.listDbSystemShapes(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciReferenceDataQuery: listDbSystemShapes: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], []).map((r) => {return {
-                        ...r,
-                        id: r.name,
-                        displayName: r.name
-                    }
-                }).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
-                // @ts-ignore
-                const uniqueResources = Array.from(new Set(resources.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
-                resolve(uniqueResources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
+    listDbSystemShapes(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listDbSystemShapes', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.databaseClient.listDbSystemShapes(r)).then((resources) => {
+            const mapped = resources.map((r: any) => {return {
+                    ...r,
+                    id: r.name,
+                    displayName: r.name
+                }
+            }).sort(sortById)
+            return uniqueByJson(mapped)
         })
     }
 
-    listDbSystemVersions(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: database.requests.ListDbVersionsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.databaseClient.listDbVersions(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciReferenceDataQuery: listDbSystemVersions: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], []).map((r) => {return {
-                        ...r,
-                        id: r.version,
-                        displayName: r.version
-                    }
-                }).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
-                // @ts-ignore
-                const uniqueResources = Array.from(new Set(resources.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
-                resolve(uniqueResources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
+    listDbSystemVersions(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listDbSystemVersions', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.databaseClient.listDbVersions(r)).then((resources) => {
+            const mapped = resources.map((r: any) => {return {
+                    ...r,
+                    id: r.version,
+                    displayName: r.version
+                }
+            }).sort(sortById)
+            return uniqueByJson(mapped)
         })
     }
 
-    listImages(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+    listImages(compartmentIds: string[]): Promise<any> {
         return new Promise((resolve, reject) => {
             const requests: core.requests.ListImagesRequest[] = compartmentIds.map((id) => {return {compartmentId: id, limit: 10000}})
             const responseIterators = requests.map((r) => this.computeClient.listImagesResponseIterator(r))
-            const queries = responseIterators.map((r) => this.getAllResponseData(r))
+            const queries = runWithConcurrency(responseIterators.map((r) => withRetry(() => this.getAllResponseData(r))), QUERY_CONCURRENCY_LIMIT)
             // const queries = requests.map((r) => this.computeClient.listImages(r))
             Promise.allSettled(queries).then((results) => {
-                console.debug('OciReferenceDataQuery: listImages: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value], []).map((r) => {return {
+                logger.debug('listImages: All Settled')
+                const resources = (this.collectSettled<any, any>(results, 'listImages', (value) => value) as any).map((r: any) => {return {
                         id: `${r.operatingSystem}-${r.operatingSystemVersion}`,
                         // id: r.displayName,
                         ocid: r.id,
@@ -408,227 +365,126 @@ export class OciReferenceDataQuery extends OciCommonQuery {
                         billableSizeInGBs: r.billableSizeInGBs,
                         lifecycleState: r.lifecycleState
                     }
-                }).sort((a: OciResource, b: OciResource) => (a.id.localeCompare(b.id) * -1))
-                // resources.forEach((i: Record<string, any>) => console.debug('OciReferenceDataQuery: Images:', i.id, ':', i.ocid))
-                // @ts-ignore
-                const uniqueResources = resources.filter((r, i) => resources.findIndex((v) => r.id === v.id) === i).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
+                }).sort(sortByIdDesc)
+                // resources.forEach((i: Record<string, any>) => logger.debug('Images:', i.id, ':', i.ocid))
+                const uniqueResources = uniqueById(resources).sort(sortById)
                 const imageIds = uniqueResources.map((r: Record<string, string>) => r.ocid)
                 this.listImageShapeCompatabilities(imageIds).then((compatibilities) => {
                     uniqueResources.forEach((r: Record<string, string>) => r.shapes = compatibilities.filter((c: Record<string, string>) => c.imageId === r.ocid).map((c: Record<string, string>) => c.shape))
                     // const sortedResources = [...uniqueResources.filter((r: Record<string, string>) => r.id.startsWith('Oracle')), ...uniqueResources.filter((r: Record<string, string>) => !r.id.startsWith('Oracle'))]
                     resolve(uniqueResources)
                 }).catch((reason) => {
-                    console.error('OciReferenceDataQuery: listImages: Error', reason)
+                    logger.error('listImages: Error', reason)
                     reject(reason)
                 })
                 // resolve(resources)
             }).catch((reason) => {
-                console.error('OciReferenceDataQuery: listImages: Error', reason)
+                logger.error('listImages: Error', reason)
                 reject(reason)
             })
         })
     }
 
-    listImageShapeCompatabilities(imageIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: core.requests.ListImageShapeCompatibilityEntriesRequest[] = imageIds.map((id) => {return {imageId: id, limit: 10000}})
-            const queries = requests.map((r) => this.computeClient.listImageShapeCompatibilityEntries(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciReferenceDataQuery: listImageShapeCompatabilities: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], []).map((r) => {return {
-                        ...r
-                    }
-                }).sort((a: OciResource, b: OciResource) => a.imageId.localeCompare(b.imageId))
-                // @ts-ignore
-                const uniqueResources = Array.from(new Set(resources.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
-                resolve(uniqueResources)
-                // resolve(resources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
+    listImageShapeCompatabilities(imageIds: string[]): Promise<any> {
+        return this.listByCompartment('listImageShapeCompatabilities', imageIds, (id) => ({ imageId: id, limit: 10000 }), (r) => this.computeClient.listImageShapeCompatibilityEntries(r)).then((resources) => {
+            const mapped = resources.map((r: any) => {return {
+                    ...r
+                }
+            }).sort(sortByImageId)
+            return uniqueByJson(mapped)
         })
     }
 
-    listLoadbalancerPolicies(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: loadbalancer.requests.ListPoliciesRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.loadbalancerClient.listPolicies(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciReferenceDataQuery: listLoadbalancerPolicies: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], []).map((r) => {return {
-                        id: r.name,
-                        displayName: OcdUtils.toTitle(r.name)
-                    }
-                }).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
-                // @ts-ignore
-                const uniqueResources = Array.from(new Set(resources.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
-                resolve(uniqueResources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
+    listLoadbalancerPolicies(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listLoadbalancerPolicies', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.loadbalancerClient.listPolicies(r)).then((resources) => {
+            const mapped = resources.map((r: any) => {return {
+                    id: r.name,
+                    displayName: OcdUtils.toTitle(r.name)
+                }
+            }).sort(sortById)
+            return uniqueByJson(mapped)
         })
     }
 
-    listLoadbalancerProtocols(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: loadbalancer.requests.ListProtocolsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.loadbalancerClient.listProtocols(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciReferenceDataQuery: listLoadbalancerProtocols: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], []).map((r) => {return {
-                        id: r.name,
-                        displayName: r.name
-                    }
-                }).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
-                // @ts-ignore
-                const uniqueResources = Array.from(new Set(resources.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
-                resolve(uniqueResources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
+    listLoadbalancerProtocols(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listLoadbalancerProtocols', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.loadbalancerClient.listProtocols(r)).then((resources) => {
+            const mapped = resources.map((r: any) => {return {
+                    id: r.name,
+                    displayName: r.name
+                }
+            }).sort(sortById)
+            return uniqueByJson(mapped)
         })
     }
 
-    listLoadbalancerShapes(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: loadbalancer.requests.ListShapesRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.loadbalancerClient.listShapes(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciReferenceDataQuery: listLoadbalancerShapes: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], []).map((r) => {return {
-                        id: r.name,
-                        displayName: r.name
-                    }
-                }).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
-                // @ts-ignore
-                const uniqueResources = Array.from(new Set(resources.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
-                resolve(uniqueResources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
+    listLoadbalancerShapes(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listLoadbalancerShapes', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.loadbalancerClient.listShapes(r)).then((resources) => {
+            const mapped = resources.map((r: any) => {return {
+                    id: r.name,
+                    displayName: r.name
+                }
+            }).sort(sortById)
+            return uniqueByJson(mapped)
         })
     }
 
-    listMySQLConfigurations(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: mysql.requests.ListConfigurationsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.mysqlaasClient.listConfigurations(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciReferenceDataQuery: listMySQLConfigurations: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], []).map((r) => {return {
-                        ...r
-                        // id: r.name,
-                        // displayName: r.name
-                    }
-                }).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
-                // @ts-ignore
-                const uniqueResources = Array.from(new Set(resources.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
-                resolve(uniqueResources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
+    listMySQLConfigurations(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listMySQLConfigurations', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.mysqlaasClient.listConfigurations(r)).then((resources) => {
+            const mapped = resources.map((r: any) => {return {
+                    ...r
+                    // id: r.name,
+                    // displayName: r.name
+                }
+            }).sort(sortById)
+            return uniqueByJson(mapped)
         })
     }
 
-    listMySQLShapes(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: mysql.requests.ListShapesRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.mysqlaasClient.listShapes(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciReferenceDataQuery: listMySQLShapes: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], []).map((r) => {return {
-                        ...r,
-                        id: r.name,
-                        displayName: r.name
-                    }
-                }).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
-                // @ts-ignore
-                const uniqueResources = Array.from(new Set(resources.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
-                resolve(uniqueResources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
+    listMySQLShapes(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listMySQLShapes', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.mysqlaasClient.listShapes(r)).then((resources) => {
+            const mapped = resources.map((r: any) => {return {
+                    ...r,
+                    id: r.name,
+                    displayName: r.name
+                }
+            }).sort(sortById)
+            return uniqueByJson(mapped)
         })
     }
 
-    listMySQLVersions(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: mysql.requests.ListVersionsRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.mysqlaasClient.listVersions(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciReferenceDataQuery: listMySQLVersions: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], []).map((r) => {return {
-                        ...r,
-                        id: r.versionFamily,
-                        displayName: r.versionFamily
-                    }
-                }).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
-                // @ts-ignore
-                const uniqueResources = Array.from(new Set(resources.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
-                resolve(uniqueResources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
+    listMySQLVersions(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listMySQLVersions', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.mysqlaasClient.listVersions(r)).then((resources) => {
+            const mapped = resources.map((r: any) => {return {
+                    ...r,
+                    id: r.versionFamily,
+                    displayName: r.versionFamily
+                }
+            }).sort(sortById)
+            return uniqueByJson(mapped)
         })
     }
 
-    listPodShapes(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: containerengine.requests.ListPodShapesRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.containerengineClient.listPodShapes(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciReferenceDataQuery: listPodShapes: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], []).map((r) => {return {
-                        ...r,
-                        id: r.name,
-                        displayName: r.name
-                    }
-                }).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
-                // @ts-ignore
-                const uniqueResources = Array.from(new Set(resources.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
-                resolve(uniqueResources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
+    listPodShapes(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listPodShapes', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.containerengineClient.listPodShapes(r)).then((resources) => {
+            const mapped = resources.map((r: any) => {return {
+                    ...r,
+                    id: r.name,
+                    displayName: r.name
+                }
+            }).sort(sortById)
+            return uniqueByJson(mapped)
         })
     }
 
-    listServices(compartmentIds: string[], retryCount: number = 0): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const requests: limits.requests.ListServicesRequest[] = compartmentIds.map((id) => {return {compartmentId: id}})
-            const queries = requests.map((r) => this.limitsClient.listServices(r))
-            Promise.allSettled(queries).then((results) => {
-                console.debug('OciReferenceDataQuery: listServices: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], []).map((r) => {return {
-                        ...r,
-                        id: r.name,
-                        displayName: r.description
-                    }
-                }).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
-                // @ts-ignore
-                const uniqueResources = Array.from(new Set(resources.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
-                resolve(uniqueResources)
-            }).catch((reason) => {
-                console.error(reason)
-                reject(reason)
-            })
+    listServices(compartmentIds: string[]): Promise<any> {
+        return this.listByCompartment('listServices', compartmentIds, (id) => ({ compartmentId: id }), (r) => this.limitsClient.listServices(r)).then((resources) => {
+            const mapped = resources.map((r: any) => {return {
+                    ...r,
+                    id: r.name,
+                    displayName: r.description
+                }
+            }).sort(sortById)
+            return uniqueByJson(mapped)
         })
     }
 
@@ -637,17 +493,17 @@ export class OciReferenceDataQuery extends OciCommonQuery {
             const request: core.requests.ListServicesRequest = {}
             const shapeQuery = this.vcnClient.listServices(request)
             shapeQuery.then((results) => {
-                console.debug('OciReferenceDataQuery: listShapes: All Settled')
-                //@ts-ignore
-                const resources = results.items.map((s) => {return {
+                logger.debug('listShapes: All Settled')
+                const sortedResources = (results.items as Array<{ name: string } & Record<string, unknown>>).map((s): LookupResource => {return {
                         ...s, 
                         id: s.name.startsWith('All ') ? 'All' : 'Object Storage',
                         displayName: `${s.name.split(' ')[0]} ${s.name.split(' ').slice(2).join(' ')}`,
                     }
-                }).sort((a, b) => a.displayName.localeCompare(b.displayName)).filter((resource, idx, self) => idx === self.findIndex((r) => r.id === resource.id)) // De-duplicated
+                }).sort(sortByDisplayName)
+                const resources = uniqueById(sortedResources)
                 resolve(resources)
             }).catch((reason) => {
-                console.error(reason)
+                logger.error(reason)
                 reject(reason)
             })
         })
@@ -658,9 +514,8 @@ export class OciReferenceDataQuery extends OciCommonQuery {
             const request: core.requests.ListShapesRequest = {compartmentId: this.provider.getTenantId()}
             const shapeQuery = this.computeClient.listShapes(request)
             shapeQuery.then((results) => {
-                console.debug('OciReferenceDataQuery: listShapes: All Settled')
-                //@ts-ignore
-                const resources = results.items.map((s) => {return {
+                logger.debug('listShapes: All Settled')
+                const sortedResources = (results.items as Array<{ shape: string } & Record<string, unknown>>).map((s): LookupResource => {return {
                         id: s.shape, 
                         displayName: s.shape, 
                         shape: s.shape, 
@@ -670,32 +525,31 @@ export class OciReferenceDataQuery extends OciCommonQuery {
                         memoryOptions: s.memoryOptions, 
                         isFlexible: s.isFlexible
                     }
-                }).sort((a, b) => a.displayName.localeCompare(b.displayName)).filter((resource, idx, self) => idx === self.findIndex((r) => r.id === resource.id)) // De-duplicated
+                }).sort(sortByDisplayName)
+                const resources = uniqueById(sortedResources)
                 resolve(resources)
             }).catch((reason) => {
-                console.error(reason)
+                logger.error(reason)
                 reject(reason)
             })
         })
     }
 
-    listVolumeBackupPolicies(compartmentIds: string[], retryCount: number = 0): Promise<any> {
+    listVolumeBackupPolicies(compartmentIds: string[]): Promise<any> {
         return new Promise((resolve, reject) => {
             const requests: core.requests.ListVolumeBackupPoliciesRequest[] = [{}, ...compartmentIds.map((id) => {return {compartmentId: id}})]
-            const queries = requests.map((r) => this.blockstorageClient.listVolumeBackupPolicies(r))
+            const queries = runWithConcurrency(requests.map((r) => withRetry(() => this.blockstorageClient.listVolumeBackupPolicies(r))), QUERY_CONCURRENCY_LIMIT)
             Promise.allSettled(queries).then((results) => {
-                console.debug('OciReferenceDataQuery: listVolumeBackupPolicies: All Settled')
-                //@ts-ignore
-                const resources = results.filter((r) => r.status === 'fulfilled').reduce((a, c) => [...a, ...c.value.items], []).map((r) => {return {
+                logger.debug('listVolumeBackupPolicies: All Settled')
+                const resources = (this.collectSettled<any>(results, 'listVolumeBackupPolicies') as any).map((r: any) => {return {
                         id: r.displayName,
                         displayName: OcdUtils.toTitle(r.displayName)
                     }
-                }).sort((a: OciResource, b: OciResource) => a.id.localeCompare(b.id))
-                // @ts-ignore
-                const uniqueResources = Array.from(new Set(resources.map(e => JSON.stringify(e)))).map(e => JSON.parse(e))
+                }).sort(sortById)
+                const uniqueResources = uniqueByJson(resources)
                 resolve(uniqueResources)
             }).catch((reason) => {
-                console.error(reason)
+                logger.error(reason)
                 reject(reason)
             })
         })

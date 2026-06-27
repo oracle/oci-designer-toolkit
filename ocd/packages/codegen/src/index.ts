@@ -5,6 +5,8 @@
 
 export { OcdSchema } from "./types/OcdSchema.js"
 
+export { AwsTerraformGenerator } from "./generator/AwsTerraformGenerator.js"
+
 export { AzureRmTerraformSchemaImporter } from "./importer/AzureRmTerraformSchemaImporter.js"
 export { AzureAzTerraformSchemaImporter } from "./importer/AzureAzTerraformSchemaImporter.js"
 export { AzureModelGenerator } from "./generator/AzureModelGenerator.js"

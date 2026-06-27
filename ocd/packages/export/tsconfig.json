@@ -8,5 +8,6 @@
         "rootDir": "src",
         "outDir": "lib/esm",
     },
-    "include": ["src"]
+    "include": ["src"],
+    "exclude": ["lib/**/*", "dist/**/*", "src/**/*.test.ts", "src/**/__tests__/**"]
 }
